@@ -1,0 +1,29 @@
+<!--
+  © 2015 Becki Authors. See the AUTHORS file found in the top-level directory of
+  this distribution.
+-->
+
+Becki
+=====
+
+Becki is a front end of the IoT connectivity solution developed by MEDIA CHECK.
+
+It integrates all the back end services and provides a nice portable interface
+for users as well as for administrators.
+
+Features
+--------
+
+The project is not in the final shape yet. Further features are added on demand
+if they fit the purpose of the program.
+
+License
+-------
+
+For the time being, we retain all rights. That means that you are not allowed to
+distribute, reproduce or modify this project.
+
+Installation
+------------
+
+Copy the distribution into any directory you like.
