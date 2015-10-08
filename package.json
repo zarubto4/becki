@@ -1,5 +1,9 @@
 {
+  "devDependencies": {
+    "mdast": "^2.1.0",
+    "mdast-lint": "^1.1.0"
+  },
   "scripts": {
-    "test": "exit"
+    "test": "mdast --quiet --frail AUTHORS CONTRIBUTORS README"
   }
 }

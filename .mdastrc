@@ -1,0 +1,10 @@
+{
+  "plugins": {
+    "lint": {
+      "list-item-indent": "space"
+    }
+  },
+  "settings": {
+    "pedantic": true
+  }
+}
