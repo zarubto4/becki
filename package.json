@@ -1,9 +1,12 @@
 {
   "devDependencies": {
+    "jsonlint": "^1.6.0",
     "mdast": "^2.1.0",
     "mdast-lint": "^1.1.0"
   },
   "scripts": {
-    "test": "mdast --quiet --frail AUTHORS CONTRIBUTORS README"
+    "lint:json": "jsonlint .mdastrc --quiet && jsonlint package.json --quiet",
+    "lint:markdown": "mdast --quiet --frail AUTHORS CONTRIBUTORS README",
+    "test": "npm run-script lint:json && npm run-script lint:markdown"
   }
 }
