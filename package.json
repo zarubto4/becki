@@ -1,11 +1,15 @@
 {
   "devDependencies": {
+    "jlint": "^1.1.0",
     "jsonlint": "^1.6.0",
     "mdast": "^2.1.0",
-    "mdast-lint": "^1.1.0"
+    "mdast-lint": "^1.1.0",
+    "posix-cat": "^1.1.0"
   },
   "scripts": {
-    "lint:json": "jsonlint .mdastrc --quiet && jsonlint package.json --quiet",
+    "lint:json": "npm run-script lint:json:jlint && npm run-script lint:json:jsonlint",
+    "lint:json:jlint": "cat .mdastrc | jlint && cat package.json | jlint",
+    "lint:json:jsonlint": "jsonlint .mdastrc --quiet && jsonlint package.json --quiet",
     "lint:markdown": "mdast --quiet --frail AUTHORS CONTRIBUTORS README",
     "test": "npm run-script lint:json && npm run-script lint:markdown"
   }
