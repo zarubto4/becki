@@ -27,3 +27,13 @@ Installation
 ------------
 
 Copy the distribution into any directory you like.
+
+Contributions
+-------------
+
+Following commands of [npm][] not less than 2.14.0 and less than 3.0.0 might be
+useful during a development:
+
+* `npm install` to install the development dependencies.
+
+[npm]: http://www.npmjs.com/
