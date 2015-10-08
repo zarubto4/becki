@@ -35,5 +35,6 @@ Following commands of [npm][] not less than 2.14.0 and less than 3.0.0 might be
 useful during a development:
 
 * `npm install` to install the development dependencies.
+* `npm test` to run application tests.
 
 [npm]: http://www.npmjs.com/
