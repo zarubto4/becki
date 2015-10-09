@@ -1,5 +1,16 @@
 {
   "bundle": "typings/tsd.d.ts",
+  "installed": {
+    "angular-protractor/angular-protractor.d.ts": {
+      "commit": "3fc1377ce29dd9670975cb68615edf1b819fc4a5"
+    },
+    "jasmine/jasmine.d.ts": {
+      "commit": "3fc1377ce29dd9670975cb68615edf1b819fc4a5"
+    },
+    "selenium-webdriver/selenium-webdriver.d.ts": {
+      "commit": "3fc1377ce29dd9670975cb68615edf1b819fc4a5"
+    }
+  },
   "path": "typings",
   "ref": "master",
   "repo": "borisyankov/DefinitelyTyped",

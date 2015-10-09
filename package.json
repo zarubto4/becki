@@ -8,20 +8,22 @@
     "mdast": "^2.1.0",
     "mdast-lint": "^1.1.0",
     "posix-cat": "^1.1.0",
+    "protractor": "^2.5.0",
     "tsd": "^0.6.0",
     "typescript": "^1.6.0"
   },
   "scripts": {
-    "postinstall": "tsd link && tsd install",
+    "postinstall": "tsd link && tsd install && webdriver-manager update",
     "lint:javascript": "npm run-script lint:javascript:eslint && npm run-script lint:javascript:jshint && npm run-script lint:javascript:jslint",
     "lint:javascript:eslint": "eslint --max-warnings 0 .",
     "lint:javascript:jshint": "jshint .",
-    "lint:javascript:jslint": "jslint '**/*.js'",
+    "lint:javascript:jslint": "jslint '*.js'",
     "lint:json": "npm run-script lint:json:jlint && npm run-script lint:json:jsonlint",
     "lint:json:jlint": "cat .eslintrc | jlint && cat .jshintrc | jlint && cat .jslintrc | jlint && cat .mdastrc | jlint && cat package.json | jlint && cat tsconfig.json | jlint && cat tsd.json | jlint",
     "lint:json:jsonlint": "jsonlint .eslintrc --quiet && jsonlint .jshintrc --quiet && jsonlint .jslintrc --quiet && jsonlint .mdastrc --quiet && jsonlint package.json --quiet && jsonlint tsconfig.json --quiet && jsonlint tsd.json --quiet",
     "lint:markdown": "mdast --quiet --frail AUTHORS CONTRIBUTORS README",
     "pretest": "tsc",
-    "test": "npm run-script lint:javascript && npm run-script lint:json && npm run-script lint:markdown"
+    "test": "npm run-script lint:javascript && npm run-script lint:json && npm run-script lint:markdown && npm run-script test:specs",
+    "test:specs": "protractor"
   }
 }
