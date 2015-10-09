@@ -2,16 +2,19 @@
   "devDependencies": {
     "jlint": "^1.1.0",
     "jshint": "^2.8.0",
+    "jslint": "^0.9.0",
     "jsonlint": "^1.6.0",
     "mdast": "^2.1.0",
     "mdast-lint": "^1.1.0",
     "posix-cat": "^1.1.0"
   },
   "scripts": {
-    "lint:javascript": "jshint .",
+    "lint:javascript": "npm run-script lint:javascript:jshint && npm run-script lint:javascript:jslint",
+    "lint:javascript:jshint": "jshint .",
+    "lint:javascript:jslint": "jslint '**/*.js'",
     "lint:json": "npm run-script lint:json:jlint && npm run-script lint:json:jsonlint",
-    "lint:json:jlint": "cat .jshintrc | jlint && cat .mdastrc | jlint && cat package.json | jlint",
-    "lint:json:jsonlint": "jsonlint .jshintrc --quiet && jsonlint .mdastrc --quiet && jsonlint package.json --quiet",
+    "lint:json:jlint": "cat .jshintrc | jlint && cat .jslintrc | jlint && cat .mdastrc | jlint && cat package.json | jlint",
+    "lint:json:jsonlint": "jsonlint .jshintrc --quiet && jsonlint .jslintrc --quiet && jsonlint .mdastrc --quiet && jsonlint package.json --quiet",
     "lint:markdown": "mdast --quiet --frail AUTHORS CONTRIBUTORS README",
     "test": "npm run-script lint:javascript && npm run-script lint:json && npm run-script lint:markdown"
   }
