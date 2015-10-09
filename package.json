@@ -1,6 +1,7 @@
 {
   "devDependencies": {
     "eslint": "^1.6.0",
+    "htmllint-cli": "0.0.4",
     "jlint": "^1.1.0",
     "jshint": "^2.8.0",
     "jslint": "^0.9.0",
@@ -15,17 +16,18 @@
   },
   "scripts": {
     "postinstall": "tsd link && tsd install && webdriver-manager update",
+    "lint:html": "htmllint '*.html'",
     "lint:javascript": "npm run-script lint:javascript:eslint && npm run-script lint:javascript:jshint && npm run-script lint:javascript:jslint",
     "lint:javascript:eslint": "eslint --max-warnings 0 .",
     "lint:javascript:jshint": "jshint .",
     "lint:javascript:jslint": "jslint '*.js'",
     "lint:json": "npm run-script lint:json:jlint && npm run-script lint:json:jsonlint",
-    "lint:json:jlint": "cat .eslintrc | jlint && cat .jshintrc | jlint && cat .jslintrc | jlint && cat .mdastrc | jlint && cat package.json | jlint && cat tsconfig.json | jlint && cat tsd.json | jlint && cat tslint.json | jlint",
-    "lint:json:jsonlint": "jsonlint .eslintrc --quiet && jsonlint .jshintrc --quiet && jsonlint .jslintrc --quiet && jsonlint .mdastrc --quiet && jsonlint package.json --quiet && jsonlint tsconfig.json --quiet && jsonlint tsd.json --quiet && jsonlint tslint.json --quiet",
+    "lint:json:jlint": "cat .eslintrc | jlint && cat .htmllintrc | jlint && cat .jshintrc | jlint && cat .jslintrc | jlint && cat .mdastrc | jlint && cat package.json | jlint && cat tsconfig.json | jlint && cat tsd.json | jlint && cat tslint.json | jlint",
+    "lint:json:jsonlint": "jsonlint .eslintrc --quiet && jsonlint .htmllintrc --quiet && jsonlint .jshintrc --quiet && jsonlint .jslintrc --quiet && jsonlint .mdastrc --quiet && jsonlint package.json --quiet && jsonlint tsconfig.json --quiet && jsonlint tsd.json --quiet && jsonlint tslint.json --quiet",
     "lint:markdown": "mdast --quiet --frail AUTHORS CONTRIBUTORS README",
     "lint:typescript": "tslint spec/code_spec.ts spec/features_spec.ts spec/use_cases_spec.ts",
     "pretest": "tsc",
-    "test": "npm run-script lint:javascript && npm run-script lint:json && npm run-script lint:markdown && npm run-script lint:typescript && npm run-script test:specs",
+    "test": "npm run-script lint:html && npm run-script lint:javascript && npm run-script lint:json && npm run-script lint:markdown && npm run-script lint:typescript && npm run-script test:specs",
     "test:specs": "protractor"
   }
 }
