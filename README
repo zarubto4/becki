@@ -50,6 +50,8 @@ useful during a development:
 
 * `npm run-script install:dev` to install the development dependencies.
 
+* `npm start` to start a HTTP server that serves the application.
+
 * `npm test` to run application tests. The tests expect [Node.js][] not less
   than 4.0.0 and less than 5.0.0 to be installed.
 
