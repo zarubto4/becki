@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "eslint": "^1.6.0",
     "jlint": "^1.1.0",
     "jshint": "^2.8.0",
     "jslint": "^0.9.0",
@@ -9,12 +10,13 @@
     "posix-cat": "^1.1.0"
   },
   "scripts": {
-    "lint:javascript": "npm run-script lint:javascript:jshint && npm run-script lint:javascript:jslint",
+    "lint:javascript": "npm run-script lint:javascript:eslint && npm run-script lint:javascript:jshint && npm run-script lint:javascript:jslint",
+    "lint:javascript:eslint": "eslint --max-warnings 0 .",
     "lint:javascript:jshint": "jshint .",
     "lint:javascript:jslint": "jslint '**/*.js'",
     "lint:json": "npm run-script lint:json:jlint && npm run-script lint:json:jsonlint",
-    "lint:json:jlint": "cat .jshintrc | jlint && cat .jslintrc | jlint && cat .mdastrc | jlint && cat package.json | jlint",
-    "lint:json:jsonlint": "jsonlint .jshintrc --quiet && jsonlint .jslintrc --quiet && jsonlint .mdastrc --quiet && jsonlint package.json --quiet",
+    "lint:json:jlint": "cat .eslintrc | jlint && cat .jshintrc | jlint && cat .jslintrc | jlint && cat .mdastrc | jlint && cat package.json | jlint",
+    "lint:json:jsonlint": "jsonlint .eslintrc --quiet && jsonlint .jshintrc --quiet && jsonlint .jslintrc --quiet && jsonlint .mdastrc --quiet && jsonlint package.json --quiet",
     "lint:markdown": "mdast --quiet --frail AUTHORS CONTRIBUTORS README",
     "test": "npm run-script lint:javascript && npm run-script lint:json && npm run-script lint:markdown"
   }
