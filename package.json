@@ -23,7 +23,7 @@
     "lint:json:jlint": "cat .eslintrc | jlint && cat .jshintrc | jlint && cat .jslintrc | jlint && cat .mdastrc | jlint && cat package.json | jlint && cat tsconfig.json | jlint && cat tsd.json | jlint && cat tslint.json | jlint",
     "lint:json:jsonlint": "jsonlint .eslintrc --quiet && jsonlint .jshintrc --quiet && jsonlint .jslintrc --quiet && jsonlint .mdastrc --quiet && jsonlint package.json --quiet && jsonlint tsconfig.json --quiet && jsonlint tsd.json --quiet && jsonlint tslint.json --quiet",
     "lint:markdown": "mdast --quiet --frail AUTHORS CONTRIBUTORS README",
-    "lint:typescript": "tslint spec/use_cases_spec.ts",
+    "lint:typescript": "tslint spec/features_spec.ts spec/use_cases_spec.ts",
     "pretest": "tsc",
     "test": "npm run-script lint:javascript && npm run-script lint:json && npm run-script lint:markdown && npm run-script lint:typescript && npm run-script test:specs",
     "test:specs": "protractor"
