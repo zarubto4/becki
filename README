@@ -24,6 +24,11 @@ License
 For the time being, we retain all rights. That means that you are not allowed to
 distribute, reproduce or modify this project.
 
+Requirements
+------------
+
+Clients must support [HTML5][].
+
 Installation
 ------------
 
@@ -36,6 +41,10 @@ Following commands of [npm][] not less than 2.14.0 and less than 3.0.0 might be
 useful during a development:
 
 * `npm install` to install the development dependencies.
-* `npm test` to run application tests.
 
+* `npm test` to run application tests. The tests expect [Node.js][] not less
+  than 4.0.0 and less than 5.0.0 to be installed.
+
+[html5]: http://www.w3.org/TR/2014/REC-html5-20141028/
+[node.js]: https://nodejs.org
 [npm]: http://www.npmjs.com/

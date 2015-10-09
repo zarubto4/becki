@@ -1,6 +1,7 @@
 {
   "devDependencies": {
     "eslint": "^1.6.0",
+    "file-url": "^1.0.0",
     "htmllint-cli": "0.0.4",
     "jlint": "^1.1.0",
     "jshint": "^2.8.0",
