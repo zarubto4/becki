@@ -10,6 +10,7 @@
     "posix-cat": "^1.1.0",
     "protractor": "^2.5.0",
     "tsd": "^0.6.0",
+    "tslint": "^2.5.0",
     "typescript": "^1.6.0"
   },
   "scripts": {
@@ -19,11 +20,12 @@
     "lint:javascript:jshint": "jshint .",
     "lint:javascript:jslint": "jslint '*.js'",
     "lint:json": "npm run-script lint:json:jlint && npm run-script lint:json:jsonlint",
-    "lint:json:jlint": "cat .eslintrc | jlint && cat .jshintrc | jlint && cat .jslintrc | jlint && cat .mdastrc | jlint && cat package.json | jlint && cat tsconfig.json | jlint && cat tsd.json | jlint",
-    "lint:json:jsonlint": "jsonlint .eslintrc --quiet && jsonlint .jshintrc --quiet && jsonlint .jslintrc --quiet && jsonlint .mdastrc --quiet && jsonlint package.json --quiet && jsonlint tsconfig.json --quiet && jsonlint tsd.json --quiet",
+    "lint:json:jlint": "cat .eslintrc | jlint && cat .jshintrc | jlint && cat .jslintrc | jlint && cat .mdastrc | jlint && cat package.json | jlint && cat tsconfig.json | jlint && cat tsd.json | jlint && cat tslint.json | jlint",
+    "lint:json:jsonlint": "jsonlint .eslintrc --quiet && jsonlint .jshintrc --quiet && jsonlint .jslintrc --quiet && jsonlint .mdastrc --quiet && jsonlint package.json --quiet && jsonlint tsconfig.json --quiet && jsonlint tsd.json --quiet && jsonlint tslint.json --quiet",
     "lint:markdown": "mdast --quiet --frail AUTHORS CONTRIBUTORS README",
+    "lint:typescript": "tslint spec/use_cases_spec.ts",
     "pretest": "tsc",
-    "test": "npm run-script lint:javascript && npm run-script lint:json && npm run-script lint:markdown && npm run-script test:specs",
+    "test": "npm run-script lint:javascript && npm run-script lint:json && npm run-script lint:markdown && npm run-script lint:typescript && npm run-script test:specs",
     "test:specs": "protractor"
   }
 }
