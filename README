@@ -30,7 +30,7 @@ Requirements
 Server-side dependencies can be installed using [npm][] not less than 2.14.0 and
 less than 3.0.0. Install it and see the installation instructions below.
 
-On the other side, clients must support [HTML5][].
+On the other side, clients must support [HTML5][] and JavaScript.
 
 Installation
 ------------
