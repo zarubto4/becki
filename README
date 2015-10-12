@@ -27,20 +27,27 @@ distribute, reproduce or modify this project.
 Requirements
 ------------
 
-Server-side dependencies can be installed using [npm][] not less than 2.14.0 and
-less than 3.0.0. Install it and see the installation instructions below.
+In order to serve the front end through HTTP, an HTTP server is required because
+current web browsers implement a variety of safety measures that may prevent the
+front end from functioning if accessed otherwise. Server-side dependencies can
+be installed using [npm][] not less than 2.14.0 and less than 3.0.0. Install it
+and see the installation instructions below.
 
 On the other side, clients must support [HTML5][] and JavaScript.
 
 Installation
 ------------
 
-In the top-level directory of this distribution:
+1. Configure the HTTP server to serve the top-level directory of this
+   distribution.
 
-1. Run `npm install --production` in order to install the application
-   dependencies.
+2. In that directory:
 
-2. Run `npm run-script compile` in order to compile the sources into JavaScript.
+   1. Run `npm install --production` in order to install the application
+      dependencies.
+
+   2. Run `npm run-script compile` in order to compile the sources into
+      JavaScript.
 
 Contributions
 -------------
@@ -50,11 +57,11 @@ useful during a development:
 
 * `npm run-script install:dev` to install the development dependencies.
 
-* `npm start` to start a HTTP server that serves the application.
+* `npm start` to start a HTTP server that serves the application at
+  <http://0.0.0.0:8080/>.
 
-* `npm test` to run application tests. The tests expect [Node.js][] not less
-  than 4.0.0 and less than 5.0.0 to be installed.
+* `npm test` to run application tests. The tests expect the tested front end
+  instance to be available at <http://127.0.0.1:8080/>.
 
 [html5]: http://www.w3.org/TR/2014/REC-html5-20141028/
-[node.js]: https://nodejs.org
 [npm]: http://www.npmjs.com/
