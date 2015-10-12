@@ -27,12 +27,16 @@ distribute, reproduce or modify this project.
 Requirements
 ------------
 
-Clients must support [HTML5][].
+Server-side dependencies can be installed using [npm][] not less than 2.14.0 and
+less than 3.0.0. Install it and see the installation instructions below.
+
+On the other side, clients must support [HTML5][].
 
 Installation
 ------------
 
-Copy the distribution into any directory you like.
+In the top-level directory of this distribution, run `npm install --production`
+in order to install the application dependencies.
 
 Contributions
 -------------
@@ -40,7 +44,7 @@ Contributions
 Following commands of [npm][] not less than 2.14.0 and less than 3.0.0 might be
 useful during a development:
 
-* `npm install` to install the development dependencies.
+* `npm run-script install:dev` to install the development dependencies.
 
 * `npm test` to run application tests. The tests expect [Node.js][] not less
   than 4.0.0 and less than 5.0.0 to be installed.

@@ -16,7 +16,8 @@
     "typescript": "^1.6.0"
   },
   "scripts": {
-    "postinstall": "tsd link && tsd install && webdriver-manager update",
+    "install:dev": "npm install",
+    "postinstall:dev": "tsd link && tsd install && webdriver-manager update",
     "lint:html": "htmllint '*.html'",
     "lint:javascript": "npm run-script lint:javascript:eslint && npm run-script lint:javascript:jshint && npm run-script lint:javascript:jslint",
     "lint:javascript:eslint": "eslint --max-warnings 0 .",
