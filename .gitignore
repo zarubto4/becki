@@ -1,4 +1,6 @@
 /node_modules/
 /spec/**/*.js
 /spec/**/*.js.map
+/src/**/*.js
+/src/**/*.js.map
 /typings/

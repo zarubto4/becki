@@ -33,7 +33,8 @@ front end from functioning if accessed otherwise. Server-side dependencies can
 be installed using [npm][] not less than 2.14.0 and less than 3.0.0. Install it
 and see the installation instructions below.
 
-On the other side, clients must support [HTML5][] and JavaScript.
+On the other side, clients must support [HTML5][] and a JavaScript based on
+[ECMAScript 5][].
 
 Installation
 ------------
@@ -63,5 +64,6 @@ useful during a development:
 * `npm test` to run application tests. The tests expect the tested front end
   instance to be available at <http://127.0.0.1:8080/>.
 
+[ecmascript 5]: http://www.ecma-international.org/publications/files/ECMA-ST-ARCH/ECMA-262%205th%20edition%20December%202009.pdf
 [html5]: http://www.w3.org/TR/2014/REC-html5-20141028/
 [npm]: http://www.npmjs.com/
