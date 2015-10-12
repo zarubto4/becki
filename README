@@ -35,8 +35,12 @@ On the other side, clients must support [HTML5][] and JavaScript.
 Installation
 ------------
 
-In the top-level directory of this distribution, run `npm install --production`
-in order to install the application dependencies.
+In the top-level directory of this distribution:
+
+1. Run `npm install --production` in order to install the application
+   dependencies.
+
+2. Run `npm run-script compile` in order to compile the sources into JavaScript.
 
 Contributions
 -------------
