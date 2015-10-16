@@ -6,7 +6,10 @@
  * A verification of the application components and units.
  */
 
+// TODO: https://github.com/angular/angular/issues/5306
+import "reflect-metadata";
 import * as backEnd from "../src/backend";
+import * as controller from "../src/controller";
 
 /**
  * The URL of the home page.
@@ -71,6 +74,15 @@ describe("The response", () => {
 
   it("creates a new instance with a body", () => {
     expect(new backEnd.Response(200, "{}").body).toEqual("{}");
+  });
+});
+
+describe("The Angular based back end", () => {
+  "use strict";
+
+  it("creates a new instance with an HTTP service", () => {
+    let http:any = {request: "foo"};
+    expect(new controller.BackEndAngular(http).http).toEqual(http);
   });
 });
 

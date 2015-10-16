@@ -17,6 +17,7 @@
     "mdast-lint": "^1.1.0",
     "posix-cat": "^1.1.0",
     "protractor": "^2.5.0",
+    "reflect-metadata": "^0.1.0",
     "tslint": "^2.5.0"
   },
   "scripts": {
