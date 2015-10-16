@@ -2,3 +2,33 @@
   © 2015 Becki Authors. See the AUTHORS file found in the top-level directory of
   this distribution.
 -->
+<h1>Person Registration</h1>
+<!-- htmllint attr-name-style=false -->
+<form #person_registration=form (ng-submit)=registerPerson()>
+  <!-- htmllint attr-name-style=$previous -->
+  <p>
+    <label>
+      Email address:
+      <!-- htmllint attr-name-style=false -->
+      <input type=email [(ng-model)]=personRegistrationModel.email>
+      <!-- htmllint attr-name-style=$previous -->
+    </label>
+  </p>
+
+  <p>
+    <label>
+      Password:
+      <!-- htmllint attr-name-style=false -->
+      <input type=password [(ng-model)]=personRegistrationModel.password>
+      <!-- htmllint attr-name-style=$previous -->
+    </label>
+  </p>
+
+  <p>
+    <input type=submit>
+  </p>
+
+  <p class=result>
+    Result: {{personRegistrationMsg}}
+  </p>
+</form>

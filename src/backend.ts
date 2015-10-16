@@ -120,6 +120,21 @@ export class Response {
 export abstract class BackEnd {
 
   /**
+   * A hostname of the back end.
+   */
+  static HOSTNAME = "127.0.0.1";
+
+  /**
+   * A port number of the back end.
+   */
+  static PORT = 9000;
+
+  /**
+   * An absolute path to the person resources.
+   */
+  static PERSON_PATH = "/coreClient/person/person";
+
+  /**
    * Perform an HTTP request.
    *
    * @param request the details of the request.
@@ -127,4 +142,24 @@ export abstract class BackEnd {
    *          with a reason.
    */
   protected abstract request(request:Request):Promise<Response>;
+
+  /**
+   * Create a new person.
+   *
+   * @param email their email address.
+   * @param password their password.
+   * @returns a promise that will be resolved with a message describing the
+   *          result, or rejected with a reason.
+   */
+  public createPerson(email:string, password:string):Promise<string> {
+    "use strict";
+
+    let request = new Request(
+        "POST",
+        BackEnd.HOSTNAME, BackEnd.PORT, BackEnd.PERSON_PATH,
+        {},
+        {mail: email, password: password}
+    );
+    return this.request(request).then(JSON.stringify);
+  }
 }

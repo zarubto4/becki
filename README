@@ -15,6 +15,11 @@ Features
 --------
 
 Refer to the test suite for the complete list of all the features and use cases.
+We have, nevertheless, mentioned one of them below in hope of gaining your
+attention:
+
+* register a new person
+
 The project is not in the final shape yet. Further features are added on demand
 if they fit the purpose of the program.
 
@@ -35,6 +40,10 @@ and see the installation instructions below.
 
 On the other side, clients must support [HTML5][] and a JavaScript based on
 [ECMAScript 5][].
+
+And on top of that a back end instance built from the Git revision
+1e77013a61d868783898e4feacd20aa922c868e7 has to be available at address
+127.0.0.1 and port 9000.
 
 Installation
 ------------
@@ -61,9 +70,11 @@ useful during a development:
 * `npm start` to start a HTTP server that serves the application at
   <http://0.0.0.0:8080/>.
 
-* `npm test` to run application tests. The tests expect the tested front end
+* `npm test` to run application tests. The tests expect [Node.js][] not less
+  than 4.0.0 and less than 5.0.0 to be installed and the tested front end
   instance to be available at <http://127.0.0.1:8080/>.
 
 [ecmascript 5]: http://www.ecma-international.org/publications/files/ECMA-ST-ARCH/ECMA-262%205th%20edition%20December%202009.pdf
 [html5]: http://www.w3.org/TR/2014/REC-html5-20141028/
+[node.js]: https://nodejs.org
 [npm]: http://www.npmjs.com/

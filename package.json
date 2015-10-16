@@ -18,6 +18,7 @@
     "posix-cat": "^1.1.0",
     "protractor": "^2.5.0",
     "reflect-metadata": "^0.1.0",
+    "selenium-webdriver": "2.47.0",
     "tslint": "^2.5.0"
   },
   "scripts": {
@@ -34,7 +35,7 @@
     "lint:json:jlint": "cat .eslintrc | jlint && cat .htmllintrc | jlint && cat .jshintrc | jlint && cat .jslintrc | jlint && cat .mdastrc | jlint && cat package.json | jlint && cat tsconfig.json | jlint && cat tsd.json | jlint && cat tslint.json | jlint",
     "lint:json:jsonlint": "jsonlint .eslintrc --quiet && jsonlint .htmllintrc --quiet && jsonlint .jshintrc --quiet && jsonlint .jslintrc --quiet && jsonlint .mdastrc --quiet && jsonlint package.json --quiet && jsonlint tsconfig.json --quiet && jsonlint tsd.json --quiet && jsonlint tslint.json --quiet",
     "lint:markdown": "mdast --quiet --frail AUTHORS CONTRIBUTORS README",
-    "lint:typescript": "tslint spec/code_spec.ts spec/features_spec.ts spec/use_cases_spec.ts src/backend.ts src/bootstrap.ts src/controller.ts",
+    "lint:typescript": "tslint spec/code_spec.ts spec/features_spec.ts spec/support.ts spec/use_cases_spec.ts src/backend.ts src/bootstrap.ts src/controller.ts",
     "prestart": "npm run-script compile",
     "start": "http-server",
     "pretest": "npm run-script compile",

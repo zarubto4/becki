@@ -70,12 +70,59 @@ export class BackEndAngular extends backEnd.BackEnd {
 
 /**
  * A "view" directive that renders a view from "src/view.html".
+ *
+ * It expects the the back end to be available at address 127.0.0.1 and port
+ * 9000.
  */
 @ng.Component({
+  bindings: [ngHttp.HTTP_BINDINGS],
   selector: "view"
 })
 @ng.View({
+  directives: [ng.FORM_DIRECTIVES],
   templateUrl: "src/view.html"
 })
 export class Controller {
+
+  /**
+   * A service providing access to the back end.
+   */
+  private backEnd:BackEndAngular;
+
+  /**
+   * A model of the person registration form.
+   */
+  public personRegistrationModel:{email:string, password:string};
+
+  /**
+   * A message describing the result of the last person registration attempt.
+   */
+  public personRegistrationMsg:string;
+
+  /**
+   * Create a new controller.
+   *
+   * @param http a service that is able to perform HTTP requests.
+   */
+  constructor(http:ngHttp.Http) {
+    "use strict";
+
+    this.backEnd = new BackEndAngular(http);
+    this.personRegistrationModel = {email: "", password: ""};
+  }
+
+  /**
+   * Register a new person.
+   *
+   * The credentials of the person are taken from
+   * {@link Controller#personRegistrationModel}. A message describing the result
+   * is stored in {@link Controller#personRegistrationMsg}.
+   */
+  registerPerson():void {
+    "use strict";
+
+    this.backEnd.createPerson(this.personRegistrationModel.email, this.personRegistrationModel.password)
+        .then((message:string) => this.personRegistrationMsg = "success: " + message)
+        .catch((reason:any) => this.personRegistrationMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
 }
