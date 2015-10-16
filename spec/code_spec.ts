@@ -258,6 +258,10 @@ describe("The Angular based back end", () => {
     });
   });
 
+  it("is injectable", () => {
+    // TODO: The way to test injectables is not documented yet.
+  });
+
   afterEach(() => {
     support.wait(backEndNodeJs.deletePerson(email));
   });
@@ -273,19 +277,23 @@ describe("The controller", () => {
   "use strict";
 
   const PASSWORD = "testing";
-  let httpAngular:ngHttp.Http;
+  let backEndAngular:controller.BackEndAngular;
   let instance:controller.Controller;
   let backEndNodeJs:support.BackEndNodeJs;
   let email:string;
 
   beforeEach(() => {
     // TODO: The way to instantiate Http is not documented yet.
-    httpAngular = <any>new Http();
-    instance = new controller.Controller(httpAngular);
+    backEndAngular = new controller.BackEndAngular(<any>new Http());
+    instance = new controller.Controller(backEndAngular);
     backEndNodeJs = new support.BackEndNodeJs();
     support.wait(backEndNodeJs.findNonExistentPerson().then((email2) => {
       email = email2;
     }));
+  });
+
+  it("creates a new instance with a back end service", () => {
+    expect(new controller.Controller(backEndAngular).backEnd).toEqual(backEndAngular);
   });
 
   it("renders 'src/view.html' into 'view' elements", () => {
@@ -311,7 +319,9 @@ describe("The controller", () => {
 
   describe("if the back end is not available", () => {
     beforeEach(() => {
+      let httpAngular = <any>new Http();
       spyOn(httpAngular, "request").and.returnValue({subscribe: (onNext:(item:ngHttp.Response)=>any, onError:(err:any)=>any)=>onError(new Error("not available"))});
+      backEndAngular = new controller.BackEndAngular(httpAngular);
     });
 
     it("describes the result of an attempt to register a new person", () => {

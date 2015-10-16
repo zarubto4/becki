@@ -15,6 +15,7 @@ import * as ngHttp from "angular2/http";
  *
  * It uses Angular to perform HTTP requests.
  */
+@ng.Injectable()
 export class BackEndAngular extends backEnd.BackEnd {
 
   /**
@@ -76,7 +77,7 @@ export class BackEndAngular extends backEnd.BackEnd {
  */
 @ng.Component({
   directives: [ng.FORM_DIRECTIVES],
-  providers: [ngHttp.HTTP_PROVIDERS],
+  providers: [BackEndAngular, ngHttp.HTTP_PROVIDERS],
   selector: "view",
   templateUrl: "src/view.html"
 })
@@ -85,27 +86,28 @@ export class Controller {
   /**
    * A service providing access to the back end.
    */
-  private backEnd:BackEndAngular;
+  backEnd:BackEndAngular;
 
   /**
    * A model of the person registration form.
    */
-  public personRegistrationModel:{email:string, password:string};
+  personRegistrationModel:{email:string, password:string};
 
   /**
    * A message describing the result of the last person registration attempt.
    */
-  public personRegistrationMsg:string;
+  personRegistrationMsg:string;
 
   /**
    * Create a new controller.
    *
-   * @param http a service that is able to perform HTTP requests.
+   * @param backEndAngular a service providing access to the back end at address
+   *                       127.0.0.1 and port 9000.
    */
-  constructor(http:ngHttp.Http) {
+  constructor(backEndAngular:BackEndAngular) {
     "use strict";
 
-    this.backEnd = new BackEndAngular(http);
+    this.backEnd = backEndAngular;
     this.personRegistrationModel = {email: "", password: ""};
   }
 
