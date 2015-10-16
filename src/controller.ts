@@ -75,11 +75,9 @@ export class BackEndAngular extends backEnd.BackEnd {
  * 9000.
  */
 @ng.Component({
-  bindings: [ngHttp.HTTP_BINDINGS],
-  selector: "view"
-})
-@ng.View({
   directives: [ng.FORM_DIRECTIVES],
+  providers: [ngHttp.HTTP_PROVIDERS],
+  selector: "view",
   templateUrl: "src/view.html"
 })
 export class Controller {

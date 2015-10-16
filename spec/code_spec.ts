@@ -297,7 +297,7 @@ describe("The controller", () => {
       instance.personRegistrationModel.email = email;
       instance.personRegistrationModel.password = PASSWORD;
       instance.registerPerson();
-      browser.wait(() => instance.personRegistrationMsg);
+      support.waitBrowser(() => instance.personRegistrationMsg);
       expect(support.call(() => backEndNodeJs.existCredentials(email, PASSWORD))).toBeTruthy();
     });
 
@@ -305,7 +305,7 @@ describe("The controller", () => {
       instance.personRegistrationModel.email = email;
       instance.personRegistrationModel.password = PASSWORD;
       instance.registerPerson();
-      expect(browser.wait(() => instance.personRegistrationMsg)).toBeTruthy();
+      expect(support.waitBrowser(() => instance.personRegistrationMsg)).toBeTruthy();
     });
   });
 
@@ -318,7 +318,7 @@ describe("The controller", () => {
       instance.personRegistrationModel.email = email;
       instance.personRegistrationModel.password = PASSWORD;
       instance.registerPerson();
-      expect(browser.wait(() => instance.personRegistrationMsg)).toBeTruthy();
+      expect(support.waitBrowser(() => instance.personRegistrationMsg)).toBeTruthy();
     });
   });
 

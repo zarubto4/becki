@@ -1,14 +1,8 @@
 {
   "bundle": "typings/tsd.d.ts",
   "installed": {
-    "angular-protractor/angular-protractor.d.ts": {
-      "commit": "3fc1377ce29dd9670975cb68615edf1b819fc4a5"
-    },
     "node/node.d.ts": {
       "commit": "43f4fc592a99e2f0f8f4ee3ae26a3a8e2f5ca3ae"
-    },
-    "selenium-webdriver/selenium-webdriver.d.ts": {
-      "commit": "3fc1377ce29dd9670975cb68615edf1b819fc4a5"
     }
   },
   "path": "typings",

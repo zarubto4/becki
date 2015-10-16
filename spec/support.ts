@@ -25,7 +25,22 @@ export const HOMEPAGE_URL = "http://127.0.0.1:8080/";
 function promiseToWebdriver<T>(promise:Promise<T>):webdriver.promise.Promise<T> {
   "use strict";
 
-  return new webdriver.promise.Promise((onFulfilled, onRejected) => promise.then(onFulfilled, onRejected));
+  // TODO: https://github.com/angular/angular/issues/5337
+  return new (<any>webdriver.promise.Promise)((onFulfilled:(value:T)=>void, onRejected:(reason:any)=>void) => promise.then(onFulfilled, onRejected));
+}
+
+// TODO: https://github.com/angular/angular/issues/5337
+/**
+ * Wait for a condition to hold.
+ *
+ * @param condition the condition to wait on.
+ * @returns a promise that will be resolved with the value of the condition.
+ * @template T
+ */
+export function waitBrowser<T>(condition:webdriver.promise.Promise<T>|webdriver.until.Condition<T>|(()=>T)):webdriver.promise.Promise<T> {
+  "use strict";
+
+  return (<any>browser.wait)(condition);
 }
 
 /**
@@ -39,7 +54,7 @@ function promiseToWebdriver<T>(promise:Promise<T>):webdriver.promise.Promise<T> 
 export function wait<T>(promise:Promise<T>):webdriver.promise.Promise<T> {
   "use strict";
 
-  return browser.wait(promiseToWebdriver(promise));
+  return waitBrowser(promiseToWebdriver(promise));
 }
 
 // TODO: https://github.com/angular/jasminewd/issues/36

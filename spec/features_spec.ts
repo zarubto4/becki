@@ -24,7 +24,7 @@ export function registerPerson(email:string, password:string):webdriver.promise.
   support.sendKeys(element(by.cssContainingText("label", "Email address:")).$("input"), email);
   support.sendKeys(element(by.cssContainingText("label", "Password:")).$("input"), password);
   $("form").submit();
-  return browser.wait(protractor.until.elementTextMatches($(".result"), /^Result: .*: .+/));
+  return support.waitBrowser(protractor.until.elementTextMatches($(".result"), /^Result: .*: .+/));
 }
 
 describe("Registration of a person", () => {
