@@ -201,6 +201,38 @@ describe("The back end", () => {
     it("returns a promise that will be resolved with a response to an attempt to create a new person", () => {
       expect(support.wait(instance.createPerson(EMAIL, PASSWORD))).toMatch(/.+/);
     });
+
+    it("performs a correct HTTP request to log a person in", () => {
+      instance.logIn(EMAIL, PASSWORD);
+      expect(instance.request).toHaveBeenCalledWith(new backEnd.Request(
+          "POST",
+          "127.0.0.1", 9000, "/coreClient/person/permission/login",
+          {},
+          {email: EMAIL, password: PASSWORD}
+      ));
+    });
+  });
+
+  describe("if available and if credentials are correct", () => {
+    let TOKEN = "3d7e6a76-4ed3-416c-8b36-f298f57d5614";
+
+    beforeEach(() => {
+      spyOn(instance, "request").and.returnValue(Promise.resolve(new backEnd.Response(200, "{\"token\": \"" + TOKEN + "\"}")));
+    });
+
+    it("returns a promise that will be resolved with an authentication token after an attempt to log a person in", () => {
+      expect(support.wait(instance.logIn(EMAIL, PASSWORD))).toEqual(TOKEN);
+    });
+  });
+
+  describe("if available and if credentials are not correct", () => {
+    beforeEach(() => {
+      spyOn(instance, "request").and.returnValue(Promise.resolve(new backEnd.Response(400, "{}")));
+    });
+
+    it("returns a promise that will be rejected with something else than a back end error because an attempt to log a person in have failed", () => {
+      expect(support.waitRejection(instance.logIn(EMAIL, PASSWORD))).not.toEqual(jasmine.any(backEnd.BackEndError));
+    });
   });
 
   describe("if not available", () => {
@@ -210,6 +242,10 @@ describe("The back end", () => {
 
     it("returns a promise that will be rejected with a reason why an attempt to create a new person have failed", () => {
       expect(support.waitRejection(instance.createPerson(EMAIL, PASSWORD))).toEqual(jasmine.anything());
+    });
+
+    it("returns a promise that will be rejected with a back end error because an attempt to log a person in have failed", () => {
+      expect(support.waitRejection(instance.logIn(EMAIL, PASSWORD))).toEqual(jasmine.any(backEnd.BackEndError));
     });
   });
 });
@@ -248,6 +284,26 @@ describe("The Angular based back end", () => {
     });
   });
 
+  describe("if available and if credentials are correct", () => {
+    beforeEach(() => {
+      support.wait(backEndNodeJs.createPerson(email, PASSWORD));
+    });
+
+    it("logs a person in", () => {
+      // TODO: There is no way to test whether a person is logged in yet.
+    });
+
+    it("returns a promise that will be resolved with an authentication token after an attempt to log a person in", () => {
+      expect(support.wait(instance.logIn(email, PASSWORD).then((token) => backEndNodeJs.logOut(token)))).toBeDefined();
+    });
+  });
+
+  describe("if available and if credentials are not correct", () => {
+    it("returns a promise that will be rejected with something else than a back end error because an attempt to log a person in have failed", () => {
+      expect(support.waitRejection(instance.logIn(email, PASSWORD))).not.toEqual(jasmine.any(backEnd.BackEndError));
+    });
+  });
+
   describe("if not available", () => {
     beforeEach(() => {
       spyOn(httpAngular, "request").and.returnValue({subscribe: (onNext:(item:ngHttp.Response)=>any, onError:(err:any)=>any)=>onError(new Error("not available"))});
@@ -255,6 +311,10 @@ describe("The Angular based back end", () => {
 
     it("returns a promise that will be rejected with a reason why an attempt to create a new person have failed", () => {
       expect(support.waitRejection(instance.createPerson(email, PASSWORD))).toEqual(jasmine.anything());
+    });
+
+    it("returns a promise that will be rejected with a back end error because an attempt to log a person in have failed", () => {
+      expect(support.waitRejection(instance.logIn(email, PASSWORD))).toEqual(jasmine.any(backEnd.BackEndError));
     });
   });
 
@@ -315,6 +375,20 @@ describe("The controller", () => {
       instance.registerPerson();
       expect(support.waitBrowser(() => instance.personRegistrationMsg)).toBeTruthy();
     });
+
+    it("logs a person in", () => {
+      instance.loginModel.email = email;
+      instance.loginModel.password = PASSWORD;
+      instance.logIn();
+      // TODO: There is no way to test whether the login was successful yet.
+    });
+
+    it("describes the result of an attempt to log a person in", () => {
+      instance.loginModel.email = email;
+      instance.loginModel.password = PASSWORD;
+      instance.logIn();
+      expect(support.waitBrowser(() => instance.loginMsg)).toBeTruthy();
+    });
   });
 
   describe("if the back end is not available", () => {
@@ -329,6 +403,13 @@ describe("The controller", () => {
       instance.personRegistrationModel.password = PASSWORD;
       instance.registerPerson();
       expect(support.waitBrowser(() => instance.personRegistrationMsg)).toBeTruthy();
+    });
+
+    it("describes the result of an attempt to log a person in", () => {
+      instance.loginModel.email = email;
+      instance.loginModel.password = PASSWORD;
+      instance.logIn();
+      expect(support.waitBrowser(() => instance.loginMsg)).toBeTruthy();
     });
   });
 

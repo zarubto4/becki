@@ -99,6 +99,16 @@ export class Controller {
   personRegistrationMsg:string;
 
   /**
+   * A model of the login form.
+   */
+  loginModel:{email:string, password:string};
+
+  /**
+   * A message describing the result of the last login attempt.
+   */
+  loginMsg:string;
+
+  /**
    * Create a new controller.
    *
    * @param backEndAngular a service providing access to the back end at address
@@ -109,6 +119,7 @@ export class Controller {
 
     this.backEnd = backEndAngular;
     this.personRegistrationModel = {email: "", password: ""};
+    this.loginModel = {email: "", password: ""};
   }
 
   /**
@@ -122,7 +133,21 @@ export class Controller {
     "use strict";
 
     this.backEnd.createPerson(this.personRegistrationModel.email, this.personRegistrationModel.password)
-        .then((message:string) => this.personRegistrationMsg = "success: " + message)
-        .catch((reason:any) => this.personRegistrationMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+        .then((message) => this.personRegistrationMsg = "success: " + message)
+        .catch((reason) => this.personRegistrationMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  /**
+   * Log a person in.
+   *
+   * The credentials are taken from {@link Controller#loginModel}. A message
+   * describing the result is stored in {@link Controller#loginMsg}.
+   */
+  logIn():void {
+    "use strict";
+
+    this.backEnd.logIn(this.loginModel.email, this.loginModel.password)
+        .then((token) => this.loginMsg = "success: " + token)
+        .catch((reason) => this.loginMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
   }
 }

@@ -115,6 +115,23 @@ export class Response {
 }
 
 /**
+ * An error describing a problem in communication with the back end.
+ */
+export class BackEndError extends Error {
+
+  /**
+   * Create a new error instance.
+   *
+   * @param reason a description of the problem.
+   */
+  constructor(reason:any) {
+    "use strict";
+
+    super("communication with the back end failed: " + reason.toString());
+  }
+}
+
+/**
  * A service providing access to the back end at 127.0.0.1:9000.
  */
 export abstract class BackEnd {
@@ -130,6 +147,11 @@ export abstract class BackEnd {
   static PORT = 9000;
 
   /**
+   * An absolute path to the permission resources.
+   */
+  static PERMISSION_PATH = "/coreClient/person/permission";
+
+  /**
    * An absolute path to the person resources.
    */
   static PERSON_PATH = "/coreClient/person/person";
@@ -142,6 +164,19 @@ export abstract class BackEnd {
    *          with a reason.
    */
   protected abstract request(request:Request):Promise<Response>;
+
+  /**
+   * Perform an HTTP request.
+   *
+   * @param request the details of the request.
+   * @returns a promise that will be resolved with the response, or rejected
+   *          with an instance of {@link BackEndError}.
+   */
+  protected requestWrapped(request:Request):Promise<Response> {
+    return this.request(request).catch((reason) => {
+      throw new BackEndError(reason);
+    });
+  }
 
   /**
    * Create a new person.
@@ -160,6 +195,36 @@ export abstract class BackEnd {
         {},
         {mail: email, password: password}
     );
-    return this.request(request).then(JSON.stringify);
+    return this.requestWrapped(request).then(JSON.stringify);
+  }
+
+  /**
+   * Log a person in.
+   *
+   * If the communication with the back end fails, the rejection reason is an
+   * instance of {@link BackEndError}. Any other reason indicates that the login
+   * have failed.
+   *
+   * @param email their email address.
+   * @param password their password.
+   * @returns a promise that will be resolved with an authentication token, or
+   *          rejected with a reason.
+   */
+  public logIn(email:string, password:string):Promise<string> {
+    "use strict";
+
+    let request = new Request(
+        "POST",
+        BackEnd.HOSTNAME, BackEnd.PORT, BackEnd.PERMISSION_PATH + "/login",
+        {},
+        {email: email, password: password}
+    );
+    return this.requestWrapped(request).then((response) => {
+      if (response.status == 200) {
+        return JSON.parse(response.body).token;
+      } else {
+        throw new Error("login failed");
+      }
+    });
   }
 }

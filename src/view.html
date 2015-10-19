@@ -32,3 +32,33 @@
     Result: {{personRegistrationMsg}}
   </p>
 </form>
+<h1>Login</h1>
+<!-- htmllint attr-name-style=false -->
+<form #login=form (ng-submit)=logIn()>
+  <!-- htmllint attr-name-style=$previous -->
+  <p>
+    <label>
+      Email address:
+      <!-- htmllint attr-name-style=false -->
+      <input type=email [(ng-model)]=loginModel.email>
+      <!-- htmllint attr-name-style=$previous -->
+    </label>
+  </p>
+
+  <p>
+    <label>
+      Password:
+      <!-- htmllint attr-name-style=false -->
+      <input type=password [(ng-model)]=loginModel.password>
+      <!-- htmllint attr-name-style=$previous -->
+    </label>
+  </p>
+
+  <p>
+    <input type=submit>
+  </p>
+
+  <p class=result>
+    Result: {{loginMsg}}
+  </p>
+</form>

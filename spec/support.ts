@@ -114,11 +114,6 @@ export function sendKeys(element:protractor.ElementFinder, text:string):void {
 export class BackEndNodeJs extends backEnd.BackEnd {
 
   /**
-   * An absolute path to the permission resources.
-   */
-  static PERMISSION_PATH = "/coreClient/person/permission";
-
-  /**
    * Perform an HTTP request.
    *
    * @param request the details of the request.
@@ -160,25 +155,15 @@ export class BackEndNodeJs extends backEnd.BackEnd {
   public existCredentials(email:string, password:string):Promise<boolean> {
     "use strict";
 
-    let loginRequest = new backEnd.Request(
-        "POST",
-        BackEndNodeJs.HOSTNAME, BackEndNodeJs.PORT, BackEndNodeJs.PERMISSION_PATH + "/login",
-        {},
-        {email: email, password: password}
-    );
-    return this.request(loginRequest).then((response) => {
-      if (response.status == 200) {
-        let logoutRequest = new backEnd.Request(
-            "POST",
-            BackEndNodeJs.HOSTNAME, BackEndNodeJs.PORT, BackEndNodeJs.PERMISSION_PATH + "/logout",
-            {"X-AUTH-TOKEN": JSON.parse(response.body).token},
-            {}
-        );
-        return this.request(logoutRequest).then(() => true);
-      } else {
-        return false;
-      }
-    });
+    return this.logIn(email, password)
+        .then((token) => this.logOut(token)).then(() => true)
+        .catch((reason) => {
+          if (reason instanceof backEnd.BackEndError) {
+            throw reason;
+          } else {
+            return false;
+          }
+        });
   }
 
   /**
@@ -196,7 +181,7 @@ export class BackEndNodeJs extends backEnd.BackEnd {
         "GET",
         BackEndNodeJs.HOSTNAME, BackEndNodeJs.PORT, BackEndNodeJs.PERSON_PATH + "/" + email
     );
-    return this.request(request).then((response) =>
+    return this.requestWrapped(request).then((response) =>
         response.status == 200 ? this.findNonExistentPerson() : email);
   }
 
@@ -214,6 +199,35 @@ export class BackEndNodeJs extends backEnd.BackEnd {
         "DELETE",
         BackEndNodeJs.HOSTNAME, BackEndNodeJs.PORT, BackEndNodeJs.PERSON_PATH + "/" + email
     );
-    return this.request(request).then(JSON.stringify);
+    return this.requestWrapped(request).then(JSON.stringify);
+  }
+
+  /**
+   * Log a person out.
+   *
+   * If the communication with the back end fails, the rejection reason is an
+   * instance of {@link BackEndError}. Any other reason indicates that the
+   * logout have failed.
+   *
+   * @param token their authentication token.
+   * @returns a promise that will be resolved with a message describing the
+   *          result, or rejected with a reason.
+   */
+  public logOut(token:string):Promise<string> {
+    "use strict";
+
+    let request = new backEnd.Request(
+        "POST",
+        BackEndNodeJs.HOSTNAME, BackEndNodeJs.PORT, BackEndNodeJs.PERMISSION_PATH + "/logout",
+        {"X-AUTH-TOKEN": token},
+        {}
+    );
+    return this.requestWrapped(request).then((response) => {
+      if (response.status == 200) {
+        return JSON.stringify(response);
+      } else {
+        throw new Error("logout failed");
+      }
+    });
   }
 }
