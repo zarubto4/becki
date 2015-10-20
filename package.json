@@ -6,7 +6,7 @@
     "typescript": "^1.6.0"
   },
   "devDependencies": {
-    "eslint": "^1.6.0",
+    "eslint": "^1.7.0",
     "htmllint-cli": "0.0.4",
     "http-server": "^0.8.0",
     "jlint": "^1.1.0",
