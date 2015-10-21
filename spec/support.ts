@@ -16,6 +16,17 @@ import * as webdriver from "selenium-webdriver";
 export const HOMEPAGE_URL = "http://127.0.0.1:8080/";
 
 /**
+ * Generate a pseudo random string.
+ *
+ * @returns the string.
+ */
+function randomString():string {
+  "use strict";
+
+  return Date.now().toString() + Math.floor(Math.random() * 100000000000000000);
+}
+
+/**
  * Convert a promise to a corresponding Webdriver promise.
  *
  * @param promise the original promise.
@@ -106,6 +117,7 @@ export function sendKeys(element:protractor.ElementFinder, text:string):void {
   }
 }
 
+// FIXME logout's jsdoc, deletes in fixtures?, test this
 /**
  * A service providing access to the back end at 127.0.0.1:9000.
  *
@@ -175,8 +187,7 @@ export class BackEndNodeJs extends backEnd.BackEnd {
   public findNonExistentPerson():Promise<string> {
     "use strict";
 
-    let random = Date.now().toString() + Math.floor(Math.random() * 1000000000);
-    let email = "foo@test" + random + ".com";
+    let email = "foo@test" + randomString() + ".com";
     let request = new backEnd.Request(
         "GET",
         BackEndNodeJs.HOSTNAME, BackEndNodeJs.PORT, BackEndNodeJs.PERSON_PATH + "/" + email
@@ -200,5 +211,109 @@ export class BackEndNodeJs extends backEnd.BackEnd {
         BackEndNodeJs.HOSTNAME, BackEndNodeJs.PORT, BackEndNodeJs.PERSON_PATH + "/" + email
     );
     return this.requestWrapped(request).then(JSON.stringify);
+  }
+
+  /**
+   * Test whether a project exists.
+   *
+   * @param project the project.
+   * @param token an authentication token of the person.
+   * @returns a promise that will be resolved with the test result, or rejected
+   *          with a reason.
+   */
+  public existsProject(project:backEnd.Project, token:string):Promise<boolean> {
+    "use strict";
+
+    return this.getProjects(token).then((idToProject) => {
+      for (let id in idToProject) {
+        if (idToProject.hasOwnProperty(id)) {
+          if (project.equals(idToProject[id])) {
+            return true;
+          }
+        }
+      }
+      return false;
+    });
+  }
+
+  /**
+   * Retrieve all the projects of a person.
+   *
+   * @param token an authentication token of the person.
+   * @returns a promise that will be resolved with a mapping from the projects
+   *          IDs to the projects themselves, or rejected with a reason.
+   */
+  public getProjects(token:string):Promise<{[id: string]: backEnd.Project}> {
+    "use strict";
+
+    let request = new backEnd.Request(
+        "GET",
+        BackEndNodeJs.HOSTNAME, BackEndNodeJs.PORT, BackEndNodeJs.PROJECT_PATH,
+        {[BackEndNodeJs.TOKEN_HEADER]: token}
+    );
+    return this.requestWrapped(request).then((response) => {
+      if (response.status == 200) {
+        let idToProject:{[id: string]: backEnd.Project} = {};
+        for (let project of JSON.parse(response.body)) {
+          idToProject[project.projectId] = new backEnd.Project(project.projectName, project.projectDescription);
+        }
+        return idToProject;
+      } else {
+        throw JSON.stringify(response);
+      }
+    });
+  }
+
+  /**
+   * Find a project name which does not exist yet.
+   *
+   * @param token an authentication token.
+   * @returns a promise that will be resolved with the address, or rejected with
+   *          a reason.
+   */
+  public findNonExistentProject(token:string):Promise<string> {
+    "use strict";
+
+    return this.getProjects(token).then((idToProject) => {
+      let names:string[] = [];
+      for (let id in idToProject) {
+        if (idToProject.hasOwnProperty(id)) {
+          names.push(idToProject[id].name);
+        }
+      }
+      while (true) {
+        let name = "Test" + randomString();
+        if (names.indexOf(name) == -1) {
+          return name;
+        }
+      }
+    });
+  }
+
+  /**
+   * Delete a project.
+   *
+   * @param project the project.
+   * @param token an authentication token.
+   * @returns a promise that will be resolved with a message describing the
+   *          result, or rejected with a reason.
+   */
+  public deleteProject(project:backEnd.Project, token:string):Promise<string> {
+    "use strict";
+
+    return this.getProjects(token).then((idToProject) => {
+      let promises:Promise<string>[] = [];
+      for (let id in idToProject) {
+        if (idToProject.hasOwnProperty(id) && project.equals(idToProject[id])) {
+          let request = new backEnd.Request(
+              "DELETE",
+              BackEndNodeJs.HOSTNAME, BackEndNodeJs.PORT, BackEndNodeJs.PROJECT_PATH + "/" + id,
+              {[BackEndNodeJs.TOKEN_HEADER]: token}
+          );
+          promises.push(this.requestWrapped(request).then(JSON.stringify));
+        }
+      }
+      return Promise.all(promises).then((values) => values.join());
+    });
   }
 }

@@ -111,6 +111,34 @@ class Http {
   }
 }
 
+describe("The project", () => {
+  "use strict";
+
+  it("creates a new instance with a name", () => {
+    expect(new backEnd.Project("test", "A testing project.").name).toEqual("test");
+  });
+
+  it("creates a new instance with a description", () => {
+    expect(new backEnd.Project("test", "A testing project.").description).toEqual("A testing project.");
+  });
+
+  it("recognizes equal projects", () => {
+    expect(new backEnd.Project("test", "A testing project.").equals(new backEnd.Project("test", "A testing project."))).toBeTruthy();
+  });
+
+  it("is not equal to null", () => {
+    expect(new backEnd.Project("test", "A testing project.").equals(null)).toBeFalsy();
+  });
+
+  it('is not equal to a project with a different name', () => {
+    expect(new backEnd.Project("test", "A testing project.").equals(new backEnd.Project("different", "A testing project."))).toBeFalsy();
+  });
+
+  it('is not equal to a project with a different description', () => {
+    expect(new backEnd.Project("test", "A testing project.").equals(new backEnd.Project("test", "different"))).toBeFalsy();
+  });
+});
+
 describe("The request", () => {
   "use strict";
 
@@ -179,9 +207,11 @@ describe("The back end", () => {
   const PASSWORD = "testing";
   let TOKEN = "3d7e6a76-4ed3-416c-8b36-f298f57d5614";
   let instance:BackEndStub;
+  let project:backEnd.Project;
 
   beforeEach(() => {
     instance = new BackEndStub();
+    project = new backEnd.Project("test", "A testing project.");
   });
 
   describe("if available", () => {
@@ -226,6 +256,20 @@ describe("The back end", () => {
     it("returns a promise that will be resolved with a response to an attempt to log a person out", () => {
       expect(support.wait(instance.logOut(TOKEN))).toMatch(/.+/);
     });
+
+    it("performs a correct HTTP request to create a new project", () => {
+      instance.createProject(project, TOKEN);
+      expect(instance.request).toHaveBeenCalledWith(new backEnd.Request(
+          "POST",
+          "127.0.0.1", 9000, "/project/project",
+          {"X-AUTH-TOKEN": TOKEN},
+          {projectName: project.name, projectDescription: project.description}
+      ));
+    });
+
+    it("returns a promise that will be resolved with a response to an attempt to create a new project", () => {
+      expect(support.wait(instance.createProject(project, TOKEN))).toMatch(/.+/);
+    });
   });
 
   describe("if available and if credentials are correct", () => {
@@ -267,6 +311,10 @@ describe("The back end", () => {
 
     it("returns a promise that will be rejected with a back end error because an attempt to log a person out have failed", () => {
       expect(support.waitRejection(instance.logOut(TOKEN))).toEqual(jasmine.any(backEnd.BackEndError));
+    });
+
+    it("returns a promise that will be rejected with a reason why an attempt to create a new project have failed", () => {
+      expect(support.waitRejection(instance.createProject(project, TOKEN))).toEqual(jasmine.anything());
     });
   });
 });
@@ -321,11 +369,15 @@ describe("The Angular based back end", () => {
 
   describe("if available and if an authentication token is correct", () => {
     let token:string;
+    let project:backEnd.Project;
 
     beforeEach(() => {
       support.wait(backEndNodeJs.createPerson(email, PASSWORD));
       support.call(() => backEndNodeJs.logIn(email, PASSWORD).then((token2) => {
         token = token2;
+      }));
+      support.call(() => backEndNodeJs.findNonExistentProject(token).then((name) => {
+        project = new backEnd.Project(name, "A testing project.");
       }));
     });
 
@@ -335,6 +387,20 @@ describe("The Angular based back end", () => {
 
     it("returns a promise that will be resolved with a response to an attempt to log a person out", () => {
       expect(support.wait(instance.logOut(token))).toMatch(/.+/);
+    });
+
+    it("creates a new project", () => {
+      support.wait(instance.createProject(project, token));
+      expect(support.call(() => backEndNodeJs.existsProject(project, token))).toBeTruthy();
+    });
+
+    it("returns a promise that will be resolved with a response to an attempt to create a new project", () => {
+      expect(support.wait(instance.createProject(project, token))).toMatch(/.+/);
+    });
+
+    afterEach(() => {
+      support.wait(backEndNodeJs.deleteProject(project, token));
+      support.call(() => backEndNodeJs.logOut(token));
     });
   });
 
@@ -365,6 +431,10 @@ describe("The Angular based back end", () => {
 
     it("returns a promise that will be rejected with a back end error because an attempt to log a person out have failed", () => {
       expect(support.waitRejection(instance.logOut("3d7e6a76-4ed3-416c-8b36-f298f57d5614"))).toEqual(jasmine.any(backEnd.BackEndError));
+    });
+
+    it("returns a promise that will be rejected with a reason why an attempt to create a new project have failed", () => {
+      expect(support.waitRejection(instance.createProject(new backEnd.Project("test", "A testing project."), "3d7e6a76-4ed3-416c-8b36-f298f57d5614"))).toEqual(jasmine.anything());
     });
   });
 
@@ -442,8 +512,15 @@ describe("The controller", () => {
   });
 
   describe("if the back end is available and if a person is logged in", () => {
+    let project:backEnd.Project;
+
     beforeEach(() => {
       support.wait(backEndNodeJs.createPerson(email, PASSWORD));
+      support.call(() => backEndNodeJs.logIn(email, PASSWORD).then((token) =>
+          backEndNodeJs.findNonExistentProject(token)
+              .then((name) => project = new backEnd.Project(name, "A testing project."))
+              .then(() => backEndNodeJs.logOut(token))
+      ));
       instance.loginModel.email = email;
       instance.loginModel.password = PASSWORD;
       instance.logIn();
@@ -458,6 +535,40 @@ describe("The controller", () => {
     it("describes the result of an attempt to log a person out", () => {
       instance.logOut();
       expect(support.waitBrowser(() => instance.logoutMsg)).toBeTruthy();
+    });
+
+    it("creates a new projct", () => {
+      instance.projectCreationModel.name = project.name;
+      instance.projectCreationModel.description = project.description;
+      instance.createProject();
+      support.waitBrowser(() => instance.projectCreationMsg);
+      instance.logOut();
+      support.waitBrowser(() => instance.logoutMsg);
+      expect(support.call(() => backEndNodeJs.logIn(email, PASSWORD)
+          .then((token) => backEndNodeJs.existsProject(project, token)
+              .then((exists) => backEndNodeJs.logOut(token)
+                  .then(() => exists)
+              )
+          )
+      ))
+          .toBeTruthy();
+    });
+
+    it("describes the result of an attempt to create a new project", () => {
+      instance.projectCreationModel.name = project.name;
+      instance.projectCreationModel.description = project.description;
+      instance.createProject();
+      expect(support.waitBrowser(() => instance.projectCreationMsg)).toBeTruthy();
+    });
+
+    afterEach(() => {
+      instance.logOut();
+      support.waitBrowser(() => instance.logoutMsg);
+      support.call(() => backEndNodeJs.logIn(email, PASSWORD)
+          .then((token) => backEndNodeJs.deleteProject(project, token)
+              .then(() => backEndNodeJs.logOut(token))
+          )
+      );
     });
   });
 
@@ -498,6 +609,13 @@ describe("The controller", () => {
     it("describes the result of an attempt to log a person out", () => {
       instance.logOut();
       expect(support.waitBrowser(() => instance.logoutMsg)).toBeTruthy();
+    });
+
+    it("describes the result of an attempt to create a new project", () => {
+      instance.projectCreationModel.name = "test";
+      instance.projectCreationModel.description = "A testing project.";
+      instance.createProject();
+      expect(support.waitBrowser(() => instance.projectCreationMsg)).toBeTruthy();
     });
   });
 

@@ -74,3 +74,33 @@
     Result: {{logoutMsg}}
   </p>
 </form>
+<h1>New Project</h1>
+<!-- htmllint attr-name-style=false -->
+<form #project_creation=form (ng-submit)=createProject()>
+  <!-- htmllint attr-name-style=$previous -->
+  <p>
+    <label>
+      Name:
+      <!-- htmllint attr-name-style=false -->
+      <input [(ng-model)]=projectCreationModel.name>
+      <!-- htmllint attr-name-style=$previous -->
+    </label>
+  </p>
+
+  <p>
+    <label>
+      Description:
+      <!-- htmllint attr-name-style=false -->
+      <textarea [(ng-model)]=projectCreationModel.description></textarea>
+      <!-- htmllint attr-name-style=$previous -->
+    </label>
+  </p>
+
+  <p>
+    <input type=submit>
+  </p>
+
+  <p class=result>
+    Result: {{projectCreationMsg}}
+  </p>
+</form>

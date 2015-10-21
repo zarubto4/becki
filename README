@@ -21,6 +21,7 @@ attention:
 * register a new person
 * log a person in
 * log a person out
+* create a new project
 
 The project is not in the final shape yet. Further features are added on demand
 if they fit the purpose of the program.

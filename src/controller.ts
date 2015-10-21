@@ -120,6 +120,16 @@ export class Controller {
   public logoutMsg:string;
 
   /**
+   * A model of the project creation form.
+   */
+  public projectCreationModel:backEnd.Project;
+
+  /**
+   * A message describing the result of the last project creation attempt.
+   */
+  public projectCreationMsg:string;
+
+  /**
    * Create a new controller.
    *
    * @param backEndAngular a service providing access to the back end at address
@@ -131,6 +141,7 @@ export class Controller {
     this.backEnd = backEndAngular;
     this.personRegistrationModel = {email: "", password: ""};
     this.loginModel = {email: "", password: ""};
+    this.projectCreationModel = new backEnd.Project("", "");
   }
 
   /**
@@ -187,5 +198,21 @@ export class Controller {
         .catch((reason) => {
           this.logoutMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason);
         });
+  }
+
+  /**
+   * Create a new project.
+   *
+   * The properties of the project are taken from
+   * {@link Controller#projectCreationModel}. Credentials are taken from
+   * {@link Controller#authToken}. A message describing the result is stored in
+   * {@link Controller#projectCreationMsg}.
+   */
+  createProject():void {
+    "use strict";
+
+    this.backEnd.createProject(this.projectCreationModel, this.authToken)
+        .then((message) => this.personRegistrationMsg = "success: " + message)
+        .catch((reason) => this.personRegistrationMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
   }
 }

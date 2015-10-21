@@ -7,6 +7,47 @@
  */
 
 /**
+ * A project.
+ */
+export class Project {
+
+  /**
+   * The name of the project.
+   */
+  name:string;
+
+  /**
+   * The description of the project.
+   */
+  description:string;
+
+  /**
+   * Create a new project instance.
+   *
+   * @param name the name of the project.
+   * @param description the description of the project.
+   */
+  constructor(name:string, description:string) {
+    "use strict";
+
+    this.name = name;
+    this.description = description;
+  }
+
+  /**
+   * Test whether this project is equal to another one.
+   *
+   * @param other the other project.
+   */
+  equals(other:Project):boolean {
+    if (!other) {
+      return false;
+    }
+    return this.name == other.name && this.description == other.description;
+  }
+}
+
+/**
  * An HTTP request.
  */
 export class Request {
@@ -157,6 +198,16 @@ export abstract class BackEnd {
   static PERSON_PATH = "/coreClient/person/person";
 
   /**
+   * An absolute path to the project resources.
+   */
+  static PROJECT_PATH = "/project/project";
+
+  /**
+   * A name of the authentication token HTTP header.
+   */
+  static TOKEN_HEADER = "X-AUTH-TOKEN";
+
+  /**
    * Perform an HTTP request.
    *
    * @param request the details of the request.
@@ -245,7 +296,7 @@ export abstract class BackEnd {
     let request = new Request(
         "POST",
         BackEnd.HOSTNAME, BackEnd.PORT, BackEnd.PERMISSION_PATH + "/logout",
-        {"X-AUTH-TOKEN": token},
+        {[BackEnd.TOKEN_HEADER]: token},
         {}
     );
     return this.requestWrapped(request).then((response) => {
@@ -255,5 +306,25 @@ export abstract class BackEnd {
         throw new Error("logout failed");
       }
     });
+  }
+
+  /**
+   * Create a new project.
+   *
+   * @param project the project.
+   * @param token an authentication token.
+   * @returns a promise that will be resolved with a message describing the
+   *          result, or rejected with a reason.
+   */
+  public createProject(project:Project, token:string):Promise<string> {
+    "use strict";
+
+    let request = new Request(
+        "POST",
+        BackEnd.HOSTNAME, BackEnd.PORT, BackEnd.PROJECT_PATH,
+        {[BackEnd.TOKEN_HEADER]: token},
+        {projectName: project.name, projectDescription: project.description}
+    );
+    return this.requestWrapped(request).then(JSON.stringify);
   }
 }
