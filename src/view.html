@@ -62,3 +62,15 @@
     Result: {{loginMsg}}
   </p>
 </form>
+<h1>Logout</h1>
+<!-- htmllint attr-name-style=false -->
+<form #logout=form (ng-submit)=logOut()>
+  <!-- htmllint attr-name-style=$previous -->
+  <p>
+    <input type=submit>
+  </p>
+
+  <p class=result>
+    Result: {{logoutMsg}}
+  </p>
+</form>

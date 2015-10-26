@@ -201,33 +201,4 @@ export class BackEndNodeJs extends backEnd.BackEnd {
     );
     return this.requestWrapped(request).then(JSON.stringify);
   }
-
-  /**
-   * Log a person out.
-   *
-   * If the communication with the back end fails, the rejection reason is an
-   * instance of {@link BackEndError}. Any other reason indicates that the
-   * logout have failed.
-   *
-   * @param token their authentication token.
-   * @returns a promise that will be resolved with a message describing the
-   *          result, or rejected with a reason.
-   */
-  public logOut(token:string):Promise<string> {
-    "use strict";
-
-    let request = new backEnd.Request(
-        "POST",
-        BackEndNodeJs.HOSTNAME, BackEndNodeJs.PORT, BackEndNodeJs.PERMISSION_PATH + "/logout",
-        {"X-AUTH-TOKEN": token},
-        {}
-    );
-    return this.requestWrapped(request).then((response) => {
-      if (response.status == 200) {
-        return JSON.stringify(response);
-      } else {
-        throw new Error("logout failed");
-      }
-    });
-  }
 }

@@ -177,6 +177,7 @@ describe("The back end", () => {
 
   const EMAIL = "test@example.com";
   const PASSWORD = "testing";
+  let TOKEN = "3d7e6a76-4ed3-416c-8b36-f298f57d5614";
   let instance:BackEndStub;
 
   beforeEach(() => {
@@ -211,11 +212,23 @@ describe("The back end", () => {
           {email: EMAIL, password: PASSWORD}
       ));
     });
+
+    it("performs a correct HTTP request to log a person out", () => {
+      instance.logOut(TOKEN);
+      expect(instance.request).toHaveBeenCalledWith(new backEnd.Request(
+          "POST",
+          "127.0.0.1", 9000, "/coreClient/person/permission/logout",
+          {"X-AUTH-TOKEN": TOKEN},
+          {}
+      ));
+    });
+
+    it("returns a promise that will be resolved with a response to an attempt to log a person out", () => {
+      expect(support.wait(instance.logOut(TOKEN))).toMatch(/.+/);
+    });
   });
 
   describe("if available and if credentials are correct", () => {
-    let TOKEN = "3d7e6a76-4ed3-416c-8b36-f298f57d5614";
-
     beforeEach(() => {
       spyOn(instance, "request").and.returnValue(Promise.resolve(new backEnd.Response(200, "{\"token\": \"" + TOKEN + "\"}")));
     });
@@ -233,6 +246,10 @@ describe("The back end", () => {
     it("returns a promise that will be rejected with something else than a back end error because an attempt to log a person in have failed", () => {
       expect(support.waitRejection(instance.logIn(EMAIL, PASSWORD))).not.toEqual(jasmine.any(backEnd.BackEndError));
     });
+
+    it("returns a promise that will be rejected with something else than a back end error because an attempt to log a person out have failed", () => {
+      expect(support.waitRejection(instance.logOut(TOKEN))).not.toEqual(jasmine.any(backEnd.BackEndError));
+    });
   });
 
   describe("if not available", () => {
@@ -246,6 +263,10 @@ describe("The back end", () => {
 
     it("returns a promise that will be rejected with a back end error because an attempt to log a person in have failed", () => {
       expect(support.waitRejection(instance.logIn(EMAIL, PASSWORD))).toEqual(jasmine.any(backEnd.BackEndError));
+    });
+
+    it("returns a promise that will be rejected with a back end error because an attempt to log a person out have failed", () => {
+      expect(support.waitRejection(instance.logOut(TOKEN))).toEqual(jasmine.any(backEnd.BackEndError));
     });
   });
 });
@@ -298,9 +319,34 @@ describe("The Angular based back end", () => {
     });
   });
 
+  describe("if available and if an authentication token is correct", () => {
+    let token:string;
+
+    beforeEach(() => {
+      support.wait(backEndNodeJs.createPerson(email, PASSWORD));
+      support.call(() => backEndNodeJs.logIn(email, PASSWORD).then((token2) => {
+        token = token2;
+      }));
+    });
+
+    it("logs a person out", () => {
+      // TODO: There is no way to test whether a person is logged out yet.
+    });
+
+    it("returns a promise that will be resolved with a response to an attempt to log a person out", () => {
+      expect(support.wait(instance.logOut(token))).toMatch(/.+/);
+    });
+  });
+
   describe("if available and if credentials are not correct", () => {
     it("returns a promise that will be rejected with something else than a back end error because an attempt to log a person in have failed", () => {
       expect(support.waitRejection(instance.logIn(email, PASSWORD))).not.toEqual(jasmine.any(backEnd.BackEndError));
+    });
+  });
+
+  describe("if available and if an authentication token is not correct", () => {
+    it("returns a promise that will be rejected with something else than a back end error because an attempt to log a person out have failed", () => {
+      expect(support.waitRejection(instance.logOut("incorrect"))).not.toEqual(jasmine.any(backEnd.BackEndError));
     });
   });
 
@@ -315,6 +361,10 @@ describe("The Angular based back end", () => {
 
     it("returns a promise that will be rejected with a back end error because an attempt to log a person in have failed", () => {
       expect(support.waitRejection(instance.logIn(email, PASSWORD))).toEqual(jasmine.any(backEnd.BackEndError));
+    });
+
+    it("returns a promise that will be rejected with a back end error because an attempt to log a person out have failed", () => {
+      expect(support.waitRejection(instance.logOut("3d7e6a76-4ed3-416c-8b36-f298f57d5614"))).toEqual(jasmine.any(backEnd.BackEndError));
     });
   });
 
@@ -391,6 +441,26 @@ describe("The controller", () => {
     });
   });
 
+  describe("if the back end is available and if a person is logged in", () => {
+    beforeEach(() => {
+      support.wait(backEndNodeJs.createPerson(email, PASSWORD));
+      instance.loginModel.email = email;
+      instance.loginModel.password = PASSWORD;
+      instance.logIn();
+      support.waitBrowser(() => instance.loginMsg);
+    });
+
+    it("logs a person out", () => {
+      instance.logOut();
+      // TODO: There is no way to test whether the logout was successful yet.
+    });
+
+    it("describes the result of an attempt to log a person out", () => {
+      instance.logOut();
+      expect(support.waitBrowser(() => instance.logoutMsg)).toBeTruthy();
+    });
+  });
+
   describe("if the back end is not available", () => {
     beforeEach(() => {
       let httpAngular = <any>new Http();
@@ -413,8 +483,27 @@ describe("The controller", () => {
     });
   });
 
+  describe("if the back end is not available and if a person is logged in", () => {
+    beforeEach(() => {
+      let httpAngular = <any>new Http();
+      spyOn(httpAngular, "request").and.returnValue({subscribe: (onNext:(item:ngHttp.Response)=>any, onError:(err:any)=>any)=>onError(new Error("not available"))});
+      backEndAngular = new controller.BackEndAngular(httpAngular);
+      support.wait(backEndNodeJs.createPerson(email, PASSWORD));
+      instance.loginModel.email = email;
+      instance.loginModel.password = PASSWORD;
+      instance.logIn();
+      support.waitBrowser(() => instance.loginMsg);
+    });
+
+    it("describes the result of an attempt to log a person out", () => {
+      instance.logOut();
+      expect(support.waitBrowser(() => instance.logoutMsg)).toBeTruthy();
+    });
+  });
+
   afterEach(() => {
-    support.wait(backEndNodeJs.deletePerson(email));
+    instance.logOut();
+    support.call(() => backEndNodeJs.deletePerson(email));
   });
 });
 

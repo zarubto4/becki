@@ -86,27 +86,38 @@ export class Controller {
   /**
    * A service providing access to the back end.
    */
-  backEnd:BackEndAngular;
+  public backEnd:BackEndAngular;
+
+  // TODO: persist it once Angular provides an API
+  /**
+   * An authentication token.
+   */
+  private authToken = "";
 
   /**
    * A model of the person registration form.
    */
-  personRegistrationModel:{email:string, password:string};
+  public personRegistrationModel:{email:string, password:string};
 
   /**
    * A message describing the result of the last person registration attempt.
    */
-  personRegistrationMsg:string;
+  public personRegistrationMsg:string;
 
   /**
    * A model of the login form.
    */
-  loginModel:{email:string, password:string};
+  public loginModel:{email:string, password:string};
 
   /**
    * A message describing the result of the last login attempt.
    */
-  loginMsg:string;
+  public loginMsg:string;
+
+  /**
+   * A message describing the result of the last logout attempt.
+   */
+  public logoutMsg:string;
 
   /**
    * Create a new controller.
@@ -141,13 +152,40 @@ export class Controller {
    * Log a person in.
    *
    * The credentials are taken from {@link Controller#loginModel}. A message
-   * describing the result is stored in {@link Controller#loginMsg}.
+   * describing the result is stored in {@link Controller#loginMsg}. In case of
+   * success, {@link Controller#authToken} is set. Otherwise, it is cleared.
    */
   logIn():void {
     "use strict";
 
     this.backEnd.logIn(this.loginModel.email, this.loginModel.password)
-        .then((token) => this.loginMsg = "success: " + token)
-        .catch((reason) => this.loginMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+        .then((token) => {
+          this.authToken = token;
+          this.loginMsg = "success: " + this.authToken;
+        })
+        .catch((reason) => {
+          this.authToken = "";
+          this.loginMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason);
+        });
+  }
+
+  /**
+   * Log a person out.
+   *
+   * The authentication token is taken from {@link Controller#authToken}. A
+   * message describing the result is stored in {@link Controller#logoutMsg}. In
+   * case of success, {@link Controller#authToken} is cleared.
+   */
+  logOut():void {
+    "use strict";
+
+    this.backEnd.logOut(this.authToken)
+        .then((message) => {
+          this.authToken = "";
+          this.logoutMsg = "success: " + message;
+        })
+        .catch((reason) => {
+          this.logoutMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason);
+        });
   }
 }
