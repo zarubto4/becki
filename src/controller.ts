@@ -20,6 +20,51 @@ import * as ng from "angular2/angular2";
 import * as ngHttp from "angular2/http";
 
 /**
+ * A convenient wrapper around a mapping from projects' IDs to the projects.
+ */
+class IdToProject {
+
+  /**
+   * The mapping from the projects' IDs to the projects themselves.
+   */
+  idToProject:{[id: string]: backEnd.Project};
+
+  /**
+   * Create a new wrapper.
+   *
+   * @param idToProject the mapping from the projects' IDs to the projects.
+   */
+  constructor (idToProject:{[id: string]: backEnd.Project}) {
+    "use strict";
+
+    this.idToProject = idToProject;
+  }
+
+  /**
+   * Get an array of the projects' IDs.
+   *
+   * @returns the IDs.
+   */
+  getIds():string[] {
+    "use strict";
+
+    return Object.keys(this.idToProject);
+  }
+
+  /**
+   * Get the name of a project.
+   *
+   * @param id the ID of the project.
+   * @returns the name of the project.
+   */
+  getName(id:string):string {
+    "use strict";
+
+    return this.idToProject[id].name;
+  }
+}
+
+/**
  * A service providing access to the back end at 127.0.0.1:9000.
  *
  * It uses Angular to perform HTTP requests.
@@ -85,7 +130,7 @@ export class BackEndAngular extends backEnd.BackEnd {
  * 9000.
  */
 @ng.Component({
-  directives: [ng.FORM_DIRECTIVES],
+  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES],
   providers: [BackEndAngular, ngHttp.HTTP_PROVIDERS],
   selector: "view",
   templateUrl: "src/view.html"
@@ -102,6 +147,11 @@ export class Controller {
    * An authentication token.
    */
   private authToken = "";
+
+  /**
+   * All the projects of the authenticated person.
+   */
+  public idToProject:IdToProject;
 
   /**
    * A model of the person registration form.
@@ -159,6 +209,16 @@ export class Controller {
   public projectCreationMsg:string;
 
   /**
+   * The ID of a project to be selected.
+   */
+  public projectSelectionId:string;
+
+  /**
+   * A message describing the result of the latest project selection attempt.
+   */
+  public projectSelectionMsg:string;
+
+  /**
    * Create a new controller.
    *
    * @param backEndAngular a service providing access to the back end at address
@@ -168,10 +228,24 @@ export class Controller {
     "use strict";
 
     this.backEnd = backEndAngular;
+    this.idToProject = new IdToProject({});
     this.personRegistrationModel = {email: "", password: ""};
     this.loginModel = {email: "", password: ""};
     this.projectCreationModel = new backEnd.Project("", "");
     this.deviceRegistrationModel = {id: "", type: ""};
+  }
+
+  /**
+   * Refresh {@link Controller#idToProject}.
+   *
+   * Credentials are taken from {@link Controller#authToken}.
+   */
+  refreshProjects():void {
+    "use strict";
+
+    this.backEnd.getProjects(this.authToken)
+        .then((idToProject) => this.idToProject = new IdToProject(idToProject))
+        .catch((message) => this.idToProject = new IdToProject({}));
   }
 
   /**
@@ -276,5 +350,18 @@ export class Controller {
     this.backEnd.createProject(this.projectCreationModel, this.authToken)
         .then((message) => this.personRegistrationMsg = "success: " + message)
         .catch((reason) => this.personRegistrationMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  /**
+   * Select a project.
+   *
+   * The properties of the project are taken from
+   * {@link Controller#projectSelectionId}. A message describing the result is
+   * stored in {@link Controller#projectSelectionMsg}.
+   */
+  selectProject():void {
+    "use strict";
+
+    this.projectSelectionMsg = this.projectSelectionId;
   }
 }

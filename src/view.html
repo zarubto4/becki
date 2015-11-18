@@ -158,3 +158,28 @@
     Result: {{projectCreationMsg}}
   </p>
 </form>
+<h1>Project Selection</h1>
+<form var-project-selection=form on-ng-submit=selectProject()>
+  <p>
+    <input type=button on-click=refreshProjects() value="Refresh projects">
+  </p>
+
+  <p>
+    <label>
+      Name:
+      <select bindon-ng-model=projectSelectionId>
+        <template ng-for var-id bind-ng-for-of=idToProject.getIds()>
+          <option bind-label="idToProject.getName(id)">{{id}}</option>
+        </template>
+      </select>
+    </label>
+  </p>
+
+  <p>
+    <input type=submit>
+  </p>
+
+  <p class=result>
+    Result: {{projectSelectionMsg}}
+  </p>
+</form>

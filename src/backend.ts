@@ -374,4 +374,32 @@ export abstract class BackEnd {
     );
     return this.requestWrapped(request).then(JSON.stringify);
   }
+
+  /**
+   * Retrieve all the projects of a person.
+   *
+   * @param token an authentication token of the person.
+   * @returns a promise that will be resolved with a mapping from the projects
+   *          IDs to the projects themselves, or rejected with a reason.
+   */
+  public getProjects(token:string):Promise<{[id: string]: Project}> {
+    "use strict";
+
+    let request = new Request(
+        "GET",
+        BackEnd.HOSTNAME, BackEnd.PORT, BackEnd.PROJECT_PATH,
+        {[BackEnd.TOKEN_HEADER]: token}
+    );
+    return this.requestWrapped(request).then((response) => {
+      if (response.status == 200) {
+        let idToProject:{[id: string]: Project} = {};
+        for (let project of JSON.parse(response.body)) {
+          idToProject[project.projectId] = new Project(project.projectName, project.projectDescription);
+        }
+        return idToProject;
+      } else {
+        throw JSON.stringify(response);
+      }
+    });
+  }
 }

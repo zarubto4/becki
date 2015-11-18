@@ -246,34 +246,6 @@ export class BackEndNodeJs extends backEnd.BackEnd {
   }
 
   /**
-   * Retrieve all the projects of a person.
-   *
-   * @param token an authentication token of the person.
-   * @returns a promise that will be resolved with a mapping from the projects
-   *          IDs to the projects themselves, or rejected with a reason.
-   */
-  public getProjects(token:string):Promise<{[id: string]: backEnd.Project}> {
-    "use strict";
-
-    let request = new backEnd.Request(
-        "GET",
-        BackEndNodeJs.HOSTNAME, BackEndNodeJs.PORT, BackEndNodeJs.PROJECT_PATH,
-        {[BackEndNodeJs.TOKEN_HEADER]: token}
-    );
-    return this.requestWrapped(request).then((response) => {
-      if (response.status == 200) {
-        let idToProject:{[id: string]: backEnd.Project} = {};
-        for (let project of JSON.parse(response.body)) {
-          idToProject[project.projectId] = new backEnd.Project(project.projectName, project.projectDescription);
-        }
-        return idToProject;
-      } else {
-        throw JSON.stringify(response);
-      }
-    });
-  }
-
-  /**
    * Find a project name which does not exist yet.
    *
    * @param token an authentication token.
