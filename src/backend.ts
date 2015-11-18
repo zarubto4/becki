@@ -57,6 +57,42 @@ export class Project {
 }
 
 /**
+ * A program.
+ */
+export class Program {
+
+  /**
+   * The name of the program.
+   */
+  name:string;
+
+  /**
+   * The description of the program.
+   */
+  description:string;
+
+  /**
+   * The code of the program.
+   */
+  code:string;
+
+  /**
+   * Create a new program.
+   *
+   * @param name the name of the program.
+   * @param description the description of the program.
+   * @param code the code of the program.
+   */
+  constructor(name:string, description:string, code:string) {
+    "use strict";
+
+    this.name = name;
+    this.description = description;
+    this.code = code;
+  }
+}
+
+/**
  * An HTTP request.
  */
 export class Request {
@@ -210,6 +246,10 @@ export abstract class BackEnd {
    * An absolute path to the project resources.
    */
   static PROJECT_PATH = "/project/project";
+  /**
+   * An absolute path to the program resources.
+   */
+  static PROGRAM_PATH:string = "/project/program";
 
   /**
    * A name of the authentication token HTTP header.
@@ -441,6 +481,32 @@ export abstract class BackEnd {
         BackEnd.HOSTNAME, BackEnd.PORT, "/project/connectDeviceWithProject",
         {[BackEnd.TOKEN_HEADER]: token},
         {projectId: project, bitecodesNames: [device]}
+    );
+    return this.requestWrapped(request).then(JSON.stringify);
+  }
+
+  /**
+   * Create a new program.
+   *
+   * @param program the program details.
+   * @param project the ID of the associated project.
+   * @param token an authentication token.
+   * @param callback a callback called with an indicator and a message
+   *                 describing the result.
+   */
+  public createProgram(program:Program, project:string, token:string):Promise<string> {
+    "use strict";
+
+    let request = new Request(
+        "POST",
+        BackEnd.HOSTNAME, BackEnd.PORT, BackEnd.PROGRAM_PATH,
+        {[BackEnd.TOKEN_HEADER]: token},
+        {
+          programName: program.name,
+          programDescription: program.description,
+          projectId: project,
+          program: program.code
+        }
     );
     return this.requestWrapped(request).then(JSON.stringify);
   }

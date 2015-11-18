@@ -217,3 +217,34 @@
     Result: {{deviceProjectAdditionMsg}}
   </p>
 </form>
+<h1>New Program</h1>
+<form var-program-creation=form on-ng-submit=createProgram()>
+  <p>
+    <label>
+      Name:
+      <input bindon-ng-model=programCreationModel.name>
+    </label>
+  </p>
+
+  <p>
+    <label>
+      Description:
+      <textarea bindon-ng-model=programCreationModel.description></textarea>
+    </label>
+  </p>
+
+  <p>
+    <label>
+      Code:
+      <textarea bindon-ng-model=programCreationModel.code></textarea>
+    </label>
+  </p>
+
+  <p>
+    <input type=submit>
+  </p>
+
+  <p class=result>
+    Result: {{programCreationMsg}}
+  </p>
+</form>

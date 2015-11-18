@@ -244,6 +244,16 @@ export class Controller {
   public deviceProjectAdditionMsg:string;
 
   /**
+   * A model of the program creation form.
+   */
+  public programCreationModel:backEnd.Program;
+
+  /**
+   * A message describing the result of the latest program creation attempt.
+   */
+  public programCreationMsg:string;
+
+  /**
    * Create a new controller.
    *
    * @param backEndAngular a service providing access to the back end at address
@@ -258,6 +268,7 @@ export class Controller {
     this.loginModel = {email: "", password: ""};
     this.projectCreationModel = new backEnd.Project("", "");
     this.deviceRegistrationModel = {id: "", type: ""};
+    this.programCreationModel = new backEnd.Program("", "", "");
   }
 
   /**
@@ -421,6 +432,23 @@ export class Controller {
     "use strict";
 
     this.backEnd.addDeviceToProject(this.deviceProjectAdditionId, this.project, this.authToken)
+        .then((message) => this.homerProjectAdditionMsg = "success: " + message)
+        .catch((reason) => this.homerProjectAdditionMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  /**
+   * Create a new program.
+   *
+   * The properties of the program are taken from
+   * {@link Controller#programCreationModel} and the properties of the project
+   * are taken from {@link Controller#project}. Credentials are taken from
+   * {@link Controller#authToken}. A message describing the result is stored in
+   * {@link Controller#programCreationMsg}.
+   */
+  createProgram():void {
+    "use strict";
+
+    this.backEnd.createProgram(this.programCreationModel, this.project, this.authToken)
         .then((message) => this.homerProjectAdditionMsg = "success: " + message)
         .catch((reason) => this.homerProjectAdditionMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
   }
