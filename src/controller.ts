@@ -149,6 +149,8 @@ export class Controller {
    */
   private authToken = "";
 
+  public current:string;
+
   public idToProject:IdToNamed<backEnd.Project>;
 
   /**
@@ -165,6 +167,10 @@ export class Controller {
    * The ID of the selected project.
    */
   private project:string = "";
+
+  private program:string = "";
+
+  public email:string = "";
 
   /**
    * A model of the person registration form.
@@ -290,6 +296,7 @@ export class Controller {
     this.deviceRegistrationModel = {id: "", type: ""};
     this.programCreationModel = new backEnd.Program("", "", "");
     this.homerUpdatingModel = {id: "", program: ""};
+    this.current = "Login";
   }
 
   /**
@@ -318,10 +325,16 @@ export class Controller {
         .then((x:{homers:string[], idToProgram:{[id: string]: backEnd.Program}}) => {
           this.homers = x.homers;
           this.idToProgram = new IdToNamed(x.idToProgram);
+          if (this.homers) {
+          this.homerUpdatingModel.id = this.homers[0];
+          } else {
+            this.homerUpdatingModel.id = "";
+          }
         })
         .catch(() => {
           this.homers = [];
           this.idToProgram = new IdToNamed({});
+          this.homerUpdatingModel.id = "";
         });
   }
 
@@ -336,7 +349,10 @@ export class Controller {
     "use strict";
 
     this.backEnd.createPerson(this.personRegistrationModel.email, this.personRegistrationModel.password)
-        .then((message) => this.personRegistrationMsg = "success: " + message)
+        .then((message) => {
+          this.personRegistrationMsg = "success: " + message;
+          this.setCurrent("Login");
+        })
         .catch((reason) => this.personRegistrationMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
   }
 
@@ -354,6 +370,10 @@ export class Controller {
         .then((token) => {
           this.authToken = token;
           this.loginMsg = "success: " + this.authToken;
+          this.email = this.loginModel.email;
+          this.refreshHomersAndPrograms();
+          this.refreshProjects();
+          this.setCurrent("Devices");
         })
         .catch((reason) => {
           this.authToken = "";
@@ -375,6 +395,7 @@ export class Controller {
         .then((message) => {
           this.authToken = "";
           this.logoutMsg = "success: " + message;
+          this.email = "";
         })
         .catch((reason) => {
           this.logoutMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason);
@@ -425,8 +446,11 @@ export class Controller {
     "use strict";
 
     this.backEnd.createProject(this.projectCreationModel, this.authToken)
-        .then((message) => this.personRegistrationMsg = "success: " + message)
-        .catch((reason) => this.personRegistrationMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+        .then((message) => {
+          this.projectCreationMsg = "success: " + message;
+          this.setCurrent("Projects");
+        })
+        .catch((reason) => this.projectCreationMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
   }
 
   /**
@@ -436,11 +460,17 @@ export class Controller {
    * {@link Controller#projectSelectionId}. A message describing the result is
    * stored in {@link Controller#projectSelectionMsg}.
    */
-  selectProject():void {
+  selectProject(id:string):void {
     "use strict";
 
-    this.project = this.projectSelectionId;
+    this.project = id;
     this.projectSelectionMsg = this.project;
+    this.setCurrent("Project");
+  }
+
+  selectProgram(id:string):void {
+    this.program = id;
+    this.setCurrent("Program");
   }
 
   /**
@@ -456,7 +486,10 @@ export class Controller {
     "use strict";
 
     this.backEnd.addHomerToProject(this.homerProjectAdditionId, this.project, this.authToken)
-        .then((message) => this.homerProjectAdditionMsg = "success: " + message)
+        .then((message) => {
+          this.homerProjectAdditionMsg = "success: " + message;
+          this.refreshHomersAndPrograms();
+        })
         .catch((reason) => this.homerProjectAdditionMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
   }
 
@@ -473,8 +506,8 @@ export class Controller {
     "use strict";
 
     this.backEnd.addDeviceToProject(this.deviceProjectAdditionId, this.project, this.authToken)
-        .then((message) => this.homerProjectAdditionMsg = "success: " + message)
-        .catch((reason) => this.homerProjectAdditionMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+        .then((message) => this.deviceProjectAdditionMsg = "success: " + message)
+        .catch((reason) => this.deviceProjectAdditionMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
   }
 
   /**
@@ -490,8 +523,11 @@ export class Controller {
     "use strict";
 
     this.backEnd.createProgram(this.programCreationModel, this.project, this.authToken)
-        .then((message) => this.homerProjectAdditionMsg = "success: " + message)
-        .catch((reason) => this.homerProjectAdditionMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+        .then((message) => {
+          this.programCreationMsg = "success: " + message;
+          this.setCurrent("Project");
+        })
+        .catch((reason) => this.programCreationMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
   }
 
   /**
@@ -505,8 +541,25 @@ export class Controller {
   updateHomer():void {
     "use strict";
 
-    this.backEnd.updateHomer(this.homerUpdatingModel.id, this.homerUpdatingModel.program, this.authToken)
+    this.backEnd.updateHomer(this.homerUpdatingModel.id, this.program, this.authToken)
         .then((message) => this.homerUpdatingMsg = "success: " + message)
         .catch((reason) => this.homerUpdatingMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  setCurrent(current:string):void {
+    this.current = current;
+    if (current == "Projects") {
+      this.refreshProjects();
+    }
+    if (current == "Project") {
+      this.refreshHomersAndPrograms();
+    }
+    if (current == "Program") {
+      this.refreshHomersAndPrograms();
+    }
+  }
+
+  isAuth():boolean {
+    return !!this.authToken;
   }
 }
