@@ -34,7 +34,7 @@ class IdToProject {
    *
    * @param idToProject the mapping from the projects' IDs to the projects.
    */
-  constructor (idToProject:{[id: string]: backEnd.Project}) {
+  constructor(idToProject:{[id: string]: backEnd.Project}) {
     "use strict";
 
     this.idToProject = idToProject;
@@ -154,6 +154,11 @@ export class Controller {
   public idToProject:IdToProject;
 
   /**
+   * The ID of the selected project.
+   */
+  private project:string = "";
+
+  /**
    * A model of the person registration form.
    */
   public personRegistrationModel:{email:string, password:string};
@@ -217,6 +222,16 @@ export class Controller {
    * A message describing the result of the latest project selection attempt.
    */
   public projectSelectionMsg:string;
+
+  /**
+   * The ID of the Homer to be added.
+   */
+  public homerProjectAdditionId:string;
+
+  /**
+   * A message describing the result of the latest Homer-to-project addition.
+   */
+  public homerProjectAdditionMsg:string;
 
   /**
    * Create a new controller.
@@ -362,6 +377,24 @@ export class Controller {
   selectProject():void {
     "use strict";
 
-    this.projectSelectionMsg = this.projectSelectionId;
+    this.project = this.projectSelectionId;
+    this.projectSelectionMsg = this.project;
+  }
+
+  /**
+   * Add a Homer to a project.
+   *
+   * The properties of the Homer are taken from
+   * {@link Controller#homerProjectAdditionId} and the properties of the project
+   * are taken from {@link Controller#project}. Credentials are taken from
+   * {@link Controller#authToken}. A message describing the result is stored in
+   * {@link Controller#homerProjectAdditionMsg}.
+   */
+  addHomerToProject():void {
+    "use strict";
+
+    this.backEnd.addHomerToProject(this.homerProjectAdditionId, this.project, this.authToken)
+        .then((message) => this.homerProjectAdditionMsg = "success: " + message)
+        .catch((reason) => this.homerProjectAdditionMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
   }
 }

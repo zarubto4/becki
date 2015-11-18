@@ -183,3 +183,20 @@
     Result: {{projectSelectionMsg}}
   </p>
 </form>
+<h1>Homer-to-project Addition</h1>
+<form var-homer-project-addition=form on-ng-submit=addHomerToProject()>
+  <p>
+    <label>
+      ID:
+      <input bindon-ng-model=homerProjectAdditionId>
+    </label>
+  </p>
+
+  <p>
+    <input type=submit>
+  </p>
+
+  <p class=result>
+    Result: {{homerProjectAdditionMsg}}
+  </p>
+</form>

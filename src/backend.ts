@@ -402,4 +402,25 @@ export abstract class BackEnd {
       }
     });
   }
+
+  /**
+   * Add a Homer to a project.
+   *
+   * @param homer the ID of the device.
+   * @param project the ID of the project.
+   * @param token an authentication token.
+   * @param callback a callback called with an indicator and a message
+   *                 describing the result.
+   */
+  public addHomerToProject(homer:string, project:string, token:string):Promise<string> {
+    "use strict";
+
+    let request = new Request(
+        "PUT",
+        BackEnd.HOSTNAME, BackEnd.PORT, "/project/connectHomerWithProject",
+        {[BackEnd.TOKEN_HEADER]: token},
+        {projectId: project, homerId: homer}
+    );
+    return this.requestWrapped(request).then(JSON.stringify);
+  }
 }
