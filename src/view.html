@@ -10,7 +10,7 @@
     <label>
       Email address:
       <!-- htmllint attr-name-style=false -->
-      <input type=email [(ng-model)]=personRegistrationModel.email>
+      <input type=email bindon-ng-model=personRegistrationModel.email>
       <!-- htmllint attr-name-style=$previous -->
     </label>
   </p>
@@ -19,7 +19,7 @@
     <label>
       Password:
       <!-- htmllint attr-name-style=false -->
-      <input type=password [(ng-model)]=personRegistrationModel.password>
+      <input type=password bindon-ng-model=personRegistrationModel.password>
       <!-- htmllint attr-name-style=$previous -->
     </label>
   </p>
@@ -40,7 +40,7 @@
     <label>
       Email address:
       <!-- htmllint attr-name-style=false -->
-      <input type=email [(ng-model)]=loginModel.email>
+      <input type=email bindon-ng-model=loginModel.email>
       <!-- htmllint attr-name-style=$previous -->
     </label>
   </p>
@@ -49,7 +49,7 @@
     <label>
       Password:
       <!-- htmllint attr-name-style=false -->
-      <input type=password [(ng-model)]=loginModel.password>
+      <input type=password bindon-ng-model=loginModel.password>
       <!-- htmllint attr-name-style=$previous -->
     </label>
   </p>
@@ -82,7 +82,7 @@
     <label>
       ID:
       <!-- htmllint attr-name-style=false -->
-      <input [(ng-model)]=homerRegistrationId>
+      <input bindon-ng-model=homerRegistrationId>
       <!-- htmllint attr-name-style=$previous -->
     </label>
   </p>
@@ -103,7 +103,7 @@
     <label>
       ID:
       <!-- htmllint attr-name-style=false -->
-      <input [(ng-model)]=deviceRegistrationModel.id>
+      <input bindon-ng-model=deviceRegistrationModel.id>
       <!-- htmllint attr-name-style=$previous -->
     </label>
   </p>
@@ -112,7 +112,7 @@
     <label>
       Type:
       <!-- htmllint attr-name-style=false -->
-      <select [(ng-model)]=deviceRegistrationModel.type>
+      <select bindon-ng-model=deviceRegistrationModel.type>
         <!-- htmllint attr-name-style=$previous -->
         <option label=light>LightNormalDevice</option>
         <option label=switch>SwitchDevice</option>
@@ -136,7 +136,7 @@
     <label>
       Name:
       <!-- htmllint attr-name-style=false -->
-      <input [(ng-model)]=projectCreationModel.name>
+      <input bindon-ng-model=projectCreationModel.name>
       <!-- htmllint attr-name-style=$previous -->
     </label>
   </p>
@@ -145,7 +145,7 @@
     <label>
       Description:
       <!-- htmllint attr-name-style=false -->
-      <textarea [(ng-model)]=projectCreationModel.description></textarea>
+      <textarea bindon-ng-model=projectCreationModel.description></textarea>
       <!-- htmllint attr-name-style=$previous -->
     </label>
   </p>
