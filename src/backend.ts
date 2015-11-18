@@ -343,14 +343,14 @@ export abstract class BackEnd {
    * @param callback a callback called with an indicator and a message
    *                 describing the result.
    */
-  public createLight(id:string, token:string):Promise<string> {
+  public createDevice(id:string, type:string, token:string):Promise<string> {
     "use strict";
 
     let request = new Request(
         "POST",
         BackEnd.HOSTNAME, BackEnd.PORT, "/project/postNewDevice",
         {[BackEnd.TOKEN_HEADER]: token},
-        {biteCode: id, typeOfDevice: "LightNormalDevice", parameters: []}
+        {biteCode: id, typeOfDevice: type, parameters: []}
     );
     return this.requestWrapped(request).then(JSON.stringify);
   }

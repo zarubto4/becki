@@ -95,16 +95,28 @@
     Result: {{homerRegistrationMsg}}
   </p>
 </form>
-<h1>Light Registration</h1>
+<h1>Device Registration</h1>
 <!-- htmllint attr-name-style=false -->
-<form #light_registration=form (ng-submit)=registerLight()>
+<form #device_registration=form (ng-submit)=registerDevice()>
   <!-- htmllint attr-name-style=$previous -->
   <p>
     <label>
       ID:
       <!-- htmllint attr-name-style=false -->
-      <input [(ng-model)]=lightRegistrationId>
+      <input [(ng-model)]=deviceRegistrationModel.id>
       <!-- htmllint attr-name-style=$previous -->
+    </label>
+  </p>
+
+  <p>
+    <label>
+      Type:
+      <!-- htmllint attr-name-style=false -->
+      <select [(ng-model)]=deviceRegistrationModel.type>
+        <!-- htmllint attr-name-style=$previous -->
+        <option label=light>LightNormalDevice</option>
+        <option label=switch>SwitchDevice</option>
+      </select>
     </label>
   </p>
 
@@ -113,7 +125,7 @@
   </p>
 
   <p class=result>
-    Result: {{lightRegistrationMsg}}
+    Result: {{deviceRegistrationMsg}}
   </p>
 </form>
 <h1>New Project</h1>

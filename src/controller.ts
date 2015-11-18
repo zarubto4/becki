@@ -139,14 +139,14 @@ export class Controller {
   public homerRegistrationMsg:string;
 
   /**
-   * The ID of a light to be registered.
+   * A model of the device registration form.
    */
-  public lightRegistrationId:string;
+  public deviceRegistrationModel:{id:string, type:string};
 
   /**
-   * A message describing the result of the latest light registration attempt.
+   * A message describing the result of the latest device registration attempt.
    */
-  public lightRegistrationMsg:string;
+  public deviceRegistrationMsg:string;
 
   /**
    * A model of the project creation form.
@@ -171,6 +171,7 @@ export class Controller {
     this.personRegistrationModel = {email: "", password: ""};
     this.loginModel = {email: "", password: ""};
     this.projectCreationModel = new backEnd.Project("", "");
+    this.deviceRegistrationModel = {id: "", type: ""};
   }
 
   /**
@@ -253,12 +254,12 @@ export class Controller {
    * {@link Controller#authToken}. A message describing the result is stored in
    * {@link Controller#lightRegistrationMsg}.
    */
-  registerLight():void {
+  registerDevice():void {
     "use strict";
 
-    this.backEnd.createLight(this.lightRegistrationId, this.authToken)
-        .then((message) => this.lightRegistrationMsg = "success: " + message)
-        .catch((reason) => this.lightRegistrationMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+    this.backEnd.createDevice(this.deviceRegistrationModel.id, this.deviceRegistrationModel.type, this.authToken)
+        .then((message) => this.deviceRegistrationMsg = "success: " + message)
+        .catch((reason) => this.deviceRegistrationMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
   }
 
   /**
