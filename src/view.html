@@ -95,6 +95,27 @@
     Result: {{homerRegistrationMsg}}
   </p>
 </form>
+<h1>Light Registration</h1>
+<!-- htmllint attr-name-style=false -->
+<form #light_registration=form (ng-submit)=registerLight()>
+  <!-- htmllint attr-name-style=$previous -->
+  <p>
+    <label>
+      ID:
+      <!-- htmllint attr-name-style=false -->
+      <input [(ng-model)]=lightRegistrationId>
+      <!-- htmllint attr-name-style=$previous -->
+    </label>
+  </p>
+
+  <p>
+    <input type=submit>
+  </p>
+
+  <p class=result>
+    Result: {{lightRegistrationMsg}}
+  </p>
+</form>
 <h1>New Project</h1>
 <!-- htmllint attr-name-style=false -->
 <form #project_creation=form (ng-submit)=createProject()>

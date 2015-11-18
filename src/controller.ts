@@ -139,6 +139,16 @@ export class Controller {
   public homerRegistrationMsg:string;
 
   /**
+   * The ID of a light to be registered.
+   */
+  public lightRegistrationId:string;
+
+  /**
+   * A message describing the result of the latest light registration attempt.
+   */
+  public lightRegistrationMsg:string;
+
+  /**
    * A model of the project creation form.
    */
   public projectCreationModel:backEnd.Project;
@@ -233,6 +243,22 @@ export class Controller {
     this.backEnd.createHomer(this.homerRegistrationId, this.authToken)
         .then((message) => this.homerRegistrationMsg = "success: " + message)
         .catch((reason) => this.homerRegistrationMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  /**
+   * Register a new light.
+   *
+   * The properties of the light are taken from
+   * {@link Controller#lightRegistrationId}. Credentials are taken from
+   * {@link Controller#authToken}. A message describing the result is stored in
+   * {@link Controller#lightRegistrationMsg}.
+   */
+  registerLight():void {
+    "use strict";
+
+    this.backEnd.createLight(this.lightRegistrationId, this.authToken)
+        .then((message) => this.lightRegistrationMsg = "success: " + message)
+        .catch((reason) => this.lightRegistrationMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
   }
 
   /**

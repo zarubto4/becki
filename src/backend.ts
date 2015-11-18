@@ -336,6 +336,26 @@ export abstract class BackEnd {
   }
 
   /**
+   * Create a new light.
+   *
+   * @param id the ID of the device.
+   * @param token an authentication token.
+   * @param callback a callback called with an indicator and a message
+   *                 describing the result.
+   */
+  public createLight(id:string, token:string):Promise<string> {
+    "use strict";
+
+    let request = new Request(
+        "POST",
+        BackEnd.HOSTNAME, BackEnd.PORT, "/project/postNewDevice",
+        {[BackEnd.TOKEN_HEADER]: token},
+        {biteCode: id, typeOfDevice: "LightNormalDevice", parameters: []}
+    );
+    return this.requestWrapped(request).then(JSON.stringify);
+  }
+
+  /**
    * Create a new project.
    *
    * @param project the project.
