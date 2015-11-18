@@ -200,3 +200,20 @@
     Result: {{homerProjectAdditionMsg}}
   </p>
 </form>
+<h1>Device-to-project Addition</h1>
+<form var-device-project-addition=form on-ng-submit=addDeviceToProject()>
+  <p>
+    <label>
+      ID:
+      <input bindon-ng-model=deviceProjectAdditionId>
+    </label>
+  </p>
+
+  <p>
+    <input type=submit>
+  </p>
+
+  <p class=result>
+    Result: {{deviceProjectAdditionMsg}}
+  </p>
+</form>

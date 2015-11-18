@@ -423,4 +423,25 @@ export abstract class BackEnd {
     );
     return this.requestWrapped(request).then(JSON.stringify);
   }
+
+  /**
+   * Add a device to a project.
+   *
+   * @param device the ID of the device.
+   * @param project the ID of the project.
+   * @param token an authentication token.
+   * @param callback a callback called with an indicator and a message
+   *                 describing the result.
+   */
+  public addDeviceToProject(device:string, project:string, token:string):Promise<string> {
+    "use strict";
+
+    let request = new Request(
+        "PUT",
+        BackEnd.HOSTNAME, BackEnd.PORT, "/project/connectDeviceWithProject",
+        {[BackEnd.TOKEN_HEADER]: token},
+        {projectId: project, bitecodesNames: [device]}
+    );
+    return this.requestWrapped(request).then(JSON.stringify);
+  }
 }

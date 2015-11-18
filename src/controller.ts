@@ -234,6 +234,16 @@ export class Controller {
   public homerProjectAdditionMsg:string;
 
   /**
+   * The ID of the device to be added.
+   */
+  public deviceProjectAdditionId:string;
+
+  /**
+   * A message describing the result of the latest device-to-project addition.
+   */
+  public deviceProjectAdditionMsg:string;
+
+  /**
    * Create a new controller.
    *
    * @param backEndAngular a service providing access to the back end at address
@@ -394,6 +404,23 @@ export class Controller {
     "use strict";
 
     this.backEnd.addHomerToProject(this.homerProjectAdditionId, this.project, this.authToken)
+        .then((message) => this.homerProjectAdditionMsg = "success: " + message)
+        .catch((reason) => this.homerProjectAdditionMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  /**
+   * Add a device to a project.
+   *
+   * The properties of the device are taken from
+   * {@link Controller#deviceProjectAdditionId} and the properties of the
+   * project are taken from {@link Controller#project}. Credentials are taken
+   * from {@link Controller#authToken}. A message describing the result is
+   * stored in {@link Controller#deviceProjectAdditionMsg}.
+   */
+  addDeviceToProject():void {
+    "use strict";
+
+    this.backEnd.addDeviceToProject(this.deviceProjectAdditionId, this.project, this.authToken)
         .then((message) => this.homerProjectAdditionMsg = "success: " + message)
         .catch((reason) => this.homerProjectAdditionMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
   }
