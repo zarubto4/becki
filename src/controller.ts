@@ -129,6 +129,16 @@ export class Controller {
   public logoutMsg:string;
 
   /**
+   * The ID of a Homer to be registered.
+   */
+  public homerRegistrationId:string;
+
+  /**
+   * A message describing the result of the latest Homer registration attempt.
+   */
+  public homerRegistrationMsg:string;
+
+  /**
    * A model of the project creation form.
    */
   public projectCreationModel:backEnd.Project;
@@ -207,6 +217,22 @@ export class Controller {
         .catch((reason) => {
           this.logoutMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason);
         });
+  }
+
+  /**
+   * Register a new Homer.
+   *
+   * The properties of the Homer are taken from
+   * {@link Controller#homerRegistrationId}. Credentials are taken from
+   * {@link Controller#authToken}. A message describing the result is stored in
+   * {@link Controller#homerRegistrationMsg}.
+   */
+  registerHomer():void {
+    "use strict";
+
+    this.backEnd.createHomer(this.homerRegistrationId, this.authToken)
+        .then((message) => this.homerRegistrationMsg = "success: " + message)
+        .catch((reason) => this.homerRegistrationMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
   }
 
   /**

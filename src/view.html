@@ -74,6 +74,27 @@
     Result: {{logoutMsg}}
   </p>
 </form>
+<h1>Homer Registration</h1>
+<!-- htmllint attr-name-style=false -->
+<form #homer_registration=form (ng-submit)=registerHomer()>
+  <!-- htmllint attr-name-style=$previous -->
+  <p>
+    <label>
+      ID:
+      <!-- htmllint attr-name-style=false -->
+      <input [(ng-model)]=homerRegistrationId>
+      <!-- htmllint attr-name-style=$previous -->
+    </label>
+  </p>
+
+  <p>
+    <input type=submit>
+  </p>
+
+  <p class=result>
+    Result: {{homerRegistrationMsg}}
+  </p>
+</form>
 <h1>New Project</h1>
 <!-- htmllint attr-name-style=false -->
 <form #project_creation=form (ng-submit)=createProject()>

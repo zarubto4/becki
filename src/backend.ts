@@ -318,6 +318,24 @@ export abstract class BackEnd {
   }
 
   /**
+   * Create a new Homer.
+   *
+   * @param id the ID of the device.
+   * @param token an authentication token.
+   */
+  public createHomer(id:string, token:string):Promise<string> {
+    "use strict";
+
+    let request = new Request(
+        "POST",
+        BackEnd.HOSTNAME, BackEnd.PORT, "/project/posthomer",
+        {[BackEnd.TOKEN_HEADER]: token},
+        {homerId: id, typeOfDevice: "raspberry"}
+    );
+    return this.requestWrapped(request).then(JSON.stringify);
+  }
+
+  /**
    * Create a new project.
    *
    * @param project the project.
