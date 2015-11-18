@@ -20,49 +20,50 @@ import * as ng from "angular2/angular2";
 import * as ngHttp from "angular2/http";
 
 /**
- * A convenient wrapper around a mapping from projects' IDs to the projects.
+ * A convenient wrapper around a mapping from IDs to named objects.
  */
-class IdToProject {
+class IdToNamed<T extends {name: string}> {
 
   /**
-   * The mapping from the projects' IDs to the projects themselves.
+   * The mapping from the IDs to the named objects.
    */
-  idToProject:{[id: string]: backEnd.Project};
+  idToNamed:{[id: string]: T};
 
   /**
    * Create a new wrapper.
    *
-   * @param idToProject the mapping from the projects' IDs to the projects.
+   * @param idToNamed the mapping from the IDs to the named objects.
    */
-  constructor(idToProject:{[id: string]: backEnd.Project}) {
+  constructor(idToNamed:{[id: string]: T}) {
     "use strict";
 
-    this.idToProject = idToProject;
+    this.idToNamed = idToNamed;
   }
 
   /**
-   * Get an array of the projects' IDs.
+   * Get an array of the IDs.
    *
    * @returns the IDs.
    */
   getIds():string[] {
     "use strict";
 
-    return Object.keys(this.idToProject);
+    return Object.keys(this.idToNamed);
   }
 
   /**
-   * Get the name of a project.
+   * Get the name of an object.
    *
-   * @param id the ID of the project.
-   * @returns the name of the project.
+   * @param id the ID.
+   * @returns the name.
    */
   getName(id:string):string {
     "use strict";
 
-    return this.idToProject[id].name;
+    return this.idToNamed[id].name;
   }
 }
+
 
 /**
  * A service providing access to the back end at 127.0.0.1:9000.
@@ -148,10 +149,17 @@ export class Controller {
    */
   private authToken = "";
 
+  public idToProject:IdToNamed<backEnd.Project>;
+
   /**
-   * All the projects of the authenticated person.
+   * All the Homers added to the selected project.
    */
-  public idToProject:IdToProject;
+  public homers:string[];
+
+  /**
+   * All the programs added to the selected project.
+   */
+  public idToProgram:IdToNamed<backEnd.Program>;
 
   /**
    * The ID of the selected project.
@@ -254,6 +262,16 @@ export class Controller {
   public programCreationMsg:string;
 
   /**
+   * A model of the Homer updating form.
+   */
+  public homerUpdatingModel:{id:string, program:string};
+
+  /**
+   * A message describing the result of the latest Homer updating attempt.
+   */
+  public homerUpdatingMsg:string;
+
+  /**
    * Create a new controller.
    *
    * @param backEndAngular a service providing access to the back end at address
@@ -263,12 +281,15 @@ export class Controller {
     "use strict";
 
     this.backEnd = backEndAngular;
-    this.idToProject = new IdToProject({});
+    this.idToProject = new IdToNamed({});
+    this.homers = [];
+    this.idToProgram = new IdToNamed({});
     this.personRegistrationModel = {email: "", password: ""};
     this.loginModel = {email: "", password: ""};
     this.projectCreationModel = new backEnd.Project("", "");
     this.deviceRegistrationModel = {id: "", type: ""};
     this.programCreationModel = new backEnd.Program("", "", "");
+    this.homerUpdatingModel = {id: "", program: ""};
   }
 
   /**
@@ -280,8 +301,28 @@ export class Controller {
     "use strict";
 
     this.backEnd.getProjects(this.authToken)
-        .then((idToProject) => this.idToProject = new IdToProject(idToProject))
-        .catch((message) => this.idToProject = new IdToProject({}));
+        .then((idToProject) => this.idToProject = new IdToNamed(idToProject))
+        .catch((message) => this.idToProject = new IdToNamed({}));
+  }
+
+  /**
+   * Refresh {@link Controller#homers} and {@link Controller#idToProgram}.
+   *
+   * A project is taken from {@link Controller#project} and credentials are
+   * taken from {@link Controller#authToken}.
+   */
+  refreshHomersAndPrograms():void {
+    "use strict";
+
+    this.backEnd.getProject(this.project, this.authToken)
+        .then((x:{homers:string[], idToProgram:{[id: string]: backEnd.Program}}) => {
+          this.homers = x.homers;
+          this.idToProgram = new IdToNamed(x.idToProgram);
+        })
+        .catch(() => {
+          this.homers = [];
+          this.idToProgram = new IdToNamed({});
+        });
   }
 
   /**
@@ -451,5 +492,21 @@ export class Controller {
     this.backEnd.createProgram(this.programCreationModel, this.project, this.authToken)
         .then((message) => this.homerProjectAdditionMsg = "success: " + message)
         .catch((reason) => this.homerProjectAdditionMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  /**
+   * Update a Homer.
+   *
+   * The properties of the Homer are taken from
+   * {@link Controller#homerUpdatingModel}. Credentials are taken from
+   * {@link Controller#authToken}. A message describing the result is stored in
+   * {@link Controller#homerUpdatingMsg}.
+   */
+  updateHomer():void {
+    "use strict";
+
+    this.backEnd.updateHomer(this.homerUpdatingModel.id, this.homerUpdatingModel.program, this.authToken)
+        .then((message) => this.homerUpdatingMsg = "success: " + message)
+        .catch((reason) => this.homerUpdatingMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
   }
 }

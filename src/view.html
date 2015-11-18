@@ -248,3 +248,40 @@
     Result: {{programCreationMsg}}
   </p>
 </form>
+<h1>Homer Updating</h1>
+<form var-homer-updating=form on-ng-submit=updateHomer()>
+  <p>
+    <input type=button on-click=refreshHomersAndPrograms()
+           value="Refresh Homers and programs">
+  </p>
+
+  <p>
+    <label>
+      ID:
+      <select bindon-ng-model=homerUpdatingModel.id>
+        <template ng-for var-id bind-ng-for-of=homers>
+          <option bind-label="id">{{id}}</option>
+        </template>
+      </select>
+    </label>
+  </p>
+
+  <p>
+    <label>
+      Program:
+      <select bindon-ng-model=homerUpdatingModel.program>
+        <template ng-for var-id bind-ng-for-of=idToProgram.getIds()>
+          <option bind-label="idToProgram.getName(id)">{{id}}</option>
+        </template>
+      </select>
+    </label>
+  </p>
+
+  <p>
+    <input type=submit>
+  </p>
+
+  <p class=result>
+    Result: {{homerUpdatingMsg}}
+  </p>
+</form>

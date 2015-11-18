@@ -416,6 +416,44 @@ export abstract class BackEnd {
   }
 
   /**
+   * Retrieve details about a project.
+   *
+   * @param id the ID of the project.
+   * @param token an authentication token.
+   * @param success a callback called with the project, its Homers' IDs, its
+   *                devices' IDs and a mapping from its programs' IDs to the
+   *                programs themselves in case of success.
+   * @param error a callback called with a message in case of a failure.
+   */
+  public getProject(id:string, token:string):Promise<{homers:string[], idToProgram:{[id: string]: Program}}> {
+    "use strict";
+
+    let request = new Request(
+        "GET",
+        BackEnd.HOSTNAME, BackEnd.PORT, BackEnd.PROJECT_PATH + "/" + id,
+        {[BackEnd.TOKEN_HEADER]: token}
+    );
+    return this.requestWrapped(request).then((response:Response) => {
+          if (response.status == 200) {
+            let result:any = JSON.parse(response.body);
+            let homers:string[] = result.homerDeviceList.map(
+                (homer:{homerId:string}) => homer.homerId
+            );
+            let idToProgram:{[id: string]: Program} = {};
+            for (let prog of result.programs) {
+              idToProgram[prog.programId] = new Program(
+                  prog.programName, prog.programDescription, prog.program
+              );
+            }
+            return {homers: homers, idToProgram: idToProgram};
+          } else {
+            throw new Error("dfsfs");
+          }
+        }
+    );
+  }
+
+  /**
    * Retrieve all the projects of a person.
    *
    * @param token an authentication token of the person.
@@ -506,6 +544,30 @@ export abstract class BackEnd {
           programDescription: program.description,
           projectId: project,
           program: program.code
+        }
+    );
+    return this.requestWrapped(request).then(JSON.stringify);
+  }
+
+  /**
+   * Update a Homer.
+   *
+   * @param id the ID of the device.
+   * @param program the ID of the program.
+   * @param token an authentication token.
+   * @param callback a callback called with an indicator and a message
+   *                 describing the result.
+   */
+  public updateHomer(id:string, program:string, token:string):Promise<string> {
+    "use strict";
+
+    let request = new Request(
+        "PUT",
+        BackEnd.HOSTNAME, BackEnd.PORT, "/project/uploudtohomer",
+        {[BackEnd.TOKEN_HEADER]: token},
+        {
+          homerId: id,
+          programId: program
         }
     );
     return this.requestWrapped(request).then(JSON.stringify);
