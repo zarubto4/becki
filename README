@@ -11,6 +11,9 @@ Becki is a front end of the IoT connectivity solution developed by MEDIA CHECK.
 It integrates all the back end services and provides a nice portable interface
 for users as well as for administrators.
 
+WARNING: This document might be outdated and the application might be flawed
+since management prefers speed over quality.
+
 Features
 --------
 
