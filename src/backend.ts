@@ -167,7 +167,7 @@ export class Request {
   getUrl():string {
     "use strict";
 
-    return this.protocol + "://" + this.hostname + ":" + this.port + this.path;
+    return this.protocol + "://" + this.hostname + this.path;
   }
 }
 
@@ -225,7 +225,7 @@ export abstract class BackEnd {
   /**
    * A hostname of the back end.
    */
-  static HOSTNAME = "127.0.0.1";
+  static HOSTNAME = "byzance-backend.herokuapp.com";
 
   /**
    * A port number of the back end.
