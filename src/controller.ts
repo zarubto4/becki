@@ -18,49 +18,36 @@
 import * as backEnd from "./backend";
 import * as ng from "angular2/angular2";
 import * as ngHttp from "angular2/http";
+import * as ngRouter from "angular2/router";
 
-/**
- * A convenient wrapper around a mapping from IDs to named objects.
- */
-class IdToNamed<T extends {name: string}> {
+class OnlyAuthenticated implements ng.OnInit, ng.OnDestroy {
+  backEnd:BackEndAngular;
+  router:ngRouter.Router;
+  exists = false;
 
-  /**
-   * The mapping from the IDs to the named objects.
-   */
-  idToNamed:{[id: string]: T};
-
-  /**
-   * Create a new wrapper.
-   *
-   * @param idToNamed the mapping from the IDs to the named objects.
-   */
-  constructor(idToNamed:{[id: string]: T}) {
+  constructor(backEndAngular:BackEndAngular, router:ngRouter.Router) {
     "use strict";
-
-    this.idToNamed = idToNamed;
+    this.backEnd = backEndAngular;
+    this.router = router;
+    backEndAngular.userChanged.toRx().subscribe(() => this.redirect());
   }
 
-  /**
-   * Get an array of the IDs.
-   *
-   * @returns the IDs.
-   */
-  getIds():string[] {
+  onInit():void {
     "use strict";
-
-    return Object.keys(this.idToNamed);
+    this.exists = true;
+    this.redirect();
   }
 
-  /**
-   * Get the name of an object.
-   *
-   * @param id the ID.
-   * @returns the name.
-   */
-  getName(id:string):string {
+  onDestroy():void {
     "use strict";
+    this.exists = false;
+  }
 
-    return this.idToNamed[id].name;
+  redirect():void {
+    "use strict";
+    if (this.exists && this.backEnd.userEmail === null) {
+      this.router.navigate(['/Login']);
+    }
   }
 }
 
@@ -78,6 +65,16 @@ export class BackEndAngular extends backEnd.BackEnd {
    */
   http:ngHttp.Http;
 
+  public registered:ng.EventEmitter;
+
+  public userChanged:ng.EventEmitter;
+
+  userEmail:string = null;
+
+  projectChanged:ng.EventEmitter;
+
+  programChanged:ng.EventEmitter;
+
   /**
    * Create a new service instance.
    *
@@ -88,6 +85,10 @@ export class BackEndAngular extends backEnd.BackEnd {
 
     super();
     this.http = http;
+    this.registered = new ng.EventEmitter();
+    this.userChanged = new ng.EventEmitter();
+    this.projectChanged = new ng.EventEmitter();
+    this.programChanged = new ng.EventEmitter();
   }
 
   /**
@@ -97,7 +98,7 @@ export class BackEndAngular extends backEnd.BackEnd {
    * @returns a promise that will be resolved with the response, or rejected
    *          with a reason.
    */
-  protected request(request:backEnd.Request):Promise<backEnd.Response> {
+  protected requestGeneral(request:backEnd.Request):Promise<backEnd.Response> {
     "use strict";
 
     const DICTIONARY:{[name: string]: ngHttp.RequestMethods} = {
@@ -122,81 +123,316 @@ export class BackEndAngular extends backEnd.BackEnd {
         )
     );
   }
+
+  /**
+   * Create a new person.
+   *
+   * @param email their email address.
+   * @param password their password.
+   * @returns a promise that will be resolved with a message describing the
+   *          result, or rejected with a reason.
+   */
+  public createPerson(email:string, password:string):Promise<string> {
+    "use strict";
+
+    return super.createPerson(email, password).then((message) => {
+      this.registered.next(null);
+      return message;
+    });
+  }
+
+  /**
+   * Log a person in.
+   *
+   * If the communication with the back end fails, the rejection reason is an
+   * instance of {@link BackEndError}. Any other reason indicates that the login
+   * have failed.
+   *
+   * @param email their email address.
+   * @param password their password.
+   * @returns a promise that will be resolved with an authentication token, or
+   *          rejected with a reason.
+   */
+  public logIn(email:string, password:string):Promise<string> {
+    "use strict";
+
+    return super.logIn(email, password).then((message) => {
+      this.userEmail = email;
+      this.userChanged.next(this.userEmail);
+      return message;
+    });
+  }
+
+  /**
+   * Log a person out.
+   *
+   * If the communication with the back end fails, the rejection reason is an
+   * instance of {@link BackEndError}. Any other reason indicates that the
+   * logout have failed.
+   *
+   * @param token their authentication token.
+   * @returns a promise that will be resolved with a message describing the
+   *          result, or rejected with a reason.
+   */
+  public logOut():Promise<string> {
+    "use strict";
+
+    return super.logOut().then((message) => {
+      this.userEmail = null;
+      this.userChanged.next(this.userEmail);
+          return message;
+        }
+    );
+  }
+
+  /**
+   * Create a new project.
+   *
+   * @param project the project.
+   * @param token an authentication token.
+   * @returns a promise that will be resolved with a message describing the
+   *          result, or rejected with a reason.
+   */
+  public createProject(project:backEnd.Project):Promise<string> {
+    "use strict";
+
+    return super.createProject(project).then((message) => {
+      this.projectChanged.next(null);
+      return message;
+    });
+  }
+
+  /**
+   * Add a Homer to a project.
+   *
+   * @param homer the ID of the device.
+   * @param project the ID of the project.
+   * @param token an authentication token.
+   * @param callback a callback called with an indicator and a message
+   *                 describing the result.
+   */
+  public addHomerToProject(homer:string, project:string):Promise<string> {
+    "use strict";
+
+    return super.addHomerToProject(homer, project).then((message) => {
+      this.projectChanged.next(project);
+      return message;
+    });
+  }
+
+  /**
+   * Add a device to a project.
+   *
+   * @param device the ID of the device.
+   * @param project the ID of the project.
+   * @param token an authentication token.
+   * @param callback a callback called with an indicator and a message
+   *                 describing the result.
+   */
+  public addDeviceToProject(device:string, project:string):Promise<string> {
+    "use strict";
+
+    return super.addDeviceToProject(device, project).then((message) => {
+      this.projectChanged.next(project);
+      return message;
+    });
+  }
+
+  /**
+   * Delete a project.
+   *
+   * @param project the project.
+   * @param token an authentication token.
+   * @returns a promise that will be resolved with a message describing the
+   *          result, or rejected with a reason.
+   */
+  public deleteProject(id:string):Promise<string> {
+    "use strict";
+
+    return super.deleteProject(id).then((message) => {
+      this.projectChanged.next(id);
+      return message;
+    });
+  }
+
+  /**
+   * Create a new program.
+   *
+   * @param program the program details.
+   * @param project the ID of the associated project.
+   * @param token an authentication token.
+   * @param callback a callback called with an indicator and a message
+   *                 describing the result.
+   */
+  public createProgram(program:backEnd.Program, project:string):Promise<string> {
+    "use strict";
+
+    return super.createProgram(program, project).then((message) => {
+      this.projectChanged.next(project);
+      return message;
+    });
+  }
+
+  public updateProgram(id:string, program:backEnd.Program, project:string):Promise<string> {
+    "use strict";
+
+    return super.updateProgram(id, program, project).then((message) => {
+      this.programChanged.next(program);
+      return message;
+    });
+  }
 }
 
-/**
- * A "view" directive that renders a view from "src/view.html".
- *
- * It expects the the back end to be available at address 127.0.0.1 and port
- * 9000.
- */
 @ng.Component({
-  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES],
-  providers: [BackEndAngular, ngHttp.HTTP_PROVIDERS],
-  selector: "view",
-  templateUrl: "src/view.html"
+  directives: [ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
+  templateUrl: "src/person-registration.html"
 })
-export class Controller {
+class PersonRegistration {
 
   /**
    * A service providing access to the back end.
    */
   public backEnd:BackEndAngular;
 
-  // TODO: persist it once Angular provides an API
-  /**
-   * An authentication token.
-   */
-  private authToken = "";
-
-  public current:string;
-
-  public idToProject:IdToNamed<backEnd.Project>;
-
-  /**
-   * All the Homers added to the selected project.
-   */
-  public homers:string[];
-
-  /**
-   * All the programs added to the selected project.
-   */
-  public idToProgram:IdToNamed<backEnd.Program>;
-
-  /**
-   * The ID of the selected project.
-   */
-  private project:string = "";
-
-  private program:string = "";
-
-  public email:string = "";
+  public router:ngRouter.Router;
 
   /**
    * A model of the person registration form.
    */
-  public personRegistrationModel:{email:string, password:string};
+  public person:{email:string, password:string};
 
   /**
    * A message describing the result of the last person registration attempt.
    */
-  public personRegistrationMsg:string;
+  public message:string;
+
+  constructor(backEndAngular:BackEndAngular, router:ngRouter.Router) {
+    "use strict";
+
+    this.backEnd = backEndAngular;
+    this.router = router;
+    this.person = {email:"", password:""};
+  }
+
+  /**
+   * Register a new person.
+   *
+   * The credentials of the person are taken from
+   * {@link Controller#personRegistrationModel}. A message describing the result
+   * is stored in {@link Controller#personRegistrationMsg}.
+   */
+  submit():void {
+    "use strict";
+
+    this.backEnd.createPerson(this.person.email, this.person.password)
+        .then((message) => {
+          this.router.navigate(['/Login']);
+          this.message = "success: " + message;
+        })
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+}
+
+@ng.Component({
+  directives: [ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
+  templateUrl: "src/login.html"
+})
+class Login {
+
+  /**
+   * A service providing access to the back end.
+   */
+  public backEnd:BackEndAngular;
+
+  public router:ngRouter.Router;
 
   /**
    * A model of the login form.
    */
-  public loginModel:{email:string, password:string};
+  public credentials:{email:string, password:string};
 
   /**
    * A message describing the result of the last login attempt.
    */
-  public loginMsg:string;
+  public message:string;
 
+  constructor(backEndAngular:BackEndAngular, router:ngRouter.Router) {
+    "use strict";
+
+    this.backEnd = backEndAngular;
+    this.router = router;
+    this.credentials = {email: "", password: ""};
+  }
+
+  /**
+   * Log a person in.
+   *
+   * The credentials are taken from {@link Controller#loginModel}. A message
+   * describing the result is stored in {@link Controller#loginMsg}. In case of
+   * success, {@link Controller#authToken} is set. Otherwise, it is cleared.
+   */
+  submit():void {
+    "use strict";
+
+    this.backEnd.logIn(this.credentials.email, this.credentials.password)
+        .then((msg) => {
+          this.message = "success: " + msg;
+          this.router.navigate(['/Devices']);
+        })
+        .catch((reason) => {
+          this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason);
+        });
+  }
+}
+
+@ng.Component({
+  directives: [ngRouter.ROUTER_DIRECTIVES],
+  selector: ".main-header",
+  templateUrl: "src/main-header.html"
+})
+export class MainHeader {
+  backEnd:BackEndAngular;
+
+  email = "";
   /**
    * A message describing the result of the last logout attempt.
    */
   public logoutMsg:string;
 
+  constructor(backEndAngular:BackEndAngular) {
+    "use strict";
+
+    this.backEnd = backEndAngular;
+    this.email = this.backEnd.userEmail;
+    this.backEnd.userChanged.toRx().subscribe((email:string) => this.email = email === null ? "" : email);
+  }
+
+  /**
+   * Log a person out.
+   *
+   * The authentication token is taken from {@link Controller#authToken}. A
+   * message describing the result is stored in {@link Controller#logoutMsg}. In
+   * case of success, {@link Controller#authToken} is cleared.
+   */
+  logOut():void {
+    "use strict";
+
+    this.backEnd.logOut()
+        .then((message) => {
+          this.logoutMsg = "success: " + message;
+        })
+        .catch((reason) => {
+          this.logoutMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason);
+        });
+  }
+}
+
+@ng.Component({
+  directives: [ng.FORM_DIRECTIVES],
+  selector: ".content",
+  templateUrl: "src/devices.html"
+})
+class DevicesTables extends OnlyAuthenticated {
   /**
    * The ID of a Homer to be registered.
    */
@@ -217,189 +453,11 @@ export class Controller {
    */
   public deviceRegistrationMsg:string;
 
-  /**
-   * A model of the project creation form.
-   */
-  public projectCreationModel:backEnd.Project;
 
-  /**
-   * A message describing the result of the last project creation attempt.
-   */
-  public projectCreationMsg:string;
-
-  /**
-   * The ID of a project to be selected.
-   */
-  public projectSelectionId:string;
-
-  /**
-   * A message describing the result of the latest project selection attempt.
-   */
-  public projectSelectionMsg:string;
-
-  /**
-   * The ID of the Homer to be added.
-   */
-  public homerProjectAdditionId:string;
-
-  /**
-   * A message describing the result of the latest Homer-to-project addition.
-   */
-  public homerProjectAdditionMsg:string;
-
-  /**
-   * The ID of the device to be added.
-   */
-  public deviceProjectAdditionId:string;
-
-  /**
-   * A message describing the result of the latest device-to-project addition.
-   */
-  public deviceProjectAdditionMsg:string;
-
-  /**
-   * A model of the program creation form.
-   */
-  public programCreationModel:backEnd.Program;
-
-  /**
-   * A message describing the result of the latest program creation attempt.
-   */
-  public programCreationMsg:string;
-
-  /**
-   * A model of the Homer updating form.
-   */
-  public homerUpdatingModel:{id:string, program:string};
-
-  /**
-   * A message describing the result of the latest Homer updating attempt.
-   */
-  public homerUpdatingMsg:string;
-
-  /**
-   * Create a new controller.
-   *
-   * @param backEndAngular a service providing access to the back end at address
-   *                       127.0.0.1 and port 9000.
-   */
-  constructor(backEndAngular:BackEndAngular) {
+  constructor(backEndAngular:BackEndAngular, router:ngRouter.Router) {
     "use strict";
-
-    this.backEnd = backEndAngular;
-    this.idToProject = new IdToNamed({});
-    this.homers = [];
-    this.idToProgram = new IdToNamed({});
-    this.personRegistrationModel = {email: "", password: ""};
-    this.loginModel = {email: "", password: ""};
-    this.projectCreationModel = new backEnd.Project("", "");
+    super(backEndAngular, router);
     this.deviceRegistrationModel = {id: "", type: ""};
-    this.programCreationModel = new backEnd.Program("", "", "");
-    this.homerUpdatingModel = {id: "", program: ""};
-    this.current = "Login";
-  }
-
-  /**
-   * Refresh {@link Controller#idToProject}.
-   *
-   * Credentials are taken from {@link Controller#authToken}.
-   */
-  refreshProjects():void {
-    "use strict";
-
-    this.backEnd.getProjects(this.authToken)
-        .then((idToProject) => this.idToProject = new IdToNamed(idToProject))
-        .catch((message) => this.idToProject = new IdToNamed({}));
-  }
-
-  /**
-   * Refresh {@link Controller#homers} and {@link Controller#idToProgram}.
-   *
-   * A project is taken from {@link Controller#project} and credentials are
-   * taken from {@link Controller#authToken}.
-   */
-  refreshHomersAndPrograms():void {
-    "use strict";
-
-    this.backEnd.getProject(this.project, this.authToken)
-        .then((x:{homers:string[], idToProgram:{[id: string]: backEnd.Program}}) => {
-          this.homers = x.homers;
-          this.idToProgram = new IdToNamed(x.idToProgram);
-          if (this.homers) {
-          this.homerUpdatingModel.id = this.homers[0];
-          } else {
-            this.homerUpdatingModel.id = "";
-          }
-        })
-        .catch(() => {
-          this.homers = [];
-          this.idToProgram = new IdToNamed({});
-          this.homerUpdatingModel.id = "";
-        });
-  }
-
-  /**
-   * Register a new person.
-   *
-   * The credentials of the person are taken from
-   * {@link Controller#personRegistrationModel}. A message describing the result
-   * is stored in {@link Controller#personRegistrationMsg}.
-   */
-  registerPerson():void {
-    "use strict";
-
-    this.backEnd.createPerson(this.personRegistrationModel.email, this.personRegistrationModel.password)
-        .then((message) => {
-          this.personRegistrationMsg = "success: " + message;
-          this.setCurrent("Login");
-        })
-        .catch((reason) => this.personRegistrationMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
-  }
-
-  /**
-   * Log a person in.
-   *
-   * The credentials are taken from {@link Controller#loginModel}. A message
-   * describing the result is stored in {@link Controller#loginMsg}. In case of
-   * success, {@link Controller#authToken} is set. Otherwise, it is cleared.
-   */
-  logIn():void {
-    "use strict";
-
-    this.backEnd.logIn(this.loginModel.email, this.loginModel.password)
-        .then((token) => {
-          this.authToken = token;
-          this.loginMsg = "success: " + this.authToken;
-          this.email = this.loginModel.email;
-          this.refreshHomersAndPrograms();
-          this.refreshProjects();
-          this.setCurrent("Devices");
-        })
-        .catch((reason) => {
-          this.authToken = "";
-          this.loginMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason);
-        });
-  }
-
-  /**
-   * Log a person out.
-   *
-   * The authentication token is taken from {@link Controller#authToken}. A
-   * message describing the result is stored in {@link Controller#logoutMsg}. In
-   * case of success, {@link Controller#authToken} is cleared.
-   */
-  logOut():void {
-    "use strict";
-
-    this.backEnd.logOut(this.authToken)
-        .then((message) => {
-          this.authToken = "";
-          this.logoutMsg = "success: " + message;
-          this.email = "";
-        })
-        .catch((reason) => {
-          this.logoutMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason);
-        });
   }
 
   /**
@@ -413,7 +471,7 @@ export class Controller {
   registerHomer():void {
     "use strict";
 
-    this.backEnd.createHomer(this.homerRegistrationId, this.authToken)
+    this.backEnd.createHomer(this.homerRegistrationId)
         .then((message) => this.homerRegistrationMsg = "success: " + message)
         .catch((reason) => this.homerRegistrationMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
   }
@@ -429,48 +487,124 @@ export class Controller {
   registerDevice():void {
     "use strict";
 
-    this.backEnd.createDevice(this.deviceRegistrationModel.id, this.deviceRegistrationModel.type, this.authToken)
+    this.backEnd.createDevice(this.deviceRegistrationModel.id, this.deviceRegistrationModel.type)
         .then((message) => this.deviceRegistrationMsg = "success: " + message)
         .catch((reason) => this.deviceRegistrationMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
   }
+}
+
+@ng.Component({
+  directives: [MainHeader, DevicesTables, ngRouter.ROUTER_DIRECTIVES, ng.CORE_DIRECTIVES],
+  templateUrl: "src/wrapper.html"
+})
+class Devices {
+  heading = "Devices";
+  breadcrumbs = [{route: ["/Devices"], human: "home"}, {route: ["/Devices"], human: "devices"}];
+}
+
+@ng.Component({
+  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
+  selector: ".content",
+  templateUrl: "src/project.html"
+})
+class ProjectOverview extends OnlyAuthenticated {
+
+  id:string;
+
+  project:backEnd.Project;
+
+  homers:string[];
+
+  devices:{id:string, type:string}[] = [];
+
+  programs:{route:any[], program:backEnd.Program}[] = [];
+
+  queue:{homerId:string, program:string}[] = [];
 
   /**
-   * Create a new project.
-   *
-   * The properties of the project are taken from
-   * {@link Controller#projectCreationModel}. Credentials are taken from
-   * {@link Controller#authToken}. A message describing the result is stored in
-   * {@link Controller#projectCreationMsg}.
+   * The ID of the Homer to be added.
    */
-  createProject():void {
-    "use strict";
+  public homerAdditionId:string;
 
-    this.backEnd.createProject(this.projectCreationModel, this.authToken)
-        .then((message) => {
-          this.projectCreationMsg = "success: " + message;
-          this.setCurrent("Projects");
-        })
-        .catch((reason) => this.projectCreationMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  /**
+   * A message describing the result of the latest Homer-to-project addition.
+   */
+  public homerAdditionMsg:string;
+
+  /**
+   * The ID of the device to be added.
+   */
+  public deviceAdditionId:string;
+
+  /**
+   * A message describing the result of the latest device-to-project addition.
+   */
+  public deviceAdditionMsg:string;
+
+  deletingMsg:string;
+
+  constructor(backEndAngular:BackEndAngular, router:ngRouter.Router, params: ngRouter.RouteParams) {
+    "use strict";
+    super(backEndAngular, router);
+    this.id = params.get("project");
+    this.project = new backEnd.Project("", "");
+    this.backEnd.userChanged.toRx().subscribe(() => this.refresh());
+    this.backEnd.projectChanged.toRx().subscribe((id:string) => {
+      if (id == this.id) {
+        this.refresh();
+      }
+    });
+    this.backEnd.programChanged.toRx().subscribe(() => this.refresh());
+  }
+
+  onInit():void {
+    "use strict";
+    super.onInit();
+    this.refresh();
   }
 
   /**
-   * Select a project.
+   * Refresh {@link Controller#idToProject}.
    *
-   * The properties of the project are taken from
-   * {@link Controller#projectSelectionId}. A message describing the result is
-   * stored in {@link Controller#projectSelectionMsg}.
+   * Credentials are taken from {@link Controller#authToken}.
    */
-  selectProject(id:string):void {
+  refresh():void {
     "use strict";
 
-    this.project = id;
-    this.projectSelectionMsg = this.project;
-    this.setCurrent("Project");
-  }
+    try {
+      this.backEnd.getProject(this.id)
+          .then((x:{name:string, description:string, homers:string[], devices:{id:string, type:string}[], idToProgram:{[id: string]: backEnd.Program}, queue:{homerId:string, program:string}[]}) => {
+            const DICTIONARY:{[type:string]: string} = {
+              lightnormaldevice: "light",
+              switchdevice: "switch"
+            };
 
-  selectProgram(id:string):void {
-    this.program = id;
-    this.setCurrent("Program");
+            this.project = new backEnd.Project(x.name, x.description);
+            this.homers = x.homers;
+            this.devices = x.devices.map((device) => ({id: device.id, type: DICTIONARY[device.type]}));
+            this.programs = Object.keys(x.idToProgram).map((id) => ({route: ['/Program', {project: this.id, program: id}], program: x.idToProgram[id]}));
+            this.queue = x.queue;
+          })
+          .catch((message) => {
+            this.project = new backEnd.Project("", "");
+            this.homers = [];
+            this.devices = [];
+            this.programs = [];
+            this.queue = [];
+            this.router.navigate(["/Projects"]);
+          });
+    } catch (error) {
+      if (error instanceof backEnd.AuthenticationError) {
+        this.project = new backEnd.Project("", "");
+        this.homers = [];
+        this.devices = [];
+        this.programs = [];
+        this.queue = [];
+        this.redirect();
+      } else {
+        throw error;
+      }
+    }
   }
 
   /**
@@ -482,15 +616,14 @@ export class Controller {
    * {@link Controller#authToken}. A message describing the result is stored in
    * {@link Controller#homerProjectAdditionMsg}.
    */
-  addHomerToProject():void {
+  addHomer():void {
     "use strict";
 
-    this.backEnd.addHomerToProject(this.homerProjectAdditionId, this.project, this.authToken)
+    this.backEnd.addHomerToProject(this.homerAdditionId, this.id)
         .then((message) => {
-          this.homerProjectAdditionMsg = "success: " + message;
-          this.refreshHomersAndPrograms();
+          this.homerAdditionMsg = "success: " + message;
         })
-        .catch((reason) => this.homerProjectAdditionMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+        .catch((reason) => this.homerAdditionMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
   }
 
   /**
@@ -502,32 +635,151 @@ export class Controller {
    * from {@link Controller#authToken}. A message describing the result is
    * stored in {@link Controller#deviceProjectAdditionMsg}.
    */
-  addDeviceToProject():void {
+  addDevice():void {
     "use strict";
 
-    this.backEnd.addDeviceToProject(this.deviceProjectAdditionId, this.project, this.authToken)
-        .then((message) => this.deviceProjectAdditionMsg = "success: " + message)
-        .catch((reason) => this.deviceProjectAdditionMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+    this.backEnd.addDeviceToProject(this.deviceAdditionId, this.id)
+        .then((message) => this.deviceAdditionMsg = "success: " + message)
+        .catch((reason) => this.deviceAdditionMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  deleteProject():void {
+    "use strict";
+
+    this.backEnd.deleteProject(this.id)
+        .then((message) => this.deletingMsg = "success: " + message)
+        .catch((reason) => this.deletingMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+}
+
+@ng.Component({
+  directives: [MainHeader, ngRouter.ROUTER_DIRECTIVES, ng.CORE_DIRECTIVES, ProjectOverview],
+  templateUrl: "src/wrapper.html"
+})
+class Project {
+  heading:string;
+  breadcrumbs:{route:any, human:string}[];
+
+  constructor(params: ngRouter.RouteParams) {
+    this.heading = "Project " + params.get("project");
+    this.breadcrumbs = [{route: ["/Devices"], human: "home"}, {route: ["/Projects"], human: "projects"}, {route: ["/Project", {project: params.get("project")}], human: "project " + params.get("project").toString()}];
+  }
+}
+
+
+@ng.Component({
+  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES],
+  selector: ".content",
+  templateUrl: "src/program.html"
+})
+class ProgramOverview extends OnlyAuthenticated {
+
+  project:string;
+
+  id:string;
+
+  program:backEnd.Program;
+
+  homers:string[];
+
+  message:string;
+
+  /**
+   * A model of the Homer updating form.
+   */
+  public homerUpdatingModelId:string;
+
+  /**
+   * A message describing the result of the latest Homer updating attempt.
+   */
+  public homerUpdatingMsg:string;
+
+  public homerUpdatingModelNew:{id:string, date:string, time:string, when:string};
+
+  public homerUpdatingNewMsg:string;
+
+  constructor(backEndAngular:BackEndAngular, router:ngRouter.Router, params: ngRouter.RouteParams) {
+    "use strict";
+    super(backEndAngular, router);
+    this.project = params.get("project");
+    this.id = params.get("program");
+    this.program = new backEnd.Program("", "", "");
+    this.initializeModel();
+    this.backEnd.userChanged.toRx().subscribe(() => this.refresh());
+    this.backEnd.projectChanged.toRx().subscribe((id:string) => {
+      if (id == this.project) {
+        this.refresh();
+      }
+    });
+    this.backEnd.programChanged.toRx().subscribe((id:string) => {
+      if (id == this.id) {
+        this.refresh();
+      }
+    });
+  }
+
+  initializeModel() {
+    let now = new Date();
+    this.homerUpdatingModelNew = {
+      id: "",
+      date: "" + now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate(),
+      time: "" + now.getHours() + ":" + now.getMinutes(),
+      when: "-1"
+    };
+  }
+
+  onInit():void {
+    "use strict";
+    super.onInit();
+    this.refresh();
   }
 
   /**
-   * Create a new program.
+   * Refresh {@link Controller#idToProject}.
    *
-   * The properties of the program are taken from
-   * {@link Controller#programCreationModel} and the properties of the project
-   * are taken from {@link Controller#project}. Credentials are taken from
-   * {@link Controller#authToken}. A message describing the result is stored in
-   * {@link Controller#programCreationMsg}.
+   * Credentials are taken from {@link Controller#authToken}.
    */
-  createProgram():void {
+  refresh():void {
     "use strict";
 
-    this.backEnd.createProgram(this.programCreationModel, this.project, this.authToken)
-        .then((message) => {
-          this.programCreationMsg = "success: " + message;
-          this.setCurrent("Project");
-        })
-        .catch((reason) => this.programCreationMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+    try {
+      this.backEnd.getProject(this.project)
+          .then((x:{homers:string[], idToProgram:{[id: string]: backEnd.Program}}) => {
+            this.homers = x.homers;
+            this.program = x.idToProgram[this.id];
+            if (this.homers) {
+              this.homerUpdatingModelId = this.homers[0];
+              this.homerUpdatingModelNew.id = this.homers[0];
+            } else {
+              this.homerUpdatingModelId = null;
+              this.homerUpdatingModelNew.id = null;
+            }
+          })
+          .catch((message) => {
+            this.homers = [];
+            this.homerUpdatingModelId = null;
+            this.program = new backEnd.Program("", "", "");
+            this.initializeModel();
+            this.router.navigate(["/Project", {project: this.project}]);
+          });
+    } catch (error) {
+      if (error instanceof backEnd.AuthenticationError) {
+        this.homers = [];
+        this.homerUpdatingModelId = null;
+        this.program = new backEnd.Program("", "", "");
+        this.initializeModel();
+        this.redirect();
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  update():void {
+    this.backEnd.updateProgram(this.id, this.program, this.project)
+        .then((message) => this.message = "success: " + message)
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
   }
 
   /**
@@ -541,25 +793,231 @@ export class Controller {
   updateHomer():void {
     "use strict";
 
-    this.backEnd.updateHomer(this.homerUpdatingModel.id, this.program, this.authToken)
+    this.backEnd.updateHomer(this.homerUpdatingModelId, this.id)
         .then((message) => this.homerUpdatingMsg = "success: " + message)
         .catch((reason) => this.homerUpdatingMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
   }
 
-  setCurrent(current:string):void {
-    this.current = current;
-    if (current == "Projects") {
-      this.refreshProjects();
+  updateHomerNew():void {
+    "use strict";
+    let time = parseInt(this.homerUpdatingModelNew.when, 10);
+    if (time > 0) {
+      let ds = this.homerUpdatingModelNew.date.split("-");
+      let ts = this.homerUpdatingModelNew.time.split(":");
+      let date = new Date(parseInt(ds[0], 10), parseInt(ds[1], 10), parseInt(ds[2], 10), parseInt(ts[0], 10), parseInt(ts[1], 10));
+      time = date.getTime();
     }
-    if (current == "Project") {
-      this.refreshHomersAndPrograms();
-    }
-    if (current == "Program") {
-      this.refreshHomersAndPrograms();
-    }
+    this.backEnd.updateHomer(this.homerUpdatingModelNew.id, this.id, time)
+        .then((message) => this.homerUpdatingNewMsg = "success: " + message)
+        .catch((reason) => this.homerUpdatingNewMsg = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+}
+
+@ng.Component({
+  directives: [MainHeader, ngRouter.ROUTER_DIRECTIVES, ng.CORE_DIRECTIVES, ProgramOverview],
+  templateUrl: "src/wrapper.html"
+})
+class Program {
+  heading:string;
+  breadcrumbs:{route:any, human:string}[];
+
+  constructor(params: ngRouter.RouteParams) {
+    this.heading = "Program " + params.get("program") + " (Project " + params.get("project") + ")";
+    this.breadcrumbs = [{route: ["/Devices"], human: "home"}, {route: ["/Projects"], human: "projects"}, {route: ["/Project", {project: params.get("project")}], human: "project " + params.get("project").toString()},
+      {route: ["/Program", {project: params.get("project"), program: params.get("program")}], human: "program " + params.get("program")}];
+  }
+}
+
+@ng.Component({
+  directives: [ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES, ng.CORE_DIRECTIVES],
+  selector: ".content",
+  templateUrl: "src/projects.html"
+})
+class ProjectsTable extends OnlyAuthenticated {
+  projects:{route:any[], project:backEnd.Project}[] = [];
+
+  constructor(backEndAngular:BackEndAngular, router:ngRouter.Router) {
+    "use strict";
+    super(backEndAngular, router);
+    this.backEnd.userChanged.toRx().subscribe(() => this.refresh());
+    this.backEnd.projectChanged.toRx().subscribe(() => this.refresh());
   }
 
-  isAuth():boolean {
-    return !!this.authToken;
+  onInit():void {
+    "use strict";
+    super.onInit();
+    this.refresh();
   }
+
+  /**
+   * Refresh {@link Controller#idToProject}.
+   *
+   * Credentials are taken from {@link Controller#authToken}.
+   */
+  refresh():void {
+    "use strict";
+
+    try {
+      this.backEnd.getProjects()
+          .then((idToProject) => this.projects = Object.keys(idToProject).map((id) => ({
+            route: ['/Project', {project: id}],
+            project: idToProject[id]
+          })))
+          .catch((message) => this.projects = []);
+    } catch (error) {
+      if (error instanceof backEnd.AuthenticationError) {
+        this.projects = [];
+        this.redirect();
+      } else {
+        throw error;
+      }
+    }
+  }
+}
+
+@ng.Component({
+  directives: [MainHeader, ngRouter.ROUTER_DIRECTIVES, ng.CORE_DIRECTIVES, ProjectsTable],
+  templateUrl: "src/wrapper.html"
+})
+class Projects {
+  heading = "Projects";
+  breadcrumbs = [{route: ["/Devices"], human: "home"}, {route: ["/Projects"], human: "projects"}];
+}
+
+@ng.Component({
+  directives: [ng.FORM_DIRECTIVES],
+  selector: ".content",
+  templateUrl: "src/new-program.html"
+})
+class NewProgramForm extends OnlyAuthenticated {
+  project:string;
+
+  /**
+   * A model of the program creation form.
+   */
+  public program:backEnd.Program;
+
+  /**
+   * A message describing the result of the latest program creation attempt.
+   */
+  public message:string;
+
+  constructor(backEndAngular:BackEndAngular, router:ngRouter.Router, params: ngRouter.RouteParams) {
+    "use strict";
+    super(backEndAngular, router);
+    this.project = params.get("project");
+    this.program = new backEnd.Program("", "", "");
+  }
+
+  /**
+   * Create a new program.
+   *
+   * The properties of the program are taken from
+   * {@link Controller#programCreationModel} and the properties of the project
+   * are taken from {@link Controller#project}. Credentials are taken from
+   * {@link Controller#authToken}. A message describing the result is stored in
+   * {@link Controller#programCreationMsg}.
+   */
+  create():void {
+    "use strict";
+
+    this.backEnd.createProgram(this.program, this.project)
+        .then((message) => {
+          this.message = "success: " + message;
+          this.router.navigate(['/Project', {project: this.project}]);
+        })
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+}
+
+@ng.Component({
+  directives: [MainHeader, ngRouter.ROUTER_DIRECTIVES, ng.CORE_DIRECTIVES, NewProgramForm],
+  templateUrl: "src/wrapper.html"
+})
+class NewProgram {
+  heading:string;
+  breadcrumbs:{route:any, human:string}[];
+
+  constructor(params: ngRouter.RouteParams) {
+    this.heading = "New Program (Project " + params.get("project") + ")";
+    this.breadcrumbs = [
+      {route: ["/Devices"], human: "home"}, {route: ["/Projects"], human: "projects"}, {route: ["/Project", {project: params.get("project")}], human: "project " + params.get("project").toString()},
+      {route: ["/NewProgram", {project: params.get("project")}], human: "new program"}];
+  }
+}
+
+@ng.Component({
+  directives: [ng.FORM_DIRECTIVES],
+  selector: ".content",
+  templateUrl: "src/new-project.html"
+})
+class NewProjectForm extends OnlyAuthenticated {
+  /**
+   * A model of the project creation form.
+   */
+  public project:backEnd.Project;
+
+  /**
+   * A message describing the result of the last project creation attempt.
+   */
+  public message:string;
+
+  constructor(backEndAngular:BackEndAngular, router:ngRouter.Router) {
+    "use strict";
+    super(backEndAngular, router);
+    this.project = new backEnd.Project("", "");
+  }
+
+  /**
+   * Create a new project.
+   *
+   * The properties of the project are taken from
+   * {@link Controller#projectCreationModel}. Credentials are taken from
+   * {@link Controller#authToken}. A message describing the result is stored in
+   * {@link Controller#projectCreationMsg}.
+   */
+  create():void {
+    "use strict";
+
+    this.backEnd.createProject(this.project)
+        .then((message) => {
+          this.message = "success: " + message;
+          this.router.navigate(['/Projects']);
+        })
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+}
+
+@ng.Component({
+  directives: [MainHeader, ngRouter.ROUTER_DIRECTIVES, ng.CORE_DIRECTIVES, NewProjectForm],
+  templateUrl: "src/wrapper.html"
+})
+class NewProject {
+  heading = "New Project";
+  breadcrumbs = [{route: ["/Devices"], human: "home"}, {route: ["/Projects"], human: "projects"}, {route: ["/NewProject"], human: "new"}];
+}
+
+/**
+ * A "view" directive that renders a view from "src/view.html".
+ *
+ * It expects the the back end to be available at address 127.0.0.1 and port
+ * 9000.
+ */
+@ng.Component({
+  directives: [ngRouter.ROUTER_DIRECTIVES],
+  selector: "view",
+  templateUrl: "src/view.html"
+})
+@ngRouter.RouteConfig([
+  {path: '/', redirectTo: '/devices'},
+  {path: '/login', component: Login, as: "Login"},
+  {path: '/devices', component: Devices, as: 'Devices'},
+  {path: '/project/:project', component: Project, as: 'Project'},
+  {path: '/project/:project/program/:program', component: Program, as: 'Program'},
+  {path: '/project/:project/programs/new', component: NewProgram, as: 'NewProgram'},
+  {path: '/projects', component: Projects, as: 'Projects'},
+  {path: '/projects/new', component: NewProject, as: 'NewProject'},
+  {path: '/registration', component: PersonRegistration, as: "Registration"}
+])
+export class Controller {
 }

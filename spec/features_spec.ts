@@ -191,7 +191,7 @@ describe("Creation of a project", () => {
     support.call(() => backEndNodeJs.logIn(email, PASSWORD).then((token) =>
         backEndNodeJs.findNonExistentProject(token)
             .then((name2) => name = name2)
-            .then(() => backEndNodeJs.logOut(token))
+            .then(() => backEndNodeJs.logOut())
     ));
     browser.get(support.HOMEPAGE_URL);
     browser.call(() => logIn(email, PASSWORD));
@@ -202,7 +202,7 @@ describe("Creation of a project", () => {
     browser.call(() => logOut());
     expect(support.call(() => backEndNodeJs.logIn(email, PASSWORD)
         .then((token) => backEndNodeJs.existsProject(new backEnd.Project(name, DESCRIPTION), token)
-            .then((exists) => backEndNodeJs.logOut(token)
+            .then((exists) => backEndNodeJs.logOut()
                 .then(() => exists)
             )
         )
@@ -211,10 +211,6 @@ describe("Creation of a project", () => {
   });
 
   afterEach(() => {
-    support.wait(backEndNodeJs.logIn(email, PASSWORD).then((token) =>
-        backEndNodeJs.deleteProject(new backEnd.Project(name, DESCRIPTION), token)
-            .then(() => backEndNodeJs.logOut(token))
-    ));
     support.call(() => backEndNodeJs.deletePerson(email));
   });
 });

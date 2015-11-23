@@ -17,5 +17,12 @@
 
 import * as ng from "angular2/angular2";
 import * as controller from "./controller";
+import * as ngHttp from "angular2/http";
+import * as ngRouter from "angular2/router";
 
-ng.bootstrap(controller.Controller);
+ng.bootstrap(controller.Controller, [
+  controller.BackEndAngular,
+  ngHttp.HTTP_PROVIDERS,
+  ngRouter.ROUTER_PROVIDERS,
+  ng.provide(ngRouter.LocationStrategy, {useClass: ngRouter.HashLocationStrategy})
+]);

@@ -141,7 +141,7 @@ export class BackEndNodeJs extends backEnd.BackEnd {
    * @returns a promise that will be resolved with the response, or rejected
    *          with a reason.
    */
-  protected request(request:backEnd.Request):Promise<backEnd.Response> {
+  protected requestGeneral(request:backEnd.Request):Promise<backEnd.Response> {
     "use strict";
 
     return new Promise((resolve, reject) => {
@@ -177,7 +177,7 @@ export class BackEndNodeJs extends backEnd.BackEnd {
     "use strict";
 
     return this.logIn(email, password)
-        .then((token) => this.logOut(token)).then(() => true)
+        .then((token) => this.logOut()).then(() => true)
         .catch((reason) => {
           if (reason instanceof backEnd.BackEndError) {
             throw reason;
@@ -197,12 +197,9 @@ export class BackEndNodeJs extends backEnd.BackEnd {
     "use strict";
 
     let email = "foo@test" + randomString() + ".com";
-    let request = new backEnd.Request(
-        "GET",
-        BackEndNodeJs.HOSTNAME, BackEndNodeJs.PORT, BackEndNodeJs.PERSON_PATH + "/" + email
-    );
-    return this.requestWrapped(request).then((response) =>
-        response.status == 200 ? this.findNonExistentPerson() : email);
+    return this.request("GET",
+        BackEndNodeJs.PERSON_PATH + "/" + email).then((response) =>
+       this.findNonExistentPerson());
   }
 
   /**
@@ -215,11 +212,8 @@ export class BackEndNodeJs extends backEnd.BackEnd {
   public deletePerson(email:string):Promise<string> {
     "use strict";
 
-    let request = new backEnd.Request(
-        "DELETE",
-        BackEndNodeJs.HOSTNAME, BackEndNodeJs.PORT, BackEndNodeJs.PERSON_PATH + "/" + email
-    );
-    return this.requestWrapped(request).then(JSON.stringify);
+     return this.request("DELETE",
+        BackEndNodeJs.PERSON_PATH + "/" + email).then(JSON.stringify);
   }
 
   /**
@@ -233,7 +227,7 @@ export class BackEndNodeJs extends backEnd.BackEnd {
   public existsProject(project:backEnd.Project, token:string):Promise<boolean> {
     "use strict";
 
-    return this.getProjects(token).then((idToProject) => {
+    return this.getProjects().then((idToProject) => {
       for (let id in idToProject) {
         if (idToProject.hasOwnProperty(id)) {
           if (project.equals(idToProject[id])) {
@@ -255,7 +249,7 @@ export class BackEndNodeJs extends backEnd.BackEnd {
   public findNonExistentProject(token:string):Promise<string> {
     "use strict";
 
-    return this.getProjects(token).then((idToProject) => {
+    return this.getProjects().then((idToProject) => {
       let names:string[] = [];
       for (let id in idToProject) {
         if (idToProject.hasOwnProperty(id)) {
@@ -279,19 +273,16 @@ export class BackEndNodeJs extends backEnd.BackEnd {
    * @returns a promise that will be resolved with a message describing the
    *          result, or rejected with a reason.
    */
-  public deleteProject(project:backEnd.Project, token:string):Promise<string> {
+  public deleteProject2(project:backEnd.Project, token:string):Promise<string> {
     "use strict";
 
-    return this.getProjects(token).then((idToProject) => {
+    return this.getProjects().then((idToProject) => {
       let promises:Promise<string>[] = [];
       for (let id in idToProject) {
         if (idToProject.hasOwnProperty(id) && project.equals(idToProject[id])) {
-          let request = new backEnd.Request(
-              "DELETE",
-              BackEndNodeJs.HOSTNAME, BackEndNodeJs.PORT, BackEndNodeJs.PROJECT_PATH + "/" + id,
-              {[BackEndNodeJs.TOKEN_HEADER]: token}
-          );
-          promises.push(this.requestWrapped(request).then(JSON.stringify));
+          promises.push(this.request("DELETE",
+              BackEndNodeJs.PROJECT_PATH + "/" + id,
+              undefined, true).then(JSON.stringify));
         }
       }
       return Promise.all(promises).then((values) => values.join());

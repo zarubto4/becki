@@ -167,7 +167,7 @@ export class Request {
   getUrl():string {
     "use strict";
 
-    return this.protocol + "://" + this.hostname + this.path;
+    return this.protocol + "://" + this.hostname + ":" + this.port + this.path;
   }
 }
 
@@ -218,19 +218,33 @@ export class BackEndError extends Error {
 }
 
 /**
+ * An error representing an problem in authentication against the back end.
+ */
+export class AuthenticationError extends Error {
+
+  /**
+   * The name of the error.
+   */
+  name = "authentication error";
+
+  /**
+   * Create a new error instance.
+   *
+   * @param message a human-readable description of the error.
+   */
+  constructor(message?:string) {
+    "use strict";
+
+    super(message);
+    // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133
+    this.message = message;
+  }
+}
+
+/**
  * A service providing access to the back end at 127.0.0.1:9000.
  */
 export abstract class BackEnd {
-
-  /**
-   * A hostname of the back end.
-   */
-  static HOSTNAME = "byzance-backend.herokuapp.com";
-
-  /**
-   * A port number of the back end.
-   */
-  static PORT = 9000;
 
   /**
    * An absolute path to the permission resources.
@@ -257,25 +271,48 @@ export abstract class BackEnd {
   static TOKEN_HEADER = "X-AUTH-TOKEN";
 
   /**
-   * Perform an HTTP request.
-   *
-   * @param request the details of the request.
-   * @returns a promise that will be resolved with the response, or rejected
-   *          with a reason.
+   * An authentication token.
    */
-  protected abstract request(request:Request):Promise<Response>;
+  private authToken:string = null;
 
   /**
    * Perform an HTTP request.
    *
    * @param request the details of the request.
    * @returns a promise that will be resolved with the response, or rejected
-   *          with an instance of {@link BackEndError}.
+   *          with a reason.
    */
-  protected requestWrapped(request:Request):Promise<Response> {
-    return this.request(request).catch((reason) => {
-      throw new BackEndError(reason);
-    });
+  protected abstract requestGeneral(request:Request):Promise<Response>;
+
+  protected request<T>(method:string, path:string, body?:Object, auth = false):Promise<T> {
+    "use strict";
+
+    let request = new Request(
+        method,
+        "127.0.0.1", 9000, path,
+        {},
+        body
+    );
+    if (auth) {
+      if (this.authToken === null) {
+        throw new AuthenticationError("not authenticated");
+      }
+      request.headers["X-AUTH-TOKEN"] = this.authToken;
+    }
+    return this.requestGeneral(request)
+        .then((response) => {
+          if (response.status == 200) {
+            // TODO: Response to a JSON request should always be a JSON.
+            return response.body ? JSON.parse(response.body) : {};
+          } else {
+            // TODO: https://github.com/angular/angular/issues/4558
+            return Promise.reject(new Error("error response: " + JSON.stringify(response)));
+          }
+        });
+  }
+
+  isAuth():boolean {
+    return !!this.authToken;
   }
 
   /**
@@ -289,13 +326,9 @@ export abstract class BackEnd {
   public createPerson(email:string, password:string):Promise<string> {
     "use strict";
 
-    let request = new Request(
-        "POST",
-        BackEnd.HOSTNAME, BackEnd.PORT, BackEnd.PERSON_PATH,
-        {},
-        {mail: email, password: password}
-    );
-    return this.requestWrapped(request).then(JSON.stringify);
+    return this.request("POST",
+        BackEnd.PERSON_PATH,
+        {mail: email, password: password}).then(JSON.stringify);
   }
 
   /**
@@ -313,19 +346,13 @@ export abstract class BackEnd {
   public logIn(email:string, password:string):Promise<string> {
     "use strict";
 
-    let request = new Request(
-        "POST",
-        BackEnd.HOSTNAME, BackEnd.PORT, BackEnd.PERMISSION_PATH + "/login",
-        {},
-        {email: email, password: password}
-    );
-    return this.requestWrapped(request).then((response) => {
-      if (response.status == 200) {
-        return JSON.parse(response.body).token;
-      } else {
-        throw new Error("login failed");
-      }
+    return this.request<{token:string}>("POST",
+        BackEnd.PERMISSION_PATH + "/login",
+        {email: email, password: password}).then((body) => {
+      this.authToken = body.token;
+      return JSON.stringify(body);
     });
+
   }
 
   /**
@@ -339,22 +366,16 @@ export abstract class BackEnd {
    * @returns a promise that will be resolved with a message describing the
    *          result, or rejected with a reason.
    */
-  public logOut(token:string):Promise<string> {
+  public logOut():Promise<string> {
     "use strict";
 
-    let request = new Request(
-        "POST",
-        BackEnd.HOSTNAME, BackEnd.PORT, BackEnd.PERMISSION_PATH + "/logout",
-        {[BackEnd.TOKEN_HEADER]: token},
-        {}
+    return this.request("POST",
+        BackEnd.PERMISSION_PATH + "/logout",
+        {}, true).then((body) => {
+      this.authToken = null;
+      return JSON.stringify(body);
+    }
     );
-    return this.requestWrapped(request).then((response) => {
-      if (response.status == 200) {
-        return JSON.stringify(response);
-      } else {
-        throw new Error("logout failed");
-      }
-    });
   }
 
   /**
@@ -363,16 +384,13 @@ export abstract class BackEnd {
    * @param id the ID of the device.
    * @param token an authentication token.
    */
-  public createHomer(id:string, token:string):Promise<string> {
+  public createHomer(id:string):Promise<string> {
     "use strict";
 
-    let request = new Request(
-        "POST",
-        BackEnd.HOSTNAME, BackEnd.PORT, "/project/posthomer",
-        {[BackEnd.TOKEN_HEADER]: token},
-        {homerId: id, typeOfDevice: "raspberry"}
-    );
-    return this.requestWrapped(request).then(JSON.stringify);
+    return this.request("POST",
+        "/project/posthomer",
+
+        {homerId: id, typeOfDevice: "raspberry"}, true).then(JSON.stringify);
   }
 
   /**
@@ -383,16 +401,12 @@ export abstract class BackEnd {
    * @param callback a callback called with an indicator and a message
    *                 describing the result.
    */
-  public createDevice(id:string, type:string, token:string):Promise<string> {
+  public createDevice(id:string, type:string):Promise<string> {
     "use strict";
 
-    let request = new Request(
-        "POST",
-        BackEnd.HOSTNAME, BackEnd.PORT, "/project/postNewDevice",
-        {[BackEnd.TOKEN_HEADER]: token},
-        {biteCode: id, typeOfDevice: type, parameters: []}
-    );
-    return this.requestWrapped(request).then(JSON.stringify);
+    return this.request("POST",
+        "/project/postNewDevice",
+        {biteCode: id, typeOfDevice: type, parameters: []}, true).then(JSON.stringify);
   }
 
   /**
@@ -403,16 +417,12 @@ export abstract class BackEnd {
    * @returns a promise that will be resolved with a message describing the
    *          result, or rejected with a reason.
    */
-  public createProject(project:Project, token:string):Promise<string> {
+  public createProject(project:Project):Promise<string> {
     "use strict";
 
-    let request = new Request(
-        "POST",
-        BackEnd.HOSTNAME, BackEnd.PORT, BackEnd.PROJECT_PATH,
-        {[BackEnd.TOKEN_HEADER]: token},
-        {projectName: project.name, projectDescription: project.description}
-    );
-    return this.requestWrapped(request).then(JSON.stringify);
+    return this.request("POST",
+        BackEnd.PROJECT_PATH,
+        {projectName: project.name, projectDescription: project.description}, true).then(JSON.stringify);
   }
 
   /**
@@ -425,30 +435,25 @@ export abstract class BackEnd {
    *                programs themselves in case of success.
    * @param error a callback called with a message in case of a failure.
    */
-  public getProject(id:string, token:string):Promise<{homers:string[], idToProgram:{[id: string]: Program}}> {
+  public getProject(id:string):Promise<{name: string, description: string, homers:string[], devices:{id:string, type:string}[], idToProgram:{[id: string]: Program}, queue:{homerId:string, program:string}[]}> {
     "use strict";
 
-    let request = new Request(
-        "GET",
-        BackEnd.HOSTNAME, BackEnd.PORT, BackEnd.PROJECT_PATH + "/" + id,
-        {[BackEnd.TOKEN_HEADER]: token}
-    );
-    return this.requestWrapped(request).then((response:Response) => {
-          if (response.status == 200) {
-            let result:any = JSON.parse(response.body);
-            let homers:string[] = result.homerDeviceList.map(
+    return this.request<{projectName:string, projectDescription:string, homerDeviceList:{homerId:string}[], databaseDevicesList:{biteCodeName: string, typeOfDevice:string}[], programs:{programId:string, programName:string, programDescription:string, program:string}[], forUploadPrograms:{homerId:string, program:string}[]}>("GET",
+        BackEnd.PROJECT_PATH + "/" + id,
+        undefined, true).then((body) => {
+            let homers:string[] = body.homerDeviceList.map(
                 (homer:{homerId:string}) => homer.homerId
             );
+            let devices:{id:string, type:string}[] = body.databaseDevicesList.map(
+                (device:{biteCodeName:string, typeOfDevice:string}) => ({id: device.biteCodeName, type: device.typeOfDevice})
+            );
             let idToProgram:{[id: string]: Program} = {};
-            for (let prog of result.programs) {
+            for (let prog of body.programs) {
               idToProgram[prog.programId] = new Program(
                   prog.programName, prog.programDescription, prog.program
               );
             }
-            return {homers: homers, idToProgram: idToProgram};
-          } else {
-            throw new Error("dfsfs");
-          }
+            return {name: body.projectName, description: body.projectDescription, homers: homers, devices: devices, idToProgram: idToProgram, queue: body.forUploadPrograms};
         }
     );
   }
@@ -460,24 +465,17 @@ export abstract class BackEnd {
    * @returns a promise that will be resolved with a mapping from the projects
    *          IDs to the projects themselves, or rejected with a reason.
    */
-  public getProjects(token:string):Promise<{[id: string]: Project}> {
+  public getProjects():Promise<{[id: string]: Project}> {
     "use strict";
 
-    let request = new Request(
-        "GET",
-        BackEnd.HOSTNAME, BackEnd.PORT, BackEnd.PROJECT_PATH,
-        {[BackEnd.TOKEN_HEADER]: token}
-    );
-    return this.requestWrapped(request).then((response) => {
-      if (response.status == 200) {
+    return this.request<{projectId:string, projectName:string, projectDescription:string}[]>("GET",
+        BackEnd.PROJECT_PATH,
+        undefined, true).then((body) => {
         let idToProject:{[id: string]: Project} = {};
-        for (let project of JSON.parse(response.body)) {
+        for (let project of body) {
           idToProject[project.projectId] = new Project(project.projectName, project.projectDescription);
         }
         return idToProject;
-      } else {
-        throw JSON.stringify(response);
-      }
     });
   }
 
@@ -490,16 +488,12 @@ export abstract class BackEnd {
    * @param callback a callback called with an indicator and a message
    *                 describing the result.
    */
-  public addHomerToProject(homer:string, project:string, token:string):Promise<string> {
+  public addHomerToProject(homer:string, project:string):Promise<string> {
     "use strict";
 
-    let request = new Request(
-        "PUT",
-        BackEnd.HOSTNAME, BackEnd.PORT, "/project/connectHomerWithProject",
-        {[BackEnd.TOKEN_HEADER]: token},
-        {projectId: project, homerId: homer}
-    );
-    return this.requestWrapped(request).then(JSON.stringify);
+    return this.request("PUT",
+        "/project/connectHomerWithProject",
+        {projectId: project, homerId: homer}, true).then(JSON.stringify);
   }
 
   /**
@@ -511,16 +505,27 @@ export abstract class BackEnd {
    * @param callback a callback called with an indicator and a message
    *                 describing the result.
    */
-  public addDeviceToProject(device:string, project:string, token:string):Promise<string> {
+  public addDeviceToProject(device:string, project:string):Promise<string> {
     "use strict";
 
-    let request = new Request(
-        "PUT",
-        BackEnd.HOSTNAME, BackEnd.PORT, "/project/connectDeviceWithProject",
-        {[BackEnd.TOKEN_HEADER]: token},
-        {projectId: project, bitecodesNames: [device]}
-    );
-    return this.requestWrapped(request).then(JSON.stringify);
+    return this.request("PUT",
+        "/project/connectDeviceWithProject",
+        {projectId: project, bitecodesNames: [device]}, true).then(JSON.stringify);
+  }
+
+  /**
+   * Delete a project.
+   *
+   * @param project the project.
+   * @param token an authentication token.
+   * @returns a promise that will be resolved with a message describing the
+   *          result, or rejected with a reason.
+   */
+  public deleteProject(id:string):Promise<string> {
+    "use strict";
+
+    return this.request("DELETE",
+          BackEnd.PROJECT_PATH + "/" + id, undefined, true).then(JSON.stringify);
   }
 
   /**
@@ -532,21 +537,30 @@ export abstract class BackEnd {
    * @param callback a callback called with an indicator and a message
    *                 describing the result.
    */
-  public createProgram(program:Program, project:string, token:string):Promise<string> {
+  public createProgram(program:Program, project:string):Promise<string> {
     "use strict";
 
-    let request = new Request(
-        "POST",
-        BackEnd.HOSTNAME, BackEnd.PORT, BackEnd.PROGRAM_PATH,
-        {[BackEnd.TOKEN_HEADER]: token},
+    return this.request("POST",
+        BackEnd.PROGRAM_PATH,
         {
           programName: program.name,
           programDescription: program.description,
           projectId: project,
           program: program.code
-        }
-    );
-    return this.requestWrapped(request).then(JSON.stringify);
+        }, true).then(JSON.stringify);
+  }
+
+  public updateProgram(id:string, program:Program, project:string):Promise<string> {
+    "use strict";
+
+    return this.request("PUT",
+        BackEnd.PROGRAM_PATH + "/" + id,
+        {
+          programName: program.name,
+          programDescription: program.description,
+          projectId: project,
+          program: program.code
+        }, true).then(JSON.stringify);
   }
 
   /**
@@ -558,18 +572,16 @@ export abstract class BackEnd {
    * @param callback a callback called with an indicator and a message
    *                 describing the result.
    */
-  public updateHomer(id:string, program:string, token:string):Promise<string> {
+  public updateHomer(id:string, program:string, time?:number):Promise<string> {
     "use strict";
 
-    let request = new Request(
-        "PUT",
-        BackEnd.HOSTNAME, BackEnd.PORT, "/project/uploudtohomer",
-        {[BackEnd.TOKEN_HEADER]: token},
+    return this.request("PUT",
+        "/project/uploudtohomer",
         {
           homerId: id,
-          programId: program
-        }
-    );
-    return this.requestWrapped(request).then(JSON.stringify);
+          programId: program,
+          // New API
+          time
+        }, true).then(JSON.stringify);
   }
 }
