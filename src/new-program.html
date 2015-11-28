@@ -1,38 +1,49 @@
-<div class="box box-primary">
-  <div class="box-header with-border">
-    <h3 class="box-title">New Program</h3>
-  </div>
+<div class="row">
+  <div class="col-md-9">
 
-  <form role="form" var-program-creation=form
-        on-ng-submit=create()>
-    <div class="box-body">
-      <div class="form-group">
-        <label for="exampleInputEmail1">Name</label>
-        <input class="form-control" id="exampleInputEmail1"
-               placeholder="Enter name"
-               bindon-ng-model=program.name>
+    <div class="box box-primary">
+      <div class="box-header with-border">
+        <h3 class="box-title">New Program</h3>
       </div>
-      <div class="form-group">
-        <label for="exampleInputPassword1">Description</label>
+
+      <form role="form" var-program-creation=form
+            on-ng-submit=create()>
+        <div class="box-body">
+          <div class="form-group">
+            <label for="exampleInputEmail1">Name</label>
+            <input class="form-control" id="exampleInputEmail1"
+                   placeholder="Enter name"
+                   bindon-ng-model=program.name>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Description</label>
         <textarea class="form-control"
                   id="exampleInputPassword1" placeholder="Description"
                   bindon-ng-model=program.description></textarea>
-      </div>
-      <div class="form-group">
-        <label for="exampleInputPassword1">Code</label>
-        <textarea class="form-control"
-                  id="exampleInputPassword1" placeholder="Description"
-                  bindon-ng-model=program.code></textarea>
-      </div>
-    </div>
-    <!-- /.box-body -->
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Code</label>
 
-    <div class="box-footer">
-      <input type="submit" class="btn btn-primary">
+            <div class="blocko" bindon-code="program.code" on-code-change="config = null"
+                 on-config-request="config = $event"></div>
+          </div>
+        </div>
+        <!-- /.box-body -->
 
-      <p class=result>
-        Result: {{message}}
-      </p>
+        <div class="box-footer">
+          <input type="submit" class="btn btn-primary">
+
+          <p class=result>
+            Result: {{message}}
+          </p>
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
+
+  <div class="col-md-3 blocko-config" bind-class.hidden="!config"
+       bind-block="config" on-save-done="config = null"
+       on-close="config = null">
+  </div>
 </div>
+<!-- /.row -->

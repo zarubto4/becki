@@ -22,9 +22,9 @@
           </div>
           <div class="form-group">
             <label for="exampleInputPassword1">Code</label>
-        <textarea class="form-control"
-                  id="exampleInputPassword1" placeholder="Description"
-                  bindon-ng-model=program.code></textarea>
+            <div class="blocko" bindon-code="program.code"
+                 on-code-change="config = null"
+                 on-config-request="config = $event"></div>
           </div>
         </div>
         <!-- /.box-body -->
@@ -38,6 +38,11 @@
         </div>
       </form>
     </div>
+  </div>
+  <!-- /.col -->
+  <div class="col-md-3 blocko-config" bind-class.hidden="!config"
+       bind-block="config" on-save-done="config = null"
+       on-close="config = null">
   </div>
   <!-- /.col -->
   <div class="col-md-3">

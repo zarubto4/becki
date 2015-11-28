@@ -19,6 +19,8 @@ import * as backEnd from "./backend";
 import * as ng from "angular2/angular2";
 import * as ngHttp from "angular2/http";
 import * as ngRouter from "angular2/router";
+import * as blocko from "../node_modules/blocko/js/index";
+
 
 class OnlyAuthenticated implements ng.OnInit, ng.OnDestroy {
   backEnd:BackEndAngular;
@@ -178,8 +180,8 @@ export class BackEndAngular extends backEnd.BackEnd {
     "use strict";
 
     return super.logOut().then((message) => {
-      this.userEmail = null;
-      this.userChanged.next(this.userEmail);
+          this.userEmail = null;
+          this.userChanged.next(this.userEmail);
           return message;
         }
     );
@@ -311,7 +313,7 @@ class PersonRegistration {
 
     this.backEnd = backEndAngular;
     this.router = router;
-    this.person = {email:"", password:""};
+    this.person = {email: "", password: ""};
   }
 
   /**
@@ -499,7 +501,10 @@ class DevicesTables extends OnlyAuthenticated {
 })
 class Devices {
   heading = "Devices";
-  breadcrumbs = [{route: ["/Devices"], human: "home"}, {route: ["/Devices"], human: "devices"}];
+  breadcrumbs = [{route: ["/Devices"], human: "home"}, {
+    route: ["/Devices"],
+    human: "devices"
+  }];
 }
 
 @ng.Component({
@@ -543,7 +548,7 @@ class ProjectOverview extends OnlyAuthenticated {
 
   deletingMsg:string;
 
-  constructor(backEndAngular:BackEndAngular, router:ngRouter.Router, params: ngRouter.RouteParams) {
+  constructor(backEndAngular:BackEndAngular, router:ngRouter.Router, params:ngRouter.RouteParams) {
     "use strict";
     super(backEndAngular, router);
     this.id = params.get("project");
@@ -581,8 +586,16 @@ class ProjectOverview extends OnlyAuthenticated {
 
             this.project = new backEnd.Project(x.name, x.description);
             this.homers = x.homers;
-            this.devices = x.devices.map((device) => ({id: device.id, type: DICTIONARY[device.type]}));
-            this.programs = Object.keys(x.idToProgram).map((id) => ({route: ['/Program', {project: this.id, program: id}], program: x.idToProgram[id]}));
+            this.devices = x.devices.map((device) => ({
+              id: device.id,
+              type: DICTIONARY[device.type]
+            }));
+            this.programs = Object.keys(x.idToProgram).map((id) => ({
+              route: ['/Program', {
+                project: this.id,
+                program: id
+              }], program: x.idToProgram[id]
+            }));
             this.queue = x.queue;
           })
           .catch((message) => {
@@ -661,15 +674,178 @@ class Project {
   heading:string;
   breadcrumbs:{route:any, human:string}[];
 
-  constructor(params: ngRouter.RouteParams) {
+  constructor(params:ngRouter.RouteParams) {
     this.heading = "Project " + params.get("project");
-    this.breadcrumbs = [{route: ["/Devices"], human: "home"}, {route: ["/Projects"], human: "projects"}, {route: ["/Project", {project: params.get("project")}], human: "project " + params.get("project").toString()}];
+    this.breadcrumbs = [{
+      route: ["/Devices"],
+      human: "home"
+    }, {
+      route: ["/Projects"],
+      human: "projects"
+    }, {
+      route: ["/Project", {project: params.get("project")}],
+      human: "project " + params.get("project").toString()
+    }];
   }
 }
 
 
 @ng.Component({
-  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES],
+  directives: [ng.CORE_DIRECTIVES],
+  inputs: ["code"],
+  selector: ".blocko",
+  templateUrl: "src/blocko.html"
+})
+class BlockoCmp implements ng.OnDestroy {
+  @ng.Output()
+  codeChange = new ng.EventEmitter();
+  @ng.Output()
+  configRequest = new ng.EventEmitter();
+
+  private controller:blocko.BlockoCore.Controller;
+
+  blocks = [
+    [
+      {computer: 'switch', human: 'switch'},
+      {computer: 'pushButton', human: 'button'},
+      {computer: 'light', human: 'light'}
+    ],
+    [
+      {computer: 'analogInput', human: 'input'},
+      {computer: 'analogOutput', human: 'output'}
+    ],
+    [
+      {computer: 'and', human: 'and'},
+      {computer: 'or', human: 'or'},
+      {computer: 'xor', human: 'xor'},
+      {computer: 'not', human: 'not'}
+    ],
+    [
+      {computer: 'flipFlop', human: 'flipFlop'},
+      {computer: 'delayTimer', human: 'delay'},
+      {computer: 'asyncGenerator', human: 'async'}
+    ],
+    [
+      {computer: 'analogRange', human: 'range'}
+    ],
+    [
+      {computer: 'jsBlock', human: 'custom'}
+    ]
+  ];
+
+  constructor() {
+    "use strict";
+    let renderer = new blocko.BlockoSnapRenderer.RendererController(document.getElementById("editor"));
+    renderer.registerOpenConfigCallback((block) => this.configRequest.next(block));
+    this.controller = blocko.BlockoCore.Controller.getInstance();
+    this.controller.registerFactoryBlockRendererCallback((block) =>
+        new blocko.BlockoSnapRenderer.BlockRenderer(renderer, block)
+    );
+    this.controller.registerFactoryConnectionRendererCallback((connection) =>
+        new blocko.BlockoSnapRenderer.ConnectionRenderer(renderer, connection)
+    );
+    this.controller.registerBlocks(blocko.BlockoBasicBlocks.Manager.getAllBlocks());
+  }
+
+  get code():string {
+    "use strict";
+    return this.controller.getDataJson();
+  }
+
+  set code(code:string) {
+    "use strict";
+    this.controller.setDataJson(code);
+    // TODO
+    this.codeChange.next(this.code);
+  }
+
+  onDestroy():void {
+    // TODO - the rendered should do that - also the renderer should be removed
+    let node = document.getElementById("editor");
+    while (node.hasChildNodes()) {
+      node.removeChild(node.lastChild);
+    }
+  }
+
+  addBlock(type:any) {
+    "use strict";
+    let cls = this.controller.getBlockClassByVisutalType(type);
+    this.controller.addBlock(new cls(this.controller.getFreeBlockId()));
+    // TODO
+    this.codeChange.next(this.code);
+  }
+
+  clearEditor() {
+    "use strict";
+    this.controller.removeAllBlocks();
+    // TODO
+    this.codeChange.next(this.code);
+  }
+}
+
+
+@ng.Component({
+  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, BlockoCmp],
+  selector: ".blocko-config",
+  templateUrl: "src/blocko-config.html"
+
+})
+class BlockoConfig implements ng.OnChanges {
+  @ng.Input()
+  block:blocko.BlockoCore.Block = null;
+  @ng.Output()
+  saveDone = new ng.EventEmitter();
+  @ng.Output()
+  close = new ng.EventEmitter();
+
+  id = "";
+
+  properties:{displayName:string, value:any, id:string}[] = [];
+
+  onChanges(changes:{[propName: string]: ng.SimpleChange}):void {
+    "use strict";
+    if (changes["block"]) {
+      if (changes["block"].currentValue) {
+        this.id = changes["block"].currentValue.id;
+        this.properties = changes["block"].currentValue.getConfigProperties().map((property:blocko.BlockoCore.ConfigProperty) => ({
+              displayName: property.displayName,
+              value: property.value.toString(),
+              id: property.id
+            })
+        );
+      } else {
+        this.id = "";
+        this.properties = [];
+      }
+    }
+  }
+
+  save() {
+    "use strict";
+    this.properties.forEach((property) => {
+      let property2 = this.block.getConfigPropertyById(property.id);
+      let value:any = property.value;
+      switch (property2.type) {
+        case blocko.BlockoCore.ConfigPropertyType.Integer:
+          value = parseInt(value, 10);
+          break;
+        case blocko.BlockoCore.ConfigPropertyType.Float:
+          value = parseFloat(value);
+          break;
+        case blocko.BlockoCore.ConfigPropertyType.Boolean:
+          value = value.toLowerCase() == "true";
+          break;
+        default:
+      }
+      property2.value = value;
+    });
+    this.block.emitConfigsChanged();
+    this.saveDone.next(null);
+  }
+}
+
+@ng.Component({
+  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, BlockoCmp, BlockoConfig],
   selector: ".content",
   templateUrl: "src/program.html"
 })
@@ -699,7 +875,9 @@ class ProgramOverview extends OnlyAuthenticated {
 
   public homerUpdatingNewMsg:string;
 
-  constructor(backEndAngular:BackEndAngular, router:ngRouter.Router, params: ngRouter.RouteParams) {
+  config:blocko.BlockoCore.Block = null;
+
+  constructor(backEndAngular:BackEndAngular, router:ngRouter.Router, params:ngRouter.RouteParams) {
     "use strict";
     super(backEndAngular, router);
     this.project = params.get("project");
@@ -748,6 +926,7 @@ class ProgramOverview extends OnlyAuthenticated {
           .then((x:{homers:string[], idToProgram:{[id: string]: backEnd.Program}}) => {
             this.homers = x.homers;
             this.program = x.idToProgram[this.id];
+            this.config = null;
             if (this.homers) {
               this.homerUpdatingModelId = this.homers[0];
               this.homerUpdatingModelNew.id = this.homers[0];
@@ -760,6 +939,7 @@ class ProgramOverview extends OnlyAuthenticated {
             this.homers = [];
             this.homerUpdatingModelId = null;
             this.program = new backEnd.Program("", "", "");
+            this.config = null;
             this.initializeModel();
             this.router.navigate(["/Project", {project: this.project}]);
           });
@@ -768,6 +948,7 @@ class ProgramOverview extends OnlyAuthenticated {
         this.homers = [];
         this.homerUpdatingModelId = null;
         this.program = new backEnd.Program("", "", "");
+        this.config = null;
         this.initializeModel();
         this.redirect();
       } else {
@@ -777,6 +958,7 @@ class ProgramOverview extends OnlyAuthenticated {
   }
 
   update():void {
+    // TODO we miss changes in movement, new connections, config chagnes...
     this.backEnd.updateProgram(this.id, this.program, this.project)
         .then((message) => this.message = "success: " + message)
         .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
@@ -821,10 +1003,24 @@ class Program {
   heading:string;
   breadcrumbs:{route:any, human:string}[];
 
-  constructor(params: ngRouter.RouteParams) {
+  constructor(params:ngRouter.RouteParams) {
     this.heading = "Program " + params.get("program") + " (Project " + params.get("project") + ")";
-    this.breadcrumbs = [{route: ["/Devices"], human: "home"}, {route: ["/Projects"], human: "projects"}, {route: ["/Project", {project: params.get("project")}], human: "project " + params.get("project").toString()},
-      {route: ["/Program", {project: params.get("project"), program: params.get("program")}], human: "program " + params.get("program")}];
+    this.breadcrumbs = [{
+      route: ["/Devices"],
+      human: "home"
+    }, {
+      route: ["/Projects"],
+      human: "projects"
+    }, {
+      route: ["/Project", {project: params.get("project")}],
+      human: "project " + params.get("project").toString()
+    },
+      {
+        route: ["/Program", {
+          project: params.get("project"),
+          program: params.get("program")
+        }], human: "program " + params.get("program")
+      }];
   }
 }
 
@@ -881,11 +1077,14 @@ class ProjectsTable extends OnlyAuthenticated {
 })
 class Projects {
   heading = "Projects";
-  breadcrumbs = [{route: ["/Devices"], human: "home"}, {route: ["/Projects"], human: "projects"}];
+  breadcrumbs = [{route: ["/Devices"], human: "home"}, {
+    route: ["/Projects"],
+    human: "projects"
+  }];
 }
 
 @ng.Component({
-  directives: [ng.FORM_DIRECTIVES],
+  directives: [ng.FORM_DIRECTIVES, BlockoCmp, BlockoConfig],
   selector: ".content",
   templateUrl: "src/new-program.html"
 })
@@ -902,7 +1101,9 @@ class NewProgramForm extends OnlyAuthenticated {
    */
   public message:string;
 
-  constructor(backEndAngular:BackEndAngular, router:ngRouter.Router, params: ngRouter.RouteParams) {
+  config:blocko.BlockoCore.Block = null;
+
+  constructor(backEndAngular:BackEndAngular, router:ngRouter.Router, params:ngRouter.RouteParams) {
     "use strict";
     super(backEndAngular, router);
     this.project = params.get("project");
@@ -938,11 +1139,20 @@ class NewProgram {
   heading:string;
   breadcrumbs:{route:any, human:string}[];
 
-  constructor(params: ngRouter.RouteParams) {
+  constructor(params:ngRouter.RouteParams) {
     this.heading = "New Program (Project " + params.get("project") + ")";
     this.breadcrumbs = [
-      {route: ["/Devices"], human: "home"}, {route: ["/Projects"], human: "projects"}, {route: ["/Project", {project: params.get("project")}], human: "project " + params.get("project").toString()},
-      {route: ["/NewProgram", {project: params.get("project")}], human: "new program"}];
+      {route: ["/Devices"], human: "home"}, {
+        route: ["/Projects"],
+        human: "projects"
+      }, {
+        route: ["/Project", {project: params.get("project")}],
+        human: "project " + params.get("project").toString()
+      },
+      {
+        route: ["/NewProgram", {project: params.get("project")}],
+        human: "new program"
+      }];
   }
 }
 
@@ -994,7 +1204,10 @@ class NewProjectForm extends OnlyAuthenticated {
 })
 class NewProject {
   heading = "New Project";
-  breadcrumbs = [{route: ["/Devices"], human: "home"}, {route: ["/Projects"], human: "projects"}, {route: ["/NewProject"], human: "new"}];
+  breadcrumbs = [{route: ["/Devices"], human: "home"}, {
+    route: ["/Projects"],
+    human: "projects"
+  }, {route: ["/NewProject"], human: "new"}];
 }
 
 /**
@@ -1013,8 +1226,16 @@ class NewProject {
   {path: '/login', component: Login, as: "Login"},
   {path: '/devices', component: Devices, as: 'Devices'},
   {path: '/project/:project', component: Project, as: 'Project'},
-  {path: '/project/:project/program/:program', component: Program, as: 'Program'},
-  {path: '/project/:project/programs/new', component: NewProgram, as: 'NewProgram'},
+  {
+    path: '/project/:project/program/:program',
+    component: Program,
+    as: 'Program'
+  },
+  {
+    path: '/project/:project/programs/new',
+    component: NewProgram,
+    as: 'NewProgram'
+  },
   {path: '/projects', component: Projects, as: 'Projects'},
   {path: '/projects/new', component: NewProject, as: 'NewProject'},
   {path: '/registration', component: PersonRegistration, as: "Registration"}

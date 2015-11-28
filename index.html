@@ -35,8 +35,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script src="node_modules/angular2/bundles/angular2.js"></script>
   <script src="node_modules/angular2/bundles/http.js"></script>
   <script src="node_modules/angular2/bundles/router.dev.js"></script>
+  <script
+      src="node_modules/blocko/examples/angular2/js/snap.svg-min.js"></script>
   <script>
-    System.config({packages: {"src": {defaultExtension: "js"}}});
+    System.config({packages: {
+      "node_modules": {defaultExtension: "js"},
+      "src": {defaultExtension: "js"}
+    }});
     System.import("src/bootstrap");
   </script>
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->

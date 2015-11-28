@@ -1,0 +1,27 @@
+<div class="box box-solid">
+  <div class="box-header with-border">
+    <h3 class="box-title">Config for {{id}}</h3>
+  </div>
+  <div class="box-body">
+    <form ng-form>
+      <template ng-for var-property
+                bind-ng-for-of="properties">
+        <div class="form-group">
+          <label>
+            {{property.displayName}}</label>
+          <input bindon-ng-model="property.value" class="form-control">
+
+        </div>
+      </template>
+      <div class="form-group">
+        <button type="submit" class="btn btn-default btn-flat"
+                on-click="close.next(null)">
+          Cancel</button>
+        <input type="submit"
+               class="btn btn-primary btn-flat pull-right"
+               on-click="save()">
+      </div>
+      <!-- /input-group -->
+    </form>
+  </div>
+</div>
