@@ -167,7 +167,7 @@ export class Request {
   getUrl():string {
     "use strict";
 
-    return this.protocol + "://" + this.hostname + ":" + this.port + this.path;
+    return this.protocol + "://" + this.hostname + this.path;
   }
 }
 
@@ -289,7 +289,7 @@ export abstract class BackEnd {
 
     let request = new Request(
         method,
-        "127.0.0.1", 9000, path,
+        "byzance-backend.herokuapp.com", 9000, path,
         {},
         body
     );
