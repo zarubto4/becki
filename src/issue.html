@@ -1,0 +1,366 @@
+<div class="row">
+  <div class="col-md-9">
+    <div class="box box-primary" bind-class.hidden="!editQuestion.id">
+      <div class="box-header with-border">
+        <h3 class="box-title">Edit question</h3>
+      </div>
+
+      <form role="form" ng-form
+            on-ng-submit=onUpdateQuestionSubmit()>
+        <div class="box-body">
+          <div class="form-group">
+            <label for="exampleInputEmail1">Type</label>
+            <input class="form-control" id="exampleInputEmail1"
+                   placeholder="Enter name"
+                   bindon-ng-model=editQuestion.type>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Title</label>
+            <input class="form-control" id="exampleInputEmail1"
+                   placeholder="Enter name"
+                   bindon-ng-model=editQuestion.title>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Body</label>
+        <textarea class="form-control"
+                  id="exampleInputPassword1" placeholder="Description"
+                  bindon-ng-model=editQuestion.body></textarea>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Tags</label>
+            <input class="form-control" id="exampleInputEmail1"
+                   placeholder="Enter name"
+                   bindon-ng-model=editQuestion.tags>
+          </div>
+        </div>
+        <!-- /.box-body -->
+
+        <div class="box-footer">
+          <input type="submit" class="btn btn-primary">
+        </div>
+      </form>
+    </div>
+    <div class="box box-primary" bind-class.hidden="!editAnswer.id">
+      <div class="box-header with-border">
+        <h3 class="box-title">Edit answer</h3>
+      </div>
+
+      <form role="form" ng-form on-ng-submit=onUpdateAnswerSubmit()>
+        <div class="box-body">
+          <div class="form-group">
+        <textarea class="form-control"
+                  id="exampleInputPassword1" placeholder="Body"
+                  bindon-ng-model=editAnswer.body></textarea>
+          </div>
+        </div>
+        <!-- /.box-body -->
+
+        <div class="box-footer">
+          <input type="submit" class="btn btn-primary">
+        </div>
+      </form>
+    </div>
+    <div class="box box-primary" bind-class.hidden="!editComment.id">
+      <div class="box-header with-border">
+        <h3 class="box-title">Edit comment</h3>
+      </div>
+
+      <form role="form" ng-form on-ng-submit=onUpdateCommentSubmit()>
+        <div class="box-body">
+          <div class="form-group">
+        <textarea class="form-control"
+                  id="exampleInputPassword1" placeholder="Body"
+                  bindon-ng-model=editComment.body></textarea>
+          </div>
+        </div>
+        <!-- /.box-body -->
+
+        <div class="box-footer">
+          <input type="submit" class="btn btn-primary">
+        </div>
+      </form>
+    </div>
+    <!-- Box Comment -->
+    <div class="box box-widget">
+      <div class="box-header with-border">
+        <h3 class="box-title">{{issue.name}} ({{issue.type}})</h3>
+        <!-- /.user-block -->
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+        <p>{{issue.textOfPost}}</p>
+        {{issue.likes}}
+        <button type="button" class="btn btn-default btn-xs" on-click="onMinusClick(issue.postId)">
+          -1
+        </button>
+        <button type="button" class="btn btn-default btn-xs"
+                on-click="onPlusClick(issue.postId)">+1
+        </button>
+        <button type="button" class="btn btn-default btn-xs"
+                on-click="onEditQuestionClick(issue.postId)">edit
+        </button>
+        <span class="pull-right text-muted">{{issue.author.firstName}}
+          {{issue.author.lastNAme}} -
+          {{issue.dateOfCreate}}</span>
+      </div>
+      <!-- /.box-body -->
+      <div class="box-footer box-comments">
+        <template ng-for var-comment bind-ng-for-of=issue.comments>
+          <div class="box-comment">
+            <div>
+                      <span class="username">
+                        {{comment.author.firstName}} {{comment.author.lastNAme}}
+                        <span class="text-muted pull-right">{{comment.dateOfCreate}}</span>
+                      </span><!-- /.username -->
+              {{comment.textOfPost}}
+            </div>
+            {{comment.likes}}
+            <button type="button"
+                    class="btn btn-default btn-xs" on-click="onMinusClick(issue.postId)">
+              -1
+            </button>
+            <button type="button" class="btn btn-default btn-xs"
+                    on-click="onPlusClick(comment.postId)">+1
+            </button>
+            <button type="button" class="btn btn-default btn-xs"
+                    on-click="onEditCommentClick(comment.postId)">edit
+            </button>
+            <button type="button" class="btn btn-default btn-xs"
+                    on-click="onRemoveCommentClick(comment.postId)">remove
+            </button>
+            <!-- /.comment-text -->
+          </div>
+          <!-- /.box-comment -->
+        </template>
+      </div>
+      <!-- /.box-footer -->
+      <div class="box-footer">
+        <form method="post" var-f="form"
+              on-ng-submit="onCommentSubmit(issue.postId, f.value.body)">
+          <input type="text" ng-control="body" class="form-control input-sm"
+          >
+          <input type="submit" class="btn btn-default">
+        </form>
+      </div>
+      <!-- /.box-footer -->
+    </div>
+    <!-- /.box -->
+
+    <template ng-for var-answer bind-ng-for-of=issue.answers>
+      <div class="box box-widget">
+        <div class="box-body">
+          <p>{{answer.textOfPost}}</p>
+          {{answer.likes}}
+          <button type="button" class="btn btn-default btn-xs" on-click="onMinusClick(issue.postId)">
+            -1
+          </button>
+          <button type="button" class="btn btn-default btn-xs"
+                  on-click="onPlusClick(answer.postId)">+1
+          </button>
+          <button type="button" class="btn btn-default btn-xs"
+                  on-click="onEditAnswerClick(answer.postId)">edit
+          </button>
+        <span class="pull-right text-muted">{{answer.author.firstName}}
+          {{answer.author.lastNAme}} -
+          {{answer.dateOfCreate}}</span>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer box-comments">
+          <template ng-for var-comment bind-ng-for-of=answer.comments>
+            <div class="box-comment">
+              <div>
+                      <span class="username">
+                        {{comment.author.firstName}} {{comment.author.lastNAme}}
+                        <span class="text-muted pull-right">{{comment.dateOfCreate}}</span>
+                      </span><!-- /.username -->
+                {{comment.textOfPost}}
+              </div>
+              {{comment.likes}}
+              <button type="button"
+                      class="btn btn-default btn-xs" on-click="onMinusClick(issue.postId)">
+                -1
+              </button>
+              <button type="button" class="btn btn-default btn-xs"
+                      on-click="onPlusClick(comment.postId)">+1
+              </button>
+              <button type="button" class="btn btn-default btn-xs"
+                      on-click="onEditCommentClick(comment.postId)">edit
+              </button>
+              <button type="button" class="btn btn-default btn-xs"
+                      on-click="onRemoveCommentClick(comment.postId)">remove
+              </button>
+              <!-- /.comment-text -->
+            </div>
+            <!-- /.box-comment -->
+          </template>
+        </div>
+        <!-- /.box-footer -->
+        <div class="box-footer">
+          <form method="post" var-f="form"
+                on-ng-submit="onCommentSubmit(answer.postId, f.value.body)">
+            <input type="text" ng-control="body" class="form-control input-sm"
+            >
+            <input type="submit" class="btn btn-default">
+          </form>
+        </div>
+        <!-- /.box-footer -->
+      </div>
+      <!-- /.box -->
+    </template>
+
+    <div class="nav-tabs-custom">
+      <ul class="nav nav-tabs">
+        <li class="active">
+          <a aria-expanded="true" href="#tab_1" data-toggle="tab">Text</a></li>
+        <li class=""><a aria-expanded="false" href="#tab_2"
+                        data-toggle="tab">Program</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="tab_1">
+          <form role="form" var-program-creation=form
+                on-ng-submit=onAddAnswerSubmit()>
+            <div class="form-group">
+        <textarea class="form-control"
+                  id="exampleInputPassword1" placeholder="Body"
+                  bindon-ng-model=answer></textarea>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="form-group">
+              <input type="submit" class="btn btn-primary">
+            </div>
+          </form>
+        </div>
+        <!-- /.tab-pane -->
+        <div class="tab-pane" id="tab_2">
+        </div>
+        <!-- /.tab-pane -->
+      </div>
+      <!-- /.tab-content -->
+    </div>
+
+
+  </div>
+
+  <!-- /.col -->
+  <div class="col-md-3">
+
+    <!-- About Me Box -->
+    <div class="box box-primary">
+      <div class="box-header with-border">
+        <h3 class="box-title">Metadata</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+        <div class="input-group">
+          <label>Related:</label>
+          <ul>
+          <template ng-for var-link bind-ng-for-of=related>
+            <li><a bind-router-link="['/Issue', {issue: link.postId}]">
+              {{link.name}}</a></li>
+          </template>
+          </ul>
+        </div>
+        <div class="input-group">
+          <label>Tags:</label>
+          {{issue.hashTags}}
+        </div>
+        <form ng-form on-ng-submit=onAddRelatedSubmit()>
+          <div class="input-group">
+            <input class="form-control" bindon-ng-model=relatedToAdd>
+
+            <div class="input-group-btn">
+              <input id="add-new-event" type="submit"
+                     class="btn btn-primary btn-flat"
+                     value="Add related">
+            </div>
+            <!-- /btn-group -->
+          </div>
+        </form>
+        <form ng-form on-ng-submit=onRemoveRelatedSubmit()>
+          <div class="input-group">
+            <select class="form-control" placeholder="ID"
+                    bindon-ng-model=relatedToRemove>
+              <option value="">Select...</option>
+              <template ng-for var-link bind-ng-for-of=related>
+                <option bind-value="link.linkId">{{link.name}}</option>
+              </template>
+            </select>
+
+            <div class="input-group-btn">
+              <input id="add-new-event" type="submit"
+                     class="btn btn-primary btn-flat"
+                     value="Remove related">
+            </div>
+            <!-- /btn-group -->
+          </div>
+        </form>
+        <!-- /input-group -->
+        <form ng-form on-ng-submit=onAddTagSubmit()>
+          <div class="input-group">
+            <input class="form-control" bindon-ng-model=tagToAdd>
+
+            <div class="input-group-btn">
+              <input id="add-new-event" type="submit"
+                     class="btn btn-primary btn-flat"
+                     value="Add tag">
+            </div>
+            <!-- /btn-group -->
+          </div>
+        </form>
+        <form ng-form on-ng-submit=onRemoveTagSubmit()>
+          <div class="input-group">
+            <select class="form-control" placeholder="ID"
+                    bindon-ng-model=tagToRemove>
+              <option value="">Select...</option>
+              <template ng-for var-tag bind-ng-for-of=issue.hashTags>
+                <option>{{tag}}</option>
+              </template>
+            </select>
+
+            <div class="input-group-btn">
+              <input id="add-new-event" type="submit"
+                     class="btn btn-primary btn-flat"
+                     value="Remove tag">
+            </div>
+            <!-- /btn-group -->
+          </div>
+        </form>
+        <form ng-form on-ng-submit=onAddConfirmationSubmit()>
+          <div class="input-group">
+            <input class="form-control" bindon-ng-model=confirmationToAdd>
+
+            <div class="input-group-btn">
+              <input id="add-new-event" type="submit"
+                     class="btn btn-primary btn-flat"
+                     value="Add confirmation">
+            </div>
+            <!-- /btn-group -->
+          </div>
+        </form>
+        <form ng-form on-ng-submit=onRemoveConfirmationSubmit()>
+          <div class="input-group">
+            <select class="form-control" placeholder="ID"
+                    bindon-ng-model=confirmationToRemove>
+            </select>
+
+            <div class="input-group-btn">
+              <input id="add-new-event" type="submit"
+                     class="btn btn-primary btn-flat"
+                     value="Remove confirmation">
+            </div>
+            <!-- /btn-group -->
+          </div>
+        </form>
+        <div class="input-group">
+          <label>Result:</label>
+          {{message}}
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+  </div>
+  <!-- /.col -->
+</div>
+<!-- /.row -->

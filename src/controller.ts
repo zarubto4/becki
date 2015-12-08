@@ -77,6 +77,8 @@ export class BackEndAngular extends backEnd.BackEnd {
 
   programChanged:ng.EventEmitter;
 
+  postChanged = new ng.EventEmitter();
+
   /**
    * Create a new service instance.
    *
@@ -280,6 +282,141 @@ export class BackEndAngular extends backEnd.BackEnd {
 
     return super.updateProgram(id, program, project).then((message) => {
       this.programChanged.next(program);
+      return message;
+    });
+  }
+
+  public createIssue(type:string, name:string, comment:string, hashTags:string[]):Promise<string> {
+    "use strict";
+
+    return super.createIssue(type, name, comment, hashTags).then((message) => {
+      this.postChanged.next(null);
+      return message;
+    });
+  }
+
+  public createComment(postId:string, comment:string):Promise<string> {
+    "use strict";
+
+    return super.createComment(postId, comment).then((message) => {
+      this.postChanged.next(null);
+      return message;
+    });
+  }
+
+  public updateIssue(postId:string, type:string, name:string, comment:string, hashTags:string[]):Promise<string> {
+    "use strict";
+
+    return super.updateIssue(postId, type, name, comment, hashTags).then((message) => {
+      this.postChanged.next(null);
+      return message;
+    });
+  }
+
+  public updateAnswer(postId:string, comment:string, hashTags:string[]):Promise<string> {
+    "use strict";
+
+    return super.updateAnswer(postId, comment, hashTags).then((message) => {
+      this.postChanged.next(null);
+      return message;
+    });
+  }
+
+  public updateComment(postId:string, comment:string, hashTags:string[]):Promise<string> {
+    "use strict";
+
+    return super.updateComment(postId, comment, hashTags).then((message) => {
+      this.postChanged.next(null);
+      return message;
+    });
+  }
+
+  public addRelatedToPost(linkId:string, postId:string):Promise<string> {
+    "use strict";
+
+    return super.addRelatedToPost(linkId, postId).then((message) => {
+      this.postChanged.next(null);
+      return message;
+    });
+  }
+
+  public removeRelated(id:string):Promise<string> {
+    "use strict";
+
+    return super.removeRelated(id).then((message) => {
+      this.postChanged.next(null);
+      return message;
+    });
+  }
+
+  public addOneToPost(id:string):Promise<string> {
+    "use strict";
+
+    return super.addOneToPost(id).then((message) => {
+      this.postChanged.next(null);
+      return message;
+    });
+  }
+
+  public subtractOneFromPost(id:string):Promise<string> {
+    "use strict";
+
+    return super.subtractOneFromPost(id).then((message) => {
+      this.postChanged.next(null);
+      return message;
+    });
+  }
+
+  public addTagToPost(postId:string, tag:string):Promise<string> {
+    "use strict";
+
+    return super.addTagToPost(postId, tag).then((message) => {
+      this.postChanged.next(null);
+      return message;
+    });
+  }
+
+  public removeTagFromPost(postId:string, tag:string):Promise<string> {
+    "use strict";
+
+    return super.removeTagFromPost(postId, tag).then((message) => {
+      this.postChanged.next(null);
+      return message;
+    });
+  }
+
+  public addConfirmationToPost(postId:string, confirmation:string):Promise<string> {
+    "use strict";
+
+    return super.addConfirmationToPost(postId, confirmation).then((message) => {
+      this.postChanged.next(null);
+      return message;
+    });
+  }
+
+  public removeConfirmationFromPost(postId:string, confirmation:string):Promise<string> {
+    "use strict";
+
+    return super.removeConfirmationFromPost(postId, confirmation).then((message) => {
+      this.postChanged.next(null);
+      return message;
+    });
+  }
+
+  public addAnswerToPost(postId:string, comment:string):Promise<string> {
+    "use strict";
+
+    return super.addAnswerToPost(postId, comment).then((message) => {
+      this.postChanged.next(null);
+      return message;
+    });
+  }
+
+  public deleteComment(id:string):Promise<string> {
+    "use strict";
+
+    return super.deleteComment(id).then((message) => {
+      this.postChanged.next(null);
       return message;
     });
   }
@@ -1210,6 +1347,397 @@ class NewProject {
   }, {route: ["/NewProject"], human: "new"}];
 }
 
+@ng.Component({
+  directives: [ngRouter.ROUTER_DIRECTIVES],
+  selector: ".content",
+  templateUrl: "src/issues.html"
+})
+class IssuesTable extends OnlyAuthenticated {
+  constructor(backEndAngular:BackEndAngular, router:ngRouter.Router) {
+    "use strict";
+    super(backEndAngular, router);
+  }
+}
+
+@ng.Component({
+  directives: [MainHeader, IssuesTable, ngRouter.ROUTER_DIRECTIVES, ng.CORE_DIRECTIVES],
+  templateUrl: "src/wrapper.html"
+})
+class Issues {
+  heading = "Issues";
+  breadcrumbs = [
+    {route: ["/Devices"], human: "home"},
+    {route: ["/Issues"], human: "issues"}];
+}
+
+@ng.Component({
+  directives: [ng.FORM_DIRECTIVES],
+  selector: ".content",
+  templateUrl: "src/new-issue.html"
+})
+class NewIssueForm extends OnlyAuthenticated {
+  title = "";
+  type = "";
+  tags = "";
+  body = "";
+
+  message = "";
+
+  constructor(backEndAngular:BackEndAngular, router:ngRouter.Router) {
+    "use strict";
+    super(backEndAngular, router);
+  }
+
+  create():void {
+    "use strict";
+    this.backEnd.createIssue(this.type, this.title, this.body, this.tags.split(","))
+        .then((message) => {
+          this.message = "success: " + message;
+          this.router.navigate(['/Issues']);
+        })
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+
+  }
+}
+
+@ng.Component({
+  directives: [MainHeader, NewIssueForm, ngRouter.ROUTER_DIRECTIVES, ng.CORE_DIRECTIVES],
+  templateUrl: "src/wrapper.html"
+})
+class NewIssue {
+  heading = "New Issue";
+  breadcrumbs = [
+    {route: ["/Devices"], human: "home"},
+    {route: ["/Issues"], human: "issues"},
+    {route: ["/NewIssue"], human: "new"}];
+}
+
+@ng.Component({
+  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
+  selector: ".content",
+  templateUrl: "src/issue.html"
+})
+class IssueOverview extends OnlyAuthenticated {
+
+  id:string;
+
+  issue = backEnd.Post.create("", "", "", 0, 0, backEnd.Person.create("", null, null), "", [], [], [], []);
+
+  related:backEnd.Link[] = [];
+
+  relatedToAdd = "";
+
+  relatedToRemove = "";
+
+  tagToAdd = "";
+
+  tagToRemove = "";
+
+  confirmationToAdd = "";
+
+  confirmationToRemove = "";
+
+  answer = "";
+
+  editQuestion = {
+    id: "",
+    type: "",
+    title: "",
+    body: "",
+    tags: ""
+  };
+
+  editAnswer = {
+    id: "",
+    body: "",
+    tags: ""
+  };
+
+  editComment = {
+    id: "",
+    body: "",
+    tags: ""
+  };
+
+  message = "";
+
+  constructor(backEndAngular:BackEndAngular, router:ngRouter.Router, params:ngRouter.RouteParams) {
+    "use strict";
+    super(backEndAngular, router);
+    this.id = params.get("issue");
+    this.backEnd.postChanged.toRx().subscribe(() => this.refresh());
+  }
+
+  onInit():void {
+    "use strict";
+    super.onInit();
+    this.refresh();
+  }
+
+  refresh():void {
+    "use strict";
+
+    try {
+      this.backEnd.getPost(this.id)
+          .then((issue) => {
+            this.issue = issue;
+            this.related = issue.linkedAnswers;
+          })
+          .catch((message) => {
+            this.issue = backEnd.Post.create("", "", "", 0, 0, backEnd.Person.create("", null, null), "", [], [], [], []);
+            this.related = [];
+            this.router.navigate(["/Issues"]);
+          });
+    } catch (error) {
+      if (error instanceof backEnd.AuthenticationError) {
+        this.issue = backEnd.Post.create("", "", "", 0, 0, backEnd.Person.create("", null, null), "", [], [], [], []);
+        this.related = [];
+        this.redirect();
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  onCommentSubmit(qaId:string, text:string) {
+    "use strict";
+
+    this.backEnd.createComment(qaId, text)
+        .then((message) => this.message = "success: " + message)
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  onEditQuestionClick(id:string):void {
+    "use strict";
+
+    this.editQuestion = {
+      id: "",
+      type: "",
+      title: "",
+      body: "",
+      tags: ""
+    };
+    this.editAnswer = {
+      id: "",
+      body: "",
+      tags: ""
+    };
+    this.editComment = {
+      id: "",
+      body: "",
+      tags: ""
+    };
+    this.backEnd.getPost(id)
+        .then((issue) => {
+          this.editQuestion = {
+            id: issue.postId,
+            type: issue.type,
+            title: issue.name,
+            body: issue.textOfPost,
+            tags: issue.hashTags.join(",")
+          };
+        })
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  onUpdateQuestionSubmit():void {
+    "use strict";
+
+    this.backEnd.updateIssue(this.editQuestion.id, this.editQuestion.type, this.editQuestion.title, this.editQuestion.body, this.editQuestion.tags.split(","))
+        .then((message) => {
+          this.message = "success: " + message;
+          this.editQuestion = {
+            id: "",
+            type: "",
+            title: "",
+            body: "",
+            tags: ""
+          };
+        })
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  onEditAnswerClick(id:string):void {
+    "use strict";
+
+    this.editQuestion = {
+      id: "",
+      type: "",
+      title: "",
+      body: "",
+      tags: ""
+    };
+    this.editAnswer = {
+      id: "",
+      body: "",
+      tags: ""
+    };
+    this.editComment = {
+      id: "",
+      body: "",
+      tags: ""
+    };
+    this.backEnd.getPost(id)
+        .then((issue) => {
+          this.editAnswer = {
+            id: issue.postId,
+            body: issue.textOfPost,
+            tags: issue.hashTags.join(",")
+          };
+        })
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  onUpdateAnswerSubmit():void {
+    "use strict";
+
+    this.backEnd.updateAnswer(this.editAnswer.id, this.editAnswer.body, this.editAnswer.tags.split(","))
+        .then((message) => {
+          this.message = "success: " + message;
+          this.editAnswer = {
+            id: "",
+            body: "",
+            tags: ""
+          };
+        })
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  onEditCommentClick(id:string):void {
+    "use strict";
+
+    this.editQuestion = {
+      id: "",
+      type: "",
+      title: "",
+      body: "",
+      tags: ""
+    };
+    this.editAnswer = {
+      id: "",
+      body: "",
+      tags: ""
+    };
+    this.editComment = {
+      id: "",
+      body: "",
+      tags: ""
+    };
+    this.backEnd.getPost(id)
+        .then((issue) => {
+          this.editComment = {
+            id: issue.postId,
+            body: issue.textOfPost,
+            tags: issue.hashTags.join(",")
+          };
+        })
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  onUpdateCommentSubmit():void {
+    "use strict";
+
+    this.backEnd.updateComment(this.editComment.id, this.editComment.body, this.editComment.tags.split(","))
+        .then((message) => {
+          this.message = "success: " + message;
+          this.editComment = {
+            id: "",
+            body: "",
+            tags: ""
+          };
+        })
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  onAddRelatedSubmit():void {
+    this.backEnd.addRelatedToPost(this.relatedToAdd, this.issue.postId)
+        .then((message) => this.message = "success: " + message)
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  onRemoveRelatedSubmit():void {
+    this.backEnd.removeRelated(this.relatedToRemove)
+        .then((message) => this.message = "success: " + message)
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  onPlusClick(id:string):void {
+    "use strict";
+
+    this.backEnd.addOneToPost(id)
+        .then((message) => this.message = "success: " + message)
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  onMinusClick(id:string):void {
+    "use strict";
+
+    this.backEnd.subtractOneFromPost(id)
+        .then((message) => this.message = "success: " + message)
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  onAddTagSubmit():void {
+    this.backEnd.addTagToPost(this.issue.postId, this.tagToAdd)
+        .then((message) => this.message = "success: " + message)
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  onRemoveTagSubmit():void {
+    this.backEnd.removeTagFromPost(this.issue.postId, this.tagToRemove)
+        .then((message) => this.message = "success: " + message)
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  onAddConfirmationSubmit():void {
+    this.backEnd.addConfirmationToPost(this.issue.postId, this.confirmationToAdd)
+        .then((message) => this.message = "success: " + message)
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  onRemoveConfirmationSubmit():void {
+    this.backEnd.removeConfirmationFromPost(this.issue.postId, this.confirmationToRemove)
+        .then((message) => this.message = "success: " + message)
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  onAddAnswerSubmit():void {
+    this.backEnd.addAnswerToPost(this.issue.postId, this.answer)
+        .then((message) => this.message = "success: " + message)
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+
+  onRemoveCommentClick(id:string):void {
+    "use strict";
+
+    this.backEnd.deleteComment(id)
+        .then((message) => this.message = "success: " + message)
+        .catch((reason) => this.message = "failure: " + reason.toString() + ": " + JSON.stringify(reason));
+  }
+}
+
+@ng.Component({
+  directives: [MainHeader, ngRouter.ROUTER_DIRECTIVES, ng.CORE_DIRECTIVES, IssueOverview],
+  templateUrl: "src/wrapper.html"
+})
+class IssueCmp {
+  heading:string;
+  breadcrumbs:{route:any, human:string}[];
+
+  constructor(params:ngRouter.RouteParams) {
+    this.heading = "Issue " + params.get("issue");
+    this.breadcrumbs = [{
+      route: ["/Devices"],
+      human: "home"
+    },
+      {route: ["/Issues"], human: "issues"},
+      {
+        route: ["/Issue", {issue: params.get("issue")}],
+        human: "issue " + params.get("issue").toString()
+      }];
+  }
+}
+
 /**
  * A "view" directive that renders a view from "src/view.html".
  *
@@ -1238,7 +1766,10 @@ class NewProject {
   },
   {path: '/projects', component: Projects, as: 'Projects'},
   {path: '/projects/new', component: NewProject, as: 'NewProject'},
-  {path: '/registration', component: PersonRegistration, as: "Registration"}
+  {path: '/registration', component: PersonRegistration, as: "Registration"},
+  {path: '/issues', component: Issues, as: "Issues"},
+  {path: '/issues/new', component: NewIssue, as: "NewIssue"},
+  {path: '/issues/issue/:issue', component: IssueCmp, as: 'Issue'}
 ])
 export class Controller {
 }

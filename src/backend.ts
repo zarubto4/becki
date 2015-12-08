@@ -167,7 +167,7 @@ export class Request {
   getUrl():string {
     "use strict";
 
-    return this.protocol + "://" + this.hostname + this.path;
+    return this.protocol + "://" + this.hostname + ":" + this.port + this.path;
   }
 }
 
@@ -197,6 +197,67 @@ export class Response {
 
     this.status = status;
     this.body = body;
+  }
+}
+
+export class Person {
+  mail:string;
+  firstName:any;
+  lastNAme:any;
+  firstTitle:any;
+  lastTitle:any;
+  dateOfBirth:any;
+
+  static create(mail:string, firstName:any, lastNAme:any):Person {
+    return {
+      mail,
+      firstName,
+      lastNAme,
+      firstTitle: null,
+      lastTitle: null,
+      dateOfBirth: null
+    };
+  }
+}
+
+export class Link {
+  linkId: string;
+  postId: string;
+  name: string;
+  question: string;
+  answers: any[];
+}
+
+export class Post {
+  postId:string;
+  name:string;
+  type:string;
+  views:number;
+  likes:number;
+  dateOfCreate:number;
+  author:Person;
+  textOfPost:string;
+  comments:Post[];
+  answers:Post[];
+  hashTags:string[];
+  linkedAnswers:Link[];
+
+  static create(postId:string, name:string, type:string, likes:number, dateOfCreate:number, author:Person, textOfPost:string, comments:Post[], answers:Post[], hashTags:string[], linkedAnswers:Link[]):Post {
+    "use strict";
+    return {
+      postId,
+      name,
+      type,
+      views: 0,
+      likes,
+      dateOfCreate,
+      author,
+      textOfPost,
+      comments,
+      answers,
+      hashTags,
+      linkedAnswers
+    };
   }
 }
 
@@ -289,7 +350,7 @@ export abstract class BackEnd {
 
     let request = new Request(
         method,
-        "byzance-backend.herokuapp.com", 9000, path,
+        "127.0.0.1", 9000, path,
         {},
         body
     );
@@ -346,10 +407,10 @@ export abstract class BackEnd {
   public logIn(email:string, password:string):Promise<string> {
     "use strict";
 
-    return this.request<{token:string}>("POST",
+    return this.request<{authToken:string}>("POST",
         BackEnd.PERMISSION_PATH + "/login",
         {email: email, password: password}).then((body) => {
-      this.authToken = body.token;
+      this.authToken = body.authToken;
       return JSON.stringify(body);
     });
 
@@ -372,9 +433,9 @@ export abstract class BackEnd {
     return this.request("POST",
         BackEnd.PERMISSION_PATH + "/logout",
         {}, true).then((body) => {
-      this.authToken = null;
-      return JSON.stringify(body);
-    }
+          this.authToken = null;
+          return JSON.stringify(body);
+        }
     );
   }
 
@@ -406,7 +467,11 @@ export abstract class BackEnd {
 
     return this.request("POST",
         "/project/postNewDevice",
-        {biteCode: id, typeOfDevice: type, parameters: []}, true).then(JSON.stringify);
+        {
+          biteCode: id,
+          typeOfDevice: type,
+          parameters: []
+        }, true).then(JSON.stringify);
   }
 
   /**
@@ -422,7 +487,10 @@ export abstract class BackEnd {
 
     return this.request("POST",
         BackEnd.PROJECT_PATH,
-        {projectName: project.name, projectDescription: project.description}, true).then(JSON.stringify);
+        {
+          projectName: project.name,
+          projectDescription: project.description
+        }, true).then(JSON.stringify);
   }
 
   /**
@@ -441,19 +509,29 @@ export abstract class BackEnd {
     return this.request<{projectName:string, projectDescription:string, homerDeviceList:{homerId:string}[], databaseDevicesList:{biteCodeName: string, typeOfDevice:string}[], programs:{programId:string, programName:string, programDescription:string, program:string}[], forUploadPrograms:{homerId:string, program:string}[]}>("GET",
         BackEnd.PROJECT_PATH + "/" + id,
         undefined, true).then((body) => {
-            let homers:string[] = body.homerDeviceList.map(
-                (homer:{homerId:string}) => homer.homerId
+          let homers:string[] = body.homerDeviceList.map(
+              (homer:{homerId:string}) => homer.homerId
+          );
+          let devices:{id:string, type:string}[] = body.databaseDevicesList.map(
+              (device:{biteCodeName:string, typeOfDevice:string}) => ({
+                id: device.biteCodeName,
+                type: device.typeOfDevice
+              })
+          );
+          let idToProgram:{[id: string]: Program} = {};
+          for (let prog of body.programs) {
+            idToProgram[prog.programId] = new Program(
+                prog.programName, prog.programDescription, prog.program
             );
-            let devices:{id:string, type:string}[] = body.databaseDevicesList.map(
-                (device:{biteCodeName:string, typeOfDevice:string}) => ({id: device.biteCodeName, type: device.typeOfDevice})
-            );
-            let idToProgram:{[id: string]: Program} = {};
-            for (let prog of body.programs) {
-              idToProgram[prog.programId] = new Program(
-                  prog.programName, prog.programDescription, prog.program
-              );
-            }
-            return {name: body.projectName, description: body.projectDescription, homers: homers, devices: devices, idToProgram: idToProgram, queue: body.forUploadPrograms};
+          }
+          return {
+            name: body.projectName,
+            description: body.projectDescription,
+            homers: homers,
+            devices: devices,
+            idToProgram: idToProgram,
+            queue: body.forUploadPrograms
+          };
         }
     );
   }
@@ -471,11 +549,11 @@ export abstract class BackEnd {
     return this.request<{projectId:string, projectName:string, projectDescription:string}[]>("GET",
         BackEnd.PROJECT_PATH,
         undefined, true).then((body) => {
-        let idToProject:{[id: string]: Project} = {};
-        for (let project of body) {
-          idToProject[project.projectId] = new Project(project.projectName, project.projectDescription);
-        }
-        return idToProject;
+      let idToProject:{[id: string]: Project} = {};
+      for (let project of body) {
+        idToProject[project.projectId] = new Project(project.projectName, project.projectDescription);
+      }
+      return idToProject;
     });
   }
 
@@ -510,7 +588,10 @@ export abstract class BackEnd {
 
     return this.request("PUT",
         "/project/connectDeviceWithProject",
-        {projectId: project, bitecodesNames: [device]}, true).then(JSON.stringify);
+        {
+          projectId: project,
+          bitecodesNames: [device]
+        }, true).then(JSON.stringify);
   }
 
   /**
@@ -525,7 +606,7 @@ export abstract class BackEnd {
     "use strict";
 
     return this.request("DELETE",
-          BackEnd.PROJECT_PATH + "/" + id, undefined, true).then(JSON.stringify);
+        BackEnd.PROJECT_PATH + "/" + id, undefined, true).then(JSON.stringify);
   }
 
   /**
@@ -583,5 +664,131 @@ export abstract class BackEnd {
           // New API
           time
         }, true).then(JSON.stringify);
+  }
+
+  public createIssue(type:string, name:string, comment:string, hashTags:string[]):Promise<string> {
+    "use strict";
+
+    return this.request("POST",
+        "/overflow/post",
+        {
+          name,
+          type,
+          hashTags,
+          comment
+        }, true).then(JSON.stringify);
+  }
+
+  public createComment(postId:string, comment:string):Promise<string> {
+    "use strict";
+
+    return this.request("POST",
+        "/overflow/comment",
+        {
+          postId,
+          type: "comment",
+          hashTags: [],
+          comment
+        }, true).then(JSON.stringify);
+  }
+
+  public getPost(id:string):Promise<Post> {
+    return this.request("GET", "/overflow/post/" + id, undefined, true);
+  }
+
+  public updateIssue(postId:string, type:string, name:string, comment:string, hashTags:string[]):Promise<string> {
+    "use strict";
+
+    return this.request("PUT",
+        "/overflow/post",
+        {
+          postId,
+          name,
+          type,
+          hashTags,
+          comment
+        }, true).then(JSON.stringify);
+  }
+
+  public updateAnswer(postId:string, comment:string, hashTags:string[]):Promise<string> {
+    "use strict";
+
+    return this.request("PUT",
+        "/overflow/answer/" + postId,
+        {
+          hashTags,
+          comment
+        }, true).then(JSON.stringify);
+  }
+
+  public updateComment(postId:string, comment:string, hashTags:string[]):Promise<string> {
+    "use strict";
+
+    return this.request("PUT",
+        "/overflow/comment/" + postId,
+        {
+          hashTags,
+          comment
+        }, true).then(JSON.stringify);
+  }
+
+  public addRelatedToPost(linkId:string, postId:string):Promise<string> {
+    "use strict";
+
+    return this.request("POST", "/overflow/link", {postId, linkId}, true).then(JSON.stringify);
+  }
+
+  public removeRelated(id:string):Promise<string> {
+    "use strict";
+
+    return this.request("DELETE", "/overflow/link/" + id, undefined, true).then(JSON.stringify);
+  }
+
+  public addOneToPost(id:string):Promise<string> {
+    "use strict";
+
+    return this.request("PUT", "/overflow/likePlus/" + id, {}, true).then(JSON.stringify);
+  }
+
+  public subtractOneFromPost(id:string):Promise<string> {
+    "use strict";
+
+    return this.request("PUT", "/overflow/likeMinus/" + id, {}, true).then(JSON.stringify);
+  }
+
+  public addTagToPost(postId:string, tag:string):Promise<string> {
+    "use strict";
+
+    return this.request("POST", "/overflow/hashTag", {postId, hashTags: [tag]}, true).then(JSON.stringify);
+  }
+
+  public removeTagFromPost(postId:string, tag:string):Promise<string> {
+    "use strict";
+
+    return this.request("PUT", "/overflow/removeHashTag", {postId, hashTags: [tag]}, true).then(JSON.stringify);
+  }
+
+  public addConfirmationToPost(postId:string, confirmation:string):Promise<string> {
+    "use strict";
+
+    return this.request("POST", "/overflow/confirms/", {postId, confirms: [confirmation]}, true).then(JSON.stringify);
+  }
+
+  public removeConfirmationFromPost(postId:string, confirmation:string):Promise<string> {
+    "use strict";
+
+    return this.request("PUT", "/overflow/confirms", {confirms: [confirmation]}, true).then(JSON.stringify);
+  }
+
+  public addAnswerToPost(postId:string, comment:string):Promise<string> {
+    "use strict";
+
+    return this.request("POST", "/overflow/answer", {postId, type: "Answare", hashTags: [], comment}, true).then(JSON.stringify);
+  }
+
+  public deleteComment(id:string):Promise<string> {
+    "use strict";
+
+    return this.request("DELETE", "/overflow/comment/" + id, undefined, true).then(JSON.stringify);
   }
 }
