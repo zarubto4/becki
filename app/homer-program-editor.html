@@ -1,0 +1,69 @@
+<!--
+  © 2015 Becki Authors. See the AUTHORS file found in the top-level directory of
+  this distribution.
+-->
+<div class="with-border">
+  <div class="btn-group">
+    <button type="button" class="btn btn-default btn-sm" data-on-click="onSwitchClick($event)">
+      Switch
+    </button>
+    <button type="button" class="btn btn-default btn-sm" data-on-click="onButtonClick($event)">
+      Button
+    </button>
+    <button type="button" class="btn btn-default btn-sm" data-on-click="onLightClick($event)">
+      Light
+    </button>
+  </div>
+  <div class="btn-group">
+    <button type="button" class="btn btn-default btn-sm" data-on-click="onInputClick($event)">
+      Input
+    </button>
+    <button type="button" class="btn btn-default btn-sm" data-on-click="onOutputClick($event)">
+      Output
+    </button>
+  </div>
+  <div class="btn-group">
+    <button type="button" class="btn btn-default btn-sm" data-on-click="onAndClick($event)">
+      And
+    </button>
+    <button type="button" class="btn btn-default btn-sm" data-on-click="onOrClick($event)">
+      Or
+    </button>
+    <button type="button" class="btn btn-default btn-sm" data-on-click="onXorClick($event)">
+      Xor
+    </button>
+    <button type="button" class="btn btn-default btn-sm" data-on-click="onNotClick($event)">
+      Not
+    </button>
+  </div>
+  <div class="btn-group">
+    <button type="button" class="btn btn-default btn-sm" data-on-click="onFlipFlopClick($event)">
+      FlipFlop
+    </button>
+    <button type="button" class="btn btn-default btn-sm" data-on-click="onDelayClick($event)">
+      Delay
+    </button>
+    <button type="button" class="btn btn-default btn-sm" data-on-click="onAsyncClick($event)">
+      Async
+    </button>
+  </div>
+  <div class="btn-group">
+    <button type="button" class="btn btn-default btn-sm" data-on-click="onRangeClick($event)">
+      Range
+    </button>
+  </div>
+  <div class="btn-group">
+    <button type="button" class="btn btn-default btn-sm" data-on-click="onCustomClick($event)">
+      Custom
+    </button>
+  </div>
+  <div class="btn-group pull-right">
+    <button type="button" class="btn btn-default btn-sm" data-on-click="onClearClick($event)">
+      Clear
+    </button>
+  </div>
+</div>
+<div data-var-field></div>
+<template data-bind-ng-if="config">
+  <div data-bind-form="config.fields" data-bind-form-title="configTitle" data-on-submit="onConfigSubmit($event)" data-on-cancel="onConfigCancel($event)"></div>
+</template>

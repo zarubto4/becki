@@ -1,0 +1,67 @@
+<!--
+  © 2015 Becki Authors. See the AUTHORS file found in the top-level directory of
+  this distribution.
+-->
+<div class="row">
+  <div class="col-md-3">
+    <a data-bind-router-link="newLink" class="btn btn-primary btn-block margin-bottom">
+      Create new
+    </a>
+
+    <div class="box box-solid collapsed-box">
+      <div class="box-header with-border">
+        <h3 class="box-title">Folders</h3>
+
+        <div class="box-tools">
+          <button type="button" class="btn btn-box-tool" data-widget="collapse">
+            <i class="fa fa-plus"></i>
+          </button>
+        </div>
+      </div>
+      <div class="box-body no-padding">
+        <ul class="nav nav-pills nav-stacked">
+          <li class="active"><a href="#">
+            <i class="fa fa-inbox"></i><em>...</em>
+            <span class="label label-primary pull-right">12</span>
+          </a></li>
+          <li><a href="#"><i class="fa fa-envelope-o"></i><em>...</em></a></li>
+          <li><a href="#"><i class="fa fa-file-text-o"></i><em>...</em></a></li>
+          <li><a href="#">
+            <i class="fa fa-filter"></i>
+            <em>...</em>
+            <span class="label label-warning pull-right">65</span>
+          </a></li>
+          <li><a href="#">
+            <i class="fa fa-trash-o"></i><em>(not implemented yet...)</em>
+          </a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="box box-solid collapsed-box">
+      <div class="box-header with-border">
+        <h3 class="box-title">Labels</h3>
+
+        <div class="box-tools">
+          <button type="button" class="btn btn-box-tool" data-widget="collapse">
+            <i class="fa fa-plus"></i>
+          </button>
+        </div>
+      </div>
+      <div class="box-body no-padding">
+        <ul class="nav nav-pills nav-stacked">
+          <li><a href="#">
+            <i class="fa fa-circle-o text-red"></i><em>...</em>
+          </a></li>
+          <li><a href="#">
+            <i class="fa fa-circle-o text-yellow"></i><em>...</em>
+          </a></li>
+          <li><a href="#">
+            <i class="fa fa-circle-o text-light-blue"></i>
+            <em>(not implemented yet...)</em>
+          </a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-9" data-bind-table="objects" data-bind-table-title="title" data-bind-object-properties="properties" data-bind-get-object-link="getLink"></div>
+</div>

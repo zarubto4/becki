@@ -1,0 +1,24 @@
+<!--
+  © 2015 Becki Authors. See the AUTHORS file found in the top-level directory of
+  this distribution.
+-->
+<div class="form-group" template="ngFor #field of fields; #index = index">
+  <label>{{field.label}}</label>
+  <template data-bind-ng-if="field.editable && field.password">
+    <input type="password" class="form-control" data-bindon-ng-model="field.model">
+  </template>
+  <template data-bind-ng-if="field.editable && !field.password && field.code">
+    <div data-bindon-data-code-editor="field.model"></div>
+  </template>
+  <template data-bind-ng-if="field.editable && !field.password && !field.code">
+    <input type="text" class="form-control" data-bindon-ng-model="field.model">
+  </template>
+  <template data-bind-ng-if="!field.editable">
+    <select class="form-control" data-bindon-ng-model="field.model">
+      <option value="">Select...</option>
+      <option data-bind-value="option.value" template="ngFor #option of field.options">
+        {{option.label}}
+      </option>
+    </select>
+  </template>
+</div>

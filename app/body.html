@@ -2,4 +2,8 @@
   © 2015 Becki Authors. See the AUTHORS file found in the top-level directory of
   this distribution.
 -->
+<template data-bind-ng-if="router.navigating">
+  <progress>Loading...</progress>
+</template>
 <router-outlet></router-outlet>
+{{message}}

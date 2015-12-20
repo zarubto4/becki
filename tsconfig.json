@@ -7,7 +7,8 @@
     "sourceMap": true,
     "target": "es5"
   },
-  "exclude": [
-    "node_modules"
+  "files": [
+    "app/main.ts",
+    "typings/underscore.string/underscore.string.d.ts"
   ]
 }

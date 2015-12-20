@@ -3,6 +3,12 @@
   "installed": {
     "node/node.d.ts": {
       "commit": "43f4fc592a99e2f0f8f4ee3ae26a3a8e2f5ca3ae"
+    },
+    "underscore.string/underscore.string.d.ts": {
+      "commit": "db2ad651b561c226ab26f539c00f8e02bac0dbfe"
+    },
+    "underscore/underscore.d.ts": {
+      "commit": "db2ad651b561c226ab26f539c00f8e02bac0dbfe"
     }
   },
   "path": "typings",

@@ -1,0 +1,12 @@
+<!--
+  © 2015 Becki Authors. See the AUTHORS file found in the top-level directory of
+  this distribution.
+-->
+<div data-bind-wrapper="heading" data-bind-breadcrumbs="breadcrumbs">
+  <div data-bind-form="projectFields" data-bind-form-title="'Project'" data-on-submit="onUpdatingSubmit($event)"></div>
+  <div data-bind-table-with-actions="devices" data-bind-table-title="'Devices'" data-bind-object-properties="deviceProperties" data-bind-get-object-link="getSelfLink" data-bind-action-title="'Device Addition'" data-bind-action-fields="deviceFields" data-on-submit="onDeviceAdditionSubmit($event)"></div>
+  <div data-bind-table-with-actions="homers" data-bind-table-title="'Homers'" data-bind-object-properties="homerProperties" data-bind-get-object-link="getSelfLink" data-bind-action-title="'Homer Addition'" data-bind-action-fields="homerFields" data-on-submit="onHomerAdditionSubmit($event)"></div>
+  <div data-bind-inbox="homerPrograms" data-bind-inbox-title="'Homer Programs'" data-bind-object-properties="homerProgramProperties" data-bind-get-object-link="getHomerProgramLink" data-bind-new-link="newHomerProgramLink"></div>
+  <div data-bind-table-with-actions="homerQueue" data-bind-table-title="'Homers Upload Queue'" data-bind-object-properties="homerQueueProperties" data-bind-get-object-link="getSelfLink" data-bind-action-title="'Homer Program Uploading'" data-bind-action-fields="homerQueueFields" data-on-submit="onHomerUpdatingSubmit($event)"></div>
+  <div data-bind-form data-bind-form-title="'Project Deletion'" data-on-submit="onDeletionSubmit($event)"></div>
+</div>

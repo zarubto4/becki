@@ -1,8 +1,8 @@
+/app/**/*.js
+/app/**/*.js.map
 /node_modules/*
 !/node_modules/blocko/
 /node_modules/blocko/examples/angular2/jsLib
 /spec/**/*.js
 /spec/**/*.js.map
-/src/**/*.js
-/src/**/*.js.map
 /typings/

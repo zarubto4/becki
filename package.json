@@ -6,7 +6,9 @@
     "http-server": "^0.8.0",
     "systemjs": "^0.19.2",
     "tsd": "^0.6.0",
-    "typescript": "^1.6.0"
+    "typescript": "^1.6.0",
+    "underscore": "^1.8.0",
+    "underscore.string": "^3.2.2"
   },
   "devDependencies": {
     "eslint": "^1.7.0",

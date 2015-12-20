@@ -126,7 +126,6 @@ export function sendKeys(element:protractor.ElementFinder, text:string):void {
   }
 }
 
-// FIXME logout's jsdoc, deletes in fixtures?, test this
 /**
  * A service providing access to the back end at 127.0.0.1:9000.
  *
@@ -175,16 +174,7 @@ export class BackEndNodeJs extends backEnd.BackEnd {
    */
   public existCredentials(email:string, password:string):Promise<boolean> {
     "use strict";
-
-    return this.logIn(email, password)
-        .then((token) => this.logOut()).then(() => true)
-        .catch((reason) => {
-          if (reason instanceof backEnd.BackEndError) {
-            throw reason;
-          } else {
-            return false;
-          }
-        });
+    return null;
   }
 
   /**
@@ -199,7 +189,7 @@ export class BackEndNodeJs extends backEnd.BackEnd {
     let email = "foo@test" + randomString() + ".com";
     return this.request("GET",
         BackEndNodeJs.PERSON_PATH + "/" + email).then((response) =>
-       this.findNonExistentPerson());
+        this.findNonExistentPerson());
   }
 
   /**
@@ -212,80 +202,7 @@ export class BackEndNodeJs extends backEnd.BackEnd {
   public deletePerson(email:string):Promise<string> {
     "use strict";
 
-     return this.request("DELETE",
+    return this.request("DELETE",
         BackEndNodeJs.PERSON_PATH + "/" + email).then(JSON.stringify);
-  }
-
-  /**
-   * Test whether a project exists.
-   *
-   * @param project the project.
-   * @param token an authentication token of the person.
-   * @returns a promise that will be resolved with the test result, or rejected
-   *          with a reason.
-   */
-  public existsProject(project:backEnd.Project, token:string):Promise<boolean> {
-    "use strict";
-
-    return this.getProjects().then((idToProject) => {
-      for (let id in idToProject) {
-        if (idToProject.hasOwnProperty(id)) {
-          if (project.equals(idToProject[id])) {
-            return true;
-          }
-        }
-      }
-      return false;
-    });
-  }
-
-  /**
-   * Find a project name which does not exist yet.
-   *
-   * @param token an authentication token.
-   * @returns a promise that will be resolved with the address, or rejected with
-   *          a reason.
-   */
-  public findNonExistentProject(token:string):Promise<string> {
-    "use strict";
-
-    return this.getProjects().then((idToProject) => {
-      let names:string[] = [];
-      for (let id in idToProject) {
-        if (idToProject.hasOwnProperty(id)) {
-          names.push(idToProject[id].name);
-        }
-      }
-      while (true) {
-        let name = "Test" + randomString();
-        if (names.indexOf(name) == -1) {
-          return name;
-        }
-      }
-    });
-  }
-
-  /**
-   * Delete a project.
-   *
-   * @param project the project.
-   * @param token an authentication token.
-   * @returns a promise that will be resolved with a message describing the
-   *          result, or rejected with a reason.
-   */
-  public deleteProject2(project:backEnd.Project, token:string):Promise<string> {
-    "use strict";
-
-    return this.getProjects().then((idToProject) => {
-      let promises:Promise<string>[] = [];
-      for (let id in idToProject) {
-        if (idToProject.hasOwnProperty(id) && project.equals(idToProject[id])) {
-          promises.push(this.request("DELETE",
-              BackEndNodeJs.PROJECT_PATH + "/" + id,
-              undefined, true).then(JSON.stringify));
-        }
-      }
-      return Promise.all(promises).then((values) => values.join());
-    });
   }
 }

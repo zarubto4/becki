@@ -1,0 +1,67 @@
+<div class="box box-primary">
+  <div class="box-header with-border">
+    <h3 class="box-title">{{title}}</h3>
+
+    <div class="box-tools pull-right">
+      <div class="has-feedback">
+        <input type="text" class="form-control input-sm" placeholder="(not implemented yet...)">
+        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+      </div>
+    </div>
+  </div>
+  <div class="box-body no-padding">
+    <div class="mailbox-controls">
+      <button type="button" class="btn btn-default btn-sm">
+        <i class="fa fa-chevron-left"></i>
+      </button>
+      1/1
+      <div class="pull-right">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default btn-sm">
+            <i class="fa fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive mailbox-messages">
+      <table id="example1" class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th></th>
+            <td template="ngFor #property of properties">{{property.label}}</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr template="ngFor #object of objects">
+            <td class="mailbox-star">
+              <a href="#"><i class="fa fa-star-o text-yellow"></i></a>
+            </td>
+            <td data-bind-ng-switch="index" template="ngFor #property of properties; #index = index">
+              <template data-bind-ng-switch-when="0">
+                <a data-bind-router-link="getLink(object)">{{object[property.name]}}</a>
+              </template>
+              <template ng-switch-default>
+                {{object[property.name]}}
+              </template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="box-footer no-padding">
+    <div class="mailbox-controls">
+      <button type="button" class="btn btn-default btn-sm">
+        <i class="fa fa-chevron-left"></i>
+      </button>
+      1/1
+      <div class="pull-right">
+        <div class="btn-group">
+          <button type="button" class="btn btn-default btn-sm">
+            <i class="fa fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

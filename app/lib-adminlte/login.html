@@ -1,0 +1,25 @@
+<!--
+  © 2015 Becki Authors. See the AUTHORS file found in the top-level directory of
+  this distribution.
+-->
+<div class='login-box'>
+  <div class="login-logo">{{appName}}</div>
+  <div class="login-box-body">
+    <p class="login-box-msg">Sign in to start your session</p>
+
+    <form data-on-submit="onSubmit($event)">
+      <div data-bind-fields="fields"></div>
+      <div class="row">
+        <div class="col-xs-4">
+          <button type="submit" class="btn btn-primary btn-block btn-flat">
+            Sign in
+          </button>
+        </div>
+      </div>
+    </form>
+
+    <a class="text-center" data-bind-router-link="newUserLink">
+      Register a new membership
+    </a>
+  </div>
+</div>

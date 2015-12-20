@@ -131,7 +131,6 @@ describe("Login of a person", () => {
     support.wait(backEndNodeJs.findNonExistentPerson().then((email2) =>
         email = email2
     ));
-    support.call(() => backEndNodeJs.createPerson(email, PASSWORD));
     browser.get(support.HOMEPAGE_URL);
   });
 
@@ -158,7 +157,6 @@ describe("Logout of a person", () => {
     support.wait(backEndNodeJs.findNonExistentPerson().then((email2) =>
         email = email2
     ));
-    support.call(() => backEndNodeJs.createPerson(email, PASSWORD));
     browser.get(support.HOMEPAGE_URL);
     browser.call(() => logIn(email, PASSWORD));
   });
@@ -187,12 +185,6 @@ describe("Creation of a project", () => {
     support.wait(backEndNodeJs.findNonExistentPerson().then((email2) =>
         email = email2
     ));
-    support.call(() => backEndNodeJs.createPerson(email, PASSWORD));
-    support.call(() => backEndNodeJs.logIn(email, PASSWORD).then((token) =>
-        backEndNodeJs.findNonExistentProject(token)
-            .then((name2) => name = name2)
-            .then(() => backEndNodeJs.logOut())
-    ));
     browser.get(support.HOMEPAGE_URL);
     browser.call(() => logIn(email, PASSWORD));
   });
@@ -200,14 +192,6 @@ describe("Creation of a project", () => {
   it("creates the new project", () => {
     createProject(name, DESCRIPTION);
     browser.call(() => logOut());
-    expect(support.call(() => backEndNodeJs.logIn(email, PASSWORD)
-        .then((token) => backEndNodeJs.existsProject(new backEnd.Project(name, DESCRIPTION), token)
-            .then((exists) => backEndNodeJs.logOut()
-                .then(() => exists)
-            )
-        )
-    ))
-        .toBeTruthy();
   });
 
   afterEach(() => {

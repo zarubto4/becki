@@ -229,7 +229,6 @@ describe("The back end", () => {
     });
 
     it("performs a correct HTTP request to create a new person", () => {
-      instance.createPerson(EMAIL, PASSWORD);
       expect(instance.requestGeneral).toHaveBeenCalledWith(new backEnd.Request(
           "POST",
           "127.0.0.1", 9000, "/coreClient/person/person",
@@ -238,12 +237,7 @@ describe("The back end", () => {
       ));
     });
 
-    it("returns a promise that will be resolved with a response to an attempt to create a new person", () => {
-      expect(support.wait(instance.createPerson(EMAIL, PASSWORD))).toMatch(/.+/);
-    });
-
     it("performs a correct HTTP request to log a person in", () => {
-      instance.logIn(EMAIL, PASSWORD);
       expect(instance.requestGeneral).toHaveBeenCalledWith(new backEnd.Request(
           "POST",
           "127.0.0.1", 9000, "/coreClient/person/permission/login",
@@ -253,7 +247,7 @@ describe("The back end", () => {
     });
 
     it("performs a correct HTTP request to log a person out", () => {
-      instance.logOut();
+      instance.deleteToken();
       expect(instance.requestGeneral).toHaveBeenCalledWith(new backEnd.Request(
           "POST",
           "127.0.0.1", 9000, "/coreClient/person/permission/logout",
@@ -263,31 +257,16 @@ describe("The back end", () => {
     });
 
     it("returns a promise that will be resolved with a response to an attempt to log a person out", () => {
-      expect(support.wait(instance.logOut())).toMatch(/.+/);
+      expect(support.wait(instance.deleteToken())).toMatch(/.+/);
     });
 
     it("performs a correct HTTP request to create a new project", () => {
-      instance.createProject(project);
       expect(instance.requestGeneral).toHaveBeenCalledWith(new backEnd.Request(
           "POST",
           "127.0.0.1", 9000, "/project/project",
           {"X-AUTH-TOKEN": TOKEN},
           {projectName: project.name, projectDescription: project.description}
       ));
-    });
-
-    it("returns a promise that will be resolved with a response to an attempt to create a new project", () => {
-      expect(support.wait(instance.createProject(project))).toMatch(/.+/);
-    });
-  });
-
-  describe("if available and if credentials are correct", () => {
-    beforeEach(() => {
-      spyOn(instance, "request").and.returnValue(Promise.resolve(new backEnd.Response(200, "{\"token\": \"" + TOKEN + "\"}")));
-    });
-
-    it("returns a promise that will be resolved with an authentication token after an attempt to log a person in", () => {
-      expect(support.wait(instance.logIn(EMAIL, PASSWORD))).toEqual(TOKEN);
     });
   });
 
@@ -296,12 +275,8 @@ describe("The back end", () => {
       spyOn(instance, "request").and.returnValue(Promise.resolve(new backEnd.Response(400, "{}")));
     });
 
-    it("returns a promise that will be rejected with something else than a back end error because an attempt to log a person in have failed", () => {
-      expect(support.waitRejection(instance.logIn(EMAIL, PASSWORD))).not.toEqual(jasmine.any(backEnd.BackEndError));
-    });
-
     it("returns a promise that will be rejected with something else than a back end error because an attempt to log a person out have failed", () => {
-      expect(support.waitRejection(instance.logOut())).not.toEqual(jasmine.any(backEnd.BackEndError));
+      expect(support.waitRejection(instance.deleteToken())).not.toEqual(jasmine.any(backEnd.BackEndError));
     });
   });
 
@@ -310,20 +285,8 @@ describe("The back end", () => {
       spyOn(instance, "request").and.returnValue(Promise.reject(new Error("not available")));
     });
 
-    it("returns a promise that will be rejected with a reason why an attempt to create a new person have failed", () => {
-      expect(support.waitRejection(instance.createPerson(EMAIL, PASSWORD))).toEqual(jasmine.anything());
-    });
-
-    it("returns a promise that will be rejected with a back end error because an attempt to log a person in have failed", () => {
-      expect(support.waitRejection(instance.logIn(EMAIL, PASSWORD))).toEqual(jasmine.any(backEnd.BackEndError));
-    });
-
     it("returns a promise that will be rejected with a back end error because an attempt to log a person out have failed", () => {
-      expect(support.waitRejection(instance.logOut())).toEqual(jasmine.any(backEnd.BackEndError));
-    });
-
-    it("returns a promise that will be rejected with a reason why an attempt to create a new project have failed", () => {
-      expect(support.waitRejection(instance.createProject(project))).toEqual(jasmine.anything());
+      expect(support.waitRejection(instance.deleteToken())).toEqual(jasmine.any(backEnd.BackEndError));
     });
   });
 });
@@ -333,46 +296,21 @@ describe("The Angular based back end", () => {
 
   const PASSWORD = "testing";
   let httpAngular:ngHttp.Http;
-  let instance:controller.BackEndAngular;
   let backEndNodeJs:support.BackEndNodeJs;
   let email:string;
 
   beforeEach(() => {
     // TODO: The way to instantiate Http is not documented yet.
     httpAngular = <any>new Http();
-    instance = new controller.BackEndAngular(httpAngular);
     backEndNodeJs = new support.BackEndNodeJs();
     support.wait(backEndNodeJs.findNonExistentPerson().then((email2) => {
       email = email2;
     }));
   });
 
-  it("creates a new instance with an HTTP service", () => {
-    expect(new controller.BackEndAngular(httpAngular).http).toEqual(httpAngular);
-  });
-
-  describe("if available", () => {
-    it("creates a new person", () => {
-      support.wait(instance.createPerson(email, PASSWORD));
-      expect(support.call(() => backEndNodeJs.existCredentials(email, PASSWORD))).toBeTruthy();
-    });
-
-    it("returns a promise that will be resolved with a response to an attempt to create a new person", () => {
-      expect(support.wait(instance.createPerson(email, PASSWORD))).toMatch(/.+/);
-    });
-  });
-
   describe("if available and if credentials are correct", () => {
-    beforeEach(() => {
-      support.wait(backEndNodeJs.createPerson(email, PASSWORD));
-    });
-
     it("logs a person in", () => {
       // TODO: There is no way to test whether a person is logged in yet.
-    });
-
-    it("returns a promise that will be resolved with an authentication token after an attempt to log a person in", () => {
-      expect(support.wait(instance.logIn(email, PASSWORD).then((token) => backEndNodeJs.logOut()))).toBeDefined();
     });
   });
 
@@ -380,69 +318,12 @@ describe("The Angular based back end", () => {
     let token:string;
     let project:backEnd.Project;
 
-    beforeEach(() => {
-      support.wait(backEndNodeJs.createPerson(email, PASSWORD));
-      support.call(() => backEndNodeJs.logIn(email, PASSWORD).then((token2) => {
-        token = token2;
-      }));
-      support.call(() => backEndNodeJs.findNonExistentProject(token).then((name) => {
-        project = new backEnd.Project(name, "A testing project.");
-      }));
-    });
-
     it("logs a person out", () => {
       // TODO: There is no way to test whether a person is logged out yet.
     });
 
-    it("returns a promise that will be resolved with a response to an attempt to log a person out", () => {
-      expect(support.wait(instance.logOut())).toMatch(/.+/);
-    });
-
-    it("creates a new project", () => {
-      support.wait(instance.createProject(project));
-      expect(support.call(() => backEndNodeJs.existsProject(project, token))).toBeTruthy();
-    });
-
-    it("returns a promise that will be resolved with a response to an attempt to create a new project", () => {
-      expect(support.wait(instance.createProject(project))).toMatch(/.+/);
-    });
-
     afterEach(() => {
-      support.call(() => backEndNodeJs.logOut());
-    });
-  });
-
-  describe("if available and if credentials are not correct", () => {
-    it("returns a promise that will be rejected with something else than a back end error because an attempt to log a person in have failed", () => {
-      expect(support.waitRejection(instance.logIn(email, PASSWORD))).not.toEqual(jasmine.any(backEnd.BackEndError));
-    });
-  });
-
-  describe("if available and if an authentication token is not correct", () => {
-    it("returns a promise that will be rejected with something else than a back end error because an attempt to log a person out have failed", () => {
-      expect(support.waitRejection(instance.logOut())).not.toEqual(jasmine.any(backEnd.BackEndError));
-    });
-  });
-
-  describe("if not available", () => {
-    beforeEach(() => {
-      spyOn(httpAngular, "request").and.returnValue({subscribe: (onNext:(item:ngHttp.Response)=>any, onError:(err:any)=>any)=>onError(new Error("not available"))});
-    });
-
-    it("returns a promise that will be rejected with a reason why an attempt to create a new person have failed", () => {
-      expect(support.waitRejection(instance.createPerson(email, PASSWORD))).toEqual(jasmine.anything());
-    });
-
-    it("returns a promise that will be rejected with a back end error because an attempt to log a person in have failed", () => {
-      expect(support.waitRejection(instance.logIn(email, PASSWORD))).toEqual(jasmine.any(backEnd.BackEndError));
-    });
-
-    it("returns a promise that will be rejected with a back end error because an attempt to log a person out have failed", () => {
-      expect(support.waitRejection(instance.logOut())).toEqual(jasmine.any(backEnd.BackEndError));
-    });
-
-    it("returns a promise that will be rejected with a reason why an attempt to create a new project have failed", () => {
-      expect(support.waitRejection(instance.createProject(new backEnd.Project("test", "A testing project.")))).toEqual(jasmine.anything());
+      support.call(() => backEndNodeJs.deleteToken());
     });
   });
 
@@ -465,14 +346,12 @@ describe("The controller", () => {
   "use strict";
 
   const PASSWORD = "testing";
-  let backEndAngular:controller.BackEndAngular;
   let instance:controller.Controller;
   let backEndNodeJs:support.BackEndNodeJs;
   let email:string;
 
   beforeEach(() => {
     // TODO: The way to instantiate Http is not documented yet.
-    backEndAngular = new controller.BackEndAngular(<any>new Http());
     backEndNodeJs = new support.BackEndNodeJs();
     support.wait(backEndNodeJs.findNonExistentPerson().then((email2) => {
       email = email2;
@@ -505,31 +384,11 @@ describe("The controller", () => {
   describe("if the back end is available and if a person is logged in", () => {
     let project:backEnd.Project;
 
-    beforeEach(() => {
-      support.wait(backEndNodeJs.createPerson(email, PASSWORD));
-      support.call(() => backEndNodeJs.logIn(email, PASSWORD).then((token) =>
-          backEndNodeJs.findNonExistentProject(token)
-              .then((name) => project = new backEnd.Project(name, "A testing project."))
-              .then(() => backEndNodeJs.logOut())
-      ));
-    });
-
     it("logs a person out", () => {
       // TODO: There is no way to test whether the logout was successful yet.
     });
 
     it("describes the result of an attempt to log a person out", () => {
-    });
-
-    it("creates a new projct", () => {
-      expect(support.call(() => backEndNodeJs.logIn(email, PASSWORD)
-          .then((token) => backEndNodeJs.existsProject(project, token)
-              .then((exists) => backEndNodeJs.logOut()
-                  .then(() => exists)
-              )
-          )
-      ))
-          .toBeTruthy();
     });
 
     it("describes the result of an attempt to create a new project", () => {
@@ -543,7 +402,6 @@ describe("The controller", () => {
     beforeEach(() => {
       let httpAngular = <any>new Http();
       spyOn(httpAngular, "request").and.returnValue({subscribe: (onNext:(item:ngHttp.Response)=>any, onError:(err:any)=>any)=>onError(new Error("not available"))});
-      backEndAngular = new controller.BackEndAngular(httpAngular);
     });
 
     it("describes the result of an attempt to register a new person", () => {
@@ -557,8 +415,6 @@ describe("The controller", () => {
     beforeEach(() => {
       let httpAngular = <any>new Http();
       spyOn(httpAngular, "request").and.returnValue({subscribe: (onNext:(item:ngHttp.Response)=>any, onError:(err:any)=>any)=>onError(new Error("not available"))});
-      backEndAngular = new controller.BackEndAngular(httpAngular);
-      support.wait(backEndNodeJs.createPerson(email, PASSWORD));
     });
 
     it("describes the result of an attempt to log a person out", () => {

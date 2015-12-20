@@ -3,8 +3,6 @@
  * of this distribution.
  */
 /**
- * Start the application with the correct component at the application root.
- *
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  *
@@ -16,13 +14,24 @@
  */
 
 import * as ng from "angular2/angular2";
-import * as controller from "./controller";
-import * as ngHttp from "angular2/http";
-import * as ngRouter from "angular2/router";
 
-ng.bootstrap(controller.Controller, [
-  controller.BackEndAngular,
-  ngHttp.HTTP_PROVIDERS,
-  ngRouter.ROUTER_PROVIDERS,
-  ng.provide(ngRouter.LocationStrategy, {useClass: ngRouter.HashLocationStrategy})
-]);
+import * as homerProgramEditor from "./homer-program-editor";
+import * as libAdminlteForm from "./lib-adminlte/form";
+
+@ng.Component({
+  selector: "[fields]",
+  templateUrl: "app/lib-adminlte/fields.html",
+  directives: [homerProgramEditor.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES],
+  inputs: ["fields"]
+})
+class Fields {
+}
+
+@ng.Component({
+  selector: "[form]",
+  templateUrl: "app/lib-adminlte/form.html",
+  directives: [Fields, ng.FORM_DIRECTIVES],
+  inputs: ["title: formTitle", "fields: form"]
+})
+export class Component extends libAdminlteForm.Component {
+}
