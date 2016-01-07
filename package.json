@@ -2,7 +2,7 @@
   "dependencies": {
     "admin-lte": "^2.3.2",
     "angular2": "2.0.0-alpha.45",
-    "blocko": "^0.1.0",
+    "blocko": "^0.1.1",
     "codemirror": "^5.10.0",
     "http-server": "^0.8.0",
     "systemjs": "^0.19.2",

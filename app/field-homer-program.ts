@@ -27,7 +27,7 @@ import * as libAdminlteForm from "./lib-adminlte/form";
 })
 export class Component implements ng.AfterViewInit {
 
-  controller = blocko.BlockoCore.Controller.getInstance();
+  controller = new blocko.BlockoCore.Controller();
 
   @ng.ViewChild("field")
   field:ng.ElementRef;
@@ -41,10 +41,11 @@ export class Component implements ng.AfterViewInit {
   set model(code:string) {
     "use strict";
 
-    this.controller.setDataJson(code);
-    this.config = null;
-    // TODO
-    this.modelChange.next(this.controller.getDataJson());
+    // TODO: https://github.com/angular/angular/issues/6114
+    // TODO: https://github.com/angular/angular/issues/6311
+    if (code != this.controller.getDataJson()) {
+      this.controller.setDataJson(code);
+    }
   }
 
   get configTitle():string {
@@ -56,18 +57,17 @@ export class Component implements ng.AfterViewInit {
   afterViewInit():void {
     "use strict";
 
-    let target = this.field.nativeElement;
-    // TODO
-    while (target.hasChildNodes()) {
-      target.removeChild(target.lastChild);
-    }
-    let renderer = new blocko.BlockoSnapRenderer.RendererController(target);
+    let renderer = new blocko.BlockoSnapRenderer.RendererController(this.field.nativeElement);
     renderer.registerOpenConfigCallback((block) =>
         this.config = {
           block,
           fields: block.getConfigProperties().map(property => new libAdminlteFields.Field(`${property.displayName}:`, property.value.toString()))
         }
     );
+    this.controller.registerDataChangedCallback(() => {
+      this.config = null;
+      this.modelChange.next(this.controller.getDataJson());
+    });
     this.controller.registerFactoryBlockRendererCallback((block) =>
         new blocko.BlockoSnapRenderer.BlockRenderer(renderer, block)
     );
@@ -165,17 +165,12 @@ export class Component implements ng.AfterViewInit {
     "use strict";
 
     this.controller.addBlock(new cls(this.controller.getFreeBlockId()));
-    // TODO
-    this.modelChange.next(this.controller.getDataJson());
   }
 
   onClearClick():void {
     "use strict";
 
     this.controller.removeAllBlocks();
-    this.config = null;
-    // TODO
-    this.modelChange.next(this.controller.getDataJson());
   }
 
   onConfigSubmit():void {
@@ -197,9 +192,6 @@ export class Component implements ng.AfterViewInit {
       }
     });
     this.config.block.emitConfigsChanged();
-    this.config = null;
-    // TODO
-    this.modelChange.next(this.controller.getDataJson());
   }
 
   onConfigCancel():void {
