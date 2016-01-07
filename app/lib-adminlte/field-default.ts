@@ -1,6 +1,6 @@
 /*
- * © 2015 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -16,10 +16,19 @@
 import * as ng from "angular2/angular2";
 
 @ng.Component({
-  selector: "[data-code-editor]",
-  templateUrl: "app/lib-adminlte/code-editor.html",
+  selector: "[field-custom]",
+  templateUrl: "app/lib-adminlte/field-default.html",
   directives: [ng.FORM_DIRECTIVES],
-  inputs: ["model: dataCodeEditor"]
+  inputs: ["model: fieldCustom", "type: fieldType"]
 })
 export class Component {
+
+  @ng.Output("fieldCustomChange")
+  modelChange = new ng.EventEmitter();
+
+  onChange(value:string):void {
+    "use strict";
+
+    this.modelChange.next(value);
+  }
 }

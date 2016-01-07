@@ -1,6 +1,6 @@
 /*
- * © 2015 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -47,23 +47,35 @@ export class Component {
 
   projectFields:libAdminlteFields.Field[];
 
+  devicePrograms:any[];
+
+  deviceProgramProperties:libAdminlteTable.Property[];
+
+  newDeviceProgramLink:any[];
+
   devices:libBackEnd.Device[];
 
   deviceProperties:libAdminlteTable.Property[];
 
   deviceFields:libAdminlteFields.Field[];
 
-  homers:libBackEnd.Homer[];
+  deviceQueue:any[];
 
-  homerProperties:libAdminlteTable.Property[];
+  deviceQueueProperties:libAdminlteTable.Property[];
 
-  homerFields:libAdminlteFields.Field[];
+  deviceQueueFields:libAdminlteFields.Field[];
 
   homerPrograms:any[];
 
   homerProgramProperties:libAdminlteTable.Property[];
 
   newHomerProgramLink:any[];
+
+  homers:libBackEnd.Homer[];
+
+  homerProperties:libAdminlteTable.Property[];
+
+  homerFields:libAdminlteFields.Field[];
 
   homerQueue:any[];
 
@@ -92,6 +104,7 @@ export class Component {
       new libAdminlteFields.Field("Name:", "Loading..."),
       new libAdminlteFields.Field("Description:", "Loading...")
     ];
+    this.newDeviceProgramLink = ["NewDeviceProgram", {project: this.id}];
     this.deviceProperties = [
       new libAdminlteTable.Property("ID", "hwName"),
       new libAdminlteTable.Property("Type", "typeOfDevice")
@@ -99,16 +112,20 @@ export class Component {
     this.deviceFields = [
       new libAdminlteFields.Field("ID:", "")
     ];
+    this.deviceQueueFields = [
+      new libAdminlteFields.Field("Device:", "", "select"),
+      new libAdminlteFields.Field("Program:", "", "select")
+    ];
+    this.newHomerProgramLink = ["NewHomerProgram", {project: this.id}];
     this.homerProperties = [
       new libAdminlteTable.Property("ID", "homerId")
     ];
     this.homerFields = [
       new libAdminlteFields.Field("ID:", "")
     ];
-    this.newHomerProgramLink = ["NewHomerProgram", {project: this.id}];
     this.homerQueueFields = [
-      new libAdminlteFields.Field("Homer:", "", false),
-      new libAdminlteFields.Field("Program:", "", false)
+      new libAdminlteFields.Field("Homer:", "", "select"),
+      new libAdminlteFields.Field("Program:", "", "select")
     ];
     this.backEnd = backEndService;
     this.events = eventsService;
@@ -129,6 +146,7 @@ export class Component {
           this.events.send(project);
           this.projectFields[0].model = project.projectName;
           this.projectFields[1].model = project.projectDescription;
+          // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-14
           this.devices = project.electronicDevicesList;
           this.homers = project.homerList;
         })
@@ -151,6 +169,12 @@ export class Component {
         .catch((reason) => this.events.send(reason));
   }
 
+  onDeviceUpdatingSubmit():void {
+    "use strict";
+
+    // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-15
+  }
+
   onDeviceAdditionSubmit():void {
     "use strict";
 
@@ -164,10 +188,10 @@ export class Component {
         });
   }
 
-  onHomerAdditionSubmit():void {
+  onHomerUpdatingSubmit():void {
     "use strict";
 
-    this.backEnd.addHomerToProject(this.homerFields[0].model, this.id)
+    this.backEnd.updateHomer(this.homerQueueFields[0].model, this.homerQueueFields[1].model)
         .then((message) => {
           this.events.send(message);
           this.refresh();
@@ -177,10 +201,10 @@ export class Component {
         });
   }
 
-  onHomerUpdatingSubmit():void {
+  onHomerAdditionSubmit():void {
     "use strict";
 
-    this.backEnd.updateHomer(this.homerQueueFields[0].model, this.homerQueueFields[1].model)
+    this.backEnd.addHomerToProject(this.homerFields[0].model, this.id)
         .then((message) => {
           this.events.send(message);
           this.refresh();

@@ -1,6 +1,6 @@
 /*
- * © 2015 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -63,7 +63,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.id = routeParams.get("issue");
-    this.heading = "Loading..."; // FIXME type title
+    this.heading = "Loading...";
     this.breadcrumbs = [
       becki.HOME,
       new libAdminlteWrapper.LabeledLink("Issues", ["Issues"]),
@@ -136,7 +136,7 @@ export class Component implements ng.OnInit {
           this.items = [].concat([issue], issue.answers);
           this.answerCreation = [new libAdminlteFields.Field("Body:", "")];
           this.linkCreation = [new libAdminlteFields.Field("ID:", "")];
-          this.linkDeletion = [new libAdminlteFields.Field("ID:", "", false, (issue.linkedAnswers || []).map(issue2 => new libAdminlteFields.Option(issue2.name, issue2.linkId)))];
+          this.linkDeletion = [new libAdminlteFields.Field("ID:", "", "select", (issue.linkedAnswers || []).map(issue2 => new libAdminlteFields.Option(issue2.name, issue2.linkId)))];
           this.confirmationAddition = [new libAdminlteFields.Field("Text:", "")];
           this.confirmationRemoval = [new libAdminlteFields.Field("Text:", "")];
         })

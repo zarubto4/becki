@@ -1,6 +1,6 @@
 /*
- * © 2015 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -44,7 +44,7 @@ export class Component {
     this.appName = appName;
     this.fields = [
       new libAdminlteFields.Field("Email:", ""),
-      new libAdminlteFields.Field("Password:", "", true, [], true)
+      new libAdminlteFields.Field("Password:", "", "password")
     ];
     this.signingInLink = ["SigningIn"];
     this.backEnd = backEndService;

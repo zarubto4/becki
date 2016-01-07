@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+<!--
 This is a starter template page. Use this page to start your new project from
 scratch. This page gets rid of all links and provides the needed markup only.
 -->
@@ -14,12 +18,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="node_modules/admin-lte/dist/css/AdminLTE.min.css">
     <link rel="stylesheet" href="node_modules/admin-lte/dist/css/skins/skin-red.min.css">
+    <link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css">
     <script src="node_modules/systemjs/dist/system.src.js"></script>
     <script src="node_modules/angular2/bundles/angular2.js"></script>
     <script src="node_modules/angular2/bundles/http.js"></script>
     <script src="node_modules/angular2/bundles/router.dev.js"></script>
     <!-- TODO -->
     <script src="node_modules/blocko/examples/angular2/js/snap.svg-min.js"></script>
+    <style>.CodeMirror {
+      border: 1px solid #d2d6de
+    }</style>
     <script>
       System.config({
         packages: {
@@ -30,6 +38,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
           "blocko": {
             main: "js/index",
             map: {'.': '/node_modules/blocko'}
+          },
+          "codemirror": {
+            main: "lib/codemirror",
+            map: {'.': '/node_modules/codemirror'}
           },
           "node_modules": {
             defaultExtension: "js"

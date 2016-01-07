@@ -1,6 +1,6 @@
 /*
- * © 2015 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -15,7 +15,7 @@
 
 import * as ng from "angular2/angular2";
 
-import * as codeEditor from "./code-editor";
+import * as fieldDefault from "./field-default";
 
 export class Option {
 
@@ -37,30 +37,24 @@ export class Field {
 
   model:string;
 
-  editable:boolean;
+  type:string;
 
   options:Option[];
 
-  password:boolean;
-
-  code:boolean;
-
-  constructor(label:string, model:string, editable = true, options:Option[] = [], password = false, code = false) {
+  constructor(label:string, model:string, type = "text", options:Option[] = []) {
     "use strict";
 
     this.label = label;
     this.model = model;
-    this.editable = editable;
+    this.type = type;
     this.options = options;
-    this.password = password;
-    this.code = code;
   }
 }
 
 @ng.Component({
   selector: "[fields]",
   templateUrl: "app/lib-adminlte/fields.html",
-  directives: [codeEditor.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES],
+  directives: [fieldDefault.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES],
   inputs: ["fields"]
 })
 export class Component {

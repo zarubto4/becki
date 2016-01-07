@@ -1,6 +1,6 @@
 /*
- * © 2015 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -66,7 +66,7 @@ export class Component implements ng.OnInit {
     this.fields = [
       new libAdminlteFields.Field("Name:", "Loading..."),
       new libAdminlteFields.Field("Description:", "Loading..."),
-      new libAdminlteFields.Field("Code:", `{"blocks":{}}`, true, [], false, true)
+      new libAdminlteFields.Field("Code:", `{"blocks":{}}`, "homer-program")
     ];
     this.backEnd = backEndService;
     this.events = eventsService;

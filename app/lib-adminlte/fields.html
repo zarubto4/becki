@@ -1,24 +1,24 @@
 <!--
-  © 2015 Becki Authors. See the AUTHORS file found in the top-level directory of
-  this distribution.
--->
-<div class="form-group" template="ngFor #field of fields; #index = index">
-  <label>{{field.label}}</label>
-  <template data-bind-ng-if="field.editable && field.password">
-    <input type="password" class="form-control" data-bindon-ng-model="field.model">
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+<div class="form-group" template="ngFor #fieldSpec of fields" data-bind-ng-switch="fieldSpec.type">
+  <label>{{fieldSpec.label}}</label>
+  <template data-bind-ng-switch-when="'text'">
+    <input type="text" class="form-control" data-bindon-ng-model="fieldSpec.model">
   </template>
-  <template data-bind-ng-if="field.editable && !field.password && field.code">
-    <div data-bindon-data-code-editor="field.model"></div>
+  <template data-bind-ng-switch-when="'password'">
+    <input type="password" class="form-control" data-bindon-ng-model="fieldSpec.model">
   </template>
-  <template data-bind-ng-if="field.editable && !field.password && !field.code">
-    <input type="text" class="form-control" data-bindon-ng-model="field.model">
-  </template>
-  <template data-bind-ng-if="!field.editable">
-    <select class="form-control" data-bindon-ng-model="field.model">
+  <template data-bind-ng-switch-when="'select'">
+    <select class="form-control" data-bindon-ng-model="fieldSpec.model">
       <option value="">Select...</option>
-      <option data-bind-value="option.value" template="ngFor #option of field.options">
+      <option data-bind-value="option.value" template="ngFor #option of fieldSpec.options">
         {{option.label}}
       </option>
     </select>
+  </template>
+  <template ng-switch-default>
+    <div data-bindon-field-custom="fieldSpec.model" data-bind-field-type="fieldSpec.type"></div>
   </template>
 </div>

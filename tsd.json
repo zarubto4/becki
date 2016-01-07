@@ -9,6 +9,9 @@
     },
     "underscore/underscore.d.ts": {
       "commit": "db2ad651b561c226ab26f539c00f8e02bac0dbfe"
+    },
+    "codemirror/codemirror.d.ts": {
+      "commit": "40c60850ad6c8175a62d5ab48c4e016ea5b3dffe"
     }
   },
   "path": "typings",

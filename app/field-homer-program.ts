@@ -21,8 +21,8 @@ import * as libAdminlteFields from "./lib-adminlte/fields";
 import * as libAdminlteForm from "./lib-adminlte/form";
 
 @ng.Component({
-  selector: "[data-code-editor]",
-  templateUrl: "app/homer-program-editor.html",
+  selector: "[field-homer-program]",
+  templateUrl: "app/field-homer-program.html",
   directives: [libAdminlteForm.Component, ng.CORE_DIRECTIVES]
 })
 export class Component implements ng.AfterViewInit {
@@ -34,10 +34,10 @@ export class Component implements ng.AfterViewInit {
 
   config:{block: blocko.BlockoCore.Block, fields: libAdminlteFields.Field[]} = null;
 
-  @ng.Output("dataCodeEditorChange")
+  @ng.Output("fieldHomerProgramChange")
   modelChange = new ng.EventEmitter();
 
-  @ng.Input("dataCodeEditor")
+  @ng.Input("fieldHomerProgram")
   set model(code:string) {
     "use strict";
 
@@ -62,12 +62,12 @@ export class Component implements ng.AfterViewInit {
       target.removeChild(target.lastChild);
     }
     let renderer = new blocko.BlockoSnapRenderer.RendererController(target);
-    renderer.registerOpenConfigCallback((block) => {
-      this.config = {
-        block,
-        fields: block.getConfigProperties().map(property => new libAdminlteFields.Field(`${property.displayName}:`, property.value.toString()))
-      };
-    });
+    renderer.registerOpenConfigCallback((block) =>
+        this.config = {
+          block,
+          fields: block.getConfigProperties().map(property => new libAdminlteFields.Field(`${property.displayName}:`, property.value.toString()))
+        }
+    );
     this.controller.registerFactoryBlockRendererCallback((block) =>
         new blocko.BlockoSnapRenderer.BlockRenderer(renderer, block)
     );

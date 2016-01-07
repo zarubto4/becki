@@ -1,6 +1,6 @@
 /*
- * © 2015 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -18,6 +18,7 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as deviceNew from "./device-new";
+import * as deviceProgramNew from "./device-program-new";
 import * as devices from "./devices";
 import * as events from "./events";
 import * as homerNew from "./homer-new";
@@ -45,7 +46,16 @@ import * as userNew from "./user-new";
   {path: "/user/project/new", component: projectNew.Component, as: "NewProject"},
   {path: "/user/projects", component: projects.Component, as: "Projects"},
   {path: "/user/projects/:project", component: project.Component, as: "Project"},
-  {path: "/user/projects/:project/homer-programs/new", component: homerProgramNew.Component, as: "NewHomerProgram"},
+  {
+    path: "/user/projects/:project/device-program/new",
+    component: deviceProgramNew.Component,
+    as: "NewDeviceProgram"
+  },
+  {
+    path: "/user/projects/:project/homer-program/new",
+    component: homerProgramNew.Component,
+    as: "NewHomerProgram"
+  },
   {path: "/user/projects/:project/homer-programs/:program", component: homerProgram.Component, as: "HomerProgram"}
 ])
 @ng.Component({

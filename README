@@ -44,8 +44,8 @@ front end from functioning if accessed otherwise. Server-side dependencies can
 be installed using [npm][] not less than 2.14.0 and less than 3.0.0. Install it
 and see the installation instructions below.
 
-On the other side, clients must support [HTML5][] and a JavaScript based on
-[ECMAScript 5][].
+On the other side, clients must support [HTML5][], a JavaScript based on
+[ECMAScript 5][] and [Web Storage 2][].
 
 And on top of that a back end instance built from the Git revision
 eb64ad34ce7a5f5f22ea4f345881f628c669f38e has to be available at address
@@ -84,3 +84,4 @@ useful during a development:
 [html5]: http://www.w3.org/TR/2014/REC-html5-20141028/
 [node.js]: https://nodejs.org
 [npm]: http://www.npmjs.com/
+[web storage 2]: http://www.w3.org/TR/2015/PR-webstorage-20151126/

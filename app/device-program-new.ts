@@ -1,6 +1,6 @@
 /*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -50,20 +50,21 @@ export class Component {
     "use strict";
 
     this.projectId = routeParams.get("project");
-    this.heading = `New Homer Program (Project ${this.projectId})`;
+    this.heading = `New Device Program (Project ${this.projectId})`;
     this.breadcrumbs = [
       becki.HOME,
       new libAdminlteWrapper.LabeledLink("User", ["Projects"]),
       new libAdminlteWrapper.LabeledLink("Projects", ["Projects"]),
       new libAdminlteWrapper.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new libAdminlteWrapper.LabeledLink("Homer Programs", ["Project", {project: this.projectId}]),
-      new libAdminlteWrapper.LabeledLink("New Homer Program", ["NewHomerProgram", {project: this.projectId}])
+      new libAdminlteWrapper.LabeledLink("Device Programs", ["Project", {project: this.projectId}]),
+      new libAdminlteWrapper.LabeledLink("New Device Program", ["NewDeviceProgram", {project: this.projectId}])
     ];
-    this.title = "Homer Program Creation";
+    this.title = "Device Program Creation";
     this.fields = [
       new libAdminlteFields.Field("Name:", ""),
       new libAdminlteFields.Field("Description:", ""),
-      new libAdminlteFields.Field("Code:", `{"blocks":{}}`, "homer-program")
+      new libAdminlteFields.Field("Libraries:", ""),
+      new libAdminlteFields.Field("Code:", "", "device-program")
     ];
     this.backEnd = backEndService;
     this.events = eventsService;
@@ -73,14 +74,7 @@ export class Component {
   onSubmit():void {
     "use strict";
 
-    this.backEnd.createHomerProgram(this.fields[0].model, this.fields[1].model, this.fields[2].model, this.projectId)
-        .then((message) => {
-          this.events.send(message);
-          this.router.navigate(["Project", {project: this.projectId}]);
-        })
-        .catch((reason) => {
-          this.events.send(reason);
-        });
+    // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-13
   }
 
   onCancel():void {
