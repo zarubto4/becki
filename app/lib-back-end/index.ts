@@ -496,10 +496,22 @@ export abstract class BackEnd {
    * @param callback a callback called with an indicator and a message
    *                 describing the result.
    */
-  public updateHomer(homerId:string, programId:string):Promise<string> {
+  public uploadToHomerNow(homerId:string, programId:string):Promise<string> {
     "use strict";
 
-    return this.request("PUT", "/project/uploudtohomer", {homerId, programId}, true).then(JSON.stringify);
+    return this.request("PUT", "/project/uploudtohomerImmediately", {homerId, programId}, true).then(JSON.stringify);
+  }
+
+  public uploadToHomerAsap(homerId:string, programId:string, until:string):Promise<string> {
+    "use strict";
+
+    return this.request("PUT", "/project/uploudtohomerAsSoonAsPossible", {homerId, programId, until}, true).then(JSON.stringify);
+  }
+
+  public uploadToHomerLater(homerId:string, programId:string, when:string, until:string):Promise<string> {
+    "use strict";
+
+    return this.request("PUT", "/project/uploudtohomerGivenTime", {homerId, programId, when, until}, true).then(JSON.stringify);
   }
 
   /**

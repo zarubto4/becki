@@ -39,6 +39,12 @@ import * as wrapper from "./wrapper";
 })
 export class Component {
 
+  static ASAP = "asap";
+
+  static IMMEDIATELY = "immediately";
+
+  static LATER = "later";
+
   id:string;
 
   heading:string;
@@ -125,7 +131,14 @@ export class Component {
     ];
     this.homerQueueFields = [
       new libAdminlteFields.Field("Homer:", "", "select"),
-      new libAdminlteFields.Field("Program:", "", "select")
+      new libAdminlteFields.Field("Program:", "", "select"),
+      new libAdminlteFields.Field("When:", "", "select", [
+        new libAdminlteFields.Option("Immediately", Component.IMMEDIATELY),
+        new libAdminlteFields.Option("As soon as possible", Component.ASAP),
+        new libAdminlteFields.Option("Later", Component.LATER)
+      ]),
+      new libAdminlteFields.Field("Since:", Date.now().toString()),
+      new libAdminlteFields.Field("Until:", (Date.now() + 7 * 24 * 60 * 60 * 1000).toString())
     ];
     this.backEnd = backEndService;
     this.events = eventsService;
@@ -191,8 +204,21 @@ export class Component {
   onHomerUpdatingSubmit():void {
     "use strict";
 
-    this.backEnd.updateHomer(this.homerQueueFields[0].model, this.homerQueueFields[1].model)
-        .then((message) => {
+    let promise:Promise<string>;
+    switch (this.homerQueueFields[2].model) {
+      case Component.IMMEDIATELY:
+        promise = this.backEnd.uploadToHomerNow(this.homerQueueFields[0].model, this.homerQueueFields[1].model);
+        break;
+      case Component.ASAP:
+        promise = this.backEnd.uploadToHomerAsap(this.homerQueueFields[0].model, this.homerQueueFields[1].model, this.homerQueueFields[4].model);
+        break;
+      case Component.LATER:
+        promise = this.backEnd.uploadToHomerLater(this.homerQueueFields[0].model, this.homerQueueFields[1].model, this.homerQueueFields[3].model, this.homerQueueFields[4].model);
+        break;
+      default:
+        return;
+    }
+    promise.then((message) => {
           this.events.send(message);
           this.refresh();
         })

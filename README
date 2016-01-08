@@ -48,7 +48,7 @@ On the other side, clients must support [HTML5][], a JavaScript based on
 [ECMAScript 5][] and [Web Storage 2][].
 
 And on top of that a back end instance built from the Git revision
-eb64ad34ce7a5f5f22ea4f345881f628c669f38e has to be available at address
+86944101755569d889e6cb2c4df8525b8bbcf241 has to be available at address
 127.0.0.1 and port 9000.
 
 Installation
