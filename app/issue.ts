@@ -69,6 +69,14 @@ export class Component implements ng.OnInit {
       new libAdminlteWrapper.LabeledLink("Issues", ["Issues"]),
       new libAdminlteWrapper.LabeledLink(`Issue ${this.id}`, ["Issue", {issue: this.id}])
     ];
+    this.answerCreation = [
+      new libAdminlteFields.Field("Body:", ""),
+      new libAdminlteFields.Field("Homer program:", `{"blocks":{}}`, "homer-program")
+    ];
+    this.linkCreation = [new libAdminlteFields.Field("ID:", "")];
+    this.linkDeletion = [new libAdminlteFields.Field("ID:", "", "select", [])];
+    this.confirmationAddition = [new libAdminlteFields.Field("Text:", "")];
+    this.confirmationRemoval = [new libAdminlteFields.Field("Text:", "")];
     this.backEnd = backEndService;
     this.events = eventsService;
   }
@@ -134,11 +142,7 @@ export class Component implements ng.OnInit {
             });
           });
           this.items = [].concat([issue], issue.answers);
-          this.answerCreation = [new libAdminlteFields.Field("Body:", "")];
-          this.linkCreation = [new libAdminlteFields.Field("ID:", "")];
-          this.linkDeletion = [new libAdminlteFields.Field("ID:", "", "select", (issue.linkedAnswers || []).map(issue2 => new libAdminlteFields.Option(issue2.name, issue2.linkId)))];
-          this.confirmationAddition = [new libAdminlteFields.Field("Text:", "")];
-          this.confirmationRemoval = [new libAdminlteFields.Field("Text:", "")];
+          this.linkDeletion[0].options = (issue.linkedAnswers || []).map(issue2 => new libAdminlteFields.Option(issue2.name, issue2.linkId));
         })
         .catch((reason) => {
           this.events.send(reason);
@@ -250,6 +254,7 @@ export class Component implements ng.OnInit {
   onAnswerCreationSubmit():void {
     "use strict";
 
+    // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-16
     this.backEnd.createAnswer(this.id, this.answerCreation[0].model)
         .then((message) => {
           this.events.send(message);

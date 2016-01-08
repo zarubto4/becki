@@ -1,7 +1,8 @@
 <!--
-  © 2015 Becki Authors. See the AUTHORS file found in the top-level directory of
-  this distribution.
--->
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
 <div data-bind-wrapper="heading" data-bind-breadcrumbs="breadcrumbs">
   <div class="row">
     <div class="col-md-9">
@@ -64,23 +65,7 @@
           <div class="box-footer" data-bind-form="commentCreation[item.postId].fields" data-bind-form-title="'New Comment'" data-on-submit="onCommentCreationSubmit(item.postId, $event)" data-on-cancel="onCommentCreationCancel(item.postId, $event)"></div>
         </template>
       </div>
-      <div class="nav-tabs-custom">
-        <ul class="nav nav-tabs">
-          <li class="active">
-            <a aria-expanded="true" href="#tab_1" data-toggle="tab">Text</a>
-          </li>
-          <li>
-            <a aria-expanded="false" href="#tab_2" data-toggle="tab">Program</a>
-          </li>
-        </ul>
-        <div class="tab-content">
-          <div class="tab-pane active" id="tab_1">
-            <div data-bind-form="answerCreation" data-bind-form-title="'New Answer'" data-on-submit="onAnswerCreationSubmit($event)"></div>
-          </div>
-          <div class="tab-pane" id="tab_2">
-          </div>
-        </div>
-      </div>
+      <div class="box box-widget" data-bind-form="answerCreation" data-bind-form-title="'New Answer'" data-on-submit="onAnswerCreationSubmit($event)"></div>
     </div>
     <div class="col-md-3">
       <div class="box box-primary">
