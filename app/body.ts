@@ -46,16 +46,8 @@ import * as userNew from "./user-new";
   {path: "/user/project/new", component: projectNew.Component, as: "NewProject"},
   {path: "/user/projects", component: projects.Component, as: "Projects"},
   {path: "/user/projects/:project", component: project.Component, as: "Project"},
-  {
-    path: "/user/projects/:project/device-program/new",
-    component: deviceProgramNew.Component,
-    as: "NewDeviceProgram"
-  },
-  {
-    path: "/user/projects/:project/homer-program/new",
-    component: homerProgramNew.Component,
-    as: "NewHomerProgram"
-  },
+  {path: "/user/projects/:project/device-program/new", component: deviceProgramNew.Component, as: "NewDeviceProgram"},
+  {path: "/user/projects/:project/homer-program/new", component: homerProgramNew.Component, as: "NewHomerProgram"},
   {path: "/user/projects/:project/homer-programs/:program", component: homerProgram.Component, as: "HomerProgram"}
 ])
 @ng.Component({

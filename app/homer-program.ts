@@ -79,9 +79,12 @@ export class Component implements ng.OnInit {
     this.backEnd.getHomerProgram(this.id)
         .then((program) => {
           this.events.send(program);
-          this.fields[0].model = program.programName;
-          this.fields[1].model = program.programDescription;
-          this.fields[2].model = program.program;
+          return this.backEnd.request<string>("GET", program.programinJson, undefined, true).then((code) => {
+            this.events.send(code);
+            this.fields[0].model = program.programName;
+            this.fields[1].model = program.programDescription;
+            this.fields[2].model = JSON.stringify(code);
+          });
         })
         .catch((reason) => {
           this.events.send(reason);

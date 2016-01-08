@@ -122,6 +122,10 @@ export class Component {
       new libAdminlteFields.Field("Device:", "", "select"),
       new libAdminlteFields.Field("Program:", "", "select")
     ];
+    this.homerProgramProperties = [
+      new libAdminlteTable.Property("Name", "programName"),
+      new libAdminlteTable.Property("Description", "programDescription")
+    ];
     this.newHomerProgramLink = ["NewHomerProgram", {project: this.id}];
     this.homerProperties = [
       new libAdminlteTable.Property("ID", "homerId")
@@ -161,17 +165,24 @@ export class Component {
           this.projectFields[1].model = project.projectDescription;
           // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-14
           this.devices = project.electronicDevicesList;
+          this.deviceQueueFields[0].options = project.electronicDevicesList.map(device =>
+              new libAdminlteFields.Option(device.hwName, device.hwName)
+          );
+          this.homerPrograms = project.programs;
           this.homers = project.homerList;
+          this.homerQueueFields[0].options = project.homerList.map(homer =>
+              new libAdminlteFields.Option(homer.homerId, homer.homerId)
+          );
         })
         .catch((reason) => {
           this.events.send(reason);
         });
   }
 
-  getSelfLink():any[] {
+  getSelfLink():()=>any[] {
     "use strict";
 
-    return ["Project", {project: this.id}];
+    return () => ["Project", {project: this.id}];
   }
 
   onUpdatingSubmit():void {
@@ -182,16 +193,35 @@ export class Component {
         .catch((reason) => this.events.send(reason));
   }
 
+  onDeviceAdditionSubmit():void {
+    "use strict";
+
+    this.backEnd.addDeviceToProject(this.deviceFields[0].model, this.id)
+        .then((message) => {
+          this.events.send(message);
+          this.refresh();
+        })
+        .catch((reason) => {
+          this.events.send(reason);
+        });
+  }
+
   onDeviceUpdatingSubmit():void {
     "use strict";
 
     // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-15
   }
 
-  onDeviceAdditionSubmit():void {
+  getHomerProgramLink():(program:libBackEnd.HomerProgram)=>any[] {
     "use strict";
 
-    this.backEnd.addDeviceToProject(this.deviceFields[0].model, this.id)
+    return (program) => ["HomerProgram", {project: this.id, program: program.programId}];
+  }
+
+  onHomerAdditionSubmit():void {
+    "use strict";
+
+    this.backEnd.addHomerToProject(this.homerFields[0].model, this.id)
         .then((message) => {
           this.events.send(message);
           this.refresh();
@@ -219,19 +249,6 @@ export class Component {
         return;
     }
     promise.then((message) => {
-          this.events.send(message);
-          this.refresh();
-        })
-        .catch((reason) => {
-          this.events.send(reason);
-        });
-  }
-
-  onHomerAdditionSubmit():void {
-    "use strict";
-
-    this.backEnd.addHomerToProject(this.homerFields[0].model, this.id)
-        .then((message) => {
           this.events.send(message);
           this.refresh();
         })

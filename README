@@ -1,7 +1,7 @@
 <!--
-  © 2015 Becki Authors. See the AUTHORS file found in the top-level directory of
-  this distribution.
--->
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
 
 Becki
 =====
@@ -48,7 +48,7 @@ On the other side, clients must support [HTML5][], a JavaScript based on
 [ECMAScript 5][] and [Web Storage 2][].
 
 And on top of that a back end instance built from the Git revision
-86944101755569d889e6cb2c4df8525b8bbcf241 has to be available at address
+17765d817d58bb02ab5d6b16be94cb8340499fbf has to be available at address
 127.0.0.1 and port 9000.
 
 Installation

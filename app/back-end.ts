@@ -1,6 +1,6 @@
 /*
- * © 2015 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -54,7 +54,7 @@ export class Service extends libBackEnd.BackEnd {
       method: _.property(_String.capitalize(request.method.toLowerCase()))(ngHttp.RequestMethods),
       headers: new ngHttp.Headers(request.headers),
       body: request.body,
-      url: request.getUrl()
+      url: request.url
     }));
     return new Promise((resolve, reject) =>
         this.http.request(ngRequest).subscribe(

@@ -1,6 +1,6 @@
 /*
- * © 2015 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * A service providing access to the back end.
@@ -25,25 +25,7 @@ export class Request {
    */
   method:string;
 
-  /**
-   * The protocol.
-   */
-  protocol = "http";
-
-  /**
-   * The host name.
-   */
-  hostname:string;
-
-  /**
-   * The port number.
-   */
-  port:number;
-
-  /**
-   * The absolute resource path.
-   */
-  path:string;
+  url:string;
 
   /**
    * The HTTP headers.
@@ -55,23 +37,11 @@ export class Request {
    */
   body:string;
 
-  /**
-   * Create a new JSON request instance.
-   *
-   * @param method the HTTP method.
-   * @param hostname the host name.
-   * @param port the port number.
-   * @param path the absolute resource path.
-   * @param headers the HTTP headers.
-   * @param body the request body.
-   */
-  constructor(method:string, hostname:string, port:number, path:string, headers:{[name: string]: string} = {}, body?:Object) {
+  constructor(method:string, url:string, headers:{[name: string]: string} = {}, body?:Object) {
     "use strict";
 
     this.method = method;
-    this.hostname = hostname;
-    this.port = port;
-    this.path = path;
+    this.url = url;
     this.headers = {};
     for (let header in headers) {
       if (headers.hasOwnProperty(header)) {
@@ -80,17 +50,6 @@ export class Request {
     }
     this.headers["Content-Type"] = "application/json";
     this.body = body ? JSON.stringify(body) : "";
-  }
-
-  /**
-   * Compose the URL.
-   *
-   * @returns the URL.
-   */
-  getUrl():string {
-    "use strict";
-
-    return `${this.protocol}://${this.hostname}:${this.port}${this.path}`;
   }
 }
 
@@ -183,7 +142,15 @@ export interface HomerProgram {
 
   programDescription:string;
 
-  program:string
+  dateOfCreate:number;
+
+  listOfUploadedHomers:string;
+
+  listOfHomersWaitingForUpload:string;
+
+  programinJson:string;
+
+  projectinJson:string;
 }
 
 export interface Homer {
@@ -207,7 +174,7 @@ export interface Project {
 
   electronicDevicesList:Device[];
 
-  programs:any[];
+  programs:HomerProgram[];
 
   forUploadPrograms:any[];
 }
@@ -349,15 +316,16 @@ export abstract class BackEnd {
    */
   protected abstract requestGeneral(request:Request):Promise<Response>;
 
-  protected request<T>(method:string, path:string, body?:Object, auth = false):Promise<T> {
+  public requestPath<T>(method:string, path:string, body?:Object, auth = false):Promise<T> {
     "use strict";
 
-    let request = new Request(
-        method,
-        "127.0.0.1", 9000, path,
-        {},
-        body
-    );
+    return this.request(method, `http://127.0.0.1:9000${path}`, body, auth);
+  }
+
+  public request<T>(method:string, url:string, body?:Object, auth = false):Promise<T> {
+    "use strict";
+
+    let request = new Request(method, url, {}, body);
     if (auth) {
       if (this.authToken === null) {
         // TODO: https://github.com/angular/angular/issues/4558
@@ -388,7 +356,7 @@ export abstract class BackEnd {
   public createPerson(mail:string, password:string):Promise<string> {
     "use strict";
 
-    return this.request("POST", BackEnd.PERSON_PATH, {mail, password}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.PERSON_PATH, {mail, password}).then(JSON.stringify);
   }
 
   /**
@@ -406,7 +374,7 @@ export abstract class BackEnd {
   public createToken(email:string, password:string):Promise<string> {
     "use strict";
 
-    return this.request<{authToken:string}>("POST", `${BackEnd.TOKEN_PATH}/login`, {email, password}).then((body) => {
+    return this.requestPath<{authToken:string}>("POST", `${BackEnd.TOKEN_PATH}/login`, {email, password}).then((body) => {
       this.authToken = body.authToken;
       this.authEmail = email;
       return JSON.stringify(body);
@@ -427,7 +395,7 @@ export abstract class BackEnd {
   public deleteToken():Promise<string> {
     "use strict";
 
-    return this.request("POST", `${BackEnd.TOKEN_PATH}/logout`, {}, true).then((body) => {
+    return this.requestPath("POST", `${BackEnd.TOKEN_PATH}/logout`, {}, true).then((body) => {
       this.authToken = null;
       this.authEmail = null;
       return JSON.stringify(body);
@@ -445,7 +413,7 @@ export abstract class BackEnd {
   public createDevice(hwName:string, typeOfDevice:string):Promise<string> {
     "use strict";
 
-    return this.request("POST", "/project/iot", {hwName, typeOfDevice, producer: "Byzance", parameters: {}}, true).then(JSON.stringify);
+    return this.requestPath("POST", "/project/iot", {hwName, typeOfDevice, producer: "Byzance", parameters: {}}, true).then(JSON.stringify);
   }
 
   /**
@@ -460,19 +428,19 @@ export abstract class BackEnd {
   public createHomerProgram(programName:string, programDescription:string, program:Object, projectId:string):Promise<string> {
     "use strict";
 
-    return this.request("POST", BackEnd.PROGRAM_PATH, {programName, programDescription, projectId, program}, true).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.PROGRAM_PATH, {programName, programDescription, projectId, program}, true).then(JSON.stringify);
   }
 
   public getHomerProgram(id:string):Promise<HomerProgram> {
     "use strict";
 
-    return this.request("GET", `${BackEnd.PROGRAM_PATH}/${id}`, undefined, true);
+    return this.requestPath("GET", `${BackEnd.PROGRAM_PATH}/${id}`, undefined, true);
   }
 
   public updateHomerProgram(programId:string, programName:string, programDescription:string, program:Object, projectId:string):Promise<string> {
     "use strict";
 
-    return this.request("PUT", `${BackEnd.PROGRAM_PATH}/${programId}`, {programName, programDescription, projectId, program}, true).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.PROGRAM_PATH}/${programId}`, {programName, programDescription, projectId, program}, true).then(JSON.stringify);
   }
 
   /**
@@ -484,7 +452,7 @@ export abstract class BackEnd {
   public createHomer(homerId:string):Promise<string> {
     "use strict";
 
-    return this.request("POST", "/project/homer", {homerId, typeOfDevice: "raspberry"}, true).then(JSON.stringify);
+    return this.requestPath("POST", "/project/homer", {homerId, typeOfDevice: "raspberry"}, true).then(JSON.stringify);
   }
 
   /**
@@ -499,19 +467,19 @@ export abstract class BackEnd {
   public uploadToHomerNow(homerId:string, programId:string):Promise<string> {
     "use strict";
 
-    return this.request("PUT", "/project/uploudtohomerImmediately", {homerId, programId}, true).then(JSON.stringify);
+    return this.requestPath("PUT", "/project/uploudtohomerImmediately", {homerId, programId}, true).then(JSON.stringify);
   }
 
   public uploadToHomerAsap(homerId:string, programId:string, until:string):Promise<string> {
     "use strict";
 
-    return this.request("PUT", "/project/uploudtohomerAsSoonAsPossible", {homerId, programId, until}, true).then(JSON.stringify);
+    return this.requestPath("PUT", "/project/uploudtohomerAsSoonAsPossible", {homerId, programId, until}, true).then(JSON.stringify);
   }
 
   public uploadToHomerLater(homerId:string, programId:string, when:string, until:string):Promise<string> {
     "use strict";
 
-    return this.request("PUT", "/project/uploudtohomerGivenTime", {homerId, programId, when, until}, true).then(JSON.stringify);
+    return this.requestPath("PUT", "/project/uploudtohomerGivenTime", {homerId, programId, when, until}, true).then(JSON.stringify);
   }
 
   /**
@@ -525,7 +493,7 @@ export abstract class BackEnd {
   public createProject(projectName:string, projectDescription:string):Promise<string> {
     "use strict";
 
-    return this.request("POST", BackEnd.PROJECT_PATH, {projectName, projectDescription}, true).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.PROJECT_PATH, {projectName, projectDescription}, true).then(JSON.stringify);
   }
 
   /**
@@ -538,7 +506,7 @@ export abstract class BackEnd {
   public getProjects():Promise<Project[]> {
     "use strict";
 
-    return this.request("GET", BackEnd.PROJECT_PATH, undefined, true);
+    return this.requestPath("GET", BackEnd.PROJECT_PATH, undefined, true);
   }
 
   /**
@@ -554,13 +522,13 @@ export abstract class BackEnd {
   public getProject(id:string):Promise<Project> {
     "use strict";
 
-    return this.request<Project>("GET", `${BackEnd.PROJECT_PATH}/${id}`, undefined, true);
+    return this.requestPath<Project>("GET", `${BackEnd.PROJECT_PATH}/${id}`, undefined, true);
   }
 
   public updateProject(id:string, projectName:string, projectDescription:string):Promise<string> {
     "use strict";
 
-    return this.request<Project>("PUT", `${BackEnd.PROJECT_PATH}/${id}`, {projectName, projectDescription}, true).then(JSON.stringify);
+    return this.requestPath<Project>("PUT", `${BackEnd.PROJECT_PATH}/${id}`, {projectName, projectDescription}, true).then(JSON.stringify);
   }
 
   /**
@@ -575,7 +543,7 @@ export abstract class BackEnd {
   public addDeviceToProject(hwName:string, projectId:string):Promise<string> {
     "use strict";
 
-    return this.request("PUT", "/project/connectIoTWithProject", {projectId, hwName: [hwName]}, true).then(JSON.stringify);
+    return this.requestPath("PUT", "/project/connectIoTWithProject", {projectId, hwName: [hwName]}, true).then(JSON.stringify);
   }
 
   /**
@@ -590,7 +558,7 @@ export abstract class BackEnd {
   public addHomerToProject(homerId:string, projectId:string):Promise<string> {
     "use strict";
 
-    return this.request("PUT", "/project/connectHomerWithProject", {projectId, homerId}, true).then(JSON.stringify);
+    return this.requestPath("PUT", "/project/connectHomerWithProject", {projectId, homerId}, true).then(JSON.stringify);
   }
 
   /**
@@ -604,100 +572,100 @@ export abstract class BackEnd {
   public deleteProject(id:string):Promise<string> {
     "use strict";
 
-    return this.request("DELETE", `${BackEnd.PROJECT_PATH}/${id}`, undefined, true).then(JSON.stringify);
+    return this.requestPath("DELETE", `${BackEnd.PROJECT_PATH}/${id}`, undefined, true).then(JSON.stringify);
   }
 
   public createIssue(type:string, name:string, comment:string, hashTags:string[]):Promise<string> {
     "use strict";
 
-    return this.request("POST", BackEnd.ISSUE_PATH, {name, type, hashTags, comment}, true).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.ISSUE_PATH, {name, type, hashTags, comment}, true).then(JSON.stringify);
   }
 
   public getIssue(id:string):Promise<Issue> {
-    return this.request("GET", `${BackEnd.ISSUE_PATH}/${id}`, undefined, true);
+    return this.requestPath("GET", `${BackEnd.ISSUE_PATH}/${id}`, undefined, true);
   }
 
   public updateIssue(postId:string, type:string, name:string, comment:string, hashTags:string[]):Promise<string> {
     "use strict";
 
-    return this.request("PUT", BackEnd.ISSUE_PATH, {postId, name, type, hashTags, comment}, true).then(JSON.stringify);
+    return this.requestPath("PUT", BackEnd.ISSUE_PATH, {postId, name, type, hashTags, comment}, true).then(JSON.stringify);
   }
 
   public addOneToPost(id:string):Promise<string> {
     "use strict";
 
-    return this.request("PUT", "/overflow/likePlus/" + id, {}, true).then(JSON.stringify);
+    return this.requestPath("PUT", "/overflow/likePlus/" + id, {}, true).then(JSON.stringify);
   }
 
   public addConfirmationToPost(postId:string, confirmation:string):Promise<string> {
     "use strict";
 
-    return this.request("POST", BackEnd.CONFIRMATION_PATH, {postId, confirms: [confirmation]}, true).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.CONFIRMATION_PATH, {postId, confirms: [confirmation]}, true).then(JSON.stringify);
   }
 
   public removeConfirmationFromPost(postId:string, confirmation:string):Promise<string> {
     "use strict";
 
-    return this.request("PUT", BackEnd.CONFIRMATION_PATH, {confirms: [confirmation]}, true).then(JSON.stringify);
+    return this.requestPath("PUT", BackEnd.CONFIRMATION_PATH, {confirms: [confirmation]}, true).then(JSON.stringify);
   }
 
   public subtractOneFromPost(id:string):Promise<string> {
     "use strict";
 
-    return this.request("PUT", "/overflow/likeMinus/" + id, {}, true).then(JSON.stringify);
+    return this.requestPath("PUT", "/overflow/likeMinus/" + id, {}, true).then(JSON.stringify);
   }
 
   public deleteIssue(id:string):Promise<string> {
     "use strict";
 
-    return this.request("DELETE", `${BackEnd.ISSUE_PATH}/${id}`, undefined, true).then(JSON.stringify);
+    return this.requestPath("DELETE", `${BackEnd.ISSUE_PATH}/${id}`, undefined, true).then(JSON.stringify);
   }
 
   public createAnswer(postId:string, comment:string):Promise<string> {
     "use strict";
 
-    return this.request("POST", BackEnd.ANSWER_PATH, {postId, type: "Answare", hashTags: [], comment}, true).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.ANSWER_PATH, {postId, type: "Answare", hashTags: [], comment}, true).then(JSON.stringify);
   }
 
   public updateAnswer(id:string, comment:string, hashTags:string[]):Promise<string> {
     "use strict";
 
-    return this.request("PUT", `${BackEnd.ANSWER_PATH}/${id}`, {hashTags, comment}, true).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.ANSWER_PATH}/${id}`, {hashTags, comment}, true).then(JSON.stringify);
   }
 
   public deleteAnswer(id:string):Promise<string> {
     "use strict";
 
-    return this.request("DELETE", `${BackEnd.ANSWER_PATH}/${id}`, undefined, true).then(JSON.stringify);
+    return this.requestPath("DELETE", `${BackEnd.ANSWER_PATH}/${id}`, undefined, true).then(JSON.stringify);
   }
 
   public createComment(postId:string, comment:string):Promise<string> {
     "use strict";
 
-    return this.request("POST", BackEnd.COMMENT_PATH, {postId, type: "comment", hashTags: [], comment}, true).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.COMMENT_PATH, {postId, type: "comment", hashTags: [], comment}, true).then(JSON.stringify);
   }
 
   public updateComment(id:string, comment:string, hashTags:string[]):Promise<string> {
     "use strict";
 
-    return this.request("PUT", `${BackEnd.COMMENT_PATH}/${id}`, {hashTags, comment}, true).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.COMMENT_PATH}/${id}`, {hashTags, comment}, true).then(JSON.stringify);
   }
 
   public deleteComment(id:string):Promise<string> {
     "use strict";
 
-    return this.request("DELETE", `${BackEnd.COMMENT_PATH}/${id}`, undefined, true).then(JSON.stringify);
+    return this.requestPath("DELETE", `${BackEnd.COMMENT_PATH}/${id}`, undefined, true).then(JSON.stringify);
   }
 
   public createIssueLink(postId:string, linkId:string):Promise<string> {
     "use strict";
 
-    return this.request("POST", BackEnd.ISSUE_LINK_PATH, {postId, linkId}, true).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.ISSUE_LINK_PATH, {postId, linkId}, true).then(JSON.stringify);
   }
 
   public deleteIssueLink(id:string):Promise<string> {
     "use strict";
 
-    return this.request("DELETE", `${BackEnd.ISSUE_LINK_PATH}/${id}`, undefined, true).then(JSON.stringify);
+    return this.requestPath("DELETE", `${BackEnd.ISSUE_LINK_PATH}/${id}`, undefined, true).then(JSON.stringify);
   }
 }
