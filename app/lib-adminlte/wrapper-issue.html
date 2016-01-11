@@ -8,61 +8,59 @@
     <div class="col-md-9">
       <div class="box box-widget" template="ngFor #item of items">
         <div class="box-body">
-          <p>{{item.textOfPost}}</p>
+          <p>{{item.body}}</p>
           {{item.likes}}
-          <button type="button" class="btn btn-default btn-xs" data-on-click="onMinusClick(item.postId, $event)">
+          <button type="button" class="btn btn-default btn-xs" data-on-click="onMinusClick(item.id, $event)">
             -1
           </button>
-          <button type="button" class="btn btn-default btn-xs" data-on-click="onPlusClick(item.postId, $event)">
+          <button type="button" class="btn btn-default btn-xs" data-on-click="onPlusClick(item.id, $event)">
             +1
           </button>
-          <button type="button" class="btn btn-default btn-xs" data-on-click="onItemCommentClick(item.postId, $event)">
+          <button type="button" class="btn btn-default btn-xs" data-on-click="onItemCommentClick(item.id, $event)">
             comment
           </button>
-          <button type="button" class="btn btn-default btn-xs" data-on-click="onItemEditClick(item.postId, $event)">
+          <button type="button" class="btn btn-default btn-xs" data-on-click="onItemEditClick(item.id, $event)">
             edit
           </button>
-          <button type="button" class="btn btn-default btn-xs" data-on-click="onItemRemoveClick(item.postId, $event)">
+          <button type="button" class="btn btn-default btn-xs" data-on-click="onItemRemoveClick(item.id, $event)">
             remove
           </button>
             <span class="pull-right text-muted">
-              {{item.author.firstName}}
-              {{item.author.lastNAme}} -
-              {{item.dateOfCreate}}
+              {{item.date}}
             </span>
         </div>
-        <template data-bind-ng-if="itemEditing[item.postId].active">
-          <div data-bind-form="itemEditing[item.postId].fields" data-bind-form-title="'Edit'" data-on-submit="onItemEditingSubmit(item.postId, $event)" data-on-cancel="onItemEditingCancel(item.postId, $event)"></div>
+        <template data-bind-ng-if="itemEditing[item.id].active">
+          <div data-bind-form="itemEditing[item.id].fields" data-bind-form-title="'Edit'" data-on-submit="onItemEditingSubmit(item.id, $event)" data-on-cancel="onItemEditingCancel(item.id, $event)"></div>
         </template>
         <div class="box-footer box-comments" template="ngFor #comment of item.comments">
           <div class="box-comment">
             <div>
               <span class="username">
-                {{comment.author.firstName}} {{comment.author.lastNAme}}
-                <span class="text-muted pull-right">{{comment.dateOfCreate}}</span>
+                {{comment.author}}
+                <span class="text-muted pull-right">{{comment.date}}</span>
               </span>
-              {{comment.textOfPost}}
+              {{comment.body}}
             </div>
             {{comment.likes}}
-            <button type="button" class="btn btn-default btn-xs" data-on-click="onMinusClick(comment.postId, $event)">
+            <button type="button" class="btn btn-default btn-xs" data-on-click="onMinusClick(comment.id, $event)">
               -1
             </button>
-            <button type="button" class="btn btn-default btn-xs" data-on-click="onPlusClick(comment.postId, $event)">
+            <button type="button" class="btn btn-default btn-xs" data-on-click="onPlusClick(comment.id, $event)">
               +1
             </button>
-            <button type="button" class="btn btn-default btn-xs" data-on-click="onCommentEditClick(comment.postId, $event)">
+            <button type="button" class="btn btn-default btn-xs" data-on-click="onCommentEditClick(comment.id, $event)">
               edit
             </button>
-            <button type="button" class="btn btn-default btn-xs" data-on-click="onCommentRemoveClick(comment.postId, $event)">
+            <button type="button" class="btn btn-default btn-xs" data-on-click="onCommentRemoveClick(comment.id, $event)">
               remove
             </button>
           </div>
-          <template data-bind-ng-if="commentEditing[comment.postId].active">
-            <div data-bind-form="commentEditing[comment.postId].fields" data-bind-form-title="'Edit'" data-on-submit="onCommentEditingSubmit(comment.postId, $event)" data-on-cancel="onCommentEditingCancel(comment.postId, $event)"></div>
+          <template data-bind-ng-if="commentEditing[comment.id].active">
+            <div data-bind-form="commentEditing[comment.id].fields" data-bind-form-title="'Edit'" data-on-submit="onCommentEditingSubmit(comment.id, $event)" data-on-cancel="onCommentEditingCancel(comment.id, $event)"></div>
           </template>
         </div>
-        <template data-bind-ng-if="commentCreation[item.postId].active">
-          <div class="box-footer" data-bind-form="commentCreation[item.postId].fields" data-bind-form-title="'New Comment'" data-on-submit="onCommentCreationSubmit(item.postId, $event)" data-on-cancel="onCommentCreationCancel(item.postId, $event)"></div>
+        <template data-bind-ng-if="commentCreation[item.id].active">
+          <div class="box-footer" data-bind-form="commentCreation[item.id].fields" data-bind-form-title="'New Comment'" data-on-submit="onCommentCreationSubmit(item.id, $event)" data-on-cancel="onCommentCreationCancel(item.id, $event)"></div>
         </template>
       </div>
       <div class="box box-widget" data-bind-form="answerCreation" data-bind-form-title="'New Answer'" data-on-submit="onAnswerCreationSubmit($event)"></div>
@@ -77,8 +75,8 @@
             <label>Related:</label>
             <ul>
               <template data-bind-ng-if="items">
-                <li template="ngFor #link of items[0].linkedAnswers">
-                  <a data-bind-router-link="getLink(link.postId)">{{link.name}}</a>
+                <li template="ngFor #link of items[0].related">
+                  <a data-bind-router-link="getLink(link.id)">{{link.title}}</a>
                 </li>
               </template>
             </ul>
@@ -87,7 +85,7 @@
             <label>Tags:</label>
             <ul>
               <template data-bind-ng-if="items">
-                <li template="ngFor #tag of items[0].hashTags">{{tag}}</li>
+                <li template="ngFor #tag of items[0].tags">{{tag}}</li>
               </template>
             </ul>
           </div>

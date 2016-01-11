@@ -25,6 +25,72 @@ import * as libAdminlteWrapper from "./lib-adminlte/wrapper";
 import * as libBackEnd from "./lib-back-end/index";
 import * as wrapper from "./wrapper";
 
+class Comment {
+
+  id:string;
+
+  body:string;
+
+  author:string;
+
+  date:number;
+
+  likes:number;
+
+  constructor(id:string, body:string, author:string, date:number, likes:number) {
+    "use strict";
+
+    this.id = id;
+    this.body = body;
+    this.author = author;
+    this.date = date;
+    this.likes = likes;
+  }
+}
+
+class Related {
+
+  id:string;
+
+  title:string;
+
+  constructor(id:string, title:string) {
+    "use strict";
+
+    this.id = id;
+    this.title = title;
+  }
+}
+
+class Item {
+
+  id:string;
+
+  body:string;
+
+  date:number;
+
+  likes:number;
+
+  comments:Comment[];
+
+  tags:string[];
+
+  related:Related[];
+
+  constructor(id:string, body:string, date:number, likes:number, comments:Comment[], tags?:string[], related?:Related[]) {
+    "use strict";
+
+    this.id = id;
+    this.body = body;
+    this.date = date;
+    this.likes = likes;
+    this.comments = comments;
+    this.tags = tags;
+    this.related = related;
+  }
+}
+
 @ng.Component({
   templateUrl: "app/lib-adminlte/wrapper-issue.html",
   directives: [form.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES, wrapper.Component]
@@ -39,7 +105,7 @@ export class Component implements ng.OnInit {
 
   itemEditing:{[id:string]: {active:boolean, fields:libAdminlteFields.Field[]}};
 
-  items:Array<libBackEnd.Issue|libBackEnd.Answer>;
+  items:Array<Item>;
 
   answerCreation:libAdminlteFields.Field[];
 
@@ -91,8 +157,22 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getIssue(this.id)
-        .then((issue) => {
+        .then(issue => {
           this.events.send(issue);
+          return Promise.all<any>([
+            issue,
+            this.backEnd.request("GET", issue.textOfPost, undefined, true),
+            this.backEnd.request("GET", issue.comments, undefined, true),
+            this.backEnd.request("GET", issue.answers, undefined, true)
+          ]);
+        })
+        .then(result => {
+          let issue:libBackEnd.Issue;
+          let body:string;
+          let comments:libBackEnd.Comment[];
+          let answers:libBackEnd.Answer[];
+          [issue, body, comments, answers] = result;
+          this.events.send(result);
           this.heading = `${issue.type}: ${issue.name}`;
           this.itemEditing = {};
           this.itemEditing[issue.postId] = {
@@ -100,7 +180,7 @@ export class Component implements ng.OnInit {
             fields: [
               new libAdminlteFields.Field("Type:", issue.type),
               new libAdminlteFields.Field("Title:", issue.name),
-              new libAdminlteFields.Field("Body:", issue.textOfPost),
+              new libAdminlteFields.Field("Body:", body),
               new libAdminlteFields.Field("Tags:", issue.hashTags.join(","))
             ]
           };
@@ -110,7 +190,7 @@ export class Component implements ng.OnInit {
             fields: [new libAdminlteFields.Field("Body:", "")]
           };
           this.commentEditing = {};
-          issue.comments.forEach(comment => {
+          comments.forEach(comment => {
             this.commentEditing[comment.postId] = {
               active: false,
               fields: [
@@ -119,7 +199,7 @@ export class Component implements ng.OnInit {
               ]
             };
           });
-          issue.answers.forEach(answer => {
+          answers.forEach(answer => {
             this.itemEditing[answer.postId] = {
               active: false,
               fields: [
@@ -141,7 +221,12 @@ export class Component implements ng.OnInit {
               };
             });
           });
-          this.items = [].concat([issue], issue.answers);
+          let commentsViews = comments.map(comment => new Comment(comment.postId, comment.textOfPost, `${comment.author.firstName} ${comment.author.lastNAme}`, comment.dateOfCreate, comment.likes));
+          let related = (issue.linkedAnswers || []).map(link => new Related(link.linkId, link.name));
+          this.items = [].concat(
+              new Item(issue.postId, body, issue.dateOfCreate, issue.likes, commentsViews, issue.hashTags, related),
+              answers.map(answer => new Item(answer.postId, answer.textOfPost, answer.dateOfCreate, answer.likes, answer.comments.map(comment => new Comment(comment.postId, comment.textOfPost, `${comment.author.firstName} ${comment.author.lastNAme}`, comment.dateOfCreate, comment.likes)), answer.hashTags))
+          );
           this.linkDeletion[0].options = (issue.linkedAnswers || []).map(issue2 => new libAdminlteFields.Option(issue2.name, issue2.linkId));
         })
         .catch((reason) => {

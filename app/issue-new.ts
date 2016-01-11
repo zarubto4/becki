@@ -1,6 +1,6 @@
 /*
- * © 2015 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -28,7 +28,7 @@ import * as wrapper from "./wrapper";
   templateUrl: "app/lib-adminlte/wrapper-form.html",
   directives: [form.Component, wrapper.Component]
 })
-export class Component {
+export class Component implements ng.OnInit {
 
   heading:string;
 
@@ -55,7 +55,7 @@ export class Component {
     ];
     this.title = "Issue Reporting";
     this.fields = [
-      new libAdminlteFields.Field("Type:", ""),
+      new libAdminlteFields.Field("Type:", "", "select"),
       new libAdminlteFields.Field("Title:", ""),
       new libAdminlteFields.Field("Body:", ""),
       new libAdminlteFields.Field("Tags:", "")
@@ -63,6 +63,19 @@ export class Component {
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
+  }
+
+  onInit():void {
+    "use strict";
+
+    this.backEnd.getIssueTypes()
+        .then((types) => {
+          this.events.send(types);
+          this.fields[0].options = types.map(type => new libAdminlteFields.Option(type.type, type.id));
+        })
+        .catch((reason) => {
+          this.events.send(reason);
+        });
   }
 
   onSubmit():void {

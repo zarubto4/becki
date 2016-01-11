@@ -179,6 +179,13 @@ export interface Project {
   forUploadPrograms:any[];
 }
 
+export interface IssueType {
+
+  id: string;
+
+  type:string;
+}
+
 export interface Issue {
 
   postId:string;
@@ -193,13 +200,11 @@ export interface Issue {
 
   dateOfCreate:number;
 
-  author:Person;
-
   textOfPost:string;
 
-  comments:Comment[];
+  comments:string;
 
-  answers:Answer[];
+  answers:string;
 
   linkedAnswers?:IssueLink[];
 
@@ -279,6 +284,8 @@ export abstract class BackEnd {
   static ISSUE_LINK_PATH = "/overflow/link";
 
   static ISSUE_PATH = "/overflow/post";
+
+  static ISSUE_TYPE_PATH = "/overflow/typeOfPost";
 
   /**
    * An absolute path to the person resources.
@@ -575,6 +582,18 @@ export abstract class BackEnd {
     return this.requestPath("DELETE", `${BackEnd.PROJECT_PATH}/${id}`, undefined, true).then(JSON.stringify);
   }
 
+  public createIssueType(type:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("POST", BackEnd.ISSUE_TYPE_PATH, {type}, true).then(JSON.stringify);
+  }
+
+  public getIssueTypes():Promise<IssueType[]> {
+    "use strict";
+
+    return this.requestPath("GET", BackEnd.ISSUE_TYPE_PATH, undefined, true);
+  }
+
   public createIssue(type:string, name:string, comment:string, hashTags:string[]):Promise<string> {
     "use strict";
 
@@ -582,7 +601,15 @@ export abstract class BackEnd {
   }
 
   public getIssue(id:string):Promise<Issue> {
+    "use strict";
+
     return this.requestPath("GET", `${BackEnd.ISSUE_PATH}/${id}`, undefined, true);
+  }
+
+  public getIssues():Promise<Issue[]> {
+    "use strict";
+
+    return this.requestPath("GET", "/overflow/postAll", undefined, true);
   }
 
   public updateIssue(postId:string, type:string, name:string, comment:string, hashTags:string[]):Promise<string> {
