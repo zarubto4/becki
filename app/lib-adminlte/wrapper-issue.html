@@ -75,8 +75,8 @@
             <label>Related:</label>
             <ul>
               <template data-bind-ng-if="items">
-                <li template="ngFor #link of items[0].related">
-                  <a data-bind-router-link="getLink(link.id)">{{link.title}}</a>
+                <li template="ngFor #related of items[0].related">
+                  <a data-bind-router-link="getLink(related.itemId)">{{related.title}}</a>
                 </li>
               </template>
             </ul>

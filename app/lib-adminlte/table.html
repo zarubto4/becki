@@ -1,3 +1,8 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
 <div class="box box-primary">
   <div class="box-header with-border">
     <h3 class="box-title">{{title}}</h3>
@@ -38,7 +43,12 @@
             </td>
             <td data-bind-ng-switch="index" template="ngFor #property of properties; #index = index">
               <template data-bind-ng-switch-when="0">
-                <a data-bind-router-link="getLink(object)">{{object[property.name]}}</a>
+                <template data-bind-ng-if="getLink">
+                  <a data-bind-router-link="getLink(object)">{{object[property.name]}}</a>
+                </template>
+                <template data-bind-ng-if="!getLink">
+                  {{object[property.name]}}
+                </template>
               </template>
               <template ng-switch-default>
                 {{object[property.name]}}

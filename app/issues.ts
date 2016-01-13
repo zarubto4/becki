@@ -89,6 +89,7 @@ export class Component implements ng.OnInit {
         .catch((reason) => {
           this.events.send(reason);
         });
+    // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-27
     this.backEnd.getIssues()
         .then(issues => {
           this.events.send(issues);
@@ -97,12 +98,6 @@ export class Component implements ng.OnInit {
         .catch((reason) => {
           this.events.send(reason);
         });
-  }
-
-  getSelfLink():()=>any[] {
-    "use strict";
-
-    return () => ["Issues"];
   }
 
   onTypeAdditionSubmit():void {

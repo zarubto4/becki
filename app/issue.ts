@@ -52,12 +52,15 @@ class Related {
 
   id:string;
 
+  itemId:string;
+
   title:string;
 
-  constructor(id:string, title:string) {
+  constructor(id:string, itemId:string, title:string) {
     "use strict";
 
     this.id = id;
+    this.itemId = itemId;
     this.title = title;
   }
 }
@@ -139,7 +142,7 @@ export class Component implements ng.OnInit {
       new libAdminlteFields.Field("Body:", ""),
       new libAdminlteFields.Field("Homer program:", `{"blocks":{}}`, "homer-program")
     ];
-    this.linkCreation = [new libAdminlteFields.Field("ID:", "")];
+    this.linkCreation = [new libAdminlteFields.Field("ID:", "", "select")];
     this.linkDeletion = [new libAdminlteFields.Field("ID:", "", "select", [])];
     this.confirmationAddition = [new libAdminlteFields.Field("Text:", "")];
     this.confirmationRemoval = [new libAdminlteFields.Field("Text:", "")];
@@ -162,7 +165,9 @@ export class Component implements ng.OnInit {
           return Promise.all<any>([
             issue,
             this.backEnd.request("GET", issue.textOfPost, undefined, true),
+            // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-18
             this.backEnd.request("GET", issue.comments, undefined, true),
+            // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-19
             this.backEnd.request("GET", issue.answers, undefined, true)
           ]);
         })
@@ -222,12 +227,20 @@ export class Component implements ng.OnInit {
             });
           });
           let commentsViews = comments.map(comment => new Comment(comment.postId, comment.textOfPost, `${comment.author.firstName} ${comment.author.lastNAme}`, comment.dateOfCreate, comment.likes));
-          let related = (issue.linkedAnswers || []).map(link => new Related(link.linkId, link.name));
+          let related = (issue.linkedAnswers || []).map(link => new Related(link.linkId, link.postId, link.name));
           this.items = [].concat(
               new Item(issue.postId, body, issue.dateOfCreate, issue.likes, commentsViews, issue.hashTags, related),
               answers.map(answer => new Item(answer.postId, answer.textOfPost, answer.dateOfCreate, answer.likes, answer.comments.map(comment => new Comment(comment.postId, comment.textOfPost, `${comment.author.firstName} ${comment.author.lastNAme}`, comment.dateOfCreate, comment.likes)), answer.hashTags))
           );
           this.linkDeletion[0].options = (issue.linkedAnswers || []).map(issue2 => new libAdminlteFields.Option(issue2.name, issue2.linkId));
+        })
+        .catch((reason) => {
+          this.events.send(reason);
+        });
+    this.backEnd.getIssues()
+        .then(issues => {
+          this.events.send(issues);
+          this.linkCreation[0].options = issues.map(issue => new libAdminlteFields.Option(issue.name, issue.postId));
         })
         .catch((reason) => {
           this.events.send(reason);
@@ -249,6 +262,7 @@ export class Component implements ng.OnInit {
   onItemEditingSubmit(id:string):void {
     "use strict";
 
+    // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-29
     switch (id) {
       case this.id:
         this.backEnd.updateIssue(this.id, this.itemEditing[this.id].fields[0].model, this.itemEditing[this.id].fields[1].model, this.itemEditing[this.id].fields[2].model, this.itemEditing[this.id].fields[3].model.split(","))
@@ -424,6 +438,7 @@ export class Component implements ng.OnInit {
   onLinkDeletionSubmit():void {
     "use strict";
 
+    // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-30
     this.backEnd.deleteIssueLink(this.linkDeletion[0].model)
         .then((message) => {
           this.events.send(message);
@@ -437,6 +452,7 @@ export class Component implements ng.OnInit {
   onConfirmationAdditionSubmit():void {
     "use strict";
 
+    // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-31
     this.backEnd.addConfirmationToPost(this.id, this.confirmationAddition[0].model)
         .then((message) => {
           this.events.send(message);

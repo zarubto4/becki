@@ -89,6 +89,8 @@ export class Component {
 
   homerQueueFields:libAdminlteFields.Field[];
 
+  collaboratorFields:libAdminlteFields.Field[];
+
   backEnd:backEnd.Service;
 
   events:events.Service;
@@ -144,6 +146,9 @@ export class Component {
       new libAdminlteFields.Field("Since:", Date.now().toString()),
       new libAdminlteFields.Field("Until:", (Date.now() + 7 * 24 * 60 * 60 * 1000).toString())
     ];
+    this.collaboratorFields = [
+      new libAdminlteFields.Field("ID:", "")
+    ];
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -163,6 +168,7 @@ export class Component {
           this.events.send(project);
           this.projectFields[0].model = project.projectName;
           this.projectFields[1].model = project.projectDescription;
+          // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-13
           // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-14
           this.devices = project.electronicDevicesList;
           this.deviceQueueFields[0].options = project.electronicDevicesList.map(device =>
@@ -173,16 +179,13 @@ export class Component {
           this.homerQueueFields[0].options = project.homerList.map(homer =>
               new libAdminlteFields.Option(homer.homerId, homer.homerId)
           );
+          this.homerQueueFields[1].options = project.programs.map(program =>
+              new libAdminlteFields.Option(program.programName, program.programId)
+          );
         })
         .catch((reason) => {
           this.events.send(reason);
         });
-  }
-
-  getSelfLink():()=>any[] {
-    "use strict";
-
-    return () => ["Project", {project: this.id}];
   }
 
   onUpdatingSubmit():void {
@@ -248,6 +251,9 @@ export class Component {
       default:
         return;
     }
+    // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-24
+    // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-25
+    // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-26
     promise.then((message) => {
           this.events.send(message);
           this.refresh();
@@ -255,6 +261,11 @@ export class Component {
         .catch((reason) => {
           this.events.send(reason);
         });
+  }
+
+  onCollaboratorAdditionSubmit():void {
+    "use strict";
+    // TODO http://byzance.myjetbrains.com/youtrack/issue/TBE-21
   }
 
   onDeletionSubmit():void {
