@@ -71,6 +71,12 @@ export class Component {
 
   deviceQueueFields:libAdminlteFields.Field[];
 
+  standalonePrograms:any[];
+
+  standaloneProgramProperties:libAdminlteTable.Property[];
+
+  newStandaloneProgramLink:any[];
+
   homerPrograms:any[];
 
   homerProgramProperties:libAdminlteTable.Property[];
@@ -124,6 +130,7 @@ export class Component {
       new libAdminlteFields.Field("Device:", "", "select"),
       new libAdminlteFields.Field("Program:", "", "select")
     ];
+    this.newStandaloneProgramLink = ["NewStandaloneProgram", {project: this.id}];
     this.homerProgramProperties = [
       new libAdminlteTable.Property("Name", "programName"),
       new libAdminlteTable.Property("Description", "programDescription")
@@ -166,20 +173,35 @@ export class Component {
     this.backEnd.getProject(this.id)
         .then((project) => {
           this.events.send(project);
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-36
+          return Promise.all<any>([
+            project,
+            this.backEnd.request("GET", project.boards, undefined, true),
+            this.backEnd.request("GET", project.homers, undefined, true),
+            this.backEnd.request("GET", project.programs, undefined, true)
+          ]);
+        })
+        .then(result => {
+          this.events.send(result);
+          let project:libBackEnd.Project;
+          let boards:libBackEnd.Device[];
+          let homers:libBackEnd.Homer[];
+          let programs:libBackEnd.HomerProgram[];
+          [project, boards, homers, programs] = result;
           this.projectFields[0].model = project.projectName;
           this.projectFields[1].model = project.projectDescription;
-          // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-13
-          // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-14
-          this.devices = project.electronicDevicesList;
-          this.deviceQueueFields[0].options = project.electronicDevicesList.map(device =>
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-13
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-14
+          this.devices = boards;
+          this.deviceQueueFields[0].options = boards.map(device =>
               new libAdminlteFields.Option(device.hwName, device.hwName)
           );
-          this.homerPrograms = project.programs;
-          this.homers = project.homerList;
-          this.homerQueueFields[0].options = project.homerList.map(homer =>
+          this.homerPrograms = programs;
+          this.homers = homers;
+          this.homerQueueFields[0].options = homers.map(homer =>
               new libAdminlteFields.Option(homer.homerId, homer.homerId)
           );
-          this.homerQueueFields[1].options = project.programs.map(program =>
+          this.homerQueueFields[1].options = programs.map(program =>
               new libAdminlteFields.Option(program.programName, program.programId)
           );
         })
@@ -212,7 +234,7 @@ export class Component {
   onDeviceUpdatingSubmit():void {
     "use strict";
 
-    // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-15
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-15
   }
 
   getHomerProgramLink():(program:libBackEnd.HomerProgram)=>any[] {
@@ -251,9 +273,9 @@ export class Component {
       default:
         return;
     }
-    // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-24
-    // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-25
-    // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-26
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-24
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-25
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-26
     promise.then((message) => {
           this.events.send(message);
           this.refresh();
@@ -265,7 +287,7 @@ export class Component {
 
   onCollaboratorAdditionSubmit():void {
     "use strict";
-    // TODO http://byzance.myjetbrains.com/youtrack/issue/TBE-21
+    // TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-21
   }
 
   onDeletionSubmit():void {

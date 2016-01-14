@@ -66,6 +66,7 @@ export class Component {
   onSubmit():void {
     "use strict";
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-33
     this.backEnd.createDevice(this.fields[0].model, this.fields[1].model)
         .then((message) => {
           this.events.send(message);

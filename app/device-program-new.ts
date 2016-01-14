@@ -64,7 +64,7 @@ export class Component {
       new libAdminlteFields.Field("Name:", ""),
       new libAdminlteFields.Field("Description:", ""),
       new libAdminlteFields.Field("Libraries:", ""),
-      new libAdminlteFields.Field("Code:", "", "device-program")
+      new libAdminlteFields.Field("Code:", "", "c")
     ];
     this.backEnd = backEndService;
     this.events = eventsService;
@@ -74,7 +74,7 @@ export class Component {
   onSubmit():void {
     "use strict";
 
-    // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-13
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-13
   }
 
   onCancel():void {

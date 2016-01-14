@@ -31,18 +31,15 @@ class Comment {
 
   body:string;
 
-  author:string;
-
   date:number;
 
   likes:number;
 
-  constructor(id:string, body:string, author:string, date:number, likes:number) {
+  constructor(id:string, body:string, date:number, likes:number) {
     "use strict";
 
     this.id = id;
     this.body = body;
-    this.author = author;
     this.date = date;
     this.likes = likes;
   }
@@ -165,19 +162,22 @@ export class Component implements ng.OnInit {
           return Promise.all<any>([
             issue,
             this.backEnd.request("GET", issue.textOfPost, undefined, true),
-            // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-18
             this.backEnd.request("GET", issue.comments, undefined, true),
-            // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-19
-            this.backEnd.request("GET", issue.answers, undefined, true)
+            this.backEnd.request("GET", issue.answers, undefined, true),
+            !issue.linkedAnswers ? [] :
+                this.backEnd.request<libBackEnd.IssueLink[]>("GET", issue.linkedAnswers, undefined, true).then(related => Promise.all(related.map(related2 =>
+                    this.backEnd.request<libBackEnd.Issue>("GET", related2.post, undefined, true).then(issue2 => new Related(related2.linkId, issue2.postId, related2.name))
+                )))
           ]);
         })
         .then(result => {
+          this.events.send(result);
           let issue:libBackEnd.Issue;
           let body:string;
           let comments:libBackEnd.Comment[];
           let answers:libBackEnd.Answer[];
-          [issue, body, comments, answers] = result;
-          this.events.send(result);
+          let related:Related[];
+          [issue, body, comments, answers, related] = result;
           this.heading = `${issue.type}: ${issue.name}`;
           this.itemEditing = {};
           this.itemEditing[issue.postId] = {
@@ -216,23 +216,29 @@ export class Component implements ng.OnInit {
               active: false,
               fields: [new libAdminlteFields.Field("Body:", "")]
             };
-            answer.comments.forEach(comment => {
-              this.commentEditing[comment.postId] = {
-                active: false,
-                fields: [
-                  new libAdminlteFields.Field("Body:", comment.textOfPost),
-                  new libAdminlteFields.Field("Tags:", comment.hashTags ? comment.hashTags.join(",") : "")
-                ]
-              };
-            });
+            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-35
+            /*
+             answer.comments.forEach(comment => {
+             this.commentEditing[comment.postId] = {
+             active: false,
+             fields: [
+             new libAdminlteFields.Field("Body:", comment.textOfPost),
+             new libAdminlteFields.Field("Tags:", comment.hashTags ? comment.hashTags.join(",") : "")
+             ]
+             };
+             });
+             */
           });
-          let commentsViews = comments.map(comment => new Comment(comment.postId, comment.textOfPost, `${comment.author.firstName} ${comment.author.lastNAme}`, comment.dateOfCreate, comment.likes));
-          let related = (issue.linkedAnswers || []).map(link => new Related(link.linkId, link.postId, link.name));
+          let commentsViews = comments.map(comment => new Comment(comment.postId, comment.textOfPost, comment.dateOfCreate, comment.likes));
           this.items = [].concat(
               new Item(issue.postId, body, issue.dateOfCreate, issue.likes, commentsViews, issue.hashTags, related),
-              answers.map(answer => new Item(answer.postId, answer.textOfPost, answer.dateOfCreate, answer.likes, answer.comments.map(comment => new Comment(comment.postId, comment.textOfPost, `${comment.author.firstName} ${comment.author.lastNAme}`, comment.dateOfCreate, comment.likes)), answer.hashTags))
+              answers.map(answer => new Item(
+                  answer.postId, answer.textOfPost, answer.dateOfCreate, answer.likes,
+                  [], // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-35 answer.comments.map(comment => new Comment(comment.postId, comment.textOfPost, comment.dateOfCreate, comment.likes)),
+                  answer.hashTags
+              ))
           );
-          this.linkDeletion[0].options = (issue.linkedAnswers || []).map(issue2 => new libAdminlteFields.Option(issue2.name, issue2.linkId));
+          this.linkDeletion[0].options = related.map(related2 => new libAdminlteFields.Option(related2.title, related2.id));
         })
         .catch((reason) => {
           this.events.send(reason);
@@ -262,7 +268,7 @@ export class Component implements ng.OnInit {
   onItemEditingSubmit(id:string):void {
     "use strict";
 
-    // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-29
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-29
     switch (id) {
       case this.id:
         this.backEnd.updateIssue(this.id, this.itemEditing[this.id].fields[0].model, this.itemEditing[this.id].fields[1].model, this.itemEditing[this.id].fields[2].model, this.itemEditing[this.id].fields[3].model.split(","))
@@ -353,7 +359,7 @@ export class Component implements ng.OnInit {
   onAnswerCreationSubmit():void {
     "use strict";
 
-    // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-16
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-16
     this.backEnd.createAnswer(this.id, this.answerCreation[0].model)
         .then((message) => {
           this.events.send(message);
@@ -438,7 +444,6 @@ export class Component implements ng.OnInit {
   onLinkDeletionSubmit():void {
     "use strict";
 
-    // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-30
     this.backEnd.deleteIssueLink(this.linkDeletion[0].model)
         .then((message) => {
           this.events.send(message);
@@ -452,7 +457,7 @@ export class Component implements ng.OnInit {
   onConfirmationAdditionSubmit():void {
     "use strict";
 
-    // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-31
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-31
     this.backEnd.addConfirmationToPost(this.id, this.confirmationAddition[0].model)
         .then((message) => {
           this.events.send(message);

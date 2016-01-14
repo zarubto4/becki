@@ -89,7 +89,7 @@ export class Component implements ng.OnInit {
         .catch((reason) => {
           this.events.send(reason);
         });
-    // TODO: http://byzance.myjetbrains.com/youtrack/issue/TBE-27
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-27
     this.backEnd.getIssues()
         .then(issues => {
           this.events.send(issues);

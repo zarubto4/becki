@@ -31,6 +31,7 @@ import * as project from "./project";
 import * as projectNew from "./project-new";
 import * as projects from "./projects";
 import * as signingIn from "./signing-in";
+import * as standaloneProgramNew from "./standalone-program-new";
 import * as userNew from "./user-new";
 
 @ngRouter.RouteConfig([
@@ -48,7 +49,8 @@ import * as userNew from "./user-new";
   {path: "/user/projects/:project", component: project.Component, as: "Project"},
   {path: "/user/projects/:project/device-program/new", component: deviceProgramNew.Component, as: "NewDeviceProgram"},
   {path: "/user/projects/:project/homer-program/new", component: homerProgramNew.Component, as: "NewHomerProgram"},
-  {path: "/user/projects/:project/homer-programs/:program", component: homerProgram.Component, as: "HomerProgram"}
+  {path: "/user/projects/:project/homer-programs/:program", component: homerProgram.Component, as: "HomerProgram"},
+  {path: "/user/projects/:project/standalone-program/new", component: standaloneProgramNew.Component, as: "NewStandaloneProgram"}
 ])
 @ng.Component({
   selector: "[body]",

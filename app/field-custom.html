@@ -3,8 +3,11 @@
   ~ of this distribution.
   -->
 <div data-bind-ng-switch="type">
-  <template data-bind-ng-switch-when="'device-program'">
-    <div data-bind-field-device-program="model" data-on-field-device-program-change="onModelChange($event)"></div>
+  <template data-bind-ng-switch-when="'c'">
+    <div data-bind-field-code="model" data-on-field-code-change="onModelChange($event)" data-bind-mode="'text/x-csrc'"></div>
+  </template>
+  <template data-bind-ng-switch-when="'javascript'">
+    <div data-bind-field-code="model" data-on-field-code-change="onModelChange($event)" data-bind-mode="'text/javascript'"></div>
   </template>
   <template data-bind-ng-switch-when="'homer-program'">
     <div data-bind-field-homer-program="model" data-on-field-homer-program-change="onModelChange($event)"></div>

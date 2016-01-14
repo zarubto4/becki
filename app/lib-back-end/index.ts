@@ -170,13 +170,17 @@ export interface Project {
 
   projectDescription:string;
 
-  homerList:Homer[];
+  homers:string;
 
-  electronicDevicesList:Device[];
+  boards:string;
 
-  programs:HomerProgram[];
+  programs:string;
 
-  forUploadPrograms:any[];
+  countOfBoards:number;
+
+  countOfPrograms:number;
+
+  countOfHomer:number;
 }
 
 export interface IssueType {
@@ -206,7 +210,7 @@ export interface Issue {
 
   answers:string;
 
-  linkedAnswers?:IssueLink[];
+  linkedAnswers?:string;
 
   hashTags?:string[];
 }
@@ -215,21 +219,11 @@ export interface Answer {
 
   postId:string;
 
-  type:string;
-
-  views:number;
-
   likes:number;
 
   dateOfCreate:number;
 
-  author:Person;
-
   textOfPost:string;
-
-  comments:Comment[];
-
-  answers:any[];
 
   hashTags?:string[];
 }
@@ -238,21 +232,11 @@ export interface Comment {
 
   postId:string;
 
-  type:string;
-
-  views:number;
-
   likes:number;
 
   dateOfCreate:number;
 
-  author:Person;
-
   textOfPost:string;
-
-  comments:any[];
-
-  answers:any[];
 
   hashTags?:any[];
 }
@@ -261,7 +245,7 @@ export interface IssueLink {
 
   linkId:string;
 
-  postId:string;
+  post:string;
 
   name:string;
 
@@ -421,6 +405,12 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath("POST", "/project/iot", {hwName, typeOfDevice, producer: "Byzance", parameters: {}}, true).then(JSON.stringify);
+  }
+
+  public createIndependentProgram(name:string, description:string, logicJson:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("POST", "/project/blockoBlock", {name, description, designJson: {}, logicJson}, true).then(JSON.stringify);
   }
 
   /**

@@ -15,7 +15,7 @@
 
 import * as ng from "angular2/angular2";
 
-import * as fieldDeviceProgram from "./field-device-program";
+import * as fieldCode from "./field-code";
 import * as fieldHomerProgram from "./field-homer-program";
 import * as libAdminlteFieldDefault from "./lib-adminlte/field-default";
 
@@ -23,7 +23,7 @@ import * as libAdminlteFieldDefault from "./lib-adminlte/field-default";
   selector: "[field-custom]",
   templateUrl: "app/field-custom.html",
   directives: [
-    fieldDeviceProgram.Component,
+    fieldCode.Component,
     fieldHomerProgram.Component,
     libAdminlteFieldDefault.Component,
     ng.CORE_DIRECTIVES],

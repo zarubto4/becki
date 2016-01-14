@@ -1,6 +1,6 @@
 /*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -28,9 +28,7 @@ import * as wrapper from "./wrapper";
   templateUrl: "app/lib-adminlte/wrapper-form.html",
   directives: [form.Component, wrapper.Component]
 })
-export class Component implements ng.OnInit {
-
-  id:string;
+export class Component {
 
   projectId:string;
 
@@ -51,51 +49,31 @@ export class Component implements ng.OnInit {
   constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.id = routeParams.get("program");
     this.projectId = routeParams.get("project");
-    this.heading = `Homer Program ${this.id} (Project ${this.projectId})`;
+    this.heading = `New Standalone Program (Project ${this.projectId})`;
     this.breadcrumbs = [
       becki.HOME,
       new libAdminlteWrapper.LabeledLink("User", ["Projects"]),
       new libAdminlteWrapper.LabeledLink("Projects", ["Projects"]),
       new libAdminlteWrapper.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new libAdminlteWrapper.LabeledLink("Homer Programs", ["Project", {project: this.projectId}]),
-      new libAdminlteWrapper.LabeledLink(`Homer Program ${this.id}`, ["HomerProgram", {project: this.projectId, program: this.id}])
+      new libAdminlteWrapper.LabeledLink("Standalone Programs", ["Project", {project: this.projectId}]),
+      new libAdminlteWrapper.LabeledLink("New Device Program", ["NewStandaloneProgram", {project: this.projectId}])
     ];
-    this.title = "Homer Program Updating";
+    this.title = "Standalone Program Creation";
     this.fields = [
-      new libAdminlteFields.Field("Name:", "Loading..."),
-      new libAdminlteFields.Field("Description:", "Loading..."),
-      new libAdminlteFields.Field("Code:", `{"blocks":{}}`, "homer-program")
+      new libAdminlteFields.Field("Name:", ""),
+      new libAdminlteFields.Field("Description:", ""),
+      new libAdminlteFields.Field("Code:", "", "javascript")
     ];
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
   }
 
-  onInit():void {
-    "use strict";
-
-    this.backEnd.getHomerProgram(this.id)
-        .then((program) => {
-          this.events.send(program);
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-34
-          return this.backEnd.request<string>("GET", program.programinJson, undefined, true).then((code) => {
-            this.events.send(code);
-            this.fields[0].model = program.programName;
-            this.fields[1].model = program.programDescription;
-            this.fields[2].model = JSON.stringify(code);
-          });
-        })
-        .catch((reason) => {
-          this.events.send(reason);
-        });
-  }
-
   onSubmit():void {
     "use strict";
 
-    this.backEnd.updateHomerProgram(this.id, this.fields[0].model, this.fields[1].model, this.fields[2].model, this.projectId)
+    this.backEnd.createIndependentProgram(this.fields[0].model, this.fields[1].model, this.fields[2].model)
         .then((message) => {
           this.events.send(message);
           this.router.navigate(["Project", {project: this.projectId}]);
