@@ -16,7 +16,6 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as backEnd from "./back-end";
 import * as deviceNew from "./device-new";
 import * as deviceProgramNew from "./device-program-new";
 import * as devices from "./devices";
@@ -56,27 +55,18 @@ import * as userNew from "./user-new";
   selector: "[body]",
   templateUrl: "app/body.html",
   directives: [ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
-  providers: [backEnd.Service, events.Service],
   inputs: ["body"]
 })
-export class Component implements ng.OnInit {
+export class Component {
 
   message:string;
-
-  events:events.Service;
 
   router:ngRouter.Router;
 
   public constructor(eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.events = eventsService;
+    eventsService.bus.toRx().subscribe((event:any) => this.message += `${event}: ${JSON.stringify(event)}||\n`);
     this.router = router;
-  }
-
-  onInit():void {
-    "use strict";
-
-    this.events.bus.toRx().subscribe((event:any) => this.message = `${event}: ${JSON.stringify(event)}`);
   }
 }
