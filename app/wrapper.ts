@@ -1,6 +1,6 @@
 /*
- * © 2015 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -54,10 +54,10 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO https://github.com/angular/angular/issues/4112
-    if (this.backEnd.authEmail === null) {
+    if (!window.localStorage.getItem("authEmail")) {
       this.router.navigate(["SigningIn"]);
     }
-    this.email = this.backEnd.authEmail;
+    this.email = window.localStorage.getItem("authEmail");
   }
 
   onSignOutClick():void {

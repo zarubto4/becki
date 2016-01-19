@@ -176,9 +176,9 @@ export class Component {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-36
           return Promise.all<any>([
             project,
-            this.backEnd.request("GET", project.boards, undefined, true),
-            this.backEnd.request("GET", project.homers, undefined, true),
-            this.backEnd.request("GET", project.programs, undefined, true)
+            this.backEnd.request("GET", project.boards),
+            this.backEnd.request("GET", project.homers),
+            this.backEnd.request("GET", project.programs)
           ]);
         })
         .then(result => {

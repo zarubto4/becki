@@ -80,7 +80,7 @@ export class Component implements ng.OnInit {
         .then((program) => {
           this.events.send(program);
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-34
-          return this.backEnd.request<string>("GET", program.programinJson, undefined, true).then((code) => {
+          return this.backEnd.request<string>("GET", program.programinJson).then((code) => {
             this.events.send(code);
             this.fields[0].model = program.programName;
             this.fields[1].model = program.programDescription;

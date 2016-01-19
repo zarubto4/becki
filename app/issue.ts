@@ -161,12 +161,12 @@ export class Component implements ng.OnInit {
           this.events.send(issue);
           return Promise.all<any>([
             issue,
-            this.backEnd.request("GET", issue.textOfPost, undefined, true),
-            this.backEnd.request("GET", issue.comments, undefined, true),
-            this.backEnd.request("GET", issue.answers, undefined, true),
+            this.backEnd.request("GET", issue.textOfPost),
+            this.backEnd.request("GET", issue.comments),
+            this.backEnd.request("GET", issue.answers),
             !issue.linkedAnswers ? [] :
-                this.backEnd.request<libBackEnd.IssueLink[]>("GET", issue.linkedAnswers, undefined, true).then(related => Promise.all(related.map(related2 =>
-                    this.backEnd.request<libBackEnd.Issue>("GET", related2.post, undefined, true).then(issue2 => new Related(related2.linkId, issue2.postId, related2.name))
+                this.backEnd.request<libBackEnd.IssueLink[]>("GET", issue.linkedAnswers).then(related => Promise.all(related.map(related2 =>
+                    this.backEnd.request<libBackEnd.Issue>("GET", related2.post).then(issue2 => new Related(related2.linkId, issue2.postId, related2.name))
                 )))
           ]);
         })
