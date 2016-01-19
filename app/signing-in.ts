@@ -64,4 +64,16 @@ export class Component {
           this.events.send(reason);
         });
   }
+
+  onFacebookClick():void {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-38
+  }
+
+  onGoogleClick():void {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-38
+  }
 }
