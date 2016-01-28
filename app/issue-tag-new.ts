@@ -1,6 +1,6 @@
 /*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -20,6 +20,7 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
 import * as form from "./form";
+import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapFields from "./lib-bootstrap/fields";
 import * as wrapper from "./wrapper";
 
@@ -29,9 +30,19 @@ import * as wrapper from "./wrapper";
 })
 export class Component implements ng.OnInit {
 
+  issueId:string;
+
   heading:string;
 
   breadcrumbs:wrapper.LabeledLink[];
+
+  type:string;
+
+  title:string;
+
+  body:string;
+
+  tags:string[];
 
   fields:libBootstrapFields.Field[];
 
@@ -41,20 +52,19 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.heading = "New Issue";
+    this.issueId = routeParams.get("issue");
+    this.heading = `New Tag (Issue ${this.issueId})`;
     this.breadcrumbs = [
       becki.HOME,
       new wrapper.LabeledLink("Issues", ["Issues"]),
-      new wrapper.LabeledLink("New Issue", ["NewIssue"])
+      new wrapper.LabeledLink(`Issue ${this.issueId}`, ["Issue", {issue: this.issueId}]),
+      new wrapper.LabeledLink("Tags", ["Issue", {issue: this.issueId}]),
+      new wrapper.LabeledLink("New Tag", ["NewIssueTag", {issue: this.issueId}])
     ];
-    this.fields = [
-      new libBootstrapFields.Field("Type", "", "select"),
-      new libBootstrapFields.Field("Title", ""),
-      new libBootstrapFields.Field("Body", "")
-    ];
+    this.fields = [new libBootstrapFields.Field("Name", "", "text", "glyphicon-tag")];
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -63,10 +73,23 @@ export class Component implements ng.OnInit {
   onInit():void {
     "use strict";
 
-    this.backEnd.getIssueTypes()
-        .then((types) => {
-          this.events.send(types);
-          this.fields[0].options = types.map(type => new libBootstrapFields.Option(type.type, type.id));
+    this.backEnd.getIssue(this.issueId)
+        .then(issue => {
+          this.events.send(issue);
+          return Promise.all<any>([
+            issue,
+            this.backEnd.request("GET", issue.textOfPost)
+          ]);
+        })
+        .then(result => {
+          this.events.send(result);
+          let issue:libBackEnd.Issue;
+          let body:string;
+          [issue, body] = result;
+          this.type = issue.type;
+          this.title = issue.name;
+          this.body = body;
+          this.tags = issue.hashTags || [];
         })
         .catch((reason) => {
           this.events.send(reason);
@@ -80,10 +103,11 @@ export class Component implements ng.OnInit {
   onSubmit():void {
     "use strict";
 
-    this.backEnd.createIssue(this.fields[0].model, this.fields[1].model, this.fields[2].model, [])
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-29
+    this.backEnd.updateIssue(this.issueId, this.type, this.title, this.body, this.tags.concat(this.fields[0].model))
         .then((message) => {
           this.events.send(message);
-          this.router.navigate(["Issues"]);
+          this.router.navigate(["Issue", {issue: this.issueId}]);
         })
         .catch((reason) => {
           this.events.send(reason);
@@ -93,6 +117,6 @@ export class Component implements ng.OnInit {
   onCancel():void {
     "use strict";
 
-    this.router.navigate(["Issues"]);
+    this.router.navigate(["Issue", {issue: this.issueId}]);
   }
 }

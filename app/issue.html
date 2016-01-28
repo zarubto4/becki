@@ -1,0 +1,120 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<div data-bind-wrapper="heading" data-bind-breadcrumbs="breadcrumbs">
+  <div class="row">
+    <div class="col-xs-12 col-sm-9">
+      <div class="media" template="ngFor #item of items">
+        <div class="media-left">
+          <div class="btn-group-vertical">
+            <button class="btn btn-default" type="button" data-on-click="onPlusClick(item.id, $event)">
+              <span class="glyphicon glyphicon-thumbs-up"></span>
+            </button>
+            <div class="h2" style="margin: 6px 12px;text-align: center;">
+              {{item.likes}}
+            </div>
+            <button class="btn btn-default" type="button" data-on-click="onMinusClick(item.id, $event)">
+              <span class="glyphicon glyphicon-thumbs-down"></span>
+            </button>
+          </div>
+        </div>
+        <div class="media-body">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              <template data-bind-ng-if="item.editing">
+                <div data-bind-form="item.fields" data-cancellable="true" data-on-submit="onItemEditingSubmit(item, $event)" data-on-cancel="onItemEditingCancel(item, $event)">
+                  <progress>Loading...</progress>
+                </div>
+              </template>
+              <template data-bind-ng-if="!item.editing">
+                <div class="btn-group btn-group-xs pull-right">
+                  <button type="button" class="btn btn-default" data-on-click="onItemEditClick(item, $event)">
+                    <span class="glyphicon glyphicon-edit"></span>
+                  </button>
+                  <button type="button" class="btn btn-danger" data-on-click="onItemRemoveClick(item, $event)">
+                    <span class="glyphicon glyphicon-remove"></span>
+                  </button>
+                </div>
+                <p>{{item.body}}</p>
+                <p class="pull-right">{{item.date}}</p>
+              </template>
+            </div>
+            <div class="panel-footer">
+              <div template="ngFor #comment of item.comments">
+                <div class="media">
+                  <div class="media-left">
+                    <img class="media-object" src="...">
+                  </div>
+                  <div class="media-body">
+                    <template data-bind-ng-if="comment.editing">
+                      <div data-bind-form="comment.fields" data-cancellable="true" data-on-submit="onCommentEditingSubmit(comment, $event)" data-on-cancel="onCommentEditingCancel(comment, $event)">
+                        <progress>Loading...</progress>
+                      </div>
+                    </template>
+                    <template data-bind-ng-if="!comment.editing">
+                      <div class="media-heading" style="font-weight: bold;">
+                        Author - {{comment.date}}
+                        <div class="btn-toolbar pull-right">
+                          <div class="btn-group btn-group-xs">
+                            <button class="btn btn-default" type="button" data-on-click="onPlusClick(comment.id, $event)">
+                              <span class="glyphicon glyphicon-thumbs-up"></span>
+                            </button>
+                            <div style="float: left;padding: 1px 5px;">
+                              {{comment.likes}}
+                            </div>
+                            <button class="btn btn-default" type="button" data-on-click="onMinusClick(comment.id, $event)">
+                              <span class="glyphicon glyphicon-thumbs-down"></span>
+                            </button>
+                          </div>
+                          <div class="btn-group btn-group-xs">
+                            <button type="button" class="btn btn-default" data-on-click="onCommentEditClick(comment, $event)">
+                              <span class="glyphicon glyphicon-edit"></span>
+                            </button>
+                            <button type="button" class="btn btn-danger" data-on-click="onCommentRemoveClick(comment.id, $event)">
+                              <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      {{comment.body}}
+                    </template>
+                  </div>
+                </div>
+                <hr>
+              </div>
+              <div class="media">
+                <div class="media-left">
+                  <img class="media-object" src="...">
+                </div>
+                <div class="media-body" data-bind-form="item.commentCreationFields" data-on-submit="onCommentCreationSubmit(item, $event)">
+                  <progress>Loading...</progress>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-3">
+      <h2>Related</h2>
+      <div data-bind-panel-list="related" data-bind-new-link="newRelatedLink">
+        <progress>Loading...</progress>
+      </div>
+      <h2>Tags</h2>
+      <div data-bind-panel-list="tags" data-bind-new-link="newTagLink">
+        <progress>Loading...</progress>
+      </div>
+      <h2>Confirmations</h2>
+      <div data-bind-panel-list="confirmations" data-bind-new-link="newConfirmationLink">
+        <progress>Loading...</progress>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-body" data-bind-form="answerCreation" data-on-submit="onAnswerCreationSubmit($event)">
+      <progress>Loading...</progress>
+    </div>
+  </div>
+</div>

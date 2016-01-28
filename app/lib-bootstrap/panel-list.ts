@@ -1,6 +1,6 @@
 /*
- * © 2015 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -16,16 +16,29 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as table from "./table";
+export class Item {
+
+  id:string;
+
+  name:string;
+
+  description:string;
+
+  constructor(id:string, name:string, description:string) {
+    "use strict";
+
+    this.id = id;
+    this.name = name;
+    this.description = description;
+  }
+}
 
 @ng.Component({
-  selector: "[inbox]",
-  templateUrl: "app/lib-adminlte/inbox.html",
-  directives: [ngRouter.ROUTER_DIRECTIVES, table.Component],
+  selector: "[panel-list]",
+  templateUrl: "app/lib-bootstrap/panel-list.html",
+  directives: [ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
   inputs: [
-    "title: inboxTitle",
-    "properties: objectProperties",
-    "objects: inbox",
+    "items: panelList",
     "getLink: getObjectLink",
     "newLink"
   ]

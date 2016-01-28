@@ -1,6 +1,6 @@
 /*
- * © 2015 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -20,23 +20,20 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
 import * as form from "./form";
-import * as libAdminlteFields from "./lib-adminlte/fields";
-import * as libAdminlteWrapper from "./lib-adminlte/wrapper";
+import * as libBootstrapFields from "./lib-bootstrap/fields";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
-  templateUrl: "app/lib-adminlte/wrapper-form.html",
+  templateUrl: "app/wrapper-form.html",
   directives: [form.Component, wrapper.Component]
 })
 export class Component {
 
   heading:string;
 
-  breadcrumbs:libAdminlteWrapper.LabeledLink[];
+  breadcrumbs:wrapper.LabeledLink[];
 
-  title:string;
-
-  fields:libAdminlteFields.Field[];
+  fields:libBootstrapFields.Field[];
 
   backEnd:backEnd.Service;
 
@@ -50,17 +47,20 @@ export class Component {
     this.heading = "New Device";
     this.breadcrumbs = [
       becki.HOME,
-      new libAdminlteWrapper.LabeledLink("Devices", ["Devices"]),
-      new libAdminlteWrapper.LabeledLink("New Device", ["NewDevice"])
+      new wrapper.LabeledLink("Devices", ["Devices"]),
+      new wrapper.LabeledLink("New Device", ["NewDevice"])
     ];
-    this.title = "Device Registration";
     this.fields = [
-      new libAdminlteFields.Field("ID:", ""),
-      new libAdminlteFields.Field("Type:", "")
+      new libBootstrapFields.Field("ID", ""),
+      new libBootstrapFields.Field("Type", "")
     ];
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
+  }
+
+  onFieldChange():void {
+    "use strict";
   }
 
   onSubmit():void {

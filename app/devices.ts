@@ -1,6 +1,6 @@
 /*
- * © 2015 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -16,24 +16,24 @@
 import * as ng from "angular2/angular2";
 
 import * as becki from "./index";
-import * as libAdminlteInbox from "./lib-adminlte/inbox";
-import * as libAdminlteTable from "./lib-adminlte/table";
-import * as libAdminlteWrapper from "./lib-adminlte/wrapper";
+import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/devices.html",
-  directives: [libAdminlteInbox.Component, wrapper.Component]
+  directives: [libBootstrapPanelList.Component, wrapper.Component]
 })
 export class Component {
 
   breadcrumbs = [
     becki.HOME,
-    new libAdminlteWrapper.LabeledLink("Devices", ["Devices"])
+    new wrapper.LabeledLink("Devices", ["Devices"])
   ];
 
-  properties:libAdminlteTable.Property[] = [
-    new libAdminlteTable.Property("(not implemented yet)", null)
+  items:libBootstrapPanelList.Item[] = [
+    new libBootstrapPanelList.Item(null, "(not implemented yet)", "does not work"),
+    new libBootstrapPanelList.Item(null, "(not implemented yet)", "does not work"),
+    new libBootstrapPanelList.Item(null, "(not implemented yet)", "does not work")
   ];
 
   newDeviceLink = ["NewDevice"];

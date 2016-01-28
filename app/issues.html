@@ -3,7 +3,13 @@
   ~ of this distribution.
   -->
 
-<div data-bind-wrapper="Issues" data-bind-breadcrumbs="breadcrumbs">
-  <div data-bind-table-with-actions="types" data-table-title="Types" data-bind-object-properties="typeProperties" data-action-title="Type Addition" data-bind-action-fields="typeFields" data-on-submit="onTypeAdditionSubmit($event)"></div>
-  <div data-bind-inbox="issues" data-inbox-title="Issues" data-bind-object-properties="issueProperties" data-bind-get-object-link="getLink" data-bind-new-link="newLink"></div>
+<div data-bind-wrapper="'Issues'" data-bind-breadcrumbs="breadcrumbs">
+  <h2>Types</h2>
+  <div data-bind-panel-list="types" data-bind-new-link="newTypeLink">
+    <progress>Loading...</progress>
+  </div>
+  <h2>Issues</h2>
+  <div data-bind-panel-list="issues" data-bind-get-object-link="getLink" data-bind-new-link="newLink">
+    <progress>Loading...</progress>
+  </div>
 </div>

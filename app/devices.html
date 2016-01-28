@@ -1,10 +1,17 @@
 <!--
-  © 2015 Becki Authors. See the AUTHORS file found in the top-level directory of
-  this distribution.
--->
-<div data-bind-wrapper="Devices" data-bind-breadcrumbs="breadcrumbs">
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<div data-bind-wrapper="'Devices'" data-bind-breadcrumbs="breadcrumbs">
+  <h2>Devices</h2>
   <!-- TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-14 -->
-  <div data-bind-inbox data-bind-inbox-title="'Devices'" data-bind-object-properties="properties" data-bind-new-link="newDeviceLink"></div>
+  <div data-bind-panel-list="items" data-bind-new-link="newDeviceLink">
+    <progress>Loading...</progress>
+  </div>
+  <h2>Homers</h2>
   <!-- TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-22 -->
-  <div data-bind-inbox data-bind-inbox-title="'Homers'" data-bind-object-properties="properties" data-bind-new-link="newHomerLink"></div>
+  <div data-bind-panel-list="items" data-bind-new-link="newHomerLink">
+    <progress>Loading...</progress>
+  </div>
 </div>

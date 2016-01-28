@@ -1,6 +1,6 @@
 /*
- * © 2015 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -17,13 +17,12 @@ import * as _ from "underscore";
 import * as blocko from "blocko";
 import * as ng from "angular2/angular2";
 
-import * as libAdminlteFields from "./lib-adminlte/fields";
-import * as libAdminlteForm from "./lib-adminlte/form";
+import * as libBootstrapFields from "./lib-bootstrap/fields";
 
 @ng.Component({
   selector: "[field-homer-program]",
   templateUrl: "app/field-homer-program.html",
-  directives: [libAdminlteForm.Component, ng.CORE_DIRECTIVES]
+  directives: [libBootstrapFields.Component, ng.CORE_DIRECTIVES]
 })
 export class Component implements ng.AfterViewInit {
 
@@ -32,7 +31,7 @@ export class Component implements ng.AfterViewInit {
   @ng.ViewChild("field")
   field:ng.ElementRef;
 
-  config:{block: blocko.BlockoCore.Block, fields: libAdminlteFields.Field[]} = null;
+  config:{block: blocko.BlockoCore.Block, fields: libBootstrapFields.Field[]} = null;
 
   @ng.Output("fieldHomerProgramChange")
   modelChange = new ng.EventEmitter();
@@ -48,12 +47,6 @@ export class Component implements ng.AfterViewInit {
     }
   }
 
-  get configTitle():string {
-    "use strict";
-
-    return this.config ? `Configuration of ${this.config.block.id}` : null;
-  }
-
   afterViewInit():void {
     "use strict";
 
@@ -61,7 +54,7 @@ export class Component implements ng.AfterViewInit {
     renderer.registerOpenConfigCallback((block) =>
         this.config = {
           block,
-          fields: block.getConfigProperties().map(property => new libAdminlteFields.Field(`${property.displayName}:`, property.value.toString()))
+          fields: block.getConfigProperties().map(property => new libBootstrapFields.Field(`${property.displayName}`, property.value.toString()))
         }
     );
     this.controller.registerDataChangedCallback(() => {
@@ -173,7 +166,7 @@ export class Component implements ng.AfterViewInit {
     this.controller.removeAllBlocks();
   }
 
-  onConfigSubmit():void {
+  onConfigSave():void {
     "use strict";
 
     _.zip(this.config.block.getConfigProperties(), this.config.fields).forEach(property_field => {

@@ -17,7 +17,7 @@ import * as ng from "angular2/angular2";
 
 import * as fieldCode from "./field-code";
 import * as fieldHomerProgram from "./field-homer-program";
-import * as libAdminlteFieldDefault from "./lib-adminlte/field-default";
+import * as libBootstrapFieldDefault from "./lib-bootstrap/field-default";
 
 @ng.Component({
   selector: "[field-custom]",
@@ -25,7 +25,7 @@ import * as libAdminlteFieldDefault from "./lib-adminlte/field-default";
   directives: [
     fieldCode.Component,
     fieldHomerProgram.Component,
-    libAdminlteFieldDefault.Component,
+    libBootstrapFieldDefault.Component,
     ng.CORE_DIRECTIVES],
   inputs: ["model: fieldCustom", "type: fieldType"]
 })

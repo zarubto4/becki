@@ -1,6 +1,6 @@
 /*
- * © 2015 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -15,25 +15,20 @@
 
 import * as ng from "angular2/angular2";
 
-import * as fields from "./fields";
-
 @ng.Component({
-  selector: "[form]",
-  templateUrl: "app/lib-adminlte/form.html",
-  directives: [fields.Component, ng.FORM_DIRECTIVES],
-  inputs: ["title: formTitle", "fields: form"]
+  selector: "[field-custom]",
+  templateUrl: "app/lib-bootstrap/field-default.html",
+  directives: [ng.FORM_DIRECTIVES],
+  inputs: ["model: fieldCustom", "type: fieldType"]
 })
 export class Component {
-  @ng.Output()
-  cancel = new ng.EventEmitter();
 
-  onSubmit():void {
-    "use strict";
-  }
+  @ng.Output("fieldCustomChange")
+  modelChange = new ng.EventEmitter();
 
-  onCancelClick(event:Event):void {
+  onChange(value:string):void {
     "use strict";
 
-    this.cancel.next(event);
+    this.modelChange.next(value);
   }
 }

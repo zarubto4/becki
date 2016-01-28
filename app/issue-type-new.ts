@@ -1,6 +1,6 @@
 /*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -17,20 +17,23 @@ import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
+import * as becki from "./index";
 import * as events from "./events";
-import * as libAdminlteFields from './lib-adminlte/fields';
+import * as form from "./form";
+import * as libBootstrapFields from "./lib-bootstrap/fields";
+import * as wrapper from "./wrapper";
 
 @ng.Component({
-  templateUrl: "app/lib-adminlte/register.html",
-  directives: [libAdminlteFields.Component, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES]
+  templateUrl: "app/wrapper-form.html",
+  directives: [form.Component, wrapper.Component]
 })
 export class Component {
 
-  appName:string;
+  heading:string;
 
-  fields:libAdminlteFields.Field[];
+  breadcrumbs:wrapper.LabeledLink[];
 
-  signingInLink:any[];
+  fields:libBootstrapFields.Field[];
 
   backEnd:backEnd.Service;
 
@@ -38,30 +41,44 @@ export class Component {
 
   router:ngRouter.Router;
 
-  constructor(@ng.Inject("appName") appName:string, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.appName = appName;
-    this.fields = [
-      new libAdminlteFields.Field("Email:", ""),
-      new libAdminlteFields.Field("Password:", "", "password")
+    this.heading = "New Issue Type";
+    this.breadcrumbs = [
+      becki.HOME,
+      new wrapper.LabeledLink("Issues", ["Issues"]),
+      new wrapper.LabeledLink("Types", ["Issues"]),
+      new wrapper.LabeledLink("New Type", ["NewIssueType"]),
     ];
-    this.signingInLink = ["SigningIn"];
+    this.fields = [
+      new libBootstrapFields.Field("Name", "")
+    ];
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
   }
 
+  onFieldChange():void {
+    "use strict";
+  }
+
   onSubmit():void {
     "use strict";
 
-    this.backEnd.createPerson(this.fields[0].model, this.fields[1].model)
+    this.backEnd.createIssueType(this.fields[0].model)
         .then((message) => {
           this.events.send(message);
-          this.router.navigate(this.signingInLink);
+          this.router.navigate(["Issues"]);
         })
         .catch((reason) => {
           this.events.send(reason);
         });
+  }
+
+  onCancel():void {
+    "use strict";
+
+    this.router.navigate(["Issues"]);
   }
 }

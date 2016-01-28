@@ -20,12 +20,11 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
 import * as form from "./form";
-import * as libAdminlteFields from "./lib-adminlte/fields";
-import * as libAdminlteWrapper from "./lib-adminlte/wrapper";
+import * as libBootstrapFields from "./lib-bootstrap/fields";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
-  templateUrl: "app/lib-adminlte/wrapper-form.html",
+  templateUrl: "app/wrapper-form.html",
   directives: [form.Component, wrapper.Component]
 })
 export class Component implements ng.OnInit {
@@ -36,11 +35,9 @@ export class Component implements ng.OnInit {
 
   heading:string;
 
-  breadcrumbs:libAdminlteWrapper.LabeledLink[];
+  breadcrumbs:wrapper.LabeledLink[];
 
-  title:string;
-
-  fields:libAdminlteFields.Field[];
+  fields:libBootstrapFields.Field[];
 
   backEnd:backEnd.Service;
 
@@ -56,17 +53,16 @@ export class Component implements ng.OnInit {
     this.heading = `Homer Program ${this.id} (Project ${this.projectId})`;
     this.breadcrumbs = [
       becki.HOME,
-      new libAdminlteWrapper.LabeledLink("User", ["Projects"]),
-      new libAdminlteWrapper.LabeledLink("Projects", ["Projects"]),
-      new libAdminlteWrapper.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new libAdminlteWrapper.LabeledLink("Homer Programs", ["Project", {project: this.projectId}]),
-      new libAdminlteWrapper.LabeledLink(`Homer Program ${this.id}`, ["HomerProgram", {project: this.projectId, program: this.id}])
+      new wrapper.LabeledLink("User", ["Projects"]),
+      new wrapper.LabeledLink("Projects", ["Projects"]),
+      new wrapper.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
+      new wrapper.LabeledLink("Homer Programs", ["Project", {project: this.projectId}]),
+      new wrapper.LabeledLink(`Homer Program ${this.id}`, ["HomerProgram", {project: this.projectId, program: this.id}])
     ];
-    this.title = "Homer Program Updating";
     this.fields = [
-      new libAdminlteFields.Field("Name:", "Loading..."),
-      new libAdminlteFields.Field("Description:", "Loading..."),
-      new libAdminlteFields.Field("Code:", `{"blocks":{}}`, "homer-program")
+      new libBootstrapFields.Field("Name", "Loading..."),
+      new libBootstrapFields.Field("Description", "Loading..."),
+      new libBootstrapFields.Field("Code", `{"blocks":{}}`, "homer-program", "glyphicon-console")
     ];
     this.backEnd = backEndService;
     this.events = eventsService;
@@ -90,6 +86,10 @@ export class Component implements ng.OnInit {
         .catch((reason) => {
           this.events.send(reason);
         });
+  }
+
+  onFieldChange():void {
+    "use strict";
   }
 
   onSubmit():void {

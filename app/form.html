@@ -1,0 +1,16 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<form class="clearfix" data-on-submit="onSubmit($event)">
+  <div data-bind-fields="fields" data-on-field-change="onFieldChange($event)">
+    <progress>Loading...</progress>
+  </div>
+  <div class="pull-right">
+    <template data-bind-ng-if="cancellable">
+      <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+    </template>
+    <button class="btn btn-primary" type="submit">Submit</button>
+  </div>
+</form>

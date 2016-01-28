@@ -1,6 +1,6 @@
 /*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -20,6 +20,7 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
 import * as form from "./form";
+import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapFields from "./lib-bootstrap/fields";
 import * as wrapper from "./wrapper";
 
@@ -27,7 +28,9 @@ import * as wrapper from "./wrapper";
   templateUrl: "app/wrapper-form.html",
   directives: [form.Component, wrapper.Component]
 })
-export class Component {
+export class Component implements ng.OnInit {
+
+  issueId:string;
 
   heading:string;
 
@@ -41,23 +44,35 @@ export class Component {
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.heading = "New Project";
+    this.issueId = routeParams.get("issue");
+    this.heading = `New Issue Related to Issue ${this.issueId}`;
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("User", ["Projects"]),
-      new wrapper.LabeledLink("Projects", ["Projects"]),
-      new wrapper.LabeledLink("New Project", ["NewProject"])
+      new wrapper.LabeledLink("Issues", ["Issues"]),
+      new wrapper.LabeledLink(`Issue ${this.issueId}`, ["Issue", {issue: this.issueId}]),
+      new wrapper.LabeledLink("Related Issues", ["Issue", {issue: this.issueId}]),
+      new wrapper.LabeledLink("New Related Issue", ["NewRelatedIssue", {issue: this.issueId}])
     ];
-    this.fields = [
-      new libBootstrapFields.Field("Name", ""),
-      new libBootstrapFields.Field("Description", "")
-    ];
+    this.fields = [new libBootstrapFields.Field("Related Title", "", "select", "glyphicon-list")];
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
+  }
+
+  onInit():void {
+    "use strict";
+
+    this.backEnd.getIssues()
+        .then(issues => {
+          this.events.send(issues);
+          this.fields[0].options = issues.map(issue => new libBootstrapFields.Option(issue.name, issue.postId));
+        })
+        .catch((reason) => {
+          this.events.send(reason);
+        });
   }
 
   onFieldChange():void {
@@ -67,10 +82,10 @@ export class Component {
   onSubmit():void {
     "use strict";
 
-    this.backEnd.createProject(this.fields[0].model, this.fields[1].model)
+    this.backEnd.createIssueLink(this.issueId, this.fields[0].model)
         .then((message) => {
           this.events.send(message);
-          this.router.navigate(["Projects"]);
+          this.router.navigate(["Issue", {issue: this.issueId}]);
         })
         .catch((reason) => {
           this.events.send(reason);
@@ -80,6 +95,6 @@ export class Component {
   onCancel():void {
     "use strict";
 
-    this.router.navigate(["Projects"]);
+    this.router.navigate(["Issue", {issue: this.issueId}]);
   }
 }

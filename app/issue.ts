@@ -20,9 +20,9 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
 import * as form from "./form";
-import * as libAdminlteFields from "./lib-adminlte/fields";
-import * as libAdminlteWrapper from "./lib-adminlte/wrapper";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBootstrapFields from "./lib-bootstrap/fields";
+import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
 import * as wrapper from "./wrapper";
 
 class Comment {
@@ -35,30 +35,22 @@ class Comment {
 
   likes:number;
 
-  constructor(id:string, body:string, date:number, likes:number) {
+  tags:string[];
+
+  editing:boolean;
+
+  fields:libBootstrapFields.Field[];
+
+  constructor(id:string, body:string, date:number, likes:number, tags?:string[]) {
     "use strict";
 
     this.id = id;
     this.body = body;
     this.date = date;
     this.likes = likes;
-  }
-}
-
-class Related {
-
-  id:string;
-
-  itemId:string;
-
-  title:string;
-
-  constructor(id:string, itemId:string, title:string) {
-    "use strict";
-
-    this.id = id;
-    this.itemId = itemId;
-    this.title = title;
+    this.tags = tags;
+    this.editing = false;
+    this.fields = [new libBootstrapFields.Field("Comment", body, "text", "glyphicon-comment")];
   }
 }
 
@@ -76,9 +68,13 @@ class Item {
 
   tags:string[];
 
-  related:Related[];
+  editing:boolean;
 
-  constructor(id:string, body:string, date:number, likes:number, comments:Comment[], tags?:string[], related?:Related[]) {
+  fields:libBootstrapFields.Field[];
+
+  commentCreationFields:libBootstrapFields.Field[];
+
+  constructor(id:string, body:string, date:number, likes:number, comments:Comment[], tags?:string[]) {
     "use strict";
 
     this.id = id;
@@ -87,13 +83,30 @@ class Item {
     this.likes = likes;
     this.comments = comments;
     this.tags = tags;
-    this.related = related;
+    this.editing = false;
+    this.fields = [new libBootstrapFields.Field("Body", body)];
+    this.commentCreationFields = [new libBootstrapFields.Field("New Comment", "", "text", "glyphicon-comment")];
+  }
+}
+
+class Issue extends Item {
+
+  constructor(id:string, type:string, title:string, body:string, date:number, likes:number, comments:Comment[], tags?:string[]) {
+    "use strict";
+
+    super(id, body, date, likes, comments, tags);
+    this.fields = [].concat(
+        [
+          new libBootstrapFields.Field("Type", type),
+          new libBootstrapFields.Field("Title", title)
+        ],
+        this.fields);
   }
 }
 
 @ng.Component({
-  templateUrl: "app/lib-adminlte/wrapper-issue.html",
-  directives: [form.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES, wrapper.Component]
+  templateUrl: "app/issue.html",
+  directives: [form.Component, libBootstrapPanelList.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -101,50 +114,50 @@ export class Component implements ng.OnInit {
 
   heading:string;
 
-  breadcrumbs:libAdminlteWrapper.LabeledLink[];
-
-  itemEditing:{[id:string]: {active:boolean, fields:libAdminlteFields.Field[]}};
+  breadcrumbs:wrapper.LabeledLink[];
 
   items:Array<Item>;
 
-  answerCreation:libAdminlteFields.Field[];
+  answerCreation:libBootstrapFields.Field[];
 
-  commentCreation:{[id:string]: {active:boolean, fields:libAdminlteFields.Field[]}};
+  related:libBootstrapPanelList.Item[];
 
-  commentEditing:{[id:string]: {active:boolean, fields:libAdminlteFields.Field[]}};
+  newRelatedLink:any[];
 
-  linkCreation:libAdminlteFields.Field[];
+  tags:libBootstrapPanelList.Item[];
 
-  linkDeletion:libAdminlteFields.Field[];
+  newTagLink:any[];
 
-  confirmationAddition:libAdminlteFields.Field[];
+  confirmations:libBootstrapPanelList.Item[];
 
-  confirmationRemoval:libAdminlteFields.Field[];
+  newConfirmationLink:any[];
 
   backEnd:backEnd.Service;
 
   events:events.Service;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service) {
+  router:ngRouter.Router;
+
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("issue");
     this.heading = "Loading...";
     this.breadcrumbs = [
       becki.HOME,
-      new libAdminlteWrapper.LabeledLink("Issues", ["Issues"]),
-      new libAdminlteWrapper.LabeledLink(`Issue ${this.id}`, ["Issue", {issue: this.id}])
+      new wrapper.LabeledLink("Issues", ["Issues"]),
+      new wrapper.LabeledLink(`Issue ${this.id}`, ["Issue", {issue: this.id}])
     ];
     this.answerCreation = [
-      new libAdminlteFields.Field("Body:", ""),
-      new libAdminlteFields.Field("Homer program:", `{"blocks":{}}`, "homer-program")
+      new libBootstrapFields.Field("Body", ""),
+      new libBootstrapFields.Field("Homer Program", `{"blocks":{}}`, "homer-program", "glyphicon-console")
     ];
-    this.linkCreation = [new libAdminlteFields.Field("ID:", "", "select")];
-    this.linkDeletion = [new libAdminlteFields.Field("ID:", "", "select", [])];
-    this.confirmationAddition = [new libAdminlteFields.Field("Text:", "")];
-    this.confirmationRemoval = [new libAdminlteFields.Field("Text:", "")];
+    this.newRelatedLink = ["NewRelatedIssue", {issue: this.id}];
+    this.newTagLink = ["NewIssueTag", {issue: this.id}];
+    this.newConfirmationLink = ["NewIssueConfirmation", {issue: this.id}];
     this.backEnd = backEndService;
     this.events = eventsService;
+    this.router = router;
   }
 
   onInit():void {
@@ -164,10 +177,7 @@ export class Component implements ng.OnInit {
             this.backEnd.request("GET", issue.textOfPost),
             this.backEnd.request("GET", issue.comments),
             this.backEnd.request("GET", issue.answers),
-            !issue.linkedAnswers ? [] :
-                this.backEnd.request<libBackEnd.IssueLink[]>("GET", issue.linkedAnswers).then(related => Promise.all(related.map(related2 =>
-                    this.backEnd.request<libBackEnd.Issue>("GET", related2.post).then(issue2 => new Related(related2.linkId, issue2.postId, related2.name))
-                )))
+            issue.linkedAnswers ? this.backEnd.request("GET", issue.linkedAnswers) : []
           ]);
         })
         .then(result => {
@@ -176,126 +186,64 @@ export class Component implements ng.OnInit {
           let body:string;
           let comments:libBackEnd.Comment[];
           let answers:libBackEnd.Answer[];
-          let related:Related[];
+          let related:libBackEnd.IssueLink[];
           [issue, body, comments, answers, related] = result;
           this.heading = `${issue.type}: ${issue.name}`;
-          this.itemEditing = {};
-          this.itemEditing[issue.postId] = {
-            active: false,
-            fields: [
-              new libAdminlteFields.Field("Type:", issue.type),
-              new libAdminlteFields.Field("Title:", issue.name),
-              new libAdminlteFields.Field("Body:", body),
-              new libAdminlteFields.Field("Tags:", issue.hashTags.join(","))
-            ]
-          };
-          this.commentCreation = {};
-          this.commentCreation[issue.postId] = {
-            active: false,
-            fields: [new libAdminlteFields.Field("Body:", "")]
-          };
-          this.commentEditing = {};
-          comments.forEach(comment => {
-            this.commentEditing[comment.postId] = {
-              active: false,
-              fields: [
-                new libAdminlteFields.Field("Body:", comment.textOfPost),
-                new libAdminlteFields.Field("Tags:", comment.hashTags ? comment.hashTags.join(",") : "")
-              ]
-            };
-          });
-          answers.forEach(answer => {
-            this.itemEditing[answer.postId] = {
-              active: false,
-              fields: [
-                new libAdminlteFields.Field("Body:", answer.textOfPost),
-                new libAdminlteFields.Field("Tags:", answer.hashTags ? answer.hashTags.join(",") : "")
-              ]
-            };
-            this.commentCreation[answer.postId] = {
-              active: false,
-              fields: [new libAdminlteFields.Field("Body:", "")]
-            };
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-35
-            /*
-             answer.comments.forEach(comment => {
-             this.commentEditing[comment.postId] = {
-             active: false,
-             fields: [
-             new libAdminlteFields.Field("Body:", comment.textOfPost),
-             new libAdminlteFields.Field("Tags:", comment.hashTags ? comment.hashTags.join(",") : "")
-             ]
-             };
-             });
-             */
-          });
-          let commentsViews = comments.map(comment => new Comment(comment.postId, comment.textOfPost, comment.dateOfCreate, comment.likes));
+          let commentsViews = comments.map(comment => new Comment(comment.postId, comment.textOfPost, comment.dateOfCreate, comment.likes, comment.hashTags));
           this.items = [].concat(
-              new Item(issue.postId, body, issue.dateOfCreate, issue.likes, commentsViews, issue.hashTags, related),
+              new Issue(issue.postId, issue.type, issue.name, body, issue.dateOfCreate, issue.likes, commentsViews, issue.hashTags),
+              // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-35
               answers.map(answer => new Item(
                   answer.postId, answer.textOfPost, answer.dateOfCreate, answer.likes,
                   [], // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-35 answer.comments.map(comment => new Comment(comment.postId, comment.textOfPost, comment.dateOfCreate, comment.likes)),
                   answer.hashTags
               ))
           );
-          this.linkDeletion[0].options = related.map(related2 => new libAdminlteFields.Option(related2.title, related2.id));
-        })
-        .catch((reason) => {
-          this.events.send(reason);
-        });
-    this.backEnd.getIssues()
-        .then(issues => {
-          this.events.send(issues);
-          this.linkCreation[0].options = issues.map(issue => new libAdminlteFields.Option(issue.name, issue.postId));
+          this.related = related.map(related2 => new libBootstrapPanelList.Item(related2.linkId, related2.name, ""));
+          this.tags = issue.hashTags ? issue.hashTags.map(tag => new libBootstrapPanelList.Item(tag, tag, "")) : [];
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-31
+          this.confirmations = [new libBootstrapPanelList.Item(null, "(issue/TYRION-31)", "does not work")];
         })
         .catch((reason) => {
           this.events.send(reason);
         });
   }
 
-  getLink(issue:string):any[] {
+  onItemEditClick(item:Item):void {
     "use strict";
 
-    return ["Issue", {issue}];
+    item.editing = true;
   }
 
-  onItemEditClick(id:string):void {
-    "use strict";
-
-    this.itemEditing[id].active = true;
-  }
-
-  onItemEditingSubmit(id:string):void {
+  onItemEditingSubmit(item:Item):void {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-29
-    switch (id) {
-      case this.id:
-        this.backEnd.updateIssue(this.id, this.itemEditing[this.id].fields[0].model, this.itemEditing[this.id].fields[1].model, this.itemEditing[this.id].fields[2].model, this.itemEditing[this.id].fields[3].model.split(","))
-            .then((message) => {
-              this.events.send(message);
-              this.refresh();
-            })
-            .catch((reason) => {
-              this.events.send(reason);
-            });
-        break;
-      default:
-        this.backEnd.updateAnswer(id, this.itemEditing[id].fields[0].model, this.itemEditing[id].fields[1].model.split(","))
-            .then((message) => {
-              this.events.send(message);
-              this.refresh();
-            })
-            .catch((reason) => {
-              this.events.send(reason);
-            });
+    if (item instanceof Issue) {
+      this.backEnd.updateIssue(item.id, item.fields[0].model, item.fields[1].model, item.fields[2].model, item.tags || [])
+          .then((message) => {
+            this.events.send(message);
+            this.refresh();
+          })
+          .catch((reason) => {
+            this.events.send(reason);
+          });
+    } else {
+      this.backEnd.updateAnswer(item.id, item.fields[0].model, item.tags || [])
+          .then((message) => {
+            this.events.send(message);
+            this.refresh();
+          })
+          .catch((reason) => {
+            this.events.send(reason);
+          });
     }
   }
 
-  onItemEditingCancel(id:string):void {
+  onItemEditingCancel(item:Item):void {
     "use strict";
 
-    this.itemEditing[id].active = false;
+    item.editing = false;
   }
 
   onMinusClick(id:string):void {
@@ -324,35 +272,27 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onItemCommentClick(id:string):void {
+  onItemRemoveClick(item:Item):void {
     "use strict";
 
-    this.commentCreation[id].active = true;
-  }
-
-  onItemRemoveClick(id:string):void {
-    "use strict";
-
-    switch (id) {
-      case this.id:
-        this.backEnd.deleteIssue(this.id)
-            .then((message) => {
-              this.events.send(message);
-              this.refresh();
-            })
-            .catch((reason) => {
-              this.events.send(reason);
-            });
-        break;
-      default:
-        this.backEnd.deleteAnswer(id)
-            .then((message) => {
-              this.events.send(message);
-              this.refresh();
-            })
-            .catch((reason) => {
-              this.events.send(reason);
-            });
+    if (item instanceof Issue) {
+      this.backEnd.deleteIssue(item.id)
+          .then((message) => {
+            this.events.send(message);
+            this.router.navigate(["Issues"]);
+          })
+          .catch((reason) => {
+            this.events.send(reason);
+          });
+    } else {
+      this.backEnd.deleteAnswer(item.id)
+          .then((message) => {
+            this.events.send(message);
+            this.refresh();
+          })
+          .catch((reason) => {
+            this.events.send(reason);
+          });
     }
   }
 
@@ -370,10 +310,10 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onCommentCreationSubmit(id:string):void {
+  onCommentCreationSubmit(item:Item):void {
     "use strict";
 
-    this.backEnd.createComment(id, this.commentCreation[id].fields[0].model)
+    this.backEnd.createComment(item.id, item.commentCreationFields[0].model)
         .then((message) => {
           this.events.send(message);
           this.refresh();
@@ -383,23 +323,16 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onCommentCreationCancel(id:string):void {
+  onCommentEditClick(comment:Comment):void {
     "use strict";
 
-    this.commentCreation[id].active = false;
+    comment.editing = true;
   }
 
-
-  onCommentEditClick(id:string):void {
+  onCommentEditingSubmit(comment:Comment):void {
     "use strict";
 
-    this.commentEditing[id].active = true;
-  }
-
-  onCommentEditingSubmit(id:string):void {
-    "use strict";
-
-    this.backEnd.updateComment(id, this.commentEditing[id].fields[0].model, this.commentEditing[id].fields[1].model.split(","))
+    this.backEnd.updateComment(comment.id, comment.fields[0].model, comment.tags || [])
         .then((message) => {
           this.events.send(message);
           this.refresh();
@@ -409,67 +342,16 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onCommentEditingCancel(id:string):void {
+  onCommentEditingCancel(comment:Comment):void {
     "use strict";
 
-    this.commentEditing[id].active = false;
+    comment.editing = false;
   }
 
   onCommentRemoveClick(id:string):void {
     "use strict";
 
     this.backEnd.deleteComment(id)
-        .then((message) => {
-          this.events.send(message);
-          this.refresh();
-        })
-        .catch((reason) => {
-          this.events.send(reason);
-        });
-  }
-
-  onLinkCreationSubmit():void {
-    "use strict";
-
-    this.backEnd.createIssueLink(this.id, this.linkCreation[0].model)
-        .then((message) => {
-          this.events.send(message);
-          this.refresh();
-        })
-        .catch((reason) => {
-          this.events.send(reason);
-        });
-  }
-
-  onLinkDeletionSubmit():void {
-    "use strict";
-
-    this.backEnd.deleteIssueLink(this.linkDeletion[0].model)
-        .then((message) => {
-          this.events.send(message);
-          this.refresh();
-        })
-        .catch((reason) => {
-          this.events.send(reason);
-        });
-  }
-
-  onConfirmationAdditionSubmit():void {
-    "use strict";
-
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-31
-    this.backEnd.addConfirmationToPost(this.id, this.confirmationAddition[0].model)
-        .then((message) => {
-          this.events.send(message);
-          this.refresh();
-        })
-        .catch((reason) => {
-          this.events.send(reason);
-        });
-  }
-
-  onConfirmationRemovalSubmit():void {
-    this.backEnd.removeConfirmationFromPost(this.id, this.confirmationRemoval[0].model)
         .then((message) => {
           this.events.send(message);
           this.refresh();

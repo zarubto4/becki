@@ -1,0 +1,52 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<h1 class="text-center">{{appName}}</h1>
+<div class="panel-group center-block" id="signing" style="max-width: 330px">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <span class="glyphicon glyphicon-log-in"></span>
+        <a data-toggle="collapse" data-parent="#signing" href="#signing-in">
+          Sign in
+        </a>
+      </h4>
+    </div>
+    <div id="signing-in" class="panel-collapse collapse in">
+      <div class="panel-body">
+        <div data-bind-form="signInFields" data-on-submit="onSignInSubmit($event)">
+          <progress>Loading...</progress>
+        </div>
+        <div class="text-center">
+          <p>or sign in using</p>
+          <button type="button" class="btn btn-default" style="color: #FFF;background-color: #F0AD4E;border-color: #EEA236;" data-on-click="onOpenidSignInClick($event)">
+            OpenID
+          </button>
+          <button type="button" class="btn btn-default" style="color: #FFF;background-color: #337AB7;border-color: #2E6DA4;" data-on-click="onFacebookSignInClick($event)">
+            Facebook
+          </button>
+          <button type="button" class="btn btn-default" style="color: #FFF;background-color: #D9534F;border-color: #D43F3A;" data-on-click="onGoogleSignInClick($event)">
+            Google
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <span class="glyphicon glyphicon-plus"></span>
+        <a class="collapsed" data-toggle="collapse" data-parent="#signing" href="#signing-up">
+          Sign up
+        </a>
+      </h4>
+    </div>
+    <div id="signing-up" class="panel-collapse collapse">
+      <div class="panel-body" data-bind-form="signUpFields" data-on-submit="onSignUpSubmit($event)">
+        <progress>Loading...</progress>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,57 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigation" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" data-bind-router-link="home.link">{{home.label}}</a>
+    </div>
+    <div class="collapse navbar-collapse" id="navigation">
+      <ul class="nav navbar-nav">
+        <li template="ngFor #page of navigation">
+          <a data-bind-router-link="page.link">{{page.label}}</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            {{email}}
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a data-on-click="onSignOutClick($event)">Sign out</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  <div class="page-header">
+    <ol class="breadcrumb pull-right">
+      <li data-bind-class.active="last" template="ngFor #breadcrumb of breadcrumbs; #last = last">
+        <a data-bind-router-link="breadcrumb.link">{{breadcrumb.label}}</a>
+      </li>
+    </ol>
+    <h1>{{heading}}</h1>
+  </div>
+  <ng-content></ng-content>
+</div>
+<nav class="navbar navbar-default navbar-fixed-bottom">
+  <div class="container">
+    <p class="navbar-text pull-right">Version prototype</p>
+    <p class="navbar-text">
+      Copyright &copy; 2015-2016
+      <a href="http://mediacheck.cz/">MEDIA CHECK s.r.o.</a>
+      All rights reserved.
+    </p>
+  </div>
+</nav>

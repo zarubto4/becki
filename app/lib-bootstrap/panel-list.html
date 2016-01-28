@@ -1,0 +1,36 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<div class="panel panel-default">
+  <div class="panel-body" style="padding:0;margin-bottom:-20px;">
+    <div class="list-group">
+      <a class="list-group-item" template="ngFor #item of items">
+        <h4 class="list-group-item-heading">
+          <template data-bind-ng-if="getLink">
+            <a data-bind-router-link="getLink(item)">
+              {{item.name}}
+            </a>
+          </template>
+          <template data-bind-ng-if="!getLink">
+            <a>
+              {{item.name}}
+            </a>
+          </template>
+        </h4>
+        <p class="list-group-item-text">{{item.description}}</p>
+      </a>
+    </div>
+  </div>
+  <div class="panel-footer text-right">
+    <div class="btn-group btn-group-sm">
+      <a class="btn btn-default" data-bind-router-link="newLink">
+        <span class="glyphicon glyphicon-plus"></span>
+      </a>
+      <button type="button" class="btn btn-danger" disabled="disabled">
+        <span class="glyphicon glyphicon-minus"></span>
+      </button>
+    </div>
+  </div>
+</div>

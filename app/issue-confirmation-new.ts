@@ -1,6 +1,6 @@
 /*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -20,6 +20,7 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
 import * as form from "./form";
+import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapFields from "./lib-bootstrap/fields";
 import * as wrapper from "./wrapper";
 
@@ -28,6 +29,8 @@ import * as wrapper from "./wrapper";
   directives: [form.Component, wrapper.Component]
 })
 export class Component {
+
+  issueId:string;
 
   heading:string;
 
@@ -41,20 +44,19 @@ export class Component {
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.heading = "New Project";
+    this.issueId = routeParams.get("issue");
+    this.heading = `New Confirmation (Issue ${this.issueId})`;
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("User", ["Projects"]),
-      new wrapper.LabeledLink("Projects", ["Projects"]),
-      new wrapper.LabeledLink("New Project", ["NewProject"])
+      new wrapper.LabeledLink("Issues", ["Issues"]),
+      new wrapper.LabeledLink(`Issue ${this.issueId}`, ["Issue", {issue: this.issueId}]),
+      new wrapper.LabeledLink("Confirmations", ["Issue", {issue: this.issueId}]),
+      new wrapper.LabeledLink("New Confirmation", ["NewIssueConfirmation", {issue: this.issueId}])
     ];
-    this.fields = [
-      new libBootstrapFields.Field("Name", ""),
-      new libBootstrapFields.Field("Description", "")
-    ];
+    this.fields = [new libBootstrapFields.Field("Text", "")];
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -67,10 +69,11 @@ export class Component {
   onSubmit():void {
     "use strict";
 
-    this.backEnd.createProject(this.fields[0].model, this.fields[1].model)
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-31
+    this.backEnd.addConfirmationToPost(this.issueId, this.fields[0].model)
         .then((message) => {
           this.events.send(message);
-          this.router.navigate(["Projects"]);
+          this.router.navigate(["Issue", {issue: this.issueId}]);
         })
         .catch((reason) => {
           this.events.send(reason);
@@ -80,6 +83,6 @@ export class Component {
   onCancel():void {
     "use strict";
 
-    this.router.navigate(["Projects"]);
+    this.router.navigate(["Issue", {issue: this.issueId}]);
   }
 }

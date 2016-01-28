@@ -20,82 +20,56 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
 import * as form from "./form";
-import * as libAdminlteFields from "./lib-adminlte/fields";
-import * as libAdminlteInbox from "./lib-adminlte/inbox";
-import * as libAdminlteTable from "./lib-adminlte/table";
-import * as libAdminlteTableWithActions from "./lib-adminlte/table-with-actions";
-import * as libAdminlteWrapper from "./lib-adminlte/wrapper";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBootstrapFields from "./lib-bootstrap/fields";
+import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/project.html",
   directives: [
     form.Component,
-    libAdminlteInbox.Component,
-    libAdminlteTableWithActions.Component,
+    libBootstrapPanelList.Component,
     wrapper.Component
   ]
 })
-export class Component {
-
-  static ASAP = "asap";
-
-  static IMMEDIATELY = "immediately";
-
-  static LATER = "later";
+export class Component implements ng.OnInit {
 
   id:string;
 
   heading:string;
 
-  breadcrumbs:libAdminlteWrapper.LabeledLink[];
+  breadcrumbs:wrapper.LabeledLink[];
 
-  projectFields:libAdminlteFields.Field[];
+  projectFields:libBootstrapFields.Field[];
 
-  devicePrograms:any[];
+  collaborators:libBootstrapPanelList.Item[];
 
-  deviceProgramProperties:libAdminlteTable.Property[];
+  newCollaboratorLink:any[];
+
+  devicePrograms:libBootstrapPanelList.Item[];
 
   newDeviceProgramLink:any[];
 
-  devices:libBackEnd.Device[];
-
-  deviceProperties:libAdminlteTable.Property[];
-
-  deviceFields:libAdminlteFields.Field[];
-
-  deviceQueue:any[];
-
-  deviceQueueProperties:libAdminlteTable.Property[];
-
-  deviceQueueFields:libAdminlteFields.Field[];
-
-  standalonePrograms:any[];
-
-  standaloneProgramProperties:libAdminlteTable.Property[];
+  standalonePrograms:libBootstrapPanelList.Item[];
 
   newStandaloneProgramLink:any[];
 
-  homerPrograms:any[];
-
-  homerProgramProperties:libAdminlteTable.Property[];
+  homerPrograms:libBootstrapPanelList.Item[];
 
   newHomerProgramLink:any[];
 
-  homers:libBackEnd.Homer[];
+  devices:libBootstrapPanelList.Item[];
 
-  homerProperties:libAdminlteTable.Property[];
+  additionalDeviceLink:any[];
 
-  homerFields:libAdminlteFields.Field[];
+  homers:libBootstrapPanelList.Item[];
 
-  homerQueue:any[];
+  additionalHomerLink:any[];
 
-  homerQueueProperties:libAdminlteTable.Property[];
+  uploadQueue:libBootstrapPanelList.Item[];
 
-  homerQueueFields:libAdminlteFields.Field[];
-
-  collaboratorFields:libAdminlteFields.Field[];
+  newUploadLink:any[];
 
   backEnd:backEnd.Service;
 
@@ -110,64 +84,52 @@ export class Component {
     this.heading = `Project ${this.id}`;
     this.breadcrumbs = [
       becki.HOME,
-      new libAdminlteWrapper.LabeledLink("User", ["Projects"]),
-      new libAdminlteWrapper.LabeledLink("Projects", ["Projects"]),
-      new libAdminlteWrapper.LabeledLink(`Project ${this.id}`, ["Project", {project: this.id}])
+      new wrapper.LabeledLink("User", ["Projects"]),
+      new wrapper.LabeledLink("Projects", ["Projects"]),
+      new wrapper.LabeledLink(`Project ${this.id}`, ["Project", {project: this.id}])
     ];
     this.projectFields = [
-      new libAdminlteFields.Field("Name:", "Loading..."),
-      new libAdminlteFields.Field("Description:", "Loading...")
+      new libBootstrapFields.Field("Name", "Loading..."),
+      new libBootstrapFields.Field("Description", "Loading...")
+    ];
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-21
+    this.collaborators = [
+      new libBootstrapPanelList.Item(null, "(issue/TYRION-21)", "does not work"),
+      new libBootstrapPanelList.Item(null, "(issue/TYRION-21)", "does not work")
+    ];
+    this.newCollaboratorLink = ["NewProjectCollaborator", {project: this.id}];
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-13
+    this.devicePrograms = [
+      new libBootstrapPanelList.Item(null, "(issue/TYRION-13)", "does not work"),
+      new libBootstrapPanelList.Item(null, "(issue/TYRION-13)", "does not work"),
+      new libBootstrapPanelList.Item(null, "(issue/TYRION-13)", "does not work")
     ];
     this.newDeviceProgramLink = ["NewDeviceProgram", {project: this.id}];
-    this.deviceProperties = [
-      new libAdminlteTable.Property("ID", "hwName"),
-      new libAdminlteTable.Property("Type", "typeOfDevice")
-    ];
-    this.deviceFields = [
-      new libAdminlteFields.Field("ID:", "")
-    ];
-    this.deviceQueueFields = [
-      new libAdminlteFields.Field("Device:", "", "select"),
-      new libAdminlteFields.Field("Program:", "", "select")
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-36
+    this.standalonePrograms = [
+      new libBootstrapPanelList.Item(null, "(issue/TYRION-36)", "does not work")
     ];
     this.newStandaloneProgramLink = ["NewStandaloneProgram", {project: this.id}];
-    this.homerProgramProperties = [
-      new libAdminlteTable.Property("Name", "programName"),
-      new libAdminlteTable.Property("Description", "programDescription")
-    ];
     this.newHomerProgramLink = ["NewHomerProgram", {project: this.id}];
-    this.homerProperties = [
-      new libAdminlteTable.Property("ID", "homerId")
+    this.additionalDeviceLink = ["NewProjectDevice", {project: this.id}];
+    this.additionalHomerLink = ["NewProjectHomer", {project: this.id}];
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-15
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-24
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-25
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-26
+    this.uploadQueue = [
+      new libBootstrapPanelList.Item(null, "(issue/TYRION-15)", "does not work"),
+      new libBootstrapPanelList.Item(null, "(issue/TYRION-24)", "does not work"),
+      new libBootstrapPanelList.Item(null, "(issue/TYRION-25)", "does not work"),
+      new libBootstrapPanelList.Item(null, "(issue/TYRION-26)", "does not work")
     ];
-    this.homerFields = [
-      new libAdminlteFields.Field("ID:", "")
-    ];
-    this.homerQueueFields = [
-      new libAdminlteFields.Field("Homer:", "", "select"),
-      new libAdminlteFields.Field("Program:", "", "select"),
-      new libAdminlteFields.Field("When:", "", "select", [
-        new libAdminlteFields.Option("Immediately", Component.IMMEDIATELY),
-        new libAdminlteFields.Option("As soon as possible", Component.ASAP),
-        new libAdminlteFields.Option("Later", Component.LATER)
-      ]),
-      new libAdminlteFields.Field("Since:", Date.now().toString()),
-      new libAdminlteFields.Field("Until:", (Date.now() + 7 * 24 * 60 * 60 * 1000).toString())
-    ];
-    this.collaboratorFields = [
-      new libAdminlteFields.Field("ID:", "")
-    ];
+    this.newUploadLink = ["NewProjectUpload", {project: this.id}];
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
   }
 
   onInit():void {
-    "use strict";
-
-    this.refresh();
-  }
-
-  refresh():void {
     "use strict";
 
     this.backEnd.getProject(this.id)
@@ -184,26 +146,17 @@ export class Component {
         .then(result => {
           this.events.send(result);
           let project:libBackEnd.Project;
-          let boards:libBackEnd.Device[];
+          let devices:libBackEnd.Device[];
           let homers:libBackEnd.Homer[];
           let programs:libBackEnd.HomerProgram[];
-          [project, boards, homers, programs] = result;
+          [project, devices, homers, programs] = result;
           this.projectFields[0].model = project.projectName;
           this.projectFields[1].model = project.projectDescription;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-13
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-14
-          this.devices = boards;
-          this.deviceQueueFields[0].options = boards.map(device =>
-              new libAdminlteFields.Option(device.hwName, device.hwName)
-          );
-          this.homerPrograms = programs;
-          this.homers = homers;
-          this.homerQueueFields[0].options = homers.map(homer =>
-              new libAdminlteFields.Option(homer.homerId, homer.homerId)
-          );
-          this.homerQueueFields[1].options = programs.map(program =>
-              new libAdminlteFields.Option(program.programName, program.programId)
-          );
+          this.devices = devices.map(device => new libBootstrapPanelList.Item(device.hwName, device.hwName, device.typeOfDevice));
+          this.homerPrograms = programs.map(program => new libBootstrapPanelList.Item(program.programId, program.programName, program.programDescription));
+          this.homers = homers.map(homer => new libBootstrapPanelList.Item(homer.homerId, homer.homerId, null));
         })
         .catch((reason) => {
           this.events.send(reason);
@@ -218,88 +171,9 @@ export class Component {
         .catch((reason) => this.events.send(reason));
   }
 
-  onDeviceAdditionSubmit():void {
+  getHomerProgramLink():(program:libBootstrapPanelList.Item)=>any[] {
     "use strict";
 
-    this.backEnd.addDeviceToProject(this.deviceFields[0].model, this.id)
-        .then((message) => {
-          this.events.send(message);
-          this.refresh();
-        })
-        .catch((reason) => {
-          this.events.send(reason);
-        });
-  }
-
-  onDeviceUpdatingSubmit():void {
-    "use strict";
-
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-15
-  }
-
-  getHomerProgramLink():(program:libBackEnd.HomerProgram)=>any[] {
-    "use strict";
-
-    return (program) => ["HomerProgram", {project: this.id, program: program.programId}];
-  }
-
-  onHomerAdditionSubmit():void {
-    "use strict";
-
-    this.backEnd.addHomerToProject(this.homerFields[0].model, this.id)
-        .then((message) => {
-          this.events.send(message);
-          this.refresh();
-        })
-        .catch((reason) => {
-          this.events.send(reason);
-        });
-  }
-
-  onHomerUpdatingSubmit():void {
-    "use strict";
-
-    let promise:Promise<string>;
-    switch (this.homerQueueFields[2].model) {
-      case Component.IMMEDIATELY:
-        promise = this.backEnd.uploadToHomerNow(this.homerQueueFields[0].model, this.homerQueueFields[1].model);
-        break;
-      case Component.ASAP:
-        promise = this.backEnd.uploadToHomerAsap(this.homerQueueFields[0].model, this.homerQueueFields[1].model, this.homerQueueFields[4].model);
-        break;
-      case Component.LATER:
-        promise = this.backEnd.uploadToHomerLater(this.homerQueueFields[0].model, this.homerQueueFields[1].model, this.homerQueueFields[3].model, this.homerQueueFields[4].model);
-        break;
-      default:
-        return;
-    }
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-24
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-25
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-26
-    promise.then((message) => {
-          this.events.send(message);
-          this.refresh();
-        })
-        .catch((reason) => {
-          this.events.send(reason);
-        });
-  }
-
-  onCollaboratorAdditionSubmit():void {
-    "use strict";
-    // TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-21
-  }
-
-  onDeletionSubmit():void {
-    "use strict";
-
-    this.backEnd.deleteProject(this.id)
-        .then((message) => {
-          this.events.send(message);
-          this.router.navigate(["Projects"]);
-        })
-        .catch((reason) => {
-          this.events.send(reason);
-        });
+    return (program) => ["HomerProgram", {project: this.id, program: program.id}];
   }
 }

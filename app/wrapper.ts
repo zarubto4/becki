@@ -19,19 +19,31 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as libAdminlteWrapper from "./lib-adminlte/wrapper";
+
+export class LabeledLink {
+
+  label:string;
+
+  link:any[];
+
+  constructor(label:string, link:any[]) {
+    "use strict";
+
+    this.label = label;
+    this.link = link;
+  }
+}
 
 @ng.Component({
   selector: "[wrapper]",
-  templateUrl: "app/lib-adminlte/wrapper.html",
+  templateUrl: "app/wrapper.html",
   directives: [ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
   inputs: ["heading: wrapper", "breadcrumbs"]
 })
 export class Component implements ng.OnInit {
+  home:LabeledLink;
 
-  home:libAdminlteWrapper.LabeledLink;
-
-  navigation:libAdminlteWrapper.LabeledLink[];
+  navigation:LabeledLink[];
 
   email:string;
 
@@ -55,7 +67,7 @@ export class Component implements ng.OnInit {
 
     // TODO https://github.com/angular/angular/issues/4112
     if (!window.localStorage.getItem("authEmail")) {
-      this.router.navigate(["SigningIn"]);
+      this.router.navigate(["Signing"]);
     }
     this.email = window.localStorage.getItem("authEmail");
   }
@@ -66,7 +78,7 @@ export class Component implements ng.OnInit {
     this.backEnd.deleteToken()
         .then((message) => {
           this.events.send(message);
-          this.router.navigate(["SigningIn"]);
+          this.router.navigate(["Signing"]);
         })
         .catch((reason) => {
           this.events.send(reason);

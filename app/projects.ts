@@ -1,6 +1,6 @@
 /*
- * © 2015 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -19,27 +19,21 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as libAdminlteInbox from "./lib-adminlte/inbox";
-import * as libAdminlteTable from "./lib-adminlte/table";
-import * as libAdminlteWrapper from "./lib-adminlte/wrapper";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
-  templateUrl: "app/lib-adminlte/wrapper-inbox.html",
-  directives: [libAdminlteInbox.Component, wrapper.Component],
+  templateUrl: "app/wrapper-list.html",
+  directives: [libBootstrapPanelList.Component, wrapper.Component],
 })
 export class Component implements ng.OnInit {
 
   heading:string;
 
-  breadcrumbs:libAdminlteWrapper.LabeledLink[];
+  breadcrumbs:wrapper.LabeledLink[];
 
-  title:string;
-
-  properties:libAdminlteTable.Property[];
-
-  objects:libBackEnd.Project[];
+  items:libBootstrapPanelList.Item[];
 
   newLink:any[];
 
@@ -55,15 +49,9 @@ export class Component implements ng.OnInit {
     this.heading = "Projects";
     this.breadcrumbs = [
       becki.HOME,
-      new libAdminlteWrapper.LabeledLink("User", ["Projects"]),
-      new libAdminlteWrapper.LabeledLink("Projects", ["Projects"])
+      new wrapper.LabeledLink("User", ["Projects"]),
+      new wrapper.LabeledLink("Projects", ["Projects"])
     ];
-    this.title = "Projects";
-    this.properties = [
-      new libAdminlteTable.Property("Name", "projectName"),
-      new libAdminlteTable.Property("Description", "projectDescription")
-    ];
-    this.objects = [];
     this.newLink = ["NewProject"];
     this.backEnd = backEndService;
     this.events = eventsService;
@@ -76,17 +64,16 @@ export class Component implements ng.OnInit {
     this.backEnd.getProjects()
         .then((projects) => {
           this.events.send(projects);
-          this.objects = projects;
+          this.items = projects.map(project => new libBootstrapPanelList.Item(project.projectId, project.projectName, project.projectDescription));
         })
         .catch((reason) => {
           this.events.send(reason);
         });
   }
 
-  getLink(project:libBackEnd.Project):any[] {
+  getLink(project:libBootstrapPanelList.Item):any[] {
     "use strict";
 
-    return ["Project", {project: project.projectId}];
+    return ["Project", {project: project.id}];
   }
 }
-

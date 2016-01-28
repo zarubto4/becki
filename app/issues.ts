@@ -18,31 +18,24 @@ import * as ng from "angular2/angular2";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as libAdminlteFields from "./lib-adminlte/fields";
-import * as libAdminlteInbox from "./lib-adminlte/inbox";
-import * as libAdminlteTable from "./lib-adminlte/table";
-import * as libAdminlteTableWithActions from "./lib-adminlte/table-with-actions";
-import * as libAdminlteWrapper from "./lib-adminlte/wrapper";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBootstrapFields from "./lib-bootstrap/fields";
+import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/issues.html",
-  directives: [libAdminlteInbox.Component, libAdminlteTableWithActions.Component, wrapper.Component],
+  directives: [libBootstrapPanelList.Component, wrapper.Component],
 })
 export class Component implements ng.OnInit {
 
-  breadcrumbs:libAdminlteWrapper.LabeledLink[];
+  breadcrumbs:wrapper.LabeledLink[];
 
-  types:libBackEnd.IssueType[];
+  types:libBootstrapPanelList.Item[];
 
-  typeProperties:libAdminlteTable.Property[];
+  issues:libBootstrapPanelList.Item[];
 
-  typeFields:libAdminlteFields.Field[];
-
-  issues:libBackEnd.Issue[];
-
-  issueProperties:libAdminlteTable.Property[];
+  newTypeLink:any[];
 
   newLink:any[];
 
@@ -55,18 +48,9 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new libAdminlteWrapper.LabeledLink("Issues", ["Issues"])
+      new wrapper.LabeledLink("Issues", ["Issues"])
     ];
-    this.typeProperties = [
-      new libAdminlteTable.Property("Name", "type")
-    ];
-    this.typeFields = [
-      new libAdminlteFields.Field("Name:", "")
-    ];
-    this.issueProperties = [
-      new libAdminlteTable.Property("Name", "name"),
-      new libAdminlteTable.Property("Type", "type")
-    ];
+    this.newTypeLink = ["NewIssueType"];
     this.newLink = ["NewIssue"];
     this.backEnd = backEndService;
     this.events = eventsService;
@@ -75,16 +59,10 @@ export class Component implements ng.OnInit {
   onInit():void {
     "use strict";
 
-    this.refresh();
-  }
-
-  refresh():void {
-    "use strict";
-
     this.backEnd.getIssueTypes()
         .then(types => {
           this.events.send(types);
-          this.types = types;
+          this.types = types.map(type => new libBootstrapPanelList.Item(type.type, type.type, null));
         })
         .catch((reason) => {
           this.events.send(reason);
@@ -93,29 +71,16 @@ export class Component implements ng.OnInit {
     this.backEnd.getIssues()
         .then(issues => {
           this.events.send(issues);
-          this.issues = issues;
+          this.issues = issues.map(issue => new libBootstrapPanelList.Item(issue.postId, issue.name, issue.type));
         })
         .catch((reason) => {
           this.events.send(reason);
         });
   }
 
-  onTypeAdditionSubmit():void {
+  getLink(issue:libBootstrapPanelList.Item):any[] {
     "use strict";
 
-    this.backEnd.createIssueType(this.typeFields[0].model)
-        .then((message) => {
-          this.events.send(message);
-          this.refresh();
-        })
-        .catch((reason) => {
-          this.events.send(reason);
-        });
-  }
-
-  getLink(issue:libBackEnd.Issue):any[] {
-    "use strict";
-
-    return ["Issue", {issue: issue.postId}];
+    return ["Issue", {issue: issue.id}];
   }
 }

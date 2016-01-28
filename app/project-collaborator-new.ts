@@ -1,6 +1,6 @@
 /*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -29,6 +29,8 @@ import * as wrapper from "./wrapper";
 })
 export class Component {
 
+  projectId:string;
+
   heading:string;
 
   breadcrumbs:wrapper.LabeledLink[];
@@ -41,19 +43,21 @@ export class Component {
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.heading = "New Project";
+    this.projectId = routeParams.get("project");
+    this.heading = `New Collaborator (Project ${this.projectId})`;
     this.breadcrumbs = [
       becki.HOME,
       new wrapper.LabeledLink("User", ["Projects"]),
       new wrapper.LabeledLink("Projects", ["Projects"]),
-      new wrapper.LabeledLink("New Project", ["NewProject"])
+      new wrapper.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
+      new wrapper.LabeledLink("Collaborators", ["Project", {project: this.projectId}]),
+      new wrapper.LabeledLink("New Collaborator", ["NewProjectCollaborator", {project: this.projectId}])
     ];
     this.fields = [
-      new libBootstrapFields.Field("Name", ""),
-      new libBootstrapFields.Field("Description", "")
+      new libBootstrapFields.Field("ID", "", "text", "glyphicon-user")
     ];
     this.backEnd = backEndService;
     this.events = eventsService;
@@ -67,19 +71,12 @@ export class Component {
   onSubmit():void {
     "use strict";
 
-    this.backEnd.createProject(this.fields[0].model, this.fields[1].model)
-        .then((message) => {
-          this.events.send(message);
-          this.router.navigate(["Projects"]);
-        })
-        .catch((reason) => {
-          this.events.send(reason);
-        });
+    // TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-21
   }
 
   onCancel():void {
     "use strict";
 
-    this.router.navigate(["Projects"]);
+    this.router.navigate(["Project", {project: this.projectId}]);
   }
 }

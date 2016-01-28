@@ -4,14 +4,60 @@
   -->
 
 <div data-bind-wrapper="heading" data-bind-breadcrumbs="breadcrumbs">
-  <div data-bind-form="projectFields" data-form-title="Project" data-on-submit="onUpdatingSubmit($event)"></div>
-  <div data-bind-inbox="devicePrograms" data-inbox-title="Device Programs" data-bind-object-properties="deviceProgramProperties" data-bind-get-object-link="getDeviceProgramLink" data-bind-new-link="newDeviceProgramLink"></div>
-  <div data-bind-table-with-actions="devices" data-table-title="Devices" data-bind-object-properties="deviceProperties" data-action-title="Device Addition" data-bind-action-fields="deviceFields" data-on-submit="onDeviceAdditionSubmit($event)"></div>
-  <div data-bind-table-with-actions="deviceQueue" data-table-title="Device Upload Queue" data-bind-object-properties="deviceQueueProperties" data-action-title="Device Program Uploading" data-bind-action-fields="deviceQueueFields" data-on-submit="onDeviceUpdatingSubmit($event)"></div>
-  <div data-bind-inbox="standalonePrograms" data-inbox-title="Standalone Programs" data-bind-object-properties="standaloneProgramProperties" data-bind-new-link="newStandaloneProgramLink"></div>
-  <div data-bind-inbox="homerPrograms" data-inbox-title="Homer Programs" data-bind-object-properties="homerProgramProperties" data-bind-get-object-link="getHomerProgramLink()" data-bind-new-link="newHomerProgramLink"></div>
-  <div data-bind-table-with-actions="homers" data-table-title="Homers" data-bind-object-properties="homerProperties" data-action-title="Homer Addition" data-bind-action-fields="homerFields" data-on-submit="onHomerAdditionSubmit($event)"></div>
-  <div data-bind-table-with-actions="homerQueue" data-table-title="Homers Upload Queue" data-bind-object-properties="homerQueueProperties" data-action-title="Homer Program Uploading" data-bind-action-fields="homerQueueFields" data-on-submit="onHomerUpdatingSubmit($event)"></div>
-  <div data-bind-table-with-actions data-table-title="Collaborators" data-action-title="Collaborator Addition" data-bind-action-fields="collaboratorFields" data-on-submit="onCollaboratorAdditionSubmit($event)"></div>
-  <div data-bind-form data-form-title="Project Deletion" data-on-submit="onDeletionSubmit($event)"></div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-8">
+      <h2>Details</h2>
+      <div data-bind-form="projectFields" data-on-submit="onUpdatingSubmit($event)">
+        <progress>Loading...</progress>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-4">
+      <h2>Collaborators</h2>
+      <div data-bind-panel-list="collaborators" data-bind-new-link="newCollaboratorLink">
+        <progress>Loading...</progress>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-4">
+      <h2>Device Programs</h2>
+      <div data-bind-panel-list="devicePrograms" data-bind-get-object-link="getDeviceProgramLink" data-bind-new-link="newDeviceProgramLink">
+        <progress>Loading...</progress>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-4">
+      <h2>Standalone Programs</h2>
+      <div data-bind-panel-list="standalonePrograms" data-bind-new-link="newStandaloneProgramLink">
+        <progress>Loading...</progress>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-4">
+      <h2>Homer Programs</h2>
+      <div data-bind-panel-list="homerPrograms" data-bind-get-object-link="getHomerProgramLink()" data-bind-new-link="newHomerProgramLink">
+        <progress>Loading...</progress>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-6">
+      <h2>Devices</h2>
+      <div data-bind-panel-list="devices" data-bind-new-link="additionalDeviceLink">
+        <progress>Loading...</progress>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-6">
+      <h2>Homers</h2>
+      <div data-bind-panel-list="homers" data-bind-new-link="additionalHomerLink">
+        <progress>Loading...</progress>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <h2>Upload Queue</h2>
+      <div data-bind-panel-list="uploadQueue" data-bind-new-link="newUploadLink">
+        <progress>Loading...</progress>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,6 +1,6 @@
 /*
- * © 2015 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -13,12 +13,12 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
-import * as libAdminlteWrapper from "./lib-adminlte/wrapper";
+import * as wrapper from "./wrapper";
 
-export const HOME = new libAdminlteWrapper.LabeledLink("Back end", ["Devices"]);
+export const HOME = new wrapper.LabeledLink("Back end", ["Devices"]);
 
 export const NAVIGATION = [
-  new libAdminlteWrapper.LabeledLink("Devices", ["Devices"]),
-  new libAdminlteWrapper.LabeledLink("Projects", ["Projects"]),
-  new libAdminlteWrapper.LabeledLink("Issues", ["Issues"])
+  new wrapper.LabeledLink("Devices", ["Devices"]),
+  new wrapper.LabeledLink("Projects", ["Projects"]),
+  new wrapper.LabeledLink("Issues", ["Issues"])
 ];

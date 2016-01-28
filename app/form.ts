@@ -16,22 +16,45 @@
 import * as ng from "angular2/angular2";
 
 import * as fieldCustom from "./field-custom";
-import * as libAdminlteForm from "./lib-adminlte/form";
+import * as libBootstrapFields from "./lib-bootstrap/fields";
 
 @ng.Component({
   selector: "[fields]",
-  templateUrl: "app/lib-adminlte/fields.html",
+  templateUrl: "app/lib-bootstrap/fields.html",
   directives: [fieldCustom.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES],
-  inputs: ["fields"]
+  inputs: ["fields"],
+  outputs: ["fieldChange"]
 })
-class Fields {
+class Fields extends libBootstrapFields.Component {
 }
 
 @ng.Component({
   selector: "[form]",
-  templateUrl: "app/lib-adminlte/form.html",
-  directives: [Fields, ng.FORM_DIRECTIVES],
-  inputs: ["title: formTitle", "fields: form"]
+  templateUrl: "app/form.html",
+  directives: [Fields, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES],
+  inputs: ["fields: form", "cancellable"]
 })
-export class Component extends libAdminlteForm.Component {
+export class Component {
+
+  @ng.Output()
+  fieldChange = new ng.EventEmitter();
+
+  @ng.Output()
+  cancel = new ng.EventEmitter();
+
+  onFieldChange(field:libBootstrapFields.Field):void {
+    "use strict";
+
+    this.fieldChange.next(field);
+  }
+
+  onSubmit():void {
+    "use strict";
+  }
+
+  onCancelClick(event:Event):void {
+    "use strict";
+
+    this.cancel.next(event);
+  }
 }

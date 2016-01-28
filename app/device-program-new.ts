@@ -20,12 +20,11 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
 import * as form from "./form";
-import * as libAdminlteFields from "./lib-adminlte/fields";
-import * as libAdminlteWrapper from "./lib-adminlte/wrapper";
+import * as libBootstrapFields from "./lib-bootstrap/fields";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
-  templateUrl: "app/lib-adminlte/wrapper-form.html",
+  templateUrl: "app/wrapper-form.html",
   directives: [form.Component, wrapper.Component]
 })
 export class Component {
@@ -34,11 +33,9 @@ export class Component {
 
   heading:string;
 
-  breadcrumbs:libAdminlteWrapper.LabeledLink[];
+  breadcrumbs:wrapper.LabeledLink[];
 
-  title:string;
-
-  fields:libAdminlteFields.Field[];
+  fields:libBootstrapFields.Field[];
 
   backEnd:backEnd.Service;
 
@@ -53,22 +50,25 @@ export class Component {
     this.heading = `New Device Program (Project ${this.projectId})`;
     this.breadcrumbs = [
       becki.HOME,
-      new libAdminlteWrapper.LabeledLink("User", ["Projects"]),
-      new libAdminlteWrapper.LabeledLink("Projects", ["Projects"]),
-      new libAdminlteWrapper.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new libAdminlteWrapper.LabeledLink("Device Programs", ["Project", {project: this.projectId}]),
-      new libAdminlteWrapper.LabeledLink("New Device Program", ["NewDeviceProgram", {project: this.projectId}])
+      new wrapper.LabeledLink("User", ["Projects"]),
+      new wrapper.LabeledLink("Projects", ["Projects"]),
+      new wrapper.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
+      new wrapper.LabeledLink("Device Programs", ["Project", {project: this.projectId}]),
+      new wrapper.LabeledLink("New Device Program", ["NewDeviceProgram", {project: this.projectId}])
     ];
-    this.title = "Device Program Creation";
     this.fields = [
-      new libAdminlteFields.Field("Name:", ""),
-      new libAdminlteFields.Field("Description:", ""),
-      new libAdminlteFields.Field("Libraries:", ""),
-      new libAdminlteFields.Field("Code:", "", "c")
+      new libBootstrapFields.Field("Name", ""),
+      new libBootstrapFields.Field("Description", ""),
+      new libBootstrapFields.Field("Libraries", "", "text", "glyphicon-book"),
+      new libBootstrapFields.Field("Code", "", "c", "glyphicon-console")
     ];
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
+  }
+
+  onFieldChange():void {
+    "use strict";
   }
 
   onSubmit():void {

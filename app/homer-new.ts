@@ -1,6 +1,6 @@
 /*
- * © 2015 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -20,23 +20,20 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
 import * as form from "./form";
-import * as libAdminlteFields from "./lib-adminlte/fields";
-import * as libAdminlteWrapper from "./lib-adminlte/wrapper";
+import * as libBootstrapFields from "./lib-bootstrap/fields";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
-  templateUrl: "app/lib-adminlte/wrapper-form.html",
+  templateUrl: "app/wrapper-form.html",
   directives: [form.Component, wrapper.Component]
 })
 export class Component {
 
   heading:string;
 
-  breadcrumbs:libAdminlteWrapper.LabeledLink[];
+  breadcrumbs:wrapper.LabeledLink[];
 
-  title:string;
-
-  fields:libAdminlteFields.Field[];
+  fields:libBootstrapFields.Field[];
 
   backEnd:backEnd.Service;
 
@@ -50,14 +47,17 @@ export class Component {
     this.heading = "New Homer";
     this.breadcrumbs = [
       becki.HOME,
-      new libAdminlteWrapper.LabeledLink("Homers", ["Devices"]),
-      new libAdminlteWrapper.LabeledLink("New Homer", ["NewHomer"])
+      new wrapper.LabeledLink("Homers", ["Devices"]),
+      new wrapper.LabeledLink("New Homer", ["NewHomer"])
     ];
-    this.title = "Homer Registration";
-    this.fields = [new libAdminlteFields.Field("ID:", "")];
+    this.fields = [new libBootstrapFields.Field("ID", "")];
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
+  }
+
+  onFieldChange():void {
+    "use strict";
   }
 
   onSubmit():void {
