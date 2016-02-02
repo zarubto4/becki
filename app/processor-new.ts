@@ -1,6 +1,6 @@
 /*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -45,16 +45,18 @@ export class Component implements ng.OnInit {
   constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.heading = "New Issue";
+    this.heading = "New Processor";
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("Issues", ["Issues"]),
-      new wrapper.LabeledLink("New Issue", ["NewIssue"])
+      new wrapper.LabeledLink("Processors", ["Devices"]),
+      new wrapper.LabeledLink("New Processor", ["NewProcessor"])
     ];
     this.fields = [
-      new libBootstrapFields.Field("Type", "", "select"),
-      new libBootstrapFields.Field("Title", ""),
-      new libBootstrapFields.Field("Body", "")
+      new libBootstrapFields.Field("Model name", ""),
+      new libBootstrapFields.Field("Model code", ""),
+      new libBootstrapFields.Field("Description", ""),
+      libBootstrapFields.Field.fromNumber("Speed", 0, "number", "glyphicon-dashboard"),
+      new libBootstrapFields.Field("Groups of libraries", "", "select", "glyphicon-book", [], true)
     ];
     this.backEnd = backEndService;
     this.events = eventsService;
@@ -64,10 +66,10 @@ export class Component implements ng.OnInit {
   onInit():void {
     "use strict";
 
-    this.backEnd.getIssueTypes()
-        .then((types) => {
-          this.events.send(types);
-          this.fields[0].options = types.map(type => new libBootstrapFieldSelect.Option(type.type, type.id));
+    this.backEnd.getLibraryGroups()
+        .then((groups) => {
+          this.events.send(groups);
+          this.fields[4].options = groups.map(group => new libBootstrapFieldSelect.Option(group.groupName, group.id));
         })
         .catch((reason) => {
           this.events.send(reason);
@@ -81,10 +83,12 @@ export class Component implements ng.OnInit {
   onSubmit():void {
     "use strict";
 
-    this.backEnd.createIssue(this.fields[0].model, this.fields[1].model, this.fields[2].model, [])
+    // TODO: https://github.com/angular/angular/issues/4427
+    let groups = this.fields[4].options.filter(option => option.selected).map(option => option.value);
+    this.backEnd.createProcessor(this.fields[0].model, this.fields[1].model, this.fields[2].model, this.fields[3].getNumber(), groups)
         .then((message) => {
           this.events.send(message);
-          this.router.navigate(["Issues"]);
+          this.router.navigate(["Devices"]);
         })
         .catch((reason) => {
           this.events.send(reason);
@@ -94,6 +98,6 @@ export class Component implements ng.OnInit {
   onCancel():void {
     "use strict";
 
-    this.router.navigate(["Issues"]);
+    this.router.navigate(["Devices"]);
   }
 }

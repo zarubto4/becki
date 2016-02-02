@@ -9,22 +9,10 @@
       <span class="glyphicon {{fieldSpec.icon}}"></span>
       {{fieldSpec.label}}
     </label>
-    <template data-bind-ng-switch-when="'text'">
-      <input type="text" class="form-control" data-bindon-ng-model="fieldSpec.model" data-on-ng-model-change="onModelChange(fieldSpec)">
-    </template>
-    <template data-bind-ng-switch-when="'email'">
-      <input type="email" class="form-control" data-bindon-ng-model="fieldSpec.model" data-on-ng-model-change="onModelChange(fieldSpec)">
-    </template>
-    <template data-bind-ng-switch-when="'password'">
-      <input type="password" class="form-control" data-bindon-ng-model="fieldSpec.model" data-on-ng-model-change="onModelChange(fieldSpec)">
-    </template>
     <template data-bind-ng-switch-when="'select'">
-      <select class="form-control" data-bindon-ng-model="fieldSpec.model" data-on-ng-model-change="onModelChange(fieldSpec)">
-        <option value="">Select...</option>
-        <option data-bind-value="option.value" template="ngFor #option of fieldSpec.options">
-          {{option.label}}
-        </option>
-      </select>
+      <div data-bindon-field-select="fieldSpec.model" data-bind-options="fieldSpec.options" data-bind-multiple="fieldSpec.multiple" data-on-field-select-change="onModelChange(fieldSpec)">
+        <progress>Loading...</progress>
+      </div>
     </template>
     <template ng-switch-default>
       <div data-bindon-field-custom="fieldSpec.model" data-bind-field-type="fieldSpec.type" data-on-field-custom-change="onModelChange(fieldSpec)">

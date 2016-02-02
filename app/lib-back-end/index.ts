@@ -121,17 +121,116 @@ export interface Person {
   dateOfBirth:any;
 }
 
-export interface Device {
+export interface Producer {
 
-  hwName:string;
+  id:string;
 
-  typeOfDevice:string;
+  name:string;
 
-  producer:string;
+  description:string;
 
-  parameters:string;
+  typeOfBoards:string;
+}
 
-  parametrs:{state: string};
+export interface Library {
+
+  id:string;
+
+  libraryName:string;
+
+  description:string;
+
+  lastVersion:number;
+
+  versions:number;
+}
+
+export interface LibraryReference {
+
+  libraryId:string;
+
+  libraryVersion:string;
+}
+
+export interface LibraryGroup {
+
+  id:string;
+
+  groupName:string;
+
+  description:string;
+
+  azurePrimaryUrl:any;
+
+  azureSecondaryUrl:any;
+
+  lastVersion:number;
+
+  versions:string;
+
+  processors:any;
+
+  versionsCount:number;
+
+  lastLibraries:string;
+}
+
+export interface LibraryGroupReference {
+
+  groupId:string;
+
+  libraryVersion:string;
+}
+
+export interface Processor {
+
+  id:string;
+
+  processorName:string;
+
+  processorCode:string;
+
+  description:string;
+
+  speed:number;
+
+  singleLibraries:string;
+
+  libraryGroups:string;
+
+  singleLibrariesCount:number;
+
+  libraryGroupsCount:number;
+}
+
+export interface BoardType {
+
+  id:string;
+
+  name:string;
+
+  description:string;
+
+  procesor:string;
+
+  libraries:string;
+
+  libraryGroups:string;
+
+  boards:string;
+}
+
+export interface Board {
+
+  id:string;
+
+  typeOfBoard:string;
+
+  isActive:boolean;
+
+  userDescription:string;
+
+  projects:string;
 }
 
 export interface HomerProgram {
@@ -160,6 +259,8 @@ export interface Homer {
   typeOfDevice:string;
 
   version:any;
+
+  uploudedProgram:any[];
 }
 
 export interface Project {
@@ -170,17 +271,21 @@ export interface Project {
 
   projectDescription:string;
 
-  homers:string;
-
   boards:string;
 
   programs:string;
+
+  homers:string;
+
+  owners:string;
 
   countOfBoards:number;
 
   countOfPrograms:number;
 
   countOfHomer:number;
+
+  countOfOwners:number;
 }
 
 export interface IssueType {
@@ -261,9 +366,13 @@ export abstract class BackEnd {
 
   static ANSWER_PATH = "/overflow/answer";
 
+  static BOARD_TYPE_PATH = "/compilation/typeOfBoard";
+
   static COMMENT_PATH = "/overflow/comment";
 
   static CONFIRMATION_PATH = "/overflow/confirms";
+
+  static HOMER_PATH = "/project/homer";
 
   static ISSUE_LINK_PATH = "/overflow/link";
 
@@ -271,10 +380,18 @@ export abstract class BackEnd {
 
   static ISSUE_TYPE_PATH = "/overflow/typeOfPost";
 
+  static LIBRARY_GROUP_PATH = "/compilation/libraryGroup";
+
+  static LIBRARY_PATH = "/compilation/library";
+
   /**
    * An absolute path to the person resources.
    */
   static PERSON_PATH = "/coreClient/person/person";
+
+  static PROCESSOR_PATH = "/compilation/processor";
+
+  static PRODUCER_PATH = "/compilation/producer";
 
   /**
    * An absolute path to the program resources.
@@ -315,7 +432,7 @@ export abstract class BackEnd {
     }
     return this.requestGeneral(request)
         .then((response) => {
-          if (response.status == 200) {
+          if (response.status >= 200 && response.status < 300) {
             // TODO: Response to a JSON request should always be a JSON.
             return response.body ? JSON.parse(response.body) : {};
           } else {
@@ -333,10 +450,10 @@ export abstract class BackEnd {
    * @returns a promise that will be resolved with a message describing the
    *          result, or rejected with a reason.
    */
-  public createPerson(mail:string, password:string):Promise<string> {
+  public createPerson(mail:string, password:string, nickName:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("POST", BackEnd.PERSON_PATH, {mail, password}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.PERSON_PATH, {mail, password, nickName}).then(JSON.stringify);
   }
 
   /**
@@ -382,6 +499,72 @@ export abstract class BackEnd {
     });
   }
 
+  public createProducer(name:string, description:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("POST", BackEnd.PRODUCER_PATH, {name, description}).then(JSON.stringify);
+  }
+
+  public getProducers():Promise<Producer[]> {
+    "use strict";
+
+    return this.requestPath("GET", BackEnd.PRODUCER_PATH);
+  }
+
+  public createLibrary(libraryName:string, description:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("POST", BackEnd.LIBRARY_PATH, {libraryName, description}).then(JSON.stringify);
+  }
+
+  public getLibraries():Promise<Library[]> {
+    "use strict";
+
+    return this.requestPath("GET", BackEnd.LIBRARY_PATH);
+  }
+
+  public createLibraryGroup(groupName:string, description:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("POST", BackEnd.LIBRARY_GROUP_PATH, {groupName, description}).then(JSON.stringify);
+  }
+
+  public getLibraryGroups():Promise<LibraryGroup[]> {
+    "use strict";
+
+    return this.requestPath("GET", BackEnd.LIBRARY_GROUP_PATH);
+  }
+
+  public createProcessor(processorName:string, processorCode:string, description:string, speed:number, libraryGroups:string[]):Promise<string> {
+    "use strict";
+
+    return this.requestPath("POST", BackEnd.PROCESSOR_PATH, {processorName, description, processorCode, speed, libraryGroups}).then(JSON.stringify);
+  }
+
+  public getProcessors():Promise<Processor[]> {
+    "use strict";
+
+    return this.requestPath("GET", BackEnd.PROCESSOR_PATH);
+  }
+
+  public createBoardType(name:string, producerId:string, processorId:string, description:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("POST", BackEnd.BOARD_TYPE_PATH, {name, description, processorId, producerId}).then(JSON.stringify);
+  }
+
+  public getBoardTypes():Promise<BoardType[]> {
+    "use strict";
+
+    return this.requestPath("GET", BackEnd.BOARD_TYPE_PATH);
+  }
+
+  public createBoardProgram(libraries:LibraryReference[], groupOfLibraries:LibraryGroupReference[], content:string, embeddedHWId:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("POST", "/compilation/program", {files: [{filename: "main", content}], groupOfLibraries, libraries, embeddedHWId}).then(JSON.stringify);
+  }
+
   /**
    * Create a new light.
    *
@@ -390,10 +573,10 @@ export abstract class BackEnd {
    * @param callback a callback called with an indicator and a message
    *                 describing the result.
    */
-  public createDevice(hwName:string, typeOfDevice:string):Promise<string> {
+  public createBoard(hwName:string, typeOfBoard:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("POST", "/project/iot", {hwName, typeOfDevice, producer: "Byzance", parameters: {}}).then(JSON.stringify);
+    return this.requestPath("POST", "/compilation/board", {hwName, typeOfBoard}).then(JSON.stringify);
   }
 
   public createIndependentProgram(name:string, description:string, logicJson:string):Promise<string> {
@@ -438,7 +621,13 @@ export abstract class BackEnd {
   public createHomer(homerId:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("POST", "/project/homer", {homerId, typeOfDevice: "raspberry"}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.HOMER_PATH, {homerId, typeOfDevice: "raspberry"}).then(JSON.stringify);
+  }
+
+  public getHomers():Promise<Homer[]> {
+    "use strict";
+
+    return this.requestPath("GET", BackEnd.HOMER_PATH);
   }
 
   /**
@@ -526,10 +715,10 @@ export abstract class BackEnd {
    * @param callback a callback called with an indicator and a message
    *                 describing the result.
    */
-  public addDeviceToProject(hwName:string, projectId:string):Promise<string> {
+  public addBoardToProject(board:string, project:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("PUT", "/project/connectIoTWithProject", {projectId, hwName: [hwName]}).then(JSON.stringify);
+    return this.requestPath("PUT", `/compilation/board/connect/${board}/${project}`, {}).then(JSON.stringify);
   }
 
   /**

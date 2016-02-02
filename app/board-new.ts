@@ -1,6 +1,6 @@
 /*
- * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -20,6 +20,7 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
 import * as form from "./form";
+import * as libBootstrapFieldSelect from "./lib-bootstrap/field-select";
 import * as libBootstrapFields from "./lib-bootstrap/fields";
 import * as wrapper from "./wrapper";
 
@@ -27,9 +28,7 @@ import * as wrapper from "./wrapper";
   templateUrl: "app/wrapper-form.html",
   directives: [form.Component, wrapper.Component]
 })
-export class Component {
-
-  projectId:string;
+export class Component implements ng.OnInit {
 
   heading:string;
 
@@ -43,25 +42,35 @@ export class Component {
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.projectId = routeParams.get("project");
-    this.heading = `New Project Device (Project ${this.projectId})`;
+    this.heading = "New Board";
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("User", ["Projects"]),
-      new wrapper.LabeledLink("Projects", ["Projects"]),
-      new wrapper.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink("Devices", ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink("New Device", ["NewProjectDevice", {project: this.projectId}])
+      new wrapper.LabeledLink("Boards", ["Devices"]),
+      new wrapper.LabeledLink("New Board", ["NewBoard"])
     ];
     this.fields = [
-      new libBootstrapFields.Field("ID", "")
+      new libBootstrapFields.Field("ID", ""),
+      new libBootstrapFields.Field("Type", "", "select", "glyphicon-list")
     ];
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
+  }
+
+  onInit():void {
+    "use strict";
+
+    this.backEnd.getBoardTypes()
+        .then(types => {
+          this.events.send(types);
+          this.fields[1].options = types.map(type => new libBootstrapFieldSelect.Option(type.name, type.id));
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
   }
 
   onFieldChange():void {
@@ -71,13 +80,12 @@ export class Component {
   onSubmit():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-33
-    this.backEnd.addDeviceToProject(this.fields[0].model, this.projectId)
-        .then((message) => {
+    this.backEnd.createBoard(this.fields[0].model, this.fields[1].model)
+        .then(message => {
           this.events.send(message);
-          this.router.navigate(["Project", {project: this.projectId}]);
+          this.router.navigate(["Devices"]);
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
   }
@@ -85,6 +93,6 @@ export class Component {
   onCancel():void {
     "use strict";
 
-    this.router.navigate(["Project", {project: this.projectId}]);
+    this.router.navigate(["Devices"]);
   }
 }

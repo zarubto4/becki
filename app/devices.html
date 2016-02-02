@@ -4,14 +4,46 @@
   -->
 
 <div data-bind-wrapper="'Devices'" data-bind-breadcrumbs="breadcrumbs">
-  <h2>Devices</h2>
-  <!-- TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-14 -->
-  <div data-bind-panel-list="items" data-bind-new-link="newDeviceLink">
+  <h2>Producers</h2>
+  <div data-bind-panel-list="producers" data-bind-new-link="newProducerLink">
     <progress>Loading...</progress>
   </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-4">
+      <h2>Libraries</h2>
+      <div data-bind-panel-list="libraries" data-bind-new-link="newLibraryLink">
+        <progress>Loading...</progress>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-4">
+      <h2>Library groups</h2>
+      <div data-bind-panel-list="libraryGroups" data-bind-new-link="newLibraryGroupLink">
+        <progress>Loading...</progress>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-4">
+      <h2>Processors</h2>
+      <div data-bind-panel-list="processors" data-bind-new-link="newProcessorLink">
+        <progress>Loading...</progress>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-4">
+      <h2>Board Types</h2>
+      <div data-bind-panel-list="boardTypes" data-bind-new-link="newBoardTypeLink">
+        <progress>Loading...</progress>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-8">
+      <h2>Boards</h2>
+      <div data-bind-panel-list="boards" data-bind-new-link="newBoardLink">
+        <progress>Loading...</progress>
+      </div>
+    </div>
+  </div>
   <h2>Homers</h2>
-  <!-- TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-22 -->
-  <div data-bind-panel-list="items" data-bind-new-link="newHomerLink">
+  <div data-bind-panel-list="homers" data-bind-new-link="newHomerLink">
     <progress>Loading...</progress>
   </div>
 </div>

@@ -54,7 +54,7 @@ export class Component {
       new wrapper.LabeledLink("Projects", ["Projects"]),
       new wrapper.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
       new wrapper.LabeledLink("Standalone Programs", ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink("New Device Program", ["NewStandaloneProgram", {project: this.projectId}])
+      new wrapper.LabeledLink("New Standalone Program", ["NewStandaloneProgram", {project: this.projectId}])
     ];
     this.fields = [
       new libBootstrapFields.Field("Name", ""),

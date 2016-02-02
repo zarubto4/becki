@@ -1,6 +1,6 @@
 /*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -44,15 +44,15 @@ export class Component {
   constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.heading = "New Device";
+    this.heading = "New Producer";
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("Devices", ["Devices"]),
-      new wrapper.LabeledLink("New Device", ["NewDevice"])
+      new wrapper.LabeledLink("Producers", ["Devices"]),
+      new wrapper.LabeledLink("New Producer", ["NewProducer"])
     ];
     this.fields = [
-      new libBootstrapFields.Field("ID", ""),
-      new libBootstrapFields.Field("Type", "")
+      new libBootstrapFields.Field("Name", ""),
+      new libBootstrapFields.Field("Description", "")
     ];
     this.backEnd = backEndService;
     this.events = eventsService;
@@ -66,8 +66,7 @@ export class Component {
   onSubmit():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-33
-    this.backEnd.createDevice(this.fields[0].model, this.fields[1].model)
+    this.backEnd.createProducer(this.fields[0].model, this.fields[1].model)
         .then((message) => {
           this.events.send(message);
           this.router.navigate(["Devices"]);

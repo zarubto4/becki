@@ -21,6 +21,7 @@ import * as becki from "./index";
 import * as events from "./events";
 import * as form from "./form";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBootstrapFieldSelect from "./lib-bootstrap/field-select";
 import * as libBootstrapFields from "./lib-bootstrap/fields";
 import * as wrapper from "./wrapper";
 
@@ -36,7 +37,7 @@ export class Component implements ng.OnInit {
 
   static LATER = "later";
 
-  static DEVICE = "device";
+  static BOARD = "board";
 
   static HOMER = "homer";
 
@@ -48,13 +49,13 @@ export class Component implements ng.OnInit {
 
   fields:libBootstrapFields.Field[];
 
-  deviceOptions:libBootstrapFields.Option[];
+  boardOptions:libBootstrapFieldSelect.Option[];
 
-  deviceProgramOptions:libBootstrapFields.Option[];
+  boardProgramOptions:libBootstrapFieldSelect.Option[];
 
-  homerOptions:libBootstrapFields.Option[];
+  homerOptions:libBootstrapFieldSelect.Option[];
 
-  homerProgramOptions:libBootstrapFields.Option[];
+  homerProgramOptions:libBootstrapFieldSelect.Option[];
 
   backEnd:backEnd.Service;
 
@@ -78,19 +79,19 @@ export class Component implements ng.OnInit {
       new wrapper.LabeledLink("New Upload", ["NewProjectUpload", {project: this.projectId}])
     ];
     this.fields = [
-      new libBootstrapFields.Field("Device/Homer program", "", "select", "glyphicon-list", [
-        new libBootstrapFields.Option("Device", Component.DEVICE),
-        new libBootstrapFields.Option("Homer", Component.HOMER)
+      new libBootstrapFields.Field("Board/Homer program", "", "select", "glyphicon-list", [
+        new libBootstrapFieldSelect.Option("Board", Component.BOARD),
+        new libBootstrapFieldSelect.Option("Homer", Component.HOMER)
       ]),
-      new libBootstrapFields.Field("Device/Homer ID", "", "select", "glyphicon-list"),
+      new libBootstrapFields.Field("Board/Homer ID", "", "select", "glyphicon-list"),
       new libBootstrapFields.Field("Program", "", "select", "glyphicon-console"),
       new libBootstrapFields.Field("When", "", "select", "glyphicon-time", [
-        new libBootstrapFields.Option("Immediately", Component.IMMEDIATELY),
-        new libBootstrapFields.Option("As soon as possible", Component.ASAP),
-        new libBootstrapFields.Option("Later", Component.LATER)
+        new libBootstrapFieldSelect.Option("Immediately", Component.IMMEDIATELY),
+        new libBootstrapFieldSelect.Option("As soon as possible", Component.ASAP),
+        new libBootstrapFieldSelect.Option("Later", Component.LATER)
       ]),
-      libBootstrapFields.Field.fromDate("Since", since, "text", "glyphicon-time", undefined, false),
-      libBootstrapFields.Field.fromDate("Until", until, "text", "glyphicon-time", undefined, false)
+      libBootstrapFields.Field.fromDate("Since", since, "text", "glyphicon-time", undefined, false, false),
+      libBootstrapFields.Field.fromDate("Until", until, "text", "glyphicon-time", undefined, false, false)
     ];
     this.backEnd = backEndService;
     this.events = eventsService;
@@ -111,16 +112,16 @@ export class Component implements ng.OnInit {
         })
         .then(result => {
           this.events.send(result);
-          let devices:libBackEnd.Device[];
+          let boards:libBackEnd.Board[];
           let homers:libBackEnd.Homer[];
           let programs:libBackEnd.HomerProgram[];
-          [devices, homers, programs] = result;
-          this.deviceOptions = devices.map(device => new libBootstrapFields.Option(device.hwName, device.hwName));
+          [boards, homers, programs] = result;
+          this.boardOptions = boards.map(board => new libBootstrapFieldSelect.Option(board.id, board.id));
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-13
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-14
-          this.deviceProgramOptions = [];
-          this.homerOptions = homers.map(homer => new libBootstrapFields.Option(homer.homerId, homer.homerId));
-          this.homerProgramOptions = programs.map(program => new libBootstrapFields.Option(program.programName, program.programId));
+          this.boardProgramOptions = [];
+          this.homerOptions = homers.map(homer => new libBootstrapFieldSelect.Option(homer.homerId, homer.homerId));
+          this.homerProgramOptions = programs.map(program => new libBootstrapFieldSelect.Option(program.programName, program.programId));
         })
         .catch((reason) => {
           this.events.send(reason);
@@ -131,10 +132,10 @@ export class Component implements ng.OnInit {
     "use strict";
 
     switch (this.fields[0].model) {
-      case Component.DEVICE:
-        this.fields[1].label = "Device ID";
-        this.fields[1].options = this.deviceOptions;
-        this.fields[2].options = this.deviceProgramOptions;
+      case Component.BOARD:
+        this.fields[1].label = "Board ID";
+        this.fields[1].options = this.boardOptions;
+        this.fields[2].options = this.boardProgramOptions;
         break;
       case Component.HOMER:
         this.fields[1].label = "Homer ID";
@@ -142,7 +143,7 @@ export class Component implements ng.OnInit {
         this.fields[2].options = this.homerProgramOptions;
         break;
       default:
-        this.fields[1].label = "Device/Homer ID";
+        this.fields[1].label = "Board/Homer ID";
         this.fields[1].options = [];
         this.fields[2].options = [];
         break;
@@ -163,7 +164,7 @@ export class Component implements ng.OnInit {
 
     let promise:Promise<string>;
     switch (this.fields[0].model) {
-      case Component.DEVICE:
+      case Component.BOARD:
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-15
         return;
       case Component.HOMER:
@@ -184,9 +185,7 @@ export class Component implements ng.OnInit {
       default:
         return;
     }
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-24
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-25
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-26
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-43
     promise.then((message) => {
           this.events.send(message);
           this.router.navigate(["Project", {project: this.projectId}]);

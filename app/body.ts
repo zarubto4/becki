@@ -16,8 +16,9 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as deviceNew from "./device-new";
-import * as deviceProgramNew from "./device-program-new";
+import * as boardNew from "./board-new";
+import * as boardProgramNew from "./board-program-new";
+import * as boardTypeNew from "./board-type-new";
 import * as devices from "./devices";
 import * as events from "./events";
 import * as homerNew from "./homer-new";
@@ -30,9 +31,13 @@ import * as issueRelatedNew from "./issue-related-new";
 import * as issueTagNew from "./issue-tag-new";
 import * as issueTypeNew from "./issue-type-new";
 import * as issues from "./issues";
+import * as libraryGroupNew from "./library-group-new";
+import * as libraryNew from "./library-new";
+import * as processorNew from "./processor-new";
+import * as producerNew from "./producer-new";
 import * as project from "./project";
+import * as projectBoardNew from "./project-board-new";
 import * as projectCollaboratorNew from "./project-collaborator-new";
-import * as projectDeviceNew from "./project-device-new";
 import * as projectHomerNew from "./project-homer-new";
 import * as projectNew from "./project-new";
 import * as projectUploadNew from "./project-upload-new";
@@ -42,7 +47,8 @@ import * as standaloneProgramNew from "./standalone-program-new";
 
 @ngRouter.RouteConfig([
   {path: "/", redirectTo: "/devices"},
-  {path: "/device/new", component: deviceNew.Component, as: "NewDevice"},
+  {path: "/board/new", component: boardNew.Component, as: "NewBoard"},
+  {path: "/board/type/new", component: boardTypeNew.Component, as: "NewBoardType"},
   {path: "/devices", component: devices.Component, as: "Devices"},
   {path: "/homer/new", component: homerNew.Component, as: "NewHomer"},
   {path: "/issue/new", component: issueNew.Component, as: "NewIssue"},
@@ -52,13 +58,17 @@ import * as standaloneProgramNew from "./standalone-program-new";
   {path: "/issues/:issue/confirmation/new", component: issueConfirmationNew.Component, as: "NewIssueConfirmation"},
   {path: "/issues/:issue/related/new", component: issueRelatedNew.Component, as: "NewRelatedIssue"},
   {path: "/issues/:issue/tag/new", component: issueTagNew.Component, as: "NewIssueTag"},
+  {path: "/library/group/new", component: libraryGroupNew.Component, as: "NewLibraryGroup"},
+  {path: "/library/new", component: libraryNew.Component, as: "NewLibrary"},
+  {path: "/processor/new", component: processorNew.Component, as: "NewProcessor"},
+  {path: "/producer/new", component: producerNew.Component, as: "NewProducer"},
   {path: "/signing", component: signing.Component, as: "Signing"},
   {path: "/user/project/new", component: projectNew.Component, as: "NewProject"},
   {path: "/user/projects", component: projects.Component, as: "Projects"},
   {path: "/user/projects/:project", component: project.Component, as: "Project"},
+  {path: "/user/projects/:project/board/new", component: projectBoardNew.Component, as: "NewProjectBoard"},
+  {path: "/user/projects/:project/board-program/new", component: boardProgramNew.Component, as: "NewBoardProgram"},
   {path: "/user/projects/:project/collaborator/new", component: projectCollaboratorNew.Component, as: "NewProjectCollaborator"},
-  {path: "/user/projects/:project/device/new", component: projectDeviceNew.Component, as: "NewProjectDevice"},
-  {path: "/user/projects/:project/device-program/new", component: deviceProgramNew.Component, as: "NewDeviceProgram"},
   {path: "/user/projects/:project/homer/new", component: projectHomerNew.Component, as: "NewProjectHomer"},
   {path: "/user/projects/:project/homer-program/new", component: homerProgramNew.Component, as: "NewHomerProgram"},
   {path: "/user/projects/:project/homer-programs/:program", component: homerProgram.Component, as: "HomerProgram"},

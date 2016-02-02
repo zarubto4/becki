@@ -16,12 +16,18 @@
 import * as ng from "angular2/angular2";
 
 import * as fieldCustom from "./field-custom";
+import * as libBootstrapFieldSelect from "./lib-bootstrap/field-select";
 import * as libBootstrapFields from "./lib-bootstrap/fields";
 
 @ng.Component({
   selector: "[fields]",
   templateUrl: "app/lib-bootstrap/fields.html",
-  directives: [fieldCustom.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES],
+  directives: [
+    fieldCustom.Component,
+    libBootstrapFieldSelect.Component,
+    ng.CORE_DIRECTIVES,
+    ng.FORM_DIRECTIVES
+  ],
   inputs: ["fields"],
   outputs: ["fieldChange"]
 })

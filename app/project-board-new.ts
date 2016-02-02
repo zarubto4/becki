@@ -47,20 +47,17 @@ export class Component {
     "use strict";
 
     this.projectId = routeParams.get("project");
-    this.heading = `New Device Program (Project ${this.projectId})`;
+    this.heading = `New Project Board (Project ${this.projectId})`;
     this.breadcrumbs = [
       becki.HOME,
       new wrapper.LabeledLink("User", ["Projects"]),
       new wrapper.LabeledLink("Projects", ["Projects"]),
       new wrapper.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink("Device Programs", ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink("New Device Program", ["NewDeviceProgram", {project: this.projectId}])
+      new wrapper.LabeledLink("Boards", ["Project", {project: this.projectId}]),
+      new wrapper.LabeledLink("New Board", ["NewProjectBoard", {project: this.projectId}])
     ];
     this.fields = [
-      new libBootstrapFields.Field("Name", ""),
-      new libBootstrapFields.Field("Description", ""),
-      new libBootstrapFields.Field("Libraries", "", "text", "glyphicon-book"),
-      new libBootstrapFields.Field("Code", "", "c", "glyphicon-console")
+      new libBootstrapFields.Field("ID", "")
     ];
     this.backEnd = backEndService;
     this.events = eventsService;
@@ -74,7 +71,14 @@ export class Component {
   onSubmit():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-13
+    this.backEnd.addBoardToProject(this.fields[0].model, this.projectId)
+        .then((message) => {
+          this.events.send(message);
+          this.router.navigate(["Project", {project: this.projectId}]);
+        })
+        .catch((reason) => {
+          this.events.send(reason);
+        });
   }
 
   onCancel():void {

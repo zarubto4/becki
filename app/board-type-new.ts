@@ -1,6 +1,6 @@
 /*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -45,16 +45,18 @@ export class Component implements ng.OnInit {
   constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.heading = "New Issue";
+    this.heading = "New Board Type";
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("Issues", ["Issues"]),
-      new wrapper.LabeledLink("New Issue", ["NewIssue"])
+      new wrapper.LabeledLink("Boards", ["Devices"]),
+      new wrapper.LabeledLink("Types", ["Devices"]),
+      new wrapper.LabeledLink("New Type", ["NewBoardType"])
     ];
     this.fields = [
-      new libBootstrapFields.Field("Type", "", "select"),
-      new libBootstrapFields.Field("Title", ""),
-      new libBootstrapFields.Field("Body", "")
+      new libBootstrapFields.Field("Name", ""),
+      new libBootstrapFields.Field("Producer name", "", "select", "glyphicon-list"),
+      new libBootstrapFields.Field("Processor name", "", "select", "glyphicon-dashboard"),
+      new libBootstrapFields.Field("Description", "")
     ];
     this.backEnd = backEndService;
     this.events = eventsService;
@@ -64,10 +66,18 @@ export class Component implements ng.OnInit {
   onInit():void {
     "use strict";
 
-    this.backEnd.getIssueTypes()
-        .then((types) => {
-          this.events.send(types);
-          this.fields[0].options = types.map(type => new libBootstrapFieldSelect.Option(type.type, type.id));
+    this.backEnd.getProducers()
+        .then((producers) => {
+          this.events.send(producers);
+          this.fields[1].options = producers.map(producer => new libBootstrapFieldSelect.Option(producer.name, producer.id));
+        })
+        .catch((reason) => {
+          this.events.send(reason);
+        });
+    this.backEnd.getProcessors()
+        .then((processors) => {
+          this.events.send(processors);
+          this.fields[2].options = processors.map(processor => new libBootstrapFieldSelect.Option(processor.processorName, processor.id));
         })
         .catch((reason) => {
           this.events.send(reason);
@@ -81,10 +91,10 @@ export class Component implements ng.OnInit {
   onSubmit():void {
     "use strict";
 
-    this.backEnd.createIssue(this.fields[0].model, this.fields[1].model, this.fields[2].model, [])
+    this.backEnd.createBoardType(this.fields[0].model, this.fields[1].model, this.fields[2].model, this.fields[3].model)
         .then((message) => {
           this.events.send(message);
-          this.router.navigate(["Issues"]);
+          this.router.navigate(["Devices"]);
         })
         .catch((reason) => {
           this.events.send(reason);
@@ -94,6 +104,6 @@ export class Component implements ng.OnInit {
   onCancel():void {
     "use strict";
 
-    this.router.navigate(["Issues"]);
+    this.router.navigate(["Devices"]);
   }
 }

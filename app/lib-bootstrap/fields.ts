@@ -16,20 +16,7 @@
 import * as ng from "angular2/angular2";
 
 import * as fieldDefault from "./field-default";
-
-export class Option {
-
-  label:string;
-
-  value:string;
-
-  constructor(label:string, value:string) {
-    "use strict";
-
-    this.label = label;
-    this.value = value;
-  }
-}
+import * as fieldSelect from "./field-select";
 
 export class Field {
 
@@ -41,11 +28,13 @@ export class Field {
 
   icon:string;
 
-  options:Option[];
+  options:fieldSelect.Option[];
+
+  multiple:boolean;
 
   visible:boolean;
 
-  constructor(label:string, model:string, type = "text", icon = "glyphicon-pencil", options:Option[] = [], visible = true) {
+  constructor(label:string, model:string, type = "text", icon = "glyphicon-pencil", options:fieldSelect.Option[] = [], multiple = false, visible = true) {
     "use strict";
 
     this.label = label;
@@ -53,10 +42,17 @@ export class Field {
     this.type = type;
     this.icon = icon;
     this.options = options;
+    this.multiple = multiple;
     this.visible = visible;
   }
 
-  static fromDate(label:string, date:Date, type = "text", icon = "glyphicon-pencil", options:Option[] = [], visible = true) {
+  static fromNumber(label:string, model:number, type = "text", icon = "glyphicon-pencil", options:fieldSelect.Option[] = [], multiple = false, visible = true) {
+    "use strict";
+
+    return new Field(label, model.toString(), type, icon, options, multiple, visible);
+  }
+
+  static fromDate(label:string, date:Date, type = "text", icon = "glyphicon-pencil", options:fieldSelect.Option[] = [], multiple = false, visible = true) {
     "use strict";
 
     let year = date.getFullYear();
@@ -73,7 +69,17 @@ export class Field {
       let fraction = ("00" + date.getMilliseconds().toString()).slice(-3);
       model += `.${fraction}`;
     }
-    return new Field(label, model, type, icon, options, visible);
+    return new Field(label, model, type, icon, options, multiple, visible);
+  }
+
+  getNumber():number {
+    "use strict";
+
+    let number = parseInt(this.model);
+    if (isNaN(number)) {
+      throw "not a number";
+    }
+    return number;
   }
 
   getDate():Date {
@@ -107,7 +113,12 @@ export class Field {
 @ng.Component({
   selector: "[fields]",
   templateUrl: "app/lib-bootstrap/fields.html",
-  directives: [fieldDefault.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES],
+  directives: [
+    fieldDefault.Component,
+    fieldSelect.Component,
+    ng.CORE_DIRECTIVES,
+    ng.FORM_DIRECTIVES
+  ],
   inputs: ["fields"]
 })
 export class Component {

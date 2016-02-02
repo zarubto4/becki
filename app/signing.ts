@@ -49,7 +49,8 @@ export class Component implements ng.AfterViewInit {
     ];
     this.signUpFields = [
       new libBootstrapFields.Field("Email", "", "email", "glyphicon-envelope"),
-      new libBootstrapFields.Field("Password", "", "password", "glyphicon-lock")
+      new libBootstrapFields.Field("Password", "", "password", "glyphicon-lock"),
+      new libBootstrapFields.Field("Nickname", "", "text", "glyphicon-user")
     ];
     this.backEnd = backEndService;
     this.events = eventsService;
@@ -100,7 +101,7 @@ export class Component implements ng.AfterViewInit {
   onSignUpSubmit():void {
     "use strict";
 
-    this.backEnd.createPerson(this.signUpFields[0].model, this.signUpFields[1].model)
+    this.backEnd.createPerson(this.signUpFields[0].model, this.signUpFields[1].model, this.signUpFields[2].model)
         .then((message) => {
           this.events.send(message);
           (<any>$("#signing-in")).collapse("show");

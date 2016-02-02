@@ -21,6 +21,7 @@ import * as becki from "./index";
 import * as events from "./events";
 import * as form from "./form";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBootstrapFieldSelect from "./lib-bootstrap/field-select";
 import * as libBootstrapFields from "./lib-bootstrap/fields";
 import * as wrapper from "./wrapper";
 
@@ -68,7 +69,7 @@ export class Component implements ng.OnInit {
     this.backEnd.getIssues()
         .then(issues => {
           this.events.send(issues);
-          this.fields[0].options = issues.map(issue => new libBootstrapFields.Option(issue.name, issue.postId));
+          this.fields[0].options = issues.map(issue => new libBootstrapFieldSelect.Option(issue.name, issue.postId));
         })
         .catch((reason) => {
           this.events.send(reason);

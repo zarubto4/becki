@@ -47,9 +47,9 @@ export class Component implements ng.OnInit {
 
   newCollaboratorLink:any[];
 
-  devicePrograms:libBootstrapPanelList.Item[];
+  boardPrograms:libBootstrapPanelList.Item[];
 
-  newDeviceProgramLink:any[];
+  newBoardProgramLink:any[];
 
   standalonePrograms:libBootstrapPanelList.Item[];
 
@@ -59,9 +59,9 @@ export class Component implements ng.OnInit {
 
   newHomerProgramLink:any[];
 
-  devices:libBootstrapPanelList.Item[];
+  boards:libBootstrapPanelList.Item[];
 
-  additionalDeviceLink:any[];
+  additionalBoardLink:any[];
 
   homers:libBootstrapPanelList.Item[];
 
@@ -98,30 +98,26 @@ export class Component implements ng.OnInit {
       new libBootstrapPanelList.Item(null, "(issue/TYRION-21)", "does not work")
     ];
     this.newCollaboratorLink = ["NewProjectCollaborator", {project: this.id}];
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-13
-    this.devicePrograms = [
-      new libBootstrapPanelList.Item(null, "(issue/TYRION-13)", "does not work"),
-      new libBootstrapPanelList.Item(null, "(issue/TYRION-13)", "does not work"),
-      new libBootstrapPanelList.Item(null, "(issue/TYRION-13)", "does not work")
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-14
+    this.boardPrograms = [
+      new libBootstrapPanelList.Item(null, "(issue/TYRION-14)", "does not work"),
+      new libBootstrapPanelList.Item(null, "(issue/TYRION-14)", "does not work"),
+      new libBootstrapPanelList.Item(null, "(issue/TYRION-14)", "does not work")
     ];
-    this.newDeviceProgramLink = ["NewDeviceProgram", {project: this.id}];
+    this.newBoardProgramLink = ["NewBoardProgram", {project: this.id}];
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-36
     this.standalonePrograms = [
       new libBootstrapPanelList.Item(null, "(issue/TYRION-36)", "does not work")
     ];
     this.newStandaloneProgramLink = ["NewStandaloneProgram", {project: this.id}];
     this.newHomerProgramLink = ["NewHomerProgram", {project: this.id}];
-    this.additionalDeviceLink = ["NewProjectDevice", {project: this.id}];
+    this.additionalBoardLink = ["NewProjectBoard", {project: this.id}];
     this.additionalHomerLink = ["NewProjectHomer", {project: this.id}];
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-15
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-24
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-25
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-26
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-43
     this.uploadQueue = [
       new libBootstrapPanelList.Item(null, "(issue/TYRION-15)", "does not work"),
-      new libBootstrapPanelList.Item(null, "(issue/TYRION-24)", "does not work"),
-      new libBootstrapPanelList.Item(null, "(issue/TYRION-25)", "does not work"),
-      new libBootstrapPanelList.Item(null, "(issue/TYRION-26)", "does not work")
+      new libBootstrapPanelList.Item(null, "(issue/TYRION-43)", "does not work")
     ];
     this.newUploadLink = ["NewProjectUpload", {project: this.id}];
     this.backEnd = backEndService;
@@ -146,15 +142,15 @@ export class Component implements ng.OnInit {
         .then(result => {
           this.events.send(result);
           let project:libBackEnd.Project;
-          let devices:libBackEnd.Device[];
+          let boards:libBackEnd.Board[];
           let homers:libBackEnd.Homer[];
           let programs:libBackEnd.HomerProgram[];
-          [project, devices, homers, programs] = result;
+          [project, boards, homers, programs] = result;
           this.projectFields[0].model = project.projectName;
           this.projectFields[1].model = project.projectDescription;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-13
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-14
-          this.devices = devices.map(device => new libBootstrapPanelList.Item(device.hwName, device.hwName, device.typeOfDevice));
+          this.boards = boards.map(board => new libBootstrapPanelList.Item(board.id, board.id, board.isActive ? "active" : "inactive"));
           this.homerPrograms = programs.map(program => new libBootstrapPanelList.Item(program.programId, program.programName, program.programDescription));
           this.homers = homers.map(homer => new libBootstrapPanelList.Item(homer.homerId, homer.homerId, null));
         })

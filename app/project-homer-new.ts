@@ -71,7 +71,6 @@ export class Component {
   onSubmit():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-33
     this.backEnd.addHomerToProject(this.fields[0].model, this.projectId)
         .then((message) => {
           this.events.send(message);
