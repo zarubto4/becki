@@ -92,11 +92,6 @@ export class Component implements ng.OnInit {
       new libBootstrapFields.Field("Name", "Loading..."),
       new libBootstrapFields.Field("Description", "Loading...")
     ];
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-21
-    this.collaborators = [
-      new libBootstrapPanelList.Item(null, "(issue/TYRION-21)", "does not work"),
-      new libBootstrapPanelList.Item(null, "(issue/TYRION-21)", "does not work")
-    ];
     this.newCollaboratorLink = ["NewProjectCollaborator", {project: this.id}];
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-14
     this.boardPrograms = [
@@ -135,24 +130,27 @@ export class Component implements ng.OnInit {
           return Promise.all<any>([
             project,
             this.backEnd.request("GET", project.boards),
+            this.backEnd.request("GET", project.programs),
             this.backEnd.request("GET", project.homers),
-            this.backEnd.request("GET", project.programs)
+            this.backEnd.request("GET", project.owners)
           ]);
         })
         .then(result => {
           this.events.send(result);
           let project:libBackEnd.Project;
           let boards:libBackEnd.Board[];
+          let homerPrograms:libBackEnd.HomerProgram[];
           let homers:libBackEnd.Homer[];
-          let programs:libBackEnd.HomerProgram[];
-          [project, boards, homers, programs] = result;
+          let collaborators:libBackEnd.Person[];
+          [project, boards, homerPrograms, homers, collaborators] = result;
           this.projectFields[0].model = project.projectName;
           this.projectFields[1].model = project.projectDescription;
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-13
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-47
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-14
           this.boards = boards.map(board => new libBootstrapPanelList.Item(board.id, board.id, board.isActive ? "active" : "inactive"));
-          this.homerPrograms = programs.map(program => new libBootstrapPanelList.Item(program.programId, program.programName, program.programDescription));
+          this.homerPrograms = homerPrograms.map(program => new libBootstrapPanelList.Item(program.programId, program.programName, program.programDescription));
           this.homers = homers.map(homer => new libBootstrapPanelList.Item(homer.homerId, homer.homerId, null));
+          this.collaborators = collaborators.map(collaborator => new libBootstrapPanelList.Item(collaborator.id, collaborator.nickName, collaborator.mail));
         })
         .catch((reason) => {
           this.events.send(reason);

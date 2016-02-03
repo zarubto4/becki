@@ -71,42 +71,63 @@ export class Component implements ng.AfterViewInit {
     "use strict";
 
     this.backEnd.createToken(this.signInFields[0].model, this.signInFields[1].model)
-        .then((message) => {
+        .then(message => {
           this.events.send(message);
           this.router.navigate(["Devices"]);
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
-  }
-
-  onOpenidSignInClick():void {
-    "use strict";
-
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-38
   }
 
   onFacebookSignInClick():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-38
+    this.backEnd.createFacebookToken()
+        .then(url => {
+          this.events.send(url);
+          location.href = url;
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
   }
 
-  onGoogleSignInClick():void {
+  onTwitterSignInClick():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-38
+    this.backEnd.createTwitterToken()
+        .then(url => {
+          this.events.send(url);
+          location.href = url;
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
+  }
+
+  onGitHubSignInClick():void {
+    "use strict";
+
+    this.backEnd.createGitHubToken()
+        .then(url => {
+          this.events.send(url);
+          location.href = url;
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
   }
 
   onSignUpSubmit():void {
     "use strict";
 
     this.backEnd.createPerson(this.signUpFields[0].model, this.signUpFields[1].model, this.signUpFields[2].model)
-        .then((message) => {
+        .then(message => {
           this.events.send(message);
           (<any>$("#signing-in")).collapse("show");
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
   }

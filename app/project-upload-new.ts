@@ -117,7 +117,7 @@ export class Component implements ng.OnInit {
           let programs:libBackEnd.HomerProgram[];
           [boards, homers, programs] = result;
           this.boardOptions = boards.map(board => new libBootstrapFieldSelect.Option(board.id, board.id));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-13
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-47
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-14
           this.boardProgramOptions = [];
           this.homerOptions = homers.map(homer => new libBootstrapFieldSelect.Option(homer.homerId, homer.homerId));

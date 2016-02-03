@@ -109,7 +109,7 @@ export class Component implements ng.OnInit {
   onSubmit():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-13
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-47
     // TODO: https://github.com/angular/angular/issues/4427
     let libraries = this.fields[0].options.filter(option => option.selected).map(option => JSON.parse(option.value));
     let libraryGroups = this.fields[1].options.filter(option => option.selected).map(option => JSON.parse(option.value));

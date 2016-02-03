@@ -41,6 +41,7 @@ export class LabeledLink {
   inputs: ["heading: wrapper", "breadcrumbs"]
 })
 export class Component implements ng.OnInit {
+
   home:LabeledLink;
 
   navigation:LabeledLink[];
@@ -75,6 +76,7 @@ export class Component implements ng.OnInit {
   onSignOutClick():void {
     "use strict";
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-50
     this.backEnd.deleteToken()
         .then((message) => {
           this.events.send(message);

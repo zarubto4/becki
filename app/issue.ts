@@ -175,8 +175,8 @@ export class Component implements ng.OnInit {
           return Promise.all<any>([
             issue,
             this.backEnd.request("GET", issue.textOfPost),
-            this.backEnd.request("GET", issue.comments),
-            this.backEnd.request("GET", issue.answers),
+            issue.comments ? this.backEnd.request("GET", issue.comments) : [],
+            this.backEnd.request<libBackEnd.Answer[]>("GET", issue.answers).then(answers => Promise.all(answers.map(answer => Promise.all([answer, answer.comments ? this.backEnd.request("GET", answer.comments) : []])))),
             issue.linkedAnswers ? this.backEnd.request("GET", issue.linkedAnswers) : []
           ]);
         })
@@ -185,18 +185,17 @@ export class Component implements ng.OnInit {
           let issue:libBackEnd.Issue;
           let body:string;
           let comments:libBackEnd.Comment[];
-          let answers:libBackEnd.Answer[];
+          let answers:[libBackEnd.Answer, libBackEnd.Comment[]][];
           let related:libBackEnd.IssueLink[];
           [issue, body, comments, answers, related] = result;
           this.heading = `${issue.type}: ${issue.name}`;
           let commentsViews = comments.map(comment => new Comment(comment.postId, comment.textOfPost, comment.dateOfCreate, comment.likes, comment.hashTags));
           this.items = [].concat(
               new Issue(issue.postId, issue.type, issue.name, body, issue.dateOfCreate, issue.likes, commentsViews, issue.hashTags),
-              // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-35
               answers.map(answer => new Item(
-                  answer.postId, answer.textOfPost, answer.dateOfCreate, answer.likes,
-                  [], // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-35 answer.comments.map(comment => new Comment(comment.postId, comment.textOfPost, comment.dateOfCreate, comment.likes)),
-                  answer.hashTags
+                  answer[0].postId, answer[0].textOfPost, answer[0].dateOfCreate, answer[0].likes,
+                  answer[1].map(comment => new Comment(comment.postId, comment.textOfPost, comment.dateOfCreate, comment.likes)),
+                  answer[0].hashTags
               ))
           );
           this.related = related.map(related2 => new libBootstrapPanelList.Item(related2.linkId, related2.name, ""));
@@ -299,7 +298,7 @@ export class Component implements ng.OnInit {
   onAnswerCreationSubmit():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-16
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-48
     this.backEnd.createAnswer(this.id, this.answerCreation[0].model)
         .then((message) => {
           this.events.send(message);

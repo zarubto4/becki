@@ -71,7 +71,14 @@ export class Component {
   onSubmit():void {
     "use strict";
 
-    // TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-21
+    this.backEnd.addCollaboratorToProject(this.fields[0].model, this.projectId)
+        .then((message) => {
+          this.events.send(message);
+          this.router.navigate(["Project", {project: this.projectId}]);
+        })
+        .catch((reason) => {
+          this.events.send(reason);
+        });
   }
 
   onCancel():void {

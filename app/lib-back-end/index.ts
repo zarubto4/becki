@@ -108,7 +108,11 @@ export class AuthenticationError extends Error {
 
 export interface Person {
 
+  id:string;
+
   mail:string;
+
+  nickName:string;
 
   firstName:any;
 
@@ -330,6 +334,8 @@ export interface Answer {
 
   textOfPost:string;
 
+  comments:string;
+
   hashTags?:string[];
 }
 
@@ -408,6 +414,13 @@ export abstract class BackEnd {
    */
   static TOKEN_PATH = "/coreClient/person/permission";
 
+  private storeToken(token:string, email:string):void {
+    "use strict";
+
+    window.localStorage.setItem("authToken", token);
+    window.localStorage.setItem("authEmail", email);
+  }
+
   /**
    * Perform an HTTP request.
    *
@@ -472,9 +485,38 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath<{authToken:string}>("POST", `${BackEnd.TOKEN_PATH}/login`, {email, password}).then((body) => {
-      window.localStorage.setItem("authToken", body.authToken);
-      window.localStorage.setItem("authEmail", email);
+      this.storeToken(body.authToken, email);
       return JSON.stringify(body);
+    });
+  }
+
+  public createFacebookToken():Promise<string> {
+    "use strict";
+
+    return this.requestPath<{authToken:string, url:string}>("GET", "/login/facebook").then(body => {
+      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-51
+      this.storeToken(body.authToken, "a Facebook account");
+      return body.url;
+    });
+  }
+
+  public createTwitterToken():Promise<string> {
+    "use strict";
+
+    return this.requestPath<{authToken:string, url:string}>("GET", "/login/twitter").then(body => {
+      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-49
+      this.storeToken(body.authToken, "a Twitter account");
+      return body.url;
+    });
+  }
+
+  public createGitHubToken():Promise<string> {
+    "use strict";
+
+    return this.requestPath<{authToken:string, url:string}>("GET", "/login/github").then(body => {
+      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-46
+      this.storeToken(body.authToken, "a GitHub account");
+      return body.url;
     });
   }
 
@@ -734,6 +776,12 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath("PUT", "/project/connectHomerWithProject", {projectId, homerId}).then(JSON.stringify);
+  }
+
+  public addCollaboratorToProject(collaborator:string, project:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("PUT", `/project/project/shareProject/${project}`, {persons: [collaborator]}).then(JSON.stringify);
   }
 
   /**
