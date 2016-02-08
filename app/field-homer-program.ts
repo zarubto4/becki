@@ -13,16 +13,15 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
-import * as _ from "underscore";
 import * as blocko from "blocko";
 import * as ng from "angular2/angular2";
 
-import * as libBootstrapFields from "./lib-bootstrap/fields";
+import * as fieldCode from "./field-code";
 
 @ng.Component({
   selector: "[field-homer-program]",
   templateUrl: "app/field-homer-program.html",
-  directives: [libBootstrapFields.Component, ng.CORE_DIRECTIVES]
+  directives: [fieldCode.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.AfterViewInit {
 
@@ -31,7 +30,7 @@ export class Component implements ng.AfterViewInit {
   @ng.ViewChild("field")
   field:ng.ElementRef;
 
-  config:{block: blocko.BlockoCore.Block, fields: libBootstrapFields.Field[]} = null;
+  config:blocko.BlockoCore.Block = null;
 
   @ng.Output("fieldHomerProgramChange")
   modelChange = new ng.EventEmitter();
@@ -52,10 +51,7 @@ export class Component implements ng.AfterViewInit {
 
     let renderer = new blocko.BlockoSnapRenderer.RendererController(this.field.nativeElement);
     renderer.registerOpenConfigCallback((block) =>
-        this.config = {
-          block,
-          fields: block.getConfigProperties().map(property => new libBootstrapFields.Field(`${property.displayName}`, property.value.toString()))
-        }
+        this.config = block
     );
     this.controller.registerDataChangedCallback(() => {
       this.config = null;
@@ -166,28 +162,32 @@ export class Component implements ng.AfterViewInit {
     this.controller.removeAllBlocks();
   }
 
-  onConfigSave():void {
+  getPropertyType(property:blocko.BlockoCore.ConfigProperty):string {
     "use strict";
 
-    _.zip(this.config.block.getConfigProperties(), this.config.fields).forEach(property_field => {
-      switch (property_field[0].type) {
-        case blocko.BlockoCore.ConfigPropertyType.Integer:
-          property_field[0].value = parseInt(property_field[1].model, 10);
-          break;
-        case blocko.BlockoCore.ConfigPropertyType.Float:
-          property_field[0].value = parseFloat(property_field[1].model);
-          break;
-        case blocko.BlockoCore.ConfigPropertyType.Boolean:
-          property_field[0].value = property_field[1].model.toLowerCase() == "true";
-          break;
-        default:
-          property_field[0].value = property_field[1].model;
-      }
-    });
-    this.config.block.emitConfigsChanged();
+    switch (property.type) {
+      case blocko.BlockoCore.ConfigPropertyType.Integer:
+        return "int";
+      case blocko.BlockoCore.ConfigPropertyType.Float:
+        return "float";
+      case blocko.BlockoCore.ConfigPropertyType.String:
+        return "text";
+      case blocko.BlockoCore.ConfigPropertyType.Boolean:
+        return "bool";
+      case blocko.BlockoCore.ConfigPropertyType.JSString:
+        return "javascript";
+      default:
+        return null;
+    }
   }
 
-  onConfigCancel():void {
+  onConfigSaveClick():void {
+    "use strict";
+
+    this.config.emitConfigsChanged();
+  }
+
+  onConfigCloseClick():void {
     "use strict";
 
     this.config = null;

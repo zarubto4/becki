@@ -18,20 +18,24 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as events from "./events";
-import * as form from "./form";
-import * as libBootstrapFields from "./lib-bootstrap/fields";
 
 @ng.Component({
   templateUrl: "app/signing.html",
-  directives: [form.Component, libBootstrapFields.Component, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES]
+  directives: [ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES]
 })
 export class Component implements ng.AfterViewInit {
 
   appName:string;
 
-  signInFields:libBootstrapFields.Field[];
+  inEmailField:string;
 
-  signUpFields:libBootstrapFields.Field[];
+  inPasswordField:string;
+
+  upEmailField:string;
+
+  upPasswordField:string;
+
+  upUsernameField:string;
 
   backEnd:backEnd.Service;
 
@@ -43,15 +47,11 @@ export class Component implements ng.AfterViewInit {
     "use strict";
 
     this.appName = appName;
-    this.signInFields = [
-      new libBootstrapFields.Field("Email", "", "email", "glyphicon-envelope"),
-      new libBootstrapFields.Field("Password", "", "password", "glyphicon-lock")
-    ];
-    this.signUpFields = [
-      new libBootstrapFields.Field("Email", "", "email", "glyphicon-envelope"),
-      new libBootstrapFields.Field("Password", "", "password", "glyphicon-lock"),
-      new libBootstrapFields.Field("Nickname", "", "text", "glyphicon-user")
-    ];
+    this.inEmailField = "";
+    this.inPasswordField = "";
+    this.upEmailField = "";
+    this.upPasswordField = "";
+    this.upUsernameField = "";
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -70,7 +70,7 @@ export class Component implements ng.AfterViewInit {
   onSignInSubmit():void {
     "use strict";
 
-    this.backEnd.createToken(this.signInFields[0].model, this.signInFields[1].model)
+    this.backEnd.createToken(this.inEmailField, this.inPasswordField)
         .then(message => {
           this.events.send(message);
           this.router.navigate(["Devices"]);
@@ -122,7 +122,7 @@ export class Component implements ng.AfterViewInit {
   onSignUpSubmit():void {
     "use strict";
 
-    this.backEnd.createPerson(this.signUpFields[0].model, this.signUpFields[1].model, this.signUpFields[2].model)
+    this.backEnd.createPerson(this.upEmailField, this.upPasswordField, this.upUsernameField)
         .then(message => {
           this.events.send(message);
           (<any>$("#signing-in")).collapse("show");

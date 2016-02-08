@@ -19,22 +19,28 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as form from "./form";
-import * as libBootstrapFieldSelect from "./lib-bootstrap/field-select";
-import * as libBootstrapFields from "./lib-bootstrap/fields";
+import * as libBackEnd from "./lib-back-end/index";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
-  templateUrl: "app/wrapper-form.html",
-  directives: [form.Component, wrapper.Component]
+  templateUrl: "app/board-type-new.html",
+  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
-  heading:string;
-
   breadcrumbs:wrapper.LabeledLink[];
 
-  fields:libBootstrapFields.Field[];
+  producers:libBackEnd.Producer[];
+
+  processors:libBackEnd.Processor[];
+
+  nameField:string;
+
+  producerField:string;
+
+  processorField:string;
+
+  descriptionField:string;
 
   backEnd:backEnd.Service;
 
@@ -45,19 +51,16 @@ export class Component implements ng.OnInit {
   constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.heading = "New Board Type";
     this.breadcrumbs = [
       becki.HOME,
       new wrapper.LabeledLink("Boards", ["Devices"]),
       new wrapper.LabeledLink("Types", ["Devices"]),
       new wrapper.LabeledLink("New Type", ["NewBoardType"])
     ];
-    this.fields = [
-      new libBootstrapFields.Field("Name", ""),
-      new libBootstrapFields.Field("Producer name", "", "select", "glyphicon-list"),
-      new libBootstrapFields.Field("Processor name", "", "select", "glyphicon-dashboard"),
-      new libBootstrapFields.Field("Description", "")
-    ];
+    this.nameField = "";
+    this.producerField = "";
+    this.processorField = "";
+    this.descriptionField = "";
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -69,7 +72,7 @@ export class Component implements ng.OnInit {
     this.backEnd.getProducers()
         .then((producers) => {
           this.events.send(producers);
-          this.fields[1].options = producers.map(producer => new libBootstrapFieldSelect.Option(producer.name, producer.id));
+          this.producers = producers;
         })
         .catch((reason) => {
           this.events.send(reason);
@@ -77,21 +80,17 @@ export class Component implements ng.OnInit {
     this.backEnd.getProcessors()
         .then((processors) => {
           this.events.send(processors);
-          this.fields[2].options = processors.map(processor => new libBootstrapFieldSelect.Option(processor.processorName, processor.id));
+          this.processors = processors;
         })
         .catch((reason) => {
           this.events.send(reason);
         });
   }
 
-  onFieldChange():void {
-    "use strict";
-  }
-
   onSubmit():void {
     "use strict";
 
-    this.backEnd.createBoardType(this.fields[0].model, this.fields[1].model, this.fields[2].model, this.fields[3].model)
+    this.backEnd.createBoardType(this.nameField, this.producerField, this.processorField, this.descriptionField)
         .then((message) => {
           this.events.send(message);
           this.router.navigate(["Devices"]);
@@ -101,7 +100,7 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onCancel():void {
+  onCancelClick():void {
     "use strict";
 
     this.router.navigate(["Devices"]);

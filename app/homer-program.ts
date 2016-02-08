@@ -19,13 +19,12 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as form from "./form";
-import * as libBootstrapFields from "./lib-bootstrap/fields";
+import * as fieldHomerProgram from "./field-homer-program";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
-  templateUrl: "app/wrapper-form.html",
-  directives: [form.Component, wrapper.Component]
+  templateUrl: "app/homer-program.html",
+  directives: [fieldHomerProgram.Component, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -37,7 +36,11 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:wrapper.LabeledLink[];
 
-  fields:libBootstrapFields.Field[];
+  nameField:string;
+
+  descriptionField:string;
+
+  codeField:string;
 
   backEnd:backEnd.Service;
 
@@ -59,11 +62,9 @@ export class Component implements ng.OnInit {
       new wrapper.LabeledLink("Homer Programs", ["Project", {project: this.projectId}]),
       new wrapper.LabeledLink(`Homer Program ${this.id}`, ["HomerProgram", {project: this.projectId, program: this.id}])
     ];
-    this.fields = [
-      new libBootstrapFields.Field("Name", "Loading..."),
-      new libBootstrapFields.Field("Description", "Loading..."),
-      new libBootstrapFields.Field("Code", `{"blocks":{}}`, "homer-program", "glyphicon-console")
-    ];
+    this.nameField = "Loading...";
+    this.descriptionField = "Loading...";
+    this.codeField = `{"blocks":{}}`;
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -77,9 +78,9 @@ export class Component implements ng.OnInit {
           this.events.send(program);
           return this.backEnd.request<string>("GET", program.programinJson).then((code) => {
             this.events.send(code);
-            this.fields[0].model = program.programName;
-            this.fields[1].model = program.programDescription;
-            this.fields[2].model = code;
+            this.nameField = program.programName;
+            this.descriptionField = program.programDescription;
+            this.codeField = code;
           });
         })
         .catch((reason) => {
@@ -87,14 +88,10 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onFieldChange():void {
-    "use strict";
-  }
-
   onSubmit():void {
     "use strict";
 
-    this.backEnd.updateHomerProgram(this.id, this.fields[0].model, this.fields[1].model, this.fields[2].model, this.projectId)
+    this.backEnd.updateHomerProgram(this.id, this.nameField, this.descriptionField, this.codeField, this.projectId)
         .then((message) => {
           this.events.send(message);
           this.router.navigate(["Project", {project: this.projectId}]);
@@ -104,7 +101,7 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onCancel():void {
+  onCancelClick():void {
     "use strict";
 
     this.router.navigate(["Project", {project: this.projectId}]);

@@ -24,9 +24,37 @@
           <div class="panel panel-default">
             <div class="panel-body">
               <template data-bind-ng-if="item.editing">
-                <div data-bind-form="item.fields" data-cancellable="true" data-on-submit="onItemEditingSubmit(item, $event)" data-on-cancel="onItemEditingCancel(item, $event)">
-                  <progress>Loading...</progress>
-                </div>
+                <form class="clearfix" data-on-submit="onItemEditingSubmit(item, $event)">
+                  <template data-bind-ng-if="item.hasOwnProperty('typeField')">
+                    <div class="form-group">
+                      <label>
+                        <span class="glyphicon glyphicon-pencil"></span>
+                        Type
+                      </label>
+                      <input class="form-control" data-bindon-ng-model="item.typeField">
+                    </div>
+                  </template>
+                  <template data-bind-ng-if="item.hasOwnProperty('titleField')">
+                    <div class="form-group">
+                      <label>
+                        <span class="glyphicon glyphicon-pencil"></span>
+                        Title
+                      </label>
+                      <input class="form-control" data-bindon-ng-model="item.titleField">
+                    </div>
+                  </template>
+                  <div class="form-group">
+                    <label>
+                      <span class="glyphicon glyphicon-pencil"></span>
+                      Body
+                    </label>
+                    <textarea class="form-control" data-bindon-ng-model="item.bodyField"></textarea>
+                  </div>
+                  <div class="pull-right">
+                    <button class="btn btn-danger" type="button" data-on-click="onItemEditingCancelClick(item, $event)">Cancel</button>
+                    <button class="btn btn-primary" type="submit">Update</button>
+                  </div>
+                </form>
               </template>
               <template data-bind-ng-if="!item.editing">
                 <div class="btn-group btn-group-xs pull-right">
@@ -49,9 +77,19 @@
                   </div>
                   <div class="media-body">
                     <template data-bind-ng-if="comment.editing">
-                      <div data-bind-form="comment.fields" data-cancellable="true" data-on-submit="onCommentEditingSubmit(comment, $event)" data-on-cancel="onCommentEditingCancel(comment, $event)">
-                        <progress>Loading...</progress>
-                      </div>
+                      <form class="clearfix" data-on-submit="onCommentEditingSubmit(comment, $event)">
+                        <div class="form-group">
+                          <label>
+                            <span class="glyphicon glyphicon-comment"></span>
+                            Comment
+                          </label>
+                          <textarea class="form-control" data-bindon-ng-model="comment.bodyField"></textarea>
+                        </div>
+                        <div class="pull-right">
+                          <button class="btn btn-danger" type="button" data-on-click="onCommentEditingCancelClick(comment, $event)">Cancel</button>
+                          <button class="btn btn-primary" type="submit">Update</button>
+                        </div>
+                      </form>
                     </template>
                     <template data-bind-ng-if="!comment.editing">
                       <div class="media-heading" style="font-weight: bold;">
@@ -88,9 +126,14 @@
                 <div class="media-left">
                   <img class="media-object" src="...">
                 </div>
-                <div class="media-body" data-bind-form="item.commentCreationFields" data-on-submit="onCommentCreationSubmit(item, $event)">
-                  <progress>Loading...</progress>
-                </div>
+                <form class="media-body" data-on-submit="onCommentCreationSubmit(item, $event)">
+                  <div class="input-group">
+                    <input class="form-control" type="text" data-bindon-ng-model="item.commentField">
+                    <span class="input-group-btn">
+                      <button class="btn btn-primary" type="submit">Comment</button>
+                    </span>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
@@ -113,8 +156,24 @@
     </div>
   </div>
   <div class="panel panel-default">
-    <div class="panel-body" data-bind-form="answerCreation" data-on-submit="onAnswerCreationSubmit($event)">
-      <progress>Loading...</progress>
-    </div>
+    <form class="panel-body clearfix" data-on-submit="onAnswerCreationSubmit($event)">
+      <div class="form-group">
+        <label>
+          <span class="glyphicon glyphicon-pencil"></span>
+          Body
+        </label>
+        <textarea class="form-control" data-bindon-ng-model="answerBodyField"></textarea>
+      </div>
+      <div class="form-group">
+        <label>
+          <span class="glyphicon glyphicon-console"></span>
+          Homer Program
+        </label>
+        <div data-bindon-field-homer-program="answerCodeField">
+          <progress>Loading...</progress>
+        </div>
+      </div>
+      <button class="btn btn-primary pull-right" type="submit">Create</button>
+    </form>
   </div>
 </div>

@@ -19,9 +19,8 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as form from "./form";
+import * as fieldHomerProgram from "./field-homer-program";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapFields from "./lib-bootstrap/fields";
 import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
 import * as wrapper from "./wrapper";
 
@@ -39,7 +38,7 @@ class Comment {
 
   editing:boolean;
 
-  fields:libBootstrapFields.Field[];
+  bodyField:string;
 
   constructor(id:string, body:string, date:number, likes:number, tags?:string[]) {
     "use strict";
@@ -50,7 +49,7 @@ class Comment {
     this.likes = likes;
     this.tags = tags;
     this.editing = false;
-    this.fields = [new libBootstrapFields.Field("Comment", body, "text", "glyphicon-comment")];
+    this.bodyField = body;
   }
 }
 
@@ -70,9 +69,9 @@ class Item {
 
   editing:boolean;
 
-  fields:libBootstrapFields.Field[];
+  bodyField:string;
 
-  commentCreationFields:libBootstrapFields.Field[];
+  commentField:string;
 
   constructor(id:string, body:string, date:number, likes:number, comments:Comment[], tags?:string[]) {
     "use strict";
@@ -84,29 +83,36 @@ class Item {
     this.comments = comments;
     this.tags = tags;
     this.editing = false;
-    this.fields = [new libBootstrapFields.Field("Body", body)];
-    this.commentCreationFields = [new libBootstrapFields.Field("New Comment", "", "text", "glyphicon-comment")];
+    this.bodyField = body;
+    this.commentField = "";
   }
 }
 
 class Issue extends Item {
 
+  typeField:string;
+
+  titleField:string;
+
   constructor(id:string, type:string, title:string, body:string, date:number, likes:number, comments:Comment[], tags?:string[]) {
     "use strict";
 
     super(id, body, date, likes, comments, tags);
-    this.fields = [].concat(
-        [
-          new libBootstrapFields.Field("Type", type),
-          new libBootstrapFields.Field("Title", title)
-        ],
-        this.fields);
+    this.typeField = type;
+    this.titleField = title;
   }
 }
 
 @ng.Component({
   templateUrl: "app/issue.html",
-  directives: [form.Component, libBootstrapPanelList.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES, wrapper.Component]
+  directives: [
+    fieldHomerProgram.Component,
+    libBootstrapPanelList.Component,
+    ng.CORE_DIRECTIVES,
+    ng.FORM_DIRECTIVES,
+    ngRouter.ROUTER_DIRECTIVES,
+    wrapper.Component
+  ]
 })
 export class Component implements ng.OnInit {
 
@@ -118,7 +124,9 @@ export class Component implements ng.OnInit {
 
   items:Array<Item>;
 
-  answerCreation:libBootstrapFields.Field[];
+  answerBodyField:string;
+
+  answerCodeField:string;
 
   related:libBootstrapPanelList.Item[];
 
@@ -148,10 +156,8 @@ export class Component implements ng.OnInit {
       new wrapper.LabeledLink("Issues", ["Issues"]),
       new wrapper.LabeledLink(`Issue ${this.id}`, ["Issue", {issue: this.id}])
     ];
-    this.answerCreation = [
-      new libBootstrapFields.Field("Body", ""),
-      new libBootstrapFields.Field("Homer Program", `{"blocks":{}}`, "homer-program", "glyphicon-console")
-    ];
+    this.answerBodyField = "";
+    this.answerCodeField = `{"blocks":{}}`;
     this.newRelatedLink = ["NewRelatedIssue", {issue: this.id}];
     this.newTagLink = ["NewIssueTag", {issue: this.id}];
     this.newConfirmationLink = ["NewIssueConfirmation", {issue: this.id}];
@@ -219,7 +225,7 @@ export class Component implements ng.OnInit {
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-29
     if (item instanceof Issue) {
-      this.backEnd.updateIssue(item.id, item.fields[0].model, item.fields[1].model, item.fields[2].model, item.tags || [])
+      this.backEnd.updateIssue(item.id, item.typeField, item.titleField, item.bodyField, item.tags || [])
           .then((message) => {
             this.events.send(message);
             this.refresh();
@@ -228,7 +234,7 @@ export class Component implements ng.OnInit {
             this.events.send(reason);
           });
     } else {
-      this.backEnd.updateAnswer(item.id, item.fields[0].model, item.tags || [])
+      this.backEnd.updateAnswer(item.id, item.bodyField, item.tags || [])
           .then((message) => {
             this.events.send(message);
             this.refresh();
@@ -239,7 +245,7 @@ export class Component implements ng.OnInit {
     }
   }
 
-  onItemEditingCancel(item:Item):void {
+  onItemEditingCancelClick(item:Item):void {
     "use strict";
 
     item.editing = false;
@@ -299,9 +305,11 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-48
-    this.backEnd.createAnswer(this.id, this.answerCreation[0].model)
+    this.backEnd.createAnswer(this.id, this.answerBodyField)
         .then((message) => {
           this.events.send(message);
+          this.answerBodyField = "";
+          this.answerCodeField = `{"blocks":{}}`;
           this.refresh();
         })
         .catch((reason) => {
@@ -312,7 +320,7 @@ export class Component implements ng.OnInit {
   onCommentCreationSubmit(item:Item):void {
     "use strict";
 
-    this.backEnd.createComment(item.id, item.commentCreationFields[0].model)
+    this.backEnd.createComment(item.id, item.commentField)
         .then((message) => {
           this.events.send(message);
           this.refresh();
@@ -331,7 +339,7 @@ export class Component implements ng.OnInit {
   onCommentEditingSubmit(comment:Comment):void {
     "use strict";
 
-    this.backEnd.updateComment(comment.id, comment.fields[0].model, comment.tags || [])
+    this.backEnd.updateComment(comment.id, comment.bodyField, comment.tags || [])
         .then((message) => {
           this.events.send(message);
           this.refresh();
@@ -341,7 +349,7 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onCommentEditingCancel(comment:Comment):void {
+  onCommentEditingCancelClick(comment:Comment):void {
     "use strict";
 
     comment.editing = false;

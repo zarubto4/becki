@@ -24,12 +24,10 @@ import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
-  templateUrl: "app/wrapper-list.html",
+  templateUrl: "app/projects.html",
   directives: [libBootstrapPanelList.Component, wrapper.Component],
 })
 export class Component implements ng.OnInit {
-
-  heading:string;
 
   breadcrumbs:wrapper.LabeledLink[];
 
@@ -46,7 +44,6 @@ export class Component implements ng.OnInit {
   constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.heading = "Projects";
     this.breadcrumbs = [
       becki.HOME,
       new wrapper.LabeledLink("User", ["Projects"]),

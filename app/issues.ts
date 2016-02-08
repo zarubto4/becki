@@ -19,7 +19,6 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapFields from "./lib-bootstrap/fields";
 import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
 import * as wrapper from "./wrapper";
 

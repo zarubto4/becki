@@ -370,6 +370,8 @@ export interface IssueLink {
  */
 export abstract class BackEnd {
 
+  static BASE_URL = "http://127.0.0.1:9000";
+
   static ANSWER_PATH = "/overflow/answer";
 
   static BOARD_TYPE_PATH = "/compilation/typeOfBoard";
@@ -433,7 +435,7 @@ export abstract class BackEnd {
   public requestPath<T>(method:string, path:string, body?:Object):Promise<T> {
     "use strict";
 
-    return this.request(method, `http://127.0.0.1:9000${path}`, body);
+    return this.request(method, BackEnd.BASE_URL + path, body);
   }
 
   public request<T>(method:string, url:string, body?:Object):Promise<T> {
@@ -547,6 +549,12 @@ export abstract class BackEnd {
     return this.requestPath("POST", BackEnd.PRODUCER_PATH, {name, description}).then(JSON.stringify);
   }
 
+  public getProducer(id:string):Promise<Producer> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.PRODUCER_PATH}/${id}`);
+  }
+
   public getProducers():Promise<Producer[]> {
     "use strict";
 
@@ -559,10 +567,54 @@ export abstract class BackEnd {
     return this.requestPath("POST", BackEnd.LIBRARY_PATH, {libraryName, description}).then(JSON.stringify);
   }
 
+  public getLibrary(id:string):Promise<Library> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.LIBRARY_PATH}/${id}`);
+  }
+
   public getLibraries():Promise<Library[]> {
     "use strict";
 
     return this.requestPath("GET", BackEnd.LIBRARY_PATH);
+  }
+
+  public updateLibrary(id:string, libraryName:string, description:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("PUT", `${BackEnd.LIBRARY_PATH}/${id}`, {libraryName, description}).then(JSON.stringify);
+  }
+
+  public addVersionToLibrary(version:number, versionName:string, description:string, id:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("POST", `${BackEnd.LIBRARY_PATH}/version/${id}`, {versionName, description, version}).then(JSON.stringify);
+  }
+
+  public updateFileOfLibrary(file:File, version:string, id:string):Promise<string> {
+    "use strict";
+
+    // TODO: https://github.com/angular/angular/issues/2803
+    return new Promise((resolve, reject) => {
+      let url = `${BackEnd.BASE_URL}/compilation/library/uploud/${id}`;
+      if (version) {
+        url += `/${version}`;
+      }
+      let formdata = new FormData();
+      formdata.append("file", file);
+      let request = new XMLHttpRequest();
+      request.addEventListener("load", () => {
+        if (request.status >= 200 && request.status < 300) {
+          resolve(request.response);
+        } else {
+          reject(request.response);
+        }
+      });
+      request.addEventListener("error", reject);
+      request.open("POST", url);
+      request.setRequestHeader("X-AUTH-TOKEN", window.localStorage.getItem("authToken"));
+      request.send(formdata);
+    });
   }
 
   public createLibraryGroup(groupName:string, description:string):Promise<string> {
@@ -714,19 +766,6 @@ export abstract class BackEnd {
   }
 
   /**
-   * Retrieve all the projects of a person.
-   *
-   * @param token an authentication token of the person.
-   * @returns a promise that will be resolved with a mapping from the projects
-   *          IDs to the projects themselves, or rejected with a reason.
-   */
-  public getProjects():Promise<Project[]> {
-    "use strict";
-
-    return this.requestPath("GET", BackEnd.PROJECT_PATH);
-  }
-
-  /**
    * Retrieve details about a project.
    *
    * @param id the ID of the project.
@@ -740,6 +779,19 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath<Project>("GET", `${BackEnd.PROJECT_PATH}/${id}`);
+  }
+
+  /**
+   * Retrieve all the projects of a person.
+   *
+   * @param token an authentication token of the person.
+   * @returns a promise that will be resolved with a mapping from the projects
+   *          IDs to the projects themselves, or rejected with a reason.
+   */
+  public getProjects():Promise<Project[]> {
+    "use strict";
+
+    return this.requestPath("GET", BackEnd.PROJECT_PATH);
   }
 
   public updateProject(id:string, projectName:string, projectDescription:string):Promise<string> {

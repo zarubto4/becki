@@ -39,13 +39,35 @@
 </div>
 <template data-bind-ng-if="config">
   <div class="panel panel-primary" style="margin-top: 2em">
-    <div class="panel-heading">Configuration of {{config?.block?.id}}</div>
-    <div class="panel-body" data-bind-fields="config.fields">
-      <progress>Loading...</progress>
+    <div class="panel-heading">Configuration of {{config?.id}}</div>
+    <div class="panel-body">
+      <div class="form-group" template="ngFor #property of config?.getConfigProperties()" data-bind-ng-switch="getPropertyType(property)">
+        <label>
+          <span class="glyphicon glyphicon-pencil"></span>
+          {{property.displayName}}
+        </label>
+        <template data-bind-ng-switch-when="'int'">
+          <input class="form-control" type="number" data-bindon-ng-model="property.value">
+        </template>
+        <template data-bind-ng-switch-when="'float'">
+          <input class="form-control" type="number" step="0.1" data-bindon-ng-model="property.value">
+        </template>
+        <template data-bind-ng-switch-when="'text'">
+          <input class="form-control" data-bindon-ng-model="property.value">
+        </template>
+        <template data-bind-ng-switch-when="'bool'">
+          <input type="checkbox" data-bindon-ng-model="property.value">
+        </template>
+        <template data-bind-ng-switch-when="'javascript'">
+          <div data-bindon-field-code="property.value" data-bind-mode="'text/javascript'">
+            <progress>Loading...</progress>
+          </div>
+        </template>
+      </div>
     </div>
     <div class="panel-footer text-right">
-      <button class="btn btn-danger" type="button" data-on-click="onConfigCancel($event)">Cancel</button>
-      <button class="btn btn-primary" type="button" data-on-click="onConfigSave($event)">Save</button>
+      <button class="btn btn-danger" type="button" data-on-click="onConfigCloseClick($event)">Close</button>
+      <button class="btn btn-primary" type="button" data-on-click="onConfigSaveClick($event)">Save</button>
     </div>
   </div>
 </template>

@@ -1,0 +1,85 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<div data-bind-wrapper="heading" data-bind-breadcrumbs="breadcrumbs">
+  <h2>Details</h2>
+  <form class="clearfix" data-on-submit="onUpdatingSubmit($event)">
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-pencil"></span>
+        Name
+      </label>
+      <input class="form-control" data-bindon-ng-model="nameField">
+    </div>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-pencil"></span>
+        Description
+      </label>
+      <textarea class="form-control" data-bindon-ng-model="descriptionField"></textarea>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+      <button class="btn btn-primary" type="submit">Update</button>
+    </div>
+  </form>
+
+  <h2>New Version</h2>
+  <form class="clearfix" data-on-submit="onVersionSubmit($event)">
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-pencil"></span>
+        Number
+      </label>
+      <input class="form-control" type="number" step="0.01" data-bindon-ng-model="versionField">
+    </div>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-pencil"></span>
+        Name
+      </label>
+      <input class="form-control" data-bindon-ng-model="versionNameField">
+    </div>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-pencil"></span>
+        Description
+      </label>
+      <textarea class="form-control" data-bindon-ng-model="versionDescriptionField"></textarea>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-primary" type="submit">Create</button>
+    </div>
+  </form>
+
+  <h2>File Upload</h2>
+  <form class="clearfix" data-on-submit="onFileSubmit($event)">
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-list"></span>
+        Version
+      </label>
+      <select class="form-control" data-bindon-ng-model="fileVersionField">
+        <option value="">Select version...</option>
+        <option value="new">
+          Create a new version
+        </option>
+        <option data-bind-value="version" template="ngFor #version of versions">
+          {{version}}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-file"></span>
+        File
+      </label>
+      <input class="form-control" type="file" required data-var-file-field>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-primary" type="submit">Upload</button>
+    </div>
+  </form>
+</div>

@@ -23,20 +23,20 @@ import * as libBackEnd from "./lib-back-end/index";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
-  templateUrl: "app/issue-related-new.html",
-  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
+  templateUrl: "app/producer.html",
+  directives: [ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
-  issueId:string;
+  id:string;
 
   heading:string;
 
   breadcrumbs:wrapper.LabeledLink[];
 
-  issues:libBackEnd.Issue[];
+  nameField:string;
 
-  field:string;
+  descriptionField:string;
 
   backEnd:backEnd.Service;
 
@@ -47,16 +47,15 @@ export class Component implements ng.OnInit {
   constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.issueId = routeParams.get("issue");
-    this.heading = `New Issue Related to Issue ${this.issueId}`;
+    this.id = routeParams.get("producer");
+    this.heading = `Producer ${this.id}`;
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("Issues", ["Issues"]),
-      new wrapper.LabeledLink(`Issue ${this.issueId}`, ["Issue", {issue: this.issueId}]),
-      new wrapper.LabeledLink("Related Issues", ["Issue", {issue: this.issueId}]),
-      new wrapper.LabeledLink("New Related Issue", ["NewRelatedIssue", {issue: this.issueId}])
+      new wrapper.LabeledLink("Producers", ["Devices"]),
+      new wrapper.LabeledLink(`Producer ${this.id}`, ["Producer", {producer: this.id}])
     ];
-    this.field = "";
+    this.nameField = "Loading...";
+    this.descriptionField = "Loading...";
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -65,10 +64,18 @@ export class Component implements ng.OnInit {
   onInit():void {
     "use strict";
 
-    this.backEnd.getIssues()
-        .then(issues => {
-          this.events.send(issues);
-          this.issues = issues;
+    this.backEnd.getProducer(this.id)
+        .then(producer =>
+          Promise.all<any>([
+              producer,
+              this.backEnd.request("GET", producer.description)
+          ])
+        )
+        .then(result => {
+          let producer:libBackEnd.Producer;
+          [producer, this.descriptionField] = result;
+          this.events.send(result);
+          this.nameField = producer.name;
         })
         .catch(reason => {
           this.events.send(reason);
@@ -78,19 +85,13 @@ export class Component implements ng.OnInit {
   onSubmit():void {
     "use strict";
 
-    this.backEnd.createIssueLink(this.issueId, this.field)
-        .then((message) => {
-          this.events.send(message);
-          this.router.navigate(["Issue", {issue: this.issueId}]);
-        })
-        .catch((reason) => {
-          this.events.send(reason);
-        });
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-54
+    alert("issue/TYRION-54");
   }
 
   onCancelClick():void {
     "use strict";
 
-    this.router.navigate(["Issue", {issue: this.issueId}]);
+    this.router.navigate(["Devices"]);
   }
 }

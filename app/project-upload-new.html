@@ -1,0 +1,124 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<div data-bind-wrapper="heading" data-bind-breadcrumbs="breadcrumbs">
+  <form class="clearfix" data-on-submit="onSubmit($event)">
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-list"></span>
+        Board/Homer program
+      </label>
+      <select class="form-control" required data-bindon-ng-model="typeField">
+        <option value="">Select type...</option>
+        <option>Board</option>
+        <option>Homer</option>
+      </select>
+    </div>
+    <div data-bind-ng-switch="typeField">
+      <template data-bind-ng-switch-when="'Board'">
+        <div class="form-group">
+          <label>
+            <span class="glyphicon glyphicon-list"></span>
+            Board ID
+          </label>
+          <select class="form-control" data-bindon-ng-model="deviceField">
+            <option value="">Select ID...</option>
+            <option data-bind-value="board.id" template="ngFor #board of boards">
+              {{board.id}}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>
+            <span class="glyphicon glyphicon-console"></span>
+            Program
+          </label>
+          <select class="form-control" data-bindon-ng-model="programField">
+            <option value="">Select name...</option>
+            <option data-bind-value="program.programId" template="ngFor #program of boardPrograms">
+              {{program.programName}}
+            </option>
+          </select>
+        </div>
+      </template>
+      <template data-bind-ng-switch-when="'Homer'">
+        <div class="form-group">
+          <label>
+            <span class="glyphicon glyphicon-list"></span>
+            Homer ID
+          </label>
+          <select class="form-control" data-bindon-ng-model="deviceField">
+            <option value="">Select ID...</option>
+            <option data-bind-value="homer.homerId" template="ngFor #homer of homers">
+              {{homer.homerId}}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>
+            <span class="glyphicon glyphicon-console"></span>
+            Program
+          </label>
+          <select class="form-control" data-bindon-ng-model="programField">
+            <option value="">Select name...</option>
+            <option data-bind-value="program.programId" template="ngFor #program of homerPrograms">
+              {{program.programName}}
+            </option>
+          </select>
+        </div>
+      </template>
+    </div>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-time"></span>
+        When
+      </label>
+      <select class="form-control" required data-bindon-ng-model="whenField">
+        <option value="">Select time...</option>
+        <option>Immediately</option>
+        <option>As soon as possible</option>
+        <option>Later</option>
+      </select>
+    </div>
+    <template data-bind-ng-if="whenField == 'Later'">
+      <div class="form-group">
+        <label>
+          <span class="glyphicon glyphicon-time"></span>
+          Since
+        </label>
+        <div class="row">
+          <div class="col-sm-6">
+            <input class="form-control" type="date" required data-bindon-ng-model="sinceDateField">
+          </div>
+          <div class="col-sm-6">
+            <input class="form-control" type="time" required step="0.001" data-bindon-ng-model="sinceTimeField">
+          </div>
+        </div>
+      </div>
+    </template>
+    <template data-bind-ng-if="whenField == 'As soon as possible' || whenField == 'Later'">
+      <div class="form-group">
+        <label>
+          <span class="glyphicon glyphicon-time"></span>
+          Until
+        </label>
+        <div class="row">
+          <div class="col-sm-6">
+            <input class="form-control" type="date" required data-bindon-ng-model="untilDateField">
+          </div>
+          <div class="col-sm-6">
+            <input class="form-control" type="time" step="0.001" required data-bindon-ng-model="untilTimeField">
+          </div>
+        </div>
+      </div>
+    </template>
+    <div class="pull-right">
+      <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">
+        Cancel
+      </button>
+      <button class="btn btn-primary" type="submit">Upload</button>
+    </div>
+  </form>
+</div>

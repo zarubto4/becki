@@ -19,27 +19,69 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as form from "./form";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapFieldSelect from "./lib-bootstrap/field-select";
-import * as libBootstrapFields from "./lib-bootstrap/fields";
 import * as wrapper from "./wrapper";
 
+function composeDateString(date:Date):string {
+  "use strict";
+
+  let year = date.getFullYear();
+  let month = ("0" + (date.getMonth() + 1).toString()).slice(-2);
+  let day = ("0" + date.getDate().toString()).slice(-2);
+  return `${year}-${month}-${day}`;
+}
+
+function composeTimeString(date:Date):string {
+  "use strict";
+
+  let hour = ("0" + date.getHours().toString()).slice(-2);
+  let minute = ("0" + date.getMinutes().toString()).slice(-2);
+  let second = ("0" + date.getSeconds().toString()).slice(-2);
+  let fraction = ("00" + date.getMilliseconds().toString()).slice(-3);
+  return `${hour}:${minute}:${second}.${fraction}`;
+}
+
+function parseDateTimeString(dateString:string, timeString:string):Date {
+  "use strict";
+
+  let dateStrings = /^(\d{4,})-(\d{2})-(\d{2})$/.exec(dateString);
+  if (!dateStrings) {
+    throw "invalid date format";
+  }
+
+  let year = parseInt(dateStrings[1]);
+  let month = parseInt(dateStrings[2]) - 1;
+  let day = parseInt(dateStrings[3]);
+  if (isNaN(year) || isNaN(month) || isNaN(day)) {
+    throw "date component not a number";
+  }
+
+  let timeStrings = /^(\d{2}):(\d{2})(?::(\d{2})(?:.(\d+))?)?$/.exec(timeString);
+  if (!timeStrings) {
+    throw "invalid time format";
+  }
+
+  let hour = parseInt(timeStrings[1]);
+  let minute = parseInt(timeStrings[2]);
+  let second = timeStrings[3] ? parseInt(timeStrings[3]) : 0;
+  let fraction = timeStrings[4] ? parseInt(timeStrings[4]) : 0;
+  if (isNaN(hour) || isNaN(minute) || isNaN(second) || isNaN(fraction)) {
+    throw "time component not a number";
+  }
+
+  let date = new Date(year, month, day, hour, minute, second, fraction);
+  if (date.getFullYear() != year || date.getMonth() != month || date.getDate() != day || date.getHours() != hour || date.getMinutes() != minute || date.getSeconds() != second || date.getMilliseconds() != fraction) {
+    throw "component out of range";
+  }
+
+  return date;
+}
+
 @ng.Component({
-  templateUrl: "app/wrapper-form.html",
-  directives: [form.Component, wrapper.Component]
+  templateUrl: "app/project-upload-new.html",
+  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
-
-  static ASAP = "asap";
-
-  static IMMEDIATELY = "immediately";
-
-  static LATER = "later";
-
-  static BOARD = "board";
-
-  static HOMER = "homer";
 
   projectId:string;
 
@@ -47,15 +89,29 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:wrapper.LabeledLink[];
 
-  fields:libBootstrapFields.Field[];
+  boards:libBackEnd.Board[];
 
-  boardOptions:libBootstrapFieldSelect.Option[];
+  homers:libBackEnd.Homer[];
 
-  boardProgramOptions:libBootstrapFieldSelect.Option[];
+  boardPrograms:any[];
 
-  homerOptions:libBootstrapFieldSelect.Option[];
+  homerPrograms:libBackEnd.HomerProgram[];
 
-  homerProgramOptions:libBootstrapFieldSelect.Option[];
+  typeField:string;
+
+  deviceField:string;
+
+  programField:string;
+
+  whenField:string;
+
+  sinceDateField:string;
+
+  sinceTimeField:string;
+
+  untilDateField:string;
+
+  untilTimeField:string;
 
   backEnd:backEnd.Service;
 
@@ -66,8 +122,7 @@ export class Component implements ng.OnInit {
   constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    let since = new Date();
-    let until = new Date(new Date(since.getTime()).setDate(since.getDate() + 7));
+    let now = new Date();
     this.projectId = routeParams.get("project");
     this.heading = `New Program Upload (Project ${this.projectId})`;
     this.breadcrumbs = [
@@ -78,21 +133,14 @@ export class Component implements ng.OnInit {
       new wrapper.LabeledLink("Program Uploads", ["Project", {project: this.projectId}]),
       new wrapper.LabeledLink("New Upload", ["NewProjectUpload", {project: this.projectId}])
     ];
-    this.fields = [
-      new libBootstrapFields.Field("Board/Homer program", "", "select", "glyphicon-list", [
-        new libBootstrapFieldSelect.Option("Board", Component.BOARD),
-        new libBootstrapFieldSelect.Option("Homer", Component.HOMER)
-      ]),
-      new libBootstrapFields.Field("Board/Homer ID", "", "select", "glyphicon-list"),
-      new libBootstrapFields.Field("Program", "", "select", "glyphicon-console"),
-      new libBootstrapFields.Field("When", "", "select", "glyphicon-time", [
-        new libBootstrapFieldSelect.Option("Immediately", Component.IMMEDIATELY),
-        new libBootstrapFieldSelect.Option("As soon as possible", Component.ASAP),
-        new libBootstrapFieldSelect.Option("Later", Component.LATER)
-      ]),
-      libBootstrapFields.Field.fromDate("Since", since, "text", "glyphicon-time", undefined, false, false),
-      libBootstrapFields.Field.fromDate("Until", until, "text", "glyphicon-time", undefined, false, false)
-    ];
+    this.typeField = "";
+    this.deviceField = "";
+    this.programField = "";
+    this.whenField = "";
+    this.sinceDateField = composeDateString(now);
+    this.sinceTimeField = composeTimeString(now);
+    this.untilDateField = composeDateString(new Date(new Date(now.getTime()).setDate(now.getDate() + 7)));
+    this.untilTimeField = this.sinceTimeField;
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -112,71 +160,39 @@ export class Component implements ng.OnInit {
         })
         .then(result => {
           this.events.send(result);
-          let boards:libBackEnd.Board[];
-          let homers:libBackEnd.Homer[];
-          let programs:libBackEnd.HomerProgram[];
-          [boards, homers, programs] = result;
-          this.boardOptions = boards.map(board => new libBootstrapFieldSelect.Option(board.id, board.id));
+          [this.boards, this.homers, this.homerPrograms] = result;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-47
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-14
-          this.boardProgramOptions = [];
-          this.homerOptions = homers.map(homer => new libBootstrapFieldSelect.Option(homer.homerId, homer.homerId));
-          this.homerProgramOptions = programs.map(program => new libBootstrapFieldSelect.Option(program.programName, program.programId));
+          this.boardPrograms = [];
         })
         .catch((reason) => {
           this.events.send(reason);
         });
   }
 
-  onFieldChange():void {
-    "use strict";
-
-    switch (this.fields[0].model) {
-      case Component.BOARD:
-        this.fields[1].label = "Board ID";
-        this.fields[1].options = this.boardOptions;
-        this.fields[2].options = this.boardProgramOptions;
-        break;
-      case Component.HOMER:
-        this.fields[1].label = "Homer ID";
-        this.fields[1].options = this.homerOptions;
-        this.fields[2].options = this.homerProgramOptions;
-        break;
-      default:
-        this.fields[1].label = "Board/Homer ID";
-        this.fields[1].options = [];
-        this.fields[2].options = [];
-        break;
-    }
-    this.fields[4].visible = false;
-    this.fields[5].visible = false;
-    switch (this.fields[3].model) {
-      case Component.LATER:
-        this.fields[4].visible = true;
-      case Component.ASAP:
-        this.fields[5].visible = true;
-        break;
-    }
-  }
-
   onSubmit():void {
     "use strict";
 
+    let since:string;
+    let until:string;
     let promise:Promise<string>;
-    switch (this.fields[0].model) {
-      case Component.BOARD:
+    switch (this.typeField) {
+      case "Board":
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-15
         return;
-      case Component.HOMER:
-        switch (this.fields[3].model) {
-          case Component.IMMEDIATELY:
-            promise = this.backEnd.uploadToHomerNow(this.fields[1].model, this.fields[2].model);
+      case "Homer":
+        switch (this.whenField) {
+          case "Immediately":
+            promise = this.backEnd.uploadToHomerNow(this.deviceField, this.programField);
             break;
-          case Component.ASAP:
-            promise = this.backEnd.uploadToHomerAsap(this.fields[1].model, this.fields[2].model, this.fields[5].getDate().getTime().toString());
+          case "As soon as possible":
+            until = parseDateTimeString(this.untilDateField, this.untilTimeField).getTime().toString();
+            promise = this.backEnd.uploadToHomerAsap(this.deviceField, this.programField, until);
             break;
-          case Component.LATER:
-            promise = this.backEnd.uploadToHomerLater(this.fields[1].model, this.fields[2].model, this.fields[4].getDate().getTime().toString(), this.fields[5].getDate().getTime().toString());
+          case "Later":
+            since = parseDateTimeString(this.sinceDateField, this.sinceTimeField).getTime().toString();
+            until = parseDateTimeString(this.untilDateField, this.untilTimeField).getTime().toString();
+            promise = this.backEnd.uploadToHomerLater(this.deviceField, this.programField, since, until);
             break;
           default:
             return;
@@ -195,7 +211,7 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onCancel():void {
+  onCancelClick():void {
     "use strict";
 
     this.router.navigate(["Project", {project: this.projectId}]);

@@ -1,0 +1,51 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<div data-bind-wrapper="'New Board Type'" data-bind-breadcrumbs="breadcrumbs">
+  <form class="clearfix" data-on-submit="onSubmit($event)">
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-pencil"></span>
+        Name
+      </label>
+      <input class="form-control" data-bindon-ng-model="nameField">
+    </div>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-list"></span>
+        Producer
+      </label>
+      <select class="form-control" data-bindon-ng-model="producerField">
+        <option value="">Select name...</option>
+        <option data-bind-value="producer.id" template="ngFor #producer of producers">
+          {{producer.name}}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-list"></span>
+        Processor
+      </label>
+      <select class="form-control" data-bindon-ng-model="processorField">
+        <option value="">Select name...</option>
+        <option data-bind-value="processor.id" template="ngFor #processor of processors">
+          {{processor.processorName}}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-pencil"></span>
+        Description
+      </label>
+      <textarea class="form-control" data-bindon-ng-model="descriptionField"></textarea>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+      <button class="btn btn-primary" type="submit">Create</button>
+    </div>
+  </form>
+</div>

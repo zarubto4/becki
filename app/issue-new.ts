@@ -19,22 +19,24 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as form from "./form";
-import * as libBootstrapFieldSelect from "./lib-bootstrap/field-select";
-import * as libBootstrapFields from "./lib-bootstrap/fields";
+import * as libBackEnd from "./lib-back-end/index";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
-  templateUrl: "app/wrapper-form.html",
-  directives: [form.Component, wrapper.Component]
+  templateUrl: "app/issue-new.html",
+  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
-  heading:string;
-
   breadcrumbs:wrapper.LabeledLink[];
 
-  fields:libBootstrapFields.Field[];
+  types:libBackEnd.IssueType[];
+
+  typeField:string;
+
+  titleField:string;
+
+  bodyField:string;
 
   backEnd:backEnd.Service;
 
@@ -45,17 +47,14 @@ export class Component implements ng.OnInit {
   constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.heading = "New Issue";
     this.breadcrumbs = [
       becki.HOME,
       new wrapper.LabeledLink("Issues", ["Issues"]),
       new wrapper.LabeledLink("New Issue", ["NewIssue"])
     ];
-    this.fields = [
-      new libBootstrapFields.Field("Type", "", "select"),
-      new libBootstrapFields.Field("Title", ""),
-      new libBootstrapFields.Field("Body", "")
-    ];
+    this.typeField = "";
+    this.titleField = "";
+    this.bodyField = "";
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -65,23 +64,19 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getIssueTypes()
-        .then((types) => {
+        .then(types => {
           this.events.send(types);
-          this.fields[0].options = types.map(type => new libBootstrapFieldSelect.Option(type.type, type.id));
+          this.types = types;
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
-  }
-
-  onFieldChange():void {
-    "use strict";
   }
 
   onSubmit():void {
     "use strict";
 
-    this.backEnd.createIssue(this.fields[0].model, this.fields[1].model, this.fields[2].model, [])
+    this.backEnd.createIssue(this.typeField, this.titleField, this.bodyField, [])
         .then((message) => {
           this.events.send(message);
           this.router.navigate(["Issues"]);
@@ -91,7 +86,7 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onCancel():void {
+  onCancelClick():void {
     "use strict";
 
     this.router.navigate(["Issues"]);

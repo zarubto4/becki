@@ -19,21 +19,17 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as form from "./form";
-import * as libBootstrapFields from "./lib-bootstrap/fields";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
-  templateUrl: "app/wrapper-form.html",
-  directives: [form.Component, wrapper.Component]
+  templateUrl: "app/issue-type-new.html",
+  directives: [ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component {
 
-  heading:string;
-
   breadcrumbs:wrapper.LabeledLink[];
 
-  fields:libBootstrapFields.Field[];
+  field:string;
 
   backEnd:backEnd.Service;
 
@@ -44,29 +40,22 @@ export class Component {
   constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.heading = "New Issue Type";
     this.breadcrumbs = [
       becki.HOME,
       new wrapper.LabeledLink("Issues", ["Issues"]),
       new wrapper.LabeledLink("Types", ["Issues"]),
       new wrapper.LabeledLink("New Type", ["NewIssueType"]),
     ];
-    this.fields = [
-      new libBootstrapFields.Field("Name", "")
-    ];
+    this.field = "";
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
   }
 
-  onFieldChange():void {
-    "use strict";
-  }
-
   onSubmit():void {
     "use strict";
 
-    this.backEnd.createIssueType(this.fields[0].model)
+    this.backEnd.createIssueType(this.field)
         .then((message) => {
           this.events.send(message);
           this.router.navigate(["Issues"]);
@@ -76,7 +65,7 @@ export class Component {
         });
   }
 
-  onCancel():void {
+  onCancelClick():void {
     "use strict";
 
     this.router.navigate(["Issues"]);

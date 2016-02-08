@@ -19,14 +19,12 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as form from "./form";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapFields from "./lib-bootstrap/fields";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
-  templateUrl: "app/wrapper-form.html",
-  directives: [form.Component, wrapper.Component]
+  templateUrl: "app/issue-confirmation-new.html",
+  directives: [ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component {
 
@@ -36,7 +34,7 @@ export class Component {
 
   breadcrumbs:wrapper.LabeledLink[];
 
-  fields:libBootstrapFields.Field[];
+  field:string;
 
   backEnd:backEnd.Service;
 
@@ -56,21 +54,17 @@ export class Component {
       new wrapper.LabeledLink("Confirmations", ["Issue", {issue: this.issueId}]),
       new wrapper.LabeledLink("New Confirmation", ["NewIssueConfirmation", {issue: this.issueId}])
     ];
-    this.fields = [new libBootstrapFields.Field("Text", "")];
+    this.field = "";
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
-  }
-
-  onFieldChange():void {
-    "use strict";
   }
 
   onSubmit():void {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-31
-    this.backEnd.addConfirmationToPost(this.issueId, this.fields[0].model)
+    this.backEnd.addConfirmationToPost(this.issueId, this.field)
         .then((message) => {
           this.events.send(message);
           this.router.navigate(["Issue", {issue: this.issueId}]);
@@ -80,7 +74,7 @@ export class Component {
         });
   }
 
-  onCancel():void {
+  onCancelClick():void {
     "use strict";
 
     this.router.navigate(["Issue", {issue: this.issueId}]);

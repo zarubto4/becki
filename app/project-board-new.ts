@@ -19,13 +19,11 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as form from "./form";
-import * as libBootstrapFields from "./lib-bootstrap/fields";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
-  templateUrl: "app/wrapper-form.html",
-  directives: [form.Component, wrapper.Component]
+  templateUrl: "app/project-board-new.html",
+  directives: [ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component {
 
@@ -35,7 +33,7 @@ export class Component {
 
   breadcrumbs:wrapper.LabeledLink[];
 
-  fields:libBootstrapFields.Field[];
+  idField:string;
 
   backEnd:backEnd.Service;
 
@@ -56,22 +54,16 @@ export class Component {
       new wrapper.LabeledLink("Boards", ["Project", {project: this.projectId}]),
       new wrapper.LabeledLink("New Board", ["NewProjectBoard", {project: this.projectId}])
     ];
-    this.fields = [
-      new libBootstrapFields.Field("ID", "")
-    ];
+    this.idField = "";
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
   }
 
-  onFieldChange():void {
-    "use strict";
-  }
-
   onSubmit():void {
     "use strict";
 
-    this.backEnd.addBoardToProject(this.fields[0].model, this.projectId)
+    this.backEnd.addBoardToProject(this.idField, this.projectId)
         .then((message) => {
           this.events.send(message);
           this.router.navigate(["Project", {project: this.projectId}]);
@@ -81,7 +73,7 @@ export class Component {
         });
   }
 
-  onCancel():void {
+  onCancelClick():void {
     "use strict";
 
     this.router.navigate(["Project", {project: this.projectId}]);

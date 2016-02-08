@@ -32,8 +32,10 @@ import * as issueTagNew from "./issue-tag-new";
 import * as issueTypeNew from "./issue-type-new";
 import * as issues from "./issues";
 import * as libraryGroupNew from "./library-group-new";
+import * as library from "./library";
 import * as libraryNew from "./library-new";
 import * as processorNew from "./processor-new";
+import * as producer from "./producer";
 import * as producerNew from "./producer-new";
 import * as project from "./project";
 import * as projectBoardNew from "./project-board-new";
@@ -58,10 +60,12 @@ import * as standaloneProgramNew from "./standalone-program-new";
   {path: "/issues/:issue/confirmation/new", component: issueConfirmationNew.Component, as: "NewIssueConfirmation"},
   {path: "/issues/:issue/related/new", component: issueRelatedNew.Component, as: "NewRelatedIssue"},
   {path: "/issues/:issue/tag/new", component: issueTagNew.Component, as: "NewIssueTag"},
+  {path: "/libraries/:library", component: library.Component, as: "Library"},
   {path: "/library/group/new", component: libraryGroupNew.Component, as: "NewLibraryGroup"},
   {path: "/library/new", component: libraryNew.Component, as: "NewLibrary"},
   {path: "/processor/new", component: processorNew.Component, as: "NewProcessor"},
   {path: "/producer/new", component: producerNew.Component, as: "NewProducer"},
+  {path: "/producers/:producer", component: producer.Component, as: "Producer"},
   {path: "/signing", component: signing.Component, as: "Signing"},
   {path: "/user/project/new", component: projectNew.Component, as: "NewProject"},
   {path: "/user/projects", component: projects.Component, as: "Projects"},

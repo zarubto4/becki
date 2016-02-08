@@ -19,21 +19,19 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as form from "./form";
-import * as libBootstrapFields from "./lib-bootstrap/fields";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
-  templateUrl: "app/wrapper-form.html",
-  directives: [form.Component, wrapper.Component]
+  templateUrl: "app/library-group-new.html",
+  directives: [ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component {
 
-  heading:string;
-
   breadcrumbs:wrapper.LabeledLink[];
 
-  fields:libBootstrapFields.Field[];
+  nameField:string;
+
+  descriptionField:string;
 
   backEnd:backEnd.Service;
 
@@ -44,40 +42,33 @@ export class Component {
   constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.heading = "New Library Group";
     this.breadcrumbs = [
       becki.HOME,
       new wrapper.LabeledLink("Libraries", ["Devices"]),
       new wrapper.LabeledLink("Groups", ["Devices"]),
       new wrapper.LabeledLink("New Group", ["NewLibraryGroup"])
     ];
-    this.fields = [
-      new libBootstrapFields.Field("Name", ""),
-      new libBootstrapFields.Field("Description", "")
-    ];
+    this.nameField = "";
+    this.descriptionField = "";
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
   }
 
-  onFieldChange():void {
-    "use strict";
-  }
-
   onSubmit():void {
     "use strict";
 
-    this.backEnd.createLibraryGroup(this.fields[0].model, this.fields[1].model)
-        .then((message) => {
+    this.backEnd.createLibraryGroup(this.nameField, this.descriptionField)
+        .then(message => {
           this.events.send(message);
           this.router.navigate(["Devices"]);
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
   }
 
-  onCancel():void {
+  onCancelClick():void {
     "use strict";
 
     this.router.navigate(["Devices"]);

@@ -19,16 +19,14 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as form from "./form";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapFields from "./lib-bootstrap/fields";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
-  templateUrl: "app/wrapper-form.html",
-  directives: [form.Component, wrapper.Component]
+  templateUrl: "app/issue-tag-new.html",
+  directives: [ng.FORM_DIRECTIVES, wrapper.Component]
 })
-export class Component implements ng.OnInit {
+export class Component {
 
   issueId:string;
 
@@ -36,15 +34,7 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:wrapper.LabeledLink[];
 
-  type:string;
-
-  title:string;
-
-  body:string;
-
-  tags:string[];
-
-  fields:libBootstrapFields.Field[];
+  field:string;
 
   backEnd:backEnd.Service;
 
@@ -64,15 +54,16 @@ export class Component implements ng.OnInit {
       new wrapper.LabeledLink("Tags", ["Issue", {issue: this.issueId}]),
       new wrapper.LabeledLink("New Tag", ["NewIssueTag", {issue: this.issueId}])
     ];
-    this.fields = [new libBootstrapFields.Field("Name", "", "text", "glyphicon-tag")];
+    this.field = "";
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
   }
 
-  onInit():void {
+  onSubmit():void {
     "use strict";
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-29
     this.backEnd.getIssue(this.issueId)
         .then(issue => {
           this.events.send(issue);
@@ -86,35 +77,18 @@ export class Component implements ng.OnInit {
           let issue:libBackEnd.Issue;
           let body:string;
           [issue, body] = result;
-          this.type = issue.type;
-          this.title = issue.name;
-          this.body = body;
-          this.tags = issue.hashTags || [];
+          return this.backEnd.updateIssue(this.issueId, issue.type, issue.name, body, (issue.hashTags || []).concat(this.field));
         })
-        .catch((reason) => {
-          this.events.send(reason);
-        });
-  }
-
-  onFieldChange():void {
-    "use strict";
-  }
-
-  onSubmit():void {
-    "use strict";
-
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-29
-    this.backEnd.updateIssue(this.issueId, this.type, this.title, this.body, this.tags.concat(this.fields[0].model))
-        .then((message) => {
+        .then(message => {
           this.events.send(message);
           this.router.navigate(["Issue", {issue: this.issueId}]);
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
   }
 
-  onCancel():void {
+  onCancelClick():void {
     "use strict";
 
     this.router.navigate(["Issue", {issue: this.issueId}]);

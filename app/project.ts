@@ -19,19 +19,13 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as form from "./form";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapFields from "./lib-bootstrap/fields";
 import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/project.html",
-  directives: [
-    form.Component,
-    libBootstrapPanelList.Component,
-    wrapper.Component
-  ]
+  directives: [ng.FORM_DIRECTIVES, libBootstrapPanelList.Component, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -41,7 +35,9 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:wrapper.LabeledLink[];
 
-  projectFields:libBootstrapFields.Field[];
+  nameField:string;
+
+  descriptionField:string;
 
   collaborators:libBootstrapPanelList.Item[];
 
@@ -88,10 +84,8 @@ export class Component implements ng.OnInit {
       new wrapper.LabeledLink("Projects", ["Projects"]),
       new wrapper.LabeledLink(`Project ${this.id}`, ["Project", {project: this.id}])
     ];
-    this.projectFields = [
-      new libBootstrapFields.Field("Name", "Loading..."),
-      new libBootstrapFields.Field("Description", "Loading...")
-    ];
+    this.nameField = "Loading...";
+    this.descriptionField = "Loading...";
     this.newCollaboratorLink = ["NewProjectCollaborator", {project: this.id}];
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-14
     this.boardPrograms = [
@@ -124,7 +118,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getProject(this.id)
-        .then((project) => {
+        .then(project => {
           this.events.send(project);
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-36
           return Promise.all<any>([
@@ -143,8 +137,8 @@ export class Component implements ng.OnInit {
           let homers:libBackEnd.Homer[];
           let collaborators:libBackEnd.Person[];
           [project, boards, homerPrograms, homers, collaborators] = result;
-          this.projectFields[0].model = project.projectName;
-          this.projectFields[1].model = project.projectDescription;
+          this.nameField = project.projectName;
+          this.descriptionField = project.projectDescription;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-47
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-14
           this.boards = boards.map(board => new libBootstrapPanelList.Item(board.id, board.id, board.isActive ? "active" : "inactive"));
@@ -160,9 +154,9 @@ export class Component implements ng.OnInit {
   onUpdatingSubmit():void {
     "use strict";
 
-    this.backEnd.updateProject(this.id, this.projectFields[0].model, this.projectFields[1].model)
-        .then((message) => this.events.send(message))
-        .catch((reason) => this.events.send(reason));
+    this.backEnd.updateProject(this.id, this.nameField, this.descriptionField)
+        .then(message => this.events.send(message))
+        .catch(reason => this.events.send(reason));
   }
 
   getHomerProgramLink():(program:libBootstrapPanelList.Item)=>any[] {

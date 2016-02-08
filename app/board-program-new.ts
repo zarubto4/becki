@@ -19,15 +19,27 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as form from "./form";
+import * as fieldCode from "./field-code";
 import * as libBackEnd from "./lib-back-end";
-import * as libBootstrapFieldSelect from "./lib-bootstrap/field-select";
-import * as libBootstrapFields from "./lib-bootstrap/fields";
 import * as wrapper from "./wrapper";
 
+class Selectable<T> {
+
+  model:T;
+
+  selected:boolean;
+
+  constructor(model:T) {
+    "use strict";
+
+    this.model = model;
+    this.selected = false;
+  }
+}
+
 @ng.Component({
-  templateUrl: "app/wrapper-form.html",
-  directives: [form.Component, wrapper.Component]
+  templateUrl: "app/board-program-new.html",
+  directives: [fieldCode.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -37,7 +49,15 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:wrapper.LabeledLink[];
 
-  fields:libBootstrapFields.Field[];
+  libraries:Selectable<libBackEnd.Library>[];
+
+  groups:Selectable<libBackEnd.LibraryGroup>[];
+
+  boards:libBackEnd.Board[];
+
+  codeField:string;
+
+  boardField:string;
 
   backEnd:backEnd.Service;
 
@@ -58,12 +78,8 @@ export class Component implements ng.OnInit {
       new wrapper.LabeledLink("Board Programs", ["Project", {project: this.projectId}]),
       new wrapper.LabeledLink("New Board Program", ["NewBoardProgram", {project: this.projectId}])
     ];
-    this.fields = [
-      new libBootstrapFields.Field("Libraries", "", "select", "glyphicon-book", [], true),
-      new libBootstrapFields.Field("Groups of libraries", "", "select", "glyphicon-book", [], true),
-      new libBootstrapFields.Field("Code", "", "c", "glyphicon-console"),
-      new libBootstrapFields.Field("Board", "", "select", "glyphicon-list")
-    ];
+    this.codeField = "";
+    this.boardField = "";
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -75,7 +91,7 @@ export class Component implements ng.OnInit {
     this.backEnd.getLibraries()
         .then(libraries => {
           this.events.send(libraries);
-          this.fields[0].options = libraries.map(library => new libBootstrapFieldSelect.Option(`${library.libraryName} ${library.lastVersion}`, JSON.stringify({libraryId: library.id, libraryVersion: library.lastVersion.toString()})));
+          this.libraries = libraries.map(library => new Selectable(library));
         })
         .catch(reason => {
           this.events.send(reason);
@@ -83,7 +99,7 @@ export class Component implements ng.OnInit {
     this.backEnd.getLibraryGroups()
         .then(groups => {
           this.events.send(groups);
-          this.fields[1].options = groups.map(group => new libBootstrapFieldSelect.Option(`${group.groupName} ${group.lastVersion}`, JSON.stringify({groupId: group.id, libraryVersion: group.lastVersion.toString()})));
+          this.groups = groups.map(group => new Selectable(group));
         })
         .catch(reason => {
           this.events.send(reason);
@@ -95,15 +111,11 @@ export class Component implements ng.OnInit {
         })
         .then(boards => {
           this.events.send(boards);
-          this.fields[3].options = boards.map(board => new libBootstrapFieldSelect.Option(board.id, board.id));
+          this.boards = boards;
         })
         .catch(reason => {
           this.events.send(reason);
         });
-  }
-
-  onFieldChange():void {
-    "use strict";
   }
 
   onSubmit():void {
@@ -111,9 +123,9 @@ export class Component implements ng.OnInit {
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-47
     // TODO: https://github.com/angular/angular/issues/4427
-    let libraries = this.fields[0].options.filter(option => option.selected).map(option => JSON.parse(option.value));
-    let libraryGroups = this.fields[1].options.filter(option => option.selected).map(option => JSON.parse(option.value));
-    this.backEnd.createBoardProgram(libraries, libraryGroups, this.fields[2].model, this.fields[3].model)
+    let libraries = this.libraries.filter(selectable => selectable.selected).map(selectable => ({libraryId: selectable.model.id, libraryVersion: selectable.model.lastVersion.toString()}));
+    let groups = this.groups.filter(selectable => selectable.selected).map(selectable => ({groupId: selectable.model.id, libraryVersion: selectable.model.lastVersion.toString()}));
+    this.backEnd.createBoardProgram(libraries, groups, this.codeField, this.boardField)
         .then((message) => {
           this.events.send(message);
           this.router.navigate(["Project", {project: this.projectId}]);
@@ -123,7 +135,7 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onCancel():void {
+  onCancelClick():void {
     "use strict";
 
     this.router.navigate(["Project", {project: this.projectId}]);

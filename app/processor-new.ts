@@ -19,22 +19,40 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as form from "./form";
-import * as libBootstrapFieldSelect from "./lib-bootstrap/field-select";
-import * as libBootstrapFields from "./lib-bootstrap/fields";
+import * as libBackEnd from "./lib-back-end/index";
 import * as wrapper from "./wrapper";
 
+class Selectable {
+
+  model:libBackEnd.LibraryGroup;
+
+  selected:boolean;
+
+  constructor(model:libBackEnd.LibraryGroup) {
+    "use strict";
+
+    this.model = model;
+    this.selected = false;
+  }
+}
+
 @ng.Component({
-  templateUrl: "app/wrapper-form.html",
-  directives: [form.Component, wrapper.Component]
+  templateUrl: "app/processor-new.html",
+  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
-  heading:string;
-
   breadcrumbs:wrapper.LabeledLink[];
 
-  fields:libBootstrapFields.Field[];
+  groups:Selectable[];
+
+  nameField:string;
+
+  codeField:string;
+
+  descriptionField:string;
+
+  speedField:number;
 
   backEnd:backEnd.Service;
 
@@ -45,19 +63,15 @@ export class Component implements ng.OnInit {
   constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.heading = "New Processor";
     this.breadcrumbs = [
       becki.HOME,
       new wrapper.LabeledLink("Processors", ["Devices"]),
       new wrapper.LabeledLink("New Processor", ["NewProcessor"])
     ];
-    this.fields = [
-      new libBootstrapFields.Field("Model name", ""),
-      new libBootstrapFields.Field("Model code", ""),
-      new libBootstrapFields.Field("Description", ""),
-      libBootstrapFields.Field.fromNumber("Speed", 0, "number", "glyphicon-dashboard"),
-      new libBootstrapFields.Field("Groups of libraries", "", "select", "glyphicon-book", [], true)
-    ];
+    this.nameField = "";
+    this.codeField = "";
+    this.descriptionField = "";
+    this.speedField = 0;
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -67,25 +81,21 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getLibraryGroups()
-        .then((groups) => {
+        .then(groups => {
           this.events.send(groups);
-          this.fields[4].options = groups.map(group => new libBootstrapFieldSelect.Option(group.groupName, group.id));
+          this.groups = groups.map(group => new Selectable(group));
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
-  }
-
-  onFieldChange():void {
-    "use strict";
   }
 
   onSubmit():void {
     "use strict";
 
     // TODO: https://github.com/angular/angular/issues/4427
-    let groups = this.fields[4].options.filter(option => option.selected).map(option => option.value);
-    this.backEnd.createProcessor(this.fields[0].model, this.fields[1].model, this.fields[2].model, this.fields[3].getNumber(), groups)
+    let groups = this.groups.filter(selectable => selectable.selected).map(selectable => selectable.model.id);
+    this.backEnd.createProcessor(this.nameField, this.codeField, this.descriptionField, this.speedField, groups)
         .then((message) => {
           this.events.send(message);
           this.router.navigate(["Devices"]);
@@ -95,7 +105,7 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onCancel():void {
+  onCancelClick():void {
     "use strict";
 
     this.router.navigate(["Devices"]);

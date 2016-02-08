@@ -136,4 +136,16 @@ export class Component implements ng.OnInit {
           this.events.send(reason);
         });
   }
+
+  getProducerLink(producer:libBootstrapPanelList.Item):any[] {
+    "use strict";
+
+    return ["Producer", {producer: producer.id}];
+  }
+
+  getLibraryLink(library:libBootstrapPanelList.Item):any[] {
+    "use strict";
+
+    return ["Library", {library: library.id}];
+  }
 }

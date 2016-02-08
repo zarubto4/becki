@@ -1,0 +1,53 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<div data-bind-wrapper="'New Processor'" data-bind-breadcrumbs="breadcrumbs">
+  <form class="clearfix" data-on-submit="onSubmit($event)">
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-pencil"></span>
+        Model name
+      </label>
+      <input class="form-control" data-bindon-ng-model="nameField">
+    </div>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-pencil"></span>
+        Model code
+      </label>
+      <input class="form-control" data-bindon-ng-model="codeField">
+    </div>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-pencil"></span>
+        Description
+      </label>
+      <textarea class="form-control" data-bindon-ng-model="descriptionField"></textarea>
+    </div>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-dashboard"></span>
+        Speed
+      </label>
+      <input class="form-control" type="number" data-bindon-ng-model="speedField">
+    </div>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-book"></span>
+        Groups of libraries
+      </label>
+      <div class="checkbox" template="ngFor #group of groups">
+        <label>
+          <input type="checkbox" data-bindon-ng-model="group.selected">
+          {{group.model.groupName}} {{group.model.lastVersion}}
+        </label>
+      </div>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+      <button class="btn btn-primary" type="submit">Create</button>
+    </div>
+  </form>
+</div>
