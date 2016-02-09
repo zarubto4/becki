@@ -161,7 +161,6 @@ export class Component implements ng.OnInit {
         .then(result => {
           this.events.send(result);
           [this.boards, this.homers, this.homerPrograms] = result;
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-47
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-14
           this.boardPrograms = [];
         })
@@ -178,7 +177,7 @@ export class Component implements ng.OnInit {
     let promise:Promise<string>;
     switch (this.typeField) {
       case "Board":
-        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-15
+        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-64
         return;
       case "Homer":
         switch (this.whenField) {

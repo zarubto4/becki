@@ -106,7 +106,7 @@ export class Component implements ng.OnInit {
     this.backEnd.getLibraryGroups()
         .then(groups => {
           this.events.send(groups);
-          this.libraryGroups = groups.map(group => new libBootstrapPanelList.Item(group.id, group.groupName, group.lastVersion.toString()));
+          this.libraryGroups = groups.map(group => new libBootstrapPanelList.Item(group.id, group.groupName, group.description));
         })
         .catch(reason => {
           this.events.send(reason);

@@ -63,21 +63,30 @@ export class Component {
   onSubmit():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-29
-    this.backEnd.getIssue(this.issueId)
-        .then(issue => {
-          this.events.send(issue);
+    Promise.all<any>([
+          this.backEnd.getIssueTypes(),
+          this.backEnd.getIssue(this.issueId)
+        ])
+        .then(result => {
+          this.events.send(result);
+          let types:libBackEnd.IssueType[];
+          let issue:libBackEnd.Issue;
+          [types, issue] = result;
           return Promise.all<any>([
+            types,
             issue,
             this.backEnd.request("GET", issue.textOfPost)
           ]);
         })
         .then(result => {
           this.events.send(result);
+          let types:libBackEnd.IssueType[];
           let issue:libBackEnd.Issue;
           let body:string;
-          [issue, body] = result;
-          return this.backEnd.updateIssue(this.issueId, issue.type, issue.name, body, (issue.hashTags || []).concat(this.field));
+          [types, issue, body] = result;
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-61
+          let type = types.filter(type => type.type == issue.type)[0].id;
+          return this.backEnd.updateIssue(this.issueId, type, issue.name, body, (issue.hashTags || []).concat(this.field));
         })
         .then(message => {
           this.events.send(message);

@@ -114,9 +114,11 @@ export interface Person {
 
   nickName:string;
 
-  firstName:any;
+  firstName:string;
 
-  lastNAme:any;
+  middleName:string;
+
+  lastName:string;
 
   firstTitle:any;
 
@@ -144,9 +146,11 @@ export interface Library {
 
   description:string;
 
-  lastVersion:number;
+  versions:string;
 
-  versions:number;
+  versionsCount:number;
+
+  lastVersion:number;
 }
 
 export interface LibraryReference {
@@ -416,13 +420,6 @@ export abstract class BackEnd {
    */
   static TOKEN_PATH = "/coreClient/person/permission";
 
-  private storeToken(token:string, email:string):void {
-    "use strict";
-
-    window.localStorage.setItem("authToken", token);
-    window.localStorage.setItem("authEmail", email);
-  }
-
   /**
    * Perform an HTTP request.
    *
@@ -471,6 +468,12 @@ export abstract class BackEnd {
     return this.requestPath("POST", BackEnd.PERSON_PATH, {mail, password, nickName}).then(JSON.stringify);
   }
 
+  public getSignedInPerson():Promise<Person> {
+    "use strict";
+
+    return this.requestPath<{person:Person}>("GET", "/login/person").then(result => result.person);
+  }
+
   /**
    * Log a person in.
    *
@@ -487,7 +490,7 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath<{authToken:string}>("POST", `${BackEnd.TOKEN_PATH}/login`, {email, password}).then((body) => {
-      this.storeToken(body.authToken, email);
+      window.localStorage.setItem("authToken", body.authToken);
       return JSON.stringify(body);
     });
   }
@@ -497,7 +500,7 @@ export abstract class BackEnd {
 
     return this.requestPath<{authToken:string, url:string}>("GET", "/login/facebook").then(body => {
       // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-51
-      this.storeToken(body.authToken, "a Facebook account");
+      window.localStorage.setItem("authToken", body.authToken);
       return body.url;
     });
   }
@@ -507,7 +510,7 @@ export abstract class BackEnd {
 
     return this.requestPath<{authToken:string, url:string}>("GET", "/login/twitter").then(body => {
       // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-49
-      this.storeToken(body.authToken, "a Twitter account");
+      window.localStorage.setItem("authToken", body.authToken);
       return body.url;
     });
   }
@@ -516,8 +519,7 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath<{authToken:string, url:string}>("GET", "/login/github").then(body => {
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-46
-      this.storeToken(body.authToken, "a GitHub account");
+      window.localStorage.setItem("authToken", body.authToken);
       return body.url;
     });
   }
@@ -538,7 +540,6 @@ export abstract class BackEnd {
 
     return this.requestPath("POST", `${BackEnd.TOKEN_PATH}/logout`, {}).then((body) => {
       window.localStorage.removeItem("authToken");
-      window.localStorage.removeItem("authEmail");
       return JSON.stringify(body);
     });
   }
@@ -559,6 +560,12 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath("GET", BackEnd.PRODUCER_PATH);
+  }
+
+  public updateProducer(id:string, name:string, description:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("PUT", `${BackEnd.PRODUCER_PATH}/${id}`, {name, description}).then(JSON.stringify);
   }
 
   public createLibrary(libraryName:string, description:string):Promise<string> {
@@ -653,10 +660,10 @@ export abstract class BackEnd {
     return this.requestPath("GET", BackEnd.BOARD_TYPE_PATH);
   }
 
-  public createBoardProgram(libraries:LibraryReference[], groupOfLibraries:LibraryGroupReference[], content:string, embeddedHWId:string):Promise<string> {
+  public createBoardProgram(programName:string, programDescription:string, libraries:LibraryReference[], groupOfLibraries:LibraryGroupReference[], content:string, project:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("POST", "/compilation/program", {files: [{filename: "main", content}], groupOfLibraries, libraries, embeddedHWId}).then(JSON.stringify);
+    return this.requestPath("POST", "/compilation/program", {programName, programDescription, project, files: [{fileName: "main", content}], groupOfLibraries, libraries}).then(JSON.stringify);
   }
 
   /**

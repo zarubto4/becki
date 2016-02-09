@@ -85,8 +85,14 @@ export class Component implements ng.OnInit {
   onSubmit():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-54
-    alert("issue/TYRION-54");
+    this.backEnd.updateProducer(this.id, this.nameField, this.descriptionField)
+        .then(message => {
+          this.events.send(message);
+          this.router.navigate(["Devices"]);
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
   }
 
   onCancelClick():void {

@@ -28,8 +28,6 @@ import * as wrapper from "./wrapper";
 })
 export class Component implements ng.OnInit {
 
-  static NEW_VERSION = "new";
-
   id:string;
 
   heading:string;
@@ -101,6 +99,7 @@ export class Component implements ng.OnInit {
           let library:libBackEnd.Library;
           [library, this.descriptionField] = result;
           this.events.send(result);
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-63
           this.versions = [library.lastVersion];
           this.nameField = library.libraryName;
         })
@@ -141,8 +140,6 @@ export class Component implements ng.OnInit {
   onFileSubmit():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-56
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-57
     this.backEnd.updateFileOfLibrary(this.fileField.nativeElement.files[0], this.fileVersionField == "new" ? null : this.fileVersionField, this.id)
         .then(message => {
           this.events.send(message);

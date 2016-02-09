@@ -122,7 +122,9 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:wrapper.LabeledLink[];
 
-  items:Array<Item>;
+  types:libBackEnd.IssueType[];
+
+  items:Item[];
 
   answerBodyField:string;
 
@@ -175,9 +177,14 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    this.backEnd.getIssue(this.id)
-        .then(issue => {
-          this.events.send(issue);
+    Promise.all<any>([
+          this.backEnd.getIssueTypes(),
+          this.backEnd.getIssue(this.id)
+        ])
+        .then(result => {
+          this.events.send(result);
+          let issue:libBackEnd.Issue;
+          [this.types, issue] = result;
           return Promise.all<any>([
             issue,
             this.backEnd.request("GET", issue.textOfPost),
@@ -195,9 +202,11 @@ export class Component implements ng.OnInit {
           let related:libBackEnd.IssueLink[];
           [issue, body, comments, answers, related] = result;
           this.heading = `${issue.type}: ${issue.name}`;
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-61
+          let type = this.types.filter(type => type.type == issue.type)[0].id;
           let commentsViews = comments.map(comment => new Comment(comment.postId, comment.textOfPost, comment.dateOfCreate, comment.likes, comment.hashTags));
           this.items = [].concat(
-              new Issue(issue.postId, issue.type, issue.name, body, issue.dateOfCreate, issue.likes, commentsViews, issue.hashTags),
+              new Issue(issue.postId, type, issue.name, body, issue.dateOfCreate, issue.likes, commentsViews, issue.hashTags),
               answers.map(answer => new Item(
                   answer[0].postId, answer[0].textOfPost, answer[0].dateOfCreate, answer[0].likes,
                   answer[1].map(comment => new Comment(comment.postId, comment.textOfPost, comment.dateOfCreate, comment.likes)),
@@ -223,7 +232,6 @@ export class Component implements ng.OnInit {
   onItemEditingSubmit(item:Item):void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-29
     if (item instanceof Issue) {
       this.backEnd.updateIssue(item.id, item.typeField, item.titleField, item.bodyField, item.tags || [])
           .then((message) => {

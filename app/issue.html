@@ -28,10 +28,15 @@
                   <template data-bind-ng-if="item.hasOwnProperty('typeField')">
                     <div class="form-group">
                       <label>
-                        <span class="glyphicon glyphicon-pencil"></span>
+                        <span class="glyphicon glyphicon-list"></span>
                         Type
                       </label>
-                      <input class="form-control" data-bindon-ng-model="item.typeField">
+                      <select class="form-control" data-bindon-ng-model="item.typeField">
+                        <option value="">Select type...</option>
+                        <option data-bind-value="type.id" template="ngFor #type of types">
+                          {{type.type}}
+                        </option>
+                      </select>
                     </div>
                   </template>
                   <template data-bind-ng-if="item.hasOwnProperty('titleField')">
@@ -51,8 +56,11 @@
                     <textarea class="form-control" data-bindon-ng-model="item.bodyField"></textarea>
                   </div>
                   <div class="pull-right">
-                    <button class="btn btn-danger" type="button" data-on-click="onItemEditingCancelClick(item, $event)">Cancel</button>
-                    <button class="btn btn-primary" type="submit">Update</button>
+                    <button class="btn btn-danger" type="button" data-on-click="onItemEditingCancelClick(item, $event)">
+                      Cancel
+                    </button>
+                    <button class="btn btn-primary" type="submit">Update
+                    </button>
                   </div>
                 </form>
               </template>
@@ -66,6 +74,7 @@
                   </button>
                 </div>
                 <p>{{item.body}}</p>
+
                 <p class="pull-right">{{item.date}}</p>
               </template>
             </div>
@@ -86,8 +95,11 @@
                           <textarea class="form-control" data-bindon-ng-model="comment.bodyField"></textarea>
                         </div>
                         <div class="pull-right">
-                          <button class="btn btn-danger" type="button" data-on-click="onCommentEditingCancelClick(comment, $event)">Cancel</button>
-                          <button class="btn btn-primary" type="submit">Update</button>
+                          <button class="btn btn-danger" type="button" data-on-click="onCommentEditingCancelClick(comment, $event)">
+                            Cancel
+                          </button>
+                          <button class="btn btn-primary" type="submit">Update
+                          </button>
                         </div>
                       </form>
                     </template>
@@ -130,7 +142,8 @@
                   <div class="input-group">
                     <input class="form-control" type="text" data-bindon-ng-model="item.commentField">
                     <span class="input-group-btn">
-                      <button class="btn btn-primary" type="submit">Comment</button>
+                      <button class="btn btn-primary" type="submit">Comment
+                      </button>
                     </span>
                   </div>
                 </form>
@@ -142,14 +155,17 @@
     </div>
     <div class="col-xs-12 col-sm-3">
       <h2>Related</h2>
+
       <div data-bind-panel-list="related" data-bind-new-link="newRelatedLink">
         <progress>Loading...</progress>
       </div>
       <h2>Tags</h2>
+
       <div data-bind-panel-list="tags" data-bind-new-link="newTagLink">
         <progress>Loading...</progress>
       </div>
       <h2>Confirmations</h2>
+
       <div data-bind-panel-list="confirmations" data-bind-new-link="newConfirmationLink">
         <progress>Loading...</progress>
       </div>
@@ -169,6 +185,7 @@
           <span class="glyphicon glyphicon-console"></span>
           Homer Program
         </label>
+
         <div data-bindon-field-homer-program="answerCodeField">
           <progress>Loading...</progress>
         </div>

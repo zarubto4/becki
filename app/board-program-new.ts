@@ -53,11 +53,11 @@ export class Component implements ng.OnInit {
 
   groups:Selectable<libBackEnd.LibraryGroup>[];
 
-  boards:libBackEnd.Board[];
+  nameField:string;
+
+  descriptionField:string;
 
   codeField:string;
-
-  boardField:string;
 
   backEnd:backEnd.Service;
 
@@ -78,8 +78,9 @@ export class Component implements ng.OnInit {
       new wrapper.LabeledLink("Board Programs", ["Project", {project: this.projectId}]),
       new wrapper.LabeledLink("New Board Program", ["NewBoardProgram", {project: this.projectId}])
     ];
+    this.nameField = "";
+    this.descriptionField = "";
     this.codeField = "";
-    this.boardField = "";
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -104,28 +105,15 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.events.send(reason);
         });
-    this.backEnd.getProject(this.projectId)
-        .then(project => {
-          this.events.send(project);
-          return this.backEnd.request<libBackEnd.Board[]>("GET", project.boards);
-        })
-        .then(boards => {
-          this.events.send(boards);
-          this.boards = boards;
-        })
-        .catch(reason => {
-          this.events.send(reason);
-        });
   }
 
   onSubmit():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-47
     // TODO: https://github.com/angular/angular/issues/4427
     let libraries = this.libraries.filter(selectable => selectable.selected).map(selectable => ({libraryId: selectable.model.id, libraryVersion: selectable.model.lastVersion.toString()}));
     let groups = this.groups.filter(selectable => selectable.selected).map(selectable => ({groupId: selectable.model.id, libraryVersion: selectable.model.lastVersion.toString()}));
-    this.backEnd.createBoardProgram(libraries, groups, this.codeField, this.boardField)
+    this.backEnd.createBoardProgram(this.nameField, this.descriptionField, libraries, groups, this.codeField, this.projectId)
         .then((message) => {
           this.events.send(message);
           this.router.navigate(["Project", {project: this.projectId}]);

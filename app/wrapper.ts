@@ -46,7 +46,7 @@ export class Component implements ng.OnInit {
 
   navigation:LabeledLink[];
 
-  email:string;
+  user:string;
 
   backEnd:backEnd.Service;
 
@@ -58,6 +58,7 @@ export class Component implements ng.OnInit {
     "use strict";
     this.home = becki.HOME;
     this.navigation = becki.NAVIGATION;
+    this.user = "Loading...";
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -67,22 +68,40 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO https://github.com/angular/angular/issues/4112
-    if (!window.localStorage.getItem("authEmail")) {
+    if (!window.localStorage.getItem("authToken")) {
       this.router.navigate(["Signing"]);
     }
-    this.email = window.localStorage.getItem("authEmail");
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-66
+    this.backEnd.getSignedInPerson()
+        .then(person => {
+          this.events.send(person);
+          let nameParts:string[] = [];
+          if (person.firstName) {
+            nameParts.push(person.firstName);
+          }
+          if (person.middleName) {
+            nameParts.push(person.middleName);
+          }
+          if (person.lastName) {
+            nameParts.push(person.lastName);
+          }
+          this.user = person.nickName ? person.nickName : nameParts ? nameParts.join(" ") : person.mail ? person.mail : "User";
+        })
+        .catch((reason) => {
+          this.events.send(reason);
+        });
   }
 
   onSignOutClick():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-50
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-65
     this.backEnd.deleteToken()
-        .then((message) => {
+        .then(message => {
           this.events.send(message);
           this.router.navigate(["Signing"]);
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
   }

@@ -102,11 +102,11 @@ export class Component implements ng.OnInit {
     this.newHomerProgramLink = ["NewHomerProgram", {project: this.id}];
     this.additionalBoardLink = ["NewProjectBoard", {project: this.id}];
     this.additionalHomerLink = ["NewProjectHomer", {project: this.id}];
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-15
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-43
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-64
     this.uploadQueue = [
-      new libBootstrapPanelList.Item(null, "(issue/TYRION-15)", "does not work"),
-      new libBootstrapPanelList.Item(null, "(issue/TYRION-43)", "does not work")
+      new libBootstrapPanelList.Item(null, "(issue/TYRION-43)", "does not work"),
+      new libBootstrapPanelList.Item(null, "(issue/TYRION-64)", "does not work")
     ];
     this.newUploadLink = ["NewProjectUpload", {project: this.id}];
     this.backEnd = backEndService;
@@ -139,9 +139,9 @@ export class Component implements ng.OnInit {
           [project, boards, homerPrograms, homers, collaborators] = result;
           this.nameField = project.projectName;
           this.descriptionField = project.projectDescription;
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-47
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-14
           this.boards = boards.map(board => new libBootstrapPanelList.Item(board.id, board.id, board.isActive ? "active" : "inactive"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-62
           this.homerPrograms = homerPrograms.map(program => new libBootstrapPanelList.Item(program.programId, program.programName, program.programDescription));
           this.homers = homers.map(homer => new libBootstrapPanelList.Item(homer.homerId, homer.homerId, null));
           this.collaborators = collaborators.map(collaborator => new libBootstrapPanelList.Item(collaborator.id, collaborator.nickName, collaborator.mail));
