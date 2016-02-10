@@ -74,16 +74,16 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getHomerProgram(this.id)
-        .then((program) => {
+        .then(program => {
           this.events.send(program);
-          return this.backEnd.request<string>("GET", program.programinJson).then((code) => {
+          return this.backEnd.request<string>("GET", program.programinJson).then(code => {
             this.events.send(code);
             this.nameField = program.programName;
             this.descriptionField = program.programDescription;
-            this.codeField = code;
+            this.codeField = JSON.stringify(code);
           });
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
   }
@@ -92,11 +92,11 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.updateHomerProgram(this.id, this.nameField, this.descriptionField, this.codeField, this.projectId)
-        .then((message) => {
+        .then(message => {
           this.events.send(message);
           this.router.navigate(["Project", {project: this.projectId}]);
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
   }

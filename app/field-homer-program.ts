@@ -25,15 +25,18 @@ import * as fieldCode from "./field-code";
 })
 export class Component implements ng.AfterViewInit {
 
-  controller = new blocko.BlockoCore.Controller();
+  @ng.Input()
+  readonly:boolean;
+
+  controller:blocko.BlockoCore.Controller;
 
   @ng.ViewChild("field")
   field:ng.ElementRef;
 
-  config:blocko.BlockoCore.Block = null;
+  config:blocko.BlockoCore.Block;
 
   @ng.Output("fieldHomerProgramChange")
-  modelChange = new ng.EventEmitter();
+  modelChange:ng.EventEmitter;
 
   @ng.Input("fieldHomerProgram")
   set model(code:string) {
@@ -46,6 +49,21 @@ export class Component implements ng.AfterViewInit {
     }
   }
 
+  constructor() {
+    "use strict";
+
+    this.readonly = false;
+    this.controller = new blocko.BlockoCore.Controller();
+    this.controller.registerDataChangedCallback(() => {
+      this.config = null;
+      // TODO: https://youtrack.byzance.cz/youtrack/issue/BLOCKO-1
+      //this.modelChange.next(this.controller.getDataJson());
+    });
+    this.controller.registerBlocks(blocko.BlockoBasicBlocks.Manager.getAllBlocks());
+    this.config = null;
+    this.modelChange = new ng.EventEmitter();
+  }
+
   afterViewInit():void {
     "use strict";
 
@@ -53,17 +71,14 @@ export class Component implements ng.AfterViewInit {
     renderer.registerOpenConfigCallback((block) =>
         this.config = block
     );
-    this.controller.registerDataChangedCallback(() => {
-      this.config = null;
-      this.modelChange.next(this.controller.getDataJson());
-    });
     this.controller.registerFactoryBlockRendererCallback((block) =>
         new blocko.BlockoSnapRenderer.BlockRenderer(renderer, block)
     );
     this.controller.registerFactoryConnectionRendererCallback((connection) =>
         new blocko.BlockoSnapRenderer.ConnectionRenderer(renderer, connection)
     );
-    this.controller.registerBlocks(blocko.BlockoBasicBlocks.Manager.getAllBlocks());
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/BLOCKO-2
+    this.controller.setDataJson(this.controller.getDataJson());
   }
 
   onSwitchClick():void {
@@ -153,13 +168,23 @@ export class Component implements ng.AfterViewInit {
   addBlock(cls:blocko.BlockoCore.BlockClass):void {
     "use strict";
 
+    if (this.readonly) {
+      throw new Error("read only");
+    }
     this.controller.addBlock(new cls(this.controller.getFreeBlockId()));
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/BLOCKO-1
+    this.modelChange.next(this.controller.getDataJson());
   }
 
   onClearClick():void {
     "use strict";
 
+    if (this.readonly) {
+      throw new Error("read only");
+    }
     this.controller.removeAllBlocks();
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/BLOCKO-1
+    this.modelChange.next(this.controller.getDataJson());
   }
 
   getPropertyType(property:blocko.BlockoCore.ConfigProperty):string {
@@ -184,7 +209,12 @@ export class Component implements ng.AfterViewInit {
   onConfigSaveClick():void {
     "use strict";
 
+    if (this.readonly) {
+      throw new Error("read only");
+    }
     this.config.emitConfigsChanged();
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/BLOCKO-1
+    this.modelChange.next(this.controller.getDataJson());
   }
 
   onConfigCloseClick():void {

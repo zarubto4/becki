@@ -19,7 +19,7 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as fieldHomerProgram from "./field-homer-program";
+import * as fieldIssueBody from "./field-issue-body";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
 import * as wrapper from "./wrapper";
@@ -106,7 +106,7 @@ class Issue extends Item {
 @ng.Component({
   templateUrl: "app/issue.html",
   directives: [
-    fieldHomerProgram.Component,
+    fieldIssueBody.Component,
     libBootstrapPanelList.Component,
     ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES,
@@ -127,8 +127,6 @@ export class Component implements ng.OnInit {
   items:Item[];
 
   answerBodyField:string;
-
-  answerCodeField:string;
 
   related:libBootstrapPanelList.Item[];
 
@@ -158,8 +156,7 @@ export class Component implements ng.OnInit {
       new wrapper.LabeledLink("Issues", ["Issues"]),
       new wrapper.LabeledLink(`Issue ${this.id}`, ["Issue", {issue: this.id}])
     ];
-    this.answerBodyField = "";
-    this.answerCodeField = `{"blocks":{}}`;
+    this.answerBodyField = fieldIssueBody.EMPTY;
     this.newRelatedLink = ["NewRelatedIssue", {issue: this.id}];
     this.newTagLink = ["NewIssueTag", {issue: this.id}];
     this.newConfirmationLink = ["NewIssueConfirmation", {issue: this.id}];
@@ -288,6 +285,7 @@ export class Component implements ng.OnInit {
   onItemRemoveClick(item:Item):void {
     "use strict";
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-79
     if (item instanceof Issue) {
       this.backEnd.deleteIssue(item.id)
           .then((message) => {
@@ -312,12 +310,10 @@ export class Component implements ng.OnInit {
   onAnswerCreationSubmit():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-48
     this.backEnd.createAnswer(this.id, this.answerBodyField)
         .then((message) => {
           this.events.send(message);
-          this.answerBodyField = "";
-          this.answerCodeField = `{"blocks":{}}`;
+          this.answerBodyField = fieldIssueBody.EMPTY;
           this.refresh();
         })
         .catch((reason) => {

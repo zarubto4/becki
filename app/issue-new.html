@@ -29,7 +29,9 @@
         <span class="glyphicon glyphicon-pencil"></span>
         Body
       </label>
-      <textarea class="form-control" data-bindon-ng-model="bodyField"></textarea>
+      <div data-bindon-field-issue-body="bodyField">
+        <progress>Loading...</progress>
+      </div>
     </div>
     <div class="pull-right">
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>

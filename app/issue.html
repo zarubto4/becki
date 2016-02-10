@@ -53,13 +53,16 @@
                       <span class="glyphicon glyphicon-pencil"></span>
                       Body
                     </label>
-                    <textarea class="form-control" data-bindon-ng-model="item.bodyField"></textarea>
+                    <div data-bindon-field-issue-body="item.bodyField">
+                      <progress>Loading...</progress>
+                    </div>
                   </div>
                   <div class="pull-right">
                     <button class="btn btn-danger" type="button" data-on-click="onItemEditingCancelClick(item, $event)">
                       Cancel
                     </button>
-                    <button class="btn btn-primary" type="submit">Update
+                    <button class="btn btn-primary" type="submit">
+                      Update
                     </button>
                   </div>
                 </form>
@@ -73,7 +76,9 @@
                     <span class="glyphicon glyphicon-remove"></span>
                   </button>
                 </div>
-                <p>{{item.body}}</p>
+                <div data-bindon-field-issue-body="item.body" data-bind-readonly="true">
+                  <progress>Loading...</progress>
+                </div>
 
                 <p class="pull-right">{{item.date}}</p>
               </template>
@@ -176,17 +181,9 @@
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon-pencil"></span>
-          Body
+          New Answer
         </label>
-        <textarea class="form-control" data-bindon-ng-model="answerBodyField"></textarea>
-      </div>
-      <div class="form-group">
-        <label>
-          <span class="glyphicon glyphicon-console"></span>
-          Homer Program
-        </label>
-
-        <div data-bindon-field-homer-program="answerCodeField">
+        <div data-bindon-field-issue-body="answerBodyField">
           <progress>Loading...</progress>
         </div>
       </div>

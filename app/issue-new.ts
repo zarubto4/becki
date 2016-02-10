@@ -19,12 +19,13 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
+import * as fieldIssueBody from "./field-issue-body";
 import * as libBackEnd from "./lib-back-end/index";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/issue-new.html",
-  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [fieldIssueBody.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -54,7 +55,7 @@ export class Component implements ng.OnInit {
     ];
     this.typeField = "";
     this.titleField = "";
-    this.bodyField = "";
+    this.bodyField = fieldIssueBody.EMPTY;
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
