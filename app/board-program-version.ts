@@ -1,6 +1,6 @@
 /*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -19,16 +19,17 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as fieldHomerProgram from "./field-homer-program";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
-  templateUrl: "app/homer-program.html",
-  directives: [fieldHomerProgram.Component, ng.FORM_DIRECTIVES, wrapper.Component]
+  templateUrl: "app/board-program-version.html",
+  directives: [ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
   id:string;
+
+  programId:string;
 
   projectId:string;
 
@@ -40,8 +41,6 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
-  codeField:string;
-
   backEnd:backEnd.Service;
 
   events:events.Service;
@@ -51,20 +50,22 @@ export class Component implements ng.OnInit {
   constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.id = routeParams.get("program");
+    this.id = routeParams.get("version");
+    this.programId = routeParams.get("program");
     this.projectId = routeParams.get("project");
-    this.heading = `Program ${this.id} (Project ${this.projectId})`;
+    this.heading = `Version ${this.id}`;
     this.breadcrumbs = [
       becki.HOME,
       new wrapper.LabeledLink("User", ["Projects"]),
       new wrapper.LabeledLink("Projects", ["Projects"]),
       new wrapper.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink("Homer Programs", ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink(`Program ${this.id}`, ["HomerProgram", {project: this.projectId, program: this.id}])
+      new wrapper.LabeledLink("Board Programs", ["Project", {project: this.projectId}]),
+      new wrapper.LabeledLink(`Program ${this.programId}`, ["BoardProgram", {project: this.projectId, program: this.programId}]),
+      new wrapper.LabeledLink("Versions", ["BoardProgram", {project: this.projectId, program: this.programId}]),
+      new wrapper.LabeledLink(`Version ${this.id}`, ["BoardProgramVersion", {project: this.projectId, program: this.programId, version: this.id}])
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    this.codeField = `{"blocks":{}}`;
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -73,17 +74,18 @@ export class Component implements ng.OnInit {
   onInit():void {
     "use strict";
 
-    this.backEnd.getHomerProgram(this.id)
-        .then((program) => {
+    this.backEnd.getBoardProgram(this.programId)
+        .then(program => {
           this.events.send(program);
-          return this.backEnd.request<string>("GET", program.programinJson).then((code) => {
-            this.events.send(code);
-            this.nameField = program.programName;
-            this.descriptionField = program.programDescription;
-            this.codeField = code;
-          });
+          let version = program.versions.find(version => version.id == this.id);
+          if (!version) {
+            // TODO: https://github.com/angular/angular/issues/4558
+            return Promise.reject(new Error(`version ${this.id} of program ${this.programId} not found`));
+          }
+          this.nameField = version.versionName;
+          this.descriptionField = version.versionDescription;
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
   }
@@ -91,12 +93,13 @@ export class Component implements ng.OnInit {
   onSubmit():void {
     "use strict";
 
-    this.backEnd.updateHomerProgram(this.id, this.nameField, this.descriptionField, this.codeField, this.projectId)
-        .then((message) => {
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-76
+    this.backEnd.updateBoardProgramVersion(this.id, this.nameField, this.descriptionField)
+        .then(message => {
           this.events.send(message);
-          this.router.navigate(["Project", {project: this.projectId}]);
+          this.router.navigate(["BoardProgram", {project: this.projectId, program: this.programId}]);
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
   }
@@ -104,6 +107,6 @@ export class Component implements ng.OnInit {
   onCancelClick():void {
     "use strict";
 
-    this.router.navigate(["Project", {project: this.projectId}]);
+    this.router.navigate(["BoardProgram", {project: this.projectId, program: this.programId}]);
   }
 }

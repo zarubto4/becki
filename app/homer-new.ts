@@ -31,6 +31,8 @@ export class Component {
 
   idField:string;
 
+  typeField:string;
+
   backEnd:backEnd.Service;
 
   events:events.Service;
@@ -46,6 +48,7 @@ export class Component {
       new wrapper.LabeledLink("New Homer", ["NewHomer"])
     ];
     this.idField = "";
+    this.typeField = "";
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -54,7 +57,7 @@ export class Component {
   onSubmit():void {
     "use strict";
 
-    this.backEnd.createHomer(this.idField)
+    this.backEnd.createHomer(this.idField, this.typeField)
         .then((message) => {
           this.events.send(message);
           this.router.navigate(["Devices"]);

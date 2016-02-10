@@ -1,6 +1,6 @@
 /*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -19,12 +19,12 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as fieldHomerProgram from "./field-homer-program";
+import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
-  templateUrl: "app/homer-program.html",
-  directives: [fieldHomerProgram.Component, ng.FORM_DIRECTIVES, wrapper.Component]
+  templateUrl: "app/board-program.html",
+  directives: [libBootstrapPanelList.Component, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -40,7 +40,9 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
-  codeField:string;
+  versions:libBootstrapPanelList.Item[];
+
+  newVersionLink:any[];
 
   backEnd:backEnd.Service;
 
@@ -53,18 +55,18 @@ export class Component implements ng.OnInit {
 
     this.id = routeParams.get("program");
     this.projectId = routeParams.get("project");
-    this.heading = `Program ${this.id} (Project ${this.projectId})`;
+    this.heading = `Program ${this.id}`;
     this.breadcrumbs = [
       becki.HOME,
       new wrapper.LabeledLink("User", ["Projects"]),
       new wrapper.LabeledLink("Projects", ["Projects"]),
       new wrapper.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink("Homer Programs", ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink(`Program ${this.id}`, ["HomerProgram", {project: this.projectId, program: this.id}])
+      new wrapper.LabeledLink("Board Programs", ["Project", {project: this.projectId}]),
+      new wrapper.LabeledLink(`Program ${this.id}`, ["BoardProgram", {project: this.projectId, program: this.id}])
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    this.codeField = `{"blocks":{}}`;
+    this.newVersionLink = ["NewBoardProgramVersion", {project: this.projectId, program: this.id}];
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -73,17 +75,20 @@ export class Component implements ng.OnInit {
   onInit():void {
     "use strict";
 
-    this.backEnd.getHomerProgram(this.id)
-        .then((program) => {
+    this.refresh();
+  }
+
+  refresh():void {
+    "use strict";
+
+    this.backEnd.getBoardProgram(this.id)
+        .then(program => {
           this.events.send(program);
-          return this.backEnd.request<string>("GET", program.programinJson).then((code) => {
-            this.events.send(code);
-            this.nameField = program.programName;
-            this.descriptionField = program.programDescription;
-            this.codeField = code;
-          });
+          this.nameField = program.programName;
+          this.descriptionField = program.programDescription;
+          this.versions = program.versions.map(version => new libBootstrapPanelList.Item(version.id, version.version.toString(), version.versionName));
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
   }
@@ -91,12 +96,13 @@ export class Component implements ng.OnInit {
   onSubmit():void {
     "use strict";
 
-    this.backEnd.updateHomerProgram(this.id, this.nameField, this.descriptionField, this.codeField, this.projectId)
-        .then((message) => {
-          this.events.send(message);
-          this.router.navigate(["Project", {project: this.projectId}]);
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-73
+    this.backEnd.updateBoardProgram(this.id, this.nameField, this.descriptionField)
+        .then(program => {
+          this.events.send(program);
+          this.refresh();
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
   }
@@ -105,5 +111,11 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.router.navigate(["Project", {project: this.projectId}]);
+  }
+
+  getVersionLink():(version:libBootstrapPanelList.Item)=>any[] {
+    "use strict";
+
+    return version => ["BoardProgramVersion", {project: this.projectId, program: this.id, version: version.id}];
   }
 }

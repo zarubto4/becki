@@ -50,14 +50,14 @@ export class Component {
     "use strict";
 
     this.projectId = routeParams.get("project");
-    this.heading = `New Standalone Program (Project ${this.projectId})`;
+    this.heading = `New Program (Project ${this.projectId})`;
     this.breadcrumbs = [
       becki.HOME,
       new wrapper.LabeledLink("User", ["Projects"]),
       new wrapper.LabeledLink("Projects", ["Projects"]),
       new wrapper.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
       new wrapper.LabeledLink("Standalone Programs", ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink("New Standalone Program", ["NewStandaloneProgram", {project: this.projectId}])
+      new wrapper.LabeledLink("New Program", ["NewStandaloneProgram", {project: this.projectId}])
     ];
     this.nameField = "";
     this.descriptionField = "";

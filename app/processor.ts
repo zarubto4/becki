@@ -28,19 +28,23 @@ class Selectable {
 
   selected:boolean;
 
-  constructor(model:libBackEnd.LibraryGroup) {
+  constructor(model:libBackEnd.LibraryGroup, selected:boolean) {
     "use strict";
 
     this.model = model;
-    this.selected = false;
+    this.selected = selected;
   }
 }
 
 @ng.Component({
-  templateUrl: "app/processor-new.html",
+  templateUrl: "app/processor.html",
   directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
+
+  id:string;
+
+  heading:string;
 
   breadcrumbs:wrapper.LabeledLink[];
 
@@ -60,17 +64,19 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
+    this.id = routeParams.get("processor");
+    this.heading = `Processor ${this.id}`;
     this.breadcrumbs = [
       becki.HOME,
       new wrapper.LabeledLink("Processors", ["Devices"]),
-      new wrapper.LabeledLink("New Processor", ["NewProcessor"])
+      new wrapper.LabeledLink(`Processor ${this.id}`, ["Processor", {processor: this.id}])
     ];
-    this.nameField = "";
-    this.codeField = "";
-    this.descriptionField = "";
+    this.nameField = "Loading...";
+    this.codeField = "Loading...";
+    this.descriptionField = "Loading...";
     this.speedField = 0;
     this.backEnd = backEndService;
     this.events = eventsService;
@@ -80,10 +86,33 @@ export class Component implements ng.OnInit {
   onInit():void {
     "use strict";
 
-    this.backEnd.getLibraryGroups()
-        .then(groups => {
-          this.events.send(groups);
-          this.groups = groups.map(group => new Selectable(group));
+    Promise.all<any>([
+          this.backEnd.getProcessor(this.id),
+          this.backEnd.getLibraryGroups()
+        ])
+        .then(result => {
+          this.events.send(result);
+          let processor:libBackEnd.Processor;
+          let groups:libBackEnd.LibraryGroup[];
+          [processor, groups] = result;
+          return Promise.all<any>([
+            processor,
+            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-67
+            this.backEnd.request("GET", processor.description),
+            this.backEnd.request("GET", processor.libraryGroups),
+            groups
+          ]);
+        })
+        .then(result => {
+          this.events.send(result);
+          let processor:libBackEnd.Processor;
+          let processorGroups:libBackEnd.LibraryGroup[];
+          let groups:libBackEnd.LibraryGroup[];
+          [processor, this.descriptionField, processorGroups, groups] = result;
+          this.nameField = processor.processorName;
+          this.codeField = processor.processorCode;
+          this.speedField = processor.speed;
+          this.groups = groups.map(group => new Selectable(group, processorGroups.find(processorGroup => group.id == processorGroup.id) != null));
         })
         .catch(reason => {
           this.events.send(reason);
@@ -94,12 +123,12 @@ export class Component implements ng.OnInit {
     "use strict";
 
     let groups = this.groups.filter(selectable => selectable.selected).map(selectable => selectable.model.id);
-    this.backEnd.createProcessor(this.nameField, this.codeField, this.descriptionField, this.speedField, groups)
-        .then((message) => {
+    this.backEnd.updateProcessor(this.id, this.nameField, this.codeField, this.descriptionField, this.speedField, groups)
+        .then(message => {
           this.events.send(message);
           this.router.navigate(["Devices"]);
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
   }

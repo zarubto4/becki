@@ -1,6 +1,6 @@
 /*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -19,16 +19,16 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as fieldHomerProgram from "./field-homer-program";
+import * as libBackEnd from "./lib-back-end/index";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
-  templateUrl: "app/homer-program-new.html",
-  directives: [fieldHomerProgram.Component, ng.FORM_DIRECTIVES, wrapper.Component]
+  templateUrl: "app/library-group.html",
+  directives: [ng.FORM_DIRECTIVES, wrapper.Component]
 })
-export class Component {
+export class Component implements ng.OnInit {
 
-  projectId:string;
+  id:string;
 
   heading:string;
 
@@ -37,8 +37,6 @@ export class Component {
   nameField:string;
 
   descriptionField:string;
-
-  codeField:string;
 
   backEnd:backEnd.Service;
 
@@ -49,33 +47,44 @@ export class Component {
   constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.projectId = routeParams.get("project");
-    this.heading = `New Program (Project ${this.projectId})`;
+    this.id = routeParams.get("group");
+    this.heading = `Library Group ${this.id}`;
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("User", ["Projects"]),
-      new wrapper.LabeledLink("Projects", ["Projects"]),
-      new wrapper.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink("Homer Programs", ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink("New Program", ["NewHomerProgram", {project: this.projectId}])
+      new wrapper.LabeledLink("Libraries", ["Devices"]),
+      new wrapper.LabeledLink("Groups", ["Devices"]),
+      new wrapper.LabeledLink(`Group ${this.id}`, ["LibraryGroup", {group: this.id}])
     ];
-    this.nameField = "";
-    this.descriptionField = "";
-    this.codeField = `{"blocks":{}}`;
+    this.nameField = "Loading...";
+    this.descriptionField = "Loading...";
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
   }
 
+  onInit():void {
+    "use strict";
+
+    this.backEnd.getLibraryGroup(this.id)
+        .then(group => {
+          this.events.send(group);
+          this.nameField = group.groupName;
+          this.descriptionField = group.description;
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
+  }
+
   onSubmit():void {
     "use strict";
 
-    this.backEnd.createHomerProgram(this.nameField, this.descriptionField, this.codeField, this.projectId)
-        .then((message) => {
+    this.backEnd.updateLibraryGroup(this.id, this.nameField, this.descriptionField)
+        .then(message => {
           this.events.send(message);
-          this.router.navigate(["Project", {project: this.projectId}]);
+          this.router.navigate(["Devices"]);
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
   }
@@ -83,6 +92,6 @@ export class Component {
   onCancelClick():void {
     "use strict";
 
-    this.router.navigate(["Project", {project: this.projectId}]);
+    this.router.navigate(["Devices"]);
   }
 }

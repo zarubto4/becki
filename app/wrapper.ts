@@ -19,6 +19,7 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
+import * as libBackEnd from "./lib-back-end/index";
 
 export class LabeledLink {
 
@@ -75,17 +76,7 @@ export class Component implements ng.OnInit {
     this.backEnd.getSignedInPerson()
         .then(person => {
           this.events.send(person);
-          let nameParts:string[] = [];
-          if (person.firstName) {
-            nameParts.push(person.firstName);
-          }
-          if (person.middleName) {
-            nameParts.push(person.middleName);
-          }
-          if (person.lastName) {
-            nameParts.push(person.lastName);
-          }
-          this.user = person.nickName ? person.nickName : nameParts ? nameParts.join(" ") : person.mail ? person.mail : "User";
+          this.user = libBackEnd.composePersonString(person) || "User";
         })
         .catch((reason) => {
           this.events.send(reason);

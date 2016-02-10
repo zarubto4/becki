@@ -124,7 +124,7 @@ export class Component implements ng.OnInit {
           return Promise.all<any>([
             project,
             this.backEnd.request("GET", project.boards),
-            this.backEnd.request("GET", project.programs),
+            [],// FIXME this.backEnd.request("GET", project.programs),
             this.backEnd.request("GET", project.homers),
             this.backEnd.request("GET", project.owners)
           ]);
@@ -144,7 +144,7 @@ export class Component implements ng.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-62
           this.homerPrograms = homerPrograms.map(program => new libBootstrapPanelList.Item(program.programId, program.programName, program.programDescription));
           this.homers = homers.map(homer => new libBootstrapPanelList.Item(homer.homerId, homer.homerId, null));
-          this.collaborators = collaborators.map(collaborator => new libBootstrapPanelList.Item(collaborator.id, collaborator.nickName, collaborator.mail));
+          this.collaborators = collaborators.map(collaborator => new libBootstrapPanelList.Item(collaborator.id, libBackEnd.composePersonString(collaborator), null));
         })
         .catch((reason) => {
           this.events.send(reason);
@@ -157,6 +157,12 @@ export class Component implements ng.OnInit {
     this.backEnd.updateProject(this.id, this.nameField, this.descriptionField)
         .then(message => this.events.send(message))
         .catch(reason => this.events.send(reason));
+  }
+
+  getBoardProgramLink():(program:libBootstrapPanelList.Item)=>any[] {
+    "use strict";
+
+    return (program) => ["BoardProgram", {project: this.id, program: program.id}];
   }
 
   getHomerProgramLink():(program:libBootstrapPanelList.Item)=>any[] {

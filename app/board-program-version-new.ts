@@ -38,10 +38,12 @@ class Selectable<T> {
 }
 
 @ng.Component({
-  templateUrl: "app/board-program-new.html",
+  templateUrl: "app/board-program-version-new.html",
   directives: [fieldCode.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
+
+  programId:string;
 
   projectId:string;
 
@@ -52,6 +54,8 @@ export class Component implements ng.OnInit {
   libraries:Selectable<libBackEnd.Library>[];
 
   groups:Selectable<libBackEnd.LibraryGroup>[];
+
+  numberField:string;
 
   nameField:string;
 
@@ -68,16 +72,20 @@ export class Component implements ng.OnInit {
   constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
+    this.programId = routeParams.get("program");
     this.projectId = routeParams.get("project");
-    this.heading = `New Program (Project ${this.projectId})`;
+    this.heading = `New Version (Program ${this.programId})`;
     this.breadcrumbs = [
       becki.HOME,
       new wrapper.LabeledLink("User", ["Projects"]),
       new wrapper.LabeledLink("Projects", ["Projects"]),
       new wrapper.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
       new wrapper.LabeledLink("Board Programs", ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink("New Program", ["NewBoardProgram", {project: this.projectId}])
+      new wrapper.LabeledLink(`Program ${this.programId}`, ["BoardProgram", {project: this.projectId, program: this.programId}]),
+      new wrapper.LabeledLink("Versions", ["BoardProgram", {project: this.projectId, program: this.programId}]),
+      new wrapper.LabeledLink("New Version", ["NewBoardProgramVersion", {project: this.projectId, program: this.programId}])
     ];
+    this.numberField = "";
     this.nameField = "";
     this.descriptionField = "";
     this.codeField = "";
@@ -112,10 +120,11 @@ export class Component implements ng.OnInit {
 
     let libraries = this.libraries.filter(selectable => selectable.selected).map(selectable => ({libraryId: selectable.model.id, libraryVersion: selectable.model.lastVersion.toString()}));
     let groups = this.groups.filter(selectable => selectable.selected).map(selectable => ({groupId: selectable.model.id, libraryVersion: selectable.model.lastVersion.toString()}));
-    this.backEnd.createBoardProgram(this.nameField, this.descriptionField, libraries, groups, this.codeField, this.projectId)
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-74
+    this.backEnd.createBoardProgramVersion(this.programId, this.numberField, this.nameField, this.descriptionField, libraries, groups, this.codeField)
         .then((message) => {
           this.events.send(message);
-          this.router.navigate(["Project", {project: this.projectId}]);
+          this.router.navigate(["BoardProgram", {project: this.projectId, program: this.programId}]);
         })
         .catch((reason) => {
           this.events.send(reason);
@@ -125,6 +134,6 @@ export class Component implements ng.OnInit {
   onCancelClick():void {
     "use strict";
 
-    this.router.navigate(["Project", {project: this.projectId}]);
+    this.router.navigate(["BoardProgram", {project: this.projectId, program: this.programId}]);
   }
 }

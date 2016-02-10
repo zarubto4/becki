@@ -15,6 +15,34 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
+export function composePersonString(person:Person):string {
+  "use strict";
+
+  if (person.nickName) {
+    return person.nickName;
+  }
+
+  let nameParts:string[] = [];
+  if (person.firstName) {
+    nameParts.push(person.firstName);
+  }
+  if (person.middleName) {
+    nameParts.push(person.middleName);
+  }
+  if (person.lastName) {
+    nameParts.push(person.lastName);
+  }
+  if (nameParts) {
+    return nameParts.join(" ");
+  }
+
+  if (person.mail) {
+    return person.mail;
+  }
+
+  return null;
+}
+
 /**
  * An HTTP request.
  */
@@ -228,6 +256,34 @@ export interface BoardType {
   boards:string;
 }
 
+export interface BoardProgramVersion {
+
+  id:string;
+
+  version:number;
+
+  allFiles:string;
+
+  dateOfCreate:number;
+
+  versionName:string;
+
+  versionDescription:any;
+
+  files:number;
+}
+
+export interface BoardProgram {
+
+  id:string;
+
+  programName:string;
+
+  programDescription:string;
+
+  versions:BoardProgramVersion[];
+}
+
 export interface Board {
 
   id:string;
@@ -377,6 +433,8 @@ export abstract class BackEnd {
   static BASE_URL = "http://127.0.0.1:9000";
 
   static ANSWER_PATH = "/overflow/answer";
+
+  static BOARD_PROGRAM_PATH = "/compilation/program";
 
   static BOARD_TYPE_PATH = "/compilation/typeOfBoard";
 
@@ -630,10 +688,22 @@ export abstract class BackEnd {
     return this.requestPath("POST", BackEnd.LIBRARY_GROUP_PATH, {groupName, description}).then(JSON.stringify);
   }
 
+  public getLibraryGroup(id:string):Promise<LibraryGroup> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.LIBRARY_GROUP_PATH}/${id}`);
+  }
+
   public getLibraryGroups():Promise<LibraryGroup[]> {
     "use strict";
 
     return this.requestPath("GET", BackEnd.LIBRARY_GROUP_PATH);
+  }
+
+  public updateLibraryGroup(id:string, groupName:string, description:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("PUT", `${BackEnd.LIBRARY_GROUP_PATH}/${id}`, {groupName, description}).then(JSON.stringify);
   }
 
   public createProcessor(processorName:string, processorCode:string, description:string, speed:number, libraryGroups:string[]):Promise<string> {
@@ -642,10 +712,22 @@ export abstract class BackEnd {
     return this.requestPath("POST", BackEnd.PROCESSOR_PATH, {processorName, description, processorCode, speed, libraryGroups}).then(JSON.stringify);
   }
 
+  public getProcessor(id:string):Promise<Processor> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.PROCESSOR_PATH}/${id}`);
+  }
+
   public getProcessors():Promise<Processor[]> {
     "use strict";
 
     return this.requestPath("GET", BackEnd.PROCESSOR_PATH);
+  }
+
+  public updateProcessor(id:string, processorName:string, processorCode:string, description:string, speed:number, libraryGroups:string[]):Promise<String> {
+    "use strict";
+
+    return this.requestPath("PUT", `${BackEnd.PROCESSOR_PATH}/${id}`, {processorName, description, processorCode, speed, libraryGroups}).then(JSON.stringify);
   }
 
   public createBoardType(name:string, producerId:string, processorId:string, description:string):Promise<string> {
@@ -654,16 +736,46 @@ export abstract class BackEnd {
     return this.requestPath("POST", BackEnd.BOARD_TYPE_PATH, {name, description, processorId, producerId}).then(JSON.stringify);
   }
 
+  public getBoardType(id:string):Promise<BoardType> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.BOARD_TYPE_PATH}/${id}`);
+  }
+
   public getBoardTypes():Promise<BoardType[]> {
     "use strict";
 
     return this.requestPath("GET", BackEnd.BOARD_TYPE_PATH);
   }
 
+  public createBoardProgramVersion(program:string, version:string, versionName:string, versionDescription:string, libraries:LibraryReference[], groupOfLibraries:LibraryGroupReference[], content:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("PUT", `${BackEnd.BOARD_PROGRAM_PATH}/newVersion/${program}`, {version, versionName, versionDescription, files: [{fileName: "main", content}], groupOfLibraries, libraries}).then(JSON.stringify);
+  }
+
+  public updateBoardProgramVersion(id:string, versionName:string, versionDescription:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("PUT", `${BackEnd.BOARD_PROGRAM_PATH}/version/${id}`, {versionName, versionDescription}).then(JSON.stringify);
+  }
+
   public createBoardProgram(programName:string, programDescription:string, libraries:LibraryReference[], groupOfLibraries:LibraryGroupReference[], content:string, project:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("POST", "/compilation/program", {programName, programDescription, project, files: [{fileName: "main", content}], groupOfLibraries, libraries}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.BOARD_PROGRAM_PATH, {programName, programDescription, project, files: [{fileName: "main", content}], groupOfLibraries, libraries}).then(JSON.stringify);
+  }
+
+  public getBoardProgram(id:string):Promise<BoardProgram> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.BOARD_PROGRAM_PATH}/${id}`);
+  }
+
+  public updateBoardProgram(id:string, programName:string, programDescription:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("PUT", `${BackEnd.BOARD_PROGRAM_PATH}/update/${id}`, {programName, programDescription}).then(JSON.stringify);
   }
 
   /**
@@ -719,10 +831,10 @@ export abstract class BackEnd {
    * @param id the ID of the device.
    * @param token an authentication token.
    */
-  public createHomer(homerId:string):Promise<string> {
+  public createHomer(homerId:string, typeOfDevice:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("POST", BackEnd.HOMER_PATH, {homerId, typeOfDevice: "raspberry"}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.HOMER_PATH, {homerId, typeOfDevice}).then(JSON.stringify);
   }
 
   public getHomers():Promise<Homer[]> {

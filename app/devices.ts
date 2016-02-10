@@ -148,4 +148,22 @@ export class Component implements ng.OnInit {
 
     return ["Library", {library: library.id}];
   }
+
+  getLibraryGroupLink(group:libBootstrapPanelList.Item):any {
+    "use strict";
+
+    return ["LibraryGroup", {group: group.id}];
+  }
+
+  getProcessorLink(processor:libBootstrapPanelList.Item):any {
+    "use strict";
+
+    return ["Processor", {processor: processor.id}];
+  }
+
+  getBoardTypeLink(type:libBootstrapPanelList.Item):any {
+    "use strict";
+
+    return ["BoardType", {type: type.id}];
+  }
 }
