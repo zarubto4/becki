@@ -93,19 +93,6 @@ export class Component implements ng.AfterViewInit {
         });
   }
 
-  onTwitterSignInClick():void {
-    "use strict";
-
-    this.backEnd.createTwitterToken()
-        .then(url => {
-          this.events.send(url);
-          location.href = url;
-        })
-        .catch(reason => {
-          this.events.send(reason);
-        });
-  }
-
   onGitHubSignInClick():void {
     "use strict";
 

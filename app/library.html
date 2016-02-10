@@ -66,8 +66,8 @@
         <option value="new">
           Create a new version
         </option>
-        <option data-bind-value="version" template="ngFor #version of versions">
-          {{version}}
+        <option data-bind-value="version.id" template="ngFor #version of versions">
+          {{version.version}}
         </option>
       </select>
     </div>

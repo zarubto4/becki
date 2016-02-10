@@ -120,7 +120,6 @@ export class Component implements ng.OnInit {
 
     let libraries = this.libraries.filter(selectable => selectable.selected).map(selectable => ({libraryId: selectable.model.id, libraryVersion: selectable.model.lastVersion.toString()}));
     let groups = this.groups.filter(selectable => selectable.selected).map(selectable => ({groupId: selectable.model.id, libraryVersion: selectable.model.lastVersion.toString()}));
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-74
     this.backEnd.createBoardProgramVersion(this.programId, this.numberField, this.nameField, this.descriptionField, libraries, groups, this.codeField)
         .then((message) => {
           this.events.send(message);

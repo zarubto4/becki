@@ -70,50 +70,6 @@
         </div>
       </template>
     </div>
-    <div class="form-group">
-      <label>
-        <span class="glyphicon glyphicon-time"></span>
-        When
-      </label>
-      <select class="form-control" required data-bindon-ng-model="whenField">
-        <option value="">Select time...</option>
-        <option>Immediately</option>
-        <option>As soon as possible</option>
-        <option>Later</option>
-      </select>
-    </div>
-    <template data-bind-ng-if="whenField == 'Later'">
-      <div class="form-group">
-        <label>
-          <span class="glyphicon glyphicon-time"></span>
-          Since
-        </label>
-        <div class="row">
-          <div class="col-sm-6">
-            <input class="form-control" type="date" required data-bindon-ng-model="sinceDateField">
-          </div>
-          <div class="col-sm-6">
-            <input class="form-control" type="time" required step="0.001" data-bindon-ng-model="sinceTimeField">
-          </div>
-        </div>
-      </div>
-    </template>
-    <template data-bind-ng-if="whenField == 'As soon as possible' || whenField == 'Later'">
-      <div class="form-group">
-        <label>
-          <span class="glyphicon glyphicon-time"></span>
-          Until
-        </label>
-        <div class="row">
-          <div class="col-sm-6">
-            <input class="form-control" type="date" required data-bindon-ng-model="untilDateField">
-          </div>
-          <div class="col-sm-6">
-            <input class="form-control" type="time" step="0.001" required data-bindon-ng-model="untilTimeField">
-          </div>
-        </div>
-      </div>
-    </template>
     <div class="pull-right">
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">
         Cancel

@@ -24,7 +24,7 @@ import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/board-type.html",
-  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -34,11 +34,7 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:wrapper.LabeledLink[];
 
-  processors:libBackEnd.Processor[];
-
   nameField:string;
-
-  processorField:string;
 
   descriptionField:string;
 
@@ -60,9 +56,7 @@ export class Component implements ng.OnInit {
       new wrapper.LabeledLink(`Type ${this.id}`, ["BoardType", {type: this.id}])
     ];
     this.nameField = "Loading...";
-    this.processorField = "Loading...";
     this.descriptionField = "Loading...";
-    this.processorField = "";
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -71,17 +65,11 @@ export class Component implements ng.OnInit {
   onInit():void {
     "use strict";
 
-    this.backEnd.getProcessors()
-        .then(processors => {
-          this.events.send(processors);
-          this.processors = processors;
-          return this.backEnd.getBoardType(this.id);
-        })
+    this.backEnd.getBoardType(this.id)
         .then(type => {
           this.events.send(type);
           return Promise.all<any>([
               type,
-              this.backEnd.request("GET", type.procesor),
               // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-68
               this.backEnd.request("GET", type.description)
           ]);
@@ -89,10 +77,8 @@ export class Component implements ng.OnInit {
         .then(result => {
           this.events.send(result);
           let type:libBackEnd.BoardType;
-          let processor:libBackEnd.Processor;
-          [type, processor, this.descriptionField] = result;
+          [type, this.descriptionField] = result;
           this.nameField = type.name;
-          this.processorField = processor.id;
         })
         .catch((reason) => {
           this.events.send(reason);
@@ -102,8 +88,14 @@ export class Component implements ng.OnInit {
   onSubmit():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-69
-    alert("issue/TYRION-69");
+    this.backEnd.updateBoardType(this.id, this.nameField, this.descriptionField)
+        .then(message => {
+          this.events.send(message);
+          this.router.navigate(["Devices"]);
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
   }
 
   onCancelClick():void {

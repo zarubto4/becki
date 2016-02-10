@@ -91,11 +91,11 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.createBoardType(this.nameField, this.producerField, this.processorField, this.descriptionField)
-        .then((message) => {
+        .then(message => {
           this.events.send(message);
           this.router.navigate(["Devices"]);
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
   }

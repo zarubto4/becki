@@ -22,61 +22,6 @@ import * as events from "./events";
 import * as libBackEnd from "./lib-back-end/index";
 import * as wrapper from "./wrapper";
 
-function composeDateString(date:Date):string {
-  "use strict";
-
-  let year = date.getFullYear();
-  let month = ("0" + (date.getMonth() + 1).toString()).slice(-2);
-  let day = ("0" + date.getDate().toString()).slice(-2);
-  return `${year}-${month}-${day}`;
-}
-
-function composeTimeString(date:Date):string {
-  "use strict";
-
-  let hour = ("0" + date.getHours().toString()).slice(-2);
-  let minute = ("0" + date.getMinutes().toString()).slice(-2);
-  let second = ("0" + date.getSeconds().toString()).slice(-2);
-  let fraction = ("00" + date.getMilliseconds().toString()).slice(-3);
-  return `${hour}:${minute}:${second}.${fraction}`;
-}
-
-function parseDateTimeString(dateString:string, timeString:string):Date {
-  "use strict";
-
-  let dateStrings = /^(\d{4,})-(\d{2})-(\d{2})$/.exec(dateString);
-  if (!dateStrings) {
-    throw "invalid date format";
-  }
-
-  let year = parseInt(dateStrings[1]);
-  let month = parseInt(dateStrings[2]) - 1;
-  let day = parseInt(dateStrings[3]);
-  if (isNaN(year) || isNaN(month) || isNaN(day)) {
-    throw "date component not a number";
-  }
-
-  let timeStrings = /^(\d{2}):(\d{2})(?::(\d{2})(?:.(\d+))?)?$/.exec(timeString);
-  if (!timeStrings) {
-    throw "invalid time format";
-  }
-
-  let hour = parseInt(timeStrings[1]);
-  let minute = parseInt(timeStrings[2]);
-  let second = timeStrings[3] ? parseInt(timeStrings[3]) : 0;
-  let fraction = timeStrings[4] ? parseInt(timeStrings[4]) : 0;
-  if (isNaN(hour) || isNaN(minute) || isNaN(second) || isNaN(fraction)) {
-    throw "time component not a number";
-  }
-
-  let date = new Date(year, month, day, hour, minute, second, fraction);
-  if (date.getFullYear() != year || date.getMonth() != month || date.getDate() != day || date.getHours() != hour || date.getMinutes() != minute || date.getSeconds() != second || date.getMilliseconds() != fraction) {
-    throw "component out of range";
-  }
-
-  return date;
-}
-
 @ng.Component({
   templateUrl: "app/project-upload-new.html",
   directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
@@ -103,16 +48,6 @@ export class Component implements ng.OnInit {
 
   programField:string;
 
-  whenField:string;
-
-  sinceDateField:string;
-
-  sinceTimeField:string;
-
-  untilDateField:string;
-
-  untilTimeField:string;
-
   backEnd:backEnd.Service;
 
   events:events.Service;
@@ -122,7 +57,6 @@ export class Component implements ng.OnInit {
   constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
-    let now = new Date();
     this.projectId = routeParams.get("project");
     this.heading = `New Program Upload (Project ${this.projectId})`;
     this.breadcrumbs = [
@@ -136,11 +70,6 @@ export class Component implements ng.OnInit {
     this.typeField = "";
     this.deviceField = "";
     this.programField = "";
-    this.whenField = "";
-    this.sinceDateField = composeDateString(now);
-    this.sinceTimeField = composeTimeString(now);
-    this.untilDateField = composeDateString(new Date(new Date(now.getTime()).setDate(now.getDate() + 7)));
-    this.untilTimeField = this.sinceTimeField;
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -153,16 +82,16 @@ export class Component implements ng.OnInit {
         .then((project) => {
           this.events.send(project);
           return Promise.all<any>([
+            this.backEnd.request("GET", project.c_programs),
             this.backEnd.request("GET", project.boards),
-            this.backEnd.request("GET", project.homers),
-            this.backEnd.request("GET", project.programs)
+            this.backEnd.request("GET", project.b_programs),
+            this.backEnd.request("GET", project.homers)
           ]);
         })
         .then(result => {
           this.events.send(result);
-          [this.boards, this.homers, this.homerPrograms] = result;
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-14
-          this.boardPrograms = [];
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-77
+          [this.boardPrograms, this.boards, this.homerPrograms, this.homers] = result;
         })
         .catch((reason) => {
           this.events.send(reason);
@@ -177,25 +106,10 @@ export class Component implements ng.OnInit {
     let promise:Promise<string>;
     switch (this.typeField) {
       case "Board":
-        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-64
-        return;
+        promise = this.backEnd.addProgramToBoard(this.programField, this.deviceField);
+        break;
       case "Homer":
-        switch (this.whenField) {
-          case "Immediately":
-            promise = this.backEnd.uploadToHomerNow(this.deviceField, this.programField);
-            break;
-          case "As soon as possible":
-            until = parseDateTimeString(this.untilDateField, this.untilTimeField).getTime().toString();
-            promise = this.backEnd.uploadToHomerAsap(this.deviceField, this.programField, until);
-            break;
-          case "Later":
-            since = parseDateTimeString(this.sinceDateField, this.sinceTimeField).getTime().toString();
-            until = parseDateTimeString(this.untilDateField, this.untilTimeField).getTime().toString();
-            promise = this.backEnd.uploadToHomerLater(this.deviceField, this.programField, since, until);
-            break;
-          default:
-            return;
-        }
+        promise = this.backEnd.addProgramToHomer(this.programField, this.deviceField);
         break;
       default:
         return;

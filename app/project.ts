@@ -87,12 +87,6 @@ export class Component implements ng.OnInit {
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.newCollaboratorLink = ["NewProjectCollaborator", {project: this.id}];
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-14
-    this.boardPrograms = [
-      new libBootstrapPanelList.Item(null, "(issue/TYRION-14)", "does not work"),
-      new libBootstrapPanelList.Item(null, "(issue/TYRION-14)", "does not work"),
-      new libBootstrapPanelList.Item(null, "(issue/TYRION-14)", "does not work")
-    ];
     this.newBoardProgramLink = ["NewBoardProgram", {project: this.id}];
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-36
     this.standalonePrograms = [
@@ -103,10 +97,10 @@ export class Component implements ng.OnInit {
     this.additionalBoardLink = ["NewProjectBoard", {project: this.id}];
     this.additionalHomerLink = ["NewProjectHomer", {project: this.id}];
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-43
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-64
     this.uploadQueue = [
       new libBootstrapPanelList.Item(null, "(issue/TYRION-43)", "does not work"),
-      new libBootstrapPanelList.Item(null, "(issue/TYRION-64)", "does not work")
+      new libBootstrapPanelList.Item(null, "(issue/TYRION-43)", "does not work"),
+      new libBootstrapPanelList.Item(null, "(issue/TYRION-43)", "does not work")
     ];
     this.newUploadLink = ["NewProjectUpload", {project: this.id}];
     this.backEnd = backEndService;
@@ -123,8 +117,9 @@ export class Component implements ng.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-36
           return Promise.all<any>([
             project,
+            this.backEnd.request("GET", project.c_programs),
             this.backEnd.request("GET", project.boards),
-            [],// FIXME this.backEnd.request("GET", project.programs),
+            this.backEnd.request("GET", project.b_programs),
             this.backEnd.request("GET", project.homers),
             this.backEnd.request("GET", project.owners)
           ]);
@@ -132,16 +127,17 @@ export class Component implements ng.OnInit {
         .then(result => {
           this.events.send(result);
           let project:libBackEnd.Project;
+          let boardPrograms:libBackEnd.BoardProgram[];
           let boards:libBackEnd.Board[];
           let homerPrograms:libBackEnd.HomerProgram[];
           let homers:libBackEnd.Homer[];
           let collaborators:libBackEnd.Person[];
-          [project, boards, homerPrograms, homers, collaborators] = result;
+          [project, boardPrograms, boards, homerPrograms, homers, collaborators] = result;
           this.nameField = project.projectName;
           this.descriptionField = project.projectDescription;
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-14
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-77
+          this.boardPrograms = boardPrograms.map(program => new libBootstrapPanelList.Item(program.id, program.programName, program.programDescription));
           this.boards = boards.map(board => new libBootstrapPanelList.Item(board.id, board.id, board.isActive ? "active" : "inactive"));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-62
           this.homerPrograms = homerPrograms.map(program => new libBootstrapPanelList.Item(program.programId, program.programName, program.programDescription));
           this.homers = homers.map(homer => new libBootstrapPanelList.Item(homer.homerId, homer.homerId, null));
           this.collaborators = collaborators.map(collaborator => new libBootstrapPanelList.Item(collaborator.id, libBackEnd.composePersonString(collaborator), null));

@@ -166,6 +166,23 @@ export interface Producer {
   typeOfBoards:string;
 }
 
+export interface Version {
+
+  id:string;
+
+  version:number;
+
+  allFiles:string;
+
+  dateOfCreate:number;
+
+  versionName:string;
+
+  versionDescription:any;
+
+  files:number;
+}
+
 export interface Library {
 
   id:string;
@@ -256,23 +273,6 @@ export interface BoardType {
   boards:string;
 }
 
-export interface BoardProgramVersion {
-
-  id:string;
-
-  version:number;
-
-  allFiles:string;
-
-  dateOfCreate:number;
-
-  versionName:string;
-
-  versionDescription:any;
-
-  files:number;
-}
-
 export interface BoardProgram {
 
   id:string;
@@ -281,7 +281,7 @@ export interface BoardProgram {
 
   programDescription:string;
 
-  versions:BoardProgramVersion[];
+  versions:Version[];
 }
 
 export interface Board {
@@ -313,7 +313,7 @@ export interface HomerProgram {
 
   programinJson:string;
 
-  projectinJson:string;
+  project:string;
 }
 
 export interface Homer {
@@ -335,13 +335,17 @@ export interface Project {
 
   projectDescription:string;
 
+  c_programs:string;
+
   boards:string;
 
-  programs:string;
+  b_programs:string;
 
   homers:string;
 
   owners:string;
+
+  m_programs:string;
 
   countOfBoards:number;
 
@@ -434,7 +438,7 @@ export abstract class BackEnd {
 
   static ANSWER_PATH = "/overflow/answer";
 
-  static BOARD_PROGRAM_PATH = "/compilation/program";
+  static BOARD_PROGRAM_PATH = "/compilation/c_program";
 
   static BOARD_TYPE_PATH = "/compilation/typeOfBoard";
 
@@ -466,7 +470,7 @@ export abstract class BackEnd {
   /**
    * An absolute path to the program resources.
    */
-  static PROGRAM_PATH:string = "/project/program";
+  static PROGRAM_PATH = "/project/b_program";
 
   /**
    * An absolute path to the project resources.
@@ -558,16 +562,6 @@ export abstract class BackEnd {
 
     return this.requestPath<{authToken:string, url:string}>("GET", "/login/facebook").then(body => {
       // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-51
-      window.localStorage.setItem("authToken", body.authToken);
-      return body.url;
-    });
-  }
-
-  public createTwitterToken():Promise<string> {
-    "use strict";
-
-    return this.requestPath<{authToken:string, url:string}>("GET", "/login/twitter").then(body => {
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-49
       window.localStorage.setItem("authToken", body.authToken);
       return body.url;
     });
@@ -748,6 +742,12 @@ export abstract class BackEnd {
     return this.requestPath("GET", BackEnd.BOARD_TYPE_PATH);
   }
 
+  public updateBoardType(id:string, name:string, description:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("PUT", `${BackEnd.BOARD_TYPE_PATH}/${id}`, {name, description}).then(JSON.stringify);
+  }
+
   public createBoardProgramVersion(program:string, version:string, versionName:string, versionDescription:string, libraries:LibraryReference[], groupOfLibraries:LibraryGroupReference[], content:string):Promise<string> {
     "use strict";
 
@@ -790,6 +790,12 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath("POST", "/compilation/board", {hwName, typeOfBoard}).then(JSON.stringify);
+  }
+
+  public addProgramToBoard(programId:string, boardId:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("POST", `${BackEnd.BOARD_PROGRAM_PATH}/uploud/${programId}/${boardId}`, {}).then(JSON.stringify);
   }
 
   public createIndependentProgram(name:string, description:string, logicJson:string):Promise<string> {
@@ -843,31 +849,10 @@ export abstract class BackEnd {
     return this.requestPath("GET", BackEnd.HOMER_PATH);
   }
 
-  /**
-   * Update a Homer.
-   *
-   * @param id the ID of the device.
-   * @param program the ID of the program.
-   * @param token an authentication token.
-   * @param callback a callback called with an indicator and a message
-   *                 describing the result.
-   */
-  public uploadToHomerNow(homerId:string, programId:string):Promise<string> {
+  public addProgramToHomer(programId:string, homerId:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("PUT", "/project/uploudtohomerImmediately", {homerId, programId}).then(JSON.stringify);
-  }
-
-  public uploadToHomerAsap(homerId:string, programId:string, until:string):Promise<string> {
-    "use strict";
-
-    return this.requestPath("PUT", "/project/uploudtohomerAsSoonAsPossible", {homerId, programId, until}).then(JSON.stringify);
-  }
-
-  public uploadToHomerLater(homerId:string, programId:string, when:string, until:string):Promise<string> {
-    "use strict";
-
-    return this.requestPath("PUT", "/project/uploudtohomerGivenTime", {homerId, programId, when, until}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.PROGRAM_PATH}/uploud`, {homerId, programId}).then(JSON.stringify);
   }
 
   /**

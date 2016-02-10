@@ -72,7 +72,6 @@ export class Component implements ng.OnInit {
     if (!window.localStorage.getItem("authToken")) {
       this.router.navigate(["Signing"]);
     }
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-66
     this.backEnd.getSignedInPerson()
         .then(person => {
           this.events.send(person);

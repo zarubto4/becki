@@ -98,7 +98,7 @@ export class Component implements ng.OnInit {
     this.backEnd.getLibraries()
         .then(libraries => {
           this.events.send(libraries);
-          this.libraries = libraries.map(library => new libBootstrapPanelList.Item(library.id, library.libraryName, library.lastVersion.toString()));
+          this.libraries = libraries.map(library => new libBootstrapPanelList.Item(library.id, library.libraryName, library.description));
         })
         .catch(reason => {
           this.events.send(reason);

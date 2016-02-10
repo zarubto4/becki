@@ -34,7 +34,7 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:wrapper.LabeledLink[];
 
-  versions:number[];
+  versions:libBackEnd.Version[];
 
   nameField:string;
 
@@ -91,17 +91,15 @@ export class Component implements ng.OnInit {
         .then(library =>
             Promise.all<any>([
               library,
-              // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-55
-              this.backEnd.request("GET", library.description)
+              this.backEnd.request("GET", library.versions)
             ])
         )
         .then(result => {
           let library:libBackEnd.Library;
-          [library, this.descriptionField] = result;
+          [library, this.versions] = result;
           this.events.send(result);
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-63
-          this.versions = [library.lastVersion];
           this.nameField = library.libraryName;
+          this.descriptionField = library.description;
         })
         .catch(reason => {
           this.events.send(reason);
