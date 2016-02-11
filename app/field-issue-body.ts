@@ -19,6 +19,12 @@ import * as fieldHomerProgram from "./field-homer-program";
 
 export const EMPTY = JSON.stringify({body: "", homer: null});
 
+export function getHomer(model:string):string {
+  "use strict";
+
+  return JSON.parse(model).homer;
+}
+
 @ng.Component({
   selector: "[field-issue-body]",
   templateUrl: "app/field-issue-body.html",

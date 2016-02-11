@@ -813,10 +813,11 @@ export abstract class BackEnd {
    * @param callback a callback called with an indicator and a message
    *                 describing the result.
    */
-  public createHomerProgram(programName:string, programDescription:string, program:Object, projectId:string):Promise<string> {
+  public createHomerProgram(programName:string, programDescription:string, code:string, projectId:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("POST", BackEnd.PROGRAM_PATH, {programName, programDescription, projectId, program}).then(JSON.stringify);
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-80
+    return this.requestPath("POST", BackEnd.PROGRAM_PATH, {programName, programDescription, projectId, program: JSON.parse(code)}).then(JSON.stringify);
   }
 
   public getHomerProgram(id:string):Promise<HomerProgram> {

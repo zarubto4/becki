@@ -19,6 +19,7 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
+import * as fieldHomerProgram from "./field-homer-program";
 import * as fieldIssueBody from "./field-issue-body";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
@@ -69,9 +70,19 @@ class Item {
 
   editing:boolean;
 
+  importing:boolean;
+
   bodyField:string;
 
   commentField:string;
+
+  programProjectField:string;
+
+  programNameField:string;
+
+  programDescriptionField:string;
+
+  programCodeField:string;
 
   constructor(id:string, body:string, date:number, likes:number, comments:Comment[], tags?:string[]) {
     "use strict";
@@ -83,8 +94,13 @@ class Item {
     this.comments = comments;
     this.tags = tags;
     this.editing = false;
+    this.importing = false;
     this.bodyField = body;
     this.commentField = "";
+    this.programProjectField = "";
+    this.programNameField = "";
+    this.programDescriptionField = "";
+    this.programCodeField = fieldIssueBody.getHomer(body);
   }
 }
 
@@ -106,6 +122,7 @@ class Issue extends Item {
 @ng.Component({
   templateUrl: "app/issue.html",
   directives: [
+    fieldHomerProgram.Component,
     fieldIssueBody.Component,
     libBootstrapPanelList.Component,
     ng.CORE_DIRECTIVES,
@@ -125,6 +142,8 @@ export class Component implements ng.OnInit {
   types:libBackEnd.IssueType[];
 
   items:Item[];
+
+  projects:libBackEnd.Project[];
 
   answerBodyField:string;
 
@@ -215,9 +234,46 @@ export class Component implements ng.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-31
           this.confirmations = [new libBootstrapPanelList.Item(null, "(issue/TYRION-31)", "does not work")];
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
+    this.backEnd.getProjects()
+        .then(projects => {
+          this.events.send(projects);
+          this.projects = projects;
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
+  }
+
+  onItemImportClick(item:Item):void {
+    "use strict;"
+
+    item.importing = true;
+  }
+
+  onItemImportingSubmit(item:Item):void {
+    "use strict";
+
+    this.backEnd.createHomerProgram(item.programNameField, item.programDescriptionField, item.programCodeField, item.programProjectField)
+        .then(message => {
+          this.events.send(message);
+          item.importing = false;
+          item.programNameField = "";
+          item.programDescriptionField = "";
+          item.programCodeField = fieldIssueBody.getHomer(item.body);
+          item.programProjectField = "";
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
+  }
+
+  onItemImportingCancelClick(item:Item):void {
+    "use strict";
+
+    item.importing = false;
   }
 
   onItemEditClick(item:Item):void {

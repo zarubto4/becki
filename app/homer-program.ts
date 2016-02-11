@@ -80,6 +80,7 @@ export class Component implements ng.OnInit {
             this.events.send(code);
             this.nameField = program.programName;
             this.descriptionField = program.programDescription;
+            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-80
             this.codeField = JSON.stringify(code);
           });
         })

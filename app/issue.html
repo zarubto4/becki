@@ -67,8 +67,60 @@
                   </div>
                 </form>
               </template>
-              <template data-bind-ng-if="!item.editing">
+              <template data-bind-ng-if="item.importing">
+                <form class="clearfix" data-on-submit="onItemImportingSubmit(item, $event)">
+                  <div class="form-group">
+                    <label>
+                      <span class="glyphicon glyphicon-list"></span>
+                      Project
+                    </label>
+                    <select class="form-control" data-bindon-ng-model="item.programProjectField">
+                      <option value="">Select name...</option>
+                      <option data-bind-value="project.projectId" template="ngFor #project of projects">
+                        {{project.projectName}}
+                      </option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>
+                      <span class="glyphicon glyphicon-pencil"></span>
+                      Name
+                    </label>
+                    <input class="form-control" data-bindon-ng-model="item.programNameField">
+                  </div>
+                  <div class="form-group">
+                    <label>
+                      <span class="glyphicon glyphicon-pencil"></span>
+                      Description
+                    </label>
+                    <textarea class="form-control" data-bindon-ng-model="item.programDescriptionField"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label>
+                      <span class="glyphicon glyphicon-console"></span>
+                      Code
+                    </label>
+                    <div data-bindon-field-homer-program="item.programCodeField">
+                      <progress>Loading...</progress>
+                    </div>
+                  </div>
+                  <div class="pull-right">
+                    <button class="btn btn-danger" type="button" data-on-click="onItemImportingCancelClick(item, $event)">
+                      Cancel
+                    </button>
+                    <button class="btn btn-primary" type="submit">
+                      Import
+                    </button>
+                  </div>
+                </form>
+              </template>
+              <template data-bind-ng-if="!item.editing && !item.importing">
                 <div class="btn-group btn-group-xs pull-right">
+                  <template data-bind-ng-if="item.programCodeField != null">
+                    <button type="button" class="btn btn-default" data-on-click="onItemImportClick(item, $event)">
+                      <span class="glyphicon glyphicon-import"></span>
+                    </button>
+                  </template>
                   <button type="button" class="btn btn-default" data-on-click="onItemEditClick(item, $event)">
                     <span class="glyphicon glyphicon-edit"></span>
                   </button>
