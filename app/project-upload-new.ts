@@ -22,6 +22,20 @@ import * as events from "./events";
 import * as libBackEnd from "./lib-back-end/index";
 import * as wrapper from "./wrapper";
 
+class Selectable<T> {
+
+  model:T;
+
+  selected:boolean;
+
+  constructor(model:T) {
+    "use strict";
+
+    this.model = model;
+    this.selected = false;
+  }
+}
+
 @ng.Component({
   templateUrl: "app/project-upload-new.html",
   directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
@@ -34,19 +48,20 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:wrapper.LabeledLink[];
 
-  boards:libBackEnd.Board[];
+  boards:Selectable<libBackEnd.Board>[];
 
-  homers:libBackEnd.Homer[];
+  homers:Selectable<libBackEnd.Homer>[];
 
-  boardPrograms:any[];
+  boardPrograms:libBackEnd.BoardProgram[];
 
   homerPrograms:libBackEnd.HomerProgram[];
 
   typeField:string;
 
-  deviceField:string;
-
   programField:string;
+
+  @ng.ViewChild("fileField")
+  fileField:ng.ElementRef;
 
   backEnd:backEnd.Service;
 
@@ -68,7 +83,6 @@ export class Component implements ng.OnInit {
       new wrapper.LabeledLink("New Upload", ["NewProjectUpload", {project: this.projectId}])
     ];
     this.typeField = "";
-    this.deviceField = "";
     this.programField = "";
     this.backEnd = backEndService;
     this.events = eventsService;
@@ -79,7 +93,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getProject(this.projectId)
-        .then((project) => {
+        .then(project => {
           this.events.send(project);
           return Promise.all<any>([
             this.backEnd.request("GET", project.c_programs),
@@ -90,10 +104,14 @@ export class Component implements ng.OnInit {
         })
         .then(result => {
           this.events.send(result);
+          let boards:libBackEnd.Board[];
+          let homers:libBackEnd.Homer[];
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-77
-          [this.boardPrograms, this.boards, this.homerPrograms, this.homers] = result;
+          [this.boardPrograms, boards, this.homerPrograms, homers] = result;
+          this.boards = boards.map(board => new Selectable(board));
+          this.homers = homers.map(homer => new Selectable(homer));
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
   }
@@ -101,25 +119,29 @@ export class Component implements ng.OnInit {
   onSubmit():void {
     "use strict";
 
-    let since:string;
-    let until:string;
-    let promise:Promise<string>;
+    let boards = this.boards.filter(selectable => selectable.selected).map(selectable => selectable.model.id);
+    let homers = this.homers.filter(selectable => selectable.selected).map(selectable => selectable.model.homerId);
+    let promise:Promise<string[]>;
     switch (this.typeField) {
-      case "Board":
-        promise = this.backEnd.addProgramToBoard(this.programField, this.deviceField);
+      case "Board program (project)":
+        promise = Promise.all(boards.map(id => this.backEnd.addProgramToBoard(this.programField, id)));
         break;
-      case "Homer":
-        promise = this.backEnd.addProgramToHomer(this.programField, this.deviceField);
+      case "Homer program (project)":
+        promise = Promise.all(homers.map(id => this.backEnd.addProgramToHomer(this.programField, id)));
         break;
+      case "Board program (binary)":
+        // TODO: http://youtrack.byzance.cz/youtrack/issue/TYRION-37#comment=109-118
+        alert("issue/TYRION-37");
+        return;
       default:
         return;
     }
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-43
-    promise.then((message) => {
-          this.events.send(message);
+    promise.then(messages => {
+          this.events.send(messages);
           this.router.navigate(["Project", {project: this.projectId}]);
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
   }

@@ -12,23 +12,24 @@
       </label>
       <select class="form-control" required data-bindon-ng-model="typeField">
         <option value="">Select type...</option>
-        <option>Board</option>
-        <option>Homer</option>
+        <option>Board program (project)</option>
+        <option>Board program (binary)</option>
+        <option>Homer program (project)</option>
       </select>
     </div>
     <div data-bind-ng-switch="typeField">
-      <template data-bind-ng-switch-when="'Board'">
+      <template data-bind-ng-switch-when="'Board program (project)'">
         <div class="form-group">
           <label>
             <span class="glyphicon glyphicon-list"></span>
-            Board ID
+            Board IDs
           </label>
-          <select class="form-control" data-bindon-ng-model="deviceField">
-            <option value="">Select ID...</option>
-            <option data-bind-value="board.id" template="ngFor #board of boards">
-              {{board.id}}
-            </option>
-          </select>
+          <div class="checkbox" template="ngFor #board of boards">
+            <label>
+              <input type="checkbox" data-bindon-ng-model="board.selected">
+              {{board.model.id}}
+            </label>
+          </div>
         </div>
         <div class="form-group">
           <label>
@@ -43,18 +44,39 @@
           </select>
         </div>
       </template>
-      <template data-bind-ng-switch-when="'Homer'">
+      <template data-bind-ng-switch-when="'Board program (binary)'">
         <div class="form-group">
           <label>
             <span class="glyphicon glyphicon-list"></span>
-            Homer ID
+            Board IDs
           </label>
-          <select class="form-control" data-bindon-ng-model="deviceField">
-            <option value="">Select ID...</option>
-            <option data-bind-value="homer.homerId" template="ngFor #homer of homers">
-              {{homer.homerId}}
-            </option>
-          </select>
+          <div class="checkbox" template="ngFor #board of boards">
+            <label>
+              <input type="checkbox" data-bindon-ng-model="board.selected">
+              {{board.model.id}}
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>
+            <span class="glyphicon glyphicon-file"></span>
+            File
+          </label>
+          <input class="form-control" type="file" required data-var-file-field>
+        </div>
+      </template>
+      <template data-bind-ng-switch-when="'Homer program (project)'">
+        <div class="form-group">
+          <label>
+            <span class="glyphicon glyphicon-list"></span>
+            Homer IDs
+          </label>
+          <div class="checkbox" template="ngFor #homer of homers">
+            <label>
+              <input type="checkbox" data-bindon-ng-model="homer.selected">
+              {{homer.model.homerId}}
+            </label>
+          </div>
         </div>
         <div class="form-group">
           <label>
