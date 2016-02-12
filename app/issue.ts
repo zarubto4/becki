@@ -276,6 +276,7 @@ export class Component implements ng.OnInit {
   onItemEditingSubmit(item:Item):void {
     "use strict";
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-97
     if (item instanceof Issue) {
       this.backEnd.updateIssue(item.id, item.typeField, item.titleField, item.bodyField, item.tags || [])
           .then((message) => {
