@@ -425,6 +425,20 @@ export class Component implements ng.OnInit {
     this.router.navigate(["NewRelatedIssue", {issue: this.id}]);
   }
 
+  onRelatedRemoveClick(ids:string[]):void {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-95
+    Promise.all(ids.map(id => this.backEnd.deleteIssueLink(id)))
+        .then(messages => {
+          this.events.send(messages);
+          this.refresh();
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
+  }
+
   onTagAddClick():void {
     "use strict";
 
