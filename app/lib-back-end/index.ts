@@ -382,6 +382,17 @@ export interface IssueType {
   type:string;
 }
 
+export interface IssueConfirmation {
+
+  id:string;
+
+  type:string;
+
+  color:string;
+
+  size:number;
+}
+
 export interface Issue {
 
   postId:string;
@@ -466,6 +477,8 @@ export abstract class BackEnd {
   static CONFIRMATION_PATH = "/overflow/confirms";
 
   static HOMER_PATH = "/project/homer";
+
+  static ISSUE_CONFIRMATION_PATH = "/overflow/typeOfConfirm";
 
   static ISSUE_LINK_PATH = "/overflow/link";
 
@@ -998,6 +1011,18 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath("GET", BackEnd.ISSUE_TYPE_PATH);
+  }
+
+  public createIssueConfirmation(type:string, color:string, size:number):Promise<string> {
+    "use strict";
+
+    return this.requestPath("POST", BackEnd.ISSUE_CONFIRMATION_PATH, {type, color, size}).then(JSON.stringify);
+  }
+
+  public getIssueConfirmations():Promise<IssueConfirmation[]> {
+    "use strict";
+
+    return this.requestPath("GET", BackEnd.ISSUE_CONFIRMATION_PATH);
   }
 
   public createIssue(type:string, name:string, comment:string, hashTags:string[]):Promise<string> {

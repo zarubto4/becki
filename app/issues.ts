@@ -32,9 +32,13 @@ export class Component implements ng.OnInit {
 
   types:libBootstrapPanelList.Item[];
 
+  confirmations:libBootstrapPanelList.Item[];
+
   issues:libBootstrapPanelList.Item[];
 
   newTypeLink:any[];
+
+  newConfirmationLink:any[];
 
   newLink:any[];
 
@@ -50,6 +54,7 @@ export class Component implements ng.OnInit {
       new wrapper.LabeledLink("Issues", ["Issues"])
     ];
     this.newTypeLink = ["NewIssueType"];
+    this.newConfirmationLink = ["NewIssueConfirmationType"];
     this.newLink = ["NewIssue"];
     this.backEnd = backEndService;
     this.events = eventsService;
@@ -63,7 +68,15 @@ export class Component implements ng.OnInit {
           this.events.send(types);
           this.types = types.map(type => new libBootstrapPanelList.Item(type.type, type.type, null));
         })
-        .catch((reason) => {
+        .catch(reason => {
+          this.events.send(reason);
+        });
+    this.backEnd.getIssueConfirmations()
+        .then(confirmations => {
+          this.events.send(confirmations);
+          this.confirmations = confirmations.map(confirmation => new libBootstrapPanelList.Item(confirmation.id, confirmation.type, null));
+        })
+        .catch(reason => {
           this.events.send(reason);
         });
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-27
@@ -72,7 +85,7 @@ export class Component implements ng.OnInit {
           this.events.send(issues);
           this.issues = issues.map(issue => new libBootstrapPanelList.Item(issue.postId, issue.name, issue.type));
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
   }

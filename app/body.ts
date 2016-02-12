@@ -30,6 +30,7 @@ import * as homerProgram from "./homer-program";
 import * as homerProgramNew from "./homer-program-new";
 import * as issue from "./issue";
 import * as issueConfirmationNew from "./issue-confirmation-new";
+import * as issueConfirmationTypeNew from "./issue-confirmation-type-new";
 import * as issueNew from "./issue-new";
 import * as issueRelatedNew from "./issue-related-new";
 import * as issueTagNew from "./issue-tag-new";
@@ -62,7 +63,8 @@ import * as standaloneProgramNew from "./standalone-program-new";
   {path: "/devices", component: devices.Component, as: "Devices"},
   {path: "/homer/new", component: homerNew.Component, as: "NewHomer"},
   {path: "/issue/new", component: issueNew.Component, as: "NewIssue"},
-  {path: "/issue/types/new", component: issueTypeNew.Component, as: "NewIssueType"},
+  {path: "/issue/confirmation/new", component: issueConfirmationTypeNew.Component, as: "NewIssueConfirmationType"},
+  {path: "/issue/type/new", component: issueTypeNew.Component, as: "NewIssueType"},
   {path: "/issues", component: issues.Component, as: "Issues"},
   {path: "/issues/:issue", component: issue.Component, as: "Issue"},
   {path: "/issues/:issue/confirmation/new", component: issueConfirmationNew.Component, as: "NewIssueConfirmation"},
