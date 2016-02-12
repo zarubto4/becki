@@ -23,18 +23,18 @@ import * as fieldCode from "./field-code";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
-  templateUrl: "app/standalone-program-new.html",
+  templateUrl: "app/standalone-program.html",
   directives: [fieldCode.Component, ng.FORM_DIRECTIVES, wrapper.Component]
 })
-export class Component {
+export class Component implements ng.OnInit {
+
+  id:string;
 
   projectId:string;
 
   heading:string;
 
   breadcrumbs:wrapper.LabeledLink[];
-
-  nameField:string;
 
   descriptionField:string;
 
@@ -49,28 +49,53 @@ export class Component {
   constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
+    this.id = routeParams.get("program");
     this.projectId = routeParams.get("project");
-    this.heading = `New Program (Project ${this.projectId})`;
+    this.heading = `Program ${this.id}`;
     this.breadcrumbs = [
       becki.HOME,
       new wrapper.LabeledLink("User", ["Projects"]),
       new wrapper.LabeledLink("Projects", ["Projects"]),
       new wrapper.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
       new wrapper.LabeledLink("Standalone Programs", ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink("New Program", ["NewStandaloneProgram", {project: this.projectId}])
+      new wrapper.LabeledLink(`Program ${this.id}`, ["StandaloneProgram", {project: this.projectId, program: this.id}])
     ];
-    this.nameField = "";
-    this.descriptionField = "";
-    this.codeField = "";
+    this.descriptionField = "Loading...";
+    this.codeField = "Loading...";
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
   }
 
+  onInit():void {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-83
+    this.backEnd.getStandaloneProgram(this.id)
+        .then(program => {
+          this.events.send(program);
+          return Promise.all<any>([
+              // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-82
+              this.backEnd.request("GET", program.generalDescription),
+              // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-83
+              this.backEnd.request("GET", program.logicJson)
+          ]);
+        })
+        .then(result => {
+          this.events.send(result);
+          let code:string;
+          [this.descriptionField, code] = result;
+          this.codeField = JSON.parse(code);
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
+  }
+
   onSubmit():void {
     "use strict";
 
-    this.backEnd.createStandaloneProgram(this.nameField, this.descriptionField, this.codeField)
+    this.backEnd.updateStandaloneProgram(this.id, this.descriptionField, this.codeField)
         .then(message => {
           this.events.send(message);
           this.router.navigate(["Project", {project: this.projectId}]);

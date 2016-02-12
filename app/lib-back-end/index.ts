@@ -297,6 +297,25 @@ export interface Board {
   projects:string;
 }
 
+export interface StandaloneProgram {
+
+  id:string;
+
+  name:string;
+
+  author:string;
+
+  generalDescription:string;
+
+  version:number;
+
+  previousVersions:string;
+
+  designJson:string;
+
+  logicJson:string;
+}
+
 export interface HomerProgram {
 
   programId:string;
@@ -476,6 +495,8 @@ export abstract class BackEnd {
    * An absolute path to the project resources.
    */
   static PROJECT_PATH = "/project/project";
+
+  static STANDALONE_PROGRAM_PATH = "/project/blockoBlock";
 
   /**
    * An absolute path to the permission resources.
@@ -798,10 +819,22 @@ export abstract class BackEnd {
     return this.requestPath("POST", `${BackEnd.BOARD_PROGRAM_PATH}/uploud/${programId}/${boardId}`, {}).then(JSON.stringify);
   }
 
-  public createIndependentProgram(name:string, description:string, logicJson:string):Promise<string> {
+  public createStandaloneProgram(name:string, description:string, logicJson:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("POST", "/project/blockoBlock", {name, description, designJson: {}, logicJson}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.STANDALONE_PROGRAM_PATH, {name, description, designJson: {}, logicJson}).then(JSON.stringify);
+  }
+
+  public getStandaloneProgram(id:string):Promise<StandaloneProgram> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.STANDALONE_PROGRAM_PATH}/${id}`);
+  }
+
+  public updateStandaloneProgram(id:string, versionDescription:string, logicJson:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("PUT", `${BackEnd.STANDALONE_PROGRAM_PATH}/${id}`, {versionDescription, designJson: {}, logicJson}).then(JSON.stringify);
   }
 
   /**

@@ -51,6 +51,7 @@ import * as projectNew from "./project-new";
 import * as projectUploadNew from "./project-upload-new";
 import * as projects from "./projects";
 import * as signing from "./signing";
+import * as standaloneProgram from "./standalone-program";
 import * as standaloneProgramNew from "./standalone-program-new";
 
 @ngRouter.RouteConfig([
@@ -89,6 +90,7 @@ import * as standaloneProgramNew from "./standalone-program-new";
   {path: "/user/projects/:project/homer-program/new", component: homerProgramNew.Component, as: "NewHomerProgram"},
   {path: "/user/projects/:project/homer-programs/:program", component: homerProgram.Component, as: "HomerProgram"},
   {path: "/user/projects/:project/standalone-program/new", component: standaloneProgramNew.Component, as: "NewStandaloneProgram"},
+  {path: "/user/projects/:project/standalone-programs/:program", component: standaloneProgram.Component, as: "StandaloneProgram"},
   {path: "/user/projects/:project/upload/new", component: projectUploadNew.Component, as: "NewProjectUpload"}
 ])
 @ng.Component({
