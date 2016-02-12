@@ -241,6 +241,20 @@ export class Component implements ng.OnInit {
     this.router.navigate(["NewProjectHomer", {project: this.id}]);
   }
 
+  onHomersRemoveClick(ids:string[]):void {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-91
+    Promise.all(ids.map(id => this.backEnd.removeHomerFromProject(id, this.id)))
+        .then(messages => {
+          this.events.send(messages);
+          this.refresh();
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
+  }
+
   onUploadAddClick():void {
     "use strict";
 

@@ -62,7 +62,7 @@
     <div class="col-xs-12 col-sm-6">
       <h2>Homers</h2>
       <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-78 -->
-      <div data-bind-panel-list="homers" data-on-plus-click="onHomerAddClick($event)">
+      <div data-bind-panel-list="homers" data-on-plus-click="onHomerAddClick($event)" data-on-minus-click="onHomersRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>

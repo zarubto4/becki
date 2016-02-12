@@ -1026,6 +1026,12 @@ export abstract class BackEnd {
     return this.requestPath("PUT", "/project/connectHomerWithProject", {projectId, homerId}).then(JSON.stringify);
   }
 
+  public removeHomerFromProject(homerId:string, projectId:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("PUT", "/project/unconnectHomerWithProject", {projectId, homerId}).then(JSON.stringify);
+  }
+
   public addCollaboratorToProject(collaborator:string, project:string):Promise<string> {
     "use strict";
 
