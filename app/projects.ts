@@ -55,6 +55,12 @@ export class Component implements ng.OnInit {
   onInit():void {
     "use strict";
 
+    this.refresh();
+  }
+
+  refresh():void {
+    "use strict";
+
     this.backEnd.getProjects()
         .then((projects) => {
           this.events.send(projects);
@@ -69,5 +75,18 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.router.navigate(["NewProject"]);
+  }
+
+  onRemoveClick(ids:string[]):void {
+    "use strict";
+
+    Promise.all(ids.map(id => this.backEnd.deleteProject(id)))
+        .then(messages => {
+          this.events.send(messages);
+          this.refresh();
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
   }
 }
