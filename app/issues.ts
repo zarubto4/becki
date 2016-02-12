@@ -122,4 +122,11 @@ export class Component implements ng.OnInit {
 
     this.router.navigate(["NewIssue"]);
   }
+
+  onIssuesRemoveClick(ids:string[]):void {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-79
+    alert("issue/TYRION-79");
+  }
 }
