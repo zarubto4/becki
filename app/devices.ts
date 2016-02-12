@@ -222,6 +222,13 @@ export class Component implements ng.OnInit {
     this.router.navigate(["NewBoard"]);
   }
 
+  onBoardsRemoveClick(ids:string[]):void {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-89
+    alert("issue/TYRION-89");
+  }
+
   onHomerAddClick():void {
     "use strict";
 

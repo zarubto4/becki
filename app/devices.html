@@ -38,7 +38,7 @@
     <div class="col-xs-12 col-sm-8">
       <h2>Boards</h2>
       <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-70 -->
-      <div data-bind-panel-list="boards" data-on-plus-click="onBoardAddClick($event)">
+      <div data-bind-panel-list="boards" data-on-plus-click="onBoardAddClick($event)" data-on-minus-click="onBoardsRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
