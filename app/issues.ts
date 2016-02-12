@@ -110,6 +110,13 @@ export class Component implements ng.OnInit {
     this.router.navigate(["NewIssueConfirmationType"]);
   }
 
+  onConfirmationsRemoveClick(ids:string[]):void {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-93
+    alert("issue/TYRION-93");
+  }
+
   onIssueAddClick():void {
     "use strict";
 
