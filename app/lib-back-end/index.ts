@@ -1006,7 +1006,13 @@ export abstract class BackEnd {
   public addCollaboratorToProject(collaborator:string, project:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("PUT", `/project/project/shareProject/${project}`, {persons: [collaborator]}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.PROJECT_PATH}/shareProject/${project}`, {persons: [collaborator]}).then(JSON.stringify);
+  }
+
+  public removeCollaboratorsFromProject(persons:string[], project:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("PUT", `${BackEnd.PROJECT_PATH}/unshareProject/${project}`, {persons}).then(JSON.stringify);
   }
 
   /**

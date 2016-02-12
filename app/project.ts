@@ -90,6 +90,12 @@ export class Component implements ng.OnInit {
   onInit():void {
     "use strict";
 
+    this.refresh();
+  }
+
+  refresh():void {
+    "use strict";
+
     this.backEnd.getProject(this.id)
         .then(project => {
           this.events.send(project);
@@ -138,6 +144,19 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.router.navigate(["NewProjectCollaborator", {project: this.id}]);
+  }
+
+  onCollaboratorsRemoveClick(ids:string[]):void {
+    "use strict";
+
+    this.backEnd.removeCollaboratorsFromProject(ids, this.id)
+        .then(messages => {
+          this.events.send(messages);
+          this.refresh();
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
   }
 
   onBoardProgramAddClick():void {
