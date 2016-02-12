@@ -222,6 +222,19 @@ export class Component implements ng.OnInit {
     this.router.navigate(["NewProjectBoard", {project: this.id}]);
   }
 
+  onBoardsRemoveClick(ids:string[]):void {
+    "use strict";
+
+    Promise.all(ids.map(id => this.backEnd.removeBoardFromProject(id, this.id)))
+        .then(messages => {
+          this.events.send(messages);
+          this.refresh();
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
+  }
+
   onHomerAddClick():void {
     "use strict";
 

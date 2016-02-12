@@ -468,6 +468,8 @@ export abstract class BackEnd {
 
   static ANSWER_PATH = "/overflow/answer";
 
+  static BOARD_PATH = "/compilation/board";
+
   static BOARD_PROGRAM_PATH = "/compilation/c_program";
 
   static BOARD_TYPE_PATH = "/compilation/typeOfBoard";
@@ -848,7 +850,7 @@ export abstract class BackEnd {
   public createBoard(hwName:string, typeOfBoard:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("POST", "/compilation/board", {hwName, typeOfBoard}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.BOARD_PATH, {hwName, typeOfBoard}).then(JSON.stringify);
   }
 
   public addProgramToBoard(programId:string, boardId:string):Promise<string> {
@@ -1000,7 +1002,13 @@ export abstract class BackEnd {
   public addBoardToProject(board:string, project:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("PUT", `/compilation/board/connect/${board}/${project}`, {}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.BOARD_PATH}/connect/${board}/${project}`, {}).then(JSON.stringify);
+  }
+
+  public removeBoardFromProject(board:string, project:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("PUT", `${BackEnd.BOARD_PATH}/unconnect/${board}/${project}`, {}).then(JSON.stringify);
   }
 
   /**
