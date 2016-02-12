@@ -260,4 +260,11 @@ export class Component implements ng.OnInit {
 
     this.router.navigate(["NewProjectUpload", {project: this.id}]);
   }
+
+  onUploadsRemoveClick(ids:string[]):void {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-43
+    alert("issue/TYRION-43");
+  }
 }
