@@ -809,6 +809,12 @@ export abstract class BackEnd {
     return this.requestPath("PUT", `${BackEnd.BOARD_PROGRAM_PATH}/newVersion/${program}`, {version, versionName, versionDescription, files: [{fileName: "main", content}], groupOfLibraries, libraries}).then(JSON.stringify);
   }
 
+  public deleteBoardProgramVersion(versionId:string, programId:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("DELETE", `${BackEnd.BOARD_PROGRAM_PATH}/${programId}/${versionId}`).then(JSON.stringify);
+  }
+
   public updateBoardProgramVersion(id:string, versionName:string, versionDescription:string):Promise<string> {
     "use strict";
 

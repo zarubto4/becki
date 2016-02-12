@@ -115,4 +115,17 @@ export class Component implements ng.OnInit {
 
     this.router.navigate(["NewBoardProgramVersion", {project: this.projectId, program: this.id}]);
   }
+
+  onVersionsRemoveClick(ids:string[]):void {
+    "use strict";
+
+    Promise.all(ids.map(id => this.backEnd.deleteBoardProgramVersion(id, this.id)))
+        .then(messages => {
+          this.events.send(messages);
+          this.refresh();
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
+  }
 }
