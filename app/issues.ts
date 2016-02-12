@@ -58,6 +58,12 @@ export class Component implements ng.OnInit {
   onInit():void {
     "use strict";
 
+    this.refresh();
+  }
+
+  refresh():void {
+    "use strict";
+
     this.backEnd.getIssueTypes()
         .then(types => {
           this.events.send(types);
@@ -89,6 +95,13 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.router.navigate(["NewIssueType"]);
+  }
+
+  onTypesRemoveClick(ids:string[]):void {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-92
+    alert("issue/TYRION-92");
   }
 
   onConfirmationAddClick():void {

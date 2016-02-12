@@ -6,7 +6,7 @@
 <div data-bind-wrapper="'Issues'" data-bind-breadcrumbs="breadcrumbs">
   <h2>Types</h2>
   <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-84 -->
-  <div data-bind-panel-list="types" data-on-plus-click="onTypeAddClick($event)">
+  <div data-bind-panel-list="types" data-on-plus-click="onTypeAddClick($event)" data-on-minus-click="onTypesRemoveClick($event)">
     <progress>Loading...</progress>
   </div>
   <h2>Confirmations</h2>
