@@ -202,6 +202,20 @@ export class Component implements ng.OnInit {
     this.router.navigate(["NewBoardType"]);
   }
 
+  onBoardTypesRemoveClick(ids:string[]):void {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-88
+    Promise.all(ids.map(id => this.backEnd.deleteBoardType(id)))
+        .then(messages => {
+          this.events.send(messages);
+          this.refresh();
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
+  }
+
   onBoardAddClick():void {
     "use strict";
 

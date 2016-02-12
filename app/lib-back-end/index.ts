@@ -798,6 +798,12 @@ export abstract class BackEnd {
     return this.requestPath("PUT", `${BackEnd.BOARD_TYPE_PATH}/${id}`, {name, description}).then(JSON.stringify);
   }
 
+  public deleteBoardType(id:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("DELETE", `${BackEnd.BOARD_TYPE_PATH}/${id}`).then(JSON.stringify);
+  }
+
   public createBoardProgramVersion(program:string, version:string, versionName:string, versionDescription:string, libraries:LibraryReference[], groupOfLibraries:LibraryGroupReference[], content:string):Promise<string> {
     "use strict";
 
