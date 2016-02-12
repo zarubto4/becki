@@ -234,4 +234,11 @@ export class Component implements ng.OnInit {
 
     this.router.navigate(["NewHomer"]);
   }
+
+  onHomersRemoveClick(ids:string[]):void {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-90
+    alert("issue/TYRION-90");
+  }
 }
