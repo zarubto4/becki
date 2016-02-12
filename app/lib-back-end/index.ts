@@ -738,6 +738,12 @@ export abstract class BackEnd {
     return this.requestPath("PUT", `${BackEnd.LIBRARY_GROUP_PATH}/${id}`, {groupName, description}).then(JSON.stringify);
   }
 
+  public deleteLibraryGroup(id:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("DELETE", `${BackEnd.LIBRARY_GROUP_PATH}/${id}`).then(JSON.stringify);
+  }
+
   public createProcessor(processorName:string, processorCode:string, description:string, speed:number, libraryGroups:string[]):Promise<string> {
     "use strict";
 
