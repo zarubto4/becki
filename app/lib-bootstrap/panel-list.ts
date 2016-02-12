@@ -18,35 +18,64 @@ import * as ngRouter from "angular2/router";
 
 export class Item {
 
+  id:string;
+
   name:string;
 
   description:string;
 
   link:any[];
 
-  constructor(name:string, description:string, link:any[] = null) {
+  selected:boolean;
+
+  constructor(id:string, name:string, description:string, link:any[] = null) {
     "use strict";
 
+    this.id = id;
     this.name = name;
     this.description = description;
     this.link = link;
+    this.selected = false;
   }
 }
 
 @ng.Component({
   selector: "[panel-list]",
   templateUrl: "app/lib-bootstrap/panel-list.html",
-  directives: [ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
-  inputs: ["items: panelList"]
+  directives: [ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES]
 })
 export class Component {
 
+  @ng.Input("panelList")
+  items:Item[] = [];
+
   @ng.Output()
   plusClick = new ng.EventEmitter();
+
+  @ng.Output()
+  minusClick = new ng.EventEmitter();
+
+  getSelectedIds():string[] {
+    "use strict";
+
+    return this.items ? this.items.filter(item => item.selected).map(item => item.id) : [];
+  }
+
+  onItemClick(item:Item):void {
+    "use strict";
+
+    item.selected = !item.selected;
+  }
 
   onPlusClick(event:Event):void {
     "use strict";
 
     this.plusClick.next(event);
+  }
+
+  onMinusClick():void {
+    "use strict";
+
+    this.minusClick.next(this.getSelectedIds());
   }
 }

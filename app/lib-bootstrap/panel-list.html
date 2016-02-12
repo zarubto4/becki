@@ -6,15 +6,15 @@
 <div class="panel panel-default">
   <div class="panel-body" style="padding:0;margin-bottom:-20px;">
     <div class="list-group">
-      <a class="list-group-item" template="ngFor #item of items">
+      <a class="list-group-item" data-bind-class.active="item.selected" template="ngFor #item of items" data-on-click="onItemClick(item, $event)">
         <h4 class="list-group-item-heading">
           <template data-bind-ng-if="item.link">
-            <a data-bind-router-link="item.link">
+            <a data-bind-router-link="item.link" style="color:#555">
               {{item.name}}
             </a>
           </template>
           <template data-bind-ng-if="!item.link">
-            <a>
+            <a style="color:#555">
               {{item.name}}
             </a>
           </template>
@@ -28,7 +28,7 @@
       <button type="button" class="btn btn-default" data-on-click="onPlusClick($event)">
         <span class="glyphicon glyphicon-plus"></span>
       </button>
-      <button type="button" class="btn btn-danger" disabled="disabled">
+      <button type="button" class="btn btn-danger" data-bind-disabled="!getSelectedIds().length" data-on-click="onMinusClick($event)">
         <span class="glyphicon glyphicon-minus"></span>
       </button>
     </div>

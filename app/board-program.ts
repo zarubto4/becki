@@ -83,7 +83,7 @@ export class Component implements ng.OnInit {
           this.events.send(program);
           this.nameField = program.programName;
           this.descriptionField = program.programDescription;
-          this.versions = program.versions.map(version => new libBootstrapPanelList.Item(version.version.toString(), version.versionName, ["BoardProgramVersion", {project: this.projectId, program: this.id, version: version.id}]));
+          this.versions = program.versions.map(version => new libBootstrapPanelList.Item(version.id, version.version.toString(), version.versionName, ["BoardProgramVersion", {project: this.projectId, program: this.id, version: version.id}]));
         })
         .catch(reason => {
           this.events.send(reason);

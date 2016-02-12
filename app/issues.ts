@@ -61,7 +61,7 @@ export class Component implements ng.OnInit {
     this.backEnd.getIssueTypes()
         .then(types => {
           this.events.send(types);
-          this.types = types.map(type => new libBootstrapPanelList.Item(type.type, null));
+          this.types = types.map(type => new libBootstrapPanelList.Item(type.id, type.type, null));
         })
         .catch(reason => {
           this.events.send(reason);
@@ -69,7 +69,7 @@ export class Component implements ng.OnInit {
     this.backEnd.getIssueConfirmations()
         .then(confirmations => {
           this.events.send(confirmations);
-          this.confirmations = confirmations.map(confirmation => new libBootstrapPanelList.Item(confirmation.type, null, ["IssueConfirmationType", {confirmation: confirmation.id}]));
+          this.confirmations = confirmations.map(confirmation => new libBootstrapPanelList.Item(confirmation.id, confirmation.type, null, ["IssueConfirmationType", {confirmation: confirmation.id}]));
         })
         .catch(reason => {
           this.events.send(reason);
@@ -78,7 +78,7 @@ export class Component implements ng.OnInit {
     this.backEnd.getIssues()
         .then(issues => {
           this.events.send(issues);
-          this.issues = issues.map(issue => new libBootstrapPanelList.Item(issue.name, issue.type, ["Issue", {issue: issue.postId}]));
+          this.issues = issues.map(issue => new libBootstrapPanelList.Item(issue.postId, issue.name, issue.type, ["Issue", {issue: issue.postId}]));
         })
         .catch(reason => {
           this.events.send(reason);
