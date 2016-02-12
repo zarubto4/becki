@@ -1136,6 +1136,12 @@ export abstract class BackEnd {
     return this.requestPath("PUT", "/overflow/likeMinus/" + id, {}).then(JSON.stringify);
   }
 
+  public removeTagsFromPost(hashTags:string[], postId:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("PUT", "/overflow/removeHashTag", {postId, hashTags}).then(JSON.stringify);
+  }
+
   public deleteIssue(id:string):Promise<string> {
     "use strict";
 

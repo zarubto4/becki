@@ -445,6 +445,20 @@ export class Component implements ng.OnInit {
     this.router.navigate(["NewIssueTag", {issue: this.id}]);
   }
 
+  onTagsRemoveClick(tags:string[]):void {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-96
+    this.backEnd.removeTagsFromPost(tags, this.id)
+        .then(messages => {
+          this.events.send(messages);
+          this.refresh();
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
+  }
+
   onConfirmationAddClick():void {
     "use strict";
 
