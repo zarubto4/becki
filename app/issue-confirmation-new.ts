@@ -24,15 +24,17 @@ import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/issue-confirmation-new.html",
-  directives: [ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
-export class Component {
+export class Component implements ng.OnInit {
 
   issueId:string;
 
   heading:string;
 
   breadcrumbs:wrapper.LabeledLink[];
+
+  confirmations:libBackEnd.IssueConfirmation[];
 
   field:string;
 
@@ -60,16 +62,28 @@ export class Component {
     this.router = router;
   }
 
+  onInit():void {
+    "use strict";
+
+    this.backEnd.getIssueConfirmations()
+        .then(confirmations => {
+          this.events.send(confirmations);
+          this.confirmations = confirmations;
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
+  }
+
   onSubmit():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-31
     this.backEnd.addConfirmationToPost(this.issueId, this.field)
-        .then((message) => {
+        .then(message => {
           this.events.send(message);
           this.router.navigate(["Issue", {issue: this.issueId}]);
         })
-        .catch((reason) => {
+        .catch(reason => {
           this.events.send(reason);
         });
   }

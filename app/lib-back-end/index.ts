@@ -474,8 +474,6 @@ export abstract class BackEnd {
 
   static COMMENT_PATH = "/overflow/comment";
 
-  static CONFIRMATION_PATH = "/overflow/confirms";
-
   static HOMER_PATH = "/project/homer";
 
   static ISSUE_CONFIRMATION_PATH = "/overflow/typeOfConfirm";
@@ -1055,16 +1053,16 @@ export abstract class BackEnd {
     return this.requestPath("PUT", "/overflow/likePlus/" + id, {}).then(JSON.stringify);
   }
 
-  public addConfirmationToPost(postId:string, confirmation:string):Promise<string> {
+  public addConfirmationToPost(postId:string, confirmationId:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("POST", BackEnd.CONFIRMATION_PATH, {postId, confirms: [confirmation]}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.ISSUE_CONFIRMATION_PATH}/${confirmationId}/${postId}`, {}).then(JSON.stringify);
   }
 
   public removeConfirmationFromPost(postId:string, confirmation:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("PUT", BackEnd.CONFIRMATION_PATH, {confirms: [confirmation]}).then(JSON.stringify);
+    return this.requestPath("PUT", "/overflow/confirms", {confirms: [confirmation]}).then(JSON.stringify);
   }
 
   public subtractOneFromPost(id:string):Promise<string> {

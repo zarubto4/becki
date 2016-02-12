@@ -7,10 +7,15 @@
   <form class="clearfix" data-on-submit="onSubmit($event)">
     <div class="form-group">
       <label>
-        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="glyphicon glyphicon-list"></span>
         Confirmation
       </label>
-      <input class="form-control" data-bindon-ng-model="field">
+      <select class="form-control" data-bindon-ng-model="field">
+        <option value="">Select confirmation...</option>
+        <option data-bind-value="confirmation.id" template="ngFor #confirmation of confirmations">
+          {{confirmation.type}}
+        </option>
+      </select>
     </div>
     <div class="pull-right">
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
