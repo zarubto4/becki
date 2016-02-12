@@ -834,6 +834,12 @@ export abstract class BackEnd {
     return this.requestPath("PUT", `${BackEnd.BOARD_PROGRAM_PATH}/update/${id}`, {programName, programDescription}).then(JSON.stringify);
   }
 
+  public deleteBoardProgram(id:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("DELETE", `${BackEnd.BOARD_PROGRAM_PATH}/${id}`).then(JSON.stringify);
+  }
+
   /**
    * Create a new light.
    *
