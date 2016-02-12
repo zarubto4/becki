@@ -58,17 +58,11 @@ export class Component implements ng.OnInit {
     this.backEnd.getProjects()
         .then((projects) => {
           this.events.send(projects);
-          this.items = projects.map(project => new libBootstrapPanelList.Item(project.projectId, project.projectName, project.projectDescription));
+          this.items = projects.map(project => new libBootstrapPanelList.Item(project.projectName, project.projectDescription, ["Project", {project: project.projectId}]));
         })
         .catch((reason) => {
           this.events.send(reason);
         });
-  }
-
-  getLink(project:libBootstrapPanelList.Item):any[] {
-    "use strict";
-
-    return ["Project", {project: project.id}];
   }
 
   onAddClick():void {

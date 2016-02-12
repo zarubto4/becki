@@ -18,18 +18,18 @@ import * as ngRouter from "angular2/router";
 
 export class Item {
 
-  id:string;
-
   name:string;
 
   description:string;
 
-  constructor(id:string, name:string, description:string) {
+  link:any[];
+
+  constructor(name:string, description:string, link:any[] = null) {
     "use strict";
 
-    this.id = id;
     this.name = name;
     this.description = description;
+    this.link = link;
   }
 }
 
@@ -37,7 +37,7 @@ export class Item {
   selector: "[panel-list]",
   templateUrl: "app/lib-bootstrap/panel-list.html",
   directives: [ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
-  inputs: ["items: panelList", "getLink: getObjectLink"]
+  inputs: ["items: panelList"]
 })
 export class Component {
 

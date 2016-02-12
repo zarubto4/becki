@@ -220,10 +220,10 @@ export class Component implements ng.OnInit {
                   answer[0].hashTags
               ))
           );
-          this.related = related.map(related2 => new libBootstrapPanelList.Item(related2[1].postId, related2[0].name, ""));
-          this.tags = issue.hashTags ? issue.hashTags.map(tag => new libBootstrapPanelList.Item(tag, tag, "")) : [];
+          this.related = related.map(related2 => new libBootstrapPanelList.Item(related2[0].name, "", ["Issue", {issue: related2[1].postId}]));
+          this.tags = issue.hashTags ? issue.hashTags.map(tag => new libBootstrapPanelList.Item(tag, "")) : [];
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-86
-          this.confirmations = [new libBootstrapPanelList.Item(null, "(issue/TYRION-86)", "does not work")];
+          this.confirmations = [new libBootstrapPanelList.Item("(issue/TYRION-86)", "does not work")];
         })
         .catch(reason => {
           this.events.send(reason);
@@ -417,12 +417,6 @@ export class Component implements ng.OnInit {
         .catch((reason) => {
           this.events.send(reason);
         });
-  }
-
-  getRelatedLink(related:libBootstrapPanelList.Item):any[] {
-    "use strict";
-
-    return ["Issue", {issue: related.id}];
   }
 
   onRelatedAddClick():void {

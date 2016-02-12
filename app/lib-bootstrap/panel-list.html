@@ -8,12 +8,12 @@
     <div class="list-group">
       <a class="list-group-item" template="ngFor #item of items">
         <h4 class="list-group-item-heading">
-          <template data-bind-ng-if="getLink">
-            <a data-bind-router-link="getLink(item)">
+          <template data-bind-ng-if="item.link">
+            <a data-bind-router-link="item.link">
               {{item.name}}
             </a>
           </template>
-          <template data-bind-ng-if="!getLink">
+          <template data-bind-ng-if="!item.link">
             <a>
               {{item.name}}
             </a>
