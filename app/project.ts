@@ -203,6 +203,19 @@ export class Component implements ng.OnInit {
     this.router.navigate(["NewHomerProgram", {project: this.id}]);
   }
 
+  onHomerProgramsRemoveClick(ids:string[]):void {
+    "use strict";
+
+    Promise.all(ids.map(id => this.backEnd.deleteHomerProgram(id)))
+        .then(messages => {
+          this.events.send(messages);
+          this.refresh();
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
+  }
+
   onBoardAddClick():void {
     "use strict";
 

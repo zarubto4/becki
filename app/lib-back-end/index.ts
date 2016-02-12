@@ -476,6 +476,8 @@ export abstract class BackEnd {
 
   static HOMER_PATH = "/project/homer";
 
+  static HOMER_PROGRAM_PATH = "/project/b_program";
+
   static ISSUE_CONFIRMATION_PATH = "/overflow/typeOfConfirm";
 
   static ISSUE_LINK_PATH = "/overflow/link";
@@ -496,11 +498,6 @@ export abstract class BackEnd {
   static PROCESSOR_PATH = "/compilation/processor";
 
   static PRODUCER_PATH = "/compilation/producer";
-
-  /**
-   * An absolute path to the program resources.
-   */
-  static PROGRAM_PATH = "/project/b_program";
 
   /**
    * An absolute path to the project resources.
@@ -897,19 +894,25 @@ export abstract class BackEnd {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-80
-    return this.requestPath("POST", BackEnd.PROGRAM_PATH, {programName, programDescription, projectId, program: JSON.parse(code)}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.HOMER_PROGRAM_PATH, {programName, programDescription, projectId, program: JSON.parse(code)}).then(JSON.stringify);
   }
 
   public getHomerProgram(id:string):Promise<HomerProgram> {
     "use strict";
 
-    return this.requestPath("GET", `${BackEnd.PROGRAM_PATH}/${id}`);
+    return this.requestPath("GET", `${BackEnd.HOMER_PROGRAM_PATH}/${id}`);
   }
 
   public updateHomerProgram(programId:string, programName:string, programDescription:string, program:Object, projectId:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("PUT", `${BackEnd.PROGRAM_PATH}/${programId}`, {programName, programDescription, projectId, program}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.HOMER_PROGRAM_PATH}/${programId}`, {programName, programDescription, projectId, program}).then(JSON.stringify);
+  }
+
+  public deleteHomerProgram(id:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("DELETE", `${BackEnd.HOMER_PROGRAM_PATH}/${id}`).then(JSON.stringify);
   }
 
   /**
@@ -933,7 +936,7 @@ export abstract class BackEnd {
   public addProgramToHomer(programId:string, homerId:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("PUT", `${BackEnd.PROGRAM_PATH}/uploud`, {homerId, programId}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.HOMER_PROGRAM_PATH}/uploud`, {homerId, programId}).then(JSON.stringify);
   }
 
   /**
