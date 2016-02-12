@@ -768,6 +768,12 @@ export abstract class BackEnd {
     return this.requestPath("PUT", `${BackEnd.PROCESSOR_PATH}/${id}`, {processorName, description, processorCode, speed, libraryGroups}).then(JSON.stringify);
   }
 
+  public deleteProcessor(id:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("DELETE", `${BackEnd.PROCESSOR_PATH}/${id}`).then(JSON.stringify);
+  }
+
   public createBoardType(name:string, producerId:string, processorId:string, description:string):Promise<string> {
     "use strict";
 
