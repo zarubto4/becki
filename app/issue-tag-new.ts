@@ -19,7 +19,6 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as events from "./events";
-import * as libBackEnd from "./lib-back-end/index";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
@@ -63,31 +62,7 @@ export class Component {
   onSubmit():void {
     "use strict";
 
-    Promise.all<any>([
-          this.backEnd.getIssueTypes(),
-          this.backEnd.getIssue(this.issueId)
-        ])
-        .then(result => {
-          this.events.send(result);
-          let types:libBackEnd.IssueType[];
-          let issue:libBackEnd.Issue;
-          [types, issue] = result;
-          return Promise.all<any>([
-            types,
-            issue,
-            this.backEnd.request("GET", issue.textOfPost)
-          ]);
-        })
-        .then(result => {
-          this.events.send(result);
-          let types:libBackEnd.IssueType[];
-          let issue:libBackEnd.Issue;
-          let body:string;
-          [types, issue, body] = result;
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-61
-          let type = types.filter(type => type.type == issue.type)[0].id;
-          return this.backEnd.updateIssue(this.issueId, type, issue.name, body, (issue.hashTags || []).concat(this.field));
-        })
+    this.backEnd.addTagToPost(this.field, this.issueId)
         .then(message => {
           this.events.send(message);
           this.router.navigate(["Issue", {issue: this.issueId}]);

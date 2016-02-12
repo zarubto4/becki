@@ -1136,6 +1136,12 @@ export abstract class BackEnd {
     return this.requestPath("PUT", "/overflow/likeMinus/" + id, {}).then(JSON.stringify);
   }
 
+  public addTagToPost(tag:string, postId:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("POST", "/overflow/hashTag", {postId, hashTags: [tag]}).then(JSON.stringify);
+  }
+
   public removeTagsFromPost(hashTags:string[], postId:string):Promise<string> {
     "use strict";
 
