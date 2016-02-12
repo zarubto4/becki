@@ -126,6 +126,13 @@ export class Component implements ng.OnInit {
     this.router.navigate(["NewProducer"]);
   }
 
+  onProducersRemoveClick(ids:string[]):void {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-87
+    alert("issue/TYRION-87");
+  }
+
   onLibraryAddClick():void {
     "use strict";
 
