@@ -213,17 +213,17 @@
     <div class="col-xs-12 col-sm-3">
       <h2>Related</h2>
 
-      <div data-bind-panel-list="related" data-bind-get-object-link="getRelatedLink" data-bind-new-link="newRelatedLink">
+      <div data-bind-panel-list="related" data-bind-get-object-link="getRelatedLink" data-on-plus-click="onRelatedAddClick($event)">
         <progress>Loading...</progress>
       </div>
       <h2>Tags</h2>
 
-      <div data-bind-panel-list="tags" data-bind-new-link="newTagLink">
+      <div data-bind-panel-list="tags" data-on-plus-click="onTagAddClick($event)">
         <progress>Loading...</progress>
       </div>
       <h2>Confirmations</h2>
 
-      <div data-bind-panel-list="confirmations" data-bind-new-link="newConfirmationLink">
+      <div data-bind-panel-list="confirmations" data-on-plus-click="onConfirmationAddClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>

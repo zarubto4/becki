@@ -42,8 +42,6 @@ export class Component implements ng.OnInit {
 
   versions:libBootstrapPanelList.Item[];
 
-  newVersionLink:any[];
-
   backEnd:backEnd.Service;
 
   events:events.Service;
@@ -66,7 +64,6 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    this.newVersionLink = ["NewBoardProgramVersion", {project: this.projectId, program: this.id}];
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -117,5 +114,11 @@ export class Component implements ng.OnInit {
     "use strict";
 
     return version => ["BoardProgramVersion", {project: this.projectId, program: this.id, version: version.id}];
+  }
+
+  onVersionAddClick():void {
+    "use strict";
+
+    this.router.navigate(["NewBoardProgramVersion", {project: this.projectId, program: this.id}]);
   }
 }

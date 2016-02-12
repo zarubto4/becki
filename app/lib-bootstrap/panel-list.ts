@@ -37,11 +37,16 @@ export class Item {
   selector: "[panel-list]",
   templateUrl: "app/lib-bootstrap/panel-list.html",
   directives: [ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
-  inputs: [
-    "items: panelList",
-    "getLink: getObjectLink",
-    "newLink"
-  ]
+  inputs: ["items: panelList", "getLink: getObjectLink"]
 })
 export class Component {
+
+  @ng.Output()
+  plusClick = new ng.EventEmitter();
+
+  onPlusClick(event:Event):void {
+    "use strict";
+
+    this.plusClick.next(event);
+  }
 }

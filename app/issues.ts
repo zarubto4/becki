@@ -14,6 +14,7 @@
  */
 
 import * as ng from "angular2/angular2";
+import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
@@ -36,28 +37,22 @@ export class Component implements ng.OnInit {
 
   issues:libBootstrapPanelList.Item[];
 
-  newTypeLink:any[];
-
-  newConfirmationLink:any[];
-
-  newLink:any[];
-
   backEnd:backEnd.Service;
 
   events:events.Service;
 
-  constructor(backEndService:backEnd.Service, eventsService:events.Service) {
+  router:ngRouter.Router;
+
+  constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
       becki.HOME,
       new wrapper.LabeledLink("Issues", ["Issues"])
     ];
-    this.newTypeLink = ["NewIssueType"];
-    this.newConfirmationLink = ["NewIssueConfirmationType"];
-    this.newLink = ["NewIssue"];
     this.backEnd = backEndService;
     this.events = eventsService;
+    this.router = router;
   }
 
   onInit():void {
@@ -90,15 +85,33 @@ export class Component implements ng.OnInit {
         });
   }
 
+  onTypeAddClick():void {
+    "use strict";
+
+    this.router.navigate(["NewIssueType"]);
+  }
+
   getConfirmationLink(confirmation:libBootstrapPanelList.Item):any[] {
     "use strict";
 
     return ["IssueConfirmationType", {confirmation: confirmation.id}];
   }
 
+  onConfirmationAddClick():void {
+    "use strict";
+
+    this.router.navigate(["NewIssueConfirmationType"]);
+  }
+
   getLink(issue:libBootstrapPanelList.Item):any[] {
     "use strict";
 
     return ["Issue", {issue: issue.id}];
+  }
+
+  onIssueAddClick():void {
+    "use strict";
+
+    this.router.navigate(["NewIssue"]);
   }
 }

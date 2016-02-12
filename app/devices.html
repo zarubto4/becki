@@ -5,25 +5,25 @@
 
 <div data-bind-wrapper="'Devices'" data-bind-breadcrumbs="breadcrumbs">
   <h2>Producers</h2>
-  <div data-bind-panel-list="producers" data-bind-get-object-link="getProducerLink" data-bind-new-link="newProducerLink">
+  <div data-bind-panel-list="producers" data-bind-get-object-link="getProducerLink" data-on-plus-click="onProducerAddClick($event)">
     <progress>Loading...</progress>
   </div>
   <div class="row">
     <div class="col-xs-12 col-sm-4">
       <h2>Libraries</h2>
-      <div data-bind-panel-list="libraries" data-bind-get-object-link="getLibraryLink" data-bind-new-link="newLibraryLink">
+      <div data-bind-panel-list="libraries" data-bind-get-object-link="getLibraryLink" data-on-plus-click="onLibraryAddClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
     <div class="col-xs-12 col-sm-4">
       <h2>Library groups</h2>
-      <div data-bind-panel-list="libraryGroups" data-bind-get-object-link="getLibraryGroupLink" data-bind-new-link="newLibraryGroupLink">
+      <div data-bind-panel-list="libraryGroups" data-bind-get-object-link="getLibraryGroupLink" data-on-plus-click="onLibraryGroupAddClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
     <div class="col-xs-12 col-sm-4">
       <h2>Processors</h2>
-      <div data-bind-panel-list="processors" data-bind-get-object-link="getProcessorLink" data-bind-new-link="newProcessorLink">
+      <div data-bind-panel-list="processors" data-bind-get-object-link="getProcessorLink" data-on-plus-click="onProcessorAddClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
@@ -31,14 +31,14 @@
   <div class="row">
     <div class="col-xs-12 col-sm-4">
       <h2>Board Types</h2>
-      <div data-bind-panel-list="boardTypes" data-bind-get-object-link="getBoardTypeLink" data-bind-new-link="newBoardTypeLink">
+      <div data-bind-panel-list="boardTypes" data-bind-get-object-link="getBoardTypeLink" data-on-plus-click="onBoardTypeAddClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
     <div class="col-xs-12 col-sm-8">
       <h2>Boards</h2>
       <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-70 -->
-      <div data-bind-panel-list="boards" data-bind-new-link="newBoardLink">
+      <div data-bind-panel-list="boards" data-on-plus-click="onBoardAddClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
@@ -46,7 +46,7 @@
   <h2>Homers</h2>
   <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-71 -->
   <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-78 -->
-  <div data-bind-panel-list="homers" data-bind-new-link="newHomerLink">
+  <div data-bind-panel-list="homers" data-on-plus-click="onHomerAddClick($event)">
     <progress>Loading...</progress>
   </div>
 </div>

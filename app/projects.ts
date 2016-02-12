@@ -33,8 +33,6 @@ export class Component implements ng.OnInit {
 
   items:libBootstrapPanelList.Item[];
 
-  newLink:any[];
-
   backEnd:backEnd.Service;
 
   events:events.Service;
@@ -49,7 +47,6 @@ export class Component implements ng.OnInit {
       new wrapper.LabeledLink("User", ["Projects"]),
       new wrapper.LabeledLink("Projects", ["Projects"])
     ];
-    this.newLink = ["NewProject"];
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -72,5 +69,11 @@ export class Component implements ng.OnInit {
     "use strict";
 
     return ["Project", {project: project.id}];
+  }
+
+  onAddClick():void {
+    "use strict";
+
+    this.router.navigate(["NewProject"]);
   }
 }

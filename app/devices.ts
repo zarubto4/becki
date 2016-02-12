@@ -14,6 +14,7 @@
  */
 
 import * as ng from "angular2/angular2";
+import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
@@ -31,57 +32,39 @@ export class Component implements ng.OnInit {
 
   producers:libBootstrapPanelList.Item[];
 
-  newProducerLink:any[];
-
   libraries:libBootstrapPanelList.Item[];
-
-  newLibraryLink:any[];
 
   libraryGroups:libBootstrapPanelList.Item[];
 
-  newLibraryGroupLink:any[];
-
   processors:libBootstrapPanelList.Item[];
-
-  newProcessorLink:any[];
 
   boardTypes:libBootstrapPanelList.Item[];
 
-  newBoardTypeLink:any[];
-
   boards:libBootstrapPanelList.Item[];
 
-  newBoardLink:any[];
-
   homers:libBootstrapPanelList.Item[];
-
-  newHomerLink:any[];
 
   backEnd:backEnd.Service;
 
   events:events.Service;
 
-  constructor(backEndService:backEnd.Service, eventsService:events.Service) {
+  router:ngRouter.Router;
+
+  constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
       becki.HOME,
       new wrapper.LabeledLink("Devices", ["Devices"])
     ];
-    this.newProducerLink = ["NewProducer"];
-    this.newLibraryLink = ["NewLibrary"];
-    this.newLibraryGroupLink = ["NewLibraryGroup"];
-    this.newProcessorLink = ["NewProcessor"];
-    this.newBoardTypeLink = ["NewBoardType"];
     this.boards = [
       new libBootstrapPanelList.Item(null, "(issue/TYRION-20)", "does not work"),
       new libBootstrapPanelList.Item(null, "(issue/TYRION-20)", "does not work"),
       new libBootstrapPanelList.Item(null, "(issue/TYRION-20)", "does not work")
     ];
-    this.newBoardLink = ["NewBoard"];
-    this.newHomerLink = ["NewHomer"];
     this.backEnd = backEndService;
     this.events = eventsService;
+    this.router = router;
   }
 
   onInit():void {
@@ -143,10 +126,22 @@ export class Component implements ng.OnInit {
     return ["Producer", {producer: producer.id}];
   }
 
+  onProducerAddClick():void {
+    "use strict";
+
+    this.router.navigate(["NewProducer"]);
+  }
+
   getLibraryLink(library:libBootstrapPanelList.Item):any[] {
     "use strict";
 
     return ["Library", {library: library.id}];
+  }
+
+  onLibraryAddClick():void {
+    "use strict";
+
+    this.router.navigate(["NewLibrary"]);
   }
 
   getLibraryGroupLink(group:libBootstrapPanelList.Item):any {
@@ -155,15 +150,45 @@ export class Component implements ng.OnInit {
     return ["LibraryGroup", {group: group.id}];
   }
 
+  onLibraryGroupAddClick():void {
+    "use strict";
+
+    this.router.navigate(["NewLibraryGroup"]);
+  }
+
   getProcessorLink(processor:libBootstrapPanelList.Item):any {
     "use strict";
 
     return ["Processor", {processor: processor.id}];
   }
 
+  onProcessorAddClick():void {
+    "use strict";
+
+    this.router.navigate(["NewProcessor"]);
+  }
+
   getBoardTypeLink(type:libBootstrapPanelList.Item):any {
     "use strict";
 
     return ["BoardType", {type: type.id}];
+  }
+
+  onBoardTypeAddClick():void {
+    "use strict";
+
+    this.router.navigate(["NewBoardType"]);
+  }
+
+  onBoardAddClick():void {
+    "use strict";
+
+    this.router.navigate(["NewBoard"]);
+  }
+
+  onHomerAddClick():void {
+    "use strict";
+
+    this.router.navigate(["NewHomer"]);
   }
 }

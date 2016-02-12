@@ -27,7 +27,7 @@
     </div>
     <div class="col-xs-12 col-sm-4">
       <h2>Collaborators</h2>
-      <div data-bind-panel-list="collaborators" data-bind-new-link="newCollaboratorLink">
+      <div data-bind-panel-list="collaborators" data-on-plus-click="onCollaboratorAddClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
@@ -35,19 +35,19 @@
   <div class="row">
     <div class="col-xs-12 col-sm-4">
       <h2>Board Programs</h2>
-      <div data-bind-panel-list="boardPrograms" data-bind-get-object-link="getBoardProgramLink()" data-bind-new-link="newBoardProgramLink">
+      <div data-bind-panel-list="boardPrograms" data-bind-get-object-link="getBoardProgramLink()" data-on-plus-click="onBoardProgramAddClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
     <div class="col-xs-12 col-sm-4">
       <h2>Standalone Programs</h2>
-      <div data-bind-panel-list="standalonePrograms" data-bind-new-link="newStandaloneProgramLink">
+      <div data-bind-panel-list="standalonePrograms" data-on-plus-click="onStandaloneProgramAddClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
     <div class="col-xs-12 col-sm-4">
       <h2>Homer Programs</h2>
-      <div data-bind-panel-list="homerPrograms" data-bind-get-object-link="getHomerProgramLink()" data-bind-new-link="newHomerProgramLink">
+      <div data-bind-panel-list="homerPrograms" data-bind-get-object-link="getHomerProgramLink()" data-on-plus-click="onHomerProgramAddClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
@@ -55,14 +55,14 @@
   <div class="row">
     <div class="col-xs-12 col-sm-6">
       <h2>Boards</h2>
-      <div data-bind-panel-list="boards" data-bind-new-link="additionalBoardLink">
+      <div data-bind-panel-list="boards" data-on-plus-click="onBoardAddClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
     <div class="col-xs-12 col-sm-6">
       <h2>Homers</h2>
       <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-78 -->
-      <div data-bind-panel-list="homers" data-bind-new-link="additionalHomerLink">
+      <div data-bind-panel-list="homers" data-on-plus-click="onHomerAddClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
@@ -70,7 +70,7 @@
   <div class="row">
     <div class="col-xs-12">
       <h2>Upload Queue</h2>
-      <div data-bind-panel-list="uploadQueue" data-bind-new-link="newUploadLink">
+      <div data-bind-panel-list="uploadQueue" data-on-plus-click="onUploadAddClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>

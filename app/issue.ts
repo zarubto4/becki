@@ -149,15 +149,9 @@ export class Component implements ng.OnInit {
 
   related:libBootstrapPanelList.Item[];
 
-  newRelatedLink:any[];
-
   tags:libBootstrapPanelList.Item[];
 
-  newTagLink:any[];
-
   confirmations:libBootstrapPanelList.Item[];
-
-  newConfirmationLink:any[];
 
   backEnd:backEnd.Service;
 
@@ -176,9 +170,6 @@ export class Component implements ng.OnInit {
       new wrapper.LabeledLink(`Issue ${this.id}`, ["Issue", {issue: this.id}])
     ];
     this.answerBodyField = fieldIssueBody.EMPTY;
-    this.newRelatedLink = ["NewRelatedIssue", {issue: this.id}];
-    this.newTagLink = ["NewIssueTag", {issue: this.id}];
-    this.newConfirmationLink = ["NewIssueConfirmation", {issue: this.id}];
     this.backEnd = backEndService;
     this.events = eventsService;
     this.router = router;
@@ -432,5 +423,23 @@ export class Component implements ng.OnInit {
     "use strict";
 
     return ["Issue", {issue: related.id}];
+  }
+
+  onRelatedAddClick():void {
+    "use strict";
+
+    this.router.navigate(["NewRelatedIssue", {issue: this.id}]);
+  }
+
+  onTagAddClick():void {
+    "use strict";
+
+    this.router.navigate(["NewIssueTag", {issue: this.id}]);
+  }
+
+  onConfirmationAddClick():void {
+    "use strict";
+
+    this.router.navigate(["NewIssueConfirmation", {issue: this.id}]);
   }
 }
