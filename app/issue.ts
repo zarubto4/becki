@@ -206,7 +206,7 @@ export class Component implements ng.OnInit {
             this.backEnd.request("GET", issue.textOfPost),
             issue.comments ? this.backEnd.request("GET", issue.comments) : [],
             this.backEnd.request<libBackEnd.Answer[]>("GET", issue.answers).then(answers => Promise.all(answers.map(answer => Promise.all([answer, answer.comments ? this.backEnd.request("GET", answer.comments) : []])))),
-            issue.linkedAnswers ? this.backEnd.request("GET", issue.linkedAnswers) : []
+            issue.linkedAnswers ? this.backEnd.request<libBackEnd.IssueLink[]>("GET", issue.linkedAnswers).then(related => Promise.all(related.map(related2 => Promise.all([related2, this.backEnd.request("GET", related2.post)])))) : []
           ]);
         })
         .then(result => {
@@ -215,7 +215,7 @@ export class Component implements ng.OnInit {
           let body:string;
           let comments:libBackEnd.Comment[];
           let answers:[libBackEnd.Answer, libBackEnd.Comment[]][];
-          let related:libBackEnd.IssueLink[];
+          let related:[libBackEnd.IssueLink, libBackEnd.Issue][];
           [issue, body, comments, answers, related] = result;
           this.heading = `${issue.type}: ${issue.name}`;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-61
@@ -229,7 +229,7 @@ export class Component implements ng.OnInit {
                   answer[0].hashTags
               ))
           );
-          this.related = related.map(related2 => new libBootstrapPanelList.Item(related2.linkId, related2.name, ""));
+          this.related = related.map(related2 => new libBootstrapPanelList.Item(related2[1].postId, related2[0].name, ""));
           this.tags = issue.hashTags ? issue.hashTags.map(tag => new libBootstrapPanelList.Item(tag, tag, "")) : [];
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-31
           this.confirmations = [new libBootstrapPanelList.Item(null, "(issue/TYRION-31)", "does not work")];
@@ -426,5 +426,11 @@ export class Component implements ng.OnInit {
         .catch((reason) => {
           this.events.send(reason);
         });
+  }
+
+  getRelatedLink(related:libBootstrapPanelList.Item):any[] {
+    "use strict";
+
+    return ["Issue", {issue: related.id}];
   }
 }
