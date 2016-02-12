@@ -878,6 +878,12 @@ export abstract class BackEnd {
     return this.requestPath("PUT", `${BackEnd.STANDALONE_PROGRAM_PATH}/${id}`, {versionDescription, designJson: {}, logicJson}).then(JSON.stringify);
   }
 
+  public deleteStandaloneProgram(id:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("DELETE", `${BackEnd.STANDALONE_PROGRAM_PATH}/${id}`).then(JSON.stringify);
+  }
+
   /**
    * Create a new program.
    *
