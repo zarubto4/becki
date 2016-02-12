@@ -1,0 +1,34 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<div data-bind-wrapper="heading" data-bind-breadcrumbs="breadcrumbs">
+  <form class="clearfix" data-on-submit="onSubmit($event)">
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-pencil"></span>
+        Name
+      </label>
+      <input class="form-control" data-bindon-ng-model="nameField">
+    </div>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-text-background"></span>
+        Color
+      </label>
+      <input class="form-control" type="color" data-bindon-ng-model="colorField">
+    </div>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-text-size"></span>
+        Size
+      </label>
+      <input class="form-control" type="number" data-bindon-ng-model="sizeField">
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+      <button class="btn btn-primary" type="submit">Update</button>
+    </div>
+  </form>
+</div>

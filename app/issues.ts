@@ -90,6 +90,12 @@ export class Component implements ng.OnInit {
         });
   }
 
+  getConfirmationLink(confirmation:libBootstrapPanelList.Item):any[] {
+    "use strict";
+
+    return ["IssueConfirmationType", {confirmation: confirmation.id}];
+  }
+
   getLink(issue:libBootstrapPanelList.Item):any[] {
     "use strict";
 
