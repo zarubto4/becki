@@ -708,6 +708,12 @@ export abstract class BackEnd {
     });
   }
 
+  public deleteLibrary(id:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("DELETE", `${BackEnd.LIBRARY_PATH}/${id}`).then(JSON.stringify);
+  }
+
   public createLibraryGroup(groupName:string, description:string):Promise<string> {
     "use strict";
 

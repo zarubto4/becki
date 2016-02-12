@@ -70,6 +70,12 @@ export class Component implements ng.OnInit {
   onInit():void {
     "use strict";
 
+    this.refresh();
+  }
+
+  refresh():void {
+    "use strict";
+
     this.backEnd.getProducers()
         .then(producers => {
           this.events.send(producers);
@@ -137,6 +143,19 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.router.navigate(["NewLibrary"]);
+  }
+
+  onLibrariesRemoveClick(ids:string[]):void {
+    "use strict";
+
+    Promise.all(ids.map(id => this.backEnd.deleteLibrary(id)))
+        .then(messages => {
+          this.events.send(messages);
+          this.refresh();
+        })
+        .catch(reason => {
+          this.events.send(reason);
+        });
   }
 
   onLibraryGroupAddClick():void {
