@@ -24,7 +24,6 @@ import * as boardProgramVersionNew from "./board-program-version-new";
 import * as boardType from "./board-type";
 import * as boardTypeNew from "./board-type-new";
 import * as devices from "./devices";
-import * as events from "./events";
 import * as homerNew from "./homer-new";
 import * as homerProgram from "./homer-program";
 import * as homerProgramNew from "./homer-program-new";
@@ -105,14 +104,11 @@ import * as standaloneProgramNew from "./standalone-program-new";
 })
 export class Component {
 
-  message:string;
-
   router:ngRouter.Router;
 
-  public constructor(eventsService:events.Service, router:ngRouter.Router) {
+  public constructor(router:ngRouter.Router) {
     "use strict";
 
-    eventsService.bus.toRx().subscribe((event:any) => this.message += `${event}: ${JSON.stringify(event)}||\n`);
     this.router = router;
   }
 }

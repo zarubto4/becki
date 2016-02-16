@@ -18,8 +18,8 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as events from "./events";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
@@ -44,11 +44,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  events:events.Service;
+  alerts:libBootstrapAlerts.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -62,47 +62,40 @@ export class Component implements ng.OnInit {
     this.processorField = "";
     this.descriptionField = "";
     this.backEnd = backEndService;
-    this.events = eventsService;
+    this.alerts = alerts;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.getProducers()
-        .then((producers) => {
-          this.events.send(producers);
-          this.producers = producers;
-        })
-        .catch((reason) => {
-          this.events.send(reason);
-        });
+        .then(producers => this.producers = producers)
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Producers cannot be loaded: ${reason}`)));
     this.backEnd.getProcessors()
-        .then((processors) => {
-          this.events.send(processors);
-          this.processors = processors;
-        })
-        .catch((reason) => {
-          this.events.send(reason);
-        });
+        .then(processors => this.processors = processors)
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Processors cannot be loaded: ${reason}`)));
   }
 
   onSubmit():void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.createBoardType(this.nameField, this.producerField, this.processorField, this.descriptionField)
-        .then(message => {
-          this.events.send(message);
+        .then(() => {
+          this.alerts.next.push(new libBootstrapAlerts.Success("The type has been created."));
           this.router.navigate(["Devices"]);
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The type cannot be created: ${reason}`));
         });
   }
 
   onCancelClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["Devices"]);
   }
 }

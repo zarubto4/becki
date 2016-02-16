@@ -17,13 +17,13 @@ import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
-import * as events from "./events";
+import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 
 @ng.Component({
   templateUrl: "app/signing.html",
-  directives: [ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES]
+  directives: [libBootstrapAlerts.Component, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES]
 })
-export class Component implements ng.AfterViewInit {
+export class Component implements ng.AfterViewInit, ng.OnInit {
 
   appName:string;
 
@@ -39,11 +39,11 @@ export class Component implements ng.AfterViewInit {
 
   backEnd:backEnd.Service;
 
-  events:events.Service;
+  alerts:libBootstrapAlerts.Service;
 
   router:ngRouter.Router;
 
-  constructor(@ng.Inject("appName") appName:string, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(@ng.Inject("appName") appName:string, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
     "use strict";
 
     this.appName = appName;
@@ -53,8 +53,14 @@ export class Component implements ng.AfterViewInit {
     this.upPasswordField = "";
     this.upUsernameField = "";
     this.backEnd = backEndService;
-    this.events = eventsService;
+    this.alerts = alerts;
     this.router = router;
+  }
+
+  onInit():void {
+    "use strict";
+
+    this.alerts.shift();
   }
 
   afterViewInit():void {
@@ -70,52 +76,41 @@ export class Component implements ng.AfterViewInit {
   onSignInSubmit():void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.createToken(this.inEmailField, this.inPasswordField)
-        .then(message => {
-          this.events.send(message);
-          this.router.navigate(["Devices"]);
-        })
-        .catch(reason => {
-          this.events.send(reason);
-        });
+        .then(() => this.router.navigate(["Devices"]))
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`The person cannot be signed in: ${reason}`)));
   }
 
   onFacebookSignInClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.createFacebookToken()
-        .then(url => {
-          this.events.send(url);
-          location.href = url;
-        })
-        .catch(reason => {
-          this.events.send(reason);
-        });
+        .then(url => location.href = url)
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`The person cannot be signed in: ${reason}`)));
   }
 
   onGitHubSignInClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.createGitHubToken()
-        .then(url => {
-          this.events.send(url);
-          location.href = url;
-        })
-        .catch(reason => {
-          this.events.send(reason);
-        });
+        .then(url => location.href = url)
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`The person cannot be signed in: ${reason}`)));
   }
 
   onSignUpSubmit():void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.createPerson(this.upEmailField, this.upPasswordField, this.upUsernameField)
-        .then(message => {
-          this.events.send(message);
+        .then(() => {
+          this.alerts.current.push(new libBootstrapAlerts.Success("The person have been signed up."));
           (<any>$("#signing-in")).collapse("show");
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The person cannot be signed up: ${reason}`));
         });
   }
 }

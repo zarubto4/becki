@@ -18,8 +18,8 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as events from "./events";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
@@ -40,11 +40,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  events:events.Service;
+  alerts:libBootstrapAlerts.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("producer");
@@ -57,47 +57,49 @@ export class Component implements ng.OnInit {
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.backEnd = backEndService;
-    this.events = eventsService;
+    this.alerts = alerts;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.getProducer(this.id)
-        .then(producer =>
-          Promise.all<any>([
-              producer,
-              this.backEnd.request("GET", producer.description)
-          ])
-        )
+        .then(producer => {
+          return Promise.all<any>([
+            producer,
+            this.backEnd.request("GET", producer.description)
+          ]);
+        })
         .then(result => {
           let producer:libBackEnd.Producer;
           [producer, this.descriptionField] = result;
-          this.events.send(result);
           this.nameField = producer.name;
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The producer ${this.id} cannot be loaded: ${reason}`));
         });
   }
 
   onSubmit():void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.updateProducer(this.id, this.nameField, this.descriptionField)
-        .then(message => {
-          this.events.send(message);
+        .then(() => {
+          this.alerts.next.push(new libBootstrapAlerts.Success("The producer cannot be updated."));
           this.router.navigate(["Devices"]);
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The producer cannot be updated: ${reason}`));
         });
   }
 
   onCancelClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["Devices"]);
   }
 }

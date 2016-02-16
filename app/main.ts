@@ -21,14 +21,14 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as body from "./body";
-import * as events from "./events";
+import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as websocket from "./websocket";
 
 ng.bootstrap(
     body.Component,
     [
       backEnd.Service,
-      events.Service,
+      libBootstrapAlerts.Service,
       ngHttp.HTTP_PROVIDERS,
       ngRouter.ROUTER_PROVIDERS,
       websocket.Service,

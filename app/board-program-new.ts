@@ -18,9 +18,9 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as events from "./events";
 import * as fieldCode from "./field-code";
 import * as libBackEnd from "./lib-back-end";
+import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as wrapper from "./wrapper";
 
 class Selectable<T> {
@@ -61,11 +61,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  events:events.Service;
+  alerts:libBootstrapAlerts.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
     "use strict";
 
     this.projectId = routeParams.get("project");
@@ -82,49 +82,42 @@ export class Component implements ng.OnInit {
     this.descriptionField = "";
     this.codeField = "";
     this.backEnd = backEndService;
-    this.events = eventsService;
+    this.alerts = alerts;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.getLibraries()
-        .then(libraries => {
-          this.events.send(libraries);
-          this.libraries = libraries.map(library => new Selectable(library));
-        })
-        .catch(reason => {
-          this.events.send(reason);
-        });
+        .then(libraries => this.libraries = libraries.map(library => new Selectable(library)))
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Libraries cannot be loaded: ${reason}`)));
     this.backEnd.getLibraryGroups()
-        .then(groups => {
-          this.events.send(groups);
-          this.groups = groups.map(group => new Selectable(group));
-        })
-        .catch(reason => {
-          this.events.send(reason);
-        });
+        .then(groups => this.groups = groups.map(group => new Selectable(group)))
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Library groups cannot be loaded: ${reason}`)));
   }
 
   onSubmit():void {
     "use strict";
 
+    this.alerts.shift();
     let libraries = this.libraries.filter(selectable => selectable.selected).map(selectable => ({libraryId: selectable.model.id, libraryVersion: selectable.model.lastVersion.toString()}));
     let groups = this.groups.filter(selectable => selectable.selected).map(selectable => ({groupId: selectable.model.id, libraryVersion: selectable.model.lastVersion.toString()}));
     this.backEnd.createBoardProgram(this.nameField, this.descriptionField, libraries, groups, this.codeField, this.projectId)
-        .then((message) => {
-          this.events.send(message);
+        .then(() => {
+          this.alerts.next.push(new libBootstrapAlerts.Success("The program has been created."));
           this.router.navigate(["Project", {project: this.projectId}]);
         })
-        .catch((reason) => {
-          this.events.send(reason);
+        .catch(reason => {
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The program cannot be created: ${reason}`));
         });
   }
 
   onCancelClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["Project", {project: this.projectId}]);
   }
 }

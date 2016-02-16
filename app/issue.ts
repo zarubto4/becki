@@ -18,10 +18,10 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as events from "./events";
 import * as fieldHomerProgram from "./field-homer-program";
 import * as fieldIssueBody from "./field-issue-body";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
 import * as wrapper from "./wrapper";
 
@@ -155,11 +155,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  events:events.Service;
+  alerts:libBootstrapAlerts.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("issue");
@@ -171,13 +171,14 @@ export class Component implements ng.OnInit {
     ];
     this.answerBodyField = fieldIssueBody.EMPTY;
     this.backEnd = backEndService;
-    this.events = eventsService;
+    this.alerts = alerts;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
+    this.alerts.shift();
     this.refresh();
   }
 
@@ -189,7 +190,6 @@ export class Component implements ng.OnInit {
           this.backEnd.getIssue(this.id)
         ])
         .then(result => {
-          this.events.send(result);
           let issue:libBackEnd.Issue;
           [this.types, issue] = result;
           return Promise.all<any>([
@@ -201,7 +201,6 @@ export class Component implements ng.OnInit {
           ]);
         })
         .then(result => {
-          this.events.send(result);
           let issue:libBackEnd.Issue;
           let body:string;
           let comments:libBackEnd.Comment[];
@@ -226,30 +225,27 @@ export class Component implements ng.OnInit {
           this.confirmations = [new libBootstrapPanelList.Item(null, "(issue/TYRION-86)", "does not work")];
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The issue ${this.id} cannot be loaded: ${reason}`));
         });
     this.backEnd.getProjects()
-        .then(projects => {
-          this.events.send(projects);
-          this.projects = projects;
-        })
-        .catch(reason => {
-          this.events.send(reason);
-        });
+        .then(projects => this.projects = projects)
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Projects cannot be loaded: ${reason}`)));
   }
 
   onItemImportClick(item:Item):void {
     "use strict;"
 
+    this.alerts.shift();
     item.importing = true;
   }
 
   onItemImportingSubmit(item:Item):void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.createHomerProgram(item.programNameField, item.programDescriptionField, item.programCodeField, item.programProjectField)
-        .then(message => {
-          this.events.send(message);
+        .then(() => {
+          this.alerts.current.push(new libBootstrapAlerts.Success("The program has been imported."));
           item.importing = false;
           item.programNameField = "";
           item.programDescriptionField = "";
@@ -257,43 +253,46 @@ export class Component implements ng.OnInit {
           item.programProjectField = "";
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The program cannot be imported: ${reason}`));
         });
   }
 
   onItemImportingCancelClick(item:Item):void {
     "use strict";
 
+    this.alerts.shift();
     item.importing = false;
   }
 
   onItemEditClick(item:Item):void {
     "use strict";
 
+    this.alerts.shift();
     item.editing = true;
   }
 
   onItemEditingSubmit(item:Item):void {
     "use strict";
 
+    this.alerts.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-97
     if (item instanceof Issue) {
       this.backEnd.updateIssue(item.id, item.typeField, item.titleField, item.bodyField, item.tags || [])
-          .then((message) => {
-            this.events.send(message);
+          .then(() => {
+            this.alerts.current.push(new libBootstrapAlerts.Success("The issue has been updated."));
             this.refresh();
           })
-          .catch((reason) => {
-            this.events.send(reason);
+          .catch(reason => {
+            this.alerts.current.push(new libBootstrapAlerts.Danger(`The issue cannot be updated: ${reason}`));
           });
     } else {
       this.backEnd.updateAnswer(item.id, item.bodyField, item.tags || [])
-          .then((message) => {
-            this.events.send(message);
+          .then(() => {
+            this.alerts.current.push(new libBootstrapAlerts.Success("The answer has been updated."));
             this.refresh();
           })
-          .catch((reason) => {
-            this.events.send(reason);
+          .catch(reason => {
+            this.alerts.current.push(new libBootstrapAlerts.Danger(`The answer cannot be updated: ${reason}`));
           });
     }
   }
@@ -301,56 +300,60 @@ export class Component implements ng.OnInit {
   onItemEditingCancelClick(item:Item):void {
     "use strict";
 
+    this.alerts.shift();
     item.editing = false;
   }
 
   onMinusClick(id:string):void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.subtractOneFromPost(id)
-        .then((message) => {
-          this.events.send(message);
+        .then(() => {
+          this.alerts.current.push(new libBootstrapAlerts.Success("The likes have been updated."));
           this.refresh();
         })
-        .catch((reason) => {
-          this.events.send(reason);
+        .catch(reason => {
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The likes cannot be updated: ${reason}`));
         });
   }
 
   onPlusClick(id:string):void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.addOneToPost(id)
-        .then((message) => {
-          this.events.send(message);
+        .then(() => {
+          this.alerts.current.push(new libBootstrapAlerts.Success("The likes have been updated."));
           this.refresh();
         })
         .catch((reason) => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The likes cannot be updated: ${reason}`));
         });
   }
 
   onItemRemoveClick(item:Item):void {
     "use strict";
 
+    this.alerts.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-79
     if (item instanceof Issue) {
       this.backEnd.deleteIssue(item.id)
-          .then((message) => {
-            this.events.send(message);
+          .then(() => {
+            this.alerts.next.push(new libBootstrapAlerts.Success("The issue has been removed."));
             this.router.navigate(["Issues"]);
           })
-          .catch((reason) => {
-            this.events.send(reason);
+          .catch(reason => {
+            this.alerts.current.push(new libBootstrapAlerts.Danger(`The issue cannot be removed: ${reason}`));
           });
     } else {
       this.backEnd.deleteAnswer(item.id)
-          .then((message) => {
-            this.events.send(message);
+          .then(() => {
+            this.alerts.current.push(new libBootstrapAlerts.Success("The answer has been removed."));
             this.refresh();
           })
           .catch((reason) => {
-            this.events.send(reason);
+            this.alerts.current.push(new libBootstrapAlerts.Danger(`The answer cannot be removed: ${reason}`));
           });
     }
   }
@@ -358,118 +361,130 @@ export class Component implements ng.OnInit {
   onAnswerCreationSubmit():void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.createAnswer(this.id, this.answerBodyField)
-        .then((message) => {
-          this.events.send(message);
+        .then(() => {
+          this.alerts.current.push(new libBootstrapAlerts.Success("The answer has been created."));
           this.answerBodyField = fieldIssueBody.EMPTY;
           this.refresh();
         })
-        .catch((reason) => {
-          this.events.send(reason);
+        .catch(reason => {
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The answer cannot be created: ${reason}`));
         });
   }
 
   onCommentCreationSubmit(item:Item):void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.createComment(item.id, item.commentField)
-        .then((message) => {
-          this.events.send(message);
+        .then(() => {
+          this.alerts.current.push(new libBootstrapAlerts.Success("The comment has been created."));
           this.refresh();
         })
         .catch((reason) => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The comment cannot be created: ${reason}`));
         });
   }
 
   onCommentEditClick(comment:Comment):void {
     "use strict";
 
+    this.alerts.shift();
     comment.editing = true;
   }
 
   onCommentEditingSubmit(comment:Comment):void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.updateComment(comment.id, comment.bodyField, comment.tags || [])
-        .then((message) => {
-          this.events.send(message);
+        .then(() => {
+          this.alerts.current.push(new libBootstrapAlerts.Success("The comment has been updated."));
           this.refresh();
         })
-        .catch((reason) => {
-          this.events.send(reason);
+        .catch(reason => {
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The comment cannot be updated: ${reason}`));
         });
   }
 
   onCommentEditingCancelClick(comment:Comment):void {
     "use strict";
 
+    this.alerts.shift();
     comment.editing = false;
   }
 
   onCommentRemoveClick(id:string):void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.deleteComment(id)
-        .then((message) => {
-          this.events.send(message);
+        .then(() => {
+          this.alerts.current.push(new libBootstrapAlerts.Success("The comment has been removed."));
           this.refresh();
         })
-        .catch((reason) => {
-          this.events.send(reason);
+        .catch(reason => {
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The comment cannot be removed: ${reason}`));
         });
   }
 
   onRelatedAddClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["NewRelatedIssue", {issue: this.id}]);
   }
 
   onRelatedRemoveClick(ids:string[]):void {
     "use strict";
 
+    this.alerts.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-95
     Promise.all(ids.map(id => this.backEnd.deleteIssueLink(id)))
-        .then(messages => {
-          this.events.send(messages);
+        .then(() => {
+          this.alerts.current.push(new libBootstrapAlerts.Success("The issues have been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The issues cannot be removed: ${reason}`));
         });
   }
 
   onTagAddClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["NewIssueTag", {issue: this.id}]);
   }
 
   onTagsRemoveClick(tags:string[]):void {
     "use strict";
 
+    this.alerts.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-96
     this.backEnd.removeTagsFromPost(tags, this.id)
-        .then(messages => {
-          this.events.send(messages);
+        .then(() => {
+          this.alerts.current.push(new libBootstrapAlerts.Success("The tags have been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The tags cannot be removed: ${reason}`));
         });
   }
 
   onConfirmationAddClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["NewIssueConfirmation", {issue: this.id}]);
   }
 
   onConfirmationsRemoveClick(ids:string[]):void {
     "use strict";
 
+    this.alerts.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-94
-    alert("issue/TYRION-94");
+    this.alerts.current.push(new libBootstrapAlerts.Danger("issue/TYRION-94"));
   }
 }

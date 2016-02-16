@@ -18,7 +18,7 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as events from "./events";
+import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
 import * as wrapper from "./wrapper";
 
@@ -44,11 +44,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  events:events.Service;
+  alerts:libBootstrapAlerts.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("program");
@@ -65,13 +65,14 @@ export class Component implements ng.OnInit {
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.backEnd = backEndService;
-    this.events = eventsService;
+    this.alerts = alerts;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
+    this.alerts.shift();
     this.refresh();
   }
 
@@ -80,52 +81,55 @@ export class Component implements ng.OnInit {
 
     this.backEnd.getBoardProgram(this.id)
         .then(program => {
-          this.events.send(program);
           this.nameField = program.programName;
           this.descriptionField = program.programDescription;
           this.versions = program.versions.map(version => new libBootstrapPanelList.Item(version.id, version.version.toString(), version.versionName, ["BoardProgramVersion", {project: this.projectId, program: this.id, version: version.id}]));
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The program ${this.id} cannot be loaded: ${reason}`));
         });
   }
 
   onSubmit():void {
     "use strict";
 
+    this.alerts.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-73
     this.backEnd.updateBoardProgram(this.id, this.nameField, this.descriptionField)
-        .then(program => {
-          this.events.send(program);
+        .then(() => {
+          this.alerts.current.push(new libBootstrapAlerts.Success("The program has been updated."));
           this.refresh();
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The cannot be updated: ${reason}`));
         });
   }
 
   onCancelClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["Project", {project: this.projectId}]);
   }
 
   onVersionAddClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["NewBoardProgramVersion", {project: this.projectId, program: this.id}]);
   }
 
   onVersionsRemoveClick(ids:string[]):void {
     "use strict";
 
+    this.alerts.shift();
     Promise.all(ids.map(id => this.backEnd.deleteBoardProgramVersion(id, this.id)))
-        .then(messages => {
-          this.events.send(messages);
+        .then(() => {
+          this.alerts.current.push(new libBootstrapAlerts.Success("The versions have been updated."));
           this.refresh();
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The versions cannot be updated: ${reason}`));
         });
   }
 }

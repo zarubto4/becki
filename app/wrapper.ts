@@ -18,8 +18,8 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as events from "./events";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 
 export class LabeledLink {
 
@@ -38,7 +38,7 @@ export class LabeledLink {
 @ng.Component({
   selector: "[wrapper]",
   templateUrl: "app/wrapper.html",
-  directives: [ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
+  directives: [libBootstrapAlerts.Component, ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
   inputs: ["heading: wrapper", "breadcrumbs"]
 })
 export class Component implements ng.OnInit {
@@ -51,17 +51,17 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  events:events.Service;
+  alerts:libBootstrapAlerts.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
     "use strict";
     this.home = becki.HOME;
     this.navigation = becki.NAVIGATION;
     this.user = "Loading...";
     this.backEnd = backEndService;
-    this.events = eventsService;
+    this.alerts = alerts;
     this.router = router;
   }
 
@@ -73,26 +73,22 @@ export class Component implements ng.OnInit {
       this.router.navigate(["Signing"]);
     }
     this.backEnd.getSignedInPerson()
-        .then(person => {
-          this.events.send(person);
-          this.user = libBackEnd.composePersonString(person) || "User";
-        })
-        .catch((reason) => {
-          this.events.send(reason);
-        });
+        .then(person => this.user = libBackEnd.composePersonString(person) || "User")
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Details about current user cannot be loaded: ${reason}`)));
   }
 
   onSignOutClick():void {
     "use strict";
 
+    this.alerts.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-65
     this.backEnd.deleteToken()
-        .then(message => {
-          this.events.send(message);
+        .then(() => {
+          this.alerts.next.push(new libBootstrapAlerts.Success("Current user have been signed out."));
           this.router.navigate(["Signing"]);
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`Current user cannot be signed out: ${reason}`));
         });
   }
 }

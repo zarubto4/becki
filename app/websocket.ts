@@ -14,21 +14,21 @@
 
 import * as ng from "angular2/angular2";
 
-import * as events from "./events";
+import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 
 @ng.Injectable()
 export class Service {
-  constructor(eventsService:events.Service) {
+  constructor(alerts:libBootstrapAlerts.Service) {
     "use strict";
 
     let socket:WebSocket;
     try {
       socket = new WebSocket("ws://echo.websocket.org/");
     } catch (err) {
-      eventsService.send(err);
+      alerts.current.push(new libBootstrapAlerts.Danger(`A communication channel with the back end cannot be created: ${err}`));
       return;
     }
-    socket.onerror = event => eventsService.send(event);
-    socket.onmessage = event => eventsService.send(event);
+    socket.onerror = event => alerts.current.push(new libBootstrapAlerts.Danger(`The back end reports an error: ${event}`));
+    socket.onmessage = event => alerts.current.push(new libBootstrapAlerts.Info(`The back end has sent a message: ${event}`));
   }
 }

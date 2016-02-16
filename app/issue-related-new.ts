@@ -18,8 +18,8 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as events from "./events";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
@@ -40,11 +40,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  events:events.Service;
+  alerts:libBootstrapAlerts.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
     "use strict";
 
     this.issueId = routeParams.get("issue");
@@ -58,39 +58,37 @@ export class Component implements ng.OnInit {
     ];
     this.field = "";
     this.backEnd = backEndService;
-    this.events = eventsService;
+    this.alerts = alerts;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.getIssues()
-        .then(issues => {
-          this.events.send(issues);
-          this.issues = issues;
-        })
-        .catch(reason => {
-          this.events.send(reason);
-        });
+        .then(issues => this.issues = issues)
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Issues cannot be loaded: ${reason}`)));
   }
 
   onSubmit():void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.createIssueLink(this.issueId, this.field)
-        .then((message) => {
-          this.events.send(message);
+        .then(() => {
+          this.alerts.next.push(new libBootstrapAlerts.Success("The issue has been added."));
           this.router.navigate(["Issue", {issue: this.issueId}]);
         })
         .catch((reason) => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The issue cannot be added: ${reason}`));
         });
   }
 
   onCancelClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["Issue", {issue: this.issueId}]);
   }
 }

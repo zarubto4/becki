@@ -18,14 +18,14 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as events from "./events";
+import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/project-collaborator-new.html",
   directives: [ng.FORM_DIRECTIVES, wrapper.Component]
 })
-export class Component {
+export class Component implements ng.OnInit {
 
   projectId:string;
 
@@ -37,11 +37,11 @@ export class Component {
 
   backEnd:backEnd.Service;
 
-  events:events.Service;
+  alerts:libBootstrapAlerts.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
     "use strict";
 
     this.projectId = routeParams.get("project");
@@ -56,26 +56,34 @@ export class Component {
     ];
     this.idField = "";
     this.backEnd = backEndService;
-    this.events = eventsService;
+    this.alerts = alerts;
     this.router = router;
+  }
+
+  onInit():void {
+    "use strict";
+
+    this.alerts.shift();
   }
 
   onSubmit():void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.addCollaboratorToProject(this.idField, this.projectId)
-        .then((message) => {
-          this.events.send(message);
+        .then(() => {
+          this.alerts.next.push(new libBootstrapAlerts.Success("The collaborator has been added."));
           this.router.navigate(["Project", {project: this.projectId}]);
         })
-        .catch((reason) => {
-          this.events.send(reason);
+        .catch(reason => {
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The collaborator cannot be added: ${reason}`));
         });
   }
 
   onCancelClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["Project", {project: this.projectId}]);
   }
 }

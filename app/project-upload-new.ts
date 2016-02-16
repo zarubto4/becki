@@ -18,8 +18,8 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as events from "./events";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as wrapper from "./wrapper";
 
 class Selectable<T> {
@@ -65,11 +65,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  events:events.Service;
+  alerts:libBootstrapAlerts.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
     "use strict";
 
     this.projectId = routeParams.get("project");
@@ -85,16 +85,16 @@ export class Component implements ng.OnInit {
     this.typeField = "";
     this.programField = "";
     this.backEnd = backEndService;
-    this.events = eventsService;
+    this.alerts = alerts;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.getProject(this.projectId)
         .then(project => {
-          this.events.send(project);
           return Promise.all<any>([
             this.backEnd.request("GET", project.c_programs),
             this.backEnd.request("GET", project.boards),
@@ -103,7 +103,6 @@ export class Component implements ng.OnInit {
           ]);
         })
         .then(result => {
-          this.events.send(result);
           let boards:libBackEnd.Board[];
           let homers:libBackEnd.Homer[];
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-77
@@ -112,13 +111,14 @@ export class Component implements ng.OnInit {
           this.homers = homers.map(homer => new Selectable(homer));
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The project ${this.projectId} cannot be loaded: ${reason}`));
         });
   }
 
   onSubmit():void {
     "use strict";
 
+    this.alerts.shift();
     let boards = this.boards.filter(selectable => selectable.selected).map(selectable => selectable.model.id);
     let homers = this.homers.filter(selectable => selectable.selected).map(selectable => selectable.model.homerId);
     let promise:Promise<string[]>;
@@ -131,24 +131,25 @@ export class Component implements ng.OnInit {
         break;
       case "Board program (binary)":
         // TODO: http://youtrack.byzance.cz/youtrack/issue/TYRION-37#comment=109-118
-        alert("issue/TYRION-37");
+        this.alerts.current.push(new libBootstrapAlerts.Danger("issue/TYRION-37"));
         return;
       default:
         return;
     }
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-43
-    promise.then(messages => {
-          this.events.send(messages);
+    promise.then(() => {
+          this.alerts.next.push(new libBootstrapAlerts.Success("The program has been uploaded."));
           this.router.navigate(["Project", {project: this.projectId}]);
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The program cannot be uploaded: ${reason}`));
         });
   }
 
   onCancelClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["Project", {project: this.projectId}]);
   }
 }

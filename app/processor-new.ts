@@ -18,8 +18,8 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as events from "./events";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as wrapper from "./wrapper";
 
 class Selectable {
@@ -56,11 +56,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  events:events.Service;
+  alerts:libBootstrapAlerts.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -73,40 +73,38 @@ export class Component implements ng.OnInit {
     this.descriptionField = "";
     this.speedField = 0;
     this.backEnd = backEndService;
-    this.events = eventsService;
+    this.alerts = alerts;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.getLibraryGroups()
-        .then(groups => {
-          this.events.send(groups);
-          this.groups = groups.map(group => new Selectable(group));
-        })
-        .catch(reason => {
-          this.events.send(reason);
-        });
+        .then(groups => this.groups = groups.map(group => new Selectable(group)))
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Library groups cannot be loaded: ${reason}`)));
   }
 
   onSubmit():void {
     "use strict";
 
+    this.alerts.shift();
     let groups = this.groups.filter(selectable => selectable.selected).map(selectable => selectable.model.id);
     this.backEnd.createProcessor(this.nameField, this.codeField, this.descriptionField, this.speedField, groups)
-        .then((message) => {
-          this.events.send(message);
+        .then(() => {
+          this.alerts.next.push(new libBootstrapAlerts.Success("The processor has been created."));
           this.router.navigate(["Devices"]);
         })
-        .catch((reason) => {
-          this.events.send(reason);
+        .catch(reason => {
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The processor cannot be created: ${reason}`));
         });
   }
 
   onCancelClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["Devices"]);
   }
 }

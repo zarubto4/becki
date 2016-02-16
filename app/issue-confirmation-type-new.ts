@@ -18,14 +18,14 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as events from "./events";
+import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/issue-confirmation-type-new.html",
   directives: [ng.FORM_DIRECTIVES, wrapper.Component]
 })
-export class Component {
+export class Component implements ng.OnInit {
 
   breadcrumbs:wrapper.LabeledLink[];
 
@@ -37,11 +37,11 @@ export class Component {
 
   backEnd:backEnd.Service;
 
-  events:events.Service;
+  alerts:libBootstrapAlerts.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -54,26 +54,34 @@ export class Component {
     this.colorField = "#ffffff";
     this.sizeField = 12;
     this.backEnd = backEndService;
-    this.events = eventsService;
+    this.alerts = alerts;
     this.router = router;
+  }
+
+  onInit():void {
+    "use strict";
+
+    this.alerts.shift();
   }
 
   onSubmit():void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.createIssueConfirmation(this.nameField, this.colorField, this.sizeField)
-        .then(message => {
-          this.events.send(message);
+        .then(() => {
+          this.alerts.next.push(new libBootstrapAlerts.Success("The confirmation has been created."));
           this.router.navigate(["Issues"]);
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The confirmation cannot be created: ${reason}`));
         });
   }
 
   onCancelClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["Issues"]);
   }
 }

@@ -18,8 +18,8 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as events from "./events";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
 import * as wrapper from "./wrapper";
 
@@ -39,11 +39,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  events:events.Service;
+  alerts:libBootstrapAlerts.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -51,13 +51,14 @@ export class Component implements ng.OnInit {
       new wrapper.LabeledLink("Issues", ["Issues"])
     ];
     this.backEnd = backEndService;
-    this.events = eventsService;
+    this.alerts = alerts;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
+    this.alerts.shift();
     this.refresh();
   }
 
@@ -65,68 +66,59 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getIssueTypes()
-        .then(types => {
-          this.events.send(types);
-          this.types = types.map(type => new libBootstrapPanelList.Item(type.id, type.type, null));
-        })
-        .catch(reason => {
-          this.events.send(reason);
-        });
+        .then(types => this.types = types.map(type => new libBootstrapPanelList.Item(type.id, type.type, null)))
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Types cannot be loaded: ${reason}`)));
     this.backEnd.getIssueConfirmations()
-        .then(confirmations => {
-          this.events.send(confirmations);
-          this.confirmations = confirmations.map(confirmation => new libBootstrapPanelList.Item(confirmation.id, confirmation.type, null, ["IssueConfirmationType", {confirmation: confirmation.id}]));
-        })
-        .catch(reason => {
-          this.events.send(reason);
-        });
+        .then(confirmations => this.confirmations = confirmations.map(confirmation => new libBootstrapPanelList.Item(confirmation.id, confirmation.type, null, ["IssueConfirmationType", {confirmation: confirmation.id}])))
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Confirmations cannot be loaded: ${reason}`)));
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-27
     this.backEnd.getIssues()
-        .then(issues => {
-          this.events.send(issues);
-          this.issues = issues.map(issue => new libBootstrapPanelList.Item(issue.postId, issue.name, issue.type, ["Issue", {issue: issue.postId}]));
-        })
-        .catch(reason => {
-          this.events.send(reason);
-        });
+        .then(issues => this.issues = issues.map(issue => new libBootstrapPanelList.Item(issue.postId, issue.name, issue.type, ["Issue", {issue: issue.postId}])))
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Issues cannot be loaded: ${reason}`)));
   }
 
   onTypeAddClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["NewIssueType"]);
   }
 
   onTypesRemoveClick(ids:string[]):void {
     "use strict";
 
+    this.alerts.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-92
-    alert("issue/TYRION-92");
+    this.alerts.current.push(new libBootstrapAlerts.Danger("issue/TYRION-92"));
   }
 
   onConfirmationAddClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["NewIssueConfirmationType"]);
   }
 
   onConfirmationsRemoveClick(ids:string[]):void {
     "use strict";
 
+    this.alerts.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-93
-    alert("issue/TYRION-93");
+    this.alerts.current.push(new libBootstrapAlerts.Danger("issue/TYRION-93"));
   }
 
   onIssueAddClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["NewIssue"]);
   }
 
   onIssuesRemoveClick(ids:string[]):void {
     "use strict";
 
+    this.alerts.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-79
-    alert("issue/TYRION-79");
+    this.alerts.current.push(new libBootstrapAlerts.Danger("issue/TYRION-79"));
   }
 }

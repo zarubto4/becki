@@ -18,15 +18,15 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as events from "./events";
 import * as fieldHomerProgram from "./field-homer-program";
+import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/homer-program-new.html",
   directives: [fieldHomerProgram.Component, ng.FORM_DIRECTIVES, wrapper.Component]
 })
-export class Component {
+export class Component implements ng.OnInit {
 
   projectId:string;
 
@@ -42,11 +42,11 @@ export class Component {
 
   backEnd:backEnd.Service;
 
-  events:events.Service;
+  alerts:libBootstrapAlerts.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
     "use strict";
 
     this.projectId = routeParams.get("project");
@@ -63,26 +63,34 @@ export class Component {
     this.descriptionField = "";
     this.codeField = `{"blocks":{}}`;
     this.backEnd = backEndService;
-    this.events = eventsService;
+    this.alerts = alerts;
     this.router = router;
+  }
+
+  onInit():void {
+    "use strict";
+
+    this.alerts.shift();
   }
 
   onSubmit():void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.createHomerProgram(this.nameField, this.descriptionField, this.codeField, this.projectId)
-        .then((message) => {
-          this.events.send(message);
+        .then(() => {
+          this.alerts.next.push(new libBootstrapAlerts.Success("The program have been created."));
           this.router.navigate(["Project", {project: this.projectId}]);
         })
         .catch((reason) => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The program cannot be created: ${reason}`));
         });
   }
 
   onCancelClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["Project", {project: this.projectId}]);
   }
 }

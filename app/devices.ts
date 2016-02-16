@@ -18,7 +18,7 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as events from "./events";
+import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
 import * as wrapper from "./wrapper";
 
@@ -46,11 +46,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  events:events.Service;
+  alerts:libBootstrapAlerts.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -63,13 +63,14 @@ export class Component implements ng.OnInit {
       new libBootstrapPanelList.Item(null, "(issue/TYRION-20)", "does not work")
     ];
     this.backEnd = backEndService;
-    this.events = eventsService;
+    this.alerts = alerts;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
+    this.alerts.shift();
     this.refresh();
   }
 
@@ -77,168 +78,152 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getProducers()
-        .then(producers => {
-          this.events.send(producers);
-          this.producers = producers.map(producer => new libBootstrapPanelList.Item(producer.id, producer.name, null, ["Producer", {producer: producer.id}]));
-        })
-        .catch(reason => {
-          this.events.send(reason);
-        });
+        .then(producers => this.producers = producers.map(producer => new libBootstrapPanelList.Item(producer.id, producer.name, null, ["Producer", {producer: producer.id}])))
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Producers cannot be loaded: ${reason}`)));
     this.backEnd.getLibraries()
-        .then(libraries => {
-          this.events.send(libraries);
-          this.libraries = libraries.map(library => new libBootstrapPanelList.Item(library.id, library.libraryName, library.description, ["Library", {library: library.id}]));
-        })
-        .catch(reason => {
-          this.events.send(reason);
-        });
+        .then(libraries => this.libraries = libraries.map(library => new libBootstrapPanelList.Item(library.id, library.libraryName, library.description, ["Library", {library: library.id}])))
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Libraries cannot be loaded: ${reason}`)));
     this.backEnd.getLibraryGroups()
-        .then(groups => {
-          this.events.send(groups);
-          this.libraryGroups = groups.map(group => new libBootstrapPanelList.Item(group.id, group.groupName, group.description, ["LibraryGroup", {group: group.id}]));
-        })
-        .catch(reason => {
-          this.events.send(reason);
-        });
+        .then(groups => this.libraryGroups = groups.map(group => new libBootstrapPanelList.Item(group.id, group.groupName, group.description, ["LibraryGroup", {group: group.id}])))
+        .catch(reason =>this.alerts.current.push(new libBootstrapAlerts.Danger(`Library groups cannot be loaded: ${reason}`)));
     this.backEnd.getProcessors()
-        .then(processors => {
-          this.events.send(processors);
-          this.processors = processors.map(processor => new libBootstrapPanelList.Item(processor.id, processor.processorName, processor.processorCode, ["Processor", {processor: processor.id}]));
-        })
-        .catch(reason => {
-          this.events.send(reason);
-        });
+        .then(processors => this.processors = processors.map(processor => new libBootstrapPanelList.Item(processor.id, processor.processorName, processor.processorCode, ["Processor", {processor: processor.id}])))
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Processors cannot be loaded: ${reason}`)));
     this.backEnd.getBoardTypes()
-        .then(boardTypes => {
-          this.events.send(boardTypes);
-          this.boardTypes = boardTypes.map(type => new libBootstrapPanelList.Item(type.id, type.name, null, ["BoardType", {type: type.id}]));
-        })
-        .catch(reason => {
-          this.events.send(reason);
-        });
+        .then(boardTypes => this.boardTypes = boardTypes.map(type => new libBootstrapPanelList.Item(type.id, type.name, null, ["BoardType", {type: type.id}])))
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Board types cannot be loaded: ${reason}`)));
     this.backEnd.getHomers()
-        .then(homers => {
-          this.events.send(homers);
-          this.homers = homers.map(homer => new libBootstrapPanelList.Item(homer.homerId, homer.homerId, homer.typeOfDevice));
-        })
-        .catch(reason => {
-          this.events.send(reason);
-        });
+        .then(homers => this.homers = homers.map(homer => new libBootstrapPanelList.Item(homer.homerId, homer.homerId, homer.typeOfDevice)))
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Homers cannot be loaded: ${reason}`)));
   }
 
   onProducerAddClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["NewProducer"]);
   }
 
   onProducersRemoveClick(ids:string[]):void {
     "use strict";
 
+    this.alerts.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-87
-    alert("issue/TYRION-87");
+    this.alerts.current.push(new libBootstrapAlerts.Danger("issue/TYRION-87"));
   }
 
   onLibraryAddClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["NewLibrary"]);
   }
 
   onLibrariesRemoveClick(ids:string[]):void {
     "use strict";
 
+    this.alerts.shift();
     Promise.all(ids.map(id => this.backEnd.deleteLibrary(id)))
-        .then(messages => {
-          this.events.send(messages);
+        .then(() => {
+          this.alerts.current.push(new libBootstrapAlerts.Success("Libraries have been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`Libraries cannot be removed: ${reason}`));
         });
   }
 
   onLibraryGroupAddClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["NewLibraryGroup"]);
   }
 
   onLibraryGroupsRemoveClick(ids:string[]):void {
     "use strict";
 
+    this.alerts.shift();
     Promise.all(ids.map(id => this.backEnd.deleteLibraryGroup(id)))
-        .then(messages => {
-          this.events.send(messages);
+        .then(() => {
+          this.alerts.current.push(new libBootstrapAlerts.Success("Library groups have been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`Library groups cannot be removed: ${reason}`));
         });
   }
 
   onProcessorAddClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["NewProcessor"]);
   }
 
   onProcessorsRemoveClick(ids:string[]):void {
     "use strict";
 
+    this.alerts.shift();
     Promise.all(ids.map(id => this.backEnd.deleteProcessor(id)))
-        .then(messages => {
-          this.events.send(messages);
+        .then(() => {
+          this.alerts.current.push(new libBootstrapAlerts.Success("Processors have been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`Processors cannot be removed: ${reason}`));
         });
   }
 
   onBoardTypeAddClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["NewBoardType"]);
   }
 
   onBoardTypesRemoveClick(ids:string[]):void {
     "use strict";
 
+    this.alerts.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-88
     Promise.all(ids.map(id => this.backEnd.deleteBoardType(id)))
-        .then(messages => {
-          this.events.send(messages);
+        .then(() => {
+          this.alerts.current.push(new libBootstrapAlerts.Success("Board types have been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`Board types cannot be removed: ${reason}`));
         });
   }
 
   onBoardAddClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["NewBoard"]);
   }
 
   onBoardsRemoveClick(ids:string[]):void {
     "use strict";
 
+    this.alerts.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-89
-    alert("issue/TYRION-89");
+    this.alerts.current.push(new libBootstrapAlerts.Danger("issue/TYRION-89"));
   }
 
   onHomerAddClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["NewHomer"]);
   }
 
   onHomersRemoveClick(ids:string[]):void {
     "use strict";
 
+    this.alerts.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-90
-    alert("issue/TYRION-90");
+    this.alerts.current.push(new libBootstrapAlerts.Danger("issue/TYRION-90"));
   }
 }

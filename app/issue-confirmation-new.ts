@@ -18,8 +18,8 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as events from "./events";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
@@ -40,11 +40,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  events:events.Service;
+  alerts:libBootstrapAlerts.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
     "use strict";
 
     this.issueId = routeParams.get("issue");
@@ -58,39 +58,37 @@ export class Component implements ng.OnInit {
     ];
     this.field = "";
     this.backEnd = backEndService;
-    this.events = eventsService;
+    this.alerts = alerts;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.getIssueConfirmations()
-        .then(confirmations => {
-          this.events.send(confirmations);
-          this.confirmations = confirmations;
-        })
-        .catch(reason => {
-          this.events.send(reason);
-        });
+        .then(confirmations => this.confirmations = confirmations)
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Confirmations cannot be loaded: ${reason}`)));
   }
 
   onSubmit():void {
     "use strict";
 
+    this.alerts.shift();
     this.backEnd.addConfirmationToPost(this.issueId, this.field)
-        .then(message => {
-          this.events.send(message);
+        .then(() => {
+          this.alerts.next.push(new libBootstrapAlerts.Success("The confirmation has been added."));
           this.router.navigate(["Issue", {issue: this.issueId}]);
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.next.push(new libBootstrapAlerts.Danger(`The confirmation cannot be added: ${reason}`));
         });
   }
 
   onCancelClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["Issue", {issue: this.issueId}]);
   }
 }

@@ -18,8 +18,8 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as events from "./events";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as wrapper from "./wrapper";
 
 class Selectable {
@@ -60,11 +60,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  events:events.Service;
+  alerts:libBootstrapAlerts.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, eventsService:events.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("processor");
@@ -79,19 +79,19 @@ export class Component implements ng.OnInit {
     this.descriptionField = "Loading...";
     this.speedField = 0;
     this.backEnd = backEndService;
-    this.events = eventsService;
+    this.alerts = alerts;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
+    this.alerts.shift();
     Promise.all<any>([
           this.backEnd.getProcessor(this.id),
           this.backEnd.getLibraryGroups()
         ])
         .then(result => {
-          this.events.send(result);
           let processor:libBackEnd.Processor;
           let groups:libBackEnd.LibraryGroup[];
           [processor, groups] = result;
@@ -104,7 +104,6 @@ export class Component implements ng.OnInit {
           ]);
         })
         .then(result => {
-          this.events.send(result);
           let processor:libBackEnd.Processor;
           let processorGroups:libBackEnd.LibraryGroup[];
           let groups:libBackEnd.LibraryGroup[];
@@ -115,27 +114,29 @@ export class Component implements ng.OnInit {
           this.groups = groups.map(group => new Selectable(group, processorGroups.find(processorGroup => group.id == processorGroup.id) != null));
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The processor ${this.id} cannot be loaded: ${reason}`));
         });
   }
 
   onSubmit():void {
     "use strict";
 
+    this.alerts.shift();
     let groups = this.groups.filter(selectable => selectable.selected).map(selectable => selectable.model.id);
     this.backEnd.updateProcessor(this.id, this.nameField, this.codeField, this.descriptionField, this.speedField, groups)
-        .then(message => {
-          this.events.send(message);
+        .then(() => {
+          this.alerts.next.push(new libBootstrapAlerts.Success("The processor has been updated."));
           this.router.navigate(["Devices"]);
         })
         .catch(reason => {
-          this.events.send(reason);
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`The processor cannot be updated: ${reason}`));
         });
   }
 
   onCancelClick():void {
     "use strict";
 
+    this.alerts.shift();
     this.router.navigate(["Devices"]);
   }
 }
