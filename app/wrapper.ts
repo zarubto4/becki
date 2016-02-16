@@ -49,6 +49,8 @@ export class Component implements ng.OnInit {
 
   user:string;
 
+  progress:number;
+
   backEnd:backEnd.Service;
 
   alerts:libBootstrapAlerts.Service;
@@ -60,6 +62,7 @@ export class Component implements ng.OnInit {
     this.home = becki.HOME;
     this.navigation = becki.NAVIGATION;
     this.user = "Loading...";
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -72,15 +75,18 @@ export class Component implements ng.OnInit {
     if (!window.localStorage.getItem("authToken")) {
       this.router.navigate(["Signing"]);
     }
+    this.progress += 1;
     this.backEnd.getSignedInPerson()
         .then(person => this.user = libBackEnd.composePersonString(person) || "User")
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Details about current user cannot be loaded: ${reason}`)));
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Details about current user cannot be loaded: ${reason}`)))
+        .then(() => this.progress -= 1);
   }
 
   onSignOutClick():void {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-65
     this.backEnd.deleteToken()
         .then(() => {
@@ -89,6 +95,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`Current user cannot be signed out: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 }

@@ -25,7 +25,7 @@ import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/project.html",
-  directives: [ng.FORM_DIRECTIVES, libBootstrapPanelList.Component, wrapper.Component]
+  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, libBootstrapPanelList.Component, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -52,6 +52,8 @@ export class Component implements ng.OnInit {
   homers:libBootstrapPanelList.Item[];
 
   uploadQueue:libBootstrapPanelList.Item[];
+
+  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -82,6 +84,7 @@ export class Component implements ng.OnInit {
       new libBootstrapPanelList.Item(null, "(issue/TYRION-43)", "does not work"),
       new libBootstrapPanelList.Item(null, "(issue/TYRION-43)", "does not work")
     ];
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -97,6 +100,7 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
+    this.progress += 1;
     this.backEnd.getProject(this.id)
         .then(project => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-36
@@ -128,6 +132,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The project ${this.id} cannot be loaded: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -135,6 +142,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.updateProject(this.id, this.nameField, this.descriptionField)
         .then(() => {
           this.alerts.current.push(new libBootstrapAlerts.Success("The project has been updated."));
@@ -142,6 +150,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The project cannot be updated: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -156,6 +167,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.removeCollaboratorsFromProject(ids, this.id)
         .then(() => {
           this.alerts.current.push(new libBootstrapAlerts.Success("The collaborators have been removed."));
@@ -163,6 +175,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The collaborators cannot be removed: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -177,6 +192,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     Promise.all(ids.map(id => this.backEnd.deleteBoardProgram(id)))
         .then(() => {
           this.alerts.current.push(new libBootstrapAlerts.Success("The programs have been removed."));
@@ -184,6 +200,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The programs cannot be removed: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -198,6 +217,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     Promise.all(ids.map(id => this.backEnd.deleteStandaloneProgram(id)))
         .then(() => {
           this.alerts.current.push(new libBootstrapAlerts.Success("The programs have been removed."));
@@ -205,6 +225,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The programs cannot be removed: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -219,6 +242,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     Promise.all(ids.map(id => this.backEnd.deleteHomerProgram(id)))
         .then(() => {
           this.alerts.current.push(new libBootstrapAlerts.Success("The programs have been removed."));
@@ -226,6 +250,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The programs cannot be removed: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -240,6 +267,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     Promise.all(ids.map(id => this.backEnd.removeBoardFromProject(id, this.id)))
         .then(() => {
           this.alerts.current.push(new libBootstrapAlerts.Success("The boards have been removed."));
@@ -247,6 +275,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The boards cannot be removed: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -261,6 +292,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-91
     Promise.all(ids.map(id => this.backEnd.removeHomerFromProject(id, this.id)))
         .then(() => {
@@ -269,6 +301,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The Homers cannot be removed: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 

@@ -58,6 +58,8 @@ export class Component implements ng.OnInit {
 
   speedField:number;
 
+  progress:number;
+
   backEnd:backEnd.Service;
 
   alerts:libBootstrapAlerts.Service;
@@ -78,6 +80,7 @@ export class Component implements ng.OnInit {
     this.codeField = "Loading...";
     this.descriptionField = "Loading...";
     this.speedField = 0;
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -87,6 +90,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     Promise.all<any>([
           this.backEnd.getProcessor(this.id),
           this.backEnd.getLibraryGroups()
@@ -115,6 +119,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The processor ${this.id} cannot be loaded: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -122,6 +129,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     let groups = this.groups.filter(selectable => selectable.selected).map(selectable => selectable.model.id);
     this.backEnd.updateProcessor(this.id, this.nameField, this.codeField, this.descriptionField, this.speedField, groups)
         .then(() => {
@@ -130,6 +138,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The processor cannot be updated: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 

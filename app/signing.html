@@ -19,7 +19,12 @@
     </div>
     <div id="signing-in" class="panel-collapse collapse in">
       <div class="panel-body">
-        <form class="clearfix" data-on-submit="onSignInSubmit($event)">
+        <form class="clearfix" data-on-submit="onSignInSubmit($event)" style="position: relative">
+          <template data-bind-ng-if="progress">
+            <div class="overlay">
+              <progress>Loading...</progress>
+            </div>
+          </template>
           <div class="form-group">
             <label>
               <span class="glyphicon glyphicon-envelope"></span>
@@ -58,7 +63,12 @@
       </h4>
     </div>
     <div id="signing-up" class="panel-collapse collapse">
-      <form class="panel-body clearfix" data-on-submit="onSignUpSubmit($event)">
+      <form class="panel-body clearfix" data-on-submit="onSignUpSubmit($event)" style="position: relative">
+        <template data-bind-ng-if="progress">
+          <div class="overlay">
+            <progress>Loading...</progress>
+          </div>
+        </template>
         <div class="form-group">
           <label>
             <span class="glyphicon glyphicon-envelope"></span>

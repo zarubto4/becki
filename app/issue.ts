@@ -153,6 +153,8 @@ export class Component implements ng.OnInit {
 
   confirmations:libBootstrapPanelList.Item[];
 
+  progress:number;
+
   backEnd:backEnd.Service;
 
   alerts:libBootstrapAlerts.Service;
@@ -170,6 +172,7 @@ export class Component implements ng.OnInit {
       new wrapper.LabeledLink(`Issue ${this.id}`, ["Issue", {issue: this.id}])
     ];
     this.answerBodyField = fieldIssueBody.EMPTY;
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -185,6 +188,7 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
+    this.progress += 2;
     Promise.all<any>([
           this.backEnd.getIssueTypes(),
           this.backEnd.getIssue(this.id)
@@ -226,10 +230,14 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The issue ${this.id} cannot be loaded: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
     this.backEnd.getProjects()
         .then(projects => this.projects = projects)
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Projects cannot be loaded: ${reason}`)));
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Projects cannot be loaded: ${reason}`)))
+        .then(() => this.progress -= 1);
   }
 
   onItemImportClick(item:Item):void {
@@ -243,6 +251,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.createHomerProgram(item.programNameField, item.programDescriptionField, item.programCodeField, item.programProjectField)
         .then(() => {
           this.alerts.current.push(new libBootstrapAlerts.Success("The program has been imported."));
@@ -254,6 +263,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The program cannot be imported: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -277,6 +289,7 @@ export class Component implements ng.OnInit {
     this.alerts.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-97
     if (item instanceof Issue) {
+      this.progress += 1;
       this.backEnd.updateIssue(item.id, item.typeField, item.titleField, item.bodyField, item.tags || [])
           .then(() => {
             this.alerts.current.push(new libBootstrapAlerts.Success("The issue has been updated."));
@@ -284,6 +297,9 @@ export class Component implements ng.OnInit {
           })
           .catch(reason => {
             this.alerts.current.push(new libBootstrapAlerts.Danger(`The issue cannot be updated: ${reason}`));
+          })
+          .then(() => {
+            this.progress -= 1;
           });
     } else {
       this.backEnd.updateAnswer(item.id, item.bodyField, item.tags || [])
@@ -293,6 +309,9 @@ export class Component implements ng.OnInit {
           })
           .catch(reason => {
             this.alerts.current.push(new libBootstrapAlerts.Danger(`The answer cannot be updated: ${reason}`));
+          })
+          .then(() => {
+            this.progress -= 1;
           });
     }
   }
@@ -308,6 +327,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.subtractOneFromPost(id)
         .then(() => {
           this.alerts.current.push(new libBootstrapAlerts.Success("The likes have been updated."));
@@ -315,6 +335,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The likes cannot be updated: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -322,6 +345,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.addOneToPost(id)
         .then(() => {
           this.alerts.current.push(new libBootstrapAlerts.Success("The likes have been updated."));
@@ -329,6 +353,9 @@ export class Component implements ng.OnInit {
         })
         .catch((reason) => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The likes cannot be updated: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -338,6 +365,7 @@ export class Component implements ng.OnInit {
     this.alerts.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-79
     if (item instanceof Issue) {
+      this.progress += 1;
       this.backEnd.deleteIssue(item.id)
           .then(() => {
             this.alerts.next.push(new libBootstrapAlerts.Success("The issue has been removed."));
@@ -345,8 +373,12 @@ export class Component implements ng.OnInit {
           })
           .catch(reason => {
             this.alerts.current.push(new libBootstrapAlerts.Danger(`The issue cannot be removed: ${reason}`));
+          })
+          .then(() => {
+            this.progress -= 1;
           });
     } else {
+      this.progress += 1;
       this.backEnd.deleteAnswer(item.id)
           .then(() => {
             this.alerts.current.push(new libBootstrapAlerts.Success("The answer has been removed."));
@@ -354,6 +386,9 @@ export class Component implements ng.OnInit {
           })
           .catch((reason) => {
             this.alerts.current.push(new libBootstrapAlerts.Danger(`The answer cannot be removed: ${reason}`));
+          })
+          .then(() => {
+            this.progress -= 1;
           });
     }
   }
@@ -362,6 +397,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.createAnswer(this.id, this.answerBodyField)
         .then(() => {
           this.alerts.current.push(new libBootstrapAlerts.Success("The answer has been created."));
@@ -370,6 +406,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The answer cannot be created: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -377,6 +416,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.createComment(item.id, item.commentField)
         .then(() => {
           this.alerts.current.push(new libBootstrapAlerts.Success("The comment has been created."));
@@ -384,6 +424,9 @@ export class Component implements ng.OnInit {
         })
         .catch((reason) => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The comment cannot be created: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -398,6 +441,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.updateComment(comment.id, comment.bodyField, comment.tags || [])
         .then(() => {
           this.alerts.current.push(new libBootstrapAlerts.Success("The comment has been updated."));
@@ -405,6 +449,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The comment cannot be updated: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -419,6 +466,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.deleteComment(id)
         .then(() => {
           this.alerts.current.push(new libBootstrapAlerts.Success("The comment has been removed."));
@@ -426,6 +474,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The comment cannot be removed: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -440,6 +491,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-95
     Promise.all(ids.map(id => this.backEnd.deleteIssueLink(id)))
         .then(() => {
@@ -448,6 +500,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The issues cannot be removed: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -462,6 +517,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-96
     this.backEnd.removeTagsFromPost(tags, this.id)
         .then(() => {
@@ -470,6 +526,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The tags cannot be removed: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 

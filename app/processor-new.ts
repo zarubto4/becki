@@ -54,6 +54,8 @@ export class Component implements ng.OnInit {
 
   speedField:number;
 
+  progress:number;
+
   backEnd:backEnd.Service;
 
   alerts:libBootstrapAlerts.Service;
@@ -72,6 +74,7 @@ export class Component implements ng.OnInit {
     this.codeField = "";
     this.descriptionField = "";
     this.speedField = 0;
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -81,15 +84,18 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.getLibraryGroups()
         .then(groups => this.groups = groups.map(group => new Selectable(group)))
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Library groups cannot be loaded: ${reason}`)));
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Library groups cannot be loaded: ${reason}`)))
+        .then(() => this.progress -= 1);
   }
 
   onSubmit():void {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     let groups = this.groups.filter(selectable => selectable.selected).map(selectable => selectable.model.id);
     this.backEnd.createProcessor(this.nameField, this.codeField, this.descriptionField, this.speedField, groups)
         .then(() => {
@@ -98,6 +104,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The processor cannot be created: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 

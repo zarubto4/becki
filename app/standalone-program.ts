@@ -24,7 +24,7 @@ import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/standalone-program.html",
-  directives: [fieldCode.Component, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [fieldCode.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -39,6 +39,8 @@ export class Component implements ng.OnInit {
   descriptionField:string;
 
   codeField:string;
+
+  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -62,6 +64,7 @@ export class Component implements ng.OnInit {
     ];
     this.descriptionField = "Loading...";
     this.codeField = "Loading...";
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -71,6 +74,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-83
     this.backEnd.getStandaloneProgram(this.id)
         .then(program => {
@@ -88,6 +92,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The program ${this.id} cannot be loaded: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -95,6 +102,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.updateStandaloneProgram(this.id, this.descriptionField, this.codeField)
         .then(() => {
           this.alerts.next.push(new libBootstrapAlerts.Success("The program have been updated."));
@@ -102,6 +110,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The program cannot be updated: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 

@@ -33,6 +33,8 @@ export class Component implements ng.OnInit {
 
   items:libBootstrapPanelList.Item[];
 
+  progress:number;
+
   backEnd:backEnd.Service;
 
   alerts:libBootstrapAlerts.Service;
@@ -47,6 +49,7 @@ export class Component implements ng.OnInit {
       new wrapper.LabeledLink("User", ["Projects"]),
       new wrapper.LabeledLink("Projects", ["Projects"])
     ];
+    this.progress += 1;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -62,9 +65,11 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
+    this.progress += 1;
     this.backEnd.getProjects()
         .then(projects => this.items = projects.map(project => new libBootstrapPanelList.Item(project.projectId, project.projectName, project.projectDescription, ["Project", {project: project.projectId}])))
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Projects cannot be loaded: ${reason}`)));
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Projects cannot be loaded: ${reason}`)))
+        .then(() => this.progress -= 1);
   }
 
   onAddClick():void {
@@ -78,6 +83,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     Promise.all(ids.map(id => this.backEnd.deleteProject(id)))
         .then(() => {
           this.alerts.current.push(new libBootstrapAlerts.Success("The projects have been removed."));
@@ -85,6 +91,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The projects cannot be removed: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 }

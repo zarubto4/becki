@@ -24,7 +24,7 @@ import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/producer.html",
-  directives: [ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -37,6 +37,8 @@ export class Component implements ng.OnInit {
   nameField:string;
 
   descriptionField:string;
+
+  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -56,6 +58,7 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -65,6 +68,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.getProducer(this.id)
         .then(producer => {
           return Promise.all<any>([
@@ -79,6 +83,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The producer ${this.id} cannot be loaded: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -86,6 +93,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.updateProducer(this.id, this.nameField, this.descriptionField)
         .then(() => {
           this.alerts.next.push(new libBootstrapAlerts.Success("The producer cannot be updated."));
@@ -93,6 +101,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The producer cannot be updated: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 

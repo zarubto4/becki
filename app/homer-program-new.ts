@@ -24,7 +24,7 @@ import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/homer-program-new.html",
-  directives: [fieldHomerProgram.Component, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [fieldHomerProgram.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -39,6 +39,8 @@ export class Component implements ng.OnInit {
   descriptionField:string;
 
   codeField:string;
+
+  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -62,6 +64,7 @@ export class Component implements ng.OnInit {
     this.nameField = "";
     this.descriptionField = "";
     this.codeField = `{"blocks":{}}`;
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -77,6 +80,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.createHomerProgram(this.nameField, this.descriptionField, this.codeField, this.projectId)
         .then(() => {
           this.alerts.next.push(new libBootstrapAlerts.Success("The program have been created."));
@@ -84,6 +88,9 @@ export class Component implements ng.OnInit {
         })
         .catch((reason) => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The program cannot be created: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 

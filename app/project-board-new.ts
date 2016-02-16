@@ -23,7 +23,7 @@ import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/project-board-new.html",
-  directives: [ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -34,6 +34,8 @@ export class Component implements ng.OnInit {
   breadcrumbs:wrapper.LabeledLink[];
 
   idField:string;
+
+  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -55,6 +57,7 @@ export class Component implements ng.OnInit {
       new wrapper.LabeledLink("New Board", ["NewProjectBoard", {project: this.projectId}])
     ];
     this.idField = "";
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -70,6 +73,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.addBoardToProject(this.idField, this.projectId)
         .then(() => {
           this.alerts.next.push(new libBootstrapAlerts.Success("The board has been added."));
@@ -77,6 +81,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The board cannot be added: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 

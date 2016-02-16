@@ -39,6 +39,8 @@ export class Component implements ng.OnInit {
 
   bodyField:string;
 
+  progress:number;
+
   backEnd:backEnd.Service;
 
   alerts:libBootstrapAlerts.Service;
@@ -56,6 +58,7 @@ export class Component implements ng.OnInit {
     this.typeField = "";
     this.titleField = "";
     this.bodyField = fieldIssueBody.EMPTY;
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -65,15 +68,18 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.getIssueTypes()
         .then(types => this.types = types)
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Types cannot be loaded: ${reason}`)));
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Types cannot be loaded: ${reason}`)))
+        .then(() => this.progress -= 1);
   }
 
   onSubmit():void {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.createIssue(this.typeField, this.titleField, this.bodyField, [])
         .then(() => {
           this.alerts.next.push(new libBootstrapAlerts.Danger("The issue has been created."));
@@ -81,6 +87,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The issue cannot be created: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 

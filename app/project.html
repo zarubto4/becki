@@ -7,7 +7,12 @@
   <div class="row">
     <div class="col-xs-12 col-sm-8">
       <h2>Details</h2>
-      <form class="clearfix" data-on-submit="onUpdatingSubmit($event)">
+      <form class="clearfix" data-on-submit="onUpdatingSubmit($event)" style="position: relative">
+        <template data-bind-ng-if="progress">
+          <div class="overlay">
+            <progress>Loading...</progress>
+          </div>
+        </template>
         <div class="form-group">
           <label>
             <span class="glyphicon glyphicon-pencil"></span>
@@ -27,7 +32,7 @@
     </div>
     <div class="col-xs-12 col-sm-4">
       <h2>Collaborators</h2>
-      <div data-bind-panel-list="collaborators" data-on-plus-click="onCollaboratorAddClick($event)" data-on-minus-click="onCollaboratorsRemoveClick($event)">
+      <div data-bind-panel-list="collaborators" data-bind-progress="progress" data-on-plus-click="onCollaboratorAddClick($event)" data-on-minus-click="onCollaboratorsRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
@@ -35,19 +40,19 @@
   <div class="row">
     <div class="col-xs-12 col-sm-4">
       <h2>Board Programs</h2>
-      <div data-bind-panel-list="boardPrograms" data-on-plus-click="onBoardProgramAddClick($event)" data-on-minus-click="onBoardProgramsRemoveClick($event)">
+      <div data-bind-panel-list="boardPrograms" data-bind-progress="progress" data-on-plus-click="onBoardProgramAddClick($event)" data-on-minus-click="onBoardProgramsRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
     <div class="col-xs-12 col-sm-4">
       <h2>Standalone Programs</h2>
-      <div data-bind-panel-list="standalonePrograms" data-on-plus-click="onStandaloneProgramAddClick($event)" data-on-minus-click="onStandaloneProgramsRemoveClick($event)">
+      <div data-bind-panel-list="standalonePrograms" data-bind-progress="progress" data-on-plus-click="onStandaloneProgramAddClick($event)" data-on-minus-click="onStandaloneProgramsRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
     <div class="col-xs-12 col-sm-4">
       <h2>Homer Programs</h2>
-      <div data-bind-panel-list="homerPrograms" data-on-plus-click="onHomerProgramAddClick($event)" data-on-minus-click="onHomerProgramsRemoveClick($event)">
+      <div data-bind-panel-list="homerPrograms" data-bind-progress="progress" data-on-plus-click="onHomerProgramAddClick($event)" data-on-minus-click="onHomerProgramsRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
@@ -55,14 +60,14 @@
   <div class="row">
     <div class="col-xs-12 col-sm-6">
       <h2>Boards</h2>
-      <div data-bind-panel-list="boards" data-on-plus-click="onBoardAddClick($event)" data-on-minus-click="onBoardsRemoveClick($event)">
+      <div data-bind-panel-list="boards" data-bind-progress="progress" data-on-plus-click="onBoardAddClick($event)" data-on-minus-click="onBoardsRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
     <div class="col-xs-12 col-sm-6">
       <h2>Homers</h2>
       <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-78 -->
-      <div data-bind-panel-list="homers" data-on-plus-click="onHomerAddClick($event)" data-on-minus-click="onHomersRemoveClick($event)">
+      <div data-bind-panel-list="homers" data-bind-progress="progress" data-on-plus-click="onHomerAddClick($event)" data-on-minus-click="onHomersRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
@@ -70,7 +75,7 @@
   <div class="row">
     <div class="col-xs-12">
       <h2>Upload Queue</h2>
-      <div data-bind-panel-list="uploadQueue" data-on-plus-click="onUploadAddClick($event)" data-on-minus-click="onUploadsRemoveClick($event)">
+      <div data-bind-panel-list="uploadQueue" data-bind-progress="progress" data-on-plus-click="onUploadAddClick($event)" data-on-minus-click="onUploadsRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>

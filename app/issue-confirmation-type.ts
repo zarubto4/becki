@@ -23,7 +23,7 @@ import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/issue-confirmation-type.html",
-  directives: [ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -38,6 +38,8 @@ export class Component implements ng.OnInit {
   colorField:string;
 
   sizeField:number;
+
+  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -59,6 +61,7 @@ export class Component implements ng.OnInit {
     this.nameField = "Loading...";
     this.colorField = "#ffffff";
     this.sizeField = 12;
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -68,6 +71,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.getIssueConfirmations()
         .then(confirmations => {
           let confirmation = confirmations.find(confirmation => confirmation.id == this.id);
@@ -77,6 +81,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`Confirmations cannot be loaded: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 

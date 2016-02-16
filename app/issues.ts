@@ -37,6 +37,8 @@ export class Component implements ng.OnInit {
 
   issues:libBootstrapPanelList.Item[];
 
+  progress:number;
+
   backEnd:backEnd.Service;
 
   alerts:libBootstrapAlerts.Service;
@@ -50,6 +52,7 @@ export class Component implements ng.OnInit {
       becki.HOME,
       new wrapper.LabeledLink("Issues", ["Issues"])
     ];
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -65,16 +68,20 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
+    this.progress += 3;
     this.backEnd.getIssueTypes()
         .then(types => this.types = types.map(type => new libBootstrapPanelList.Item(type.id, type.type, null)))
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Types cannot be loaded: ${reason}`)));
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Types cannot be loaded: ${reason}`)))
+        .then(() => this.progress -= 1);
     this.backEnd.getIssueConfirmations()
         .then(confirmations => this.confirmations = confirmations.map(confirmation => new libBootstrapPanelList.Item(confirmation.id, confirmation.type, null, ["IssueConfirmationType", {confirmation: confirmation.id}])))
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Confirmations cannot be loaded: ${reason}`)));
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Confirmations cannot be loaded: ${reason}`)))
+        .then(() => this.progress -= 1);
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-27
     this.backEnd.getIssues()
         .then(issues => this.issues = issues.map(issue => new libBootstrapPanelList.Item(issue.postId, issue.name, issue.type, ["Issue", {issue: issue.postId}])))
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Issues cannot be loaded: ${reason}`)));
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Issues cannot be loaded: ${reason}`)))
+        .then(() => this.progress -= 1);
   }
 
   onTypeAddClick():void {

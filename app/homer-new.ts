@@ -23,7 +23,7 @@ import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/homer-new.html",
-  directives: [ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -32,6 +32,8 @@ export class Component implements ng.OnInit {
   idField:string;
 
   typeField:string;
+
+  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -49,6 +51,7 @@ export class Component implements ng.OnInit {
     ];
     this.idField = "";
     this.typeField = "";
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -64,6 +67,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.createHomer(this.idField, this.typeField)
         .then(() => {
           this.alerts.next.push(new libBootstrapAlerts.Success("The Homer have been created."));
@@ -71,6 +75,9 @@ export class Component implements ng.OnInit {
         })
         .catch((reason) => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The Homer cannot be created: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 

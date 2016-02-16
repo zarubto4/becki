@@ -23,7 +23,7 @@ import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/library-group-new.html",
-  directives: [ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -32,6 +32,8 @@ export class Component implements ng.OnInit {
   nameField:string;
 
   descriptionField:string;
+
+  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -50,6 +52,7 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "";
     this.descriptionField = "";
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -65,6 +68,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.createLibraryGroup(this.nameField, this.descriptionField)
         .then(() => {
           this.alerts.next.push(new libBootstrapAlerts.Success("The group has been created."));
@@ -72,6 +76,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.next.push(new libBootstrapAlerts.Danger(`The group cannot be created: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 

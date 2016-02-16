@@ -21,7 +21,7 @@ import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 
 @ng.Component({
   templateUrl: "app/signing.html",
-  directives: [libBootstrapAlerts.Component, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES]
+  directives: [libBootstrapAlerts.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES]
 })
 export class Component implements ng.AfterViewInit, ng.OnInit {
 
@@ -36,6 +36,8 @@ export class Component implements ng.AfterViewInit, ng.OnInit {
   upPasswordField:string;
 
   upUsernameField:string;
+
+  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -52,6 +54,7 @@ export class Component implements ng.AfterViewInit, ng.OnInit {
     this.upEmailField = "";
     this.upPasswordField = "";
     this.upUsernameField = "";
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -77,33 +80,40 @@ export class Component implements ng.AfterViewInit, ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.createToken(this.inEmailField, this.inPasswordField)
         .then(() => this.router.navigate(["Devices"]))
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`The person cannot be signed in: ${reason}`)));
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`The person cannot be signed in: ${reason}`)))
+        .then(() => this.progress -= 1);
   }
 
   onFacebookSignInClick():void {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.createFacebookToken()
         .then(url => location.href = url)
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`The person cannot be signed in: ${reason}`)));
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`The person cannot be signed in: ${reason}`)))
+        .then(() => this.progress -= 1);
   }
 
   onGitHubSignInClick():void {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.createGitHubToken()
         .then(url => location.href = url)
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`The person cannot be signed in: ${reason}`)));
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`The person cannot be signed in: ${reason}`)))
+        .then(() => this.progress -= 1);
   }
 
   onSignUpSubmit():void {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.createPerson(this.upEmailField, this.upPasswordField, this.upUsernameField)
         .then(() => {
           this.alerts.current.push(new libBootstrapAlerts.Success("The person have been signed up."));
@@ -111,6 +121,9 @@ export class Component implements ng.AfterViewInit, ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The person cannot be signed up: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 }

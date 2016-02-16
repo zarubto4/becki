@@ -63,6 +63,8 @@ export class Component implements ng.OnInit {
   @ng.ViewChild("fileField")
   fileField:ng.ElementRef;
 
+  progress:number;
+
   backEnd:backEnd.Service;
 
   alerts:libBootstrapAlerts.Service;
@@ -84,6 +86,7 @@ export class Component implements ng.OnInit {
     ];
     this.typeField = "";
     this.programField = "";
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -93,6 +96,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.getProject(this.projectId)
         .then(project => {
           return Promise.all<any>([
@@ -112,6 +116,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The project ${this.projectId} cannot be loaded: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -119,6 +126,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     let boards = this.boards.filter(selectable => selectable.selected).map(selectable => selectable.model.id);
     let homers = this.homers.filter(selectable => selectable.selected).map(selectable => selectable.model.homerId);
     let promise:Promise<string[]>;
@@ -143,6 +151,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The program cannot be uploaded: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 

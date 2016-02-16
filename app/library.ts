@@ -51,6 +51,8 @@ export class Component implements ng.OnInit {
   @ng.ViewChild("fileField")
   fileField:ng.ElementRef;
 
+  progress:number;
+
   backEnd:backEnd.Service;
 
   alerts:libBootstrapAlerts.Service;
@@ -73,6 +75,7 @@ export class Component implements ng.OnInit {
     this.versionNameField = "";
     this.versionDescriptionField = "";
     this.fileVersionField = "";
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -88,6 +91,7 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
+    this.progress += 1;
     this.backEnd.getLibrary(this.id)
         .then(library =>
             Promise.all<any>([
@@ -103,6 +107,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The library ${this.id} cannot be loaded: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -110,6 +117,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.updateLibrary(this.id, this.nameField, this.descriptionField)
         .then(() => {
           this.alerts.next.push(new libBootstrapAlerts.Success("The library has been updated."));
@@ -117,6 +125,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The library cannot be updated: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -124,6 +135,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.addVersionToLibrary(this.versionField, this.versionNameField, this.versionDescriptionField, this.id)
         .then(() => {
           this.alerts.current.push(new libBootstrapAlerts.Success("The version has been created."));
@@ -134,6 +146,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The version cannot be created: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -141,6 +156,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.updateFileOfLibrary(this.fileField.nativeElement.files[0], this.fileVersionField == "new" ? null : this.fileVersionField, this.id)
         .then(() => {
           this.alerts.current.push(new libBootstrapAlerts.Success("The file has been uploaded."));
@@ -150,6 +166,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The file cannot be uploaded: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 

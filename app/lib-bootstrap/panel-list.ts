@@ -42,7 +42,8 @@ export class Item {
 @ng.Component({
   selector: "[panel-list]",
   templateUrl: "app/lib-bootstrap/panel-list.html",
-  directives: [ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES]
+  directives: [ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
+  inputs: ["progress"]
 })
 export class Component {
 

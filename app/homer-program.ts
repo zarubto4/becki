@@ -24,7 +24,7 @@ import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/homer-program.html",
-  directives: [fieldHomerProgram.Component, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [fieldHomerProgram.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -41,6 +41,8 @@ export class Component implements ng.OnInit {
   descriptionField:string;
 
   codeField:string;
+
+  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -68,6 +70,7 @@ export class Component implements ng.OnInit {
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.codeField = `{"blocks":{}}`;
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -77,6 +80,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.getHomerProgram(this.id)
         .then(program => this.backEnd.request<string>("GET", program.programinJson).then(code => {
           this.nameField = program.programName;
@@ -86,6 +90,9 @@ export class Component implements ng.OnInit {
         }))
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The program ${this.id} cannot be loaded: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -93,6 +100,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.updateHomerProgram(this.id, this.nameField, this.descriptionField, this.codeField, this.projectId)
         .then(() => {
           this.alerts.next.push(new libBootstrapAlerts.Danger("The program has been updated."));
@@ -100,6 +108,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The program cannot be updated: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 

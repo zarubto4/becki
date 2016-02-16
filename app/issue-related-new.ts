@@ -38,6 +38,8 @@ export class Component implements ng.OnInit {
 
   field:string;
 
+  progress:number;
+
   backEnd:backEnd.Service;
 
   alerts:libBootstrapAlerts.Service;
@@ -57,6 +59,7 @@ export class Component implements ng.OnInit {
       new wrapper.LabeledLink("New Related Issue", ["NewRelatedIssue", {issue: this.issueId}])
     ];
     this.field = "";
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -66,15 +69,18 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.getIssues()
         .then(issues => this.issues = issues)
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Issues cannot be loaded: ${reason}`)));
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Issues cannot be loaded: ${reason}`)))
+        .then(() => this.progress -= 1);
   }
 
   onSubmit():void {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.createIssueLink(this.issueId, this.field)
         .then(() => {
           this.alerts.next.push(new libBootstrapAlerts.Success("The issue has been added."));
@@ -82,6 +88,9 @@ export class Component implements ng.OnInit {
         })
         .catch((reason) => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The issue cannot be added: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 

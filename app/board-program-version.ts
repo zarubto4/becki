@@ -23,7 +23,7 @@ import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/board-program-version.html",
-  directives: [ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -40,6 +40,8 @@ export class Component implements ng.OnInit {
   nameField:string;
 
   descriptionField:string;
+
+  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -66,6 +68,7 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -75,6 +78,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.getBoardProgram(this.programId)
         .then(program => {
           let version = program.versions.find(version => version.id == this.id);
@@ -87,6 +91,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The version ${this.id} of program ${this.programId} cannot be loaded: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -94,6 +101,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-76
     this.backEnd.updateBoardProgramVersion(this.id, this.nameField, this.descriptionField)
         .then(() => {
@@ -102,6 +110,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The version cannot be updated: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 

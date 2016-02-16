@@ -3,7 +3,12 @@
   ~ directory of this distribution.
   -->
 
-<div class="panel panel-default">
+<div class="panel panel-default" style="position:relative">
+  <template data-bind-ng-if="progress">
+    <div class="overlay">
+      <progress>Loading...</progress>
+    </div>
+  </template>
   <div class="panel-body" style="padding:0;margin-bottom:-20px;">
     <div class="list-group">
       <a class="list-group-item" data-bind-class.active="item.selected" template="ngFor #item of items" data-on-click="onItemClick(item, $event)">

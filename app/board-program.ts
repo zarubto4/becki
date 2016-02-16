@@ -24,7 +24,7 @@ import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/board-program.html",
-  directives: [libBootstrapPanelList.Component, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [libBootstrapPanelList.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -41,6 +41,8 @@ export class Component implements ng.OnInit {
   descriptionField:string;
 
   versions:libBootstrapPanelList.Item[];
+
+  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -64,6 +66,7 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -79,6 +82,7 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
+    this.progress += 1;
     this.backEnd.getBoardProgram(this.id)
         .then(program => {
           this.nameField = program.programName;
@@ -87,6 +91,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The program ${this.id} cannot be loaded: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -94,6 +101,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-73
     this.backEnd.updateBoardProgram(this.id, this.nameField, this.descriptionField)
         .then(() => {
@@ -102,6 +110,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The cannot be updated: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
@@ -123,6 +134,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     Promise.all(ids.map(id => this.backEnd.deleteBoardProgramVersion(id, this.id)))
         .then(() => {
           this.alerts.current.push(new libBootstrapAlerts.Success("The versions have been updated."));
@@ -130,6 +142,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The versions cannot be updated: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 }

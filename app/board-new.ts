@@ -36,6 +36,8 @@ export class Component implements ng.OnInit {
 
   types:libBackEnd.BoardType[];
 
+  progress:number;
+
   backEnd:backEnd.Service;
 
   alerts:libBootstrapAlerts.Service;
@@ -52,6 +54,7 @@ export class Component implements ng.OnInit {
     ];
     this.idField = "";
     this.typeField = "";
+    this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
     this.router = router;
@@ -61,15 +64,18 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.getBoardTypes()
         .then(types => this.types = types)
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Board types cannot be loaded: ${reason}`)));
+        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Board types cannot be loaded: ${reason}`)))
+        .then(() => this.progress -= 1);
   }
 
   onSubmit():void {
     "use strict";
 
     this.alerts.shift();
+    this.progress += 1;
     this.backEnd.createBoard(this.idField, this.typeField)
         .then(() => {
           this.alerts.next.push(new libBootstrapAlerts.Success("The board has been created."));
@@ -77,6 +83,9 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The board cannot be created: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
         });
   }
 
