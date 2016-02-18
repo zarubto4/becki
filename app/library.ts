@@ -18,13 +18,14 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
+import * as customValidator from "./custom-validator";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/library.html",
-  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [customValidator.Directive, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -111,6 +112,31 @@ export class Component implements ng.OnInit {
         .then(() => {
           this.progress -= 1;
         });
+  }
+
+  validateNameField():()=>Promise<boolean> {
+    "use strict";
+
+    return () => {
+      this.progress += 1;
+      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+      return Promise.all<any>([
+            this.backEnd.getLibraries(),
+            this.backEnd.getLibraryGroups(),
+          ])
+          .then(result => {
+            this.progress -= 1;
+            let libraries:libBackEnd.Library[];
+            let groups:libBackEnd.LibraryGroup[];
+            [libraries, groups] = result;
+            return !libraries.find(library => library.id != this.id && library.libraryName == this.nameField) &&
+                !groups.find(group => group.groupName == this.nameField);
+          })
+          .catch(reason => {
+            this.progress -= 1;
+            return Promise.reject(reason);
+          });
+    };
   }
 
   onUpdatingSubmit():void {

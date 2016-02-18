@@ -36,7 +36,7 @@
                         <span class="glyphicon glyphicon-list"></span>
                         Type
                       </label>
-                      <select class="form-control" data-bindon-ng-model="item.typeField">
+                      <select class="form-control" required data-bindon-ng-model="item.typeField">
                         <option value="">Select type...</option>
                         <option data-bind-value="type.id" template="ngFor #type of types">
                           {{type.type}}
@@ -50,7 +50,7 @@
                         <span class="glyphicon glyphicon-pencil"></span>
                         Title
                       </label>
-                      <input class="form-control" data-bindon-ng-model="item.titleField">
+                      <input class="form-control" required data-bindon-ng-model="item.titleField">
                     </div>
                   </template>
                   <div class="form-group">
@@ -58,7 +58,7 @@
                       <span class="glyphicon glyphicon-pencil"></span>
                       Body
                     </label>
-                    <div data-bindon-field-issue-body="item.bodyField">
+                    <div data-bindon-field-issue-body="item.bodyField" data-bind-required="true">
                       <progress>Loading...</progress>
                     </div>
                   </div>
@@ -79,36 +79,38 @@
                       <span class="glyphicon glyphicon-list"></span>
                       Project
                     </label>
-                    <select class="form-control" data-bindon-ng-model="item.programProjectField">
+                    <select class="form-control" required data-bindon-ng-model="item.programProjectField" data-on-ng-model-change="item.programNameField = ''">
                       <option value="">Select name...</option>
                       <option data-bind-value="project.projectId" template="ngFor #project of projects">
                         {{project.projectName}}
                       </option>
                     </select>
                   </div>
-                  <div class="form-group">
-                    <label>
-                      <span class="glyphicon glyphicon-pencil"></span>
-                      Name
-                    </label>
-                    <input class="form-control" data-bindon-ng-model="item.programNameField">
-                  </div>
-                  <div class="form-group">
-                    <label>
-                      <span class="glyphicon glyphicon-pencil"></span>
-                      Description
-                    </label>
-                    <textarea class="form-control" data-bindon-ng-model="item.programDescriptionField"></textarea>
-                  </div>
-                  <div class="form-group">
-                    <label>
-                      <span class="glyphicon glyphicon-console"></span>
-                      Code
-                    </label>
-                    <div data-bindon-field-homer-program="item.programCodeField">
-                      <progress>Loading...</progress>
+                  <template data-bind-ng-if="item.programProjectField">
+                    <div class="form-group">
+                      <label>
+                        <span class="glyphicon glyphicon-pencil"></span>
+                        Name
+                      </label>
+                      <input class="form-control" required data-bindon-ng-model="item.programNameField" data-bind-custom-validator="validateHomerProgramName(item.programNameField, item.programProjectField)" data-message="This name is used already. Please choose another one.">
                     </div>
-                  </div>
+                    <div class="form-group">
+                      <label>
+                        <span class="glyphicon glyphicon-pencil"></span>
+                        Description
+                      </label>
+                      <textarea class="form-control" data-bindon-ng-model="item.programDescriptionField"></textarea>
+                    </div>
+                    <div class="form-group">
+                      <label>
+                        <span class="glyphicon glyphicon-console"></span>
+                        Code
+                      </label>
+                      <div data-bindon-field-homer-program="item.programCodeField">
+                        <progress>Loading...</progress>
+                      </div>
+                    </div>
+                  </template>
                   <div class="pull-right">
                     <button class="btn btn-danger" type="button" data-on-click="onItemImportingCancelClick(item, $event)">
                       Cancel
@@ -154,7 +156,7 @@
                             <span class="glyphicon glyphicon-comment"></span>
                             Comment
                           </label>
-                          <textarea class="form-control" data-bindon-ng-model="comment.bodyField"></textarea>
+                          <textarea class="form-control" required data-bindon-ng-model="comment.bodyField"></textarea>
                         </div>
                         <div class="pull-right">
                           <button class="btn btn-danger" type="button" data-on-click="onCommentEditingCancelClick(comment, $event)">
@@ -202,10 +204,9 @@
                 </div>
                 <form class="media-body" data-on-submit="onCommentCreationSubmit(item, $event)">
                   <div class="input-group">
-                    <input class="form-control" type="text" data-bindon-ng-model="item.commentField">
+                    <input class="form-control" type="text" required data-bindon-ng-model="item.commentField">
                     <span class="input-group-btn">
-                      <button class="btn btn-primary" type="submit">Comment
-                      </button>
+                      <button class="btn btn-primary" type="submit">Comment</button>
                     </span>
                   </div>
                 </form>
@@ -245,7 +246,7 @@
           <span class="glyphicon glyphicon-pencil"></span>
           New Answer
         </label>
-        <div data-bindon-field-issue-body="answerBodyField">
+        <div data-bindon-field-issue-body="answerBodyField" data-bind-required="true">
           <progress>Loading...</progress>
         </div>
       </div>

@@ -55,7 +55,7 @@ export class Component implements ng.OnInit {
 
   groups:Selectable<libBackEnd.LibraryGroup>[];
 
-  numberField:string;
+  numberField:number;
 
   nameField:string;
 
@@ -96,7 +96,7 @@ export class Component implements ng.OnInit {
         program: this.programId
       }])
     ];
-    this.numberField = "";
+    this.numberField = 1.01;
     this.nameField = "";
     this.descriptionField = "";
     this.codeField = "";
@@ -128,7 +128,7 @@ export class Component implements ng.OnInit {
     this.progress += 1;
     let libraries = this.libraries.filter(selectable => selectable.selected).map(selectable => ({libraryId: selectable.model.id, libraryVersion: selectable.model.lastVersion.toString()}));
     let groups = this.groups.filter(selectable => selectable.selected).map(selectable => ({groupId: selectable.model.id, libraryVersion: selectable.model.lastVersion.toString()}));
-    this.backEnd.createBoardProgramVersion(this.programId, this.numberField, this.nameField, this.descriptionField, libraries, groups, this.codeField)
+    this.backEnd.createBoardProgramVersion(this.programId, this.numberField.toString(), this.nameField, this.descriptionField, libraries, groups, this.codeField)
         .then(() => {
           this.alerts.next.push(new libBootstrapAlerts.Success("The version has been created."));
           this.router.navigate(["BoardProgram", {project: this.projectId, program: this.programId}]);

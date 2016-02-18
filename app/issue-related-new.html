@@ -15,7 +15,7 @@
         <span class="glyphicon glyphicon-list"></span>
         Related Issue
       </label>
-      <select class="form-control" data-bindon-ng-model="field">
+      <select class="form-control" required data-bindon-ng-model="field">
         <option value="">Select title...</option>
         <option data-bind-value="issue.postId" template="ngFor #issue of issues">
           {{issue.name}}

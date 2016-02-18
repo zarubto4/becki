@@ -71,9 +71,30 @@ export class Component implements ng.OnInit {
     this.alerts.shift();
     this.progress += 1;
     this.backEnd.getIssues()
-        .then(issues => this.issues = issues)
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Issues cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
+        .then(issues => {
+          let issue = issues.find(issue => issue.postId == this.issueId);
+          if (!issue) {
+            // TODO: https://github.com/angular/angular/issues/4558
+            return Promise.reject<any>(new Error(`issue ${this.issueId} not found`));
+          }
+          return Promise.all([
+            issues,
+            issue.linkedAnswers ? this.backEnd.request<libBackEnd.IssueLink[]>("GET", issue.linkedAnswers).then(related => Promise.all(related.map(related2 => this.backEnd.request("GET", related2.post)))) : []
+          ]);
+        })
+        .then(result => {
+          let issues:libBackEnd.Issue[];
+          let ignore:libBackEnd.Issue[];
+          [issues, ignore] = result;
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+          this.issues = issues.filter(issue => ignore.find(issue2 => issue2.postId == issue.postId) === undefined);
+        })
+        .catch(reason => {
+          this.alerts.current.push(new libBootstrapAlerts.Danger(`Issues cannot be loaded: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
+        });
   }
 
   onSubmit():void {

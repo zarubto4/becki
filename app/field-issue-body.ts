@@ -29,7 +29,7 @@ export function getHomer(model:string):string {
   selector: "[field-issue-body]",
   templateUrl: "app/field-issue-body.html",
   directives: [fieldHomerProgram.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES],
-  inputs: ["fieldIssueBody"]
+  inputs: ["fieldIssueBody", "required"]
 })
 export class Component implements ng.OnChanges {
 

@@ -18,6 +18,7 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
+import * as customValidator from "./custom-validator";
 import * as fieldHomerProgram from "./field-homer-program";
 import * as fieldIssueBody from "./field-issue-body";
 import * as libBackEnd from "./lib-back-end/index";
@@ -122,6 +123,7 @@ class Issue extends Item {
 @ng.Component({
   templateUrl: "app/issue.html",
   directives: [
+    customValidator.Directive,
     fieldHomerProgram.Component,
     fieldIssueBody.Component,
     libBootstrapPanelList.Component,
@@ -245,6 +247,26 @@ export class Component implements ng.OnInit {
 
     this.alerts.shift();
     item.importing = true;
+  }
+
+  validateHomerProgramName(name:string, projectId:string):()=>Promise<boolean> {
+    "use strict";
+    return () => {
+      this.progress += 1;
+      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+      return this.backEnd.getProject(projectId)
+          .then(project => {
+            return this.backEnd.request<libBackEnd.HomerProgram[]>("GET", project.b_programs);
+          })
+          .then(programs => {
+            this.progress -= 1;
+            return !programs.find(program => program.programName == name);
+          })
+          .catch(reason => {
+            this.progress -= 1;
+            return Promise.reject(reason);
+          });
+    };
   }
 
   onItemImportingSubmit(item:Item):void {

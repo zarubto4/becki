@@ -18,13 +18,14 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
+import * as customValidator from "./custom-validator";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/board-new.html",
-  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [customValidator.Directive, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -69,6 +70,14 @@ export class Component implements ng.OnInit {
         .then(types => this.types = types)
         .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Board types cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
+  }
+
+  validateIdField():()=>Promise<boolean> {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-20
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => Promise.reject<boolean>("issue/TYRION-20");
   }
 
   onSubmit():void {

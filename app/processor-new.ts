@@ -18,6 +18,7 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
+import * as customValidator from "./custom-validator";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as wrapper from "./wrapper";
@@ -38,7 +39,7 @@ class Selectable {
 
 @ng.Component({
   templateUrl: "app/processor-new.html",
-  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [customValidator.Directive, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
 })
 export class Component implements ng.OnInit {
 
@@ -89,6 +90,24 @@ export class Component implements ng.OnInit {
         .then(groups => this.groups = groups.map(group => new Selectable(group)))
         .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Library groups cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
+  }
+
+  validateNameField():()=>Promise<boolean> {
+    "use strict";
+
+    return () => {
+      this.progress += 1;
+      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+      return this.backEnd.getProcessors()
+          .then(processors => {
+            this.progress -= 1;
+            return !processors.find(processor => processor.processorName == this.nameField);
+          })
+          .catch(reason => {
+            this.progress -= 1;
+            return Promise.reject(reason);
+          });
+    };
   }
 
   onSubmit():void {

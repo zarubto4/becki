@@ -15,7 +15,7 @@
         <span class="glyphicon glyphicon-pencil"></span>
         Model name
       </label>
-      <input class="form-control" data-bindon-ng-model="nameField">
+      <input class="form-control" required data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
     </div>
     <div class="form-group">
       <label>
@@ -36,7 +36,7 @@
         <span class="glyphicon glyphicon-dashboard"></span>
         Speed
       </label>
-      <input class="form-control" type="number" data-bindon-ng-model="speedField">
+      <input class="form-control" type="number" required data-bindon-ng-model="speedField">
     </div>
     <div class="form-group">
       <label>

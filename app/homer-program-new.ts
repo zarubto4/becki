@@ -18,13 +18,21 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
+import * as customValidator from "./custom-validator";
 import * as fieldHomerProgram from "./field-homer-program";
+import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/homer-program-new.html",
-  directives: [fieldHomerProgram.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [
+    customValidator.Directive,
+    fieldHomerProgram.Component,
+    ng.CORE_DIRECTIVES,
+    ng.FORM_DIRECTIVES,
+    wrapper.Component
+  ]
 })
 export class Component implements ng.OnInit {
 
@@ -74,6 +82,27 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+  }
+
+  validateNameField():()=>Promise<boolean> {
+    "use strict";
+
+    return () => {
+      this.progress += 1;
+      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+      return this.backEnd.getProject(this.projectId)
+          .then(project => {
+            return this.backEnd.request<libBackEnd.HomerProgram[]>("GET", project.b_programs);
+          })
+          .then(programs => {
+            this.progress -= 1;
+            return !programs.find(program => program.programName == this.nameField);
+          })
+          .catch(reason => {
+            this.progress -= 1;
+            return Promise.reject(reason);
+          });
+    };
   }
 
   onSubmit():void {

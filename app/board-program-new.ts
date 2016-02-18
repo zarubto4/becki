@@ -18,6 +18,7 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
+import * as customValidator from "./custom-validator";
 import * as fieldCode from "./field-code";
 import * as libBackEnd from "./lib-back-end";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
@@ -39,7 +40,13 @@ class Selectable<T> {
 
 @ng.Component({
   templateUrl: "app/board-program-new.html",
-  directives: [fieldCode.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [
+    customValidator.Directive,
+    fieldCode.Component,
+    ng.CORE_DIRECTIVES,
+    ng.FORM_DIRECTIVES,
+    wrapper.Component
+  ]
 })
 export class Component implements ng.OnInit {
 
@@ -102,6 +109,28 @@ export class Component implements ng.OnInit {
         .then(groups => this.groups = groups.map(group => new Selectable(group)))
         .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Library groups cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
+  }
+
+  validateNameField():()=>Promise<boolean> {
+    "use strict";
+
+    return () => {
+      this.progress += 1;
+      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+      return this.backEnd.getProject(this.projectId)
+          .then(project => {
+            return this.backEnd.request<libBackEnd.BoardProgram[]>("GET", project.c_programs);
+          })
+          .then(programs => {
+            this.progress -= 1;
+            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-77
+            return !programs.find(program => program.programName == this.nameField);
+          })
+          .catch(reason => {
+            this.progress -= 1;
+            return Promise.reject(reason);
+          });
+    };
   }
 
   onSubmit():void {

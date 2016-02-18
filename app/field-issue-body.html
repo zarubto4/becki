@@ -11,7 +11,7 @@
     <span class="glyphicon glyphicon-paperclip"></span>
     Homer program
   </button>
-  <textarea class="form-control" data-bind-ng-model="model.body" data-on-ng-model-change="onBodyChange($event)"></textarea>
+  <textarea class="form-control" data-bind-ng-model="model.body" data-bind-required="required" data-on-ng-model-change="onBodyChange($event)"></textarea>
 </template>
 <template data-bind-ng-if="model.homer != null">
   <div style="margin-top: 1em" data-bind-field-homer-program="model.homer" data-bind-readonly="readonly" data-on-field-homer-program-change="onHomerChange($event)">

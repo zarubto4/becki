@@ -16,7 +16,7 @@
         <span class="glyphicon glyphicon-pencil"></span>
         Name
       </label>
-      <input class="form-control" data-bindon-ng-model="nameField">
+      <input class="form-control" required data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used as a name of a library or a library group already. Please choose another one.">
     </div>
     <div class="form-group">
       <label>
@@ -43,7 +43,7 @@
         <span class="glyphicon glyphicon-pencil"></span>
         Number
       </label>
-      <input class="form-control" type="number" step="0.01" data-bindon-ng-model="versionField">
+      <input class="form-control" type="number" required step="0.01" data-bindon-ng-model="versionField">
     </div>
     <div class="form-group">
       <label>
@@ -76,7 +76,7 @@
         <span class="glyphicon glyphicon-list"></span>
         Version
       </label>
-      <select class="form-control" data-bindon-ng-model="fileVersionField">
+      <select class="form-control" required data-bindon-ng-model="fileVersionField">
         <option value="">Select version...</option>
         <option value="new">
           Create a new version

@@ -15,7 +15,7 @@
         <span class="glyphicon glyphicon-pencil"></span>
         Type
       </label>
-      <input class="form-control" data-bindon-ng-model="field">
+      <input class="form-control" required data-bindon-ng-model="field"data-bind-custom-validator="validateField()" data-message="This type exists already. Please choose another one.">
     </div>
     <div class="pull-right">
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>

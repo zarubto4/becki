@@ -18,13 +18,20 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
+import * as customValidator from "./custom-validator";
 import * as fieldCode from "./field-code";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/standalone-program-new.html",
-  directives: [fieldCode.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [
+    customValidator.Directive,
+    fieldCode.Component,
+    ng.CORE_DIRECTIVES,
+    ng.FORM_DIRECTIVES,
+    wrapper.Component
+  ]
 })
 export class Component implements ng.OnInit {
 
@@ -74,6 +81,14 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.alerts.shift();
+  }
+
+  validateNameField():()=>Promise<boolean> {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-36
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => Promise.reject<boolean>("issue/TYRION-36");
   }
 
   onSubmit():void {

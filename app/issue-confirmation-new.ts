@@ -71,6 +71,8 @@ export class Component implements ng.OnInit {
     this.alerts.shift();
     this.progress += 1;
     this.backEnd.getIssueConfirmations()
+        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-86
+        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
         .then(confirmations => this.confirmations = confirmations)
         .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Confirmations cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);

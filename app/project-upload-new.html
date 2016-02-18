@@ -41,7 +41,7 @@
             <span class="glyphicon glyphicon-console"></span>
             Program
           </label>
-          <select class="form-control" data-bindon-ng-model="programField">
+          <select class="form-control" required data-bindon-ng-model="programField">
             <option value="">Select name...</option>
             <option data-bind-value="program.programId" template="ngFor #program of boardPrograms">
               {{program.programName}}
@@ -88,7 +88,7 @@
             <span class="glyphicon glyphicon-console"></span>
             Program
           </label>
-          <select class="form-control" data-bindon-ng-model="programField">
+          <select class="form-control" required data-bindon-ng-model="programField">
             <option value="">Select name...</option>
             <option data-bind-value="program.programId" template="ngFor #program of homerPrograms">
               {{program.programName}}

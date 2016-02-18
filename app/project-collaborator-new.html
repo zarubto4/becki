@@ -15,7 +15,7 @@
         <span class="glyphicon glyphicon-user"></span>
         ID
       </label>
-      <input class="form-control" data-bindon-ng-model="idField">
+      <input class="form-control" required data-bindon-ng-model="idField" data-bind-custom-validator="validateIdField()" data-message="This ID is registered already.">
     </div>
     <div class="pull-right">
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>

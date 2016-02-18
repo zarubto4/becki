@@ -15,14 +15,14 @@
         <span class="glyphicon glyphicon-pencil"></span>
         Name
       </label>
-      <input class="form-control" data-bindon-ng-model="nameField">
+      <input class="form-control" required data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
     </div>
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon-pencil"></span>
         Description
       </label>
-      <input class="form-control" data-bindon-ng-model="descriptionField">
+      <textarea class="form-control" data-bindon-ng-model="descriptionField"></textarea>
     </div>
     <div class="form-group">
       <label>

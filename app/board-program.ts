@@ -18,13 +18,21 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
+import * as customValidator from "./custom-validator";
+import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
 import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/board-program.html",
-  directives: [libBootstrapPanelList.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [
+    customValidator.Directive,
+    libBootstrapPanelList.Component,
+    ng.CORE_DIRECTIVES,
+    ng.FORM_DIRECTIVES,
+    wrapper.Component
+  ]
 })
 export class Component implements ng.OnInit {
 
@@ -95,6 +103,28 @@ export class Component implements ng.OnInit {
         .then(() => {
           this.progress -= 1;
         });
+  }
+
+  validateNameField():()=>Promise<boolean> {
+    "use strict";
+
+    return () => {
+      this.progress += 1;
+      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+      return this.backEnd.getProject(this.projectId)
+          .then(project => {
+            return this.backEnd.request<libBackEnd.BoardProgram[]>("GET", project.c_programs);
+          })
+          .then(programs => {
+            this.progress -= 1;
+            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-77
+            return !programs.find(program => program.id != this.id && program.programName == this.nameField);
+          })
+          .catch(reason => {
+            this.progress -= 1;
+            return Promise.reject(reason);
+          });
+    };
   }
 
   onSubmit():void {
