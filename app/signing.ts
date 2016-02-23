@@ -23,13 +23,17 @@ import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
   templateUrl: "app/signing.html",
   directives: [libBootstrapAlerts.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES]
 })
-export class Component implements ng.AfterViewInit, ng.OnInit {
+export class Component implements ng.OnInit {
 
   appName:string;
+
+  inCollapsed:boolean;
 
   inEmailField:string;
 
   inPasswordField:string;
+
+  upCollapsed:boolean;
 
   upEmailField:string;
 
@@ -49,8 +53,10 @@ export class Component implements ng.AfterViewInit, ng.OnInit {
     "use strict";
 
     this.appName = appName;
+    this.inCollapsed = false;
     this.inEmailField = "";
     this.inPasswordField = "";
+    this.upCollapsed = true;
     this.upEmailField = "";
     this.upPasswordField = "";
     this.upUsernameField = "";
@@ -66,14 +72,10 @@ export class Component implements ng.AfterViewInit, ng.OnInit {
     this.alerts.shift();
   }
 
-  afterViewInit():void {
+  onSignInClick():void {
     "use strict";
 
-    // See https://github.com/twbs/bootstrap/issues/16360#issuecomment-96271746
-    (<any>$("#signing .collapse")).collapse({
-      parent: "#signing",
-      toggle: false
-    });
+    this.inCollapsed = !this.inCollapsed;
   }
 
   onSignInSubmit():void {
@@ -109,6 +111,12 @@ export class Component implements ng.AfterViewInit, ng.OnInit {
         .then(() => this.progress -= 1);
   }
 
+  onSignUpClick():void {
+    "use strict";
+
+    this.upCollapsed = !this.upCollapsed;
+  }
+
   onSignUpSubmit():void {
     "use strict";
 
@@ -117,7 +125,8 @@ export class Component implements ng.AfterViewInit, ng.OnInit {
     this.backEnd.createPerson(this.upEmailField, this.upPasswordField, this.upUsernameField)
         .then(() => {
           this.alerts.current.push(new libBootstrapAlerts.Success("The person have been signed up."));
-          (<any>$("#signing-in")).collapse("show");
+          this.inCollapsed = false;
+          this.upCollapsed = true;
         })
         .catch(reason => {
           this.alerts.current.push(new libBootstrapAlerts.Danger(`The person cannot be signed up: ${reason}`));

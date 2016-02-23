@@ -7,17 +7,17 @@
   <progress>Loading...</progress>
 </div>
 <h1 class="text-center">{{appName}}</h1>
-<div class="panel-group center-block" id="signing" style="max-width: 330px">
+<div class="panel-group center-block" style="max-width: 330px">
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">
         <span class="glyphicon glyphicon-log-in"></span>
-        <a data-toggle="collapse" data-parent="#signing" href="#signing-in">
+        <a data-bind-class.collapsed="inCollapsed" data-on-click="onSignInClick($event)" style="cursor: pointer">
           Sign in
         </a>
       </h4>
     </div>
-    <div id="signing-in" class="panel-collapse collapse in">
+    <div id="signing-in" class="panel-collapse collapse" data-bind-class.in="!inCollapsed">
       <div class="panel-body">
         <form class="clearfix" data-on-submit="onSignInSubmit($event)" style="position: relative">
           <template data-bind-ng-if="progress">
@@ -57,12 +57,12 @@
     <div class="panel-heading">
       <h4 class="panel-title">
         <span class="glyphicon glyphicon-plus"></span>
-        <a class="collapsed" data-toggle="collapse" data-parent="#signing" href="#signing-up">
+        <a data-bind-class.collapsed="upCollapsed" data-on-click="onSignUpClick($event)" style="cursor: pointer">
           Sign up
         </a>
       </h4>
     </div>
-    <div id="signing-up" class="panel-collapse collapse">
+    <div id="signing-up" class="panel-collapse collapse" data-bind-class.in="!upCollapsed">
       <form class="panel-body clearfix" data-on-submit="onSignUpSubmit($event)" style="position: relative">
         <template data-bind-ng-if="progress">
           <div class="overlay">
