@@ -1,0 +1,79 @@
+<!--
+  ~ © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+  ~ of this distribution.
+  -->
+
+<nav class="navbar navbar-pf-alt">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-on-click="onNavbarToggleClick($event)">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" data-bind-router-link="home">IoTHUB</a>
+  </div>
+  <nav class="collapse navbar-collapse">
+    <ul class="nav navbar-nav navbar-right navbar-iconic">
+      <li class="dropdown" data-bind-class.open="dropdownOpen">
+        <a class="dropdown-toggle nav-item-iconic" data-on-click="onDropdownClick($event)">
+          <span class="fa pficon-user"></span>
+          <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+          <li style="position: relative">
+            <template data-bind-ng-if="progress">
+              <div class="overlay">
+                <progress>Loading...</progress>
+              </div>
+            </template>
+            <a href="#" data-on-click="onSignOutClick($event)">Sign Out</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</nav>
+<nav class="nav-pf-vertical-alt" data-bind-class.collapsed="navbarState == 'collapsed'" data-bind-class.hidden="navbarState == 'hidden'" data-bind-class.show-mobile-nav="navbarState == 'visible'">
+  <ul class="list-group">
+    <li class="list-group-item" template="ngFor #page of navigation">
+      <a data-bind-router-link="page.link">
+        <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
+        <span class="list-group-item-value">{{page.label}}</span>
+      </a>
+    </li>
+    <li class="list-group-item list-group-item-separator hidden-sm hidden-md hidden-lg">
+      <a href="#" data-on-click="onSignOutClick($event)">
+        <span class="fa fa-sign-out" title="Sign Out"></span>
+        <span class="list-group-item-value">Sign Out</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<div class="container-fluid container-pf-alt-nav-pf-vertical-alt" data-bind-class.collapsed-nav="navbarState == 'collapsed'" data-bind-class.hidden-nav="['hidden', 'visible'].indexOf(navbarState) != -1">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header">
+        <div alerts>
+          <progress>Loading...</progress>
+        </div>
+        <ol class="breadcrumb">
+          <li template="ngFor #breadcrumb of breadcrumbs">
+            <a data-bind-router-link="breadcrumb.link">{{breadcrumb.label}}</a>
+          </li>
+        </ol>
+        <h1>{{heading}}</h1>
+      </div>
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>
+
+<footer class="container-fluid footer-pf-alt">
+  <p>
+    Copyright &copy; 2015-2016
+    <a href="http://mediacheck.cz/">MEDIA CHECK s.r.o.</a>
+    All rights reserved.
+  </p>
+</footer>

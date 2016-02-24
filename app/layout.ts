@@ -12,45 +12,33 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
+// TODO: https://github.com/patternfly/patternfly/pull/195
 
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
-
-export class LabeledLink {
-
-  label:string;
-
-  link:any[];
-
-  icon:string;
-
-  constructor(label:string, link:any[], icon="file") {
-    "use strict";
-
-    this.label = label;
-    this.link = link;
-    this.icon = icon;
-  }
-}
+import * as wrapper from "./wrapper";
 
 @ng.Component({
-  selector: "[wrapper]",
-  templateUrl: "app/wrapper.html",
+  selector: "[layout]",
+  templateUrl: "app/layout.html",
   directives: [libBootstrapAlerts.Component, ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
-  inputs: ["heading: wrapper", "breadcrumbs"]
+  inputs: ["heading: layout", "breadcrumbs"]
 })
 export class Component implements ng.OnInit {
 
-  home:LabeledLink;
+  home:any[];
 
-  navigation:LabeledLink[];
+  dropdownOpen:boolean;
 
-  user:string;
+  navbarState:string;
+
+  navigation:wrapper.LabeledLink[];
+
+  lastWindowWidth:string;
 
   progress:number;
 
@@ -62,9 +50,12 @@ export class Component implements ng.OnInit {
 
   constructor(backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
     "use strict";
-    this.home = becki.HOME;
+
+    this.home = becki.HOME.link;
+    this.dropdownOpen = false;
+    this.navbarState = "expanded";
     this.navigation = becki.NAVIGATION;
-    this.user = "Loading...";
+    this.lastWindowWidth = null;
     this.progress = 0;
     this.backEnd = backEndService;
     this.alerts = alerts;
@@ -74,15 +65,14 @@ export class Component implements ng.OnInit {
   onInit():void {
     "use strict";
 
-    // TODO https://github.com/angular/angular/issues/4112
-    if (!window.localStorage.getItem("authToken")) {
-      this.router.navigate(["Signing"]);
-    }
-    this.progress += 1;
-    this.backEnd.getSignedInPerson()
-        .then(person => this.user = libBackEnd.composePersonString(person) || "User")
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Details about current user cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
+    this.onWindowResize();
+  }
+
+  onDropdownClick(event:Event):void {
+    "use strict";
+
+    this.dropdownOpen = !this.dropdownOpen;
+    event.stopPropagation();
   }
 
   onSignOutClick():void {
@@ -102,5 +92,48 @@ export class Component implements ng.OnInit {
         .then(() => {
           this.progress -= 1;
         });
+  }
+
+  @ng.HostListener("document:click")
+  onDocumentClick():void {
+    "use strict";
+
+    this.dropdownOpen = false;
+  }
+
+  onNavbarToggleClick():void {
+    "use strict";
+
+    const DICTIONARY:{[state: string]: string} = {
+      expanded: "collapsed",
+      collapsed: "expanded",
+      visible: "hidden",
+      hidden: "visible"
+    };
+    this.navbarState = DICTIONARY[this.navbarState];
+  }
+
+  @ng.HostListener("window:resize")
+  onWindowResize():void {
+    "use strict";
+
+    let width = window.innerWidth;
+    let widthString = "desktop";
+    if (width < 768) {
+      widthString = "phone";
+    } else if (width < 992) {
+      widthString = "tablet";
+    }
+
+    if (widthString != this.lastWindowWidth) {
+      const DICTIONARY:{[width: string]: string} = {
+        phone: "hidden",
+        tablet: "collapsed",
+        desktop: "expanded"
+      };
+      this.navbarState = DICTIONARY[widthString];
+    }
+
+    this.lastWindowWidth = widthString;
   }
 }

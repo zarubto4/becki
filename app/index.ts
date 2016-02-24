@@ -18,7 +18,7 @@ import * as wrapper from "./wrapper";
 export const HOME = new wrapper.LabeledLink("Back end", ["Devices"]);
 
 export const NAVIGATION = [
-  new wrapper.LabeledLink("Devices", ["Devices"]),
-  new wrapper.LabeledLink("Projects", ["Projects"]),
-  new wrapper.LabeledLink("Issues", ["Issues"])
+  new wrapper.LabeledLink("Devices", ["Devices"], "tachometer"),
+  new wrapper.LabeledLink("Projects", ["Projects"], "book"),
+  new wrapper.LabeledLink("Issues", ["Issues"], "bug")
 ];
