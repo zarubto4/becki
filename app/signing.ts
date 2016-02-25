@@ -101,9 +101,13 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.progress += 1;
     this.backEnd.createFacebookToken()
-        .then(url => location.href = url)
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed in: ${reason}`)))
-        .then(() => this.progress -= 1);
+        .then(url => {
+          location.href = url;
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed in: ${reason}`));
+          this.progress -= 1;
+        });
   }
 
   onGitHubSignInClick():void {
@@ -112,9 +116,13 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.progress += 1;
     this.backEnd.createGitHubToken()
-        .then(url => location.href = url)
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed in: ${reason}`)))
-        .then(() => this.progress -= 1);
+        .then(url => {
+          location.href = url;
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed in: ${reason}`));
+          this.progress -= 1;
+        });
   }
 
   onSignUpClick():void {
