@@ -3,98 +3,95 @@
   ~ directory of this distribution.
   -->
 
-<div notifications>
-  <progress>Loading...</progress>
-</div>
-<h1 class="text-center">{{appName}}</h1>
-<div class="panel-group center-block" style="max-width: 330px">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <span class="glyphicon glyphicon-log-in"></span>
-        <a data-bind-class.collapsed="inCollapsed" data-on-click="onSignInClick($event)" style="cursor: pointer">
-          Sign in
-        </a>
-      </h4>
-    </div>
-    <div id="signing-in" class="panel-collapse collapse" data-bind-class.in="!inCollapsed">
-      <div class="panel-body">
-        <form class="clearfix" data-on-submit="onSignInSubmit($event)" style="position: relative">
-          <template data-bind-ng-if="progress">
-            <div class="overlay">
-              <progress>Loading...</progress>
-            </div>
-          </template>
-          <div class="form-group">
-            <label>
-              <span class="glyphicon glyphicon-envelope"></span>
-              Email
-            </label>
-            <input class="form-control" type="email" required data-bindon-ng-model="inEmailField">
-          </div>
-          <div class="form-group">
-            <label>
-              <span class="glyphicon glyphicon-lock"></span>
-              Password
-            </label>
-            <input class="form-control" type="password" required minlength="8" data-bindon-ng-model="inPasswordField">
-          </div>
-          <button class="btn btn-primary pull-right" type="submit">Sign in</button>
-        </form>
-        <div class="text-center">
-          <p>or sign in using</p>
-          <button type="button" class="btn btn-default" style="color: #FFF;background-color: #337AB7;border-color: #2E6DA4;" data-on-click="onFacebookSignInClick($event)">
-            Facebook
-          </button>
-          <button type="button" class="btn btn-default" style="color: #FFF;background-color: #000;border-color: #000;" data-on-click="onGitHubSignInClick($event)">
-            GitHub
-          </button>
-        </div>
+<span id="badge">
+  <img src="..." alt="IoTHUB logo" />
+</span>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div id="brand">
+        <img src="..." data-bind-alt="appName">
       </div>
     </div>
-  </div>
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <span class="glyphicon glyphicon-plus"></span>
-        <a data-bind-class.collapsed="upCollapsed" data-on-click="onSignUpClick($event)" style="cursor: pointer">
-          Sign up
-        </a>
-      </h4>
-    </div>
-    <div id="signing-up" class="panel-collapse collapse" data-bind-class.in="!upCollapsed">
-      <form class="panel-body clearfix" data-on-submit="onSignUpSubmit($event)" style="position: relative">
+    <div class="col-sm-7 col-md-6 col-lg-5 login">
+      <div notifications>
+        <progress>Loading...</progress>
+      </div>
+      <div style="position: relative" data-bind-ng-switch="signIn">
         <template data-bind-ng-if="progress">
           <div class="overlay">
             <progress>Loading...</progress>
           </div>
         </template>
-        <div class="form-group">
-          <label>
-            <span class="glyphicon glyphicon-envelope"></span>
-            Email
-          </label>
-          <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98 -->
-          <input class="form-control" type="email" required data-bindon-ng-model="upEmailField">
-        </div>
-        <div class="form-group">
-          <label>
-            <span class="glyphicon glyphicon-lock"></span>
-            Password
-          </label>
-          <input class="form-control" type="password" required minlength="8" data-bindon-ng-model="upPasswordField">
-        </div>
-        <div class="form-group">
-          <label>
-            <span class="glyphicon glyphicon-user"></span>
-            Username
-          </label>
-          <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98 -->
-          <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-99 -->
-          <input class="form-control" required data-bindon-ng-model="upUsernameField">
-        </div>
-        <button class="btn btn-primary pull-right" type="submit">Sign up</button>
-      </form>
+        <template data-bind-ng-switch-when="true">
+          <form class="form-horizontal" data-on-submit="onSignInSubmit($event)">
+            <div class="form-group">
+              <label class="col-sm-2 col-md-2 control-label">Email</label>
+              <div class="col-sm-10 col-md-10">
+                <input class="form-control" type="email" required data-bindon-ng-model="inEmailField">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 col-md-2 control-label">Password</label>
+              <div class="col-sm-10 col-md-10">
+                <input class="form-control" type="password" required minlength="8" data-bindon-ng-model="inPasswordField">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-xs-8 col-sm-offset-2 col-sm-6 col-md-offset-2 col-md-6">
+                <span class="help-block">Don't have an <a data-on-click="onSignUpClick($event)" style="cursor: pointer">account</a>?</span>
+              </div>
+              <div class="col-xs-4 col-sm-4 col-md-4 submit">
+                <button type="submit" class="btn btn-primary btn-lg">Sign In
+                </button>
+              </div>
+            </div>
+          </form>
+          <div class="text-center">
+            <p>or sign in using</p>
+            <button type="button" class="btn btn-default btn-lg" style="color: #FFF;background-color: #337AB7;border-color: #2E6DA4;" data-on-click="onFacebookSignInClick($event)">
+              Facebook
+            </button>
+            <button type="button" class="btn btn-default btn-lg" style="color: #FFF;background-color: #000;border-color: #000;" data-on-click="onGitHubSignInClick($event)">
+              GitHub
+            </button>
+          </div>
+        </template>
+        <template data-bind-ng-switch-when="false">
+          <form class="form-horizontal" data-on-submit="onSignUpSubmit($event)">
+            <div class="form-group">
+              <label class="col-sm-2 col-md-2 control-label">Email</label>
+              <div class="col-sm-10 col-md-10">
+                <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98 -->
+                <input class="form-control" type="email" required data-bindon-ng-model="upEmailField">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 col-md-2 control-label">Password</label>
+              <div class="col-sm-10 col-md-10">
+                <input class="form-control" type="password" required minlength="8" data-bindon-ng-model="upPasswordField">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 col-md-2 control-label">Username</label>
+              <div class="col-sm-10 col-md-10">
+                <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98 -->
+                <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-99 -->
+                <input class="form-control" required data-bindon-ng-model="upUsernameField">
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-xs-8 col-sm-offset-2 col-sm-6 col-md-offset-2 col-md-6">
+                <span class="help-block">Already have an <a data-on-click="onSignInClick($event)" style="cursor: pointer">account</a>?</span>
+              </div>
+              <div class="col-xs-4 col-sm-4 col-md-4 submit">
+                <button type="submit" class="btn btn-primary btn-lg">Sign Up</button>
+              </div>
+            </div>
+          </form>
+        </template>
+      </div>
     </div>
+    <div class="col-sm-5 col-md-6 col-lg-7 details"></div>
   </div>
 </div>

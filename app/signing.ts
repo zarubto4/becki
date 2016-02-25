@@ -21,19 +21,17 @@ import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/signing.html",
-  directives: [libPatternFlyNotifications.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES]
+  directives: [libPatternFlyNotifications.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
   appName:string;
 
-  inCollapsed:boolean;
+  signIn:boolean;
 
   inEmailField:string;
 
   inPasswordField:string;
-
-  upCollapsed:boolean;
 
   upEmailField:string;
 
@@ -53,10 +51,9 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.appName = appName;
-    this.inCollapsed = false;
+    this.signIn = true;
     this.inEmailField = "";
     this.inPasswordField = "";
-    this.upCollapsed = true;
     this.upEmailField = "";
     this.upPasswordField = "";
     this.upUsernameField = "";
@@ -70,12 +67,21 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
+    // TODO: https://groups.google.com/d/msg/angular/IJf-KyGC3Gs/h33mlUTrAwAJ
+    document.documentElement.classList.add("login-pf");
+  }
+
+  onDestroy():void {
+    "use strict";
+
+    // TODO: https://groups.google.com/d/msg/angular/IJf-KyGC3Gs/h33mlUTrAwAJ
+    document.documentElement.classList.remove("login-pf");
   }
 
   onSignInClick():void {
     "use strict";
 
-    this.inCollapsed = !this.inCollapsed;
+    this.signIn = true;
   }
 
   onSignInSubmit():void {
@@ -114,7 +120,7 @@ export class Component implements ng.OnInit {
   onSignUpClick():void {
     "use strict";
 
-    this.upCollapsed = !this.upCollapsed;
+    this.signIn = false;
   }
 
   onSignUpSubmit():void {
@@ -125,8 +131,7 @@ export class Component implements ng.OnInit {
     this.backEnd.createPerson(this.upEmailField, this.upPasswordField, this.upUsernameField)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The person have been signed up."));
-          this.inCollapsed = false;
-          this.upCollapsed = true;
+          this.signIn = true;
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed up: ${reason}`));
