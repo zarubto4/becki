@@ -20,7 +20,23 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
-import * as wrapper from "./wrapper";
+
+export class LabeledLink {
+
+  label:string;
+
+  link:any[];
+
+  icon:string;
+
+  constructor(label:string, link:any[], icon="file") {
+    "use strict";
+
+    this.label = label;
+    this.link = link;
+    this.icon = icon;
+  }
+}
 
 @ng.Component({
   selector: "[layout]",
@@ -36,7 +52,7 @@ export class Component implements ng.OnInit {
 
   navbarState:string;
 
-  navigation:wrapper.LabeledLink[];
+  navigation:LabeledLink[];
 
   lastWindowWidth:string;
 
@@ -65,6 +81,10 @@ export class Component implements ng.OnInit {
   onInit():void {
     "use strict";
 
+    // TODO https://github.com/angular/angular/issues/4112
+    if (!window.localStorage.getItem("authToken")) {
+      this.router.navigate(["Signing"]);
+    }
     this.onWindowResize();
   }
 

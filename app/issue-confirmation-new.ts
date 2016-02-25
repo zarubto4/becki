@@ -18,13 +18,13 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
+import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
-import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/issue-confirmation-new.html",
-  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -32,7 +32,7 @@ export class Component implements ng.OnInit {
 
   heading:string;
 
-  breadcrumbs:wrapper.LabeledLink[];
+  breadcrumbs:layout.LabeledLink[];
 
   confirmations:libBackEnd.IssueConfirmation[];
 
@@ -53,10 +53,10 @@ export class Component implements ng.OnInit {
     this.heading = `New Confirmation (Issue ${this.issueId})`;
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("Issues", ["Issues"]),
-      new wrapper.LabeledLink(`Issue ${this.issueId}`, ["Issue", {issue: this.issueId}]),
-      new wrapper.LabeledLink("Confirmations", ["Issue", {issue: this.issueId}]),
-      new wrapper.LabeledLink("New Confirmation", ["NewIssueConfirmation", {issue: this.issueId}])
+      new layout.LabeledLink("Issues", ["Issues"]),
+      new layout.LabeledLink(`Issue ${this.issueId}`, ["Issue", {issue: this.issueId}]),
+      new layout.LabeledLink("Confirmations", ["Issue", {issue: this.issueId}]),
+      new layout.LabeledLink("New Confirmation", ["NewIssueConfirmation", {issue: this.issueId}])
     ];
     this.field = "";
     this.progress = 0;

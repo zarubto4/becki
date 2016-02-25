@@ -20,17 +20,17 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as fieldCode from "./field-code";
+import * as layout from "./layout";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
-import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/standalone-program-new.html",
   directives: [
     customValidator.Directive,
     fieldCode.Component,
+    layout.Component,
     ng.CORE_DIRECTIVES,
-    ng.FORM_DIRECTIVES,
-    wrapper.Component
+    ng.FORM_DIRECTIVES
   ]
 })
 export class Component implements ng.OnInit {
@@ -39,7 +39,7 @@ export class Component implements ng.OnInit {
 
   heading:string;
 
-  breadcrumbs:wrapper.LabeledLink[];
+  breadcrumbs:layout.LabeledLink[];
 
   nameField:string;
 
@@ -62,11 +62,11 @@ export class Component implements ng.OnInit {
     this.heading = `New Program (Project ${this.projectId})`;
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("User", ["Projects"]),
-      new wrapper.LabeledLink("Projects", ["Projects"]),
-      new wrapper.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink("Standalone Programs", ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink("New Program", ["NewStandaloneProgram", {project: this.projectId}])
+      new layout.LabeledLink("User", ["Projects"]),
+      new layout.LabeledLink("Projects", ["Projects"]),
+      new layout.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
+      new layout.LabeledLink("Standalone Programs", ["Project", {project: this.projectId}]),
+      new layout.LabeledLink("New Program", ["NewStandaloneProgram", {project: this.projectId}])
     ];
     this.nameField = "";
     this.descriptionField = "";

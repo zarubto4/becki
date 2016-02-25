@@ -18,18 +18,18 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
+import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
-import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/issues.html",
-  directives: [libBootstrapPanelList.Component, wrapper.Component],
+  directives: [layout.Component, libBootstrapPanelList.Component]
 })
 export class Component implements ng.OnInit {
 
-  breadcrumbs:wrapper.LabeledLink[];
+  breadcrumbs:layout.LabeledLink[];
 
   types:libBootstrapPanelList.Item[];
 
@@ -50,7 +50,7 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("Issues", ["Issues"])
+      new layout.LabeledLink("Issues", ["Issues"])
     ];
     this.progress = 0;
     this.backEnd = backEndService;

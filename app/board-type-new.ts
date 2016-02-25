@@ -19,17 +19,17 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
+import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
-import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/board-type-new.html",
-  directives: [customValidator.Directive, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
-  breadcrumbs:wrapper.LabeledLink[];
+  breadcrumbs:layout.LabeledLink[];
 
   producers:libBackEnd.Producer[];
 
@@ -56,9 +56,9 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("Boards", ["Devices"]),
-      new wrapper.LabeledLink("Types", ["Devices"]),
-      new wrapper.LabeledLink("New Type", ["NewBoardType"])
+      new layout.LabeledLink("Boards", ["Devices"]),
+      new layout.LabeledLink("Types", ["Devices"]),
+      new layout.LabeledLink("New Type", ["NewBoardType"])
     ];
     this.nameField = "";
     this.producerField = "";

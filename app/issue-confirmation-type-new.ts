@@ -19,16 +19,16 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
+import * as layout from "./layout";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
-import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/issue-confirmation-type-new.html",
-  directives: [customValidator.Directive, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
-  breadcrumbs:wrapper.LabeledLink[]
+  breadcrumbs:layout.LabeledLink[];
 
   nameField:string;
 
@@ -49,9 +49,9 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("Issues", ["Issues"]),
-      new wrapper.LabeledLink("Confirmations", ["Issues"]),
-      new wrapper.LabeledLink("New Confirmation", ["NewIssueConfirmationType"]),
+      new layout.LabeledLink("Issues", ["Issues"]),
+      new layout.LabeledLink("Confirmations", ["Issues"]),
+      new layout.LabeledLink("New Confirmation", ["NewIssueConfirmationType"]),
     ];
     this.nameField = "";
     this.colorField = "#ffffff";

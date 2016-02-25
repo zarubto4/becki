@@ -19,12 +19,12 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as fieldCode from "./field-code";
+import * as layout from "./layout";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
-import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/standalone-program.html",
-  directives: [fieldCode.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [fieldCode.Component, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -34,7 +34,7 @@ export class Component implements ng.OnInit {
 
   heading:string;
 
-  breadcrumbs:wrapper.LabeledLink[];
+  breadcrumbs:layout.LabeledLink[];
 
   descriptionField:string;
 
@@ -56,11 +56,11 @@ export class Component implements ng.OnInit {
     this.heading = `Program ${this.id}`;
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("User", ["Projects"]),
-      new wrapper.LabeledLink("Projects", ["Projects"]),
-      new wrapper.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink("Standalone Programs", ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink(`Program ${this.id}`, ["StandaloneProgram", {project: this.projectId, program: this.id}])
+      new layout.LabeledLink("User", ["Projects"]),
+      new layout.LabeledLink("Projects", ["Projects"]),
+      new layout.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
+      new layout.LabeledLink("Standalone Programs", ["Project", {project: this.projectId}]),
+      new layout.LabeledLink(`Program ${this.id}`, ["StandaloneProgram", {project: this.projectId, program: this.id}])
     ];
     this.descriptionField = "Loading...";
     this.codeField = "Loading...";

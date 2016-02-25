@@ -20,9 +20,9 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as fieldCode from "./field-code";
+import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
-import * as wrapper from "./wrapper";
 
 class Selectable<T> {
 
@@ -43,9 +43,9 @@ class Selectable<T> {
   directives: [
     customValidator.Directive,
     fieldCode.Component,
+    layout.Component,
     ng.CORE_DIRECTIVES,
-    ng.FORM_DIRECTIVES,
-    wrapper.Component
+    ng.FORM_DIRECTIVES
   ]
 })
 export class Component implements ng.OnInit {
@@ -54,7 +54,7 @@ export class Component implements ng.OnInit {
 
   heading:string;
 
-  breadcrumbs:wrapper.LabeledLink[];
+  breadcrumbs:layout.LabeledLink[];
 
   libraries:Selectable<libBackEnd.Library>[];
 
@@ -81,11 +81,11 @@ export class Component implements ng.OnInit {
     this.heading = `New Program (Project ${this.projectId})`;
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("User", ["Projects"]),
-      new wrapper.LabeledLink("Projects", ["Projects"]),
-      new wrapper.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink("Board Programs", ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink("New Program", ["NewBoardProgram", {project: this.projectId}])
+      new layout.LabeledLink("User", ["Projects"]),
+      new layout.LabeledLink("Projects", ["Projects"]),
+      new layout.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
+      new layout.LabeledLink("Board Programs", ["Project", {project: this.projectId}]),
+      new layout.LabeledLink("New Program", ["NewBoardProgram", {project: this.projectId}])
     ];
     this.nameField = "";
     this.descriptionField = "";

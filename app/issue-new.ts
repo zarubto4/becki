@@ -19,17 +19,17 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as fieldIssueBody from "./field-issue-body";
+import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
-import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/issue-new.html",
-  directives: [fieldIssueBody.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [fieldIssueBody.Component, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
-  breadcrumbs:wrapper.LabeledLink[];
+  breadcrumbs:layout.LabeledLink[];
 
   types:libBackEnd.IssueType[];
 
@@ -52,8 +52,8 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("Issues", ["Issues"]),
-      new wrapper.LabeledLink("New Issue", ["NewIssue"])
+      new layout.LabeledLink("Issues", ["Issues"]),
+      new layout.LabeledLink("New Issue", ["NewIssue"])
     ];
     this.typeField = "";
     this.titleField = "";

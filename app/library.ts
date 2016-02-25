@@ -19,13 +19,13 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
+import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
-import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/library.html",
-  directives: [customValidator.Directive, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -33,7 +33,7 @@ export class Component implements ng.OnInit {
 
   heading:string;
 
-  breadcrumbs:wrapper.LabeledLink[];
+  breadcrumbs:layout.LabeledLink[];
 
   versions:libBackEnd.Version[];
 
@@ -67,8 +67,8 @@ export class Component implements ng.OnInit {
     this.heading = `Library ${this.id}`;
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("Libraries", ["Devices"]),
-      new wrapper.LabeledLink(`Library ${this.id}`, ["Library", {library: this.id}])
+      new layout.LabeledLink("Libraries", ["Devices"]),
+      new layout.LabeledLink(`Library ${this.id}`, ["Library", {library: this.id}])
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";

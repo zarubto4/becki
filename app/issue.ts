@@ -21,10 +21,10 @@ import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as fieldHomerProgram from "./field-homer-program";
 import * as fieldIssueBody from "./field-issue-body";
+import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
-import * as wrapper from "./wrapper";
 
 class Comment {
 
@@ -126,11 +126,11 @@ class Issue extends Item {
     customValidator.Directive,
     fieldHomerProgram.Component,
     fieldIssueBody.Component,
+    layout.Component,
     libBootstrapPanelList.Component,
     ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES,
-    ngRouter.ROUTER_DIRECTIVES,
-    wrapper.Component
+    ngRouter.ROUTER_DIRECTIVES
   ]
 })
 export class Component implements ng.OnInit {
@@ -139,7 +139,7 @@ export class Component implements ng.OnInit {
 
   heading:string;
 
-  breadcrumbs:wrapper.LabeledLink[];
+  breadcrumbs:layout.LabeledLink[];
 
   types:libBackEnd.IssueType[];
 
@@ -170,8 +170,8 @@ export class Component implements ng.OnInit {
     this.heading = "Loading...";
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("Issues", ["Issues"]),
-      new wrapper.LabeledLink(`Issue ${this.id}`, ["Issue", {issue: this.id}])
+      new layout.LabeledLink("Issues", ["Issues"]),
+      new layout.LabeledLink(`Issue ${this.id}`, ["Issue", {issue: this.id}])
     ];
     this.answerBodyField = fieldIssueBody.EMPTY;
     this.progress = 0;

@@ -18,9 +18,9 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
+import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
-import * as wrapper from "./wrapper";
 
 class Selectable<T> {
 
@@ -38,7 +38,7 @@ class Selectable<T> {
 
 @ng.Component({
   templateUrl: "app/project-upload-new.html",
-  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -46,7 +46,7 @@ export class Component implements ng.OnInit {
 
   heading:string;
 
-  breadcrumbs:wrapper.LabeledLink[];
+  breadcrumbs:layout.LabeledLink[];
 
   boards:Selectable<libBackEnd.Board>[];
 
@@ -78,11 +78,11 @@ export class Component implements ng.OnInit {
     this.heading = `New Program Upload (Project ${this.projectId})`;
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("User", ["Projects"]),
-      new wrapper.LabeledLink("Projects", ["Projects"]),
-      new wrapper.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink("Program Uploads", ["Project", {project: this.projectId}]),
-      new wrapper.LabeledLink("New Upload", ["NewProjectUpload", {project: this.projectId}])
+      new layout.LabeledLink("User", ["Projects"]),
+      new layout.LabeledLink("Projects", ["Projects"]),
+      new layout.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
+      new layout.LabeledLink("Program Uploads", ["Project", {project: this.projectId}]),
+      new layout.LabeledLink("New Upload", ["NewProjectUpload", {project: this.projectId}])
     ];
     this.typeField = "";
     this.programField = "";

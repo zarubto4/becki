@@ -19,17 +19,17 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
+import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
-import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/library-group-new.html",
-  directives: [customValidator.Directive, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, wrapper.Component]
+  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
-  breadcrumbs:wrapper.LabeledLink[];
+  breadcrumbs:layout.LabeledLink[];
 
   nameField:string;
 
@@ -48,9 +48,9 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("Libraries", ["Devices"]),
-      new wrapper.LabeledLink("Groups", ["Devices"]),
-      new wrapper.LabeledLink("New Group", ["NewLibraryGroup"])
+      new layout.LabeledLink("Libraries", ["Devices"]),
+      new layout.LabeledLink("Groups", ["Devices"]),
+      new layout.LabeledLink("New Group", ["NewLibraryGroup"])
     ];
     this.nameField = "";
     this.descriptionField = "";

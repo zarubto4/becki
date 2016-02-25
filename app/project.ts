@@ -19,19 +19,19 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
+import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
-import * as wrapper from "./wrapper";
 
 @ng.Component({
   templateUrl: "app/project.html",
   directives: [
     customValidator.Directive,
-    ng.CORE_DIRECTIVES,
-    ng.FORM_DIRECTIVES,
+    layout.Component,
     libBootstrapPanelList.Component,
-    wrapper.Component
+    ng.CORE_DIRECTIVES,
+    ng.FORM_DIRECTIVES
   ]
 })
 export class Component implements ng.OnInit {
@@ -40,7 +40,7 @@ export class Component implements ng.OnInit {
 
   heading:string;
 
-  breadcrumbs:wrapper.LabeledLink[];
+  breadcrumbs:layout.LabeledLink[];
 
   nameField:string;
 
@@ -75,9 +75,9 @@ export class Component implements ng.OnInit {
     this.heading = `Project ${this.id}`;
     this.breadcrumbs = [
       becki.HOME,
-      new wrapper.LabeledLink("User", ["Projects"]),
-      new wrapper.LabeledLink("Projects", ["Projects"]),
-      new wrapper.LabeledLink(`Project ${this.id}`, ["Project", {project: this.id}])
+      new layout.LabeledLink("User", ["Projects"]),
+      new layout.LabeledLink("Projects", ["Projects"]),
+      new layout.LabeledLink(`Project ${this.id}`, ["Project", {project: this.id}])
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
