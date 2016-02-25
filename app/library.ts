@@ -21,7 +21,7 @@ import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
+import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/library.html",
@@ -56,11 +56,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  alerts:libBootstrapAlerts.Service;
+  notifications:libPatternFlyNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("library");
@@ -78,14 +78,14 @@ export class Component implements ng.OnInit {
     this.fileVersionField = "";
     this.progress = 0;
     this.backEnd = backEndService;
-    this.alerts = alerts;
+    this.notifications = notifications;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.refresh();
   }
 
@@ -107,7 +107,7 @@ export class Component implements ng.OnInit {
           this.descriptionField = library.description;
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The library ${this.id} cannot be loaded: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The library ${this.id} cannot be loaded: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -142,15 +142,15 @@ export class Component implements ng.OnInit {
   onUpdatingSubmit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.updateLibrary(this.id, this.nameField, this.descriptionField)
         .then(() => {
-          this.alerts.next.push(new libBootstrapAlerts.Success("The library has been updated."));
+          this.notifications.next.push(new libPatternFlyNotifications.Success("The library has been updated."));
           this.router.navigate(["Devices"]);
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The library cannot be updated: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The library cannot be updated: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -160,18 +160,18 @@ export class Component implements ng.OnInit {
   onVersionSubmit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.addVersionToLibrary(this.versionField, this.versionNameField, this.versionDescriptionField, this.id)
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The version has been created."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The version has been created."));
           this.versionField = 0;
           this.versionNameField = "";
           this.versionDescriptionField = "";
           this.refresh();
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The version cannot be created: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The version cannot be created: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -181,17 +181,17 @@ export class Component implements ng.OnInit {
   onFileSubmit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.updateFileOfLibrary(this.fileField.nativeElement.files[0], this.fileVersionField == "new" ? null : this.fileVersionField, this.id)
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The file has been uploaded."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The file has been uploaded."));
           this.fileField.nativeElement.value = "";
           this.fileVersionField = "";
           this.refresh();
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The file cannot be uploaded: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The file cannot be uploaded: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -201,7 +201,7 @@ export class Component implements ng.OnInit {
   onCancelClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.router.navigate(["Devices"]);
   }
 }

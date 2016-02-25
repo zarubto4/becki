@@ -22,7 +22,7 @@ import * as customValidator from "./custom-validator";
 import * as fieldHomerProgram from "./field-homer-program";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
+import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/homer-program.html",
@@ -54,11 +54,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  alerts:libBootstrapAlerts.Service;
+  notifications:libPatternFlyNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("program");
@@ -80,14 +80,14 @@ export class Component implements ng.OnInit {
     this.codeField = `{"blocks":{}}`;
     this.progress = 0;
     this.backEnd = backEndService;
-    this.alerts = alerts;
+    this.notifications = notifications;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.getHomerProgram(this.id)
         .then(program => this.backEnd.request<string>("GET", program.programinJson).then(code => {
@@ -97,7 +97,7 @@ export class Component implements ng.OnInit {
           this.codeField = JSON.stringify(code);
         }))
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The program ${this.id} cannot be loaded: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program ${this.id} cannot be loaded: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -128,15 +128,15 @@ export class Component implements ng.OnInit {
   onSubmit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.updateHomerProgram(this.id, this.nameField, this.descriptionField, this.codeField, this.projectId)
         .then(() => {
-          this.alerts.next.push(new libBootstrapAlerts.Success("The program has been updated."));
+          this.notifications.next.push(new libPatternFlyNotifications.Success("The program has been updated."));
           this.router.navigate(["Project", {project: this.projectId}]);
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The program cannot be updated: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be updated: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -146,7 +146,7 @@ export class Component implements ng.OnInit {
   onCancelClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.router.navigate(["Project", {project: this.projectId}]);
   }
 }

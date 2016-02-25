@@ -20,7 +20,7 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
-import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
+import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/issue-confirmation-type.html",
@@ -44,11 +44,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  alerts:libBootstrapAlerts.Service;
+  notifications:libPatternFlyNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("confirmation");
@@ -64,14 +64,14 @@ export class Component implements ng.OnInit {
     this.sizeField = 12;
     this.progress = 0;
     this.backEnd = backEndService;
-    this.alerts = alerts;
+    this.notifications = notifications;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.getIssueConfirmations()
         .then(confirmations => {
@@ -81,7 +81,7 @@ export class Component implements ng.OnInit {
           this.sizeField = confirmation.size;
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`Confirmations cannot be loaded: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`Confirmations cannot be loaded: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -109,15 +109,15 @@ export class Component implements ng.OnInit {
   onSubmit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-85
-    this.alerts.current.push(new libBootstrapAlerts.Danger("issue/TYRION-85"));
+    this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-85"));
   }
 
   onCancelClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.router.navigate(["Issues"]);
   }
 }

@@ -21,8 +21,8 @@ import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
+import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/board-program.html",
@@ -54,11 +54,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  alerts:libBootstrapAlerts.Service;
+  notifications:libPatternFlyNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("program");
@@ -76,14 +76,14 @@ export class Component implements ng.OnInit {
     this.descriptionField = "Loading...";
     this.progress = 0;
     this.backEnd = backEndService;
-    this.alerts = alerts;
+    this.notifications = notifications;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.refresh();
   }
 
@@ -98,7 +98,7 @@ export class Component implements ng.OnInit {
           this.versions = program.versions.map(version => new libBootstrapPanelList.Item(version.id, version.version.toString(), version.versionName, ["BoardProgramVersion", {project: this.projectId, program: this.id, version: version.id}]));
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The program ${this.id} cannot be loaded: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program ${this.id} cannot be loaded: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -130,16 +130,16 @@ export class Component implements ng.OnInit {
   onSubmit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-73
     this.backEnd.updateBoardProgram(this.id, this.nameField, this.descriptionField)
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The program has been updated."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The program has been updated."));
           this.refresh();
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The cannot be updated: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The cannot be updated: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -149,29 +149,29 @@ export class Component implements ng.OnInit {
   onCancelClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.router.navigate(["Project", {project: this.projectId}]);
   }
 
   onVersionAddClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.router.navigate(["NewBoardProgramVersion", {project: this.projectId, program: this.id}]);
   }
 
   onVersionsRemoveClick(ids:string[]):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     Promise.all(ids.map(id => this.backEnd.deleteBoardProgramVersion(id, this.id)))
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The versions have been updated."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The versions have been updated."));
           this.refresh();
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The versions cannot be updated: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The versions cannot be updated: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;

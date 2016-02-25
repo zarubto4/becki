@@ -21,7 +21,7 @@ import * as becki from "./index";
 import * as fieldCode from "./field-code";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end";
-import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
+import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 class Selectable<T> {
 
@@ -67,11 +67,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  alerts:libBootstrapAlerts.Service;
+  notifications:libPatternFlyNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.programId = routeParams.get("program");
@@ -102,39 +102,39 @@ export class Component implements ng.OnInit {
     this.codeField = "";
     this.progress = 0;
     this.backEnd = backEndService;
-    this.alerts = alerts;
+    this.notifications = notifications;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 2;
     this.backEnd.getLibraries()
         .then(libraries => this.libraries = libraries.map(library => new Selectable(library)))
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Libraries cannot be loaded: ${reason}`)))
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Libraries cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
     this.backEnd.getLibraryGroups()
         .then(groups => this.groups = groups.map(group => new Selectable(group)))
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Library groups cannot be loaded: ${reason}`)))
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Library groups cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
   }
 
   onSubmit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     let libraries = this.libraries.filter(selectable => selectable.selected).map(selectable => ({libraryId: selectable.model.id, libraryVersion: selectable.model.lastVersion.toString()}));
     let groups = this.groups.filter(selectable => selectable.selected).map(selectable => ({groupId: selectable.model.id, libraryVersion: selectable.model.lastVersion.toString()}));
     this.backEnd.createBoardProgramVersion(this.programId, this.numberField.toString(), this.nameField, this.descriptionField, libraries, groups, this.codeField)
         .then(() => {
-          this.alerts.next.push(new libBootstrapAlerts.Success("The version has been created."));
+          this.notifications.next.push(new libPatternFlyNotifications.Success("The version has been created."));
           this.router.navigate(["BoardProgram", {project: this.projectId, program: this.programId}]);
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The version cannot be created: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The version cannot be created: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -144,7 +144,7 @@ export class Component implements ng.OnInit {
   onCancelClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.router.navigate(["BoardProgram", {project: this.projectId, program: this.programId}]);
   }
 }

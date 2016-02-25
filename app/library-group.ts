@@ -21,7 +21,7 @@ import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
+import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/library-group.html",
@@ -43,11 +43,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  alerts:libBootstrapAlerts.Service;
+  notifications:libPatternFlyNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("group");
@@ -62,14 +62,14 @@ export class Component implements ng.OnInit {
     this.descriptionField = "Loading...";
     this.progress = 0;
     this.backEnd = backEndService;
-    this.alerts = alerts;
+    this.notifications = notifications;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.getLibraryGroup(this.id)
         .then(group => {
@@ -77,7 +77,7 @@ export class Component implements ng.OnInit {
           this.descriptionField = group.description;
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The group ${this.id} cannot be loaded: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The group ${this.id} cannot be loaded: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -112,15 +112,15 @@ export class Component implements ng.OnInit {
   onSubmit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.updateLibraryGroup(this.id, this.nameField, this.descriptionField)
         .then(() => {
-          this.alerts.next.push(new libBootstrapAlerts.Success("The group has been updated."));
+          this.notifications.next.push(new libPatternFlyNotifications.Success("The group has been updated."));
           this.router.navigate(["Devices"]);
         })
         .catch(reason => {
-          this.alerts.next.push(new libBootstrapAlerts.Danger(`The group cannot be updated: ${reason}`));
+          this.notifications.next.push(new libPatternFlyNotifications.Danger(`The group cannot be updated: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -130,7 +130,7 @@ export class Component implements ng.OnInit {
   onCancelClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.router.navigate(["Devices"]);
   }
 }

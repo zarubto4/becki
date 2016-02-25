@@ -19,7 +19,7 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
+import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 export class LabeledLink {
 
@@ -41,7 +41,7 @@ export class LabeledLink {
 @ng.Component({
   selector: "[layout]",
   templateUrl: "app/layout.html",
-  directives: [libBootstrapAlerts.Component, ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
+  directives: [libPatternFlyNotifications.Component, ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
   inputs: ["heading: layout", "breadcrumbs"]
 })
 export class Component implements ng.OnInit {
@@ -60,11 +60,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  alerts:libBootstrapAlerts.Service;
+  notifications:libPatternFlyNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.home = becki.HOME.link;
@@ -74,7 +74,7 @@ export class Component implements ng.OnInit {
     this.lastWindowWidth = null;
     this.progress = 0;
     this.backEnd = backEndService;
-    this.alerts = alerts;
+    this.notifications = notifications;
     this.router = router;
   }
 
@@ -98,16 +98,16 @@ export class Component implements ng.OnInit {
   onSignOutClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-65
     this.backEnd.deleteToken()
         .then(() => {
-          this.alerts.next.push(new libBootstrapAlerts.Success("Current user have been signed out."));
+          this.notifications.next.push(new libPatternFlyNotifications.Success("Current user have been signed out."));
           this.router.navigate(["Signing"]);
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`Current user cannot be signed out: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`Current user cannot be signed out: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;

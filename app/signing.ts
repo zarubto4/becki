@@ -17,11 +17,11 @@ import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
-import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
+import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/signing.html",
-  directives: [libBootstrapAlerts.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES]
+  directives: [libPatternFlyNotifications.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -45,11 +45,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  alerts:libBootstrapAlerts.Service;
+  notifications:libPatternFlyNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(@ng.Inject("appName") appName:string, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
+  constructor(@ng.Inject("appName") appName:string, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.appName = appName;
@@ -62,14 +62,14 @@ export class Component implements ng.OnInit {
     this.upUsernameField = "";
     this.progress = 0;
     this.backEnd = backEndService;
-    this.alerts = alerts;
+    this.notifications = notifications;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
   }
 
   onSignInClick():void {
@@ -81,33 +81,33 @@ export class Component implements ng.OnInit {
   onSignInSubmit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.createToken(this.inEmailField, this.inPasswordField)
         .then(() => this.router.navigate(["Devices"]))
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`The person cannot be signed in: ${reason}`)))
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed in: ${reason}`)))
         .then(() => this.progress -= 1);
   }
 
   onFacebookSignInClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.createFacebookToken()
         .then(url => location.href = url)
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`The person cannot be signed in: ${reason}`)))
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed in: ${reason}`)))
         .then(() => this.progress -= 1);
   }
 
   onGitHubSignInClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.createGitHubToken()
         .then(url => location.href = url)
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`The person cannot be signed in: ${reason}`)))
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed in: ${reason}`)))
         .then(() => this.progress -= 1);
   }
 
@@ -120,16 +120,16 @@ export class Component implements ng.OnInit {
   onSignUpSubmit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.createPerson(this.upEmailField, this.upPasswordField, this.upUsernameField)
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The person have been signed up."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The person have been signed up."));
           this.inCollapsed = false;
           this.upCollapsed = true;
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The person cannot be signed up: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed up: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;

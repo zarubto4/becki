@@ -20,7 +20,7 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
+import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/issue-confirmation-new.html",
@@ -42,11 +42,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  alerts:libBootstrapAlerts.Service;
+  notifications:libPatternFlyNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.issueId = routeParams.get("issue");
@@ -61,35 +61,35 @@ export class Component implements ng.OnInit {
     this.field = "";
     this.progress = 0;
     this.backEnd = backEndService;
-    this.alerts = alerts;
+    this.notifications = notifications;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.getIssueConfirmations()
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-86
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
         .then(confirmations => this.confirmations = confirmations)
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Confirmations cannot be loaded: ${reason}`)))
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Confirmations cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
   }
 
   onSubmit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.addConfirmationToPost(this.issueId, this.field)
         .then(() => {
-          this.alerts.next.push(new libBootstrapAlerts.Success("The confirmation has been added."));
+          this.notifications.next.push(new libPatternFlyNotifications.Success("The confirmation has been added."));
           this.router.navigate(["Issue", {issue: this.issueId}]);
         })
         .catch(reason => {
-          this.alerts.next.push(new libBootstrapAlerts.Danger(`The confirmation cannot be added: ${reason}`));
+          this.notifications.next.push(new libPatternFlyNotifications.Danger(`The confirmation cannot be added: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -99,7 +99,7 @@ export class Component implements ng.OnInit {
   onCancelClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.router.navigate(["Issue", {issue: this.issueId}]);
   }
 }

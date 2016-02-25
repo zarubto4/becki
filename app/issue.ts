@@ -23,8 +23,8 @@ import * as fieldHomerProgram from "./field-homer-program";
 import * as fieldIssueBody from "./field-issue-body";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
+import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 class Comment {
 
@@ -159,11 +159,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  alerts:libBootstrapAlerts.Service;
+  notifications:libPatternFlyNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("issue");
@@ -176,14 +176,14 @@ export class Component implements ng.OnInit {
     this.answerBodyField = fieldIssueBody.EMPTY;
     this.progress = 0;
     this.backEnd = backEndService;
-    this.alerts = alerts;
+    this.notifications = notifications;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.refresh();
   }
 
@@ -231,21 +231,21 @@ export class Component implements ng.OnInit {
           this.confirmations = [new libBootstrapPanelList.Item(null, "(issue/TYRION-86)", "does not work")];
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The issue ${this.id} cannot be loaded: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issue ${this.id} cannot be loaded: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
         });
     this.backEnd.getProjects()
         .then(projects => this.projects = projects)
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Projects cannot be loaded: ${reason}`)))
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Projects cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
   }
 
   onItemImportClick(item:Item):void {
     "use strict;"
 
-    this.alerts.shift();
+    this.notifications.shift();
     item.importing = true;
   }
 
@@ -272,11 +272,11 @@ export class Component implements ng.OnInit {
   onItemImportingSubmit(item:Item):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.createHomerProgram(item.programNameField, item.programDescriptionField, item.programCodeField, item.programProjectField)
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The program has been imported."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The program has been imported."));
           item.importing = false;
           item.programNameField = "";
           item.programDescriptionField = "";
@@ -284,7 +284,7 @@ export class Component implements ng.OnInit {
           item.programProjectField = "";
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The program cannot be imported: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be imported: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -294,31 +294,31 @@ export class Component implements ng.OnInit {
   onItemImportingCancelClick(item:Item):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     item.importing = false;
   }
 
   onItemEditClick(item:Item):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     item.editing = true;
   }
 
   onItemEditingSubmit(item:Item):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-97
     if (item instanceof Issue) {
       this.progress += 1;
       this.backEnd.updateIssue(item.id, item.typeField, item.titleField, item.bodyField, item.tags || [])
           .then(() => {
-            this.alerts.current.push(new libBootstrapAlerts.Success("The issue has been updated."));
+            this.notifications.current.push(new libPatternFlyNotifications.Success("The issue has been updated."));
             this.refresh();
           })
           .catch(reason => {
-            this.alerts.current.push(new libBootstrapAlerts.Danger(`The issue cannot be updated: ${reason}`));
+            this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issue cannot be updated: ${reason}`));
           })
           .then(() => {
             this.progress -= 1;
@@ -326,11 +326,11 @@ export class Component implements ng.OnInit {
     } else {
       this.backEnd.updateAnswer(item.id, item.bodyField, item.tags || [])
           .then(() => {
-            this.alerts.current.push(new libBootstrapAlerts.Success("The answer has been updated."));
+            this.notifications.current.push(new libPatternFlyNotifications.Success("The answer has been updated."));
             this.refresh();
           })
           .catch(reason => {
-            this.alerts.current.push(new libBootstrapAlerts.Danger(`The answer cannot be updated: ${reason}`));
+            this.notifications.current.push(new libPatternFlyNotifications.Danger(`The answer cannot be updated: ${reason}`));
           })
           .then(() => {
             this.progress -= 1;
@@ -341,22 +341,22 @@ export class Component implements ng.OnInit {
   onItemEditingCancelClick(item:Item):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     item.editing = false;
   }
 
   onMinusClick(id:string):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.subtractOneFromPost(id)
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The likes have been updated."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The likes have been updated."));
           this.refresh();
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The likes cannot be updated: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The likes cannot be updated: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -366,15 +366,15 @@ export class Component implements ng.OnInit {
   onPlusClick(id:string):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.addOneToPost(id)
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The likes have been updated."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The likes have been updated."));
           this.refresh();
         })
         .catch((reason) => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The likes cannot be updated: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The likes cannot be updated: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -384,17 +384,17 @@ export class Component implements ng.OnInit {
   onItemRemoveClick(item:Item):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-79
     if (item instanceof Issue) {
       this.progress += 1;
       this.backEnd.deleteIssue(item.id)
           .then(() => {
-            this.alerts.next.push(new libBootstrapAlerts.Success("The issue has been removed."));
+            this.notifications.next.push(new libPatternFlyNotifications.Success("The issue has been removed."));
             this.router.navigate(["Issues"]);
           })
           .catch(reason => {
-            this.alerts.current.push(new libBootstrapAlerts.Danger(`The issue cannot be removed: ${reason}`));
+            this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issue cannot be removed: ${reason}`));
           })
           .then(() => {
             this.progress -= 1;
@@ -403,11 +403,11 @@ export class Component implements ng.OnInit {
       this.progress += 1;
       this.backEnd.deleteAnswer(item.id)
           .then(() => {
-            this.alerts.current.push(new libBootstrapAlerts.Success("The answer has been removed."));
+            this.notifications.current.push(new libPatternFlyNotifications.Success("The answer has been removed."));
             this.refresh();
           })
           .catch((reason) => {
-            this.alerts.current.push(new libBootstrapAlerts.Danger(`The answer cannot be removed: ${reason}`));
+            this.notifications.current.push(new libPatternFlyNotifications.Danger(`The answer cannot be removed: ${reason}`));
           })
           .then(() => {
             this.progress -= 1;
@@ -418,16 +418,16 @@ export class Component implements ng.OnInit {
   onAnswerCreationSubmit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.createAnswer(this.id, this.answerBodyField)
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The answer has been created."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The answer has been created."));
           this.answerBodyField = fieldIssueBody.EMPTY;
           this.refresh();
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The answer cannot be created: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The answer cannot be created: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -437,15 +437,15 @@ export class Component implements ng.OnInit {
   onCommentCreationSubmit(item:Item):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.createComment(item.id, item.commentField)
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The comment has been created."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The comment has been created."));
           this.refresh();
         })
         .catch((reason) => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The comment cannot be created: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The comment cannot be created: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -455,22 +455,22 @@ export class Component implements ng.OnInit {
   onCommentEditClick(comment:Comment):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     comment.editing = true;
   }
 
   onCommentEditingSubmit(comment:Comment):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.updateComment(comment.id, comment.bodyField, comment.tags || [])
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The comment has been updated."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The comment has been updated."));
           this.refresh();
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The comment cannot be updated: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The comment cannot be updated: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -480,22 +480,22 @@ export class Component implements ng.OnInit {
   onCommentEditingCancelClick(comment:Comment):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     comment.editing = false;
   }
 
   onCommentRemoveClick(id:string):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.deleteComment(id)
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The comment has been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The comment has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The comment cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The comment cannot be removed: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -505,23 +505,23 @@ export class Component implements ng.OnInit {
   onRelatedAddClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.router.navigate(["NewRelatedIssue", {issue: this.id}]);
   }
 
   onRelatedRemoveClick(ids:string[]):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-95
     Promise.all(ids.map(id => this.backEnd.deleteIssueLink(id)))
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The issues have been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The issues have been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The issues cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issues cannot be removed: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -531,23 +531,23 @@ export class Component implements ng.OnInit {
   onTagAddClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.router.navigate(["NewIssueTag", {issue: this.id}]);
   }
 
   onTagsRemoveClick(tags:string[]):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-96
     this.backEnd.removeTagsFromPost(tags, this.id)
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The tags have been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The tags have been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The tags cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The tags cannot be removed: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -557,15 +557,15 @@ export class Component implements ng.OnInit {
   onConfirmationAddClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.router.navigate(["NewIssueConfirmation", {issue: this.id}]);
   }
 
   onConfirmationsRemoveClick(ids:string[]):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-94
-    this.alerts.current.push(new libBootstrapAlerts.Danger("issue/TYRION-94"));
+    this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-94"));
   }
 }

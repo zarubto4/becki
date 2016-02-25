@@ -15,9 +15,11 @@
 
 import * as ng from "angular2/angular2";
 
-abstract class Alert {
+abstract class Notification {
 
-  TYPE = 'info';
+  TYPE = "info";
+
+  ICON = "info";
 
   body:string;
 
@@ -28,31 +30,39 @@ abstract class Alert {
   }
 }
 
-export class Success extends Alert {
+export class Success extends Notification {
 
-  TYPE = 'success';
+  TYPE = "success";
+
+  ICON = "ok";
 }
 
-export class Info extends Alert {
+export class Info extends Notification {
 
-  TYPE = 'info';
+  TYPE = "info";
+
+  ICON = "info";
 }
 
-export class Warning extends Alert {
+export class Warning extends Notification {
 
-  TYPE = 'warning';
+  TYPE = "warning";
+
+  ICON = "warning-triangle-o";
 }
 
-export class Danger extends Alert {
+export class Danger extends Notification {
 
-  TYPE = 'danger';
+  TYPE = "danger";
+
+  ICON = "error-circle-o";
 }
 
 export class Service {
 
-  current:Alert[] = [];
+  current:Notification[] = [];
 
-  next:Alert[] = [];
+  next:Notification[] = [];
 
   shift():void {
     "use strict";
@@ -62,8 +72,8 @@ export class Service {
 }
 
 @ng.Component({
-  selector: "[alerts]",
-  templateUrl: "app/lib-bootstrap/alerts.html",
+  selector: "[notifications]",
+  templateUrl: "app/lib-patternfly/notifications.html",
   directives: [ng.CORE_DIRECTIVES]
 })
 export class Component {
@@ -76,9 +86,9 @@ export class Component {
     this.service = service;
   }
 
-  onCloseClick(alert:Alert):void {
+  onCloseClick(notification:Notification):void {
     "use strict";
 
-    this.service.current.splice(this.service.current.indexOf(alert), 1);
+    this.service.current.splice(this.service.current.indexOf(notification), 1);
   }
 }

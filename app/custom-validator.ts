@@ -15,7 +15,7 @@
 
 import * as ng from "angular2/angular2";
 
-import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
+import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Directive({
   selector: "[custom-validator]",
@@ -33,15 +33,15 @@ export class Directive {
 
   warned:boolean;
 
-  alerts:libBootstrapAlerts.Service;
+  notifications:libPatternFlyNotifications.Service;
 
-  constructor(field:ng.ElementRef, alerts:libBootstrapAlerts.Service) {
+  constructor(field:ng.ElementRef, notifications:libPatternFlyNotifications.Service) {
     "use strict";
 
     this.message = "Please fill out a valid value.";
     this.field = field;
     this.warned = false;
-    this.alerts = alerts;
+    this.notifications = notifications;
   }
 
   clear():void {
@@ -56,14 +56,14 @@ export class Directive {
     this.customValidator()
         .then(valid => {
           if (this.warned) {
-            this.alerts.current.push(new libBootstrapAlerts.Success("Can validate a field again."));
+            this.notifications.current.push(new libPatternFlyNotifications.Success("Can validate a field again."));
           }
           this.warned = false;
           return valid;
         })
         .catch(reason => {
           if (!this.warned) {
-            this.alerts.current.push(new libBootstrapAlerts.Warning(`Cannot validate a field: ${reason}`));
+            this.notifications.current.push(new libPatternFlyNotifications.Warning(`Cannot validate a field: ${reason}`));
           }
           this.warned = true;
           return false;
@@ -72,7 +72,7 @@ export class Directive {
           this.field.nativeElement.setCustomValidity(valid ? "" : this.message);
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`An unexpected error occurred during validating a field: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`An unexpected error occurred during validating a field: ${reason}`));
         });
   }
 }

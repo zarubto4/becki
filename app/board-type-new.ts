@@ -21,7 +21,7 @@ import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
+import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/board-type-new.html",
@@ -47,11 +47,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  alerts:libBootstrapAlerts.Service;
+  notifications:libPatternFlyNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -66,22 +66,22 @@ export class Component implements ng.OnInit {
     this.descriptionField = "";
     this.progress = 0;
     this.backEnd = backEndService;
-    this.alerts = alerts;
+    this.notifications = notifications;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 2;
     this.backEnd.getProducers()
         .then(producers => this.producers = producers)
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Producers cannot be loaded: ${reason}`)))
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Producers cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
     this.backEnd.getProcessors()
         .then(processors => this.processors = processors)
-        .catch(reason => this.alerts.current.push(new libBootstrapAlerts.Danger(`Processors cannot be loaded: ${reason}`)))
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Processors cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
   }
 
@@ -106,15 +106,15 @@ export class Component implements ng.OnInit {
   onSubmit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.createBoardType(this.nameField, this.producerField, this.processorField, this.descriptionField)
         .then(() => {
-          this.alerts.next.push(new libBootstrapAlerts.Success("The type has been created."));
+          this.notifications.next.push(new libPatternFlyNotifications.Success("The type has been created."));
           this.router.navigate(["Devices"]);
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The type cannot be created: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The type cannot be created: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -124,7 +124,7 @@ export class Component implements ng.OnInit {
   onCancelClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.router.navigate(["Devices"]);
   }
 }

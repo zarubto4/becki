@@ -21,8 +21,8 @@ import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
 import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
+import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/project.html",
@@ -64,11 +64,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  alerts:libBootstrapAlerts.Service;
+  notifications:libPatternFlyNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("project");
@@ -93,14 +93,14 @@ export class Component implements ng.OnInit {
     ];
     this.progress = 0;
     this.backEnd = backEndService;
-    this.alerts = alerts;
+    this.notifications = notifications;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.refresh();
   }
 
@@ -138,7 +138,7 @@ export class Component implements ng.OnInit {
           this.collaborators = collaborators.map(collaborator => new libBootstrapPanelList.Item(collaborator.id, libBackEnd.composePersonString(collaborator), null));
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The project ${this.id} cannot be loaded: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The project ${this.id} cannot be loaded: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -166,15 +166,15 @@ export class Component implements ng.OnInit {
   onUpdatingSubmit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.updateProject(this.id, this.nameField, this.descriptionField)
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The project has been updated."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The project has been updated."));
           this.refresh();
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The project cannot be updated: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The project cannot be updated: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -184,22 +184,22 @@ export class Component implements ng.OnInit {
   onCollaboratorAddClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.router.navigate(["NewProjectCollaborator", {project: this.id}]);
   }
 
   onCollaboratorsRemoveClick(ids:string[]):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.removeCollaboratorsFromProject(ids, this.id)
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The collaborators have been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The collaborators have been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The collaborators cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The collaborators cannot be removed: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -209,22 +209,22 @@ export class Component implements ng.OnInit {
   onBoardProgramAddClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.router.navigate(["NewBoardProgram", {project: this.id}]);
   }
 
   onBoardProgramsRemoveClick(ids:string[]):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     Promise.all(ids.map(id => this.backEnd.deleteBoardProgram(id)))
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The programs have been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The programs have been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The programs cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The programs cannot be removed: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -234,22 +234,22 @@ export class Component implements ng.OnInit {
   onStandaloneProgramAddClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.router.navigate(["NewStandaloneProgram", {project: this.id}]);
   }
 
   onStandaloneProgramsRemoveClick(ids:string[]):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     Promise.all(ids.map(id => this.backEnd.deleteStandaloneProgram(id)))
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The programs have been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The programs have been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The programs cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The programs cannot be removed: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -259,22 +259,22 @@ export class Component implements ng.OnInit {
   onHomerProgramAddClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.router.navigate(["NewHomerProgram", {project: this.id}]);
   }
 
   onHomerProgramsRemoveClick(ids:string[]):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     Promise.all(ids.map(id => this.backEnd.deleteHomerProgram(id)))
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The programs have been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The programs have been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The programs cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The programs cannot be removed: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -284,22 +284,22 @@ export class Component implements ng.OnInit {
   onBoardAddClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.router.navigate(["NewProjectBoard", {project: this.id}]);
   }
 
   onBoardsRemoveClick(ids:string[]):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     Promise.all(ids.map(id => this.backEnd.removeBoardFromProject(id, this.id)))
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The boards have been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The boards have been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The boards cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The boards cannot be removed: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -309,23 +309,23 @@ export class Component implements ng.OnInit {
   onHomerAddClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.router.navigate(["NewProjectHomer", {project: this.id}]);
   }
 
   onHomersRemoveClick(ids:string[]):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-91
     Promise.all(ids.map(id => this.backEnd.removeHomerFromProject(id, this.id)))
         .then(() => {
-          this.alerts.current.push(new libBootstrapAlerts.Success("The Homers have been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The Homers have been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The Homers cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The Homers cannot be removed: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -335,15 +335,15 @@ export class Component implements ng.OnInit {
   onUploadAddClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.router.navigate(["NewProjectUpload", {project: this.id}]);
   }
 
   onUploadsRemoveClick(ids:string[]):void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-43
-    this.alerts.current.push(new libBootstrapAlerts.Danger("issue/TYRION-43"));
+    this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-43"));
   }
 }

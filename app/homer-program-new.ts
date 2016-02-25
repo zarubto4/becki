@@ -22,7 +22,7 @@ import * as customValidator from "./custom-validator";
 import * as fieldHomerProgram from "./field-homer-program";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapAlerts from "./lib-bootstrap/alerts";
+import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/homer-program-new.html",
@@ -52,11 +52,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  alerts:libBootstrapAlerts.Service;
+  notifications:libPatternFlyNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, alerts:libBootstrapAlerts.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.projectId = routeParams.get("project");
@@ -74,14 +74,14 @@ export class Component implements ng.OnInit {
     this.codeField = `{"blocks":{}}`;
     this.progress = 0;
     this.backEnd = backEndService;
-    this.alerts = alerts;
+    this.notifications = notifications;
     this.router = router;
   }
 
   onInit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -108,15 +108,15 @@ export class Component implements ng.OnInit {
   onSubmit():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.progress += 1;
     this.backEnd.createHomerProgram(this.nameField, this.descriptionField, this.codeField, this.projectId)
         .then(() => {
-          this.alerts.next.push(new libBootstrapAlerts.Success("The program have been created."));
+          this.notifications.next.push(new libPatternFlyNotifications.Success("The program have been created."));
           this.router.navigate(["Project", {project: this.projectId}]);
         })
         .catch((reason) => {
-          this.alerts.current.push(new libBootstrapAlerts.Danger(`The program cannot be created: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be created: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
@@ -126,7 +126,7 @@ export class Component implements ng.OnInit {
   onCancelClick():void {
     "use strict";
 
-    this.alerts.shift();
+    this.notifications.shift();
     this.router.navigate(["Project", {project: this.projectId}]);
   }
 }
