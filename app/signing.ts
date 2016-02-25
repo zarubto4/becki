@@ -17,11 +17,12 @@ import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
+import * as customValidator from "./custom-validator";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/signing.html",
-  directives: [libPatternFlyNotifications.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [customValidator.Directive, libPatternFlyNotifications.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -35,7 +36,9 @@ export class Component implements ng.OnInit {
 
   upEmailField:string;
 
-  upPasswordField:string;
+  upPassword1Field:string;
+
+  upPassword2Field:string;
 
   upUsernameField:string;
 
@@ -55,7 +58,8 @@ export class Component implements ng.OnInit {
     this.inEmailField = "";
     this.inPasswordField = "";
     this.upEmailField = "";
-    this.upPasswordField = "";
+    this.upPassword1Field = "";
+    this.upPassword2Field = "";
     this.upUsernameField = "";
     this.progress = 0;
     this.backEnd = backEndService;
@@ -131,12 +135,18 @@ export class Component implements ng.OnInit {
     this.signIn = false;
   }
 
+  validateUpPasswordField():()=>Promise<boolean> {
+    "use strict";
+
+    return () => Promise.resolve(this.upPassword1Field == this.upPassword2Field);
+  }
+
   onSignUpSubmit():void {
     "use strict";
 
     this.notifications.shift();
     this.progress += 1;
-    this.backEnd.createPerson(this.upEmailField, this.upPasswordField, this.upUsernameField)
+    this.backEnd.createPerson(this.upEmailField, this.upPassword1Field, this.upUsernameField)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The person have been signed up."));
           this.signIn = true;
