@@ -21,6 +21,8 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
+const HTML_CLASSES = ["layout-pf-alt", "layout-pf-alt-fixed", "layout-pf-alt-fixed-with-footer"];
+
 export class LabeledLink {
 
   label:string;
@@ -44,7 +46,7 @@ export class LabeledLink {
   directives: [libPatternFlyNotifications.Component, ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
   inputs: ["heading: layout", "breadcrumbs"]
 })
-export class Component implements ng.OnInit {
+export class Component implements ng.OnInit, ng.OnDestroy {
 
   home:any[];
 
@@ -86,6 +88,15 @@ export class Component implements ng.OnInit {
       this.router.navigate(["Signing"]);
     }
     this.onWindowResize();
+    // TODO: https://groups.google.com/d/msg/angular/IJf-KyGC3Gs/h33mlUTrAwAJ
+    document.documentElement.classList.add(...HTML_CLASSES);
+  }
+
+  onDestroy():void {
+    "use strict";
+
+    // TODO: https://groups.google.com/d/msg/angular/IJf-KyGC3Gs/h33mlUTrAwAJ
+    document.documentElement.classList.remove(...HTML_CLASSES);
   }
 
   onDropdownClick(event:Event):void {
