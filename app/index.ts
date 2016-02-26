@@ -18,7 +18,7 @@ import * as layout from "./layout";
 export const HOME = new layout.LabeledLink("Back end", ["Devices"]);
 
 export const NAVIGATION = [
-  new layout.LabeledLink("Devices", ["Devices"], "tachometer"),
-  new layout.LabeledLink("Projects", ["Projects"], "book"),
-  new layout.LabeledLink("Issues", ["Issues"], "bug")
+  new layout.LabeledLink("Devices (TODO)", ["Devices"], "tachometer"),
+  new layout.LabeledLink("Projects (TODO)", ["Projects"], "book"),
+  new layout.LabeledLink("Issues (TODO)", ["Issues"], "bug")
 ];
