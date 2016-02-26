@@ -21,7 +21,7 @@ import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
+import * as libBootstrapListGroup from "./lib-bootstrap/list-group";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
@@ -29,9 +29,10 @@ import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
   directives: [
     customValidator.Directive,
     layout.Component,
-    libBootstrapPanelList.Component,
+    libBootstrapListGroup.Component,
     ng.CORE_DIRECTIVES,
-    ng.FORM_DIRECTIVES
+    ng.FORM_DIRECTIVES,
+    ngRouter.ROUTER_DIRECTIVES
   ]
 })
 export class Component implements ng.OnInit {
@@ -46,19 +47,33 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
-  collaborators:libBootstrapPanelList.Item[];
+  newCollaboratorLink:any[];
 
-  boardPrograms:libBootstrapPanelList.Item[];
+  collaborators:libBootstrapListGroup.Item[];
 
-  standalonePrograms:libBootstrapPanelList.Item[];
+  newBoardProgramLink:any[];
 
-  homerPrograms:libBootstrapPanelList.Item[];
+  boardPrograms:libBootstrapListGroup.Item[];
 
-  boards:libBootstrapPanelList.Item[];
+  newStandaloneProgramLink:any[];
 
-  homers:libBootstrapPanelList.Item[];
+  standalonePrograms:libBootstrapListGroup.Item[];
 
-  uploadQueue:libBootstrapPanelList.Item[];
+  newHomerProgramLink:any[];
+
+  homerPrograms:libBootstrapListGroup.Item[];
+
+  newBoardLink:any[];
+
+  boards:libBootstrapListGroup.Item[];
+
+  newHomerLink:any[];
+
+  homers:libBootstrapListGroup.Item[];
+
+  newUploadLink:any[];
+
+  uploadQueue:libBootstrapListGroup.Item[];
 
   progress:number;
 
@@ -81,15 +96,22 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
+    this.newCollaboratorLink = ["NewProjectCollaborator", {project: this.id}];
+    this.newBoardProgramLink = ["NewBoardProgram", {project: this.id}];
+    this.newStandaloneProgramLink = ["NewStandaloneProgram", {project: this.id}];
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-36
     this.standalonePrograms = [
-      new libBootstrapPanelList.Item(null, "(issue/TYRION-36)", "does not work")
+      new libBootstrapListGroup.Item(null, "(issue/TYRION-36)", "does not work")
     ];
+    this.newHomerProgramLink = ["NewHomerProgram", {project: this.id}];
+    this.newBoardLink = ["NewProjectBoard", {project: this.id}];
+    this.newHomerLink = ["NewProjectHomer", {project: this.id}];
+    this.newUploadLink = ["NewProjectUpload", {project: this.id}];
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-43
     this.uploadQueue = [
-      new libBootstrapPanelList.Item(null, "(issue/TYRION-43)", "does not work"),
-      new libBootstrapPanelList.Item(null, "(issue/TYRION-43)", "does not work"),
-      new libBootstrapPanelList.Item(null, "(issue/TYRION-43)", "does not work")
+      new libBootstrapListGroup.Item(null, "(issue/TYRION-43)", "does not work"),
+      new libBootstrapListGroup.Item(null, "(issue/TYRION-43)", "does not work"),
+      new libBootstrapListGroup.Item(null, "(issue/TYRION-43)", "does not work")
     ];
     this.progress = 0;
     this.backEnd = backEndService;
@@ -131,11 +153,11 @@ export class Component implements ng.OnInit {
           this.nameField = project.projectName;
           this.descriptionField = project.projectDescription;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-77
-          this.boardPrograms = boardPrograms.map(program => new libBootstrapPanelList.Item(program.id, program.programName, program.programDescription, ["BoardProgram", {project: this.id, program: program.id}]));
-          this.boards = boards.map(board => new libBootstrapPanelList.Item(board.id, board.id, board.isActive ? "active" : "inactive"));
-          this.homerPrograms = homerPrograms.map(program => new libBootstrapPanelList.Item(program.programId, program.programName, program.programDescription, ["HomerProgram", {project: this.id, program: program.programId}]));
-          this.homers = homers.map(homer => new libBootstrapPanelList.Item(homer.homerId, homer.homerId, null));
-          this.collaborators = collaborators.map(collaborator => new libBootstrapPanelList.Item(collaborator.id, libBackEnd.composePersonString(collaborator), null));
+          this.boardPrograms = boardPrograms.map(program => new libBootstrapListGroup.Item(program.id, program.programName, program.programDescription, ["BoardProgram", {project: this.id, program: program.id}]));
+          this.boards = boards.map(board => new libBootstrapListGroup.Item(board.id, board.id, board.isActive ? "active" : "inactive"));
+          this.homerPrograms = homerPrograms.map(program => new libBootstrapListGroup.Item(program.programId, program.programName, program.programDescription, ["HomerProgram", {project: this.id, program: program.programId}]));
+          this.homers = homers.map(homer => new libBootstrapListGroup.Item(homer.homerId, homer.homerId, null));
+          this.collaborators = collaborators.map(collaborator => new libBootstrapListGroup.Item(collaborator.id, libBackEnd.composePersonString(collaborator), null));
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The project ${this.id} cannot be loaded: ${reason}`));
@@ -181,165 +203,116 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onCollaboratorAddClick():void {
-    "use strict";
-
-    this.notifications.shift();
-    this.router.navigate(["NewProjectCollaborator", {project: this.id}]);
-  }
-
-  onCollaboratorsRemoveClick(ids:string[]):void {
+  onCollaboratorRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
     this.progress += 1;
-    this.backEnd.removeCollaboratorsFromProject(ids, this.id)
+    this.backEnd.removeCollaboratorsFromProject([id], this.id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The collaborators have been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The collaborator has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The collaborators cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The collaborator cannot be removed: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
         });
   }
 
-  onBoardProgramAddClick():void {
-    "use strict";
-
-    this.notifications.shift();
-    this.router.navigate(["NewBoardProgram", {project: this.id}]);
-  }
-
-  onBoardProgramsRemoveClick(ids:string[]):void {
+  onBoardProgramRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
     this.progress += 1;
-    Promise.all(ids.map(id => this.backEnd.deleteBoardProgram(id)))
+    this.backEnd.deleteBoardProgram(id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The programs have been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The program has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The programs cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be removed: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
         });
   }
 
-  onStandaloneProgramAddClick():void {
-    "use strict";
-
-    this.notifications.shift();
-    this.router.navigate(["NewStandaloneProgram", {project: this.id}]);
-  }
-
-  onStandaloneProgramsRemoveClick(ids:string[]):void {
+  onStandaloneProgramRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
     this.progress += 1;
-    Promise.all(ids.map(id => this.backEnd.deleteStandaloneProgram(id)))
+    this.backEnd.deleteStandaloneProgram(id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The programs have been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The program has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The programs cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be removed: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
         });
   }
 
-  onHomerProgramAddClick():void {
-    "use strict";
-
-    this.notifications.shift();
-    this.router.navigate(["NewHomerProgram", {project: this.id}]);
-  }
-
-  onHomerProgramsRemoveClick(ids:string[]):void {
+  onHomerProgramRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
     this.progress += 1;
-    Promise.all(ids.map(id => this.backEnd.deleteHomerProgram(id)))
+    this.backEnd.deleteHomerProgram(id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The programs have been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The program has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The programs cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be removed: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
         });
   }
 
-  onBoardAddClick():void {
-    "use strict";
-
-    this.notifications.shift();
-    this.router.navigate(["NewProjectBoard", {project: this.id}]);
-  }
-
-  onBoardsRemoveClick(ids:string[]):void {
+  onBoardRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
     this.progress += 1;
-    Promise.all(ids.map(id => this.backEnd.removeBoardFromProject(id, this.id)))
+    this.backEnd.removeBoardFromProject(id, this.id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The boards have been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The board has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The boards cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The board cannot be removed: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
         });
   }
 
-  onHomerAddClick():void {
-    "use strict";
-
-    this.notifications.shift();
-    this.router.navigate(["NewProjectHomer", {project: this.id}]);
-  }
-
-  onHomersRemoveClick(ids:string[]):void {
+  onHomerRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
     this.progress += 1;
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-91
-    Promise.all(ids.map(id => this.backEnd.removeHomerFromProject(id, this.id)))
+    this.backEnd.removeHomerFromProject(id, this.id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The Homers have been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The Homer has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The Homers cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The Homer cannot be removed: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
         });
   }
 
-  onUploadAddClick():void {
-    "use strict";
-
-    this.notifications.shift();
-    this.router.navigate(["NewProjectUpload", {project: this.id}]);
-  }
-
-  onUploadsRemoveClick(ids:string[]):void {
+  onUploadRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();

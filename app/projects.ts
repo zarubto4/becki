@@ -20,18 +20,20 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
+import * as libBootstrapListGroup from "./lib-bootstrap/list-group";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/projects.html",
-  directives: [layout.Component, libBootstrapPanelList.Component],
+  directives: [layout.Component, libBootstrapListGroup.Component, ngRouter.ROUTER_DIRECTIVES],
 })
 export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
-  items:libBootstrapPanelList.Item[];
+  newLink:any[];
+
+  items:libBootstrapListGroup.Item[];
 
   progress:number;
 
@@ -49,6 +51,7 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("User", ["Projects"]),
       new layout.LabeledLink("Projects", ["Projects"])
     ];
+    this.newLink = ["NewProject"];
     this.progress += 1;
     this.backEnd = backEndService;
     this.notifications = notifications;
@@ -67,30 +70,23 @@ export class Component implements ng.OnInit {
 
     this.progress += 1;
     this.backEnd.getProjects()
-        .then(projects => this.items = projects.map(project => new libBootstrapPanelList.Item(project.projectId, project.projectName, project.projectDescription, ["Project", {project: project.projectId}])))
+        .then(projects => this.items = projects.map(project => new libBootstrapListGroup.Item(project.projectId, project.projectName, project.projectDescription, ["Project", {project: project.projectId}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Projects cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
   }
 
-  onAddClick():void {
-    "use strict";
-
-    this.notifications.shift();
-    this.router.navigate(["NewProject"]);
-  }
-
-  onRemoveClick(ids:string[]):void {
+  onRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
     this.progress += 1;
-    Promise.all(ids.map(id => this.backEnd.deleteProject(id)))
+    this.backEnd.deleteProject(id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The projects have been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The project has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The projects cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The project cannot be removed: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;

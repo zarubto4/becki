@@ -21,7 +21,7 @@ import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
+import * as libBootstrapListGroup from "./lib-bootstrap/list-group";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
@@ -29,9 +29,10 @@ import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
   directives: [
     customValidator.Directive,
     layout.Component,
-    libBootstrapPanelList.Component,
+    libBootstrapListGroup.Component,
     ng.CORE_DIRECTIVES,
-    ng.FORM_DIRECTIVES
+    ng.FORM_DIRECTIVES,
+    ngRouter.ROUTER_DIRECTIVES
   ]
 })
 export class Component implements ng.OnInit {
@@ -48,7 +49,9 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
-  versions:libBootstrapPanelList.Item[];
+  newVersionLink:any[];
+
+  versions:libBootstrapListGroup.Item[];
 
   progress:number;
 
@@ -74,6 +77,7 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
+    this.newVersionLink = ["NewBoardProgramVersion", {project: this.projectId, program: this.id}];
     this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
@@ -95,7 +99,7 @@ export class Component implements ng.OnInit {
         .then(program => {
           this.nameField = program.programName;
           this.descriptionField = program.programDescription;
-          this.versions = program.versions.map(version => new libBootstrapPanelList.Item(version.id, version.version.toString(), version.versionName, ["BoardProgramVersion", {project: this.projectId, program: this.id, version: version.id}]));
+          this.versions = program.versions.map(version => new libBootstrapListGroup.Item(version.id, version.version.toString(), version.versionName, ["BoardProgramVersion", {project: this.projectId, program: this.id, version: version.id}]));
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program ${this.id} cannot be loaded: ${reason}`));
@@ -153,25 +157,18 @@ export class Component implements ng.OnInit {
     this.router.navigate(["Project", {project: this.projectId}]);
   }
 
-  onVersionAddClick():void {
-    "use strict";
-
-    this.notifications.shift();
-    this.router.navigate(["NewBoardProgramVersion", {project: this.projectId, program: this.id}]);
-  }
-
-  onVersionsRemoveClick(ids:string[]):void {
+  onVersionRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
     this.progress += 1;
-    Promise.all(ids.map(id => this.backEnd.deleteBoardProgramVersion(id, this.id)))
+    this.backEnd.deleteBoardProgramVersion(id, this.id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The versions have been updated."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The version has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The versions cannot be updated: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The version cannot be removed: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;

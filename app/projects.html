@@ -4,7 +4,8 @@
   -->
 
 <div data-bind-layout="'Projects'" data-bind-breadcrumbs="breadcrumbs">
-  <div data-bind-panel-list="items" data-bind-progress="progress" data-on-plus-click="onAddClick($event)" data-on-minus-click="onRemoveClick($event)">
+  <h2><small><a data-bind-router-link="newLink">Add</a></small></h2>
+  <div data-bind-list-group="items" data-bind-progress="progress" data-on-remove-click="onRemoveClick($event)">
     <progress>Loading...</progress>
   </div>
 </div>

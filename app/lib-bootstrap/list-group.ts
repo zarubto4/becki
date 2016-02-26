@@ -26,8 +26,6 @@ export class Item {
 
   link:any[];
 
-  selected:boolean;
-
   constructor(id:string, name:string, description:string, link:any[] = null) {
     "use strict";
 
@@ -35,48 +33,26 @@ export class Item {
     this.name = name;
     this.description = description;
     this.link = link;
-    this.selected = false;
   }
 }
 
 @ng.Component({
-  selector: "[panel-list]",
-  templateUrl: "app/lib-bootstrap/panel-list.html",
+  selector: "[list-group]",
+  templateUrl: "app/lib-bootstrap/list-group.html",
   directives: [ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
   inputs: ["progress"]
 })
 export class Component {
 
-  @ng.Input("panelList")
+  @ng.Input("listGroup")
   items:Item[] = [];
 
   @ng.Output()
-  plusClick = new ng.EventEmitter();
+  removeClick = new ng.EventEmitter();
 
-  @ng.Output()
-  minusClick = new ng.EventEmitter();
-
-  getSelectedIds():string[] {
+  onRemoveClick(item:Item):void {
     "use strict";
 
-    return this.items ? this.items.filter(item => item.selected).map(item => item.id) : [];
-  }
-
-  onItemClick(item:Item):void {
-    "use strict";
-
-    item.selected = !item.selected;
-  }
-
-  onPlusClick(event:Event):void {
-    "use strict";
-
-    this.plusClick.next(event);
-  }
-
-  onMinusClick():void {
-    "use strict";
-
-    this.minusClick.next(this.getSelectedIds());
+    this.removeClick.next(item.id);
   }
 }

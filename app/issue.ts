@@ -23,7 +23,7 @@ import * as fieldHomerProgram from "./field-homer-program";
 import * as fieldIssueBody from "./field-issue-body";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
+import * as libBootstrapListGroup from "./lib-bootstrap/list-group";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 class Comment {
@@ -127,7 +127,7 @@ class Issue extends Item {
     fieldHomerProgram.Component,
     fieldIssueBody.Component,
     layout.Component,
-    libBootstrapPanelList.Component,
+    libBootstrapListGroup.Component,
     ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES,
     ngRouter.ROUTER_DIRECTIVES
@@ -149,11 +149,17 @@ export class Component implements ng.OnInit {
 
   answerBodyField:string;
 
-  related:libBootstrapPanelList.Item[];
+  newRelatedLink:any[];
 
-  tags:libBootstrapPanelList.Item[];
+  related:libBootstrapListGroup.Item[];
 
-  confirmations:libBootstrapPanelList.Item[];
+  newTagLink:any[];
+
+  tags:libBootstrapListGroup.Item[];
+
+  newConfirmationLink:any[];
+
+  confirmations:libBootstrapListGroup.Item[];
 
   progress:number;
 
@@ -174,6 +180,9 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink(`Issue ${this.id}`, ["Issue", {issue: this.id}])
     ];
     this.answerBodyField = fieldIssueBody.EMPTY;
+    this.newRelatedLink = ["NewRelatedIssue", {issue: this.id}];
+    this.newTagLink = ["NewIssueTag", {issue: this.id}];
+    this.newConfirmationLink = ["NewIssueConfirmation", {issue: this.id}];
     this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
@@ -225,10 +234,10 @@ export class Component implements ng.OnInit {
                   answer[0].hashTags
               ))
           );
-          this.related = related.map(related2 => new libBootstrapPanelList.Item(related2[0].linkId, related2[0].name, "", ["Issue", {issue: related2[1].postId}]));
-          this.tags = issue.hashTags ? issue.hashTags.map(tag => new libBootstrapPanelList.Item(tag, tag, "")) : [];
+          this.related = related.map(related2 => new libBootstrapListGroup.Item(related2[0].linkId, related2[0].name, "", ["Issue", {issue: related2[1].postId}]));
+          this.tags = issue.hashTags ? issue.hashTags.map(tag => new libBootstrapListGroup.Item(tag, tag, "")) : [];
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-86
-          this.confirmations = [new libBootstrapPanelList.Item(null, "(issue/TYRION-86)", "does not work")];
+          this.confirmations = [new libBootstrapListGroup.Item(null, "(issue/TYRION-86)", "does not work")];
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issue ${this.id} cannot be loaded: ${reason}`));
@@ -502,66 +511,45 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onRelatedAddClick():void {
-    "use strict";
-
-    this.notifications.shift();
-    this.router.navigate(["NewRelatedIssue", {issue: this.id}]);
-  }
-
-  onRelatedRemoveClick(ids:string[]):void {
+  onRelatedRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
     this.progress += 1;
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-95
-    Promise.all(ids.map(id => this.backEnd.deleteIssueLink(id)))
+    this.backEnd.deleteIssueLink(id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The issues have been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The issue has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issues cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issue cannot be removed: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
         });
   }
 
-  onTagAddClick():void {
-    "use strict";
-
-    this.notifications.shift();
-    this.router.navigate(["NewIssueTag", {issue: this.id}]);
-  }
-
-  onTagsRemoveClick(tags:string[]):void {
+  onTagRemoveClick(tag:string):void {
     "use strict";
 
     this.notifications.shift();
     this.progress += 1;
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-96
-    this.backEnd.removeTagsFromPost(tags, this.id)
+    this.backEnd.removeTagsFromPost([tag], this.id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The tags have been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The tag has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The tags cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The tag cannot be removed: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;
         });
   }
 
-  onConfirmationAddClick():void {
-    "use strict";
-
-    this.notifications.shift();
-    this.router.navigate(["NewIssueConfirmation", {issue: this.id}]);
-  }
-
-  onConfirmationsRemoveClick(ids:string[]):void {
+  onConfirmationRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();

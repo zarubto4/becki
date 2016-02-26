@@ -30,8 +30,8 @@
       <button class="btn btn-primary" type="submit">Update</button>
     </div>
   </form>
-  <h2>Versions</h2>
-  <div data-bind-panel-list="versions" data-bind-progress="progress" data-on-plus-click="onVersionAddClick($event)" data-on-minus-click="onVersionsRemoveClick($event)">
+  <h2>Versions <small>— <a data-bind-router-link="newVersionLink">Add</a></small></h2>
+  <div data-bind-list-group="versions" data-bind-progress="progress" data-on-remove-click="onVersionRemoveClick($event)">
     <progress>Loading...</progress>
   </div>
 </div>

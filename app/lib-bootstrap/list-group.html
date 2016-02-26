@@ -1,0 +1,27 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<div class="list-group" style="position:relative">
+  <template data-bind-ng-if="progress">
+    <div class="overlay">
+      <progress>Loading...</progress>
+    </div>
+  </template>
+  <div template="ngFor #item of items">
+    <div class="list-group-item">
+      <h4 class="list-group-item-heading">
+        {{item.name}}
+        <small>
+          —
+          <template data-bind-ng-if="item.link">
+            <a data-bind-router-link="item.link">Edit</a> |
+          </template>
+          <a data-on-click="onRemoveClick(item, $event)" style="cursor: pointer">Remove</a>
+        </small>
+      </h4>
+      <p class="list-group-item-text">{{item.description}}</p>
+    </div>
+  </div>
+</div>

@@ -217,19 +217,28 @@
       </div>
     </div>
     <div class="col-xs-12 col-sm-3">
-      <h2>Related</h2>
+      <h2>
+        Related
+        <small>— <a data-bind-router-link="newRelatedLink">Add</a></small>
+      </h2>
 
-      <div data-bind-panel-list="related" data-bind-progress="progress" data-on-plus-click="onRelatedAddClick($event)" data-on-minus-click="onRelatedRemoveClick($event)">
+      <div data-bind-list-group="related" data-bind-progress="progress" data-on-remove-click="onRelatedRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
-      <h2>Tags</h2>
+      <h2>
+        Tags
+        <small>— <a data-bind-router-link="newTagLink">Add</a></small>
+      </h2>
 
-      <div data-bind-panel-list="tags" data-bind-progress="progress" data-on-plus-click="onTagAddClick($event)" data-on-minus-click="onTagsRemoveClick($event)">
+      <div data-bind-list-group="tags" data-bind-progress="progress" data-on-remove-click="onTagRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
-      <h2>Confirmations</h2>
+      <h2>
+        Confirmations
+        <small>— <a data-bind-router-link="newConfirmationLink">Add</a></small>
+      </h2>
 
-      <div data-bind-panel-list="confirmations" data-bind-progress="progress" data-on-plus-click="onConfirmationAddClick($event)" data-on-minus-click="onConfirmationsRemoveClick($event)">
+      <div data-bind-list-group="confirmations" data-bind-progress="progress" data-on-remove-click="onConfirmationRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>

@@ -31,51 +31,72 @@
       </form>
     </div>
     <div class="col-xs-12 col-sm-4">
-      <h2>Collaborators</h2>
-      <div data-bind-panel-list="collaborators" data-bind-progress="progress" data-on-plus-click="onCollaboratorAddClick($event)" data-on-minus-click="onCollaboratorsRemoveClick($event)">
+      <h2>
+        Collaborators
+        <small>— <a data-bind-router-link="newCollaboratorLink">Add</a></small>
+      </h2>
+      <div data-bind-list-group="collaborators" data-bind-progress="progress" data-on-remove-click="onCollaboratorRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-xs-12 col-sm-4">
-      <h2>Board Programs</h2>
-      <div data-bind-panel-list="boardPrograms" data-bind-progress="progress" data-on-plus-click="onBoardProgramAddClick($event)" data-on-minus-click="onBoardProgramsRemoveClick($event)">
+      <h2>
+        Board Programs
+        <small>— <a data-bind-router-link="newBoardProgramLink">Add</a></small>
+      </h2>
+      <div data-bind-list-group="boardPrograms" data-bind-progress="progress" data-on-remove-click="onBoardProgramRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
     <div class="col-xs-12 col-sm-4">
-      <h2>Standalone Programs</h2>
-      <div data-bind-panel-list="standalonePrograms" data-bind-progress="progress" data-on-plus-click="onStandaloneProgramAddClick($event)" data-on-minus-click="onStandaloneProgramsRemoveClick($event)">
+      <h2>
+        Standalone Programs
+        <small>— <a data-bind-router-link="newStandaloneProgramLink">Add</a></small>
+      </h2>
+      <div data-bind-list-group="standalonePrograms" data-bind-progress="progress" data-on-remove-click="onStandaloneProgramRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
     <div class="col-xs-12 col-sm-4">
-      <h2>Homer Programs</h2>
-      <div data-bind-panel-list="homerPrograms" data-bind-progress="progress" data-on-plus-click="onHomerProgramAddClick($event)" data-on-minus-click="onHomerProgramsRemoveClick($event)">
+      <h2>
+        Homer Programs
+        <small>— <a data-bind-router-link="newHomerProgramLink">Add</a></small>
+      </h2>
+      <div data-bind-list-group="homerPrograms" data-bind-progress="progress" data-on-remove-click="onHomerProgramRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-xs-12 col-sm-6">
-      <h2>Boards</h2>
-      <div data-bind-panel-list="boards" data-bind-progress="progress" data-on-plus-click="onBoardAddClick($event)" data-on-minus-click="onBoardsRemoveClick($event)">
+      <h2>
+        Boards
+        <small>— <a data-bind-router-link="newBoardLink">Add</a></small>
+      </h2>
+      <div data-bind-list-group="boards" data-bind-progress="progress" data-on-remove-click="onBoardRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
     <div class="col-xs-12 col-sm-6">
-      <h2>Homers</h2>
+      <h2>
+        Homers
+        <small>— <a data-bind-router-link="newHomerLink">Add</a></small>
+      </h2>
       <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-78 -->
-      <div data-bind-panel-list="homers" data-bind-progress="progress" data-on-plus-click="onHomerAddClick($event)" data-on-minus-click="onHomersRemoveClick($event)">
+      <div data-bind-list-group="homers" data-bind-progress="progress" data-on-remove-click="onHomerRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-xs-12">
-      <h2>Upload Queue</h2>
-      <div data-bind-panel-list="uploadQueue" data-bind-progress="progress" data-on-plus-click="onUploadAddClick($event)" data-on-minus-click="onUploadsRemoveClick($event)">
+      <h2>
+        Upload Queue
+        <small>— <a data-bind-router-link="newUploadLink">Add</a></small>
+      </h2>
+      <div data-bind-list-group="uploadQueue" data-bind-progress="progress" data-on-remove-click="onUploadRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>

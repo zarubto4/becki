@@ -4,49 +4,70 @@
   -->
 
 <div data-bind-layout="'Devices'" data-bind-breadcrumbs="breadcrumbs">
-  <h2>Producers</h2>
-  <div data-bind-panel-list="producers" data-bind-progress="progress" data-on-plus-click="onProducerAddClick($event)" data-on-minus-click="onProducersRemoveClick($event)">
+  <h2>
+    Producers
+    <small>— <a data-bind-router-link="newProducerLink">Add</a></small>
+  </h2>
+  <div data-bind-list-group="producers" data-bind-progress="progress" data-on-remove-click="onProducerRemoveClick($event)">
     <progress>Loading...</progress>
   </div>
   <div class="row">
     <div class="col-xs-12 col-sm-4">
-      <h2>Libraries</h2>
-      <div data-bind-panel-list="libraries" data-bind-progress="progress" data-on-plus-click="onLibraryAddClick($event)" data-on-minus-click="onLibrariesRemoveClick($event)">
+      <h2>
+        Libraries
+        <small>— <a data-bind-router-link="newLibraryLink">Add</a></small>
+      </h2>
+      <div data-bind-list-group="libraries" data-bind-progress="progress" data-on-remove-click="onLibraryRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
     <div class="col-xs-12 col-sm-4">
-      <h2>Library groups</h2>
-      <div data-bind-panel-list="libraryGroups" data-bind-progress="progress" data-on-plus-click="onLibraryGroupAddClick($event)" data-on-minus-click="onLibraryGroupsRemoveClick($event)">
+      <h2>
+        Library groups
+        <small>— <a data-bind-router-link="newLibraryGroupLink">Add</a></small>
+      </h2>
+      <div data-bind-list-group="libraryGroups" data-bind-progress="progress" data-on-remove-click="onLibraryGroupRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
     <div class="col-xs-12 col-sm-4">
-      <h2>Processors</h2>
-      <div data-bind-panel-list="processors" data-bind-progress="progress" data-on-plus-click="onProcessorAddClick($event)" data-on-minus-click="onProcessorsRemoveClick($event)">
+      <h2>
+        Processors
+        <small>— <a data-bind-router-link="newProcessorLink">Add</a></small>
+      </h2>
+      <div data-bind-list-group="processors" data-bind-progress="progress" data-on-remove-click="onProcessorRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-xs-12 col-sm-4">
-      <h2>Board Types</h2>
-      <div data-bind-panel-list="boardTypes" data-bind-progress="progress" data-on-plus-click="onBoardTypeAddClick($event)" data-on-minus-click="onBoardTypesRemoveClick($event)">
+      <h2>
+        Board Types
+        <small>— <a data-bind-router-link="newBoardTypeLink">Add</a></small>
+      </h2>
+      <div data-bind-list-group="boardTypes" data-bind-progress="progress" data-on-remove-click="onBoardTypeRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
     <div class="col-xs-12 col-sm-8">
-      <h2>Boards</h2>
+      <h2>
+        Boards
+        <small>— <a data-bind-router-link="newBoardLink">Add</a></small>
+      </h2>
       <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-70 -->
-      <div data-bind-panel-list="boards" data-bind-progress="progress" data-on-plus-click="onBoardAddClick($event)" data-on-minus-click="onBoardsRemoveClick($event)">
+      <div data-bind-list-group="boards" data-bind-progress="progress" data-on-remove-click="onBoardRemoveClick($event)">
         <progress>Loading...</progress>
       </div>
     </div>
   </div>
-  <h2>Homers</h2>
+  <h2>
+    Homers
+    <small>— <a data-bind-router-link="newHomerLink">Add</a></small>
+  </h2>
   <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-71 -->
   <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-78 -->
-  <div data-bind-panel-list="homers" data-bind-progress="progress" data-on-plus-click="onHomerAddClick($event)" data-on-minus-click="onHomersRemoveClick($event)">
+  <div data-bind-list-group="homers" data-bind-progress="progress" data-on-remove-click="onHomerRemoveClick($event)">
     <progress>Loading...</progress>
   </div>
 </div>

@@ -20,22 +20,28 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapPanelList from "./lib-bootstrap/panel-list";
+import * as libBootstrapListGroup from "./lib-bootstrap/list-group";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/issues.html",
-  directives: [layout.Component, libBootstrapPanelList.Component]
+  directives: [layout.Component, libBootstrapListGroup.Component, ngRouter.ROUTER_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
-  types:libBootstrapPanelList.Item[];
+  newTypeLink:any[];
 
-  confirmations:libBootstrapPanelList.Item[];
+  types:libBootstrapListGroup.Item[];
 
-  issues:libBootstrapPanelList.Item[];
+  newConfirmationLink:any[];
+
+  confirmations:libBootstrapListGroup.Item[];
+
+  newIssueLink:any[];
+
+  issues:libBootstrapListGroup.Item[];
 
   progress:number;
 
@@ -52,6 +58,9 @@ export class Component implements ng.OnInit {
       becki.HOME,
       new layout.LabeledLink("Issues", ["Issues"])
     ];
+    this.newTypeLink = ["NewIssueType"];
+    this.newConfirmationLink = ["NewIssueConfirmationType"];
+    this.newIssueLink = ["NewIssue"];
     this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
@@ -70,28 +79,21 @@ export class Component implements ng.OnInit {
 
     this.progress += 3;
     this.backEnd.getIssueTypes()
-        .then(types => this.types = types.map(type => new libBootstrapPanelList.Item(type.id, type.type, null)))
+        .then(types => this.types = types.map(type => new libBootstrapListGroup.Item(type.id, type.type, null)))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Types cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
     this.backEnd.getIssueConfirmations()
-        .then(confirmations => this.confirmations = confirmations.map(confirmation => new libBootstrapPanelList.Item(confirmation.id, confirmation.type, null, ["IssueConfirmationType", {confirmation: confirmation.id}])))
+        .then(confirmations => this.confirmations = confirmations.map(confirmation => new libBootstrapListGroup.Item(confirmation.id, confirmation.type, null, ["IssueConfirmationType", {confirmation: confirmation.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Confirmations cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-27
     this.backEnd.getIssues()
-        .then(issues => this.issues = issues.map(issue => new libBootstrapPanelList.Item(issue.postId, issue.name, issue.type, ["Issue", {issue: issue.postId}])))
+        .then(issues => this.issues = issues.map(issue => new libBootstrapListGroup.Item(issue.postId, issue.name, issue.type, ["Issue", {issue: issue.postId}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Issues cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
   }
 
-  onTypeAddClick():void {
-    "use strict";
-
-    this.notifications.shift();
-    this.router.navigate(["NewIssueType"]);
-  }
-
-  onTypesRemoveClick(ids:string[]):void {
+  onTypeRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
@@ -99,14 +101,7 @@ export class Component implements ng.OnInit {
     this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-92"));
   }
 
-  onConfirmationAddClick():void {
-    "use strict";
-
-    this.notifications.shift();
-    this.router.navigate(["NewIssueConfirmationType"]);
-  }
-
-  onConfirmationsRemoveClick(ids:string[]):void {
+  onConfirmationRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
@@ -114,14 +109,7 @@ export class Component implements ng.OnInit {
     this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-93"));
   }
 
-  onIssueAddClick():void {
-    "use strict";
-
-    this.notifications.shift();
-    this.router.navigate(["NewIssue"]);
-  }
-
-  onIssuesRemoveClick(ids:string[]):void {
+  onIssueRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
