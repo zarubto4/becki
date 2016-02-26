@@ -15,12 +15,12 @@
     </div>
     <div class="col-sm-7 col-md-6 col-lg-5 login">
       <div notifications>
-        <progress>Loading...</progress>
+        <div class="spinner"></div>
       </div>
       <div style="position: relative" data-bind-ng-switch="signIn">
         <template data-bind-ng-if="progress">
           <div class="overlay">
-            <progress>Loading...</progress>
+            <div class="spinner"></div>
           </div>
         </template>
         <template data-bind-ng-switch-when="true">

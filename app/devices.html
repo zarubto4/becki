@@ -9,7 +9,7 @@
     <small>— <a data-bind-router-link="newProducerLink">Add</a></small>
   </h2>
   <div data-bind-list-group="producers" data-bind-progress="progress" data-on-remove-click="onProducerRemoveClick($event)">
-    <progress>Loading...</progress>
+    <div class="spinner"></div>
   </div>
   <div class="row">
     <div class="col-xs-12 col-sm-4">
@@ -18,7 +18,7 @@
         <small>— <a data-bind-router-link="newLibraryLink">Add</a></small>
       </h2>
       <div data-bind-list-group="libraries" data-bind-progress="progress" data-on-remove-click="onLibraryRemoveClick($event)">
-        <progress>Loading...</progress>
+        <div class="spinner"></div>
       </div>
     </div>
     <div class="col-xs-12 col-sm-4">
@@ -27,7 +27,7 @@
         <small>— <a data-bind-router-link="newLibraryGroupLink">Add</a></small>
       </h2>
       <div data-bind-list-group="libraryGroups" data-bind-progress="progress" data-on-remove-click="onLibraryGroupRemoveClick($event)">
-        <progress>Loading...</progress>
+        <div class="spinner"></div>
       </div>
     </div>
     <div class="col-xs-12 col-sm-4">
@@ -36,7 +36,7 @@
         <small>— <a data-bind-router-link="newProcessorLink">Add</a></small>
       </h2>
       <div data-bind-list-group="processors" data-bind-progress="progress" data-on-remove-click="onProcessorRemoveClick($event)">
-        <progress>Loading...</progress>
+        <div class="spinner"></div>
       </div>
     </div>
   </div>
@@ -47,7 +47,7 @@
         <small>— <a data-bind-router-link="newBoardTypeLink">Add</a></small>
       </h2>
       <div data-bind-list-group="boardTypes" data-bind-progress="progress" data-on-remove-click="onBoardTypeRemoveClick($event)">
-        <progress>Loading...</progress>
+        <div class="spinner"></div>
       </div>
     </div>
     <div class="col-xs-12 col-sm-8">
@@ -57,7 +57,7 @@
       </h2>
       <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-70 -->
       <div data-bind-list-group="boards" data-bind-progress="progress" data-on-remove-click="onBoardRemoveClick($event)">
-        <progress>Loading...</progress>
+        <div class="spinner"></div>
       </div>
     </div>
   </div>
@@ -68,6 +68,6 @@
   <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-71 -->
   <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-78 -->
   <div data-bind-list-group="homers" data-bind-progress="progress" data-on-remove-click="onHomerRemoveClick($event)">
-    <progress>Loading...</progress>
+    <div class="spinner"></div>
   </div>
 </div>

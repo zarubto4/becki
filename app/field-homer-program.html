@@ -37,7 +37,7 @@
   </div>
 </template>
 <div data-bind-class.form-control="!readonly" style="height: auto" data-var-field>
-  <progress>Loading...</progress>
+  <div class="spinner"></div>
 </div>
 <template data-bind-ng-if="config">
   <div class="panel panel-primary" style="margin-top: 2em">
@@ -62,7 +62,7 @@
         </template>
         <template data-bind-ng-switch-when="'javascript'">
           <div data-bindon-field-code="property.value" data-bind-mode="'text/javascript'">
-            <progress>Loading...</progress>
+            <div class="spinner"></div>
           </div>
         </template>
       </div>

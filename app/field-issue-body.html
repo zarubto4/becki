@@ -15,6 +15,6 @@
 </template>
 <template data-bind-ng-if="model.homer != null">
   <div style="margin-top: 1em" data-bind-field-homer-program="model.homer" data-bind-readonly="readonly" data-on-field-homer-program-change="onHomerChange($event)">
-    <progress>Loading...</progress>
+    <div class="spinner"></div>
   </div>
 </template>

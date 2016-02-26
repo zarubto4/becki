@@ -9,7 +9,7 @@
       <div class="media" template="ngFor #item of items" style="position: relative">
         <template data-bind-ng-if="progress">
           <div class="overlay">
-            <progress>Loading...</progress>
+            <div class="spinner"></div>
           </div>
         </template>
         <div class="media-left">
@@ -59,7 +59,7 @@
                       Body
                     </label>
                     <div data-bindon-field-issue-body="item.bodyField" data-bind-required="true">
-                      <progress>Loading...</progress>
+                      <div class="spinner"></div>
                     </div>
                   </div>
                   <div class="pull-right">
@@ -107,7 +107,7 @@
                         Code
                       </label>
                       <div data-bindon-field-homer-program="item.programCodeField">
-                        <progress>Loading...</progress>
+                        <div class="spinner"></div>
                       </div>
                     </div>
                   </template>
@@ -141,7 +141,7 @@
                   </button>
                 </div>
                 <div data-bindon-field-issue-body="item.body" data-bind-readonly="true">
-                  <progress>Loading...</progress>
+                  <div class="spinner"></div>
                 </div>
 
                 <p class="pull-right">{{item.date}}</p>
@@ -233,7 +233,7 @@
       </h2>
 
       <div data-bind-list-group="related" data-bind-progress="progress" data-on-remove-click="onRelatedRemoveClick($event)">
-        <progress>Loading...</progress>
+        <div class="spinner"></div>
       </div>
       <h2>
         Tags
@@ -241,7 +241,7 @@
       </h2>
 
       <div data-bind-list-group="tags" data-bind-progress="progress" data-on-remove-click="onTagRemoveClick($event)">
-        <progress>Loading...</progress>
+        <div class="spinner"></div>
       </div>
       <h2>
         Confirmations
@@ -249,7 +249,7 @@
       </h2>
 
       <div data-bind-list-group="confirmations" data-bind-progress="progress" data-on-remove-click="onConfirmationRemoveClick($event)">
-        <progress>Loading...</progress>
+        <div class="spinner"></div>
       </div>
     </div>
   </div>
@@ -257,7 +257,7 @@
     <form class="panel-body clearfix" data-on-submit="onAnswerCreationSubmit($event)" style="position: relative">
       <template data-bind-ng-if="progress">
         <div class="overlay">
-          <progress>Loading...</progress>
+          <div class="spinner"></div>
         </div>
       </template>
       <div class="form-group">
@@ -266,7 +266,7 @@
           New Answer
         </label>
         <div data-bindon-field-issue-body="answerBodyField" data-bind-required="true">
-          <progress>Loading...</progress>
+          <div class="spinner"></div>
         </div>
       </div>
       <button class="btn btn-primary pull-right" type="submit">Create</button>

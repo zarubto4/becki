@@ -24,7 +24,7 @@
           <li style="position: relative">
             <template data-bind-ng-if="progress">
               <div class="overlay">
-                <progress>Loading...</progress>
+                <div class="spinner"></div>
               </div>
             </template>
             <a href="#" data-on-click="onSignOutClick($event)">Sign Out</a>
@@ -56,7 +56,7 @@
     <div class="col-md-12">
       <div class="page-header">
         <div notifications>
-          <progress>Loading...</progress>
+          <div class="spinner"></div>
         </div>
         <ol class="breadcrumb">
           <li template="ngFor #breadcrumb of breadcrumbs">
