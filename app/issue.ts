@@ -40,6 +40,8 @@ class Comment {
 
   editing:boolean;
 
+  removing:boolean;
+
   bodyField:string;
 
   constructor(id:string, body:string, date:number, likes:number, tags?:string[]) {
@@ -51,6 +53,7 @@ class Comment {
     this.likes = likes;
     this.tags = tags;
     this.editing = false;
+    this.removing = false;
     this.bodyField = body;
   }
 }
@@ -72,6 +75,8 @@ class Item {
   editing:boolean;
 
   importing:boolean;
+
+  removing:boolean;
 
   bodyField:string;
 
@@ -96,6 +101,7 @@ class Item {
     this.tags = tags;
     this.editing = false;
     this.importing = false;
+    this.removing = false;
     this.bodyField = body;
     this.commentField = "";
     this.programProjectField = "";
@@ -254,7 +260,6 @@ export class Component implements ng.OnInit {
   onItemImportClick(item:Item):void {
     "use strict;"
 
-    this.notifications.shift();
     item.importing = true;
   }
 
@@ -303,14 +308,12 @@ export class Component implements ng.OnInit {
   onItemImportingCancelClick(item:Item):void {
     "use strict";
 
-    this.notifications.shift();
     item.importing = false;
   }
 
   onItemEditClick(item:Item):void {
     "use strict";
 
-    this.notifications.shift();
     item.editing = true;
   }
 
@@ -350,7 +353,6 @@ export class Component implements ng.OnInit {
   onItemEditingCancelClick(item:Item):void {
     "use strict";
 
-    this.notifications.shift();
     item.editing = false;
   }
 
@@ -393,6 +395,13 @@ export class Component implements ng.OnInit {
   onItemRemoveClick(item:Item):void {
     "use strict";
 
+    item.removing = true;
+  }
+
+  onItemRemovingYesClick(item:Item):void {
+    "use strict";
+
+    item.removing = false;
     this.notifications.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-79
     if (item instanceof Issue) {
@@ -422,6 +431,12 @@ export class Component implements ng.OnInit {
             this.progress -= 1;
           });
     }
+  }
+
+  onItemRemovingNoClick(item:Item):void {
+    "use strict";
+
+    item.removing = false;
   }
 
   onAnswerCreationSubmit():void {
@@ -464,7 +479,6 @@ export class Component implements ng.OnInit {
   onCommentEditClick(comment:Comment):void {
     "use strict";
 
-    this.notifications.shift();
     comment.editing = true;
   }
 
@@ -489,16 +503,22 @@ export class Component implements ng.OnInit {
   onCommentEditingCancelClick(comment:Comment):void {
     "use strict";
 
-    this.notifications.shift();
     comment.editing = false;
   }
 
-  onCommentRemoveClick(id:string):void {
+  onCommentRemoveClick(comment:Comment):void {
     "use strict";
 
+    comment.removing = true;
+  }
+
+  onCommentRemovingYesClick(comment:Comment):void {
+    "use strict";
+
+    comment.removing = false;
     this.notifications.shift();
     this.progress += 1;
-    this.backEnd.deleteComment(id)
+    this.backEnd.deleteComment(comment.id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The comment has been removed."));
           this.refresh();
@@ -509,6 +529,12 @@ export class Component implements ng.OnInit {
         .then(() => {
           this.progress -= 1;
         });
+  }
+
+  onCommentRemovingNoClick(comment:Comment):void {
+    "use strict";
+
+    comment.removing = false;
   }
 
   onRelatedRemoveClick(id:string):void {

@@ -121,7 +121,12 @@
                   </div>
                 </form>
               </template>
-              <template data-bind-ng-if="!item.editing && !item.importing">
+              <template data-bind-ng-if="item.removing">
+                Do you really want to remove this?
+                <button class="btn btn-danger" type="button" data-on-click="onItemRemovingYesClick(item, $event)">Yes</button>
+                <button class="btn btn-default" type="button" data-on-click="onItemRemovingNoClick(item, $event)">No</button>
+              </template>
+              <template data-bind-ng-if="!item.editing && !item.importing && !item.removing">
                 <div class="btn-group btn-group-xs pull-right">
                   <template data-bind-ng-if="item.programCodeField != null">
                     <button type="button" class="btn btn-default" data-on-click="onItemImportClick(item, $event)">
@@ -167,7 +172,12 @@
                         </div>
                       </form>
                     </template>
-                    <template data-bind-ng-if="!comment.editing">
+                    <template data-bind-ng-if="comment.removing">
+                      Do you really want to remove this comment?
+                      <button class="btn btn-danger" type="button" data-on-click="onCommentRemovingYesClick(comment, $event)">Yes</button>
+                      <button class="btn btn-default" type="button" data-on-click="onCommentRemovingNoClick(comment, $event)">No</button>
+                    </template>
+                    <template data-bind-ng-if="!comment.editing && !comment.removing">
                       <div class="media-heading" style="font-weight: bold;">
                         Author - {{comment.date}}
                         <div class="btn-toolbar pull-right">
@@ -186,7 +196,7 @@
                             <button type="button" class="btn btn-default" data-on-click="onCommentEditClick(comment, $event)">
                               <span class="glyphicon glyphicon-edit"></span>
                             </button>
-                            <button type="button" class="btn btn-danger" data-on-click="onCommentRemoveClick(comment.id, $event)">
+                            <button type="button" class="btn btn-danger" data-on-click="onCommentRemoveClick(comment, $event)">
                               <span class="glyphicon glyphicon-remove"></span>
                             </button>
                           </div>

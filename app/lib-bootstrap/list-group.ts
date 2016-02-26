@@ -26,6 +26,8 @@ export class Item {
 
   link:any[];
 
+  removing:boolean;
+
   constructor(id:string, name:string, description:string, link:any[] = null) {
     "use strict";
 
@@ -33,6 +35,7 @@ export class Item {
     this.name = name;
     this.description = description;
     this.link = link;
+    this.removing = false;
   }
 }
 
@@ -53,6 +56,19 @@ export class Component {
   onRemoveClick(item:Item):void {
     "use strict";
 
+    item.removing = true;
+  }
+
+  onConfirmationYesClick(item:Item):void {
+    "use strict";
+
+    item.removing = false;
     this.removeClick.next(item.id);
+  }
+
+  onConfirmationNoClick(item:Item):void {
+    "use strict";
+
+    item.removing = false;
   }
 }
