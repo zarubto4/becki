@@ -532,6 +532,7 @@ export abstract class BackEnd {
     "use strict";
 
     let request = new Request(method, url, {}, body);
+    // TODO: https://github.com/angular/angular/issues/7303
     if (window.localStorage.getItem("authToken")) {
       request.headers["X-AUTH-TOKEN"] = window.localStorage.getItem("authToken");
     }
@@ -583,6 +584,7 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath<{authToken:string}>("POST", `${BackEnd.TOKEN_PATH}/login`, {email, password}).then((body) => {
+      // TODO: https://github.com/angular/angular/issues/7303
       window.localStorage.setItem("authToken", body.authToken);
       return JSON.stringify(body);
     });
@@ -593,6 +595,7 @@ export abstract class BackEnd {
 
     return this.requestPath<{authToken:string, url:string}>("GET", "/login/facebook").then(body => {
       // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-51
+      // TODO: https://github.com/angular/angular/issues/7303
       window.localStorage.setItem("authToken", body.authToken);
       return body.url;
     });
@@ -602,6 +605,7 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath<{authToken:string, url:string}>("GET", "/login/github").then(body => {
+      // TODO: https://github.com/angular/angular/issues/7303
       window.localStorage.setItem("authToken", body.authToken);
       return body.url;
     });
@@ -622,6 +626,7 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath("POST", `${BackEnd.TOKEN_PATH}/logout`, {}).then((body) => {
+      // TODO: https://github.com/angular/angular/issues/7303
       window.localStorage.removeItem("authToken");
       return JSON.stringify(body);
     });
@@ -702,6 +707,7 @@ export abstract class BackEnd {
       });
       request.addEventListener("error", reject);
       request.open("POST", url);
+      // TODO: https://github.com/angular/angular/issues/7303
       request.setRequestHeader("X-AUTH-TOKEN", window.localStorage.getItem("authToken"));
       request.send(formdata);
     });
