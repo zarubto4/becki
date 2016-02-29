@@ -94,7 +94,7 @@ export class Response {
   /**
    * The body of the response.
    */
-  body:string;
+  body:Object;
 
   /**
    * Create a new response instance.
@@ -102,7 +102,7 @@ export class Response {
    * @param status the status code of the response.
    * @param body the response body.
    */
-  constructor(status:number, body:string) {
+  constructor(status:number, body:Object) {
     "use strict";
 
     this.status = status;
@@ -537,10 +537,9 @@ export abstract class BackEnd {
       request.headers["X-AUTH-TOKEN"] = window.localStorage.getItem("authToken");
     }
     return this.requestGeneral(request)
-        .then((response) => {
+        .then(response => {
           if (response.status >= 200 && response.status < 300) {
-            // TODO: Response to a JSON request should always be a JSON.
-            return response.body ? JSON.parse(response.body) : {};
+            return response.body;
           } else {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject(new Error(`error response: ${JSON.stringify(response)}`));
