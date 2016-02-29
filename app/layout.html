@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<nav class="navbar navbar-pf-alt">
+<nav class="navbar navbar-pf-vertical">
   <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-on-click="onNavbarToggleClick($event)">
       <span class="sr-only">Toggle navigation</span>
@@ -34,7 +34,7 @@
     </ul>
   </nav>
 </nav>
-<nav class="nav-pf-vertical-alt" data-bind-class.collapsed="navbarState == 'collapsed'" data-bind-class.hidden="navbarState == 'hidden'" data-bind-class.show-mobile-nav="navbarState == 'visible'">
+<div class="nav-pf-vertical nav-pf-vertical-with-secondary-nav" data-bind-class.collapsed="navbarState == 'collapsed'" data-bind-class.hidden="navbarState == 'hidden'" data-bind-class.show-mobile-nav="navbarState == 'visible'">
   <ul class="list-group">
     <li class="list-group-item" template="ngFor #page of navigation">
       <a data-bind-router-link="page.link">
@@ -49,9 +49,9 @@
       </a>
     </li>
   </ul>
-</nav>
+</div>
 
-<div class="container-fluid container-pf-alt-nav-pf-vertical-alt" data-bind-class.collapsed-nav="navbarState == 'collapsed'" data-bind-class.hidden-nav="['hidden', 'visible'].indexOf(navbarState) != -1">
+<div class="container-fluid container-pf-nav-pf-vertical container-pf-nav-pf-vertical-with-secondary" data-bind-class.collapsed-nav="navbarState == 'collapsed'" data-bind-class.hidden-nav="['hidden', 'visible'].indexOf(navbarState) != -1">
   <div class="row">
     <div class="col-md-12">
       <div class="page-header">
@@ -69,11 +69,3 @@
     </div>
   </div>
 </div>
-
-<footer class="container-fluid footer-pf-alt">
-  <p>
-    Copyright &copy; 2015-2016
-    <a href="http://mediacheck.cz/">MEDIA CHECK s.r.o.</a>
-    All rights reserved.
-  </p>
-</footer>

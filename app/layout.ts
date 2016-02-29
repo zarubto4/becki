@@ -12,7 +12,6 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
-// TODO: https://github.com/patternfly/patternfly/pull/195
 
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
@@ -21,7 +20,7 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
-const HTML_CLASSES = ["layout-pf-alt", "layout-pf-alt-fixed", "layout-pf-alt-fixed-with-footer"];
+const HTML_CLASSES = ["layout-pf", "layout-pf-fixed"];
 
 export class LabeledLink {
 
