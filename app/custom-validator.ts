@@ -66,7 +66,7 @@ export class Directive {
             this.notifications.current.push(new libPatternFlyNotifications.Warning(`Cannot validate a field: ${reason}`));
           }
           this.warned = true;
-          return false;
+          return true;
         })
         .then(valid => {
           this.field.nativeElement.setCustomValidity(valid ? "" : this.message);
