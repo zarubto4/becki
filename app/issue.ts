@@ -311,8 +311,8 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
+    this.progress += 1;
     if (item instanceof Issue) {
-      this.progress += 1;
       this.backEnd.updateIssue(item.id, item.typeField, item.titleField, item.bodyField, item.tags)
           .then(() => {
             this.notifications.current.push(new libPatternFlyNotifications.Success("The issue has been updated."));
