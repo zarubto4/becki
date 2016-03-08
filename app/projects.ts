@@ -52,7 +52,7 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("Projects", ["Projects"])
     ];
     this.newLink = ["NewProject"];
-    this.progress += 1;
+    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
