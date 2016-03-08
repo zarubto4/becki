@@ -150,7 +150,7 @@ export class Component implements ng.OnInit {
     this.progress += 1;
     this.backEnd.createPerson(this.upEmailField, this.upPassword1Field, this.upUsernameField)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The person have been signed up."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The person have been signed up. It is necessary to follow the instructions sent to their email before signing in."));
           this.signIn = true;
         })
         .catch(reason => {
