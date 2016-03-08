@@ -112,7 +112,7 @@ export class Component implements ng.OnInit {
     this.progress += 1;
     this.backEnd.updateProducer(this.id, this.nameField, this.descriptionField)
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The producer cannot be updated."));
+          this.notifications.next.push(new libPatternFlyNotifications.Success("The producer has been updated."));
           this.router.navigate(["Devices"]);
         })
         .catch(reason => {
