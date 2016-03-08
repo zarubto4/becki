@@ -82,7 +82,7 @@ export class Component implements ng.OnInit {
     this.progress += 1;
     this.backEnd.createIssue(this.typeField, this.titleField, this.bodyField, [])
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Danger("The issue has been created."));
+          this.notifications.next.push(new libPatternFlyNotifications.Success("The issue has been created."));
           this.router.navigate(["Issues"]);
         })
         .catch(reason => {
