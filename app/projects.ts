@@ -70,7 +70,7 @@ export class Component implements ng.OnInit {
 
     this.progress += 1;
     this.backEnd.getProjects()
-        .then(projects => this.items = projects.map(project => new libBootstrapListGroup.Item(project.projectId, project.projectName, project.projectDescription, ["Project", {project: project.projectId}])))
+        .then(projects => this.items = projects.map(project => new libBootstrapListGroup.Item(project.id, project.project_name, project.project_description, ["Project", {project: project.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Projects cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
   }

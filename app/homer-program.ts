@@ -19,20 +19,13 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
-import * as fieldHomerProgram from "./field-homer-program";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/homer-program.html",
-  directives: [
-    customValidator.Directive,
-    fieldHomerProgram.Component,
-    layout.Component,
-    ng.CORE_DIRECTIVES,
-    ng.FORM_DIRECTIVES
-  ]
+  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -47,8 +40,6 @@ export class Component implements ng.OnInit {
   nameField:string;
 
   descriptionField:string;
-
-  codeField:string;
 
   progress:number;
 
@@ -77,7 +68,6 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    this.codeField = `{"blocks":{}}`;
     this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
@@ -90,12 +80,10 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.progress += 1;
     this.backEnd.getHomerProgram(this.id)
-        .then(program => this.backEnd.request<string>("GET", program.programinJson).then(code => {
-          this.nameField = program.programName;
+        .then(program => {
+          this.nameField = program.name;
           this.descriptionField = program.programDescription;
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-80
-          this.codeField = JSON.stringify(code);
-        }))
+        })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program ${this.id} cannot be loaded: ${reason}`));
         })
@@ -110,13 +98,10 @@ export class Component implements ng.OnInit {
     return () => {
       this.progress += 1;
       // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return this.backEnd.getProject(this.projectId)
-          .then(project => {
-            return this.backEnd.request<libBackEnd.HomerProgram[]>("GET", project.b_programs);
-          })
+      return this.backEnd.getProjectHomerPrograms(this.projectId)
           .then(programs => {
             this.progress -= 1;
-            return !programs.find(program => program.programId != this.id && program.programName == this.nameField);
+            return !programs.find(program => program.programId != this.id && program.name == this.nameField);
           })
           .catch(reason => {
             this.progress -= 1;
@@ -130,7 +115,7 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.progress += 1;
-    this.backEnd.updateHomerProgram(this.id, this.nameField, this.descriptionField, this.codeField, this.projectId)
+    this.backEnd.updateHomerProgram(this.id, this.nameField, this.descriptionField)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The program has been updated."));
           this.router.navigate(["Project", {project: this.projectId}]);
@@ -142,7 +127,6 @@ export class Component implements ng.OnInit {
           this.progress -= 1;
         });
   }
-
   onCancelClick():void {
     "use strict";
 

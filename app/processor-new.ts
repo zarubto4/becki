@@ -20,22 +20,7 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
-import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
-
-class Selectable {
-
-  model:libBackEnd.LibraryGroup;
-
-  selected:boolean;
-
-  constructor(model:libBackEnd.LibraryGroup) {
-    "use strict";
-
-    this.model = model;
-    this.selected = false;
-  }
-}
 
 @ng.Component({
   templateUrl: "app/processor-new.html",
@@ -44,8 +29,6 @@ class Selectable {
 export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
-
-  groups:Selectable[];
 
   nameField:string;
 
@@ -85,11 +68,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
-    this.backEnd.getLibraryGroups()
-        .then(groups => this.groups = groups.map(group => new Selectable(group)))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Library groups cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -101,7 +79,7 @@ export class Component implements ng.OnInit {
       return this.backEnd.getProcessors()
           .then(processors => {
             this.progress -= 1;
-            return !processors.find(processor => processor.processorName == this.nameField);
+            return !processors.find(processor => processor.processor_name == this.nameField);
           })
           .catch(reason => {
             this.progress -= 1;
@@ -115,8 +93,7 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.progress += 1;
-    let groups = this.groups.filter(selectable => selectable.selected).map(selectable => selectable.model.id);
-    this.backEnd.createProcessor(this.nameField, this.codeField, this.descriptionField, this.speedField, groups)
+    this.backEnd.createProcessor(this.nameField, this.codeField, this.descriptionField, this.speedField)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The processor has been created."));
           this.router.navigate(["Devices"]);

@@ -19,6 +19,18 @@
     </div>
     <div class="form-group">
       <label>
+        <span class="glyphicon glyphicon-list"></span>
+        Category
+      </label>
+      <select class="form-control" required data-bindon-ng-model="categoryField">
+        <option value="">Select category...</option>
+        <option data-bind-value="category.id" template="ngFor #category of categories">
+          {{category.name}}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>
         <span class="glyphicon glyphicon-pencil"></span>
         Description
       </label>

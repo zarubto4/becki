@@ -77,10 +77,7 @@ export class Component implements ng.OnInit {
     return () => {
       this.progress += 1;
       // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return this.backEnd.getProject(this.projectId)
-          .then(project => {
-            return this.backEnd.request<libBackEnd.Person[]>("GET", project.owners);
-          })
+      return this.backEnd.getProjectOwners(this.projectId)
           .then(collaborators => {
             this.progress -= 1;
             return !collaborators.find(collaborator => collaborator.id == this.idField);

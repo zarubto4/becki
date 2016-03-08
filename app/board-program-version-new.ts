@@ -18,28 +18,21 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
+import * as customValidator from "./custom-validator";
 import * as fieldCode from "./field-code";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
-class Selectable<T> {
-
-  model:T;
-
-  selected:boolean;
-
-  constructor(model:T) {
-    "use strict";
-
-    this.model = model;
-    this.selected = false;
-  }
-}
-
 @ng.Component({
   templateUrl: "app/board-program-version-new.html",
-  directives: [fieldCode.Component, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [
+    customValidator.Directive,
+    fieldCode.Component,
+    layout.Component,
+    ng.CORE_DIRECTIVES,
+    ng.FORM_DIRECTIVES
+  ]
 })
 export class Component implements ng.OnInit {
 
@@ -50,12 +43,6 @@ export class Component implements ng.OnInit {
   heading:string;
 
   breadcrumbs:layout.LabeledLink[];
-
-  libraries:Selectable<libBackEnd.Library>[];
-
-  groups:Selectable<libBackEnd.LibraryGroup>[];
-
-  numberField:number;
 
   nameField:string;
 
@@ -96,7 +83,6 @@ export class Component implements ng.OnInit {
         program: this.programId
       }])
     ];
-    this.numberField = 1.01;
     this.nameField = "";
     this.descriptionField = "";
     this.codeField = "";
@@ -110,15 +96,24 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 2;
-    this.backEnd.getLibraries()
-        .then(libraries => this.libraries = libraries.map(library => new Selectable(library)))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Libraries cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
-    this.backEnd.getLibraryGroups()
-        .then(groups => this.groups = groups.map(group => new Selectable(group)))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Library groups cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
+  }
+
+  validateNameField():()=>Promise<boolean> {
+    "use strict";
+
+    return () => {
+      this.progress += 1;
+      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+      return this.backEnd.getBoardProgram(this.programId)
+          .then(program => {
+            this.progress -= 1;
+            return !program.version_objects.find(version => version.version_name == this.nameField);
+          })
+          .catch(reason => {
+            this.progress -= 1;
+            return Promise.reject(reason);
+          });
+    };
   }
 
   onSubmit():void {
@@ -126,14 +121,14 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.progress += 1;
-    let libraries = this.libraries.filter(selectable => selectable.selected).map(selectable => ({libraryId: selectable.model.id, libraryVersion: selectable.model.lastVersion.toString()}));
-    let groups = this.groups.filter(selectable => selectable.selected).map(selectable => ({groupId: selectable.model.id, libraryVersion: selectable.model.lastVersion.toString()}));
-    this.backEnd.createBoardProgramVersion(this.programId, this.numberField.toString(), this.nameField, this.descriptionField, libraries, groups, this.codeField)
+    this.backEnd.addVersionToBoardProgram(this.nameField, this.descriptionField, this.codeField, this.programId)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The version has been created."));
           this.router.navigate(["BoardProgram", {project: this.projectId, program: this.programId}]);
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-143
+          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-143"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The version cannot be created: ${reason}`));
         })
         .then(() => {

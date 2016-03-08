@@ -24,6 +24,18 @@ import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapListGroup from "./lib-bootstrap/list-group";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
+class SelectableItem extends libBootstrapListGroup.Item {
+
+  selected:boolean;
+
+  constructor(id:string, name:string, description:string, link:any[] = null) {
+    "use strict";
+
+    super(id, name, description, link);
+    this.selected = false;
+  }
+}
+
 @ng.Component({
   templateUrl: "app/project.html",
   directives: [
@@ -65,15 +77,18 @@ export class Component implements ng.OnInit {
 
   newBoardLink:any[];
 
-  boards:libBootstrapListGroup.Item[];
+  boards:SelectableItem[];
+
+  boardUploadingProgramField:string;
+
+  @ng.ViewChild("boardUploadingBinaryFileField")
+  boardUploadingBinaryFileField:ng.ElementRef;
 
   newHomerLink:any[];
 
-  homers:libBootstrapListGroup.Item[];
+  homers:SelectableItem[];
 
-  newUploadLink:any[];
-
-  uploadQueue:libBootstrapListGroup.Item[];
+  homerUploadingProgramField:string;
 
   progress:number;
 
@@ -99,20 +114,15 @@ export class Component implements ng.OnInit {
     this.newCollaboratorLink = ["NewProjectCollaborator", {project: this.id}];
     this.newBoardProgramLink = ["NewBoardProgram", {project: this.id}];
     this.newStandaloneProgramLink = ["NewStandaloneProgram", {project: this.id}];
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-36
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-146
     this.standalonePrograms = [
-      new libBootstrapListGroup.Item(null, "(issue/TYRION-36)", "does not work")
+      new libBootstrapListGroup.Item(null, "(issue/TYRION-146)", "does not work")
     ];
     this.newHomerProgramLink = ["NewHomerProgram", {project: this.id}];
     this.newBoardLink = ["NewProjectBoard", {project: this.id}];
+    this.boardUploadingProgramField = "";
     this.newHomerLink = ["NewProjectHomer", {project: this.id}];
-    this.newUploadLink = ["NewProjectUpload", {project: this.id}];
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-43
-    this.uploadQueue = [
-      new libBootstrapListGroup.Item(null, "(issue/TYRION-43)", "does not work"),
-      new libBootstrapListGroup.Item(null, "(issue/TYRION-43)", "does not work"),
-      new libBootstrapListGroup.Item(null, "(issue/TYRION-43)", "does not work")
-    ];
+    this.homerUploadingProgramField = "";
     this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
@@ -130,34 +140,30 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.progress += 1;
-    this.backEnd.getProject(this.id)
-        .then(project => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-36
-          return Promise.all<any>([
-            project,
-            this.backEnd.request("GET", project.c_programs),
-            this.backEnd.request("GET", project.boards),
-            this.backEnd.request("GET", project.b_programs),
-            this.backEnd.request("GET", project.homers),
-            this.backEnd.request("GET", project.owners)
-          ]);
-        })
+    Promise.all<any>([
+          this.backEnd.getProject(this.id),
+          this.backEnd.getProjectOwners(this.id),
+          this.backEnd.getProjectBoardPrograms(this.id),
+          this.backEnd.getProjectHomerPrograms(this.id),
+          this.backEnd.getProjectBoards(this.id),
+          this.backEnd.getProjectHomers(this.id)
+        ])
         .then(result => {
           let project:libBackEnd.Project;
-          let boardPrograms:libBackEnd.BoardProgram[];
-          let boards:libBackEnd.Board[];
-          let homerPrograms:libBackEnd.HomerProgram[];
-          let homers:libBackEnd.Homer[];
           let collaborators:libBackEnd.Person[];
-          [project, boardPrograms, boards, homerPrograms, homers, collaborators] = result;
-          this.nameField = project.projectName;
-          this.descriptionField = project.projectDescription;
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-77
-          this.boardPrograms = boardPrograms.map(program => new libBootstrapListGroup.Item(program.id, program.programName, program.programDescription, ["BoardProgram", {project: this.id, program: program.id}]));
-          this.boards = boards.map(board => new libBootstrapListGroup.Item(board.id, board.id, board.isActive ? "active" : "inactive"));
-          this.homerPrograms = homerPrograms.map(program => new libBootstrapListGroup.Item(program.programId, program.programName, program.programDescription, ["HomerProgram", {project: this.id, program: program.programId}]));
-          this.homers = homers.map(homer => new libBootstrapListGroup.Item(homer.homerId, homer.homerId, null));
+          let boardPrograms:libBackEnd.BoardProgram[];
+          let homerPrograms:libBackEnd.HomerProgram[];
+          let boards:libBackEnd.Board[];
+          let homers:libBackEnd.Homer[];
+          [project, collaborators, boardPrograms, homerPrograms, boards, homers] = result;
+          this.nameField = project.project_name;
+          this.descriptionField = project.project_description;
           this.collaborators = collaborators.map(collaborator => new libBootstrapListGroup.Item(collaborator.id, libBackEnd.composePersonString(collaborator), null));
+          this.boardPrograms = boardPrograms.map(program => new libBootstrapListGroup.Item(program.id, program.program_name, program.program_description, ["BoardProgram", {project: this.id, program: program.id}]));
+          this.homerPrograms = homerPrograms.map(program => new libBootstrapListGroup.Item(program.programId, program.name, program.programDescription, ["HomerProgram", {project: this.id, program: program.programId}]));
+          this.boards = boards.map(board => new SelectableItem(board.id, board.id, board.isActive ? "active" : "inactive"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-78
+          this.homers = homers.map(homer => new SelectableItem(homer.homer_id, homer.homer_id, "(issue/TYRION-78)"));
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The project ${this.id} cannot be loaded: ${reason}`));
@@ -176,7 +182,7 @@ export class Component implements ng.OnInit {
       return this.backEnd.getProjects()
           .then(projects => {
             this.progress -= 1;
-            return !projects.find(project => project.projectId != this.id && project.projectName == this.nameField);
+            return !projects.find(project => project.id != this.id && project.project_name == this.nameField);
           })
           .catch(reason => {
             this.progress -= 1;
@@ -250,6 +256,8 @@ export class Component implements ng.OnInit {
           this.refresh();
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-130
+          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-130"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be removed: ${reason}`));
         })
         .then(() => {
@@ -293,12 +301,41 @@ export class Component implements ng.OnInit {
         });
   }
 
+  onBoardUploadingSubmit():void {
+    "use strict";
+
+    this.notifications.shift();
+    this.progress += 1;
+    let boards = this.boards.filter(selectable => selectable.selected).map(selectable => selectable.id);
+    Promise.all(boards.map(id => this.backEnd.addProgramToBoard(this.boardUploadingProgramField, id)))
+        .then(() => {
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The program has been uploaded."));
+          this.refresh();
+        })
+        .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-128
+          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-128"));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be uploaded: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
+        });
+  }
+
+  onBoardUploadingBinarySubmit():void {
+    "use strict";
+
+    this.notifications.shift();
+    // TODO: http://youtrack.byzance.cz/youtrack/issue/TYRION-37#comment=109-118
+    this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-37"));
+    console.log(this.boardUploadingBinaryFileField);
+  }
+
   onHomerRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
     this.progress += 1;
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-91
     this.backEnd.removeHomerFromProject(id, this.id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The Homer has been removed."));
@@ -312,11 +349,24 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onUploadRemoveClick(id:string):void {
+  onHomerUploadingSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-43
-    this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-43"));
+    this.progress += 1;
+    let homers = this.homers.filter(selectable => selectable.selected).map(selectable => selectable.id);
+    Promise.all(homers.map(id => this.backEnd.addProgramToHomer(this.homerUploadingProgramField, id)))
+        .then(() => {
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The program has been uploaded."));
+          this.refresh();
+        })
+        .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-137
+          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-137"));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be uploaded: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
+        });
   }
 }

@@ -79,16 +79,15 @@ export class Component implements ng.OnInit {
 
     this.progress += 3;
     this.backEnd.getIssueTypes()
-        .then(types => this.types = types.map(type => new libBootstrapListGroup.Item(type.id, type.type, null)))
+        .then(types => this.types = types.map(type => new libBootstrapListGroup.Item(type.id, type.type, null, ["IssueType", {type: type.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Types cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
     this.backEnd.getIssueConfirmations()
         .then(confirmations => this.confirmations = confirmations.map(confirmation => new libBootstrapListGroup.Item(confirmation.id, confirmation.type, null, ["IssueConfirmationType", {confirmation: confirmation.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Confirmations cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-27
     this.backEnd.getIssues()
-        .then(issues => this.issues = issues.map(issue => new libBootstrapListGroup.Item(issue.postId, issue.name, issue.type, ["Issue", {issue: issue.postId}])))
+        .then(issues => this.issues = issues.map(issue => new libBootstrapListGroup.Item(issue.postId, issue.name, issue.type.type, ["Issue", {issue: issue.postId}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Issues cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
   }
@@ -97,23 +96,55 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-92
-    this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-92"));
+    this.progress += 1;
+    this.backEnd.deleteIssueType(id)
+        .then(() => {
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The type has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The type cannot be removed: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
+        });
   }
 
   onConfirmationRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-93
-    this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-93"));
+    this.progress += 1;
+    this.backEnd.deleteIssueConfirmation(id)
+        .then(() => {
+          this.notifications.next.push(new libPatternFlyNotifications.Success("The confirmation has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-149
+          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-149"));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The confirmation cannot be removed: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
+        });
   }
 
   onIssueRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-79
-    this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-79"));
+    this.progress += 1;
+    this.backEnd.deletePost(id)
+        .then(() => {
+          this.notifications.next.push(new libPatternFlyNotifications.Success("The issue has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issue cannot be removed: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
+        });
   }
 }

@@ -90,13 +90,10 @@ export class Component implements ng.OnInit {
     return () => {
       this.progress += 1;
       // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return this.backEnd.getProject(this.projectId)
-          .then(project => {
-            return this.backEnd.request<libBackEnd.HomerProgram[]>("GET", project.b_programs);
-          })
+      return this.backEnd.getProjectHomerPrograms(this.projectId)
           .then(programs => {
             this.progress -= 1;
-            return !programs.find(program => program.programName == this.nameField);
+            return !programs.find(program => program.name == this.nameField);
           })
           .catch(reason => {
             this.progress -= 1;
@@ -110,7 +107,10 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.progress += 1;
-    this.backEnd.createHomerProgram(this.nameField, this.descriptionField, this.codeField, this.projectId)
+    this.backEnd.createHomerProgram(this.nameField, this.descriptionField, this.projectId)
+        .then(program => {
+          return this.backEnd.addVersionToHomerProgram("Initial version", "", this.codeField, program.programId);
+        })
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The program have been created."));
           this.router.navigate(["Project", {project: this.projectId}]);

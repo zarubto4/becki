@@ -35,7 +35,15 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
+  producers:libBackEnd.Producer[];
+
+  processors:libBackEnd.Processor[];
+
   nameField:string;
+
+  producerField:string;
+
+  processorField:string;
 
   descriptionField:string;
 
@@ -70,19 +78,24 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
+    this.progress += 3;
     this.backEnd.getBoardType(this.id)
         .then(type => {
           return Promise.all<any>([
             type,
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-68
-            this.backEnd.request("GET", type.description)
+            this.backEnd.request("GET", type.producer),
+            this.backEnd.request("GET", type.processor)
           ]);
         })
         .then(result => {
           let type:libBackEnd.BoardType;
-          [type, this.descriptionField] = result;
+          let producer:libBackEnd.Producer;
+          let processor:libBackEnd.Processor;
+          [type, producer, processor] = result;
           this.nameField = type.name;
+          this.producerField = producer.id;
+          this.processorField = processor.id;
+          this.descriptionField = type.description;
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The type ${this.id} cannot be loaded: ${reason}`));
@@ -90,6 +103,14 @@ export class Component implements ng.OnInit {
         .then(() => {
           this.progress -= 1;
         });
+    this.backEnd.getProducers()
+        .then(producers => this.producers = producers)
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Producers cannot be loaded: ${reason}`)))
+        .then(() => this.progress -= 1);
+    this.backEnd.getProcessors()
+        .then(processors => this.processors = processors)
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Processors cannot be loaded: ${reason}`)))
+        .then(() => this.progress -= 1);
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -115,7 +136,7 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.progress += 1;
-    this.backEnd.updateBoardType(this.id, this.nameField, this.descriptionField)
+    this.backEnd.updateBoardType(this.id, this.nameField, this.producerField, this.processorField, this.descriptionField)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The type has been updated."));
           this.router.navigate(["Devices"]);

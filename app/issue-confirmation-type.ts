@@ -73,9 +73,8 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.progress += 1;
-    this.backEnd.getIssueConfirmations()
-        .then(confirmations => {
-          let confirmation = confirmations.find(confirmation => confirmation.id == this.id);
+    this.backEnd.getIssueConfirmation(this.id)
+        .then(confirmation => {
           this.nameField = confirmation.type;
           this.colorField = confirmation.color;
           this.sizeField = confirmation.size;
@@ -110,8 +109,18 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-85
-    this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-85"));
+    this.progress += 1;
+    this.backEnd.updateIssueConfirmation(this.id, this.nameField, this.colorField, this.sizeField)
+        .then(() => {
+          this.notifications.next.push(new libPatternFlyNotifications.Success("The confirmation has been updated."));
+          this.router.navigate(["Issues"]);
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The confirmation cannot be updated: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
+        });
   }
 
   onCancelClick():void {

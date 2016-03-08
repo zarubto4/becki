@@ -18,13 +18,13 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as fieldCode from "./field-code";
+import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/standalone-program.html",
-  directives: [fieldCode.Component, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -36,9 +36,9 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
-  descriptionField:string;
+  nameField:string;
 
-  codeField:string;
+  descriptionField:string;
 
   progress:number;
 
@@ -62,8 +62,8 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("Standalone Programs", ["Project", {project: this.projectId}]),
       new layout.LabeledLink(`Program ${this.id}`, ["StandaloneProgram", {project: this.projectId, program: this.id}])
     ];
+    this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    this.codeField = "Loading...";
     this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
@@ -75,20 +75,10 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.progress += 1;
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-83
     this.backEnd.getStandaloneProgram(this.id)
         .then(program => {
-          return Promise.all<any>([
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-82
-            this.backEnd.request("GET", program.generalDescription),
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-83
-            this.backEnd.request("GET", program.logicJson)
-          ]);
-        })
-        .then(result => {
-          let code:string;
-          [this.descriptionField, code] = result;
-          this.codeField = JSON.parse(code);
+          this.nameField = program.name;
+          this.descriptionField = program.general_description;
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program ${this.id} cannot be loaded: ${reason}`));
@@ -98,22 +88,20 @@ export class Component implements ng.OnInit {
         });
   }
 
+  validateNameField():()=>Promise<boolean> {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-146
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => Promise.reject<boolean>("issue/TYRION-146");
+  }
+
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
-    this.backEnd.updateStandaloneProgram(this.id, this.descriptionField, this.codeField)
-        .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The program have been updated."));
-          this.router.navigate(["Project", {project: this.projectId}]);
-        })
-        .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be updated: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
-        });
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-147
+    this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-147"));
   }
 
   onCancelClick():void {

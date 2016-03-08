@@ -77,13 +77,10 @@ export class Component implements ng.OnInit {
     return () => {
       this.progress += 1;
       // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return this.backEnd.getProject(this.projectId)
-          .then(project => {
-            return this.backEnd.request<libBackEnd.Homer[]>("GET", project.homers);
-          })
+      return this.backEnd.getProjectHomers(this.projectId)
           .then(homers => {
             this.progress -= 1;
-            return !homers.find(homer => homer.homerId == this.idField);
+            return !homers.find(homer => homer.homer_id == this.idField);
           })
           .catch(reason => {
             this.progress -= 1;

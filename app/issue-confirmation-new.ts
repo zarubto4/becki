@@ -70,12 +70,22 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.progress += 1;
-    this.backEnd.getIssueConfirmations()
-        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-86
-        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-        .then(confirmations => this.confirmations = confirmations)
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Confirmations cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
+    Promise.all<any>([
+          this.backEnd.getIssueConfirmations(),
+          this.backEnd.getIssue(this.issueId)
+        ])
+        .then(result => {
+          let confirmations:libBackEnd.IssueConfirmation[];
+          let issue:libBackEnd.Issue;
+          [confirmations, issue] = result;
+          this.confirmations = confirmations.filter(confirmation => !issue.type_of_confirms.find(confirmation2 => confirmation2.id == confirmation.id));
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`Confirmations cannot be loaded: ${reason}`));
+        })
+        .then(() => {
+          this.progress -= 1;
+        });
   }
 
   onSubmit():void {
@@ -83,13 +93,13 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.progress += 1;
-    this.backEnd.addConfirmationToPost(this.issueId, this.field)
+    this.backEnd.addConfirmationToPost(this.field, this.issueId)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The confirmation has been added."));
           this.router.navigate(["Issue", {issue: this.issueId}]);
         })
         .catch(reason => {
-          this.notifications.next.push(new libPatternFlyNotifications.Danger(`The confirmation cannot be added: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The confirmation cannot be added: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;

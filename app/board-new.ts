@@ -75,9 +75,21 @@ export class Component implements ng.OnInit {
   validateIdField():()=>Promise<boolean> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-20
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => Promise.reject<boolean>("issue/TYRION-20");
+    return () => {
+      this.progress += 1;
+      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+      return this.backEnd.getBoards()
+          .then(boards => {
+            this.progress -= 1;
+            return !boards.find(board => board.id == this.idField);
+          })
+          .catch(reason => {
+            this.progress -= 1;
+            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-141
+            this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-141"));
+            return Promise.reject(reason);
+          });
+    };
   }
 
   onSubmit():void {

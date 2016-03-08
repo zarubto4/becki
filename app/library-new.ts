@@ -80,8 +80,8 @@ export class Component implements ng.OnInit {
             let libraries:libBackEnd.Library[];
             let groups:libBackEnd.LibraryGroup[];
             [libraries, groups] = result;
-            return !libraries.find(library => library.libraryName == this.nameField) &&
-                !groups.find(group => group.groupName == this.nameField);
+            return !libraries.find(library => library.library_name == this.nameField) &&
+                !groups.find(group => group.group_name == this.nameField);
           })
           .catch(reason => {
             this.progress -= 1;

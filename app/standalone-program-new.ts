@@ -43,6 +43,8 @@ export class Component implements ng.OnInit {
 
   nameField:string;
 
+  categoryField:string;
+
   descriptionField:string;
 
   codeField:string;
@@ -69,6 +71,7 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("New Program", ["NewStandaloneProgram", {project: this.projectId}])
     ];
     this.nameField = "";
+    this.categoryField = "";
     this.descriptionField = "";
     this.codeField = "";
     this.progress = 0;
@@ -86,9 +89,9 @@ export class Component implements ng.OnInit {
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-36
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-146
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => Promise.reject<boolean>("issue/TYRION-36");
+    return () => Promise.reject<boolean>("issue/TYRION-146");
   }
 
   onSubmit():void {
@@ -96,7 +99,10 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.progress += 1;
-    this.backEnd.createStandaloneProgram(this.nameField, this.descriptionField, this.codeField)
+    this.backEnd.createStandaloneProgram(this.nameField, this.categoryField, this.descriptionField)
+        .then(program => {
+          return this.backEnd.addVersionToStandaloneProgram("Initial version", "", this.codeField, program.id);
+        })
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The program have been created."));
           this.router.navigate(["Project", {project: this.projectId}]);

@@ -70,7 +70,7 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-xs-12 col-sm-6">
+    <div class="col-xs-12 col-sm-4">
       <h2>
         Boards
         <small>— <a data-bind-router-link="newBoardLink">Add</a></small>
@@ -79,26 +79,116 @@
         <div class="spinner"></div>
       </div>
     </div>
-    <div class="col-xs-12 col-sm-6">
+    <div class="col-xs-12 col-sm-4">
+      <h2>Board Upload</h2>
+      <form class="clearfix" data-on-submit="onBoardUploadingSubmit($event)" style="position: relative">
+        <template data-bind-ng-if="progress">
+          <div class="overlay">
+            <div class="spinner"></div>
+          </div>
+        </template>
+        <div class="form-group">
+          <label>
+            <span class="glyphicon glyphicon-list"></span>
+            Board IDs
+          </label>
+          <div class="checkbox" template="ngFor #board of boards">
+            <label>
+              <input type="checkbox" data-bindon-ng-model="board.selected">
+              {{board.name}}
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>
+            <span class="glyphicon glyphicon-console"></span>
+            Program
+          </label>
+          <select class="form-control" required data-bindon-ng-model="boardUploadingProgramField">
+            <option value="">Select name...</option>
+            <option data-bind-value="program.id" template="ngFor #program of boardPrograms">
+              {{program.name}}
+            </option>
+          </select>
+        </div>
+        <button class="btn btn-primary pull-right" type="submit">Upload</button>
+      </form>
+    </div>
+    <div class="col-xs-12 col-sm-4">
+      <h2>Board Upload</h2>
+      <form class="clearfix" data-on-submit="onBoardUploadingBinarySubmit($event)" style="position: relative">
+        <template data-bind-ng-if="progress">
+          <div class="overlay">
+            <div class="spinner"></div>
+          </div>
+        </template>
+        <div class="form-group">
+          <label>
+            <span class="glyphicon glyphicon-list"></span>
+            Board IDs
+          </label>
+          <div class="checkbox" template="ngFor #board of boards">
+            <label>
+              <input type="checkbox" data-bindon-ng-model="board.selected">
+              {{board.name}}
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>
+            <span class="glyphicon glyphicon-file"></span>
+            Binary File
+          </label>
+          <input class="form-control" type="file" required data-var-board-uploading-binary-file-field>
+        </div>
+        <button class="btn btn-primary pull-right" type="submit">Upload</button>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-4">
       <h2>
         Homers
         <small>— <a data-bind-router-link="newHomerLink">Add</a></small>
       </h2>
-      <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-78 -->
       <div data-bind-list-group="homers" data-bind-progress="progress" data-on-remove-click="onHomerRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-xs-12">
-      <h2>
-        Upload Queue
-        <small>— <a data-bind-router-link="newUploadLink">Add</a></small>
-      </h2>
-      <div data-bind-list-group="uploadQueue" data-bind-progress="progress" data-on-remove-click="onUploadRemoveClick($event)">
-        <div class="spinner"></div>
-      </div>
+    <div class="col-xs-12 col-sm-8">
+      <h2>Homer Upload</h2>
+      <form class="clearfix" data-on-submit="onHomerUploadingSubmit($event)" style="position: relative">
+        <template data-bind-ng-if="progress">
+          <div class="overlay">
+            <div class="spinner"></div>
+          </div>
+        </template>
+        <div class="form-group">
+          <label>
+            <span class="glyphicon glyphicon-list"></span>
+            Homer IDs
+          </label>
+          <div class="checkbox" template="ngFor #homer of homers">
+            <label>
+              <input type="checkbox" data-bindon-ng-model="homer.selected">
+              {{homer.name}}
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>
+            <span class="glyphicon glyphicon-console"></span>
+            Program
+          </label>
+          <select class="form-control" required data-bindon-ng-model="homerUploadingProgramField">
+            <option value="">Select name...</option>
+            <option data-bind-value="program.id" template="ngFor #program of homerPrograms">
+              {{program.name}}
+            </option>
+          </select>
+        </div>
+        <button class="btn btn-primary pull-right" type="submit">Upload</button>
+      </form>
     </div>
   </div>
 </div>

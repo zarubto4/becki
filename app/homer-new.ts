@@ -62,6 +62,8 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-142
+    this.notifications.current.push(new libPatternFlyNotifications.Warning("issue/TYRION-142"));
   }
 
   validateIdField():()=>Promise<boolean> {
@@ -73,7 +75,7 @@ export class Component implements ng.OnInit {
       return this.backEnd.getHomers()
           .then(homers => {
             this.progress -= 1;
-            return !homers.find(homer => homer.homerId == this.idField);
+            return !homers.find(homer => homer.homer_id == this.idField);
           })
           .catch(reason => {
             this.progress -= 1;

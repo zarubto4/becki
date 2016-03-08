@@ -70,13 +70,10 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.progress += 1;
-    this.backEnd.getProducer(this.id)
-        .then(producer => {
-          return Promise.all<any>([
-            producer,
-            this.backEnd.request("GET", producer.description)
-          ]);
-        })
+    Promise.all<any>([
+          this.backEnd.getProducer(this.id),
+          this.backEnd.getProducerDescription(this.id)
+        ])
         .then(result => {
           let producer:libBackEnd.Producer;
           [producer, this.descriptionField] = result;

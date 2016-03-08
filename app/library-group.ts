@@ -73,7 +73,7 @@ export class Component implements ng.OnInit {
     this.progress += 1;
     this.backEnd.getLibraryGroup(this.id)
         .then(group => {
-          this.nameField = group.groupName;
+          this.nameField = group.group_name;
           this.descriptionField = group.description;
         })
         .catch(reason => {
@@ -99,8 +99,8 @@ export class Component implements ng.OnInit {
             let libraries:libBackEnd.Library[];
             let groups:libBackEnd.LibraryGroup[];
             [libraries, groups] = result;
-            return !groups.find(group => group.id != this.id && group.groupName == this.nameField) &&
-                !libraries.find(library => library.libraryName == this.nameField);
+            return !groups.find(group => group.id != this.id && group.group_name == this.nameField) &&
+                !libraries.find(library => library.library_name == this.nameField);
           })
           .catch(reason => {
             this.progress -= 1;
@@ -120,7 +120,7 @@ export class Component implements ng.OnInit {
           this.router.navigate(["Devices"]);
         })
         .catch(reason => {
-          this.notifications.next.push(new libPatternFlyNotifications.Danger(`The group cannot be updated: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The group cannot be updated: ${reason}`));
         })
         .then(() => {
           this.progress -= 1;

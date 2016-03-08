@@ -41,8 +41,6 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
-  versionField:number;
-
   versionNameField:string;
 
   versionDescriptionField:string;
@@ -72,7 +70,6 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    this.versionField = 0;
     this.versionNameField = "";
     this.versionDescriptionField = "";
     this.fileVersionField = "";
@@ -93,17 +90,14 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.progress += 1;
-    this.backEnd.getLibrary(this.id)
-        .then(library =>
-            Promise.all<any>([
-              library,
-              this.backEnd.request("GET", library.versions)
-            ])
-        )
+    Promise.all<any>([
+          this.backEnd.getLibrary(this.id),
+          this.backEnd.getLibraryVersions(this.id)
+        ])
         .then(result => {
           let library:libBackEnd.Library;
           [library, this.versions] = result;
-          this.nameField = library.libraryName;
+          this.nameField = library.library_name;
           this.descriptionField = library.description;
         })
         .catch(reason => {
@@ -129,8 +123,7 @@ export class Component implements ng.OnInit {
             let libraries:libBackEnd.Library[];
             let groups:libBackEnd.LibraryGroup[];
             [libraries, groups] = result;
-            return !libraries.find(library => library.id != this.id && library.libraryName == this.nameField) &&
-                !groups.find(group => group.groupName == this.nameField);
+            return !libraries.find(library => library.id != this.id && library.library_name == this.nameField) && !groups.find(group => group.group_name == this.nameField);
           })
           .catch(reason => {
             this.progress -= 1;
@@ -162,10 +155,9 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.progress += 1;
-    this.backEnd.addVersionToLibrary(this.versionField, this.versionNameField, this.versionDescriptionField, this.id)
+    this.backEnd.addVersionToLibrary(this.versionNameField, this.versionDescriptionField, this.id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The version has been created."));
-          this.versionField = 0;
           this.versionNameField = "";
           this.versionDescriptionField = "";
           this.refresh();
@@ -191,6 +183,8 @@ export class Component implements ng.OnInit {
           this.refresh();
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-118
+          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-118"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The file cannot be uploaded: ${reason}`));
         })
         .then(() => {

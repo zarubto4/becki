@@ -20,7 +20,6 @@ import * as applicationsVision from "./applications-vision";
 import * as boardNew from "./board-new";
 import * as boardProgram from "./board-program";
 import * as boardProgramNew from "./board-program-new";
-import * as boardProgramVersion from "./board-program-version";
 import * as boardProgramVersionNew from "./board-program-version-new";
 import * as boardType from "./board-type";
 import * as boardTypeNew from "./board-type-new";
@@ -35,6 +34,7 @@ import * as issueConfirmationTypeNew from "./issue-confirmation-type-new";
 import * as issueNew from "./issue-new";
 import * as issueRelatedNew from "./issue-related-new";
 import * as issueTagNew from "./issue-tag-new";
+import * as issueType from "./issue-type";
 import * as issueTypeNew from "./issue-type-new";
 import * as issues from "./issues";
 import * as libraryGroup from "./library-group";
@@ -50,7 +50,6 @@ import * as projectBoardNew from "./project-board-new";
 import * as projectCollaboratorNew from "./project-collaborator-new";
 import * as projectHomerNew from "./project-homer-new";
 import * as projectNew from "./project-new";
-import * as projectUploadNew from "./project-upload-new";
 import * as projects from "./projects";
 import * as signing from "./signing";
 import * as standaloneProgram from "./standalone-program";
@@ -68,6 +67,7 @@ import * as standaloneProgramNew from "./standalone-program-new";
   {path: "/issue/confirmation/new", component: issueConfirmationTypeNew.Component, as: "NewIssueConfirmationType"},
   {path: "/issue/confirmations/:confirmation", component: issueConfirmationType.Component, as: "IssueConfirmationType"},
   {path: "/issue/type/new", component: issueTypeNew.Component, as: "NewIssueType"},
+  {path: "/issue/types/:type", component: issueType.Component, as: "IssueType"},
   {path: "/issues", component: issues.Component, as: "Issues"},
   {path: "/issues/:issue", component: issue.Component, as: "Issue"},
   {path: "/issues/:issue/confirmation/new", component: issueConfirmationNew.Component, as: "NewIssueConfirmation"},
@@ -89,14 +89,12 @@ import * as standaloneProgramNew from "./standalone-program-new";
   {path: "/user/projects/:project/board-program/new", component: boardProgramNew.Component, as: "NewBoardProgram"},
   {path: "/user/projects/:project/board-programs/:program", component: boardProgram.Component, as: "BoardProgram"},
   {path: "/user/projects/:project/board-programs/:program/version/new", component: boardProgramVersionNew.Component, as: "NewBoardProgramVersion"},
-  {path: "/user/projects/:project/board-programs/:program/versions/:version", component: boardProgramVersion.Component, as: "BoardProgramVersion"},
   {path: "/user/projects/:project/collaborator/new", component: projectCollaboratorNew.Component, as: "NewProjectCollaborator"},
   {path: "/user/projects/:project/homer/new", component: projectHomerNew.Component, as: "NewProjectHomer"},
   {path: "/user/projects/:project/homer-program/new", component: homerProgramNew.Component, as: "NewHomerProgram"},
   {path: "/user/projects/:project/homer-programs/:program", component: homerProgram.Component, as: "HomerProgram"},
   {path: "/user/projects/:project/standalone-program/new", component: standaloneProgramNew.Component, as: "NewStandaloneProgram"},
-  {path: "/user/projects/:project/standalone-programs/:program", component: standaloneProgram.Component, as: "StandaloneProgram"},
-  {path: "/user/projects/:project/upload/new", component: projectUploadNew.Component, as: "NewProjectUpload"}
+  {path: "/user/projects/:project/standalone-programs/:program", component: standaloneProgram.Component, as: "StandaloneProgram"}
 ])
 @ng.Component({
   selector: "[body]",

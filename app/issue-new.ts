@@ -86,6 +86,8 @@ export class Component implements ng.OnInit {
           this.router.navigate(["Issues"]);
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-150
+          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-150"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issue cannot be created: ${reason}`));
         })
         .then(() => {

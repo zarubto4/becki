@@ -19,34 +19,12 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
-import * as fieldCode from "./field-code";
 import * as layout from "./layout";
-import * as libBackEnd from "./lib-back-end";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
-
-class Selectable<T> {
-
-  model:T;
-
-  selected:boolean;
-
-  constructor(model:T) {
-    "use strict";
-
-    this.model = model;
-    this.selected = false;
-  }
-}
 
 @ng.Component({
   templateUrl: "app/board-program-new.html",
-  directives: [
-    customValidator.Directive,
-    fieldCode.Component,
-    layout.Component,
-    ng.CORE_DIRECTIVES,
-    ng.FORM_DIRECTIVES
-  ]
+  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -56,15 +34,9 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
-  libraries:Selectable<libBackEnd.Library>[];
-
-  groups:Selectable<libBackEnd.LibraryGroup>[];
-
   nameField:string;
 
   descriptionField:string;
-
-  codeField:string;
 
   progress:number;
 
@@ -89,7 +61,6 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "";
     this.descriptionField = "";
-    this.codeField = "";
     this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
@@ -100,15 +71,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 2;
-    this.backEnd.getLibraries()
-        .then(libraries => this.libraries = libraries.map(library => new Selectable(library)))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Libraries cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
-    this.backEnd.getLibraryGroups()
-        .then(groups => this.groups = groups.map(group => new Selectable(group)))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Library groups cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -117,14 +79,10 @@ export class Component implements ng.OnInit {
     return () => {
       this.progress += 1;
       // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return this.backEnd.getProject(this.projectId)
-          .then(project => {
-            return this.backEnd.request<libBackEnd.BoardProgram[]>("GET", project.c_programs);
-          })
+      return this.backEnd.getBoardPrograms(this.projectId)
           .then(programs => {
             this.progress -= 1;
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-77
-            return !programs.find(program => program.programName == this.nameField);
+            return !programs.find(program => program.program_name == this.nameField);
           })
           .catch(reason => {
             this.progress -= 1;
@@ -138,9 +96,7 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.progress += 1;
-    let libraries = this.libraries.filter(selectable => selectable.selected).map(selectable => ({libraryId: selectable.model.id, libraryVersion: selectable.model.lastVersion.toString()}));
-    let groups = this.groups.filter(selectable => selectable.selected).map(selectable => ({groupId: selectable.model.id, libraryVersion: selectable.model.lastVersion.toString()}));
-    this.backEnd.createBoardProgram(this.nameField, this.descriptionField, libraries, groups, this.codeField, this.projectId)
+    this.backEnd.createBoardProgram(this.nameField, this.descriptionField, this.projectId)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The program has been created."));
           this.router.navigate(["Project", {project: this.projectId}]);

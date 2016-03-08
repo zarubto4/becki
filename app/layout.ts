@@ -111,7 +111,6 @@ export class Component implements ng.OnInit, ng.OnDestroy {
 
     this.notifications.shift();
     this.progress += 1;
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-65
     this.backEnd.deleteToken()
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("Current user have been signed out."));

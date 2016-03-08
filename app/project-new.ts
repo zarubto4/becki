@@ -74,7 +74,7 @@ export class Component implements ng.OnInit {
       return this.backEnd.getProjects()
           .then(projects => {
             this.progress -= 1;
-            return !projects.find(project => project.projectName == this.nameField);
+            return !projects.find(project => project.project_name == this.nameField);
           })
           .catch(reason => {
             this.progress -= 1;

@@ -20,6 +20,8 @@ import * as backEnd from "./back-end";
 import * as customValidator from "./custom-validator";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
+const REDIRECT_URL = `${window.location.pathname}#`;
+
 @ng.Component({
   templateUrl: "app/signing.html",
   directives: [customValidator.Directive, libPatternFlyNotifications.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
@@ -104,7 +106,7 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.progress += 1;
-    this.backEnd.createFacebookToken()
+    this.backEnd.createFacebookToken(REDIRECT_URL)
         .then(url => {
           location.href = url;
         })
@@ -119,7 +121,7 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.progress += 1;
-    this.backEnd.createGitHubToken()
+    this.backEnd.createGitHubToken(REDIRECT_URL)
         .then(url => {
           location.href = url;
         })

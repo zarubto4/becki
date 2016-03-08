@@ -41,13 +41,6 @@
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon-pencil"></span>
-        Number
-      </label>
-      <input class="form-control" type="number" required step="0.01" data-bindon-ng-model="versionField">
-    </div>
-    <div class="form-group">
-      <label>
-        <span class="glyphicon glyphicon-pencil"></span>
         Name
       </label>
       <input class="form-control" data-bindon-ng-model="versionNameField">
@@ -82,7 +75,7 @@
           Create a new version
         </option>
         <option data-bind-value="version.id" template="ngFor #version of versions">
-          {{version.version}}
+          {{version.version_name}}
         </option>
       </select>
     </div>

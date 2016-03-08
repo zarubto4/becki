@@ -13,18 +13,16 @@
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon-pencil"></span>
-        Description
+        Name
       </label>
-      <textarea class="form-control" data-bindon-ng-model="descriptionField"></textarea>
+      <input class="form-control" required data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
     </div>
     <div class="form-group">
       <label>
-        <span class="glyphicon glyphicon-console"></span>
-        Code
+        <span class="glyphicon glyphicon-pencil"></span>
+        Description
       </label>
-      <div data-bindon-field-code="codeField" data-bind-mode="'text/javascript'">
-        <div class="spinner"></div>
-      </div>
+      <textarea class="form-control" data-bindon-ng-model="descriptionField"></textarea>
     </div>
     <div class="pull-right">
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>

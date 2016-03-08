@@ -20,7 +20,6 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
-import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapListGroup from "./lib-bootstrap/list-group";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
@@ -97,9 +96,10 @@ export class Component implements ng.OnInit {
     this.progress += 1;
     this.backEnd.getBoardProgram(this.id)
         .then(program => {
-          this.nameField = program.programName;
-          this.descriptionField = program.programDescription;
-          this.versions = program.versions.map(version => new libBootstrapListGroup.Item(version.id, version.version.toString(), version.versionName, ["BoardProgramVersion", {project: this.projectId, program: this.id, version: version.id}]));
+          this.nameField = program.program_name;
+          this.descriptionField = program.program_description;
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-126
+          this.versions = program.version_objects.map(version => new libBootstrapListGroup.Item(version.id, `${version.version_name} (issue/TYRION-126)`, version.version_description));
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program ${this.id} cannot be loaded: ${reason}`));
@@ -115,14 +115,10 @@ export class Component implements ng.OnInit {
     return () => {
       this.progress += 1;
       // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return this.backEnd.getProject(this.projectId)
-          .then(project => {
-            return this.backEnd.request<libBackEnd.BoardProgram[]>("GET", project.c_programs);
-          })
+      return this.backEnd.getBoardPrograms(this.projectId)
           .then(programs => {
             this.progress -= 1;
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-77
-            return !programs.find(program => program.id != this.id && program.programName == this.nameField);
+            return !programs.find(program => program.id != this.id && program.program_name == this.nameField);
           })
           .catch(reason => {
             this.progress -= 1;
@@ -136,7 +132,6 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.progress += 1;
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-73
     this.backEnd.updateBoardProgram(this.id, this.nameField, this.descriptionField)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The program has been updated."));
@@ -162,7 +157,7 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.progress += 1;
-    this.backEnd.deleteBoardProgramVersion(id, this.id)
+    this.backEnd.removeVersionFromBoardProgram(id, this.id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The version has been removed."));
           this.refresh();
