@@ -41,7 +41,7 @@ export class Item {
 
 @ng.Component({
   selector: "[list-group]",
-  templateUrl: "app/lib-bootstrap/list-group.html",
+  templateUrl: "app/lib-patternfly/list-group.html",
   directives: [ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
   inputs: ["progress"]
 })
@@ -50,8 +50,18 @@ export class Component {
   @ng.Input("listGroup")
   items:Item[] = [];
 
+  @ng.Input()
+  emptyTitle = "No item yet";
+
+  @ng.Output()
+  addClick = new ng.EventEmitter();
+
   @ng.Output()
   removeClick = new ng.EventEmitter();
+
+  onAddClick():void {
+    this.addClick.next(null);
+  }
 
   onRemoveClick(item:Item):void {
     "use strict";

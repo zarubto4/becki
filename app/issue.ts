@@ -23,7 +23,7 @@ import * as fieldHomerProgram from "./field-homer-program";
 import * as fieldIssueBody from "./field-issue-body";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapListGroup from "./lib-bootstrap/list-group";
+import * as libPatternFlyListGroup from "./lib-patternfly/list-group";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 class Comment {
@@ -133,7 +133,7 @@ class Issue extends Item {
     fieldHomerProgram.Component,
     fieldIssueBody.Component,
     layout.Component,
-    libBootstrapListGroup.Component,
+    libPatternFlyListGroup.Component,
     ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES,
     ngRouter.ROUTER_DIRECTIVES
@@ -157,15 +157,15 @@ export class Component implements ng.OnInit {
 
   newRelatedLink:any[];
 
-  related:libBootstrapListGroup.Item[];
+  related:libPatternFlyListGroup.Item[];
 
   newTagLink:any[];
 
-  tags:libBootstrapListGroup.Item[];
+  tags:libPatternFlyListGroup.Item[];
 
   newConfirmationLink:any[];
 
-  confirmations:libBootstrapListGroup.Item[];
+  confirmations:libPatternFlyListGroup.Item[];
 
   progress:number;
 
@@ -227,9 +227,9 @@ export class Component implements ng.OnInit {
             // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-152
             this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-152"));
           }
-          this.related = related.map(related2 => new libBootstrapListGroup.Item(related2[0].linkId, related2[0].name, "", ["Issue", {issue: related2[1].postId}]));
-          this.tags = issue.hashTags.map(tag => new libBootstrapListGroup.Item(tag, tag, ""));
-          this.confirmations = issue.type_of_confirms.map(confirmation => new libBootstrapListGroup.Item(confirmation.id, confirmation.type, null));
+          this.related = related.map(related2 => new libPatternFlyListGroup.Item(related2[0].linkId, related2[0].name, "", ["Issue", {issue: related2[1].postId}]));
+          this.tags = issue.hashTags.map(tag => new libPatternFlyListGroup.Item(tag, tag, ""));
+          this.confirmations = issue.type_of_confirms.map(confirmation => new libPatternFlyListGroup.Item(confirmation.id, confirmation.type, null));
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issue ${this.id} cannot be loaded: ${reason}`));
@@ -520,6 +520,12 @@ export class Component implements ng.OnInit {
     comment.removing = false;
   }
 
+  onRelatedAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newRelatedLink);
+  }
+
   onRelatedRemoveClick(id:string):void {
     "use strict";
 
@@ -538,6 +544,12 @@ export class Component implements ng.OnInit {
         });
   }
 
+  onTagAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newTagLink);
+  }
+
   onTagRemoveClick(tag:string):void {
     "use strict";
 
@@ -554,6 +566,12 @@ export class Component implements ng.OnInit {
         .then(() => {
           this.progress -= 1;
         });
+  }
+
+  onConfirmationAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newConfirmationLink);
   }
 
   onConfirmationRemoveClick(id:string):void {

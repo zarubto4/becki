@@ -35,7 +35,7 @@
         Collaborators
         <small>— <a data-bind-router-link="newCollaboratorLink">Add</a></small>
       </h2>
-      <div data-bind-list-group="collaborators" data-bind-progress="progress" data-on-remove-click="onCollaboratorRemoveClick($event)">
+      <div data-bind-list-group="collaborators" data-bind-progress="progress" data-on-add-click="onCollaboratorAddClick($event)" data-on-remove-click="onCollaboratorRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>
@@ -46,7 +46,7 @@
         Board Programs
         <small>— <a data-bind-router-link="newBoardProgramLink">Add</a></small>
       </h2>
-      <div data-bind-list-group="boardPrograms" data-bind-progress="progress" data-on-remove-click="onBoardProgramRemoveClick($event)">
+      <div data-bind-list-group="boardPrograms" data-bind-progress="progress" data-on-add-click="onBoardProgramAddClick($event)" data-on-remove-click="onBoardProgramRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>
@@ -55,7 +55,7 @@
         Standalone Programs
         <small>— <a data-bind-router-link="newStandaloneProgramLink">Add</a></small>
       </h2>
-      <div data-bind-list-group="standalonePrograms" data-bind-progress="progress" data-on-remove-click="onStandaloneProgramRemoveClick($event)">
+      <div data-bind-list-group="standalonePrograms" data-bind-progress="progress" data-on-add-click="onStandaloneProgramAddClick($event)" data-on-remove-click="onStandaloneProgramRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>
@@ -64,7 +64,7 @@
         Homer Programs
         <small>— <a data-bind-router-link="newHomerProgramLink">Add</a></small>
       </h2>
-      <div data-bind-list-group="homerPrograms" data-bind-progress="progress" data-on-remove-click="onHomerProgramRemoveClick($event)">
+      <div data-bind-list-group="homerPrograms" data-bind-progress="progress" data-on-add-click="onHomerProgramAddClick($event)" data-on-remove-click="onHomerProgramRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>
@@ -75,7 +75,7 @@
         Boards
         <small>— <a data-bind-router-link="newBoardLink">Add</a></small>
       </h2>
-      <div data-bind-list-group="boards" data-bind-progress="progress" data-on-remove-click="onBoardRemoveClick($event)">
+      <div data-bind-list-group="boards" data-bind-progress="progress" data-on-add-click="onBoardAddClick($event)" data-on-remove-click="onBoardRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>
@@ -151,7 +151,7 @@
         Homers
         <small>— <a data-bind-router-link="newHomerLink">Add</a></small>
       </h2>
-      <div data-bind-list-group="homers" data-bind-progress="progress" data-on-remove-click="onHomerRemoveClick($event)">
+      <div data-bind-list-group="homers" data-bind-progress="progress" data-on-add-click="onHomerAddClick($event)" data-on-remove-click="onHomerRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>

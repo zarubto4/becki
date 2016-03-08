@@ -21,10 +21,10 @@ import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapListGroup from "./lib-bootstrap/list-group";
+import * as libPatternFlyListGroup from "./lib-patternfly/list-group";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
-class SelectableItem extends libBootstrapListGroup.Item {
+class SelectableItem extends libPatternFlyListGroup.Item {
 
   selected:boolean;
 
@@ -41,7 +41,7 @@ class SelectableItem extends libBootstrapListGroup.Item {
   directives: [
     customValidator.Directive,
     layout.Component,
-    libBootstrapListGroup.Component,
+    libPatternFlyListGroup.Component,
     ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES,
     ngRouter.ROUTER_DIRECTIVES
@@ -61,19 +61,19 @@ export class Component implements ng.OnInit {
 
   newCollaboratorLink:any[];
 
-  collaborators:libBootstrapListGroup.Item[];
+  collaborators:libPatternFlyListGroup.Item[];
 
   newBoardProgramLink:any[];
 
-  boardPrograms:libBootstrapListGroup.Item[];
+  boardPrograms:libPatternFlyListGroup.Item[];
 
   newStandaloneProgramLink:any[];
 
-  standalonePrograms:libBootstrapListGroup.Item[];
+  standalonePrograms:libPatternFlyListGroup.Item[];
 
   newHomerProgramLink:any[];
 
-  homerPrograms:libBootstrapListGroup.Item[];
+  homerPrograms:libPatternFlyListGroup.Item[];
 
   newBoardLink:any[];
 
@@ -116,7 +116,7 @@ export class Component implements ng.OnInit {
     this.newStandaloneProgramLink = ["NewStandaloneProgram", {project: this.id}];
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-146
     this.standalonePrograms = [
-      new libBootstrapListGroup.Item(null, "(issue/TYRION-146)", "does not work")
+      new libPatternFlyListGroup.Item(null, "(issue/TYRION-146)", "does not work")
     ];
     this.newHomerProgramLink = ["NewHomerProgram", {project: this.id}];
     this.newBoardLink = ["NewProjectBoard", {project: this.id}];
@@ -158,9 +158,9 @@ export class Component implements ng.OnInit {
           [project, collaborators, boardPrograms, homerPrograms, boards, homers] = result;
           this.nameField = project.project_name;
           this.descriptionField = project.project_description;
-          this.collaborators = collaborators.map(collaborator => new libBootstrapListGroup.Item(collaborator.id, libBackEnd.composePersonString(collaborator), null));
-          this.boardPrograms = boardPrograms.map(program => new libBootstrapListGroup.Item(program.id, program.program_name, program.program_description, ["BoardProgram", {project: this.id, program: program.id}]));
-          this.homerPrograms = homerPrograms.map(program => new libBootstrapListGroup.Item(program.programId, program.name, program.programDescription, ["HomerProgram", {project: this.id, program: program.programId}]));
+          this.collaborators = collaborators.map(collaborator => new libPatternFlyListGroup.Item(collaborator.id, libBackEnd.composePersonString(collaborator), null));
+          this.boardPrograms = boardPrograms.map(program => new libPatternFlyListGroup.Item(program.id, program.program_name, program.program_description, ["BoardProgram", {project: this.id, program: program.id}]));
+          this.homerPrograms = homerPrograms.map(program => new libPatternFlyListGroup.Item(program.programId, program.name, program.programDescription, ["HomerProgram", {project: this.id, program: program.programId}]));
           this.boards = boards.map(board => new SelectableItem(board.id, board.id, board.isActive ? "active" : "inactive"));
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-78
           this.homers = homers.map(homer => new SelectableItem(homer.homer_id, homer.homer_id, "(issue/TYRION-78)"));
@@ -209,6 +209,12 @@ export class Component implements ng.OnInit {
         });
   }
 
+  onCollaboratorAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newCollaboratorLink);
+  }
+
   onCollaboratorRemoveClick(id:string):void {
     "use strict";
 
@@ -227,6 +233,12 @@ export class Component implements ng.OnInit {
         });
   }
 
+  onBoardProgramAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newBoardProgramLink);
+  }
+
   onBoardProgramRemoveClick(id:string):void {
     "use strict";
 
@@ -243,6 +255,12 @@ export class Component implements ng.OnInit {
         .then(() => {
           this.progress -= 1;
         });
+  }
+
+  onStandaloneProgramAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newStandaloneProgramLink);
   }
 
   onStandaloneProgramRemoveClick(id:string):void {
@@ -265,6 +283,12 @@ export class Component implements ng.OnInit {
         });
   }
 
+  onHomerProgramAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newHomerProgramLink);
+  }
+
   onHomerProgramRemoveClick(id:string):void {
     "use strict";
 
@@ -281,6 +305,12 @@ export class Component implements ng.OnInit {
         .then(() => {
           this.progress -= 1;
         });
+  }
+
+  onBoardAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newBoardLink);
   }
 
   onBoardRemoveClick(id:string):void {
@@ -329,6 +359,12 @@ export class Component implements ng.OnInit {
     // TODO: http://youtrack.byzance.cz/youtrack/issue/TYRION-37#comment=109-118
     this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-37"));
     console.log(this.boardUploadingBinaryFileField);
+  }
+
+  onHomerAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newHomerLink);
   }
 
   onHomerRemoveClick(id:string):void {

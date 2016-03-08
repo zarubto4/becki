@@ -8,21 +8,21 @@
     Types
     <small>— <a data-bind-router-link="newTypeLink">Add</a></small>
   </h2>
-  <div data-bind-list-group="types" data-bind-progress="progress" data-on-remove-click="onTypeRemoveClick($event)">
+  <div data-bind-list-group="types" data-bind-progress="progress" data-on-add-click="onTypeAddClick($event)" data-on-remove-click="onTypeRemoveClick($event)">
     <div class="spinner"></div>
   </div>
   <h2>
     Confirmations
     <small>— <a data-bind-router-link="newConfirmationLink">Add</a></small>
   </h2>
-  <div data-bind-list-group="confirmations" data-bind-progress="progress" data-on-remove-click="onConfirmationRemoveClick($event)">
+  <div data-bind-list-group="confirmations" data-bind-progress="progress" data-on-add-click="onConfirmationAddClick($event)" data-on-remove-click="onConfirmationRemoveClick($event)">
     <div class="spinner"></div>
   </div>
   <h2>
     Issues
     <small>— <a data-bind-router-link="newIssueLink">Add</a></small>
   </h2>
-  <div data-bind-list-group="issues" data-bind-progress="progress" data-on-remove-click="onIssueRemoveClick($event)">
+  <div data-bind-list-group="issues" data-bind-progress="progress" data-on-add-click="onIssueAddClick($event)" data-on-remove-click="onIssueRemoveClick($event)">
     <div class="spinner"></div>
   </div>
 </div>

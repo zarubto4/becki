@@ -20,12 +20,12 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapListGroup from "./lib-bootstrap/list-group";
+import * as libPatternFlyListGroup from "./lib-patternfly/list-group";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/issues.html",
-  directives: [layout.Component, libBootstrapListGroup.Component, ngRouter.ROUTER_DIRECTIVES]
+  directives: [layout.Component, libPatternFlyListGroup.Component, ngRouter.ROUTER_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -33,15 +33,15 @@ export class Component implements ng.OnInit {
 
   newTypeLink:any[];
 
-  types:libBootstrapListGroup.Item[];
+  types:libPatternFlyListGroup.Item[];
 
   newConfirmationLink:any[];
 
-  confirmations:libBootstrapListGroup.Item[];
+  confirmations:libPatternFlyListGroup.Item[];
 
   newIssueLink:any[];
 
-  issues:libBootstrapListGroup.Item[];
+  issues:libPatternFlyListGroup.Item[];
 
   progress:number;
 
@@ -79,17 +79,23 @@ export class Component implements ng.OnInit {
 
     this.progress += 3;
     this.backEnd.getIssueTypes()
-        .then(types => this.types = types.map(type => new libBootstrapListGroup.Item(type.id, type.type, null, ["IssueType", {type: type.id}])))
+        .then(types => this.types = types.map(type => new libPatternFlyListGroup.Item(type.id, type.type, null, ["IssueType", {type: type.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Types cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
     this.backEnd.getIssueConfirmations()
-        .then(confirmations => this.confirmations = confirmations.map(confirmation => new libBootstrapListGroup.Item(confirmation.id, confirmation.type, null, ["IssueConfirmationType", {confirmation: confirmation.id}])))
+        .then(confirmations => this.confirmations = confirmations.map(confirmation => new libPatternFlyListGroup.Item(confirmation.id, confirmation.type, null, ["IssueConfirmationType", {confirmation: confirmation.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Confirmations cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
     this.backEnd.getIssues()
-        .then(issues => this.issues = issues.map(issue => new libBootstrapListGroup.Item(issue.postId, issue.name, issue.type.type, ["Issue", {issue: issue.postId}])))
+        .then(issues => this.issues = issues.map(issue => new libPatternFlyListGroup.Item(issue.postId, issue.name, issue.type.type, ["Issue", {issue: issue.postId}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Issues cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
+  }
+
+  onTypeAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newTypeLink);
   }
 
   onTypeRemoveClick(id:string):void {
@@ -110,6 +116,12 @@ export class Component implements ng.OnInit {
         });
   }
 
+  onConfirmationAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newConfirmationLink);
+  }
+
   onConfirmationRemoveClick(id:string):void {
     "use strict";
 
@@ -128,6 +140,12 @@ export class Component implements ng.OnInit {
         .then(() => {
           this.progress -= 1;
         });
+  }
+
+  onIssueAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newIssueLink);
   }
 
   onIssueRemoveClick(id:string):void {

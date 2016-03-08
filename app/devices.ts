@@ -19,12 +19,12 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as layout from "./layout";
-import * as libBootstrapListGroup from "./lib-bootstrap/list-group";
+import * as libPatternFlyListGroup from "./lib-patternfly/list-group";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/devices.html",
-  directives: [layout.Component, libBootstrapListGroup.Component, ngRouter.ROUTER_DIRECTIVES]
+  directives: [layout.Component, libPatternFlyListGroup.Component, ngRouter.ROUTER_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -32,31 +32,31 @@ export class Component implements ng.OnInit {
 
   newProducerLink:any[];
 
-  producers:libBootstrapListGroup.Item[];
+  producers:libPatternFlyListGroup.Item[];
 
   newLibraryLink:any[];
 
-  libraries:libBootstrapListGroup.Item[];
+  libraries:libPatternFlyListGroup.Item[];
 
   newLibraryGroupLink:any[];
 
-  libraryGroups:libBootstrapListGroup.Item[];
+  libraryGroups:libPatternFlyListGroup.Item[];
 
   newProcessorLink:any[];
 
-  processors:libBootstrapListGroup.Item[];
+  processors:libPatternFlyListGroup.Item[];
 
   newBoardTypeLink:any[];
 
-  boardTypes:libBootstrapListGroup.Item[];
+  boardTypes:libPatternFlyListGroup.Item[];
 
   newBoardLink:any[];
 
-  boards:libBootstrapListGroup.Item[];
+  boards:libPatternFlyListGroup.Item[];
 
   newHomerLink:any[];
 
-  homers:libBootstrapListGroup.Item[];
+  homers:libPatternFlyListGroup.Item[];
 
   progress:number;
 
@@ -97,40 +97,46 @@ export class Component implements ng.OnInit {
 
     this.progress += 7;
     this.backEnd.getProducers()
-        .then(producers => this.producers = producers.map(producer => new libBootstrapListGroup.Item(producer.id, producer.name, null, ["Producer", {producer: producer.id}])))
+        .then(producers => this.producers = producers.map(producer => new libPatternFlyListGroup.Item(producer.id, producer.name, null, ["Producer", {producer: producer.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Producers cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
     this.backEnd.getLibraries()
-        .then(libraries => this.libraries = libraries.map(library => new libBootstrapListGroup.Item(library.id, library.library_name, library.description, ["Library", {library: library.id}])))
+        .then(libraries => this.libraries = libraries.map(library => new libPatternFlyListGroup.Item(library.id, library.library_name, library.description, ["Library", {library: library.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Libraries cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
     this.backEnd.getLibraryGroups()
-        .then(groups => this.libraryGroups = groups.map(group => new libBootstrapListGroup.Item(group.id, group.group_name, group.description, ["LibraryGroup", {group: group.id}])))
+        .then(groups => this.libraryGroups = groups.map(group => new libPatternFlyListGroup.Item(group.id, group.group_name, group.description, ["LibraryGroup", {group: group.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Library groups cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
     this.backEnd.getProcessors()
-        .then(processors => this.processors = processors.map(processor => new libBootstrapListGroup.Item(processor.id, processor.processor_name, processor.processor_code, ["Processor", {processor: processor.id}])))
+        .then(processors => this.processors = processors.map(processor => new libPatternFlyListGroup.Item(processor.id, processor.processor_name, processor.processor_code, ["Processor", {processor: processor.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Processors cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
     this.backEnd.getBoardTypes()
-        .then(boardTypes => this.boardTypes = boardTypes.map(type => new libBootstrapListGroup.Item(type.id, type.name, type.description, ["BoardType", {type: type.id}])))
+        .then(boardTypes => this.boardTypes = boardTypes.map(type => new libPatternFlyListGroup.Item(type.id, type.name, type.description, ["BoardType", {type: type.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Board types cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
     this.backEnd.getBoards()
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
-        .then(boards => this.boards = boards.map(board => new libBootstrapListGroup.Item(board.id, `${board.id} (issue/TYRION-70)`, board.isActive ? "active" : "inactive")))
+        .then(boards => this.boards = boards.map(board => new libPatternFlyListGroup.Item(board.id, `${board.id} (issue/TYRION-70)`, board.isActive ? "active" : "inactive")))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Board types cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
     this.backEnd.getHomers()
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-71
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-78
-        .then(homers => this.homers = homers.map(homer => new libBootstrapListGroup.Item(homer.homer_id, `${homer.homer_id} (issue/TYRION-71)`, "(issue/TYRION-78)")))
+        .then(homers => this.homers = homers.map(homer => new libPatternFlyListGroup.Item(homer.homer_id, `${homer.homer_id} (issue/TYRION-71)`, "(issue/TYRION-78)")))
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-142
           this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-142"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`Homers cannot be loaded: ${reason}`));
         })
         .then(() => this.progress -= 1);
+  }
+
+  onProducerAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newProducerLink);
   }
 
   onProducerRemoveClick(id:string):void {
@@ -151,6 +157,12 @@ export class Component implements ng.OnInit {
         });
   }
 
+  onLibraryAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newLibraryLink);
+  }
+
   onLibraryRemoveClick(id:string):void {
     "use strict";
 
@@ -167,6 +179,12 @@ export class Component implements ng.OnInit {
         .then(() => {
           this.progress -= 1;
         });
+  }
+
+  onLibraryGroupAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newLibraryGroupLink);
   }
 
   onLibraryGroupRemoveClick(id:string):void {
@@ -187,6 +205,12 @@ export class Component implements ng.OnInit {
         });
   }
 
+  onProcessorAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newProcessorLink);
+  }
+
   onProcessorRemoveClick(id:string):void {
     "use strict";
 
@@ -203,6 +227,12 @@ export class Component implements ng.OnInit {
         .then(() => {
           this.progress -= 1;
         });
+  }
+
+  onBoardTypeAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newBoardTypeLink);
   }
 
   onBoardTypeRemoveClick(id:string):void {
@@ -223,12 +253,24 @@ export class Component implements ng.OnInit {
         });
   }
 
+  onBoardAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newBoardLink);
+  }
+
   onBoardRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
     // see https://youtrack.byzance.cz/youtrack/issue/TYRION-89
     this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-89"));
+  }
+
+  onHomerAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newHomerLink);
   }
 
   onHomerRemoveClick(id:string):void {

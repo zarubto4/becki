@@ -20,7 +20,7 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
-import * as libBootstrapListGroup from "./lib-bootstrap/list-group";
+import * as libPatternFlyListGroup from "./lib-patternfly/list-group";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
@@ -28,7 +28,7 @@ import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
   directives: [
     customValidator.Directive,
     layout.Component,
-    libBootstrapListGroup.Component,
+    libPatternFlyListGroup.Component,
     ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES,
     ngRouter.ROUTER_DIRECTIVES
@@ -50,7 +50,7 @@ export class Component implements ng.OnInit {
 
   newVersionLink:any[];
 
-  versions:libBootstrapListGroup.Item[];
+  versions:libPatternFlyListGroup.Item[];
 
   progress:number;
 
@@ -99,7 +99,7 @@ export class Component implements ng.OnInit {
           this.nameField = program.program_name;
           this.descriptionField = program.program_description;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-126
-          this.versions = program.version_objects.map(version => new libBootstrapListGroup.Item(version.id, `${version.version_name} (issue/TYRION-126)`, version.version_description));
+          this.versions = program.version_objects.map(version => new libPatternFlyListGroup.Item(version.id, `${version.version_name} (issue/TYRION-126)`, version.version_description));
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program ${this.id} cannot be loaded: ${reason}`));
@@ -150,6 +150,12 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.router.navigate(["Project", {project: this.projectId}]);
+  }
+
+  onVersionAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newVersionLink);
   }
 
   onVersionRemoveClick(id:string):void {

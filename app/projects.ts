@@ -20,12 +20,12 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libBootstrapListGroup from "./lib-bootstrap/list-group";
+import * as libPatternFlyListGroup from "./lib-patternfly/list-group";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/projects.html",
-  directives: [layout.Component, libBootstrapListGroup.Component, ngRouter.ROUTER_DIRECTIVES],
+  directives: [layout.Component, libPatternFlyListGroup.Component, ngRouter.ROUTER_DIRECTIVES],
 })
 export class Component implements ng.OnInit {
 
@@ -33,7 +33,7 @@ export class Component implements ng.OnInit {
 
   newLink:any[];
 
-  items:libBootstrapListGroup.Item[];
+  items:libPatternFlyListGroup.Item[];
 
   progress:number;
 
@@ -70,9 +70,15 @@ export class Component implements ng.OnInit {
 
     this.progress += 1;
     this.backEnd.getProjects()
-        .then(projects => this.items = projects.map(project => new libBootstrapListGroup.Item(project.id, project.project_name, project.project_description, ["Project", {project: project.id}])))
+        .then(projects => this.items = projects.map(project => new libPatternFlyListGroup.Item(project.id, project.project_name, project.project_description, ["Project", {project: project.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Projects cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
+  }
+
+  onAddClick():void {
+    "use strict";
+
+    this.router.navigate(this.newLink);
   }
 
   onRemoveClick(id:string):void {

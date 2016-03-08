@@ -31,7 +31,7 @@
     </div>
   </form>
   <h2>Versions <small>— <a data-bind-router-link="newVersionLink">Add</a></small></h2>
-  <div data-bind-list-group="versions" data-bind-progress="progress" data-on-remove-click="onVersionRemoveClick($event)">
+  <div data-bind-list-group="versions" data-bind-progress="progress" data-on-add-click="onVersionAddClick($event)" data-on-remove-click="onVersionRemoveClick($event)">
     <div class="spinner"></div>
   </div>
 </div>

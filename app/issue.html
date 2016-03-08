@@ -232,7 +232,7 @@
         <small>— <a data-bind-router-link="newRelatedLink">Add</a></small>
       </h2>
 
-      <div data-bind-list-group="related" data-bind-progress="progress" data-on-remove-click="onRelatedRemoveClick($event)">
+      <div data-bind-list-group="related" data-bind-progress="progress" data-on-add-click="onRelatedAddClick($event)" data-on-remove-click="onRelatedRemoveClick($event)">
         <div class="spinner"></div>
       </div>
       <h2>
@@ -240,7 +240,7 @@
         <small>— <a data-bind-router-link="newTagLink">Add</a></small>
       </h2>
 
-      <div data-bind-list-group="tags" data-bind-progress="progress" data-on-remove-click="onTagRemoveClick($event)">
+      <div data-bind-list-group="tags" data-bind-progress="progress" data-on-add-click="onTagAddClick($event)" data-on-remove-click="onTagRemoveClick($event)">
         <div class="spinner"></div>
       </div>
       <h2>
@@ -248,7 +248,7 @@
         <small>— <a data-bind-router-link="newConfirmationLink">Add</a></small>
       </h2>
 
-      <div data-bind-list-group="confirmations" data-bind-progress="progress" data-on-remove-click="onConfirmationRemoveClick($event)">
+      <div data-bind-list-group="confirmations" data-bind-progress="progress" data-on-add-click="onConfirmationAddClick($event)" data-on-remove-click="onConfirmationRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>
