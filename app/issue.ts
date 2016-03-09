@@ -38,6 +38,8 @@ class Comment {
 
   tags:string[];
 
+  dropdownOpen:boolean;
+
   editing:boolean;
 
   removing:boolean;
@@ -52,6 +54,7 @@ class Comment {
     this.date = date;
     this.likes = likes;
     this.tags = tags;
+    this.dropdownOpen = false;
     this.editing = false;
     this.removing = false;
     this.bodyField = body;
@@ -71,6 +74,8 @@ class Item {
   comments:Comment[];
 
   tags:string[];
+
+  dropdownOpen:boolean;
 
   editing:boolean;
 
@@ -99,6 +104,7 @@ class Item {
     this.likes = likes;
     this.comments = comments;
     this.tags = tags;
+    this.dropdownOpen = false;
     this.editing = false;
     this.importing = false;
     this.removing = false;
@@ -236,6 +242,13 @@ export class Component implements ng.OnInit {
         .then(projects => this.projects = projects)
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Projects cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
+  }
+
+  onItemDropdownClick(item:Item, event:Event):void {
+    "use strict";
+
+    item.dropdownOpen = !item.dropdownOpen;
+    event.stopPropagation();
   }
 
   onItemImportClick(item:Item):void {
@@ -450,6 +463,13 @@ export class Component implements ng.OnInit {
         });
   }
 
+  onCommentDropdownClick(comment:Comment, event:Event):void {
+    "use strict";
+
+    comment.dropdownOpen = !comment.dropdownOpen;
+    event.stopPropagation();
+  }
+
   onCommentEditClick(comment:Comment):void {
     "use strict";
 
@@ -581,5 +601,17 @@ export class Component implements ng.OnInit {
         .then(() => {
           this.progress -= 1;
         });
+  }
+
+  @ng.HostListener("document:click")
+  onDocumentClick():void {
+    "use strict";
+
+    if (this.items) {
+      this.items.forEach(item => {
+        item.dropdownOpen = false;
+        item.comments.forEach(comment => comment.dropdownOpen = false);
+      });
+    }
   }
 }

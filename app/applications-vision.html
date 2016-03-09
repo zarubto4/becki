@@ -15,16 +15,28 @@
   <div>
     <div class="pull-right">
       <button type="button" class="btn btn-default">Add</button>
-      <button type="button" class="btn btn-default">Reorder</button>
+      <div class="dropdown dropdown-kebab-pf pull-right" data-bind-class.open="verticalDropdownOpen" style="margin-left: 10px">
+        <button class="btn btn-link dropdown-toggle" type="button" data-on-click="onVerticalDropdownClick($event)">
+          <span class="fa fa-ellipsis-v"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li><a data-on-click="onClick($event)" style="cursor: pointer">Reorder</a></li>
+        </ul>
+      </div>
     </div>
     <h3>Vertical Screens</h3>
   </div>
   <div class="clearfix">
     <div class="panel panel-default pull-left" style="margin-right: 20px">
       <div class="panel-heading clearfix">
-        <div class="pull-right">
-          <button type="button" class="btn btn-xs btn-default">Rename</button>
-          <button type="button" class="btn btn-xs btn-danger">Delete</button>
+        <div class="dropdown dropdown-kebab-pf pull-right" data-bind-class.open="vertical1DropdownOpen">
+          <button class="btn btn-link dropdown-toggle" type="button" data-on-click="onVertical1DropdownClick($event)">
+            <span class="fa fa-ellipsis-v"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li><a data-on-click="onClick($event)" style="cursor: pointer">Rename</a></li>
+            <li><a data-on-click="onClick($event)" style="cursor: pointer">Delete</a></li>
+          </ul>
         </div>
         <h3 class="panel-title"><small>1.</small>Dashboard</h3>
       </div>
@@ -39,9 +51,14 @@
     </div>
     <div class="panel panel-default pull-left" style="margin-right: 20px">
       <div class="panel-heading clearfix">
-        <div class="pull-right">
-          <button type="button" class="btn btn-xs btn-default">Rename</button>
-          <button type="button" class="btn btn-xs btn-danger">Delete</button>
+        <div class="dropdown dropdown-kebab-pf pull-right" data-bind-class.open="vertical2DropdownOpen">
+          <button class="btn btn-link dropdown-toggle" type="button" data-on-click="onVertical2DropdownClick($event)">
+            <span class="fa fa-ellipsis-v"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li><a data-on-click="onClick($event)" style="cursor: pointer">Rename</a></li>
+            <li><a data-on-click="onClick($event)" style="cursor: pointer">Delete</a></li>
+          </ul>
         </div>
         <h3 class="panel-title"><small>2.</small> Emergency</h3>
       </div>
@@ -56,9 +73,14 @@
     </div>
     <div class="panel panel-default pull-left" style="margin-right: 20px">
       <div class="panel-heading clearfix">
-        <div class="pull-right">
-          <button type="button" class="btn btn-xs btn-default">Rename</button>
-          <button type="button" class="btn btn-xs btn-danger">Delete</button>
+        <div class="dropdown dropdown-kebab-pf pull-right" data-bind-class.open="vertical3DropdownOpen">
+          <button class="btn btn-link dropdown-toggle" type="button" data-on-click="onVertical3DropdownClick($event)">
+            <span class="fa fa-ellipsis-v"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li><a data-on-click="onClick($event)" style="cursor: pointer">Rename</a></li>
+            <li><a data-on-click="onClick($event)" style="cursor: pointer">Delete</a></li>
+          </ul>
         </div>
         <h3 class="panel-title"><small>3.</small> Administration</h3>
       </div>
@@ -76,16 +98,28 @@
   <div>
     <div class="pull-right">
       <button type="button" class="btn btn-default">Add</button>
-      <button type="button" class="btn btn-default">Reorder</button>
+      <div class="dropdown dropdown-kebab-pf pull-right" data-bind-class.open="horizontalDropdownOpen" style="margin-left: 10px">
+        <button class="btn btn-link dropdown-toggle" type="button" data-on-click="onHorizontalDropdownClick($event)">
+          <span class="fa fa-ellipsis-v"></span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <li><a data-on-click="onClick($event)" style="cursor: pointer">Reorder</a></li>
+        </ul>
+      </div>
     </div>
     <h3>Horizontal screens</h3>
   </div>
   <div class="clearfix">
     <div class="panel panel-default pull-left" style="margin-right: 20px">
       <div class="panel-heading clearfix">
-        <div class="pull-right">
-          <button type="button" class="btn btn-xs btn-default">Rename</button>
-          <button type="button" class="btn btn-xs btn-danger">Delete</button>
+        <div class="dropdown dropdown-kebab-pf pull-right" data-bind-class.open="horizontal1DropdownOpen">
+          <button class="btn btn-link dropdown-toggle" type="button" data-on-click="onHorizontal1DropdownClick($event)">
+            <span class="fa fa-ellipsis-v"></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-right">
+            <li><a data-on-click="onClick($event)" style="cursor: pointer">Rename</a></li>
+            <li><a data-on-click="onClick($event)" style="cursor: pointer">Delete</a></li>
+          </ul>
         </div>
         <h3 class="panel-title"><small>1.</small> Dashboard</h3>
       </div>
