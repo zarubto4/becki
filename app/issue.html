@@ -122,22 +122,24 @@
                 </form>
               </template>
               <template data-bind-ng-if="item.removing">
+                <div class="pull-right">
+                  <button class="btn btn-danger" type="button" data-on-click="onItemRemovingYesClick(item, $event)">Yes</button>
+                  <button class="btn btn-default" type="button" data-on-click="onItemRemovingNoClick(item, $event)">No</button>
+                </div>
                 Do you really want to remove this?
-                <button class="btn btn-danger" type="button" data-on-click="onItemRemovingYesClick(item, $event)">Yes</button>
-                <button class="btn btn-default" type="button" data-on-click="onItemRemovingNoClick(item, $event)">No</button>
               </template>
               <template data-bind-ng-if="!item.editing && !item.importing && !item.removing">
-                <div class="btn-group btn-group-xs pull-right">
+                <div class="pull-right">
                   <template data-bind-ng-if="item.programCodeField != null">
-                    <button type="button" class="btn btn-default" data-on-click="onItemImportClick(item, $event)">
-                      <span class="glyphicon glyphicon-import"></span>
+                    <button type="button" class="btn btn-xs btn-default" data-on-click="onItemImportClick(item, $event)">
+                      Import
                     </button>
                   </template>
-                  <button type="button" class="btn btn-default" data-on-click="onItemEditClick(item, $event)">
-                    <span class="glyphicon glyphicon-edit"></span>
+                  <button type="button" class="btn btn-xs btn-default" data-on-click="onItemEditClick(item, $event)">
+                    Edit
                   </button>
-                  <button type="button" class="btn btn-danger" data-on-click="onItemRemoveClick(item, $event)">
-                    <span class="glyphicon glyphicon-remove"></span>
+                  <button type="button" class="btn btn-xs btn-danger" data-on-click="onItemRemoveClick(item, $event)">
+                    Remove
                   </button>
                 </div>
                 <div data-bindon-field-issue-body="item.body" data-bind-readonly="true">
@@ -173,9 +175,11 @@
                       </form>
                     </template>
                     <template data-bind-ng-if="comment.removing">
+                      <div class="pull-right">
+                        <button class="btn btn-danger" type="button" data-on-click="onCommentRemovingYesClick(comment, $event)">Yes</button>
+                        <button class="btn btn-default" type="button" data-on-click="onCommentRemovingNoClick(comment, $event)">No</button>
+                      </div>
                       Do you really want to remove this comment?
-                      <button class="btn btn-danger" type="button" data-on-click="onCommentRemovingYesClick(comment, $event)">Yes</button>
-                      <button class="btn btn-default" type="button" data-on-click="onCommentRemovingNoClick(comment, $event)">No</button>
                     </template>
                     <template data-bind-ng-if="!comment.editing && !comment.removing">
                       <div class="media-heading" style="font-weight: bold;">
@@ -194,10 +198,10 @@
                           </div>
                           <div class="btn-group btn-group-xs">
                             <button type="button" class="btn btn-default" data-on-click="onCommentEditClick(comment, $event)">
-                              <span class="glyphicon glyphicon-edit"></span>
+                              Edit
                             </button>
                             <button type="button" class="btn btn-danger" data-on-click="onCommentRemoveClick(comment, $event)">
-                              <span class="glyphicon glyphicon-remove"></span>
+                              Remove
                             </button>
                           </div>
                         </div>
@@ -227,27 +231,32 @@
       </div>
     </div>
     <div class="col-xs-12 col-sm-3">
-      <h2>
-        Related
-        <small>— <a data-bind-router-link="newRelatedLink">Add</a></small>
-      </h2>
-
+      <div>
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" data-on-click="onRelatedAddClick($event)">Add</button>
+        </div>
+        <h2>Related</h2>
+      </div>
       <div data-bind-list-group="related" data-bind-progress="progress" data-on-add-click="onRelatedAddClick($event)" data-on-remove-click="onRelatedRemoveClick($event)">
         <div class="spinner"></div>
       </div>
-      <h2>
-        Tags
-        <small>— <a data-bind-router-link="newTagLink">Add</a></small>
-      </h2>
 
+      <div>
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" data-on-click="onTagAddClick($event)">Add</button>
+        </div>
+        <h2>Tags</h2>
+      </div>
       <div data-bind-list-group="tags" data-bind-progress="progress" data-on-add-click="onTagAddClick($event)" data-on-remove-click="onTagRemoveClick($event)">
         <div class="spinner"></div>
       </div>
-      <h2>
-        Confirmations
-        <small>— <a data-bind-router-link="newConfirmationLink">Add</a></small>
-      </h2>
 
+      <div>
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" data-on-click="onConfirmationAddClick($event)">Add</button>
+        </div>
+        <h2>Confirmations</h2>
+      </div>
       <div data-bind-list-group="confirmations" data-bind-progress="progress" data-on-add-click="onConfirmationAddClick($event)" data-on-remove-click="onConfirmationRemoveClick($event)">
         <div class="spinner"></div>
       </div>

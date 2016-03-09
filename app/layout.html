@@ -64,19 +64,17 @@
             <a data-bind-router-link="breadcrumb.link">{{breadcrumb.label}}</a>
           </li>
         </ol>
-        <h1>
-          {{heading}}
-          <template data-bind-ng-if="actionLabel">
-            <small style="position: relative">
-              <template data-bind-ng-if="progress">
-                <div class="overlay">
-                  <div class="spinner"></div>
-                </div>
-              </template>
-              — <a data-on-click="onActionClick($event)" style="cursor: pointer">{{actionLabel}}</a>
-            </small>
-          </template>
-        </h1>
+        <template data-bind-ng-if="actionLabel">
+          <div class="pull-right" style="position: relative">
+            <template data-bind-ng-if="progress">
+              <div class="overlay">
+                <div class="spinner"></div>
+              </div>
+            </template>
+            <button type="button" class="btn btn-default" data-on-click="onActionClick($event)">{{actionLabel}}</button>
+          </div>
+        </template>
+        <h1>{{heading}}</h1>
       </div>
       <ng-content></ng-content>
     </div>

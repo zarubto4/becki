@@ -13,21 +13,20 @@
     <div class="list-group">
       <div class="list-group-item clearfix" template="ngFor #item of items" data-bind-ng-switch="item.removing">
         <template data-bind-ng-switch-when="true">
+          <div class="pull-right">
+            <button class="btn btn-danger" type="button" data-on-click="onConfirmationYesClick(item, $event)">Yes</button>
+            <button class="btn btn-default" type="button" data-on-click="onConfirmationNoClick(item, $event)">No</button>
+          </div>
           Do you really want to remove <strong>{{item.name}}</strong>?
-          <button class="btn btn-danger" type="button" data-on-click="onConfirmationYesClick(item, $event)">Yes</button>
-          <button class="btn btn-default" type="button" data-on-click="onConfirmationNoClick(item, $event)">No</button>
         </template>
         <template data-bind-ng-switch-when="false">
-          <h4 class="list-group-item-heading">
-            {{item.name}}
-            <small>
-              —
-              <template data-bind-ng-if="item.link">
-                <a data-bind-router-link="item.link">Edit</a> |
-              </template>
-              <a data-on-click="onRemoveClick(item, $event)" style="cursor: pointer">Remove</a>
-            </small>
-          </h4>
+          <div class="pull-right">
+            <template data-bind-ng-if="item.link">
+              <button type="button" class="btn btn-default" data-on-click="onEditClick(item, $event)">Edit</button>
+            </template>
+            <button type="button" class="btn btn-danger" data-on-click="onRemoveClick(item, $event)">Remove</button>
+          </div>
+          <h4 class="list-group-item-heading">{{item.name}}</h4>
           <p class="list-group-item-text">{{item.description}}</p>
         </template>
       </div>

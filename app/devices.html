@@ -4,37 +4,45 @@
   -->
 
 <div data-bind-layout="'Devices'" data-bind-breadcrumbs="breadcrumbs">
-  <h2>
-    Producers
-    <small>— <a data-bind-router-link="newProducerLink">Add</a></small>
-  </h2>
+  <div>
+    <div class="pull-right">
+      <button type="button" class="btn btn-default" data-on-click="onProducerAddClick($event)">Add</button>
+    </div>
+    <h2>Producers</h2>
+  </div>
   <div data-bind-list-group="producers" data-bind-progress="progress" data-on-add-click="onProducerAddClick($event)" data-on-remove-click="onProducerRemoveClick($event)">
     <div class="spinner"></div>
   </div>
   <div class="row">
     <div class="col-xs-12 col-sm-4">
-      <h2>
-        Libraries
-        <small>— <a data-bind-router-link="newLibraryLink">Add</a></small>
-      </h2>
+      <div>
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" data-on-click="onLibraryAddClick($event)">Add</button>
+        </div>
+        <h2>Libraries</h2>
+      </div>
       <div data-bind-list-group="libraries" data-bind-progress="progress" data-on-add-click="onLibraryAddClick($event)" data-on-remove-click="onLibraryRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>
     <div class="col-xs-12 col-sm-4">
-      <h2>
-        Library groups
-        <small>— <a data-bind-router-link="newLibraryGroupLink">Add</a></small>
-      </h2>
+      <div>
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" data-on-click="onLibraryGroupAddClick($event)">Add</button>
+        </div>
+        <h2>Library groups</h2>
+      </div>
       <div data-bind-list-group="libraryGroups" data-bind-progress="progress" data-on-add-click="onLibraryGroupAddClick($event)" data-on-remove-click="onLibraryGroupRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>
     <div class="col-xs-12 col-sm-4">
-      <h2>
-        Processors
-        <small>— <a data-bind-router-link="newProcessorLink">Add</a></small>
-      </h2>
+      <div>
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" data-on-click="onProcessorAddClick($event)">Add</button>
+        </div>
+        <h2>Processors</h2>
+      </div>
       <div data-bind-list-group="processors" data-bind-progress="progress" data-on-add-click="onProcessorAddClick($event)" data-on-remove-click="onProcessorRemoveClick($event)">
         <div class="spinner"></div>
       </div>
@@ -42,28 +50,34 @@
   </div>
   <div class="row">
     <div class="col-xs-12 col-sm-4">
-      <h2>
-        Board Types
-        <small>— <a data-bind-router-link="newBoardTypeLink">Add</a></small>
-      </h2>
+      <div>
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" data-on-click="onBoardTypeAddClick($event)">Add</button>
+        </div>
+        <h2>Board Types</h2>
+      </div>
       <div data-bind-list-group="boardTypes" data-bind-progress="progress" data-on-add-click="onBoardTypeAddClick($event)" data-on-remove-click="onBoardTypeRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>
     <div class="col-xs-12 col-sm-8">
-      <h2>
-        Boards
-        <small>— <a data-bind-router-link="newBoardLink">Add</a></small>
-      </h2>
+      <div>
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" data-on-click="onBoardAddClick($event)">Add</button>
+        </div>
+        <h2>Boards</h2>
+      </div>
       <div data-bind-list-group="boards" data-bind-progress="progress" data-on-add-click="onBoardAddClick($event)" data-on-remove-click="onBoardRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>
   </div>
-  <h2>
-    Homers
-    <small>— <a data-bind-router-link="newHomerLink">Add</a></small>
-  </h2>
+  <div>
+    <div class="pull-right">
+      <button type="button" class="btn btn-default" data-on-click="onHomerAddClick($event)">Add</button>
+    </div>
+    <h2>Homers</h2>
+  </div>
   <div data-bind-list-group="homers" data-bind-progress="progress" data-on-add-click="onHomerAddClick($event)" data-on-remove-click="onHomerRemoveClick($event)">
     <div class="spinner"></div>
   </div>

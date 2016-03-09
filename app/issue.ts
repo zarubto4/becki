@@ -155,15 +155,9 @@ export class Component implements ng.OnInit {
 
   answerBodyField:string;
 
-  newRelatedLink:any[];
-
   related:libPatternFlyListGroup.Item[];
 
-  newTagLink:any[];
-
   tags:libPatternFlyListGroup.Item[];
-
-  newConfirmationLink:any[];
 
   confirmations:libPatternFlyListGroup.Item[];
 
@@ -186,9 +180,6 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink(`Issue ${this.id}`, ["Issue", {issue: this.id}])
     ];
     this.answerBodyField = fieldIssueBody.EMPTY;
-    this.newRelatedLink = ["NewRelatedIssue", {issue: this.id}];
-    this.newTagLink = ["NewIssueTag", {issue: this.id}];
-    this.newConfirmationLink = ["NewIssueConfirmation", {issue: this.id}];
     this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
@@ -523,7 +514,7 @@ export class Component implements ng.OnInit {
   onRelatedAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newRelatedLink);
+    this.router.navigate(["NewRelatedIssue", {issue: this.id}]);
   }
 
   onRelatedRemoveClick(id:string):void {
@@ -547,7 +538,7 @@ export class Component implements ng.OnInit {
   onTagAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newTagLink);
+    this.router.navigate(["NewIssueTag", {issue: this.id}]);
   }
 
   onTagRemoveClick(tag:string):void {
@@ -571,7 +562,7 @@ export class Component implements ng.OnInit {
   onConfirmationAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newConfirmationLink);
+    this.router.navigate(["NewIssueConfirmation", {issue: this.id}]);
   }
 
   onConfirmationRemoveClick(id:string):void {

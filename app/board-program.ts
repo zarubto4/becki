@@ -48,8 +48,6 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
-  newVersionLink:any[];
-
   versions:libPatternFlyListGroup.Item[];
 
   progress:number;
@@ -76,7 +74,6 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    this.newVersionLink = ["NewBoardProgramVersion", {project: this.projectId, program: this.id}];
     this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
@@ -155,7 +152,7 @@ export class Component implements ng.OnInit {
   onVersionAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newVersionLink);
+    this.router.navigate(["NewBoardProgramVersion", {project: this.projectId, program: this.id}]);
   }
 
   onVersionRemoveClick(id:string):void {

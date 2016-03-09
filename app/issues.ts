@@ -31,15 +31,9 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
-  newTypeLink:any[];
-
   types:libPatternFlyListGroup.Item[];
 
-  newConfirmationLink:any[];
-
   confirmations:libPatternFlyListGroup.Item[];
-
-  newIssueLink:any[];
 
   issues:libPatternFlyListGroup.Item[];
 
@@ -58,9 +52,6 @@ export class Component implements ng.OnInit {
       becki.HOME,
       new layout.LabeledLink("Issues", ["Issues"])
     ];
-    this.newTypeLink = ["NewIssueType"];
-    this.newConfirmationLink = ["NewIssueConfirmationType"];
-    this.newIssueLink = ["NewIssue"];
     this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
@@ -95,7 +86,7 @@ export class Component implements ng.OnInit {
   onTypeAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newTypeLink);
+    this.router.navigate(["NewIssueType"]);
   }
 
   onTypeRemoveClick(id:string):void {
@@ -119,7 +110,7 @@ export class Component implements ng.OnInit {
   onConfirmationAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newConfirmationLink);
+    this.router.navigate(["NewIssueConfirmationType"]);
   }
 
   onConfirmationRemoveClick(id:string):void {
@@ -145,7 +136,7 @@ export class Component implements ng.OnInit {
   onIssueAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newIssueLink);
+    this.router.navigate(["NewIssue"]);
   }
 
   onIssueRemoveClick(id:string):void {

@@ -59,23 +59,13 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
-  newCollaboratorLink:any[];
-
   collaborators:libPatternFlyListGroup.Item[];
-
-  newBoardProgramLink:any[];
 
   boardPrograms:libPatternFlyListGroup.Item[];
 
-  newStandaloneProgramLink:any[];
-
   standalonePrograms:libPatternFlyListGroup.Item[];
 
-  newHomerProgramLink:any[];
-
   homerPrograms:libPatternFlyListGroup.Item[];
-
-  newBoardLink:any[];
 
   boards:SelectableItem[];
 
@@ -83,8 +73,6 @@ export class Component implements ng.OnInit {
 
   @ng.ViewChild("boardUploadingBinaryFileField")
   boardUploadingBinaryFileField:ng.ElementRef;
-
-  newHomerLink:any[];
 
   homers:SelectableItem[];
 
@@ -111,17 +99,11 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    this.newCollaboratorLink = ["NewProjectCollaborator", {project: this.id}];
-    this.newBoardProgramLink = ["NewBoardProgram", {project: this.id}];
-    this.newStandaloneProgramLink = ["NewStandaloneProgram", {project: this.id}];
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-146
     this.standalonePrograms = [
       new libPatternFlyListGroup.Item(null, "(issue/TYRION-146)", "does not work")
     ];
-    this.newHomerProgramLink = ["NewHomerProgram", {project: this.id}];
-    this.newBoardLink = ["NewProjectBoard", {project: this.id}];
     this.boardUploadingProgramField = "";
-    this.newHomerLink = ["NewProjectHomer", {project: this.id}];
     this.homerUploadingProgramField = "";
     this.progress = 0;
     this.backEnd = backEndService;
@@ -212,7 +194,7 @@ export class Component implements ng.OnInit {
   onCollaboratorAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newCollaboratorLink);
+    this.router.navigate(["NewProjectCollaborator", {project: this.id}]);
   }
 
   onCollaboratorRemoveClick(id:string):void {
@@ -236,7 +218,7 @@ export class Component implements ng.OnInit {
   onBoardProgramAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newBoardProgramLink);
+    this.router.navigate(["NewBoardProgram", {project: this.id}]);
   }
 
   onBoardProgramRemoveClick(id:string):void {
@@ -260,7 +242,7 @@ export class Component implements ng.OnInit {
   onStandaloneProgramAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newStandaloneProgramLink);
+    this.router.navigate(["NewStandaloneProgram", {project: this.id}]);
   }
 
   onStandaloneProgramRemoveClick(id:string):void {
@@ -286,7 +268,7 @@ export class Component implements ng.OnInit {
   onHomerProgramAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newHomerProgramLink);
+    this.router.navigate(["NewHomerProgram", {project: this.id}]);
   }
 
   onHomerProgramRemoveClick(id:string):void {
@@ -310,7 +292,7 @@ export class Component implements ng.OnInit {
   onBoardAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newBoardLink);
+    this.router.navigate(["NewProjectBoard", {project: this.id}]);
   }
 
   onBoardRemoveClick(id:string):void {
@@ -364,7 +346,7 @@ export class Component implements ng.OnInit {
   onHomerAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newHomerLink);
+    this.router.navigate(["NewProjectHomer", {project: this.id}]);
   }
 
   onHomerRemoveClick(id:string):void {

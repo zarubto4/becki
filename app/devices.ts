@@ -30,31 +30,17 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
-  newProducerLink:any[];
-
   producers:libPatternFlyListGroup.Item[];
-
-  newLibraryLink:any[];
 
   libraries:libPatternFlyListGroup.Item[];
 
-  newLibraryGroupLink:any[];
-
   libraryGroups:libPatternFlyListGroup.Item[];
-
-  newProcessorLink:any[];
 
   processors:libPatternFlyListGroup.Item[];
 
-  newBoardTypeLink:any[];
-
   boardTypes:libPatternFlyListGroup.Item[];
 
-  newBoardLink:any[];
-
   boards:libPatternFlyListGroup.Item[];
-
-  newHomerLink:any[];
 
   homers:libPatternFlyListGroup.Item[];
 
@@ -73,12 +59,6 @@ export class Component implements ng.OnInit {
       becki.HOME,
       new layout.LabeledLink("Devices", ["Devices"])
     ];
-    this.newProducerLink = ["NewProducer"];
-    this.newLibraryLink = ["NewLibrary"];
-    this.newLibraryGroupLink = ["NewLibraryGroup"];
-    this.newProcessorLink = ["NewProcessor"];
-    this.newBoardTypeLink = ["NewBoardType"];
-    this.newBoardLink = ["NewBoard"];    this.newHomerLink = ["NewHomer"];
     this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
@@ -136,7 +116,7 @@ export class Component implements ng.OnInit {
   onProducerAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newProducerLink);
+    this.router.navigate(["NewProducer"]);
   }
 
   onProducerRemoveClick(id:string):void {
@@ -160,7 +140,7 @@ export class Component implements ng.OnInit {
   onLibraryAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newLibraryLink);
+    this.router.navigate(["NewLibrary"]);
   }
 
   onLibraryRemoveClick(id:string):void {
@@ -184,7 +164,7 @@ export class Component implements ng.OnInit {
   onLibraryGroupAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newLibraryGroupLink);
+    this.router.navigate(["NewLibraryGroup"]);
   }
 
   onLibraryGroupRemoveClick(id:string):void {
@@ -208,7 +188,7 @@ export class Component implements ng.OnInit {
   onProcessorAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newProcessorLink);
+    this.router.navigate(["NewProcessor"]);
   }
 
   onProcessorRemoveClick(id:string):void {
@@ -232,7 +212,7 @@ export class Component implements ng.OnInit {
   onBoardTypeAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newBoardTypeLink);
+    this.router.navigate(["NewBoardType"]);
   }
 
   onBoardTypeRemoveClick(id:string):void {
@@ -256,7 +236,7 @@ export class Component implements ng.OnInit {
   onBoardAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newBoardLink);
+    this.router.navigate(["NewBoard"]);
   }
 
   onBoardRemoveClick(id:string):void {
@@ -270,7 +250,7 @@ export class Component implements ng.OnInit {
   onHomerAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newHomerLink);
+    this.router.navigate(["NewHomer"]);
   }
 
   onHomerRemoveClick(id:string):void {

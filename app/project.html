@@ -31,10 +31,12 @@
       </form>
     </div>
     <div class="col-xs-12 col-sm-4">
-      <h2>
-        Collaborators
-        <small>— <a data-bind-router-link="newCollaboratorLink">Add</a></small>
-      </h2>
+      <div>
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" data-on-click="onCollaboratorAddClick($event)">Add</button>
+        </div>
+        <h2>Collaborators</h2>
+      </div>
       <div data-bind-list-group="collaborators" data-bind-progress="progress" data-on-add-click="onCollaboratorAddClick($event)" data-on-remove-click="onCollaboratorRemoveClick($event)">
         <div class="spinner"></div>
       </div>
@@ -42,28 +44,34 @@
   </div>
   <div class="row">
     <div class="col-xs-12 col-sm-4">
-      <h2>
-        Board Programs
-        <small>— <a data-bind-router-link="newBoardProgramLink">Add</a></small>
-      </h2>
+      <div>
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" data-on-click="onBoardProgramAddClick($event)">Add</button>
+        </div>
+        <h2>Board Programs</h2>
+      </div>
       <div data-bind-list-group="boardPrograms" data-bind-progress="progress" data-on-add-click="onBoardProgramAddClick($event)" data-on-remove-click="onBoardProgramRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>
     <div class="col-xs-12 col-sm-4">
-      <h2>
-        Standalone Programs
-        <small>— <a data-bind-router-link="newStandaloneProgramLink">Add</a></small>
-      </h2>
+      <div>
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" data-on-click="onStandaloneProgramAddClick($event)">Add</button>
+        </div>
+        <h2>Standalone Programs</h2>
+      </div>
       <div data-bind-list-group="standalonePrograms" data-bind-progress="progress" data-on-add-click="onStandaloneProgramAddClick($event)" data-on-remove-click="onStandaloneProgramRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>
     <div class="col-xs-12 col-sm-4">
-      <h2>
-        Homer Programs
-        <small>— <a data-bind-router-link="newHomerProgramLink">Add</a></small>
-      </h2>
+      <div>
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" data-on-click="onHomerProgramAddClick($event)">Add</button>
+        </div>
+        <h2>Homer Programs</h2>
+      </div>
       <div data-bind-list-group="homerPrograms" data-bind-progress="progress" data-on-add-click="onHomerProgramAddClick($event)" data-on-remove-click="onHomerProgramRemoveClick($event)">
         <div class="spinner"></div>
       </div>
@@ -71,10 +79,12 @@
   </div>
   <div class="row">
     <div class="col-xs-12 col-sm-4">
-      <h2>
-        Boards
-        <small>— <a data-bind-router-link="newBoardLink">Add</a></small>
-      </h2>
+      <div>
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" data-on-click="onBoardAddClick($event)">Add</button>
+        </div>
+        <h2>Boards</h2>
+      </div>
       <div data-bind-list-group="boards" data-bind-progress="progress" data-on-add-click="onBoardAddClick($event)" data-on-remove-click="onBoardRemoveClick($event)">
         <div class="spinner"></div>
       </div>
@@ -147,10 +157,12 @@
   </div>
   <div class="row">
     <div class="col-xs-12 col-sm-4">
-      <h2>
-        Homers
-        <small>— <a data-bind-router-link="newHomerLink">Add</a></small>
-      </h2>
+      <div>
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" data-on-click="onHomerAddClick($event)">Add</button>
+        </div>
+        <h2>Homers</h2>
+      </div>
       <div data-bind-list-group="homers" data-bind-progress="progress" data-on-add-click="onHomerAddClick($event)" data-on-remove-click="onHomerRemoveClick($event)">
         <div class="spinner"></div>
       </div>
