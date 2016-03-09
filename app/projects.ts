@@ -31,8 +31,6 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
-  newLink:any[];
-
   items:libPatternFlyListGroup.Item[];
 
   progress:number;
@@ -51,7 +49,6 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("User", ["Projects"]),
       new layout.LabeledLink("Projects", ["Projects"])
     ];
-    this.newLink = ["NewProject"];
     this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
@@ -78,7 +75,7 @@ export class Component implements ng.OnInit {
   onAddClick():void {
     "use strict";
 
-    this.router.navigate(this.newLink);
+    this.router.navigate(["NewProject"]);
   }
 
   onRemoveClick(id:string):void {

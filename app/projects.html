@@ -3,8 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout="'Projects'" data-bind-breadcrumbs="breadcrumbs">
-  <h2><small><a data-bind-router-link="newLink">Add</a></small></h2>
+<div data-bind-layout="'Projects'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="'Add'" data-on-action-click="onAddClick($event)">
   <div data-bind-list-group="items" data-bind-progress="progress" data-on-add-click="onAddClick($event)" data-on-remove-click="onRemoveClick($event)">
     <div class="spinner"></div>
   </div>

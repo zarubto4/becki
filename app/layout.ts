@@ -43,7 +43,7 @@ export class LabeledLink {
   selector: "[layout]",
   templateUrl: "app/layout.html",
   directives: [libPatternFlyNotifications.Component, ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
-  inputs: ["heading: layout", "breadcrumbs"]
+  inputs: ["heading: layout", "breadcrumbs", "actionLabel"]
 })
 export class Component implements ng.OnInit, ng.OnDestroy {
 
@@ -54,6 +54,9 @@ export class Component implements ng.OnInit, ng.OnDestroy {
   navbarState:string;
 
   navigation:LabeledLink[];
+
+  @ng.Output()
+  actionClick:ng.EventEmitter;
 
   lastWindowWidth:string;
 
@@ -72,6 +75,7 @@ export class Component implements ng.OnInit, ng.OnDestroy {
     this.dropdownOpen = false;
     this.navbarState = "expanded";
     this.navigation = becki.NAVIGATION;
+    this.actionClick = new ng.EventEmitter();
     this.lastWindowWidth = null;
     this.progress = 0;
     this.backEnd = backEndService;
@@ -122,6 +126,12 @@ export class Component implements ng.OnInit, ng.OnDestroy {
         .then(() => {
           this.progress -= 1;
         });
+  }
+
+  onActionClick():void {
+    "use strict";
+
+    this.actionClick.next(null);
   }
 
   @ng.HostListener("document:click")
