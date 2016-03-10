@@ -48,7 +48,7 @@ export class LabeledLink {
 })
 export class Component implements ng.OnInit, ng.OnDestroy {
 
-  home:any[];
+  home:LabeledLink;
 
   navbarState:string;
 
@@ -68,7 +68,7 @@ export class Component implements ng.OnInit, ng.OnDestroy {
   constructor(backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.home = becki.HOME.link;
+    this.home = becki.HOME;
     this.navbarState = "expanded";
     this.navigation = becki.NAVIGATION;
     this.actionClick = new ng.EventEmitter();

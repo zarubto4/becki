@@ -17,6 +17,7 @@ import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
+import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
@@ -28,7 +29,7 @@ const REDIRECT_URL = `${window.location.pathname}#`;
 })
 export class Component implements ng.OnInit {
 
-  appName:string;
+  brand:string;
 
   signIn:boolean;
 
@@ -52,10 +53,10 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(@ng.Inject("appName") appName:string, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.appName = appName;
+    this.brand = becki.HOME.label;
     this.signIn = true;
     this.inEmailField = "";
     this.inPasswordField = "";

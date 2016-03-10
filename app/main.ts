@@ -32,7 +32,6 @@ ng.bootstrap(
       ngHttp.HTTP_PROVIDERS,
       ngRouter.ROUTER_PROVIDERS,
       websocket.Service,
-      ng.provide(ngRouter.LocationStrategy, {useClass: ngRouter.HashLocationStrategy}),
-      ng.provide("appName", {useValue: "IOThub"})
+      ng.provide(ngRouter.LocationStrategy, {useClass: ngRouter.HashLocationStrategy})
     ]
 );
