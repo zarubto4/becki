@@ -50,8 +50,6 @@ export class Component implements ng.OnInit {
   @ng.ViewChild("fileField")
   fileField:ng.ElementRef;
 
-  progress:number;
-
   backEnd:backEnd.Service;
 
   notifications:libPatternFlyNotifications.Service;
@@ -73,7 +71,6 @@ export class Component implements ng.OnInit {
     this.versionNameField = "";
     this.versionDescriptionField = "";
     this.fileVersionField = "";
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -89,7 +86,6 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    this.progress += 1;
     Promise.all<any>([
           this.backEnd.getLibrary(this.id),
           this.backEnd.getLibraryVersions(this.id)
@@ -102,41 +98,29 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The library ${this.id} cannot be loaded: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
-    return () => {
-      this.progress += 1;
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return Promise.all<any>([
-            this.backEnd.getLibraries(),
-            this.backEnd.getLibraryGroups(),
-          ])
-          .then(result => {
-            this.progress -= 1;
-            let libraries:libBackEnd.Library[];
-            let groups:libBackEnd.LibraryGroup[];
-            [libraries, groups] = result;
-            return !libraries.find(library => library.id != this.id && library.library_name == this.nameField) && !groups.find(group => group.group_name == this.nameField);
-          })
-          .catch(reason => {
-            this.progress -= 1;
-            return Promise.reject(reason);
-          });
-    };
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => Promise.all<any>([
+          this.backEnd.getLibraries(),
+          this.backEnd.getLibraryGroups(),
+        ])
+        .then(result => {
+          let libraries:libBackEnd.Library[];
+          let groups:libBackEnd.LibraryGroup[];
+          [libraries, groups] = result;
+          return !libraries.find(library => library.id != this.id && library.library_name == this.nameField) && !groups.find(group => group.group_name == this.nameField);
+        });
   }
 
   onUpdatingSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.updateLibrary(this.id, this.nameField, this.descriptionField)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The library has been updated."));
@@ -144,9 +128,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The library cannot be updated: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
@@ -154,7 +135,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.addVersionToLibrary(this.versionNameField, this.versionDescriptionField, this.id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The version has been created."));
@@ -164,9 +144,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The version cannot be created: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
@@ -174,7 +151,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.updateFileOfLibrary(this.fileField.nativeElement.files[0], this.fileVersionField == "new" ? null : this.fileVersionField, this.id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The file has been uploaded."));
@@ -186,9 +162,6 @@ export class Component implements ng.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-118
           this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-118"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The file cannot be uploaded: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 

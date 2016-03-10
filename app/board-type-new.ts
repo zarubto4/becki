@@ -43,8 +43,6 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
-  progress:number;
-
   backEnd:backEnd.Service;
 
   notifications:libPatternFlyNotifications.Service;
@@ -64,7 +62,6 @@ export class Component implements ng.OnInit {
     this.producerField = "";
     this.processorField = "";
     this.descriptionField = "";
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -74,40 +71,25 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 2;
     this.backEnd.getProducers()
         .then(producers => this.producers = producers)
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Producers cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Producers cannot be loaded: ${reason}`)));
     this.backEnd.getProcessors()
         .then(processors => this.processors = processors)
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Processors cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Processors cannot be loaded: ${reason}`)));
   }
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
-    return () => {
-      this.progress += 1;
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return this.backEnd.getBoardTypes()
-          .then(types => {
-            this.progress -= 1;
-            return !types.find(type => type.name == this.nameField);
-          })
-          .catch(reason => {
-            this.progress -= 1;
-            return Promise.reject(reason);
-          });
-    };
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () =>this.backEnd.getBoardTypes().then(types => !types.find(type => type.name == this.nameField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.createBoardType(this.nameField, this.producerField, this.processorField, this.descriptionField)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The type has been created."));
@@ -115,9 +97,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The type cannot be created: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 

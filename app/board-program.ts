@@ -29,7 +29,6 @@ import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
     customValidator.Directive,
     layout.Component,
     libPatternFlyListGroup.Component,
-    ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES,
     ngRouter.ROUTER_DIRECTIVES
   ]
@@ -49,8 +48,6 @@ export class Component implements ng.OnInit {
   descriptionField:string;
 
   versions:libPatternFlyListGroup.Item[];
-
-  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -74,7 +71,6 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -90,7 +86,6 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    this.progress += 1;
     this.backEnd.getBoardProgram(this.id)
         .then(program => {
           this.nameField = program.program_name;
@@ -100,35 +95,20 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program ${this.id} cannot be loaded: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
-    return () => {
-      this.progress += 1;
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return this.backEnd.getBoardPrograms(this.projectId)
-          .then(programs => {
-            this.progress -= 1;
-            return !programs.find(program => program.id != this.id && program.program_name == this.nameField);
-          })
-          .catch(reason => {
-            this.progress -= 1;
-            return Promise.reject(reason);
-          });
-    };
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => this.backEnd.getBoardPrograms(this.projectId).then(programs => !programs.find(program => program.id != this.id && program.program_name == this.nameField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.updateBoardProgram(this.id, this.nameField, this.descriptionField)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The program has been updated."));
@@ -136,9 +116,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The cannot be updated: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
@@ -159,7 +136,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.removeVersionFromBoardProgram(id, this.id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The version has been removed."));
@@ -167,9 +143,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The version cannot be removed: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 }

@@ -24,7 +24,7 @@ import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/standalone-program.html",
-  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -39,8 +39,6 @@ export class Component implements ng.OnInit {
   nameField:string;
 
   descriptionField:string;
-
-  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -64,7 +62,6 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -74,7 +71,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.getStandaloneProgram(this.id)
         .then(program => {
           this.nameField = program.name;
@@ -82,9 +78,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program ${this.id} cannot be loaded: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 

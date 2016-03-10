@@ -4,12 +4,7 @@
   -->
 
 <div data-bind-layout="'New Issue Confirmation'" data-bind-breadcrumbs="breadcrumbs">
-  <form class="clearfix" data-on-submit="onSubmit($event)" style="position: relative">
-    <template data-bind-ng-if="progress">
-      <div class="overlay">
-        <div class="spinner"></div>
-      </div>
-    </template>
+  <form class="clearfix" data-on-submit="onSubmit($event)">
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon-pencil"></span>

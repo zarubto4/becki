@@ -24,7 +24,7 @@ import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/homer-new.html",
-  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -33,8 +33,6 @@ export class Component implements ng.OnInit {
   idField:string;
 
   typeField:string;
-
-  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -52,7 +50,6 @@ export class Component implements ng.OnInit {
     ];
     this.idField = "";
     this.typeField = "";
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -69,26 +66,14 @@ export class Component implements ng.OnInit {
   validateIdField():()=>Promise<boolean> {
     "use strict";
 
-    return () => {
-      this.progress += 1;
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return this.backEnd.getHomers()
-          .then(homers => {
-            this.progress -= 1;
-            return !homers.find(homer => homer.homer_id == this.idField);
-          })
-          .catch(reason => {
-            this.progress -= 1;
-            return Promise.reject(reason);
-          });
-    };
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => this.backEnd.getHomers().then(homers => !homers.find(homer => homer.homer_id == this.idField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.createHomer(this.idField, this.typeField)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The Homer have been created."));
@@ -96,9 +81,6 @@ export class Component implements ng.OnInit {
         })
         .catch((reason) => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The Homer cannot be created: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 

@@ -38,8 +38,6 @@ export class Component implements ng.OnInit {
 
   field:string;
 
-  progress:number;
-
   backEnd:backEnd.Service;
 
   notifications:libPatternFlyNotifications.Service;
@@ -59,7 +57,6 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("New Related Issue", ["NewRelatedIssue", {issue: this.issueId}])
     ];
     this.field = "";
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -69,7 +66,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.getIssues()
         .then(issues => {
           let issue = issues.find(issue => issue.postId == this.issueId);
@@ -91,9 +87,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`Issues cannot be loaded: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
@@ -101,7 +94,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.createIssueLink(this.issueId, this.field)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The issue has been added."));
@@ -109,9 +101,6 @@ export class Component implements ng.OnInit {
         })
         .catch((reason) => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issue cannot be added: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 

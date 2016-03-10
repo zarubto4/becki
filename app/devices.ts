@@ -44,8 +44,6 @@ export class Component implements ng.OnInit {
 
   homers:libPatternFlyListGroup.Item[];
 
-  progress:number;
-
   backEnd:backEnd.Service;
 
   notifications:libPatternFlyNotifications.Service;
@@ -59,7 +57,6 @@ export class Component implements ng.OnInit {
       becki.HOME,
       new layout.LabeledLink("Devices", ["Devices"])
     ];
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -75,32 +72,25 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    this.progress += 7;
     this.backEnd.getProducers()
         .then(producers => this.producers = producers.map(producer => new libPatternFlyListGroup.Item(producer.id, producer.name, null, ["Producer", {producer: producer.id}])))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Producers cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Producers cannot be loaded: ${reason}`)));
     this.backEnd.getLibraries()
         .then(libraries => this.libraries = libraries.map(library => new libPatternFlyListGroup.Item(library.id, library.library_name, library.description, ["Library", {library: library.id}])))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Libraries cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Libraries cannot be loaded: ${reason}`)));
     this.backEnd.getLibraryGroups()
         .then(groups => this.libraryGroups = groups.map(group => new libPatternFlyListGroup.Item(group.id, group.group_name, group.description, ["LibraryGroup", {group: group.id}])))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Library groups cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Library groups cannot be loaded: ${reason}`)));
     this.backEnd.getProcessors()
         .then(processors => this.processors = processors.map(processor => new libPatternFlyListGroup.Item(processor.id, processor.processor_name, processor.processor_code, ["Processor", {processor: processor.id}])))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Processors cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Processors cannot be loaded: ${reason}`)));
     this.backEnd.getBoardTypes()
         .then(boardTypes => this.boardTypes = boardTypes.map(type => new libPatternFlyListGroup.Item(type.id, type.name, type.description, ["BoardType", {type: type.id}])))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Board types cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Board types cannot be loaded: ${reason}`)));
     this.backEnd.getBoards()
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
         .then(boards => this.boards = boards.map(board => new libPatternFlyListGroup.Item(board.id, `${board.id} (issue/TYRION-70)`, board.isActive ? "active" : "inactive")))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Board types cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Board types cannot be loaded: ${reason}`)));
     this.backEnd.getHomers()
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-71
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-78
@@ -109,8 +99,7 @@ export class Component implements ng.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-142
           this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-142"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`Homers cannot be loaded: ${reason}`));
-        })
-        .then(() => this.progress -= 1);
+        });
   }
 
   onProducerAddClick():void {
@@ -123,7 +112,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.deleteProducer(id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The producer has been removed."));
@@ -131,9 +119,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The producer cannot be removed: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
@@ -147,7 +132,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.deleteLibrary(id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The library has been removed."));
@@ -155,9 +139,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The library cannot be removed: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
@@ -171,7 +152,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.deleteLibraryGroup(id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The library group has been removed."));
@@ -179,9 +159,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The library group cannot be removed: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
@@ -195,7 +172,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.deleteProcessor(id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The processor has been removed."));
@@ -203,9 +179,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The processor cannot be removed: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
@@ -219,7 +192,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.deleteBoardType(id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The board type has been removed."));
@@ -227,9 +199,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The board type cannot be removed: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
@@ -257,7 +226,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.deleteHomer(id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The Homer has been removed."));
@@ -265,9 +233,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The Homer cannot be removed: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 }

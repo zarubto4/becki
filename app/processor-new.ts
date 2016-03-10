@@ -24,7 +24,7 @@ import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/processor-new.html",
-  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -37,8 +37,6 @@ export class Component implements ng.OnInit {
   descriptionField:string;
 
   speedField:number;
-
-  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -58,7 +56,6 @@ export class Component implements ng.OnInit {
     this.codeField = "";
     this.descriptionField = "";
     this.speedField = 0;
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -73,26 +70,14 @@ export class Component implements ng.OnInit {
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
-    return () => {
-      this.progress += 1;
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return this.backEnd.getProcessors()
-          .then(processors => {
-            this.progress -= 1;
-            return !processors.find(processor => processor.processor_name == this.nameField);
-          })
-          .catch(reason => {
-            this.progress -= 1;
-            return Promise.reject(reason);
-          });
-    };
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => this.backEnd.getProcessors().then(processors => !processors.find(processor => processor.processor_name == this.nameField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.createProcessor(this.nameField, this.codeField, this.descriptionField, this.speedField)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The processor has been created."));
@@ -100,9 +85,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The processor cannot be created: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 

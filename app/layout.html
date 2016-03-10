@@ -3,6 +3,11 @@
   ~ of this distribution.
   -->
 
+<template data-bind-ng-if="backEnd.tasks">
+  <div class="overlay">
+    <div class="spinner spinner-lg"></div>
+  </div>
+</template>
 <nav class="navbar navbar-pf-vertical">
   <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-on-click="onNavbarToggleClick($event)">
@@ -21,12 +26,7 @@
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-          <li style="position: relative">
-            <template data-bind-ng-if="progress">
-              <div class="overlay">
-                <div class="spinner"></div>
-              </div>
-            </template>
+          <li>
             <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-65 -->
             <a href="#" data-on-click="onSignOutClick($event)">Sign Out (issue/TYRION-65)</a>
           </li>
@@ -65,12 +65,7 @@
           </li>
         </ol>
         <template data-bind-ng-if="actionLabel">
-          <div class="pull-right" style="position: relative">
-            <template data-bind-ng-if="progress">
-              <div class="overlay">
-                <div class="spinner"></div>
-              </div>
-            </template>
+          <div class="pull-right">
             <button type="button" class="btn btn-default" data-on-click="onActionClick($event)">{{actionLabel}}</button>
           </div>
         </template>

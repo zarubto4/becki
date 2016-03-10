@@ -537,6 +537,8 @@ export abstract class BackEnd {
    */
   static TOKEN_PATH = "/coreClient/person/permission";
 
+  tasks = 0;
+
   /**
    * Perform an HTTP request.
    *
@@ -560,15 +562,24 @@ export abstract class BackEnd {
     if (window.localStorage.getItem("authToken")) {
       request.headers["X-AUTH-TOKEN"] = window.localStorage.getItem("authToken");
     }
+    this.tasks += 1;
     return this.requestGeneral(request)
-        .then(response => {
-          if (response.status >= 200 && response.status < 300) {
-            return response.body;
-          } else {
-            // TODO: https://github.com/angular/angular/issues/4558
-            return Promise.reject(new Error(`error response: ${JSON.stringify(response)}`));
-          }
-        });
+        .then(
+            response => {
+              this.tasks -= 1;
+              if (response.status >= 200 && response.status < 300) {
+                return response.body;
+              } else {
+                // TODO: https://github.com/angular/angular/issues/4558
+                return Promise.reject(new Error(`error response: ${JSON.stringify(response)}`));
+              }
+            },
+            reason => {
+              this.tasks -= 1;
+              // TODO: https://github.com/angular/angular/issues/4558
+              return Promise.reject(reason);
+            }
+        );
   }
 
   /**

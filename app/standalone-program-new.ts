@@ -49,8 +49,6 @@ export class Component implements ng.OnInit {
 
   codeField:string;
 
-  progress:number;
-
   backEnd:backEnd.Service;
 
   notifications:libPatternFlyNotifications.Service;
@@ -74,7 +72,6 @@ export class Component implements ng.OnInit {
     this.categoryField = "";
     this.descriptionField = "";
     this.codeField = "";
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -98,7 +95,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.createStandaloneProgram(this.nameField, this.categoryField, this.descriptionField)
         .then(program => {
           return this.backEnd.addVersionToStandaloneProgram("Initial version", "", this.codeField, program.id);
@@ -109,9 +105,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be created: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 

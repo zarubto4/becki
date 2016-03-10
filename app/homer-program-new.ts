@@ -26,13 +26,7 @@ import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/homer-program-new.html",
-  directives: [
-    customValidator.Directive,
-    fieldHomerProgram.Component,
-    layout.Component,
-    ng.CORE_DIRECTIVES,
-    ng.FORM_DIRECTIVES
-  ]
+  directives: [customValidator.Directive, fieldHomerProgram.Component, layout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -47,8 +41,6 @@ export class Component implements ng.OnInit {
   descriptionField:string;
 
   codeField:string;
-
-  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -72,7 +64,6 @@ export class Component implements ng.OnInit {
     this.nameField = "";
     this.descriptionField = "";
     this.codeField = `{"blocks":{}}`;
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -87,26 +78,14 @@ export class Component implements ng.OnInit {
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
-    return () => {
-      this.progress += 1;
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return this.backEnd.getProjectHomerPrograms(this.projectId)
-          .then(programs => {
-            this.progress -= 1;
-            return !programs.find(program => program.name == this.nameField);
-          })
-          .catch(reason => {
-            this.progress -= 1;
-            return Promise.reject(reason);
-          });
-    };
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => this.backEnd.getProjectHomerPrograms(this.projectId).then(programs => !programs.find(program => program.name == this.nameField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.createHomerProgram(this.nameField, this.descriptionField, this.projectId)
         .then(program => {
           return this.backEnd.addVersionToHomerProgram("Initial version", "", this.codeField, program.programId);
@@ -117,9 +96,6 @@ export class Component implements ng.OnInit {
         })
         .catch((reason) => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be created: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 

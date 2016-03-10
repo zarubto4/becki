@@ -24,7 +24,7 @@ import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/issue-confirmation-type-new.html",
-  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -35,8 +35,6 @@ export class Component implements ng.OnInit {
   colorField:string;
 
   sizeField:number;
-
-  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -56,7 +54,6 @@ export class Component implements ng.OnInit {
     this.nameField = "";
     this.colorField = "#ffffff";
     this.sizeField = 12;
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -71,26 +68,14 @@ export class Component implements ng.OnInit {
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
-    return () => {
-      this.progress += 1;
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return this.backEnd.getIssueConfirmations()
-          .then(confirmations => {
-            this.progress -= 1;
-            return !confirmations.find(confirmation => confirmation.type == this.nameField);
-          })
-          .catch(reason => {
-            this.progress -= 1;
-            return Promise.reject(reason);
-          });
-    };
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => this.backEnd.getIssueConfirmations().then(confirmations => !confirmations.find(confirmation => confirmation.type == this.nameField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.createIssueConfirmation(this.nameField, this.colorField, this.sizeField)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The confirmation has been created."));
@@ -98,9 +83,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The confirmation cannot be created: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 

@@ -44,8 +44,7 @@ export class Item {
 @ng.Component({
   selector: "[list-group]",
   templateUrl: "app/lib-patternfly/list-group.html",
-  directives: [libBootstrapDropdown.DIRECTIVES, ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
-  inputs: ["progress"]
+  directives: [libBootstrapDropdown.DIRECTIVES, ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES]
 })
 export class Component {
 

@@ -38,8 +38,6 @@ export class Component implements ng.OnInit {
 
   field:string;
 
-  progress:number;
-
   backEnd:backEnd.Service;
 
   notifications:libPatternFlyNotifications.Service;
@@ -59,7 +57,6 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("New Confirmation", ["NewIssueConfirmation", {issue: this.issueId}])
     ];
     this.field = "";
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -69,7 +66,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     Promise.all<any>([
           this.backEnd.getIssueConfirmations(),
           this.backEnd.getIssue(this.issueId)
@@ -82,9 +78,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`Confirmations cannot be loaded: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
@@ -92,7 +85,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.addConfirmationToPost(this.field, this.issueId)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The confirmation has been added."));
@@ -100,9 +92,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The confirmation cannot be added: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 

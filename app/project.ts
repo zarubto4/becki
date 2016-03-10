@@ -78,8 +78,6 @@ export class Component implements ng.OnInit {
 
   homerUploadingProgramField:string;
 
-  progress:number;
-
   backEnd:backEnd.Service;
 
   notifications:libPatternFlyNotifications.Service;
@@ -105,7 +103,6 @@ export class Component implements ng.OnInit {
     ];
     this.boardUploadingProgramField = "";
     this.homerUploadingProgramField = "";
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -121,7 +118,6 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    this.progress += 1;
     Promise.all<any>([
           this.backEnd.getProject(this.id),
           this.backEnd.getProjectOwners(this.id),
@@ -149,35 +145,20 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The project ${this.id} cannot be loaded: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
-    return () => {
-      this.progress += 1;
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return this.backEnd.getProjects()
-          .then(projects => {
-            this.progress -= 1;
-            return !projects.find(project => project.id != this.id && project.project_name == this.nameField);
-          })
-          .catch(reason => {
-            this.progress -= 1;
-            return Promise.reject(reason);
-          });
-    };
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => this.backEnd.getProjects().then(projects => !projects.find(project => project.id != this.id && project.project_name == this.nameField));
   }
 
   onUpdatingSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.updateProject(this.id, this.nameField, this.descriptionField)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The project has been updated."));
@@ -185,9 +166,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The project cannot be updated: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
@@ -201,7 +179,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.removeCollaboratorsFromProject([id], this.id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The collaborator has been removed."));
@@ -209,9 +186,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The collaborator cannot be removed: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
@@ -225,7 +199,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.deleteBoardProgram(id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The program has been removed."));
@@ -233,9 +206,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be removed: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
@@ -249,7 +219,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.deleteStandaloneProgram(id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The program has been removed."));
@@ -259,9 +228,6 @@ export class Component implements ng.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-130
           this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-130"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be removed: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
@@ -275,7 +241,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.deleteHomerProgram(id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The program has been removed."));
@@ -283,9 +248,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be removed: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
@@ -299,7 +261,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.removeBoardFromProject(id, this.id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The board has been removed."));
@@ -307,9 +268,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The board cannot be removed: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
@@ -317,7 +275,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     let boards = this.boards.filter(selectable => selectable.selected).map(selectable => selectable.id);
     Promise.all(boards.map(id => this.backEnd.addProgramToBoard(this.boardUploadingProgramField, id)))
         .then(() => {
@@ -328,9 +285,6 @@ export class Component implements ng.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-128
           this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-128"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be uploaded: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
@@ -353,7 +307,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.removeHomerFromProject(id, this.id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The Homer has been removed."));
@@ -361,9 +314,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The Homer cannot be removed: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
@@ -371,7 +321,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     let homers = this.homers.filter(selectable => selectable.selected).map(selectable => selectable.id);
     Promise.all(homers.map(id => this.backEnd.addProgramToHomer(this.homerUploadingProgramField, id)))
         .then(() => {
@@ -382,9 +331,6 @@ export class Component implements ng.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-137
           this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-137"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be uploaded: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 }

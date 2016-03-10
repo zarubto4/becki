@@ -25,7 +25,7 @@ import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/producer.html",
-  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -38,8 +38,6 @@ export class Component implements ng.OnInit {
   nameField:string;
 
   descriptionField:string;
-
-  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -59,7 +57,6 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -69,7 +66,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     Promise.all<any>([
           this.backEnd.getProducer(this.id),
           this.backEnd.getProducerDescription(this.id)
@@ -81,35 +77,20 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The producer ${this.id} cannot be loaded: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
-    return () => {
-      this.progress += 1;
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return this.backEnd.getProducers()
-          .then(producers => {
-            this.progress -= 1;
-            return !producers.find(producer => producer.id != this.id && producer.name == this.nameField);
-          })
-          .catch(reason => {
-            this.progress -= 1;
-            return Promise.reject(reason);
-          });
-    };
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => this.backEnd.getProducers().then(producers => !producers.find(producer => producer.id != this.id && producer.name == this.nameField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.updateProducer(this.id, this.nameField, this.descriptionField)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The producer has been updated."));
@@ -117,9 +98,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The producer cannot be updated: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 

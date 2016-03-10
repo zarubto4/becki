@@ -44,7 +44,7 @@ export class Component implements ng.OnInit {
 
   upUsernameField:string;
 
-  progress:number;
+  redirecting:boolean;
 
   backEnd:backEnd.Service;
 
@@ -63,7 +63,7 @@ export class Component implements ng.OnInit {
     this.upPassword1Field = "";
     this.upPassword2Field = "";
     this.upUsernameField = "";
-    this.progress = 0;
+    this.redirecting = false;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -84,6 +84,13 @@ export class Component implements ng.OnInit {
     document.documentElement.classList.remove("login-pf");
   }
 
+  redirect(url:string):void {
+    "use strict";
+
+    this.redirecting = true;
+    location.href = url;
+  }
+
   onSignInClick():void {
     "use strict";
 
@@ -94,41 +101,27 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.createToken(this.inEmailField, this.inPasswordField)
         .then(() => this.router.navigate(["Devices"]))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed in: ${reason}`)))
-        .then(() => this.progress -= 1);
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed in: ${reason}`)));
   }
 
   onFacebookSignInClick():void {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.createFacebookToken(REDIRECT_URL)
-        .then(url => {
-          location.href = url;
-        })
-        .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed in: ${reason}`));
-          this.progress -= 1;
-        });
+        .then(url => this.redirect(url))
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed in: ${reason}`)));
   }
 
   onGitHubSignInClick():void {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.createGitHubToken(REDIRECT_URL)
-        .then(url => {
-          location.href = url;
-        })
-        .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed in: ${reason}`));
-          this.progress -= 1;
-        });
+        .then(url => this.redirect(url))
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed in: ${reason}`)));
   }
 
   onSignUpClick():void {
@@ -147,7 +140,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.createPerson(this.upEmailField, this.upPassword1Field, this.upUsernameField)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The person have been signed up. It is necessary to follow the instructions sent to their email before signing in."));
@@ -155,9 +147,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed up: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 }

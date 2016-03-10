@@ -33,8 +33,6 @@ export class Component implements ng.OnInit {
 
   items:libPatternFlyListGroup.Item[];
 
-  progress:number;
-
   backEnd:backEnd.Service;
 
   notifications:libPatternFlyNotifications.Service;
@@ -49,7 +47,6 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("User", ["Projects"]),
       new layout.LabeledLink("Projects", ["Projects"])
     ];
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -65,11 +62,9 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    this.progress += 1;
     this.backEnd.getProjects()
         .then(projects => this.items = projects.map(project => new libPatternFlyListGroup.Item(project.id, project.project_name, project.project_description, ["Project", {project: project.id}])))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Projects cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Projects cannot be loaded: ${reason}`)));
   }
 
   onAddClick():void {
@@ -82,7 +77,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.deleteProject(id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The project has been removed."));
@@ -90,9 +84,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The project cannot be removed: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 }

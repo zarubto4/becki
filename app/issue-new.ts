@@ -39,8 +39,6 @@ export class Component implements ng.OnInit {
 
   bodyField:string;
 
-  progress:number;
-
   backEnd:backEnd.Service;
 
   notifications:libPatternFlyNotifications.Service;
@@ -58,7 +56,6 @@ export class Component implements ng.OnInit {
     this.typeField = "";
     this.titleField = "";
     this.bodyField = fieldIssueBody.EMPTY;
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -68,18 +65,15 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.getIssueTypes()
         .then(types => this.types = types)
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Types cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Types cannot be loaded: ${reason}`)));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.createIssue(this.typeField, this.titleField, this.bodyField, [])
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The issue has been created."));
@@ -89,9 +83,6 @@ export class Component implements ng.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-150
           this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-150"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issue cannot be created: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 

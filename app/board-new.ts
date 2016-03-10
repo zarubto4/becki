@@ -37,8 +37,6 @@ export class Component implements ng.OnInit {
 
   types:libBackEnd.BoardType[];
 
-  progress:number;
-
   backEnd:backEnd.Service;
 
   notifications:libPatternFlyNotifications.Service;
@@ -55,7 +53,6 @@ export class Component implements ng.OnInit {
     ];
     this.idField = "";
     this.typeField = "";
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -65,38 +62,28 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.getBoardTypes()
         .then(types => this.types = types)
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Board types cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Board types cannot be loaded: ${reason}`)));
   }
 
   validateIdField():()=>Promise<boolean> {
     "use strict";
 
-    return () => {
-      this.progress += 1;
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return this.backEnd.getBoards()
-          .then(boards => {
-            this.progress -= 1;
-            return !boards.find(board => board.id == this.idField);
-          })
-          .catch(reason => {
-            this.progress -= 1;
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-141
-            this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-141"));
-            return Promise.reject(reason);
-          });
-    };
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => this.backEnd.getBoards()
+        .then(boards => !boards.find(board => board.id == this.idField))
+        .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-141
+          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-141"));
+          return Promise.reject(reason);
+        });
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.createBoard(this.idField, this.typeField)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The board has been created."));
@@ -104,9 +91,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The board cannot be created: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 

@@ -59,8 +59,6 @@ export class Component implements ng.OnInit, ng.OnDestroy {
 
   lastWindowWidth:string;
 
-  progress:number;
-
   backEnd:backEnd.Service;
 
   notifications:libPatternFlyNotifications.Service;
@@ -75,7 +73,6 @@ export class Component implements ng.OnInit, ng.OnDestroy {
     this.navigation = becki.NAVIGATION;
     this.actionClick = new ng.EventEmitter();
     this.lastWindowWidth = null;
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -105,7 +102,6 @@ export class Component implements ng.OnInit, ng.OnDestroy {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.deleteToken()
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("Current user have been signed out."));
@@ -113,9 +109,6 @@ export class Component implements ng.OnInit, ng.OnDestroy {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`Current user cannot be signed out: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 

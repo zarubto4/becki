@@ -25,7 +25,7 @@ import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/library-group-new.html",
-  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -34,8 +34,6 @@ export class Component implements ng.OnInit {
   nameField:string;
 
   descriptionField:string;
-
-  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -54,7 +52,6 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "";
     this.descriptionField = "";
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -69,33 +66,24 @@ export class Component implements ng.OnInit {
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
-    return () => {
-      this.progress += 1;
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return Promise.all<any>([
-            this.backEnd.getLibraries(),
-            this.backEnd.getLibraryGroups(),
-          ])
-          .then(result => {
-            this.progress -= 1;
-            let libraries:libBackEnd.Library[];
-            let groups:libBackEnd.LibraryGroup[];
-            [libraries, groups] = result;
-            return !groups.find(group => group.group_name == this.nameField) &&
-                !libraries.find(library => library.library_name == this.nameField);
-          })
-          .catch(reason => {
-            this.progress -= 1;
-            return Promise.reject(reason);
-          });
-    };
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => Promise.all<any>([
+          this.backEnd.getLibraries(),
+          this.backEnd.getLibraryGroups(),
+        ])
+        .then(result => {
+          let libraries:libBackEnd.Library[];
+          let groups:libBackEnd.LibraryGroup[];
+          [libraries, groups] = result;
+          return !groups.find(group => group.group_name == this.nameField) &&
+              !libraries.find(library => library.library_name == this.nameField);
+        });
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.createLibraryGroup(this.nameField, this.descriptionField)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The group has been created."));
@@ -103,9 +91,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The group cannot be created: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 

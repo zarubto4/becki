@@ -5,12 +5,7 @@
 
 <div data-bind-layout="heading" data-bind-breadcrumbs="breadcrumbs">
   <h2>Details</h2>
-  <form class="clearfix" data-on-submit="onUpdatingSubmit($event)" style="position: relative">
-    <template data-bind-ng-if="progress">
-      <div class="overlay">
-        <div class="spinner"></div>
-      </div>
-    </template>
+  <form class="clearfix" data-on-submit="onUpdatingSubmit($event)">
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon-pencil"></span>
@@ -32,12 +27,7 @@
   </form>
 
   <h2>New Version</h2>
-  <form class="clearfix" data-on-submit="onVersionSubmit($event)" style="position: relative">
-    <template data-bind-ng-if="progress">
-      <div class="overlay">
-        <div class="spinner"></div>
-      </div>
-    </template>
+  <form class="clearfix" data-on-submit="onVersionSubmit($event)">
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon-pencil"></span>
@@ -58,12 +48,7 @@
   </form>
 
   <h2>File Upload</h2>
-  <form class="clearfix" data-on-submit="onFileSubmit($event)" style="position: relative">
-    <template data-bind-ng-if="progress">
-      <div class="overlay">
-        <div class="spinner"></div>
-      </div>
-    </template>
+  <form class="clearfix" data-on-submit="onFileSubmit($event)">
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon-list"></span>

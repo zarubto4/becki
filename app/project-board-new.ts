@@ -25,7 +25,7 @@ import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/project-board-new.html",
-  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -36,8 +36,6 @@ export class Component implements ng.OnInit {
   breadcrumbs:layout.LabeledLink[];
 
   idField:string;
-
-  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -59,7 +57,6 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("New Board", ["NewProjectBoard", {project: this.projectId}])
     ];
     this.idField = "";
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -74,26 +71,14 @@ export class Component implements ng.OnInit {
   validateIdField():()=>Promise<boolean> {
     "use strict";
 
-    return () => {
-      this.progress += 1;
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return this.backEnd.getProjectBoards(this.projectId)
-          .then(boards => {
-            this.progress -= 1;
-            return !boards.find(board => board.id == this.idField);
-          })
-          .catch(reason => {
-            this.progress -= 1;
-            return Promise.reject(reason);
-          });
-    };
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => this.backEnd.getProjectBoards(this.projectId).then(boards => !boards.find(board => board.id == this.idField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.addBoardToProject(this.idField, this.projectId)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The board has been added."));
@@ -101,9 +86,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The board cannot be added: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 

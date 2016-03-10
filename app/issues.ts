@@ -37,8 +37,6 @@ export class Component implements ng.OnInit {
 
   issues:libPatternFlyListGroup.Item[];
 
-  progress:number;
-
   backEnd:backEnd.Service;
 
   notifications:libPatternFlyNotifications.Service;
@@ -52,7 +50,6 @@ export class Component implements ng.OnInit {
       becki.HOME,
       new layout.LabeledLink("Issues", ["Issues"])
     ];
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -68,19 +65,15 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    this.progress += 3;
     this.backEnd.getIssueTypes()
         .then(types => this.types = types.map(type => new libPatternFlyListGroup.Item(type.id, type.type, null, ["IssueType", {type: type.id}])))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Types cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Types cannot be loaded: ${reason}`)));
     this.backEnd.getIssueConfirmations()
         .then(confirmations => this.confirmations = confirmations.map(confirmation => new libPatternFlyListGroup.Item(confirmation.id, confirmation.type, null, ["IssueConfirmationType", {confirmation: confirmation.id}])))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Confirmations cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Confirmations cannot be loaded: ${reason}`)));
     this.backEnd.getIssues()
         .then(issues => this.issues = issues.map(issue => new libPatternFlyListGroup.Item(issue.postId, issue.name, issue.type.type, ["Issue", {issue: issue.postId}])))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Issues cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Issues cannot be loaded: ${reason}`)));
   }
 
   onTypeAddClick():void {
@@ -93,7 +86,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.deleteIssueType(id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The type has been removed."));
@@ -101,9 +93,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The type cannot be removed: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
@@ -117,7 +106,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.deleteIssueConfirmation(id)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The confirmation has been removed."));
@@ -127,9 +115,6 @@ export class Component implements ng.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-149
           this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-149"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The confirmation cannot be removed: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
@@ -143,7 +128,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.deletePost(id)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The issue has been removed."));
@@ -151,9 +135,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issue cannot be removed: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 }

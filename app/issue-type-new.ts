@@ -24,15 +24,13 @@ import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/issue-type-new.html",
-  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
   field:string;
-
-  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -50,7 +48,6 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("New Type", ["NewIssueType"]),
     ];
     this.field = "";
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -65,26 +62,14 @@ export class Component implements ng.OnInit {
   validateField():()=>Promise<boolean> {
     "use strict";
 
-    return () => {
-      this.progress += 1;
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return this.backEnd.getIssueTypes()
-          .then(types => {
-            this.progress -= 1;
-            return !types.find(type => type.type == this.field);
-          })
-          .catch(reason => {
-            this.progress -= 1;
-            return Promise.reject(reason);
-          });
-    };
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => this.backEnd.getIssueTypes().then(types => !types.find(type => type.type == this.field));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.createIssueType(this.field)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The type has been created."));
@@ -92,9 +77,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The type cannot be created: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 

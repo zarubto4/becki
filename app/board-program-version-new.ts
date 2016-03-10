@@ -26,13 +26,7 @@ import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/board-program-version-new.html",
-  directives: [
-    customValidator.Directive,
-    fieldCode.Component,
-    layout.Component,
-    ng.CORE_DIRECTIVES,
-    ng.FORM_DIRECTIVES
-  ]
+  directives: [customValidator.Directive, fieldCode.Component, layout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -49,8 +43,6 @@ export class Component implements ng.OnInit {
   descriptionField:string;
 
   codeField:string;
-
-  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -86,7 +78,6 @@ export class Component implements ng.OnInit {
     this.nameField = "";
     this.descriptionField = "";
     this.codeField = "";
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -101,26 +92,14 @@ export class Component implements ng.OnInit {
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
-    return () => {
-      this.progress += 1;
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return this.backEnd.getBoardProgram(this.programId)
-          .then(program => {
-            this.progress -= 1;
-            return !program.version_objects.find(version => version.version_name == this.nameField);
-          })
-          .catch(reason => {
-            this.progress -= 1;
-            return Promise.reject(reason);
-          });
-    };
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => this.backEnd.getBoardProgram(this.programId).then(program => !program.version_objects.find(version => version.version_name == this.nameField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.addVersionToBoardProgram(this.nameField, this.descriptionField, this.codeField, this.programId)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The version has been created."));
@@ -130,9 +109,6 @@ export class Component implements ng.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-143
           this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-143"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The version cannot be created: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 

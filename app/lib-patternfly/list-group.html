@@ -3,12 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<div style="position:relative" data-bind-ng-switch="items?.length > 0">
-  <template data-bind-ng-if="progress">
-    <div class="overlay">
-      <div class="spinner"></div>
-    </div>
-  </template>
+<div data-bind-ng-switch="items?.length > 0">
   <template data-bind-ng-switch-when="true">
     <div class="list-group">
       <div class="list-group-item clearfix" template="ngFor #item of items" data-bind-ng-switch="item.removing">

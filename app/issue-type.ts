@@ -25,7 +25,7 @@ import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/issue-type.html",
-  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -36,8 +36,6 @@ export class Component implements ng.OnInit {
   breadcrumbs:layout.LabeledLink[];
 
   field:string;
-
-  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -57,7 +55,6 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink(`Type ${this.id}`, ["IssueType", {type: this.id}])
     ];
     this.field = "Loading...";
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -67,36 +64,22 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.getIssueType(this.id)
         .then(type => this.field = type.type)
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`The type ${this.id} cannot be loaded: ${reason}`)))
-        .then(() => this.progress -= 1);
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`The type ${this.id} cannot be loaded: ${reason}`)));
   }
 
   validateField():()=>Promise<boolean> {
     "use strict";
 
-    return () => {
-      this.progress += 1;
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return this.backEnd.getIssueTypes()
-          .then(types => {
-            this.progress -= 1;
-            return !types.find(type => type.id != this.id && type.type == this.field);
-          })
-          .catch(reason => {
-            this.progress -= 1;
-            return Promise.reject(reason);
-          });
-    };
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => this.backEnd.getIssueTypes().then(types => !types.find(type => type.id != this.id && type.type == this.field));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.updateIssueType(this.id, this.field)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The type has been updated."));
@@ -104,9 +87,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The type cannot be updated: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 

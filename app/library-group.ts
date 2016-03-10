@@ -25,7 +25,7 @@ import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/library-group.html",
-  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -38,8 +38,6 @@ export class Component implements ng.OnInit {
   nameField:string;
 
   descriptionField:string;
-
-  progress:number;
 
   backEnd:backEnd.Service;
 
@@ -60,7 +58,6 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    this.progress = 0;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -70,7 +67,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.getLibraryGroup(this.id)
         .then(group => {
           this.nameField = group.group_name;
@@ -78,42 +74,30 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The group ${this.id} cannot be loaded: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
-    return () => {
-      this.progress += 1;
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-      return Promise.all<any>([
-            this.backEnd.getLibraries(),
-            this.backEnd.getLibraryGroups(),
-          ])
-          .then(result => {
-            this.progress -= 1;
-            let libraries:libBackEnd.Library[];
-            let groups:libBackEnd.LibraryGroup[];
-            [libraries, groups] = result;
-            return !groups.find(group => group.id != this.id && group.group_name == this.nameField) &&
-                !libraries.find(library => library.library_name == this.nameField);
-          })
-          .catch(reason => {
-            this.progress -= 1;
-            return Promise.reject(reason);
-          });
-    };
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => Promise.all<any>([
+          this.backEnd.getLibraries(),
+          this.backEnd.getLibraryGroups(),
+        ])
+        .then(result => {
+          let libraries:libBackEnd.Library[];
+          let groups:libBackEnd.LibraryGroup[];
+          [libraries, groups] = result;
+          return !groups.find(group => group.id != this.id && group.group_name == this.nameField) &&
+              !libraries.find(library => library.library_name == this.nameField);
+        });
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.progress += 1;
     this.backEnd.updateLibraryGroup(this.id, this.nameField, this.descriptionField)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The group has been updated."));
@@ -121,9 +105,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The group cannot be updated: ${reason}`));
-        })
-        .then(() => {
-          this.progress -= 1;
         });
   }
 
