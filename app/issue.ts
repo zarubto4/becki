@@ -23,6 +23,7 @@ import * as fieldHomerProgram from "./field-homer-program";
 import * as fieldIssueBody from "./field-issue-body";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBootstrapDropdown from "./lib-bootstrap/dropdown";
 import * as libPatternFlyListGroup from "./lib-patternfly/list-group";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
@@ -38,8 +39,6 @@ class Comment {
 
   tags:string[];
 
-  dropdownOpen:boolean;
-
   editing:boolean;
 
   removing:boolean;
@@ -54,7 +53,6 @@ class Comment {
     this.date = date;
     this.likes = likes;
     this.tags = tags;
-    this.dropdownOpen = false;
     this.editing = false;
     this.removing = false;
     this.bodyField = body;
@@ -74,8 +72,6 @@ class Item {
   comments:Comment[];
 
   tags:string[];
-
-  dropdownOpen:boolean;
 
   editing:boolean;
 
@@ -104,7 +100,6 @@ class Item {
     this.likes = likes;
     this.comments = comments;
     this.tags = tags;
-    this.dropdownOpen = false;
     this.editing = false;
     this.importing = false;
     this.removing = false;
@@ -139,6 +134,7 @@ class Issue extends Item {
     fieldHomerProgram.Component,
     fieldIssueBody.Component,
     layout.Component,
+    libBootstrapDropdown.DIRECTIVES,
     libPatternFlyListGroup.Component,
     ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES,
@@ -242,13 +238,6 @@ export class Component implements ng.OnInit {
         .then(projects => this.projects = projects)
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Projects cannot be loaded: ${reason}`)))
         .then(() => this.progress -= 1);
-  }
-
-  onItemDropdownClick(item:Item, event:Event):void {
-    "use strict";
-
-    item.dropdownOpen = !item.dropdownOpen;
-    event.stopPropagation();
   }
 
   onItemImportClick(item:Item):void {
@@ -463,13 +452,6 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onCommentDropdownClick(comment:Comment, event:Event):void {
-    "use strict";
-
-    comment.dropdownOpen = !comment.dropdownOpen;
-    event.stopPropagation();
-  }
-
   onCommentEditClick(comment:Comment):void {
     "use strict";
 
@@ -601,17 +583,5 @@ export class Component implements ng.OnInit {
         .then(() => {
           this.progress -= 1;
         });
-  }
-
-  @ng.HostListener("document:click")
-  onDocumentClick():void {
-    "use strict";
-
-    if (this.items) {
-      this.items.forEach(item => {
-        item.dropdownOpen = false;
-        item.comments.forEach(comment => comment.dropdownOpen = false);
-      });
-    }
   }
 }

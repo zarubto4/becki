@@ -129,8 +129,8 @@
                 Do you really want to remove this?
               </template>
               <template data-bind-ng-if="!item.editing && !item.importing && !item.removing">
-                <div class="dropdown dropdown-kebab-pf pull-right" data-bind-class.open="item.dropdownOpen">
-                  <button class="btn btn-link dropdown-toggle" type="button" data-on-click="onItemDropdownClick(item, $event)">
+                <div class="dropdown dropdown-kebab-pf pull-right">
+                  <button class="btn btn-link dropdown-toggle" type="button">
                     <span class="fa fa-ellipsis-v"></span>
                   </button>
                   <ul class="dropdown-menu dropdown-menu-right">
@@ -195,8 +195,8 @@
                               <span class="glyphicon glyphicon-thumbs-down"></span>
                             </button>
                           </div>
-                          <div class="dropdown dropdown-kebab-pf pull-right" data-bind-class.open="comment.dropdownOpen" style="margin-left: 10px">
-                            <button class="btn btn-link dropdown-toggle" type="button" data-on-click="onCommentDropdownClick(comment, $event)">
+                          <div class="dropdown dropdown-kebab-pf pull-right" style="margin-left: 10px">
+                            <button class="btn btn-link dropdown-toggle" type="button">
                               <span class="fa fa-ellipsis-v"></span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-right">

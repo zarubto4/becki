@@ -16,6 +16,8 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
+import * as libBootstrapDropdown from "../lib-bootstrap/dropdown";
+
 export class Item {
 
   id:string;
@@ -26,8 +28,6 @@ export class Item {
 
   link:any[];
 
-  dropdownOpen:boolean;
-
   removing:boolean;
 
   constructor(id:string, name:string, description:string, link:any[] = null) {
@@ -37,7 +37,6 @@ export class Item {
     this.name = name;
     this.description = description;
     this.link = link;
-    this.dropdownOpen = false;
     this.removing = false;
   }
 }
@@ -45,7 +44,7 @@ export class Item {
 @ng.Component({
   selector: "[list-group]",
   templateUrl: "app/lib-patternfly/list-group.html",
-  directives: [ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
+  directives: [libBootstrapDropdown.DIRECTIVES, ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
   inputs: ["progress"]
 })
 export class Component {
@@ -79,13 +78,6 @@ export class Component {
     this.addClick.next(null);
   }
 
-  onDropdownClick(item:Item, event:Event):void {
-    "use strict";
-
-    item.dropdownOpen = !item.dropdownOpen;
-    event.stopPropagation();
-  }
-
   onEditClick(item:Item):void {
     "use strict";
 
@@ -109,14 +101,5 @@ export class Component {
     "use strict";
 
     item.removing = false;
-  }
-
-  @ng.HostListener("document:click")
-  onDocumentClick():void {
-    "use strict";
-
-    if (this.items) {
-      this.items.forEach(item => item.dropdownOpen = false);
-    }
   }
 }

@@ -18,6 +18,7 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
+import * as libBootstrapDropdown from "./lib-bootstrap/dropdown";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 const HTML_CLASSES = ["layout-pf", "layout-pf-fixed"];
@@ -42,14 +43,12 @@ export class LabeledLink {
 @ng.Component({
   selector: "[layout]",
   templateUrl: "app/layout.html",
-  directives: [libPatternFlyNotifications.Component, ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
+  directives: [libBootstrapDropdown.DIRECTIVES, libPatternFlyNotifications.Component, ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
   inputs: ["heading: layout", "breadcrumbs", "actionLabel"]
 })
 export class Component implements ng.OnInit, ng.OnDestroy {
 
   home:any[];
-
-  dropdownOpen:boolean;
 
   navbarState:string;
 
@@ -72,7 +71,6 @@ export class Component implements ng.OnInit, ng.OnDestroy {
     "use strict";
 
     this.home = becki.HOME.link;
-    this.dropdownOpen = false;
     this.navbarState = "expanded";
     this.navigation = becki.NAVIGATION;
     this.actionClick = new ng.EventEmitter();
@@ -103,13 +101,6 @@ export class Component implements ng.OnInit, ng.OnDestroy {
     document.documentElement.classList.remove(...HTML_CLASSES);
   }
 
-  onDropdownClick(event:Event):void {
-    "use strict";
-
-    this.dropdownOpen = !this.dropdownOpen;
-    event.stopPropagation();
-  }
-
   onSignOutClick():void {
     "use strict";
 
@@ -132,13 +123,6 @@ export class Component implements ng.OnInit, ng.OnDestroy {
     "use strict";
 
     this.actionClick.next(null);
-  }
-
-  @ng.HostListener("document:click")
-  onDocumentClick():void {
-    "use strict";
-
-    this.dropdownOpen = false;
   }
 
   onNavbarToggleClick():void {
