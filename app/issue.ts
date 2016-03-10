@@ -24,7 +24,7 @@ import * as fieldIssueBody from "./field-issue-body";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapDropdown from "./lib-bootstrap/dropdown";
-import * as libPatternFlyListGroup from "./lib-patternfly/list-group";
+import * as libPatternFlyListView from "./lib-patternfly/list-view";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 class Comment {
@@ -135,7 +135,7 @@ class Issue extends Item {
     fieldIssueBody.Component,
     layout.Component,
     libBootstrapDropdown.DIRECTIVES,
-    libPatternFlyListGroup.Component,
+    libPatternFlyListView.Component,
     ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES,
     ngRouter.ROUTER_DIRECTIVES
@@ -157,11 +157,11 @@ export class Component implements ng.OnInit {
 
   answerBodyField:string;
 
-  related:libPatternFlyListGroup.Item[];
+  related:libPatternFlyListView.Item[];
 
-  tags:libPatternFlyListGroup.Item[];
+  tags:libPatternFlyListView.Item[];
 
-  confirmations:libPatternFlyListGroup.Item[];
+  confirmations:libPatternFlyListView.Item[];
 
   backEnd:backEnd.Service;
 
@@ -216,9 +216,9 @@ export class Component implements ng.OnInit {
             // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-152
             this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-152"));
           }
-          this.related = related.map(related2 => new libPatternFlyListGroup.Item(related2[0].linkId, related2[0].name, "", ["Issue", {issue: related2[1].postId}]));
-          this.tags = issue.hashTags.map(tag => new libPatternFlyListGroup.Item(tag, tag, ""));
-          this.confirmations = issue.type_of_confirms.map(confirmation => new libPatternFlyListGroup.Item(confirmation.id, confirmation.type, null));
+          this.related = related.map(related2 => new libPatternFlyListView.Item(related2[0].linkId, related2[0].name, "", ["Issue", {issue: related2[1].postId}]));
+          this.tags = issue.hashTags.map(tag => new libPatternFlyListView.Item(tag, tag, ""));
+          this.confirmations = issue.type_of_confirms.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null));
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issue ${this.id} cannot be loaded: ${reason}`));

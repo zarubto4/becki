@@ -42,13 +42,13 @@ export class Item {
 }
 
 @ng.Component({
-  selector: "[list-group]",
-  templateUrl: "app/lib-patternfly/list-group.html",
+  selector: "[list-view]",
+  templateUrl: "app/lib-patternfly/list-view.html",
   directives: [libBootstrapDropdown.DIRECTIVES, ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES]
 })
 export class Component {
 
-  @ng.Input("listGroup")
+  @ng.Input("listView")
   items:Item[];
 
   @ng.Input()

@@ -20,22 +20,22 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libPatternFlyListGroup from "./lib-patternfly/list-group";
+import * as libPatternFlyListView from "./lib-patternfly/list-view";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/issues.html",
-  directives: [layout.Component, libPatternFlyListGroup.Component, ngRouter.ROUTER_DIRECTIVES]
+  directives: [layout.Component, libPatternFlyListView.Component, ngRouter.ROUTER_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
-  types:libPatternFlyListGroup.Item[];
+  types:libPatternFlyListView.Item[];
 
-  confirmations:libPatternFlyListGroup.Item[];
+  confirmations:libPatternFlyListView.Item[];
 
-  issues:libPatternFlyListGroup.Item[];
+  issues:libPatternFlyListView.Item[];
 
   backEnd:backEnd.Service;
 
@@ -66,13 +66,13 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getIssueTypes()
-        .then(types => this.types = types.map(type => new libPatternFlyListGroup.Item(type.id, type.type, null, ["IssueType", {type: type.id}])))
+        .then(types => this.types = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, ["IssueType", {type: type.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Types cannot be loaded: ${reason}`)));
     this.backEnd.getIssueConfirmations()
-        .then(confirmations => this.confirmations = confirmations.map(confirmation => new libPatternFlyListGroup.Item(confirmation.id, confirmation.type, null, ["IssueConfirmationType", {confirmation: confirmation.id}])))
+        .then(confirmations => this.confirmations = confirmations.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null, ["IssueConfirmationType", {confirmation: confirmation.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Confirmations cannot be loaded: ${reason}`)));
     this.backEnd.getIssues()
-        .then(issues => this.issues = issues.map(issue => new libPatternFlyListGroup.Item(issue.postId, issue.name, issue.type.type, ["Issue", {issue: issue.postId}])))
+        .then(issues => this.issues = issues.map(issue => new libPatternFlyListView.Item(issue.postId, issue.name, issue.type.type, ["Issue", {issue: issue.postId}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Issues cannot be loaded: ${reason}`)));
   }
 

@@ -19,30 +19,30 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as layout from "./layout";
-import * as libPatternFlyListGroup from "./lib-patternfly/list-group";
+import * as libPatternFlyListView from "./lib-patternfly/list-view";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/devices.html",
-  directives: [layout.Component, libPatternFlyListGroup.Component, ngRouter.ROUTER_DIRECTIVES]
+  directives: [layout.Component, libPatternFlyListView.Component, ngRouter.ROUTER_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
-  producers:libPatternFlyListGroup.Item[];
+  producers:libPatternFlyListView.Item[];
 
-  libraries:libPatternFlyListGroup.Item[];
+  libraries:libPatternFlyListView.Item[];
 
-  libraryGroups:libPatternFlyListGroup.Item[];
+  libraryGroups:libPatternFlyListView.Item[];
 
-  processors:libPatternFlyListGroup.Item[];
+  processors:libPatternFlyListView.Item[];
 
-  boardTypes:libPatternFlyListGroup.Item[];
+  boardTypes:libPatternFlyListView.Item[];
 
-  boards:libPatternFlyListGroup.Item[];
+  boards:libPatternFlyListView.Item[];
 
-  homers:libPatternFlyListGroup.Item[];
+  homers:libPatternFlyListView.Item[];
 
   backEnd:backEnd.Service;
 
@@ -73,28 +73,28 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getProducers()
-        .then(producers => this.producers = producers.map(producer => new libPatternFlyListGroup.Item(producer.id, producer.name, null, ["Producer", {producer: producer.id}])))
+        .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, null, ["Producer", {producer: producer.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Producers cannot be loaded: ${reason}`)));
     this.backEnd.getLibraries()
-        .then(libraries => this.libraries = libraries.map(library => new libPatternFlyListGroup.Item(library.id, library.library_name, library.description, ["Library", {library: library.id}])))
+        .then(libraries => this.libraries = libraries.map(library => new libPatternFlyListView.Item(library.id, library.library_name, library.description, ["Library", {library: library.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Libraries cannot be loaded: ${reason}`)));
     this.backEnd.getLibraryGroups()
-        .then(groups => this.libraryGroups = groups.map(group => new libPatternFlyListGroup.Item(group.id, group.group_name, group.description, ["LibraryGroup", {group: group.id}])))
+        .then(groups => this.libraryGroups = groups.map(group => new libPatternFlyListView.Item(group.id, group.group_name, group.description, ["LibraryGroup", {group: group.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Library groups cannot be loaded: ${reason}`)));
     this.backEnd.getProcessors()
-        .then(processors => this.processors = processors.map(processor => new libPatternFlyListGroup.Item(processor.id, processor.processor_name, processor.processor_code, ["Processor", {processor: processor.id}])))
+        .then(processors => this.processors = processors.map(processor => new libPatternFlyListView.Item(processor.id, processor.processor_name, processor.processor_code, ["Processor", {processor: processor.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Processors cannot be loaded: ${reason}`)));
     this.backEnd.getBoardTypes()
-        .then(boardTypes => this.boardTypes = boardTypes.map(type => new libPatternFlyListGroup.Item(type.id, type.name, type.description, ["BoardType", {type: type.id}])))
+        .then(boardTypes => this.boardTypes = boardTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, ["BoardType", {type: type.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Board types cannot be loaded: ${reason}`)));
     this.backEnd.getBoards()
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
-        .then(boards => this.boards = boards.map(board => new libPatternFlyListGroup.Item(board.id, `${board.id} (issue/TYRION-70)`, board.isActive ? "active" : "inactive")))
+        .then(boards => this.boards = boards.map(board => new libPatternFlyListView.Item(board.id, `${board.id} (issue/TYRION-70)`, board.isActive ? "active" : "inactive")))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Board types cannot be loaded: ${reason}`)));
     this.backEnd.getHomers()
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-71
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-78
-        .then(homers => this.homers = homers.map(homer => new libPatternFlyListGroup.Item(homer.homer_id, `${homer.homer_id} (issue/TYRION-71)`, "(issue/TYRION-78)")))
+        .then(homers => this.homers = homers.map(homer => new libPatternFlyListView.Item(homer.homer_id, `${homer.homer_id} (issue/TYRION-71)`, "(issue/TYRION-78)")))
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-142
           this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-142"));

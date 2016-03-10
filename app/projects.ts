@@ -20,18 +20,18 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libPatternFlyListGroup from "./lib-patternfly/list-group";
+import * as libPatternFlyListView from "./lib-patternfly/list-view";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/projects.html",
-  directives: [layout.Component, libPatternFlyListGroup.Component, ngRouter.ROUTER_DIRECTIVES],
+  directives: [layout.Component, libPatternFlyListView.Component, ngRouter.ROUTER_DIRECTIVES],
 })
 export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
-  items:libPatternFlyListGroup.Item[];
+  items:libPatternFlyListView.Item[];
 
   backEnd:backEnd.Service;
 
@@ -63,7 +63,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getProjects()
-        .then(projects => this.items = projects.map(project => new libPatternFlyListGroup.Item(project.id, project.project_name, project.project_description, ["Project", {project: project.id}])))
+        .then(projects => this.items = projects.map(project => new libPatternFlyListView.Item(project.id, project.project_name, project.project_description, ["Project", {project: project.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Projects cannot be loaded: ${reason}`)));
   }
 

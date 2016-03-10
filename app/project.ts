@@ -21,10 +21,10 @@ import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libPatternFlyListGroup from "./lib-patternfly/list-group";
+import * as libPatternFlyListView from "./lib-patternfly/list-view";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
-class SelectableItem extends libPatternFlyListGroup.Item {
+class SelectableItem extends libPatternFlyListView.Item {
 
   selected:boolean;
 
@@ -41,7 +41,7 @@ class SelectableItem extends libPatternFlyListGroup.Item {
   directives: [
     customValidator.Directive,
     layout.Component,
-    libPatternFlyListGroup.Component,
+    libPatternFlyListView.Component,
     ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES,
     ngRouter.ROUTER_DIRECTIVES
@@ -59,13 +59,13 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
-  collaborators:libPatternFlyListGroup.Item[];
+  collaborators:libPatternFlyListView.Item[];
 
-  boardPrograms:libPatternFlyListGroup.Item[];
+  boardPrograms:libPatternFlyListView.Item[];
 
-  standalonePrograms:libPatternFlyListGroup.Item[];
+  standalonePrograms:libPatternFlyListView.Item[];
 
-  homerPrograms:libPatternFlyListGroup.Item[];
+  homerPrograms:libPatternFlyListView.Item[];
 
   boards:SelectableItem[];
 
@@ -99,7 +99,7 @@ export class Component implements ng.OnInit {
     this.descriptionField = "Loading...";
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-146
     this.standalonePrograms = [
-      new libPatternFlyListGroup.Item(null, "(issue/TYRION-146)", "does not work")
+      new libPatternFlyListView.Item(null, "(issue/TYRION-146)", "does not work")
     ];
     this.boardUploadingProgramField = "";
     this.homerUploadingProgramField = "";
@@ -136,9 +136,9 @@ export class Component implements ng.OnInit {
           [project, collaborators, boardPrograms, homerPrograms, boards, homers] = result;
           this.nameField = project.project_name;
           this.descriptionField = project.project_description;
-          this.collaborators = collaborators.map(collaborator => new libPatternFlyListGroup.Item(collaborator.id, libBackEnd.composePersonString(collaborator), null));
-          this.boardPrograms = boardPrograms.map(program => new libPatternFlyListGroup.Item(program.id, program.program_name, program.program_description, ["BoardProgram", {project: this.id, program: program.id}]));
-          this.homerPrograms = homerPrograms.map(program => new libPatternFlyListGroup.Item(program.programId, program.name, program.programDescription, ["HomerProgram", {project: this.id, program: program.programId}]));
+          this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composePersonString(collaborator), null));
+          this.boardPrograms = boardPrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, ["BoardProgram", {project: this.id, program: program.id}]));
+          this.homerPrograms = homerPrograms.map(program => new libPatternFlyListView.Item(program.programId, program.name, program.programDescription, ["HomerProgram", {project: this.id, program: program.programId}]));
           this.boards = boards.map(board => new SelectableItem(board.id, board.id, board.isActive ? "active" : "inactive"));
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-78
           this.homers = homers.map(homer => new SelectableItem(homer.homer_id, homer.homer_id, "(issue/TYRION-78)"));

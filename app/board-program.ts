@@ -20,7 +20,7 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
-import * as libPatternFlyListGroup from "./lib-patternfly/list-group";
+import * as libPatternFlyListView from "./lib-patternfly/list-view";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
@@ -28,7 +28,7 @@ import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
   directives: [
     customValidator.Directive,
     layout.Component,
-    libPatternFlyListGroup.Component,
+    libPatternFlyListView.Component,
     ng.FORM_DIRECTIVES,
     ngRouter.ROUTER_DIRECTIVES
   ]
@@ -47,7 +47,7 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
-  versions:libPatternFlyListGroup.Item[];
+  versions:libPatternFlyListView.Item[];
 
   backEnd:backEnd.Service;
 
@@ -91,7 +91,7 @@ export class Component implements ng.OnInit {
           this.nameField = program.program_name;
           this.descriptionField = program.program_description;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-126
-          this.versions = program.version_objects.map(version => new libPatternFlyListGroup.Item(version.id, `${version.version_name} (issue/TYRION-126)`, version.version_description));
+          this.versions = program.version_objects.map(version => new libPatternFlyListView.Item(version.id, `${version.version_name} (issue/TYRION-126)`, version.version_description));
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program ${this.id} cannot be loaded: ${reason}`));
