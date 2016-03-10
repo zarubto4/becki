@@ -77,7 +77,7 @@ export class Component {
     this.addClick.next(null);
   }
 
-  onEditClick(item:Item):void {
+  onViewClick(item:Item):void {
     "use strict";
 
     this.router.navigate(item.link);
