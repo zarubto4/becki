@@ -1,11 +1,16 @@
 {
   "dependencies": {
     "angular2": "2.0.0-alpha.45",
+    "autolayout": "^0.5.3",
     "blocko": "^0.1.1",
     "codemirror": "^5.10.0",
     "http-server": "^0.8.0",
+    "jquery": "^2.2.1",
+    "jquery-knob": "^1.2.11",
+    "jqueryui": "^1.11.1",
     "patternfly": "^3.1.0",
     "systemjs": "^0.19.2",
+    "the-grid": "git+ssh://git@git.byzance.cz:js-components/the-grid.git#v0.1.0",
     "tsd": "^0.6.0",
     "typescript": "^1.6.0",
     "underscore": "^1.8.0",

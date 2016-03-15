@@ -10,6 +10,8 @@
     <title>No Name | Becki</title>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- a the-grid dependency -->
+    <link rel="stylesheet" href="node_modules/the-grid/css/style.css">
     <!-- a codemirror dependency -->
     <link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css">
     <!-- patternfly dependencies -->
@@ -20,6 +22,12 @@
     <script src="node_modules/angular2/bundles/angular2.js"></script>
     <script src="node_modules/angular2/bundles/http.js"></script>
     <script src="node_modules/angular2/bundles/router.dev.js"></script>
+    <!-- the-grid dependencies -->
+    <script src="node_modules/jquery/dist/jquery.js"></script>
+    <!-- https://bugs.jqueryui.com/ticket/11101 -->
+    <script src="node_modules/jqueryui/jquery-ui.js"></script>
+    <script src="node_modules/jquery-knob/dist/jquery.knob.min.js"></script>
+    <script src="node_modules/autolayout/dist/autolayout.js"></script>
     <!-- a blocko dependency -->
     <script src="node_modules/blocko/examples/angular2/js/snap.svg-min.js"></script>
     <script>
@@ -39,6 +47,10 @@
           },
           "node_modules": {
             defaultExtension: "js"
+          },
+          "the-grid": {
+            main: "js/index",
+            map: {'.': '/node_modules/the-grid'}
           },
           "underscore": {
             main: "underscore",
