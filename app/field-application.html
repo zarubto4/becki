@@ -5,8 +5,8 @@
 
 <div data-bind-ng-switch="!config">
   <template data-bind-ng-switch-when="true">
-    <div data-var-toolbar style="position: fixed;z-index: 1"></div>
-    <div data-var-screens style="padding-top: 120px"></div>
+    <div data-var-toolbar style="position: fixed;z-index: 1" data-bind-class.hidden="readonly"></div>
+    <div data-var-screens data-bind-style.padding-top="readonly ? '0' : '120px'"></div>
   </template>
   <template data-bind-ng-switch-when="false">
     <div class="panel panel-primary">
@@ -33,7 +33,9 @@
       </div>
       <div class="panel-footer text-right">
         <button class="btn btn-danger" type="button" data-on-click="onConfigCloseClick($event)">Close</button>
-        <button class="btn btn-primary" type="button" data-on-click="onConfigSaveClick($event)">Save</button>
+        <template data-bind-ng-if="!readonly">
+          <button class="btn btn-primary" type="button" data-on-click="onConfigSaveClick($event)">Save</button>
+        </template>
       </div>
     </div>
   </template>

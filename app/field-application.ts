@@ -42,6 +42,9 @@ export class Component implements ng.AfterViewInit, ng.OnChanges {
 
   controller:theGrid.Core.Controller;
 
+  @ng.Input()
+  readonly:boolean;
+
   @ng.ViewChild("toolbar")
   toolbar:ng.ElementRef;
 
@@ -66,6 +69,7 @@ export class Component implements ng.AfterViewInit, ng.OnChanges {
     this.controller.registerWidget(theGrid.Widgets.FAButtonWidget);
     this.controller.registerWidget(theGrid.Widgets.KnobWidget);
     this.controller.deviceProfile = new theGrid.DeviceProfiles.iPhone6();
+    this.readonly = false;
     this.config = null;
     this.modelChange = new ng.EventEmitter();
     this.notifications = notifications;
@@ -129,6 +133,9 @@ export class Component implements ng.AfterViewInit, ng.OnChanges {
   onConfigSaveClick():void {
     "use strict";
 
+    if (this.readonly) {
+      throw new Error("read only");
+    }
     this.config.emitOnConfigsChanged();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TG-1
     this.config = null;
