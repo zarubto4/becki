@@ -1125,6 +1125,12 @@ export abstract class BackEnd {
     return this.requestPath("GET", `${BackEnd.APPLICATION_PATH}/app/m_programs`);
   }
 
+  public deleteApplication(id:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("DELETE", `${BackEnd.APPLICATION_PATH}/${id}`).then(JSON.stringify);
+  }
+
   /**
    * Create a new project.
    *

@@ -17,6 +17,7 @@ import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
 import * as applicationNew from "./application-new";
+import * as applications from "./applications";
 import * as applicationsVision from "./applications-vision";
 import * as boardNew from "./board-new";
 import * as boardProgram from "./board-program";
@@ -59,6 +60,7 @@ import * as standaloneProgramNew from "./standalone-program-new";
 @ngRouter.RouteConfig([
   {path: "/", redirectTo: "/devices"},
   {path: "/application/new", component: applicationNew.Component, as: "NewApplication"},
+  {path: "/applications", component: applications.Component, as: "Applications"},
   {path: "/applications/vision", component: applicationsVision.Component, as: "ApplicationsVision"},
   {path: "/board/new", component: boardNew.Component, as: "NewBoard"},
   {path: "/board/type/new", component: boardTypeNew.Component, as: "NewBoardType"},

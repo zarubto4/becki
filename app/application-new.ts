@@ -200,7 +200,7 @@ export class Component implements ng.OnInit {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The application has been created."));
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TG-1
           this.notifications.next.push(new libPatternFlyNotifications.Warning("issue/TG-1"));
-          this.router.navigate(["Devices"]);
+          this.router.navigate(["Applications"]);
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The application cannot be created: ${reason}`));
@@ -211,6 +211,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Devices"]);
+    this.router.navigate(["Applications"]);
   }
 }
