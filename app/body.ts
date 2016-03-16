@@ -58,7 +58,7 @@ import * as standaloneProgram from "./standalone-program";
 import * as standaloneProgramNew from "./standalone-program-new";
 
 @ngRouter.RouteConfig([
-  {path: "/", redirectTo: "/devices"},
+  {path: "/", redirectTo: "/applications"},
   {path: "/application/new", component: applicationNew.Component, as: "NewApplication"},
   {path: "/applications", component: applications.Component, as: "Applications"},
   {path: "/applications/vision", component: applicationsVision.Component, as: "ApplicationsVision"},

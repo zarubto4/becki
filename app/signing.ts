@@ -103,7 +103,7 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.backEnd.createToken(this.inEmailField, this.inPasswordField)
-        .then(() => this.router.navigate(["Devices"]))
+        .then(() => this.router.navigate(["Applications"]))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed in: ${reason}`)));
   }
 

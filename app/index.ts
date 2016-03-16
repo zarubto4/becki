@@ -15,7 +15,7 @@
 
 import * as layout from "./layout";
 
-export const HOME = new layout.LabeledLink("No Name", ["Devices"]);
+export const HOME = new layout.LabeledLink("No Name", ["Applications"]);
 
 export const NAVIGATION = [
   new layout.LabeledLink("Applications", ["Applications"], "mobile"),
