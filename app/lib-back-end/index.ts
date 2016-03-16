@@ -1119,10 +1119,22 @@ export abstract class BackEnd {
     return this.requestPath("POST", BackEnd.APPLICATION_PATH, {m_program_id, screen_type_id, program_name, program_description, m_code, height_lock: false, width_lock: false}).then(JSON.stringify);
   }
 
+  public getApplication(id:string):Promise<Application> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.APPLICATION_PATH}/${id}`);
+  }
+
   public getApplications():Promise<Application[]> {
     "use strict";
 
     return this.requestPath("GET", `${BackEnd.APPLICATION_PATH}/app/m_programs`);
+  }
+
+  public updateApplication(id:string, program_name:string, program_description:string, screen_type_id:string, m_code:string, m_program_id:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("PUT", `${BackEnd.APPLICATION_PATH}/${id}`, {m_program_id, screen_type_id, program_name, program_description, m_code, height_lock: false, width_lock: false}).then(JSON.stringify);
   }
 
   public deleteApplication(id:string):Promise<string> {

@@ -61,7 +61,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getApplications()
-        .then(applications => this.items = applications.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description)))
+        .then(applications => this.items = applications.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["Application", {application: application.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Applications cannot be loaded: ${reason}`)));
   }
 
