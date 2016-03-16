@@ -339,6 +339,65 @@ export interface Homer {
   version:string;
 }
 
+export interface ApplicationDevice {
+
+  id:string;
+
+  name:string;
+
+  height:number;
+
+  width:number;
+
+  height_lock:boolean;
+
+  width_lock:boolean;
+
+  touch_screen:boolean;
+
+  private_type?:string;
+}
+
+export interface ApplicationGroup {
+
+  id:string;
+
+  program_name:string;
+
+  program_description:string;
+
+  date_of_create:string;
+
+  project:string;
+
+  m_programs:Application[];
+}
+
+export interface Application {
+
+  id:string;
+
+  program_name:string;
+
+  program_description:string;
+
+  screen_size_type:string;
+
+  program:string;
+
+  date_of_create:string;
+
+  last_update:string;
+
+  height_lock:boolean;
+
+  width_lock:boolean;
+
+  qr_token:string;
+
+  m_project:string;
+}
+
 export interface Project {
 
   id:string;
@@ -489,6 +548,12 @@ export abstract class BackEnd {
   static BASE_URL = "http://127.0.0.1:9000";
 
   static ANSWER_PATH = "/overflow/answer";
+
+  static APPLICATION_DEVICE_PATH = "/grid/screen_type";
+
+  static APPLICATION_GROUP_PATH = "/grid/m_project";
+
+  static APPLICATION_PATH = "/grid/m_program";
 
   static BOARD_PATH = "/compilation/board";
 
@@ -1036,6 +1101,30 @@ export abstract class BackEnd {
     return this.requestPath("DELETE", `${BackEnd.HOMER_PATH}/${id}`).then(JSON.stringify);
   }
 
+  public getApplicationDevices():Promise<ApplicationDevice[]> {
+    "use strict";
+
+    return this.requestPath<{public_types:ApplicationDevice[]}>("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/all`).then(body => body.public_types);
+  }
+
+  public createApplicationGroup(program_name:string, program_description:string, projectId:string):Promise<ApplicationGroup> {
+    "use strict";
+
+    return this.requestPath("POST", `${BackEnd.APPLICATION_GROUP_PATH}?project_id=${projectId}`, {program_description, program_name});
+  }
+
+  public createApplication(program_name:string, program_description:string, screen_type_id:string, m_code:string, m_program_id:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("POST", BackEnd.APPLICATION_PATH, {m_program_id, screen_type_id, program_name, program_description, m_code, height_lock: false, width_lock: false}).then(JSON.stringify);
+  }
+
+  public getApplications():Promise<Application[]> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.APPLICATION_PATH}/app/m_programs`);
+  }
+
   /**
    * Create a new project.
    *
@@ -1044,10 +1133,10 @@ export abstract class BackEnd {
    * @returns a promise that will be resolved with a message describing the
    *          result, or rejected with a reason.
    */
-  public createProject(project_name:string, project_description:string):Promise<string> {
+  public createProject(project_name:string, project_description:string):Promise<Project> {
     "use strict";
 
-    return this.requestPath("POST", BackEnd.PROJECT_PATH, {project_name, project_description}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.PROJECT_PATH, {project_name, project_description});
   }
 
   /**
@@ -1090,10 +1179,23 @@ export abstract class BackEnd {
     return this.requestPath("GET", `${BackEnd.PROJECT_PATH}/homers/${id}`);
   }
 
+  public getProjectApplicationGroups(id:string):Promise<ApplicationGroup[]> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.APPLICATION_GROUP_PATH}/project/${id}`);
+  }
+
   public getProjectOwners(id:string):Promise<Person[]> {
     "use strict";
 
     return this.requestPath("GET", `${BackEnd.PROJECT_PATH}/owners/${id}`);
+  }
+
+  public getProjectApplicationDevices(id:string):Promise<ApplicationDevice[]> {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-154
+    return this.requestPath("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/project/${id}`);
   }
 
   /**
