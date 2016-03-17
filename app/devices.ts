@@ -93,11 +93,10 @@ export class Component implements ng.OnInit {
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Board types cannot be loaded: ${reason}`)));
     this.backEnd.getHomers()
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-71
-        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-78
-        .then(homers => this.homers = homers.map(homer => new libPatternFlyListView.Item(homer.homer_id, `${homer.homer_id} (issue/TYRION-71)`, "(issue/TYRION-78)")))
+        .then(homers => this.homers = homers.map(homer => new libPatternFlyListView.Item(homer.homer_id, `${homer.homer_id} (issue/TYRION-71)`, homer.online ? "online" : "offline")))
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-142
-          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-142"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
+          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-155"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`Homers cannot be loaded: ${reason}`));
         });
   }

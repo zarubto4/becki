@@ -78,7 +78,7 @@ export class Component implements ng.OnInit {
     this.backEnd.getHomerProgram(this.id)
         .then(program => {
           this.nameField = program.name;
-          this.descriptionField = program.programDescription;
+          this.descriptionField = program.program_description;
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program ${this.id} cannot be loaded: ${reason}`));
@@ -89,7 +89,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getProjectHomerPrograms(this.projectId).then(programs => !programs.find(program => program.programId != this.id && program.name == this.nameField));
+    return () => this.backEnd.getProjectHomerPrograms(this.projectId).then(programs => !programs.find(program => program.b_program_id != this.id && program.name == this.nameField));
   }
 
   onSubmit():void {

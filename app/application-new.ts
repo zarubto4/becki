@@ -180,7 +180,7 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     Promise.resolve(
-            this.getProject() || this.backEnd.createProject("Default", "An automatically created project. It can be edited or removed like any other project.").then(project => {
+            this.getProject() || this.backEnd.createProject("Default project", "An automatically created project. It can be edited or removed like any other project.").then(project => {
               this.projects = [project];
               this.projectField = project.id;
               return project.id;

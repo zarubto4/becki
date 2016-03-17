@@ -70,7 +70,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getIssue(this.issueId).then(issue => !issue.hashTags || issue.hashTags.indexOf(this.field) == -1);
+    return () => this.backEnd.getIssue(this.issueId).then(issue => issue.hashTags.indexOf(this.field) == -1);
   }
 
   onSubmit():void {

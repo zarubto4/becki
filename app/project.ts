@@ -97,9 +97,9 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-146
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-160
     this.standalonePrograms = [
-      new libPatternFlyListView.Item(null, "(issue/TYRION-146)", "does not work")
+      new libPatternFlyListView.Item(null, "(issue/TYRION-160)", "does not work")
     ];
     this.boardUploadingProgramField = "";
     this.homerUploadingProgramField = "";
@@ -138,10 +138,9 @@ export class Component implements ng.OnInit {
           this.descriptionField = project.project_description;
           this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composePersonString(collaborator), null));
           this.boardPrograms = boardPrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, ["BoardProgram", {project: this.id, program: program.id}]));
-          this.homerPrograms = homerPrograms.map(program => new libPatternFlyListView.Item(program.programId, program.name, program.programDescription, ["HomerProgram", {project: this.id, program: program.programId}]));
+          this.homerPrograms = homerPrograms.map(program => new libPatternFlyListView.Item(program.b_program_id, program.name, program.program_description, ["HomerProgram", {project: this.id, program: program.b_program_id}]));
           this.boards = boards.map(board => new SelectableItem(board.id, board.id, board.isActive ? "active" : "inactive"));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-78
-          this.homers = homers.map(homer => new SelectableItem(homer.homer_id, homer.homer_id, "(issue/TYRION-78)"));
+          this.homers = homers.map(homer => new SelectableItem(homer.homer_id, homer.homer_id, homer.online ? "online" : "offline"));
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The project ${this.id} cannot be loaded: ${reason}`));
@@ -225,8 +224,6 @@ export class Component implements ng.OnInit {
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-130
-          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-130"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be removed: ${reason}`));
         });
   }

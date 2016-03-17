@@ -38,6 +38,8 @@ export class Component implements ng.OnInit {
 
   nameField:string;
 
+  categoryField:string;
+
   descriptionField:string;
 
   backEnd:backEnd.Service;
@@ -61,6 +63,7 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink(`Program ${this.id}`, ["StandaloneProgram", {project: this.projectId, program: this.id}])
     ];
     this.nameField = "Loading...";
+    this.categoryField = "";
     this.descriptionField = "Loading...";
     this.backEnd = backEndService;
     this.notifications = notifications;
@@ -84,17 +87,25 @@ export class Component implements ng.OnInit {
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-146
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-160
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => Promise.reject<boolean>("issue/TYRION-146");
+    return () => Promise.reject<boolean>("issue/TYRION-160");
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-147
-    this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-147"));
+    this.backEnd.updateStandaloneProgram(this.id, this.nameField, this.descriptionField, this.categoryField)
+        .then(() => {
+          this.notifications.next.push(new libPatternFlyNotifications.Success("The program has been updated."));
+          this.router.navigate(["Project", {project: this.projectId}]);
+        })
+        .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-161
+          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-161"));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be updated: ${reason}`));
+        });
   }
 
   onCancelClick():void {

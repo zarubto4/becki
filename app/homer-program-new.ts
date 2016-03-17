@@ -88,7 +88,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createHomerProgram(this.nameField, this.descriptionField, this.projectId)
         .then(program => {
-          return this.backEnd.addVersionToHomerProgram("Initial version", "", this.codeField, program.programId);
+          return this.backEnd.addVersionToHomerProgram("Initial version", "", this.codeField, program.b_program_id);
         })
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The program have been created."));

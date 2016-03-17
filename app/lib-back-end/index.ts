@@ -134,6 +134,7 @@ export class AuthenticationError extends Error {
   }
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Person {
 
   id:string;
@@ -155,6 +156,7 @@ export interface Person {
   date_of_birth:string;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Producer {
 
   id:string;
@@ -166,6 +168,7 @@ export interface Producer {
   type_of_boards:string;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Version {
 
   id:string;
@@ -181,6 +184,7 @@ export interface Version {
   allFiles:string;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Library {
 
   id:string;
@@ -194,6 +198,7 @@ export interface Library {
   versionsCount:number;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface LibraryGroup {
 
   id:string;
@@ -209,6 +214,7 @@ export interface LibraryGroup {
   versionsCount:number;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Processor {
 
   id:string;
@@ -230,6 +236,7 @@ export interface Processor {
   libraryGroupsCount:number;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface BoardType {
 
   id:string;
@@ -249,6 +256,7 @@ export interface BoardType {
   boards:string;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface BoardProgram {
 
   id:string;
@@ -262,6 +270,7 @@ export interface BoardProgram {
   dateOfCreate:string;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Board {
 
   id:string;
@@ -275,6 +284,7 @@ export interface Board {
   projects:string;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface StandaloneProgramCategory {
 
   id:string;
@@ -284,6 +294,7 @@ export interface StandaloneProgramCategory {
   generalDescription:string;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface StandaloneProgram {
 
   id:string;
@@ -299,6 +310,7 @@ export interface StandaloneProgram {
   countOfversions:number;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface StandaloneProgramCollectionItem {
 
   typeOfBlock:StandaloneProgramCategory;
@@ -306,18 +318,20 @@ export interface StandaloneProgramCollectionItem {
   Blocks:StandaloneProgram[];
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface StandaloneProgramCollection {
 
   [type: string]: StandaloneProgramCollectionItem;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface HomerProgram {
 
-  programId:string;
+  b_program_id:string;
 
   name:string;
 
-  programDescription:string;
+  program_description:string;
 
   versionObjects:Version[];
 
@@ -330,15 +344,19 @@ export interface HomerProgram {
   project:string;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Homer {
 
   homer_id:string;
 
   type_of_device:string;
 
+  online:boolean;
+
   version:string;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface ApplicationDevice {
 
   id:string;
@@ -355,9 +373,11 @@ export interface ApplicationDevice {
 
   touch_screen:boolean;
 
-  private_type?:string;
+  // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-158
+  private_type:string;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface ApplicationGroup {
 
   id:string;
@@ -371,8 +391,13 @@ export interface ApplicationGroup {
   project:string;
 
   m_programs:Application[];
+
+  b_program:string;
+
+  b_progam_connected_version:string;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Application {
 
   id:string;
@@ -398,6 +423,7 @@ export interface Application {
   m_project:string;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Project {
 
   id:string;
@@ -439,6 +465,7 @@ export interface Project {
   count_screen_size_types:number;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface IssueType {
 
   id: string;
@@ -446,6 +473,7 @@ export interface IssueType {
   type:string;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface IssueConfirmation {
 
   id:string;
@@ -457,6 +485,7 @@ export interface IssueConfirmation {
   size:number;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Issue {
 
   postId:string;
@@ -469,19 +498,17 @@ export interface Issue {
 
   author:Person;
 
-  // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-151
-  date_of_create:number;
+  date_of_create:string;
 
-  // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-105
   answers:Answer[];
 
-  // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-105
   comments:Comment[];
 
   hashTags:string[];
 
   likes:number;
 
+  // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-159
   linkedAnswers?:string;
 
   type_of_confirms:IssueConfirmation[];
@@ -491,7 +518,8 @@ export interface Issue {
   views:number;
 }
 
-// TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-152
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
+// TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-159
 export interface Answer {
 
   postId:string;
@@ -500,33 +528,38 @@ export interface Answer {
 
   author:Person;
 
-  date_of_create:number;
+  date_of_create:string;
 
-  hashTags?:string[];
+  // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-152
+  comments:Comment[];
+
+  hashTags:string[];
 
   likes:number;
 
   updated:boolean;
 }
 
-// TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-105
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
+// TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-159
 export interface Comment {
 
   postId:string;
 
   likes:number;
 
-  date_of_create:number;
+  date_of_create:string;
 
   text_of_post:string;
 
   author:Person;
 
-  hashTags?:string[];
+  hashTags:string[];
 
   updated:boolean;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface IssueLink {
 
   linkId:string;
@@ -676,6 +709,7 @@ export abstract class BackEnd {
   public createToken(mail:string, password:string):Promise<string> {
     "use strict";
 
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
     return this.requestPath<{authToken:string}>("POST", `${BackEnd.TOKEN_PATH}/login`, {mail, password}).then((body) => {
       // TODO: https://github.com/angular/angular/issues/7303
       window.localStorage.setItem("authToken", body.authToken);
@@ -687,6 +721,7 @@ export abstract class BackEnd {
     "use strict";
 
     redirectUrl = encodeURIComponent(redirectUrl);
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
     return this.requestPath<{authToken:string, redirect_url:string}>("GET", `/login/facebook?return_link=${redirectUrl}`).then(body => {
       // TODO: https://github.com/angular/angular/issues/7303
       window.localStorage.setItem("authToken", body.authToken);
@@ -698,6 +733,7 @@ export abstract class BackEnd {
     "use strict";
 
     redirectUrl = encodeURIComponent(redirectUrl);
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
     return this.requestPath<{authToken:string, redirect_url:string}>("GET", `/login/github?return_link=${redirectUrl}`).then(body => {
       // TODO: https://github.com/angular/angular/issues/7303
       window.localStorage.setItem("authToken", body.authToken);
@@ -741,6 +777,7 @@ export abstract class BackEnd {
   public getProducerDescription(id:string):Promise<string> {
     "use strict";
 
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
     return this.requestPath<{description:string}>("GET", `${BackEnd.PRODUCER_PATH}/description/${id}`).then(result => result.description);
   }
 
@@ -789,7 +826,7 @@ export abstract class BackEnd {
   public updateLibrary(id:string, library_name:string, description:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("PUT", `${BackEnd.LIBRARY_PATH}${id}`, {library_name, description}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.LIBRARY_PATH}/${id}`, {library_name, description}).then(JSON.stringify);
   }
 
   public addVersionToLibrary(version_name:string, version_description:string, id:string):Promise<string> {
@@ -829,7 +866,7 @@ export abstract class BackEnd {
   public deleteLibrary(id:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("DELETE", `${BackEnd.LIBRARY_PATH}${id}`).then(JSON.stringify);
+    return this.requestPath("DELETE", `${BackEnd.LIBRARY_PATH}/${id}`).then(JSON.stringify);
   }
 
   public createLibraryGroup(group_name:string, description:string):Promise<string> {
@@ -865,7 +902,6 @@ export abstract class BackEnd {
   public createProcessor(processor_name:string, processor_code:string, description:string, speed:number):Promise<string> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-139
     return this.requestPath("POST", BackEnd.PROCESSOR_PATH, {processor_name, description, processor_code, speed}).then(JSON.stringify);
   }
 
@@ -884,7 +920,6 @@ export abstract class BackEnd {
   public updateProcessor(id:string, processor_name:string, processor_code:string, description:string, speed:number):Promise<String> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-140
     return this.requestPath("PUT", `${BackEnd.PROCESSOR_PATH}/${id}`, {processor_name, description, processor_code, speed}).then(JSON.stringify);
   }
 
@@ -978,7 +1013,6 @@ export abstract class BackEnd {
   public createBoard(hardware_unique_id:string, type_of_board_id:string):Promise<string> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-141
     return this.requestPath("POST", BackEnd.BOARD_PATH, {type_of_board_id, hardware_unique_id}).then(JSON.stringify);
   }
 
@@ -998,7 +1032,6 @@ export abstract class BackEnd {
   public createStandaloneProgram(name:string, type_of_block_id:string, general_description:string):Promise<StandaloneProgram> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-145
     return this.requestPath("POST", BackEnd.STANDALONE_PROGRAM_PATH, {general_description, name, type_of_block_id});
   }
 
@@ -1011,22 +1044,18 @@ export abstract class BackEnd {
   public updateStandaloneProgram(id:string, name:string, general_description:string, type_of_block_id:string):Promise<string> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-129
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-147
     return this.requestPath("PUT", `${BackEnd.STANDALONE_PROGRAM_PATH}/${id}`, {general_description, name, type_of_block_id}).then(JSON.stringify);
   }
 
   public addVersionToStandaloneProgram(version_name:string, version_description:string, logic_json:string, program:string):Promise<string> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-131
     return this.requestPath("POST", `${BackEnd.STANDALONE_PROGRAM_PATH}/version/${program}`, {version_name, version_description, design_json: "", logic_json}).then(JSON.stringify);
   }
 
   public deleteStandaloneProgram(id:string):Promise<string> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-130
     return this.requestPath("DELETE", `${BackEnd.STANDALONE_PROGRAM_PATH}/${id}`).then(JSON.stringify);
   }
 
@@ -1084,7 +1113,7 @@ export abstract class BackEnd {
   public getHomers():Promise<Homer[]> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-142
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
     return this.requestPath("GET", BackEnd.HOMER_PATH);
   }
 
@@ -1104,13 +1133,14 @@ export abstract class BackEnd {
   public getApplicationDevices():Promise<ApplicationDevice[]> {
     "use strict";
 
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
     return this.requestPath<{public_types:ApplicationDevice[]}>("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/all`).then(body => body.public_types);
   }
 
   public createApplicationGroup(program_name:string, program_description:string, projectId:string):Promise<ApplicationGroup> {
     "use strict";
 
-    return this.requestPath("POST", `${BackEnd.APPLICATION_GROUP_PATH}?project_id=${projectId}`, {program_description, program_name});
+    return this.requestPath("POST", `${BackEnd.APPLICATION_GROUP_PATH}/${projectId}`, {program_description, program_name});
   }
 
   public createApplication(program_name:string, program_description:string, screen_type_id:string, m_code:string, m_program_id:string):Promise<string> {
@@ -1280,14 +1310,12 @@ export abstract class BackEnd {
   public addCollaboratorToProject(collaborator:string, project:string):Promise<string> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-148
     return this.requestPath("PUT", `${BackEnd.PROJECT_PATH}/shareProject/${project}`, {persons: [collaborator]}).then(JSON.stringify);
   }
 
   public removeCollaboratorsFromProject(persons:string[], project:string):Promise<string> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-148
     return this.requestPath("PUT", `${BackEnd.PROJECT_PATH}/unshareProject/${project}`, {persons}).then(JSON.stringify);
   }
 
@@ -1362,14 +1390,12 @@ export abstract class BackEnd {
   public deleteIssueConfirmation(id:string):Promise<string> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-149
     return this.requestPath("DELETE", `${BackEnd.ISSUE_CONFIRMATION_PATH}/${id}`).then(JSON.stringify);
   }
 
   public createIssue(type_of_post_id:string, name:string, text_of_post:string, hash_tags:string[]):Promise<string> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-150
     return this.requestPath("POST", BackEnd.ISSUE_PATH, {name, text_of_post, type_of_post_id, hash_tags}).then(JSON.stringify);
   }
 
@@ -1437,7 +1463,6 @@ export abstract class BackEnd {
   public createAnswer(postId:string, text_of_post:string, hash_tags:string[]):Promise<string> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-150
     return this.requestPath("POST", `${BackEnd.ANSWER_PATH}/${postId}`, {text_of_post, hash_tags}).then(JSON.stringify);
   }
 
@@ -1451,7 +1476,6 @@ export abstract class BackEnd {
   public createComment(postId:string, text_of_post:string, hash_tags:string[]):Promise<string> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-150
     return this.requestPath("POST", `${BackEnd.COMMENT_PATH}/${postId}`, {text_of_post, hash_tags}).then(JSON.stringify);
   }
 

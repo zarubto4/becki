@@ -81,14 +81,16 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-160
+    this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-160"));
   }
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-146
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-160
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => Promise.reject<boolean>("issue/TYRION-146");
+    return () => Promise.reject<boolean>("issue/TYRION-160");
   }
 
   onSubmit():void {

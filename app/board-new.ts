@@ -71,13 +71,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getBoards()
-        .then(boards => !boards.find(board => board.id == this.idField))
-        .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-141
-          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-141"));
-          return Promise.reject(reason);
-        });
+    return () => this.backEnd.getBoards().then(boards => !boards.find(board => board.id == this.idField));
   }
 
   onSubmit():void {

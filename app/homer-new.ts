@@ -59,8 +59,8 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-142
-    this.notifications.current.push(new libPatternFlyNotifications.Warning("issue/TYRION-142"));
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
+    this.notifications.current.push(new libPatternFlyNotifications.Warning("issue/TYRION-155"));
   }
 
   validateIdField():()=>Promise<boolean> {

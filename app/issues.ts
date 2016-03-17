@@ -112,8 +112,6 @@ export class Component implements ng.OnInit {
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-149
-          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-149"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The confirmation cannot be removed: ${reason}`));
         });
   }

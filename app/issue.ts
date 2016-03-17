@@ -33,7 +33,7 @@ class Comment {
 
   body:string;
 
-  date:number;
+  date:string;
 
   likes:number;
 
@@ -45,7 +45,7 @@ class Comment {
 
   bodyField:string;
 
-  constructor(id:string, body:string, date:number, likes:number, tags?:string[]) {
+  constructor(id:string, body:string, date:string, likes:number, tags:string[]) {
     "use strict";
 
     this.id = id;
@@ -65,7 +65,7 @@ class Item {
 
   body:string;
 
-  date:number;
+  date:string;
 
   likes:number;
 
@@ -91,7 +91,7 @@ class Item {
 
   programCodeField:string;
 
-  constructor(id:string, body:string, date:number, likes:number, comments:Comment[], tags?:string[]) {
+  constructor(id:string, body:string, date:string, likes:number, comments:Comment[], tags:string[]) {
     "use strict";
 
     this.id = id;
@@ -118,7 +118,7 @@ class Issue extends Item {
 
   titleField:string;
 
-  constructor(id:string, type:string, title:string, body:string, date:number, likes:number, comments:Comment[], tags:string[]) {
+  constructor(id:string, type:string, title:string, body:string, date:string, likes:number, comments:Comment[], tags:string[]) {
     "use strict";
 
     super(id, body, date, likes, comments, tags);
@@ -250,7 +250,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createHomerProgram(item.programNameField, item.programDescriptionField, item.programProjectField)
         .then(program => {
-          return this.backEnd.addVersionToHomerProgram("The original", `Imported from issue ${this.id}`, item.programCodeField, program.programId);
+          return this.backEnd.addVersionToHomerProgram("The original", `Imported from issue ${this.id}`, item.programCodeField, program.b_program_id);
         })
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The program has been imported."));
@@ -293,7 +293,7 @@ export class Component implements ng.OnInit {
             this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issue cannot be updated: ${reason}`));
           });
     } else {
-      this.backEnd.updateAnswer(item.id, item.bodyField, item.tags || [])
+      this.backEnd.updateAnswer(item.id, item.bodyField, item.tags)
           .then(() => {
             this.notifications.current.push(new libPatternFlyNotifications.Success("The answer has been updated."));
             this.refresh();
@@ -381,8 +381,6 @@ export class Component implements ng.OnInit {
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-150
-          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-150"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The answer cannot be created: ${reason}`));
         });
   }
@@ -397,8 +395,6 @@ export class Component implements ng.OnInit {
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-150
-          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-150"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The comment cannot be created: ${reason}`));
         });
   }
@@ -413,7 +409,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.updateComment(comment.id, comment.bodyField, comment.tags || [])
+    this.backEnd.updateComment(comment.id, comment.bodyField, comment.tags)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The comment has been updated."));
           this.refresh();
