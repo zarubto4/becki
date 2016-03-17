@@ -24,3 +24,15 @@ export const NAVIGATION = [
   new layout.LabeledLink("Projects (TODO)", ["Projects"], "book"),
   new layout.LabeledLink("Issues (TODO)", ["Issues"], "bug")
 ];
+
+export function getAdvancedField(field:string, options:string[]):string {
+  "use strict";
+
+  if (field) {
+    return field;
+  } else if (options.length == 1) {
+    return options[0];
+  } else {
+    return null;
+  }
+}

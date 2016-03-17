@@ -378,6 +378,14 @@ export interface ApplicationDevice {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
+export interface ApplicationDeviceCollection {
+
+  public_types:ApplicationDevice[];
+
+  private_types:ApplicationDevice[];
+}
+
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface ApplicationGroup {
 
   id:string;
@@ -1130,11 +1138,16 @@ export abstract class BackEnd {
     return this.requestPath("DELETE", `${BackEnd.HOMER_PATH}/${id}`).then(JSON.stringify);
   }
 
-  public getApplicationDevices():Promise<ApplicationDevice[]> {
+  public createApplicationDevice(name:string, height:number, width:number, project_id:string) {
     "use strict";
 
-    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-    return this.requestPath<{public_types:ApplicationDevice[]}>("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/all`).then(body => body.public_types);
+    return this.requestPath("POST", BackEnd.APPLICATION_DEVICE_PATH, {name, height, width, height_lock: false, width_lock: false, touch_screen: false, project_id}).then(JSON.stringify);
+  }
+
+  public getApplicationDevices():Promise<ApplicationDeviceCollection> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/all`);
   }
 
   public createApplicationGroup(program_name:string, program_description:string, projectId:string):Promise<ApplicationGroup> {
@@ -1185,6 +1198,12 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath("POST", BackEnd.PROJECT_PATH, {project_name, project_description});
+  }
+
+  public createDefaultProject():Promise<Project> {
+    "use strict";
+
+    return this.createProject("Default project", "An automatically created project. It can be edited or removed like any other project.");
   }
 
   /**

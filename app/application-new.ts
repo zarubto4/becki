@@ -24,18 +24,6 @@ import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
-function getAdvancedField(field:string, options:string[]):string {
-  "use strict";
-
-  if (field) {
-    return field;
-  } else if (options.length == 1) {
-    return options[0];
-  } else {
-    return null;
-  }
-}
-
 @ng.Component({
   templateUrl: "app/application-new.html",
   directives: [
@@ -118,20 +106,20 @@ export class Component implements ng.OnInit {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`Projects cannot be loaded: ${reason}`));
         });
     this.backEnd.getApplicationDevices()
-        .then(devices => this.devices = devices)
+        .then(devices => this.devices = devices.public_types)
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Target devices cannot be loaded: ${reason}`)));
   }
 
   getProject():string {
     "use strict";
 
-    return getAdvancedField(this.projectField, this.projects.map(project => project.id));
+    return becki.getAdvancedField(this.projectField, this.projects.map(project => project.id));
   }
 
   getGroup():string {
     "use strict";
 
-    return getAdvancedField(this.groupField, this.groups.map(group => group.id));
+    return becki.getAdvancedField(this.groupField, this.groups.map(group => group.id));
   }
 
   getDevice():libBackEnd.ApplicationDevice {
@@ -180,7 +168,7 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     Promise.resolve(
-            this.getProject() || this.backEnd.createProject("Default project", "An automatically created project. It can be edited or removed like any other project.").then(project => {
+            this.getProject() || this.backEnd.createDefaultProject().then(project => {
               this.projects = [project];
               this.projectField = project.id;
               return project.id;

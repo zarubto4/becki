@@ -17,6 +17,7 @@ import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
 import * as application from "./application";
+import * as applicationDeviceNew from "./application-device-new";
 import * as applicationNew from "./application-new";
 import * as applications from "./applications";
 import * as applicationsVision from "./applications-vision";
@@ -60,6 +61,7 @@ import * as standaloneProgramNew from "./standalone-program-new";
 
 @ngRouter.RouteConfig([
   {path: "/", redirectTo: "/applications"},
+  {path: "/application/device/new", component: applicationDeviceNew.Component, as: "NewApplicationDevice"},
   {path: "/application/new", component: applicationNew.Component, as: "NewApplication"},
   {path: "/application/vision", component: applicationsVision.Component, as: "ApplicationsVision"},
   {path: "/applications", component: applications.Component, as: "Applications"},
