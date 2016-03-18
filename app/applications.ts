@@ -70,8 +70,8 @@ export class Component implements ng.OnInit {
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Applications cannot be loaded: ${reason}`)));
     this.backEnd.getApplicationDevices()
         .then(devices => this.devices = [].concat(
-            devices.public_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "global")),
-            devices.private_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "project specific"))
+            devices.public_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "global", ["ApplicationDevice", {device: device.id}])),
+            devices.private_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "project specific", ["ApplicationDevice", {device: device.id}]))
         ))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Devices cannot be loaded: ${reason}`)));
   }

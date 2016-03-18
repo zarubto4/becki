@@ -1144,10 +1144,22 @@ export abstract class BackEnd {
     return this.requestPath("POST", BackEnd.APPLICATION_DEVICE_PATH, {name, height, width, height_lock: false, width_lock: false, touch_screen: false, project_id}).then(JSON.stringify);
   }
 
+  public getApplicationDevice(id:string):Promise<ApplicationDevice> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/${id}`);
+  }
+
   public getApplicationDevices():Promise<ApplicationDeviceCollection> {
     "use strict";
 
     return this.requestPath("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/all`);
+  }
+
+  public updateApplicationDevice(id:string, name:string, height:number, width:number, project_id:string, height_lock:boolean, width_lock:boolean, touch_screen:boolean) {
+    "use strict";
+
+    return this.requestPath("PUT", `${BackEnd.APPLICATION_DEVICE_PATH}/${id}`, {name, height, width, height_lock, width_lock, touch_screen, project_id}).then(JSON.stringify);
   }
 
   public deleteApplicationDevice(id:string):Promise<string> {
