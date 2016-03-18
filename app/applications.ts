@@ -24,13 +24,17 @@ import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/applications.html",
-  directives: [layout.Component, libPatternFlyListView.Component],
+  directives: [layout.Component, libPatternFlyListView.Component, ng.CORE_DIRECTIVES],
 })
 export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
-  items:libPatternFlyListView.Item[];
+  showDevices:boolean;
+
+  applications:libPatternFlyListView.Item[];
+
+  devices:libPatternFlyListView.Item[];
 
   backEnd:backEnd.Service;
 
@@ -45,6 +49,7 @@ export class Component implements ng.OnInit {
       becki.HOME,
       new layout.LabeledLink("Applications", ["Applications"])
     ];
+    this.showDevices = false;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -61,17 +66,51 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getApplications()
-        .then(applications => this.items = applications.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["Application", {application: application.id}])))
+        .then(applications => this.applications = applications.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["Application", {application: application.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Applications cannot be loaded: ${reason}`)));
+    this.backEnd.getApplicationDevices()
+        .then(devices => this.devices = [].concat(
+            devices.public_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "global")),
+            devices.private_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "project specific"))
+        ))
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Devices cannot be loaded: ${reason}`)));
   }
 
   onAddClick():void {
     "use strict";
 
+    if (this.showDevices) {
+      this.onAddDeviceClick();
+    } else {
+      this.onAddApplicationClick();
+    }
+  }
+
+  onAddApplicationClick():void {
+    "use strict";
+
     this.router.navigate(["NewApplication"]);
   }
 
-  onRemoveClick(id:string):void {
+  onAddDeviceClick():void {
+    "use strict";
+
+    this.router.navigate(["NewApplicationDevice"]);
+  }
+
+  onApplicationsClick():void {
+    "use strict";
+
+    this.showDevices = false;
+  }
+
+  onDevicesClick():void {
+    "use strict";
+
+    this.showDevices = true;
+  }
+
+  onRemoveApplicationClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
@@ -82,6 +121,20 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The application cannot be removed: ${reason}`));
+        });
+  }
+
+  onRemoveDeviceClick(id:string):void {
+    "use strict";
+
+    this.notifications.shift();
+    this.backEnd.deleteApplicationDevice(id)
+        .then(() => {
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The device has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The device cannot be removed: ${reason}`));
         });
   }
 }

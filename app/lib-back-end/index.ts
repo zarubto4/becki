@@ -1150,6 +1150,12 @@ export abstract class BackEnd {
     return this.requestPath("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/all`);
   }
 
+  public deleteApplicationDevice(id:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("DELETE", `${BackEnd.APPLICATION_DEVICE_PATH}/${id}`).then(JSON.stringify);
+  }
+
   public createApplicationGroup(program_name:string, program_description:string, projectId:string):Promise<ApplicationGroup> {
     "use strict";
 

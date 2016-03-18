@@ -3,8 +3,27 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, View or Remove an Application'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="'Add'" data-on-action-click="onAddClick($event)">
-  <div data-bind-list-view="items" data-on-add-click="onAddClick($event)" data-on-remove-click="onRemoveClick($event)">
-    <div class="spinner"></div>
-  </div>
+<div data-bind-layout="'Add, View or Remove an Application or a Device'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="showDevices">
+  <ul class="nav nav-tabs">
+    <li data-bind-class.active="!showDevices">
+      <a data-on-click="onApplicationsClick($event)" style="cursor: pointer">
+        Applications
+      </a>
+    </li>
+    <li data-bind-class.active="showDevices">
+      <a data-on-click="onDevicesClick($event)" style="cursor: pointer">
+        Devices
+      </a>
+    </li>
+  </ul>
+  <template data-bind-ng-switch-when="true">
+    <div data-bind-list-view="devices" data-on-add-click="onAddDeviceClick($event)" data-on-remove-click="onRemoveDeviceClick($event)">
+      <div class="spinner"></div>
+    </div>
+  </template>
+  <template data-bind-ng-switch-when="false">
+    <div data-bind-list-view="applications" data-on-add-click="onAddApplicationClick($event)" data-on-remove-click="onRemoveApplicationClick($event)">
+      <div class="spinner"></div>
+    </div>
+  </template>
 </div>
