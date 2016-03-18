@@ -83,6 +83,8 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program ${this.id} cannot be loaded: ${reason}`));
         });
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-165
+    this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-165"));
   }
 
   validateNameField():()=>Promise<boolean> {
