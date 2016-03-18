@@ -21,6 +21,27 @@
     </div>
     <div class="form-group">
       <label>
+        <span class="glyphicon glyphicon-phone"></span>
+        {{groups?.length > 1 ? 'Application groups' : 'Applications'}}
+      </label>
+      <div template="ngFor #group of groups">
+        <div class="checkbox">
+          <label data-bind-ng-switch="groups?.length > 1">
+            <input type="checkbox" data-bindon-ng-model="group.selected">
+            <template data-bind-ng-switch-when="true">
+              {{group.model.program_name}}
+            </template>
+            <template data-bind-ng-switch-when="false">
+              <span template="ngFor #application of group.model.m_programs; #last = last">
+                {{application.program_name}}<template data-bind-ng-if="!last">,</template>
+              </span>
+            </template>
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>
         <span class="glyphicon glyphicon-console"></span>
         Code
       </label>

@@ -24,9 +24,29 @@ import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
+class SelectableApplicationGroup {
+
+  model:libBackEnd.ApplicationGroup;
+
+  selected:boolean;
+
+  constructor(model:libBackEnd.ApplicationGroup, selected = false) {
+    "use strict";
+
+    this.model = model;
+    this.selected = selected;
+  }
+}
+
 @ng.Component({
   templateUrl: "app/homer-program-new.html",
-  directives: [customValidator.Directive, fieldHomerProgram.Component, layout.Component, ng.FORM_DIRECTIVES]
+  directives: [
+    customValidator.Directive,
+    fieldHomerProgram.Component,
+    layout.Component,
+    ng.CORE_DIRECTIVES,
+    ng.FORM_DIRECTIVES
+  ]
 })
 export class Component implements ng.OnInit {
 
@@ -39,6 +59,8 @@ export class Component implements ng.OnInit {
   nameField:string;
 
   descriptionField:string;
+
+  groups:SelectableApplicationGroup[];
 
   codeField:string;
 
@@ -73,6 +95,9 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
+    this.backEnd.getProjectApplicationGroups(this.projectId)
+        .then(groups => this.groups = groups.map(group => new SelectableApplicationGroup(group)))
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Application groups cannot be loaded: ${reason}`)));
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -88,7 +113,22 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createHomerProgram(this.nameField, this.descriptionField, this.projectId)
         .then(program => {
-          return this.backEnd.addVersionToHomerProgram("Initial version", "", this.codeField, program.b_program_id);
+          return Promise.all([
+            program.b_program_id,
+            this.backEnd.addVersionToHomerProgram("Initial version", "", this.codeField, program.b_program_id)
+          ]);
+        })
+        .then(result => {
+          let id = result[0];
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-163
+          return this.backEnd.getHomerProgram(id);
+        })
+        .then(program => {
+          if (program.versionObjects.length != 1) {
+            // TODO: https://github.com/angular/angular/issues/4558
+            return Promise.reject<any>(new Error("the new program does not have only one version"));
+          }
+          return Promise.all(this.groups.filter(group => group.selected).map(group => this.backEnd.addApplicationGroupToHomerProgram(group.model.id, program.b_program_id, program.versionObjects[0].id)));
         })
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The program have been created."));

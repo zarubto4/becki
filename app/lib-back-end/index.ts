@@ -1100,6 +1100,12 @@ export abstract class BackEnd {
     return this.requestPath("PUT", `${BackEnd.HOMER_PROGRAM_PATH}/update/${programId}`, {version_name, version_description, program}).then(JSON.stringify);
   }
 
+  public addApplicationGroupToHomerProgram(group:string, program:string, version:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("PUT", `${BackEnd.APPLICATION_GROUP_PATH}/connect/${group}/${program}/${version}`, {}).then(JSON.stringify);
+  }
+
   public deleteHomerProgram(id:string):Promise<string> {
     "use strict";
 
