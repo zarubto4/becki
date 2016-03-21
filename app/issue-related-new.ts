@@ -73,17 +73,8 @@ export class Component implements ng.OnInit {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error(`issue ${this.issueId} not found`));
           }
-          return Promise.all([
-            issues,
-            issue.linkedAnswers ? this.backEnd.request<libBackEnd.IssueLink[]>("GET", issue.linkedAnswers).then(related => Promise.all(related.map(related2 => this.backEnd.request("GET", related2.post)))) : []
-          ]);
-        })
-        .then(result => {
-          let issues:libBackEnd.Issue[];
-          let ignore:libBackEnd.Issue[];
-          [issues, ignore] = result;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-          this.issues = issues.filter(issue => ignore.find(issue2 => issue2.postId == issue.postId) === undefined);
+          this.issues = issues.filter(issue2 => issue.linked_answers.find(related => related.answer.postId == issue2.postId) === undefined);
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`Issues cannot be loaded: ${reason}`));

@@ -106,8 +106,6 @@ export class Component implements ng.OnInit {
           this.router.navigate(["BoardProgram", {project: this.projectId, program: this.programId}]);
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-143
-          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-143"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The version cannot be created: ${reason}`));
         });
   }

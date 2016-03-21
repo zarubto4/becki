@@ -87,9 +87,10 @@ export class Component implements ng.OnInit {
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-160
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => Promise.reject<boolean>("issue/TYRION-160");
+    return () => this.backEnd.getStandaloneProgramCategories()
+        .then(categories => Promise.all(categories.map(category => this.backEnd.getStandalonePrograms(category.id))))
+        .then(programs => ![].concat(...programs).find(program => program.id != this.id && program.name == this.nameField));
   }
 
   onSubmit():void {
@@ -102,8 +103,8 @@ export class Component implements ng.OnInit {
           this.router.navigate(["Project", {project: this.projectId}]);
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-161
-          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-161"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-166
+          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-166"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be updated: ${reason}`));
         });
   }

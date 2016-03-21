@@ -36,6 +36,23 @@ class SelectableItem extends libPatternFlyListView.Item {
   }
 }
 
+class HomerProgramVersion {
+
+  programId:string;
+
+  versionId:string;
+
+  name:string;
+
+  constructor(programId:string, versionId:string, name:string) {
+    "use strict";
+
+    this.programId = programId;
+    this.versionId = versionId;
+    this.name = name;
+  }
+}
+
 @ng.Component({
   templateUrl: "app/project.html",
   directives: [
@@ -76,7 +93,9 @@ export class Component implements ng.OnInit {
 
   homers:SelectableItem[];
 
-  homerUploadingProgramField:string;
+  homerUploadingProgramField:number;
+
+  homerProgramVersions:HomerProgramVersion[];
 
   backEnd:backEnd.Service;
 
@@ -97,12 +116,11 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-160
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-167
     this.standalonePrograms = [
-      new libPatternFlyListView.Item(null, "(issue/TYRION-160)", "does not work")
+      new libPatternFlyListView.Item(null, "(issue/TYRION-167)", "does not work")
     ];
     this.boardUploadingProgramField = "";
-    this.homerUploadingProgramField = "";
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -141,6 +159,7 @@ export class Component implements ng.OnInit {
           this.homerPrograms = homerPrograms.map(program => new libPatternFlyListView.Item(program.b_program_id, program.name, program.program_description, ["HomerProgram", {project: this.id, program: program.b_program_id}]));
           this.boards = boards.map(board => new SelectableItem(board.id, board.id, board.isActive ? "active" : "inactive"));
           this.homers = homers.map(homer => new SelectableItem(homer.homer_id, homer.homer_id, homer.online ? "online" : "offline"));
+          this.homerProgramVersions = [].concat(...homerPrograms.map(program => program.versionObjects.map(version => new HomerProgramVersion(program.b_program_id, version.id, `${program.name} ${version.version_name}`))));
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The project ${this.id} cannot be loaded: ${reason}`));
@@ -319,14 +338,12 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     let homers = this.homers.filter(selectable => selectable.selected).map(selectable => selectable.id);
-    Promise.all(homers.map(id => this.backEnd.addProgramToHomer(this.homerUploadingProgramField, id)))
+    Promise.all(homers.map(id => this.backEnd.addProgramToHomer(this.homerProgramVersions[this.homerUploadingProgramField].versionId, id, this.homerProgramVersions[this.homerUploadingProgramField].programId)))
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The program has been uploaded."));
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-137
-          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-137"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be uploaded: ${reason}`));
         });
   }

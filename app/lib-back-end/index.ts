@@ -168,6 +168,22 @@ export interface Producer {
   type_of_boards:string;
 }
 
+export interface FileContent {
+
+  content:string;
+
+  file_name:string;
+}
+
+export interface File {
+
+  id:string;
+
+  file_name:string;
+
+  fileContent:string;
+}
+
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Version {
 
@@ -305,6 +321,8 @@ export interface StandaloneProgram {
 
   general_description:string;
 
+  type_of_block:string;
+
   versions:string;
 
   countOfversions:number;
@@ -372,9 +390,6 @@ export interface ApplicationDevice {
   width_lock:boolean;
 
   touch_screen:boolean;
-
-  // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-158
-  private_type:string;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -402,6 +417,8 @@ export interface ApplicationGroup {
 
   b_program:string;
 
+  auto_incrementing:boolean;
+
   b_progam_connected_version:string;
 }
 
@@ -416,7 +433,9 @@ export interface Application {
 
   screen_size_type:string;
 
-  program:string;
+  m_code?:string;
+
+  m_code_url:string;
 
   date_of_create:string;
 
@@ -427,6 +446,8 @@ export interface Application {
   width_lock:boolean;
 
   qr_token:string;
+
+  websocket_address:string;
 
   m_project:string;
 }
@@ -516,8 +537,7 @@ export interface Issue {
 
   likes:number;
 
-  // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-159
-  linkedAnswers?:string;
+  linked_answers:IssueLink[];
 
   type_of_confirms:IssueConfirmation[];
 
@@ -527,7 +547,6 @@ export interface Issue {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-// TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-159
 export interface Answer {
 
   postId:string;
@@ -538,7 +557,6 @@ export interface Answer {
 
   date_of_create:string;
 
-  // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-152
   comments:Comment[];
 
   hashTags:string[];
@@ -549,7 +567,6 @@ export interface Answer {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-// TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-159
 export interface Comment {
 
   postId:string;
@@ -572,13 +589,7 @@ export interface IssueLink {
 
   linkId:string;
 
-  post:string;
-
-  name:string;
-
-  question:string;
-
-  answers:Answer[];
+  answer:Issue;
 }
 
 /**
@@ -635,6 +646,8 @@ export abstract class BackEnd {
    * An absolute path to the project resources.
    */
   static PROJECT_PATH = "/project/project";
+
+  static STANDALONE_PROGRAM_CATEGORY_PATH = "/project/typeOfBlock";
 
   static STANDALONE_PROGRAM_PATH = "/project/blockoBlock";
 
@@ -994,7 +1007,6 @@ export abstract class BackEnd {
   public addVersionToBoardProgram(version_name:string, version_description:string, content:string, program:string):Promise<string> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-143
     return this.requestPath("PUT", `${BackEnd.BOARD_PROGRAM_PATH}/update/${program}`, {version_name, version_description, files: [{file_name: "main", content}]}).then(JSON.stringify);
   }
 
@@ -1037,6 +1049,12 @@ export abstract class BackEnd {
     return this.requestPath("POST", `${BackEnd.BOARD_PROGRAM_PATH}/uploud/${programId}/${boardId}`, {}).then(JSON.stringify);
   }
 
+  public getStandaloneProgramCategories():Promise<StandaloneProgramCategory[]> {
+    "use strict";
+
+    return this.requestPath("GET", BackEnd.STANDALONE_PROGRAM_CATEGORY_PATH);
+  }
+
   public createStandaloneProgram(name:string, type_of_block_id:string, general_description:string):Promise<StandaloneProgram> {
     "use strict";
 
@@ -1047,6 +1065,12 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath("GET", `${BackEnd.STANDALONE_PROGRAM_PATH}/${id}`);
+  }
+
+  public getStandalonePrograms(categoryId:string):Promise<StandaloneProgram[]> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.STANDALONE_PROGRAM_CATEGORY_PATH}/${categoryId}`);
   }
 
   public updateStandaloneProgram(id:string, name:string, general_description:string, type_of_block_id:string):Promise<string> {
@@ -1100,10 +1124,10 @@ export abstract class BackEnd {
     return this.requestPath("PUT", `${BackEnd.HOMER_PROGRAM_PATH}/update/${programId}`, {version_name, version_description, program}).then(JSON.stringify);
   }
 
-  public addApplicationGroupToHomerProgram(group:string, program:string, version:string):Promise<string> {
+  public addApplicationGroupToHomerProgram(group:string, version:string, autoupdate:boolean):Promise<string> {
     "use strict";
 
-    return this.requestPath("PUT", `${BackEnd.APPLICATION_GROUP_PATH}/connect/${group}/${program}/${version}`, {}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.APPLICATION_GROUP_PATH}/connect/${group}/${version}/${autoupdate}`, {}).then(JSON.stringify);
   }
 
   public deleteHomerProgram(id:string):Promise<string> {
@@ -1131,11 +1155,10 @@ export abstract class BackEnd {
     return this.requestPath("GET", BackEnd.HOMER_PATH);
   }
 
-  public addProgramToHomer(programId:string, homerId:string):Promise<string> {
+  public addProgramToHomer(versionId:string, homerId:string, programId:string):Promise<string> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-137
-    return this.requestPath("PUT", `${BackEnd.HOMER_PROGRAM_PATH}/uploud`, {homerId, programId}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.HOMER_PROGRAM_PATH}/uploadToHomer/${programId}/${versionId}/${homerId}`, {}).then(JSON.stringify);
   }
 
   public deleteHomer(id:string):Promise<string> {
@@ -1180,10 +1203,10 @@ export abstract class BackEnd {
     return this.requestPath("POST", `${BackEnd.APPLICATION_GROUP_PATH}/${projectId}`, {program_description, program_name});
   }
 
-  public createApplication(program_name:string, program_description:string, screen_type_id:string, m_code:string, m_program_id:string):Promise<string> {
+  public createApplication(program_name:string, program_description:string, screen_type_id:string, m_code:string, groupId:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("POST", BackEnd.APPLICATION_PATH, {m_program_id, screen_type_id, program_name, program_description, m_code, height_lock: false, width_lock: false}).then(JSON.stringify);
+    return this.requestPath("POST", `${BackEnd.APPLICATION_PATH}/${groupId}`, {screen_type_id, program_name, program_description, m_code, height_lock: false, width_lock: false}).then(JSON.stringify);
   }
 
   public getApplication(id:string):Promise<Application> {
@@ -1192,16 +1215,22 @@ export abstract class BackEnd {
     return this.requestPath("GET", `${BackEnd.APPLICATION_PATH}/${id}`);
   }
 
+  public getApplicationByQrToken(token:string):Promise<Application> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.APPLICATION_PATH}/app/token/${token}`);
+  }
+
   public getApplications():Promise<Application[]> {
     "use strict";
 
     return this.requestPath("GET", `${BackEnd.APPLICATION_PATH}/app/m_programs`);
   }
 
-  public updateApplication(id:string, program_name:string, program_description:string, screen_type_id:string, m_code:string, m_program_id:string):Promise<string> {
+  public updateApplication(id:string, program_name:string, program_description:string, screen_type_id:string, m_code:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("PUT", `${BackEnd.APPLICATION_PATH}/${id}`, {m_program_id, screen_type_id, program_name, program_description, m_code, height_lock: false, width_lock: false}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.APPLICATION_PATH}/${id}`, {screen_type_id, program_name, program_description, m_code, height_lock: false, width_lock: false}).then(JSON.stringify);
   }
 
   public deleteApplication(id:string):Promise<string> {
@@ -1285,7 +1314,6 @@ export abstract class BackEnd {
   public getProjectApplicationDevices(id:string):Promise<ApplicationDevice[]> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-154
     return this.requestPath("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/project/${id}`);
   }
 

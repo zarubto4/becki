@@ -174,8 +174,8 @@
           </label>
           <select class="form-control" required data-bindon-ng-model="homerUploadingProgramField">
             <option value="">Select name...</option>
-            <option data-bind-value="program.id" template="ngFor #program of homerPrograms">
-              {{program.name}}
+            <option data-bind-value="index" template="ngFor #version of homerProgramVersions; #index = index">
+              {{version.name}}
             </option>
           </select>
         </div>

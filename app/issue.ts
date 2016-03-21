@@ -197,26 +197,17 @@ export class Component implements ng.OnInit {
 
     this.backEnd.getIssue(this.id)
         .then(issue => {
-          return Promise.all<any>([
-            issue,
-            issue.linkedAnswers ? this.backEnd.request<libBackEnd.IssueLink[]>("GET", issue.linkedAnswers).then(related => Promise.all(related.map(related2 => Promise.all([related2, this.backEnd.request("GET", related2.post)])))) : []
-          ]);
-        })
-        .then(result => {
-          let issue:libBackEnd.Issue;
-          let related:[libBackEnd.IssueLink, libBackEnd.Issue][];
-          [issue, related] = result;
           this.heading = `${issue.type.type}: ${issue.name}`;
           let commentsViews = issue.comments.map(comment => new Comment(comment.postId, comment.text_of_post, comment.date_of_create, comment.likes, comment.hashTags));
           this.items = [].concat(
               new Issue(issue.postId, issue.type.id, issue.name, issue.text_of_post, issue.date_of_create, issue.likes, commentsViews, issue.hashTags),
-              issue.answers.map(answer => new Item(answer.postId, answer.text_of_post, answer.date_of_create, answer.likes, [], answer.hashTags))
+              issue.answers.map(answer => new Item(
+                  answer.postId, answer.text_of_post, answer.date_of_create, answer.likes,
+                  answer.comments.map(comment => new Comment(comment.postId, comment.text_of_post, comment.date_of_create, comment.likes, comment.hashTags)),
+                  answer.hashTags
+              ))
           );
-          if (issue.answers) {
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-152
-            this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-152"));
-          }
-          this.related = related.map(related2 => new libPatternFlyListView.Item(related2[0].linkId, related2[0].name, "", ["Issue", {issue: related2[1].postId}]));
+          this.related = issue.linked_answers.map(related => new libPatternFlyListView.Item(related.linkId, related.answer.name, "", ["Issue", {issue: related.answer.postId}]));
           this.tags = issue.hashTags.map(tag => new libPatternFlyListView.Item(tag, tag, ""));
           this.confirmations = issue.type_of_confirms.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null));
         })

@@ -128,7 +128,7 @@ export class Component implements ng.OnInit {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error("the new program does not have only one version"));
           }
-          return Promise.all(this.groups.filter(group => group.selected).map(group => this.backEnd.addApplicationGroupToHomerProgram(group.model.id, program.b_program_id, program.versionObjects[0].id)));
+          return Promise.all(this.groups.filter(group => group.selected).map(group => this.backEnd.addApplicationGroupToHomerProgram(group.model.id, program.versionObjects[0].id, true)));
         })
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The program have been created."));
