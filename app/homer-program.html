@@ -19,6 +19,29 @@
       </label>
       <textarea class="form-control" data-bindon-ng-model="descriptionField"></textarea>
     </div>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-phone"></span>
+        {{groups?.length > 1 ? 'Application groups' : 'Applications'}}
+      </label>
+      <div template="ngFor #group of groups">
+        <div class="checkbox">
+          <label data-bind-ng-switch="groups?.length > 1">
+            <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-169 -->
+            <input type="checkbox" data-bind-disabled="group.selected" data-bindon-ng-model="group.select">
+            <template data-bind-ng-switch-when="true">
+              {{group.model.program_name}}
+            </template>
+            <template data-bind-ng-switch-when="false">
+              <span template="ngFor #application of group.model.m_programs; #last = last">
+                {{application.program_name}}<template data-bind-ng-if="!last">,</template>
+              </span>
+            </template>
+            <template data-bind-ng-if="group.selected">(issue/TYRION-169)</template>
+          </label>
+        </div>
+      </div>
+    </div>
     <div class="pull-right">
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
       <button class="btn btn-primary" type="submit">Update</button>
