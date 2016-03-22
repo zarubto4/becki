@@ -32,8 +32,8 @@ import * as boardType from "./board-type";
 import * as boardTypeNew from "./board-type-new";
 import * as devices from "./devices";
 import * as homerNew from "./homer-new";
-import * as homerProgram from "./homer-program";
-import * as homerProgramNew from "./homer-program-new";
+import * as interactionsScheme from "./interactions-scheme";
+import * as interactionsSchemeNew from "./interactions-scheme-new";
 import * as issue from "./issue";
 import * as issueConfirmationNew from "./issue-confirmation-new";
 import * as issueConfirmationType from "./issue-confirmation-type";
@@ -76,8 +76,8 @@ import * as standaloneProgramNew from "./standalone-program-new";
   {path: "/board/type/new", component: boardTypeNew.Component, as: "NewBoardType"},
   {path: "/board/types/:type", component: boardType.Component, as: "BoardType"},
   {path: "/devices", component: devices.Component, as: "Devices"},
-  {path: "/homer-program/new", component: homerProgramNew.Component, as: "NewHomerProgram"},
   {path: "/homer/new", component: homerNew.Component, as: "NewHomer"},
+  {path: "/interactions/scheme/new", component: interactionsSchemeNew.Component, as: "NewInteractionsScheme"},
   {path: "/issue/new", component: issueNew.Component, as: "NewIssue"},
   {path: "/issue/confirmation/new", component: issueConfirmationTypeNew.Component, as: "NewIssueConfirmationType"},
   {path: "/issue/confirmations/:confirmation", component: issueConfirmationType.Component, as: "IssueConfirmationType"},
@@ -106,7 +106,7 @@ import * as standaloneProgramNew from "./standalone-program-new";
   {path: "/user/projects/:project/board-programs/:program/version/new", component: boardProgramVersionNew.Component, as: "NewBoardProgramVersion"},
   {path: "/user/projects/:project/collaborator/new", component: projectCollaboratorNew.Component, as: "NewProjectCollaborator"},
   {path: "/user/projects/:project/homer/new", component: projectHomerNew.Component, as: "NewProjectHomer"},
-  {path: "/user/projects/:project/homer-programs/:program", component: homerProgram.Component, as: "HomerProgram"},
+  {path: "/user/projects/:project/interactions-schemes/:scheme", component: interactionsScheme.Component, as: "InteractionsScheme"},
   {path: "/user/projects/:project/standalone-program/new", component: standaloneProgramNew.Component, as: "NewStandaloneProgram"},
   {path: "/user/projects/:project/standalone-programs/:program", component: standaloneProgram.Component, as: "StandaloneProgram"}
 ])

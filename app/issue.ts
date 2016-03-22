@@ -19,7 +19,7 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
-import * as fieldHomerProgram from "./field-homer-program";
+import * as fieldInteractionsScheme from "./field-interactions-scheme";
 import * as fieldIssueBody from "./field-issue-body";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
@@ -83,13 +83,13 @@ class Item {
 
   commentField:string;
 
-  programProjectField:string;
+  interactionsProjectField:string;
 
-  programNameField:string;
+  interactionsNameField:string;
 
-  programDescriptionField:string;
+  interactionsDescriptionField:string;
 
-  programCodeField:string;
+  interactionsSchemeField:string;
 
   constructor(id:string, body:string, date:string, likes:number, comments:Comment[], tags:string[]) {
     "use strict";
@@ -105,10 +105,10 @@ class Item {
     this.removing = false;
     this.bodyField = body;
     this.commentField = "";
-    this.programProjectField = "";
-    this.programNameField = "";
-    this.programDescriptionField = "";
-    this.programCodeField = fieldIssueBody.getHomer(body);
+    this.interactionsProjectField = "";
+    this.interactionsNameField = "";
+    this.interactionsDescriptionField = "";
+    this.interactionsSchemeField = fieldIssueBody.getInteractions(body);
   }
 }
 
@@ -131,7 +131,7 @@ class Issue extends Item {
   templateUrl: "app/issue.html",
   directives: [
     customValidator.Directive,
-    fieldHomerProgram.Component,
+    fieldInteractionsScheme.Component,
     fieldIssueBody.Component,
     layout.Component,
     libBootstrapDropdown.DIRECTIVES,
@@ -228,31 +228,31 @@ export class Component implements ng.OnInit {
     item.importing = true;
   }
 
-  validateHomerProgramName(name:string, projectId:string):()=>Promise<boolean> {
+  validateInteractionsSchemeName(name:string, projectId:string):()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getProjectHomerPrograms(projectId).then(programs => !programs.find(program => program.name == name));
+    return () => this.backEnd.getProjectInteractionsSchemes(projectId).then(schemes => !schemes.find(scheme => scheme.name == name));
   }
 
   onItemImportingSubmit(item:Item):void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.createHomerProgram(item.programNameField, item.programDescriptionField, item.programProjectField)
-        .then(program => {
-          return this.backEnd.addVersionToHomerProgram("The original", `Imported from issue ${this.id}`, item.programCodeField, program.b_program_id);
+    this.backEnd.createInteractionsScheme(item.interactionsNameField, item.interactionsDescriptionField, item.interactionsProjectField)
+        .then(scheme => {
+          return this.backEnd.addVersionToInteractionsScheme("The original", `Imported from issue ${this.id}`, item.interactionsSchemeField, scheme.b_program_id);
         })
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The program has been imported."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The scheme has been imported."));
           item.importing = false;
-          item.programNameField = "";
-          item.programDescriptionField = "";
-          item.programCodeField = fieldIssueBody.getHomer(item.body);
-          item.programProjectField = "";
+          item.interactionsNameField = "";
+          item.interactionsDescriptionField = "";
+          item.interactionsSchemeField = fieldIssueBody.getInteractions(item.body);
+          item.interactionsProjectField = "";
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be imported: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme cannot be imported: ${reason}`));
         });
   }
 

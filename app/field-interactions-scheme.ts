@@ -19,8 +19,8 @@ import * as ng from "angular2/angular2";
 import * as fieldCode from "./field-code";
 
 @ng.Component({
-  selector: "[field-homer-program]",
-  templateUrl: "app/field-homer-program.html",
+  selector: "[field-interactions-scheme]",
+  templateUrl: "app/field-interactions-scheme.html",
   directives: [fieldCode.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.AfterViewInit {
@@ -35,17 +35,17 @@ export class Component implements ng.AfterViewInit {
 
   config:blocko.BlockoCore.Block;
 
-  @ng.Output("fieldHomerProgramChange")
+  @ng.Output("fieldInteractionsSchemeChange")
   modelChange:ng.EventEmitter;
 
-  @ng.Input("fieldHomerProgram")
-  set model(code:string) {
+  @ng.Input("fieldInteractionsScheme")
+  set model(scheme:string) {
     "use strict";
 
     // TODO: https://github.com/angular/angular/issues/6114
     // TODO: https://github.com/angular/angular/issues/6311
-    if (code != this.controller.getDataJson()) {
-      this.controller.setDataJson(code);
+    if (scheme != this.controller.getDataJson()) {
+      this.controller.setDataJson(scheme);
     }
   }
 

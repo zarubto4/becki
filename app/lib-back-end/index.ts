@@ -343,7 +343,7 @@ export interface StandaloneProgramCollection {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface HomerProgram {
+export interface InteractionsScheme {
 
   b_program_id:string;
 
@@ -617,7 +617,7 @@ export abstract class BackEnd {
 
   static HOMER_PATH = "/project/homer";
 
-  static HOMER_PROGRAM_PATH = "/project/b_program";
+  static INTERACTIONS_SCHEME_PATH = "/project/b_program";
 
   static ISSUE_CONFIRMATION_PATH = "/overflow/typeOfConfirm";
 
@@ -1100,40 +1100,40 @@ export abstract class BackEnd {
    * @param callback a callback called with an indicator and a message
    *                 describing the result.
    */
-  public createHomerProgram(name:string, program_description:string, projectId:string):Promise<HomerProgram> {
+  public createInteractionsScheme(name:string, program_description:string, projectId:string):Promise<InteractionsScheme> {
     "use strict";
 
-    return this.requestPath("POST", `${BackEnd.HOMER_PROGRAM_PATH}/${projectId}`, {program_description, name});
+    return this.requestPath("POST", `${BackEnd.INTERACTIONS_SCHEME_PATH}/${projectId}`, {program_description, name});
   }
 
-  public getHomerProgram(id:string):Promise<HomerProgram> {
+  public getInteractionsScheme(id:string):Promise<InteractionsScheme> {
     "use strict";
 
-    return this.requestPath("GET", `${BackEnd.HOMER_PROGRAM_PATH}/${id}`);
+    return this.requestPath("GET", `${BackEnd.INTERACTIONS_SCHEME_PATH}/${id}`);
   }
 
-  public updateHomerProgram(id:string, name:string, program_description:string):Promise<string> {
+  public updateInteractionsScheme(id:string, name:string, program_description:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("PUT", `${BackEnd.HOMER_PROGRAM_PATH}/${id}`, {program_description, name}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.INTERACTIONS_SCHEME_PATH}/${id}`, {program_description, name}).then(JSON.stringify);
   }
 
-  public addVersionToHomerProgram(version_name:string, version_description:string, program:string, programId:string):Promise<string> {
+  public addVersionToInteractionsScheme(version_name:string, version_description:string, program:string, programId:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("PUT", `${BackEnd.HOMER_PROGRAM_PATH}/update/${programId}`, {version_name, version_description, program}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.INTERACTIONS_SCHEME_PATH}/update/${programId}`, {version_name, version_description, program}).then(JSON.stringify);
   }
 
-  public addApplicationGroupToHomerProgram(group:string, version:string, autoupdate:boolean):Promise<string> {
+  public addApplicationGroupToInteractionsScheme(group:string, version:string, autoupdate:boolean):Promise<string> {
     "use strict";
 
     return this.requestPath("PUT", `${BackEnd.APPLICATION_GROUP_PATH}/connect/${group}/${version}/${autoupdate}`, {}).then(JSON.stringify);
   }
 
-  public deleteHomerProgram(id:string):Promise<string> {
+  public deleteInteractionsScheme(id:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("DELETE", `${BackEnd.HOMER_PROGRAM_PATH}/${id}`).then(JSON.stringify);
+    return this.requestPath("DELETE", `${BackEnd.INTERACTIONS_SCHEME_PATH}/${id}`).then(JSON.stringify);
   }
 
   /**
@@ -1155,10 +1155,10 @@ export abstract class BackEnd {
     return this.requestPath("GET", BackEnd.HOMER_PATH);
   }
 
-  public addProgramToHomer(versionId:string, homerId:string, programId:string):Promise<string> {
+  public addSchemeToHomer(versionId:string, homerId:string, schemeId:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("PUT", `${BackEnd.HOMER_PROGRAM_PATH}/uploadToHomer/${programId}/${versionId}/${homerId}`, {}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.INTERACTIONS_SCHEME_PATH}/uploadToHomer/${schemeId}/${versionId}/${homerId}`, {}).then(JSON.stringify);
   }
 
   public deleteHomer(id:string):Promise<string> {
@@ -1311,7 +1311,7 @@ export abstract class BackEnd {
     return this.requestPath("GET", `${BackEnd.PROJECT_PATH}/boards/${id}`);
   }
 
-  public getProjectHomerPrograms(id:string):Promise<HomerProgram[]> {
+  public getProjectInteractionsSchemes(id:string):Promise<InteractionsScheme[]> {
     "use strict";
 
     return this.requestPath("GET", `${BackEnd.PROJECT_PATH}/b_programs/${id}`);

@@ -3,8 +3,22 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout="heading" data-bind-breadcrumbs="breadcrumbs">
+<div data-bind-layout="'Create a New Scheme of Interactions'" data-bind-breadcrumbs="breadcrumbs">
   <form class="clearfix" data-on-submit="onSubmit($event)">
+    <template data-bind-ng-if="projects?.length > 1">
+      <div class="form-group">
+        <label>
+          <span class="glyphicon glyphicon-list"></span>
+          Project
+        </label>
+        <select class="form-control" required data-bindon-ng-model="projectField" data-on-ng-model-change="onProjectChange($event)">
+          <option value="">Select name...</option>
+          <option data-bind-value="project.id" template="ngFor #project of projects">
+            {{project.project_name}}
+          </option>
+        </select>
+      </div>
+    </template>
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon-pencil"></span>
@@ -27,8 +41,7 @@
       <div template="ngFor #group of groups">
         <div class="checkbox">
           <label data-bind-ng-switch="groups?.length > 1">
-            <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-169 -->
-            <input type="checkbox" data-bind-disabled="group.selected" data-bindon-ng-model="group.select">
+            <input type="checkbox" data-bindon-ng-model="group.selected">
             <template data-bind-ng-switch-when="true">
               {{group.model.program_name}}
             </template>
@@ -37,42 +50,21 @@
                 {{application.program_name}}<template data-bind-ng-if="!last">,</template>
               </span>
             </template>
-            <template data-bind-ng-if="group.selected">(issue/TYRION-169)</template>
           </label>
         </div>
       </div>
     </div>
-    <div class="pull-right">
-      <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-      <button class="btn btn-primary" type="submit">Update</button>
-    </div>
-  </form>
-  <h2>New Version</h2>
-  <form class="clearfix" data-on-submit="onCodeSubmit($event)">
     <div class="form-group">
       <label>
-        <span class="glyphicon glyphicon-console"></span>
-        Code
+        <span class="glyphicon glyphicon-link"></span>
+        Scheme
       </label>
-      <div data-bindon-field-homer-program="codeField">
+      <div data-bindon-field-interactions-scheme="schemeField">
         <div class="spinner"></div>
       </div>
     </div>
-    <div class="form-group">
-      <label>
-        <span class="glyphicon glyphicon-pencil"></span>
-        Version Name
-      </label>
-      <input class="form-control" required data-bindon-ng-model="versionNameField" data-bind-custom-validator="validateVersionNameField()" data-message="This name is used already. Please choose another one.">
-    </div>
-    <div class="form-group">
-      <label>
-        <span class="glyphicon glyphicon-pencil"></span>
-        Version Description
-      </label>
-      <textarea class="form-control" data-bindon-ng-model="versionDescriptionField"></textarea>
-    </div>
     <div class="pull-right">
+      <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
       <button class="btn btn-primary" type="submit">Create</button>
     </div>
   </form>

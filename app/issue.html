@@ -74,34 +74,34 @@
                       <span class="glyphicon glyphicon-list"></span>
                       Project
                     </label>
-                    <select class="form-control" required data-bindon-ng-model="item.programProjectField" data-on-ng-model-change="item.programNameField = ''">
+                    <select class="form-control" required data-bindon-ng-model="item.interactionsProjectField" data-on-ng-model-change="item.interactionsNameField = ''">
                       <option value="">Select name...</option>
                       <option data-bind-value="project.id" template="ngFor #project of projects">
                         {{project.project_name}}
                       </option>
                     </select>
                   </div>
-                  <template data-bind-ng-if="item.programProjectField">
+                  <template data-bind-ng-if="item.interactionsProjectField">
                     <div class="form-group">
                       <label>
                         <span class="glyphicon glyphicon-pencil"></span>
                         Name
                       </label>
-                      <input class="form-control" required data-bindon-ng-model="item.programNameField" data-bind-custom-validator="validateHomerProgramName(item.programNameField, item.programProjectField)" data-message="This name is used already. Please choose another one.">
+                      <input class="form-control" required data-bindon-ng-model="item.interactionsNameField" data-bind-custom-validator="validateInteractionsSchemeName(item.interactionsNameField, item.interactionsProjectField)" data-message="This name is used already. Please choose another one.">
                     </div>
                     <div class="form-group">
                       <label>
                         <span class="glyphicon glyphicon-pencil"></span>
                         Description
                       </label>
-                      <textarea class="form-control" data-bindon-ng-model="item.programDescriptionField"></textarea>
+                      <textarea class="form-control" data-bindon-ng-model="item.interactionsDescriptionField"></textarea>
                     </div>
                     <div class="form-group">
                       <label>
-                        <span class="glyphicon glyphicon-console"></span>
-                        Code
+                        <span class="glyphicon glyphicon-link"></span>
+                        Scheme
                       </label>
-                      <div data-bindon-field-homer-program="item.programCodeField">
+                      <div data-bindon-field-interactions-scheme="item.interactionsSchemeField">
                         <div class="spinner"></div>
                       </div>
                     </div>
@@ -129,7 +129,7 @@
                     <span class="fa fa-ellipsis-v"></span>
                   </button>
                   <ul class="dropdown-menu dropdown-menu-right">
-                    <template data-bind-ng-if="item.programCodeField != null">
+                    <template data-bind-ng-if="item.interactionsSchemeField != null">
                       <li><a data-on-click="onItemImportClick(item, $event)" style="cursor: pointer">Import</a></li>
                     </template>
                     <li><a data-on-click="onItemEditClick(item, $event)" style="cursor: pointer">Edit</a></li>

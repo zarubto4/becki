@@ -19,7 +19,7 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
-import * as fieldHomerProgram from "./field-homer-program";
+import * as fieldInteractionsScheme from "./field-interactions-scheme";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
@@ -39,10 +39,10 @@ class SelectableApplicationGroup {
 }
 
 @ng.Component({
-  templateUrl: "app/homer-program-new.html",
+  templateUrl: "app/interactions-scheme-new.html",
   directives: [
     customValidator.Directive,
-    fieldHomerProgram.Component,
+    fieldInteractionsScheme.Component,
     layout.Component,
     ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES
@@ -62,7 +62,7 @@ export class Component implements ng.OnInit {
 
   groups:SelectableApplicationGroup[];
 
-  codeField:string;
+  schemeField:string;
 
   backEnd:backEnd.Service;
 
@@ -75,12 +75,12 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("New Homer Program", ["NewHomerProgram"])
+      new layout.LabeledLink("New Scheme of Interactions", ["NewInteractionsScheme"])
     ];
     this.projectField = "";
     this.nameField = "";
     this.descriptionField = "";
-    this.codeField = `{"blocks":{}}`;
+    this.schemeField = `{"blocks":{}}`;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -128,8 +128,8 @@ export class Component implements ng.OnInit {
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     return () => this.backEnd.getProjects()
-        .then(projects => Promise.all(projects.map(project => this.backEnd.getProjectHomerPrograms(project.id))))
-        .then(programs => ![].concat(...programs).find(program => program.name == this.nameField));
+        .then(projects => Promise.all(projects.map(project => this.backEnd.getProjectInteractionsSchemes(project.id))))
+        .then(schemes => ![].concat(...schemes).find(scheme => scheme.name == this.nameField));
   }
 
   onSubmit():void {
@@ -144,32 +144,32 @@ export class Component implements ng.OnInit {
             })
         )
         .then(project => {
-          return this.backEnd.createHomerProgram(this.nameField, this.descriptionField, project);
+          return this.backEnd.createInteractionsScheme(this.nameField, this.descriptionField, project);
         })
-        .then(program => {
+        .then(scheme => {
           return Promise.all([
-            program.b_program_id,
-            this.backEnd.addVersionToHomerProgram("Initial version", "", this.codeField, program.b_program_id)
+            scheme.b_program_id,
+            this.backEnd.addVersionToInteractionsScheme("Initial version", "", this.schemeField, scheme.b_program_id)
           ]);
         })
         .then(result => {
           let id = result[0];
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-163
-          return this.backEnd.getHomerProgram(id);
+          return this.backEnd.getInteractionsScheme(id);
         })
-        .then(program => {
-          if (program.versionObjects.length != 1) {
+        .then(scheme => {
+          if (scheme.versionObjects.length != 1) {
             // TODO: https://github.com/angular/angular/issues/4558
-            return Promise.reject<any>(new Error("the new program does not have only one version"));
+            return Promise.reject<any>(new Error("the new scheme does not have only one version"));
           }
-          return Promise.all(this.groups.filter(group => group.selected).map(group => this.backEnd.addApplicationGroupToHomerProgram(group.model.id, program.versionObjects[0].id, true)));
+          return Promise.all(this.groups.filter(group => group.selected).map(group => this.backEnd.addApplicationGroupToInteractionsScheme(group.model.id, scheme.versionObjects[0].id, true)));
         })
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The program have been created."));
+          this.notifications.next.push(new libPatternFlyNotifications.Success("The scheme have been created."));
           this.router.navigate(["Projects"]);
         })
         .catch((reason) => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be created: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme cannot be created: ${reason}`));
         });
   }
 

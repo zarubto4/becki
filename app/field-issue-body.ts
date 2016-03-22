@@ -15,20 +15,20 @@
 
 import * as ng from "angular2/angular2";
 
-import * as fieldHomerProgram from "./field-homer-program";
+import * as fieldInteractionsScheme from "./field-interactions-scheme";
 
-export const EMPTY = JSON.stringify({body: "", homer: null});
+export const EMPTY = JSON.stringify({body: "", interactions: null});
 
-export function getHomer(model:string):string {
+export function getInteractions(model:string):string {
   "use strict";
 
-  return JSON.parse(model).homer;
+  return JSON.parse(model).interactions;
 }
 
 @ng.Component({
   selector: "[field-issue-body]",
   templateUrl: "app/field-issue-body.html",
-  directives: [fieldHomerProgram.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES],
+  directives: [fieldInteractionsScheme.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES],
   inputs: ["fieldIssueBody", "required"]
 })
 export class Component implements ng.OnChanges {
@@ -57,17 +57,17 @@ export class Component implements ng.OnChanges {
     this.emitModelChange();
   }
 
-  onHomerChange(value:string):void {
+  onInteractionsChange(value:string):void {
     "use strict";
 
-    this.model.homer = value;
+    this.model.interactions = value;
     this.emitModelChange();
   }
 
-  onHomerProgramClick():void {
+  onInteractionsSchemeClick():void {
     "use strict";
 
-    this.model.homer = this.model.homer == null ? '{\'blocks\':{}}' : null;
+    this.model.interactions = this.model.interactions == null ? '{\'blocks\':{}}' : null;
     this.emitModelChange();
   }
 

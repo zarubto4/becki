@@ -7,14 +7,14 @@
   <p>{{model.body}}</p>
 </template>
 <template data-bind-ng-if="!readonly">
-  <button type="button" class="btn btn-xs btn-default" data-bind-class.active="model.homer != null" data-on-click="onHomerProgramClick($event)">
+  <button type="button" class="btn btn-xs btn-default" data-bind-class.active="model.interactions != null" data-on-click="onInteractionsSchemeClick($event)">
     <span class="glyphicon glyphicon-paperclip"></span>
-    Homer program
+    Interactions Scheme
   </button>
   <textarea class="form-control" data-bind-ng-model="model.body" data-bind-required="required" data-on-ng-model-change="onBodyChange($event)"></textarea>
 </template>
-<template data-bind-ng-if="model.homer != null">
-  <div style="margin-top: 1em" data-bind-field-homer-program="model.homer" data-bind-readonly="readonly" data-on-field-homer-program-change="onHomerChange($event)">
+<template data-bind-ng-if="model.interactions != null">
+  <div style="margin-top: 1em" data-bind-field-interactions-scheme="model.interactions" data-bind-readonly="readonly" data-on-field-interactions-scheme-change="onInteractionsChange($event)">
     <div class="spinner"></div>
   </div>
 </template>

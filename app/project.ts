@@ -36,18 +36,18 @@ class SelectableItem extends libPatternFlyListView.Item {
   }
 }
 
-class HomerProgramVersion {
+class InteractionsSchemeVersion {
 
-  programId:string;
+  schemeId:string;
 
   versionId:string;
 
   name:string;
 
-  constructor(programId:string, versionId:string, name:string) {
+  constructor(schemeId:string, versionId:string, name:string) {
     "use strict";
 
-    this.programId = programId;
+    this.schemeId = schemeId;
     this.versionId = versionId;
     this.name = name;
   }
@@ -82,7 +82,7 @@ export class Component implements ng.OnInit {
 
   standalonePrograms:libPatternFlyListView.Item[];
 
-  homerPrograms:libPatternFlyListView.Item[];
+  interactionsSchemes:libPatternFlyListView.Item[];
 
   boards:SelectableItem[];
 
@@ -93,9 +93,9 @@ export class Component implements ng.OnInit {
 
   homers:SelectableItem[];
 
-  homerUploadingProgramField:number;
+  homerUploadingSchemeField:number;
 
-  homerProgramVersions:HomerProgramVersion[];
+  interactionsSchemesVersions:InteractionsSchemeVersion[];
 
   backEnd:backEnd.Service;
 
@@ -140,7 +140,7 @@ export class Component implements ng.OnInit {
           this.backEnd.getProject(this.id),
           this.backEnd.getProjectOwners(this.id),
           this.backEnd.getProjectBoardPrograms(this.id),
-          this.backEnd.getProjectHomerPrograms(this.id),
+          this.backEnd.getProjectInteractionsSchemes(this.id),
           this.backEnd.getProjectBoards(this.id),
           this.backEnd.getProjectHomers(this.id)
         ])
@@ -148,18 +148,18 @@ export class Component implements ng.OnInit {
           let project:libBackEnd.Project;
           let collaborators:libBackEnd.Person[];
           let boardPrograms:libBackEnd.BoardProgram[];
-          let homerPrograms:libBackEnd.HomerProgram[];
+          let interactionsSchemes:libBackEnd.InteractionsScheme[];
           let boards:libBackEnd.Board[];
           let homers:libBackEnd.Homer[];
-          [project, collaborators, boardPrograms, homerPrograms, boards, homers] = result;
+          [project, collaborators, boardPrograms, interactionsSchemes, boards, homers] = result;
           this.nameField = project.project_name;
           this.descriptionField = project.project_description;
           this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composePersonString(collaborator), null));
           this.boardPrograms = boardPrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, ["BoardProgram", {project: this.id, program: program.id}]));
-          this.homerPrograms = homerPrograms.map(program => new libPatternFlyListView.Item(program.b_program_id, program.name, program.program_description, ["HomerProgram", {project: this.id, program: program.b_program_id}]));
+          this.interactionsSchemes = interactionsSchemes.map(scheme => new libPatternFlyListView.Item(scheme.b_program_id, scheme.name, scheme.program_description, ["InteractionsScheme", {project: this.id, scheme: scheme.b_program_id}]));
           this.boards = boards.map(board => new SelectableItem(board.id, board.id, board.isActive ? "active" : "inactive"));
           this.homers = homers.map(homer => new SelectableItem(homer.homer_id, homer.homer_id, homer.online ? "online" : "offline"));
-          this.homerProgramVersions = [].concat(...homerPrograms.map(program => program.versionObjects.map(version => new HomerProgramVersion(program.b_program_id, version.id, `${program.name} ${version.version_name}`))));
+          this.interactionsSchemesVersions = [].concat(...interactionsSchemes.map(scheme => scheme.versionObjects.map(version => new InteractionsSchemeVersion(scheme.b_program_id, version.id, `${scheme.name} ${version.version_name}`))));
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The project ${this.id} cannot be loaded: ${reason}`));
@@ -247,23 +247,23 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onHomerProgramAddClick():void {
+  onInteractionsSchemeAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewHomerProgram"]);
+    this.router.navigate(["NewInteractionsScheme"]);
   }
 
-  onHomerProgramRemoveClick(id:string):void {
+  onInteractionsSchemeRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.deleteHomerProgram(id)
+    this.backEnd.deleteInteractionsScheme(id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The program has been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The scheme has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme cannot be removed: ${reason}`));
         });
   }
 
@@ -338,13 +338,14 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     let homers = this.homers.filter(selectable => selectable.selected).map(selectable => selectable.id);
-    Promise.all(homers.map(id => this.backEnd.addProgramToHomer(this.homerProgramVersions[this.homerUploadingProgramField].versionId, id, this.homerProgramVersions[this.homerUploadingProgramField].programId)))
+    let scheme = this.interactionsSchemesVersions[this.homerUploadingSchemeField];
+    Promise.all(homers.map(id => this.backEnd.addSchemeToHomer(scheme.versionId, id, scheme.schemeId)))
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The program has been uploaded."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The scheme has been uploaded."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be uploaded: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme cannot be uploaded: ${reason}`));
         });
   }
 }
