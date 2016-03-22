@@ -157,6 +157,84 @@ export interface Person {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
+export interface ApplicationDevice {
+
+  id:string;
+
+  name:string;
+
+  height:number;
+
+  width:number;
+
+  height_lock:boolean;
+
+  width_lock:boolean;
+
+  touch_screen:boolean;
+}
+
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
+export interface ApplicationDeviceCollection {
+
+  public_types:ApplicationDevice[];
+
+  private_types:ApplicationDevice[];
+}
+
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
+export interface ApplicationGroup {
+
+  id:string;
+
+  program_name:string;
+
+  program_description:string;
+
+  date_of_create:string;
+
+  project:string;
+
+  m_programs:Application[];
+
+  b_program:string;
+
+  auto_incrementing:boolean;
+
+  b_progam_connected_version:string;
+}
+
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
+export interface Application {
+
+  id:string;
+
+  program_name:string;
+
+  program_description:string;
+
+  screen_size_type:string;
+
+  m_code?:string;
+
+  m_code_url:string;
+
+  date_of_create:string;
+
+  last_update:string;
+
+  height_lock:boolean;
+
+  width_lock:boolean;
+
+  qr_token:string;
+
+  websocket_address:string;
+
+  m_project:string;
+}
+
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Producer {
 
   id:string;
@@ -375,84 +453,6 @@ export interface Homer {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface ApplicationDevice {
-
-  id:string;
-
-  name:string;
-
-  height:number;
-
-  width:number;
-
-  height_lock:boolean;
-
-  width_lock:boolean;
-
-  touch_screen:boolean;
-}
-
-// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface ApplicationDeviceCollection {
-
-  public_types:ApplicationDevice[];
-
-  private_types:ApplicationDevice[];
-}
-
-// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface ApplicationGroup {
-
-  id:string;
-
-  program_name:string;
-
-  program_description:string;
-
-  date_of_create:string;
-
-  project:string;
-
-  m_programs:Application[];
-
-  b_program:string;
-
-  auto_incrementing:boolean;
-
-  b_progam_connected_version:string;
-}
-
-// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface Application {
-
-  id:string;
-
-  program_name:string;
-
-  program_description:string;
-
-  screen_size_type:string;
-
-  m_code?:string;
-
-  m_code_url:string;
-
-  date_of_create:string;
-
-  last_update:string;
-
-  height_lock:boolean;
-
-  width_lock:boolean;
-
-  qr_token:string;
-
-  websocket_address:string;
-
-  m_project:string;
-}
-
-// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Project {
 
   id:string;
@@ -460,6 +460,8 @@ export interface Project {
   project_name:string;
 
   project_description:string;
+
+  m_projects:string;
 
   c_programs:string;
 
@@ -469,13 +471,13 @@ export interface Project {
 
   homers:string;
 
-  m_projects:string;
-
   owners:string;
+
+  screen_size_types:string;
 
   type_of_blocks:string;
 
-  screen_size_types:string;
+  count_m_projects:number;
 
   count_c_programs:number;
 
@@ -485,13 +487,11 @@ export interface Project {
 
   count_Homers:number;
 
-  count_m_projects:number;
-
   count_owners:number;
 
-  count_type_of_blocks:number;
-
   count_screen_size_types:number;
+
+  count_type_of_blocks:number;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -781,6 +781,102 @@ export abstract class BackEnd {
       window.localStorage.removeItem("authToken");
       return JSON.stringify(body);
     });
+  }
+
+  public createApplicationDevice(name:string, height:number, width:number, project_id:string) {
+    "use strict";
+
+    return this.requestPath("POST", BackEnd.APPLICATION_DEVICE_PATH, {name, height, width, height_lock: false, width_lock: false, touch_screen: false, project_id}).then(JSON.stringify);
+  }
+
+  public getApplicationDevice(id:string):Promise<ApplicationDevice> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/${id}`);
+  }
+
+  public getApplicationDevices():Promise<ApplicationDeviceCollection> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/all`);
+  }
+
+  public updateApplicationDevice(id:string, name:string, height:number, width:number, project_id:string, height_lock:boolean, width_lock:boolean, touch_screen:boolean) {
+    "use strict";
+
+    return this.requestPath("PUT", `${BackEnd.APPLICATION_DEVICE_PATH}/${id}`, {name, height, width, height_lock, width_lock, touch_screen, project_id}).then(JSON.stringify);
+  }
+
+  public deleteApplicationDevice(id:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("DELETE", `${BackEnd.APPLICATION_DEVICE_PATH}/${id}`).then(JSON.stringify);
+  }
+
+  public createApplicationGroup(program_name:string, program_description:string, projectId:string):Promise<ApplicationGroup> {
+    "use strict";
+
+    return this.requestPath("POST", `${BackEnd.APPLICATION_GROUP_PATH}/${projectId}`, {program_description, program_name});
+  }
+
+  public getApplicationGroup(id:string):Promise<ApplicationGroup> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.APPLICATION_GROUP_PATH}/${id}`);
+  }
+
+  public getApplicationGroups():Promise<ApplicationGroup[]> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.APPLICATION_GROUP_PATH}/person`);
+  }
+
+  public updateApplicationGroup(id:string, program_name:string, program_description:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("PUT", `${BackEnd.APPLICATION_GROUP_PATH}/${id}`, {program_description, program_name}).then(JSON.stringify);
+  }
+
+  public deleteApplicationGroup(id:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("DELETE", `${BackEnd.APPLICATION_GROUP_PATH}/${id}`).then(JSON.stringify);
+  }
+
+  public createApplication(program_name:string, program_description:string, screen_type_id:string, m_code:string, groupId:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("POST", `${BackEnd.APPLICATION_PATH}/${groupId}`, {screen_type_id, program_name, program_description, m_code, height_lock: false, width_lock: false}).then(JSON.stringify);
+  }
+
+  public getApplication(id:string):Promise<Application> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.APPLICATION_PATH}/${id}`);
+  }
+
+  public getApplicationByQrToken(token:string):Promise<Application> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.APPLICATION_PATH}/app/token/${token}`);
+  }
+
+  public getApplications():Promise<Application[]> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.APPLICATION_PATH}/app/m_programs`);
+  }
+
+  public updateApplication(id:string, program_name:string, program_description:string, screen_type_id:string, m_code:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("PUT", `${BackEnd.APPLICATION_PATH}/${id}`, {screen_type_id, program_name, program_description, m_code, height_lock: false, width_lock: false}).then(JSON.stringify);
+  }
+
+  public deleteApplication(id:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("DELETE", `${BackEnd.APPLICATION_PATH}/${id}`).then(JSON.stringify);
   }
 
   public createProducer(name:string, description:string):Promise<string> {
@@ -1118,16 +1214,16 @@ export abstract class BackEnd {
     return this.requestPath("PUT", `${BackEnd.INTERACTIONS_SCHEME_PATH}/${id}`, {program_description, name}).then(JSON.stringify);
   }
 
-  public addVersionToInteractionsScheme(version_name:string, version_description:string, program:string, programId:string):Promise<string> {
-    "use strict";
-
-    return this.requestPath("PUT", `${BackEnd.INTERACTIONS_SCHEME_PATH}/update/${programId}`, {version_name, version_description, program}).then(JSON.stringify);
-  }
-
   public addApplicationGroupToInteractionsScheme(group:string, version:string, autoupdate:boolean):Promise<string> {
     "use strict";
 
     return this.requestPath("PUT", `${BackEnd.APPLICATION_GROUP_PATH}/connect/${group}/${version}/${autoupdate}`, {}).then(JSON.stringify);
+  }
+
+  public addVersionToInteractionsScheme(version_name:string, version_description:string, program:string, programId:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("PUT", `${BackEnd.INTERACTIONS_SCHEME_PATH}/update/${programId}`, {version_name, version_description, program}).then(JSON.stringify);
   }
 
   public deleteInteractionsScheme(id:string):Promise<string> {
@@ -1167,102 +1263,6 @@ export abstract class BackEnd {
     return this.requestPath("DELETE", `${BackEnd.HOMER_PATH}/${id}`).then(JSON.stringify);
   }
 
-  public createApplicationDevice(name:string, height:number, width:number, project_id:string) {
-    "use strict";
-
-    return this.requestPath("POST", BackEnd.APPLICATION_DEVICE_PATH, {name, height, width, height_lock: false, width_lock: false, touch_screen: false, project_id}).then(JSON.stringify);
-  }
-
-  public getApplicationDevice(id:string):Promise<ApplicationDevice> {
-    "use strict";
-
-    return this.requestPath("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/${id}`);
-  }
-
-  public getApplicationDevices():Promise<ApplicationDeviceCollection> {
-    "use strict";
-
-    return this.requestPath("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/all`);
-  }
-
-  public updateApplicationDevice(id:string, name:string, height:number, width:number, project_id:string, height_lock:boolean, width_lock:boolean, touch_screen:boolean) {
-    "use strict";
-
-    return this.requestPath("PUT", `${BackEnd.APPLICATION_DEVICE_PATH}/${id}`, {name, height, width, height_lock, width_lock, touch_screen, project_id}).then(JSON.stringify);
-  }
-
-  public deleteApplicationDevice(id:string):Promise<string> {
-    "use strict";
-
-    return this.requestPath("DELETE", `${BackEnd.APPLICATION_DEVICE_PATH}/${id}`).then(JSON.stringify);
-  }
-
-  public createApplicationGroup(program_name:string, program_description:string, projectId:string):Promise<ApplicationGroup> {
-    "use strict";
-
-    return this.requestPath("POST", `${BackEnd.APPLICATION_GROUP_PATH}/${projectId}`, {program_description, program_name});
-  }
-
-  public getApplicationGroup(id:string):Promise<ApplicationGroup> {
-    "use strict";
-
-    return this.requestPath("GET", `${BackEnd.APPLICATION_GROUP_PATH}/${id}`);
-  }
-
-  public getApplicationGroups():Promise<ApplicationGroup[]> {
-    "use strict";
-
-    return this.requestPath("GET", `${BackEnd.APPLICATION_GROUP_PATH}/person`);
-  }
-
-  public updateApplicationGroup(id:string, program_name:string, program_description:string):Promise<string> {
-    "use strict";
-
-    return this.requestPath("PUT", `${BackEnd.APPLICATION_GROUP_PATH}/${id}`, {program_description, program_name}).then(JSON.stringify);
-  }
-
-  public deleteApplicationGroup(id:string):Promise<string> {
-    "use strict";
-
-    return this.requestPath("DELETE", `${BackEnd.APPLICATION_GROUP_PATH}/${id}`).then(JSON.stringify);
-  }
-
-  public createApplication(program_name:string, program_description:string, screen_type_id:string, m_code:string, groupId:string):Promise<string> {
-    "use strict";
-
-    return this.requestPath("POST", `${BackEnd.APPLICATION_PATH}/${groupId}`, {screen_type_id, program_name, program_description, m_code, height_lock: false, width_lock: false}).then(JSON.stringify);
-  }
-
-  public getApplication(id:string):Promise<Application> {
-    "use strict";
-
-    return this.requestPath("GET", `${BackEnd.APPLICATION_PATH}/${id}`);
-  }
-
-  public getApplicationByQrToken(token:string):Promise<Application> {
-    "use strict";
-
-    return this.requestPath("GET", `${BackEnd.APPLICATION_PATH}/app/token/${token}`);
-  }
-
-  public getApplications():Promise<Application[]> {
-    "use strict";
-
-    return this.requestPath("GET", `${BackEnd.APPLICATION_PATH}/app/m_programs`);
-  }
-
-  public updateApplication(id:string, program_name:string, program_description:string, screen_type_id:string, m_code:string):Promise<string> {
-    "use strict";
-
-    return this.requestPath("PUT", `${BackEnd.APPLICATION_PATH}/${id}`, {screen_type_id, program_name, program_description, m_code, height_lock: false, width_lock: false}).then(JSON.stringify);
-  }
-
-  public deleteApplication(id:string):Promise<string> {
-    "use strict";
-
-    return this.requestPath("DELETE", `${BackEnd.APPLICATION_PATH}/${id}`).then(JSON.stringify);
-  }
-
   /**
    * Create a new project.
    *
@@ -1299,6 +1299,12 @@ export abstract class BackEnd {
     return this.requestPath<Project>("GET", `${BackEnd.PROJECT_PATH}/${id}`);
   }
 
+  public getProjectApplicationGroups(id:string):Promise<ApplicationGroup[]> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.APPLICATION_GROUP_PATH}/project/${id}`);
+  }
+
   public getProjectBoardPrograms(id:string):Promise<BoardProgram[]> {
     "use strict";
 
@@ -1321,12 +1327,6 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath("GET", `${BackEnd.PROJECT_PATH}/homers/${id}`);
-  }
-
-  public getProjectApplicationGroups(id:string):Promise<ApplicationGroup[]> {
-    "use strict";
-
-    return this.requestPath("GET", `${BackEnd.APPLICATION_GROUP_PATH}/project/${id}`);
   }
 
   public getProjectOwners(id:string):Promise<Person[]> {
