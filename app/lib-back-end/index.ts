@@ -1209,6 +1209,12 @@ export abstract class BackEnd {
     return this.requestPath("GET", `${BackEnd.APPLICATION_GROUP_PATH}/person`);
   }
 
+  public deleteApplicationGroup(id:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("DELETE", `${BackEnd.APPLICATION_GROUP_PATH}/${id}`).then(JSON.stringify);
+  }
+
   public createApplication(program_name:string, program_description:string, screen_type_id:string, m_code:string, groupId:string):Promise<string> {
     "use strict";
 

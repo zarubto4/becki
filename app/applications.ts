@@ -30,11 +30,13 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
-  showDevices:boolean;
+  tab:string;
 
   applications:libPatternFlyListView.Item[];
 
   devices:libPatternFlyListView.Item[];
+
+  groups:libPatternFlyListView.Item[];
 
   backEnd:backEnd.Service;
 
@@ -49,7 +51,7 @@ export class Component implements ng.OnInit {
       becki.HOME,
       new layout.LabeledLink("Applications", ["Applications"])
     ];
-    this.showDevices = false;
+    this.tab = "applications";
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -74,15 +76,24 @@ export class Component implements ng.OnInit {
             devices.private_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "project specific", ["ApplicationDevice", {device: device.id}]))
         ))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Devices cannot be loaded: ${reason}`)));
+    this.backEnd.getApplicationGroups()
+        .then(groups => this.groups = groups.map(group => new libPatternFlyListView.Item(group.id, group.program_name, group.program_description)))
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Groups cannot be loaded: ${reason}`)));
   }
 
   onAddClick():void {
     "use strict";
 
-    if (this.showDevices) {
-      this.onAddDeviceClick();
-    } else {
-      this.onAddApplicationClick();
+    switch (this.tab) {
+      case "applications":
+        this.onAddApplicationClick();
+        break;
+      case "devices":
+        this.onAddDeviceClick();
+        break;
+      case "groups":
+        this.onAddGroupClick();
+        break;
     }
   }
 
@@ -98,16 +109,16 @@ export class Component implements ng.OnInit {
     this.router.navigate(["NewApplicationDevice"]);
   }
 
-  onApplicationsClick():void {
+  onAddGroupClick():void {
     "use strict";
 
-    this.showDevices = false;
+    this.router.navigate(["NewApplicationGroup"]);
   }
 
-  onDevicesClick():void {
+  onTabClick(tab:string):void {
     "use strict";
 
-    this.showDevices = true;
+    this.tab = tab;
   }
 
   onRemoveApplicationClick(id:string):void {
@@ -135,6 +146,20 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The device cannot be removed: ${reason}`));
+        });
+  }
+
+  onRemoveGroupClick(id:string):void {
+    "use strict";
+
+    this.notifications.shift();
+    this.backEnd.deleteApplicationGroup(id)
+        .then(() => {
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The group has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The group cannot be removed: ${reason}`));
         });
   }
 }
