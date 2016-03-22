@@ -75,7 +75,6 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("User", ["Projects"]),
       new layout.LabeledLink("New Homer Program", ["NewHomerProgram"])
     ];
     this.projectField = "";
