@@ -52,6 +52,9 @@ export class Component {
   items:Item[];
 
   @ng.Input()
+  removable:boolean;
+
+  @ng.Input()
   emptyTitle:string;
 
   @ng.Output()
@@ -65,6 +68,7 @@ export class Component {
   constructor(router:ngRouter.Router) {
     "use strict";
 
+    this.removable = true;
     this.emptyTitle = "No item yet";
     this.addClick = new ng.EventEmitter();
     this.removeClick = new ng.EventEmitter();

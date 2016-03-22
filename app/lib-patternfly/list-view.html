@@ -21,19 +21,23 @@
           </div>
         </template>
         <template data-bind-ng-switch-when="false">
-          <div class="list-view-pf-actions">
-            <div class="dropdown pull-right dropdown-kebab-pf">
-              <button class="btn btn-link dropdown-toggle" type="button">
-                <span class="fa fa-ellipsis-v"></span>
-              </button>
-              <ul class="dropdown-menu dropdown-menu-right">
-                <template data-bind-ng-if="item.link">
-                  <li><a data-on-click="onViewClick(item, $event)" style="cursor: pointer">View</a></li>
-                </template>
-                <li><a data-on-click="onRemoveClick(item, $event)" style="cursor: pointer">Remove</a></li>
-              </ul>
+          <template data-bind-ng-if="item.link || removable">
+            <div class="list-view-pf-actions">
+              <div class="dropdown pull-right dropdown-kebab-pf">
+                <button class="btn btn-link dropdown-toggle" type="button">
+                  <span class="fa fa-ellipsis-v"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                  <template data-bind-ng-if="item.link">
+                    <li><a data-on-click="onViewClick(item, $event)" style="cursor: pointer">View</a></li>
+                  </template>
+                  <template data-bind-ng-if="removable">
+                    <li><a data-on-click="onRemoveClick(item, $event)" style="cursor: pointer">Remove</a></li>
+                  </template>
+                </ul>
+              </div>
             </div>
-          </div>
+          </template>
           <div class="list-view-pf-main-info">
             <div class="list-view-pf-body">
               <div class="list-view-pf-description">
