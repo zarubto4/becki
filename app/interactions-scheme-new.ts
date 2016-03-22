@@ -162,7 +162,7 @@ export class Component implements ng.OnInit {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error("the new scheme does not have only one version"));
           }
-          return Promise.all(this.groups.filter(group => group.selected).map(group => this.backEnd.addApplicationGroupToInteractionsScheme(group.model.id, scheme.versionObjects[0].id, true)));
+          return Promise.all(this.groups.filter(group => group.selected).map(group => this.backEnd.addApplicationGroupToInteractionsScheme(group.model.id, scheme.versionObjects[0].id, false)));
         })
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The scheme have been created."));

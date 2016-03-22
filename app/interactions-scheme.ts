@@ -20,29 +20,11 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
-import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
-
-class SelectableApplicationGroup {
-
-  model:libBackEnd.ApplicationGroup;
-
-  selected:boolean;
-
-  select:boolean;
-
-  constructor(model:libBackEnd.ApplicationGroup, selected = false) {
-    "use strict";
-
-    this.model = model;
-    this.selected = selected;
-    this.select = selected;
-  }
-}
 
 @ng.Component({
   templateUrl: "app/interactions-scheme.html",
-  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -57,10 +39,6 @@ export class Component implements ng.OnInit {
   nameField:string;
 
   descriptionField:string;
-
-  groups:SelectableApplicationGroup[];
-
-  lastVersion:string;
 
   backEnd:backEnd.Service;
 
@@ -95,37 +73,8 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.getInteractionsScheme(this.id)
         .then(scheme => {
-          if (!scheme.versionObjects) {
-            // TODO: https://github.com/angular/angular/issues/4558
-            return Promise.reject<any>(new Error("the scheme has no version"));
-          } else if (scheme.versionObjects.length > 1) {
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-164
-            this.notifications.current.push(new libPatternFlyNotifications.Warning("issue/TYRION-164"));
-          }
-          return Promise.all<any>([
-              scheme,
-              this.backEnd.getProjectApplicationGroups(this.projectId),
-              scheme.versionObjects[0].id
-          ]);
-        })
-        .then(result => {
-          let scheme:libBackEnd.InteractionsScheme;
-          let groups:libBackEnd.ApplicationGroup[];
-          let lastVersion:string;
-          [scheme, groups, lastVersion] = result;
-          return Promise.all<any>([
-              scheme,
-              Promise.all(groups.map(group => Promise.all<any>([group, group.b_program ? this.backEnd.request("GET", group.b_program) : null]))),
-              lastVersion
-          ]);
-        })
-        .then(result => {
-          let scheme:libBackEnd.InteractionsScheme;
-          let groups:[libBackEnd.ApplicationGroup, libBackEnd.InteractionsScheme][];
-          [scheme, groups, this.lastVersion] = result;
           this.nameField = scheme.name;
           this.descriptionField = scheme.program_description;
-          this.groups = groups.map(pair => new SelectableApplicationGroup(pair[0], pair[1] ? pair[1].b_program_id == this.id : false));
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme ${this.id} cannot be loaded: ${reason}`));
@@ -143,11 +92,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    Promise.all<any>([
-          this.backEnd.updateInteractionsScheme(this.id, this.nameField, this.descriptionField),
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-169
-          Promise.all(this.groups.filter(group => !group.selected && group.select).map(group => this.backEnd.addApplicationGroupToInteractionsScheme(group.model.id, this.lastVersion, true)))
-        ])
+    this.backEnd.updateInteractionsScheme(this.id, this.nameField, this.descriptionField)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The scheme has been updated."));
           this.router.navigate(["Project", {project: this.projectId}]);

@@ -24,9 +24,32 @@ import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
+class SelectableApplicationGroup {
+
+  model:libBackEnd.ApplicationGroup;
+
+  selected:boolean;
+
+  select:boolean;
+
+  constructor(model:libBackEnd.ApplicationGroup, selected = false) {
+    "use strict";
+
+    this.model = model;
+    this.selected = selected;
+    this.select = selected;
+  }
+}
+
 @ng.Component({
   templateUrl: "app/interactions-scheme-version-new.html",
-  directives: [customValidator.Directive, fieldInteractionsScheme.Component, layout.Component, ng.FORM_DIRECTIVES]
+  directives: [
+    customValidator.Directive,
+    fieldInteractionsScheme.Component,
+    layout.Component,
+    ng.CORE_DIRECTIVES,
+    ng.FORM_DIRECTIVES
+  ]
 })
 export class Component implements ng.OnInit {
 
@@ -39,6 +62,8 @@ export class Component implements ng.OnInit {
   nameField:string;
 
   descriptionField:string;
+
+  groups:SelectableApplicationGroup[];
 
   schemeField:string;
 
@@ -73,6 +98,15 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.getInteractionsScheme(this.schemeId)
         .then(scheme => {
+          return Promise.all<any>([
+              scheme,
+              this.backEnd.request("GET", scheme.project)
+          ]);
+        })
+        .then(result => {
+          let scheme:libBackEnd.InteractionsScheme;
+          let project:libBackEnd.Project;
+          [scheme, project] = result;
           if (!scheme.versionObjects) {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error("the scheme has no version"));
@@ -80,30 +114,40 @@ export class Component implements ng.OnInit {
             // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-164
             this.notifications.current.push(new libPatternFlyNotifications.Warning("issue/TYRION-164"));
           }
+          let lastVersion = scheme.versionObjects[0];
           return Promise.all<any>([
             scheme,
-            this.backEnd.request("GET", scheme.versionObjects[0].allFiles)
+            this.backEnd.getProjectApplicationGroups(project.id),
+            lastVersion,
+            this.backEnd.request("GET", lastVersion.allFiles)
           ]);
         })
         .then(result => {
           let scheme:libBackEnd.InteractionsScheme;
+          let groups:libBackEnd.ApplicationGroup[];
+          let lastVersion:libBackEnd.Version;
           let files:libBackEnd.File[];
-          [scheme, files] = result;
+          [scheme, groups, lastVersion, files] = result;
           if (files.length != 1) {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error("the scheme version does not have only one file"));
           }
           return Promise.all<any>([
             scheme,
+            Promise.all(groups.map(group => Promise.all<any>([group, group.b_progam_connected_version ? this.backEnd.request("GET", group.b_progam_connected_version) : null]))),
+            lastVersion,
             this.backEnd.request("GET", files[0].fileContent)
           ]);
         })
         .then(result => {
           let scheme:libBackEnd.InteractionsScheme;
+          let groups:[libBackEnd.ApplicationGroup, libBackEnd.Version][];
+          let lastVersion:libBackEnd.Version;
           let file:libBackEnd.FileContent;
-          [scheme, file] = result;
+          [scheme, groups, lastVersion, file] = result;
           this.schemeName = scheme.name;
           this.breadcrumbs[2].label = scheme.name;
+          this.groups = groups.map(pair => new SelectableApplicationGroup(pair[0], pair[1] ? pair[1].id == lastVersion.id : false));
           this.schemeField = file.content;
         })
         .catch(reason => {
@@ -122,6 +166,20 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.addVersionToInteractionsScheme(this.nameField, this.descriptionField, this.schemeField, this.schemeId)
+        .then(() => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-163
+          return this.backEnd.getInteractionsScheme(this.schemeId);
+        })
+        .then(scheme => {
+          if (!scheme.versionObjects) {
+            // TODO: https://github.com/angular/angular/issues/4558
+            return Promise.reject<any>(new Error("the scheme has no version"));
+          } else if (scheme.versionObjects.length > 1) {
+            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-164
+            this.notifications.current.push(new libPatternFlyNotifications.Warning("issue/TYRION-164"));
+          }
+          return Promise.all(this.groups.filter(group => group.selected).map(group => this.backEnd.addApplicationGroupToInteractionsScheme(group.model.id, scheme.versionObjects[0].id, false)));
+        })
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The version has been created."));
           this.router.navigate(["Interactions"]);
