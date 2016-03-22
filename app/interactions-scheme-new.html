@@ -36,23 +36,23 @@
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon-phone"></span>
-        {{groups?.length > 1 ? 'Application groups' : 'Applications'}}
+        {{groups?.length > 1 ? 'Application group' : 'Application'}}
       </label>
-      <div template="ngFor #group of groups">
-        <div class="checkbox">
-          <label data-bind-ng-switch="groups?.length > 1 || groups[0].model.m_programs.length == 0">
-            <input type="checkbox" data-bindon-ng-model="group.selected">
+      <select class="form-control" data-bindon-ng-model="groupField">
+        <option value="">Select name...</option>
+        <template ng-for data-var-group data-bind-ng-for-of="groups">
+          <option data-bind-value="group.id" data-bind-ng-switch="groups?.length > 1 || groups[0].m_programs.length == 0">
             <template data-bind-ng-switch-when="true">
-              {{group.model.program_name}}
+              {{group.program_name}}
             </template>
             <template data-bind-ng-switch-when="false">
-              <span template="ngFor #application of group.model.m_programs; #last = last">
+              <template ng-for data-var-application data-bind-ng-for-of="group.m_programs" data-var-last="last">
                 {{application.program_name}}<template data-bind-ng-if="!last">,</template>
-              </span>
+              </template>
             </template>
-          </label>
-        </div>
-      </div>
+          </option>
+        </template>
+      </select>
     </div>
     <div class="form-group">
       <label>

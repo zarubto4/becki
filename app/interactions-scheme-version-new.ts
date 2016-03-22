@@ -24,23 +24,6 @@ import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
-class SelectableApplicationGroup {
-
-  model:libBackEnd.ApplicationGroup;
-
-  selected:boolean;
-
-  select:boolean;
-
-  constructor(model:libBackEnd.ApplicationGroup, selected = false) {
-    "use strict";
-
-    this.model = model;
-    this.selected = selected;
-    this.select = selected;
-  }
-}
-
 @ng.Component({
   templateUrl: "app/interactions-scheme-version-new.html",
   directives: [
@@ -63,7 +46,9 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
-  groups:SelectableApplicationGroup[];
+  groupField:string;
+
+  groups:libBackEnd.ApplicationGroup[];
 
   schemeField:string;
 
@@ -86,6 +71,7 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "";
     this.descriptionField = "";
+    this.groupField = "";
     this.schemeField = `{"blocks":{}}`;
     this.backEnd = backEndService;
     this.notifications = notifications;
@@ -147,7 +133,11 @@ export class Component implements ng.OnInit {
           [scheme, groups, lastVersion, file] = result;
           this.schemeName = scheme.name;
           this.breadcrumbs[2].label = scheme.name;
-          this.groups = groups.map(pair => new SelectableApplicationGroup(pair[0], pair[1] ? pair[1].id == lastVersion.id : false));
+          let group = groups.find(pair => pair[1] && pair[1].id == lastVersion.id);
+          if (group) {
+            this.groupField = group[0].id;
+          }
+          this.groups = groups.map(pair => pair[0]);
           this.schemeField = file.content;
         })
         .catch(reason => {
@@ -178,7 +168,7 @@ export class Component implements ng.OnInit {
             // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-164
             this.notifications.current.push(new libPatternFlyNotifications.Warning("issue/TYRION-164"));
           }
-          return Promise.all(this.groups.filter(group => group.selected).map(group => this.backEnd.addApplicationGroupToInteractionsScheme(group.model.id, scheme.versionObjects[0].id, false)));
+          return this.groupField ? this.backEnd.addApplicationGroupToInteractionsScheme(this.groupField, scheme.versionObjects[0].id, false) : null;
         })
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The version has been created."));

@@ -24,20 +24,6 @@ import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
-class SelectableApplicationGroup {
-
-  model:libBackEnd.ApplicationGroup;
-
-  selected:boolean;
-
-  constructor(model:libBackEnd.ApplicationGroup, selected = false) {
-    "use strict";
-
-    this.model = model;
-    this.selected = selected;
-  }
-}
-
 @ng.Component({
   templateUrl: "app/interactions-scheme-new.html",
   directives: [
@@ -60,7 +46,9 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
-  groups:SelectableApplicationGroup[];
+  groupField:string;
+
+  groups:libBackEnd.ApplicationGroup[];
 
   schemeField:string;
 
@@ -80,6 +68,7 @@ export class Component implements ng.OnInit {
     this.projectField = "";
     this.nameField = "";
     this.descriptionField = "";
+    this.groupField = "";
     this.schemeField = `{"blocks":{}}`;
     this.backEnd = backEndService;
     this.notifications = notifications;
@@ -112,7 +101,7 @@ export class Component implements ng.OnInit {
     this.groups = [];
     if (this.getProject()) {
       this.backEnd.getProjectApplicationGroups(this.getProject())
-          .then(groups => this.groups = groups.map(group => new SelectableApplicationGroup(group)))
+          .then(groups => this.groups = groups)
           .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Application groups cannot be loaded: ${reason}`)));
     }
   }
@@ -162,7 +151,7 @@ export class Component implements ng.OnInit {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error("the new scheme does not have only one version"));
           }
-          return Promise.all(this.groups.filter(group => group.selected).map(group => this.backEnd.addApplicationGroupToInteractionsScheme(group.model.id, scheme.versionObjects[0].id, false)));
+          return this.groupField ? this.backEnd.addApplicationGroupToInteractionsScheme(this.groupField, scheme.versionObjects[0].id, false) : null;
         })
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The scheme have been created."));
