@@ -18,6 +18,7 @@ import * as layout from "./layout";
 export const HOME = new layout.LabeledLink("No Name", ["Applications"]);
 
 export const NAVIGATION = [
+  new layout.LabeledLink("Interactions", ["Interactions"], "link"),
   new layout.LabeledLink("Applications", ["Applications"], "mobile"),
   new layout.LabeledLink("Applications (Vision)", ["ApplicationsVision"], "mobile"),
   new layout.LabeledLink("Devices (TODO)", ["Devices"], "tachometer"),

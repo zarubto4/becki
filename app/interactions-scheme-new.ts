@@ -166,7 +166,7 @@ export class Component implements ng.OnInit {
         })
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The scheme have been created."));
-          this.router.navigate(["Projects"]);
+          this.router.navigate(["Interactions"]);
         })
         .catch((reason) => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme cannot be created: ${reason}`));
@@ -177,6 +177,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Projects"]);
+    this.router.navigate(["Interactions"]);
   }
 }

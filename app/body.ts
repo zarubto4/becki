@@ -32,6 +32,7 @@ import * as boardType from "./board-type";
 import * as boardTypeNew from "./board-type-new";
 import * as devices from "./devices";
 import * as homerNew from "./homer-new";
+import * as interactions from "./interactions";
 import * as interactionsScheme from "./interactions-scheme";
 import * as interactionsSchemeNew from "./interactions-scheme-new";
 import * as issue from "./issue";
@@ -77,6 +78,7 @@ import * as standaloneProgramNew from "./standalone-program-new";
   {path: "/board/types/:type", component: boardType.Component, as: "BoardType"},
   {path: "/devices", component: devices.Component, as: "Devices"},
   {path: "/homer/new", component: homerNew.Component, as: "NewHomer"},
+  {path: "/interactions", component: interactions.Component, as: "Interactions"},
   {path: "/interactions/scheme/new", component: interactionsSchemeNew.Component, as: "NewInteractionsScheme"},
   {path: "/issue/new", component: issueNew.Component, as: "NewIssue"},
   {path: "/issue/confirmation/new", component: issueConfirmationTypeNew.Component, as: "NewIssueConfirmationType"},
