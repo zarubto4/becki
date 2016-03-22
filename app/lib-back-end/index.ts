@@ -1203,10 +1203,22 @@ export abstract class BackEnd {
     return this.requestPath("POST", `${BackEnd.APPLICATION_GROUP_PATH}/${projectId}`, {program_description, program_name});
   }
 
+  public getApplicationGroup(id:string):Promise<ApplicationGroup> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.APPLICATION_GROUP_PATH}/${id}`);
+  }
+
   public getApplicationGroups():Promise<ApplicationGroup[]> {
     "use strict";
 
     return this.requestPath("GET", `${BackEnd.APPLICATION_GROUP_PATH}/person`);
+  }
+
+  public updateApplicationGroup(id:string, program_name:string, program_description:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("PUT", `${BackEnd.APPLICATION_GROUP_PATH}/${id}`, {program_description, program_name}).then(JSON.stringify);
   }
 
   public deleteApplicationGroup(id:string):Promise<string> {

@@ -77,7 +77,7 @@ export class Component implements ng.OnInit {
         ))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Devices cannot be loaded: ${reason}`)));
     this.backEnd.getApplicationGroups()
-        .then(groups => this.groups = groups.map(group => new libPatternFlyListView.Item(group.id, group.program_name, group.program_description)))
+        .then(groups => this.groups = groups.map(group => new libPatternFlyListView.Item(group.id, group.program_name, group.program_description, ["ApplicationGroup", {group: group.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Groups cannot be loaded: ${reason}`)));
   }
 
