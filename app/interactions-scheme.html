@@ -24,4 +24,13 @@
       <button class="btn btn-primary" type="submit">Update</button>
     </div>
   </form>
+  <div>
+    <div class="pull-right">
+      <button type="button" class="btn btn-default" data-on-click="onAddVersionClick($event)">Add</button>
+    </div>
+    <h2>Versions</h2>
+  </div>
+  <div data-bind-list-view="versions" data-bind-removable="false" data-on-add-click="onAddVersionClick($event)">
+    <div class="spinner"></div>
+  </div>
 </div>

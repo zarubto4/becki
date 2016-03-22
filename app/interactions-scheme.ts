@@ -20,11 +20,12 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
+import * as libPatternFlyListView from "./lib-patternfly/list-view";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/interactions-scheme.html",
-  directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
+  directives: [customValidator.Directive, layout.Component, libPatternFlyListView.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -39,6 +40,8 @@ export class Component implements ng.OnInit {
   nameField:string;
 
   descriptionField:string;
+
+  versions:libPatternFlyListView.Item[];
 
   backEnd:backEnd.Service;
 
@@ -75,6 +78,7 @@ export class Component implements ng.OnInit {
         .then(scheme => {
           this.nameField = scheme.name;
           this.descriptionField = scheme.program_description;
+          this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, version.version_description));
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme ${this.id} cannot be loaded: ${reason}`));
@@ -107,5 +111,12 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.router.navigate(["Project", {project: this.projectId}]);
+  }
+
+  onAddVersionClick():void {
+    "use strict";
+
+    this.notifications.shift();
+    this.router.navigate(["NewInteractionsSchemeVersion", {scheme: this.id}]);
   }
 }
