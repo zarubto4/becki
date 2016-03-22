@@ -1,0 +1,41 @@
+<!--
+  ~ © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+  ~ of this distribution.
+  -->
+
+<div data-bind-layout="'Create a New Group for Applications'" data-bind-breadcrumbs="breadcrumbs">
+  <form class="clearfix" data-on-submit="onSubmit($event)">
+    <template data-bind-ng-if="projects?.length > 1">
+      <div class="form-group">
+        <label>
+          <span class="glyphicon glyphicon-list"></span>
+          Project
+        </label>
+        <select class="form-control" required data-bindon-ng-model="projectField">
+          <option value="">Select name...</option>
+          <option data-bind-value="project.id" template="ngFor #project of projects">
+            {{project.project_name}}
+          </option>
+        </select>
+      </div>
+    </template>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-pencil"></span>
+        Name
+      </label>
+      <input class="form-control" required data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
+    </div>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-pencil"></span>
+        Description
+      </label>
+      <textarea class="form-control" data-bindon-ng-model="descriptionField"></textarea>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+      <button class="btn btn-primary" type="submit">Create</button>
+    </div>
+  </form>
+</div>

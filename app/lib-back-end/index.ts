@@ -1203,6 +1203,12 @@ export abstract class BackEnd {
     return this.requestPath("POST", `${BackEnd.APPLICATION_GROUP_PATH}/${projectId}`, {program_description, program_name});
   }
 
+  public getApplicationGroups():Promise<ApplicationGroup[]> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.APPLICATION_GROUP_PATH}/person`);
+  }
+
   public createApplication(program_name:string, program_description:string, screen_type_id:string, m_code:string, groupId:string):Promise<string> {
     "use strict";
 
