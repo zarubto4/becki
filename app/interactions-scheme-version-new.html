@@ -26,7 +26,7 @@
       </label>
       <div template="ngFor #group of groups">
         <div class="checkbox">
-          <label data-bind-ng-switch="groups?.length > 1">
+          <label data-bind-ng-switch="groups?.length > 1 || groups[0].model.m_programs.length == 0">
             <input type="checkbox" data-bindon-ng-model="group.selected">
             <template data-bind-ng-switch-when="true">
               {{group.model.program_name}}
