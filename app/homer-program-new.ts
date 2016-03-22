@@ -50,11 +50,11 @@ class SelectableApplicationGroup {
 })
 export class Component implements ng.OnInit {
 
-  projectId:string;
-
-  heading:string;
-
   breadcrumbs:layout.LabeledLink[];
+
+  projectField:string;
+
+  projects:libBackEnd.Project[];
 
   nameField:string;
 
@@ -70,19 +70,15 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.projectId = routeParams.get("project");
-    this.heading = `New Program (Project ${this.projectId})`;
     this.breadcrumbs = [
       becki.HOME,
       new layout.LabeledLink("User", ["Projects"]),
-      new layout.LabeledLink("Projects", ["Projects"]),
-      new layout.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new layout.LabeledLink("Homer Programs", ["Project", {project: this.projectId}]),
-      new layout.LabeledLink("New Program", ["NewHomerProgram", {project: this.projectId}])
+      new layout.LabeledLink("New Homer Program", ["NewHomerProgram"])
     ];
+    this.projectField = "";
     this.nameField = "";
     this.descriptionField = "";
     this.codeField = `{"blocks":{}}`;
@@ -95,23 +91,62 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.getProjectApplicationGroups(this.projectId)
-        .then(groups => this.groups = groups.map(group => new SelectableApplicationGroup(group)))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Application groups cannot be loaded: ${reason}`)));
+    this.backEnd.getProjects()
+        .then(projects => {
+          this.projects = projects;
+          this.loadFromProject();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`Projects cannot be loaded: ${reason}`));
+        });
+  }
+
+  getProject():string {
+    "use strict";
+
+    return becki.getAdvancedField(this.projectField, this.projects.map(project => project.id));
+  }
+
+  loadFromProject():void {
+    "use strict";
+
+    this.groups = [];
+    if (this.getProject()) {
+      this.backEnd.getProjectApplicationGroups(this.getProject())
+          .then(groups => this.groups = groups.map(group => new SelectableApplicationGroup(group)))
+          .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Application groups cannot be loaded: ${reason}`)));
+    }
+  }
+
+  onProjectChange():void {
+    "use strict";
+
+    this.loadFromProject();
   }
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getProjectHomerPrograms(this.projectId).then(programs => !programs.find(program => program.name == this.nameField));
+    return () => this.backEnd.getProjects()
+        .then(projects => Promise.all(projects.map(project => this.backEnd.getProjectHomerPrograms(project.id))))
+        .then(programs => ![].concat(...programs).find(program => program.name == this.nameField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.createHomerProgram(this.nameField, this.descriptionField, this.projectId)
+    Promise.resolve(
+            this.getProject() || this.backEnd.createDefaultProject().then(project => {
+              this.projects = [project];
+              this.projectField = project.id;
+              return project.id;
+            })
+        )
+        .then(project => {
+          return this.backEnd.createHomerProgram(this.nameField, this.descriptionField, project);
+        })
         .then(program => {
           return Promise.all([
             program.b_program_id,
@@ -132,7 +167,7 @@ export class Component implements ng.OnInit {
         })
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The program have been created."));
-          this.router.navigate(["Project", {project: this.projectId}]);
+          this.router.navigate(["Projects"]);
         })
         .catch((reason) => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be created: ${reason}`));
@@ -143,6 +178,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Project", {project: this.projectId}]);
+    this.router.navigate(["Projects"]);
   }
 }

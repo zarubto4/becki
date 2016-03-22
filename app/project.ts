@@ -250,7 +250,7 @@ export class Component implements ng.OnInit {
   onHomerProgramAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewHomerProgram", {project: this.id}]);
+    this.router.navigate(["NewHomerProgram"]);
   }
 
   onHomerProgramRemoveClick(id:string):void {
