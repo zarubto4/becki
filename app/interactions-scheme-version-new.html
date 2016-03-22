@@ -1,0 +1,36 @@
+<!--
+  ~ © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+  ~ of this distribution.
+  -->
+
+<div data-bind-layout='"Create a New Version of the \"" + schemeName + "\" Scheme of Interactions"' data-bind-breadcrumbs="breadcrumbs">
+  <form class="clearfix" data-on-submit="onSubmit($event)">
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-pencil"></span>
+        Version Name
+      </label>
+      <input class="form-control" required data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
+    </div>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-pencil"></span>
+        Version Description
+      </label>
+      <textarea class="form-control" data-bindon-ng-model="descriptionField"></textarea>
+    </div>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-link"></span>
+        Scheme
+      </label>
+      <div data-bindon-field-interactions-scheme="schemeField">
+        <div class="spinner"></div>
+      </div>
+    </div>
+    <div class="pull-right">
+      <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+      <button class="btn btn-primary" type="submit">Create</button>
+    </div>
+  </form>
+</div>

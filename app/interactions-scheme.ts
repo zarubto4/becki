@@ -19,7 +19,6 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
-import * as fieldInteractionsScheme from "./field-interactions-scheme";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
@@ -43,13 +42,7 @@ class SelectableApplicationGroup {
 
 @ng.Component({
   templateUrl: "app/interactions-scheme.html",
-  directives: [
-    customValidator.Directive,
-    fieldInteractionsScheme.Component,
-    layout.Component,
-    ng.CORE_DIRECTIVES,
-    ng.FORM_DIRECTIVES
-  ]
+  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -68,12 +61,6 @@ export class Component implements ng.OnInit {
   groups:SelectableApplicationGroup[];
 
   lastVersion:string;
-
-  schemeField:string;
-
-  versionNameField:string;
-
-  versionDescriptionField:string;
 
   backEnd:backEnd.Service;
 
@@ -118,36 +105,27 @@ export class Component implements ng.OnInit {
           return Promise.all<any>([
               scheme,
               this.backEnd.getProjectApplicationGroups(this.projectId),
-              scheme.versionObjects[0].id,
-              this.backEnd.request("GET", scheme.versionObjects[0].allFiles)
+              scheme.versionObjects[0].id
           ]);
         })
         .then(result => {
           let scheme:libBackEnd.InteractionsScheme;
           let groups:libBackEnd.ApplicationGroup[];
           let lastVersion:string;
-          let files:libBackEnd.File[];
-          [scheme, groups, lastVersion, files] = result;
-          if (files.length != 1) {
-            // TODO: https://github.com/angular/angular/issues/4558
-            return Promise.reject<any>(new Error("the scheme version does not have only one file"));
-          }
+          [scheme, groups, lastVersion] = result;
           return Promise.all<any>([
               scheme,
               Promise.all(groups.map(group => Promise.all<any>([group, group.b_program ? this.backEnd.request("GET", group.b_program) : null]))),
-              lastVersion,
-              this.backEnd.request("GET", files[0].fileContent)
+              lastVersion
           ]);
         })
         .then(result => {
           let scheme:libBackEnd.InteractionsScheme;
           let groups:[libBackEnd.ApplicationGroup, libBackEnd.InteractionsScheme][];
-          let file:libBackEnd.FileContent;
-          [scheme, groups, this.lastVersion, file] = result;
+          [scheme, groups, this.lastVersion] = result;
           this.nameField = scheme.name;
           this.descriptionField = scheme.program_description;
           this.groups = groups.map(pair => new SelectableApplicationGroup(pair[0], pair[1] ? pair[1].b_program_id == this.id : false));
-          this.schemeField = file.content;
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme ${this.id} cannot be loaded: ${reason}`));
@@ -159,13 +137,6 @@ export class Component implements ng.OnInit {
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     return () => this.backEnd.getProjectInteractionsSchemes(this.projectId).then(schemes => !schemes.find(scheme => scheme.b_program_id != this.id && scheme.name == this.nameField));
-  }
-
-  validateVersionNameField():()=>Promise<boolean> {
-    "use strict";
-
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getInteractionsScheme(this.id).then(scheme => !scheme.versionObjects.find(version => version.version_name == this.versionNameField));
   }
 
   onSubmit():void {
@@ -191,18 +162,5 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.router.navigate(["Project", {project: this.projectId}]);
-  }
-
-  onVersionSubmit():void {
-    "use strict";
-
-    this.backEnd.addVersionToInteractionsScheme(this.versionNameField, this.versionDescriptionField, this.schemeField, this.id)
-        .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The version has been created."));
-          this.router.navigate(["Project", {project: this.projectId}]);
-        })
-        .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The version cannot be created: ${reason}`));
-        });
   }
 }
