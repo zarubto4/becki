@@ -107,7 +107,7 @@ export class Component implements ng.OnInit {
           let scheme:libBackEnd.InteractionsScheme;
           let project:libBackEnd.Project;
           [scheme, project] = result;
-          if (!scheme.versionObjects) {
+          if (!scheme.versionObjects.length) {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error("the scheme has no version"));
           } else if (scheme.versionObjects.length > 1) {
@@ -171,7 +171,7 @@ export class Component implements ng.OnInit {
           return this.backEnd.getInteractionsScheme(this.schemeId);
         })
         .then(scheme => {
-          if (!scheme.versionObjects) {
+          if (!scheme.versionObjects.length) {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error("the scheme has no version"));
           } else if (scheme.versionObjects.length > 1) {
