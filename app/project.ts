@@ -82,8 +82,6 @@ export class Component implements ng.OnInit {
 
   standalonePrograms:libPatternFlyListView.Item[];
 
-  interactionsSchemes:libPatternFlyListView.Item[];
-
   boards:SelectableItem[];
 
   boardUploadingProgramField:string;
@@ -140,23 +138,22 @@ export class Component implements ng.OnInit {
           this.backEnd.getProject(this.id),
           this.backEnd.getProjectOwners(this.id),
           this.backEnd.getProjectBoardPrograms(this.id),
-          this.backEnd.getProjectInteractionsSchemes(this.id),
           this.backEnd.getProjectBoards(this.id),
-          this.backEnd.getProjectHomers(this.id)
+          this.backEnd.getProjectHomers(this.id),
+          this.backEnd.getProjectInteractionsSchemes(this.id)
         ])
         .then(result => {
           let project:libBackEnd.Project;
           let collaborators:libBackEnd.Person[];
           let boardPrograms:libBackEnd.BoardProgram[];
-          let interactionsSchemes:libBackEnd.InteractionsScheme[];
           let boards:libBackEnd.Board[];
           let homers:libBackEnd.Homer[];
-          [project, collaborators, boardPrograms, interactionsSchemes, boards, homers] = result;
+          let interactionsSchemes:libBackEnd.InteractionsScheme[];
+          [project, collaborators, boardPrograms, boards, homers, interactionsSchemes] = result;
           this.nameField = project.project_name;
           this.descriptionField = project.project_description;
           this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composePersonString(collaborator), null));
           this.boardPrograms = boardPrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, ["BoardProgram", {project: this.id, program: program.id}]));
-          this.interactionsSchemes = interactionsSchemes.map(scheme => new libPatternFlyListView.Item(scheme.b_program_id, scheme.name, scheme.program_description, ["InteractionsScheme", {scheme: scheme.b_program_id}]));
           this.boards = boards.map(board => new SelectableItem(board.id, board.id, board.isActive ? "active" : "inactive"));
           this.homers = homers.map(homer => new SelectableItem(homer.homer_id, homer.homer_id, homer.online ? "online" : "offline"));
           this.interactionsSchemesVersions = [].concat(...interactionsSchemes.map(scheme => scheme.versionObjects.map(version => new InteractionsSchemeVersion(scheme.b_program_id, version.id, `${scheme.name} ${version.version_name}`))));
@@ -244,26 +241,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be removed: ${reason}`));
-        });
-  }
-
-  onInteractionsSchemeAddClick():void {
-    "use strict";
-
-    this.router.navigate(["NewInteractionsScheme"]);
-  }
-
-  onInteractionsSchemeRemoveClick(id:string):void {
-    "use strict";
-
-    this.notifications.shift();
-    this.backEnd.deleteInteractionsScheme(id)
-        .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The scheme has been removed."));
-          this.refresh();
-        })
-        .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme cannot be removed: ${reason}`));
         });
   }
 
