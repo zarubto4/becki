@@ -20,6 +20,7 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
+import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
@@ -31,7 +32,7 @@ export class Component implements ng.OnInit {
 
   id:string;
 
-  heading:string;
+  name:string;
 
   breadcrumbs:layout.LabeledLink[];
 
@@ -51,7 +52,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.id = routeParams.get("scheme");
-    this.heading = `Scheme of Interactions ${this.id}`;
+    this.name = "Loading...";
     this.breadcrumbs = [
       becki.HOME,
       new layout.LabeledLink("User", ["Applications"]),
@@ -71,6 +72,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.getInteractionsScheme(this.id)
         .then(scheme => {
+          this.name = scheme.name;
           this.nameField = scheme.name;
           this.descriptionField = scheme.program_description;
           this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, version.version_description));
