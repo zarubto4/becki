@@ -67,7 +67,6 @@ export class Component implements ng.OnInit {
     this.name = "Loading...";
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("User", ["Applications"]),
       new layout.LabeledLink("Schemes of Interactions", ["Interactions"]),
       new layout.LabeledLink(`Scheme of Interactions ${this.id}`, ["InteractionsScheme", {scheme: this.id}])
     ];
