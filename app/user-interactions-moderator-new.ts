@@ -48,7 +48,7 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("User", ["Projects"]),
+      new layout.LabeledLink("User", becki.HOME.link),
       new layout.LabeledLink("New Moderator of Interactions", ["NewUserInteractionsModerator"])
     ];
     this.projectField = "";
@@ -92,7 +92,7 @@ export class Component implements ng.OnInit {
         })
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The moderator has been added."));
-          this.router.navigate(["Projects"]);
+          this.router.navigate(["UserInteractions"]);
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The moderator cannot be added: ${reason}`));
@@ -103,6 +103,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Projects"]);
+    this.router.navigate(["UserInteractions"]);
   }
 }

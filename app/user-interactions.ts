@@ -19,8 +19,21 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as layout from "./layout";
+import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+
+class InteractionsModeratorItem extends libPatternFlyListView.Item {
+
+  project:string;
+
+  constructor(moderator:libBackEnd.InteractionsModerator, project:string) {
+    "use strict";
+
+    super(moderator.homer_id, moderator.homer_id, moderator.online ? "online" : "offline");
+    this.project = project;
+  }
+}
 
 @ng.Component({
   templateUrl: "app/user-interactions.html",
@@ -30,7 +43,11 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
-  items:libPatternFlyListView.Item[];
+  showModerators:boolean;
+
+  schemes:libPatternFlyListView.Item[];
+
+  moderators:InteractionsModeratorItem[];
 
   backEnd:backEnd.Service;
 
@@ -46,6 +63,7 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("User", becki.HOME.link),
       new layout.LabeledLink("Interactions", ["UserInteractions"])
     ];
+    this.showModerators = false;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -62,18 +80,57 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getProjects()
-        .then(projects => Promise.all(projects.map(project => this.backEnd.getProjectInteractionsSchemes(project.id))))
-        .then(schemes => this.items = [].concat(...schemes).map(scheme => new libPatternFlyListView.Item(scheme.b_program_id, scheme.name, scheme.program_description, ["UserInteractionsScheme", {scheme: scheme.b_program_id}])))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Schemes cannot be loaded: ${reason}`)));
+        .then(projects => {
+          return Promise.all<any>([
+            Promise.all(projects.map(project => this.backEnd.getProjectInteractionsSchemes(project.id))),
+            Promise.all(projects.map(project => Promise.all<any>([this.backEnd.getProjectInteractionsModerators(project.id), project])))
+          ]);
+        })
+        .then(result => {
+          let schemes:libBackEnd.InteractionsScheme[][];
+          let moderators:[libBackEnd.InteractionsModerator[], libBackEnd.Project][];
+          [schemes, moderators] = result;
+          this.schemes = [].concat(...schemes).map(scheme => new libPatternFlyListView.Item(scheme.b_program_id, scheme.name, scheme.program_description, ["UserInteractionsScheme", {scheme: scheme.b_program_id}]));
+          this.moderators = [].concat(...moderators.map(pair => pair[0].map(moderator => new InteractionsModeratorItem(moderator, pair[1].id))));
+        })
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Interactions cannot be loaded: ${reason}`)));
   }
 
   onAddClick():void {
     "use strict";
 
+    if (this.showModerators) {
+      this.onAddModeratorClick();
+    } else {
+      this.onAddSchemeClick();
+    }
+  }
+
+  onAddSchemeClick():void {
+    "use strict";
+
     this.router.navigate(["NewUserInteractionsScheme"]);
   }
 
-  onRemoveClick(id:string):void {
+  onAddModeratorClick():void {
+    "use strict";
+
+    this.router.navigate(["NewUserInteractionsModerator"]);
+  }
+
+  onSchemesClick():void {
+    "use strict";
+
+    this.showModerators = false;
+  }
+
+  onModeratorsClick():void {
+    "use strict";
+
+    this.showModerators = true;
+  }
+
+  onRemoveSchemeClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
@@ -84,6 +141,21 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme cannot be removed: ${reason}`));
+        });
+  }
+
+  onRemoveModeratorClick(id:string):void {
+    "use strict";
+
+    this.notifications.shift();
+    let moderator = this.moderators.find(moderator => moderator.id == id);
+    this.backEnd.removeInteractionsModeratorFromProject(moderator.id, moderator.project)
+        .then(() => {
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The moderator has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The moderator cannot be removed: ${reason}`));
         });
   }
 }
