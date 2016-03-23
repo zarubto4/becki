@@ -36,12 +36,12 @@
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon-phone"></span>
-        {{groups?.length > 1 ? 'Application group' : 'Application'}}
+        {{showGroups ? 'Application group' : 'Application'}}
       </label>
       <select class="form-control" data-bindon-ng-model="groupField">
         <option value="">Select name...</option>
         <template ng-for data-var-group data-bind-ng-for-of="groups">
-          <option data-bind-value="group.id" data-bind-ng-switch="groups?.length > 1 || groups[0].m_programs.length == 0">
+          <option data-bind-value="group.id" data-bind-ng-switch="showGroups">
             <template data-bind-ng-switch-when="true">
               {{group.program_name}}
             </template>

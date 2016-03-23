@@ -46,6 +46,8 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
+  showGroups:boolean;
+
   groupField:string;
 
   groups:libBackEnd.ApplicationGroup[];
@@ -71,6 +73,7 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "";
     this.descriptionField = "";
+    this.showGroups = false;
     this.groupField = "";
     this.schemeField = `{"blocks":{}}`;
     this.backEnd = backEndService;
@@ -133,6 +136,7 @@ export class Component implements ng.OnInit {
           [scheme, groups, lastVersion, file] = result;
           this.schemeName = scheme.name;
           this.breadcrumbs[2].label = scheme.name;
+          this.showGroups = groups.length > 1 || (groups.length == 1 && !groups[0][0].m_programs.length);
           let group = groups.find(pair => pair[1] && pair[1].id == lastVersion.id);
           if (group) {
             this.groupField = group[0].id;

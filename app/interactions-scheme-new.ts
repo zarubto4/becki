@@ -46,6 +46,8 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
+  showGroups:boolean;
+
   groupField:string;
 
   groups:libBackEnd.ApplicationGroup[];
@@ -68,6 +70,7 @@ export class Component implements ng.OnInit {
     this.projectField = "";
     this.nameField = "";
     this.descriptionField = "";
+    this.showGroups = false;
     this.groupField = "";
     this.schemeField = `{"blocks":{}}`;
     this.backEnd = backEndService;
@@ -98,11 +101,17 @@ export class Component implements ng.OnInit {
   loadFromProject():void {
     "use strict";
 
+    this.showGroups = false;
     this.groups = [];
     if (this.getProject()) {
       this.backEnd.getProjectApplicationGroups(this.getProject())
-          .then(groups => this.groups = groups)
-          .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Application groups cannot be loaded: ${reason}`)));
+          .then(groups => {
+            this.showGroups = groups.length > 1 || (groups.length == 1 && !groups[0].m_programs.length);
+            this.groups = groups;
+          })
+          .catch(reason => {
+            this.notifications.current.push(new libPatternFlyNotifications.Danger(`Application groups cannot be loaded: ${reason}`));
+          });
     }
   }
 
