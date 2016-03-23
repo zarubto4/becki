@@ -35,6 +35,7 @@ import * as homerNew from "./homer-new";
 import * as interactions from "./interactions";
 import * as interactionsScheme from "./interactions-scheme";
 import * as interactionsSchemeNew from "./interactions-scheme-new";
+import * as interactionsSchemeVersion from "./interactions-scheme-version";
 import * as interactionsSchemeVersionNew from "./interactions-scheme-version-new";
 import * as issue from "./issue";
 import * as issueConfirmationNew from "./issue-confirmation-new";
@@ -83,6 +84,7 @@ import * as standaloneProgramNew from "./standalone-program-new";
   {path: "/interactions/scheme/new", component: interactionsSchemeNew.Component, as: "NewInteractionsScheme"},
   {path: "/interactions/schemes/:scheme", component: interactionsScheme.Component, as: "InteractionsScheme"},
   {path: "/interactions/schemes/:scheme/version/new", component: interactionsSchemeVersionNew.Component, as: "NewInteractionsSchemeVersion"},
+  {path: "/interactions/schemes/:scheme/versions/:version", component: interactionsSchemeVersion.Component, as: "InteractionsSchemeVersion"},
   {path: "/issue/new", component: issueNew.Component, as: "NewIssue"},
   {path: "/issue/confirmation/new", component: issueConfirmationTypeNew.Component, as: "NewIssueConfirmationType"},
   {path: "/issue/confirmations/:confirmation", component: issueConfirmationType.Component, as: "IssueConfirmationType"},

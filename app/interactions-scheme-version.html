@@ -1,0 +1,34 @@
+<!--
+  ~ © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+  ~ of this distribution.
+  -->
+
+<div data-bind-layout='"The \"" + name + "\" Version of the \"" + schemeName + "\" Scheme"' data-bind-breadcrumbs="breadcrumbs">
+  <div class="form-group">
+    <label>Description</label>
+    <p class="form-control-static">{{description}}</p>
+  </div>
+  <div class="form-group">
+    <label>{{showGroups ? 'Application groups' : 'Applications'}}</label>
+    <ul class="form-control-static">
+      <template ng-for data-var-group data-bind-ng-for-of="groups">
+        <template data-bind-ng-if="showGroups">
+          <li>
+            {{group.program_name}}
+          </li>
+        </template>
+        <template data-bind-ng-if="!showGroups">
+          <li template="ngFor #application of group.m_programs">
+            {{application.program_name}}
+          </li>
+        </template>
+      </template>
+    </ul>
+  </div>
+  <div class="form-group">
+    <label>Scheme</label>
+    <div data-bindon-field-interactions-scheme="scheme" data-bind-readonly="true">
+      <div class="spinner"></div>
+    </div>
+  </div>
+</div>

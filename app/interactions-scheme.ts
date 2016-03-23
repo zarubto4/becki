@@ -109,7 +109,7 @@ export class Component implements ng.OnInit {
           this.nameField = scheme.name;
           this.descriptionField = scheme.program_description;
           this.description = scheme.program_description;
-          this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, version.version_description));
+          this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, version.version_description, ["InteractionsSchemeVersion", {scheme: this.id, version: version.id}]));
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme ${this.id} cannot be loaded: ${reason}`));
