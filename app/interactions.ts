@@ -62,7 +62,7 @@ export class Component implements ng.OnInit {
 
     this.backEnd.getProjects()
         .then(projects => Promise.all(projects.map(project => this.backEnd.getProjectInteractionsSchemes(project.id))))
-        .then(schemes => this.items = [].concat(...schemes).map(scheme => new libPatternFlyListView.Item(scheme.b_program_id, scheme.name, scheme.program_description)))
+        .then(schemes => this.items = [].concat(...schemes).map(scheme => new libPatternFlyListView.Item(scheme.b_program_id, scheme.name, scheme.program_description, ["InteractionsScheme", {scheme: scheme.b_program_id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Schemes cannot be loaded: ${reason}`)));
   }
 
