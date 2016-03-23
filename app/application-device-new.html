@@ -5,13 +5,7 @@
 
 <div data-bind-layout="'Add a New Device for Applications'" data-bind-breadcrumbs="breadcrumbs">
   <form class="clearfix" data-on-submit="onSubmit($event)">
-    <div class="checkbox">
-      <label>
-        <input type="checkbox" data-bindon-ng-model="globalField">
-        Global
-      </label>
-    </div>
-    <template data-bind-ng-if="projects?.length > 1 && !globalField">
+    <template data-bind-ng-if="projects?.length > 1">
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon-list"></span>

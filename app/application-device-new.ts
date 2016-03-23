@@ -32,8 +32,6 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
-  globalField:boolean;
-
   projectField:string;
 
   projects:libBackEnd.Project[];
@@ -57,7 +55,6 @@ export class Component implements ng.OnInit {
       becki.HOME,
       new layout.LabeledLink("New Device for Applications", ["NewApplicationDevice"])
     ];
-    this.globalField = true;
     this.projectField = "";
     this.nameField = "";
     this.heightField = 1;
@@ -88,7 +85,7 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     Promise.resolve(
-            this.globalField ? undefined : becki.getAdvancedField(this.projectField, this.projects.map(project => project.id)) || this.backEnd.createDefaultProject().then(project => {
+            becki.getAdvancedField(this.projectField, this.projects.map(project => project.id)) || this.backEnd.createDefaultProject().then(project => {
               this.projects = [project];
               this.projectField = project.id;
               return project.id;
