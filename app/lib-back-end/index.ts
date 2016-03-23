@@ -441,7 +441,7 @@ export interface InteractionsScheme {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface Homer {
+export interface InteractionsModerator {
 
   homer_id:string;
 
@@ -615,7 +615,7 @@ export abstract class BackEnd {
 
   static COMMENT_PATH = "/overflow/comment";
 
-  static HOMER_PATH = "/project/homer";
+  static INTERACTIONS_MODERATOR_PATH = "/project/homer";
 
   static INTERACTIONS_SCHEME_PATH = "/project/b_program";
 
@@ -1238,29 +1238,29 @@ export abstract class BackEnd {
    * @param id the ID of the device.
    * @param token an authentication token.
    */
-  public createHomer(homer_id:string, type_of_device:string):Promise<string> {
+  public createInteractionsModerator(homer_id:string, type_of_device:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("POST", BackEnd.HOMER_PATH, {homer_id, type_of_device}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.INTERACTIONS_MODERATOR_PATH, {homer_id, type_of_device}).then(JSON.stringify);
   }
 
-  public getHomers():Promise<Homer[]> {
+  public getInteractionsModerators():Promise<InteractionsModerator[]> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
-    return this.requestPath("GET", BackEnd.HOMER_PATH);
+    return this.requestPath("GET", BackEnd.INTERACTIONS_MODERATOR_PATH);
   }
 
-  public addSchemeToHomer(versionId:string, homerId:string, schemeId:string):Promise<string> {
+  public addSchemeToInteractionsModerator(versionId:string, moderatorId:string, schemeId:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("PUT", `${BackEnd.INTERACTIONS_SCHEME_PATH}/uploadToHomer/${schemeId}/${versionId}/${homerId}`, {}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.INTERACTIONS_SCHEME_PATH}/uploadToHomer/${schemeId}/${versionId}/${moderatorId}`, {}).then(JSON.stringify);
   }
 
-  public deleteHomer(id:string):Promise<string> {
+  public deleteInteractionsModerator(id:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("DELETE", `${BackEnd.HOMER_PATH}/${id}`).then(JSON.stringify);
+    return this.requestPath("DELETE", `${BackEnd.INTERACTIONS_MODERATOR_PATH}/${id}`).then(JSON.stringify);
   }
 
   /**
@@ -1323,7 +1323,7 @@ export abstract class BackEnd {
     return this.requestPath("GET", `${BackEnd.PROJECT_PATH}/b_programs/${id}`);
   }
 
-  public getProjectHomers(id:string):Promise<Homer[]> {
+  public getProjectInteractionsModerators(id:string):Promise<InteractionsModerator[]> {
     "use strict";
 
     return this.requestPath("GET", `${BackEnd.PROJECT_PATH}/homers/${id}`);
@@ -1390,16 +1390,16 @@ export abstract class BackEnd {
    * @param callback a callback called with an indicator and a message
    *                 describing the result.
    */
-  public addHomerToProject(homer:string, project:string):Promise<string> {
+  public addInteractionsModeratorToProject(moderator:string, project:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("PUT", `${BackEnd.HOMER_PATH}/${project}/${homer}`, {}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.INTERACTIONS_MODERATOR_PATH}/${project}/${moderator}`, {}).then(JSON.stringify);
   }
 
-  public removeHomerFromProject(homer:string, project:string):Promise<string> {
+  public removeInteractionsModeratorFromProject(moderator:string, project:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("DELETE", `${BackEnd.HOMER_PATH}/${project}/${homer}`).then(JSON.stringify);
+    return this.requestPath("DELETE", `${BackEnd.INTERACTIONS_MODERATOR_PATH}/${project}/${moderator}`).then(JSON.stringify);
   }
 
   public addCollaboratorToProject(collaborator:string, project:string):Promise<string> {

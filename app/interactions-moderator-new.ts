@@ -1,6 +1,6 @@
 /*
- * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -20,22 +20,19 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
-import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
-  templateUrl: "app/project-homer-new.html",
+  templateUrl: "app/interactions-moderator-new.html",
   directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
-  projectId:string;
-
-  heading:string;
-
   breadcrumbs:layout.LabeledLink[];
 
   idField:string;
+
+  typeField:string;
 
   backEnd:backEnd.Service;
 
@@ -43,20 +40,16 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.projectId = routeParams.get("project");
-    this.heading = `New Project Homer (Project ${this.projectId})`;
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("User", ["Projects"]),
-      new layout.LabeledLink("Projects", ["Projects"]),
-      new layout.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new layout.LabeledLink("Homers", ["Project", {project: this.projectId}]),
-      new layout.LabeledLink("New Homer", ["NewProjectHomer", {project: this.projectId}])
+      new layout.LabeledLink("Moderators of Interactions", ["Devices"]),
+      new layout.LabeledLink("New Moderator", ["NewInteractionsModerator"])
     ];
     this.idField = "";
+    this.typeField = "";
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -66,26 +59,28 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
+    this.notifications.current.push(new libPatternFlyNotifications.Warning("issue/TYRION-155"));
   }
 
   validateIdField():()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getProjectHomers(this.projectId).then(homers => !homers.find(homer => homer.homer_id == this.idField));
+    return () => this.backEnd.getInteractionsModerators().then(moderators => !moderators.find(moderator => moderator.homer_id == this.idField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.addHomerToProject(this.idField, this.projectId)
+    this.backEnd.createInteractionsModerator(this.idField, this.typeField)
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The Homer has been added."));
-          this.router.navigate(["Project", {project: this.projectId}]);
+          this.notifications.next.push(new libPatternFlyNotifications.Success("The moderator have been created."));
+          this.router.navigate(["Devices"]);
         })
-        .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The Homer cannot be added: ${reason}`));
+        .catch((reason) => {
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The moderator cannot be created: ${reason}`));
         });
   }
 
@@ -93,6 +88,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Project", {project: this.projectId}]);
+    this.router.navigate(["Devices"]);
   }
 }

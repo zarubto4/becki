@@ -89,9 +89,9 @@ export class Component implements ng.OnInit {
   @ng.ViewChild("boardUploadingBinaryFileField")
   boardUploadingBinaryFileField:ng.ElementRef;
 
-  homers:SelectableItem[];
+  interactionsModerators:SelectableItem[];
 
-  homerUploadingSchemeField:number;
+  interactionsUploadingSchemeField:number;
 
   interactionsSchemesVersions:InteractionsSchemeVersion[];
 
@@ -139,7 +139,7 @@ export class Component implements ng.OnInit {
           this.backEnd.getProjectOwners(this.id),
           this.backEnd.getProjectBoardPrograms(this.id),
           this.backEnd.getProjectBoards(this.id),
-          this.backEnd.getProjectHomers(this.id),
+          this.backEnd.getProjectInteractionsModerators(this.id),
           this.backEnd.getProjectInteractionsSchemes(this.id)
         ])
         .then(result => {
@@ -147,15 +147,15 @@ export class Component implements ng.OnInit {
           let collaborators:libBackEnd.Person[];
           let boardPrograms:libBackEnd.BoardProgram[];
           let boards:libBackEnd.Board[];
-          let homers:libBackEnd.Homer[];
+          let moderators:libBackEnd.InteractionsModerator[];
           let interactionsSchemes:libBackEnd.InteractionsScheme[];
-          [project, collaborators, boardPrograms, boards, homers, interactionsSchemes] = result;
+          [project, collaborators, boardPrograms, boards, moderators, interactionsSchemes] = result;
           this.nameField = project.project_name;
           this.descriptionField = project.project_description;
           this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composePersonString(collaborator), null));
           this.boardPrograms = boardPrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, ["BoardProgram", {project: this.id, program: program.id}]));
           this.boards = boards.map(board => new SelectableItem(board.id, board.id, board.isActive ? "active" : "inactive"));
-          this.homers = homers.map(homer => new SelectableItem(homer.homer_id, homer.homer_id, homer.online ? "online" : "offline"));
+          this.interactionsModerators = moderators.map(moderator => new SelectableItem(moderator.homer_id, moderator.homer_id, moderator.online ? "online" : "offline"));
           this.interactionsSchemesVersions = [].concat(...interactionsSchemes.map(scheme => scheme.versionObjects.map(version => new InteractionsSchemeVersion(scheme.b_program_id, version.id, `${scheme.name} ${version.version_name}`))));
         })
         .catch(reason => {
@@ -290,33 +290,33 @@ export class Component implements ng.OnInit {
     console.log(this.boardUploadingBinaryFileField);
   }
 
-  onHomerAddClick():void {
+  onInteractionsModeratorAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewProjectHomer", {project: this.id}]);
+    this.router.navigate(["NewProjectInteractionsModerator", {project: this.id}]);
   }
 
-  onHomerRemoveClick(id:string):void {
+  onInteractionsModeratorRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.removeHomerFromProject(id, this.id)
+    this.backEnd.removeInteractionsModeratorFromProject(id, this.id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The Homer has been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The moderator has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The Homer cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The moderator cannot be removed: ${reason}`));
         });
   }
 
-  onHomerUploadingSubmit():void {
+  onInteractionsUploadingSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    let homers = this.homers.filter(selectable => selectable.selected).map(selectable => selectable.id);
-    let scheme = this.interactionsSchemesVersions[this.homerUploadingSchemeField];
-    Promise.all(homers.map(id => this.backEnd.addSchemeToHomer(scheme.versionId, id, scheme.schemeId)))
+    let moderators = this.interactionsModerators.filter(selectable => selectable.selected).map(selectable => selectable.id);
+    let scheme = this.interactionsSchemesVersions[this.interactionsUploadingSchemeField];
+    Promise.all(moderators.map(id => this.backEnd.addSchemeToInteractionsModerator(scheme.versionId, id, scheme.schemeId)))
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The scheme has been uploaded."));
           this.refresh();

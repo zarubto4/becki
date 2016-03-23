@@ -24,7 +24,7 @@ import * as boardProgramVersionNew from "./board-program-version-new";
 import * as boardType from "./board-type";
 import * as boardTypeNew from "./board-type-new";
 import * as devices from "./devices";
-import * as homerNew from "./homer-new";
+import * as interactionsModeratorNew from "./interactions-moderator-new";
 import * as issue from "./issue";
 import * as issueConfirmationNew from "./issue-confirmation-new";
 import * as issueConfirmationType from "./issue-confirmation-type";
@@ -46,7 +46,7 @@ import * as producerNew from "./producer-new";
 import * as project from "./project";
 import * as projectBoardNew from "./project-board-new";
 import * as projectCollaboratorNew from "./project-collaborator-new";
-import * as projectHomerNew from "./project-homer-new";
+import * as projectInteractionsModeratorNew from "./project-interactions-moderator-new";
 import * as projectNew from "./project-new";
 import * as projects from "./projects";
 import * as signing from "./signing";
@@ -72,7 +72,7 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
   {path: "/board/type/new", component: boardTypeNew.Component, as: "NewBoardType"},
   {path: "/board/types/:type", component: boardType.Component, as: "BoardType"},
   {path: "/devices", component: devices.Component, as: "Devices"},
-  {path: "/homer/new", component: homerNew.Component, as: "NewHomer"},
+  {path: "/interactions-moderator/new", component: interactionsModeratorNew.Component, as: "NewInteractionsModerator"},
   {path: "/issue/new", component: issueNew.Component, as: "NewIssue"},
   {path: "/issue/confirmation/new", component: issueConfirmationTypeNew.Component, as: "NewIssueConfirmationType"},
   {path: "/issue/confirmations/:confirmation", component: issueConfirmationType.Component, as: "IssueConfirmationType"},
@@ -112,7 +112,7 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
   {path: "/user/projects/:project/board-programs/:program", component: boardProgram.Component, as: "BoardProgram"},
   {path: "/user/projects/:project/board-programs/:program/version/new", component: boardProgramVersionNew.Component, as: "NewBoardProgramVersion"},
   {path: "/user/projects/:project/collaborator/new", component: projectCollaboratorNew.Component, as: "NewProjectCollaborator"},
-  {path: "/user/projects/:project/homer/new", component: projectHomerNew.Component, as: "NewProjectHomer"},
+  {path: "/user/projects/:project/interactions-moderator/new", component: projectInteractionsModeratorNew.Component, as: "NewProjectInteractionsModerator"},
   {path: "/user/projects/:project/standalone-program/new", component: standaloneProgramNew.Component, as: "NewStandaloneProgram"},
   {path: "/user/projects/:project/standalone-programs/:program", component: standaloneProgram.Component, as: "StandaloneProgram"}
 ])

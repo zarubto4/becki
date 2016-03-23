@@ -42,7 +42,7 @@ export class Component implements ng.OnInit {
 
   boards:libPatternFlyListView.Item[];
 
-  homers:libPatternFlyListView.Item[];
+  interactionsModerators:libPatternFlyListView.Item[];
 
   backEnd:backEnd.Service;
 
@@ -91,13 +91,13 @@ export class Component implements ng.OnInit {
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
         .then(boards => this.boards = boards.map(board => new libPatternFlyListView.Item(board.id, `${board.id} (issue/TYRION-70)`, board.isActive ? "active" : "inactive")))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Board types cannot be loaded: ${reason}`)));
-    this.backEnd.getHomers()
+    this.backEnd.getInteractionsModerators()
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-71
-        .then(homers => this.homers = homers.map(homer => new libPatternFlyListView.Item(homer.homer_id, `${homer.homer_id} (issue/TYRION-71)`, homer.online ? "online" : "offline")))
+        .then(moderators => this.interactionsModerators = moderators.map(moderator => new libPatternFlyListView.Item(moderator.homer_id, `${moderator.homer_id} (issue/TYRION-71)`, moderator.online ? "online" : "offline")))
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
           this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-155"));
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`Homers cannot be loaded: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`Moderators of interactions cannot be loaded: ${reason}`));
         });
   }
 
@@ -215,23 +215,23 @@ export class Component implements ng.OnInit {
     this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-89"));
   }
 
-  onHomerAddClick():void {
+  onInteractionsModeratorAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewHomer"]);
+    this.router.navigate(["NewInteractionsModerator"]);
   }
 
-  onHomerRemoveClick(id:string):void {
+  onInteractionsModeratorRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.deleteHomer(id)
+    this.backEnd.deleteInteractionsModerator(id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The Homer has been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The moderator has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The Homer cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The moderator cannot be removed: ${reason}`));
         });
   }
 }
