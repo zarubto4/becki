@@ -101,6 +101,7 @@ import * as standaloneProgramNew from "./standalone-program-new";
   {path: "/producer/new", component: producerNew.Component, as: "NewProducer"},
   {path: "/producers/:producer", component: producer.Component, as: "Producer"},
   {path: "/signing", component: signing.Component, as: "Signing"},
+  {path: "/user/interactions-schemes/:scheme", component: interactionsScheme.Component, as: "InteractionsScheme"},
   {path: "/user/project/new", component: projectNew.Component, as: "NewProject"},
   {path: "/user/projects", component: projects.Component, as: "Projects"},
   {path: "/user/projects/:project", component: project.Component, as: "Project"},
@@ -110,7 +111,6 @@ import * as standaloneProgramNew from "./standalone-program-new";
   {path: "/user/projects/:project/board-programs/:program/version/new", component: boardProgramVersionNew.Component, as: "NewBoardProgramVersion"},
   {path: "/user/projects/:project/collaborator/new", component: projectCollaboratorNew.Component, as: "NewProjectCollaborator"},
   {path: "/user/projects/:project/homer/new", component: projectHomerNew.Component, as: "NewProjectHomer"},
-  {path: "/user/projects/:project/interactions-schemes/:scheme", component: interactionsScheme.Component, as: "InteractionsScheme"},
   {path: "/user/projects/:project/standalone-program/new", component: standaloneProgramNew.Component, as: "NewStandaloneProgram"},
   {path: "/user/projects/:project/standalone-programs/:program", component: standaloneProgram.Component, as: "StandaloneProgram"}
 ])

@@ -66,7 +66,7 @@ export class Component implements ng.OnInit {
     this.breadcrumbs = [
       becki.HOME,
       new layout.LabeledLink("Schemes of Interactions", ["Interactions"]),
-      new layout.LabeledLink("Loading...", ["Interactions"]),
+      new layout.LabeledLink("Loading...", ["InteractionsScheme", {scheme: this.schemeId}]),
       new layout.LabeledLink("New Version", ["Interactions"])
     ];
     this.nameField = "";
@@ -172,7 +172,7 @@ export class Component implements ng.OnInit {
         })
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The version has been created."));
-          this.router.navigate(["Interactions"]);
+          this.router.navigate(["InteractionsScheme", {scheme: this.schemeId}]);
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The version cannot be created: ${reason}`));
@@ -183,6 +183,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Interactions"]);
+    this.router.navigate(["InteractionsScheme", {scheme: this.schemeId}]);
   }
 }

@@ -31,8 +31,6 @@ export class Component implements ng.OnInit {
 
   id:string;
 
-  projectId:string;
-
   heading:string;
 
   breadcrumbs:layout.LabeledLink[];
@@ -53,15 +51,12 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.id = routeParams.get("scheme");
-    this.projectId = routeParams.get("project");
-    this.heading = `Scheme of Interactions ${this.id} (Project ${this.projectId})`;
+    this.heading = `Scheme of Interactions ${this.id}`;
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("User", ["Projects"]),
-      new layout.LabeledLink("Projects", ["Projects"]),
-      new layout.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new layout.LabeledLink("Schemes of Interactions", ["Project", {project: this.projectId}]),
-      new layout.LabeledLink(`Scheme of Interactions ${this.id}`, ["InteractionsScheme", {project: this.projectId, scheme: this.id}])
+      new layout.LabeledLink("User", ["Applications"]),
+      new layout.LabeledLink("Schemes of Interactions", ["Interactions"]),
+      new layout.LabeledLink(`Scheme of Interactions ${this.id}`, ["InteractionsScheme", {scheme: this.id}])
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
@@ -89,7 +84,9 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getProjectInteractionsSchemes(this.projectId).then(schemes => !schemes.find(scheme => scheme.b_program_id != this.id && scheme.name == this.nameField));
+    return () => this.backEnd.getProjects()
+        .then(projects => Promise.all(projects.map(project => this.backEnd.getProjectInteractionsSchemes(project.id))))
+        .then(schemes => ![].concat(...schemes).find(scheme => scheme.b_program_id != this.id && scheme.name == this.nameField));
   }
 
   onSubmit():void {
@@ -99,7 +96,7 @@ export class Component implements ng.OnInit {
     this.backEnd.updateInteractionsScheme(this.id, this.nameField, this.descriptionField)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The scheme has been updated."));
-          this.router.navigate(["Project", {project: this.projectId}]);
+          this.router.navigate(["Interactions"]);
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme cannot be updated: ${reason}`));
@@ -110,7 +107,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Project", {project: this.projectId}]);
+    this.router.navigate(["Interactions"]);
   }
 
   onAddVersionClick():void {
