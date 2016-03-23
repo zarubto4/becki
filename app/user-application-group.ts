@@ -65,7 +65,7 @@ export class Component implements ng.OnInit {
     this.breadcrumbs = [
       becki.HOME,
       new layout.LabeledLink("User", becki.HOME.link),
-      new layout.LabeledLink("Groups for Applications", ["UserApplications"]),
+      new layout.LabeledLink("Applications Groups", ["UserApplications"]),
       new layout.LabeledLink("Loading...", ["UserApplicationGroup", {group: this.id}])
     ];
     this.editing = false;

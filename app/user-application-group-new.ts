@@ -51,7 +51,7 @@ export class Component implements ng.OnInit {
     this.breadcrumbs = [
       becki.HOME,
       new layout.LabeledLink("User", becki.HOME.link),
-      new layout.LabeledLink("New Group for Applications", ["NewUserApplicationGroup"])
+      new layout.LabeledLink("New Applications Group", ["NewUserApplicationGroup"])
     ];
     this.projectField = "";
     this.nameField = "";
