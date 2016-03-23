@@ -67,7 +67,7 @@ export class Component implements ng.OnInit {
       becki.HOME,
       new layout.LabeledLink("Schemes of Interactions", ["Interactions"]),
       new layout.LabeledLink("Loading...", ["InteractionsScheme", {scheme: this.schemeId}]),
-      new layout.LabeledLink("New Version", ["Interactions"])
+      new layout.LabeledLink("New Version", ["NewInteractionsSchemeVersion", {scheme: this.schemeId}])
     ];
     this.nameField = "";
     this.descriptionField = "";
