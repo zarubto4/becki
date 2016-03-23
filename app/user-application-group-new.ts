@@ -19,13 +19,12 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
-import * as fieldApplication from "./field-application";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
-  templateUrl: "app/application-device-new.html",
+  templateUrl: "app/user-application-group-new.html",
   directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
@@ -38,9 +37,7 @@ export class Component implements ng.OnInit {
 
   nameField:string;
 
-  heightField:number;
-
-  widthField:number;
+  descriptionField:string;
 
   backEnd:backEnd.Service;
 
@@ -53,12 +50,12 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("New Device for Applications", ["NewApplicationDevice"])
+      new layout.LabeledLink("User", becki.HOME.link),
+      new layout.LabeledLink("New Group for Applications", ["NewUserApplicationGroup"])
     ];
     this.projectField = "";
     this.nameField = "";
-    this.heightField = 1;
-    this.widthField = 1;
+    this.descriptionField = "";
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -77,7 +74,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getApplicationDevices().then(devices => ![].concat(devices.public_types, devices.private_types).find(device => device.name == this.nameField));
+    return () => this.backEnd.getApplicationGroups().then(groups => !groups.find(group => group.program_name == this.nameField));
   }
 
   onSubmit():void {
@@ -92,14 +89,14 @@ export class Component implements ng.OnInit {
             })
         )
         .then(project => {
-          return this.backEnd.createApplicationDevice(this.nameField, this.heightField, this.widthField, project);
+          return this.backEnd.createApplicationGroup(this.nameField, this.descriptionField, project);
         })
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The device has been created."));
-          this.router.navigate(["Applications"]);
+          this.notifications.next.push(new libPatternFlyNotifications.Success("The group has been created."));
+          this.router.navigate(["UserApplications"]);
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The device cannot be created: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The group cannot be created: ${reason}`));
         });
   }
 
@@ -107,6 +104,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Applications"]);
+    this.router.navigate(["UserApplications"]);
   }
 }

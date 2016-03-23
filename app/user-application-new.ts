@@ -25,7 +25,7 @@ import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
-  templateUrl: "app/application-new.html",
+  templateUrl: "app/user-application-new.html",
   directives: [
     customValidator.Directive,
     fieldApplication.Component,
@@ -77,7 +77,8 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("New Application", ["NewApplication"])
+      new layout.LabeledLink("User", becki.HOME.link),
+      new layout.LabeledLink("New Application", ["NewUserApplication"])
     ];
     this.projectField = "";
     this.groupField = "";
@@ -188,7 +189,7 @@ export class Component implements ng.OnInit {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The application has been created."));
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TG-1
           this.notifications.next.push(new libPatternFlyNotifications.Warning("issue/TG-1"));
-          this.router.navigate(["Applications"]);
+          this.router.navigate(["UserApplications"]);
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The application cannot be created: ${reason}`));
@@ -199,6 +200,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Applications"]);
+    this.router.navigate(["UserApplications"]);
   }
 }

@@ -59,7 +59,7 @@ export class Component implements ng.OnInit {
     this.id = routeParams.get("device");
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("Devices for Applications", ["Applications"]),
+      new layout.LabeledLink("Devices for Applications", ["UserApplications"]),
       new layout.LabeledLink("Loading...", ["ApplicationDevice", {device: this.id}])
     ];
     this.editing = false;

@@ -18,41 +18,34 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as customValidator from "./custom-validator";
 import * as fieldInteractionsScheme from "./field-interactions-scheme";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
-  templateUrl: "app/interactions-scheme-version-new.html",
-  directives: [
-    customValidator.Directive,
-    fieldInteractionsScheme.Component,
-    layout.Component,
-    ng.CORE_DIRECTIVES,
-    ng.FORM_DIRECTIVES
-  ]
+  templateUrl: "app/user-interactions-scheme-version.html",
+  directives: [fieldInteractionsScheme.Component, layout.Component, ng.CORE_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
+  id:string;
+
   schemeId:string;
+
+  name:string;
 
   schemeName:string;
 
   breadcrumbs:layout.LabeledLink[];
 
-  nameField:string;
-
-  descriptionField:string;
+  description:string;
 
   showGroups:boolean;
 
-  groupField:string;
-
   groups:libBackEnd.ApplicationGroup[];
 
-  schemeField:string;
+  scheme:string;
 
   backEnd:backEnd.Service;
 
@@ -63,19 +56,21 @@ export class Component implements ng.OnInit {
   constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
+    this.id = routeParams.get("version");
     this.schemeId = routeParams.get("scheme");
+    this.name = "Loading...";
     this.schemeName = "Loading...";
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("Schemes of Interactions", ["Interactions"]),
-      new layout.LabeledLink("Loading...", ["InteractionsScheme", {scheme: this.schemeId}]),
-      new layout.LabeledLink("New Version", ["NewInteractionsSchemeVersion", {scheme: this.schemeId}])
+      new layout.LabeledLink("User", becki.HOME.link),
+      new layout.LabeledLink("Schemes of Interactions", ["UserInteractions"]),
+      new layout.LabeledLink("Loading...", ["UserInteractionsScheme", {scheme: this.schemeId}]),
+      new layout.LabeledLink("Versions", ["UserInteractionsScheme", {scheme: this.schemeId}]),
+      new layout.LabeledLink("Loading...", ["UserInteractionsSchemeVersion", {scheme: this.schemeId, version: this.id}])
     ];
-    this.nameField = "";
-    this.descriptionField = "";
+    this.description = "Loading...";
     this.showGroups = false;
-    this.groupField = "";
-    this.schemeField = `{"blocks":{}}`;
+    this.scheme = `{"blocks":{}}`;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -96,97 +91,52 @@ export class Component implements ng.OnInit {
           let scheme:libBackEnd.InteractionsScheme;
           let project:libBackEnd.Project;
           [scheme, project] = result;
-          if (!scheme.versionObjects.length) {
+          let version = scheme.versionObjects.find(version => version.id == this.id);
+          if (!version) {
             // TODO: https://github.com/angular/angular/issues/4558
-            return Promise.reject<any>(new Error("the scheme has no version"));
-          } else if (scheme.versionObjects.length > 1) {
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-164
-            this.notifications.current.push(new libPatternFlyNotifications.Warning("issue/TYRION-164"));
+            return Promise.reject<any>(new Error(`version ${this.id} not found in scheme ${scheme.name}`));
           }
-          let lastVersion = scheme.versionObjects[0];
           return Promise.all<any>([
+            version,
             scheme,
             this.backEnd.getProjectApplicationGroups(project.id),
-            lastVersion,
-            this.backEnd.request("GET", lastVersion.allFiles)
+            this.backEnd.request("GET", version.allFiles)
           ]);
         })
         .then(result => {
+          let version:libBackEnd.Version;
           let scheme:libBackEnd.InteractionsScheme;
           let groups:libBackEnd.ApplicationGroup[];
-          let lastVersion:libBackEnd.Version;
           let files:libBackEnd.File[];
-          [scheme, groups, lastVersion, files] = result;
+          [version, scheme, groups, files] = result;
           if (files.length != 1) {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error("the scheme version does not have only one file"));
           }
           return Promise.all<any>([
+            version,
             scheme,
             Promise.all(groups.map(group => Promise.all<any>([group, group.b_progam_connected_version ? this.backEnd.request("GET", group.b_progam_connected_version) : null]))),
-            lastVersion,
             this.backEnd.request("GET", files[0].fileContent)
           ]);
         })
         .then(result => {
+          let version:libBackEnd.Version;
           let scheme:libBackEnd.InteractionsScheme;
           let groups:[libBackEnd.ApplicationGroup, libBackEnd.Version][];
-          let lastVersion:libBackEnd.Version;
           let file:libBackEnd.FileContent;
-          [scheme, groups, lastVersion, file] = result;
+          [version, scheme, groups, file] = result;
+          this.name = version.version_name;
           this.schemeName = scheme.name;
-          this.breadcrumbs[2].label = scheme.name;
+          this.breadcrumbs[3].label = scheme.name;
+          this.breadcrumbs[5].label = version.version_name;
+          this.description = version.version_description;
           this.showGroups = groups.length > 1 || (groups.length == 1 && !groups[0][0].m_programs.length);
-          let group = groups.find(pair => pair[1] && pair[1].id == lastVersion.id);
-          if (group) {
-            this.groupField = group[0].id;
-          }
-          this.groups = groups.map(pair => pair[0]);
-          this.schemeField = file.content;
+          this.groups = groups.filter(pair => pair[1] && pair[1].id == this.id).map(pair => pair[0]);
+          this.scheme = file.content;
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme ${this.schemeId} cannot be loaded: ${reason}`));
         });
-  }
-
-  validateNameField():()=>Promise<boolean> {
-    "use strict";
-
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getInteractionsScheme(this.schemeId).then(scheme => !scheme.versionObjects.find(version => version.version_name == this.nameField));
-  }
-
-  onSubmit():void {
-    "use strict";
-
-    this.backEnd.addVersionToInteractionsScheme(this.nameField, this.descriptionField, this.schemeField, this.schemeId)
-        .then(() => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-163
-          return this.backEnd.getInteractionsScheme(this.schemeId);
-        })
-        .then(scheme => {
-          if (!scheme.versionObjects.length) {
-            // TODO: https://github.com/angular/angular/issues/4558
-            return Promise.reject<any>(new Error("the scheme has no version"));
-          } else if (scheme.versionObjects.length > 1) {
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-164
-            this.notifications.current.push(new libPatternFlyNotifications.Warning("issue/TYRION-164"));
-          }
-          return this.groupField ? this.backEnd.addApplicationGroupToInteractionsScheme(this.groupField, scheme.versionObjects[0].id, false) : null;
-        })
-        .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The version has been created."));
-          this.router.navigate(["InteractionsScheme", {scheme: this.schemeId}]);
-        })
-        .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The version cannot be created: ${reason}`));
-        });
-  }
-
-  onCancelClick():void {
-    "use strict";
-
-    this.notifications.shift();
-    this.router.navigate(["InteractionsScheme", {scheme: this.schemeId}]);
   }
 }

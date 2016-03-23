@@ -25,7 +25,7 @@ import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
-  templateUrl: "app/interactions-scheme-new.html",
+  templateUrl: "app/user-interactions-scheme-new.html",
   directives: [
     customValidator.Directive,
     fieldInteractionsScheme.Component,
@@ -65,7 +65,8 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("New Scheme of Interactions", ["NewInteractionsScheme"])
+      new layout.LabeledLink("User", becki.HOME.link),
+      new layout.LabeledLink("New Scheme of Interactions", ["NewUserInteractionsScheme"])
     ];
     this.projectField = "";
     this.nameField = "";
@@ -164,7 +165,7 @@ export class Component implements ng.OnInit {
         })
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The scheme have been created."));
-          this.router.navigate(["Interactions"]);
+          this.router.navigate(["UserInteractions"]);
         })
         .catch((reason) => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme cannot be created: ${reason}`));
@@ -175,6 +176,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Interactions"]);
+    this.router.navigate(["UserInteractions"]);
   }
 }

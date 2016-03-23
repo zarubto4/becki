@@ -25,7 +25,7 @@ import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
-  templateUrl: "app/application.html",
+  templateUrl: "app/user-application.html",
   directives: [
     customValidator.Directive,
     fieldApplication.Component,
@@ -77,8 +77,9 @@ export class Component implements ng.OnInit {
     this.name = "Loading...";
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("Applications", ["Applications"]),
-      new layout.LabeledLink("Loading...", ["Application", {application: this.id}])
+      new layout.LabeledLink("User", becki.HOME.link),
+      new layout.LabeledLink("Applications", ["UserApplications"]),
+      new layout.LabeledLink("Loading...", ["UserApplication", {application: this.id}])
     ];
     this.editing = false;
     this.showProject = false;
@@ -146,7 +147,7 @@ export class Component implements ng.OnInit {
           let device:libBackEnd.ApplicationDevice;
           [application, projects, this.project, groups, group, device] = result;
           this.name = application.program_name;
-          this.breadcrumbs[2].label = application.program_name;
+          this.breadcrumbs[3].label = application.program_name;
           this.showProject = projects.length > 1;
           this.showGroup = groups.length > 1;
           this.group = group.program_name;

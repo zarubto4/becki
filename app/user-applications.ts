@@ -23,7 +23,7 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
-  templateUrl: "app/applications.html",
+  templateUrl: "app/user-applications.html",
   directives: [layout.Component, libPatternFlyListView.Component, ng.CORE_DIRECTIVES],
 })
 export class Component implements ng.OnInit {
@@ -49,7 +49,8 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("Applications", ["Applications"])
+      new layout.LabeledLink("User", becki.HOME.link),
+      new layout.LabeledLink("Applications", ["UserApplications"])
     ];
     this.tab = "applications";
     this.backEnd = backEndService;
@@ -68,7 +69,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getApplications()
-        .then(applications => this.applications = applications.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["Application", {application: application.id}])))
+        .then(applications => this.applications = applications.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["UserApplication", {application: application.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Applications cannot be loaded: ${reason}`)));
     this.backEnd.getApplicationDevices()
         .then(devices => this.devices = [].concat(
@@ -77,7 +78,7 @@ export class Component implements ng.OnInit {
         ))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Devices cannot be loaded: ${reason}`)));
     this.backEnd.getApplicationGroups()
-        .then(groups => this.groups = groups.map(group => new libPatternFlyListView.Item(group.id, group.program_name, group.program_description, ["ApplicationGroup", {group: group.id}])))
+        .then(groups => this.groups = groups.map(group => new libPatternFlyListView.Item(group.id, group.program_name, group.program_description, ["UserApplicationGroup", {group: group.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Groups cannot be loaded: ${reason}`)));
   }
 
@@ -100,19 +101,19 @@ export class Component implements ng.OnInit {
   onAddApplicationClick():void {
     "use strict";
 
-    this.router.navigate(["NewApplication"]);
+    this.router.navigate(["NewUserApplication"]);
   }
 
   onAddDeviceClick():void {
     "use strict";
 
-    this.router.navigate(["NewApplicationDevice"]);
+    this.router.navigate(["NewUserApplicationDevice"]);
   }
 
   onAddGroupClick():void {
     "use strict";
 
-    this.router.navigate(["NewApplicationGroup"]);
+    this.router.navigate(["NewUserApplicationGroup"]);
   }
 
   onTabClick(tab:string):void {

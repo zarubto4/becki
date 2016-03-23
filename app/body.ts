@@ -16,14 +16,7 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as application from "./application";
 import * as applicationDevice from "./application-device";
-import * as applicationDeviceNew from "./application-device-new";
-import * as applicationGroup from "./application-group";
-import * as applicationGroupNew from "./application-group-new";
-import * as applicationNew from "./application-new";
-import * as applications from "./applications";
-import * as applicationsVision from "./applications-vision";
 import * as boardNew from "./board-new";
 import * as boardProgram from "./board-program";
 import * as boardProgramNew from "./board-program-new";
@@ -32,11 +25,6 @@ import * as boardType from "./board-type";
 import * as boardTypeNew from "./board-type-new";
 import * as devices from "./devices";
 import * as homerNew from "./homer-new";
-import * as interactions from "./interactions";
-import * as interactionsScheme from "./interactions-scheme";
-import * as interactionsSchemeNew from "./interactions-scheme-new";
-import * as interactionsSchemeVersion from "./interactions-scheme-version";
-import * as interactionsSchemeVersionNew from "./interactions-scheme-version-new";
 import * as issue from "./issue";
 import * as issueConfirmationNew from "./issue-confirmation-new";
 import * as issueConfirmationType from "./issue-confirmation-type";
@@ -64,27 +52,27 @@ import * as projects from "./projects";
 import * as signing from "./signing";
 import * as standaloneProgram from "./standalone-program";
 import * as standaloneProgramNew from "./standalone-program-new";
+import * as userApplication from "./user-application";
+import * as userApplicationDeviceNew from "./user-application-device-new";
+import * as userApplicationGroup from "./user-application-group";
+import * as userApplicationGroupNew from "./user-application-group-new";
+import * as userApplicationNew from "./user-application-new";
+import * as userApplications from "./user-applications";
+import * as userApplicationsVision from "./user-applications-vision";
+import * as userInteractions from "./user-interactions";
+import * as userInteractionsScheme from "./user-interactions-scheme";
+import * as userInteractionsSchemeNew from "./user-interactions-scheme-new";
+import * as userInteractionsSchemeVersion from "./user-interactions-scheme-version";
+import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-version-new";
 
 @ngRouter.RouteConfig([
-  {path: "/", redirectTo: "/applications"},
-  {path: "/application/device/new", component: applicationDeviceNew.Component, as: "NewApplicationDevice"},
+  {path: "/", redirectTo: "/user/applications"},
   {path: "/application/devices/:device", component: applicationDevice.Component, as: "ApplicationDevice"},
-  {path: "/application/group/new", component: applicationGroupNew.Component, as: "NewApplicationGroup"},
-  {path: "/application/groups/:group", component: applicationGroup.Component, as: "ApplicationGroup"},
-  {path: "/application/new", component: applicationNew.Component, as: "NewApplication"},
-  {path: "/application/vision", component: applicationsVision.Component, as: "ApplicationsVision"},
-  {path: "/applications", component: applications.Component, as: "Applications"},
-  {path: "/applications/:application", component: application.Component, as: "Application"},
   {path: "/board/new", component: boardNew.Component, as: "NewBoard"},
   {path: "/board/type/new", component: boardTypeNew.Component, as: "NewBoardType"},
   {path: "/board/types/:type", component: boardType.Component, as: "BoardType"},
   {path: "/devices", component: devices.Component, as: "Devices"},
   {path: "/homer/new", component: homerNew.Component, as: "NewHomer"},
-  {path: "/interactions", component: interactions.Component, as: "Interactions"},
-  {path: "/interactions/scheme/new", component: interactionsSchemeNew.Component, as: "NewInteractionsScheme"},
-  {path: "/interactions/schemes/:scheme", component: interactionsScheme.Component, as: "InteractionsScheme"},
-  {path: "/interactions/schemes/:scheme/version/new", component: interactionsSchemeVersionNew.Component, as: "NewInteractionsSchemeVersion"},
-  {path: "/interactions/schemes/:scheme/versions/:version", component: interactionsSchemeVersion.Component, as: "InteractionsSchemeVersion"},
   {path: "/issue/new", component: issueNew.Component, as: "NewIssue"},
   {path: "/issue/confirmation/new", component: issueConfirmationTypeNew.Component, as: "NewIssueConfirmationType"},
   {path: "/issue/confirmations/:confirmation", component: issueConfirmationType.Component, as: "IssueConfirmationType"},
@@ -104,6 +92,18 @@ import * as standaloneProgramNew from "./standalone-program-new";
   {path: "/producer/new", component: producerNew.Component, as: "NewProducer"},
   {path: "/producers/:producer", component: producer.Component, as: "Producer"},
   {path: "/signing", component: signing.Component, as: "Signing"},
+  {path: "/user/application/device/new", component: userApplicationDeviceNew.Component, as: "NewUserApplicationDevice"},
+  {path: "/user/application/group/new", component: userApplicationGroupNew.Component, as: "NewUserApplicationGroup"},
+  {path: "/user/application/groups/:group", component: userApplicationGroup.Component, as: "UserApplicationGroup"},
+  {path: "/user/application/new", component: userApplicationNew.Component, as: "NewUserApplication"},
+  {path: "/user/application/vision", component: userApplicationsVision.Component, as: "UserApplicationsVision"},
+  {path: "/user/applications", component: userApplications.Component, as: "UserApplications"},
+  {path: "/user/applications/:application", component: userApplication.Component, as: "UserApplication"},
+  {path: "/user/interactions", component: userInteractions.Component, as: "UserInteractions"},
+  {path: "/user/interactions/scheme/new", component: userInteractionsSchemeNew.Component, as: "NewUserInteractionsScheme"},
+  {path: "/user/interactions/schemes/:scheme", component: userInteractionsScheme.Component, as: "UserInteractionsScheme"},
+  {path: "/user/interactions/schemes/:scheme/version/new", component: userInteractionsSchemeVersionNew.Component, as: "NewUserInteractionsSchemeVersion"},
+  {path: "/user/interactions/schemes/:scheme/versions/:version", component: userInteractionsSchemeVersion.Component, as: "UserInteractionsSchemeVersion"},
   {path: "/user/project/new", component: projectNew.Component, as: "NewProject"},
   {path: "/user/projects", component: projects.Component, as: "Projects"},
   {path: "/user/projects/:project", component: project.Component, as: "Project"},

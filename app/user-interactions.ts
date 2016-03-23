@@ -23,7 +23,7 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
-  templateUrl: "app/interactions.html",
+  templateUrl: "app/user-interactions.html",
   directives: [layout.Component, libPatternFlyListView.Component, ng.CORE_DIRECTIVES],
 })
 export class Component implements ng.OnInit {
@@ -43,7 +43,8 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("Interactions", ["Interactions"])
+      new layout.LabeledLink("User", becki.HOME.link),
+      new layout.LabeledLink("Interactions", ["UserInteractions"])
     ];
     this.backEnd = backEndService;
     this.notifications = notifications;
@@ -62,14 +63,14 @@ export class Component implements ng.OnInit {
 
     this.backEnd.getProjects()
         .then(projects => Promise.all(projects.map(project => this.backEnd.getProjectInteractionsSchemes(project.id))))
-        .then(schemes => this.items = [].concat(...schemes).map(scheme => new libPatternFlyListView.Item(scheme.b_program_id, scheme.name, scheme.program_description, ["InteractionsScheme", {scheme: scheme.b_program_id}])))
+        .then(schemes => this.items = [].concat(...schemes).map(scheme => new libPatternFlyListView.Item(scheme.b_program_id, scheme.name, scheme.program_description, ["UserInteractionsScheme", {scheme: scheme.b_program_id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Schemes cannot be loaded: ${reason}`)));
   }
 
   onAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewInteractionsScheme"]);
+    this.router.navigate(["NewUserInteractionsScheme"]);
   }
 
   onRemoveClick(id:string):void {

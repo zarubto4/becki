@@ -1,6 +1,6 @@
 /*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -25,20 +25,20 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
-  templateUrl: "app/interactions-scheme.html",
+  templateUrl: "app/user-application-group.html",
   directives: [
     customValidator.Directive,
     layout.Component,
     libPatternFlyListView.Component,
-    ng.FORM_DIRECTIVES,
-    ng.CORE_DIRECTIVES
+    ng.CORE_DIRECTIVES,
+    ng.FORM_DIRECTIVES
   ]
 })
 export class Component implements ng.OnInit {
 
   id:string;
 
-  name:string;
+  group:libBackEnd.ApplicationGroup;
 
   breadcrumbs:layout.LabeledLink[];
 
@@ -50,9 +50,7 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
-  description:string;
-
-  versions:libPatternFlyListView.Item[];
+  applications:libPatternFlyListView.Item[];
 
   backEnd:backEnd.Service;
 
@@ -63,17 +61,16 @@ export class Component implements ng.OnInit {
   constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.id = routeParams.get("scheme");
-    this.name = "Loading...";
+    this.id = routeParams.get("group");
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("Schemes of Interactions", ["Interactions"]),
-      new layout.LabeledLink("Loading...", ["InteractionsScheme", {scheme: this.id}])
+      new layout.LabeledLink("User", becki.HOME.link),
+      new layout.LabeledLink("Groups for Applications", ["UserApplications"]),
+      new layout.LabeledLink("Loading...", ["UserApplicationGroup", {group: this.id}])
     ];
     this.editing = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    this.description = "Loading...";
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -90,29 +87,26 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.editing = false;
-    this.backEnd.getInteractionsScheme(this.id)
-        .then(scheme => {
+    this.backEnd.getApplicationGroup(this.id)
+        .then(group => {
           return Promise.all<any>([
-              scheme,
-              this.backEnd.getProjects(),
-              this.backEnd.request("GET", scheme.project)
+            group,
+            this.backEnd.getProjects(),
+            this.backEnd.request("GET", group.project)
           ]);
         })
         .then(result => {
-          let scheme:libBackEnd.InteractionsScheme;
           let projects:libBackEnd.Project[];
           let project:libBackEnd.Project;
-          [scheme, projects, project] = result;
-          this.name = scheme.name;
-          this.breadcrumbs[2].label = scheme.name;
+          [this.group, projects, project] = result;
+          this.breadcrumbs[3].label = this.group.program_name;
           this.project = projects.length > 1 ? project.project_name : null;
-          this.nameField = scheme.name;
-          this.descriptionField = scheme.program_description;
-          this.description = scheme.program_description;
-          this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, version.version_description, ["InteractionsSchemeVersion", {scheme: this.id, version: version.id}]));
+          this.nameField = this.group.program_name;
+          this.descriptionField = this.group.program_description;
+          this.applications = this.group.m_programs.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["UserApplication", {application: application.id}]))
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme ${this.id} cannot be loaded: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The group ${this.id} cannot be loaded: ${reason}`));
         });
   }
 
@@ -126,22 +120,20 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getProjects()
-        .then(projects => Promise.all(projects.map(project => this.backEnd.getProjectInteractionsSchemes(project.id))))
-        .then(schemes => ![].concat(...schemes).find(scheme => scheme.b_program_id != this.id && scheme.name == this.nameField));
+    return () => this.backEnd.getApplicationGroups().then(groups => !groups.find(group => group.id != this.id && group.program_name == this.nameField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.updateInteractionsScheme(this.id, this.nameField, this.descriptionField)
+    this.backEnd.updateApplicationGroup(this.id, this.nameField, this.descriptionField)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The scheme has been updated."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The group has been updated."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme cannot be updated: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The group cannot be updated: ${reason}`));
         });
   }
 
@@ -151,10 +143,24 @@ export class Component implements ng.OnInit {
     this.editing = false;
   }
 
-  onAddVersionClick():void {
+  onAddApplicationClick():void {
+    "use strict";
+
+    this.router.navigate(["NewUserApplication"]);
+  }
+
+  onRemoveApplicationClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["NewInteractionsSchemeVersion", {scheme: this.id}]);
+    this.backEnd.deleteApplication(id)
+        .then(() => {
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The application has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The application cannot be removed: ${reason}`));
+        });
   }
+
 }

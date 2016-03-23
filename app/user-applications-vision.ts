@@ -20,15 +20,16 @@ import * as layout from "./layout";
 import * as libBootstrapDropdown from "./lib-bootstrap/dropdown";
 
 @ng.Component({
-  templateUrl: "app/applications-vision.html",
+  templateUrl: "app/user-applications-vision.html",
   directives: [layout.Component, libBootstrapDropdown.DIRECTIVES]
 })
 export class Component {
 
   breadcrumbs = [
     becki.HOME,
-    new layout.LabeledLink("Applications", ["ApplicationsVision"]),
-    new layout.LabeledLink("Hello world", ["ApplicationsVision"])
+    new layout.LabeledLink("User", becki.HOME.link),
+    new layout.LabeledLink("Applications", ["UserApplicationsVision"]),
+    new layout.LabeledLink("Hello world", ["UserApplicationsVision"])
   ];
 
   onClick():void {
