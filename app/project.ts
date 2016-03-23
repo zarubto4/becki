@@ -290,26 +290,6 @@ export class Component implements ng.OnInit {
     console.log(this.boardUploadingBinaryFileField);
   }
 
-  onInteractionsModeratorAddClick():void {
-    "use strict";
-
-    this.router.navigate(["NewUserInteractionsModerator"]);
-  }
-
-  onInteractionsModeratorRemoveClick(id:string):void {
-    "use strict";
-
-    this.notifications.shift();
-    this.backEnd.removeInteractionsModeratorFromProject(id, this.id)
-        .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The moderator has been removed."));
-          this.refresh();
-        })
-        .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The moderator cannot be removed: ${reason}`));
-        });
-  }
-
   onInteractionsUploadingSubmit():void {
     "use strict";
 
