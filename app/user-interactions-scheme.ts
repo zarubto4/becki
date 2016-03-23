@@ -24,6 +24,20 @@ import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
+class SelectableModerator {
+
+  model:libBackEnd.InteractionsModerator;
+
+  selected:boolean;
+
+  constructor(model:libBackEnd.InteractionsModerator) {
+    "use strict";
+
+    this.model = model;
+    this.selected = false;
+  }
+}
+
 @ng.Component({
   templateUrl: "app/user-interactions-scheme.html",
   directives: [
@@ -54,6 +68,10 @@ export class Component implements ng.OnInit {
 
   versions:libPatternFlyListView.Item[];
 
+  uploadVersionField:string;
+
+  moderators:SelectableModerator[];
+
   backEnd:backEnd.Service;
 
   notifications:libPatternFlyNotifications.Service;
@@ -75,6 +93,7 @@ export class Component implements ng.OnInit {
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.description = "Loading...";
+    this.uploadVersionField = "";
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -95,15 +114,26 @@ export class Component implements ng.OnInit {
         .then(scheme => {
           return Promise.all<any>([
               scheme,
-              this.backEnd.getProjects(),
               this.backEnd.request("GET", scheme.project)
+          ]);
+        })
+        .then(result => {
+          let scheme:libBackEnd.InteractionsScheme;
+          let project:libBackEnd.Project;
+          [scheme, project] = result;
+          return Promise.all<any>([
+            scheme,
+            this.backEnd.getProjects(),
+            project,
+            this.backEnd.getProjectInteractionsModerators(project.id)
           ]);
         })
         .then(result => {
           let scheme:libBackEnd.InteractionsScheme;
           let projects:libBackEnd.Project[];
           let project:libBackEnd.Project;
-          [scheme, projects, project] = result;
+          let moderators:libBackEnd.InteractionsModerator[];
+          [scheme, projects, project, moderators] = result;
           this.name = scheme.name;
           this.breadcrumbs[3].label = scheme.name;
           this.project = projects.length > 1 ? project.project_name : null;
@@ -111,6 +141,7 @@ export class Component implements ng.OnInit {
           this.descriptionField = scheme.program_description;
           this.description = scheme.program_description;
           this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, version.version_description, ["UserInteractionsSchemeVersion", {scheme: this.id, version: version.id}]));
+          this.moderators = moderators.map(moderator => new SelectableModerator(moderator));
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme ${this.id} cannot be loaded: ${reason}`));
@@ -157,5 +188,24 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.router.navigate(["NewUserInteractionsSchemeVersion", {scheme: this.id}]);
+  }
+
+  onUploadSubmit():void {
+    "use strict";
+
+    let moderators = this.moderators.filter(selectable => selectable.selected).map(selectable => selectable.model.homer_id);
+    if (!moderators.length) {
+      return;
+    }
+
+    this.notifications.shift();
+    Promise.all(moderators.map(id => this.backEnd.addSchemeToInteractionsModerator(this.uploadVersionField, id, this.id)))
+        .then(() => {
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The scheme has been uploaded."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme cannot be uploaded: ${reason}`));
+        });
   }
 }
