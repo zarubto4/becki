@@ -68,7 +68,7 @@ export class Component implements ng.OnInit {
     this.breadcrumbs = [
       becki.HOME,
       new layout.LabeledLink("Schemes of Interactions", ["Interactions"]),
-      new layout.LabeledLink(`Scheme of Interactions ${this.id}`, ["InteractionsScheme", {scheme: this.id}])
+      new layout.LabeledLink("Loading...", ["InteractionsScheme", {scheme: this.id}])
     ];
     this.editing = false;
     this.nameField = "Loading...";
@@ -104,6 +104,7 @@ export class Component implements ng.OnInit {
           let project:libBackEnd.Project;
           [scheme, projects, project] = result;
           this.name = scheme.name;
+          this.breadcrumbs[2].label = scheme.name;
           this.project = projects.length > 1 ? project.project_name : null;
           this.nameField = scheme.name;
           this.descriptionField = scheme.program_description;
