@@ -3,34 +3,53 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + name + "\" Scheme"' data-bind-breadcrumbs="breadcrumbs">
+<div data-bind-layout='"Edit the \"" + name + "\" Scheme"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="editing">
   <form class="clearfix" data-on-submit="onSubmit($event)">
+    <template data-bind-ng-if="project">
+      <div class="form-group">
+        <label>Project</label>
+        <p class="form-control-static">{{project}}</p>
+      </div>
+    </template>
+    <template data-bind-ng-switch-when="true">
+      <div class="form-group">
+        <label>
+          <span class="glyphicon glyphicon-pencil"></span>
+          Name
+        </label>
+        <input class="form-control" required data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
+      </div>
+    </template>
     <div class="form-group">
       <label>
-        <span class="glyphicon glyphicon-pencil"></span>
-        Name
-      </label>
-      <input class="form-control" required data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
-    </div>
-    <div class="form-group">
-      <label>
-        <span class="glyphicon glyphicon-pencil"></span>
+        <template data-bind-ng-switch-when="true">
+          <span class="glyphicon glyphicon-pencil"></span>
+        </template>
         Description
       </label>
-      <textarea class="form-control" data-bindon-ng-model="descriptionField"></textarea>
+      <template data-bind-ng-switch-when="true">
+        <textarea class="form-control" data-bindon-ng-model="descriptionField"></textarea>
+      </template>
+      <template data-bind-ng-switch-when="false">
+        <p class="form-control-static">{{description}}</p>
+      </template>
     </div>
-    <div class="pull-right">
-      <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-      <button class="btn btn-primary" type="submit">Update</button>
-    </div>
+    <template data-bind-ng-switch-when="true">
+      <div class="pull-right">
+        <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+        <button class="btn btn-primary" type="submit">Update</button>
+      </div>
+    </template>
   </form>
-  <div>
-    <div class="pull-right">
-      <button type="button" class="btn btn-default" data-on-click="onAddVersionClick($event)">Add</button>
+  <template data-bind-ng-switch-when="false">
+    <div>
+      <div class="pull-right">
+        <button type="button" class="btn btn-default" data-on-click="onAddVersionClick($event)">Add</button>
+      </div>
+      <h2>Versions</h2>
     </div>
-    <h2>Versions</h2>
-  </div>
-  <div data-bind-list-view="versions" data-bind-removable="false" data-on-add-click="onAddVersionClick($event)">
-    <div class="spinner"></div>
-  </div>
+    <div data-bind-list-view="versions" data-bind-removable="false" data-on-add-click="onAddVersionClick($event)">
+      <div class="spinner"></div>
+    </div>
+  </template>
 </div>

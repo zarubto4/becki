@@ -26,7 +26,13 @@ import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/interactions-scheme.html",
-  directives: [customValidator.Directive, layout.Component, libPatternFlyListView.Component, ng.FORM_DIRECTIVES]
+  directives: [
+    customValidator.Directive,
+    layout.Component,
+    libPatternFlyListView.Component,
+    ng.FORM_DIRECTIVES,
+    ng.CORE_DIRECTIVES
+  ]
 })
 export class Component implements ng.OnInit {
 
@@ -36,9 +42,15 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
+  editing:boolean;
+
+  project:string;
+
   nameField:string;
 
   descriptionField:string;
+
+  description:string;
 
   versions:libPatternFlyListView.Item[];
 
@@ -59,8 +71,10 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("Schemes of Interactions", ["Interactions"]),
       new layout.LabeledLink(`Scheme of Interactions ${this.id}`, ["InteractionsScheme", {scheme: this.id}])
     ];
+    this.editing = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
+    this.description = "Loading...";
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -70,16 +84,42 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
+    this.refresh();
+  }
+
+  refresh():void {
+    "use strict";
+
+    this.editing = false;
     this.backEnd.getInteractionsScheme(this.id)
         .then(scheme => {
+          return Promise.all<any>([
+              scheme,
+              this.backEnd.getProjects(),
+              this.backEnd.request("GET", scheme.project)
+          ]);
+        })
+        .then(result => {
+          let scheme:libBackEnd.InteractionsScheme;
+          let projects:libBackEnd.Project[];
+          let project:libBackEnd.Project;
+          [scheme, projects, project] = result;
           this.name = scheme.name;
+          this.project = projects.length > 1 ? project.project_name : null;
           this.nameField = scheme.name;
           this.descriptionField = scheme.program_description;
+          this.description = scheme.program_description;
           this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, version.version_description));
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme ${this.id} cannot be loaded: ${reason}`));
         });
+  }
+
+  onEditClick():void {
+    "use strict";
+
+    this.editing = !this.editing;
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -97,8 +137,8 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateInteractionsScheme(this.id, this.nameField, this.descriptionField)
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The scheme has been updated."));
-          this.router.navigate(["Interactions"]);
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The scheme has been updated."));
+          this.refresh();
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme cannot be updated: ${reason}`));
@@ -108,8 +148,7 @@ export class Component implements ng.OnInit {
   onCancelClick():void {
     "use strict";
 
-    this.notifications.shift();
-    this.router.navigate(["Interactions"]);
+    this.editing = false;
   }
 
   onAddVersionClick():void {
