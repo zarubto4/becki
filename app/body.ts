@@ -46,7 +46,6 @@ import * as producerNew from "./producer-new";
 import * as project from "./project";
 import * as projectBoardNew from "./project-board-new";
 import * as projectCollaboratorNew from "./project-collaborator-new";
-import * as projectInteractionsModeratorNew from "./project-interactions-moderator-new";
 import * as projectNew from "./project-new";
 import * as projects from "./projects";
 import * as signing from "./signing";
@@ -60,6 +59,7 @@ import * as userApplicationNew from "./user-application-new";
 import * as userApplications from "./user-applications";
 import * as userApplicationsVision from "./user-applications-vision";
 import * as userInteractions from "./user-interactions";
+import * as userInteractionsModeratorNew from "./user-interactions-moderator-new";
 import * as userInteractionsScheme from "./user-interactions-scheme";
 import * as userInteractionsSchemeNew from "./user-interactions-scheme-new";
 import * as userInteractionsSchemeVersion from "./user-interactions-scheme-version";
@@ -100,6 +100,7 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
   {path: "/user/applications", component: userApplications.Component, as: "UserApplications"},
   {path: "/user/applications/:application", component: userApplication.Component, as: "UserApplication"},
   {path: "/user/interactions", component: userInteractions.Component, as: "UserInteractions"},
+  {path: "/user/interactions/moderator/new", component: userInteractionsModeratorNew.Component, as: "NewUserInteractionsModerator"},
   {path: "/user/interactions/scheme/new", component: userInteractionsSchemeNew.Component, as: "NewUserInteractionsScheme"},
   {path: "/user/interactions/schemes/:scheme", component: userInteractionsScheme.Component, as: "UserInteractionsScheme"},
   {path: "/user/interactions/schemes/:scheme/version/new", component: userInteractionsSchemeVersionNew.Component, as: "NewUserInteractionsSchemeVersion"},
@@ -112,7 +113,6 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
   {path: "/user/projects/:project/board-programs/:program", component: boardProgram.Component, as: "BoardProgram"},
   {path: "/user/projects/:project/board-programs/:program/version/new", component: boardProgramVersionNew.Component, as: "NewBoardProgramVersion"},
   {path: "/user/projects/:project/collaborator/new", component: projectCollaboratorNew.Component, as: "NewProjectCollaborator"},
-  {path: "/user/projects/:project/interactions-moderator/new", component: projectInteractionsModeratorNew.Component, as: "NewProjectInteractionsModerator"},
   {path: "/user/projects/:project/standalone-program/new", component: standaloneProgramNew.Component, as: "NewStandaloneProgram"},
   {path: "/user/projects/:project/standalone-programs/:program", component: standaloneProgram.Component, as: "StandaloneProgram"}
 ])
