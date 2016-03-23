@@ -13,6 +13,7 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
+import * as _ from "underscore";
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
@@ -100,11 +101,8 @@ export class Component implements ng.OnInit {
           if (!scheme.versionObjects.length) {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error("the scheme has no version"));
-          } else if (scheme.versionObjects.length > 1) {
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-164
-            this.notifications.current.push(new libPatternFlyNotifications.Warning("issue/TYRION-164"));
           }
-          let lastVersion = scheme.versionObjects[0];
+          let lastVersion = _.max(scheme.versionObjects, version => version.date_of_create);
           return Promise.all<any>([
             scheme,
             this.backEnd.getProjectApplicationGroups(project.id),
@@ -161,19 +159,8 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.addVersionToInteractionsScheme(this.nameField, this.descriptionField, this.schemeField, this.schemeId)
-        .then(() => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-163
-          return this.backEnd.getInteractionsScheme(this.schemeId);
-        })
-        .then(scheme => {
-          if (!scheme.versionObjects.length) {
-            // TODO: https://github.com/angular/angular/issues/4558
-            return Promise.reject<any>(new Error("the scheme has no version"));
-          } else if (scheme.versionObjects.length > 1) {
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-164
-            this.notifications.current.push(new libPatternFlyNotifications.Warning("issue/TYRION-164"));
-          }
-          return this.groupField ? this.backEnd.addApplicationGroupToInteractionsScheme(this.groupField, scheme.versionObjects[0].id, false) : null;
+        .then(version => {
+          return this.groupField ? this.backEnd.addApplicationGroupToInteractionsScheme(this.groupField, version.id, false) : null;
         })
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The version has been created."));

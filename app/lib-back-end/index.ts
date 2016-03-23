@@ -153,7 +153,7 @@ export interface Person {
 
   last_title:string;
 
-  date_of_birth:string;
+  date_of_birth:number;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -191,7 +191,7 @@ export interface ApplicationGroup {
 
   program_description:string;
 
-  date_of_create:string;
+  date_of_create:number;
 
   project:string;
 
@@ -219,9 +219,9 @@ export interface Application {
 
   m_code_url:string;
 
-  date_of_create:string;
+  date_of_create:number;
 
-  last_update:string;
+  last_update:number;
 
   height_lock:boolean;
 
@@ -271,7 +271,7 @@ export interface Version {
 
   version_description:string;
 
-  date_of_create:string;
+  date_of_create:number;
 
   files:number;
 
@@ -361,7 +361,7 @@ export interface BoardProgram {
 
   version_objects:Version[];
 
-  dateOfCreate:string;
+  dateOfCreate:number;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -386,6 +386,10 @@ export interface StandaloneProgramCategory {
   name:string;
 
   generalDescription:string;
+
+  blockoBlocks:StandaloneProgram[];
+
+  project:string;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -433,9 +437,9 @@ export interface InteractionsScheme {
 
   program_state:Object;
 
-  dateOfCreate:string;
+  dateOfCreate:number;
 
-  lastUpdate:string;
+  lastUpdate:number;
 
   project:string;
 }
@@ -647,8 +651,6 @@ export abstract class BackEnd {
    */
   static PROJECT_PATH = "/project/project";
 
-  static STANDALONE_PROGRAM_CATEGORY_PATH = "/project/typeOfBlock";
-
   static STANDALONE_PROGRAM_PATH = "/project/blockoBlock";
 
   /**
@@ -853,12 +855,6 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath("GET", `${BackEnd.APPLICATION_PATH}/${id}`);
-  }
-
-  public getApplicationByQrToken(token:string):Promise<Application> {
-    "use strict";
-
-    return this.requestPath("GET", `${BackEnd.APPLICATION_PATH}/app/token/${token}`);
   }
 
   public getApplications():Promise<Application[]> {
@@ -1148,7 +1144,7 @@ export abstract class BackEnd {
   public getStandaloneProgramCategories():Promise<StandaloneProgramCategory[]> {
     "use strict";
 
-    return this.requestPath("GET", BackEnd.STANDALONE_PROGRAM_CATEGORY_PATH);
+    return this.requestPath("GET", "/project/typeOfBlock");
   }
 
   public createStandaloneProgram(name:string, type_of_block_id:string, general_description:string):Promise<StandaloneProgram> {
@@ -1161,12 +1157,6 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath("GET", `${BackEnd.STANDALONE_PROGRAM_PATH}/${id}`);
-  }
-
-  public getStandalonePrograms(categoryId:string):Promise<StandaloneProgram[]> {
-    "use strict";
-
-    return this.requestPath("GET", `${BackEnd.STANDALONE_PROGRAM_CATEGORY_PATH}/${categoryId}`);
   }
 
   public updateStandaloneProgram(id:string, name:string, general_description:string, type_of_block_id:string):Promise<string> {
@@ -1220,10 +1210,10 @@ export abstract class BackEnd {
     return this.requestPath("PUT", `${BackEnd.APPLICATION_GROUP_PATH}/connect/${group}/${version}/${autoupdate}`, {}).then(JSON.stringify);
   }
 
-  public addVersionToInteractionsScheme(version_name:string, version_description:string, program:string, programId:string):Promise<string> {
+  public addVersionToInteractionsScheme(version_name:string, version_description:string, program:string, programId:string):Promise<Version> {
     "use strict";
 
-    return this.requestPath("PUT", `${BackEnd.INTERACTIONS_SCHEME_PATH}/update/${programId}`, {version_name, version_description, program}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.INTERACTIONS_SCHEME_PATH}/update/${programId}`, {version_name, version_description, program});
   }
 
   public deleteInteractionsScheme(id:string):Promise<string> {
@@ -1405,12 +1395,14 @@ export abstract class BackEnd {
   public addCollaboratorToProject(collaborator:string, project:string):Promise<string> {
     "use strict";
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-170
     return this.requestPath("PUT", `${BackEnd.PROJECT_PATH}/shareProject/${project}`, {persons: [collaborator]}).then(JSON.stringify);
   }
 
   public removeCollaboratorsFromProject(persons:string[], project:string):Promise<string> {
     "use strict";
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-170
     return this.requestPath("PUT", `${BackEnd.PROJECT_PATH}/unshareProject/${project}`, {persons}).then(JSON.stringify);
   }
 

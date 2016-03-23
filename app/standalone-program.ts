@@ -78,6 +78,7 @@ export class Component implements ng.OnInit {
         .then(program => {
           this.nameField = program.name;
           this.descriptionField = program.general_description;
+          this.categoryField = program.type_of_block;
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program ${this.id} cannot be loaded: ${reason}`));
@@ -88,9 +89,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getStandaloneProgramCategories()
-        .then(categories => Promise.all(categories.map(category => this.backEnd.getStandalonePrograms(category.id))))
-        .then(programs => ![].concat(...programs).find(program => program.id != this.id && program.name == this.nameField));
+    return () => this.backEnd.getStandaloneProgramCategories().then(categories => ![].concat(...categories.map(category => category.blockoBlocks)).find(program => program.id != this.id && program.name == this.nameField));
   }
 
   onSubmit():void {
@@ -103,8 +102,6 @@ export class Component implements ng.OnInit {
           this.router.navigate(["Project", {project: this.projectId}]);
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-166
-          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-166"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be updated: ${reason}`));
         });
   }

@@ -130,8 +130,7 @@ export class Component implements ng.OnInit {
           let group:libBackEnd.ApplicationGroup;
           [application, project, group] = result;
           return Promise.all<any>([
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-168
-            this.backEnd.getApplicationByQrToken(application.qr_token),
+            application,
             this.backEnd.getProjects(),
             project,
             this.backEnd.getProjectApplicationGroups(project.id),

@@ -146,22 +146,10 @@ export class Component implements ng.OnInit {
           return this.backEnd.createInteractionsScheme(this.nameField, this.descriptionField, project);
         })
         .then(scheme => {
-          return Promise.all([
-            scheme.b_program_id,
-            this.backEnd.addVersionToInteractionsScheme("Initial version", "", this.schemeField, scheme.b_program_id)
-          ]);
+          return this.backEnd.addVersionToInteractionsScheme("Initial version", "", this.schemeField, scheme.b_program_id);
         })
-        .then(result => {
-          let id = result[0];
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-163
-          return this.backEnd.getInteractionsScheme(id);
-        })
-        .then(scheme => {
-          if (scheme.versionObjects.length != 1) {
-            // TODO: https://github.com/angular/angular/issues/4558
-            return Promise.reject<any>(new Error("the new scheme does not have only one version"));
-          }
-          return this.groupField ? this.backEnd.addApplicationGroupToInteractionsScheme(this.groupField, scheme.versionObjects[0].id, false) : null;
+        .then(version => {
+          return this.groupField ? this.backEnd.addApplicationGroupToInteractionsScheme(this.groupField, version.id, false) : null;
         })
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The scheme have been created."));
