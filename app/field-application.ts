@@ -18,18 +18,6 @@ import * as theGrid from "the-grid";
 
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
-// TODO: https://youtrack.byzance.cz/youtrack/issue/TG-4
-class CustomDeviceProfile extends theGrid.Core.DeviceProfile {
-
-  constructor(name:string, width:number, height:number) {
-    "use strict";
-
-    super(name);
-    this.addScreenProfile(new theGrid.Core.ScreenProfile(this, "portrait", width, height, 6, 11));
-    this.addScreenProfile(new theGrid.Core.ScreenProfile(this, "landscape", height, width, 11, 6));
-  }
-}
-
 @ng.Component({
   selector: "[field-application]",
   templateUrl: "app/field-application.html",
@@ -62,16 +50,20 @@ export class Component implements ng.AfterViewInit, ng.OnChanges {
     "use strict";
 
     this.controller = new theGrid.Core.Controller();
+    this.controller.registerDataChangedCallback(() => {
+      this.config = null;
+      this.modelChange.next(this.controller.getDataJson());
+    });
     this.controller.registerWidget(theGrid.Widgets.TimeWidget);
     this.controller.registerWidget(theGrid.Widgets.LabelWidget);
     this.controller.registerWidget(theGrid.Widgets.WeatherWidget);
     this.controller.registerWidget(theGrid.Widgets.ButtonWidget);
     this.controller.registerWidget(theGrid.Widgets.FAButtonWidget);
     this.controller.registerWidget(theGrid.Widgets.KnobWidget);
-    this.controller.deviceProfile = new theGrid.DeviceProfiles.iPhone6();
     this.readonly = false;
     this.config = null;
-    this.modelChange = new ng.EventEmitter();
+    // TODO: https://github.com/angular/angular/issues/6311
+    this.modelChange = new ng.EventEmitter(false);
     this.notifications = notifications;
   }
 
@@ -81,9 +73,11 @@ export class Component implements ng.AfterViewInit, ng.OnChanges {
     let device = changes["device"];
     if (device) {
       if (device.isFirstChange()) {
-        this.controller.deviceProfile = new CustomDeviceProfile(device.currentValue.name, device.currentValue.width, device.currentValue.height);
+        this.controller.deviceProfile = new theGrid.Core.DeviceProfile(device.currentValue.name, [
+          new theGrid.Core.ScreenProfile("portrait", device.currentValue.width, device.currentValue.height, 6, 11, 1, 10),
+          new theGrid.Core.ScreenProfile("landscape", device.currentValue.height, device.currentValue.width, 11, 6, 1, 10)
+        ]);
       } else {
-        // TODO: https://youtrack.byzance.cz/youtrack/issue/TG-3
         this.notifications.current.push(new libPatternFlyNotifications.Danger("The device cannot be changed."));
       }
     }
@@ -93,8 +87,6 @@ export class Component implements ng.AfterViewInit, ng.OnChanges {
         this.initialModel = model.currentValue;
       } else {
         this.controller.setDataJson(model.currentValue);
-        // TODO: https://youtrack.byzance.cz/youtrack/issue/TG-1
-        this.config = null;
       }
     }
   }
@@ -102,7 +94,9 @@ export class Component implements ng.AfterViewInit, ng.OnChanges {
   afterViewInit():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TG-1
+    if (!this.controller.deviceProfile) {
+      this.controller.deviceProfile = new theGrid.DeviceProfiles.iPhone6();
+    }
     let renderer = new theGrid.EditorRenderer.ControllerRenderer(this.controller, this.toolbar.nativeElement, this.screens.nativeElement);
     renderer.registerOpenConfigCallback(widget =>
       this.config = widget
@@ -137,9 +131,6 @@ export class Component implements ng.AfterViewInit, ng.OnChanges {
       throw new Error("read only");
     }
     this.config.emitOnConfigsChanged();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TG-1
-    this.config = null;
-    this.modelChange.next(this.controller.getDataJson());
   }
 
   onConfigCloseClick():void {

@@ -184,8 +184,6 @@ export class Component implements ng.OnInit {
     this.backEnd.updateApplication(this.id, this.nameField, this.descriptionField, this.device.id, this.codeField)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The application has been updated."));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TG-1
-          this.notifications.next.push(new libPatternFlyNotifications.Warning("issue/TG-1"));
           this.refresh();
         })
         .catch(reason => {

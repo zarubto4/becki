@@ -187,8 +187,6 @@ export class Component implements ng.OnInit {
         })
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The application has been created."));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TG-1
-          this.notifications.next.push(new libPatternFlyNotifications.Warning("issue/TG-1"));
           this.router.navigate(["UserApplications"]);
         })
         .catch(reason => {
