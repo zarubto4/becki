@@ -129,36 +129,4 @@
       </form>
     </div>
   </div>
-  <div class="row">
-    <div class="col-xs-12">
-      <h2>Interactions Upload</h2>
-      <form class="clearfix" data-on-submit="onInteractionsUploadingSubmit($event)">
-        <div class="form-group">
-          <label>
-            <span class="glyphicon glyphicon-list"></span>
-            Moderator IDs
-          </label>
-          <div class="checkbox" template="ngFor #moderator of interactionsModerators">
-            <label>
-              <input type="checkbox" data-bindon-ng-model="moderator.selected">
-              {{moderator.name}}
-            </label>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>
-            <span class="glyphicon glyphicon-link"></span>
-            Scheme
-          </label>
-          <select class="form-control" required data-bindon-ng-model="interactionsUploadingSchemeField">
-            <option value="">Select name...</option>
-            <option data-bind-value="index" template="ngFor #version of interactionsSchemesVersions; #index = index">
-              {{version.name}}
-            </option>
-          </select>
-        </div>
-        <button class="btn btn-primary pull-right" type="submit">Upload</button>
-      </form>
-    </div>
-  </div>
 </div>

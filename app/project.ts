@@ -36,23 +36,6 @@ class SelectableItem extends libPatternFlyListView.Item {
   }
 }
 
-class InteractionsSchemeVersion {
-
-  schemeId:string;
-
-  versionId:string;
-
-  name:string;
-
-  constructor(schemeId:string, versionId:string, name:string) {
-    "use strict";
-
-    this.schemeId = schemeId;
-    this.versionId = versionId;
-    this.name = name;
-  }
-}
-
 @ng.Component({
   templateUrl: "app/project.html",
   directives: [
@@ -88,12 +71,6 @@ export class Component implements ng.OnInit {
 
   @ng.ViewChild("boardUploadingBinaryFileField")
   boardUploadingBinaryFileField:ng.ElementRef;
-
-  interactionsModerators:SelectableItem[];
-
-  interactionsUploadingSchemeField:number;
-
-  interactionsSchemesVersions:InteractionsSchemeVersion[];
 
   backEnd:backEnd.Service;
 
@@ -138,25 +115,19 @@ export class Component implements ng.OnInit {
           this.backEnd.getProject(this.id),
           this.backEnd.getProjectOwners(this.id),
           this.backEnd.getProjectBoardPrograms(this.id),
-          this.backEnd.getProjectBoards(this.id),
-          this.backEnd.getProjectInteractionsModerators(this.id),
-          this.backEnd.getProjectInteractionsSchemes(this.id)
+          this.backEnd.getProjectBoards(this.id)
         ])
         .then(result => {
           let project:libBackEnd.Project;
           let collaborators:libBackEnd.Person[];
           let boardPrograms:libBackEnd.BoardProgram[];
           let boards:libBackEnd.Board[];
-          let moderators:libBackEnd.InteractionsModerator[];
-          let interactionsSchemes:libBackEnd.InteractionsScheme[];
-          [project, collaborators, boardPrograms, boards, moderators, interactionsSchemes] = result;
+          [project, collaborators, boardPrograms, boards] = result;
           this.nameField = project.project_name;
           this.descriptionField = project.project_description;
           this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composePersonString(collaborator), null));
           this.boardPrograms = boardPrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, ["BoardProgram", {project: this.id, program: program.id}]));
           this.boards = boards.map(board => new SelectableItem(board.id, board.id, board.isActive ? "active" : "inactive"));
-          this.interactionsModerators = moderators.map(moderator => new SelectableItem(moderator.homer_id, moderator.homer_id, moderator.online ? "online" : "offline"));
-          this.interactionsSchemesVersions = [].concat(...interactionsSchemes.map(scheme => scheme.versionObjects.map(version => new InteractionsSchemeVersion(scheme.b_program_id, version.id, `${scheme.name} ${version.version_name}`))));
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The project ${this.id} cannot be loaded: ${reason}`));
@@ -288,21 +259,5 @@ export class Component implements ng.OnInit {
     // TODO: http://youtrack.byzance.cz/youtrack/issue/TYRION-37#comment=109-118
     this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-37"));
     console.log(this.boardUploadingBinaryFileField);
-  }
-
-  onInteractionsUploadingSubmit():void {
-    "use strict";
-
-    this.notifications.shift();
-    let moderators = this.interactionsModerators.filter(selectable => selectable.selected).map(selectable => selectable.id);
-    let scheme = this.interactionsSchemesVersions[this.interactionsUploadingSchemeField];
-    Promise.all(moderators.map(id => this.backEnd.addSchemeToInteractionsModerator(scheme.versionId, id, scheme.schemeId)))
-        .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The scheme has been uploaded."));
-          this.refresh();
-        })
-        .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme cannot be uploaded: ${reason}`));
-        });
   }
 }
