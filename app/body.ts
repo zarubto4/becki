@@ -24,7 +24,6 @@ import * as boardProgramVersionNew from "./board-program-version-new";
 import * as boardType from "./board-type";
 import * as boardTypeNew from "./board-type-new";
 import * as devices from "./devices";
-import * as interactionsModeratorNew from "./interactions-moderator-new";
 import * as issue from "./issue";
 import * as issueConfirmationNew from "./issue-confirmation-new";
 import * as issueConfirmationType from "./issue-confirmation-type";
@@ -51,6 +50,7 @@ import * as projects from "./projects";
 import * as signing from "./signing";
 import * as standaloneProgram from "./standalone-program";
 import * as standaloneProgramNew from "./standalone-program-new";
+import * as systemInteractionsModeratorNew from "./system-interactions-moderator-new";
 import * as userApplication from "./user-application";
 import * as userApplicationDeviceNew from "./user-application-device-new";
 import * as userApplicationGroup from "./user-application-group";
@@ -72,7 +72,6 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
   {path: "/board/type/new", component: boardTypeNew.Component, as: "NewBoardType"},
   {path: "/board/types/:type", component: boardType.Component, as: "BoardType"},
   {path: "/devices", component: devices.Component, as: "Devices"},
-  {path: "/interactions-moderator/new", component: interactionsModeratorNew.Component, as: "NewInteractionsModerator"},
   {path: "/issue/new", component: issueNew.Component, as: "NewIssue"},
   {path: "/issue/confirmation/new", component: issueConfirmationTypeNew.Component, as: "NewIssueConfirmationType"},
   {path: "/issue/confirmations/:confirmation", component: issueConfirmationType.Component, as: "IssueConfirmationType"},
@@ -92,6 +91,7 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
   {path: "/producer/new", component: producerNew.Component, as: "NewProducer"},
   {path: "/producers/:producer", component: producer.Component, as: "Producer"},
   {path: "/signing", component: signing.Component, as: "Signing"},
+  {path: "/system/interactions/moderator/new", component: systemInteractionsModeratorNew.Component, as: "NewSystemInteractionsModerator"},
   {path: "/user/application/device/new", component: userApplicationDeviceNew.Component, as: "NewUserApplicationDevice"},
   {path: "/user/application/group/new", component: userApplicationGroupNew.Component, as: "NewUserApplicationGroup"},
   {path: "/user/application/groups/:group", component: userApplicationGroup.Component, as: "UserApplicationGroup"},

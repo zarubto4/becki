@@ -218,7 +218,7 @@ export class Component implements ng.OnInit {
   onInteractionsModeratorAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewInteractionsModerator"]);
+    this.router.navigate(["NewSystemInteractionsModerator"]);
   }
 
   onInteractionsModeratorRemoveClick(id:string):void {

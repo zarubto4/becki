@@ -23,7 +23,7 @@ import * as layout from "./layout";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
-  templateUrl: "app/interactions-moderator-new.html",
+  templateUrl: "app/system-interactions-moderator-new.html",
   directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
@@ -45,8 +45,8 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("Moderators of Interactions", ["Devices"]),
-      new layout.LabeledLink("New Moderator", ["NewInteractionsModerator"])
+      new layout.LabeledLink("System", ["Devices"]),
+      new layout.LabeledLink("New Moderator of Interactions", ["NewSystemInteractionsModerator"])
     ];
     this.idField = "";
     this.typeField = "";
