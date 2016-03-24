@@ -42,11 +42,7 @@ export class Component implements ng.AfterViewInit {
   set model(scheme:string) {
     "use strict";
 
-    // TODO: https://github.com/angular/angular/issues/6114
-    // TODO: https://github.com/angular/angular/issues/6311
-    if (scheme != this.controller.getDataJson()) {
-      this.controller.setDataJson(scheme);
-    }
+    this.controller.setDataJson(scheme);
   }
 
   constructor() {
@@ -56,12 +52,12 @@ export class Component implements ng.AfterViewInit {
     this.controller = new blocko.BlockoCore.Controller();
     this.controller.registerDataChangedCallback(() => {
       this.config = null;
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/BLOCKO-1
-      //this.modelChange.next(this.controller.getDataJson());
+      this.modelChange.next(this.controller.getDataJson());
     });
     this.controller.registerBlocks(blocko.BlockoBasicBlocks.Manager.getAllBlocks());
     this.config = null;
-    this.modelChange = new ng.EventEmitter();
+    // TODO: https://github.com/angular/angular/issues/6311
+    this.modelChange = new ng.EventEmitter(false);
   }
 
   afterViewInit():void {
@@ -172,8 +168,6 @@ export class Component implements ng.AfterViewInit {
       throw new Error("read only");
     }
     this.controller.addBlock(new cls(this.controller.getFreeBlockId()));
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/BLOCKO-1
-    this.modelChange.next(this.controller.getDataJson());
   }
 
   onClearClick():void {
@@ -183,8 +177,6 @@ export class Component implements ng.AfterViewInit {
       throw new Error("read only");
     }
     this.controller.removeAllBlocks();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/BLOCKO-1
-    this.modelChange.next(this.controller.getDataJson());
   }
 
   getPropertyType(property:blocko.BlockoCore.ConfigProperty):string {
@@ -213,8 +205,6 @@ export class Component implements ng.AfterViewInit {
       throw new Error("read only");
     }
     this.config.emitConfigsChanged();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/BLOCKO-1
-    this.modelChange.next(this.controller.getDataJson());
   }
 
   onConfigCloseClick():void {

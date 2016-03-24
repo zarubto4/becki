@@ -39,7 +39,8 @@ export class Component implements ng.OnChanges {
   readonly = false;
 
   @ng.Output("fieldIssueBodyChange")
-  modelChange = new ng.EventEmitter();
+  // TODO: https://github.com/angular/angular/issues/6311
+  modelChange = new ng.EventEmitter(false);
 
   onChanges(changes:{[key: string]: ng.SimpleChange}):void {
     "use strict";
