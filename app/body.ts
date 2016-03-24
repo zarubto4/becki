@@ -50,6 +50,7 @@ import * as projects from "./projects";
 import * as signing from "./signing";
 import * as standaloneProgram from "./standalone-program";
 import * as standaloneProgramNew from "./standalone-program-new";
+import * as system from "./system";
 import * as systemInteractionsModeratorNew from "./system-interactions-moderator-new";
 import * as userApplication from "./user-application";
 import * as userApplicationDeviceNew from "./user-application-device-new";
@@ -91,6 +92,7 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
   {path: "/producer/new", component: producerNew.Component, as: "NewProducer"},
   {path: "/producers/:producer", component: producer.Component, as: "Producer"},
   {path: "/signing", component: signing.Component, as: "Signing"},
+  {path: "/system", component: system.Component, as: "System"},
   {path: "/system/interactions/moderator/new", component: systemInteractionsModeratorNew.Component, as: "NewSystemInteractionsModerator"},
   {path: "/user/application/device/new", component: userApplicationDeviceNew.Component, as: "NewUserApplicationDevice"},
   {path: "/user/application/group/new", component: userApplicationGroupNew.Component, as: "NewUserApplicationGroup"},
