@@ -38,7 +38,8 @@ export class Component implements ng.AfterViewInit, ng.OnChanges, ng.OnDestroy {
   editor:CodeMirror.EditorFromTextArea;
 
   @ng.Output("fieldCodeChange")
-  modelChange = new ng.EventEmitter();
+  // TODO: https://github.com/angular/angular/issues/6311
+  modelChange = new ng.EventEmitter(false);
 
   onChanges(changes:{[key: string]: ng.SimpleChange}):void {
     "use strict";
@@ -46,8 +47,7 @@ export class Component implements ng.AfterViewInit, ng.OnChanges, ng.OnDestroy {
     let model = changes["model"];
     // see https://github.com/codemirror/CodeMirror/issues/3734
     // TODO: https://github.com/angular/angular/issues/6114
-    // TODO: https://github.com/angular/angular/issues/6311
-    if (model && this.editor && !this.editor.hasFocus()) {
+    if (model && this.editor && model.currentValue != this.editor.getDoc().getValue()) {
       this.editor.getDoc().setValue(model.currentValue);
     }
   }
