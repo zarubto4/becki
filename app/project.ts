@@ -91,10 +91,6 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-167
-    this.standalonePrograms = [
-      new libPatternFlyListView.Item(null, "(issue/TYRION-167)", "does not work")
-    ];
     this.boardUploadingProgramField = "";
     this.backEnd = backEndService;
     this.notifications = notifications;
@@ -115,19 +111,22 @@ export class Component implements ng.OnInit {
           this.backEnd.getProject(this.id),
           this.backEnd.getProjectOwners(this.id),
           this.backEnd.getProjectBoardPrograms(this.id),
-          this.backEnd.getProjectBoards(this.id)
+          this.backEnd.getProjectBoards(this.id),
+          this.backEnd.getProjectStandaloneProgramCategories(this.id)
         ])
         .then(result => {
           let project:libBackEnd.Project;
           let collaborators:libBackEnd.Person[];
           let boardPrograms:libBackEnd.BoardProgram[];
           let boards:libBackEnd.Board[];
-          [project, collaborators, boardPrograms, boards] = result;
+          let categories:libBackEnd.StandaloneProgramCategory[];
+          [project, collaborators, boardPrograms, boards, categories] = result;
           this.nameField = project.project_name;
           this.descriptionField = project.project_description;
           this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composePersonString(collaborator), null));
           this.boardPrograms = boardPrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, ["BoardProgram", {project: this.id, program: program.id}]));
           this.boards = boards.map(board => new SelectableItem(board.id, board.id, board.isActive ? "active" : "inactive"));
+          this.standalonePrograms = [].concat(...categories.map(category => category.blockoBlocks.map(program => new libPatternFlyListView.Item(program.id, program.name, program.general_description, ["StandaloneProgram", {project: this.id, program: program.id}]))));
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The project ${this.id} cannot be loaded: ${reason}`));

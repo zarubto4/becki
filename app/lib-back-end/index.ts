@@ -163,13 +163,33 @@ export interface ApplicationDevice {
 
   name:string;
 
-  height:number;
+  portrait_width:number;
 
-  width:number;
+  portrait_height:number;
+
+  landscape_width:number;
+
+  landscape_height:number;
+
+  portrait_square_width:number;
+
+  portrait_square_height:number;
+
+  landscape_square_width:number;
+
+  landscape_square_height:number;
+
+  width_lock:boolean;
 
   height_lock:boolean;
 
-  width_lock:boolean;
+  portrait_min_screens:number;
+
+  portrait_max_screens:number;
+
+  landscape_min_screens:number;
+
+  landscape_max_screens:number;
 
   touch_screen:boolean;
 }
@@ -785,10 +805,10 @@ export abstract class BackEnd {
     });
   }
 
-  public createApplicationDevice(name:string, height:number, width:number, project_id:string) {
+  public createApplicationDevice(name:string, width:number, height:number, columns:number, rows:number, project_id:string) {
     "use strict";
 
-    return this.requestPath("POST", BackEnd.APPLICATION_DEVICE_PATH, {name, height, width, height_lock: false, width_lock: false, touch_screen: false, project_id}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.APPLICATION_DEVICE_PATH, {name, height_lock: false, width_lock: false, touch_screen: false, project_id, landscape_height: width, landscape_width: height, landscape_square_height: columns, landscape_square_width: rows, landscape_max_screens: 10, landscape_min_screens: 1, portrait_height: height, portrait_width: width, portrait_square_height: rows, portrait_square_width: columns, portrait_max_screens: 10, portrait_min_screens: 1}).then(JSON.stringify);
   }
 
   public getApplicationDevice(id:string):Promise<ApplicationDevice> {
@@ -803,10 +823,10 @@ export abstract class BackEnd {
     return this.requestPath("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/all`);
   }
 
-  public updateApplicationDevice(id:string, name:string, height:number, width:number, project_id:string, height_lock:boolean, width_lock:boolean, touch_screen:boolean) {
+  public updateApplicationDevice(id:string, name:string, width:number, height:number, columns:number, rows:number, width_lock:boolean, height_lock:boolean, portrait_min_screens:number, portrait_max_screens:number, landscape_min_screens:number, landscape_max_screens:number, touch_screen:boolean, project_id:string) {
     "use strict";
 
-    return this.requestPath("PUT", `${BackEnd.APPLICATION_DEVICE_PATH}/${id}`, {name, height, width, height_lock, width_lock, touch_screen, project_id}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.APPLICATION_DEVICE_PATH}/${id}`, {name, height_lock, width_lock, touch_screen, project_id, landscape_height: width, landscape_width: height, landscape_square_height: columns, landscape_square_width: rows, landscape_max_screens, landscape_min_screens, portrait_height: height, portrait_width: width, portrait_square_height: rows, portrait_square_width: columns, portrait_max_screens, portrait_min_screens}).then(JSON.stringify);
   }
 
   public deleteApplicationDevice(id:string):Promise<string> {
@@ -1168,7 +1188,7 @@ export abstract class BackEnd {
   public addVersionToStandaloneProgram(version_name:string, version_description:string, logic_json:string, program:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("POST", `${BackEnd.STANDALONE_PROGRAM_PATH}/version/${program}`, {version_name, version_description, design_json: "", logic_json}).then(JSON.stringify);
+    return this.requestPath("POST", `${BackEnd.STANDALONE_PROGRAM_PATH}/version/${program}`, {version_name, version_description, design_json: "-", logic_json}).then(JSON.stringify);
   }
 
   public deleteStandaloneProgram(id:string):Promise<string> {
@@ -1307,6 +1327,12 @@ export abstract class BackEnd {
     return this.requestPath("GET", `${BackEnd.PROJECT_PATH}/boards/${id}`);
   }
 
+  public getProjectStandaloneProgramCategories(id:string):Promise<StandaloneProgramCategory[]> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.STANDALONE_PROGRAM_PATH}/project/${id}`);
+  }
+
   public getProjectInteractionsSchemes(id:string):Promise<InteractionsScheme[]> {
     "use strict";
 
@@ -1395,14 +1421,12 @@ export abstract class BackEnd {
   public addCollaboratorToProject(collaborator:string, project:string):Promise<string> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-170
     return this.requestPath("PUT", `${BackEnd.PROJECT_PATH}/shareProject/${project}`, {persons: [collaborator]}).then(JSON.stringify);
   }
 
   public removeCollaboratorsFromProject(persons:string[], project:string):Promise<string> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-170
     return this.requestPath("PUT", `${BackEnd.PROJECT_PATH}/unshareProject/${project}`, {persons}).then(JSON.stringify);
   }
 

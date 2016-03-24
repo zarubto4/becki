@@ -43,9 +43,13 @@ export class Component implements ng.OnInit {
 
   nameField:string;
 
+  widthField:number;
+
   heightField:number;
 
-  widthField:number;
+  columnsField:number;
+
+  rowsField:number;
 
   backEnd:backEnd.Service;
 
@@ -65,8 +69,10 @@ export class Component implements ng.OnInit {
     this.editing = false;
     this.showProject = false;
     this.nameField = "Loading...";
-    this.heightField = 1;
     this.widthField = 1;
+    this.heightField = 1;
+    this.columnsField = 1;
+    this.rowsField = 1;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -98,8 +104,10 @@ export class Component implements ng.OnInit {
           this.project = pair ? pair[0] : null;
           this.showProject = this.project && projects.length > 1;
           this.nameField = this.device.name;
-          this.heightField = this.device.height;
-          this.widthField = this.device.width;
+          this.widthField = this.device.portrait_width;
+          this.heightField = this.device.portrait_height;
+          this.columnsField = this.device.portrait_square_width;
+          this.rowsField = this.device.portrait_square_height;
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The device ${this.id} cannot be loaded: ${reason}`));
@@ -123,7 +131,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.updateApplicationDevice(this.id, this.nameField, this.heightField, this.widthField, this.project ? this.project.id : undefined, this.device.height_lock, this.device.width_lock, this.device.touch_screen)
+    this.backEnd.updateApplicationDevice(this.id, this.nameField, this.widthField, this.heightField, this.columnsField, this.rowsField, this.device.width_lock, this.device.height_lock, this.device.portrait_min_screens, this.device.portrait_max_screens, this.device.landscape_min_screens, this.device.landscape_max_screens, this.device.touch_screen, this.project ? this.project.id : undefined)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The device has been updated."));
           this.refresh();

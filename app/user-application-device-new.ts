@@ -38,9 +38,13 @@ export class Component implements ng.OnInit {
 
   nameField:string;
 
+  widthField:number;
+
   heightField:number;
 
-  widthField:number;
+  columnsField:number;
+
+  rowsField:number;
 
   backEnd:backEnd.Service;
 
@@ -58,8 +62,10 @@ export class Component implements ng.OnInit {
     ];
     this.projectField = "";
     this.nameField = "";
-    this.heightField = 1;
     this.widthField = 1;
+    this.heightField = 1;
+    this.columnsField = 1;
+    this.rowsField = 1;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -93,7 +99,7 @@ export class Component implements ng.OnInit {
             })
         )
         .then(project => {
-          return this.backEnd.createApplicationDevice(this.nameField, this.heightField, this.widthField, project);
+          return this.backEnd.createApplicationDevice(this.nameField, this.widthField, this.heightField, this.columnsField, this.rowsField, project);
         })
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The device has been created."));

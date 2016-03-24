@@ -74,8 +74,8 @@ export class Component implements ng.AfterViewInit, ng.OnChanges {
     if (device) {
       if (device.isFirstChange()) {
         this.controller.deviceProfile = new theGrid.Core.DeviceProfile(device.currentValue.name, [
-          new theGrid.Core.ScreenProfile("portrait", device.currentValue.width, device.currentValue.height, 6, 11, 1, 10),
-          new theGrid.Core.ScreenProfile("landscape", device.currentValue.height, device.currentValue.width, 11, 6, 1, 10)
+          new theGrid.Core.ScreenProfile("portrait", device.currentValue.portrait_width, device.currentValue.portrait_height, device.currentValue.portrait_square_width, device.currentValue.portrait_square_height, device.currentValue.portrait_min_screens, device.currentValue.portrait_max_screens),
+          new theGrid.Core.ScreenProfile("landscape", device.currentValue.landscape_width, device.currentValue.landscape_height, device.currentValue.landscape_square_width, device.currentValue.landscape_square_height, device.currentValue.landscape_min_screens, device.currentValue.landscape_max_screens)
         ]);
       } else {
         this.notifications.current.push(new libPatternFlyNotifications.Danger("The device cannot be changed."));

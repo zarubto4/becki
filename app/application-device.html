@@ -23,35 +23,73 @@
         </label>
         <input class="form-control" required data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
       </div>
-    </template>
-    <div class="form-group">
-      <label>
-        <template data-bind-ng-switch-when="true">
-          <span class="glyphicon glyphicon-resize-vertical"></span>
-        </template>
-        Height
-      </label>
-      <template data-bind-ng-switch-when="true">
-        <input class="form-control" type="number" min="1" required data-bindon-ng-model="heightField">
-      </template>
-      <template data-bind-ng-switch-when="false">
-        <p class="form-control-static">{{device?.height}}</p>
-      </template>
-    </div>
-    <div class="form-group">
-      <label>
-        <template data-bind-ng-switch-when="true">
+      <div class="form-group">
+        <label>
           <span class="glyphicon glyphicon-resize-horizontal"></span>
-        </template>
-        Width
-      </label>
-      <template data-bind-ng-switch-when="true">
+          Width
+        </label>
         <input class="form-control" type="number" min="1" required data-bindon-ng-model="widthField">
-      </template>
-      <template data-bind-ng-switch-when="false">
-        <p class="form-control-static">{{device?.width}}</p>
-      </template>
-    </div>
+      </div>
+      <div class="form-group">
+        <label>
+          <span class="glyphicon glyphicon-resize-vertical"></span>
+          Height
+        </label>
+        <input class="form-control" type="number" min="1" required data-bindon-ng-model="heightField">
+      </div>
+    </template>
+    <template data-bind-ng-switch-when="false">
+      <div class="form-group" data-bind-ng-switch="device?.portrait_width != device?.landscape_height || device?.portrait_height != device?.landscape_width">
+        <label>Width × height</label>
+        <template data-bind-ng-switch-when="true">
+          <p class="form-control-static">
+            Portrait: {{device?.portrait_width}} × {{device?.portrait_height}}
+          </p>
+          <p class="form-control-static">
+            Landscape: {{device?.landscape_width}} × {{device?.landscape_height}}
+          </p>
+        </template>
+        <template data-bind-ng-switch-when="false">
+          <p class="form-control-static">
+            {{device?.portrait_width}} × {{device?.portrait_height}}
+          </p>
+        </template>
+      </div>
+    </template>
+    <template data-bind-ng-switch-when="true">
+      <div class="form-group">
+        <label>
+          <span class="glyphicon glyphicon glyphicon-option-horizontal"></span>
+          Columns
+        </label>
+        <input class="form-control" type="number" min="1" required data-bindon-ng-model="columnsField">
+      </div>
+      <div class="form-group">
+        <label>
+          <span class="glyphicon glyphicon glyphicon-option-vertical"></span>
+          Rows
+        </label>
+        <input class="form-control" type="number" min="1" required data-bindon-ng-model="rowsField">
+      </div>
+    </template>
+    <template data-bind-ng-switch-when="false">
+      <div class="form-group" data-bind-ng-switch="device?.portrait_square_width != device?.landscape_square_height || device?.portrait_square_height != device?.landscape_square_width">
+        <label>Columns × rows</label>
+        <template data-bind-ng-switch-when="true">
+          <p class="form-control-static">
+            Portrait: {{device?.portrait_square_width}} × {{device?.portrait_square_height}}
+          </p>
+          <p class="form-control-static">
+            Landscape: {{device?.landscape_square_width}} × {{device?.landscape_square_height}}
+          </p>
+        </template>
+        <template data-bind-ng-switch-when="false">
+          <p class="form-control-static">
+            {{device?.portrait_square_width}} × {{device?.portrait_square_height}}
+          </p>
+        </template>
+      </div>
+    </template>
     <template data-bind-ng-switch-when="true">
       <div class="pull-right">
         <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>

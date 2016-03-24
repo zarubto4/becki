@@ -21,6 +21,7 @@ import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as fieldCode from "./field-code";
 import * as layout from "./layout";
+import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
@@ -44,6 +45,8 @@ export class Component implements ng.OnInit {
   nameField:string;
 
   categoryField:string;
+
+  categories:libBackEnd.StandaloneProgramCategory[];
 
   descriptionField:string;
 
@@ -81,8 +84,9 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-167
-    this.notifications.current.push(new libPatternFlyNotifications.Danger("TYRION-167"));
+    this.backEnd.getProjectStandaloneProgramCategories(this.projectId)
+        .then(categories => this.categories = categories)
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Categories cannot be loaded: ${reason}`)));
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -98,7 +102,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createStandaloneProgram(this.nameField, this.categoryField, this.descriptionField)
         .then(program => {
-          return this.backEnd.addVersionToStandaloneProgram("Initial version", "", this.codeField, program.id);
+          return this.backEnd.addVersionToStandaloneProgram("Initial version", "An automatically created version.", this.codeField, program.id);
         })
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The program have been created."));
