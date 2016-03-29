@@ -40,8 +40,6 @@ export class Component implements ng.OnInit {
 
   deviceTypes:libPatternFlyListView.Item[];
 
-  devices:libPatternFlyListView.Item[];
-
   backEnd:backEnd.Service;
 
   notifications:libPatternFlyNotifications.Service;
@@ -85,10 +83,6 @@ export class Component implements ng.OnInit {
     this.backEnd.getDeviceTypes()
         .then(deviceTypes => this.deviceTypes = deviceTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, ["DeviceType", {type: type.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Device types cannot be loaded: ${reason}`)));
-    this.backEnd.getDevices()
-        // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
-        .then(devices => this.devices = devices.map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.isActive ? "active" : "inactive")))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Devices cannot be loaded: ${reason}`)));
   }
 
   onProducerAddClick():void {
@@ -189,19 +183,5 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The device type cannot be removed: ${reason}`));
         });
-  }
-
-  onDeviceAddClick():void {
-    "use strict";
-
-    this.router.navigate(["NewSystemDevice"]);
-  }
-
-  onDeviceRemoveClick(id:string):void {
-    "use strict";
-
-    this.notifications.shift();
-    // see https://youtrack.byzance.cz/youtrack/issue/TYRION-89
-    this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-89"));
   }
 }
