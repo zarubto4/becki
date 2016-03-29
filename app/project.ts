@@ -214,26 +214,6 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onDeviceAddClick():void {
-    "use strict";
-
-    this.router.navigate(["NewUserDevice"]);
-  }
-
-  onDeviceRemoveClick(id:string):void {
-    "use strict";
-
-    this.notifications.shift();
-    this.backEnd.removeDeviceFromProject(id, this.id)
-        .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The device has been removed."));
-          this.refresh();
-        })
-        .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The device cannot be removed: ${reason}`));
-        });
-  }
-
   onDeviceUploadingSubmit():void {
     "use strict";
 
