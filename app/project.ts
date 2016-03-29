@@ -69,9 +69,6 @@ export class Component implements ng.OnInit {
 
   deviceUploadingProgramField:string;
 
-  @ng.ViewChild("deviceUploadingBinaryFileField")
-  deviceUploadingBinaryFileField:ng.ElementRef;
-
   backEnd:backEnd.Service;
 
   notifications:libPatternFlyNotifications.Service;
@@ -229,14 +226,5 @@ export class Component implements ng.OnInit {
           this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-128"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be uploaded: ${reason}`));
         });
-  }
-
-  onDeviceUploadingBinarySubmit():void {
-    "use strict";
-
-    this.notifications.shift();
-    // TODO: http://youtrack.byzance.cz/youtrack/issue/TYRION-37#comment=109-118
-    this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-37"));
-    console.log(this.deviceUploadingBinaryFileField);
   }
 }
