@@ -217,7 +217,7 @@ export class Component implements ng.OnInit {
   onDeviceAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewProjectDevice", {project: this.id}]);
+    this.router.navigate(["NewUserDevice"]);
   }
 
   onDeviceRemoveClick(id:string):void {

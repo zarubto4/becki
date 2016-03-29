@@ -3,8 +3,22 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout="heading" data-bind-breadcrumbs="breadcrumbs">
+<div data-bind-layout="'New Project Device'" data-bind-breadcrumbs="breadcrumbs">
   <form class="clearfix" data-on-submit="onSubmit($event)">
+    <template data-bind-ng-if="projects?.length > 1">
+      <div class="form-group">
+        <label>
+          <span class="glyphicon glyphicon-list"></span>
+          Project
+        </label>
+        <select class="form-control" required data-bindon-ng-model="projectField">
+          <option value="">Select name...</option>
+          <option data-bind-value="project.id" template="ngFor #project of projects">
+            {{project.project_name}}
+          </option>
+        </select>
+      </div>
+    </template>
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon-pencil"></span>
