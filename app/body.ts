@@ -17,7 +17,6 @@ import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
 import * as applicationDevice from "./application-device";
-import * as deviceNew from "./device-new";
 import * as deviceProgram from "./device-program";
 import * as deviceProgramNew from "./device-program-new";
 import * as deviceProgramVersionNew from "./device-program-version-new";
@@ -50,6 +49,7 @@ import * as signing from "./signing";
 import * as standaloneProgram from "./standalone-program";
 import * as standaloneProgramNew from "./standalone-program-new";
 import * as system from "./system";
+import * as systemDeviceNew from "./system-device-new";
 import * as systemInteractionsModeratorNew from "./system-interactions-moderator-new";
 import * as userApplication from "./user-application";
 import * as userApplicationDeviceNew from "./user-application-device-new";
@@ -70,7 +70,6 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
 @ngRouter.RouteConfig([
   {path: "/", redirectTo: "/user/applications"},
   {path: "/application/devices/:device", component: applicationDevice.Component, as: "ApplicationDevice"},
-  {path: "/device/new", component: deviceNew.Component, as: "NewDevice"},
   {path: "/device/type/new", component: deviceTypeNew.Component, as: "NewDeviceType"},
   {path: "/device/types/:type", component: deviceType.Component, as: "DeviceType"},
   {path: "/devices", component: devices.Component, as: "Devices"},
@@ -94,6 +93,7 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
   {path: "/producers/:producer", component: producer.Component, as: "Producer"},
   {path: "/signing", component: signing.Component, as: "Signing"},
   {path: "/system", component: system.Component, as: "System"},
+  {path: "/system/device/new", component: systemDeviceNew.Component, as: "NewSystemDevice"},
   {path: "/system/interactions/moderator/new", component: systemInteractionsModeratorNew.Component, as: "NewSystemInteractionsModerator"},
   {path: "/user/application/device/new", component: userApplicationDeviceNew.Component, as: "NewUserApplicationDevice"},
   {path: "/user/application/group/new", component: userApplicationGroupNew.Component, as: "NewUserApplicationGroup"},

@@ -24,7 +24,7 @@ import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
-  templateUrl: "app/device-new.html",
+  templateUrl: "app/system-device-new.html",
   directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
@@ -48,8 +48,8 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("Devices", ["Devices"]),
-      new layout.LabeledLink("New Device", ["NewDevice"])
+      new layout.LabeledLink("System", ["Devices"]),
+      new layout.LabeledLink("New Device", ["NewSystemDevice"])
     ];
     this.idField = "";
     this.typeField = "";
