@@ -17,12 +17,12 @@ import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
 import * as applicationDevice from "./application-device";
-import * as boardNew from "./board-new";
-import * as boardProgram from "./board-program";
-import * as boardProgramNew from "./board-program-new";
-import * as boardProgramVersionNew from "./board-program-version-new";
-import * as boardType from "./board-type";
-import * as boardTypeNew from "./board-type-new";
+import * as deviceNew from "./device-new";
+import * as deviceProgram from "./device-program";
+import * as deviceProgramNew from "./device-program-new";
+import * as deviceProgramVersionNew from "./device-program-version-new";
+import * as deviceType from "./device-type";
+import * as deviceTypeNew from "./device-type-new";
 import * as devices from "./devices";
 import * as issue from "./issue";
 import * as issueConfirmationNew from "./issue-confirmation-new";
@@ -43,8 +43,8 @@ import * as processorNew from "./processor-new";
 import * as producer from "./producer";
 import * as producerNew from "./producer-new";
 import * as project from "./project";
-import * as projectBoardNew from "./project-board-new";
 import * as projectCollaboratorNew from "./project-collaborator-new";
+import * as projectDeviceNew from "./project-device-new";
 import * as projectNew from "./project-new";
 import * as projects from "./projects";
 import * as signing from "./signing";
@@ -69,9 +69,9 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
 @ngRouter.RouteConfig([
   {path: "/", redirectTo: "/user/applications"},
   {path: "/application/devices/:device", component: applicationDevice.Component, as: "ApplicationDevice"},
-  {path: "/board/new", component: boardNew.Component, as: "NewBoard"},
-  {path: "/board/type/new", component: boardTypeNew.Component, as: "NewBoardType"},
-  {path: "/board/types/:type", component: boardType.Component, as: "BoardType"},
+  {path: "/device/new", component: deviceNew.Component, as: "NewDevice"},
+  {path: "/device/type/new", component: deviceTypeNew.Component, as: "NewDeviceType"},
+  {path: "/device/types/:type", component: deviceType.Component, as: "DeviceType"},
   {path: "/devices", component: devices.Component, as: "Devices"},
   {path: "/issue/new", component: issueNew.Component, as: "NewIssue"},
   {path: "/issue/confirmation/new", component: issueConfirmationTypeNew.Component, as: "NewIssueConfirmationType"},
@@ -110,10 +110,10 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
   {path: "/user/project/new", component: projectNew.Component, as: "NewProject"},
   {path: "/user/projects", component: projects.Component, as: "Projects"},
   {path: "/user/projects/:project", component: project.Component, as: "Project"},
-  {path: "/user/projects/:project/board/new", component: projectBoardNew.Component, as: "NewProjectBoard"},
-  {path: "/user/projects/:project/board-program/new", component: boardProgramNew.Component, as: "NewBoardProgram"},
-  {path: "/user/projects/:project/board-programs/:program", component: boardProgram.Component, as: "BoardProgram"},
-  {path: "/user/projects/:project/board-programs/:program/version/new", component: boardProgramVersionNew.Component, as: "NewBoardProgramVersion"},
+  {path: "/user/projects/:project/device/new", component: projectDeviceNew.Component, as: "NewProjectDevice"},
+  {path: "/user/projects/:project/device-program/new", component: deviceProgramNew.Component, as: "NewDeviceProgram"},
+  {path: "/user/projects/:project/device-programs/:program", component: deviceProgram.Component, as: "DeviceProgram"},
+  {path: "/user/projects/:project/device-programs/:program/version/new", component: deviceProgramVersionNew.Component, as: "NewDeviceProgramVersion"},
   {path: "/user/projects/:project/collaborator/new", component: projectCollaboratorNew.Component, as: "NewProjectCollaborator"},
   {path: "/user/projects/:project/standalone-program/new", component: standaloneProgramNew.Component, as: "NewStandaloneProgram"},
   {path: "/user/projects/:project/standalone-programs/:program", component: standaloneProgram.Component, as: "StandaloneProgram"}

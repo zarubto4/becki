@@ -351,7 +351,7 @@ export interface Processor {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface BoardType {
+export interface DeviceType {
 
   id:string;
 
@@ -371,7 +371,7 @@ export interface BoardType {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface BoardProgram {
+export interface DeviceProgram {
 
   id:string;
 
@@ -385,7 +385,7 @@ export interface BoardProgram {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface Board {
+export interface Device {
 
   id:string;
 
@@ -631,13 +631,13 @@ export abstract class BackEnd {
 
   static APPLICATION_PATH = "/grid/m_program";
 
-  static BOARD_PATH = "/compilation/board";
-
-  static BOARD_PROGRAM_PATH = "/compilation/c_program";
-
-  static BOARD_TYPE_PATH = "/compilation/typeOfBoard";
-
   static COMMENT_PATH = "/overflow/comment";
+
+  static DEVICE_PATH = "/compilation/board";
+
+  static DEVICE_PROGRAM_PATH = "/compilation/c_program";
+
+  static DEVICE_TYPE_PATH = "/compilation/typeOfBoard";
 
   static INTERACTIONS_MODERATOR_PATH = "/project/homer";
 
@@ -1062,76 +1062,76 @@ export abstract class BackEnd {
     return this.requestPath("DELETE", `${BackEnd.PROCESSOR_PATH}/${id}`).then(JSON.stringify);
   }
 
-  public createBoardType(name:string, producer_id:string, processor_id:string, description:string):Promise<string> {
+  public createDeviceType(name:string, producer_id:string, processor_id:string, description:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("POST", BackEnd.BOARD_TYPE_PATH, {name, description, producer_id, processor_id}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.DEVICE_TYPE_PATH, {name, description, producer_id, processor_id}).then(JSON.stringify);
   }
 
-  public getBoardType(id:string):Promise<BoardType> {
+  public getDeviceType(id:string):Promise<DeviceType> {
     "use strict";
 
-    return this.requestPath("GET", `${BackEnd.BOARD_TYPE_PATH}/${id}`);
+    return this.requestPath("GET", `${BackEnd.DEVICE_TYPE_PATH}/${id}`);
   }
 
-  public getBoardTypes():Promise<BoardType[]> {
+  public getDeviceTypes():Promise<DeviceType[]> {
     "use strict";
 
-    return this.requestPath("GET", `${BackEnd.BOARD_TYPE_PATH}/all`);
+    return this.requestPath("GET", `${BackEnd.DEVICE_TYPE_PATH}/all`);
   }
 
-  public updateBoardType(id:string, name:string, producer_id:string, processor_id:string, description:string):Promise<string> {
+  public updateDeviceType(id:string, name:string, producer_id:string, processor_id:string, description:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("PUT", `${BackEnd.BOARD_TYPE_PATH}/${id}`, {name, description, producer_id, processor_id}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.DEVICE_TYPE_PATH}/${id}`, {name, description, producer_id, processor_id}).then(JSON.stringify);
   }
 
-  public deleteBoardType(id:string):Promise<string> {
+  public deleteDeviceType(id:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("DELETE", `${BackEnd.BOARD_TYPE_PATH}/${id}`).then(JSON.stringify);
+    return this.requestPath("DELETE", `${BackEnd.DEVICE_TYPE_PATH}/${id}`).then(JSON.stringify);
   }
 
-  public createBoardProgram(program_name:string, program_description:string, projectId:string):Promise<string> {
+  public createDeviceProgram(program_name:string, program_description:string, projectId:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("POST", `${BackEnd.BOARD_PROGRAM_PATH}/${projectId}`, {program_name, program_description}).then(JSON.stringify);
+    return this.requestPath("POST", `${BackEnd.DEVICE_PROGRAM_PATH}/${projectId}`, {program_name, program_description}).then(JSON.stringify);
   }
 
-  public getBoardProgram(id:string):Promise<BoardProgram> {
+  public getDeviceProgram(id:string):Promise<DeviceProgram> {
     "use strict";
 
-    return this.requestPath("GET", `${BackEnd.BOARD_PROGRAM_PATH}/${id}`);
+    return this.requestPath("GET", `${BackEnd.DEVICE_PROGRAM_PATH}/${id}`);
   }
 
-  public getBoardPrograms(projectId:string):Promise<BoardProgram[]> {
+  public getDevicePrograms(projectId:string):Promise<DeviceProgram[]> {
     "use strict";
 
-    return this.requestPath("GET", `${BackEnd.BOARD_PROGRAM_PATH}/project/${projectId}`);
+    return this.requestPath("GET", `${BackEnd.DEVICE_PROGRAM_PATH}/project/${projectId}`);
   }
 
-  public updateBoardProgram(id:string, program_name:string, program_description:string):Promise<string> {
+  public updateDeviceProgram(id:string, program_name:string, program_description:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("PUT", `${BackEnd.BOARD_PROGRAM_PATH}/edit/${id}`, {program_name, program_description}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.DEVICE_PROGRAM_PATH}/edit/${id}`, {program_name, program_description}).then(JSON.stringify);
   }
 
-  public addVersionToBoardProgram(version_name:string, version_description:string, content:string, program:string):Promise<string> {
+  public addVersionToDeviceProgram(version_name:string, version_description:string, content:string, program:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("PUT", `${BackEnd.BOARD_PROGRAM_PATH}/update/${program}`, {version_name, version_description, files: [{file_name: "main", content}]}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.DEVICE_PROGRAM_PATH}/update/${program}`, {version_name, version_description, files: [{file_name: "main", content}]}).then(JSON.stringify);
   }
 
-  public removeVersionFromBoardProgram(versionId:string, programId:string):Promise<string> {
+  public removeVersionFromDeviceProgram(versionId:string, programId:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("DELETE", `${BackEnd.BOARD_PROGRAM_PATH}/version/${programId}/${versionId}`).then(JSON.stringify);
+    return this.requestPath("DELETE", `${BackEnd.DEVICE_PROGRAM_PATH}/version/${programId}/${versionId}`).then(JSON.stringify);
   }
 
-  public deleteBoardProgram(id:string):Promise<string> {
+  public deleteDeviceProgram(id:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("DELETE", `${BackEnd.BOARD_PROGRAM_PATH}/c_program/${id}`).then(JSON.stringify);
+    return this.requestPath("DELETE", `${BackEnd.DEVICE_PROGRAM_PATH}/c_program/${id}`).then(JSON.stringify);
   }
 
   /**
@@ -1142,23 +1142,23 @@ export abstract class BackEnd {
    * @param callback a callback called with an indicator and a message
    *                 describing the result.
    */
-  public createBoard(hardware_unique_id:string, type_of_board_id:string):Promise<string> {
+  public createDevice(hardware_unique_id:string, type_of_board_id:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("POST", BackEnd.BOARD_PATH, {type_of_board_id, hardware_unique_id}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.DEVICE_PATH, {type_of_board_id, hardware_unique_id}).then(JSON.stringify);
   }
 
-  public getBoards():Promise<Board[]> {
+  public getDevices():Promise<Device[]> {
     "use strict";
 
-    return this.requestPath("PUT", `${BackEnd.BOARD_PATH}/filter`, {});
+    return this.requestPath("PUT", `${BackEnd.DEVICE_PATH}/filter`, {});
   }
 
-  public addProgramToBoard(programId:string, boardId:string):Promise<string> {
+  public addProgramToDevice(program:string, device:string):Promise<string> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-128
-    return this.requestPath("POST", `${BackEnd.BOARD_PROGRAM_PATH}/uploud/${programId}/${boardId}`, {}).then(JSON.stringify);
+    return this.requestPath("POST", `${BackEnd.DEVICE_PROGRAM_PATH}/uploud/${program}/${device}`, {}).then(JSON.stringify);
   }
 
   public getStandaloneProgramCategories():Promise<StandaloneProgramCategory[]> {
@@ -1315,13 +1315,13 @@ export abstract class BackEnd {
     return this.requestPath("GET", `${BackEnd.APPLICATION_GROUP_PATH}/project/${id}`);
   }
 
-  public getProjectBoardPrograms(id:string):Promise<BoardProgram[]> {
+  public getProjectDevicePrograms(id:string):Promise<DeviceProgram[]> {
     "use strict";
 
     return this.requestPath("GET", `${BackEnd.PROJECT_PATH}/c_programs/${id}`);
   }
 
-  public getProjectBoards(id:string):Promise<Board[]> {
+  public getProjectDevices(id:string):Promise<Device[]> {
     "use strict";
 
     return this.requestPath("GET", `${BackEnd.PROJECT_PATH}/boards/${id}`);
@@ -1385,16 +1385,16 @@ export abstract class BackEnd {
    * @param callback a callback called with an indicator and a message
    *                 describing the result.
    */
-  public addBoardToProject(board:string, project:string):Promise<string> {
+  public addDeviceToProject(device:string, project:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("PUT", `${BackEnd.BOARD_PATH}/${board}/${project}`, {}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.DEVICE_PATH}/${device}/${project}`, {}).then(JSON.stringify);
   }
 
-  public removeBoardFromProject(board:string, project:string):Promise<string> {
+  public removeDeviceFromProject(device:string, project:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("DELETE", `${BackEnd.BOARD_PATH}/${board}/${project}`).then(JSON.stringify);
+    return this.requestPath("DELETE", `${BackEnd.DEVICE_PATH}/${device}/${project}`).then(JSON.stringify);
   }
 
   /**

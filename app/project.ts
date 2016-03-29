@@ -61,16 +61,16 @@ export class Component implements ng.OnInit {
 
   collaborators:libPatternFlyListView.Item[];
 
-  boardPrograms:libPatternFlyListView.Item[];
+  devicePrograms:libPatternFlyListView.Item[];
 
   standalonePrograms:libPatternFlyListView.Item[];
 
-  boards:SelectableItem[];
+  devices:SelectableItem[];
 
-  boardUploadingProgramField:string;
+  deviceUploadingProgramField:string;
 
-  @ng.ViewChild("boardUploadingBinaryFileField")
-  boardUploadingBinaryFileField:ng.ElementRef;
+  @ng.ViewChild("deviceUploadingBinaryFileField")
+  deviceUploadingBinaryFileField:ng.ElementRef;
 
   backEnd:backEnd.Service;
 
@@ -91,7 +91,7 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    this.boardUploadingProgramField = "";
+    this.deviceUploadingProgramField = "";
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -110,22 +110,22 @@ export class Component implements ng.OnInit {
     Promise.all<any>([
           this.backEnd.getProject(this.id),
           this.backEnd.getProjectOwners(this.id),
-          this.backEnd.getProjectBoardPrograms(this.id),
-          this.backEnd.getProjectBoards(this.id),
+          this.backEnd.getProjectDevicePrograms(this.id),
+          this.backEnd.getProjectDevices(this.id),
           this.backEnd.getProjectStandaloneProgramCategories(this.id)
         ])
         .then(result => {
           let project:libBackEnd.Project;
           let collaborators:libBackEnd.Person[];
-          let boardPrograms:libBackEnd.BoardProgram[];
-          let boards:libBackEnd.Board[];
+          let devicePrograms:libBackEnd.DeviceProgram[];
+          let devices:libBackEnd.Device[];
           let categories:libBackEnd.StandaloneProgramCategory[];
-          [project, collaborators, boardPrograms, boards, categories] = result;
+          [project, collaborators, devicePrograms, devices, categories] = result;
           this.nameField = project.project_name;
           this.descriptionField = project.project_description;
           this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composePersonString(collaborator), null));
-          this.boardPrograms = boardPrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, ["BoardProgram", {project: this.id, program: program.id}]));
-          this.boards = boards.map(board => new SelectableItem(board.id, board.id, board.isActive ? "active" : "inactive"));
+          this.devicePrograms = devicePrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, ["DeviceProgram", {project: this.id, program: program.id}]));
+          this.devices = devices.map(device => new SelectableItem(device.id, device.id, device.isActive ? "active" : "inactive"));
           this.standalonePrograms = [].concat(...categories.map(category => category.blockoBlocks.map(program => new libPatternFlyListView.Item(program.id, program.name, program.general_description, ["StandaloneProgram", {project: this.id, program: program.id}]))));
         })
         .catch(reason => {
@@ -174,17 +174,17 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onBoardProgramAddClick():void {
+  onDeviceProgramAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewBoardProgram", {project: this.id}]);
+    this.router.navigate(["NewDeviceProgram", {project: this.id}]);
   }
 
-  onBoardProgramRemoveClick(id:string):void {
+  onDeviceProgramRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.deleteBoardProgram(id)
+    this.backEnd.deleteDeviceProgram(id)
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The program has been removed."));
           this.refresh();
@@ -214,32 +214,32 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onBoardAddClick():void {
+  onDeviceAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewProjectBoard", {project: this.id}]);
+    this.router.navigate(["NewProjectDevice", {project: this.id}]);
   }
 
-  onBoardRemoveClick(id:string):void {
+  onDeviceRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.removeBoardFromProject(id, this.id)
+    this.backEnd.removeDeviceFromProject(id, this.id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The board has been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The device has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The board cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The device cannot be removed: ${reason}`));
         });
   }
 
-  onBoardUploadingSubmit():void {
+  onDeviceUploadingSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    let boards = this.boards.filter(selectable => selectable.selected).map(selectable => selectable.id);
-    Promise.all(boards.map(id => this.backEnd.addProgramToBoard(this.boardUploadingProgramField, id)))
+    let devices = this.devices.filter(selectable => selectable.selected).map(selectable => selectable.id);
+    Promise.all(devices.map(id => this.backEnd.addProgramToDevice(this.deviceUploadingProgramField, id)))
         .then(() => {
           this.notifications.current.push(new libPatternFlyNotifications.Success("The program has been uploaded."));
           this.refresh();
@@ -251,12 +251,12 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onBoardUploadingBinarySubmit():void {
+  onDeviceUploadingBinarySubmit():void {
     "use strict";
 
     this.notifications.shift();
     // TODO: http://youtrack.byzance.cz/youtrack/issue/TYRION-37#comment=109-118
     this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-37"));
-    console.log(this.boardUploadingBinaryFileField);
+    console.log(this.deviceUploadingBinaryFileField);
   }
 }

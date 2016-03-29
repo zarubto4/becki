@@ -25,7 +25,7 @@ import * as libBackEnd from "./lib-back-end";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
-  templateUrl: "app/board-program-version-new.html",
+  templateUrl: "app/device-program-version-new.html",
   directives: [customValidator.Directive, fieldCode.Component, layout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
@@ -61,19 +61,10 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("User", ["Projects"]),
       new layout.LabeledLink("Projects", ["Projects"]),
       new layout.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new layout.LabeledLink("Board Programs", ["Project", {project: this.projectId}]),
-      new layout.LabeledLink(`Program ${this.programId}`, ["BoardProgram", {
-        project: this.projectId,
-        program: this.programId
-      }]),
-      new layout.LabeledLink("Versions", ["BoardProgram", {
-        project: this.projectId,
-        program: this.programId
-      }]),
-      new layout.LabeledLink("New Version", ["NewBoardProgramVersion", {
-        project: this.projectId,
-        program: this.programId
-      }])
+      new layout.LabeledLink("Device Programs", ["Project", {project: this.projectId}]),
+      new layout.LabeledLink(`Program ${this.programId}`, ["DeviceProgram", {project: this.projectId, program: this.programId}]),
+      new layout.LabeledLink("Versions", ["DeviceProgram", {project: this.projectId, program: this.programId}]),
+      new layout.LabeledLink("New Version", ["NewDeviceProgramVersion", {project: this.projectId, program: this.programId}])
     ];
     this.nameField = "";
     this.descriptionField = "";
@@ -93,17 +84,17 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getBoardProgram(this.programId).then(program => !program.version_objects.find(version => version.version_name == this.nameField));
+    return () => this.backEnd.getDeviceProgram(this.programId).then(program => !program.version_objects.find(version => version.version_name == this.nameField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.addVersionToBoardProgram(this.nameField, this.descriptionField, this.codeField, this.programId)
+    this.backEnd.addVersionToDeviceProgram(this.nameField, this.descriptionField, this.codeField, this.programId)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The version has been created."));
-          this.router.navigate(["BoardProgram", {project: this.projectId, program: this.programId}]);
+          this.router.navigate(["DeviceProgram", {project: this.projectId, program: this.programId}]);
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The version cannot be created: ${reason}`));
@@ -114,6 +105,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["BoardProgram", {project: this.projectId, program: this.programId}]);
+    this.router.navigate(["DeviceProgram", {project: this.projectId, program: this.programId}]);
   }
 }

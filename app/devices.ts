@@ -38,9 +38,9 @@ export class Component implements ng.OnInit {
 
   processors:libPatternFlyListView.Item[];
 
-  boardTypes:libPatternFlyListView.Item[];
+  deviceTypes:libPatternFlyListView.Item[];
 
-  boards:libPatternFlyListView.Item[];
+  devices:libPatternFlyListView.Item[];
 
   backEnd:backEnd.Service;
 
@@ -82,13 +82,13 @@ export class Component implements ng.OnInit {
     this.backEnd.getProcessors()
         .then(processors => this.processors = processors.map(processor => new libPatternFlyListView.Item(processor.id, processor.processor_name, processor.processor_code, ["Processor", {processor: processor.id}])))
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Processors cannot be loaded: ${reason}`)));
-    this.backEnd.getBoardTypes()
-        .then(boardTypes => this.boardTypes = boardTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, ["BoardType", {type: type.id}])))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Board types cannot be loaded: ${reason}`)));
-    this.backEnd.getBoards()
+    this.backEnd.getDeviceTypes()
+        .then(deviceTypes => this.deviceTypes = deviceTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, ["DeviceType", {type: type.id}])))
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Device types cannot be loaded: ${reason}`)));
+    this.backEnd.getDevices()
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
-        .then(boards => this.boards = boards.map(board => new libPatternFlyListView.Item(board.id, `${board.id} (issue/TYRION-70)`, board.isActive ? "active" : "inactive")))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Board types cannot be loaded: ${reason}`)));
+        .then(devices => this.devices = devices.map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.isActive ? "active" : "inactive")))
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Devices cannot be loaded: ${reason}`)));
   }
 
   onProducerAddClick():void {
@@ -171,33 +171,33 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onBoardTypeAddClick():void {
+  onDeviceTypeAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewBoardType"]);
+    this.router.navigate(["NewDeviceType"]);
   }
 
-  onBoardTypeRemoveClick(id:string):void {
+  onDeviceTypeRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.deleteBoardType(id)
+    this.backEnd.deleteDeviceType(id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The board type has been removed."));
+          this.notifications.current.push(new libPatternFlyNotifications.Success("The device type has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The board type cannot be removed: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The device type cannot be removed: ${reason}`));
         });
   }
 
-  onBoardAddClick():void {
+  onDeviceAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewBoard"]);
+    this.router.navigate(["NewDevice"]);
   }
 
-  onBoardRemoveClick(id:string):void {
+  onDeviceRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();

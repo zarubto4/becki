@@ -23,7 +23,7 @@ import * as layout from "./layout";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
-  templateUrl: "app/board-program-new.html",
+  templateUrl: "app/device-program-new.html",
   directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
@@ -54,8 +54,8 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("User", ["Projects"]),
       new layout.LabeledLink("Projects", ["Projects"]),
       new layout.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new layout.LabeledLink("Board Programs", ["Project", {project: this.projectId}]),
-      new layout.LabeledLink("New Program", ["NewBoardProgram", {project: this.projectId}])
+      new layout.LabeledLink("Device Programs", ["Project", {project: this.projectId}]),
+      new layout.LabeledLink("New Program", ["NewDeviceProgram", {project: this.projectId}])
     ];
     this.nameField = "";
     this.descriptionField = "";
@@ -74,14 +74,14 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getBoardPrograms(this.projectId).then(programs => !programs.find(program => program.program_name == this.nameField));
+    return () => this.backEnd.getDevicePrograms(this.projectId).then(programs => !programs.find(program => program.program_name == this.nameField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.createBoardProgram(this.nameField, this.descriptionField, this.projectId)
+    this.backEnd.createDeviceProgram(this.nameField, this.descriptionField, this.projectId)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The program has been created."));
           this.router.navigate(["Project", {project: this.projectId}]);

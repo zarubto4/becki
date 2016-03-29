@@ -24,10 +24,14 @@ import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
-  templateUrl: "app/board-type-new.html",
+  templateUrl: "app/device-type.html",
   directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
+
+  id:string;
+
+  heading:string;
 
   breadcrumbs:layout.LabeledLink[];
 
@@ -49,19 +53,19 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
+    this.id = routeParams.get("type");
+    this.heading = `Type ${this.id}`;
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("Boards", ["Devices"]),
+      new layout.LabeledLink("Devices", ["Devices"]),
       new layout.LabeledLink("Types", ["Devices"]),
-      new layout.LabeledLink("New Type", ["NewBoardType"])
+      new layout.LabeledLink(`Type ${this.id}`, ["DeviceType", {type: this.id}])
     ];
-    this.nameField = "";
-    this.producerField = "";
-    this.processorField = "";
-    this.descriptionField = "";
+    this.nameField = "Loading...";
+    this.descriptionField = "Loading...";
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -71,6 +75,27 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
+    this.backEnd.getDeviceType(this.id)
+        .then(type => {
+          return Promise.all<any>([
+            type,
+            this.backEnd.request("GET", type.producer),
+            this.backEnd.request("GET", type.processor)
+          ]);
+        })
+        .then(result => {
+          let type:libBackEnd.DeviceType;
+          let producer:libBackEnd.Producer;
+          let processor:libBackEnd.Processor;
+          [type, producer, processor] = result;
+          this.nameField = type.name;
+          this.producerField = producer.id;
+          this.processorField = processor.id;
+          this.descriptionField = type.description;
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The type ${this.id} cannot be loaded: ${reason}`));
+        });
     this.backEnd.getProducers()
         .then(producers => this.producers = producers)
         .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Producers cannot be loaded: ${reason}`)));
@@ -83,20 +108,20 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () =>this.backEnd.getBoardTypes().then(types => !types.find(type => type.name == this.nameField));
+    return () => this.backEnd.getDeviceTypes().then(types => !types.find(type => type.id != this.id && type.name == this.nameField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.createBoardType(this.nameField, this.producerField, this.processorField, this.descriptionField)
+    this.backEnd.updateDeviceType(this.id, this.nameField, this.producerField, this.processorField, this.descriptionField)
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The type has been created."));
+          this.notifications.next.push(new libPatternFlyNotifications.Success("The type has been updated."));
           this.router.navigate(["Devices"]);
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The type cannot be created: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The type cannot be updated: ${reason}`));
         });
   }
 

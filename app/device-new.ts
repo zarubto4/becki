@@ -1,6 +1,6 @@
 /*
- * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
- * of this distribution.
+ * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
  */
 /**
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -24,18 +24,18 @@ import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
-  templateUrl: "app/project-board-new.html",
-  directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
+  templateUrl: "app/device-new.html",
+  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
-
-  projectId:string;
-
-  heading:string;
 
   breadcrumbs:layout.LabeledLink[];
 
   idField:string;
+
+  typeField:string;
+
+  types:libBackEnd.DeviceType[];
 
   backEnd:backEnd.Service;
 
@@ -43,20 +43,16 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.projectId = routeParams.get("project");
-    this.heading = `New Project Board (Project ${this.projectId})`;
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("User", ["Projects"]),
-      new layout.LabeledLink("Projects", ["Projects"]),
-      new layout.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new layout.LabeledLink("Boards", ["Project", {project: this.projectId}]),
-      new layout.LabeledLink("New Board", ["NewProjectBoard", {project: this.projectId}])
+      new layout.LabeledLink("Devices", ["Devices"]),
+      new layout.LabeledLink("New Device", ["NewDevice"])
     ];
     this.idField = "";
+    this.typeField = "";
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -66,26 +62,29 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
+    this.backEnd.getDeviceTypes()
+        .then(types => this.types = types)
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Device types cannot be loaded: ${reason}`)));
   }
 
   validateIdField():()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getProjectBoards(this.projectId).then(boards => !boards.find(board => board.id == this.idField));
+    return () => this.backEnd.getDevices().then(devices => !devices.find(device => device.id == this.idField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.addBoardToProject(this.idField, this.projectId)
+    this.backEnd.createDevice(this.idField, this.typeField)
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The board has been added."));
-          this.router.navigate(["Project", {project: this.projectId}]);
+          this.notifications.next.push(new libPatternFlyNotifications.Success("The device has been created."));
+          this.router.navigate(["Devices"]);
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The board cannot be added: ${reason}`));
+          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The device cannot be created: ${reason}`));
         });
   }
 
@@ -93,6 +92,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Project", {project: this.projectId}]);
+    this.router.navigate(["Devices"]);
   }
 }
