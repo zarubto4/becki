@@ -59,6 +59,7 @@ import * as userApplicationNew from "./user-application-new";
 import * as userApplications from "./user-applications";
 import * as userApplicationsVision from "./user-applications-vision";
 import * as userDeviceNew from "./user-device-new";
+import * as userDevices from "./user-devices";
 import * as userInteractions from "./user-interactions";
 import * as userInteractionsModeratorNew from "./user-interactions-moderator-new";
 import * as userInteractionsScheme from "./user-interactions-scheme";
@@ -102,6 +103,7 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
   {path: "/user/applications", component: userApplications.Component, as: "UserApplications"},
   {path: "/user/applications/:application", component: userApplication.Component, as: "UserApplication"},
   {path: "/user/device/new", component: userDeviceNew.Component, as: "NewUserDevice"},
+  {path: "/user/devices", component: userDevices.Component, as: "UserDevices"},
   {path: "/user/interactions", component: userInteractions.Component, as: "UserInteractions"},
   {path: "/user/interactions/moderator/new", component: userInteractionsModeratorNew.Component, as: "NewUserInteractionsModerator"},
   {path: "/user/interactions/scheme/new", component: userInteractionsSchemeNew.Component, as: "NewUserInteractionsScheme"},

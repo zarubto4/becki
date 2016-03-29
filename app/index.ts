@@ -20,6 +20,7 @@ export const HOME = new layout.LabeledLink("No Name", ["UserApplications"]);
 export const NAVIGATION = [
   new layout.LabeledLink("Applications", ["UserApplications"], "mobile"),
   new layout.LabeledLink("Interactions", ["UserInteractions"], "link"),
+  new layout.LabeledLink("Devices", ["UserDevices"], "rocket"),
   new layout.LabeledLink("System", ["System"], "globe"),
   new layout.LabeledLink("Applications (Vision)", ["UserApplicationsVision"], "mobile"),
   new layout.LabeledLink("Devices (TODO)", ["Devices"], "tachometer"),

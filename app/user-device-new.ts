@@ -48,7 +48,7 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("User", ["Projects"]),
+      new layout.LabeledLink("User", becki.HOME.link),
       new layout.LabeledLink("New Device", ["NewUserDevice"])
     ];
     this.projectField = "";
@@ -92,7 +92,7 @@ export class Component implements ng.OnInit {
         })
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The device has been added."));
-          this.router.navigate(["Projects"]);
+          this.router.navigate(["UserDevices"]);
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The device cannot be added: ${reason}`));
@@ -103,6 +103,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Projects"]);
+    this.router.navigate(["UserDevices"]);
   }
 }
