@@ -48,7 +48,7 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("System", ["Devices"]),
+      new layout.LabeledLink("System", ["System"]),
       new layout.LabeledLink("New Device", ["NewSystemDevice"])
     ];
     this.idField = "";
@@ -81,7 +81,7 @@ export class Component implements ng.OnInit {
     this.backEnd.createDevice(this.idField, this.typeField)
         .then(() => {
           this.notifications.next.push(new libPatternFlyNotifications.Success("The device has been created."));
-          this.router.navigate(["Devices"]);
+          this.router.navigate(["System"]);
         })
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The device cannot be created: ${reason}`));
@@ -92,6 +92,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Devices"]);
+    this.router.navigate(["System"]);
   }
 }

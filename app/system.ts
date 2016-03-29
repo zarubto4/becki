@@ -19,18 +19,23 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as layout from "./layout";
+import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 
 @ng.Component({
   templateUrl: "app/system.html",
-  directives: [layout.Component, libPatternFlyListView.Component],
+  directives: [layout.Component, libPatternFlyListView.Component, ng.CORE_DIRECTIVES],
 })
 export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
-  items:libPatternFlyListView.Item[];
+  showDevices:boolean;
+
+  moderators:libPatternFlyListView.Item[];
+
+  devices:libPatternFlyListView.Item[];
 
   backEnd:backEnd.Service;
 
@@ -45,6 +50,7 @@ export class Component implements ng.OnInit {
       becki.HOME,
       new layout.LabeledLink("System", ["System"])
     ];
+    this.showDevices = false;
     this.backEnd = backEndService;
     this.notifications = notifications;
     this.router = router;
@@ -62,21 +68,53 @@ export class Component implements ng.OnInit {
 
     this.backEnd.getInteractionsModerators()
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-71
-        .then(moderators => this.items = moderators.map(moderator => new libPatternFlyListView.Item(moderator.homer_id, `${moderator.homer_id} (issue/TYRION-71)`, moderator.online ? "online" : "offline")))
+        .then(moderators => this.moderators = moderators.map(moderator => new libPatternFlyListView.Item(moderator.homer_id, `${moderator.homer_id} (issue/TYRION-71)`, moderator.online ? "online" : "offline")))
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
           this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-155"));
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`Moderators of interactions cannot be loaded: ${reason}`));
         });
+    this.backEnd.getDevices()
+        // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
+        .then(devices => this.devices = devices.map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.isActive ? "active" : "inactive")))
+        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Devices cannot be loaded: ${reason}`)));
   }
 
   onAddClick():void {
     "use strict";
 
+    if (this.showDevices) {
+      this.onAddDeviceClick();
+    } else {
+      this.onAddModeratorClick();
+    }
+  }
+
+  onAddModeratorClick():void {
+    "use strict";
+
     this.router.navigate(["NewSystemInteractionsModerator"]);
   }
 
-  onRemoveClick(id:string):void {
+  onAddDeviceClick():void {
+    "use strict";
+
+    this.router.navigate(["NewSystemDevice"]);
+  }
+
+  onModeratorsClick():void {
+    "use strict";
+
+    this.showDevices = false;
+  }
+
+  onDevicesClick():void {
+    "use strict";
+
+    this.showDevices = true;
+  }
+
+  onRemoveModeratorClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
@@ -88,5 +126,13 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libPatternFlyNotifications.Danger(`The moderator of interactions cannot be removed: ${reason}`));
         });
+  }
+
+  onRemoveDeviceClick(id:string):void {
+    "use strict";
+
+    this.notifications.shift();
+    // see https://youtrack.byzance.cz/youtrack/issue/TYRION-89
+    this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-89"));
   }
 }
