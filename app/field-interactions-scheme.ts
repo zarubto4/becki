@@ -67,14 +67,7 @@ export class Component implements ng.AfterViewInit {
     renderer.registerOpenConfigCallback((block) =>
         this.modal.modalChange.next(new modal.BlockEvent(block, this.readonly))
     );
-    this.controller.registerFactoryBlockRendererCallback((block) =>
-        new blocko.BlockoSnapRenderer.BlockRenderer(renderer, block)
-    );
-    this.controller.registerFactoryConnectionRendererCallback((connection) =>
-        new blocko.BlockoSnapRenderer.ConnectionRenderer(renderer, connection)
-    );
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/BLOCKO-2
-    this.controller.setDataJson(this.controller.getDataJson());
+    this.controller.rendererFactory = renderer;
   }
 
   onSwitchClick():void {

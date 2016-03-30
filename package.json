@@ -2,7 +2,7 @@
   "dependencies": {
     "angular2": "2.0.0-alpha.45",
     "autolayout": "^0.5.3",
-    "blocko": "^0.1.1",
+    "blocko": "git+ssh://git@git.byzance.cz:js-components/blocko.git#v0.1.3",
     "codemirror": "^5.10.0",
     "http-server": "^0.8.0",
     "jquery": "^2.2.1",
