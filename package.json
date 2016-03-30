@@ -8,13 +8,16 @@
     "jquery": "^2.2.1",
     "jquery-knob": "^1.2.11",
     "jqueryui": "^1.11.1",
+    "material-design-icons": "^2.2.3",
     "patternfly": "^3.1.0",
+    "roboto-fontface": "^0.4.5",
     "systemjs": "^0.19.2",
     "the-grid": "git+ssh://git@git.byzance.cz:js-components/the-grid.git#v0.1.1",
     "tsd": "^0.6.0",
     "typescript": "^1.6.0",
     "underscore": "^1.8.0",
-    "underscore.string": "^3.2.2"
+    "underscore.string": "^3.2.2",
+    "weathericons": "^2.0.8"
   },
   "devDependencies": {
     "eslint": "^1.7.0",
