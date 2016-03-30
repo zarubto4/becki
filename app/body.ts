@@ -13,6 +13,7 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
+import * as blocko from "blocko";
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 import * as theGrid from "the-grid";
@@ -24,6 +25,7 @@ import * as deviceProgramVersionNew from "./device-program-version-new";
 import * as deviceType from "./device-type";
 import * as deviceTypeNew from "./device-type-new";
 import * as devices from "./devices";
+import * as fieldCode from "./field-code";
 import * as issue from "./issue";
 import * as issueConfirmationNew from "./issue-confirmation-new";
 import * as issueConfirmationType from "./issue-confirmation-type";
@@ -126,7 +128,7 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
   selector: "[body]",
   templateUrl: "app/body.html",
   providers: [modal.Service],
-  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
+  directives: [fieldCode.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
   inputs: ["body"],
   host: {"[class.modal-open]": "modalEvent"}
 })
@@ -142,6 +144,18 @@ export class Component {
     this.modalEvent = null;
     this.router = router;
     modalService.modalChange.toRx().subscribe((event:modal.Event) => this.modalEvent = event);
+  }
+
+  getModalEventType():string {
+    "use strict";
+
+    if (this.modalEvent instanceof modal.WidgetEvent) {
+      return "widget";
+    }
+    if (this.modalEvent instanceof modal.BlockEvent) {
+      return "block";
+    }
+    return null;
   }
 
   getWidgetPropertyType(property:theGrid.Core.ConfigProperty):string {
@@ -161,6 +175,25 @@ export class Component {
     }
   }
 
+  getBlockPropertyType(property:blocko.BlockoCore.ConfigProperty):string {
+    "use strict";
+
+    switch (property.type) {
+      case blocko.BlockoCore.ConfigPropertyType.Integer:
+        return "int";
+      case blocko.BlockoCore.ConfigPropertyType.Float:
+        return "float";
+      case blocko.BlockoCore.ConfigPropertyType.String:
+        return "text";
+      case blocko.BlockoCore.ConfigPropertyType.Boolean:
+        return "bool";
+      case blocko.BlockoCore.ConfigPropertyType.JSString:
+        return "javascript";
+      default:
+        return null;
+    }
+  }
+
   onModalCloseClick():void {
     "use strict";
 
@@ -170,7 +203,11 @@ export class Component {
   onModalEditClick():void {
     "use strict";
 
-    this.modalEvent.widget.emitOnConfigsChanged();
+    if (this.modalEvent instanceof modal.WidgetEvent) {
+      (<modal.WidgetEvent>this.modalEvent).widget.emitOnConfigsChanged();
+    } else if (this.modalEvent instanceof modal.BlockEvent) {
+      (<modal.BlockEvent>this.modalEvent).block.emitConfigsChanged();
+    }
     this.modalEvent = null;
   }
 }

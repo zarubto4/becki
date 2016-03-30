@@ -16,12 +16,12 @@
 import * as blocko from "blocko";
 import * as ng from "angular2/angular2";
 
-import * as fieldCode from "./field-code";
+import * as modal from "./modal";
 
 @ng.Component({
   selector: "[field-interactions-scheme]",
   templateUrl: "app/field-interactions-scheme.html",
-  directives: [fieldCode.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [ng.CORE_DIRECTIVES]
 })
 export class Component implements ng.AfterViewInit {
 
@@ -33,10 +33,10 @@ export class Component implements ng.AfterViewInit {
   @ng.ViewChild("field")
   field:ng.ElementRef;
 
-  config:blocko.BlockoCore.Block;
-
   @ng.Output("fieldInteractionsSchemeChange")
   modelChange:ng.EventEmitter;
+
+  modal:modal.Service;
 
   @ng.Input("fieldInteractionsScheme")
   set model(scheme:string) {
@@ -45,19 +45,19 @@ export class Component implements ng.AfterViewInit {
     this.controller.setDataJson(scheme);
   }
 
-  constructor() {
+  constructor(modalService:modal.Service) {
     "use strict";
 
     this.readonly = false;
     this.controller = new blocko.BlockoCore.Controller();
     this.controller.registerDataChangedCallback(() => {
-      this.config = null;
+      this.modal.modalChange.next(null);
       this.modelChange.next(this.controller.getDataJson());
     });
     this.controller.registerBlocks(blocko.BlockoBasicBlocks.Manager.getAllBlocks());
-    this.config = null;
     // TODO: https://github.com/angular/angular/issues/6311
     this.modelChange = new ng.EventEmitter(false);
+    this.modal = modalService;
   }
 
   afterViewInit():void {
@@ -65,7 +65,7 @@ export class Component implements ng.AfterViewInit {
 
     let renderer = new blocko.BlockoSnapRenderer.RendererController(this.field.nativeElement);
     renderer.registerOpenConfigCallback((block) =>
-        this.config = block
+        this.modal.modalChange.next(new modal.BlockEvent(block, this.readonly))
     );
     this.controller.registerFactoryBlockRendererCallback((block) =>
         new blocko.BlockoSnapRenderer.BlockRenderer(renderer, block)
@@ -177,39 +177,5 @@ export class Component implements ng.AfterViewInit {
       throw new Error("read only");
     }
     this.controller.removeAllBlocks();
-  }
-
-  getPropertyType(property:blocko.BlockoCore.ConfigProperty):string {
-    "use strict";
-
-    switch (property.type) {
-      case blocko.BlockoCore.ConfigPropertyType.Integer:
-        return "int";
-      case blocko.BlockoCore.ConfigPropertyType.Float:
-        return "float";
-      case blocko.BlockoCore.ConfigPropertyType.String:
-        return "text";
-      case blocko.BlockoCore.ConfigPropertyType.Boolean:
-        return "bool";
-      case blocko.BlockoCore.ConfigPropertyType.JSString:
-        return "javascript";
-      default:
-        return null;
-    }
-  }
-
-  onConfigSaveClick():void {
-    "use strict";
-
-    if (this.readonly) {
-      throw new Error("read only");
-    }
-    this.config.emitConfigsChanged();
-  }
-
-  onConfigCloseClick():void {
-    "use strict";
-
-    this.config = null;
   }
 }

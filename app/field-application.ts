@@ -99,7 +99,7 @@ export class Component implements ng.AfterViewInit, ng.OnChanges {
     }
     let renderer = new theGrid.EditorRenderer.ControllerRenderer(this.controller, this.toolbar.nativeElement, this.screens.nativeElement);
     renderer.registerOpenConfigCallback(widget =>
-      this.modal.modalChange.next(new modal.Event(widget, this.readonly))
+      this.modal.modalChange.next(new modal.WidgetEvent(widget, this.readonly))
     );
     this.controller.setRenderer(renderer);
     if (this.initialModel) {
