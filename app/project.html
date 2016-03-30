@@ -13,14 +13,14 @@
             <span class="glyphicon glyphicon-pencil"></span>
             Name
           </label>
-          <input class="form-control" required data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
+          <input class="form-control" required minlength="8" data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
         </div>
         <div class="form-group">
           <label>
             <span class="glyphicon glyphicon-pencil"></span>
             Description
           </label>
-          <textarea class="form-control" data-bindon-ng-model="descriptionField"></textarea>
+          <textarea class="form-control" required minlength="24" data-bindon-ng-model="descriptionField"></textarea>
         </div>
         <button class="btn btn-primary pull-right" type="submit">Update</button>
       </form>

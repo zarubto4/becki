@@ -23,7 +23,7 @@
           <span class="glyphicon glyphicon-pencil"></span>
           Name
         </label>
-        <input class="form-control" required data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
+        <input class="form-control" required minlength="8" data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
       </div>
     </template>
     <div class="form-group">
