@@ -17,3 +17,45 @@
   margin-top: -0.5em;
   margin-left: -2.5em;
 }
+
+.btn-facebook,
+.btn-facebook:hover,
+.btn-facebook:focus,
+.btn-facebook:active,
+.btn-facebook.active {
+  background-color: #133783;
+  border-color: #0c224f;
+  color: #FFF;
+}
+
+.btn-facebook {
+  background-image: linear-gradient(to bottom, #3B5998 0%, #133783 100%);
+}
+
+.btn-facebook:hover,
+.btn-facebook:focus,
+.btn-facebook:active,
+.btn-facebook.active {
+  background-image: none;
+}
+
+.btn-github,
+.btn-github:hover,
+.btn-github:focus,
+.btn-github:active,
+.btn-github.active {
+  background-color: #c3c3c3;
+  border-color: #8f8f8f;
+  color: #000;
+}
+
+.btn-github {
+  background-image: linear-gradient(to bottom, #fafafa 0%, #c3c3c3 100%);
+}
+
+.btn-github:hover,
+.btn-github:focus,
+.btn-github:active,
+.btn-github.active {
+  background-image: none;
+}
