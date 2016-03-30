@@ -17,11 +17,11 @@ import * as ng from "angular2/angular2";
 import * as theGrid from "the-grid";
 
 import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as modal from "./modal";
 
 @ng.Component({
   selector: "[field-application]",
   templateUrl: "app/field-application.html",
-  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES],
   inputs: ["model: fieldApplication", "device"]
 })
 export class Component implements ng.AfterViewInit, ng.OnChanges {
@@ -39,19 +39,19 @@ export class Component implements ng.AfterViewInit, ng.OnChanges {
   @ng.ViewChild("screens")
   screens:ng.ElementRef;
 
-  config:theGrid.Core.Widget;
-
   @ng.Output("fieldApplicationChange")
   modelChange:ng.EventEmitter;
 
+  modal:modal.Service;
+
   notifications:libPatternFlyNotifications.Service;
 
-  constructor(notifications:libPatternFlyNotifications.Service) {
+  constructor(modalService:modal.Service, notifications:libPatternFlyNotifications.Service) {
     "use strict";
 
     this.controller = new theGrid.Core.Controller();
     this.controller.registerDataChangedCallback(() => {
-      this.config = null;
+      this.modal.modalChange.next(null);
       this.modelChange.next(this.controller.getDataJson());
     });
     this.controller.registerWidget(theGrid.Widgets.TimeWidget);
@@ -61,9 +61,9 @@ export class Component implements ng.AfterViewInit, ng.OnChanges {
     this.controller.registerWidget(theGrid.Widgets.FAButtonWidget);
     this.controller.registerWidget(theGrid.Widgets.KnobWidget);
     this.readonly = false;
-    this.config = null;
     // TODO: https://github.com/angular/angular/issues/6311
     this.modelChange = new ng.EventEmitter(false);
+    this.modal = modalService;
     this.notifications = notifications;
   }
 
@@ -99,43 +99,11 @@ export class Component implements ng.AfterViewInit, ng.OnChanges {
     }
     let renderer = new theGrid.EditorRenderer.ControllerRenderer(this.controller, this.toolbar.nativeElement, this.screens.nativeElement);
     renderer.registerOpenConfigCallback(widget =>
-      this.config = widget
+      this.modal.modalChange.next(new modal.Event(widget, this.readonly))
     );
     this.controller.setRenderer(renderer);
     if (this.initialModel) {
       this.controller.setDataJson(this.initialModel);
     }
-  }
-
-  getPropertyType(property:theGrid.Core.ConfigProperty):string {
-    "use strict";
-
-    switch (property.type) {
-      case theGrid.Core.ConfigPropertyType.Integer:
-        return "int";
-      case theGrid.Core.ConfigPropertyType.Float:
-        return "float";
-      case theGrid.Core.ConfigPropertyType.String:
-        return "text";
-      case theGrid.Core.ConfigPropertyType.Boolean:
-        return "bool";
-      default:
-        return null;
-    }
-  }
-
-  onConfigSaveClick():void {
-    "use strict";
-
-    if (this.readonly) {
-      throw new Error("read only");
-    }
-    this.config.emitOnConfigsChanged();
-  }
-
-  onConfigCloseClick():void {
-    "use strict";
-
-    this.config = null;
   }
 }

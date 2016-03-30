@@ -3,40 +3,5 @@
   ~ of this distribution.
   -->
 
-<div data-bind-ng-switch="!config">
-  <template data-bind-ng-switch-when="true">
-    <div data-var-toolbar style="position: fixed;z-index: 1" data-bind-class.hidden="readonly"></div>
-    <div data-var-screens data-bind-style.padding-top="readonly ? '0' : '120px'"></div>
-  </template>
-  <template data-bind-ng-switch-when="false">
-    <div class="panel panel-primary">
-      <div class="panel-heading">Configuration of a Widget</div>
-      <div class="panel-body">
-        <div class="form-group" template="ngFor #property of config?.configProperties" data-bind-ng-switch="getPropertyType(property)">
-          <label>
-            <span class="glyphicon glyphicon-pencil"></span>
-            {{property.displayName}}
-          </label>
-          <template data-bind-ng-switch-when="'int'">
-            <input class="form-control" type="number" data-bindon-ng-model="property.value">
-          </template>
-          <template data-bind-ng-switch-when="'float'">
-            <input class="form-control" type="number" step="0.01" data-bindon-ng-model="property.value">
-          </template>
-          <template data-bind-ng-switch-when="'text'">
-            <input class="form-control" data-bindon-ng-model="property.value">
-          </template>
-          <template data-bind-ng-switch-when="'bool'">
-            <input type="checkbox" data-bindon-ng-model="property.value">
-          </template>
-        </div>
-      </div>
-      <div class="panel-footer text-right">
-        <button class="btn btn-danger" type="button" data-on-click="onConfigCloseClick($event)">Close</button>
-        <template data-bind-ng-if="!readonly">
-          <button class="btn btn-primary" type="button" data-on-click="onConfigSaveClick($event)">Save</button>
-        </template>
-      </div>
-    </div>
-  </template>
-</div>
+<div data-var-toolbar style="position: fixed;z-index: 1" data-bind-class.hidden="readonly"></div>
+<div data-var-screens data-bind-style.padding-top="readonly ? '0' : '120px'"></div>

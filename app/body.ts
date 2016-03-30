@@ -15,6 +15,7 @@
 
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
+import * as theGrid from "the-grid";
 
 import * as applicationDevice from "./application-device";
 import * as deviceProgram from "./device-program";
@@ -37,6 +38,7 @@ import * as libraryGroup from "./library-group";
 import * as libraryGroupNew from "./library-group-new";
 import * as library from "./library";
 import * as libraryNew from "./library-new";
+import * as modal from "./modal";
 import * as processor from "./processor";
 import * as processorNew from "./processor-new";
 import * as producer from "./producer";
@@ -123,16 +125,52 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
 @ng.Component({
   selector: "[body]",
   templateUrl: "app/body.html",
-  directives: [ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
-  inputs: ["body"]
+  providers: [modal.Service],
+  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
+  inputs: ["body"],
+  host: {"[class.modal-open]": "modalEvent"}
 })
 export class Component {
 
+  modalEvent:modal.Event;
+
   router:ngRouter.Router;
 
-  public constructor(router:ngRouter.Router) {
+  public constructor(modalService:modal.Service, router:ngRouter.Router) {
     "use strict";
 
+    this.modalEvent = null;
     this.router = router;
+    modalService.modalChange.toRx().subscribe((event:modal.Event) => this.modalEvent = event);
+  }
+
+  getWidgetPropertyType(property:theGrid.Core.ConfigProperty):string {
+    "use strict";
+
+    switch (property.type) {
+      case theGrid.Core.ConfigPropertyType.Integer:
+        return "int";
+      case theGrid.Core.ConfigPropertyType.Float:
+        return "float";
+      case theGrid.Core.ConfigPropertyType.String:
+        return "text";
+      case theGrid.Core.ConfigPropertyType.Boolean:
+        return "bool";
+      default:
+        return null;
+    }
+  }
+
+  onModalCloseClick():void {
+    "use strict";
+
+    this.modalEvent = null;
+  }
+
+  onModalEditClick():void {
+    "use strict";
+
+    this.modalEvent.widget.emitOnConfigsChanged();
+    this.modalEvent = null;
   }
 }
