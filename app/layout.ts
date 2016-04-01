@@ -81,11 +81,6 @@ export class Component implements ng.OnInit, ng.OnDestroy {
   onInit():void {
     "use strict";
 
-    // TODO: https://github.com/angular/angular/issues/4112
-    // TODO: https://github.com/angular/angular/issues/7303
-    if (!window.localStorage.getItem("authToken")) {
-      this.router.navigate(["Signing"]);
-    }
     this.onWindowResize();
     // TODO: https://groups.google.com/d/msg/angular/IJf-KyGC3Gs/h33mlUTrAwAJ
     document.documentElement.classList.add(...HTML_CLASSES);

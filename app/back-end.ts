@@ -17,6 +17,7 @@ import * as _ from "underscore";
 import * as _String from "underscore.string";
 import * as ng from "angular2/angular2";
 import * as ngHttp from "angular2/http";
+import * as ngRouter from "angular2/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 
@@ -28,16 +29,19 @@ export class Service extends libBackEnd.BackEnd {
    */
   http:ngHttp.Http;
 
+  router:ngRouter.Router;
+
   /**
    * Create a new service instance.
    *
    * @param http a service that is able to perform HTTP requests.
    */
-  public constructor(http:ngHttp.Http) {
+  public constructor(http:ngHttp.Http, router:ngRouter.Router) {
     "use strict";
 
     super();
     this.http = http;
+    this.router = router;
   }
 
   /**
@@ -56,6 +60,11 @@ export class Service extends libBackEnd.BackEnd {
       body: request.body,
       url: request.url
     }));
-    return new Promise(resolve => this.http.request(ngRequest).subscribe((ngResponse:ngHttp.Response) => resolve(new libBackEnd.Response(ngResponse.status, ngResponse.json()))));
+    return new Promise(resolve => this.http.request(ngRequest).subscribe((ngResponse:ngHttp.Response) => {
+      if (ngResponse.status == 401) {
+        this.router.navigate(["Signing"]);
+      }
+      resolve(new libBackEnd.Response(ngResponse.status, ngResponse.json()));
+    }));
   }
 }
