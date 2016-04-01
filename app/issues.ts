@@ -21,7 +21,7 @@ import * as becki from "./index";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/issues.html",
@@ -39,11 +39,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -51,7 +51,7 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("Issues", ["Issues"])
     ];
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -67,13 +67,13 @@ export class Component implements ng.OnInit {
 
     this.backEnd.getIssueTypes()
         .then(types => this.types = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, ["IssueType", {type: type.id}])))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Types cannot be loaded: ${reason}`)));
+        .catch(reason => this.notifications.current.push(new notifications.Danger("Types cannot be loaded.", reason)));
     this.backEnd.getIssueConfirmations()
         .then(confirmations => this.confirmations = confirmations.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null, ["IssueConfirmationType", {confirmation: confirmation.id}])))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Confirmations cannot be loaded: ${reason}`)));
+        .catch(reason => this.notifications.current.push(new notifications.Danger("Confirmations cannot be loaded.", reason)));
     this.backEnd.getIssues()
         .then(issues => this.issues = issues.map(issue => new libPatternFlyListView.Item(issue.postId, issue.name, issue.type.type, ["Issue", {issue: issue.postId}])))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Issues cannot be loaded: ${reason}`)));
+        .catch(reason => this.notifications.current.push(new notifications.Danger("Issues cannot be loaded.", reason)));
   }
 
   onTypeAddClick():void {
@@ -88,11 +88,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.deleteIssueType(id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The type has been removed."));
+          this.notifications.current.push(new notifications.Success("The type has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The type cannot be removed: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The type cannot be removed.", reason));
         });
   }
 
@@ -108,11 +108,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.deleteIssueConfirmation(id)
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The confirmation has been removed."));
+          this.notifications.next.push(new notifications.Success("The confirmation has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The confirmation cannot be removed: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The confirmation cannot be removed.", reason));
         });
   }
 
@@ -128,11 +128,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.deletePost(id)
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The issue has been removed."));
+          this.notifications.next.push(new notifications.Success("The issue has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issue cannot be removed: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The issue cannot be removed.", reason));
         });
   }
 }

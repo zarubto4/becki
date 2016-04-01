@@ -22,7 +22,7 @@ import * as customValidator from "./custom-validator";
 import * as fieldInteractionsScheme from "./field-interactions-scheme";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/user-interactions-scheme-new.html",
@@ -56,11 +56,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -75,7 +75,7 @@ export class Component implements ng.OnInit {
     this.groupField = "";
     this.schemeField = `{"blocks":{}}`;
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -89,7 +89,7 @@ export class Component implements ng.OnInit {
           this.loadFromProject();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`Projects cannot be loaded: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("Projects cannot be loaded.", reason));
         });
   }
 
@@ -111,7 +111,7 @@ export class Component implements ng.OnInit {
             this.groups = groups;
           })
           .catch(reason => {
-            this.notifications.current.push(new libPatternFlyNotifications.Danger(`Application groups cannot be loaded: ${reason}`));
+            this.notifications.current.push(new notifications.Danger("Application groups cannot be loaded.", reason));
           });
     }
   }
@@ -152,11 +152,13 @@ export class Component implements ng.OnInit {
           return this.groupField ? this.backEnd.addApplicationGroupToInteractionsScheme(this.groupField, version.id, false) : null;
         })
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The scheme have been created."));
+          this.notifications.next.push(new notifications.Success("The scheme have been created."));
           this.router.navigate(["UserInteractions"]);
         })
-        .catch((reason) => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme cannot be created: ${reason}`));
+        .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-174
+          this.notifications.current.push(new notifications.Danger("issue/TYRION-174"));
+          this.notifications.current.push(new notifications.Danger("The scheme cannot be created.", reason));
         });
   }
 

@@ -21,7 +21,7 @@ import * as becki from "./index";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/system.html",
@@ -39,11 +39,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -52,7 +52,7 @@ export class Component implements ng.OnInit {
     ];
     this.showDevices = false;
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -71,13 +71,13 @@ export class Component implements ng.OnInit {
         .then(moderators => this.moderators = moderators.map(moderator => new libPatternFlyListView.Item(moderator.homer_id, `${moderator.homer_id} (issue/TYRION-71)`, moderator.online ? "online" : "offline")))
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
-          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-155"));
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`Moderators of interactions cannot be loaded: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("issue/TYRION-155"));
+          this.notifications.current.push(new notifications.Danger("Moderators of interactions cannot be loaded.", reason));
         });
     this.backEnd.getDevices()
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
         .then(devices => this.devices = devices.map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.isActive ? "active" : "inactive")))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Devices cannot be loaded: ${reason}`)));
+        .catch(reason => this.notifications.current.push(new notifications.Danger("Devices cannot be loaded.", reason)));
   }
 
   onAddClick():void {
@@ -120,11 +120,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.deleteInteractionsModerator(id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The moderator of interactions has been removed."));
+          this.notifications.current.push(new notifications.Success("The moderator of interactions has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The moderator of interactions cannot be removed: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The moderator of interactions cannot be removed.", reason));
         });
   }
 
@@ -133,6 +133,6 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     // see https://youtrack.byzance.cz/youtrack/issue/TYRION-89
-    this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-89"));
+    this.notifications.current.push(new notifications.Danger("issue/TYRION-89"));
   }
 }

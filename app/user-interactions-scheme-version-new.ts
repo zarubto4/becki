@@ -23,7 +23,7 @@ import * as customValidator from "./custom-validator";
 import * as fieldInteractionsScheme from "./field-interactions-scheme";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/user-interactions-scheme-version-new.html",
@@ -57,11 +57,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.schemeId = routeParams.get("scheme");
@@ -79,7 +79,7 @@ export class Component implements ng.OnInit {
     this.groupField = "";
     this.schemeField = `{"blocks":{}}`;
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -144,7 +144,7 @@ export class Component implements ng.OnInit {
           this.schemeField = file.content;
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme ${this.schemeId} cannot be loaded: ${reason}`));
+          this.notifications.current.push(new notifications.Danger(`The scheme ${this.schemeId} cannot be loaded.`, reason));
         });
   }
 
@@ -163,11 +163,11 @@ export class Component implements ng.OnInit {
           return this.groupField ? this.backEnd.addApplicationGroupToInteractionsScheme(this.groupField, version.id, false) : null;
         })
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The version has been created."));
+          this.notifications.next.push(new notifications.Success("The version has been created."));
           this.router.navigate(["UserInteractionsScheme", {scheme: this.schemeId}]);
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The version cannot be created: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The version cannot be created.", reason));
         });
   }
 

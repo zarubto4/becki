@@ -21,7 +21,7 @@ import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/library.html",
@@ -52,11 +52,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("library");
@@ -72,7 +72,7 @@ export class Component implements ng.OnInit {
     this.versionDescriptionField = "";
     this.fileVersionField = "";
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -97,7 +97,7 @@ export class Component implements ng.OnInit {
           this.descriptionField = library.description;
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The library ${this.id} cannot be loaded: ${reason}`));
+          this.notifications.current.push(new notifications.Danger(`The library ${this.id} cannot be loaded.`, reason));
         });
   }
 
@@ -123,11 +123,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateLibrary(this.id, this.nameField, this.descriptionField)
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The library has been updated."));
+          this.notifications.next.push(new notifications.Success("The library has been updated."));
           this.router.navigate(["Devices"]);
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The library cannot be updated: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The library cannot be updated.", reason));
         });
   }
 
@@ -137,13 +137,13 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.addVersionToLibrary(this.versionNameField, this.versionDescriptionField, this.id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The version has been created."));
+          this.notifications.current.push(new notifications.Success("The version has been created."));
           this.versionNameField = "";
           this.versionDescriptionField = "";
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The version cannot be created: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The version cannot be created.", reason));
         });
   }
 
@@ -153,15 +153,15 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateFileOfLibrary(this.fileField.nativeElement.files[0], this.fileVersionField == "new" ? null : this.fileVersionField, this.id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The file has been uploaded."));
+          this.notifications.current.push(new notifications.Success("The file has been uploaded."));
           this.fileField.nativeElement.value = "";
           this.fileVersionField = "";
           this.refresh();
         })
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-118
-          this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-118"));
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The file cannot be uploaded: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("issue/TYRION-118"));
+          this.notifications.current.push(new notifications.Danger("The file cannot be uploaded.", reason));
         });
   }
 

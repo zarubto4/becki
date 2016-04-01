@@ -21,7 +21,7 @@ import * as becki from "./index";
 import * as fieldInteractionsScheme from "./field-interactions-scheme";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/user-interactions-scheme-version.html",
@@ -49,11 +49,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("version");
@@ -72,7 +72,7 @@ export class Component implements ng.OnInit {
     this.showGroups = false;
     this.scheme = `{"blocks":{}}`;
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -136,7 +136,7 @@ export class Component implements ng.OnInit {
           this.scheme = file.content;
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme ${this.schemeId} cannot be loaded: ${reason}`));
+          this.notifications.current.push(new notifications.Danger(`The scheme ${this.schemeId} cannot be loaded.`, reason));
         });
   }
 }

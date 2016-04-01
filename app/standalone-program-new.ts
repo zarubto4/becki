@@ -22,7 +22,7 @@ import * as customValidator from "./custom-validator";
 import * as fieldCode from "./field-code";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/standalone-program-new.html",
@@ -54,11 +54,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.projectId = routeParams.get("project");
@@ -76,7 +76,7 @@ export class Component implements ng.OnInit {
     this.descriptionField = "";
     this.codeField = "";
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -86,7 +86,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.getProjectStandaloneProgramCategories(this.projectId)
         .then(categories => this.categories = categories)
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Categories cannot be loaded: ${reason}`)));
+        .catch(reason => this.notifications.current.push(new notifications.Danger("Categories cannot be loaded.", reason)));
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -105,11 +105,11 @@ export class Component implements ng.OnInit {
           return this.backEnd.addVersionToStandaloneProgram("Initial version", "An automatically created version.", this.codeField, program.id);
         })
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The program have been created."));
+          this.notifications.next.push(new notifications.Success("The program have been created."));
           this.router.navigate(["Project", {project: this.projectId}]);
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be created: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The program cannot be created.", reason));
         });
   }
 

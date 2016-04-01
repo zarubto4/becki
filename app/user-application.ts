@@ -22,7 +22,7 @@ import * as customValidator from "./custom-validator";
 import * as fieldApplication from "./field-application";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/user-application.html",
@@ -66,11 +66,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("application");
@@ -92,7 +92,7 @@ export class Component implements ng.OnInit {
     this.codeField = "{}";
     this.code = "{}";
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -160,7 +160,7 @@ export class Component implements ng.OnInit {
           this.code = application.m_code;
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The application ${this.id} cannot be loaded: ${reason}`));
+          this.notifications.current.push(new notifications.Danger(`The application ${this.id} cannot be loaded.`, reason));
         });
   }
 
@@ -183,11 +183,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateApplication(this.id, this.nameField, this.descriptionField, this.device.id, this.codeField)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The application has been updated."));
+          this.notifications.current.push(new notifications.Success("The application has been updated."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The application cannot be updated: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The application cannot be updated.", reason));
         });
   }
 

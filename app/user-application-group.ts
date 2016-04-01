@@ -22,7 +22,7 @@ import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/user-application-group.html",
@@ -54,11 +54,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("group");
@@ -72,7 +72,7 @@ export class Component implements ng.OnInit {
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -106,7 +106,7 @@ export class Component implements ng.OnInit {
           this.applications = this.group.m_programs.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["UserApplication", {application: application.id}]))
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The group ${this.id} cannot be loaded: ${reason}`));
+          this.notifications.current.push(new notifications.Danger(`The group ${this.id} cannot be loaded.`, reason));
         });
   }
 
@@ -129,11 +129,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateApplicationGroup(this.id, this.nameField, this.descriptionField)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The group has been updated."));
+          this.notifications.current.push(new notifications.Success("The group has been updated."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The group cannot be updated: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The group cannot be updated.", reason));
         });
   }
 
@@ -155,12 +155,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.deleteApplication(id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The application has been removed."));
+          this.notifications.current.push(new notifications.Success("The application has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The application cannot be removed: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The application cannot be removed.", reason));
         });
   }
-
 }

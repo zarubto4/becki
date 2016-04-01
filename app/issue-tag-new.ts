@@ -20,7 +20,7 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/issue-tag-new.html",
@@ -38,11 +38,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.issueId = routeParams.get("issue");
@@ -56,7 +56,7 @@ export class Component implements ng.OnInit {
     ];
     this.field = "";
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -79,11 +79,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.addTagToPost(this.field, this.issueId)
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The tag has been added."));
+          this.notifications.next.push(new notifications.Success("The tag has been added."));
           this.router.navigate(["Issue", {issue: this.issueId}]);
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The tag cannot be added: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The tag cannot be added.", reason));
         });
   }
 

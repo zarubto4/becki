@@ -19,13 +19,13 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 const REDIRECT_URL = `${window.location.pathname}#`;
 
 @ng.Component({
   templateUrl: "app/signing.html",
-  directives: [customValidator.Directive, libPatternFlyNotifications.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [customValidator.Directive, notifications.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -49,11 +49,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.brand = becki.HOME.label;
@@ -66,7 +66,7 @@ export class Component implements ng.OnInit {
     this.upUsernameField = "";
     this.redirecting = false;
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -104,7 +104,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createToken(this.inEmailField, this.inPasswordField)
         .then(() => this.router.navigate(becki.HOME.link))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed in: ${reason}`)));
+        .catch(reason => this.notifications.current.push(new notifications.Danger("The person cannot be signed in.", reason)));
   }
 
   onFacebookSignInClick():void {
@@ -113,7 +113,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createFacebookToken(REDIRECT_URL)
         .then(url => this.redirect(url))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed in: ${reason}`)));
+        .catch(reason => this.notifications.current.push(new notifications.Danger("The person cannot be signed in.", reason)));
   }
 
   onGitHubSignInClick():void {
@@ -122,7 +122,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createGitHubToken(REDIRECT_URL)
         .then(url => this.redirect(url))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed in: ${reason}`)));
+        .catch(reason => this.notifications.current.push(new notifications.Danger("The person cannot be signed in.", reason)));
   }
 
   onSignUpClick():void {
@@ -143,11 +143,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createPerson(this.upEmailField, this.upPassword1Field, this.upUsernameField)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The person have been signed up. It is necessary to follow the instructions sent to their email before signing in."));
+          this.notifications.current.push(new notifications.Success("The person have been signed up. It is necessary to follow the instructions sent to their email before signing in."));
           this.signIn = true;
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The person cannot be signed up: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The person cannot be signed up.", reason));
         });
   }
 }

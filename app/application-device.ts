@@ -21,7 +21,7 @@ import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/application-device.html",
@@ -53,11 +53,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("device");
@@ -74,7 +74,7 @@ export class Component implements ng.OnInit {
     this.columnsField = 1;
     this.rowsField = 1;
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -110,7 +110,7 @@ export class Component implements ng.OnInit {
           this.rowsField = this.device.portrait_square_height;
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The device ${this.id} cannot be loaded: ${reason}`));
+          this.notifications.current.push(new notifications.Danger(`The device ${this.id} cannot be loaded.`, reason));
         });
   }
 
@@ -133,11 +133,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateApplicationDevice(this.id, this.nameField, this.widthField, this.heightField, this.columnsField, this.rowsField, this.device.width_lock, this.device.height_lock, this.device.portrait_min_screens, this.device.portrait_max_screens, this.device.landscape_min_screens, this.device.landscape_max_screens, this.device.touch_screen, this.project ? this.project.id : undefined)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The device has been updated."));
+          this.notifications.current.push(new notifications.Success("The device has been updated."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The device cannot be updated: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The device cannot be updated.", reason));
         });
   }
 

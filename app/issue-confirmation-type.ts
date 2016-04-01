@@ -20,7 +20,7 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/issue-confirmation-type.html",
@@ -42,11 +42,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("confirmation");
@@ -61,7 +61,7 @@ export class Component implements ng.OnInit {
     this.colorField = "#ffffff";
     this.sizeField = 12;
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -76,7 +76,7 @@ export class Component implements ng.OnInit {
           this.sizeField = confirmation.size;
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`Confirmations cannot be loaded: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("Confirmations cannot be loaded.", reason));
         });
   }
 
@@ -93,11 +93,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateIssueConfirmation(this.id, this.nameField, this.colorField, this.sizeField)
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The confirmation has been updated."));
+          this.notifications.next.push(new notifications.Success("The confirmation has been updated."));
           this.router.navigate(["Issues"]);
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The confirmation cannot be updated: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The confirmation cannot be updated.", reason));
         });
   }
 

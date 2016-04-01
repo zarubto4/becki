@@ -14,21 +14,21 @@
 
 import * as ng from "angular2/angular2";
 
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Injectable()
 export class Service {
-  constructor(notifications:libPatternFlyNotifications.Service) {
+  constructor(notificationsService:notifications.Service) {
     "use strict";
 
     let socket:WebSocket;
     try {
       socket = new WebSocket("ws://echo.websocket.org/");
     } catch (err) {
-      notifications.current.push(new libPatternFlyNotifications.Danger(`A communication channel with the back end cannot be created: ${err}`));
+      notificationsService.current.push(new notifications.Danger("A communication channel with the back end cannot be created.", err));
       return;
     }
-    socket.onerror = event => notifications.current.push(new libPatternFlyNotifications.Danger(`The back end reports an error: ${event}`));
-    socket.onmessage = event => notifications.current.push(new libPatternFlyNotifications.Info(`The back end has sent a message: ${event}`));
+    socket.onerror = event => notificationsService.current.push(new notifications.Danger("The back end reports an error.", event));
+    socket.onmessage = event => notificationsService.current.push(new notifications.Info(`The back end has sent a message: ${event}`));
   }
 }

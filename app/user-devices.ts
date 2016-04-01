@@ -21,7 +21,7 @@ import * as becki from "./index";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 class SelectableDeviceItem extends libPatternFlyListView.Item {
 
@@ -55,11 +55,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -69,7 +69,7 @@ export class Component implements ng.OnInit {
     ];
     this.showUpdate = false;
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -86,7 +86,7 @@ export class Component implements ng.OnInit {
     this.backEnd.getProjects()
         .then(projects => Promise.all(projects.map(project => Promise.all<any>([this.backEnd.getProjectDevices(project.id), project]))))
         .then((devices:[libBackEnd.Device[], libBackEnd.Project][]) => this.devices = [].concat(...devices.map(pair => pair[0].map(device => new SelectableDeviceItem(device, pair[1].id)))))
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Devices cannot be loaded: ${reason}`)));
+        .catch(reason => this.notifications.current.push(new notifications.Danger("Devices cannot be loaded.", reason)));
   }
 
   onAddDeviceClick():void {
@@ -114,11 +114,11 @@ export class Component implements ng.OnInit {
     let device = this.devices.find(device => device.id == id);
     this.backEnd.removeDeviceFromProject(device.id, device.project)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The device has been removed."));
+          this.notifications.current.push(new notifications.Success("The device has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The device cannot be removed: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The device cannot be removed.", reason));
         });
   }
 
@@ -132,6 +132,6 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-37#comment=109-118
-    this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-37"));
+    this.notifications.current.push(new notifications.Danger("issue/TYRION-37"));
   }
 }

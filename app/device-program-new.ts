@@ -20,7 +20,7 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/device-program-new.html",
@@ -40,11 +40,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.projectId = routeParams.get("project");
@@ -60,7 +60,7 @@ export class Component implements ng.OnInit {
     this.nameField = "";
     this.descriptionField = "";
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -83,11 +83,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createDeviceProgram(this.nameField, this.descriptionField, this.projectId)
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The program has been created."));
+          this.notifications.next.push(new notifications.Success("The program has been created."));
           this.router.navigate(["Project", {project: this.projectId}]);
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The program cannot be created: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The program cannot be created.", reason));
         });
   }
 

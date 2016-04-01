@@ -21,7 +21,7 @@ import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/producer.html",
@@ -41,11 +41,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("producer");
@@ -58,7 +58,7 @@ export class Component implements ng.OnInit {
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -76,7 +76,7 @@ export class Component implements ng.OnInit {
           this.nameField = producer.name;
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The producer ${this.id} cannot be loaded: ${reason}`));
+          this.notifications.current.push(new notifications.Danger(`The producer ${this.id} cannot be loaded.`, reason));
         });
   }
 
@@ -93,11 +93,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateProducer(this.id, this.nameField, this.descriptionField)
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The producer has been updated."));
+          this.notifications.next.push(new notifications.Success("The producer has been updated."));
           this.router.navigate(["Devices"]);
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The producer cannot be updated: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The producer cannot be updated.", reason));
         });
   }
 

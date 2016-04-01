@@ -20,7 +20,7 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/project-new.html",
@@ -36,11 +36,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -52,7 +52,7 @@ export class Component implements ng.OnInit {
     this.nameField = "";
     this.descriptionField = "";
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -75,11 +75,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createProject(this.nameField, this.descriptionField)
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The project has been created."));
+          this.notifications.next.push(new notifications.Success("The project has been created."));
           this.router.navigate(["Projects"]);
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The project cannot be created: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The project cannot be created.", reason));
         });
   }
 

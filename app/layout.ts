@@ -19,7 +19,7 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as libBootstrapDropdown from "./lib-bootstrap/dropdown";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 const HTML_CLASSES = ["layout-pf", "layout-pf-fixed"];
 
@@ -43,7 +43,7 @@ export class LabeledLink {
 @ng.Component({
   selector: "[layout]",
   templateUrl: "app/layout.html",
-  directives: [libBootstrapDropdown.DIRECTIVES, libPatternFlyNotifications.Component, ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
+  directives: [libBootstrapDropdown.DIRECTIVES, notifications.Component, ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
   inputs: ["heading: layout", "breadcrumbs", "actionLabel"]
 })
 export class Component implements ng.OnInit, ng.OnDestroy {
@@ -61,11 +61,11 @@ export class Component implements ng.OnInit, ng.OnDestroy {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.home = becki.HOME;
@@ -74,7 +74,7 @@ export class Component implements ng.OnInit, ng.OnDestroy {
     this.actionClick = new ng.EventEmitter();
     this.lastWindowWidth = null;
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -104,11 +104,11 @@ export class Component implements ng.OnInit, ng.OnDestroy {
     this.notifications.shift();
     this.backEnd.deleteToken()
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("Current user have been signed out."));
+          this.notifications.next.push(new notifications.Success("Current user have been signed out."));
           this.router.navigate(["Signing"]);
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`Current user cannot be signed out: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("Current user cannot be signed out.", reason));
         });
   }
 

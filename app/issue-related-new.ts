@@ -20,7 +20,7 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/issue-related-new.html",
@@ -40,11 +40,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.issueId = routeParams.get("issue");
@@ -58,7 +58,7 @@ export class Component implements ng.OnInit {
     ];
     this.field = "";
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -77,7 +77,7 @@ export class Component implements ng.OnInit {
           this.issues = issues.filter(issue2 => issue.linked_answers.find(related => related.answer.postId == issue2.postId) === undefined);
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`Issues cannot be loaded: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("Issues cannot be loaded.", reason));
         });
   }
 
@@ -87,11 +87,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createIssueLink(this.issueId, this.field)
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The issue has been added."));
+          this.notifications.next.push(new notifications.Success("The issue has been added."));
           this.router.navigate(["Issue", {issue: this.issueId}]);
         })
         .catch((reason) => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issue cannot be added: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The issue cannot be added.", reason));
         });
   }
 

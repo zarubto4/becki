@@ -21,7 +21,7 @@ import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/user-application-group-new.html",
@@ -41,11 +41,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -57,7 +57,7 @@ export class Component implements ng.OnInit {
     this.nameField = "";
     this.descriptionField = "";
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -67,7 +67,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.getProjects()
         .then(projects => this.projects = projects)
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Projects cannot be loaded: ${reason}`)));
+        .catch(reason => this.notifications.current.push(new notifications.Danger("Projects cannot be loaded.", reason)));
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -92,11 +92,11 @@ export class Component implements ng.OnInit {
           return this.backEnd.createApplicationGroup(this.nameField, this.descriptionField, project);
         })
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The group has been created."));
+          this.notifications.next.push(new notifications.Success("The group has been created."));
           this.router.navigate(["UserApplications"]);
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The group cannot be created: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The group cannot be created.", reason));
         });
   }
 

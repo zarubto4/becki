@@ -25,7 +25,7 @@ import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapDropdown from "./lib-bootstrap/dropdown";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 class Comment {
 
@@ -165,11 +165,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("issue");
@@ -181,7 +181,7 @@ export class Component implements ng.OnInit {
     ];
     this.answerBodyField = fieldIssueBody.EMPTY;
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -212,14 +212,14 @@ export class Component implements ng.OnInit {
           this.confirmations = issue.type_of_confirms.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null));
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issue ${this.id} cannot be loaded: ${reason}`));
+          this.notifications.current.push(new notifications.Danger(`The issue ${this.id} cannot be loaded.`, reason));
         });
     this.backEnd.getIssueTypes()
         .then(types => this.types = types)
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Issue types cannot be loaded: ${reason}`)));
+        .catch(reason => this.notifications.current.push(new notifications.Danger("Issue types cannot be loaded.", reason)));
     this.backEnd.getProjects()
         .then(projects => this.projects = projects)
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Projects cannot be loaded: ${reason}`)));
+        .catch(reason => this.notifications.current.push(new notifications.Danger("Projects cannot be loaded.", reason)));
   }
 
   onItemImportClick(item:Item):void {
@@ -244,7 +244,7 @@ export class Component implements ng.OnInit {
           return this.backEnd.addVersionToInteractionsScheme("The original", `Imported from issue ${this.id}`, item.interactionsSchemeField, scheme.b_program_id);
         })
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The scheme has been imported."));
+          this.notifications.current.push(new notifications.Success("The scheme has been imported."));
           item.importing = false;
           item.interactionsNameField = "";
           item.interactionsDescriptionField = "";
@@ -252,7 +252,7 @@ export class Component implements ng.OnInit {
           item.interactionsProjectField = "";
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The scheme cannot be imported: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The scheme cannot be imported.", reason));
         });
   }
 
@@ -275,22 +275,22 @@ export class Component implements ng.OnInit {
     if (item instanceof Issue) {
       this.backEnd.updateIssue(item.id, item.typeField, item.titleField, item.bodyField, item.tags)
           .then(() => {
-            this.notifications.current.push(new libPatternFlyNotifications.Success("The issue has been updated."));
+            this.notifications.current.push(new notifications.Success("The issue has been updated."));
             this.refresh();
           })
           .catch(reason => {
             // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-150
-            this.notifications.current.push(new libPatternFlyNotifications.Danger("issue/TYRION-150"));
-            this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issue cannot be updated: ${reason}`));
+            this.notifications.current.push(new notifications.Danger("issue/TYRION-150"));
+            this.notifications.current.push(new notifications.Danger("The issue cannot be updated.", reason));
           });
     } else {
       this.backEnd.updateAnswer(item.id, item.bodyField, item.tags)
           .then(() => {
-            this.notifications.current.push(new libPatternFlyNotifications.Success("The answer has been updated."));
+            this.notifications.current.push(new notifications.Success("The answer has been updated."));
             this.refresh();
           })
           .catch(reason => {
-            this.notifications.current.push(new libPatternFlyNotifications.Danger(`The answer cannot be updated: ${reason}`));
+            this.notifications.current.push(new notifications.Danger("The answer cannot be updated.", reason));
           });
     }
   }
@@ -307,11 +307,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.subtractOneFromPost(id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The likes have been updated."));
+          this.notifications.current.push(new notifications.Success("The likes have been updated."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The likes cannot be updated: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The likes cannot be updated.", reason));
         });
   }
 
@@ -321,11 +321,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.addOneToPost(id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The likes have been updated."));
+          this.notifications.current.push(new notifications.Success("The likes have been updated."));
           this.refresh();
         })
         .catch((reason) => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The likes cannot be updated: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The likes cannot be updated.", reason));
         });
   }
 
@@ -343,15 +343,15 @@ export class Component implements ng.OnInit {
     this.backEnd.deletePost(item.id)
         .then(() => {
           if (item instanceof Issue) {
-            this.notifications.next.push(new libPatternFlyNotifications.Success("The issue has been removed."));
+            this.notifications.next.push(new notifications.Success("The issue has been removed."));
             this.router.navigate(["Issues"]);
           } else {
-            this.notifications.current.push(new libPatternFlyNotifications.Success("The answer has been removed."));
+            this.notifications.current.push(new notifications.Success("The answer has been removed."));
             this.refresh();
           }
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issue/answer cannot be removed: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The issue/answer cannot be removed.", reason));
         });
   }
 
@@ -367,12 +367,12 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createAnswer(this.id, this.answerBodyField, [])
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The answer has been created."));
+          this.notifications.current.push(new notifications.Success("The answer has been created."));
           this.answerBodyField = fieldIssueBody.EMPTY;
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The answer cannot be created: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The answer cannot be created.", reason));
         });
   }
 
@@ -382,11 +382,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createComment(item.id, item.commentField, [])
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The comment has been created."));
+          this.notifications.current.push(new notifications.Success("The comment has been created."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The comment cannot be created: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The comment cannot be created.", reason));
         });
   }
 
@@ -402,11 +402,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateComment(comment.id, comment.bodyField, comment.tags)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The comment has been updated."));
+          this.notifications.current.push(new notifications.Success("The comment has been updated."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The comment cannot be updated: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The comment cannot be updated.", reason));
         });
   }
 
@@ -429,11 +429,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.deleteComment(comment.id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The comment has been removed."));
+          this.notifications.current.push(new notifications.Success("The comment has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The comment cannot be removed: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The comment cannot be removed.", reason));
         });
   }
 
@@ -455,11 +455,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.deleteIssueLink(id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The issue has been removed."));
+          this.notifications.current.push(new notifications.Success("The issue has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The issue cannot be removed: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The issue cannot be removed.", reason));
         });
   }
 
@@ -475,11 +475,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.removeTagFromPost(tag, this.id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The tag has been removed."));
+          this.notifications.current.push(new notifications.Success("The tag has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The tag cannot be removed: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The tag cannot be removed.", reason));
         });
   }
 
@@ -495,11 +495,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.removeConfirmationFromPost(id, this.id)
         .then(() => {
-          this.notifications.current.push(new libPatternFlyNotifications.Success("The confirmation has been removed."));
+          this.notifications.current.push(new notifications.Success("The confirmation has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The confirmation cannot be removed: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The confirmation cannot be removed.", reason));
         });
   }
 }

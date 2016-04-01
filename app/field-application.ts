@@ -16,8 +16,8 @@
 import * as ng from "angular2/angular2";
 import * as theGrid from "the-grid";
 
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
 import * as modal from "./modal";
+import * as notifications from "./notifications";
 
 @ng.Component({
   selector: "[field-application]",
@@ -44,9 +44,9 @@ export class Component implements ng.AfterViewInit, ng.OnChanges {
 
   modal:modal.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
-  constructor(modalService:modal.Service, notifications:libPatternFlyNotifications.Service) {
+  constructor(modalService:modal.Service, notificationsService:notifications.Service) {
     "use strict";
 
     this.controller = new theGrid.Core.Controller();
@@ -64,7 +64,7 @@ export class Component implements ng.AfterViewInit, ng.OnChanges {
     // TODO: https://github.com/angular/angular/issues/6311
     this.modelChange = new ng.EventEmitter(false);
     this.modal = modalService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
   }
 
   onChanges(changes:{[key:string]: ng.SimpleChange}):void {
@@ -78,7 +78,7 @@ export class Component implements ng.AfterViewInit, ng.OnChanges {
           new theGrid.Core.ScreenProfile("landscape", device.currentValue.landscape_width, device.currentValue.landscape_height, device.currentValue.landscape_square_width, device.currentValue.landscape_square_height, device.currentValue.landscape_min_screens, device.currentValue.landscape_max_screens)
         ]);
       } else {
-        this.notifications.current.push(new libPatternFlyNotifications.Danger("The device cannot be changed."));
+        this.notifications.current.push(new notifications.Danger("The device cannot be changed."));
       }
     }
     let model = changes["model"];

@@ -76,6 +76,7 @@ export class Request {
         this.headers[header] = headers[header];
       }
     }
+    this.headers["Accept"] = "application/json";
     this.headers["Content-Type"] = "application/json";
     this.body = body ? JSON.stringify(body) : "";
   }
@@ -110,27 +111,86 @@ export class Response {
   }
 }
 
-/**
- * An error representing an problem in authentication against the back end.
- */
-export class AuthenticationError extends Error {
+export class BugFoundError extends Error {
 
-  /**
-   * The name of the error.
-   */
-  name = "authentication error";
+  name = "bug found error";
 
-  /**
-   * Create a new error instance.
-   *
-   * @param message a human-readable description of the error.
-   */
-  constructor(message?:string) {
+  adminMessage:string;
+
+  userMessage:string;
+
+  constructor(adminMessage:string, userMessage?:string) {
+    "use strict";
+
+    super(BugFoundError.composeMessage(adminMessage));
+    // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133
+    this.message = BugFoundError.composeMessage(adminMessage);
+    this.adminMessage = adminMessage;
+    this.userMessage = userMessage;
+  }
+
+  static fromResponse(response:Response):BugFoundError {
+    "use strict";
+
+    let content = response.body;
+    let message:string;
+    if (response.status == 400) {
+      content = (<{exception:Object}>response.body).exception;
+      message = (<{message:string}>response.body).message;
+    }
+    return new BugFoundError(`response ${response.status}: ${JSON.stringify(content)}`, message);
+  }
+
+  static composeMessage(adminMessage:string):string {
+    "use strict";
+
+    return `bug found in client or server: ${adminMessage}`;
+  }
+}
+
+export class UnauthorizedError extends Error {
+
+  name = "request unauthorized error";
+
+  userMessage:string;
+
+  constructor(userMessage:string, message = "authorized authentication token required") {
     "use strict";
 
     super(message);
     // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133
     this.message = message;
+    this.userMessage = userMessage;
+  }
+
+  static fromResponse(response:Response):UnauthorizedError {
+    "use strict";
+
+    return new UnauthorizedError((<{message:string}>response.body).message);
+  }
+}
+
+export class PermissionMissingError extends UnauthorizedError {
+
+  static MESSAGE = "permission required";
+
+  name = "permission missing error";
+
+  userMessage:string;
+
+  constructor(userMessage:string) {
+    "use strict";
+
+    super(PermissionMissingError.MESSAGE);
+    // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133
+    this.message = PermissionMissingError.MESSAGE;
+    this.userMessage = userMessage;
+  }
+
+  static fromReponse(response:Response):PermissionMissingError {
+    "use strict";
+
+    return new PermissionMissingError((<{message:string}>response.body).message);
   }
 }
 
@@ -689,13 +749,13 @@ export abstract class BackEnd {
    */
   protected abstract requestGeneral(request:Request):Promise<Response>;
 
-  public requestPath<T>(method:string, path:string, body?:Object):Promise<T> {
+  public requestPath<Response>(method:string, path:string, body?:Object, successes=[200]):Promise<Response> {
     "use strict";
 
-    return this.request(method, BackEnd.BASE_URL + path, body);
+    return this.request(method, BackEnd.BASE_URL + path, body, successes);
   }
 
-  public request<T>(method:string, url:string, body?:Object):Promise<T> {
+  public request<T>(method:string, url:string, body?:Object, successes=[200]):Promise<T> {
     "use strict";
 
     let request = new Request(method, url, {}, body);
@@ -708,11 +768,19 @@ export abstract class BackEnd {
         .then(
             response => {
               this.tasks -= 1;
-              if (response.status >= 200 && response.status < 300) {
+              if (successes.indexOf(response.status) != -1) {
                 return response.body;
-              } else {
-                // TODO: https://github.com/angular/angular/issues/4558
-                return Promise.reject(new Error(`error response: ${JSON.stringify(response)}`));
+              }
+              switch (response.status) {
+                case 401:
+                  // TODO: https://github.com/angular/angular/issues/4558
+                  return Promise.reject(UnauthorizedError.fromResponse(response));
+                case 403:
+                  // TODO: https://github.com/angular/angular/issues/4558
+                  return Promise.reject(PermissionMissingError.fromResponse(response));
+                default:
+                  // TODO: https://github.com/angular/angular/issues/4558
+                  return Promise.reject(BugFoundError.fromResponse(response));
               }
             },
             reason => {
@@ -735,7 +803,7 @@ export abstract class BackEnd {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-171
-    return this.requestPath("POST", BackEnd.PERSON_PATH, {nick_name, mail, password}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.PERSON_PATH, {nick_name, mail, password}, [201]).then(JSON.stringify);
   }
 
   /**
@@ -817,7 +885,7 @@ export abstract class BackEnd {
       throw "name, integer width, integer height, integer columns and integer rows required";
     }
 
-    return this.requestPath("POST", BackEnd.APPLICATION_DEVICE_PATH, {name, height_lock: false, width_lock: false, touch_screen: false, project_id, landscape_height: width, landscape_width: height, landscape_square_height: columns, landscape_square_width: rows, landscape_max_screens: 10, landscape_min_screens: 1, portrait_height: height, portrait_width: width, portrait_square_height: rows, portrait_square_width: columns, portrait_max_screens: 10, portrait_min_screens: 1}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.APPLICATION_DEVICE_PATH, {name, height_lock: false, width_lock: false, touch_screen: false, project_id, landscape_height: width, landscape_width: height, landscape_square_height: columns, landscape_square_width: rows, landscape_max_screens: 10, landscape_min_screens: 1, portrait_height: height, portrait_width: width, portrait_square_height: rows, portrait_square_width: columns, portrait_max_screens: 10, portrait_min_screens: 1}, [201]).then(JSON.stringify);
   }
 
   public getApplicationDevice(id:string):Promise<ApplicationDevice> {
@@ -832,26 +900,28 @@ export abstract class BackEnd {
     return this.requestPath("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/all`);
   }
 
-  public updateApplicationDevice(id:string, name:string, width:number, height:number, columns:number, rows:number, width_lock:boolean, height_lock:boolean, portrait_min_screens:number, portrait_max_screens:number, landscape_min_screens:number, landscape_max_screens:number, touch_screen:boolean, project_id:string) {
+  public updateApplicationDevice(id:string, name:string, width:number, height:number, columns:number, rows:number, width_lock:boolean, height_lock:boolean, portrait_min_screens:number, portrait_max_screens:number, landscape_min_screens:number, landscape_max_screens:number, touch_screen:boolean, project_id:string):Promise<string> {
     "use strict";
 
     if (!name || !Number.isInteger(width) || !Number.isInteger(height) || !Number.isInteger(columns) || !Number.isInteger(rows) || !Number.isInteger(portrait_min_screens) || !Number.isInteger(portrait_max_screens) || !Number.isInteger(landscape_min_screens) || !Number.isInteger(landscape_max_screens)) {
       throw "name, integer width, integer height, integer columns, integer rows and integer screen counts required";
     }
 
-    return this.requestPath("PUT", `${BackEnd.APPLICATION_DEVICE_PATH}/${id}`, {name, height_lock, width_lock, touch_screen, project_id, landscape_height: width, landscape_width: height, landscape_square_height: columns, landscape_square_width: rows, landscape_max_screens, landscape_min_screens, portrait_height: height, portrait_width: width, portrait_square_height: rows, portrait_square_width: columns, portrait_max_screens, portrait_min_screens}).then(JSON.stringify);
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-173
+    return this.requestPath("PUT", `${BackEnd.APPLICATION_DEVICE_PATH}/${id}`, {name, height_lock, width_lock, touch_screen, project_id, landscape_height: width, landscape_width: height, landscape_square_height: columns, landscape_square_width: rows, landscape_max_screens, landscape_min_screens, portrait_height: height, portrait_width: width, portrait_square_height: rows, portrait_square_width: columns, portrait_max_screens, portrait_min_screens}, [200, 201]).then(JSON.stringify);
   }
 
   public deleteApplicationDevice(id:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("DELETE", `${BackEnd.APPLICATION_DEVICE_PATH}/${id}`).then(JSON.stringify);
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-173
+    return this.requestPath("DELETE", `${BackEnd.APPLICATION_DEVICE_PATH}/${id}`, undefined, [200, 201]).then(JSON.stringify);
   }
 
   public createApplicationGroup(program_name:string, program_description:string, projectId:string):Promise<ApplicationGroup> {
     "use strict";
 
-    return this.requestPath("POST", `${BackEnd.APPLICATION_GROUP_PATH}/${projectId}`, {program_description, program_name});
+    return this.requestPath("POST", `${BackEnd.APPLICATION_GROUP_PATH}/${projectId}`, {program_description, program_name}, [201]);
   }
 
   public getApplicationGroup(id:string):Promise<ApplicationGroup> {
@@ -885,7 +955,7 @@ export abstract class BackEnd {
       throw "name >= 8 and code required";
     }
 
-    return this.requestPath("POST", `${BackEnd.APPLICATION_PATH}/${groupId}`, {screen_type_id, program_name, program_description, m_code, height_lock: false, width_lock: false}).then(JSON.stringify);
+    return this.requestPath("POST", `${BackEnd.APPLICATION_PATH}/${groupId}`, {screen_type_id, program_name, program_description, m_code, height_lock: false, width_lock: false}, [201]).then(JSON.stringify);
   }
 
   public getApplication(id:string):Promise<Application> {
@@ -923,7 +993,7 @@ export abstract class BackEnd {
       throw "name >= 8 and description >= 24 required";
     }
 
-    return this.requestPath("POST", BackEnd.PRODUCER_PATH, {name, description}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.PRODUCER_PATH, {name, description}, [201]).then(JSON.stringify);
   }
 
   public getProducer(id:string):Promise<Producer> {
@@ -968,7 +1038,7 @@ export abstract class BackEnd {
       throw "name >= 8 and description >= 8 required";
     }
 
-    return this.requestPath("POST", BackEnd.LIBRARY_PATH, {library_name, description}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.LIBRARY_PATH, {library_name, description}, [201]).then(JSON.stringify);
   }
 
   public getLibrary(id:string):Promise<Library> {
@@ -996,7 +1066,8 @@ export abstract class BackEnd {
       throw "name >= 8 and description >= 8 required";
     }
 
-    return this.requestPath("PUT", `${BackEnd.LIBRARY_PATH}/${id}`, {library_name, description}).then(JSON.stringify);
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-173
+    return this.requestPath("PUT", `${BackEnd.LIBRARY_PATH}/${id}`, {library_name, description}, [200, 201]).then(JSON.stringify);
   }
 
   public addVersionToLibrary(version_name:string, version_description:string, id:string):Promise<string> {
@@ -1006,7 +1077,7 @@ export abstract class BackEnd {
       throw "name >= 8 and description >= 8 required";
     }
 
-    return this.requestPath("POST", `${BackEnd.LIBRARY_PATH}/version/${id}`, {version_name, version_description}).then(JSON.stringify);
+    return this.requestPath("POST", `${BackEnd.LIBRARY_PATH}/version/${id}`, {version_name, version_description}, [201]).then(JSON.stringify);
   }
 
   public updateFileOfLibrary(file:File, version:string, id:string):Promise<string> {
@@ -1050,7 +1121,7 @@ export abstract class BackEnd {
       throw "description >= 24 and name required";
     }
 
-    return this.requestPath("POST", BackEnd.LIBRARY_GROUP_PATH, {description, group_name}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.LIBRARY_GROUP_PATH, {description, group_name}, [201]).then(JSON.stringify);
   }
 
   public getLibraryGroup(id:string):Promise<LibraryGroup> {
@@ -1072,7 +1143,7 @@ export abstract class BackEnd {
       throw "description >= 24 and name required";
     }
 
-    return this.requestPath("PUT", `${BackEnd.LIBRARY_GROUP_PATH}/${id}`, {description, group_name}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.LIBRARY_GROUP_PATH}/${id}`, {description, group_name}, [201]).then(JSON.stringify);
   }
 
   public deleteLibraryGroup(id:string):Promise<string> {
@@ -1088,7 +1159,7 @@ export abstract class BackEnd {
       throw "name >= 4, code >= 4 and description >= 24 required";
     }
 
-    return this.requestPath("POST", BackEnd.PROCESSOR_PATH, {processor_name, description, processor_code, speed}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.PROCESSOR_PATH, {processor_name, description, processor_code, speed}, [201]).then(JSON.stringify);
   }
 
   public getProcessor(id:string):Promise<Processor> {
@@ -1126,7 +1197,7 @@ export abstract class BackEnd {
       throw "name >= 8 and description required";
     }
 
-    return this.requestPath("POST", BackEnd.DEVICE_TYPE_PATH, {name, description, producer_id, processor_id}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.DEVICE_TYPE_PATH, {name, description, producer_id, processor_id}, [201]).then(JSON.stringify);
   }
 
   public getDeviceType(id:string):Promise<DeviceType> {
@@ -1164,7 +1235,7 @@ export abstract class BackEnd {
       throw "name >= 8";
     }
 
-    return this.requestPath("POST", `${BackEnd.DEVICE_PROGRAM_PATH}/${projectId}`, {program_name, program_description}).then(JSON.stringify);
+    return this.requestPath("POST", `${BackEnd.DEVICE_PROGRAM_PATH}/${projectId}`, {program_name, program_description}, [201]).then(JSON.stringify);
   }
 
   public getDeviceProgram(id:string):Promise<DeviceProgram> {
@@ -1196,7 +1267,7 @@ export abstract class BackEnd {
       throw "name >= 8";
     }
 
-    return this.requestPath("PUT", `${BackEnd.DEVICE_PROGRAM_PATH}/update/${program}`, {version_name, version_description, files: [{file_name: "main", content}]}).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.DEVICE_PROGRAM_PATH}/update/${program}`, {version_name, version_description, files: [{file_name: "main", content}]}, [201]).then(JSON.stringify);
   }
 
   public removeVersionFromDeviceProgram(versionId:string, programId:string):Promise<string> {
@@ -1226,7 +1297,7 @@ export abstract class BackEnd {
       throw "ID required";
     }
 
-    return this.requestPath("POST", BackEnd.DEVICE_PATH, {type_of_board_id, hardware_unique_id}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.DEVICE_PATH, {type_of_board_id, hardware_unique_id}, [201]).then(JSON.stringify);
   }
 
   public getDevices():Promise<Device[]> {
@@ -1255,7 +1326,7 @@ export abstract class BackEnd {
       throw "name and description required";
     }
 
-    return this.requestPath("POST", BackEnd.STANDALONE_PROGRAM_PATH, {general_description, name, type_of_block_id});
+    return this.requestPath("POST", BackEnd.STANDALONE_PROGRAM_PATH, {general_description, name, type_of_block_id}, [201]);
   }
 
   public getStandaloneProgram(id:string):Promise<StandaloneProgram> {
@@ -1271,7 +1342,8 @@ export abstract class BackEnd {
       throw "name and description required";
     }
 
-    return this.requestPath("PUT", `${BackEnd.STANDALONE_PROGRAM_PATH}/${id}`, {general_description, name, type_of_block_id}).then(JSON.stringify);
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-173
+    return this.requestPath("PUT", `${BackEnd.STANDALONE_PROGRAM_PATH}/${id}`, {general_description, name, type_of_block_id}, [200, 201]).then(JSON.stringify);
   }
 
   public addVersionToStandaloneProgram(version_name:string, version_description:string, logic_json:string, program:string):Promise<string> {
@@ -1281,7 +1353,8 @@ export abstract class BackEnd {
       throw "name, description and code required";
     }
 
-    return this.requestPath("POST", `${BackEnd.STANDALONE_PROGRAM_PATH}/version/${program}`, {version_name, version_description, design_json: "-", logic_json}).then(JSON.stringify);
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-173
+    return this.requestPath("POST", `${BackEnd.STANDALONE_PROGRAM_PATH}/version/${program}`, {version_name, version_description, design_json: "-", logic_json}, [200, 201]).then(JSON.stringify);
   }
 
   public deleteStandaloneProgram(id:string):Promise<string> {
@@ -1306,7 +1379,7 @@ export abstract class BackEnd {
       throw "name >= 8 required";
     }
 
-    return this.requestPath("POST", `${BackEnd.INTERACTIONS_SCHEME_PATH}/${projectId}`, {program_description, name});
+    return this.requestPath("POST", `${BackEnd.INTERACTIONS_SCHEME_PATH}/${projectId}`, {program_description, name}, [201]);
   }
 
   public getInteractionsScheme(id:string):Promise<InteractionsScheme> {
@@ -1360,7 +1433,7 @@ export abstract class BackEnd {
       throw "ID required";
     }
 
-    return this.requestPath("POST", BackEnd.INTERACTIONS_MODERATOR_PATH, {homer_id, type_of_device}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.INTERACTIONS_MODERATOR_PATH, {homer_id, type_of_device}, [201]).then(JSON.stringify);
   }
 
   public getInteractionsModerators():Promise<InteractionsModerator[]> {
@@ -1397,7 +1470,7 @@ export abstract class BackEnd {
       throw "name >= 8 and description >= 24 required";
     }
 
-    return this.requestPath("POST", BackEnd.PROJECT_PATH, {project_name, project_description});
+    return this.requestPath("POST", BackEnd.PROJECT_PATH, {project_name, project_description}, [201]);
   }
 
   public createDefaultProject():Promise<Project> {
@@ -1467,7 +1540,8 @@ export abstract class BackEnd {
   public getProjectApplicationDevices(id:string):Promise<ApplicationDevice[]> {
     "use strict";
 
-    return this.requestPath("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/project/${id}`);
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-173
+    return this.requestPath("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/project/${id}`, [200, 201]);
   }
 
   /**
@@ -1568,7 +1642,7 @@ export abstract class BackEnd {
       throw "name >= 3 required";
     }
 
-    return this.requestPath("POST", BackEnd.ISSUE_TYPE_PATH, {type}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.ISSUE_TYPE_PATH, {type}, [201]).then(JSON.stringify);
   }
 
   public getIssueType(id:string):Promise<IssueType> {
@@ -1590,7 +1664,8 @@ export abstract class BackEnd {
       throw "name >= 3 required";
     }
 
-    return this.requestPath("PUT", `${BackEnd.ISSUE_TYPE_PATH}/${id}`, {type}).then(JSON.stringify);
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-173
+    return this.requestPath("PUT", `${BackEnd.ISSUE_TYPE_PATH}/${id}`, {type}, [200, 201]).then(JSON.stringify);
   }
 
   public deleteIssueType(id:string):Promise<string> {
@@ -1606,7 +1681,7 @@ export abstract class BackEnd {
       throw "name >= 8, color and positive size required";
     }
 
-    return this.requestPath("POST", BackEnd.ISSUE_CONFIRMATION_PATH, {type, color, size}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.ISSUE_CONFIRMATION_PATH, {type, color, size}, [201]).then(JSON.stringify);
   }
 
   public getIssueConfirmation(id:string):Promise<IssueConfirmation> {
@@ -1644,7 +1719,7 @@ export abstract class BackEnd {
       throw "name and body required";
     }
 
-    return this.requestPath("POST", BackEnd.ISSUE_PATH, {name, text_of_post, type_of_post_id, hash_tags}).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.ISSUE_PATH, {name, text_of_post, type_of_post_id, hash_tags}, [201]).then(JSON.stringify);
   }
 
   public getIssue(id:string):Promise<Issue> {

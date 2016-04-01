@@ -22,7 +22,7 @@ import * as customValidator from "./custom-validator";
 import * as fieldApplication from "./field-application";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/user-application-device-new.html",
@@ -48,11 +48,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -67,7 +67,7 @@ export class Component implements ng.OnInit {
     this.columnsField = 1;
     this.rowsField = 1;
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -77,7 +77,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.getProjects()
         .then(projects => this.projects = projects)
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`Projects cannot be loaded: ${reason}`)));
+        .catch(reason => this.notifications.current.push(new notifications.Danger("Projects cannot be loaded.", reason)));
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -102,11 +102,11 @@ export class Component implements ng.OnInit {
           return this.backEnd.createApplicationDevice(this.nameField, this.widthField, this.heightField, this.columnsField, this.rowsField, project);
         })
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The device has been created."));
+          this.notifications.next.push(new notifications.Success("The device has been created."));
           this.router.navigate(["UserApplications"]);
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The device cannot be created: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The device cannot be created.", reason));
         });
   }
 

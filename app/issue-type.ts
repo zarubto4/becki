@@ -21,7 +21,7 @@ import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/issue-type.html",
@@ -39,11 +39,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("type");
@@ -56,7 +56,7 @@ export class Component implements ng.OnInit {
     ];
     this.field = "Loading...";
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -66,7 +66,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.getIssueType(this.id)
         .then(type => this.field = type.type)
-        .catch(reason => this.notifications.current.push(new libPatternFlyNotifications.Danger(`The type ${this.id} cannot be loaded: ${reason}`)));
+        .catch(reason => this.notifications.current.push(new notifications.Danger(`The type ${this.id} cannot be loaded.`, reason)));
   }
 
   validateField():()=>Promise<boolean> {
@@ -82,11 +82,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateIssueType(this.id, this.field)
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The type has been updated."));
+          this.notifications.next.push(new notifications.Success("The type has been updated."));
           this.router.navigate(["Issues"]);
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The type cannot be updated: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The type cannot be updated.", reason));
         });
   }
 

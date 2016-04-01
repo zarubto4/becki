@@ -56,19 +56,6 @@ export class Service extends libBackEnd.BackEnd {
       body: request.body,
       url: request.url
     }));
-    return new Promise((resolve, reject) =>
-        this.http.request(ngRequest).subscribe(
-            (ngResponse:ngHttp.Response) => {
-              let body:Object;
-              try {
-                body = ngResponse.json();
-              } catch (err) {
-                return reject(err);
-              }
-              resolve(new libBackEnd.Response(ngResponse.status, body));
-            },
-            reject
-        )
-    );
+    return new Promise(resolve => this.http.request(ngRequest).subscribe((ngResponse:ngHttp.Response) => resolve(new libBackEnd.Response(ngResponse.status, ngResponse.json()))));
   }
 }

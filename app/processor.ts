@@ -20,7 +20,7 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
-import * as libPatternFlyNotifications from "./lib-patternfly/notifications";
+import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/processor.html",
@@ -44,11 +44,11 @@ export class Component implements ng.OnInit {
 
   backEnd:backEnd.Service;
 
-  notifications:libPatternFlyNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notifications:libPatternFlyNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("processor");
@@ -63,7 +63,7 @@ export class Component implements ng.OnInit {
     this.descriptionField = "Loading...";
     this.speedField = 0;
     this.backEnd = backEndService;
-    this.notifications = notifications;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -79,7 +79,7 @@ export class Component implements ng.OnInit {
           this.speedField = processor.speed;
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The processor ${this.id} cannot be loaded: ${reason}`));
+          this.notifications.current.push(new notifications.Danger(`The processor ${this.id} cannot be loaded.`, reason));
         });
   }
 
@@ -96,11 +96,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateProcessor(this.id, this.nameField, this.codeField, this.descriptionField, this.speedField)
         .then(() => {
-          this.notifications.next.push(new libPatternFlyNotifications.Success("The processor has been updated."));
+          this.notifications.next.push(new notifications.Success("The processor has been updated."));
           this.router.navigate(["Devices"]);
         })
         .catch(reason => {
-          this.notifications.current.push(new libPatternFlyNotifications.Danger(`The processor cannot be updated: ${reason}`));
+          this.notifications.current.push(new notifications.Danger("The processor cannot be updated.", reason));
         });
   }
 
