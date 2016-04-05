@@ -23,7 +23,7 @@ import * as layout from "./layout";
 import * as notifications from "./notifications";
 
 @ng.Component({
-  templateUrl: "app/issue-confirmation-type.html",
+  templateUrl: "app/system-issue-confirmation.html",
   directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
@@ -53,9 +53,9 @@ export class Component implements ng.OnInit {
     this.heading = `Confirmation ${this.id}`;
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("Issues", ["Issues"]),
-      new layout.LabeledLink("Confirmations", ["Issues"]),
-      new layout.LabeledLink(`Confirmation ${this.id}`, ["IssueConfirmationType", {confirmation: this.id}]),
+      new layout.LabeledLink("System", ["Issues"]),
+      new layout.LabeledLink("Issue Confirmations", ["Issues"]),
+      new layout.LabeledLink(`Confirmation ${this.id}`, ["SystemIssueConfirmation", {confirmation: this.id}]),
     ];
     this.nameField = "Loading...";
     this.colorField = "#ffffff";

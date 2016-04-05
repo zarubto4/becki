@@ -64,7 +64,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getIssueConfirmations()
-        .then(confirmations => this.confirmations = confirmations.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null, ["IssueConfirmationType", {confirmation: confirmation.id}])))
+        .then(confirmations => this.confirmations = confirmations.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null, ["SystemIssueConfirmation", {confirmation: confirmation.id}])))
         .catch(reason => this.notifications.current.push(new notifications.Danger("Confirmations cannot be loaded.", reason)));
     this.backEnd.getIssues()
         .then(issues => this.issues = issues.map(issue => new libPatternFlyListView.Item(issue.postId, issue.name, issue.type.type, ["Issue", {issue: issue.postId}])))
