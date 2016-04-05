@@ -106,6 +106,8 @@ export class Component implements ng.OnInit {
           this.router.navigate(["UserApplications"]);
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-179
+          this.notifications.current.push(new notifications.Warning("issue/TYRION-179"));
           this.notifications.current.push(new notifications.Danger("The device cannot be created.", reason));
         });
   }

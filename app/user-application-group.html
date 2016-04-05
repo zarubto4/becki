@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + group?.program_name + "\" Group"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="editing">
+<div data-bind-layout='"Edit the \"" + group?.program_name + "\" Group"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="editing">
   <form class="clearfix" data-on-submit="onSubmit($event)">
     <template data-bind-ng-if="project">
       <div class="form-group">

@@ -79,6 +79,8 @@ export class Component implements ng.OnInit {
           this.router.navigate(["Projects"]);
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-179
+          this.notifications.current.push(new notifications.Danger("issue/TYRION-179"));
           this.notifications.current.push(new notifications.Danger("The project cannot be created.", reason));
         });
   }

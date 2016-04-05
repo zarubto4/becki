@@ -1433,6 +1433,7 @@ export abstract class BackEnd {
       throw "name >= 8 required";
     }
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-180
     return this.requestPath("POST", `${BackEnd.INTERACTIONS_SCHEME_PATH}/${projectId}`, {program_description, name}, [201]);
   }
 
@@ -1524,6 +1525,7 @@ export abstract class BackEnd {
       throw "name >= 8 and description >= 24 required";
     }
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-179
     return this.requestPath("POST", BackEnd.PROJECT_PATH, {project_name, project_description}, [201]);
   }
 

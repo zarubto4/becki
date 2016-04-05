@@ -158,6 +158,10 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-174
           this.notifications.current.push(new notifications.Danger("issue/TYRION-174"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-179
+          this.notifications.current.push(new notifications.Warning("issue/TYRION-179"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-180
+          this.notifications.current.push(new notifications.Warning("issue/TYRION-180"));
           this.notifications.current.push(new notifications.Danger("The scheme cannot be created.", reason));
         });
   }
