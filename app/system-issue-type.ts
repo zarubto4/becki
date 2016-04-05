@@ -31,7 +31,7 @@ export class Component implements ng.OnInit {
 
   id:string;
 
-  heading:string;
+  type:libBackEnd.IssueType;
 
   breadcrumbs:layout.LabeledLink[];
 
@@ -47,7 +47,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.id = routeParams.get("type");
-    this.heading = `Type ${this.id}`;
     this.breadcrumbs = [
       becki.HOME,
       new layout.LabeledLink("System", ["Issues"]),
@@ -65,8 +64,13 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.backEnd.getIssueType(this.id)
-        .then(type => this.field = type.type)
-        .catch(reason => this.notifications.current.push(new notifications.Danger(`The type ${this.id} cannot be loaded.`, reason)));
+        .then(type => {
+          this.type = type;
+          this.field = type.type;
+        })
+        .catch(reason => {
+          this.notifications.current.push(new notifications.Danger(`The type ${this.id} cannot be loaded.`, reason));
+        });
   }
 
   validateField():()=>Promise<boolean> {
