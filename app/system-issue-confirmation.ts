@@ -20,6 +20,7 @@ import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
+import * as libBackEnd from "./lib-back-end/index";
 import * as notifications from "./notifications";
 
 @ng.Component({
@@ -30,7 +31,7 @@ export class Component implements ng.OnInit {
 
   id:string;
 
-  heading:string;
+  confirmation:libBackEnd.IssueConfirmation;
 
   breadcrumbs:layout.LabeledLink[];
 
@@ -50,7 +51,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.id = routeParams.get("confirmation");
-    this.heading = `Confirmation ${this.id}`;
     this.breadcrumbs = [
       becki.HOME,
       new layout.LabeledLink("System", ["Issues"]),
@@ -71,6 +71,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.getIssueConfirmation(this.id)
         .then(confirmation => {
+          this.confirmation = confirmation;
           this.nameField = confirmation.type;
           this.colorField = confirmation.color;
           this.sizeField = confirmation.size;
