@@ -1698,6 +1698,7 @@ export abstract class BackEnd {
       throw "name >= 3 required";
     }
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-181
     return this.requestPath("POST", BackEnd.ISSUE_TYPE_PATH, {type}, [201]).then(JSON.stringify);
   }
 
