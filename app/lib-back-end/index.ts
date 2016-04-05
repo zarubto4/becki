@@ -802,7 +802,11 @@ export abstract class BackEnd {
   public createPerson(mail:string, password:string, nick_name:string):Promise<string> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-171
+    if (!mail || password.length < 8 || nick_name.length < 8) {
+      throw "password >= 8 and username >= 8 and email required";
+    }
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-175
     return this.requestPath("POST", BackEnd.PERSON_PATH, {nick_name, mail, password}, [201]).then(JSON.stringify);
   }
 

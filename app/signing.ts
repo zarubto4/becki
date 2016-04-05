@@ -147,6 +147,8 @@ export class Component implements ng.OnInit {
           this.signIn = true;
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-175
+          this.notifications.current.push(new notifications.Danger("issue/TYRION-175"));
           this.notifications.current.push(new notifications.Danger("The person cannot be signed up.", reason));
         });
   }
