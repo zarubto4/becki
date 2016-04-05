@@ -19,6 +19,7 @@ import * as ngRouter from "angular2/router";
 import * as theGrid from "the-grid";
 
 import * as applicationDevice from "./application-device";
+import * as backEnd from "./back-end";
 import * as deviceProgram from "./device-program";
 import * as deviceProgramNew from "./device-program-new";
 import * as deviceProgramVersionNew from "./device-program-version-new";
@@ -41,6 +42,7 @@ import * as libraryGroupNew from "./library-group-new";
 import * as library from "./library";
 import * as libraryNew from "./library-new";
 import * as modal from "./modal";
+import * as notifications from "./notifications";
 import * as processor from "./processor";
 import * as processorNew from "./processor-new";
 import * as producer from "./producer";
@@ -134,16 +136,47 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
 })
 export class Component {
 
-  modalEvent:modal.Event;
+  public modalEvent:modal.Event;
 
-  router:ngRouter.Router;
+  public router:ngRouter.Router;
 
-  public constructor(modalService:modal.Service, router:ngRouter.Router) {
+  private notifications:notifications.Notification[];
+
+  private notificationTimeout:number;
+
+  constructor(modalService:modal.Service, router:ngRouter.Router, backEndService:backEnd.Service) {
     "use strict";
 
     this.modalEvent = null;
     this.router = router;
+    this.notifications = [];
+    this.notificationTimeout = null;
     modalService.modalChange.toRx().subscribe((event:modal.Event) => this.modalEvent = event);
+    backEndService.notificationsNew.toRx().subscribe((event:MessageEvent) => {
+      let notificationData = JSON.parse(event.data);
+      let notification:notifications.Notification;
+      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-178
+      switch (notificationData.level) {
+        case "info":
+        case "message":
+          notification = new notifications.Info(notificationData.text);
+          break;
+        case "success":
+          notification = new notifications.Success(notificationData.text);
+          break;
+        case "warning":
+          notification = new notifications.Warning(notificationData.text);
+          break;
+        case "error":
+          notification = new notifications.Danger(notificationData.text);
+          break;
+        default:
+          return;
+      }
+      this.notifications.push(notification);
+    });
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-176
+    this.notifications.push(new notifications.Danger("issue/TYRION-176"));
   }
 
   getModalEventType():string {
@@ -209,5 +242,25 @@ export class Component {
       (<modal.BlockEvent>this.modalEvent).block.emitConfigsChanged();
     }
     this.modalEvent = null;
+  }
+
+  getNotification():notifications.Notification {
+    "use strict";
+
+    if (!this.notifications.length) {
+      return null;
+    }
+    if (this.notificationTimeout == null) {
+      this.notificationTimeout = setTimeout(this.onNotificationCloseClick.bind(this), 1000 * 8);
+    }
+    return this.notifications[0];
+  }
+
+  onNotificationCloseClick():void {
+    "use strict";
+
+    clearTimeout(this.notificationTimeout);
+    this.notifications.shift();
+    this.notificationTimeout = null;
   }
 }

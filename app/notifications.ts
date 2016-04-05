@@ -17,7 +17,7 @@ import * as ng from "angular2/angular2";
 
 import * as libBackEnd from "./lib-back-end/index";
 
-abstract class Notification {
+export abstract class Notification {
 
   type:string;
 

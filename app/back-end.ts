@@ -31,17 +31,23 @@ export class Service extends libBackEnd.BackEnd {
 
   router:ngRouter.Router;
 
+  zone:ng.NgZone;
+
+  notificationsNew:ng.EventEmitter;
+
   /**
    * Create a new service instance.
    *
    * @param http a service that is able to perform HTTP requests.
    */
-  public constructor(http:ngHttp.Http, router:ngRouter.Router) {
+  public constructor(http:ngHttp.Http, router:ngRouter.Router, zone:ng.NgZone) {
     "use strict";
 
     super();
     this.http = http;
     this.router = router;
+    this.zone = zone;
+    this.notificationsNew = new ng.EventEmitter();
   }
 
   /**
@@ -66,5 +72,14 @@ export class Service extends libBackEnd.BackEnd {
       }
       resolve(new libBackEnd.Response(ngResponse.status, ngResponse.json()));
     }));
+  }
+
+  public reregisterNotifications() {
+    "use strict";
+
+    super.reregisterNotifications();
+    if (this.notifications) {
+      this.notifications.onmessage = event => this.zone.run(() => this.notificationsNew.next(event));
+    }
   }
 }

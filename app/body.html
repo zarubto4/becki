@@ -134,4 +134,13 @@
     <div class="spinner spinner-lg"></div>
   </div>
 </template>
+<template data-bind-ng-if="getNotification()">
+  <div class="toast-pf toast-pf-top-right alert alert-{{getNotification().type}} alert-dismissable">
+    <button type="button" class="close" data-on-click="onNotificationCloseClick($event)">
+      <span class="pficon pficon-close"></span>
+    </button>
+    <span class="pficon pficon-{{getNotification().icon}}"></span>
+    {{getNotification().body}}
+  </div>
+</template>
 <router-outlet></router-outlet>

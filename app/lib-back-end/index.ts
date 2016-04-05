@@ -216,6 +216,17 @@ export interface Person {
   date_of_birth:number;
 }
 
+export declare class EventSource {
+
+  onopen:(event:Event)=>void;
+
+  onmessage:(event:MessageEvent)=>void;
+
+  onerror:(event:Event)=>void;
+
+  constructor(url:string);
+}
+
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface ApplicationDevice {
 
@@ -681,64 +692,88 @@ export interface IssueLink {
  */
 export abstract class BackEnd {
 
-  static BASE_URL = "http://127.0.0.1:9000";
+  public static BASE_URL = "http://127.0.0.1:9000";
 
-  static ANSWER_PATH = "/overflow/answer";
+  public static ANSWER_PATH = "/overflow/answer";
 
-  static APPLICATION_DEVICE_PATH = "/grid/screen_type";
+  public static APPLICATION_DEVICE_PATH = "/grid/screen_type";
 
-  static APPLICATION_GROUP_PATH = "/grid/m_project";
+  public static APPLICATION_GROUP_PATH = "/grid/m_project";
 
-  static APPLICATION_PATH = "/grid/m_program";
+  public static APPLICATION_PATH = "/grid/m_program";
 
-  static COMMENT_PATH = "/overflow/comment";
+  public static COMMENT_PATH = "/overflow/comment";
 
-  static DEVICE_PATH = "/compilation/board";
+  public static DEVICE_PATH = "/compilation/board";
 
-  static DEVICE_PROGRAM_PATH = "/compilation/c_program";
+  public static DEVICE_PROGRAM_PATH = "/compilation/c_program";
 
-  static DEVICE_TYPE_PATH = "/compilation/typeOfBoard";
+  public static DEVICE_TYPE_PATH = "/compilation/typeOfBoard";
 
-  static INTERACTIONS_MODERATOR_PATH = "/project/homer";
+  public static INTERACTIONS_MODERATOR_PATH = "/project/homer";
 
-  static INTERACTIONS_SCHEME_PATH = "/project/b_program";
+  public static INTERACTIONS_SCHEME_PATH = "/project/b_program";
 
-  static ISSUE_CONFIRMATION_PATH = "/overflow/typeOfConfirm";
+  public static ISSUE_CONFIRMATION_PATH = "/overflow/typeOfConfirm";
 
-  static ISSUE_LINK_PATH = "/overflow/link";
+  public static ISSUE_LINK_PATH = "/overflow/link";
 
-  static ISSUE_PATH = "/overflow/post";
+  public static ISSUE_PATH = "/overflow/post";
 
-  static ISSUE_TAG_PATH = "/overflow/hashTag";
+  public static ISSUE_TAG_PATH = "/overflow/hashTag";
 
-  static ISSUE_TYPE_PATH = "/overflow/typeOfPost";
+  public static ISSUE_TYPE_PATH = "/overflow/typeOfPost";
 
-  static LIBRARY_GROUP_PATH = "/compilation/libraryGroup";
+  public static LIBRARY_GROUP_PATH = "/compilation/libraryGroup";
 
-  static LIBRARY_PATH = "/compilation/library";
+  public static LIBRARY_PATH = "/compilation/library";
 
   /**
    * An absolute path to the person resources.
    */
-  static PERSON_PATH = "/coreClient/person/person";
+  public static PERSON_PATH = "/coreClient/person/person";
 
-  static PROCESSOR_PATH = "/compilation/processor";
+  public static PROCESSOR_PATH = "/compilation/processor";
 
-  static PRODUCER_PATH = "/compilation/producer";
+  public static PRODUCER_PATH = "/compilation/producer";
 
   /**
    * An absolute path to the project resources.
    */
-  static PROJECT_PATH = "/project/project";
+  public static PROJECT_PATH = "/project/project";
 
-  static STANDALONE_PROGRAM_PATH = "/project/blockoBlock";
+  public static STANDALONE_PROGRAM_PATH = "/project/blockoBlock";
 
   /**
    * An absolute path to the permission resources.
    */
-  static TOKEN_PATH = "/coreClient/person/permission";
+  public static TOKEN_PATH = "/coreClient/person/permission";
 
-  tasks = 0;
+  protected notifications:EventSource;
+
+  public tasks:number;
+
+  public constructor() {
+    "use strict";
+
+    this.notifications = null;
+    this.tasks = 0;
+    this.reregisterNotifications();
+  }
+
+  private setToken(token:string):void {
+    "use strict";
+
+    window.localStorage.setItem("authToken", token);
+    this.reregisterNotifications();
+  }
+
+  private unsetToken():void {
+    "use strict";
+
+    window.localStorage.removeItem("authToken");
+    this.reregisterNotifications();
+  }
 
   /**
    * Perform an HTTP request.
@@ -791,6 +826,21 @@ export abstract class BackEnd {
         );
   }
 
+  public reregisterNotifications():void {
+    "use strict";
+
+    if (this.notifications) {
+      this.notifications.onopen = null;
+      this.notifications.onmessage = null;
+      this.notifications.onerror = null;
+    }
+    this.notifications = null;
+    if (window.localStorage.getItem("authToken")) {
+      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-177
+      this.notifications = new EventSource(`${BackEnd.BASE_URL}/notification/${window.localStorage.getItem("authToken")}`);
+    }
+  }
+
   /**
    * Create a new person.
    *
@@ -832,7 +882,7 @@ export abstract class BackEnd {
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
     return this.requestPath<{authToken:string}>("POST", `${BackEnd.TOKEN_PATH}/login`, {mail, password}).then((body) => {
       // TODO: https://github.com/angular/angular/issues/7303
-      window.localStorage.setItem("authToken", body.authToken);
+      this.setToken(body.authToken);
       return JSON.stringify(body);
     });
   }
@@ -844,7 +894,7 @@ export abstract class BackEnd {
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
     return this.requestPath<{authToken:string, redirect_url:string}>("GET", `/login/facebook?return_link=${redirectUrl}`).then(body => {
       // TODO: https://github.com/angular/angular/issues/7303
-      window.localStorage.setItem("authToken", body.authToken);
+      this.setToken(body.authToken);
       return body.redirect_url;
     });
   }
@@ -856,7 +906,7 @@ export abstract class BackEnd {
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
     return this.requestPath<{authToken:string, redirect_url:string}>("GET", `/login/github?return_link=${redirectUrl}`).then(body => {
       // TODO: https://github.com/angular/angular/issues/7303
-      window.localStorage.setItem("authToken", body.authToken);
+      this.setToken(body.authToken);
       return body.redirect_url;
     });
   }
@@ -877,7 +927,7 @@ export abstract class BackEnd {
 
     return this.requestPath("POST", `${BackEnd.TOKEN_PATH}/logout`, {}).then((body) => {
       // TODO: https://github.com/angular/angular/issues/7303
-      window.localStorage.removeItem("authToken");
+      this.unsetToken();
       return JSON.stringify(body);
     });
   }
