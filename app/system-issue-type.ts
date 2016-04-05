@@ -24,7 +24,7 @@ import * as libBackEnd from "./lib-back-end/index";
 import * as notifications from "./notifications";
 
 @ng.Component({
-  templateUrl: "app/issue-type.html",
+  templateUrl: "app/system-issue-type.html",
   directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
@@ -50,9 +50,9 @@ export class Component implements ng.OnInit {
     this.heading = `Type ${this.id}`;
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("Issues", ["Issues"]),
-      new layout.LabeledLink("Types", ["Issues"]),
-      new layout.LabeledLink(`Type ${this.id}`, ["IssueType", {type: this.id}])
+      new layout.LabeledLink("System", ["Issues"]),
+      new layout.LabeledLink("Issue Types", ["Issues"]),
+      new layout.LabeledLink(`Type ${this.id}`, ["SystemIssueType", {type: this.id}])
     ];
     this.field = "Loading...";
     this.backEnd = backEndService;

@@ -34,7 +34,6 @@ import * as issueConfirmationTypeNew from "./issue-confirmation-type-new";
 import * as issueNew from "./issue-new";
 import * as issueRelatedNew from "./issue-related-new";
 import * as issueTagNew from "./issue-tag-new";
-import * as issueType from "./issue-type";
 import * as issues from "./issues";
 import * as libraryGroup from "./library-group";
 import * as libraryGroupNew from "./library-group-new";
@@ -56,6 +55,7 @@ import * as standaloneProgramNew from "./standalone-program-new";
 import * as system from "./system";
 import * as systemDeviceNew from "./system-device-new";
 import * as systemInteractionsModeratorNew from "./system-interactions-moderator-new";
+import * as systemIssueType from "./system-issue-type";
 import * as systemIssueTypeNew from "./system-issue-type-new";
 import * as userApplication from "./user-application";
 import * as userApplicationDeviceNew from "./user-application-device-new";
@@ -82,7 +82,6 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
   {path: "/issue/new", component: issueNew.Component, as: "NewIssue"},
   {path: "/issue/confirmation/new", component: issueConfirmationTypeNew.Component, as: "NewIssueConfirmationType"},
   {path: "/issue/confirmations/:confirmation", component: issueConfirmationType.Component, as: "IssueConfirmationType"},
-  {path: "/issue/types/:type", component: issueType.Component, as: "IssueType"},
   {path: "/issues", component: issues.Component, as: "Issues"},
   {path: "/issues/:issue", component: issue.Component, as: "Issue"},
   {path: "/issues/:issue/confirmation/new", component: issueConfirmationNew.Component, as: "NewIssueConfirmation"},
@@ -101,6 +100,7 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
   {path: "/system/device/new", component: systemDeviceNew.Component, as: "NewSystemDevice"},
   {path: "/system/interactions/moderator/new", component: systemInteractionsModeratorNew.Component, as: "NewSystemInteractionsModerator"},
   {path: "/system/issue/type/new", component: systemIssueTypeNew.Component, as: "NewSystemIssueType"},
+  {path: "/system/issue/types/:type", component: systemIssueType.Component, as: "SystemIssueType"},
   {path: "/user/application/device/new", component: userApplicationDeviceNew.Component, as: "NewUserApplicationDevice"},
   {path: "/user/application/group/new", component: userApplicationGroupNew.Component, as: "NewUserApplicationGroup"},
   {path: "/user/application/groups/:group", component: userApplicationGroup.Component, as: "UserApplicationGroup"},
