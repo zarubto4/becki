@@ -31,11 +31,13 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
-  showDevices:boolean;
+  tab:string;
 
   moderators:libPatternFlyListView.Item[];
 
   devices:libPatternFlyListView.Item[];
+
+  types:libPatternFlyListView.Item[];
 
   backEnd:backEnd.Service;
 
@@ -50,7 +52,7 @@ export class Component implements ng.OnInit {
       becki.HOME,
       new layout.LabeledLink("System", ["System"])
     ];
-    this.showDevices = false;
+    this.tab = "moderators";
     this.backEnd = backEndService;
     this.notifications = notificationsService;
     this.router = router;
@@ -78,15 +80,24 @@ export class Component implements ng.OnInit {
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
         .then(devices => this.devices = devices.map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.isActive ? "active" : "inactive")))
         .catch(reason => this.notifications.current.push(new notifications.Danger("Devices cannot be loaded.", reason)));
+    this.backEnd.getIssueTypes()
+        .then(types => this.types = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, ["SystemIssueType", {type: type.id}])))
+        .catch(reason => this.notifications.current.push(new notifications.Danger("Issue types cannot be loaded.", reason)));
   }
 
   onAddClick():void {
     "use strict";
 
-    if (this.showDevices) {
-      this.onAddDeviceClick();
-    } else {
-      this.onAddModeratorClick();
+    switch (this.tab) {
+      case "moderators":
+        this.onAddModeratorClick();
+        break;
+      case "devices":
+        this.onAddDeviceClick();
+        break;
+      case "types":
+        this.onAddTypeClick();
+        break;
     }
   }
 
@@ -102,16 +113,16 @@ export class Component implements ng.OnInit {
     this.router.navigate(["NewSystemDevice"]);
   }
 
-  onModeratorsClick():void {
+  onAddTypeClick():void {
     "use strict";
 
-    this.showDevices = false;
+    this.router.navigate(["NewSystemIssueType"]);
   }
 
-  onDevicesClick():void {
+  onTabClick(tab:string):void {
     "use strict";
 
-    this.showDevices = true;
+    this.tab = tab;
   }
 
   onRemoveModeratorClick(id:string):void {
@@ -134,5 +145,19 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     // see https://youtrack.byzance.cz/youtrack/issue/TYRION-89
     this.notifications.current.push(new notifications.Danger("issue/TYRION-89"));
+  }
+
+  onRemoveTypeClick(id:string):void {
+    "use strict";
+
+    this.notifications.shift();
+    this.backEnd.deleteIssueType(id)
+        .then(() => {
+          this.notifications.current.push(new notifications.Success("The issue type has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new notifications.Danger("The issue type cannot be removed.", reason));
+        });
   }
 }

@@ -31,8 +31,6 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
-  types:libPatternFlyListView.Item[];
-
   confirmations:libPatternFlyListView.Item[];
 
   issues:libPatternFlyListView.Item[];
@@ -65,35 +63,12 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    this.backEnd.getIssueTypes()
-        .then(types => this.types = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, ["SystemIssueType", {type: type.id}])))
-        .catch(reason => this.notifications.current.push(new notifications.Danger("Types cannot be loaded.", reason)));
     this.backEnd.getIssueConfirmations()
         .then(confirmations => this.confirmations = confirmations.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null, ["IssueConfirmationType", {confirmation: confirmation.id}])))
         .catch(reason => this.notifications.current.push(new notifications.Danger("Confirmations cannot be loaded.", reason)));
     this.backEnd.getIssues()
         .then(issues => this.issues = issues.map(issue => new libPatternFlyListView.Item(issue.postId, issue.name, issue.type.type, ["Issue", {issue: issue.postId}])))
         .catch(reason => this.notifications.current.push(new notifications.Danger("Issues cannot be loaded.", reason)));
-  }
-
-  onTypeAddClick():void {
-    "use strict";
-
-    this.router.navigate(["NewSystemIssueType"]);
-  }
-
-  onTypeRemoveClick(id:string):void {
-    "use strict";
-
-    this.notifications.shift();
-    this.backEnd.deleteIssueType(id)
-        .then(() => {
-          this.notifications.current.push(new notifications.Success("The type has been removed."));
-          this.refresh();
-        })
-        .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The type cannot be removed.", reason));
-        });
   }
 
   onConfirmationAddClick():void {

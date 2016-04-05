@@ -49,8 +49,8 @@ export class Component implements ng.OnInit {
     this.id = routeParams.get("type");
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("System", ["Issues"]),
-      new layout.LabeledLink("Issue Types", ["Issues"]),
+      new layout.LabeledLink("System", ["System"]),
+      new layout.LabeledLink("Issue Types", ["System"]),
       new layout.LabeledLink("Loading...", ["SystemIssueType", {type: this.id}])
     ];
     this.field = "Loading...";
@@ -88,7 +88,7 @@ export class Component implements ng.OnInit {
     this.backEnd.updateIssueType(this.id, this.field)
         .then(() => {
           this.notifications.next.push(new notifications.Success("The type has been updated."));
-          this.router.navigate(["Issues"]);
+          this.router.navigate(["System"]);
         })
         .catch(reason => {
           this.notifications.current.push(new notifications.Danger("The type cannot be updated.", reason));
@@ -99,6 +99,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Issues"]);
+    this.router.navigate(["System"]);
   }
 }

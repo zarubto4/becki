@@ -43,7 +43,7 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("System", ["Issues"]),
+      new layout.LabeledLink("System", ["System"]),
       new layout.LabeledLink("New Issue Type", ["NewSystemIssueType"]),
     ];
     this.field = "";
@@ -72,7 +72,7 @@ export class Component implements ng.OnInit {
     this.backEnd.createIssueType(this.field)
         .then(() => {
           this.notifications.next.push(new notifications.Success("The type has been created."));
-          this.router.navigate(["Issues"]);
+          this.router.navigate(["System"]);
         })
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-181
@@ -85,6 +85,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Issues"]);
+    this.router.navigate(["System"]);
   }
 }
