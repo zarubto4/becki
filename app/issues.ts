@@ -74,7 +74,7 @@ export class Component implements ng.OnInit {
   onConfirmationAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewIssueConfirmationType"]);
+    this.router.navigate(["NewSystemIssueConfirmation"]);
   }
 
   onConfirmationRemoveClick(id:string):void {
