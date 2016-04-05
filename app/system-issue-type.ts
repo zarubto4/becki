@@ -51,7 +51,7 @@ export class Component implements ng.OnInit {
       becki.HOME,
       new layout.LabeledLink("System", ["Issues"]),
       new layout.LabeledLink("Issue Types", ["Issues"]),
-      new layout.LabeledLink(`Type ${this.id}`, ["SystemIssueType", {type: this.id}])
+      new layout.LabeledLink("Loading...", ["SystemIssueType", {type: this.id}])
     ];
     this.field = "Loading...";
     this.backEnd = backEndService;
@@ -66,6 +66,7 @@ export class Component implements ng.OnInit {
     this.backEnd.getIssueType(this.id)
         .then(type => {
           this.type = type;
+          this.breadcrumbs[3].label = type.type;
           this.field = type.type;
         })
         .catch(reason => {
