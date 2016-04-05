@@ -23,7 +23,7 @@ import * as layout from "./layout";
 import * as notifications from "./notifications";
 
 @ng.Component({
-  templateUrl: "app/issue-type-new.html",
+  templateUrl: "app/system-issue-type-new.html",
   directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
@@ -43,9 +43,8 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("Issues", ["Issues"]),
-      new layout.LabeledLink("Types", ["Issues"]),
-      new layout.LabeledLink("New Type", ["NewIssueType"]),
+      new layout.LabeledLink("System", ["Issues"]),
+      new layout.LabeledLink("New Issue Type", ["NewSystemIssueType"]),
     ];
     this.field = "";
     this.backEnd = backEndService;

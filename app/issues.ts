@@ -79,7 +79,7 @@ export class Component implements ng.OnInit {
   onTypeAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewIssueType"]);
+    this.router.navigate(["NewSystemIssueType"]);
   }
 
   onTypeRemoveClick(id:string):void {
