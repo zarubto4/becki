@@ -1738,6 +1738,7 @@ export abstract class BackEnd {
       throw "name >= 8, color and positive size required";
     }
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-182
     return this.requestPath("POST", BackEnd.ISSUE_CONFIRMATION_PATH, {type, color, size}, [201]).then(JSON.stringify);
   }
 
