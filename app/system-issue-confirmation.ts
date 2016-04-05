@@ -55,7 +55,7 @@ export class Component implements ng.OnInit {
       becki.HOME,
       new layout.LabeledLink("System", ["Issues"]),
       new layout.LabeledLink("Issue Confirmations", ["Issues"]),
-      new layout.LabeledLink(`Confirmation ${this.id}`, ["SystemIssueConfirmation", {confirmation: this.id}]),
+      new layout.LabeledLink("Loading...", ["SystemIssueConfirmation", {confirmation: this.id}]),
     ];
     this.nameField = "Loading...";
     this.colorField = "#ffffff";
@@ -72,6 +72,7 @@ export class Component implements ng.OnInit {
     this.backEnd.getIssueConfirmation(this.id)
         .then(confirmation => {
           this.confirmation = confirmation;
+          this.breadcrumbs[3].label = confirmation.type;
           this.nameField = confirmation.type;
           this.colorField = confirmation.color;
           this.sizeField = confirmation.size;
