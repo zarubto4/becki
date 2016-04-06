@@ -177,7 +177,7 @@ export class Component implements ng.OnInit {
     this.breadcrumbs = [
       becki.HOME,
       new layout.LabeledLink("Issues", ["Issues"]),
-      new layout.LabeledLink(`Issue ${this.id}`, ["Issue", {issue: this.id}])
+      new layout.LabeledLink("Loading...", ["Issue", {issue: this.id}])
     ];
     this.answerBodyField = fieldIssueBody.EMPTY;
     this.backEnd = backEndService;
@@ -198,6 +198,7 @@ export class Component implements ng.OnInit {
     this.backEnd.getIssue(this.id)
         .then(issue => {
           this.heading = `${issue.type.type}: ${issue.name}`;
+          this.breadcrumbs[2].label = issue.name;
           let commentsViews = issue.comments.map(comment => new Comment(comment.postId, comment.text_of_post, comment.date_of_create, comment.likes, comment.hashTags));
           this.items = [].concat(
               new Issue(issue.postId, issue.type.id, issue.name, issue.text_of_post, issue.date_of_create, issue.likes, commentsViews, issue.hashTags),
