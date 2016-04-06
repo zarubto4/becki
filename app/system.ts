@@ -39,6 +39,8 @@ export class Component implements ng.OnInit {
 
   types:libPatternFlyListView.Item[];
 
+  confirmations:libPatternFlyListView.Item[];
+
   backEnd:backEnd.Service;
 
   notifications:notifications.Service;
@@ -83,6 +85,9 @@ export class Component implements ng.OnInit {
     this.backEnd.getIssueTypes()
         .then(types => this.types = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, ["SystemIssueType", {type: type.id}])))
         .catch(reason => this.notifications.current.push(new notifications.Danger("Issue types cannot be loaded.", reason)));
+    this.backEnd.getIssueConfirmations()
+        .then(confirmations => this.confirmations = confirmations.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null, ["SystemIssueConfirmation", {confirmation: confirmation.id}])))
+        .catch(reason => this.notifications.current.push(new notifications.Danger("Issue confirmations cannot be loaded.", reason)));
   }
 
   onAddClick():void {
@@ -97,6 +102,9 @@ export class Component implements ng.OnInit {
         break;
       case "types":
         this.onAddTypeClick();
+        break;
+      case "confirmations":
+        this.onAddConfirmationClick();
         break;
     }
   }
@@ -117,6 +125,12 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.router.navigate(["NewSystemIssueType"]);
+  }
+
+  onAddConfirmationClick():void {
+    "use strict";
+
+    this.router.navigate(["NewSystemIssueConfirmation"]);
   }
 
   onTabClick(tab:string):void {
@@ -158,6 +172,20 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new notifications.Danger("The issue type cannot be removed.", reason));
+        });
+  }
+
+  onRemoveConfirmationClick(id:string):void {
+    "use strict";
+
+    this.notifications.shift();
+    this.backEnd.deleteIssueConfirmation(id)
+        .then(() => {
+          this.notifications.current.push(new notifications.Success("The issue confirmation has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new notifications.Danger("The issue confirmation cannot be removed.", reason));
         });
   }
 }

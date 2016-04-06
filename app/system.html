@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, View or Remove a Moderator of Interactions, a Device or an Issue Type'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
+<div data-bind-layout="'Add, View or Remove a Moderator of Interactions, a Device, an Issue Type or an Issue Confirmation'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="tab == 'moderators'">
       <a data-on-click="onTabClick('moderators', $event)" style="cursor: pointer">
@@ -20,6 +20,11 @@
         Issue Types
       </a>
     </li>
+    <li data-bind-class.active="tab == 'confirmations'">
+      <a data-on-click="onTabClick('confirmations', $event)" style="cursor: pointer">
+        Issue Confirmations
+      </a>
+    </li>
   </ul>
   <template data-bind-ng-switch-when="'moderators'">
     <div data-bind-list-view="moderators" data-on-add-click="onAddModeratorClick($event)" data-on-remove-click="onRemoveModeratorClick($event)">
@@ -33,6 +38,11 @@
   </template>
   <template data-bind-ng-switch-when="'types'">
     <div data-bind-list-view="types" data-on-add-click="onAddTypeClick($event)" data-on-remove-click="onRemoveTypeClick($event)">
+      <div class="spinner"></div>
+    </div>
+  </template>
+  <template data-bind-ng-switch-when="'confirmations'">
+    <div data-bind-list-view="confirmations" data-on-add-click="onAddConfirmationClick($event)" data-on-remove-click="onRemoveConfirmationClick($event)">
       <div class="spinner"></div>
     </div>
   </template>

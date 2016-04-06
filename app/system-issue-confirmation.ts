@@ -55,8 +55,8 @@ export class Component implements ng.OnInit {
     this.id = routeParams.get("confirmation");
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("System", ["Issues"]),
-      new layout.LabeledLink("Issue Confirmations", ["Issues"]),
+      new layout.LabeledLink("System", ["System"]),
+      new layout.LabeledLink("Issue Confirmations", ["System"]),
       new layout.LabeledLink("Loading...", ["SystemIssueConfirmation", {confirmation: this.id}]),
     ];
     this.editing = false;

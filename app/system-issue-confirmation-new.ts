@@ -47,7 +47,7 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("System", ["Issues"]),
+      new layout.LabeledLink("System", ["System"]),
       new layout.LabeledLink("New Issue Confirmation", ["NewSystemIssueConfirmation"]),
     ];
     this.nameField = "";
@@ -78,7 +78,7 @@ export class Component implements ng.OnInit {
     this.backEnd.createIssueConfirmation(this.nameField, this.colorField, this.sizeField)
         .then(() => {
           this.notifications.next.push(new notifications.Success("The confirmation has been created."));
-          this.router.navigate(["Issues"]);
+          this.router.navigate(["System"]);
         })
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-182
@@ -91,6 +91,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Issues"]);
+    this.router.navigate(["System"]);
   }
 }

@@ -31,9 +31,7 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
-  confirmations:libPatternFlyListView.Item[];
-
-  issues:libPatternFlyListView.Item[];
+  items:libPatternFlyListView.Item[];
 
   backEnd:backEnd.Service;
 
@@ -63,41 +61,18 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    this.backEnd.getIssueConfirmations()
-        .then(confirmations => this.confirmations = confirmations.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null, ["SystemIssueConfirmation", {confirmation: confirmation.id}])))
-        .catch(reason => this.notifications.current.push(new notifications.Danger("Confirmations cannot be loaded.", reason)));
     this.backEnd.getIssues()
-        .then(issues => this.issues = issues.map(issue => new libPatternFlyListView.Item(issue.postId, issue.name, issue.type.type, ["Issue", {issue: issue.postId}])))
+        .then(issues => this.items = issues.map(issue => new libPatternFlyListView.Item(issue.postId, issue.name, issue.type.type, ["Issue", {issue: issue.postId}])))
         .catch(reason => this.notifications.current.push(new notifications.Danger("Issues cannot be loaded.", reason)));
   }
 
-  onConfirmationAddClick():void {
-    "use strict";
-
-    this.router.navigate(["NewSystemIssueConfirmation"]);
-  }
-
-  onConfirmationRemoveClick(id:string):void {
-    "use strict";
-
-    this.notifications.shift();
-    this.backEnd.deleteIssueConfirmation(id)
-        .then(() => {
-          this.notifications.next.push(new notifications.Success("The confirmation has been removed."));
-          this.refresh();
-        })
-        .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The confirmation cannot be removed.", reason));
-        });
-  }
-
-  onIssueAddClick():void {
+  onAddClick():void {
     "use strict";
 
     this.router.navigate(["NewIssue"]);
   }
 
-  onIssueRemoveClick(id:string):void {
+  onRemoveClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
