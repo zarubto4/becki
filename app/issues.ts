@@ -19,7 +19,6 @@ import * as ngRouter from "angular2/router";
 import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as layout from "./layout";
-import * as libBackEnd from "./lib-back-end/index";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
 import * as notifications from "./notifications";
 
