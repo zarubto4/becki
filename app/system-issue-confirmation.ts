@@ -25,7 +25,7 @@ import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/system-issue-confirmation.html",
-  directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
+  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -34,6 +34,8 @@ export class Component implements ng.OnInit {
   confirmation:libBackEnd.IssueConfirmation;
 
   breadcrumbs:layout.LabeledLink[];
+
+  editing:boolean;
 
   nameField:string;
 
@@ -57,6 +59,7 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("Issue Confirmations", ["Issues"]),
       new layout.LabeledLink("Loading...", ["SystemIssueConfirmation", {confirmation: this.id}]),
     ];
+    this.editing = false;
     this.nameField = "Loading...";
     this.colorField = "#ffffff";
     this.sizeField = 12;
@@ -69,6 +72,13 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
+    this.refresh();
+  }
+
+  refresh():void {
+    "use strict";
+
+    this.editing = false;
     this.backEnd.getIssueConfirmation(this.id)
         .then(confirmation => {
           this.confirmation = confirmation;
@@ -80,6 +90,12 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new notifications.Danger("Confirmations cannot be loaded.", reason));
         });
+  }
+
+  onEditClick():void {
+    "use strict";
+
+    this.editing = !this.editing;
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -95,8 +111,8 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateIssueConfirmation(this.id, this.nameField, this.colorField, this.sizeField)
         .then(() => {
-          this.notifications.next.push(new notifications.Success("The confirmation has been updated."));
-          this.router.navigate(["Issues"]);
+          this.notifications.current.push(new notifications.Success("The confirmation has been updated."));
+          this.refresh();
         })
         .catch(reason => {
           this.notifications.current.push(new notifications.Danger("The confirmation cannot be updated.", reason));
@@ -107,6 +123,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Issues"]);
+    this.editing = false;
   }
 }
