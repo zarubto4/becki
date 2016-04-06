@@ -31,7 +31,6 @@ import * as issue from "./issue";
 import * as issueConfirmationNew from "./issue-confirmation-new";
 import * as issueNew from "./issue-new";
 import * as issueRelatedNew from "./issue-related-new";
-import * as issueTagNew from "./issue-tag-new";
 import * as issues from "./issues";
 import * as libraryGroup from "./library-group";
 import * as libraryGroupNew from "./library-group-new";
@@ -84,7 +83,6 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
   {path: "/issues/:issue", component: issue.Component, as: "Issue"},
   {path: "/issues/:issue/confirmation/new", component: issueConfirmationNew.Component, as: "NewIssueConfirmation"},
   {path: "/issues/:issue/related/new", component: issueRelatedNew.Component, as: "NewRelatedIssue"},
-  {path: "/issues/:issue/tag/new", component: issueTagNew.Component, as: "NewIssueTag"},
   {path: "/libraries/:library", component: library.Component, as: "Library"},
   {path: "/library/group/new", component: libraryGroupNew.Component, as: "NewLibraryGroup"},
   {path: "/library/groups/:group", component: libraryGroup.Component, as: "LibraryGroup"},

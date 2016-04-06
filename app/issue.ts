@@ -95,6 +95,8 @@ class Item {
 
   editing:boolean;
 
+  tagsEditable:boolean;
+
   importing:boolean;
 
   removing:boolean;
@@ -102,6 +104,8 @@ class Item {
   bodyField:string;
 
   commentField:string;
+
+  tagsField:string;
 
   interactionsProjectField:string;
 
@@ -123,15 +127,23 @@ class Item {
     this.comments = comments;
     this.tags = tags;
     this.editing = false;
+    this.tagsEditable = false;
     this.importing = false;
     this.removing = false;
     this.bodyField = body;
     this.commentField = "";
+    this.tagsField = tags.join(",");
     this.interactionsProjectField = "";
     this.interactionsNameField = "";
     this.interactionsDescriptionField = "";
     this.interactionsSchemeField = fieldIssueBody.getInteractions(body);
     this.markable = false;
+  }
+
+  parseTagsField():string[] {
+    "use strict";
+
+    return this.tagsField.split(",").map(tag => tag.trim()).filter(tag => tag.length > 0);
   }
 }
 
@@ -145,6 +157,7 @@ class Issue extends Item {
     "use strict";
 
     super(id, body, date, likes, comments, tags);
+    this.tagsEditable = true;
     this.typeField = type;
     this.titleField = title;
     this.markable = true;
@@ -182,8 +195,6 @@ export class Component implements ng.OnInit {
   projects:libBackEnd.Project[];
 
   answerBodyField:string;
-
-  tags:libPatternFlyListView.Item[];
 
   confirmations:libPatternFlyListView.Item[];
 
@@ -233,7 +244,6 @@ export class Component implements ng.OnInit {
                   answer.hashTags
               ))
           );
-          this.tags = issue.hashTags.map(tag => new libPatternFlyListView.Item(tag, tag, ""));
           this.confirmations = issue.type_of_confirms.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null));
         })
         .catch(reason => {
@@ -331,7 +341,7 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     if (item instanceof Issue) {
-      this.backEnd.updateIssue(item.id, item.typeField, item.titleField, item.bodyField, item.tags)
+      this.backEnd.updateIssue(item.id, item.typeField, item.titleField, item.bodyField, item.parseTagsField())
           .then(() => {
             this.notifications.current.push(new notifications.Success("The issue has been updated."));
             this.refresh();
@@ -342,7 +352,7 @@ export class Component implements ng.OnInit {
             this.notifications.current.push(new notifications.Danger("The issue cannot be updated.", reason));
           });
     } else {
-      this.backEnd.updateAnswer(item.id, item.bodyField, item.tags)
+      this.backEnd.updateAnswer(item.id, item.bodyField, item.parseTagsField())
           .then(() => {
             this.notifications.current.push(new notifications.Success("The answer has been updated."));
             this.refresh();
@@ -499,26 +509,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     comment.removing = false;
-  }
-
-  onTagAddClick():void {
-    "use strict";
-
-    this.router.navigate(["NewIssueTag", {issue: this.id}]);
-  }
-
-  onTagRemoveClick(tag:string):void {
-    "use strict";
-
-    this.notifications.shift();
-    this.backEnd.removeTagFromPost(tag, this.id)
-        .then(() => {
-          this.notifications.current.push(new notifications.Success("The tag has been removed."));
-          this.refresh();
-        })
-        .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The tag cannot be removed.", reason));
-        });
   }
 
   onConfirmationAddClick():void {

@@ -77,6 +77,20 @@
                       <div class="spinner"></div>
                     </div>
                   </div>
+                  <template data-bind-ng-if="item.tagsEditable">
+                    <div class="form-group">
+                      <label>
+                        <span class="glyphicon glyphicon-tag"></span>
+                        Tags
+                      </label>
+                      <p>
+                        <template ng-for data-var-tag data-bind-ng-for-of="item.parseTagsField()">
+                          <span class="label label-default">{{tag}}</span>
+                        </template>
+                      </p>
+                      <input class="form-control" data-bindon-ng-model="item.tagsField">
+                    </div>
+                  </template>
                   <div class="pull-right">
                     <button class="btn btn-danger" type="button" data-on-click="onItemEditingCancelClick(item, $event)">
                       Cancel
@@ -162,7 +176,9 @@
                 <div data-bindon-field-issue-body="item.body" data-bind-readonly="true">
                   <div class="spinner"></div>
                 </div>
-
+                <template ng-for data-var-tag data-bind-ng-for-of="item.tags">
+                  <span class="label label-default">{{tag}}</span>
+                </template>
                 <p class="pull-right">{{item.date}}</p>
               </template>
             </div>
@@ -249,16 +265,6 @@
       </div>
     </div>
     <div class="col-xs-12 col-sm-3">
-      <div>
-        <div class="pull-right">
-          <button type="button" class="btn btn-default" data-on-click="onTagAddClick($event)">Add</button>
-        </div>
-        <h2>Tags</h2>
-      </div>
-      <div data-bind-list-view="tags" data-on-add-click="onTagAddClick($event)" data-on-remove-click="onTagRemoveClick($event)">
-        <div class="spinner"></div>
-      </div>
-
       <div>
         <div class="pull-right">
           <button type="button" class="btn btn-default" data-on-click="onConfirmationAddClick($event)">Add</button>

@@ -720,8 +720,6 @@ export abstract class BackEnd {
 
   public static ISSUE_PATH = "/overflow/post";
 
-  public static ISSUE_TAG_PATH = "/overflow/hashTag";
-
   public static ISSUE_TYPE_PATH = "/overflow/typeOfPost";
 
   public static LIBRARY_GROUP_PATH = "/compilation/libraryGroup";
@@ -1826,18 +1824,6 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath("DELETE", `${BackEnd.ISSUE_CONFIRMATION_PATH}/${post}/${confirmation}`).then(JSON.stringify);
-  }
-
-  public addTagToPost(tag:string, post:string):Promise<string> {
-    "use strict";
-
-    return this.requestPath("PUT", `${BackEnd.ISSUE_TAG_PATH}/${post}/${tag}`, {}).then(JSON.stringify);
-  }
-
-  public removeTagFromPost(tag:string, post:string):Promise<string> {
-    "use strict";
-
-    return this.requestPath("DELETE", `${BackEnd.ISSUE_TAG_PATH}/${post}/${tag}`).then(JSON.stringify);
   }
 
   public deletePost(id:string):Promise<string> {
