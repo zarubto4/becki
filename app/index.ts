@@ -23,10 +23,10 @@ export const NAVIGATION = [
   new layout.LabeledLink("Devices", ["UserDevices"], "rocket"),
   // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
   new layout.LabeledLink("System (TYRION-155)", ["System"], "globe"),
+  new layout.LabeledLink("Issues", ["Issues"], "bug"),
   new layout.LabeledLink("Applications (Vision)", ["UserApplicationsVision"], "mobile"),
   new layout.LabeledLink("Devices (TODO)", ["Devices"], "tachometer"),
-  new layout.LabeledLink("Projects (TODO)", ["Projects"], "book"),
-  new layout.LabeledLink("Issues (TODO)", ["Issues"], "bug")
+  new layout.LabeledLink("Projects (TODO)", ["Projects"], "book")
 ];
 
 export function getAdvancedField(field:string, options:string[]):string {
