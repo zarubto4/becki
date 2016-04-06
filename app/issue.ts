@@ -27,6 +27,26 @@ import * as libBootstrapDropdown from "./lib-bootstrap/dropdown";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
 import * as notifications from "./notifications";
 
+class RemovableIssueLink {
+
+  model:libBackEnd.IssueLink;
+
+  removing:boolean;
+
+  get targetLink():any[] {
+    "use strict";
+
+    return ["Issue", {issue: this.model.answer.postId}];
+  }
+
+  constructor(model:libBackEnd.IssueLink) {
+    "use strict";
+
+    this.model = model;
+    this.removing = false;
+  }
+}
+
 class Comment {
 
   id:string;
@@ -91,6 +111,8 @@ class Item {
 
   interactionsSchemeField:string;
 
+  markable:boolean;
+
   constructor(id:string, body:string, date:string, likes:number, comments:Comment[], tags:string[]) {
     "use strict";
 
@@ -109,6 +131,7 @@ class Item {
     this.interactionsNameField = "";
     this.interactionsDescriptionField = "";
     this.interactionsSchemeField = fieldIssueBody.getInteractions(body);
+    this.markable = false;
   }
 }
 
@@ -124,6 +147,7 @@ class Issue extends Item {
     super(id, body, date, likes, comments, tags);
     this.typeField = type;
     this.titleField = title;
+    this.markable = true;
   }
 }
 
@@ -149,6 +173,8 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
+  related:RemovableIssueLink[];
+
   types:libBackEnd.IssueType[];
 
   items:Item[];
@@ -156,8 +182,6 @@ export class Component implements ng.OnInit {
   projects:libBackEnd.Project[];
 
   answerBodyField:string;
-
-  related:libPatternFlyListView.Item[];
 
   tags:libPatternFlyListView.Item[];
 
@@ -199,6 +223,7 @@ export class Component implements ng.OnInit {
         .then(issue => {
           this.heading = `${issue.type.type}: ${issue.name}`;
           this.breadcrumbs[2].label = issue.name;
+          this.related = issue.linked_answers.map(link => new RemovableIssueLink(link));
           let commentsViews = issue.comments.map(comment => new Comment(comment.postId, comment.text_of_post, comment.date_of_create, comment.likes, comment.hashTags));
           this.items = [].concat(
               new Issue(issue.postId, issue.type.id, issue.name, issue.text_of_post, issue.date_of_create, issue.likes, commentsViews, issue.hashTags),
@@ -208,7 +233,6 @@ export class Component implements ng.OnInit {
                   answer.hashTags
               ))
           );
-          this.related = issue.linked_answers.map(related => new libPatternFlyListView.Item(related.linkId, related.answer.name, "", ["Issue", {issue: related.answer.postId}]));
           this.tags = issue.hashTags.map(tag => new libPatternFlyListView.Item(tag, tag, ""));
           this.confirmations = issue.type_of_confirms.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null));
         })
@@ -221,6 +245,33 @@ export class Component implements ng.OnInit {
     this.backEnd.getProjects()
         .then(projects => this.projects = projects)
         .catch(reason => this.notifications.current.push(new notifications.Danger("Projects cannot be loaded.", reason)));
+  }
+
+  onRelatedRemoveClick(link:RemovableIssueLink):void {
+    "use strict";
+
+    link.removing = true;
+  }
+
+  onRelatedRemovingYesClick(link:RemovableIssueLink):void {
+    "use strict";
+
+    link.removing = false;
+    this.notifications.shift();
+    this.backEnd.deleteIssueLink(link.model.linkId)
+        .then(() => {
+          this.notifications.current.push(new notifications.Success("The issue has been unmarked as related."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new notifications.Danger("The issue cannot be unmarked as related.", reason));
+        });
+  }
+
+  onRelatedRemovingNoClick(link:RemovableIssueLink):void {
+    "use strict";
+
+    link.removing = false;
   }
 
   onItemImportClick(item:Item):void {
@@ -261,6 +312,12 @@ export class Component implements ng.OnInit {
     "use strict";
 
     item.importing = false;
+  }
+
+  onItemMarkClick(item:Item):void {
+    "use strict";
+
+    this.router.navigate(["NewRelatedIssue", {issue: item.id}]);
   }
 
   onItemEditClick(item:Item):void {
@@ -442,26 +499,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     comment.removing = false;
-  }
-
-  onRelatedAddClick():void {
-    "use strict";
-
-    this.router.navigate(["NewRelatedIssue", {issue: this.id}]);
-  }
-
-  onRelatedRemoveClick(id:string):void {
-    "use strict";
-
-    this.notifications.shift();
-    this.backEnd.deleteIssueLink(id)
-        .then(() => {
-          this.notifications.current.push(new notifications.Success("The issue has been removed."));
-          this.refresh();
-        })
-        .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The issue cannot be removed.", reason));
-        });
   }
 
   onTagAddClick():void {

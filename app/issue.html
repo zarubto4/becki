@@ -4,6 +4,26 @@
   -->
 
 <div data-bind-layout="heading" data-bind-breadcrumbs="breadcrumbs">
+  <template data-bind-ng-if="related?.length">
+    <div class="well">
+      Following issues have been marked as related:
+      <ul>
+        <li template="ngFor #link of related" data-bind-ng-switch="link.removing">
+          <template data-bind-ng-switch-when="true">
+            Do you really want to unmark this issue?
+            <button class="btn btn-danger" type="button" data-on-click="onRelatedRemovingYesClick(link, $event)">Yes</button>
+            <button class="btn btn-default" type="button" data-on-click="onRelatedRemovingNoClick(link, $event)">No</button>
+          </template>
+          <template data-bind-ng-switch-when="false">
+            <a data-bind-router-link="link.targetLink">{{link.model.answer.name}}</a>
+            <a class="text-danger" data-on-click="onRelatedRemoveClick(link, $event)" style="cursor: pointer">
+              <span class="pficon pficon-close"></span>
+            </a>
+          </template>
+        </li>
+      </ul>
+    </div>
+  </template>
   <div class="row">
     <div class="col-xs-12 col-sm-9">
       <div class="media" template="ngFor #item of items">
@@ -132,6 +152,9 @@
                     <template data-bind-ng-if="item.interactionsSchemeField != null">
                       <li><a data-on-click="onItemImportClick(item, $event)" style="cursor: pointer">Import</a></li>
                     </template>
+                    <template data-bind-ng-if="item.markable">
+                      <li><a data-on-click="onItemMarkClick(item, $event)" style="cursor: pointer">Mark</a></li>
+                    </template>
                     <li><a data-on-click="onItemEditClick(item, $event)" style="cursor: pointer">Edit</a></li>
                     <li><a data-on-click="onItemRemoveClick(item, $event)" style="cursor: pointer">Remove</a></li>
                   </ul>
@@ -226,16 +249,6 @@
       </div>
     </div>
     <div class="col-xs-12 col-sm-3">
-      <div>
-        <div class="pull-right">
-          <button type="button" class="btn btn-default" data-on-click="onRelatedAddClick($event)">Add</button>
-        </div>
-        <h2>Related</h2>
-      </div>
-      <div data-bind-list-view="related" data-on-add-click="onRelatedAddClick($event)" data-on-remove-click="onRelatedRemoveClick($event)">
-        <div class="spinner"></div>
-      </div>
-
       <div>
         <div class="pull-right">
           <button type="button" class="btn btn-default" data-on-click="onTagAddClick($event)">Add</button>
