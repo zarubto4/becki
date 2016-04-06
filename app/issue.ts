@@ -24,7 +24,6 @@ import * as fieldIssueBody from "./field-issue-body";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapDropdown from "./lib-bootstrap/dropdown";
-import * as libPatternFlyListView from "./lib-patternfly/list-view";
 import * as notifications from "./notifications";
 
 class RemovableIssueLink {
@@ -117,6 +116,8 @@ class Item {
 
   markable:boolean;
 
+  confirmable:boolean;
+
   constructor(id:string, body:string, date:string, likes:number, comments:Comment[], tags:string[]) {
     "use strict";
 
@@ -138,6 +139,7 @@ class Item {
     this.interactionsDescriptionField = "";
     this.interactionsSchemeField = fieldIssueBody.getInteractions(body);
     this.markable = false;
+    this.confirmable = false;
   }
 
   parseTagsField():string[] {
@@ -161,6 +163,7 @@ class Issue extends Item {
     this.typeField = type;
     this.titleField = title;
     this.markable = true;
+    this.confirmable = true;
   }
 }
 
@@ -172,7 +175,6 @@ class Issue extends Item {
     fieldIssueBody.Component,
     layout.Component,
     libBootstrapDropdown.DIRECTIVES,
-    libPatternFlyListView.Component,
     ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES,
     ngRouter.ROUTER_DIRECTIVES
@@ -186,6 +188,10 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
 
+  confirmationToRemove:libBackEnd.IssueConfirmation;
+
+  confirmations:libBackEnd.IssueConfirmation[];
+
   related:RemovableIssueLink[];
 
   types:libBackEnd.IssueType[];
@@ -195,8 +201,6 @@ export class Component implements ng.OnInit {
   projects:libBackEnd.Project[];
 
   answerBodyField:string;
-
-  confirmations:libPatternFlyListView.Item[];
 
   backEnd:backEnd.Service;
 
@@ -214,6 +218,7 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("Issues", ["Issues"]),
       new layout.LabeledLink("Loading...", ["Issue", {issue: this.id}])
     ];
+    this.confirmationToRemove = null;
     this.answerBodyField = fieldIssueBody.EMPTY;
     this.backEnd = backEndService;
     this.notifications = notificationsService;
@@ -234,6 +239,7 @@ export class Component implements ng.OnInit {
         .then(issue => {
           this.heading = `${issue.type.type}: ${issue.name}`;
           this.breadcrumbs[2].label = issue.name;
+          this.confirmations = issue.type_of_confirms;
           this.related = issue.linked_answers.map(link => new RemovableIssueLink(link));
           let commentsViews = issue.comments.map(comment => new Comment(comment.postId, comment.text_of_post, comment.date_of_create, comment.likes, comment.hashTags));
           this.items = [].concat(
@@ -244,7 +250,6 @@ export class Component implements ng.OnInit {
                   answer.hashTags
               ))
           );
-          this.confirmations = issue.type_of_confirms.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null));
         })
         .catch(reason => {
           this.notifications.current.push(new notifications.Danger(`The issue ${this.id} cannot be loaded.`, reason));
@@ -255,6 +260,34 @@ export class Component implements ng.OnInit {
     this.backEnd.getProjects()
         .then(projects => this.projects = projects)
         .catch(reason => this.notifications.current.push(new notifications.Danger("Projects cannot be loaded.", reason)));
+  }
+
+  onConfirmationRemoveClick(confirmation:libBackEnd.IssueConfirmation):void {
+    "use strict";
+
+    this.confirmationToRemove = confirmation;
+  }
+
+  onConfirmationRemoveYesClick():void {
+    "use strict";
+
+    let confirmation = this.confirmationToRemove;
+    this.confirmationToRemove = null;
+    this.notifications.shift();
+    this.backEnd.removeConfirmationFromPost(confirmation.id, this.id)
+        .then(() => {
+          this.notifications.current.push(new notifications.Success("The confirmation has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new notifications.Danger("The confirmation cannot be removed.", reason));
+        });
+  }
+
+  onConfirmationRemoveNoClick():void {
+    "use strict";
+
+    this.confirmationToRemove = null;
   }
 
   onRelatedRemoveClick(link:RemovableIssueLink):void {
@@ -328,6 +361,12 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.router.navigate(["NewRelatedIssue", {issue: item.id}]);
+  }
+
+  onItemConfirmationAddClick(item:Item):void {
+    "use strict";
+
+    this.router.navigate(["NewIssueConfirmation", {issue: item.id}]);
   }
 
   onItemEditClick(item:Item):void {
@@ -509,25 +548,5 @@ export class Component implements ng.OnInit {
     "use strict";
 
     comment.removing = false;
-  }
-
-  onConfirmationAddClick():void {
-    "use strict";
-
-    this.router.navigate(["NewIssueConfirmation", {issue: this.id}]);
-  }
-
-  onConfirmationRemoveClick(id:string):void {
-    "use strict";
-
-    this.notifications.shift();
-    this.backEnd.removeConfirmationFromPost(id, this.id)
-        .then(() => {
-          this.notifications.current.push(new notifications.Success("The confirmation has been removed."));
-          this.refresh();
-        })
-        .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The confirmation cannot be removed.", reason));
-        });
   }
 }

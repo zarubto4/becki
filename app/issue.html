@@ -4,6 +4,22 @@
   -->
 
 <div data-bind-layout="heading" data-bind-breadcrumbs="breadcrumbs">
+  <div data-bind-ng-switch="!confirmationToRemove">
+    <template data-bind-ng-switch-when="true">
+      <template ng-for data-var-confirmation data-bind-ng-for-of="confirmations">
+        <span class="label" data-bind-style.background-color="confirmation.color" style="border: 1px solid #eeeeee">{{confirmation.type}} <a data-on-click="onConfirmationRemoveClick(confirmation, $event)" style="cursor: pointer; color: #333333; margin-left: 1em"><span class="pficon pficon-close"></span></a></span>
+      </template>
+    </template>
+    <template data-bind-ng-switch-when="false">
+      Do you really want to remove the confirmation?
+      <button class="btn btn-danger" type="button" data-on-click="onConfirmationRemoveYesClick($event)">
+        Yes
+      </button>
+      <button class="btn btn-default" type="button" data-on-click="onConfirmationRemoveNoClick($event)">
+        No
+      </button>
+    </template>
+  </div>
   <template data-bind-ng-if="related?.length">
     <div class="well">
       Following issues have been marked as related:
@@ -24,255 +40,243 @@
       </ul>
     </div>
   </template>
-  <div class="row">
-    <div class="col-xs-12 col-sm-9">
-      <div class="media" template="ngFor #item of items">
-        <div class="media-left">
-          <div class="btn-group-vertical">
-            <button class="btn btn-default" type="button" data-on-click="onPlusClick(item.id, $event)">
-              <span class="glyphicon glyphicon-thumbs-up"></span>
-            </button>
-            <div class="h2" style="margin: 6px 12px;text-align: center;">
-              {{item.likes}}
-            </div>
-            <button class="btn btn-default" type="button" data-on-click="onMinusClick(item.id, $event)">
-              <span class="glyphicon glyphicon-thumbs-down"></span>
-            </button>
-          </div>
+  <div class="media" template="ngFor #item of items">
+    <div class="media-left">
+      <div class="btn-group-vertical">
+        <button class="btn btn-default" type="button" data-on-click="onPlusClick(item.id, $event)">
+          <span class="glyphicon glyphicon-thumbs-up"></span>
+        </button>
+        <div class="h2" style="margin: 6px 12px;text-align: center;">
+          {{item.likes}}
         </div>
-        <div class="media-body">
-          <div class="panel panel-default">
-            <div class="panel-body">
-              <template data-bind-ng-if="item.editing">
-                <form class="clearfix" data-on-submit="onItemEditingSubmit(item, $event)">
-                  <template data-bind-ng-if="item.hasOwnProperty('typeField')">
-                    <div class="form-group">
-                      <label>
-                        <span class="glyphicon glyphicon-list"></span>
-                        Type
-                      </label>
-                      <select class="form-control" required data-bindon-ng-model="item.typeField">
-                        <option value="">Select type...</option>
-                        <option data-bind-value="type.id" template="ngFor #type of types">
-                          {{type.type}}
-                        </option>
-                      </select>
-                    </div>
-                  </template>
-                  <template data-bind-ng-if="item.hasOwnProperty('titleField')">
-                    <div class="form-group">
-                      <label>
-                        <span class="glyphicon glyphicon-pencil"></span>
-                        Title
-                      </label>
-                      <input class="form-control" required data-bindon-ng-model="item.titleField">
-                    </div>
-                  </template>
-                  <div class="form-group">
-                    <label>
-                      <span class="glyphicon glyphicon-pencil"></span>
-                      Body
-                    </label>
-                    <div data-bindon-field-issue-body="item.bodyField" data-bind-required="true">
-                      <div class="spinner"></div>
-                    </div>
-                  </div>
-                  <template data-bind-ng-if="item.tagsEditable">
-                    <div class="form-group">
-                      <label>
-                        <span class="glyphicon glyphicon-tag"></span>
-                        Tags
-                      </label>
-                      <p>
-                        <template ng-for data-var-tag data-bind-ng-for-of="item.parseTagsField()">
-                          <span class="label label-default">{{tag}}</span>
-                        </template>
-                      </p>
-                      <input class="form-control" data-bindon-ng-model="item.tagsField">
-                    </div>
-                  </template>
-                  <div class="pull-right">
-                    <button class="btn btn-danger" type="button" data-on-click="onItemEditingCancelClick(item, $event)">
-                      Cancel
-                    </button>
-                    <button class="btn btn-primary" type="submit">
-                      Update
-                    </button>
-                  </div>
-                </form>
-              </template>
-              <template data-bind-ng-if="item.importing">
-                <form class="clearfix" data-on-submit="onItemImportingSubmit(item, $event)">
-                  <div class="form-group">
-                    <label>
-                      <span class="glyphicon glyphicon-list"></span>
-                      Project
-                    </label>
-                    <select class="form-control" required data-bindon-ng-model="item.interactionsProjectField" data-on-ng-model-change="item.interactionsNameField = ''">
-                      <option value="">Select name...</option>
-                      <option data-bind-value="project.id" template="ngFor #project of projects">
-                        {{project.project_name}}
-                      </option>
-                    </select>
-                  </div>
-                  <template data-bind-ng-if="item.interactionsProjectField">
-                    <div class="form-group">
-                      <label>
-                        <span class="glyphicon glyphicon-pencil"></span>
-                        Name
-                      </label>
-                      <input class="form-control" required minlength="8" data-bindon-ng-model="item.interactionsNameField" data-bind-custom-validator="validateInteractionsSchemeName(item.interactionsNameField, item.interactionsProjectField)" data-message="This name is used already. Please choose another one.">
-                    </div>
-                    <div class="form-group">
-                      <label>
-                        <span class="glyphicon glyphicon-pencil"></span>
-                        Description
-                      </label>
-                      <textarea class="form-control" data-bindon-ng-model="item.interactionsDescriptionField"></textarea>
-                    </div>
-                    <div class="form-group">
-                      <label>
-                        <span class="glyphicon glyphicon-link"></span>
-                        Scheme
-                      </label>
-                      <div data-bindon-field-interactions-scheme="item.interactionsSchemeField">
-                        <div class="spinner"></div>
-                      </div>
-                    </div>
-                  </template>
-                  <div class="pull-right">
-                    <button class="btn btn-danger" type="button" data-on-click="onItemImportingCancelClick(item, $event)">
-                      Cancel
-                    </button>
-                    <button class="btn btn-primary" type="submit">
-                      Import
-                    </button>
-                  </div>
-                </form>
-              </template>
-              <template data-bind-ng-if="item.removing">
-                <div class="pull-right">
-                  <button class="btn btn-danger" type="button" data-on-click="onItemRemovingYesClick(item, $event)">Yes</button>
-                  <button class="btn btn-default" type="button" data-on-click="onItemRemovingNoClick(item, $event)">No</button>
-                </div>
-                Do you really want to remove this?
-              </template>
-              <template data-bind-ng-if="!item.editing && !item.importing && !item.removing">
-                <div class="dropdown dropdown-kebab-pf pull-right">
-                  <button class="btn btn-link dropdown-toggle" type="button">
-                    <span class="fa fa-ellipsis-v"></span>
-                  </button>
-                  <ul class="dropdown-menu dropdown-menu-right">
-                    <template data-bind-ng-if="item.interactionsSchemeField != null">
-                      <li><a data-on-click="onItemImportClick(item, $event)" style="cursor: pointer">Import</a></li>
-                    </template>
-                    <template data-bind-ng-if="item.markable">
-                      <li><a data-on-click="onItemMarkClick(item, $event)" style="cursor: pointer">Mark</a></li>
-                    </template>
-                    <li><a data-on-click="onItemEditClick(item, $event)" style="cursor: pointer">Edit</a></li>
-                    <li><a data-on-click="onItemRemoveClick(item, $event)" style="cursor: pointer">Remove</a></li>
-                  </ul>
-                </div>
-                <div data-bindon-field-issue-body="item.body" data-bind-readonly="true">
-                  <div class="spinner"></div>
-                </div>
-                <template ng-for data-var-tag data-bind-ng-for-of="item.tags">
-                  <span class="label label-default">{{tag}}</span>
-                </template>
-                <p class="pull-right">{{item.date}}</p>
-              </template>
-            </div>
-            <div class="panel-footer">
-              <div template="ngFor #comment of item.comments">
-                <div class="media" style="overflow: visible">
-                  <div class="media-left">
-                    <img class="media-object" src="...">
-                  </div>
-                  <div class="media-body" style="overflow: visible">
-                    <template data-bind-ng-if="comment.editing">
-                      <form class="clearfix" data-on-submit="onCommentEditingSubmit(comment, $event)">
-                        <div class="form-group">
-                          <label>
-                            <span class="glyphicon glyphicon-comment"></span>
-                            Comment
-                          </label>
-                          <textarea class="form-control" required data-bindon-ng-model="comment.bodyField"></textarea>
-                        </div>
-                        <div class="pull-right">
-                          <button class="btn btn-danger" type="button" data-on-click="onCommentEditingCancelClick(comment, $event)">
-                            Cancel
-                          </button>
-                          <button class="btn btn-primary" type="submit">Update
-                          </button>
-                        </div>
-                      </form>
-                    </template>
-                    <template data-bind-ng-if="comment.removing">
-                      <div class="pull-right">
-                        <button class="btn btn-danger" type="button" data-on-click="onCommentRemovingYesClick(comment, $event)">Yes</button>
-                        <button class="btn btn-default" type="button" data-on-click="onCommentRemovingNoClick(comment, $event)">No</button>
-                      </div>
-                      Do you really want to remove this comment?
-                    </template>
-                    <template data-bind-ng-if="!comment.editing && !comment.removing">
-                      <div class="media-heading" style="font-weight: bold;">
-                        Author - {{comment.date}}
-                        <div class="pull-right">
-                          <div class="btn-group btn-group-xs">
-                            <button class="btn btn-default" type="button" data-on-click="onPlusClick(comment.id, $event)">
-                              <span class="glyphicon glyphicon-thumbs-up"></span>
-                            </button>
-                            <div style="float: left;padding: 1px 5px;">
-                              {{comment.likes}}
-                            </div>
-                            <button class="btn btn-default" type="button" data-on-click="onMinusClick(comment.id, $event)">
-                              <span class="glyphicon glyphicon-thumbs-down"></span>
-                            </button>
-                          </div>
-                          <div class="dropdown dropdown-kebab-pf pull-right" style="margin-left: 10px">
-                            <button class="btn btn-link dropdown-toggle" type="button">
-                              <span class="fa fa-ellipsis-v"></span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-right">
-                              <li><a data-on-click="onCommentEditClick(comment, $event)" style="cursor: pointer">Edit</a></li>
-                              <li><a data-on-click="onCommentRemoveClick(comment, $event)" style="cursor: pointer">Remove</a></li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      {{comment.body}}
-                    </template>
-                  </div>
-                </div>
-                <hr>
-              </div>
-              <div class="media">
-                <div class="media-left">
-                  <img class="media-object" src="...">
-                </div>
-                <form class="media-body" data-on-submit="onCommentCreationSubmit(item, $event)">
-                  <div class="input-group">
-                    <input class="form-control" type="text" required data-bindon-ng-model="item.commentField">
-                    <span class="input-group-btn">
-                      <button class="btn btn-primary" type="submit">Comment</button>
-                    </span>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
+        <button class="btn btn-default" type="button" data-on-click="onMinusClick(item.id, $event)">
+          <span class="glyphicon glyphicon-thumbs-down"></span>
+        </button>
       </div>
     </div>
-    <div class="col-xs-12 col-sm-3">
-      <div>
-        <div class="pull-right">
-          <button type="button" class="btn btn-default" data-on-click="onConfirmationAddClick($event)">Add</button>
+    <div class="media-body">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <template data-bind-ng-if="item.editing">
+            <form class="clearfix" data-on-submit="onItemEditingSubmit(item, $event)">
+              <template data-bind-ng-if="item.hasOwnProperty('typeField')">
+                <div class="form-group">
+                  <label>
+                    <span class="glyphicon glyphicon-list"></span>
+                    Type
+                  </label>
+                  <select class="form-control" required data-bindon-ng-model="item.typeField">
+                    <option value="">Select type...</option>
+                    <option data-bind-value="type.id" template="ngFor #type of types">
+                      {{type.type}}
+                    </option>
+                  </select>
+                </div>
+              </template>
+              <template data-bind-ng-if="item.hasOwnProperty('titleField')">
+                <div class="form-group">
+                  <label>
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    Title
+                  </label>
+                  <input class="form-control" required data-bindon-ng-model="item.titleField">
+                </div>
+              </template>
+              <div class="form-group">
+                <label>
+                  <span class="glyphicon glyphicon-pencil"></span>
+                  Body
+                </label>
+                <div data-bindon-field-issue-body="item.bodyField" data-bind-required="true">
+                  <div class="spinner"></div>
+                </div>
+              </div>
+              <template data-bind-ng-if="item.tagsEditable">
+                <div class="form-group">
+                  <label>
+                    <span class="glyphicon glyphicon-tag"></span>
+                    Tags
+                  </label>
+                  <p>
+                    <template ng-for data-var-tag data-bind-ng-for-of="item.parseTagsField()">
+                      <span class="label label-default">{{tag}}</span>
+                    </template>
+                  </p>
+                  <input class="form-control" data-bindon-ng-model="item.tagsField">
+                </div>
+              </template>
+              <div class="pull-right">
+                <button class="btn btn-danger" type="button" data-on-click="onItemEditingCancelClick(item, $event)">
+                  Cancel
+                </button>
+                <button class="btn btn-primary" type="submit">
+                  Update
+                </button>
+              </div>
+            </form>
+          </template>
+          <template data-bind-ng-if="item.importing">
+            <form class="clearfix" data-on-submit="onItemImportingSubmit(item, $event)">
+              <div class="form-group">
+                <label>
+                  <span class="glyphicon glyphicon-list"></span>
+                  Project
+                </label>
+                <select class="form-control" required data-bindon-ng-model="item.interactionsProjectField" data-on-ng-model-change="item.interactionsNameField = ''">
+                  <option value="">Select name...</option>
+                  <option data-bind-value="project.id" template="ngFor #project of projects">
+                    {{project.project_name}}
+                  </option>
+                </select>
+              </div>
+              <template data-bind-ng-if="item.interactionsProjectField">
+                <div class="form-group">
+                  <label>
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    Name
+                  </label>
+                  <input class="form-control" required minlength="8" data-bindon-ng-model="item.interactionsNameField" data-bind-custom-validator="validateInteractionsSchemeName(item.interactionsNameField, item.interactionsProjectField)" data-message="This name is used already. Please choose another one.">
+                </div>
+                <div class="form-group">
+                  <label>
+                    <span class="glyphicon glyphicon-pencil"></span>
+                    Description
+                  </label>
+                  <textarea class="form-control" data-bindon-ng-model="item.interactionsDescriptionField"></textarea>
+                </div>
+                <div class="form-group">
+                  <label>
+                    <span class="glyphicon glyphicon-link"></span>
+                    Scheme
+                  </label>
+                  <div data-bindon-field-interactions-scheme="item.interactionsSchemeField">
+                    <div class="spinner"></div>
+                  </div>
+                </div>
+              </template>
+              <div class="pull-right">
+                <button class="btn btn-danger" type="button" data-on-click="onItemImportingCancelClick(item, $event)">
+                  Cancel
+                </button>
+                <button class="btn btn-primary" type="submit">
+                  Import
+                </button>
+              </div>
+            </form>
+          </template>
+          <template data-bind-ng-if="item.removing">
+            <div class="pull-right">
+              <button class="btn btn-danger" type="button" data-on-click="onItemRemovingYesClick(item, $event)">Yes</button>
+              <button class="btn btn-default" type="button" data-on-click="onItemRemovingNoClick(item, $event)">No</button>
+            </div>
+            Do you really want to remove this?
+          </template>
+          <template data-bind-ng-if="!item.editing && !item.importing && !item.removing">
+            <div class="dropdown dropdown-kebab-pf pull-right">
+              <button class="btn btn-link dropdown-toggle" type="button">
+                <span class="fa fa-ellipsis-v"></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <template data-bind-ng-if="item.interactionsSchemeField != null">
+                  <li><a data-on-click="onItemImportClick(item, $event)" style="cursor: pointer">Import</a></li>
+                </template>
+                <template data-bind-ng-if="item.markable">
+                  <li><a data-on-click="onItemMarkClick(item, $event)" style="cursor: pointer">Mark</a></li>
+                </template>
+                <template data-bind-ng-if="item.confirmable">
+                  <li><a data-on-click="onItemConfirmationAddClick(item, $event)" style="cursor: pointer">Confirm</a></li>
+                </template>
+                <li><a data-on-click="onItemEditClick(item, $event)" style="cursor: pointer">Edit</a></li>
+                <li><a data-on-click="onItemRemoveClick(item, $event)" style="cursor: pointer">Remove</a></li>
+              </ul>
+            </div>
+            <div data-bindon-field-issue-body="item.body" data-bind-readonly="true">
+              <div class="spinner"></div>
+            </div>
+            <template ng-for data-var-tag data-bind-ng-for-of="item.tags">
+              <span class="label label-default">{{tag}}</span>
+            </template>
+            <p class="pull-right">{{item.date}}</p>
+          </template>
         </div>
-        <h2>Confirmations</h2>
-      </div>
-      <div data-bind-list-view="confirmations" data-on-add-click="onConfirmationAddClick($event)" data-on-remove-click="onConfirmationRemoveClick($event)">
-        <div class="spinner"></div>
+        <div class="panel-footer">
+          <div template="ngFor #comment of item.comments">
+            <div class="media" style="overflow: visible">
+              <div class="media-left">
+                <img class="media-object" src="...">
+              </div>
+              <div class="media-body" style="overflow: visible">
+                <template data-bind-ng-if="comment.editing">
+                  <form class="clearfix" data-on-submit="onCommentEditingSubmit(comment, $event)">
+                    <div class="form-group">
+                      <label>
+                        <span class="glyphicon glyphicon-comment"></span>
+                        Comment
+                      </label>
+                      <textarea class="form-control" required data-bindon-ng-model="comment.bodyField"></textarea>
+                    </div>
+                    <div class="pull-right">
+                      <button class="btn btn-danger" type="button" data-on-click="onCommentEditingCancelClick(comment, $event)">
+                        Cancel
+                      </button>
+                      <button class="btn btn-primary" type="submit">Update
+                      </button>
+                    </div>
+                  </form>
+                </template>
+                <template data-bind-ng-if="comment.removing">
+                  <div class="pull-right">
+                    <button class="btn btn-danger" type="button" data-on-click="onCommentRemovingYesClick(comment, $event)">Yes</button>
+                    <button class="btn btn-default" type="button" data-on-click="onCommentRemovingNoClick(comment, $event)">No</button>
+                  </div>
+                  Do you really want to remove this comment?
+                </template>
+                <template data-bind-ng-if="!comment.editing && !comment.removing">
+                  <div class="media-heading" style="font-weight: bold;">
+                    Author - {{comment.date}}
+                    <div class="pull-right">
+                      <div class="btn-group btn-group-xs">
+                        <button class="btn btn-default" type="button" data-on-click="onPlusClick(comment.id, $event)">
+                          <span class="glyphicon glyphicon-thumbs-up"></span>
+                        </button>
+                        <div style="float: left;padding: 1px 5px;">
+                          {{comment.likes}}
+                        </div>
+                        <button class="btn btn-default" type="button" data-on-click="onMinusClick(comment.id, $event)">
+                          <span class="glyphicon glyphicon-thumbs-down"></span>
+                        </button>
+                      </div>
+                      <div class="dropdown dropdown-kebab-pf pull-right" style="margin-left: 10px">
+                        <button class="btn btn-link dropdown-toggle" type="button">
+                          <span class="fa fa-ellipsis-v"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                          <li><a data-on-click="onCommentEditClick(comment, $event)" style="cursor: pointer">Edit</a></li>
+                          <li><a data-on-click="onCommentRemoveClick(comment, $event)" style="cursor: pointer">Remove</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                  {{comment.body}}
+                </template>
+              </div>
+            </div>
+            <hr>
+          </div>
+          <div class="media">
+            <div class="media-left">
+              <img class="media-object" src="...">
+            </div>
+            <form class="media-body" data-on-submit="onCommentCreationSubmit(item, $event)">
+              <div class="input-group">
+                <input class="form-control" type="text" required data-bindon-ng-model="item.commentField">
+                <span class="input-group-btn">
+                  <button class="btn btn-primary" type="submit">Comment</button>
+                </span>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   </div>
