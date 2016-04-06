@@ -55,12 +55,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.refresh();
-  }
-
-  refresh():void {
-    "use strict";
-
     this.backEnd.getIssues()
         .then(issues => this.items = issues.map(issue => new libPatternFlyListView.Item(issue.postId, issue.name, issue.type.type, ["Issue", {issue: issue.postId}])))
         .catch(reason => this.notifications.current.push(new notifications.Danger("Issues cannot be loaded.", reason)));
@@ -70,19 +64,5 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.router.navigate(["NewIssue"]);
-  }
-
-  onRemoveClick(id:string):void {
-    "use strict";
-
-    this.notifications.shift();
-    this.backEnd.deletePost(id)
-        .then(() => {
-          this.notifications.current.push(new notifications.Success("The issue has been removed."));
-          this.refresh();
-        })
-        .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The issue cannot be removed.", reason));
-        });
   }
 }

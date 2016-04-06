@@ -80,6 +80,8 @@ export class Component implements ng.OnInit {
           this.router.navigate(["Issues"]);
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-183
+          this.notifications.current.push(new notifications.Warning("issue/TYRION-183"));
           this.notifications.current.push(new notifications.Danger("The issue cannot be created.", reason));
         });
   }

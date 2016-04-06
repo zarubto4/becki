@@ -1777,6 +1777,7 @@ export abstract class BackEnd {
       throw "name and body required";
     }
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-183
     return this.requestPath("POST", BackEnd.ISSUE_PATH, {name, text_of_post, type_of_post_id, hash_tags}, [201]).then(JSON.stringify);
   }
 
