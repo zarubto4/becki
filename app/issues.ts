@@ -78,7 +78,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.deletePost(id)
         .then(() => {
-          this.notifications.next.push(new notifications.Success("The issue has been removed."));
+          this.notifications.current.push(new notifications.Success("The issue has been removed."));
           this.refresh();
         })
         .catch(reason => {
