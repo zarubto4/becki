@@ -50,7 +50,6 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       becki.HOME,
-      new layout.LabeledLink("Issues", ["Issues"]),
       new layout.LabeledLink("New Issue", ["NewIssue"])
     ];
     this.typeField = "";
