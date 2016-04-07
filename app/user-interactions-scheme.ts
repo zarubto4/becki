@@ -16,13 +16,13 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
-import * as notifications from "./notifications";
 
 class SelectableModerator {
 
@@ -41,8 +41,8 @@ class SelectableModerator {
 @ng.Component({
   templateUrl: "app/user-interactions-scheme.html",
   directives: [
-    customValidator.Directive,
     layout.Component,
+    libBeckiCustomValidator.Directive,
     libPatternFlyListView.Component,
     ng.FORM_DIRECTIVES,
     ng.CORE_DIRECTIVES
@@ -72,13 +72,13 @@ export class Component implements ng.OnInit {
 
   moderators:SelectableModerator[];
 
-  backEnd:backEnd.Service;
+  backEnd:libBeckiBackEnd.Service;
 
-  notifications:notifications.Service;
+  notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("scheme");
@@ -94,8 +94,8 @@ export class Component implements ng.OnInit {
     this.descriptionField = "Loading...";
     this.description = "Loading...";
     this.uploadVersionField = "";
-    this.backEnd = backEndService;
-    this.notifications = notificationsService;
+    this.backEnd = backEnd;
+    this.notifications = notifications;
     this.router = router;
   }
 
@@ -144,7 +144,7 @@ export class Component implements ng.OnInit {
           this.moderators = moderators.map(moderator => new SelectableModerator(moderator));
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger(`The scheme ${this.id} cannot be loaded.`, reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger(`The scheme ${this.id} cannot be loaded.`, reason));
         });
   }
 
@@ -169,11 +169,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateInteractionsScheme(this.id, this.nameField, this.descriptionField)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The scheme has been updated."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The scheme has been updated."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The scheme cannot be updated.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The scheme cannot be updated.", reason));
         });
   }
 
@@ -201,11 +201,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     Promise.all(moderators.map(id => this.backEnd.addSchemeToInteractionsModerator(this.uploadVersionField, id, this.id)))
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The scheme has been uploaded."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The scheme has been uploaded."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The scheme cannot be uploaded.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The scheme cannot be uploaded.", reason));
         });
   }
 }

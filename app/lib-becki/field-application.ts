@@ -21,7 +21,7 @@ import * as notifications from "./notifications";
 
 @ng.Component({
   selector: "[field-application]",
-  templateUrl: "app/field-application.html",
+  templateUrl: "app/lib-becki/field-application.html",
   inputs: ["model: fieldApplication", "device"]
 })
 export class Component implements ng.AfterViewInit, ng.OnChanges {

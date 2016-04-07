@@ -16,13 +16,13 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
-import * as notifications from "./notifications";
 
 class SelectableItem extends libPatternFlyListView.Item {
 
@@ -39,8 +39,8 @@ class SelectableItem extends libPatternFlyListView.Item {
 @ng.Component({
   templateUrl: "app/project.html",
   directives: [
-    customValidator.Directive,
     layout.Component,
+    libBeckiCustomValidator.Directive,
     libPatternFlyListView.Component,
     ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES,
@@ -69,13 +69,13 @@ export class Component implements ng.OnInit {
 
   deviceUploadingProgramField:string;
 
-  backEnd:backEnd.Service;
+  backEnd:libBeckiBackEnd.Service;
 
-  notifications:notifications.Service;
+  notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("project");
@@ -89,8 +89,8 @@ export class Component implements ng.OnInit {
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.deviceUploadingProgramField = "";
-    this.backEnd = backEndService;
-    this.notifications = notificationsService;
+    this.backEnd = backEnd;
+    this.notifications = notifications;
     this.router = router;
   }
 
@@ -126,7 +126,7 @@ export class Component implements ng.OnInit {
           this.standalonePrograms = [].concat(...categories.map(category => category.blockoBlocks.map(program => new libPatternFlyListView.Item(program.id, program.name, program.general_description, ["StandaloneProgram", {project: this.id, program: program.id}]))));
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger(`The project ${this.id} cannot be loaded.`, reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger(`The project ${this.id} cannot be loaded.`, reason));
         });
   }
 
@@ -143,11 +143,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateProject(this.id, this.nameField, this.descriptionField)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The project has been updated."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The project has been updated."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The project cannot be updated.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The project cannot be updated.", reason));
         });
   }
 
@@ -163,11 +163,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.removeCollaboratorsFromProject([id], this.id)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The collaborator has been removed."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The collaborator has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The collaborator cannot be removed.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The collaborator cannot be removed.", reason));
         });
   }
 
@@ -183,11 +183,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.deleteDeviceProgram(id)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The program has been removed."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The program has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The program cannot be removed.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The program cannot be removed.", reason));
         });
   }
 
@@ -203,11 +203,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.deleteStandaloneProgram(id)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The program has been removed."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The program has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The program cannot be removed.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The program cannot be removed.", reason));
         });
   }
 
@@ -218,13 +218,13 @@ export class Component implements ng.OnInit {
     let devices = this.devices.filter(selectable => selectable.selected).map(selectable => selectable.id);
     Promise.all(devices.map(id => this.backEnd.addProgramToDevice(this.deviceUploadingProgramField, id)))
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The program has been uploaded."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The program has been uploaded."));
           this.refresh();
         })
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-128
-          this.notifications.current.push(new notifications.Danger("issue/TYRION-128"));
-          this.notifications.current.push(new notifications.Danger("The program cannot be uploaded.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-128"));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The program cannot be uploaded.", reason));
         });
   }
 }

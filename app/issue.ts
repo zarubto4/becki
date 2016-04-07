@@ -16,16 +16,16 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as customValidator from "./custom-validator";
-import * as fieldInteractionsScheme from "./field-interactions-scheme";
-import * as fieldIssueBody from "./field-issue-body";
-import * as fieldIssueTags from "./field-issue-tags";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiFieldInteractionsScheme from "./lib-becki/field-interactions-scheme";
+import * as libBeckiFieldIssueBody from "./lib-becki/field-issue-body";
+import * as libBeckiFieldIssueTags from "./lib-becki/field-issue-tags";
+import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libBootstrapDropdown from "./lib-bootstrap/dropdown";
-import * as notifications from "./notifications";
 
 function timestampToString(timestamp:number):string {
   "use strict";
@@ -150,7 +150,7 @@ class Item {
     this.interactionsProjectField = "";
     this.interactionsNameField = "";
     this.interactionsDescriptionField = "";
-    this.interactionsSchemeField = fieldIssueBody.getInteractions(item.text_of_post);
+    this.interactionsSchemeField = libBeckiFieldIssueBody.getInteractions(item.text_of_post);
     this.markable = false;
     this.confirmable = false;
   }
@@ -177,11 +177,11 @@ class Issue extends Item {
 @ng.Component({
   templateUrl: "app/issue.html",
   directives: [
-    customValidator.Directive,
-    fieldInteractionsScheme.Component,
-    fieldIssueBody.Component,
-    fieldIssueTags.Component,
     layout.Component,
+    libBeckiCustomValidator.Directive,
+    libBeckiFieldInteractionsScheme.Component,
+    libBeckiFieldIssueBody.Component,
+    libBeckiFieldIssueTags.Component,
     libBootstrapDropdown.DIRECTIVES,
     ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES,
@@ -210,13 +210,13 @@ export class Component implements ng.OnInit {
 
   answerBodyField:string;
 
-  backEnd:backEnd.Service;
+  backEnd:libBeckiBackEnd.Service;
 
-  notifications:notifications.Service;
+  notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("issue");
@@ -227,9 +227,9 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("Loading...", ["Issue", {issue: this.id}])
     ];
     this.confirmationToRemove = null;
-    this.answerBodyField = fieldIssueBody.EMPTY;
-    this.backEnd = backEndService;
-    this.notifications = notificationsService;
+    this.answerBodyField = libBeckiFieldIssueBody.EMPTY;
+    this.backEnd = backEnd;
+    this.notifications = notifications;
     this.router = router;
   }
 
@@ -252,14 +252,14 @@ export class Component implements ng.OnInit {
           this.items = [].concat(new Issue(issue), issue.answers.map(answer => new Item(answer)));
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger(`The issue ${this.id} cannot be loaded.`, reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger(`The issue ${this.id} cannot be loaded.`, reason));
         });
     this.backEnd.getIssueTypes()
         .then(types => this.types = types)
-        .catch(reason => this.notifications.current.push(new notifications.Danger("Issue types cannot be loaded.", reason)));
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue types cannot be loaded.", reason)));
     this.backEnd.getProjects()
         .then(projects => this.projects = projects)
-        .catch(reason => this.notifications.current.push(new notifications.Danger("Projects cannot be loaded.", reason)));
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
   }
 
   onConfirmationRemoveClick(confirmation:libBackEnd.IssueConfirmation):void {
@@ -276,11 +276,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.removeConfirmationFromPost(confirmation.id, this.id)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The confirmation has been removed."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The confirmation has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The confirmation cannot be removed.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The confirmation cannot be removed.", reason));
         });
   }
 
@@ -303,11 +303,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.deleteIssueLink(link.model.linkId)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The issue has been unmarked as related."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The issue has been unmarked as related."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The issue cannot be unmarked as related.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The issue cannot be unmarked as related.", reason));
         });
   }
 
@@ -339,15 +339,15 @@ export class Component implements ng.OnInit {
           return this.backEnd.addVersionToInteractionsScheme("The original", `Imported from issue ${this.id}`, item.interactionsSchemeField, scheme.b_program_id);
         })
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The scheme has been imported."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The scheme has been imported."));
           item.importing = false;
           item.interactionsNameField = "";
           item.interactionsDescriptionField = "";
-          item.interactionsSchemeField = fieldIssueBody.getInteractions(item.body);
+          item.interactionsSchemeField = libBeckiFieldIssueBody.getInteractions(item.body);
           item.interactionsProjectField = "";
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The scheme cannot be imported.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The scheme cannot be imported.", reason));
         });
   }
 
@@ -379,26 +379,26 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    let tags = fieldIssueTags.parseTags(item.tagsField);
+    let tags = libBeckiFieldIssueTags.parseTags(item.tagsField);
     if (item instanceof Issue) {
       this.backEnd.updateIssue(item.id, item.typeField, item.titleField, item.bodyField, tags)
           .then(() => {
-            this.notifications.current.push(new notifications.Success("The issue has been updated."));
+            this.notifications.current.push(new libBeckiNotifications.Success("The issue has been updated."));
             this.refresh();
           })
           .catch(reason => {
             // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-150
-            this.notifications.current.push(new notifications.Danger("issue/TYRION-150"));
-            this.notifications.current.push(new notifications.Danger("The issue cannot be updated.", reason));
+            this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-150"));
+            this.notifications.current.push(new libBeckiNotifications.Danger("The issue cannot be updated.", reason));
           });
     } else {
       this.backEnd.updateAnswer(item.id, item.bodyField, tags)
           .then(() => {
-            this.notifications.current.push(new notifications.Success("The answer has been updated."));
+            this.notifications.current.push(new libBeckiNotifications.Success("The answer has been updated."));
             this.refresh();
           })
           .catch(reason => {
-            this.notifications.current.push(new notifications.Danger("The answer cannot be updated.", reason));
+            this.notifications.current.push(new libBeckiNotifications.Danger("The answer cannot be updated.", reason));
           });
     }
   }
@@ -415,11 +415,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.subtractOneFromPost(id)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The likes have been updated."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The likes have been updated."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The likes cannot be updated.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The likes cannot be updated.", reason));
         });
   }
 
@@ -429,11 +429,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.addOneToPost(id)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The likes have been updated."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The likes have been updated."));
           this.refresh();
         })
         .catch((reason) => {
-          this.notifications.current.push(new notifications.Danger("The likes cannot be updated.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The likes cannot be updated.", reason));
         });
   }
 
@@ -451,15 +451,15 @@ export class Component implements ng.OnInit {
     this.backEnd.deletePost(item.id)
         .then(() => {
           if (item instanceof Issue) {
-            this.notifications.next.push(new notifications.Success("The issue has been removed."));
+            this.notifications.next.push(new libBeckiNotifications.Success("The issue has been removed."));
             this.router.navigate(["Issues"]);
           } else {
-            this.notifications.current.push(new notifications.Success("The answer has been removed."));
+            this.notifications.current.push(new libBeckiNotifications.Success("The answer has been removed."));
             this.refresh();
           }
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The issue/answer cannot be removed.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The issue/answer cannot be removed.", reason));
         });
   }
 
@@ -475,12 +475,12 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createAnswer(this.id, this.answerBodyField, [])
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The answer has been created."));
-          this.answerBodyField = fieldIssueBody.EMPTY;
+          this.notifications.current.push(new libBeckiNotifications.Success("The answer has been created."));
+          this.answerBodyField = libBeckiFieldIssueBody.EMPTY;
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The answer cannot be created.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The answer cannot be created.", reason));
         });
   }
 
@@ -490,13 +490,13 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createComment(item.id, item.commentField, [])
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The comment has been created."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The comment has been created."));
           this.refresh();
         })
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-184
-          this.notifications.current.push(new notifications.Warning("issue/TYRION-184"));
-          this.notifications.current.push(new notifications.Danger("The comment cannot be created.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-184"));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The comment cannot be created.", reason));
         });
   }
 
@@ -512,11 +512,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateComment(comment.id, comment.bodyField, comment.tags)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The comment has been updated."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The comment has been updated."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The comment cannot be updated.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The comment cannot be updated.", reason));
         });
   }
 
@@ -539,11 +539,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.deleteComment(comment.id)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The comment has been removed."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The comment has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The comment cannot be removed.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The comment cannot be removed.", reason));
         });
   }
 

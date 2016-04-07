@@ -21,7 +21,7 @@ import * as ng from "angular2/angular2";
 
 @ng.Component({
   selector: "[field-code]",
-  templateUrl: "app/field-code.html",
+  templateUrl: "app/lib-becki/field-code.html",
   directives: [ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.AfterViewInit, ng.OnChanges, ng.OnDestroy {

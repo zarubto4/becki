@@ -16,18 +16,18 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
+import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
-import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/device-program.html",
   directives: [
-    customValidator.Directive,
     layout.Component,
+    libBeckiCustomValidator.Directive,
     libPatternFlyListView.Component,
     ng.FORM_DIRECTIVES,
     ngRouter.ROUTER_DIRECTIVES
@@ -49,13 +49,13 @@ export class Component implements ng.OnInit {
 
   versions:libPatternFlyListView.Item[];
 
-  backEnd:backEnd.Service;
+  backEnd:libBeckiBackEnd.Service;
 
-  notifications:notifications.Service;
+  notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("program");
@@ -71,8 +71,8 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    this.backEnd = backEndService;
-    this.notifications = notificationsService;
+    this.backEnd = backEnd;
+    this.notifications = notifications;
     this.router = router;
   }
 
@@ -94,7 +94,7 @@ export class Component implements ng.OnInit {
           this.versions = program.version_objects.map(version => new libPatternFlyListView.Item(version.id, `${version.version_name} (issue/TYRION-126)`, version.version_description));
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger(`The program ${this.id} cannot be loaded.`, reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger(`The program ${this.id} cannot be loaded.`, reason));
         });
   }
 
@@ -111,11 +111,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateDeviceProgram(this.id, this.nameField, this.descriptionField)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The program has been updated."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The program has been updated."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The program cannot be updated.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The program cannot be updated.", reason));
         });
   }
 
@@ -138,11 +138,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.removeVersionFromDeviceProgram(id, this.id)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The version has been removed."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The version has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The version cannot be removed.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The version cannot be removed.", reason));
         });
   }
 }

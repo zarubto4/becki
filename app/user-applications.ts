@@ -16,11 +16,11 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as layout from "./layout";
+import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
-import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/user-applications.html",
@@ -38,13 +38,13 @@ export class Component implements ng.OnInit {
 
   groups:libPatternFlyListView.Item[];
 
-  backEnd:backEnd.Service;
+  backEnd:libBeckiBackEnd.Service;
 
-  notifications:notifications.Service;
+  notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -53,8 +53,8 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("Applications", ["UserApplications"])
     ];
     this.tab = "applications";
-    this.backEnd = backEndService;
-    this.notifications = notificationsService;
+    this.backEnd = backEnd;
+    this.notifications = notifications;
     this.router = router;
   }
 
@@ -70,16 +70,16 @@ export class Component implements ng.OnInit {
 
     this.backEnd.getApplications()
         .then(applications => this.applications = applications.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["UserApplication", {application: application.id}])))
-        .catch(reason => this.notifications.current.push(new notifications.Danger("Applications cannot be loaded.", reason)));
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Applications cannot be loaded.", reason)));
     this.backEnd.getApplicationDevices()
         .then(devices => this.devices = [].concat(
             devices.public_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "global", ["ApplicationDevice", {device: device.id}])),
             devices.private_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "project specific", ["ApplicationDevice", {device: device.id}]))
         ))
-        .catch(reason => this.notifications.current.push(new notifications.Danger("Devices cannot be loaded.", reason)));
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
     this.backEnd.getApplicationGroups()
         .then(groups => this.groups = groups.map(group => new libPatternFlyListView.Item(group.id, group.program_name, group.program_description, ["UserApplicationGroup", {group: group.id}])))
-        .catch(reason => this.notifications.current.push(new notifications.Danger("Groups cannot be loaded.", reason)));
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Groups cannot be loaded.", reason)));
   }
 
   onAddClick():void {
@@ -128,11 +128,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.deleteApplication(id)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The application has been removed."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The application has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The application cannot be removed.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The application cannot be removed.", reason));
         });
   }
 
@@ -142,11 +142,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.deleteApplicationDevice(id)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The device has been removed."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The device has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The device cannot be removed.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The device cannot be removed.", reason));
         });
   }
 
@@ -156,11 +156,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.deleteApplicationGroup(id)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The group has been removed."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The group has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The group cannot be removed.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The group cannot be removed.", reason));
         });
   }
 }

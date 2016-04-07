@@ -19,25 +19,25 @@ import * as ngRouter from "angular2/router";
 import * as theGrid from "the-grid";
 
 import * as applicationDevice from "./application-device";
-import * as backEnd from "./back-end";
 import * as deviceProgram from "./device-program";
 import * as deviceProgramNew from "./device-program-new";
 import * as deviceProgramVersionNew from "./device-program-version-new";
 import * as deviceType from "./device-type";
 import * as deviceTypeNew from "./device-type-new";
 import * as devices from "./devices";
-import * as fieldCode from "./field-code";
 import * as issue from "./issue";
 import * as issueConfirmationNew from "./issue-confirmation-new";
 import * as issueNew from "./issue-new";
 import * as issueRelatedNew from "./issue-related-new";
 import * as issues from "./issues";
+import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiFieldCode from "./lib-becki/field-code";
+import * as libBeckiModal from "./lib-becki/modal";
+import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libraryGroup from "./library-group";
 import * as libraryGroupNew from "./library-group-new";
 import * as library from "./library";
 import * as libraryNew from "./library-new";
-import * as modal from "./modal";
-import * as notifications from "./notifications";
 import * as processor from "./processor";
 import * as processorNew from "./processor-new";
 import * as producer from "./producer";
@@ -127,46 +127,46 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
 @ng.Component({
   selector: "[body]",
   templateUrl: "app/body.html",
-  providers: [modal.Service],
-  directives: [fieldCode.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
+  providers: [libBeckiModal.Service],
+  directives: [libBeckiFieldCode.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
   inputs: ["body"],
   host: {"[class.modal-open]": "modalEvent"}
 })
 export class Component {
 
-  public modalEvent:modal.Event;
+  public modalEvent:libBeckiModal.Event;
 
   public router:ngRouter.Router;
 
-  private notifications:notifications.Notification[];
+  private notifications:libBeckiNotifications.Notification[];
 
   private notificationTimeout:number;
 
-  constructor(modalService:modal.Service, router:ngRouter.Router, backEndService:backEnd.Service) {
+  constructor(modal:libBeckiModal.Service, router:ngRouter.Router, backEnd:libBeckiBackEnd.Service) {
     "use strict";
 
     this.modalEvent = null;
     this.router = router;
     this.notifications = [];
     this.notificationTimeout = null;
-    modalService.modalChange.toRx().subscribe((event:modal.Event) => this.modalEvent = event);
-    backEndService.notificationsNew.toRx().subscribe((event:MessageEvent) => {
+    modal.modalChange.toRx().subscribe((event:libBeckiModal.Event) => this.modalEvent = event);
+    backEnd.notificationsNew.toRx().subscribe((event:MessageEvent) => {
       let notificationData = JSON.parse(event.data);
-      let notification:notifications.Notification;
+      let notification:libBeckiNotifications.Notification;
       // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-178
       switch (notificationData.level) {
         case "info":
         case "message":
-          notification = new notifications.Info(notificationData.text);
+          notification = new libBeckiNotifications.Info(notificationData.text);
           break;
         case "success":
-          notification = new notifications.Success(notificationData.text);
+          notification = new libBeckiNotifications.Success(notificationData.text);
           break;
         case "warning":
-          notification = new notifications.Warning(notificationData.text);
+          notification = new libBeckiNotifications.Warning(notificationData.text);
           break;
         case "error":
-          notification = new notifications.Danger(notificationData.text);
+          notification = new libBeckiNotifications.Danger(notificationData.text);
           break;
         default:
           return;
@@ -174,16 +174,16 @@ export class Component {
       this.notifications.push(notification);
     });
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-176
-    this.notifications.push(new notifications.Danger("issue/TYRION-176"));
+    this.notifications.push(new libBeckiNotifications.Danger("issue/TYRION-176"));
   }
 
   getModalEventType():string {
     "use strict";
 
-    if (this.modalEvent instanceof modal.WidgetEvent) {
+    if (this.modalEvent instanceof libBeckiModal.WidgetEvent) {
       return "widget";
     }
-    if (this.modalEvent instanceof modal.BlockEvent) {
+    if (this.modalEvent instanceof libBeckiModal.BlockEvent) {
       return "block";
     }
     return null;
@@ -234,15 +234,15 @@ export class Component {
   onModalEditClick():void {
     "use strict";
 
-    if (this.modalEvent instanceof modal.WidgetEvent) {
-      (<modal.WidgetEvent>this.modalEvent).widget.emitOnConfigsChanged();
-    } else if (this.modalEvent instanceof modal.BlockEvent) {
-      (<modal.BlockEvent>this.modalEvent).block.emitConfigsChanged();
+    if (this.modalEvent instanceof libBeckiModal.WidgetEvent) {
+      (<libBeckiModal.WidgetEvent>this.modalEvent).widget.emitOnConfigsChanged();
+    } else if (this.modalEvent instanceof libBeckiModal.BlockEvent) {
+      (<libBeckiModal.BlockEvent>this.modalEvent).block.emitConfigsChanged();
     }
     this.modalEvent = null;
   }
 
-  getNotification():notifications.Notification {
+  getNotification():libBeckiNotifications.Notification {
     "use strict";
 
     if (!this.notifications.length) {

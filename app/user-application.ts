@@ -16,20 +16,20 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as customValidator from "./custom-validator";
-import * as fieldApplication from "./field-application";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as notifications from "./notifications";
+import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiFieldApplication from "./lib-becki/field-application";
+import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/user-application.html",
   directives: [
-    customValidator.Directive,
-    fieldApplication.Component,
     layout.Component,
+    libBeckiCustomValidator.Directive,
+    libBeckiFieldApplication.Component,
     ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES
   ]
@@ -64,13 +64,13 @@ export class Component implements ng.OnInit {
 
   code:string;
 
-  backEnd:backEnd.Service;
+  backEnd:libBeckiBackEnd.Service;
 
-  notifications:notifications.Service;
+  notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("application");
@@ -91,8 +91,8 @@ export class Component implements ng.OnInit {
     this.device = null;
     this.codeField = "{}";
     this.code = "{}";
-    this.backEnd = backEndService;
-    this.notifications = notificationsService;
+    this.backEnd = backEnd;
+    this.notifications = notifications;
     this.router = router;
   }
 
@@ -160,7 +160,7 @@ export class Component implements ng.OnInit {
           this.code = application.m_code;
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger(`The application ${this.id} cannot be loaded.`, reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger(`The application ${this.id} cannot be loaded.`, reason));
         });
   }
 
@@ -183,11 +183,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateApplication(this.id, this.nameField, this.descriptionField, this.device.id, this.codeField)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The application has been updated."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The application has been updated."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The application cannot be updated.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The application cannot be updated.", reason));
         });
   }
 

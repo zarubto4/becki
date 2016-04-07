@@ -16,12 +16,12 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
-import * as notifications from "./notifications";
 
 class InteractionsModeratorItem extends libPatternFlyListView.Item {
 
@@ -49,13 +49,13 @@ export class Component implements ng.OnInit {
 
   moderators:InteractionsModeratorItem[];
 
-  backEnd:backEnd.Service;
+  backEnd:libBeckiBackEnd.Service;
 
-  notifications:notifications.Service;
+  notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -64,8 +64,8 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("Interactions", ["UserInteractions"])
     ];
     this.showModerators = false;
-    this.backEnd = backEndService;
-    this.notifications = notificationsService;
+    this.backEnd = backEnd;
+    this.notifications = notifications;
     this.router = router;
   }
 
@@ -93,7 +93,7 @@ export class Component implements ng.OnInit {
           this.schemes = [].concat(...schemes).map(scheme => new libPatternFlyListView.Item(scheme.b_program_id, scheme.name, scheme.program_description, ["UserInteractionsScheme", {scheme: scheme.b_program_id}]));
           this.moderators = [].concat(...moderators.map(pair => pair[0].map(moderator => new InteractionsModeratorItem(moderator, pair[1].id))));
         })
-        .catch(reason => this.notifications.current.push(new notifications.Danger("Interactions cannot be loaded.", reason)));
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Interactions cannot be loaded.", reason)));
   }
 
   onAddClick():void {
@@ -136,11 +136,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.deleteInteractionsScheme(id)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The scheme has been removed."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The scheme has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The scheme cannot be removed.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The scheme cannot be removed.", reason));
         });
   }
 
@@ -151,11 +151,11 @@ export class Component implements ng.OnInit {
     let moderator = this.moderators.find(moderator => moderator.id == id);
     this.backEnd.removeInteractionsModeratorFromProject(moderator.id, moderator.project)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The moderator has been removed."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The moderator has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The moderator cannot be removed.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The moderator cannot be removed.", reason));
         });
   }
 }

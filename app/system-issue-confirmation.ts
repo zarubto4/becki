@@ -16,16 +16,16 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as notifications from "./notifications";
+import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/system-issue-confirmation.html",
-  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [layout.Component, libBeckiCustomValidator.Directive, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -43,13 +43,13 @@ export class Component implements ng.OnInit {
 
   sizeField:number;
 
-  backEnd:backEnd.Service;
+  backEnd:libBeckiBackEnd.Service;
 
-  notifications:notifications.Service;
+  notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("confirmation");
@@ -63,8 +63,8 @@ export class Component implements ng.OnInit {
     this.nameField = "Loading...";
     this.colorField = "#ffffff";
     this.sizeField = 12;
-    this.backEnd = backEndService;
-    this.notifications = notificationsService;
+    this.backEnd = backEnd;
+    this.notifications = notifications;
     this.router = router;
   }
 
@@ -88,7 +88,7 @@ export class Component implements ng.OnInit {
           this.sizeField = confirmation.size;
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("Confirmations cannot be loaded.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("Confirmations cannot be loaded.", reason));
         });
   }
 
@@ -111,11 +111,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateIssueConfirmation(this.id, this.nameField, this.colorField, this.sizeField)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The confirmation has been updated."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The confirmation has been updated."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The confirmation cannot be updated.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The confirmation cannot be updated.", reason));
         });
   }
 

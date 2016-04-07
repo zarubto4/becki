@@ -16,11 +16,11 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as layout from "./layout";
+import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
-import * as notifications from "./notifications";
 
 @ng.Component({
   templateUrl: "app/projects.html",
@@ -32,13 +32,13 @@ export class Component implements ng.OnInit {
 
   items:libPatternFlyListView.Item[];
 
-  backEnd:backEnd.Service;
+  backEnd:libBeckiBackEnd.Service;
 
-  notifications:notifications.Service;
+  notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -46,8 +46,8 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("User", ["Projects"]),
       new layout.LabeledLink("Projects", ["Projects"])
     ];
-    this.backEnd = backEndService;
-    this.notifications = notificationsService;
+    this.backEnd = backEnd;
+    this.notifications = notifications;
     this.router = router;
   }
 
@@ -63,7 +63,7 @@ export class Component implements ng.OnInit {
 
     this.backEnd.getProjects()
         .then(projects => this.items = projects.map(project => new libPatternFlyListView.Item(project.id, project.project_name, project.project_description, ["Project", {project: project.id}])))
-        .catch(reason => this.notifications.current.push(new notifications.Danger("Projects cannot be loaded.", reason)));
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
   }
 
   onAddClick():void {
@@ -78,11 +78,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.deleteProject(id)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The project has been removed."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The project has been removed."));
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The project cannot be removed.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The project cannot be removed.", reason));
         });
   }
 }

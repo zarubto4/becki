@@ -15,7 +15,7 @@
 
 import * as ng from "angular2/angular2";
 
-import * as libBackEnd from "./lib-back-end/index";
+import * as libBackEnd from "../lib-back-end/index";
 
 export abstract class Notification {
 
@@ -99,7 +99,7 @@ export class Service {
 
 @ng.Component({
   selector: "[notifications]",
-  templateUrl: "app/notifications.html",
+  templateUrl: "app/lib-becki/notifications.html",
   directives: [ng.CORE_DIRECTIVES]
 })
 export class Component {

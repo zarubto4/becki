@@ -19,7 +19,7 @@ import * as ng from "angular2/angular2";
 import * as ngHttp from "angular2/http";
 import * as ngRouter from "angular2/router";
 
-import * as libBackEnd from "./lib-back-end/index";
+import * as libBackEnd from "../lib-back-end/index";
 
 @ng.Injectable()
 export class Service extends libBackEnd.BackEnd {

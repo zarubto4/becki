@@ -20,7 +20,7 @@ import * as modal from "./modal";
 
 @ng.Component({
   selector: "[field-interactions-scheme]",
-  templateUrl: "app/field-interactions-scheme.html",
+  templateUrl: "app/lib-becki/field-interactions-scheme.html",
   directives: [ng.CORE_DIRECTIVES]
 })
 export class Component implements ng.AfterViewInit {

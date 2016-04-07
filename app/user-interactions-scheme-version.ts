@@ -16,16 +16,16 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as fieldInteractionsScheme from "./field-interactions-scheme";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as notifications from "./notifications";
+import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiFieldInteractionsScheme from "./lib-becki/field-interactions-scheme";
+import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/user-interactions-scheme-version.html",
-  directives: [fieldInteractionsScheme.Component, layout.Component, ng.CORE_DIRECTIVES]
+  directives: [layout.Component, libBeckiFieldInteractionsScheme.Component, ng.CORE_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -47,13 +47,13 @@ export class Component implements ng.OnInit {
 
   scheme:string;
 
-  backEnd:backEnd.Service;
+  backEnd:libBeckiBackEnd.Service;
 
-  notifications:notifications.Service;
+  notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("version");
@@ -71,8 +71,8 @@ export class Component implements ng.OnInit {
     this.description = "Loading...";
     this.showGroups = false;
     this.scheme = `{"blocks":{}}`;
-    this.backEnd = backEndService;
-    this.notifications = notificationsService;
+    this.backEnd = backEnd;
+    this.notifications = notifications;
     this.router = router;
   }
 
@@ -136,7 +136,7 @@ export class Component implements ng.OnInit {
           this.scheme = file.content;
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger(`The scheme ${this.schemeId} cannot be loaded.`, reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger(`The scheme ${this.schemeId} cannot be loaded.`, reason));
         });
   }
 }

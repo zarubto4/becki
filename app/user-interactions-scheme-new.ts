@@ -16,20 +16,20 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as customValidator from "./custom-validator";
-import * as fieldInteractionsScheme from "./field-interactions-scheme";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as notifications from "./notifications";
+import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiFieldInteractionsScheme from "./lib-becki/field-interactions-scheme";
+import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/user-interactions-scheme-new.html",
   directives: [
-    customValidator.Directive,
-    fieldInteractionsScheme.Component,
     layout.Component,
+    libBeckiCustomValidator.Directive,
+    libBeckiFieldInteractionsScheme.Component,
     ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES
   ]
@@ -54,13 +54,13 @@ export class Component implements ng.OnInit {
 
   schemeField:string;
 
-  backEnd:backEnd.Service;
+  backEnd:libBeckiBackEnd.Service;
 
-  notifications:notifications.Service;
+  notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -74,8 +74,8 @@ export class Component implements ng.OnInit {
     this.showGroups = false;
     this.groupField = "";
     this.schemeField = `{"blocks":{}}`;
-    this.backEnd = backEndService;
-    this.notifications = notificationsService;
+    this.backEnd = backEnd;
+    this.notifications = notifications;
     this.router = router;
   }
 
@@ -89,7 +89,7 @@ export class Component implements ng.OnInit {
           this.loadFromProject();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("Projects cannot be loaded.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason));
         });
   }
 
@@ -111,7 +111,7 @@ export class Component implements ng.OnInit {
             this.groups = groups;
           })
           .catch(reason => {
-            this.notifications.current.push(new notifications.Danger("Application groups cannot be loaded.", reason));
+            this.notifications.current.push(new libBeckiNotifications.Danger("Application groups cannot be loaded.", reason));
           });
     }
   }
@@ -152,17 +152,17 @@ export class Component implements ng.OnInit {
           return this.groupField ? this.backEnd.addApplicationGroupToInteractionsScheme(this.groupField, version.id, false) : null;
         })
         .then(() => {
-          this.notifications.next.push(new notifications.Success("The scheme have been created."));
+          this.notifications.next.push(new libBeckiNotifications.Success("The scheme have been created."));
           this.router.navigate(["UserInteractions"]);
         })
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-174
-          this.notifications.current.push(new notifications.Danger("issue/TYRION-174"));
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-174"));
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-179
-          this.notifications.current.push(new notifications.Warning("issue/TYRION-179"));
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-179"));
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-180
-          this.notifications.current.push(new notifications.Warning("issue/TYRION-180"));
-          this.notifications.current.push(new notifications.Danger("The scheme cannot be created.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-180"));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The scheme cannot be created.", reason));
         });
   }
 

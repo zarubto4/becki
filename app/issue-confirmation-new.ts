@@ -16,11 +16,11 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as backEnd from "./back-end";
 import * as becki from "./index";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as notifications from "./notifications";
+import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/issue-confirmation-new.html",
@@ -38,13 +38,13 @@ export class Component implements ng.OnInit {
 
   field:string;
 
-  backEnd:backEnd.Service;
+  backEnd:libBeckiBackEnd.Service;
 
-  notifications:notifications.Service;
+  notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.issueId = routeParams.get("issue");
@@ -56,8 +56,8 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("New Confirmation", ["NewIssueConfirmation", {issue: this.issueId}])
     ];
     this.field = "";
-    this.backEnd = backEndService;
-    this.notifications = notificationsService;
+    this.backEnd = backEnd;
+    this.notifications = notifications;
     this.router = router;
   }
 
@@ -78,7 +78,7 @@ export class Component implements ng.OnInit {
           this.confirmations = confirmations.filter(confirmation => !issue.type_of_confirms.find(confirmation2 => confirmation2.id == confirmation.id));
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("Confirmations cannot be loaded.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("Confirmations cannot be loaded.", reason));
         });
   }
 
@@ -88,11 +88,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.addConfirmationToPost(this.field, this.issueId)
         .then(() => {
-          this.notifications.next.push(new notifications.Success("The confirmation has been added."));
+          this.notifications.next.push(new libBeckiNotifications.Success("The confirmation has been added."));
           this.router.navigate(["Issue", {issue: this.issueId}]);
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The confirmation cannot be added.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The confirmation cannot be added.", reason));
         });
   }
 

@@ -27,7 +27,7 @@ export function getInteractions(model:string):string {
 
 @ng.Component({
   selector: "[field-issue-body]",
-  templateUrl: "app/field-issue-body.html",
+  templateUrl: "app/lib-becki/field-issue-body.html",
   directives: [fieldInteractionsScheme.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES],
   inputs: ["fieldIssueBody", "required"]
 })

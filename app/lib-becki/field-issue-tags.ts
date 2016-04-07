@@ -23,7 +23,7 @@ export function parseTags(tags:string):string[] {
 
 @ng.Component({
   selector: "[field-issue-tags]",
-  templateUrl: "app/field-issue-tags.html",
+  templateUrl: "app/lib-becki/field-issue-tags.html",
   directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component {

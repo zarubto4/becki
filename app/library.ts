@@ -16,16 +16,16 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as notifications from "./notifications";
+import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/library.html",
-  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [layout.Component, libBeckiCustomValidator.Directive, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -50,13 +50,13 @@ export class Component implements ng.OnInit {
   @ng.ViewChild("fileField")
   fileField:ng.ElementRef;
 
-  backEnd:backEnd.Service;
+  backEnd:libBeckiBackEnd.Service;
 
-  notifications:notifications.Service;
+  notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("library");
@@ -71,8 +71,8 @@ export class Component implements ng.OnInit {
     this.versionNameField = "";
     this.versionDescriptionField = "";
     this.fileVersionField = "";
-    this.backEnd = backEndService;
-    this.notifications = notificationsService;
+    this.backEnd = backEnd;
+    this.notifications = notifications;
     this.router = router;
   }
 
@@ -97,7 +97,7 @@ export class Component implements ng.OnInit {
           this.descriptionField = library.description;
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger(`The library ${this.id} cannot be loaded.`, reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger(`The library ${this.id} cannot be loaded.`, reason));
         });
   }
 
@@ -123,11 +123,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateLibrary(this.id, this.nameField, this.descriptionField)
         .then(() => {
-          this.notifications.next.push(new notifications.Success("The library has been updated."));
+          this.notifications.next.push(new libBeckiNotifications.Success("The library has been updated."));
           this.router.navigate(["Devices"]);
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The library cannot be updated.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The library cannot be updated.", reason));
         });
   }
 
@@ -137,13 +137,13 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.addVersionToLibrary(this.versionNameField, this.versionDescriptionField, this.id)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The version has been created."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The version has been created."));
           this.versionNameField = "";
           this.versionDescriptionField = "";
           this.refresh();
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The version cannot be created.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The version cannot be created.", reason));
         });
   }
 
@@ -153,15 +153,15 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateFileOfLibrary(this.fileField.nativeElement.files[0], this.fileVersionField == "new" ? null : this.fileVersionField, this.id)
         .then(() => {
-          this.notifications.current.push(new notifications.Success("The file has been uploaded."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The file has been uploaded."));
           this.fileField.nativeElement.value = "";
           this.fileVersionField = "";
           this.refresh();
         })
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-118
-          this.notifications.current.push(new notifications.Danger("issue/TYRION-118"));
-          this.notifications.current.push(new notifications.Danger("The file cannot be uploaded.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-118"));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The file cannot be uploaded.", reason));
         });
   }
 

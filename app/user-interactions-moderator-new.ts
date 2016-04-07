@@ -16,16 +16,16 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as notifications from "./notifications";
+import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/user-interactions-moderator-new.html",
-  directives: [customValidator.Directive, layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [layout.Component, libBeckiCustomValidator.Directive, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -37,13 +37,13 @@ export class Component implements ng.OnInit {
 
   idField:string;
 
-  backEnd:backEnd.Service;
+  backEnd:libBeckiBackEnd.Service;
 
-  notifications:notifications.Service;
+  notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -53,8 +53,8 @@ export class Component implements ng.OnInit {
     ];
     this.projectField = "";
     this.idField = "";
-    this.backEnd = backEndService;
-    this.notifications = notificationsService;
+    this.backEnd = backEnd;
+    this.notifications = notifications;
     this.router = router;
   }
 
@@ -64,7 +64,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.getProjects()
         .then(projects => this.projects = projects)
-        .catch(reason => this.notifications.current.push(new notifications.Danger("Projects cannot be loaded.", reason)));
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
   }
 
   validateIdField():()=>Promise<boolean> {
@@ -91,13 +91,13 @@ export class Component implements ng.OnInit {
           return this.backEnd.addInteractionsModeratorToProject(this.idField, project);
         })
         .then(() => {
-          this.notifications.next.push(new notifications.Success("The moderator has been added."));
+          this.notifications.next.push(new libBeckiNotifications.Success("The moderator has been added."));
           this.router.navigate(["UserInteractions"]);
         })
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-179
-          this.notifications.current.push(new notifications.Warning("issue/TYRION-179"));
-          this.notifications.current.push(new notifications.Danger("The moderator cannot be added.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-179"));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The moderator cannot be added.", reason));
         });
   }
 

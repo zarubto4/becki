@@ -16,16 +16,16 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as notifications from "./notifications";
+import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/system-issue-type.html",
-  directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
+  directives: [layout.Component, libBeckiCustomValidator.Directive, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -37,13 +37,13 @@ export class Component implements ng.OnInit {
 
   field:string;
 
-  backEnd:backEnd.Service;
+  backEnd:libBeckiBackEnd.Service;
 
-  notifications:notifications.Service;
+  notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("type");
@@ -54,8 +54,8 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("Loading...", ["SystemIssueType", {type: this.id}])
     ];
     this.field = "Loading...";
-    this.backEnd = backEndService;
-    this.notifications = notificationsService;
+    this.backEnd = backEnd;
+    this.notifications = notifications;
     this.router = router;
   }
 
@@ -70,7 +70,7 @@ export class Component implements ng.OnInit {
           this.field = type.type;
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger(`The type ${this.id} cannot be loaded.`, reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger(`The type ${this.id} cannot be loaded.`, reason));
         });
   }
 
@@ -87,11 +87,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateIssueType(this.id, this.field)
         .then(() => {
-          this.notifications.next.push(new notifications.Success("The type has been updated."));
+          this.notifications.next.push(new libBeckiNotifications.Success("The type has been updated."));
           this.router.navigate(["System"]);
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The type cannot be updated.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The type cannot be updated.", reason));
         });
   }
 

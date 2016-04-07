@@ -17,20 +17,20 @@ import * as _ from "underscore";
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as customValidator from "./custom-validator";
-import * as fieldInteractionsScheme from "./field-interactions-scheme";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as notifications from "./notifications";
+import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiFieldInteractionsScheme from "./lib-becki/field-interactions-scheme";
+import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/user-interactions-scheme-version-new.html",
   directives: [
-    customValidator.Directive,
-    fieldInteractionsScheme.Component,
     layout.Component,
+    libBeckiCustomValidator.Directive,
+    libBeckiFieldInteractionsScheme.Component,
     ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES
   ]
@@ -55,13 +55,13 @@ export class Component implements ng.OnInit {
 
   schemeField:string;
 
-  backEnd:backEnd.Service;
+  backEnd:libBeckiBackEnd.Service;
 
-  notifications:notifications.Service;
+  notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.schemeId = routeParams.get("scheme");
@@ -78,8 +78,8 @@ export class Component implements ng.OnInit {
     this.showGroups = false;
     this.groupField = "";
     this.schemeField = `{"blocks":{}}`;
-    this.backEnd = backEndService;
-    this.notifications = notificationsService;
+    this.backEnd = backEnd;
+    this.notifications = notifications;
     this.router = router;
   }
 
@@ -144,7 +144,7 @@ export class Component implements ng.OnInit {
           this.schemeField = file.content;
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger(`The scheme ${this.schemeId} cannot be loaded.`, reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger(`The scheme ${this.schemeId} cannot be loaded.`, reason));
         });
   }
 
@@ -163,11 +163,11 @@ export class Component implements ng.OnInit {
           return this.groupField ? this.backEnd.addApplicationGroupToInteractionsScheme(this.groupField, version.id, false) : null;
         })
         .then(() => {
-          this.notifications.next.push(new notifications.Success("The version has been created."));
+          this.notifications.next.push(new libBeckiNotifications.Success("The version has been created."));
           this.router.navigate(["UserInteractionsScheme", {scheme: this.schemeId}]);
         })
         .catch(reason => {
-          this.notifications.current.push(new notifications.Danger("The version cannot be created.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The version cannot be created.", reason));
         });
   }
 

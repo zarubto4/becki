@@ -16,20 +16,20 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as fieldIssueBody from "./field-issue-body";
-import * as fieldIssueTags from "./field-issue-tags";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
-import * as notifications from "./notifications";
+import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiFieldIssueBody from "./lib-becki/field-issue-body";
+import * as libBeckiFieldIssueTags from "./lib-becki/field-issue-tags";
+import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/issue-new.html",
   directives: [
-    fieldIssueBody.Component,
-    fieldIssueTags.Component,
     layout.Component,
+    libBeckiFieldIssueBody.Component,
+    libBeckiFieldIssueTags.Component,
     ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES
   ]
@@ -48,13 +48,13 @@ export class Component implements ng.OnInit {
 
   tagsField:string;
 
-  backEnd:backEnd.Service;
+  backEnd:libBeckiBackEnd.Service;
 
-  notifications:notifications.Service;
+  notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -63,10 +63,10 @@ export class Component implements ng.OnInit {
     ];
     this.typeField = "";
     this.titleField = "";
-    this.bodyField = fieldIssueBody.EMPTY;
+    this.bodyField = libBeckiFieldIssueBody.EMPTY;
     this.tagsField = "";
-    this.backEnd = backEndService;
-    this.notifications = notificationsService;
+    this.backEnd = backEnd;
+    this.notifications = notifications;
     this.router = router;
   }
 
@@ -76,22 +76,22 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.getIssueTypes()
         .then(types => this.types = types)
-        .catch(reason => this.notifications.current.push(new notifications.Danger("Types cannot be loaded.", reason)));
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Types cannot be loaded.", reason)));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.createIssue(this.typeField, this.titleField, this.bodyField, fieldIssueTags.parseTags(this.tagsField))
+    this.backEnd.createIssue(this.typeField, this.titleField, this.bodyField, libBeckiFieldIssueTags.parseTags(this.tagsField))
         .then(() => {
-          this.notifications.next.push(new notifications.Success("The issue has been created."));
+          this.notifications.next.push(new libBeckiNotifications.Success("The issue has been created."));
           this.router.navigate(["Issues"]);
         })
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-183
-          this.notifications.current.push(new notifications.Warning("issue/TYRION-183"));
-          this.notifications.current.push(new notifications.Danger("The issue cannot be created.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-183"));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The issue cannot be created.", reason));
         });
   }
 

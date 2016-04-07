@@ -16,15 +16,15 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as backEnd from "./back-end";
 import * as becki from "./index";
-import * as customValidator from "./custom-validator";
 import * as layout from "./layout";
-import * as notifications from "./notifications";
+import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/system-issue-confirmation-new.html",
-  directives: [customValidator.Directive, layout.Component, ng.FORM_DIRECTIVES]
+  directives: [layout.Component, libBeckiCustomValidator.Directive, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -36,13 +36,13 @@ export class Component implements ng.OnInit {
 
   sizeField:number;
 
-  backEnd:backEnd.Service;
+  backEnd:libBeckiBackEnd.Service;
 
-  notifications:notifications.Service;
+  notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -53,8 +53,8 @@ export class Component implements ng.OnInit {
     this.nameField = "";
     this.colorField = "#ffffff";
     this.sizeField = 12;
-    this.backEnd = backEndService;
-    this.notifications = notificationsService;
+    this.backEnd = backEnd;
+    this.notifications = notifications;
     this.router = router;
   }
 
@@ -77,13 +77,13 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createIssueConfirmation(this.nameField, this.colorField, this.sizeField)
         .then(() => {
-          this.notifications.next.push(new notifications.Success("The confirmation has been created."));
+          this.notifications.next.push(new libBeckiNotifications.Success("The confirmation has been created."));
           this.router.navigate(["System"]);
         })
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-182
-          this.notifications.current.push(new notifications.Danger("issue/TYRION-182"));
-          this.notifications.current.push(new notifications.Danger("The confirmation cannot be created.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-182"));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The confirmation cannot be created.", reason));
         });
   }
 
