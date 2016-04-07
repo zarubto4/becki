@@ -494,6 +494,8 @@ export class Component implements ng.OnInit {
           this.refresh();
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-184
+          this.notifications.current.push(new notifications.Warning("issue/TYRION-184"));
           this.notifications.current.push(new notifications.Danger("The comment cannot be created.", reason));
         });
   }
