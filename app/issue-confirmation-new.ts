@@ -53,7 +53,6 @@ export class Component implements ng.OnInit {
       becki.HOME,
       new layout.LabeledLink("Issues", ["Issues"]),
       new layout.LabeledLink(`Issue ${this.issueId}`, ["Issue", {issue: this.issueId}]),
-      new layout.LabeledLink("Confirmations", ["Issue", {issue: this.issueId}]),
       new layout.LabeledLink("New Confirmation", ["NewIssueConfirmation", {issue: this.issueId}])
     ];
     this.field = "";
