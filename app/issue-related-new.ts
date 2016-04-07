@@ -30,7 +30,7 @@ export class Component implements ng.OnInit {
 
   issueId:string;
 
-  heading:string;
+  issueTitle:string;
 
   breadcrumbs:layout.LabeledLink[];
 
@@ -48,11 +48,11 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.issueId = routeParams.get("issue");
-    this.heading = `New Issue Related to Issue ${this.issueId}`;
+    this.issueTitle = "Loading...";
     this.breadcrumbs = [
       becki.HOME,
       new layout.LabeledLink("Issues", ["Issues"]),
-      new layout.LabeledLink(`Issue ${this.issueId}`, ["Issue", {issue: this.issueId}]),
+      new layout.LabeledLink("Loading...", ["Issue", {issue: this.issueId}]),
       new layout.LabeledLink("New Related Issue", ["NewRelatedIssue", {issue: this.issueId}])
     ];
     this.field = "";
@@ -72,6 +72,8 @@ export class Component implements ng.OnInit {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error(`issue ${this.issueId} not found`));
           }
+          this.issueTitle = issue.name;
+          this.breadcrumbs[2].label = issue.name;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
           this.issues = issues.filter(issue2 => issue.linked_answers.find(related => related.answer.postId == issue2.postId) === undefined);
         })
