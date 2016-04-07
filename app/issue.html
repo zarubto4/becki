@@ -193,7 +193,7 @@
             <template ng-for data-var-tag data-bind-ng-for-of="item.tags">
               <span class="label label-default">{{tag}}</span>
             </template>
-            <p class="pull-right">{{item.date}}</p>
+            <p class="pull-right">{{item.author}} - {{item.date}}</p>
           </template>
         </div>
         <div class="panel-footer">
@@ -231,7 +231,7 @@
                 </template>
                 <template data-bind-ng-if="!comment.editing && !comment.removing">
                   <div class="media-heading" style="font-weight: bold;">
-                    Author - {{comment.date}}
+                    {{comment.author}} - {{comment.date}}
                     <div class="pull-right">
                       <div class="btn-group btn-group-xs">
                         <button class="btn btn-default" type="button" data-on-click="onPlusClick(comment.id, $event)">

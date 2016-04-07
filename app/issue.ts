@@ -59,6 +59,8 @@ class Comment {
 
   body:string;
 
+  author:string;
+
   date:string;
 
   likes:number;
@@ -71,17 +73,18 @@ class Comment {
 
   bodyField:string;
 
-  constructor(id:string, body:string, date:string, likes:number, tags:string[]) {
+  constructor(comment:libBackEnd.Comment) {
     "use strict";
 
-    this.id = id;
-    this.body = body;
-    this.date = date;
-    this.likes = likes;
-    this.tags = tags;
+    this.id = comment.postId;
+    this.body = comment.text_of_post;
+    this.author = libBackEnd.composePersonString(comment.author);
+    this.date = timestampToString(comment.date_of_create);
+    this.likes = comment.likes;
+    this.tags = comment.hashTags;
     this.editing = false;
     this.removing = false;
-    this.bodyField = body;
+    this.bodyField = comment.text_of_post;
   }
 }
 
@@ -90,6 +93,8 @@ class Item {
   id:string;
 
   body:string;
+
+  author:string;
 
   date:string;
 
@@ -125,26 +130,27 @@ class Item {
 
   confirmable:boolean;
 
-  constructor(id:string, body:string, date:string, likes:number, comments:Comment[], tags:string[]) {
+  constructor(item:libBackEnd.Issue|libBackEnd.Answer) {
     "use strict";
 
-    this.id = id;
-    this.body = body;
-    this.date = date;
-    this.likes = likes;
-    this.comments = comments;
-    this.tags = tags;
+    this.id = item.postId;
+    this.body = item.text_of_post;
+    this.author = libBackEnd.composePersonString(item.author);
+    this.date = timestampToString(item.date_of_create);
+    this.likes = item.likes;
+    this.comments = item.comments.map(comment => new Comment(comment));
+    this.tags = item.hashTags;
     this.editing = false;
     this.tagsEditable = false;
     this.importing = false;
     this.removing = false;
-    this.bodyField = body;
+    this.bodyField = item.text_of_post;
     this.commentField = "";
-    this.tagsField = tags.join(",");
+    this.tagsField = item.hashTags.join(",");
     this.interactionsProjectField = "";
     this.interactionsNameField = "";
     this.interactionsDescriptionField = "";
-    this.interactionsSchemeField = fieldIssueBody.getInteractions(body);
+    this.interactionsSchemeField = fieldIssueBody.getInteractions(item.text_of_post);
     this.markable = false;
     this.confirmable = false;
   }
@@ -156,13 +162,13 @@ class Issue extends Item {
 
   titleField:string;
 
-  constructor(id:string, type:string, title:string, body:string, date:string, likes:number, comments:Comment[], tags:string[]) {
+  constructor(issue:libBackEnd.Issue) {
     "use strict";
 
-    super(id, body, date, likes, comments, tags);
+    super(issue);
     this.tagsEditable = true;
-    this.typeField = type;
-    this.titleField = title;
+    this.typeField = issue.type.id;
+    this.titleField = issue.name;
     this.markable = true;
     this.confirmable = true;
   }
@@ -243,15 +249,7 @@ export class Component implements ng.OnInit {
           this.breadcrumbs[2].label = issue.name;
           this.confirmations = issue.type_of_confirms;
           this.related = issue.linked_answers.map(link => new RemovableIssueLink(link));
-          let commentsViews = issue.comments.map(comment => new Comment(comment.postId, comment.text_of_post, timestampToString(comment.date_of_create), comment.likes, comment.hashTags));
-          this.items = [].concat(
-              new Issue(issue.postId, issue.type.id, issue.name, issue.text_of_post, timestampToString(issue.date_of_create), issue.likes, commentsViews, issue.hashTags),
-              issue.answers.map(answer => new Item(
-                  answer.postId, answer.text_of_post, timestampToString(answer.date_of_create), answer.likes,
-                  answer.comments.map(comment => new Comment(comment.postId, comment.text_of_post, timestampToString(comment.date_of_create), comment.likes, comment.hashTags)),
-                  answer.hashTags
-              ))
-          );
+          this.items = [].concat(new Issue(issue), issue.answers.map(answer => new Item(answer)));
         })
         .catch(reason => {
           this.notifications.current.push(new notifications.Danger(`The issue ${this.id} cannot be loaded.`, reason));
