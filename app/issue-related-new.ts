@@ -75,7 +75,7 @@ export class Component implements ng.OnInit {
           this.issueTitle = issue.name;
           this.breadcrumbs[2].label = issue.name;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-          this.issues = issues.filter(issue2 => issue.linked_answers.find(related => related.answer.postId == issue2.postId) === undefined);
+          this.issues = issues.filter(issue2 => issue2.postId != this.issueId && issue.linked_answers.find(related => related.answer.postId == issue2.postId) === undefined);
         })
         .catch(reason => {
           this.notifications.current.push(new notifications.Danger("Issues cannot be loaded.", reason));
