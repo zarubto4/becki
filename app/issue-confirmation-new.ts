@@ -30,7 +30,7 @@ export class Component implements ng.OnInit {
 
   issueId:string;
 
-  heading:string;
+  issueTitle:string;
 
   breadcrumbs:layout.LabeledLink[];
 
@@ -48,11 +48,11 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.issueId = routeParams.get("issue");
-    this.heading = `New Confirmation (Issue ${this.issueId})`;
+    this.issueTitle = "Loading...";
     this.breadcrumbs = [
       becki.HOME,
       new layout.LabeledLink("Issues", ["Issues"]),
-      new layout.LabeledLink(`Issue ${this.issueId}`, ["Issue", {issue: this.issueId}]),
+      new layout.LabeledLink("Loading...", ["Issue", {issue: this.issueId}]),
       new layout.LabeledLink("New Confirmation", ["NewIssueConfirmation", {issue: this.issueId}])
     ];
     this.field = "";
@@ -73,6 +73,8 @@ export class Component implements ng.OnInit {
           let confirmations:libBackEnd.IssueConfirmation[];
           let issue:libBackEnd.Issue;
           [confirmations, issue] = result;
+          this.issueTitle = issue.name;
+          this.breadcrumbs[2].label = issue.name;
           this.confirmations = confirmations.filter(confirmation => !issue.type_of_confirms.find(confirmation2 => confirmation2.id == confirmation.id));
         })
         .catch(reason => {
