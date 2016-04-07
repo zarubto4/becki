@@ -622,7 +622,7 @@ export interface Issue {
 
   author:Person;
 
-  date_of_create:string;
+  date_of_create:number;
 
   answers:Answer[];
 
@@ -650,7 +650,7 @@ export interface Answer {
 
   author:Person;
 
-  date_of_create:string;
+  date_of_create:number;
 
   comments:Comment[];
 
@@ -668,7 +668,7 @@ export interface Comment {
 
   likes:number;
 
-  date_of_create:string;
+  date_of_create:number;
 
   text_of_post:string;
 

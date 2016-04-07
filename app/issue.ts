@@ -27,6 +27,12 @@ import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapDropdown from "./lib-bootstrap/dropdown";
 import * as notifications from "./notifications";
 
+function timestampToString(timestamp:number):string {
+  "use strict";
+
+  return new Date(timestamp).toLocaleString();
+}
+
 class RemovableIssueLink {
 
   model:libBackEnd.IssueLink;
@@ -237,12 +243,12 @@ export class Component implements ng.OnInit {
           this.breadcrumbs[2].label = issue.name;
           this.confirmations = issue.type_of_confirms;
           this.related = issue.linked_answers.map(link => new RemovableIssueLink(link));
-          let commentsViews = issue.comments.map(comment => new Comment(comment.postId, comment.text_of_post, comment.date_of_create, comment.likes, comment.hashTags));
+          let commentsViews = issue.comments.map(comment => new Comment(comment.postId, comment.text_of_post, timestampToString(comment.date_of_create), comment.likes, comment.hashTags));
           this.items = [].concat(
-              new Issue(issue.postId, issue.type.id, issue.name, issue.text_of_post, issue.date_of_create, issue.likes, commentsViews, issue.hashTags),
+              new Issue(issue.postId, issue.type.id, issue.name, issue.text_of_post, timestampToString(issue.date_of_create), issue.likes, commentsViews, issue.hashTags),
               issue.answers.map(answer => new Item(
-                  answer.postId, answer.text_of_post, answer.date_of_create, answer.likes,
-                  answer.comments.map(comment => new Comment(comment.postId, comment.text_of_post, comment.date_of_create, comment.likes, comment.hashTags)),
+                  answer.postId, answer.text_of_post, timestampToString(answer.date_of_create), answer.likes,
+                  answer.comments.map(comment => new Comment(comment.postId, comment.text_of_post, timestampToString(comment.date_of_create), comment.likes, comment.hashTags)),
                   answer.hashTags
               ))
           );
