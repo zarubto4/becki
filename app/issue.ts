@@ -21,6 +21,7 @@ import * as becki from "./index";
 import * as customValidator from "./custom-validator";
 import * as fieldInteractionsScheme from "./field-interactions-scheme";
 import * as fieldIssueBody from "./field-issue-body";
+import * as fieldIssueTags from "./field-issue-tags";
 import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBootstrapDropdown from "./lib-bootstrap/dropdown";
@@ -141,12 +142,6 @@ class Item {
     this.markable = false;
     this.confirmable = false;
   }
-
-  parseTagsField():string[] {
-    "use strict";
-
-    return this.tagsField.split(",").map(tag => tag.trim()).filter(tag => tag.length > 0);
-  }
 }
 
 class Issue extends Item {
@@ -173,6 +168,7 @@ class Issue extends Item {
     customValidator.Directive,
     fieldInteractionsScheme.Component,
     fieldIssueBody.Component,
+    fieldIssueTags.Component,
     layout.Component,
     libBootstrapDropdown.DIRECTIVES,
     ng.CORE_DIRECTIVES,
@@ -379,8 +375,9 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
+    let tags = fieldIssueTags.parseTags(item.tagsField);
     if (item instanceof Issue) {
-      this.backEnd.updateIssue(item.id, item.typeField, item.titleField, item.bodyField, item.parseTagsField())
+      this.backEnd.updateIssue(item.id, item.typeField, item.titleField, item.bodyField, tags)
           .then(() => {
             this.notifications.current.push(new notifications.Success("The issue has been updated."));
             this.refresh();
@@ -391,7 +388,7 @@ export class Component implements ng.OnInit {
             this.notifications.current.push(new notifications.Danger("The issue cannot be updated.", reason));
           });
     } else {
-      this.backEnd.updateAnswer(item.id, item.bodyField, item.parseTagsField())
+      this.backEnd.updateAnswer(item.id, item.bodyField, tags)
           .then(() => {
             this.notifications.current.push(new notifications.Success("The answer has been updated."));
             this.refresh();
