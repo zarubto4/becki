@@ -56,6 +56,7 @@ import * as systemIssueConfirmation from "./system-issue-confirmation";
 import * as systemIssueConfirmationNew from "./system-issue-confirmation-new";
 import * as systemIssueType from "./system-issue-type";
 import * as systemIssueTypeNew from "./system-issue-type-new";
+import * as user from "./user";
 import * as userApplication from "./user-application";
 import * as userApplicationDeviceNew from "./user-application-device-new";
 import * as userApplicationGroup from "./user-application-group";
@@ -122,7 +123,8 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
   {path: "/user/projects/:project/device-programs/:program/version/new", component: deviceProgramVersionNew.Component, as: "NewDeviceProgramVersion"},
   {path: "/user/projects/:project/collaborator/new", component: projectCollaboratorNew.Component, as: "NewProjectCollaborator"},
   {path: "/user/projects/:project/standalone-program/new", component: standaloneProgramNew.Component, as: "NewStandaloneProgram"},
-  {path: "/user/projects/:project/standalone-programs/:program", component: standaloneProgram.Component, as: "StandaloneProgram"}
+  {path: "/user/projects/:project/standalone-programs/:program", component: standaloneProgram.Component, as: "StandaloneProgram"},
+  {path: "/users/:user", component: user.Component, as: "User"},
 ])
 @ng.Component({
   selector: "[body]",

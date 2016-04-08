@@ -15,6 +15,7 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
+// TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-188
 export function composeUserString(user:User):string {
   "use strict";
 
@@ -195,6 +196,7 @@ export class PermissionMissingError extends UnauthorizedError {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
+// TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-188
 export interface User {
 
   id:string;
@@ -855,7 +857,14 @@ export abstract class BackEnd {
       throw "password >= 8 and username >= 9 and email required";
     }
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-188
     return this.requestPath("POST", BackEnd.USER_PATH, {nick_name, mail, password}, [201]).then(JSON.stringify);
+  }
+
+  public getUser(id:string):Promise<User> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.USER_PATH}/${id}`);
   }
 
   public getUserEmailUsed(email:string):Promise<boolean> {
@@ -870,6 +879,18 @@ export abstract class BackEnd {
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-187
     return this.requestPath<{code:number}>("GET", `${BackEnd.VALIDATION_PATH}/nickname/${username}`, undefined, [200, 400]).then(body => body.code == 200);
+  }
+
+  public updateUser(id:string, first_name:string, middle_name:string, last_name:string, nick_name:string, date_of_birth:string, first_title:string, last_title:string):Promise<string> {
+    "use strict";
+
+    if (!first_name || !middle_name || !last_name || !nick_name || !date_of_birth) {
+      throw "first name, middle name, last name, username and birthdate required";
+    }
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-188
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-189
+    return this.requestPath("PUT", `${BackEnd.USER_PATH}/${id}`, {nick_name, first_name, middle_name, last_name, date_of_birth, first_title, last_title}, [200, 201]).then(JSON.stringify);
   }
 
   /**
