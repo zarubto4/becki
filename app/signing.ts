@@ -149,6 +149,18 @@ export class Component implements ng.OnInit {
     return () => Promise.resolve(this.upPassword1Field == this.upPassword2Field);
   }
 
+  validateUpUsernameField():()=>Promise<boolean> {
+    "use strict";
+
+    return () => {
+      if (this.upUsernameField.length >= 9) {
+        return this.backEnd.getUsernameUsed(this.upUsernameField);
+      } else {
+        return Promise.resolve(true);
+      }
+    };
+  }
+
   onSignUpSubmit():void {
     "use strict";
 

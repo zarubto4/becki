@@ -746,6 +746,8 @@ export abstract class BackEnd {
 
   public static USER_PATH = "/coreClient/person/person";
 
+  public static VALIDATION_PATH = "/coreClient/person/valid";
+
   protected notifications:EventSource;
 
   public tasks:number;
@@ -860,7 +862,14 @@ export abstract class BackEnd {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-187
-    return this.requestPath<{code:number}>("GET", `/coreClient/person/valid/mail/${email}`, undefined, [200, 400]).then(body => body.code == 200);
+    return this.requestPath<{code:number}>("GET", `${BackEnd.VALIDATION_PATH}/mail/${email}`, undefined, [200, 400]).then(body => body.code == 200);
+  }
+
+  public getUsernameUsed(username:string):Promise<boolean> {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-187
+    return this.requestPath<{code:number}>("GET", `${BackEnd.VALIDATION_PATH}/nickname/${username}`, undefined, [200, 400]).then(body => body.code == 200);
   }
 
   /**
