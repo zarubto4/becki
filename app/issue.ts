@@ -30,7 +30,7 @@ import * as libBootstrapDropdown from "./lib-bootstrap/dropdown";
 function timestampToString(timestamp:number):string {
   "use strict";
 
-  return new Date(timestamp).toLocaleString();
+  return new Date(timestamp * 1000).toLocaleString();
 }
 
 class RemovableIssueLink {
@@ -79,7 +79,8 @@ class Comment {
     this.id = comment.postId;
     this.body = comment.text_of_post;
     this.author = libBackEnd.composeUserString(comment.author);
-    this.date = timestampToString(comment.date_of_create);
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-190
+    this.date = `${timestampToString(comment.date_of_create)} (issue/TYRION-190)`;
     this.likes = comment.likes;
     this.tags = comment.hashTags;
     this.editing = false;
@@ -136,7 +137,8 @@ class Item {
     this.id = item.postId;
     this.body = item.text_of_post;
     this.author = libBackEnd.composeUserString(item.author);
-    this.date = timestampToString(item.date_of_create);
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-190
+    this.date = `${timestampToString(item.date_of_create)} (issue/TYRION-190)`;
     this.likes = item.likes;
     this.comments = item.comments.map(comment => new Comment(comment));
     this.tags = item.hashTags;
