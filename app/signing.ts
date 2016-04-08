@@ -131,6 +131,18 @@ export class Component implements ng.OnInit {
     this.signIn = false;
   }
 
+  validateUpEmailField():()=>Promise<boolean> {
+    "use strict";
+
+    return () => {
+      if (this.upEmailField) {
+        return this.backEnd.getUserEmailUsed(this.upEmailField);
+      } else {
+        return Promise.resolve(true);
+      }
+    };
+  }
+
   validateUpPasswordField():()=>Promise<boolean> {
     "use strict";
 

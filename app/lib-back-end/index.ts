@@ -856,6 +856,13 @@ export abstract class BackEnd {
     return this.requestPath("POST", BackEnd.USER_PATH, {nick_name, mail, password}, [201]).then(JSON.stringify);
   }
 
+  public getUserEmailUsed(email:string):Promise<boolean> {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-187
+    return this.requestPath<{code:number}>("GET", `/coreClient/person/valid/mail/${email}`, undefined, [200, 400]).then(body => body.code == 200);
+  }
+
   /**
    * Log a person in.
    *
