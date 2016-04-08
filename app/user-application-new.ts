@@ -190,8 +190,6 @@ export class Component implements ng.OnInit {
           this.router.navigate(["UserApplications"]);
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-179
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-179"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The application cannot be created.", reason));
         });
   }

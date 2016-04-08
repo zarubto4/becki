@@ -156,12 +156,6 @@ export class Component implements ng.OnInit {
           this.router.navigate(["UserInteractions"]);
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-174
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-174"));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-179
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-179"));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-180
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-180"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The scheme cannot be created.", reason));
         });
   }

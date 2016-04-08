@@ -153,10 +153,8 @@ export class Component {
     backEnd.notificationsNew.toRx().subscribe((event:MessageEvent) => {
       let notificationData = JSON.parse(event.data);
       let notification:libBeckiNotifications.Notification;
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-178
       switch (notificationData.level) {
         case "info":
-        case "message":
           notification = new libBeckiNotifications.Info(notificationData.text);
           break;
         case "success":
@@ -173,8 +171,6 @@ export class Component {
       }
       this.notifications.push(notification);
     });
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-176
-    this.notifications.push(new libBeckiNotifications.Danger("issue/TYRION-176"));
   }
 
   getModalEventType():string {

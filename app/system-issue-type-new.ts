@@ -75,8 +75,6 @@ export class Component implements ng.OnInit {
           this.router.navigate(["System"]);
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-181
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-181"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The type cannot be created.", reason));
         });
   }

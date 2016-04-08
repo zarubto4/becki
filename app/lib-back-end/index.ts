@@ -545,6 +545,8 @@ export interface InteractionsModerator {
   online:boolean;
 
   version:string;
+
+  active_boards?:Device[];
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -850,11 +852,10 @@ export abstract class BackEnd {
   public createPerson(mail:string, password:string, nick_name:string):Promise<string> {
     "use strict";
 
-    if (!mail || password.length < 8 || nick_name.length < 8) {
-      throw "password >= 8 and username >= 8 and email required";
+    if (!mail || password.length < 8 || nick_name.length < 9) {
+      throw "password >= 8 and username >= 9 and email required";
     }
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-175
     return this.requestPath("POST", BackEnd.PERSON_PATH, {nick_name, mail, password}, [201]).then(JSON.stringify);
   }
 
@@ -1431,7 +1432,6 @@ export abstract class BackEnd {
       throw "name >= 8 required";
     }
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-180
     return this.requestPath("POST", `${BackEnd.INTERACTIONS_SCHEME_PATH}/${projectId}`, {program_description, name}, [201]);
   }
 
@@ -1470,6 +1470,7 @@ export abstract class BackEnd {
   public deleteInteractionsScheme(id:string):Promise<string> {
     "use strict";
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-185
     return this.requestPath("DELETE", `${BackEnd.INTERACTIONS_SCHEME_PATH}/${id}`).then(JSON.stringify);
   }
 
@@ -1523,7 +1524,6 @@ export abstract class BackEnd {
       throw "name >= 8 and description >= 24 required";
     }
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-179
     return this.requestPath("POST", BackEnd.PROJECT_PATH, {project_name, project_description}, [201]);
   }
 
@@ -1696,7 +1696,6 @@ export abstract class BackEnd {
       throw "name >= 3 required";
     }
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-181
     return this.requestPath("POST", BackEnd.ISSUE_TYPE_PATH, {type}, [201]).then(JSON.stringify);
   }
 
@@ -1736,7 +1735,6 @@ export abstract class BackEnd {
       throw "name >= 8, color and positive size required";
     }
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-182
     return this.requestPath("POST", BackEnd.ISSUE_CONFIRMATION_PATH, {type, color, size}, [201]).then(JSON.stringify);
   }
 
@@ -1798,7 +1796,6 @@ export abstract class BackEnd {
       throw "name and body required";
     }
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-150
     return this.requestPath("PUT", `${BackEnd.ISSUE_PATH}/${id}`, {name, text_of_post, type_of_post_id, hash_tags}).then(JSON.stringify);
   }
 
@@ -1849,7 +1846,6 @@ export abstract class BackEnd {
       throw "body required";
     }
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-150
     return this.requestPath("PUT", `${BackEnd.ANSWER_PATH}/${id}`, {text_of_post, hash_tags}).then(JSON.stringify);
   }
 
@@ -1870,7 +1866,6 @@ export abstract class BackEnd {
       throw "body required";
     }
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-150
     return this.requestPath("PUT", `${BackEnd.ANSWER_PATH}/${id}`, {text_of_post, hash_tags}).then(JSON.stringify);
   }
 

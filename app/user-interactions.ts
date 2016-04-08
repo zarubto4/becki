@@ -140,6 +140,8 @@ export class Component implements ng.OnInit {
           this.refresh();
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-185
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-185"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The scheme cannot be removed.", reason));
         });
   }

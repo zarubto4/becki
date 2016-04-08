@@ -95,8 +95,6 @@ export class Component implements ng.OnInit {
           this.router.navigate(["UserDevices"]);
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-179
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-179"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The device cannot be added.", reason));
         });
   }

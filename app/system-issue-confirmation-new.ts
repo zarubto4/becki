@@ -81,8 +81,6 @@ export class Component implements ng.OnInit {
           this.router.navigate(["System"]);
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-182
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-182"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The confirmation cannot be created.", reason));
         });
   }

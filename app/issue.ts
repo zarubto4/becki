@@ -387,8 +387,6 @@ export class Component implements ng.OnInit {
             this.refresh();
           })
           .catch(reason => {
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-150
-            this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-150"));
             this.notifications.current.push(new libBeckiNotifications.Danger("The issue cannot be updated.", reason));
           });
     } else {
