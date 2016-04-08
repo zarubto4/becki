@@ -113,14 +113,14 @@ export class Component implements ng.OnInit {
         ])
         .then(result => {
           let project:libBackEnd.Project;
-          let collaborators:libBackEnd.Person[];
+          let collaborators:libBackEnd.User[];
           let devicePrograms:libBackEnd.DeviceProgram[];
           let devices:libBackEnd.Device[];
           let categories:libBackEnd.StandaloneProgramCategory[];
           [project, collaborators, devicePrograms, devices, categories] = result;
           this.nameField = project.project_name;
           this.descriptionField = project.project_description;
-          this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composePersonString(collaborator), null));
+          this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composeUserString(collaborator), null));
           this.devicePrograms = devicePrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, ["DeviceProgram", {project: this.id, program: program.id}]));
           this.devices = devices.map(device => new SelectableItem(device.id, device.id, device.isActive ? "active" : "inactive"));
           this.standalonePrograms = [].concat(...categories.map(category => category.blockoBlocks.map(program => new libPatternFlyListView.Item(program.id, program.name, program.general_description, ["StandaloneProgram", {project: this.id, program: program.id}]))));

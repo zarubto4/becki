@@ -104,7 +104,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createToken(this.inEmailField, this.inPasswordField)
         .then(() => this.router.navigate(becki.HOME.link))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("The person cannot be signed in.", reason)));
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("The user cannot be signed in.", reason)));
   }
 
   onFacebookSignInClick():void {
@@ -113,7 +113,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createFacebookToken(REDIRECT_URL)
         .then(url => this.redirect(url))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("The person cannot be signed in.", reason)));
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("The user cannot be signed in.", reason)));
   }
 
   onGitHubSignInClick():void {
@@ -122,7 +122,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createGitHubToken(REDIRECT_URL)
         .then(url => this.redirect(url))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("The person cannot be signed in.", reason)));
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("The user cannot be signed in.", reason)));
   }
 
   onSignUpClick():void {
@@ -141,13 +141,13 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.createPerson(this.upEmailField, this.upPassword1Field, this.upUsernameField)
+    this.backEnd.createUser(this.upEmailField, this.upPassword1Field, this.upUsernameField)
         .then(() => {
-          this.notifications.current.push(new libBeckiNotifications.Success("The person have been signed up. It is necessary to follow the instructions sent to their email before signing in."));
+          this.notifications.current.push(new libBeckiNotifications.Success("The user have been signed up. It is necessary to follow the instructions sent to their email before signing in."));
           this.signIn = true;
         })
         .catch(reason => {
-          this.notifications.current.push(new libBeckiNotifications.Danger("The person cannot be signed up.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The user cannot be signed up.", reason));
         });
   }
 }

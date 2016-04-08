@@ -78,7 +78,7 @@ class Comment {
 
     this.id = comment.postId;
     this.body = comment.text_of_post;
-    this.author = libBackEnd.composePersonString(comment.author);
+    this.author = libBackEnd.composeUserString(comment.author);
     this.date = timestampToString(comment.date_of_create);
     this.likes = comment.likes;
     this.tags = comment.hashTags;
@@ -135,7 +135,7 @@ class Item {
 
     this.id = item.postId;
     this.body = item.text_of_post;
-    this.author = libBackEnd.composePersonString(item.author);
+    this.author = libBackEnd.composeUserString(item.author);
     this.date = timestampToString(item.date_of_create);
     this.likes = item.likes;
     this.comments = item.comments.map(comment => new Comment(comment));

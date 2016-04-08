@@ -15,29 +15,29 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
-export function composePersonString(person:Person):string {
+export function composeUserString(user:User):string {
   "use strict";
 
-  if (person.nick_name) {
-    return person.nick_name;
+  if (user.nick_name) {
+    return user.nick_name;
   }
 
   let nameParts:string[] = [];
-  if (person.first_name) {
-    nameParts.push(person.first_name);
+  if (user.first_name) {
+    nameParts.push(user.first_name);
   }
-  if (person.middle_name) {
-    nameParts.push(person.middle_name);
+  if (user.middle_name) {
+    nameParts.push(user.middle_name);
   }
-  if (person.last_name) {
-    nameParts.push(person.last_name);
+  if (user.last_name) {
+    nameParts.push(user.last_name);
   }
   if (nameParts) {
     return nameParts.join(" ");
   }
 
-  if (person.mail) {
-    return person.mail;
+  if (user.mail) {
+    return user.mail;
   }
 
   return null;
@@ -195,7 +195,7 @@ export class PermissionMissingError extends UnauthorizedError {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface Person {
+export interface User {
 
   id:string;
 
@@ -622,7 +622,7 @@ export interface Issue {
 
   text_of_post:string;
 
-  author:Person;
+  author:User;
 
   date_of_create:number;
 
@@ -650,7 +650,7 @@ export interface Answer {
 
   text_of_post:string;
 
-  author:Person;
+  author:User;
 
   date_of_create:number;
 
@@ -674,7 +674,7 @@ export interface Comment {
 
   text_of_post:string;
 
-  author:Person;
+  author:User;
 
   hashTags:string[];
 
@@ -728,11 +728,6 @@ export abstract class BackEnd {
 
   public static LIBRARY_PATH = "/compilation/library";
 
-  /**
-   * An absolute path to the person resources.
-   */
-  public static PERSON_PATH = "/coreClient/person/person";
-
   public static PROCESSOR_PATH = "/compilation/processor";
 
   public static PRODUCER_PATH = "/compilation/producer";
@@ -748,6 +743,8 @@ export abstract class BackEnd {
    * An absolute path to the permission resources.
    */
   public static TOKEN_PATH = "/coreClient/person/permission";
+
+  public static USER_PATH = "/coreClient/person/person";
 
   protected notifications:EventSource;
 
@@ -849,14 +846,14 @@ export abstract class BackEnd {
    * @returns a promise that will be resolved with a message describing the
    *          result, or rejected with a reason.
    */
-  public createPerson(mail:string, password:string, nick_name:string):Promise<string> {
+  public createUser(mail:string, password:string, nick_name:string):Promise<string> {
     "use strict";
 
     if (!mail || password.length < 8 || nick_name.length < 9) {
       throw "password >= 8 and username >= 9 and email required";
     }
 
-    return this.requestPath("POST", BackEnd.PERSON_PATH, {nick_name, mail, password}, [201]).then(JSON.stringify);
+    return this.requestPath("POST", BackEnd.USER_PATH, {nick_name, mail, password}, [201]).then(JSON.stringify);
   }
 
   /**
@@ -1585,7 +1582,7 @@ export abstract class BackEnd {
     return this.requestPath("GET", `${BackEnd.PROJECT_PATH}/homers/${id}`);
   }
 
-  public getProjectOwners(id:string):Promise<Person[]> {
+  public getProjectOwners(id:string):Promise<User[]> {
     "use strict";
 
     return this.requestPath("GET", `${BackEnd.PROJECT_PATH}/owners/${id}`);
