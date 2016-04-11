@@ -77,17 +77,18 @@ export class Component implements ng.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
           this.addDevice = libBackEnd.containsPermissions(currentPermissions, ["project.owner"]);
+          let viewDevice = libBackEnd.containsPermissions(currentPermissions, ["project.owner"]);
+          this.backEnd.getApplicationDevices()
+              .then(devices => this.devices = [].concat(
+                  devices.public_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "global", ["ApplicationDevice", {device: device.id}])),
+                  devices.private_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "project specific", viewDevice ? ["ApplicationDevice", {device: device.id}] : undefined))
+              ))
+              .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
     this.backEnd.getApplications()
         .then(applications => this.applications = applications.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["UserApplication", {application: application.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Applications cannot be loaded.", reason)));
-    this.backEnd.getApplicationDevices()
-        .then(devices => this.devices = [].concat(
-            devices.public_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "global", ["ApplicationDevice", {device: device.id}])),
-            devices.private_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "project specific", ["ApplicationDevice", {device: device.id}]))
-        ))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
     this.backEnd.getApplicationGroups()
         .then(groups => this.groups = groups.map(group => new libPatternFlyListView.Item(group.id, group.program_name, group.program_description, ["UserApplicationGroup", {group: group.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Groups cannot be loaded.", reason)));
