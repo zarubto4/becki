@@ -15,10 +15,10 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
-export function containsPermission(rolesAndPermissions:RolesAndPermissions, permission:string):boolean {
+export function containsPermissions(rolesAndPermissions:RolesAndPermissions, permissions:string[]):boolean {
   "use strict";
 
-  return rolesAndPermissions.permissions.find(permission2 => permission2.value == permission) != undefined;
+  return permissions.every(permission => rolesAndPermissions.permissions.find(permission2 => permission2.value == permission) != undefined);
 }
 
 // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-188
