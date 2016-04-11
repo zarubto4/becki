@@ -88,6 +88,8 @@ export class Component implements ng.OnInit {
 
   tab:string;
 
+  viewRolesAndPermissions:boolean;
+
   firstNameField:string;
 
   middleNameField:string;
@@ -124,6 +126,7 @@ export class Component implements ng.OnInit {
     ];
     this.editing = false;
     this.tab = 'account';
+    this.viewRolesAndPermissions = false;
     this.firstNameField = "Loading...";
     this.middleNameField = "Loading...";
     this.lastNameField = "Loading...";
@@ -162,24 +165,38 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The user ${this.id} cannot be loaded.`, reason));
         });
-    Promise.all<any>([
-          this.backEnd.getRoles(),
-          this.backEnd.getPermissions(),
-          this.backEnd.getUserRolesAndPermissions(this.id)
-        ])
-        .then(result => {
-          let roles:libBackEnd.Role[];
-          let permissions:libBackEnd.Permission[];
-          let userPermissions:libBackEnd.RolesAndPermissions;
-          [roles, permissions, userPermissions] = result;
-          this.roles = roles.map(role => new Selectable(role, userPermissions.roles.find(userRole => userRole.id == role.id) != undefined));
-          this.permissions = permissions.map(permission => new Selectable(permission, userPermissions.permissions.find(userPermission => userPermission.value == permission.value) != undefined));
+    this.backEnd.getUserRolesAndPermissionsCurrent()
+        .then(currentPermissions => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
+          this.viewRolesAndPermissions = currentPermissions.permissions.find(permission => permission.value == "role.manager") != undefined;
+          if (this.viewRolesAndPermissions) {
+            return Promise.all<any>([
+                  this.backEnd.getRoles(),
+                  this.backEnd.getPermissions(),
+                  this.backEnd.getUserRolesAndPermissions(this.id)
+                ])
+                .then(result => {
+                  let roles:libBackEnd.Role[];
+                  let permissions:libBackEnd.Permission[];
+                  let userPermissions:libBackEnd.RolesAndPermissions;
+                  [roles, permissions, userPermissions] = result;
+                  this.roles = roles.map(role => new Selectable(role, userPermissions.roles.find(userRole => userRole.id == role.id) != undefined));
+                  // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-191
+                  this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-191"));
+                  this.permissions = permissions.map(permission => new Selectable(permission, userPermissions.permissions.find(userPermission => userPermission.value == permission.value) != undefined));
+                });
+          } else {
+            this.roles = [];
+            this.permissions = [];
+            if (["roles", "permissions"].indexOf(this.tab) >= 0) {
+              this.tab = "account";
+            }
+          }
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason));
         });
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-191
-    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-191"));
   }
 
   onEditClick():void {

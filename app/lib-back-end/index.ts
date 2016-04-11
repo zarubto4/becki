@@ -915,6 +915,12 @@ export abstract class BackEnd {
     return this.requestPath("GET", `/secure/person/system_acces/${id}`);
   }
 
+  public getUserRolesAndPermissionsCurrent():Promise<RolesAndPermissions> {
+    "use strict";
+
+    return this.requestPath("GET", "/login/person");
+  }
+
   public updateUser(id:string, first_name:string, middle_name:string, last_name:string, nick_name:string, date_of_birth:string, first_title:string, last_title:string):Promise<string> {
     "use strict";
 
