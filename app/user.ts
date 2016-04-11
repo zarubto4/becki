@@ -55,15 +55,15 @@ function parseDateString(dateString:string):Date {
   return date;
 }
 
-class SelectablePermission {
+class Selectable<T> {
 
-  model:libBackEnd.Permission;
+  model:T;
 
   selected:boolean;
 
   select:boolean;
 
-  constructor(model:libBackEnd.Permission, selected:boolean) {
+  constructor(model:T, selected:boolean) {
     "use strict";
 
     this.model = model;
@@ -86,7 +86,7 @@ export class Component implements ng.OnInit {
 
   editing:boolean;
 
-  showPermissions:boolean;
+  tab:string;
 
   firstNameField:string;
 
@@ -102,7 +102,9 @@ export class Component implements ng.OnInit {
 
   user:libBackEnd.User;
 
-  permissions:SelectablePermission[];
+  roles:Selectable<libBackEnd.Role>[];
+
+  permissions:Selectable<libBackEnd.Permission>[];
 
   backEnd:libBeckiBackEnd.Service;
 
@@ -121,7 +123,7 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("Loading...", ["User", {user: this.id}])
     ];
     this.editing = false;
-    this.showPermissions = false;
+    this.tab = 'account';
     this.firstNameField = "Loading...";
     this.middleNameField = "Loading...";
     this.lastNameField = "Loading...";
@@ -160,15 +162,18 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The user ${this.id} cannot be loaded.`, reason));
         });
-    Promise.all([
+    Promise.all<any>([
+          this.backEnd.getRoles(),
           this.backEnd.getPermissions(),
-          this.backEnd.getUserPermissions(this.id)
+          this.backEnd.getUserRolesAndPermissions(this.id)
         ])
         .then(result => {
+          let roles:libBackEnd.Role[];
           let permissions:libBackEnd.Permission[];
-          let userPermissions:libBackEnd.Permission[];
-          [permissions, userPermissions] = result;
-          this.permissions = permissions.map(permission => new SelectablePermission(permission, userPermissions.find(userPermission => userPermission.value == permission.value) != undefined));
+          let userPermissions:libBackEnd.RolesAndPermissions;
+          [roles, permissions, userPermissions] = result;
+          this.roles = roles.map(role => new Selectable(role, userPermissions.roles.find(userRole => userRole.id == role.id) != undefined));
+          this.permissions = permissions.map(permission => new Selectable(permission, userPermissions.permissions.find(userPermission => userPermission.value == permission.value) != undefined));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason));
@@ -183,22 +188,10 @@ export class Component implements ng.OnInit {
     this.editing = !this.editing;
   }
 
-  onAccountClick():void {
+  onTabClick(tab:string):void {
     "use strict";
 
-    if (this.showPermissions) {
-      this.editing = false;
-      this.showPermissions = false;
-    }
-  }
-
-  onPermissionsClick():void {
-    "use strict";
-
-    if (!this.showPermissions) {
-      this.editing = false;
-      this.showPermissions = true;
-    }
+    this.tab = tab;
   }
 
   validateAccountUsernameField():()=>Promise<boolean> {
@@ -226,6 +219,26 @@ export class Component implements ng.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-189
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-189"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The user cannot be updated.", reason));
+        });
+  }
+
+  onRolesSubmit():void {
+    "use strict";
+
+    this.notifications.shift();
+    Promise.all(this.roles.filter(role => role.selected != role.select).map(role => {
+          if (role.select) {
+            return this.backEnd.addRoleToUser(role.model.id, this.id);
+          } else {
+            return this.backEnd.removeRoleFromUser(role.model.id, this.id);
+          }
+        }))
+        .then(() => {
+          this.notifications.current.push(new libBeckiNotifications.Success("The roles have been updated."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger("The roles cannot be updated.", reason));
         });
   }
 

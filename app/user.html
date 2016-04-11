@@ -3,45 +3,25 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + userString + "\" User Account or Its Permissions"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="showPermissions">
+<div data-bind-layout='"Edit the \"" + userString + "\" User Account, Its Roles or Permissions"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="tab">
   <ul class="nav nav-tabs">
-    <li data-bind-class.active="!showPermissions">
-      <a data-on-click="onAccountClick($event)" style="cursor: pointer">
+    <li data-bind-class.active="tab == 'account'">
+      <a data-on-click="onTabClick('account', $event)" style="cursor: pointer">
         Account
       </a>
     </li>
-    <li data-bind-class.active="showPermissions">
-      <a data-on-click="onPermissionsClick($event)" style="cursor: pointer">
+    <li data-bind-class.active="tab == 'roles'">
+      <a data-on-click="onTabClick('roles', $event)" style="cursor: pointer">
+        Roles
+      </a>
+    </li>
+    <li data-bind-class.active="tab == 'permissions'">
+      <a data-on-click="onTabClick('permissions', $event)" style="cursor: pointer">
         Individual Permissions
       </a>
     </li>
   </ul>
-  <template data-bind-ng-switch-when="true">
-    <form class="clearfix" data-on-submit="onPermissionsSubmit($event)" style="margin-top: 2em" data-bind-ng-switch="editing">
-      <template data-bind-ng-switch-when="true">
-        <div class="checkbox" template="ngFor #permission of permissions">
-          <label>
-            <input type="checkbox" data-bindon-ng-model="permission.select">
-            {{permission.model.value}} ({{permission.model.description}})
-          </label>
-        </div>
-        <div class="pull-right">
-          <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-          <button class="btn btn-primary" type="submit">Edit</button>
-        </div>
-      </template>
-      <template data-bind-ng-switch-when="false">
-        <ul>
-          <li template="ngFor #permission of permissions" style="list-style-type: none" data-bind-ng-switch="permission.selected">
-            <template data-bind-ng-switch-when="true">✓</template>
-            <template data-bind-ng-switch-when="false">✗</template>
-            {{permission.model.value}} ({{permission.model.description}})
-          </li>
-        </ul>
-      </template>
-    </form>
-  </template>
-  <template data-bind-ng-switch-when="false">
+  <template data-bind-ng-switch-when="'account'">
     <form class="clearfix" data-on-submit="onAccountSubmit($event)" style="margin-top: 2em" data-bind-ng-switch="editing">
       <div class="form-group">
         <label>
@@ -102,6 +82,56 @@
           <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
           <button class="btn btn-primary" type="submit">Edit</button>
         </div>
+      </template>
+    </form>
+  </template>
+  <template data-bind-ng-switch-when="'roles'">
+    <form class="clearfix" data-on-submit="onRolesSubmit($event)" style="margin-top: 2em" data-bind-ng-switch="editing">
+      <template data-bind-ng-switch-when="true">
+        <div class="checkbox" template="ngFor #role of roles">
+          <label>
+            <input type="checkbox" data-bindon-ng-model="role.select">
+            {{role.model.name}} ({{role.model.description}})
+          </label>
+        </div>
+        <div class="pull-right">
+          <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+          <button class="btn btn-primary" type="submit">Edit</button>
+        </div>
+      </template>
+      <template data-bind-ng-switch-when="false">
+        <ul>
+          <li template="ngFor #role of roles" style="list-style-type: none" data-bind-ng-switch="role.selected">
+            <template data-bind-ng-switch-when="true">✓</template>
+            <template data-bind-ng-switch-when="false">✗</template>
+            {{role.model.name}} ({{role.model.description}})
+          </li>
+        </ul>
+      </template>
+    </form>
+  </template>
+  <template data-bind-ng-switch-when="'permissions'">
+    <form class="clearfix" data-on-submit="onPermissionsSubmit($event)" style="margin-top: 2em" data-bind-ng-switch="editing">
+      <template data-bind-ng-switch-when="true">
+        <div class="checkbox" template="ngFor #permission of permissions">
+          <label>
+            <input type="checkbox" data-bindon-ng-model="permission.select">
+            {{permission.model.value}} ({{permission.model.description}})
+          </label>
+        </div>
+        <div class="pull-right">
+          <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+          <button class="btn btn-primary" type="submit">Edit</button>
+        </div>
+      </template>
+      <template data-bind-ng-switch-when="false">
+        <ul>
+          <li template="ngFor #permission of permissions" style="list-style-type: none" data-bind-ng-switch="permission.selected">
+            <template data-bind-ng-switch-when="true">✓</template>
+            <template data-bind-ng-switch-when="false">✗</template>
+            {{permission.model.value}} ({{permission.model.description}})
+          </li>
+        </ul>
       </template>
     </form>
   </template>
