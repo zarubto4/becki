@@ -18,6 +18,7 @@ import * as ngRouter from "angular2/router";
 
 import * as becki from "./index";
 import * as layout from "./layout";
+import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
@@ -29,6 +30,8 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
 export class Component implements ng.OnInit {
 
   breadcrumbs:layout.LabeledLink[];
+
+  addDevice:boolean;
 
   tab:string;
 
@@ -52,6 +55,7 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("User", becki.HOME.link),
       new layout.LabeledLink("Applications", ["UserApplications"])
     ];
+    this.addDevice = false;
     this.tab = "applications";
     this.backEnd = backEnd;
     this.notifications = notifications;
@@ -68,6 +72,13 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
+    this.backEnd.getUserRolesAndPermissionsCurrent()
+        .then(currentPermissions => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
+          this.addDevice = libBackEnd.containsPermissions(currentPermissions, ["project.owner"]);
+        })
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
     this.backEnd.getApplications()
         .then(applications => this.applications = applications.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["UserApplication", {application: application.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Applications cannot be loaded.", reason)));
