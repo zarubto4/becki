@@ -88,6 +88,8 @@ export class Component implements ng.OnInit {
 
   editRoles:boolean;
 
+  editPermissions:boolean;
+
   tab:string;
 
   viewRolesAndPermissions:boolean;
@@ -128,6 +130,7 @@ export class Component implements ng.OnInit {
     ];
     this.editing = false;
     this.editRoles = false;
+    this.editPermissions = false;
     this.tab = 'account';
     this.viewRolesAndPermissions = false;
     this.firstNameField = "Loading...";
@@ -173,6 +176,7 @@ export class Component implements ng.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
           this.editRoles = libBackEnd.containsPermissions(currentPermissions, ["role.manager", "role.person"]);
+          this.editPermissions = libBackEnd.containsPermissions(currentPermissions, ["permission.connect_with_person"]);
           this.viewRolesAndPermissions = libBackEnd.containsPermissions(currentPermissions, ["role.manager"]);
           if (this.viewRolesAndPermissions) {
             return Promise.all<any>([
