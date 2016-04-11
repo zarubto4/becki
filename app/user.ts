@@ -86,6 +86,8 @@ export class Component implements ng.OnInit {
 
   editing:boolean;
 
+  editRoles:boolean;
+
   tab:string;
 
   viewRolesAndPermissions:boolean;
@@ -125,6 +127,7 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("Loading...", ["User", {user: this.id}])
     ];
     this.editing = false;
+    this.editRoles = false;
     this.tab = 'account';
     this.viewRolesAndPermissions = false;
     this.firstNameField = "Loading...";
@@ -169,7 +172,8 @@ export class Component implements ng.OnInit {
         .then(currentPermissions => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
-          this.viewRolesAndPermissions = currentPermissions.permissions.find(permission => permission.value == "role.manager") != undefined;
+          this.editRoles = libBackEnd.containsPermission(currentPermissions, "role.person");
+          this.viewRolesAndPermissions = libBackEnd.containsPermission(currentPermissions, "role.manager");
           if (this.viewRolesAndPermissions) {
             return Promise.all<any>([
                   this.backEnd.getRoles(),

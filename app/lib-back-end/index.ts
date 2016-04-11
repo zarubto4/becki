@@ -15,6 +15,12 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
+export function containsPermission(rolesAndPermissions:RolesAndPermissions, permission:string):boolean {
+  "use strict";
+
+  return rolesAndPermissions.permissions.find(permission2 => permission2.value == permission) != undefined;
+}
+
 // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-188
 export function composeUserString(user:User):string {
   "use strict";

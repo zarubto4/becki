@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + userString + "\" User Account, Its Roles or Permissions"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="tab">
+<div data-bind-layout='"Edit the \"" + userString + "\" User Account, Its Roles or Permissions"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing || (tab == 'roles' && !editRoles) ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="tab">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="tab == 'account'">
       <a data-on-click="onTabClick('account', $event)" style="cursor: pointer">
