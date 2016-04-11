@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, View or Remove a Moderator of Interactions, a Device, an Issue Type or an Issue Confirmation'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
+<div data-bind-layout="'Add, View or Remove a Moderator of Interactions, a Device, an Issue Type, an Issue Confirmation or a User'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="tab == 'users' ? null : 'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="tab == 'moderators'">
       <a data-on-click="onTabClick('moderators', $event)" style="cursor: pointer">
@@ -23,6 +23,11 @@
     <li data-bind-class.active="tab == 'confirmations'">
       <a data-on-click="onTabClick('confirmations', $event)" style="cursor: pointer">
         Issue Confirmations
+      </a>
+    </li>
+    <li data-bind-class.active="tab == 'users'">
+      <a data-on-click="onTabClick('users', $event)" style="cursor: pointer">
+        Users
       </a>
     </li>
   </ul>
