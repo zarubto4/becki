@@ -177,7 +177,7 @@ export class Component implements ng.OnInit {
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
           this.editRoles = libBackEnd.containsPermissions(currentPermissions, ["role.manager", "role.person"]);
           this.editPermissions = libBackEnd.containsPermissions(currentPermissions, ["permission.connect_with_person", "permission.disconnect_with_person"]);
-          this.viewRolesAndPermissions = libBackEnd.containsPermissions(currentPermissions, ["role.manager"]);
+          this.viewRolesAndPermissions = libBackEnd.containsPermissions(currentPermissions, ["permission.read", "role.manager"]);
           if (this.viewRolesAndPermissions) {
             return Promise.all<any>([
                   this.backEnd.getRoles(),
