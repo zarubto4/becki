@@ -229,6 +229,13 @@ export declare class EventSource {
   constructor(url:string);
 }
 
+export interface Permission {
+
+  value:string;
+
+  description:string;
+}
+
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface ApplicationDevice {
 
@@ -730,6 +737,8 @@ export abstract class BackEnd {
 
   public static LIBRARY_PATH = "/compilation/library";
 
+  public static PERMISSION_PATH = "/secure/permission";
+
   public static PROCESSOR_PATH = "/compilation/processor";
 
   public static PRODUCER_PATH = "/compilation/producer";
@@ -881,6 +890,13 @@ export abstract class BackEnd {
     return this.requestPath<{code:number}>("GET", `${BackEnd.VALIDATION_PATH}/nickname/${username}`, undefined, [200, 400]).then(body => body.code == 200);
   }
 
+  public getUserPermissions(id:string):Promise<Permission[]> {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-191
+    return this.requestPath<{permissions:Permission[]}>("GET", `/secure/person/system_acces/${id}`).then(body => body.permissions);
+  }
+
   public updateUser(id:string, first_name:string, middle_name:string, last_name:string, nick_name:string, date_of_birth:string, first_title:string, last_title:string):Promise<string> {
     "use strict";
 
@@ -891,6 +907,18 @@ export abstract class BackEnd {
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-188
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-189
     return this.requestPath("PUT", `${BackEnd.USER_PATH}/${id}`, {nick_name, first_name, middle_name, last_name, date_of_birth, first_title, last_title}, [200, 201]).then(JSON.stringify);
+  }
+
+  public addPermissionToUser(permission:string, user:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("PUT", `${BackEnd.PERMISSION_PATH}/person/${user}/${permission}`, {}).then(JSON.stringify);
+  }
+
+  public removePermissionFromUser(permission:string, user:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("DELETE", `${BackEnd.PERMISSION_PATH}/person/${user}/${permission}`).then(JSON.stringify);
   }
 
   /**
@@ -963,6 +991,12 @@ export abstract class BackEnd {
       this.unsetToken();
       return JSON.stringify(body);
     });
+  }
+
+  public getPermissions():Promise<Permission[]> {
+    "use strict";
+
+    return this.requestPath("GET", BackEnd.PERMISSION_PATH);
   }
 
   public createApplicationDevice(name:string, width:number, height:number, columns:number, rows:number, project_id:string) {

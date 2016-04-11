@@ -3,67 +3,106 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + userString + "\" User Account"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="editing">
-  <form class="clearfix" data-on-submit="onSubmit($event)">
-    <div class="form-group">
-      <label>
-        <template data-bind-ng-switch-when="true">
-          <span class="glyphicon glyphicon-pencil"></span>
-        </template>
-        First Name, Middle Name and Last Name
-      </label>
+<div data-bind-layout='"Edit the \"" + userString + "\" User Account or Its Permissions"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="showPermissions">
+  <ul class="nav nav-tabs">
+    <li data-bind-class.active="!showPermissions">
+      <a data-on-click="onAccountClick($event)" style="cursor: pointer">
+        Account
+      </a>
+    </li>
+    <li data-bind-class.active="showPermissions">
+      <a data-on-click="onPermissionsClick($event)" style="cursor: pointer">
+        Individual Permissions
+      </a>
+    </li>
+  </ul>
+  <template data-bind-ng-switch-when="true">
+    <form class="clearfix" data-on-submit="onPermissionsSubmit($event)" style="margin-top: 2em" data-bind-ng-switch="editing">
       <template data-bind-ng-switch-when="true">
-        <div class="form-inline">
-          <input class="form-control" required data-bindon-ng-model="firstNameField">
-          <input class="form-control" required data-bindon-ng-model="middleNameField">
-          <input class="form-control" required data-bindon-ng-model="lastNameField">
+        <div class="checkbox" template="ngFor #permission of permissions">
+          <label>
+            <input type="checkbox" data-bindon-ng-model="permission.select">
+            {{permission.model.value}} ({{permission.model.description}})
+          </label>
+        </div>
+        <div class="pull-right">
+          <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+          <button class="btn btn-primary" type="submit">Edit</button>
         </div>
       </template>
       <template data-bind-ng-switch-when="false">
-        <p class="form-control-static">
-          {{user?.first_name}} {{user?.middle_name}} {{user?.last_name}}
-        </p>
+        <ul>
+          <li template="ngFor #permission of permissions" style="list-style-type: none" data-bind-ng-switch="permission.selected">
+            <template data-bind-ng-switch-when="true">✓</template>
+            <template data-bind-ng-switch-when="false">✗</template>
+            {{permission.model.value}} ({{permission.model.description}})
+          </li>
+        </ul>
       </template>
-    </div>
-    <div class="form-group">
-      <label>
-        <template data-bind-ng-switch-when="true">
-          <span class="glyphicon glyphicon-pencil"></span>
-        </template>
-        Username
-      </label>
-      <template data-bind-ng-switch-when="true">
-        <input class="form-control" required data-bindon-ng-model="usernameField" data-bind-custom-validator="validateUsernameField()" data-message="This username is used already. Please choose another one.">
-      </template>
-      <template data-bind-ng-switch-when="false">
-        <p class="form-control-static">{{user?.nick_name}}</p>
-      </template>
-    </div>
-    <template data-bind-ng-switch-when="false">
+    </form>
+  </template>
+  <template data-bind-ng-switch-when="false">
+    <form class="clearfix" data-on-submit="onAccountSubmit($event)" style="margin-top: 2em" data-bind-ng-switch="editing">
       <div class="form-group">
-        <label>Email</label>
-        <p class="form-control-static">{{user?.mail}}</p>
-      </div>
-    </template>
-    <div class="form-group">
-      <label>
+        <label>
+          <template data-bind-ng-switch-when="true">
+            <span class="glyphicon glyphicon-pencil"></span>
+          </template>
+          First Name, Middle Name and Last Name
+        </label>
         <template data-bind-ng-switch-when="true">
-          <span class="glyphicon glyphicon-calendar"></span>
+          <div class="form-inline">
+            <input class="form-control" required data-bindon-ng-model="firstNameField">
+            <input class="form-control" required data-bindon-ng-model="middleNameField">
+            <input class="form-control" required data-bindon-ng-model="lastNameField">
+          </div>
         </template>
-        Birthdate
-      </label>
-      <template data-bind-ng-switch-when="true">
-        <input class="form-control" type="date" required data-bindon-ng-model="birthdateField">
-      </template>
-      <template data-bind-ng-switch-when="false">
-        <p class="form-control-static">{{birthdateString}}</p>
-      </template>
-    </div>
-    <template data-bind-ng-switch-when="true">
-      <div class="pull-right">
-        <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-        <button class="btn btn-primary" type="submit">Edit</button>
+        <template data-bind-ng-switch-when="false">
+          <p class="form-control-static">
+            {{user?.first_name}} {{user?.middle_name}} {{user?.last_name}}
+          </p>
+        </template>
       </div>
-    </template>
-  </form>
+      <div class="form-group">
+        <label>
+          <template data-bind-ng-switch-when="true">
+            <span class="glyphicon glyphicon-pencil"></span>
+          </template>
+          Username
+        </label>
+        <template data-bind-ng-switch-when="true">
+          <input class="form-control" required data-bindon-ng-model="usernameField" data-bind-custom-validator="validateAccountUsernameField()" data-message="This username is used already. Please choose another one.">
+        </template>
+        <template data-bind-ng-switch-when="false">
+          <p class="form-control-static">{{user?.nick_name}}</p>
+        </template>
+      </div>
+      <template data-bind-ng-switch-when="false">
+        <div class="form-group">
+          <label>Email</label>
+          <p class="form-control-static">{{user?.mail}}</p>
+        </div>
+      </template>
+      <div class="form-group">
+        <label>
+          <template data-bind-ng-switch-when="true">
+            <span class="glyphicon glyphicon-calendar"></span>
+          </template>
+          Birthdate
+        </label>
+        <template data-bind-ng-switch-when="true">
+          <input class="form-control" type="date" required data-bindon-ng-model="birthdateField">
+        </template>
+        <template data-bind-ng-switch-when="false">
+          <p class="form-control-static">{{birthdateString}}</p>
+        </template>
+      </div>
+      <template data-bind-ng-switch-when="true">
+        <div class="pull-right">
+          <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+          <button class="btn btn-primary" type="submit">Edit</button>
+        </div>
+      </template>
+    </form>
+  </template>
 </div>

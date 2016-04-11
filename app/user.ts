@@ -55,6 +55,23 @@ function parseDateString(dateString:string):Date {
   return date;
 }
 
+class SelectablePermission {
+
+  model:libBackEnd.Permission;
+
+  selected:boolean;
+
+  select:boolean;
+
+  constructor(model:libBackEnd.Permission, selected:boolean) {
+    "use strict";
+
+    this.model = model;
+    this.selected = selected;
+    this.select = selected;
+  }
+}
+
 @ng.Component({
   templateUrl: "app/user.html",
   directives: [layout.Component, libBeckiCustomValidator.Directive, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
@@ -69,6 +86,8 @@ export class Component implements ng.OnInit {
 
   editing:boolean;
 
+  showPermissions:boolean;
+
   firstNameField:string;
 
   middleNameField:string;
@@ -82,6 +101,8 @@ export class Component implements ng.OnInit {
   birthdateString:string;
 
   user:libBackEnd.User;
+
+  permissions:SelectablePermission[];
 
   backEnd:libBeckiBackEnd.Service;
 
@@ -100,6 +121,7 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("Loading...", ["User", {user: this.id}])
     ];
     this.editing = false;
+    this.showPermissions = false;
     this.firstNameField = "Loading...";
     this.middleNameField = "Loading...";
     this.lastNameField = "Loading...";
@@ -138,6 +160,21 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The user ${this.id} cannot be loaded.`, reason));
         });
+    Promise.all([
+          this.backEnd.getPermissions(),
+          this.backEnd.getUserPermissions(this.id)
+        ])
+        .then(result => {
+          let permissions:libBackEnd.Permission[];
+          let userPermissions:libBackEnd.Permission[];
+          [permissions, userPermissions] = result;
+          this.permissions = permissions.map(permission => new SelectablePermission(permission, userPermissions.find(userPermission => userPermission.value == permission.value) != undefined));
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason));
+        });
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-191
+    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-191"));
   }
 
   onEditClick():void {
@@ -146,7 +183,25 @@ export class Component implements ng.OnInit {
     this.editing = !this.editing;
   }
 
-  validateUsernameField():()=>Promise<boolean> {
+  onAccountClick():void {
+    "use strict";
+
+    if (this.showPermissions) {
+      this.editing = false;
+      this.showPermissions = false;
+    }
+  }
+
+  onPermissionsClick():void {
+    "use strict";
+
+    if (!this.showPermissions) {
+      this.editing = false;
+      this.showPermissions = true;
+    }
+  }
+
+  validateAccountUsernameField():()=>Promise<boolean> {
     "use strict";
 
     return () => {
@@ -158,7 +213,7 @@ export class Component implements ng.OnInit {
     };
   }
 
-  onSubmit():void {
+  onAccountSubmit():void {
     "use strict";
 
     this.notifications.shift();
@@ -171,6 +226,26 @@ export class Component implements ng.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-189
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-189"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The user cannot be updated.", reason));
+        });
+  }
+
+  onPermissionsSubmit():void {
+    "use strict";
+
+    this.notifications.shift();
+    Promise.all(this.permissions.filter(permission => permission.selected != permission.select).map(permission => {
+          if (permission.select) {
+            return this.backEnd.addPermissionToUser(permission.model.value, this.id);
+          } else {
+            return this.backEnd.removePermissionFromUser(permission.model.value, this.id);
+          }
+        }))
+        .then(() => {
+          this.notifications.current.push(new libBeckiNotifications.Success("The permissions have been updated."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger("The permissions cannot be updated.", reason));
         });
   }
 
