@@ -16,6 +16,7 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
+import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
@@ -23,11 +24,13 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
 
 @ng.Component({
   templateUrl: "app/devices.html",
-  directives: [libBeckiLayout.Component, libPatternFlyListView.Component, ngRouter.ROUTER_DIRECTIVES]
+  directives: [libBeckiLayout.Component, libPatternFlyListView.Component, ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
+
+  addProducer:boolean;
 
   producers:libPatternFlyListView.Item[];
 
@@ -52,6 +55,7 @@ export class Component implements ng.OnInit {
       home,
       new libBeckiLayout.LabeledLink("Devices", ["Devices"])
     ];
+    this.addProducer = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -67,6 +71,13 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
+    this.backEnd.getUserRolesAndPermissionsCurrent()
+        .then(currentPermissions => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
+          this.addProducer = libBackEnd.containsPermissions(currentPermissions, ["producer.create"]);
+        })
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
     this.backEnd.getProducers()
         .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, null, ["Producer", {producer: producer.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Producers cannot be loaded.", reason)));

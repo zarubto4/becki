@@ -42,9 +42,11 @@
   <div class="row">
     <div class="col-xs-12 col-sm-4">
       <div>
-        <div class="pull-right">
-          <button type="button" class="btn btn-default" data-on-click="onProducerAddClick($event)">Add</button>
-        </div>
+        <template data-bind-ng-if="addProducer">
+          <div class="pull-right">
+            <button type="button" class="btn btn-default" data-on-click="onProducerAddClick($event)">Add</button>
+          </div>
+        </template>
         <h2>Producers</h2>
       </div>
       <div data-bind-list-view="producers" data-on-add-click="onProducerAddClick($event)" data-on-remove-click="onProducerRemoveClick($event)">
