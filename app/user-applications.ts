@@ -89,7 +89,7 @@ export class Component implements ng.OnInit {
               .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
           if (this.viewGroups) {
             this.backEnd.getApplicationGroups()
-                .then(groups => this.groups = groups.map(group => new libPatternFlyListView.Item(group.id, group.program_name, group.program_description, hasPermission ? ["UserApplicationGroup", {group: group.id}] : undefined)))
+                .then(groups => this.groups = groups.map(group => new libPatternFlyListView.Item(group.id, group.program_name, group.program_description, hasPermission ? ["UserApplicationGroup", {group: group.id}] : undefined, hasPermission)))
                 .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Groups cannot be loaded.", reason)));
           } else {
             this.groups = [];
