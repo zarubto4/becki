@@ -82,7 +82,7 @@ export class Component implements ng.OnInit {
           this.addItem = hasPermission;
           this.viewGroups = hasPermission;
           this.backEnd.getApplications()
-              .then(applications => this.applications = applications.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, hasPermission ? ["UserApplication", {application: application.id}] : undefined)))
+              .then(applications => this.applications = applications.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, hasPermission ? ["UserApplication", {application: application.id}] : undefined, hasPermission)))
               .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Applications cannot be loaded.", reason)));
           this.backEnd.getApplicationDevices()
               .then(devices => this.devices = [].concat(
