@@ -34,6 +34,8 @@ export class Component implements ng.OnInit {
 
   tab:string;
 
+  viewGroups:boolean;
+
   applications:libPatternFlyListView.Item[];
 
   devices:libPatternFlyListView.Item[];
@@ -56,6 +58,7 @@ export class Component implements ng.OnInit {
     ];
     this.addDeviceOrGroup = false;
     this.tab = "applications";
+    this.viewGroups = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -77,15 +80,23 @@ export class Component implements ng.OnInit {
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
           let hasPermission = libBackEnd.containsPermissions(currentPermissions, ["project.owner"]);
           this.addDeviceOrGroup = hasPermission;
+          this.viewGroups = hasPermission;
           this.backEnd.getApplicationDevices()
               .then(devices => this.devices = [].concat(
                   devices.public_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "global", ["ApplicationDevice", {device: device.id}])),
                   devices.private_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "project specific", hasPermission ? ["ApplicationDevice", {device: device.id}] : undefined, hasPermission))
               ))
               .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
-          this.backEnd.getApplicationGroups()
-              .then(groups => this.groups = groups.map(group => new libPatternFlyListView.Item(group.id, group.program_name, group.program_description, hasPermission ? ["UserApplicationGroup", {group: group.id}] : undefined)))
-              .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Groups cannot be loaded.", reason)));
+          if (this.viewGroups) {
+            this.backEnd.getApplicationGroups()
+                .then(groups => this.groups = groups.map(group => new libPatternFlyListView.Item(group.id, group.program_name, group.program_description, hasPermission ? ["UserApplicationGroup", {group: group.id}] : undefined)))
+                .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Groups cannot be loaded.", reason)));
+          } else {
+            this.groups = [];
+            if (this.tab == "groups") {
+              this.tab = "applications";
+            }
+          }
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
     this.backEnd.getApplications()

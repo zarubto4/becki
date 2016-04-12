@@ -16,7 +16,7 @@
       </a>
     </li>
     <li data-bind-class.active="tab == 'groups'">
-      <a data-on-click="onTabClick('groups', $event)" style="cursor: pointer">
+      <a data-on-click="onTabClick(viewGroups ? 'groups' : tab, $event)" data-bind-style.cursor="viewGroups ? 'pointer' : 'not-allowed'" data-bind-style.opacity="viewGroups ? 'initial' : 0.65" data-bind-title="viewGroups ? '' : 'You are not allowed to view groups.'">
         Groups
       </a>
     </li>

@@ -107,6 +107,8 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The group ${this.id} cannot be loaded.`, reason));
         });
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-192"));
   }
 
   onEditClick():void {
@@ -119,7 +121,14 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getApplicationGroups().then(groups => !groups.find(group => group.id != this.id && group.program_name == this.nameField));
+    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
+        .then(permissions => {
+          if (!libBackEnd.containsPermissions(permissions, ["project.owner"])) {
+            return Promise.reject('You are not allowed to view groups.');
+          }
+        })
+        .then(() => this.backEnd.getApplicationGroups())
+        .then(groups => !groups.find(group => group.id != this.id && group.program_name == this.nameField));
   }
 
   onSubmit():void {
