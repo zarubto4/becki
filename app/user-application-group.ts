@@ -43,6 +43,8 @@ export class Component implements ng.OnInit {
 
   editing:boolean;
 
+  editGroup:boolean;
+
   project:string;
 
   nameField:string;
@@ -68,6 +70,7 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Loading...", ["UserApplicationGroup", {group: this.id}])
     ];
     this.editing = false;
+    this.editGroup = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.backEnd = backEnd;
@@ -90,15 +93,18 @@ export class Component implements ng.OnInit {
         .then(group => {
           return Promise.all<any>([
             group,
+            this.backEnd.getUserRolesAndPermissionsCurrent(),
             this.backEnd.getProjects(),
             this.backEnd.request("GET", group.project)
           ]);
         })
         .then(result => {
+          let permissions:libBackEnd.RolesAndPermissions;
           let projects:libBackEnd.Project[];
           let project:libBackEnd.Project;
-          [this.group, projects, project] = result;
+          [this.group, permissions, projects, project] = result;
           this.breadcrumbs[3].label = this.group.program_name;
+          this.editGroup = libBackEnd.containsPermissions(permissions, ["project.owner"]);
           this.project = projects.length > 1 ? project.project_name : null;
           this.nameField = this.group.program_name;
           this.descriptionField = this.group.program_description;
@@ -108,7 +114,7 @@ export class Component implements ng.OnInit {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The group ${this.id} cannot be loaded.`, reason));
         });
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-192"));
+    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
   }
 
   onEditClick():void {
