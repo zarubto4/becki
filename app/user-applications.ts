@@ -83,14 +83,14 @@ export class Component implements ng.OnInit {
                   devices.private_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "project specific", hasPermission ? ["ApplicationDevice", {device: device.id}] : undefined, hasPermission))
               ))
               .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
+          this.backEnd.getApplicationGroups()
+              .then(groups => this.groups = groups.map(group => new libPatternFlyListView.Item(group.id, group.program_name, group.program_description, hasPermission ? ["UserApplicationGroup", {group: group.id}] : undefined)))
+              .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Groups cannot be loaded.", reason)));
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
     this.backEnd.getApplications()
         .then(applications => this.applications = applications.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["UserApplication", {application: application.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Applications cannot be loaded.", reason)));
-    this.backEnd.getApplicationGroups()
-        .then(groups => this.groups = groups.map(group => new libPatternFlyListView.Item(group.id, group.program_name, group.program_description, ["UserApplicationGroup", {group: group.id}])))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Groups cannot be loaded.", reason)));
   }
 
   onAddClick():void {
