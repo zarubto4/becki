@@ -16,8 +16,8 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as becki from "./index";
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBecki from "./lib-becki/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
 import * as libBeckiLayout from "./lib-becki/layout";
@@ -81,7 +81,7 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     Promise.resolve(
-            becki.getAdvancedField(this.projectField, this.projects.map(project => project.id)) || this.backEnd.createDefaultProject().then(project => {
+            libBecki.getAdvancedField(this.projectField, this.projects.map(project => project.id)) || this.backEnd.createDefaultProject().then(project => {
               this.projects = [project];
               this.projectField = project.id;
               return project.id;
