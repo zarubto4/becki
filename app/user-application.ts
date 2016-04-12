@@ -43,6 +43,8 @@ export class Component implements ng.OnInit {
 
   editing:boolean;
 
+  editApplication:boolean;
+
   showProject:boolean;
 
   project:libBackEnd.Project;
@@ -81,6 +83,7 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Loading...", ["UserApplication", {application: this.id}])
     ];
     this.editing = false;
+    this.editApplication = false;
     this.showProject = false;
     this.showGroup = false;
     this.group = "Loading...";
@@ -130,6 +133,7 @@ export class Component implements ng.OnInit {
           [application, project, group] = result;
           return Promise.all<any>([
             application,
+            this.backEnd.getUserRolesAndPermissionsCurrent(),
             this.backEnd.getProjects(),
             project,
             this.backEnd.getProjectApplicationGroups(project.id),
@@ -139,13 +143,15 @@ export class Component implements ng.OnInit {
         })
         .then(result => {
           let application:libBackEnd.Application;
+          let permissions:libBackEnd.RolesAndPermissions;
           let projects:libBackEnd.Project[];
           let groups:libBackEnd.ApplicationGroup[];
           let group:libBackEnd.ApplicationGroup;
           let device:libBackEnd.ApplicationDevice;
-          [application, projects, this.project, groups, group, device] = result;
+          [application, permissions, projects, this.project, groups, group, device] = result;
           this.name = application.program_name;
           this.breadcrumbs[3].label = application.program_name;
+          this.editApplication = libBackEnd.containsPermissions(permissions, ["project.owner"]);
           this.showProject = projects.length > 1;
           this.showGroup = groups.length > 1;
           this.group = group.program_name;
