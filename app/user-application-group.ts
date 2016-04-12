@@ -113,7 +113,7 @@ export class Component implements ng.OnInit {
           this.nameField = this.group.program_name;
           this.descriptionField = this.group.program_description;
           this.addApplication = hasPermission;
-          this.applications = this.group.m_programs.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["UserApplication", {application: application.id}]))
+          this.applications = this.group.m_programs.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, hasPermission ? ["UserApplication", {application: application.id}] : undefined));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The group ${this.id} cannot be loaded.`, reason));

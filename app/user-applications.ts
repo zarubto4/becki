@@ -81,6 +81,9 @@ export class Component implements ng.OnInit {
           let hasPermission = libBackEnd.containsPermissions(currentPermissions, ["project.owner"]);
           this.addItem = hasPermission;
           this.viewGroups = hasPermission;
+          this.backEnd.getApplications()
+              .then(applications => this.applications = applications.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, hasPermission ? ["UserApplication", {application: application.id}] : undefined)))
+              .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Applications cannot be loaded.", reason)));
           this.backEnd.getApplicationDevices()
               .then(devices => this.devices = [].concat(
                   devices.public_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "global", ["ApplicationDevice", {device: device.id}])),
@@ -99,9 +102,6 @@ export class Component implements ng.OnInit {
           }
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
-    this.backEnd.getApplications()
-        .then(applications => this.applications = applications.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["UserApplication", {application: application.id}])))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Applications cannot be loaded.", reason)));
   }
 
   onAddClick():void {
