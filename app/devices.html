@@ -49,7 +49,7 @@
         </template>
         <h2>Producers</h2>
       </div>
-      <div data-bind-list-view="producers" data-on-add-click="onProducerAddClick($event)" data-on-remove-click="onProducerRemoveClick($event)">
+      <div data-bind-list-view="producers" data-bind-addable="addProducer" data-on-add-click="onProducerAddClick($event)" data-on-remove-click="onProducerRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>

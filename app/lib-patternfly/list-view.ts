@@ -57,6 +57,9 @@ export class Component {
   @ng.Input()
   emptyTitle:string;
 
+  @ng.Input()
+  addable:boolean;
+
   @ng.Output()
   addClick:ng.EventEmitter;
 
@@ -69,6 +72,7 @@ export class Component {
     "use strict";
 
     this.emptyTitle = "No item yet";
+    this.addable = true;
     this.addClick = new ng.EventEmitter();
     this.removeClick = new ng.EventEmitter();
     this.router = router;

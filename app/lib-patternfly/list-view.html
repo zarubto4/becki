@@ -76,9 +76,11 @@
         <span class="pficon pficon-add-circle-o"></span>
       </div>
       <h1>{{emptyTitle}}</h1>
-      <div class="blank-slate-pf-main-action">
-        <button class="btn btn-primary btn-lg" data-on-click="onAddClick($event)">Add</button>
-      </div>
+      <template data-bind-ng-if="addable">
+        <div class="blank-slate-pf-main-action">
+          <button class="btn btn-primary btn-lg" data-on-click="onAddClick($event)">Add</button>
+        </div>
+      </template>
     </div>
   </template>
 </div>
