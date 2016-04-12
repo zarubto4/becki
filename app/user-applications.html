@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, View or Remove an Application, a Device or a Group'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="(tab == 'devices' && !addDevice) ? null : 'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
+<div data-bind-layout="'Add, View or Remove an Application, a Device or a Group'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="(['devices', 'groups'].indexOf(tab) >= 0 && !addDeviceOrGroup) ? null : 'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="tab == 'applications'">
       <a data-on-click="onTabClick('applications', $event)" style="cursor: pointer">

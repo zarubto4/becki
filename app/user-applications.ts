@@ -30,7 +30,7 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
-  addDevice:boolean;
+  addDeviceOrGroup:boolean;
 
   tab:string;
 
@@ -54,7 +54,7 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("User", home.link),
       new libBeckiLayout.LabeledLink("Applications", ["UserApplications"])
     ];
-    this.addDevice = false;
+    this.addDeviceOrGroup = false;
     this.tab = "applications";
     this.backEnd = backEnd;
     this.notifications = notifications;
@@ -76,7 +76,7 @@ export class Component implements ng.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
           let hasPermission = libBackEnd.containsPermissions(currentPermissions, ["project.owner"]);
-          this.addDevice = hasPermission;
+          this.addDeviceOrGroup = hasPermission;
           this.backEnd.getApplicationDevices()
               .then(devices => this.devices = [].concat(
                   devices.public_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "global", ["ApplicationDevice", {device: device.id}])),
