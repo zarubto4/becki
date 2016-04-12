@@ -37,6 +37,8 @@ export class Component implements ng.OnInit {
 
   editing:boolean;
 
+  editDevice:boolean;
+
   project:libBackEnd.Project;
 
   showProject:boolean;
@@ -67,6 +69,7 @@ export class Component implements ng.OnInit {
       new layout.LabeledLink("Loading...", ["ApplicationDevice", {device: this.id}])
     ];
     this.editing = false;
+    this.editDevice = false;
     this.showProject = false;
     this.nameField = "Loading...";
     this.widthField = 1;
@@ -91,16 +94,21 @@ export class Component implements ng.OnInit {
     this.editing = false;
     this.backEnd.getProjects()
         .then(projects => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
           return Promise.all<any>([
             this.backEnd.getApplicationDevice(this.id),
-            Promise.all(projects.map(project => Promise.all<any>([project, this.backEnd.getProjectApplicationDevices(project.id)])))
+            Promise.all(projects.map(project => Promise.all<any>([project, this.backEnd.getProjectApplicationDevices(project.id)]))),
+            this.backEnd.getUserRolesAndPermissionsCurrent()
           ]);
         })
         .then(result => {
           let projects:[libBackEnd.Project, libBackEnd.ApplicationDevice[]][];
+          let permissions:libBackEnd.RolesAndPermissions;
           [this.device, projects] = result;
           this.breadcrumbs[2].label = this.device.name;
           let pair = projects.find(pair => pair[1].find(device => device.id == this.id) !== undefined);
+          this.editDevice = !pair || libBackEnd.containsPermissions(permissions, ["project.owner"]);
           this.project = pair ? pair[0] : null;
           this.showProject = this.project && projects.length > 1;
           this.nameField = this.device.name;
