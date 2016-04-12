@@ -30,7 +30,9 @@ export class Item {
 
   removing:boolean;
 
-  constructor(id:string, name:string, description:string, link:any[] = null) {
+  removable:boolean;
+
+  constructor(id:string, name:string, description:string, link:any[] = null, removable = true) {
     "use strict";
 
     this.id = id;
@@ -38,6 +40,7 @@ export class Item {
     this.description = description;
     this.link = link;
     this.removing = false;
+    this.removable = removable;
   }
 }
 
@@ -50,9 +53,6 @@ export class Component {
 
   @ng.Input("listView")
   items:Item[];
-
-  @ng.Input()
-  removable:boolean;
 
   @ng.Input()
   emptyTitle:string;
@@ -68,7 +68,6 @@ export class Component {
   constructor(router:ngRouter.Router) {
     "use strict";
 
-    this.removable = true;
     this.emptyTitle = "No item yet";
     this.addClick = new ng.EventEmitter();
     this.removeClick = new ng.EventEmitter();

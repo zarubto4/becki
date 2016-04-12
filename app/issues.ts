@@ -55,7 +55,7 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.backEnd.getIssues()
-        .then(issues => this.items = issues.map(issue => new libPatternFlyListView.Item(issue.postId, issue.name, issue.type.type, ["Issue", {issue: issue.postId}])))
+        .then(issues => this.items = issues.map(issue => new libPatternFlyListView.Item(issue.postId, issue.name, issue.type.type, ["Issue", {issue: issue.postId}], false)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issues cannot be loaded.", reason)));
   }
 

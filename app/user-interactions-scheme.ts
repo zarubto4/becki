@@ -140,7 +140,7 @@ export class Component implements ng.OnInit {
           this.nameField = scheme.name;
           this.descriptionField = scheme.program_description;
           this.description = scheme.program_description;
-          this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, version.version_description, ["UserInteractionsSchemeVersion", {scheme: this.id, version: version.id}]));
+          this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, version.version_description, ["UserInteractionsSchemeVersion", {scheme: this.id, version: version.id}], false));
           this.moderators = moderators.map(moderator => new SelectableModerator(moderator));
         })
         .catch(reason => {

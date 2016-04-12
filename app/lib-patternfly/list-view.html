@@ -21,7 +21,7 @@
           </div>
         </template>
         <template data-bind-ng-switch-when="false">
-          <template data-bind-ng-if="item.link || removable">
+          <template data-bind-ng-if="item.link || item.removable">
             <div class="list-view-pf-actions">
               <div class="dropdown pull-right dropdown-kebab-pf">
                 <button class="btn btn-link dropdown-toggle" type="button">
@@ -31,7 +31,7 @@
                   <template data-bind-ng-if="item.link">
                     <li><a data-on-click="onViewClick(item, $event)" style="cursor: pointer">View</a></li>
                   </template>
-                  <template data-bind-ng-if="removable">
+                  <template data-bind-ng-if="item.removable">
                     <li><a data-on-click="onRemoveClick(item, $event)" style="cursor: pointer">Remove</a></li>
                   </template>
                 </ul>
