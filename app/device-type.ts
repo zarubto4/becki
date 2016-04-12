@@ -16,16 +16,15 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as becki from "./index";
-import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/device-type.html",
-  directives: [layout.Component, libBeckiCustomValidator.Directive, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -33,7 +32,7 @@ export class Component implements ng.OnInit {
 
   heading:string;
 
-  breadcrumbs:layout.LabeledLink[];
+  breadcrumbs:libBeckiLayout.LabeledLink[];
 
   producers:libBackEnd.Producer[];
 
@@ -53,16 +52,16 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("type");
     this.heading = `Type ${this.id}`;
     this.breadcrumbs = [
-      becki.HOME,
-      new layout.LabeledLink("Devices", ["Devices"]),
-      new layout.LabeledLink("Types", ["Devices"]),
-      new layout.LabeledLink(`Type ${this.id}`, ["DeviceType", {type: this.id}])
+      home,
+      new libBeckiLayout.LabeledLink("Devices", ["Devices"]),
+      new libBeckiLayout.LabeledLink("Types", ["Devices"]),
+      new libBeckiLayout.LabeledLink(`Type ${this.id}`, ["DeviceType", {type: this.id}])
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";

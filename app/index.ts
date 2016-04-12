@@ -13,22 +13,6 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
-import * as layout from "./layout";
-
-export const HOME = new layout.LabeledLink("No Name", ["UserApplications"]);
-
-export const NAVIGATION = [
-  new layout.LabeledLink("Applications", ["UserApplications"], "mobile"),
-  new layout.LabeledLink("Interactions", ["UserInteractions"], "link"),
-  new layout.LabeledLink("Devices", ["UserDevices"], "rocket"),
-  // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
-  new layout.LabeledLink("System (TYRION-155)", ["System"], "globe"),
-  new layout.LabeledLink("Issues", ["Issues"], "bug"),
-  new layout.LabeledLink("Applications (Vision)", ["UserApplicationsVision"], "mobile"),
-  new layout.LabeledLink("Devices (TODO)", ["Devices"], "tachometer"),
-  new layout.LabeledLink("Projects (TODO)", ["Projects"], "book")
-];
-
 export function getAdvancedField(field:string, options:string[]):string {
   "use strict";
 

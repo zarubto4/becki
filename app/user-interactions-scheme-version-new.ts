@@ -17,20 +17,19 @@ import * as _ from "underscore";
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as becki from "./index";
-import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
 import * as libBeckiFieldInteractionsScheme from "./lib-becki/field-interactions-scheme";
+import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/user-interactions-scheme-version-new.html",
   directives: [
-    layout.Component,
     libBeckiCustomValidator.Directive,
     libBeckiFieldInteractionsScheme.Component,
+    libBeckiLayout.Component,
     ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES
   ]
@@ -41,7 +40,7 @@ export class Component implements ng.OnInit {
 
   schemeName:string;
 
-  breadcrumbs:layout.LabeledLink[];
+  breadcrumbs:libBeckiLayout.LabeledLink[];
 
   nameField:string;
 
@@ -61,17 +60,17 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.schemeId = routeParams.get("scheme");
     this.schemeName = "Loading...";
     this.breadcrumbs = [
-      becki.HOME,
-      new layout.LabeledLink("User", becki.HOME.link),
-      new layout.LabeledLink("Schemes of Interactions", ["UserInteractions"]),
-      new layout.LabeledLink("Loading...", ["UserInteractionsScheme", {scheme: this.schemeId}]),
-      new layout.LabeledLink("New Version", ["NewUserInteractionsSchemeVersion", {scheme: this.schemeId}])
+      home,
+      new libBeckiLayout.LabeledLink("User", home.link),
+      new libBeckiLayout.LabeledLink("Schemes of Interactions", ["UserInteractions"]),
+      new libBeckiLayout.LabeledLink("Loading...", ["UserInteractionsScheme", {scheme: this.schemeId}]),
+      new libBeckiLayout.LabeledLink("New Version", ["NewUserInteractionsSchemeVersion", {scheme: this.schemeId}])
     ];
     this.nameField = "";
     this.descriptionField = "";

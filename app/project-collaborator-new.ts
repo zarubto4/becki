@@ -16,16 +16,15 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as becki from "./index";
-import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/project-collaborator-new.html",
-  directives: [layout.Component, libBeckiCustomValidator.Directive, ng.FORM_DIRECTIVES]
+  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -33,7 +32,7 @@ export class Component implements ng.OnInit {
 
   heading:string;
 
-  breadcrumbs:layout.LabeledLink[];
+  breadcrumbs:libBeckiLayout.LabeledLink[];
 
   idField:string;
 
@@ -43,18 +42,18 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.projectId = routeParams.get("project");
     this.heading = `New Collaborator (Project ${this.projectId})`;
     this.breadcrumbs = [
-      becki.HOME,
-      new layout.LabeledLink("User", ["Projects"]),
-      new layout.LabeledLink("Projects", ["Projects"]),
-      new layout.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new layout.LabeledLink("Collaborators", ["Project", {project: this.projectId}]),
-      new layout.LabeledLink("New Collaborator", ["NewProjectCollaborator", {project: this.projectId}])
+      home,
+      new libBeckiLayout.LabeledLink("User", ["Projects"]),
+      new libBeckiLayout.LabeledLink("Projects", ["Projects"]),
+      new libBeckiLayout.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
+      new libBeckiLayout.LabeledLink("Collaborators", ["Project", {project: this.projectId}]),
+      new libBeckiLayout.LabeledLink("New Collaborator", ["NewProjectCollaborator", {project: this.projectId}])
     ];
     this.idField = "";
     this.backEnd = backEnd;

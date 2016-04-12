@@ -16,15 +16,14 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as becki from "./index";
-import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/issue-confirmation-new.html",
-  directives: [layout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [libBeckiLayout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -32,7 +31,7 @@ export class Component implements ng.OnInit {
 
   issueTitle:string;
 
-  breadcrumbs:layout.LabeledLink[];
+  breadcrumbs:libBeckiLayout.LabeledLink[];
 
   confirmations:libBackEnd.IssueConfirmation[];
 
@@ -44,16 +43,16 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.issueId = routeParams.get("issue");
     this.issueTitle = "Loading...";
     this.breadcrumbs = [
-      becki.HOME,
-      new layout.LabeledLink("Issues", ["Issues"]),
-      new layout.LabeledLink("Loading...", ["Issue", {issue: this.issueId}]),
-      new layout.LabeledLink("New Confirmation", ["NewIssueConfirmation", {issue: this.issueId}])
+      home,
+      new libBeckiLayout.LabeledLink("Issues", ["Issues"]),
+      new libBeckiLayout.LabeledLink("Loading...", ["Issue", {issue: this.issueId}]),
+      new libBeckiLayout.LabeledLink("New Confirmation", ["NewIssueConfirmation", {issue: this.issueId}])
     ];
     this.field = "";
     this.backEnd = backEnd;

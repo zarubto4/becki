@@ -16,11 +16,10 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as becki from "./index";
-import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 function composeDateString(date:Date):string {
@@ -74,7 +73,7 @@ class Selectable<T> {
 
 @ng.Component({
   templateUrl: "app/user.html",
-  directives: [layout.Component, libBeckiCustomValidator.Directive, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -82,7 +81,7 @@ export class Component implements ng.OnInit {
 
   userString:string;
 
-  breadcrumbs:layout.LabeledLink[];
+  breadcrumbs:libBeckiLayout.LabeledLink[];
 
   editing:boolean;
 
@@ -118,15 +117,15 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("user");
     this.userString = "Loading...";
     this.breadcrumbs = [
-      becki.HOME,
-      new layout.LabeledLink("Users", becki.HOME.link),
-      new layout.LabeledLink("Loading...", ["User", {user: this.id}])
+      home,
+      new libBeckiLayout.LabeledLink("Users", home.link),
+      new libBeckiLayout.LabeledLink("Loading...", ["User", {user: this.id}])
     ];
     this.editing = false;
     this.editRoles = false;

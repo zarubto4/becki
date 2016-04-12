@@ -16,14 +16,13 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as becki from "./index";
-import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
 import * as libBeckiFieldInteractionsScheme from "./lib-becki/field-interactions-scheme";
 import * as libBeckiFieldIssueBody from "./lib-becki/field-issue-body";
 import * as libBeckiFieldIssueTags from "./lib-becki/field-issue-tags";
+import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libBootstrapDropdown from "./lib-bootstrap/dropdown";
 
@@ -179,11 +178,11 @@ class Issue extends Item {
 @ng.Component({
   templateUrl: "app/issue.html",
   directives: [
-    layout.Component,
     libBeckiCustomValidator.Directive,
     libBeckiFieldInteractionsScheme.Component,
     libBeckiFieldIssueBody.Component,
     libBeckiFieldIssueTags.Component,
+    libBeckiLayout.Component,
     libBootstrapDropdown.DIRECTIVES,
     ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES,
@@ -196,7 +195,7 @@ export class Component implements ng.OnInit {
 
   heading:string;
 
-  breadcrumbs:layout.LabeledLink[];
+  breadcrumbs:libBeckiLayout.LabeledLink[];
 
   confirmationToRemove:libBackEnd.IssueConfirmation;
 
@@ -218,15 +217,15 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("issue");
     this.heading = "Loading...";
     this.breadcrumbs = [
-      becki.HOME,
-      new layout.LabeledLink("Issues", ["Issues"]),
-      new layout.LabeledLink("Loading...", ["Issue", {issue: this.id}])
+      home,
+      new libBeckiLayout.LabeledLink("Issues", ["Issues"]),
+      new libBeckiLayout.LabeledLink("Loading...", ["Issue", {issue: this.id}])
     ];
     this.confirmationToRemove = null;
     this.answerBodyField = libBeckiFieldIssueBody.EMPTY;

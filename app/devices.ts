@@ -16,19 +16,18 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as becki from "./index";
-import * as layout from "./layout";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
 
 @ng.Component({
   templateUrl: "app/devices.html",
-  directives: [layout.Component, libPatternFlyListView.Component, ngRouter.ROUTER_DIRECTIVES]
+  directives: [libBeckiLayout.Component, libPatternFlyListView.Component, ngRouter.ROUTER_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
-  breadcrumbs:layout.LabeledLink[];
+  breadcrumbs:libBeckiLayout.LabeledLink[];
 
   producers:libPatternFlyListView.Item[];
 
@@ -46,12 +45,12 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(@ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
-      becki.HOME,
-      new layout.LabeledLink("Devices", ["Devices"])
+      home,
+      new libBeckiLayout.LabeledLink("Devices", ["Devices"])
     ];
     this.backEnd = backEnd;
     this.notifications = notifications;

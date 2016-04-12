@@ -16,20 +16,19 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as becki from "./index";
-import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
 
 @ng.Component({
   templateUrl: "app/user-applications.html",
-  directives: [layout.Component, libPatternFlyListView.Component, ng.CORE_DIRECTIVES],
+  directives: [libBeckiLayout.Component, libPatternFlyListView.Component, ng.CORE_DIRECTIVES],
 })
 export class Component implements ng.OnInit {
 
-  breadcrumbs:layout.LabeledLink[];
+  breadcrumbs:libBeckiLayout.LabeledLink[];
 
   addDevice:boolean;
 
@@ -47,13 +46,13 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(@ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
-      becki.HOME,
-      new layout.LabeledLink("User", becki.HOME.link),
-      new layout.LabeledLink("Applications", ["UserApplications"])
+      home,
+      new libBeckiLayout.LabeledLink("User", home.link),
+      new libBeckiLayout.LabeledLink("Applications", ["UserApplications"])
     ];
     this.addDevice = false;
     this.tab = "applications";

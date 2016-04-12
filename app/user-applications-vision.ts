@@ -15,22 +15,27 @@
 
 import * as ng from "angular2/angular2";
 
-import * as becki from "./index";
-import * as layout from "./layout";
+import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBootstrapDropdown from "./lib-bootstrap/dropdown";
 
 @ng.Component({
   templateUrl: "app/user-applications-vision.html",
-  directives: [layout.Component, libBootstrapDropdown.DIRECTIVES]
+  directives: [libBeckiLayout.Component, libBootstrapDropdown.DIRECTIVES]
 })
 export class Component {
 
-  breadcrumbs = [
-    becki.HOME,
-    new layout.LabeledLink("User", becki.HOME.link),
-    new layout.LabeledLink("Applications", ["UserApplicationsVision"]),
-    new layout.LabeledLink("Hello world", ["UserApplicationsVision"])
-  ];
+  breadcrumbs:libBeckiLayout.LabeledLink[];
+
+  constructor(@ng.Inject("home") home:libBeckiLayout.LabeledLink) {
+    "use strict";
+
+    this.breadcrumbs = [
+      home,
+      new libBeckiLayout.LabeledLink("User", home.link),
+      new libBeckiLayout.LabeledLink("Applications", ["UserApplicationsVision"]),
+      new libBeckiLayout.LabeledLink("Hello world", ["UserApplicationsVision"])
+    ];
+  }
 
   onClick():void {
     "use strict";

@@ -16,20 +16,19 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as becki from "./index";
-import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/device-type-new.html",
-  directives: [layout.Component, libBeckiCustomValidator.Directive, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
-  breadcrumbs:layout.LabeledLink[];
+  breadcrumbs:libBeckiLayout.LabeledLink[];
 
   producers:libBackEnd.Producer[];
 
@@ -49,14 +48,14 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(@ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
-      becki.HOME,
-      new layout.LabeledLink("Devices", ["Devices"]),
-      new layout.LabeledLink("Types", ["Devices"]),
-      new layout.LabeledLink("New Type", ["NewDeviceType"])
+      home,
+      new libBeckiLayout.LabeledLink("Devices", ["Devices"]),
+      new libBeckiLayout.LabeledLink("Types", ["Devices"]),
+      new libBeckiLayout.LabeledLink("New Type", ["NewDeviceType"])
     ];
     this.nameField = "";
     this.producerField = "";

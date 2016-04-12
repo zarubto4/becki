@@ -16,10 +16,9 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as becki from "./index";
-import * as libBeckiBackEnd from "./lib-becki/back-end";
-import * as libBeckiNotifications from "./lib-becki/notifications";
-import * as libBootstrapDropdown from "./lib-bootstrap/dropdown";
+import * as backEnd from "./back-end";
+import * as notifications from "./notifications";
+import * as libBootstrapDropdown from "../lib-bootstrap/dropdown";
 
 const HTML_CLASSES = ["layout-pf", "layout-pf-fixed"];
 
@@ -42,8 +41,8 @@ export class LabeledLink {
 
 @ng.Component({
   selector: "[layout]",
-  templateUrl: "app/layout.html",
-  directives: [libBootstrapDropdown.DIRECTIVES, libBeckiNotifications.Component, ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
+  templateUrl: "app/lib-becki/layout.html",
+  directives: [libBootstrapDropdown.DIRECTIVES, notifications.Component, ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
   inputs: ["heading: layout", "breadcrumbs", "actionLabel"]
 })
 export class Component implements ng.OnInit, ng.OnDestroy {
@@ -59,22 +58,22 @@ export class Component implements ng.OnInit, ng.OnDestroy {
 
   lastWindowWidth:string;
 
-  backEnd:libBeckiBackEnd.Service;
+  backEnd:backEnd.Service;
 
-  notifications:libBeckiNotifications.Service;
+  notifications:notifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(@ng.Inject("home") home:LabeledLink, @ng.Inject("navigation") navigation:LabeledLink[], backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.home = becki.HOME;
+    this.home = home;
     this.navbarState = "expanded";
-    this.navigation = becki.NAVIGATION;
+    this.navigation = navigation;
     this.actionClick = new ng.EventEmitter();
     this.lastWindowWidth = null;
-    this.backEnd = backEnd;
-    this.notifications = notifications;
+    this.backEnd = backEndService;
+    this.notifications = notificationsService;
     this.router = router;
   }
 
@@ -99,11 +98,11 @@ export class Component implements ng.OnInit, ng.OnDestroy {
     this.notifications.shift();
     this.backEnd.deleteToken()
         .then(() => {
-          this.notifications.next.push(new libBeckiNotifications.Success("Current user have been signed out."));
+          this.notifications.next.push(new notifications.Success("Current user have been signed out."));
           this.router.navigate(["Signing"]);
         })
         .catch(reason => {
-          this.notifications.current.push(new libBeckiNotifications.Danger("Current user cannot be signed out.", reason));
+          this.notifications.current.push(new notifications.Danger("Current user cannot be signed out.", reason));
         });
   }
 

@@ -16,11 +16,10 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as becki from "./index";
-import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
 
@@ -41,8 +40,8 @@ class SelectableModerator {
 @ng.Component({
   templateUrl: "app/user-interactions-scheme.html",
   directives: [
-    layout.Component,
     libBeckiCustomValidator.Directive,
+    libBeckiLayout.Component,
     libPatternFlyListView.Component,
     ng.FORM_DIRECTIVES,
     ng.CORE_DIRECTIVES
@@ -54,7 +53,7 @@ export class Component implements ng.OnInit {
 
   name:string;
 
-  breadcrumbs:layout.LabeledLink[];
+  breadcrumbs:libBeckiLayout.LabeledLink[];
 
   editing:boolean;
 
@@ -78,16 +77,16 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("scheme");
     this.name = "Loading...";
     this.breadcrumbs = [
-      becki.HOME,
-      new layout.LabeledLink("User", becki.HOME.link),
-      new layout.LabeledLink("Schemes of Interactions", ["UserInteractions"]),
-      new layout.LabeledLink("Loading...", ["UserInteractionsScheme", {scheme: this.id}])
+      home,
+      new libBeckiLayout.LabeledLink("User", home.link),
+      new libBeckiLayout.LabeledLink("Schemes of Interactions", ["UserInteractions"]),
+      new libBeckiLayout.LabeledLink("Loading...", ["UserInteractionsScheme", {scheme: this.id}])
     ];
     this.editing = false;
     this.nameField = "Loading...";

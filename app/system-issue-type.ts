@@ -16,16 +16,15 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as becki from "./index";
-import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/system-issue-type.html",
-  directives: [layout.Component, libBeckiCustomValidator.Directive, ng.FORM_DIRECTIVES]
+  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -33,7 +32,7 @@ export class Component implements ng.OnInit {
 
   type:libBackEnd.IssueType;
 
-  breadcrumbs:layout.LabeledLink[];
+  breadcrumbs:libBeckiLayout.LabeledLink[];
 
   field:string;
 
@@ -43,15 +42,15 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("type");
     this.breadcrumbs = [
-      becki.HOME,
-      new layout.LabeledLink("System", ["System"]),
-      new layout.LabeledLink("Issue Types", ["System"]),
-      new layout.LabeledLink("Loading...", ["SystemIssueType", {type: this.id}])
+      home,
+      new libBeckiLayout.LabeledLink("System", ["System"]),
+      new libBeckiLayout.LabeledLink("Issue Types", ["System"]),
+      new libBeckiLayout.LabeledLink("Loading...", ["SystemIssueType", {type: this.id}])
     ];
     this.field = "Loading...";
     this.backEnd = backEnd;

@@ -32,6 +32,7 @@ import * as issueRelatedNew from "./issue-related-new";
 import * as issues from "./issues";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiFieldCode from "./lib-becki/field-code";
+import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiModal from "./lib-becki/modal";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libraryGroup from "./library-group";
@@ -129,7 +130,23 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
 @ng.Component({
   selector: "[body]",
   templateUrl: "app/body.html",
-  providers: [libBeckiModal.Service],
+  providers: [
+    libBeckiModal.Service,
+    ng.provide("home", {useValue: new libBeckiLayout.LabeledLink("No Name", ["UserApplications"])}),
+    ng.provide("navigation", {
+      useValue: [
+        new libBeckiLayout.LabeledLink("Applications", ["UserApplications"], "mobile"),
+        new libBeckiLayout.LabeledLink("Interactions", ["UserInteractions"], "link"),
+        new libBeckiLayout.LabeledLink("Devices", ["UserDevices"], "rocket"),
+        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
+        new libBeckiLayout.LabeledLink("System (TYRION-155)", ["System"], "globe"),
+        new libBeckiLayout.LabeledLink("Issues", ["Issues"], "bug"),
+        new libBeckiLayout.LabeledLink("Applications (Vision)", ["UserApplicationsVision"], "mobile"),
+        new libBeckiLayout.LabeledLink("Devices (TODO)", ["Devices"], "tachometer"),
+        new libBeckiLayout.LabeledLink("Projects (TODO)", ["Projects"], "book")
+      ]
+    }),
+  ],
   directives: [libBeckiFieldCode.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
   inputs: ["body"],
   host: {"[class.modal-open]": "modalEvent"}

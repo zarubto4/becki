@@ -16,9 +16,9 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as becki from "./index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 const REDIRECT_URL = `${window.location.pathname}#`;
@@ -29,7 +29,7 @@ const REDIRECT_URL = `${window.location.pathname}#`;
 })
 export class Component implements ng.OnInit {
 
-  brand:string;
+  home:libBeckiLayout.LabeledLink;
 
   signIn:boolean;
 
@@ -53,10 +53,10 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(@ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.brand = becki.HOME.label;
+    this.home = home;
     this.signIn = true;
     this.inEmailField = "";
     this.inPasswordField = "";
@@ -103,7 +103,7 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.backEnd.createToken(this.inEmailField, this.inPasswordField)
-        .then(() => this.router.navigate(becki.HOME.link))
+        .then(() => this.router.navigate(this.home.link))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("The user cannot be signed in.", reason)));
   }
 

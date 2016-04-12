@@ -16,15 +16,14 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as becki from "./index";
-import * as layout from "./layout";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/processor.html",
-  directives: [layout.Component, libBeckiCustomValidator.Directive, ng.FORM_DIRECTIVES]
+  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -32,7 +31,7 @@ export class Component implements ng.OnInit {
 
   heading:string;
 
-  breadcrumbs:layout.LabeledLink[];
+  breadcrumbs:libBeckiLayout.LabeledLink[];
 
   nameField:string;
 
@@ -48,15 +47,15 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("processor");
     this.heading = `Processor ${this.id}`;
     this.breadcrumbs = [
-      becki.HOME,
-      new layout.LabeledLink("Processors", ["Devices"]),
-      new layout.LabeledLink(`Processor ${this.id}`, ["Processor", {processor: this.id}])
+      home,
+      new libBeckiLayout.LabeledLink("Processors", ["Devices"]),
+      new libBeckiLayout.LabeledLink(`Processor ${this.id}`, ["Processor", {processor: this.id}])
     ];
     this.nameField = "Loading...";
     this.codeField = "Loading...";

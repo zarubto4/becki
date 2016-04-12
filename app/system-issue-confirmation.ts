@@ -16,16 +16,15 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as becki from "./index";
-import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/system-issue-confirmation.html",
-  directives: [layout.Component, libBeckiCustomValidator.Directive, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -33,7 +32,7 @@ export class Component implements ng.OnInit {
 
   confirmation:libBackEnd.IssueConfirmation;
 
-  breadcrumbs:layout.LabeledLink[];
+  breadcrumbs:libBeckiLayout.LabeledLink[];
 
   editing:boolean;
 
@@ -49,15 +48,15 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("confirmation");
     this.breadcrumbs = [
-      becki.HOME,
-      new layout.LabeledLink("System", ["System"]),
-      new layout.LabeledLink("Issue Confirmations", ["System"]),
-      new layout.LabeledLink("Loading...", ["SystemIssueConfirmation", {confirmation: this.id}]),
+      home,
+      new libBeckiLayout.LabeledLink("System", ["System"]),
+      new libBeckiLayout.LabeledLink("Issue Confirmations", ["System"]),
+      new libBeckiLayout.LabeledLink("Loading...", ["SystemIssueConfirmation", {confirmation: this.id}]),
     ];
     this.editing = false;
     this.nameField = "Loading...";

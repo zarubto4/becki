@@ -16,27 +16,26 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as becki from "./index";
-import * as layout from "./layout";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiFieldIssueBody from "./lib-becki/field-issue-body";
 import * as libBeckiFieldIssueTags from "./lib-becki/field-issue-tags";
+import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/issue-new.html",
   directives: [
-    layout.Component,
     libBeckiFieldIssueBody.Component,
     libBeckiFieldIssueTags.Component,
+    libBeckiLayout.Component,
     ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES
   ]
 })
 export class Component implements ng.OnInit {
 
-  breadcrumbs:layout.LabeledLink[];
+  breadcrumbs:libBeckiLayout.LabeledLink[];
 
   types:libBackEnd.IssueType[];
 
@@ -54,12 +53,12 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(@ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
-      becki.HOME,
-      new layout.LabeledLink("New Issue", ["NewIssue"])
+      home,
+      new libBeckiLayout.LabeledLink("New Issue", ["NewIssue"])
     ];
     this.typeField = "";
     this.titleField = "";
