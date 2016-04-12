@@ -51,6 +51,8 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
+  addApplication:boolean;
+
   applications:libPatternFlyListView.Item[];
 
   backEnd:libBeckiBackEnd.Service;
@@ -73,6 +75,7 @@ export class Component implements ng.OnInit {
     this.editGroup = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
+    this.addApplication = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -104,10 +107,12 @@ export class Component implements ng.OnInit {
           let project:libBackEnd.Project;
           [this.group, permissions, projects, project] = result;
           this.breadcrumbs[3].label = this.group.program_name;
-          this.editGroup = libBackEnd.containsPermissions(permissions, ["project.owner"]);
+          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner"]);
+          this.editGroup = hasPermission;
           this.project = projects.length > 1 ? project.project_name : null;
           this.nameField = this.group.program_name;
           this.descriptionField = this.group.program_description;
+          this.addApplication = hasPermission;
           this.applications = this.group.m_programs.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["UserApplication", {application: application.id}]))
         })
         .catch(reason => {
