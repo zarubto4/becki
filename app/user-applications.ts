@@ -76,12 +76,12 @@ export class Component implements ng.OnInit {
         .then(currentPermissions => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
-          this.addDevice = libBackEnd.containsPermissions(currentPermissions, ["project.owner"]);
-          let viewDevice = libBackEnd.containsPermissions(currentPermissions, ["project.owner"]);
+          let hasPermission = libBackEnd.containsPermissions(currentPermissions, ["project.owner"]);
+          this.addDevice = hasPermission;
           this.backEnd.getApplicationDevices()
               .then(devices => this.devices = [].concat(
                   devices.public_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "global", ["ApplicationDevice", {device: device.id}])),
-                  devices.private_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "project specific", viewDevice ? ["ApplicationDevice", {device: device.id}] : undefined))
+                  devices.private_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "project specific", hasPermission ? ["ApplicationDevice", {device: device.id}] : undefined, hasPermission))
               ))
               .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
         })
