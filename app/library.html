@@ -43,7 +43,7 @@
       <textarea class="form-control" required minlength="8" data-bindon-ng-model="versionDescriptionField"></textarea>
     </div>
     <div class="pull-right">
-      <button class="btn btn-primary" type="submit">Create</button>
+      <button class="btn btn-primary" type="submit" data-bind-disabled="!editLibrary" data-bind-title="editLibrary ? '' : 'You are not allowed to edit libraries.'">Create</button>
     </div>
   </form>
 
