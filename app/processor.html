@@ -35,7 +35,7 @@
     </div>
     <div class="pull-right">
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-      <button class="btn btn-primary" type="submit">Update</button>
+      <button class="btn btn-primary" type="submit" data-bind-disabled="!editProcessor" data-bind-title="editProcessor ? '' : 'You are not allowed to edit processors.'">Update</button>
     </div>
   </form>
 </div>
