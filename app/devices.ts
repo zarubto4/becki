@@ -106,9 +106,10 @@ export class Component implements ng.OnInit {
           }
           this.addLibraryGroup = libBackEnd.containsPermissions(currentPermissions, ["libraryGroup.create"]);
           let viewLibraryGroup = libBackEnd.containsPermissions(currentPermissions, ["libraryGroup.read"]);
+          let deleteLibraryGroup = libBackEnd.containsPermissions(currentPermissions, ["libraryGroup.delete"]);
           if (viewLibraryGroup) {
             this.backEnd.getLibraryGroups()
-                .then(groups => this.libraryGroups = groups.map(group => new libPatternFlyListView.Item(group.id, group.group_name, group.description, viewLibraryGroup ? ["LibraryGroup", {group: group.id}] : undefined)))
+                .then(groups => this.libraryGroups = groups.map(group => new libPatternFlyListView.Item(group.id, group.group_name, group.description, viewLibraryGroup ? ["LibraryGroup", {group: group.id}] : undefined, deleteLibraryGroup)))
                 .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Library groups cannot be loaded.", reason)));
           } else {
             this.libraryGroups = [];
