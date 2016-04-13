@@ -119,11 +119,12 @@ export class Component implements ng.OnInit {
             this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view library groups."));
           }
           this.addProcessor = libBackEnd.containsPermissions(currentPermissions, ["processor.create"]);
+          let viewProcessor = libBackEnd.containsPermissions(currentPermissions, ["processor.read"]);
+          this.backEnd.getProcessors()
+              .then(processors => this.processors = processors.map(processor => new libPatternFlyListView.Item(processor.id, processor.processor_name, processor.processor_code, viewProcessor ? ["Processor", {processor: processor.id}] : undefined)))
+              .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
-    this.backEnd.getProcessors()
-        .then(processors => this.processors = processors.map(processor => new libPatternFlyListView.Item(processor.id, processor.processor_name, processor.processor_code, ["Processor", {processor: processor.id}])))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));
     this.backEnd.getDeviceTypes()
         .then(deviceTypes => this.deviceTypes = deviceTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, ["DeviceType", {type: type.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Device types cannot be loaded.", reason)));
