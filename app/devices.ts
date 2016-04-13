@@ -42,6 +42,8 @@ export class Component implements ng.OnInit {
 
   libraryGroups:libPatternFlyListView.Item[];
 
+  addProcessor:boolean;
+
   processors:libPatternFlyListView.Item[];
 
   deviceTypes:libPatternFlyListView.Item[];
@@ -62,6 +64,7 @@ export class Component implements ng.OnInit {
     this.addProducer = false;
     this.addLibrary = false;
     this.addLibraryGroup = false;
+    this.addProcessor = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -115,6 +118,7 @@ export class Component implements ng.OnInit {
             this.libraryGroups = [];
             this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view library groups."));
           }
+          this.addProcessor = libBackEnd.containsPermissions(currentPermissions, ["processor.create"]);
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
     this.backEnd.getProcessors()

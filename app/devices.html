@@ -33,12 +33,14 @@
     </div>
     <div class="col-xs-12 col-sm-4">
       <div>
-        <div class="pull-right">
-          <button type="button" class="btn btn-default" data-on-click="onProcessorAddClick($event)">Add</button>
-        </div>
+        <template data-bind-ng-if="addProcessor">
+          <div class="pull-right">
+            <button type="button" class="btn btn-default" data-on-click="onProcessorAddClick($event)">Add</button>
+          </div>
+        </template>
         <h2>Processors</h2>
       </div>
-      <div data-bind-list-view="processors" data-on-add-click="onProcessorAddClick($event)" data-on-remove-click="onProcessorRemoveClick($event)">
+      <div data-bind-list-view="processors" data-bind-addable="addProcessor" data-on-add-click="onProcessorAddClick($event)" data-on-remove-click="onProcessorRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>
