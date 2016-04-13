@@ -108,11 +108,17 @@ export class Component implements ng.OnInit {
             this.producers = [];
             this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view producers."));
           }
+          let viewProcessors = libBackEnd.containsPermissions(currentPermissions, ["processor.read"]);
+          if (viewProcessors) {
+            this.backEnd.getProcessors()
+                .then(processors => this.processors = processors)
+                .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));
+          } else {
+            this.processors = [];
+            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view processors."));
+          }
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
-    this.backEnd.getProcessors()
-        .then(processors => this.processors = processors)
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));
   }
 
   validateNameField():()=>Promise<boolean> {

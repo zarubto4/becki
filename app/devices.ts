@@ -120,9 +120,14 @@ export class Component implements ng.OnInit {
           }
           this.addProcessor = libBackEnd.containsPermissions(currentPermissions, ["processor.create"]);
           let viewProcessor = libBackEnd.containsPermissions(currentPermissions, ["processor.read"]);
-          this.backEnd.getProcessors()
-              .then(processors => this.processors = processors.map(processor => new libPatternFlyListView.Item(processor.id, processor.processor_name, processor.processor_code, viewProcessor ? ["Processor", {processor: processor.id}] : undefined)))
-              .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));
+          if (viewProcessor) {
+            this.backEnd.getProcessors()
+                .then(processors => this.processors = processors.map(processor => new libPatternFlyListView.Item(processor.id, processor.processor_name, processor.processor_code, viewProcessor ? ["Processor", {processor: processor.id}] : undefined)))
+                .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));
+          } else {
+            this.processors = [];
+            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view processors."));
+          }
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
     this.backEnd.getDeviceTypes()
