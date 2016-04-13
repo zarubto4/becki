@@ -86,10 +86,10 @@ export class Component implements ng.OnInit {
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
           this.addProducer = libBackEnd.containsPermissions(currentPermissions, ["producer.create"]);
           let viewProducers = libBackEnd.containsPermissions(currentPermissions, ["producer.edit"]);
-          let hasPermission = libBackEnd.containsPermissions(currentPermissions, ["producer.read"]);
-          if (hasPermission) {
+          let hasProducerPermission = libBackEnd.containsPermissions(currentPermissions, ["producer.read"]);
+          if (hasProducerPermission) {
             this.backEnd.getProducers()
-                .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, null, hasPermission ? ["Producer", {producer: producer.id}] : undefined, hasPermission)))
+                .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, null, hasProducerPermission ? ["Producer", {producer: producer.id}] : undefined, hasProducerPermission)))
                 .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Producers cannot be loaded.", reason)));
           } else {
             this.producers = [];
@@ -119,10 +119,10 @@ export class Component implements ng.OnInit {
             this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view library groups."));
           }
           this.addProcessor = libBackEnd.containsPermissions(currentPermissions, ["processor.create"]);
-          let viewProcessor = libBackEnd.containsPermissions(currentPermissions, ["processor.read"]);
-          if (viewProcessor) {
+          let hasProcessorPermission = libBackEnd.containsPermissions(currentPermissions, ["processor.read"]);
+          if (hasProcessorPermission) {
             this.backEnd.getProcessors()
-                .then(processors => this.processors = processors.map(processor => new libPatternFlyListView.Item(processor.id, processor.processor_name, processor.processor_code, viewProcessor ? ["Processor", {processor: processor.id}] : undefined)))
+                .then(processors => this.processors = processors.map(processor => new libPatternFlyListView.Item(processor.id, processor.processor_name, processor.processor_code, hasProcessorPermission ? ["Processor", {processor: processor.id}] : undefined, hasProcessorPermission)))
                 .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));
           } else {
             this.processors = [];
