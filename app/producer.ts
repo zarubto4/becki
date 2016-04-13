@@ -38,6 +38,8 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
+  editProducer:boolean;
+
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
@@ -56,6 +58,7 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
+    this.editProducer = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -77,8 +80,11 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The producer ${this.id} cannot be loaded.`, reason));
         });
+    this.backEnd.getUserRolesAndPermissionsCurrent()
+        .then(permissions => this.editProducer = libBackEnd.containsPermissions(permissions, ["producer.edit"]))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-192"));
+    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
   }
 
   validateNameField():()=>Promise<boolean> {
