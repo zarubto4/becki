@@ -20,12 +20,14 @@
     </div>
     <div class="col-xs-12 col-sm-4">
       <div>
-        <div class="pull-right">
-          <button type="button" class="btn btn-default" data-on-click="onLibraryGroupAddClick($event)">Add</button>
-        </div>
+        <template data-bind-ng-if="addLibraryGroup">
+          <div class="pull-right">
+            <button type="button" class="btn btn-default" data-on-click="onLibraryGroupAddClick($event)">Add</button>
+          </div>
+        </template>
         <h2>Library groups</h2>
       </div>
-      <div data-bind-list-view="libraryGroups" data-on-add-click="onLibraryGroupAddClick($event)" data-on-remove-click="onLibraryGroupRemoveClick($event)">
+      <div data-bind-list-view="libraryGroups" data-bind-addable="addLibraryGroup" data-on-add-click="onLibraryGroupAddClick($event)" data-on-remove-click="onLibraryGroupRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>
