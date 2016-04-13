@@ -46,6 +46,8 @@ export class Component implements ng.OnInit {
 
   processors:libPatternFlyListView.Item[];
 
+  addDeviceType:boolean;
+
   deviceTypes:libPatternFlyListView.Item[];
 
   backEnd:libBeckiBackEnd.Service;
@@ -65,6 +67,7 @@ export class Component implements ng.OnInit {
     this.addLibrary = false;
     this.addLibraryGroup = false;
     this.addProcessor = false;
+    this.addDeviceType = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -128,6 +131,7 @@ export class Component implements ng.OnInit {
             this.processors = [];
             this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view processors."));
           }
+          this.addDeviceType = libBackEnd.containsPermissions(currentPermissions, ["type_of_board.create"]);
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
     this.backEnd.getDeviceTypes()

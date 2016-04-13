@@ -61,12 +61,14 @@
     </div>
     <div class="col-xs-12 col-sm-8">
       <div>
-        <div class="pull-right">
-          <button type="button" class="btn btn-default" data-on-click="onDeviceTypeAddClick($event)">Add</button>
-        </div>
+        <template data-bind-ng-if="addDeviceType">
+          <div class="pull-right">
+            <button type="button" class="btn btn-default" data-on-click="onDeviceTypeAddClick($event)">Add</button>
+          </div>
+        </template>
         <h2>Device Types</h2>
       </div>
-      <div data-bind-list-view="deviceTypes" data-on-add-click="onDeviceTypeAddClick($event)" data-on-remove-click="onDeviceTypeRemoveClick($event)">
+      <div data-bind-list-view="deviceTypes" data-bind-addable="addDeviceType" data-on-add-click="onDeviceTypeAddClick($event)" data-on-remove-click="onDeviceTypeRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>
