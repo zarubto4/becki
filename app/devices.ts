@@ -90,10 +90,16 @@ export class Component implements ng.OnInit {
             this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view producers."));
           }
           this.addLibrary = libBackEnd.containsPermissions(currentPermissions, ["library.create"]);
+          let viewLibraries = libBackEnd.containsPermissions(currentPermissions, ["libraryGroup.read"]);
           let viewLibrary = libBackEnd.containsPermissions(currentPermissions, ["library.read"]);
-          this.backEnd.getLibraries()
-              .then(libraries => this.libraries = libraries.map(library => new libPatternFlyListView.Item(library.id, library.library_name, library.description, viewLibrary ? ["Library", {library: library.id}] : undefined)))
-              .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Libraries cannot be loaded.", reason)));
+          if (viewLibraries) {
+            this.backEnd.getLibraries()
+                .then(libraries => this.libraries = libraries.map(library => new libPatternFlyListView.Item(library.id, library.library_name, library.description, viewLibrary ? ["Library", {library: library.id}] : undefined)))
+                .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Libraries cannot be loaded.", reason)));
+          } else {
+            this.libraries = [];
+            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view libraries."));
+          }
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
     this.backEnd.getLibraryGroups()
