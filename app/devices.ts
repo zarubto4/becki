@@ -77,10 +77,10 @@ export class Component implements ng.OnInit {
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
           this.addProducer = libBackEnd.containsPermissions(currentPermissions, ["producer.create"]);
           let viewProducers = libBackEnd.containsPermissions(currentPermissions, ["producer.edit"]);
-          let viewProducer = libBackEnd.containsPermissions(currentPermissions, ["producer.read"]);
-          if (viewProducers) {
+          let hasPermission = libBackEnd.containsPermissions(currentPermissions, ["producer.read"]);
+          if (hasPermission) {
             this.backEnd.getProducers()
-                .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, null, viewProducer ? ["Producer", {producer: producer.id}] : undefined)))
+                .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, null, hasPermission ? ["Producer", {producer: producer.id}] : undefined, hasPermission)))
                 .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Producers cannot be loaded.", reason)));
           } else {
             this.producers = [];
