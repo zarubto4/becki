@@ -106,9 +106,14 @@ export class Component implements ng.OnInit {
           }
           this.addLibraryGroup = libBackEnd.containsPermissions(currentPermissions, ["libraryGroup.create"]);
           let viewLibraryGroup = libBackEnd.containsPermissions(currentPermissions, ["libraryGroup.read"]);
-          this.backEnd.getLibraryGroups()
-              .then(groups => this.libraryGroups = groups.map(group => new libPatternFlyListView.Item(group.id, group.group_name, group.description, viewLibraryGroup ? ["LibraryGroup", {group: group.id}] : undefined)))
-              .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Library groups cannot be loaded.", reason)));
+          if (viewLibraryGroup) {
+            this.backEnd.getLibraryGroups()
+                .then(groups => this.libraryGroups = groups.map(group => new libPatternFlyListView.Item(group.id, group.group_name, group.description, viewLibraryGroup ? ["LibraryGroup", {group: group.id}] : undefined)))
+                .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Library groups cannot be loaded.", reason)));
+          } else {
+            this.libraryGroups = [];
+            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view library groups."));
+          }
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
     this.backEnd.getProcessors()
