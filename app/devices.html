@@ -7,12 +7,14 @@
   <div class="row">
     <div class="col-xs-12 col-sm-4">
       <div>
-        <div class="pull-right">
-          <button type="button" class="btn btn-default" data-on-click="onLibraryAddClick($event)">Add</button>
-        </div>
+        <template data-bind-ng-if="addLibrary">
+          <div class="pull-right">
+            <button type="button" class="btn btn-default" data-on-click="onLibraryAddClick($event)">Add</button>
+          </div>
+        </template>
         <h2>Libraries</h2>
       </div>
-      <div data-bind-list-view="libraries" data-on-add-click="onLibraryAddClick($event)" data-on-remove-click="onLibraryRemoveClick($event)">
+      <div data-bind-list-view="libraries" data-bind-addable="addLibrary" data-on-add-click="onLibraryAddClick($event)" data-on-remove-click="onLibraryRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>
