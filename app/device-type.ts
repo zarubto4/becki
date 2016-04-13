@@ -95,9 +95,21 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The type ${this.id} cannot be loaded.`, reason));
         });
-    this.backEnd.getProducers()
-        .then(producers => this.producers = producers)
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Producers cannot be loaded.", reason)));
+    this.backEnd.getUserRolesAndPermissionsCurrent()
+        .then(currentPermissions => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
+          let viewProducers = libBackEnd.containsPermissions(currentPermissions, ["producer.edit"]);
+          if (viewProducers) {
+            this.backEnd.getProducers()
+                .then(producers => this.producers = producers)
+                .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Producers cannot be loaded.", reason)));
+          } else {
+            this.producers = [];
+            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view producers."));
+          }
+        })
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
     this.backEnd.getProcessors()
         .then(processors => this.processors = processors)
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));

@@ -77,13 +77,22 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The producer ${this.id} cannot be loaded.`, reason));
         });
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-192"));
   }
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getProducers().then(producers => !producers.find(producer => producer.id != this.id && producer.name == this.nameField));
+    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
+        .then(permissions => {
+          if (!libBackEnd.containsPermissions(permissions, ["producer.edit"])) {
+            return Promise.reject('You are not allowed to list other producers.');
+          }
+        })
+        .then(() => this.backEnd.getProducers())
+        .then(producers => !producers.find(producer => producer.id != this.id && producer.name == this.nameField));
   }
 
   onSubmit():void {

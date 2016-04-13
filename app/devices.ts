@@ -76,10 +76,16 @@ export class Component implements ng.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
           this.addProducer = libBackEnd.containsPermissions(currentPermissions, ["producer.create"]);
+          let viewProducers = libBackEnd.containsPermissions(currentPermissions, ["producer.edit"]);
           let viewProducer = libBackEnd.containsPermissions(currentPermissions, ["producer.read"]);
-          this.backEnd.getProducers()
-              .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, null, viewProducer ? ["Producer", {producer: producer.id}] : undefined)))
-              .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Producers cannot be loaded.", reason)));
+          if (viewProducers) {
+            this.backEnd.getProducers()
+                .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, null, viewProducer ? ["Producer", {producer: producer.id}] : undefined)))
+                .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Producers cannot be loaded.", reason)));
+          } else {
+            this.producers = [];
+            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view producers."));
+          }
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
     this.backEnd.getLibraries()
