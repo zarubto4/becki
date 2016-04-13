@@ -22,7 +22,7 @@
     </div>
     <div class="pull-right">
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-      <button class="btn btn-primary" type="submit">Update</button>
+      <button class="btn btn-primary" type="submit" data-bind-disabled="!editLibrary" data-bind-title="editLibrary ? '' : 'You are not allowed to edit libraries.'">Update</button>
     </div>
   </form>
 
