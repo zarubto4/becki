@@ -129,7 +129,7 @@ export class Component implements ng.OnInit {
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
           let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
           this.addDeviceProgram = hasPermission;
-          this.devicePrograms = devicePrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, hasPermission ? ["DeviceProgram", {project: this.id, program: program.id}] : undefined));
+          this.devicePrograms = devicePrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, hasPermission ? ["DeviceProgram", {project: this.id, program: program.id}] : undefined, hasPermission));
           this.devices = devices.map(device => new SelectableItem(device.id, device.id, device.isActive ? "active" : "inactive"));
           this.standalonePrograms = [].concat(...categories.map(category => category.blockoBlocks.map(program => new libPatternFlyListView.Item(program.id, program.name, program.general_description, ["StandaloneProgram", {project: this.id, program: program.id}]))));
         })
