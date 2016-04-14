@@ -26,12 +26,14 @@
     </div>
   </form>
   <div>
-    <div class="pull-right">
-      <button type="button" class="btn btn-default" data-on-click="onVersionAddClick($event)">Add</button>
-    </div>
+    <template data-bind-ng-if="editProgram">
+      <div class="pull-right">
+        <button type="button" class="btn btn-default" data-on-click="onVersionAddClick($event)">Add</button>
+      </div>
+    </template>
     <h2>Versions</h2>
   </div>
-  <div data-bind-list-view="versions" data-on-add-click="onVersionAddClick($event)" data-on-remove-click="onVersionRemoveClick($event)">
+  <div data-bind-list-view="versions" data-bind-addable="editProgram" data-on-add-click="onVersionAddClick($event)" data-on-remove-click="onVersionRemoveClick($event)">
     <div class="spinner"></div>
   </div>
 </div>
