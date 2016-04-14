@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, View or Remove a Scheme or a Moderator of Interactions'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="showModerators">
+<div data-bind-layout="'Add, View or Remove a Scheme or a Moderator of Interactions'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="!showModerators && !addScheme ? null : 'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="showModerators">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="!showModerators">
       <a data-on-click="onSchemesClick($event)" style="cursor: pointer">
@@ -22,7 +22,7 @@
     </div>
   </template>
   <template data-bind-ng-switch-when="false">
-    <div data-bind-list-view="schemes" data-on-add-click="onAddSchemeClick($event)" data-on-remove-click="onRemoveSchemeClick($event)">
+    <div data-bind-list-view="schemes" data-bind-addable="addScheme" data-on-add-click="onAddSchemeClick($event)" data-on-remove-click="onRemoveSchemeClick($event)">
       <div class="spinner"></div>
     </div>
   </template>

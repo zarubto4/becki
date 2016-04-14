@@ -44,6 +44,8 @@ export class Component implements ng.OnInit {
 
   showModerators:boolean;
 
+  addScheme:boolean;
+
   schemes:libPatternFlyListView.Item[];
 
   moderators:InteractionsModeratorItem[];
@@ -63,6 +65,7 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Interactions", ["UserInteractions"])
     ];
     this.showModerators = false;
+    this.addScheme = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -78,6 +81,11 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
+    this.backEnd.getUserRolesAndPermissionsCurrent()
+        .then(permissions => this.addScheme = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
     this.backEnd.getProjects()
         .then(projects => {
           return Promise.all<any>([

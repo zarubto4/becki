@@ -175,7 +175,14 @@
               </button>
               <ul class="dropdown-menu dropdown-menu-right">
                 <template data-bind-ng-if="item.interactionsSchemeField != null">
-                  <li><a data-on-click="onItemImportClick(item, $event)" style="cursor: pointer">Import</a></li>
+                  <li data-bind-ng-switch="importScheme">
+                    <template data-bind-ng-switch-when="true">
+                      <a data-on-click="onItemImportClick(item, $event)" style="cursor: pointer">Import</a>
+                    </template>
+                    <template data-bind-ng-switch-when="false">
+                      <a style="cursor: not-allowed; opacity: 0.65" title="You are not allowed to import schemes.">Import</a>
+                    </template>
+                  </li>
                 </template>
                 <template data-bind-ng-if="item.markable">
                   <li><a data-on-click="onItemMarkClick(item, $event)" style="cursor: pointer">Mark</a></li>
