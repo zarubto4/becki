@@ -43,12 +43,14 @@
   </form>
   <template data-bind-ng-switch-when="false">
     <div>
-      <div class="pull-right">
-        <button type="button" class="btn btn-default" data-on-click="onAddVersionClick($event)">Add</button>
-      </div>
+      <template data-bind-ng-if="addVersion">
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" data-on-click="onAddVersionClick($event)">Add</button>
+        </div>
+      </template>
       <h2>Versions</h2>
     </div>
-    <div data-bind-list-view="versions" data-on-add-click="onAddVersionClick($event)">
+    <div data-bind-list-view="versions" data-bind-addable="addVersion" data-on-add-click="onAddVersionClick($event)">
       <div class="spinner"></div>
     </div>
     <h2>Upload</h2>

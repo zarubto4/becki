@@ -67,6 +67,8 @@ export class Component implements ng.OnInit {
 
   description:string;
 
+  addVersion:boolean;
+
   versions:libPatternFlyListView.Item[];
 
   uploadVersionField:string;
@@ -95,6 +97,7 @@ export class Component implements ng.OnInit {
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.description = "Loading...";
+    this.addVersion = false;
     this.uploadVersionField = "";
     this.backEnd = backEnd;
     this.notifications = notifications;
@@ -147,6 +150,7 @@ export class Component implements ng.OnInit {
           this.nameField = scheme.name;
           this.descriptionField = scheme.program_description;
           this.description = scheme.program_description;
+          this.addVersion = libBackEnd.containsPermissions(permissions, ["project.owner"]);
           this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, version.version_description, ["UserInteractionsSchemeVersion", {scheme: this.id, version: version.id}], false));
           this.moderators = moderators.map(moderator => new SelectableModerator(moderator));
         })
