@@ -32,6 +32,8 @@ export class Component implements ng.OnInit {
 
   tab:string;
 
+  addDevice:boolean;
+
   moderators:libPatternFlyListView.Item[];
 
   devices:libPatternFlyListView.Item[];
@@ -54,6 +56,7 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("System", ["System"])
     ];
     this.tab = "moderators";
+    this.addDevice = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -69,6 +72,11 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
+    this.backEnd.getUserRolesAndPermissionsCurrent()
+        .then(permissions => this.addDevice = libBackEnd.containsPermissions(permissions, ["type_of_board.read"]))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
     this.backEnd.getInteractionsModerators()
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-71
         .then(moderators => this.moderators = moderators.map(moderator => new libPatternFlyListView.Item(moderator.homer_id, `${moderator.homer_id} (issue/TYRION-71)`, moderator.online ? "online" : "offline")))

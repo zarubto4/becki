@@ -125,7 +125,14 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getDeviceTypes().then(types => !types.find(type => type.id != this.id && type.name == this.nameField));
+    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
+        .then(permissions => {
+          if (!libBackEnd.containsPermissions(permissions, ["type_of_board.read"])) {
+            return Promise.reject("You are not allowed to list other types.");
+          }
+        })
+        .then(() => this.backEnd.getDeviceTypes())
+        .then(types => !types.find(type => type.id != this.id && type.name == this.nameField));
   }
 
   onSubmit():void {
