@@ -135,7 +135,7 @@ export class Component implements ng.OnInit {
           this.devicePrograms = devicePrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, hasPermission ? ["DeviceProgram", {project: this.id, program: program.id}] : undefined, hasPermission));
           this.devices = devices.map(device => new SelectableItem(device.id, device.id, device.isActive ? "active" : "inactive"));
           this.addStandaloneProgram = hasPermission;
-          this.standalonePrograms = [].concat(...categories.map(category => category.blockoBlocks.map(program => new libPatternFlyListView.Item(program.id, program.name, program.general_description, hasPermission ? ["StandaloneProgram", {project: this.id, program: program.id}] : undefined))));
+          this.standalonePrograms = [].concat(...categories.map(category => category.blockoBlocks.map(program => new libPatternFlyListView.Item(program.id, program.name, program.general_description, hasPermission ? ["StandaloneProgram", {project: this.id, program: program.id}] : undefined, hasPermission))));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The project ${this.id} cannot be loaded.`, reason));
