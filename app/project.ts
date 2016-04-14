@@ -109,6 +109,7 @@ export class Component implements ng.OnInit {
     Promise.all<any>([
           this.backEnd.getProject(this.id),
           this.backEnd.getProjectOwners(this.id),
+          this.backEnd.getUserRolesAndPermissionsCurrent(),
           this.backEnd.getProjectDevicePrograms(this.id),
           this.backEnd.getProjectDevices(this.id),
           this.backEnd.getProjectStandaloneProgramCategories(this.id)
@@ -116,25 +117,25 @@ export class Component implements ng.OnInit {
         .then(result => {
           let project:libBackEnd.Project;
           let collaborators:libBackEnd.User[];
+          let permissions:libBackEnd.RolesAndPermissions;
           let devicePrograms:libBackEnd.DeviceProgram[];
           let devices:libBackEnd.Device[];
           let categories:libBackEnd.StandaloneProgramCategory[];
-          [project, collaborators, devicePrograms, devices, categories] = result;
+          [project, collaborators, permissions, devicePrograms, devices, categories] = result;
           this.nameField = project.project_name;
           this.descriptionField = project.project_description;
           this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composeUserString(collaborator), null));
-          this.devicePrograms = devicePrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, ["DeviceProgram", {project: this.id, program: program.id}]));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
+          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
+          this.addDeviceProgram = hasPermission;
+          this.devicePrograms = devicePrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, hasPermission ? ["DeviceProgram", {project: this.id, program: program.id}] : undefined));
           this.devices = devices.map(device => new SelectableItem(device.id, device.id, device.isActive ? "active" : "inactive"));
           this.standalonePrograms = [].concat(...categories.map(category => category.blockoBlocks.map(program => new libPatternFlyListView.Item(program.id, program.name, program.general_description, ["StandaloneProgram", {project: this.id, program: program.id}]))));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The project ${this.id} cannot be loaded.`, reason));
         });
-    this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => this.addDeviceProgram = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
   }
 
   validateNameField():()=>Promise<boolean> {
