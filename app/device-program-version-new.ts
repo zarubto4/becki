@@ -16,7 +16,7 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as libBackEnd from "./lib-back-end";
+import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
 import * as libBeckiFieldCode from "./lib-becki/field-code";
