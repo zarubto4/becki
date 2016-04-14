@@ -16,6 +16,7 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
+import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
 import * as libBeckiLayout from "./lib-becki/layout";
@@ -88,7 +89,14 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getStandaloneProgramCategories().then(categories => ![].concat(...categories.map(category => category.blockoBlocks)).find(program => program.id != this.id && program.name == this.nameField));
+    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
+        .then(permissions => {
+          if (!libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"])) {
+            return Promise.reject('You are not allowed to list other programs.');
+          }
+        })
+        .then(() => this.backEnd.getStandaloneProgramCategories())
+        .then(categories => ![].concat(...categories.map(category => category.blockoBlocks)).find(program => program.id != this.id && program.name == this.nameField));
   }
 
   onSubmit():void {
