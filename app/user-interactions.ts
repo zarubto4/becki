@@ -83,21 +83,22 @@ export class Component implements ng.OnInit {
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
     this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
-    this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => this.addScheme = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
     this.backEnd.getProjects()
         .then(projects => {
           return Promise.all<any>([
+            this.backEnd.getUserRolesAndPermissionsCurrent(),
             Promise.all(projects.map(project => this.backEnd.getProjectInteractionsSchemes(project.id))),
             Promise.all(projects.map(project => Promise.all<any>([this.backEnd.getProjectInteractionsModerators(project.id), project])))
           ]);
         })
         .then(result => {
+          let permissions:libBackEnd.RolesAndPermissions;
           let schemes:libBackEnd.InteractionsScheme[][];
           let moderators:[libBackEnd.InteractionsModerator[], libBackEnd.Project][];
-          [schemes, moderators] = result;
-          this.schemes = [].concat(...schemes).map(scheme => new libPatternFlyListView.Item(scheme.b_program_id, scheme.name, scheme.program_description, ["UserInteractionsScheme", {scheme: scheme.b_program_id}]));
+          [permissions, schemes, moderators] = result;
+          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
+          this.addScheme = hasPermission;
+          this.schemes = [].concat(...schemes).map(scheme => new libPatternFlyListView.Item(scheme.b_program_id, scheme.name, scheme.program_description, hasPermission ? ["UserInteractionsScheme", {scheme: scheme.b_program_id}] : undefined));
           this.moderators = [].concat(...moderators.map(pair => pair[0].map(moderator => new InteractionsModeratorItem(moderator, pair[1].id))));
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Interactions cannot be loaded.", reason)));
