@@ -89,21 +89,26 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    this.backEnd.getDeviceProgram(this.id)
-        .then(program => {
+    Promise.all<any>([
+          this.backEnd.getDeviceProgram(this.id),
+          this.backEnd.getUserRolesAndPermissionsCurrent()
+        ])
+        .then(result => {
+          let program: libBackEnd.DeviceProgram;
+          let permissions: libBackEnd.RolesAndPermissions;
+          [program, permissions] = result;
           this.nameField = program.program_name;
           this.descriptionField = program.program_description;
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
+          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
+          this.editProgram = hasPermission;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-126
-          this.versions = program.version_objects.map(version => new libPatternFlyListView.Item(version.id, `${version.version_name} (issue/TYRION-126)`, version.version_description));
+          this.versions = program.version_objects.map(version => new libPatternFlyListView.Item(version.id, `${version.version_name} (issue/TYRION-126)`, version.version_description, undefined, hasPermission));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The program ${this.id} cannot be loaded.`, reason));
         });
-    this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => this.editProgram = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
   }
 
   validateNameField():()=>Promise<boolean> {
