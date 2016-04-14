@@ -57,6 +57,8 @@ export class Component implements ng.OnInit {
 
   editing:boolean;
 
+  editScheme:boolean;
+
   project:string;
 
   nameField:string;
@@ -89,6 +91,7 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Loading...", ["UserInteractionsScheme", {scheme: this.id}])
     ];
     this.editing = false;
+    this.editScheme = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.description = "Loading...";
@@ -120,8 +123,11 @@ export class Component implements ng.OnInit {
           let scheme:libBackEnd.InteractionsScheme;
           let project:libBackEnd.Project;
           [scheme, project] = result;
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
           return Promise.all<any>([
             scheme,
+            this.backEnd.getUserRolesAndPermissionsCurrent(),
             this.backEnd.getProjects(),
             project,
             this.backEnd.getProjectInteractionsModerators(project.id)
@@ -129,12 +135,14 @@ export class Component implements ng.OnInit {
         })
         .then(result => {
           let scheme:libBackEnd.InteractionsScheme;
+          let permissions:libBackEnd.RolesAndPermissions;
           let projects:libBackEnd.Project[];
           let project:libBackEnd.Project;
           let moderators:libBackEnd.InteractionsModerator[];
-          [scheme, projects, project, moderators] = result;
+          [scheme, permissions, projects, project, moderators] = result;
           this.name = scheme.name;
           this.breadcrumbs[3].label = scheme.name;
+          this.editScheme = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
           this.project = projects.length > 1 ? project.project_name : null;
           this.nameField = scheme.name;
           this.descriptionField = scheme.program_description;
