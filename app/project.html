@@ -40,12 +40,14 @@
   <div class="row">
     <div class="col-xs-12 col-sm-6">
       <div>
-        <div class="pull-right">
-          <button type="button" class="btn btn-default" data-on-click="onDeviceProgramAddClick($event)">Add</button>
-        </div>
+        <template data-bind-ng-if="addDeviceProgram">
+          <div class="pull-right">
+            <button type="button" class="btn btn-default" data-on-click="onDeviceProgramAddClick($event)">Add</button>
+          </div>
+        </template>
         <h2>Device Programs</h2>
       </div>
-      <div data-bind-list-view="devicePrograms" data-on-add-click="onDeviceProgramAddClick($event)" data-on-remove-click="onDeviceProgramRemoveClick($event)">
+      <div data-bind-list-view="devicePrograms" data-bind-addable="addDeviceProgram" data-on-add-click="onDeviceProgramAddClick($event)" data-on-remove-click="onDeviceProgramRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>

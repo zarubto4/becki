@@ -60,6 +60,8 @@ export class Component implements ng.OnInit {
 
   collaborators:libPatternFlyListView.Item[];
 
+  addDeviceProgram:boolean;
+
   devicePrograms:libPatternFlyListView.Item[];
 
   standalonePrograms:libPatternFlyListView.Item[];
@@ -87,6 +89,7 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
+    this.addDeviceProgram = false;
     this.deviceUploadingProgramField = "";
     this.backEnd = backEnd;
     this.notifications = notifications;
@@ -127,6 +130,11 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The project ${this.id} cannot be loaded.`, reason));
         });
+    this.backEnd.getUserRolesAndPermissionsCurrent()
+        .then(permissions => this.addDeviceProgram = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
   }
 
   validateNameField():()=>Promise<boolean> {
