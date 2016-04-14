@@ -45,7 +45,7 @@
     </div>
     <div class="pull-right">
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-      <button class="btn btn-primary" type="submit">Update</button>
+      <button class="btn btn-primary" type="submit" data-bind-disabled="!editType" data-bind-title="editType ? '' : 'You are not allowed to edit types.'">Update</button>
     </div>
   </form>
 </div>

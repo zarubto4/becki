@@ -46,6 +46,8 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
+  editType:boolean;
+
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
@@ -65,6 +67,7 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
+    this.editType = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -117,6 +120,7 @@ export class Component implements ng.OnInit {
             this.processors = [];
             this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view processors."));
           }
+          this.editType = libBackEnd.containsPermissions(currentPermissions, ["type_of_board.edit"]);
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
   }
