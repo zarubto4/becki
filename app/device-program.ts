@@ -47,6 +47,8 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
+  editProgram:boolean;
+
   versions:libPatternFlyListView.Item[];
 
   backEnd:libBeckiBackEnd.Service;
@@ -71,6 +73,7 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
+    this.editProgram = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -96,8 +99,11 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The program ${this.id} cannot be loaded.`, reason));
         });
+    this.backEnd.getUserRolesAndPermissionsCurrent()
+        .then(permissions => this.editProgram = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-192"));
+    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
   }
 
   validateNameField():()=>Promise<boolean> {
