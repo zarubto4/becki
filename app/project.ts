@@ -64,6 +64,8 @@ export class Component implements ng.OnInit {
 
   devicePrograms:libPatternFlyListView.Item[];
 
+  addStandaloneProgram:boolean;
+
   standalonePrograms:libPatternFlyListView.Item[];
 
   devices:SelectableItem[];
@@ -90,6 +92,7 @@ export class Component implements ng.OnInit {
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.addDeviceProgram = false;
+    this.addStandaloneProgram = false;
     this.deviceUploadingProgramField = "";
     this.backEnd = backEnd;
     this.notifications = notifications;
@@ -131,6 +134,7 @@ export class Component implements ng.OnInit {
           this.addDeviceProgram = hasPermission;
           this.devicePrograms = devicePrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, hasPermission ? ["DeviceProgram", {project: this.id, program: program.id}] : undefined, hasPermission));
           this.devices = devices.map(device => new SelectableItem(device.id, device.id, device.isActive ? "active" : "inactive"));
+          this.addStandaloneProgram = hasPermission;
           this.standalonePrograms = [].concat(...categories.map(category => category.blockoBlocks.map(program => new libPatternFlyListView.Item(program.id, program.name, program.general_description, ["StandaloneProgram", {project: this.id, program: program.id}]))));
         })
         .catch(reason => {

@@ -53,12 +53,14 @@
     </div>
     <div class="col-xs-12 col-sm-6">
       <div>
-        <div class="pull-right">
-          <button type="button" class="btn btn-default" data-on-click="onStandaloneProgramAddClick($event)">Add</button>
-        </div>
+        <template data-bind-ng-if="addStandaloneProgram">
+          <div class="pull-right">
+            <button type="button" class="btn btn-default" data-on-click="onStandaloneProgramAddClick($event)">Add</button>
+          </div>
+        </template>
         <h2>Standalone Programs</h2>
       </div>
-      <div data-bind-list-view="standalonePrograms" data-on-add-click="onStandaloneProgramAddClick($event)" data-on-remove-click="onStandaloneProgramRemoveClick($event)">
+      <div data-bind-list-view="standalonePrograms" data-bind-addable="addStandaloneProgram" data-on-add-click="onStandaloneProgramAddClick($event)" data-on-remove-click="onStandaloneProgramRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>
