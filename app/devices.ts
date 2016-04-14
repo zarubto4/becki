@@ -133,9 +133,10 @@ export class Component implements ng.OnInit {
           }
           this.addDeviceType = libBackEnd.containsPermissions(currentPermissions, ["type_of_board.create"]);
           let viewDeviceType = libBackEnd.containsPermissions(currentPermissions, ["type_of_board.read"]);
+          let deleteDeviceType = libBackEnd.containsPermissions(currentPermissions, ["type_of_board.delete"]);
           if (viewDeviceType) {
             this.backEnd.getDeviceTypes()
-                .then(deviceTypes => this.deviceTypes = deviceTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, viewDeviceType ? ["DeviceType", {type: type.id}] : undefined)))
+                .then(deviceTypes => this.deviceTypes = deviceTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, viewDeviceType ? ["DeviceType", {type: type.id}] : undefined, deleteDeviceType)))
                 .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Device types cannot be loaded.", reason)));
           } else {
             this.deviceTypes = [];
