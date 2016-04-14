@@ -75,8 +75,22 @@ export class Component implements ng.OnInit {
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
     this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
     this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => this.addDevice = libBackEnd.containsPermissions(permissions, ["type_of_board.create", "type_of_board.read"]))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
+        .then(permissions => {
+          this.addDevice = libBackEnd.containsPermissions(permissions, ["type_of_board.create", "type_of_board.read"]);
+          let viewDevice = libBackEnd.containsPermissions(permissions, ["board.read"]);
+          if (viewDevice) {
+            this.backEnd.getDevices()
+                // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
+                .then(devices => this.devices = devices.map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.isActive ? "active" : "inactive")))
+                .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
+          } else {
+            this.devices = [];
+            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view devices."));
+          }
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason));
+        });
     this.backEnd.getInteractionsModerators()
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-71
         .then(moderators => this.moderators = moderators.map(moderator => new libPatternFlyListView.Item(moderator.homer_id, `${moderator.homer_id} (issue/TYRION-71)`, moderator.online ? "online" : "offline")))
@@ -85,10 +99,6 @@ export class Component implements ng.OnInit {
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-155"));
           this.notifications.current.push(new libBeckiNotifications.Danger("Moderators of interactions cannot be loaded.", reason));
         });
-    this.backEnd.getDevices()
-        // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
-        .then(devices => this.devices = devices.map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.isActive ? "active" : "inactive")))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
     this.backEnd.getIssueTypes()
         .then(types => this.types = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, ["SystemIssueType", {type: type.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue types cannot be loaded.", reason)));
