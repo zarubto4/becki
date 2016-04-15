@@ -16,6 +16,7 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
+import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
@@ -28,6 +29,8 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
 export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
+
+  addProject:boolean;
 
   items:libPatternFlyListView.Item[];
 
@@ -45,6 +48,7 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("User", ["Projects"]),
       new libBeckiLayout.LabeledLink("Projects", ["Projects"])
     ];
+    this.addProject = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -60,6 +64,11 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
+    this.backEnd.getUserRolesAndPermissionsCurrent()
+        .then(permissions => this.addProject = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
     this.backEnd.getProjects()
         .then(projects => this.items = projects.map(project => new libPatternFlyListView.Item(project.id, project.project_name, project.project_description, ["Project", {project: project.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));

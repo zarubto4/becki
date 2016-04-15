@@ -112,7 +112,7 @@ export class Component implements ng.OnInit {
           this.project = projects.length > 1 ? project.project_name : null;
           this.nameField = this.group.program_name;
           this.descriptionField = this.group.program_description;
-          this.addApplication = hasPermission;
+          this.addApplication = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
           this.applications = this.group.m_programs.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, hasPermission ? ["UserApplication", {application: application.id}] : undefined, hasPermission));
         })
         .catch(reason => {

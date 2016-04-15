@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, Update or Remove a Device'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="showUpdate ? null : 'Add'" data-on-action-click="onAddDeviceClick($event)" data-bind-ng-switch="showUpdate">
+<div data-bind-layout="'Add, Update or Remove a Device'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="showUpdate || !addDevice ? null : 'Add'" data-on-action-click="onAddDeviceClick($event)" data-bind-ng-switch="showUpdate">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="!showUpdate">
       <a data-on-click="onDevicesClick($event)" style="cursor: pointer">
@@ -41,7 +41,7 @@
     </form>
   </template>
   <template data-bind-ng-switch-when="false">
-    <div data-bind-list-view="devices" data-on-add-click="onAddDeviceClick($event)" data-on-remove-click="onRemoveDeviceClick($event)">
+    <div data-bind-list-view="devices" data-bind-addable="addDevice" data-on-add-click="onAddDeviceClick($event)" data-on-remove-click="onRemoveDeviceClick($event)">
       <div class="spinner"></div>
     </div>
   </template>

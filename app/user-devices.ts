@@ -47,6 +47,8 @@ export class Component implements ng.OnInit {
 
   showUpdate:boolean;
 
+  addDevice:boolean;
+
   devices:SelectableDeviceItem[];
 
   @ng.ViewChild("updateField")
@@ -67,6 +69,7 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Devices", ["UserDevices"])
     ];
     this.showUpdate = false;
+    this.addDevice = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -82,6 +85,11 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
+    this.backEnd.getUserRolesAndPermissionsCurrent()
+        .then(permissions => this.addDevice = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
     this.backEnd.getProjects()
         .then(projects => Promise.all(projects.map(project => Promise.all<any>([this.backEnd.getProjectDevices(project.id), project]))))
         .then((devices:[libBackEnd.Device[], libBackEnd.Project][]) => this.devices = [].concat(...devices.map(pair => pair[0].map(device => new SelectableDeviceItem(device, pair[1].id)))))

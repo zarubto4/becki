@@ -42,9 +42,9 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
-  showModerators:boolean;
+  addItem:boolean;
 
-  addScheme:boolean;
+  showModerators:boolean;
 
   schemes:libPatternFlyListView.Item[];
 
@@ -64,8 +64,8 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("User", home.link),
       new libBeckiLayout.LabeledLink("Interactions", ["UserInteractions"])
     ];
+    this.addItem = false;
     this.showModerators = false;
-    this.addScheme = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -97,7 +97,7 @@ export class Component implements ng.OnInit {
           let moderators:[libBackEnd.InteractionsModerator[], libBackEnd.Project][];
           [permissions, schemes, moderators] = result;
           let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
-          this.addScheme = hasPermission;
+          this.addItem = hasPermission;
           this.schemes = [].concat(...schemes).map(scheme => new libPatternFlyListView.Item(scheme.b_program_id, scheme.name, scheme.program_description, hasPermission ? ["UserInteractionsScheme", {scheme: scheme.b_program_id}] : undefined, hasPermission));
           this.moderators = [].concat(...moderators.map(pair => pair[0].map(moderator => new InteractionsModeratorItem(moderator, pair[1].id))));
         })

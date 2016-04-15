@@ -78,8 +78,8 @@ export class Component implements ng.OnInit {
         .then(currentPermissions => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
+          this.addItem = libBackEnd.containsPermissions(currentPermissions, ["project.owner", "Project_Editor"]);
           let hasPermission = libBackEnd.containsPermissions(currentPermissions, ["project.owner"]);
-          this.addItem = hasPermission;
           this.viewGroups = hasPermission;
           this.backEnd.getApplications()
               .then(applications => this.applications = applications.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, hasPermission ? ["UserApplication", {application: application.id}] : undefined, hasPermission)))

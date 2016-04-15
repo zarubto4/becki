@@ -79,7 +79,16 @@ export class Component implements ng.OnInit {
     this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
     this.backEnd.getUserRolesAndPermissionsCurrent()
         .then(permissions => {
-          this.addModerator = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
+          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
+          this.addModerator = hasPermission;
+          this.backEnd.getInteractionsModerators()
+              // see https://youtrack.byzance.cz/youtrack/issue/TYRION-71
+              .then(moderators => this.moderators = moderators.map(moderator => new libPatternFlyListView.Item(moderator.homer_id, `${moderator.homer_id} (issue/TYRION-71)`, moderator.online ? "online" : "offline", undefined, hasPermission)))
+              .catch(reason => {
+                // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
+                this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-155"));
+                this.notifications.current.push(new libBeckiNotifications.Danger("Moderators of interactions cannot be loaded.", reason));
+              });
           this.addDevice = libBackEnd.containsPermissions(permissions, ["type_of_board.create", "type_of_board.read"]);
           let viewDevice = libBackEnd.containsPermissions(permissions, ["board.read"]);
           if (viewDevice) {
@@ -94,14 +103,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason));
-        });
-    this.backEnd.getInteractionsModerators()
-        // see https://youtrack.byzance.cz/youtrack/issue/TYRION-71
-        .then(moderators => this.moderators = moderators.map(moderator => new libPatternFlyListView.Item(moderator.homer_id, `${moderator.homer_id} (issue/TYRION-71)`, moderator.online ? "online" : "offline")))
-        .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-155"));
-          this.notifications.current.push(new libBeckiNotifications.Danger("Moderators of interactions cannot be loaded.", reason));
         });
     this.backEnd.getIssueTypes()
         .then(types => this.types = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, ["SystemIssueType", {type: type.id}])))
