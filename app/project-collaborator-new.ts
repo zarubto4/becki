@@ -65,13 +65,22 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-192"));
   }
 
   validateIdField():()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getProjectOwners(this.projectId).then(collaborators => !collaborators.find(collaborator => collaborator.id == this.idField));
+    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
+        .then(permissions => {
+          if (!libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"])) {
+            return Promise.reject('You are not allowed to list other collaborators.');
+          }
+        })
+        .then(() => this.backEnd.getProjectOwners(this.projectId))
+        .then(collaborators => !collaborators.find(collaborator => collaborator.id == this.idField));
   }
 
   onSubmit():void {

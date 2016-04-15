@@ -109,28 +109,34 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    Promise.all<any>([
-          this.backEnd.getProject(this.id),
-          this.backEnd.getProjectOwners(this.id),
-          this.backEnd.getUserRolesAndPermissionsCurrent(),
-          this.backEnd.getProjectDevicePrograms(this.id),
-          this.backEnd.getProjectDevices(this.id),
-          this.backEnd.getProjectStandaloneProgramCategories(this.id)
-        ])
-        .then(result => {
-          let project:libBackEnd.Project;
-          let collaborators:libBackEnd.User[];
-          let permissions:libBackEnd.RolesAndPermissions;
-          let devicePrograms:libBackEnd.DeviceProgram[];
-          let devices:libBackEnd.Device[];
-          let categories:libBackEnd.StandaloneProgramCategory[];
-          [project, collaborators, permissions, devicePrograms, devices, categories] = result;
-          this.nameField = project.project_name;
-          this.descriptionField = project.project_description;
-          this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composeUserString(collaborator), null));
+    this.backEnd.getUserRolesAndPermissionsCurrent()
+        .then(permissions => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
           let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
+          if (!hasPermission) {
+            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view collaborators."));
+          }
+          return Promise.all<any>([
+            this.backEnd.getProject(this.id),
+            hasPermission ? this.backEnd.getProjectOwners(this.id) : [],
+            hasPermission,
+            this.backEnd.getProjectDevicePrograms(this.id),
+            this.backEnd.getProjectDevices(this.id),
+            this.backEnd.getProjectStandaloneProgramCategories(this.id)
+          ]);
+        })
+        .then(result => {
+          let project:libBackEnd.Project;
+          let collaborators:libBackEnd.User[];
+          let hasPermission:boolean;
+          let devicePrograms:libBackEnd.DeviceProgram[];
+          let devices:libBackEnd.Device[];
+          let categories:libBackEnd.StandaloneProgramCategory[];
+          [project, collaborators, hasPermission, devicePrograms, devices, categories] = result;
+          this.nameField = project.project_name;
+          this.descriptionField = project.project_description;
+          this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composeUserString(collaborator), null));
           this.addDeviceProgram = hasPermission;
           if (hasPermission) {
             this.devicePrograms = devicePrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, hasPermission ? ["DeviceProgram", {project: this.id, program: program.id}] : undefined, hasPermission));
