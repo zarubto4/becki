@@ -285,7 +285,14 @@
                               <a style="cursor: not-allowed; opacity: 0.65" title="You are not allowed to edit comments.">Edit</a>
                             </template>
                           </li>
-                          <li><a data-on-click="onCommentRemoveClick(comment, $event)" style="cursor: pointer">Remove</a></li>
+                          <li data-bind-ng-switch="deleteItem">
+                            <template data-bind-ng-switch-when="true">
+                              <a data-on-click="onCommentRemoveClick(comment, $event)" style="cursor: pointer">Remove</a>
+                            </template>
+                            <template data-bind-ng-switch-when="false">
+                              <a style="cursor: not-allowed; opacity: 0.65" title="You are not allowed to remove comments.">Remove</a>
+                            </template>
+                          </li>
                         </ul>
                       </div>
                     </div>
