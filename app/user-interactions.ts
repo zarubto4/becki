@@ -26,10 +26,10 @@ class InteractionsModeratorItem extends libPatternFlyListView.Item {
 
   project:string;
 
-  constructor(moderator:libBackEnd.InteractionsModerator, project:string) {
+  constructor(moderator:libBackEnd.InteractionsModerator, project:string, removable:boolean) {
     "use strict";
 
-    super(moderator.homer_id, moderator.homer_id, moderator.online ? "online" : "offline");
+    super(moderator.homer_id, moderator.homer_id, moderator.online ? "online" : "offline", undefined, removable);
     this.project = project;
   }
 }
@@ -112,7 +112,7 @@ export class Component implements ng.OnInit {
           [hasPermission, schemes, moderators] = result;
           this.addItem = hasPermission;
           this.schemes = [].concat(...schemes).map(scheme => new libPatternFlyListView.Item(scheme.b_program_id, scheme.name, scheme.program_description, hasPermission ? ["UserInteractionsScheme", {scheme: scheme.b_program_id}] : undefined, hasPermission));
-          this.moderators = [].concat(...moderators.map(pair => pair[0].map(moderator => new InteractionsModeratorItem(moderator, pair[1].id))));
+          this.moderators = [].concat(...moderators.map(pair => pair[0].map(moderator => new InteractionsModeratorItem(moderator, pair[1].id, hasPermission))));
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Interactions cannot be loaded.", reason)));
   }
