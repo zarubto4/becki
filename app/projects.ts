@@ -72,7 +72,7 @@ export class Component implements ng.OnInit {
           this.addProject = hasPermission;
           if (hasPermission) {
             this.backEnd.getProjects()
-                .then(projects => this.items = projects.map(project => new libPatternFlyListView.Item(project.id, project.project_name, project.project_description, hasPermission ? ["Project", {project: project.id}] : null)))
+                .then(projects => this.items = projects.map(project => new libPatternFlyListView.Item(project.id, project.project_name, project.project_description, hasPermission ? ["Project", {project: project.id}] : null, hasPermission)))
                 .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
           } else {
             this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view projects."));
