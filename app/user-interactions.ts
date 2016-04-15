@@ -81,22 +81,31 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
-    this.backEnd.getProjects()
-        .then(projects => {
+    Promise.all<any>([
+          this.backEnd.getUserRolesAndPermissionsCurrent(),
+          this.backEnd.getProjects()
+        ])
+        .then(result => {
+          let permissions:libBackEnd.RolesAndPermissions;
+          let projects:libBackEnd.Project[];
+          [permissions, projects] = result;
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
+          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
+          if (!hasPermission) {
+            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view schemes."));
+          }
           return Promise.all<any>([
-            this.backEnd.getUserRolesAndPermissionsCurrent(),
-            Promise.all(projects.map(project => this.backEnd.getProjectInteractionsSchemes(project.id))),
+            hasPermission,
+            hasPermission ? Promise.all(projects.map(project => this.backEnd.getProjectInteractionsSchemes(project.id))) : [],
             Promise.all(projects.map(project => Promise.all<any>([this.backEnd.getProjectInteractionsModerators(project.id), project])))
           ]);
         })
         .then(result => {
-          let permissions:libBackEnd.RolesAndPermissions;
+          let hasPermission:boolean;
           let schemes:libBackEnd.InteractionsScheme[][];
           let moderators:[libBackEnd.InteractionsModerator[], libBackEnd.Project][];
-          [permissions, schemes, moderators] = result;
-          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
+          [hasPermission, schemes, moderators] = result;
           this.addItem = hasPermission;
           this.schemes = [].concat(...schemes).map(scheme => new libPatternFlyListView.Item(scheme.b_program_id, scheme.name, scheme.program_description, hasPermission ? ["UserInteractionsScheme", {scheme: scheme.b_program_id}] : undefined, hasPermission));
           this.moderators = [].concat(...moderators.map(pair => pair[0].map(moderator => new InteractionsModeratorItem(moderator, pair[1].id))));
