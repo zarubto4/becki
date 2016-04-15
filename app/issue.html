@@ -205,7 +205,14 @@
                     <a style="cursor: not-allowed; opacity: 0.65" title="You are not allowed to edit this.">Edit</a>
                   </template>
                 </li>
-                <li><a data-on-click="onItemRemoveClick(item, $event)" style="cursor: pointer">Remove</a></li>
+                <li data-bind-ng-switch="deleteItem">
+                  <template data-bind-ng-switch-when="true">
+                    <a data-on-click="onItemRemoveClick(item, $event)" style="cursor: pointer">Remove</a>
+                  </template>
+                  <template data-bind-ng-switch-when="false">
+                    <a style="cursor: not-allowed; opacity: 0.65" title="You are not allowed to remove this.">Remove</a>
+                  </template>
+                </li>
               </ul>
             </div>
             <div data-bindon-field-issue-body="item.body" data-bind-readonly="true">
