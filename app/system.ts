@@ -112,9 +112,14 @@ export class Component implements ng.OnInit {
             this.types = [];
             this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view issue types."));
           }
-          this.backEnd.getIssueConfirmations()
-              .then(confirmations => this.confirmations = confirmations.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null, hasPermission ? ["SystemIssueConfirmation", {confirmation: confirmation.id}] : undefined)))
-              .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue confirmations cannot be loaded.", reason)));
+          if (hasPermission) {
+            this.backEnd.getIssueConfirmations()
+                .then(confirmations => this.confirmations = confirmations.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null, hasPermission ? ["SystemIssueConfirmation", {confirmation: confirmation.id}] : undefined)))
+                .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue confirmations cannot be loaded.", reason)));
+          } else {
+            this.confirmations = [];
+            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view issue confirmations."));
+          }
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason));

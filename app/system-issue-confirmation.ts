@@ -89,6 +89,8 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("Confirmations cannot be loaded.", reason));
         });
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-192"));
   }
 
   onEditClick():void {
@@ -101,7 +103,14 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getIssueConfirmations().then(confirmations => !confirmations.find(confirmation => confirmation.id != this.id && confirmation.type == this.nameField));
+    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
+        .then(permissions => {
+          if (!libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"])) {
+            return Promise.reject('You are not allowed to list other confirmations.');
+          }
+        })
+        .then(() => this.backEnd.getIssueConfirmations())
+        .then(confirmations => !confirmations.find(confirmation => confirmation.id != this.id && confirmation.type == this.nameField));
   }
 
   onSubmit():void {

@@ -188,7 +188,14 @@
                   <li><a data-on-click="onItemMarkClick(item, $event)" style="cursor: pointer">Mark</a></li>
                 </template>
                 <template data-bind-ng-if="item.confirmable">
-                  <li><a data-on-click="onItemConfirmationAddClick(item, $event)" style="cursor: pointer">Confirm</a></li>
+                  <li data-bind-ng-switch="confirmItem">
+                    <template data-bind-ng-switch-when="true">
+                      <a data-on-click="onItemConfirmationAddClick(item, $event)" style="cursor: pointer">Confirm</a>
+                    </template>
+                    <template data-bind-ng-switch-when="false">
+                      <a style="cursor: not-allowed; opacity: 0.65" title="You are not allowed to confirm this.">Confirm</a>
+                    </template>
+                  </li>
                 </template>
                 <li data-bind-ng-switch="editItem">
                   <template data-bind-ng-switch-when="true">

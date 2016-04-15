@@ -163,7 +163,7 @@ class Issue extends Item {
 
   titleField:string;
 
-  constructor(issue:libBackEnd.Issue) {
+  constructor(issue:libBackEnd.Issue, confirmable = true) {
     "use strict";
 
     super(issue);
@@ -171,7 +171,7 @@ class Issue extends Item {
     this.typeField = issue.type.id;
     this.titleField = issue.name;
     this.markable = true;
-    this.confirmable = true;
+    this.confirmable = confirmable;
   }
 }
 
@@ -211,6 +211,8 @@ export class Component implements ng.OnInit {
 
   importScheme:boolean;
 
+  confirmItem:boolean;
+
   editItem:boolean;
 
   answerBodyField:string;
@@ -233,6 +235,7 @@ export class Component implements ng.OnInit {
     ];
     this.confirmationToRemove = null;
     this.importScheme = false;
+    this.confirmItem = false;
     this.editItem = false;
     this.answerBodyField = libBeckiFieldIssueBody.EMPTY;
     this.backEnd = backEnd;
@@ -277,6 +280,7 @@ export class Component implements ng.OnInit {
           } else {
             this.projects = [];
           }
+          this.confirmItem = hasPermission;
           this.editItem = hasPermission;
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
