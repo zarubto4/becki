@@ -49,7 +49,7 @@
         <div class="h2" style="margin: 6px 12px;text-align: center;">
           {{item.likes}}
         </div>
-        <button class="btn btn-default" type="button" data-on-click="onMinusClick(item.id, $event)">
+        <button class="btn btn-default" type="button" data-bind-disabled="!editItem" data-bind-title="editItem ? '' : 'You are not allowed to subtract one.'" data-on-click="onMinusClick(item.id, $event)">
           <span class="glyphicon glyphicon-thumbs-down"></span>
         </button>
       </div>
@@ -261,7 +261,7 @@
                         <div style="float: left;padding: 1px 5px;">
                           {{comment.likes}}
                         </div>
-                        <button class="btn btn-default" type="button" data-on-click="onMinusClick(comment.id, $event)">
+                        <button class="btn btn-default" type="button" data-bind-disabled="!editItem" data-bind-title="editItem ? '' : 'You are not allowed to subtract one.'" data-on-click="onMinusClick(comment.id, $event)">
                           <span class="glyphicon glyphicon-thumbs-down"></span>
                         </button>
                       </div>
