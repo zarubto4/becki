@@ -103,14 +103,14 @@ export class Component implements ng.OnInit {
             this.devices = [];
             this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view devices."));
           }
-          this.addType = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
+          this.addType = hasPermission;
+          this.backEnd.getIssueTypes()
+              .then(types => this.types = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, hasPermission ? ["SystemIssueType", {type: type.id}] : undefined)))
+              .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue types cannot be loaded.", reason)));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason));
         });
-    this.backEnd.getIssueTypes()
-        .then(types => this.types = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, ["SystemIssueType", {type: type.id}])))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue types cannot be loaded.", reason)));
     this.backEnd.getIssueConfirmations()
         .then(confirmations => this.confirmations = confirmations.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null, ["SystemIssueConfirmation", {confirmation: confirmation.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue confirmations cannot be loaded.", reason)));
