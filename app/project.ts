@@ -60,6 +60,8 @@ export class Component implements ng.OnInit {
 
   editProject:boolean;
 
+  addCollaborator:boolean;
+
   collaborators:libPatternFlyListView.Item[];
 
   addDeviceProgram:boolean;
@@ -94,6 +96,7 @@ export class Component implements ng.OnInit {
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.editProject = false;
+    this.addCollaborator = false;
     this.addDeviceProgram = false;
     this.addStandaloneProgram = false;
     this.deviceUploadingProgramField = "";
@@ -140,6 +143,7 @@ export class Component implements ng.OnInit {
           this.nameField = project.project_name;
           this.descriptionField = project.project_description;
           this.editProject = hasPermission;
+          this.addCollaborator = hasPermission;
           this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composeUserString(collaborator), null));
           this.addDeviceProgram = hasPermission;
           if (hasPermission) {
