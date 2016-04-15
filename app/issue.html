@@ -32,9 +32,11 @@
           </template>
           <template data-bind-ng-switch-when="false">
             <a data-bind-router-link="link.targetLink">{{link.model.answer.name}}</a>
-            <a class="text-danger" data-on-click="onRelatedRemoveClick(link, $event)" style="cursor: pointer">
-              <span class="pficon pficon-close"></span>
-            </a>
+            <template data-bind-ng-if="deleteRelated">
+              <a class="text-danger" data-on-click="onRelatedRemoveClick(link, $event)" style="cursor: pointer">
+                <span class="pficon pficon-close"></span>
+              </a>
+            </template>
           </template>
         </li>
       </ul>

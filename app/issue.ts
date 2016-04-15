@@ -205,6 +205,8 @@ export class Component implements ng.OnInit {
 
   related:RemovableIssueLink[];
 
+  deleteRelated:boolean;
+
   types:libBackEnd.IssueType[];
 
   items:Item[];
@@ -243,6 +245,7 @@ export class Component implements ng.OnInit {
     ];
     this.confirmationToRemove = null;
     this.deleteConfirmation = false;
+    this.deleteRelated = false;
     this.importScheme = false;
     this.markItem = false;
     this.confirmItem = false;
@@ -285,6 +288,7 @@ export class Component implements ng.OnInit {
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
           let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
           this.deleteConfirmation = hasPermission;
+          this.deleteRelated = hasPermission;
           this.importScheme = hasPermission;
           if (hasPermission) {
             this.backEnd.getProjects()
