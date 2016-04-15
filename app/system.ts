@@ -104,9 +104,14 @@ export class Component implements ng.OnInit {
             this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view devices."));
           }
           this.addType = hasPermission;
-          this.backEnd.getIssueTypes()
-              .then(types => this.types = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, hasPermission ? ["SystemIssueType", {type: type.id}] : undefined)))
-              .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue types cannot be loaded.", reason)));
+          if (hasPermission) {
+            this.backEnd.getIssueTypes()
+                .then(types => this.types = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, hasPermission ? ["SystemIssueType", {type: type.id}] : undefined)))
+                .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue types cannot be loaded.", reason)));
+          } else {
+            this.types = [];
+            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view issue types."));
+          }
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason));
