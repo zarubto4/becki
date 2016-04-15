@@ -71,7 +71,13 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getProjects()
+    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
+        .then(permissions => {
+          if (!libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"])) {
+            return Promise.reject('You are not allowed to list other moderators.');
+          }
+        })
+        .then(() => this.backEnd.getProjects())
         .then(projects => Promise.all(projects.map(project => this.backEnd.getProjectInteractionsModerators(project.id))))
         .then(moderators => ![].concat(...moderators).find(moderator => moderator.homer_id == this.idField));
   }

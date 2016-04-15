@@ -119,21 +119,27 @@ export class Component implements ng.OnInit {
         .then(scheme => {
           return Promise.all<any>([
               scheme,
-              this.backEnd.request("GET", scheme.project)
+              this.backEnd.request("GET", scheme.project),
+              this.backEnd.getUserRolesAndPermissionsCurrent()
           ]);
         })
         .then(result => {
           let scheme:libBackEnd.InteractionsScheme;
           let project:libBackEnd.Project;
+          let permissions:libBackEnd.RolesAndPermissions;
           [scheme, project] = result;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
+          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
+          if (!hasPermission) {
+            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view moderators."));
+          }
           return Promise.all<any>([
             scheme,
-            this.backEnd.getUserRolesAndPermissionsCurrent(),
+            permissions,
             this.backEnd.getProjects(),
             project,
-            this.backEnd.getProjectInteractionsModerators(project.id)
+            hasPermission ? this.backEnd.getProjectInteractionsModerators(project.id) : []
           ]);
         })
         .then(result => {

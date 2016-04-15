@@ -93,12 +93,12 @@ export class Component implements ng.OnInit {
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
           let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
           if (!hasPermission) {
-            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view schemes."));
+            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view schemes and moderators."));
           }
           return Promise.all<any>([
             hasPermission,
             hasPermission ? Promise.all(projects.map(project => this.backEnd.getProjectInteractionsSchemes(project.id))) : [],
-            Promise.all(projects.map(project => Promise.all<any>([this.backEnd.getProjectInteractionsModerators(project.id), project])))
+            hasPermission ? Promise.all(projects.map(project => Promise.all<any>([this.backEnd.getProjectInteractionsModerators(project.id), project]))) : []
           ]);
         })
         .then(result => {
