@@ -32,6 +32,8 @@ export class Component implements ng.OnInit {
 
   tab:string;
 
+  addModerator:boolean;
+
   addDevice:boolean;
 
   moderators:libPatternFlyListView.Item[];
@@ -56,6 +58,7 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("System", ["System"])
     ];
     this.tab = "moderators";
+    this.addModerator = false;
     this.addDevice = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
@@ -76,6 +79,7 @@ export class Component implements ng.OnInit {
     this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
     this.backEnd.getUserRolesAndPermissionsCurrent()
         .then(permissions => {
+          this.addModerator = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
           this.addDevice = libBackEnd.containsPermissions(permissions, ["type_of_board.create", "type_of_board.read"]);
           let viewDevice = libBackEnd.containsPermissions(permissions, ["board.read"]);
           if (viewDevice) {

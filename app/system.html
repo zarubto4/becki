@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, View or Remove a Moderator of Interactions, a Device, an Issue Type, an Issue Confirmation or a User'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="(tab == 'users' || (tab == 'devices' && !addDevice)) ? null : 'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
+<div data-bind-layout="'Add, View or Remove a Moderator of Interactions, a Device, an Issue Type, an Issue Confirmation or a User'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="(tab == 'users' || (tab == 'moderators' && !addModerator) || (tab == 'devices' && !addDevice)) ? null : 'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="tab == 'moderators'">
       <a data-on-click="onTabClick('moderators', $event)" style="cursor: pointer">
@@ -32,7 +32,7 @@
     </li>
   </ul>
   <template data-bind-ng-switch-when="'moderators'">
-    <div data-bind-list-view="moderators" data-on-add-click="onAddModeratorClick($event)" data-on-remove-click="onRemoveModeratorClick($event)">
+    <div data-bind-list-view="moderators" data-bind-addable="addModerator" data-on-add-click="onAddModeratorClick($event)" data-on-remove-click="onRemoveModeratorClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
