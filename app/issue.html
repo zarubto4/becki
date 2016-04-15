@@ -7,7 +7,7 @@
   <p data-bind-ng-switch="!confirmationToRemove">
     <template data-bind-ng-switch-when="true">
       <template ng-for data-var-confirmation data-bind-ng-for-of="confirmations">
-        <span class="label" data-bind-style.background-color="confirmation.color" style="border: 1px solid #eeeeee">{{confirmation.type}} <a data-on-click="onConfirmationRemoveClick(confirmation, $event)" style="cursor: pointer; color: #333333; margin-left: 1em"><span class="pficon pficon-close"></span></a></span>
+        <span class="label" data-bind-style.background-color="confirmation.color" style="border: 1px solid #eeeeee">{{confirmation.type}} <template data-bind-ng-if="deleteConfirmation"><a data-on-click="onConfirmationRemoveClick(confirmation, $event)" style="cursor: pointer; color: #333333; margin-left: 1em"><span class="pficon pficon-close"></span></a></template></span>
       </template>
     </template>
     <template data-bind-ng-switch-when="false">

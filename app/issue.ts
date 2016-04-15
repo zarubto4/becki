@@ -201,6 +201,8 @@ export class Component implements ng.OnInit {
 
   confirmations:libBackEnd.IssueConfirmation[];
 
+  deleteConfirmation:boolean;
+
   related:RemovableIssueLink[];
 
   types:libBackEnd.IssueType[];
@@ -234,6 +236,7 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Loading...", ["Issue", {issue: this.id}])
     ];
     this.confirmationToRemove = null;
+    this.deleteConfirmation = false;
     this.importScheme = false;
     this.confirmItem = false;
     this.editItem = false;
@@ -272,6 +275,7 @@ export class Component implements ng.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
           let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
+          this.deleteConfirmation = hasPermission;
           this.importScheme = hasPermission;
           if (hasPermission) {
             this.backEnd.getProjects()
