@@ -89,9 +89,8 @@ export class Component implements ng.OnInit {
     this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
     this.backEnd.getUserRolesAndPermissionsCurrent()
         .then(permissions => {
-          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
-          this.addDevice = hasPermission;
-          if (hasPermission) {
+          this.addDevice = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor", "Board Owner", "Project Owner", "board.edit"]);
+          if (libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"])) {
             this.backEnd.getProjects()
                 .then(projects => Promise.all(projects.map(project => Promise.all<any>([this.backEnd.getProjectDevices(project.id), project]))))
                 .then((devices:[libBackEnd.Device[], libBackEnd.Project][]) => this.devices = [].concat(...devices.map(pair => pair[0].map(device => new SelectableDeviceItem(device, pair[1].id)))))
