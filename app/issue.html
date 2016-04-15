@@ -185,7 +185,14 @@
                   </li>
                 </template>
                 <template data-bind-ng-if="item.markable">
-                  <li><a data-on-click="onItemMarkClick(item, $event)" style="cursor: pointer">Mark</a></li>
+                  <li data-bind-ng-switch="markItem">
+                    <template data-bind-ng-switch-when="true">
+                      <a data-on-click="onItemMarkClick(item, $event)" style="cursor: pointer">Mark</a>
+                    </template>
+                    <template data-bind-ng-switch-when="false">
+                      <a style="cursor: not-allowed; opacity: 0.65" title="You are not allowed to mark this.">Mark</a>
+                    </template>
+                  </li>
                 </template>
                 <template data-bind-ng-if="item.confirmable">
                   <li data-bind-ng-switch="confirmItem">

@@ -213,6 +213,8 @@ export class Component implements ng.OnInit {
 
   importScheme:boolean;
 
+  markItem:boolean;
+
   confirmItem:boolean;
 
   editItem:boolean;
@@ -242,6 +244,7 @@ export class Component implements ng.OnInit {
     this.confirmationToRemove = null;
     this.deleteConfirmation = false;
     this.importScheme = false;
+    this.markItem = false;
     this.confirmItem = false;
     this.editItem = false;
     this.deleteItem = false;
@@ -290,6 +293,7 @@ export class Component implements ng.OnInit {
           } else {
             this.projects = [];
           }
+          this.markItem = hasPermission;
           this.confirmItem = hasPermission;
           this.editItem = hasPermission;
           this.deleteItem = hasPermission;
