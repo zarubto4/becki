@@ -152,7 +152,8 @@ export class Component implements ng.OnInit {
           this.descriptionField = scheme.program_description;
           this.description = scheme.program_description;
           this.addVersion = hasPermission;
-          this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, version.version_description, ["UserInteractionsSchemeVersion", {scheme: this.id, version: version.id}], false));
+          let viewVersion = libBackEnd.containsPermissions(permissions, ["project.owner"]);
+          this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, version.version_description, viewVersion ? ["UserInteractionsSchemeVersion", {scheme: this.id, version: version.id}] : undefined, false));
           this.moderators = moderators.map(moderator => new SelectableModerator(moderator));
         })
         .catch(reason => {

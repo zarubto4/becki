@@ -90,21 +90,29 @@ export class Component implements ng.OnInit {
         .then(scheme => {
           return Promise.all<any>([
               scheme,
+              this.backEnd.getUserRolesAndPermissionsCurrent(),
               this.backEnd.request("GET", scheme.project)
           ]);
         })
         .then(result => {
           let scheme:libBackEnd.InteractionsScheme;
+          let permissions:libBackEnd.RolesAndPermissions;
           let project:libBackEnd.Project;
           [scheme, project] = result;
           if (!scheme.versionObjects.length) {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error("the scheme has no version"));
           }
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
+          let listGroups = libBackEnd.containsPermissions(permissions, ["project.owner"]);
+          if (!listGroups) {
+            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view applications."));
+          }
           let lastVersion = _.max(scheme.versionObjects, version => version.date_of_create);
           return Promise.all<any>([
             scheme,
-            this.backEnd.getProjectApplicationGroups(project.id),
+            listGroups ? this.backEnd.getProjectApplicationGroups(project.id) : [],
             lastVersion,
             this.backEnd.request("GET", lastVersion.allFiles)
           ]);

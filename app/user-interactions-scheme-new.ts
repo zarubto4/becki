@@ -105,7 +105,17 @@ export class Component implements ng.OnInit {
     this.showGroups = false;
     this.groups = [];
     if (this.getProject()) {
-      this.backEnd.getProjectApplicationGroups(this.getProject())
+      this.backEnd.getUserRolesAndPermissionsCurrent()
+          .then(permissions => {
+            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+            this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
+            if (libBackEnd.containsPermissions(permissions, ["project.owner"])) {
+              return this.backEnd.getProjectApplicationGroups(this.getProject());
+            } else {
+              this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view applications."));
+              return [];
+            }
+          })
           .then(groups => {
             this.showGroups = groups.length > 1 || (groups.length == 1 && !groups[0].m_programs.length);
             this.groups = groups;
