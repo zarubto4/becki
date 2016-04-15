@@ -304,7 +304,7 @@
               <div class="input-group">
                 <input class="form-control" type="text" required data-bindon-ng-model="item.commentField">
                 <span class="input-group-btn">
-                  <button class="btn btn-primary" type="submit">Comment</button>
+                  <button class="btn btn-primary" type="submit" data-bind-disabled="!createItem" data-bind-title="createItem ? '' : 'You are not allowed to comment.'">Comment</button>
                 </span>
               </div>
             </form>
@@ -324,7 +324,7 @@
           <div class="spinner"></div>
         </div>
       </div>
-      <button class="btn btn-primary pull-right" type="submit" data-bind-disabled="!createAnswer" data-bind-title="createAnswer ? '' : 'You are not allowed to answer.'">Create</button>
+      <button class="btn btn-primary pull-right" type="submit" data-bind-disabled="!createItem" data-bind-title="createItem ? '' : 'You are not allowed to answer.'">Create</button>
     </form>
   </div>
 </div>
