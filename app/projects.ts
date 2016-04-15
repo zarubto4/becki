@@ -64,14 +64,19 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
     this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => this.addProject = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
-    this.backEnd.getProjects()
-        .then(projects => this.items = projects.map(project => new libPatternFlyListView.Item(project.id, project.project_name, project.project_description, ["Project", {project: project.id}])))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
+        .then(permissions => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
+          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
+          this.addProject = hasPermission;
+          this.backEnd.getProjects()
+              .then(projects => this.items = projects.map(project => new libPatternFlyListView.Item(project.id, project.project_name, project.project_description, hasPermission ? ["Project", {project: project.id}] : null)))
+              .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason));
+        });
   }
 
   onAddClick():void {
