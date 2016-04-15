@@ -88,12 +88,20 @@ export class Component implements ng.OnInit {
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
     this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
     this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => this.addDevice = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]))
+        .then(permissions => {
+          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
+          this.addDevice = hasPermission;
+          if (hasPermission) {
+            this.backEnd.getProjects()
+                .then(projects => Promise.all(projects.map(project => Promise.all<any>([this.backEnd.getProjectDevices(project.id), project]))))
+                .then((devices:[libBackEnd.Device[], libBackEnd.Project][]) => this.devices = [].concat(...devices.map(pair => pair[0].map(device => new SelectableDeviceItem(device, pair[1].id)))))
+                .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
+          } else {
+            this.devices = [];
+            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view devices."));
+          }
+        })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
-    this.backEnd.getProjects()
-        .then(projects => Promise.all(projects.map(project => Promise.all<any>([this.backEnd.getProjectDevices(project.id), project]))))
-        .then((devices:[libBackEnd.Device[], libBackEnd.Project][]) => this.devices = [].concat(...devices.map(pair => pair[0].map(device => new SelectableDeviceItem(device, pair[1].id)))))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
   }
 
   onAddDeviceClick():void {
