@@ -144,7 +144,7 @@ export class Component implements ng.OnInit {
           this.descriptionField = project.project_description;
           this.editProject = hasPermission;
           this.addCollaborator = hasPermission;
-          this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composeUserString(collaborator), null));
+          this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composeUserString(collaborator), null, undefined, hasPermission));
           this.addDeviceProgram = hasPermission;
           if (hasPermission) {
             this.devicePrograms = devicePrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, hasPermission ? ["DeviceProgram", {project: this.id, program: program.id}] : undefined, hasPermission));
