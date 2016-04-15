@@ -221,6 +221,8 @@ export class Component implements ng.OnInit {
 
   answerBodyField:string;
 
+  createAnswer:boolean;
+
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
@@ -244,6 +246,7 @@ export class Component implements ng.OnInit {
     this.editItem = false;
     this.deleteItem = false;
     this.answerBodyField = libBeckiFieldIssueBody.EMPTY;
+    this.createAnswer = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -290,6 +293,7 @@ export class Component implements ng.OnInit {
           this.confirmItem = hasPermission;
           this.editItem = hasPermission;
           this.deleteItem = hasPermission;
+          this.createAnswer = hasPermission;
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
   }
