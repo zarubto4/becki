@@ -106,7 +106,7 @@ export class Component implements ng.OnInit {
           this.addType = hasPermission;
           if (hasPermission) {
             this.backEnd.getIssueTypes()
-                .then(types => this.types = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, hasPermission ? ["SystemIssueType", {type: type.id}] : undefined)))
+                .then(types => this.types = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, hasPermission ? ["SystemIssueType", {type: type.id}] : undefined, hasPermission)))
                 .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue types cannot be loaded.", reason)));
           } else {
             this.types = [];
