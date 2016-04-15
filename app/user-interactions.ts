@@ -98,7 +98,7 @@ export class Component implements ng.OnInit {
           [permissions, schemes, moderators] = result;
           let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
           this.addScheme = hasPermission;
-          this.schemes = [].concat(...schemes).map(scheme => new libPatternFlyListView.Item(scheme.b_program_id, scheme.name, scheme.program_description, hasPermission ? ["UserInteractionsScheme", {scheme: scheme.b_program_id}] : undefined));
+          this.schemes = [].concat(...schemes).map(scheme => new libPatternFlyListView.Item(scheme.b_program_id, scheme.name, scheme.program_description, hasPermission ? ["UserInteractionsScheme", {scheme: scheme.b_program_id}] : undefined, hasPermission));
           this.moderators = [].concat(...moderators.map(pair => pair[0].map(moderator => new InteractionsModeratorItem(moderator, pair[1].id))));
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Interactions cannot be loaded.", reason)));
