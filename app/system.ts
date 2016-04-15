@@ -36,6 +36,8 @@ export class Component implements ng.OnInit {
 
   addDevice:boolean;
 
+  addType:boolean;
+
   moderators:libPatternFlyListView.Item[];
 
   devices:libPatternFlyListView.Item[];
@@ -60,6 +62,7 @@ export class Component implements ng.OnInit {
     this.tab = "moderators";
     this.addModerator = false;
     this.addDevice = false;
+    this.addType = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -100,6 +103,7 @@ export class Component implements ng.OnInit {
             this.devices = [];
             this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view devices."));
           }
+          this.addType = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason));
