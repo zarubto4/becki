@@ -145,12 +145,13 @@ export class Component implements ng.OnInit {
           [scheme, permissions, projects, project, moderators] = result;
           this.name = scheme.name;
           this.breadcrumbs[3].label = scheme.name;
-          this.editScheme = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
+          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
+          this.editScheme = hasPermission;
           this.project = projects.length > 1 ? project.project_name : null;
           this.nameField = scheme.name;
           this.descriptionField = scheme.program_description;
           this.description = scheme.program_description;
-          this.addVersion = libBackEnd.containsPermissions(permissions, ["project.owner"]);
+          this.addVersion = hasPermission;
           this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, version.version_description, ["UserInteractionsSchemeVersion", {scheme: this.id, version: version.id}], false));
           this.moderators = moderators.map(moderator => new SelectableModerator(moderator));
         })
