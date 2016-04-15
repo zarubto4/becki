@@ -81,24 +81,28 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    Promise.all<any>([
-          this.backEnd.getUserRolesAndPermissionsCurrent(),
-          this.backEnd.getProjects()
-        ])
-        .then(result => {
-          let permissions:libBackEnd.RolesAndPermissions;
-          let projects:libBackEnd.Project[];
-          [permissions, projects] = result;
+    this.backEnd.getUserRolesAndPermissionsCurrent()
+        .then(permissions => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
           let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
-          if (!hasPermission) {
+          let projects:Promise<libBackEnd.Project[]>;
+          if (hasPermission) {
+            projects = this.backEnd.getProjects();
+          } else {
             this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view schemes and moderators."));
+            projects = Promise.resolve([]);
           }
+          return Promise.all<any>([hasPermission, projects]);
+        })
+        .then(result => {
+          let hasPermission:boolean;
+          let projects:libBackEnd.Project[];
+          [hasPermission, projects] = result;
           return Promise.all<any>([
             hasPermission,
-            hasPermission ? Promise.all(projects.map(project => this.backEnd.getProjectInteractionsSchemes(project.id))) : [],
-            hasPermission ? Promise.all(projects.map(project => Promise.all<any>([this.backEnd.getProjectInteractionsModerators(project.id), project]))) : []
+            Promise.all(projects.map(project => this.backEnd.getProjectInteractionsSchemes(project.id))),
+            Promise.all(projects.map(project => Promise.all<any>([this.backEnd.getProjectInteractionsModerators(project.id), project])))
           ]);
         })
         .then(result => {

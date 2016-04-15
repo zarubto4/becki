@@ -261,14 +261,21 @@ export class Component implements ng.OnInit {
     this.backEnd.getIssueTypes()
         .then(types => this.types = types)
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue types cannot be loaded.", reason)));
-    this.backEnd.getProjects()
-        .then(projects => this.projects = projects)
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
     this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => this.importScheme = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]))
+        .then(permissions => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
+          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
+          this.importScheme = hasPermission;
+          if (hasPermission) {
+            this.backEnd.getProjects()
+                .then(projects => this.projects = projects)
+                .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
+          } else {
+            this.projects = [];
+          }
+        })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
   }
 
   onConfirmationRemoveClick(confirmation:libBackEnd.IssueConfirmation):void {

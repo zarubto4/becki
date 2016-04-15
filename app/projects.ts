@@ -70,9 +70,14 @@ export class Component implements ng.OnInit {
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
           let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
           this.addProject = hasPermission;
-          this.backEnd.getProjects()
-              .then(projects => this.items = projects.map(project => new libPatternFlyListView.Item(project.id, project.project_name, project.project_description, hasPermission ? ["Project", {project: project.id}] : null)))
-              .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
+          if (hasPermission) {
+            this.backEnd.getProjects()
+                .then(projects => this.items = projects.map(project => new libPatternFlyListView.Item(project.id, project.project_name, project.project_description, hasPermission ? ["Project", {project: project.id}] : null)))
+                .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
+          } else {
+            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view projects."));
+            this.items = [];
+          }
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason));
