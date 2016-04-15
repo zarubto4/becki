@@ -28,10 +28,10 @@ class SelectableDeviceItem extends libPatternFlyListView.Item {
 
   selected:boolean;
 
-  constructor(device:libBackEnd.Device, project:string) {
+  constructor(device:libBackEnd.Device, project:string, removable:boolean) {
     "use strict";
 
-    super(device.id, device.id, device.isActive ? "active" : "inactive");
+    super(device.id, device.id, device.isActive ? "active" : "inactive", undefined, removable);
     this.project = project;
     this.selected = false;
   }
@@ -90,10 +90,11 @@ export class Component implements ng.OnInit {
     this.backEnd.getUserRolesAndPermissionsCurrent()
         .then(permissions => {
           this.addDevice = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor", "Board Owner", "Project Owner", "board.edit"]);
+          let deleteDevice = libBackEnd.containsPermissions(permissions, ["Board Owner", "Project Owner", "board.edit"]);
           if (libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"])) {
             this.backEnd.getProjects()
                 .then(projects => Promise.all(projects.map(project => Promise.all<any>([this.backEnd.getProjectDevices(project.id), project]))))
-                .then((devices:[libBackEnd.Device[], libBackEnd.Project][]) => this.devices = [].concat(...devices.map(pair => pair[0].map(device => new SelectableDeviceItem(device, pair[1].id)))))
+                .then((devices:[libBackEnd.Device[], libBackEnd.Project][]) => this.devices = [].concat(...devices.map(pair => pair[0].map(device => new SelectableDeviceItem(device, pair[1].id, deleteDevice)))))
                 .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
           } else {
             this.devices = [];
