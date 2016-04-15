@@ -145,7 +145,12 @@ export class Component implements ng.OnInit {
             this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view devices."));
           }
           this.addStandaloneProgram = hasPermission;
-          this.standalonePrograms = [].concat(...categories.map(category => category.blockoBlocks.map(program => new libPatternFlyListView.Item(program.id, program.name, program.general_description, hasPermission ? ["StandaloneProgram", {project: this.id, program: program.id}] : undefined, hasPermission))));
+          if (hasPermission) {
+            this.standalonePrograms = [].concat(...categories.map(category => category.blockoBlocks.map(program => new libPatternFlyListView.Item(program.id, program.name, program.general_description, hasPermission ? ["StandaloneProgram", {project: this.id, program: program.id}] : undefined, hasPermission))));
+          } else {
+            this.standalonePrograms = [];
+            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view standalone programs."));
+          }
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The project ${this.id} cannot be loaded.`, reason));
