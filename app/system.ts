@@ -114,7 +114,7 @@ export class Component implements ng.OnInit {
           }
           if (hasPermission) {
             this.backEnd.getIssueConfirmations()
-                .then(confirmations => this.confirmations = confirmations.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null, hasPermission ? ["SystemIssueConfirmation", {confirmation: confirmation.id}] : undefined)))
+                .then(confirmations => this.confirmations = confirmations.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null, hasPermission ? ["SystemIssueConfirmation", {confirmation: confirmation.id}] : undefined, hasPermission)))
                 .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue confirmations cannot be loaded.", reason)));
           } else {
             this.confirmations = [];
