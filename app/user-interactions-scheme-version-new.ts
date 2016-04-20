@@ -120,7 +120,7 @@ export class Component implements ng.OnInit {
           let scheme:libBackEnd.InteractionsScheme;
           let groups:libBackEnd.ApplicationGroup[];
           let lastVersion:libBackEnd.Version;
-          let file:libBackEnd.File;
+          let file:libBackEnd.BackEndFile;
           [scheme, groups, lastVersion, file] = result;
           this.schemeName = scheme.name;
           this.breadcrumbs[3].label = scheme.name;

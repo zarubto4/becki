@@ -361,7 +361,7 @@ export interface Producer {
   type_of_boards_id:string[];
 }
 
-export interface File {
+export interface BackEndFile {
 
   id:string;
 
@@ -1189,7 +1189,7 @@ export abstract class BackEnd {
     return this.requestPath("DELETE", `${BackEnd.PRODUCER_PATH}/${id}`).then(JSON.stringify);
   }
 
-  public getFile(id:string):Promise<File> {
+  public getFile(id:string):Promise<BackEndFile> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-195
