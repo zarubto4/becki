@@ -142,8 +142,8 @@ export class Component implements ng.OnInit {
     this.backEnd.getUser(this.id)
         .then(user => {
           let birthdate = new Date(user.date_of_birth * 1000);
-          this.userString = libBackEnd.composeUserString(user);
-          this.breadcrumbs[2].label = libBackEnd.composeUserString(user);
+          this.userString = libBackEnd.composeUserString(user, true);
+          this.breadcrumbs[2].label = libBackEnd.composeUserString(user, true);
           this.nameField = user.full_name;
           this.usernameField = user.nick_name;
           this.birthdateField = composeDateString(birthdate);

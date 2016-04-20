@@ -15,10 +15,10 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
-export function composeUserString(user:User):string {
+export function composeUserString(user:User, showEmail=false):string {
   "use strict";
 
-  return user.nick_name || user.full_name || user.mail || null;
+  return user.nick_name || user.full_name || showEmail && user.mail || null;
 }
 
 /**
