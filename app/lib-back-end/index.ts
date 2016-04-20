@@ -531,20 +531,6 @@ export interface StandaloneProgram {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface StandaloneProgramCollectionItem {
-
-  typeOfBlock:StandaloneProgramCategory;
-
-  Blocks:StandaloneProgram[];
-}
-
-// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface StandaloneProgramCollection {
-
-  [type: string]: StandaloneProgramCollectionItem;
-}
-
-// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface InteractionsScheme {
 
   id:string;
