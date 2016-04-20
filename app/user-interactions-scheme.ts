@@ -119,48 +119,35 @@ export class Component implements ng.OnInit {
         .then(scheme => {
           return Promise.all<any>([
               scheme,
-              this.backEnd.request("GET", scheme.project),
-              this.backEnd.getUserRolesAndPermissionsCurrent()
+              this.backEnd.getProject(scheme.project_id)
           ]);
         })
         .then(result => {
           let scheme:libBackEnd.InteractionsScheme;
           let project:libBackEnd.Project;
-          let permissions:libBackEnd.RolesAndPermissions;
           [scheme, project] = result;
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
-          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
-          if (!hasPermission) {
-            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view moderators."));
-          }
           return Promise.all<any>([
             scheme,
-            permissions,
             this.backEnd.getProjects(),
-            project,
-            hasPermission ? this.backEnd.getProjectInteractionsModerators(project.id) : []
+            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-197
+            Promise.all(project.homers_id.map(id => this.backEnd.getInteractionsModerator(id)))
           ]);
         })
         .then(result => {
           let scheme:libBackEnd.InteractionsScheme;
-          let permissions:libBackEnd.RolesAndPermissions;
           let projects:libBackEnd.Project[];
-          let project:libBackEnd.Project;
           let moderators:libBackEnd.InteractionsModerator[];
-          [scheme, permissions, projects, project, moderators] = result;
+          [scheme, projects, moderators] = result;
           this.name = scheme.name;
           this.breadcrumbs[3].label = scheme.name;
-          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
-          this.editScheme = hasPermission;
-          this.project = projects.length > 1 ? project.project_name : null;
+          this.editScheme = scheme.edit_permission;
+          this.project = projects.length > 1 ? projects.find(project => project.id == scheme.project_id).project_name : null;
           this.nameField = scheme.name;
           this.descriptionField = scheme.program_description;
           this.description = scheme.program_description;
-          this.addVersion = hasPermission;
-          let viewVersion = libBackEnd.containsPermissions(permissions, ["project.owner"]);
-          this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, version.version_description, viewVersion ? ["UserInteractionsSchemeVersion", {scheme: this.id, version: version.id}] : undefined, false));
-          this.moderators = moderators.map(moderator => new SelectableModerator(moderator));
+          this.addVersion = scheme.update_permission;
+          this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, version.version_description, ["UserInteractionsSchemeVersion", {scheme: this.id, version: version.id}], false));
+          this.moderators = moderators.filter(moderator => moderator.update_permission).map(moderator => new SelectableModerator(moderator));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The scheme ${this.id} cannot be loaded.`, reason));
@@ -177,15 +164,9 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          if (!libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"])) {
-            return Promise.reject('You are not allowed to list other schemes.');
-          }
-        })
-        .then(() => this.backEnd.getProjects())
-        .then(projects => Promise.all(projects.map(project => this.backEnd.getProjectInteractionsSchemes(project.id))))
-        .then(schemes => ![].concat(...schemes).find(scheme => scheme.b_program_id != this.id && scheme.name == this.nameField));
+    return () => this.backEnd.getProjects()
+        .then(projects => Promise.all([].concat(...projects.map(project => project.b_programs_id)).map(id => this.backEnd.getInteractionsScheme(id))))
+        .then(schemes => !schemes.find(scheme => scheme.id != this.id && scheme.name == this.nameField));
   }
 
   onSubmit():void {
@@ -218,7 +199,7 @@ export class Component implements ng.OnInit {
   onUploadSubmit():void {
     "use strict";
 
-    let moderators = this.moderators.filter(selectable => selectable.selected).map(selectable => selectable.model.homer_id);
+    let moderators = this.moderators.filter(selectable => selectable.selected).map(selectable => selectable.model.id);
     if (!moderators.length) {
       return;
     }

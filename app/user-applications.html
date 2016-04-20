@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, View or Remove an Application, a Device or a Group'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="!addItem ? null : 'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
+<div data-bind-layout="'Add, View or Remove an Application, a Device or a Group'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="tab == 'applications'">
       <a data-on-click="onTabClick('applications', $event)" style="cursor: pointer">
@@ -16,23 +16,23 @@
       </a>
     </li>
     <li data-bind-class.active="tab == 'groups'">
-      <a data-on-click="onTabClick(viewGroups ? 'groups' : tab, $event)" data-bind-style.cursor="viewGroups ? 'pointer' : 'not-allowed'" data-bind-style.opacity="viewGroups ? 'initial' : 0.65" data-bind-title="viewGroups ? '' : 'You are not allowed to view groups.'">
+      <a data-on-click="onTabClick('groups', $event)" style="cursor: pointer">
         Groups
       </a>
     </li>
   </ul>
   <template data-bind-ng-switch-when="'applications'">
-    <div data-bind-list-view="applications" data-bind-addable="addItem" data-on-add-click="onAddApplicationClick($event)" data-on-remove-click="onRemoveApplicationClick($event)">
+    <div data-bind-list-view="applications" data-on-add-click="onAddApplicationClick($event)" data-on-remove-click="onRemoveApplicationClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
   <template data-bind-ng-switch-when="'devices'">
-    <div data-bind-list-view="devices" data-bind-addable="addItem" data-on-add-click="onAddDeviceClick($event)" data-on-remove-click="onRemoveDeviceClick($event)">
+    <div data-bind-list-view="devices" data-on-add-click="onAddDeviceClick($event)" data-on-remove-click="onRemoveDeviceClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
   <template data-bind-ng-switch-when="'groups'">
-    <div data-bind-list-view="groups" data-bind-addable="addItem" data-on-add-click="onAddGroupClick($event)" data-on-remove-click="onRemoveGroupClick($event)">
+    <div data-bind-list-view="groups" data-on-add-click="onAddGroupClick($event)" data-on-remove-click="onRemoveGroupClick($event)">
       <div class="spinner"></div>
     </div>
   </template>

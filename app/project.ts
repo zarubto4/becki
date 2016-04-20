@@ -68,8 +68,6 @@ export class Component implements ng.OnInit {
 
   devicePrograms:libPatternFlyListView.Item[];
 
-  addStandaloneProgram:boolean;
-
   standalonePrograms:libPatternFlyListView.Item[];
 
   devices:SelectableItem[];
@@ -98,7 +96,6 @@ export class Component implements ng.OnInit {
     this.editProject = false;
     this.addCollaborator = false;
     this.addDeviceProgram = false;
-    this.addStandaloneProgram = false;
     this.deviceUploadingProgramField = "";
     this.backEnd = backEnd;
     this.notifications = notifications;
@@ -115,56 +112,32 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
-          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
-          if (!hasPermission) {
-            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view collaborators."));
-          }
+    this.backEnd.getProject(this.id)
+        .then(project => {
           return Promise.all<any>([
-            this.backEnd.getProject(this.id),
-            hasPermission ? this.backEnd.getProjectOwners(this.id) : [],
-            hasPermission,
-            this.backEnd.getProjectDevicePrograms(this.id),
-            this.backEnd.getProjectDevices(this.id),
-            this.backEnd.getProjectStandaloneProgramCategories(this.id)
+            project,
+            Promise.all(project.owners_id.map(id => this.backEnd.getUser(id))),
+            Promise.all(project.c_programs_id.map(id => this.backEnd.getDeviceProgram(id))),
+            Promise.all(project.type_of_blocks_id.map(id => this.backEnd.getStandaloneProgramCategory(id))),
+            Promise.all(project.boards_id.map(id => this.backEnd.getDevice(id)))
           ]);
         })
         .then(result => {
           let project:libBackEnd.Project;
           let collaborators:libBackEnd.User[];
-          let hasPermission:boolean;
           let devicePrograms:libBackEnd.DeviceProgram[];
-          let devices:libBackEnd.Device[];
           let categories:libBackEnd.StandaloneProgramCategory[];
-          [project, collaborators, hasPermission, devicePrograms, devices, categories] = result;
+          let devices:libBackEnd.Device[];
+          [project, collaborators, devicePrograms, categories, devices] = result;
           this.nameField = project.project_name;
           this.descriptionField = project.project_description;
-          this.editProject = hasPermission;
-          this.addCollaborator = hasPermission;
-          this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composeUserString(collaborator), null, undefined, hasPermission));
-          this.addDeviceProgram = hasPermission;
-          if (hasPermission) {
-            this.devicePrograms = devicePrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, hasPermission ? ["DeviceProgram", {project: this.id, program: program.id}] : undefined, hasPermission));
-          } else {
-            this.devicePrograms = [];
-            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view device programs."));
-          }
-          if (hasPermission) {
-            this.devices = devices.map(device => new SelectableItem(device.id, device.id, device.isActive ? "active" : "inactive"));
-          } else {
-            this.devices = [];
-            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view devices."));
-          }
-          this.addStandaloneProgram = hasPermission;
-          if (hasPermission) {
-            this.standalonePrograms = [].concat(...categories.map(category => category.blockoBlocks.map(program => new libPatternFlyListView.Item(program.id, program.name, program.general_description, hasPermission ? ["StandaloneProgram", {project: this.id, program: program.id}] : undefined, hasPermission))));
-          } else {
-            this.standalonePrograms = [];
-            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view standalone programs."));
-          }
+          this.editProject = project.edit_permission;
+          this.addCollaborator = project.share_permission;
+          this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composeUserString(collaborator), null, undefined, project.unshare_permission));
+          this.addDeviceProgram = project.update_permission;
+          this.devicePrograms = devicePrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, ["DeviceProgram", {project: this.id, program: program.id}], program.delete_permission));
+          this.standalonePrograms = [].concat(...categories.map(category => category.blockoBlocks.map(program => new libPatternFlyListView.Item(program.id, program.name, program.general_description, ["StandaloneProgram", {project: this.id, program: program.id}], program.delete_permission))));
+          this.devices = devices.map(device => new SelectableItem(device.id, device.id, device.type_of_board.name));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The project ${this.id} cannot be loaded.`, reason));
@@ -175,14 +148,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          if (!libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"])) {
-            return Promise.reject('You are not allowed to list other schemes.');
-          }
-        })
-        .then(() => this.backEnd.getProjects())
-        .then(projects => !projects.find(project => project.id != this.id && project.project_name == this.nameField));
+    return () => this.backEnd.getProjects().then(projects => !projects.find(project => project.id != this.id && project.project_name == this.nameField));
   }
 
   onUpdatingSubmit():void {

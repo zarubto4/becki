@@ -72,7 +72,8 @@
     </template>
     <div class="pull-right">
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-      <button class="btn btn-primary" type="submit">{{selected ? 'Create' : 'Next'}}</button>
+      <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-198 -->
+      <button class="btn btn-primary" type="submit">{{selected ? 'Create (issue/TYRION-198)' : 'Next'}}</button>
     </div>
   </form>
 </div>

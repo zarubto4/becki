@@ -83,7 +83,7 @@ export class Component implements ng.OnInit {
         .then(scheme => {
           return Promise.all<any>([
               scheme,
-              this.backEnd.request("GET", scheme.project)
+              this.backEnd.getProject(scheme.project_id)
           ]);
         })
         .then(result => {
@@ -95,44 +95,33 @@ export class Component implements ng.OnInit {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error(`version ${this.id} not found in scheme ${scheme.name}`));
           }
-          return Promise.all<any>([
-            version,
-            scheme,
-            this.backEnd.getProjectApplicationGroups(project.id),
-            this.backEnd.request("GET", version.allFiles)
-          ]);
-        })
-        .then(result => {
-          let version:libBackEnd.Version;
-          let scheme:libBackEnd.InteractionsScheme;
-          let groups:libBackEnd.ApplicationGroup[];
-          let files:libBackEnd.File[];
-          [version, scheme, groups, files] = result;
-          if (files.length != 1) {
+          if (version.files_id.length != 1) {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error("the scheme version does not have only one file"));
           }
           return Promise.all<any>([
             version,
             scheme,
-            Promise.all(groups.map(group => Promise.all<any>([group, group.b_progam_connected_version ? this.backEnd.request("GET", group.b_progam_connected_version) : null]))),
-            this.backEnd.request("GET", files[0].fileContent)
+            Promise.all(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id))),
+            this.backEnd.getFile(version.files_id[0])
           ]);
         })
         .then(result => {
           let version:libBackEnd.Version;
           let scheme:libBackEnd.InteractionsScheme;
-          let groups:[libBackEnd.ApplicationGroup, libBackEnd.Version][];
-          let file:libBackEnd.FileContent;
+          let groups:libBackEnd.ApplicationGroup[];
+          let file:libBackEnd.File;
           [version, scheme, groups, file] = result;
           this.name = version.version_name;
           this.schemeName = scheme.name;
           this.breadcrumbs[3].label = scheme.name;
           this.breadcrumbs[5].label = version.version_name;
           this.description = version.version_description;
-          this.showGroups = groups.length > 1 || (groups.length == 1 && !groups[0][0].m_programs.length);
-          this.groups = groups.filter(pair => pair[1] && pair[1].id == this.id).map(pair => pair[0]);
-          this.scheme = file.content;
+          this.showGroups = groups.length > 1 || (groups.length == 1 && !groups[0].m_programs.length);
+          this.groups = groups.filter(group => group.b_progam_connected_version_id && group.b_progam_connected_version_id == this.id);
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-195
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-195"));
+          this.scheme = file.fileContent;
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The scheme ${this.schemeId} cannot be loaded.`, reason));

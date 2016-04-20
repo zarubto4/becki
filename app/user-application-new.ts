@@ -100,7 +100,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.getProjects()
         .then(projects => {
-          this.projects = projects;
+          this.projects = projects.filter(project => project.m_projects_id.length > 0 || project.update_permission);
           this.loadFromProject();
         })
         .catch(reason => {
@@ -137,12 +137,21 @@ export class Component implements ng.OnInit {
     this.deviceField = "";
     this.projectDevices = [];
     if (this.getProject()) {
-      this.backEnd.getProjectApplicationGroups(this.getProject())
-          .then(groups => this.groups = groups)
-          .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Application groups cannot be loaded: ${reason}`)));
-      this.backEnd.getProjectApplicationDevices(this.getProject())
-          .then(devices => this.projectDevices = devices)
-          .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Target devices cannot be loaded.", reason)));
+      this.backEnd.getProject(this.getProject())
+          .then(project => {
+            return Promise.all<any>([
+              Promise.all(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id))),
+              Promise.all(project.screen_size_types_id.map(id => this.backEnd.getApplicationDevice(id)))
+            ]);
+          })
+          .then(result => {
+            let groups:libBackEnd.ApplicationGroup[];
+            [groups, this.projectDevices] = result;
+            this.groups = groups.filter(group => group.update_permission);
+          })
+          .catch(reason => {
+            this.notifications.current.push(new libBeckiNotifications.Danger(`Application groups/devices cannot be loaded: ${reason}`));
+          });
     }
   }
 

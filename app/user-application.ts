@@ -113,47 +113,23 @@ export class Component implements ng.OnInit {
         .then(application => {
           return Promise.all<any>([
             application,
-            this.backEnd.request("GET", application.m_project)
-          ]);
-        })
-        .then(result => {
-          let application:libBackEnd.Application;
-          let group:libBackEnd.ApplicationGroup;
-          [application, group] = result;
-          return Promise.all<any>([
-            application,
-            this.backEnd.request("GET", group.project),
-            group
-          ]);
-        })
-        .then(result => {
-          let application:libBackEnd.Application;
-          let project:libBackEnd.Project;
-          let group:libBackEnd.ApplicationGroup;
-          [application, project, group] = result;
-          return Promise.all<any>([
-            application,
-            this.backEnd.getUserRolesAndPermissionsCurrent(),
             this.backEnd.getProjects(),
-            project,
-            this.backEnd.getProjectApplicationGroups(project.id),
-            group,
-            this.backEnd.request("GET", application.screen_size_type)
+            this.backEnd.getApplicationGroup(application.m_project_id),
+            this.backEnd.getApplicationDevice(application.screen_size_type_id)
           ]);
         })
         .then(result => {
           let application:libBackEnd.Application;
-          let permissions:libBackEnd.RolesAndPermissions;
           let projects:libBackEnd.Project[];
-          let groups:libBackEnd.ApplicationGroup[];
           let group:libBackEnd.ApplicationGroup;
           let device:libBackEnd.ApplicationDevice;
-          [application, permissions, projects, this.project, groups, group, device] = result;
+          [application, projects, group, device] = result;
           this.name = application.program_name;
           this.breadcrumbs[3].label = application.program_name;
-          this.editApplication = libBackEnd.containsPermissions(permissions, ["project.owner"]);
+          this.editApplication = application.edit_permission;
           this.showProject = projects.length > 1;
-          this.showGroup = groups.length > 1;
+          this.project = projects.find(project => project.id == group.project_id);
+          this.showGroup = this.project.m_projects_id.length > 1;
           this.group = group.program_name;
           this.nameField = application.program_name;
           this.descriptionField = application.program_description;

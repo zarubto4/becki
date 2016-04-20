@@ -51,7 +51,7 @@
     </div>
     <div class="pull-right">
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-      <button class="btn btn-primary" type="submit">Create</button>
+      <button class="btn btn-primary" type="submit" data-bind-disabled="!createVersion" data-bind-title="createVersion ? '' : 'You are not allowed to create a new version.'">Create</button>
     </div>
   </form>
 </div>

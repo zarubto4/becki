@@ -7,7 +7,7 @@
   <p data-bind-ng-switch="!confirmationToRemove">
     <template data-bind-ng-switch-when="true">
       <template ng-for data-var-confirmation data-bind-ng-for-of="confirmations">
-        <span class="label" data-bind-style.background-color="confirmation.color" style="border: 1px solid #eeeeee">{{confirmation.type}} <template data-bind-ng-if="deleteConfirmation"><a data-on-click="onConfirmationRemoveClick(confirmation, $event)" style="cursor: pointer; color: #333333; margin-left: 1em"><span class="pficon pficon-close"></span></a></template></span>
+        <span class="label" data-bind-style.background-color="confirmation.color" style="border: 1px solid #eeeeee">{{confirmation.type}} <a data-on-click="onConfirmationRemoveClick(confirmation, $event)" style="cursor: pointer; color: #333333; margin-left: 1em"><span class="pficon pficon-close"></span></a></span>
       </template>
     </template>
     <template data-bind-ng-switch-when="false">
@@ -32,11 +32,9 @@
           </template>
           <template data-bind-ng-switch-when="false">
             <a data-bind-router-link="link.targetLink">{{link.model.answer.name}}</a>
-            <template data-bind-ng-if="deleteRelated">
-              <a class="text-danger" data-on-click="onRelatedRemoveClick(link, $event)" style="cursor: pointer">
-                <span class="pficon pficon-close"></span>
-              </a>
-            </template>
+            <a class="text-danger" data-on-click="onRelatedRemoveClick(link, $event)" style="cursor: pointer">
+              <span class="pficon pficon-close"></span>
+            </a>
           </template>
         </li>
       </ul>
@@ -45,13 +43,13 @@
   <div class="media" template="ngFor #item of items">
     <div class="media-left">
       <div class="btn-group-vertical">
-        <button class="btn btn-default" type="button" data-bind-disabled="!editItem" data-bind-title="editItem ? '' : 'You are not allowed to add one.'" data-on-click="onPlusClick(item.id, $event)">
+        <button class="btn btn-default" type="button" data-on-click="onPlusClick(item.id, $event)">
           <span class="glyphicon glyphicon-thumbs-up"></span>
         </button>
         <div class="h2" style="margin: 6px 12px;text-align: center;">
           {{item.likes}}
         </div>
-        <button class="btn btn-default" type="button" data-bind-disabled="!editItem" data-bind-title="editItem ? '' : 'You are not allowed to subtract one.'" data-on-click="onMinusClick(item.id, $event)">
+        <button class="btn btn-default" type="button" data-on-click="onMinusClick(item.id, $event)">
           <span class="glyphicon glyphicon-thumbs-down"></span>
         </button>
       </div>
@@ -177,51 +175,18 @@
               </button>
               <ul class="dropdown-menu dropdown-menu-right">
                 <template data-bind-ng-if="item.interactionsSchemeField != null">
-                  <li data-bind-ng-switch="importScheme">
-                    <template data-bind-ng-switch-when="true">
-                      <a data-on-click="onItemImportClick(item, $event)" style="cursor: pointer">Import</a>
-                    </template>
-                    <template data-bind-ng-switch-when="false">
-                      <a style="cursor: not-allowed; opacity: 0.65" title="You are not allowed to import schemes.">Import</a>
-                    </template>
-                  </li>
+                  <li><a data-on-click="onItemImportClick(item, $event)" style="cursor: pointer">Import</a></li>
                 </template>
                 <template data-bind-ng-if="item.markable">
-                  <li data-bind-ng-switch="markItem">
-                    <template data-bind-ng-switch-when="true">
-                      <a data-on-click="onItemMarkClick(item, $event)" style="cursor: pointer">Mark</a>
-                    </template>
-                    <template data-bind-ng-switch-when="false">
-                      <a style="cursor: not-allowed; opacity: 0.65" title="You are not allowed to mark this.">Mark</a>
-                    </template>
-                  </li>
+                  <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-208 -->
+                  <li><a data-on-click="onItemMarkClick(item, $event)" style="cursor: pointer">Mark (TYRION-208)</a></li>
                 </template>
                 <template data-bind-ng-if="item.confirmable">
-                  <li data-bind-ng-switch="confirmItem">
-                    <template data-bind-ng-switch-when="true">
-                      <a data-on-click="onItemConfirmationAddClick(item, $event)" style="cursor: pointer">Confirm</a>
-                    </template>
-                    <template data-bind-ng-switch-when="false">
-                      <a style="cursor: not-allowed; opacity: 0.65" title="You are not allowed to confirm this.">Confirm</a>
-                    </template>
-                  </li>
+                  <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-209 -->
+                  <li><a data-on-click="onItemConfirmationAddClick(item, $event)" style="cursor: pointer">Confirm (issue/TYRION-209)</a></li>
                 </template>
-                <li data-bind-ng-switch="editItem">
-                  <template data-bind-ng-switch-when="true">
-                    <a data-on-click="onItemEditClick(item, $event)" style="cursor: pointer">Edit</a>
-                  </template>
-                  <template data-bind-ng-switch-when="false">
-                    <a style="cursor: not-allowed; opacity: 0.65" title="You are not allowed to edit this.">Edit</a>
-                  </template>
-                </li>
-                <li data-bind-ng-switch="deleteItem">
-                  <template data-bind-ng-switch-when="true">
-                    <a data-on-click="onItemRemoveClick(item, $event)" style="cursor: pointer">Remove</a>
-                  </template>
-                  <template data-bind-ng-switch-when="false">
-                    <a style="cursor: not-allowed; opacity: 0.65" title="You are not allowed to remove this.">Remove</a>
-                  </template>
-                </li>
+                <li><a data-on-click="onItemEditClick(item, $event)" style="cursor: pointer">Edit</a></li>
+                <li><a data-on-click="onItemRemoveClick(item, $event)" style="cursor: pointer">Remove</a></li>
               </ul>
             </div>
             <div data-bindon-field-issue-body="item.body" data-bind-readonly="true">
@@ -271,13 +236,13 @@
                     {{comment.author}} - {{comment.date}}
                     <div class="pull-right">
                       <div class="btn-group btn-group-xs">
-                        <button class="btn btn-default" type="button" data-bind-disabled="!editItem" data-bind-title="editItem ? '' : 'You are not allowed to add one.'" data-on-click="onPlusClick(comment.id, $event)">
+                        <button class="btn btn-default" type="button" data-on-click="onPlusClick(comment.id, $event)">
                           <span class="glyphicon glyphicon-thumbs-up"></span>
                         </button>
                         <div style="float: left;padding: 1px 5px;">
                           {{comment.likes}}
                         </div>
-                        <button class="btn btn-default" type="button" data-bind-disabled="!editItem" data-bind-title="editItem ? '' : 'You are not allowed to subtract one.'" data-on-click="onMinusClick(comment.id, $event)">
+                        <button class="btn btn-default" type="button" data-on-click="onMinusClick(comment.id, $event)">
                           <span class="glyphicon glyphicon-thumbs-down"></span>
                         </button>
                       </div>
@@ -286,22 +251,8 @@
                           <span class="fa fa-ellipsis-v"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right">
-                          <li data-bind-ng-switch="editItem">
-                            <template data-bind-ng-switch-when="true">
-                              <a data-on-click="onCommentEditClick(comment, $event)" style="cursor: pointer">Edit</a>
-                            </template>
-                            <template data-bind-ng-switch-when="false">
-                              <a style="cursor: not-allowed; opacity: 0.65" title="You are not allowed to edit comments.">Edit</a>
-                            </template>
-                          </li>
-                          <li data-bind-ng-switch="deleteItem">
-                            <template data-bind-ng-switch-when="true">
-                              <a data-on-click="onCommentRemoveClick(comment, $event)" style="cursor: pointer">Remove</a>
-                            </template>
-                            <template data-bind-ng-switch-when="false">
-                              <a style="cursor: not-allowed; opacity: 0.65" title="You are not allowed to remove comments.">Remove</a>
-                            </template>
-                          </li>
+                          <li><a data-on-click="onCommentEditClick(comment, $event)" style="cursor: pointer">Edit</a></li>
+                          <li><a data-on-click="onCommentRemoveClick(comment, $event)" style="cursor: pointer">Remove</a></li>
                         </ul>
                       </div>
                     </div>
@@ -320,7 +271,7 @@
               <div class="input-group">
                 <input class="form-control" type="text" required data-bindon-ng-model="item.commentField">
                 <span class="input-group-btn">
-                  <button class="btn btn-primary" type="submit" data-bind-disabled="!createItem" data-bind-title="createItem ? '' : 'You are not allowed to comment.'">Comment</button>
+                  <button class="btn btn-primary" type="submit">Comment</button>
                 </span>
               </div>
             </form>
@@ -340,7 +291,7 @@
           <div class="spinner"></div>
         </div>
       </div>
-      <button class="btn btn-primary pull-right" type="submit" data-bind-disabled="!createItem" data-bind-title="createItem ? '' : 'You are not allowed to answer.'">Create</button>
+      <button class="btn btn-primary pull-right" type="submit">Create</button>
     </form>
   </div>
 </div>

@@ -140,7 +140,8 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
         new libBeckiLayout.LabeledLink("Devices", ["UserDevices"], "rocket"),
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
         new libBeckiLayout.LabeledLink("System (TYRION-155)", ["System"], "globe"),
-        new libBeckiLayout.LabeledLink("Issues", ["Issues"], "bug"),
+        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-208
+        new libBeckiLayout.LabeledLink("Issues (TYRION-208)", ["Issues"], "bug"),
         new libBeckiLayout.LabeledLink("Applications (Vision)", ["UserApplicationsVision"], "mobile"),
         new libBeckiLayout.LabeledLink("Devices (TODO)", ["Devices"], "tachometer"),
         new libBeckiLayout.LabeledLink("Projects (TODO)", ["Projects"], "book")

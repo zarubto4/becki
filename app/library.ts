@@ -40,8 +40,6 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
-  editLibrary:boolean;
-
   versionNameField:string;
 
   versionDescriptionField:string;
@@ -69,7 +67,6 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    this.editLibrary = false;
     this.versionNameField = "";
     this.versionDescriptionField = "";
     this.fileVersionField = "";
@@ -101,27 +98,16 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The library ${this.id} cannot be loaded.`, reason));
         });
-    this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => this.editLibrary = libBackEnd.containsPermissions(permissions, ["library.create"]))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
   }
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          if (!libBackEnd.containsPermissions(permissions, ["libraryGroup.read"])) {
-            return Promise.reject("You are not allowed to list other libraries.");
-          }
-        })
-        .then(() => Promise.all<any>([
+    return () => Promise.all<any>([
           this.backEnd.getLibraries(),
           this.backEnd.getLibraryGroups(),
-        ]))
+        ])
         .then(result => {
           let libraries:libBackEnd.Library[];
           let groups:libBackEnd.LibraryGroup[];

@@ -14,7 +14,7 @@
     </div>
     <div class="pull-right">
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-      <button class="btn btn-primary" type="submit">Add</button>
+      <button class="btn btn-primary" type="submit" data-bind-disabled="!addCollaborator" data-bind-title="addCollaborator ? '' : 'You are not allowed to add a collaborator to the project.'">Add</button>
     </div>
   </form>
 </div>

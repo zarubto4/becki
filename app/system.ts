@@ -32,12 +32,6 @@ export class Component implements ng.OnInit {
 
   tab:string;
 
-  addModerator:boolean;
-
-  addDevice:boolean;
-
-  addType:boolean;
-
   moderators:libPatternFlyListView.Item[];
 
   devices:libPatternFlyListView.Item[];
@@ -60,9 +54,6 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("System", ["System"])
     ];
     this.tab = "moderators";
-    this.addModerator = false;
-    this.addDevice = false;
-    this.addType = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -78,52 +69,24 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
-    this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
-          this.addModerator = hasPermission;
-          this.backEnd.getInteractionsModerators()
-              // see https://youtrack.byzance.cz/youtrack/issue/TYRION-71
-              .then(moderators => this.moderators = moderators.map(moderator => new libPatternFlyListView.Item(moderator.homer_id, `${moderator.homer_id} (issue/TYRION-71)`, moderator.online ? "online" : "offline", undefined, hasPermission)))
-              .catch(reason => {
-                // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
-                this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-155"));
-                this.notifications.current.push(new libBeckiNotifications.Danger("Moderators of interactions cannot be loaded.", reason));
-              });
-          this.addDevice = libBackEnd.containsPermissions(permissions, ["type_of_board.create", "type_of_board.read"]);
-          let viewDevice = libBackEnd.containsPermissions(permissions, ["board.read"]);
-          if (viewDevice) {
-            this.backEnd.getDevices()
-                // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
-                .then(devices => this.devices = devices.map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.isActive ? "active" : "inactive")))
-                .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
-          } else {
-            this.devices = [];
-            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view devices."));
-          }
-          this.addType = hasPermission;
-          if (hasPermission) {
-            this.backEnd.getIssueTypes()
-                .then(types => this.types = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, hasPermission ? ["SystemIssueType", {type: type.id}] : undefined, hasPermission)))
-                .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue types cannot be loaded.", reason)));
-          } else {
-            this.types = [];
-            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view issue types."));
-          }
-          if (hasPermission) {
-            this.backEnd.getIssueConfirmations()
-                .then(confirmations => this.confirmations = confirmations.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null, hasPermission ? ["SystemIssueConfirmation", {confirmation: confirmation.id}] : undefined, hasPermission)))
-                .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue confirmations cannot be loaded.", reason)));
-          } else {
-            this.confirmations = [];
-            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view issue confirmations."));
-          }
-        })
+    this.backEnd.getInteractionsModerators()
+        // see https://youtrack.byzance.cz/youtrack/issue/TYRION-71
+        .then(moderators => this.moderators = moderators.map(moderator => new libPatternFlyListView.Item(moderator.id, `${moderator.id} (issue/TYRION-71)`, moderator.type_of_device, undefined, moderator.delete_permission)))
         .catch(reason => {
-          this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-155"));
+          this.notifications.current.push(new libBeckiNotifications.Danger("Moderators of interactions cannot be loaded.", reason));
         });
+    this.backEnd.getDevices()
+        // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
+        .then(devices => this.devices = devices.map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.type_of_board.name, undefined, device.delete_permission)))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
+    this.backEnd.getIssueTypes()
+        .then(types => this.types = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, ["SystemIssueType", {type: type.id}])))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue types cannot be loaded.", reason)));
+    this.backEnd.getIssueConfirmations()
+        .then(confirmations => this.confirmations = confirmations.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null, ["SystemIssueConfirmation", {confirmation: confirmation.id}], confirmation.delete_permission)))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue confirmations cannot be loaded.", reason)));
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-186
     this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-186"));
   }

@@ -81,30 +81,19 @@ export class Component implements ng.OnInit {
         .then(program => {
           this.nameField = program.name;
           this.descriptionField = program.general_description;
-          this.categoryField = program.type_of_block;
+          this.categoryField = program.type_of_block_id;
+          this.editProgram = program.edit_permission;
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The program ${this.id} cannot be loaded.`, reason));
         });
-    this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => this.editProgram = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
   }
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          if (!libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"])) {
-            return Promise.reject('You are not allowed to list other programs.');
-          }
-        })
-        .then(() => this.backEnd.getStandaloneProgramCategories())
-        .then(categories => ![].concat(...categories.map(category => category.blockoBlocks)).find(program => program.id != this.id && program.name == this.nameField));
+    return () => this.backEnd.getStandaloneProgramCategories().then(categories => ![].concat(...categories.map(category => category.blockoBlocks)).find(program => program.id != this.id && program.name == this.nameField));
   }
 
   onSubmit():void {

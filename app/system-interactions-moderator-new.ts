@@ -66,7 +66,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getInteractionsModerators().then(moderators => !moderators.find(moderator => moderator.homer_id == this.idField));
+    return () => this.backEnd.getInteractionsModerators().then(moderators => !moderators.find(moderator => moderator.id == this.idField));
   }
 
   onSubmit():void {

@@ -63,7 +63,7 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.backEnd.getProjects()
-        .then(projects => this.projects = projects)
+        .then(projects => this.projects = projects.filter(project => project.update_permission))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
   }
 
@@ -71,15 +71,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          if (!libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"])) {
-            return Promise.reject('You are not allowed to list other devices.');
-          }
-        })
-        .then(() => this.backEnd.getProjects())
-        .then(projects => Promise.all(projects.map(project => this.backEnd.getProjectDevices(project.id))))
-        .then(devices => ![].concat(...devices).find(device => device.id == this.idField));
+    return () => this.backEnd.getProjects().then(projects => projects.every(project => project.boards_id.indexOf(this.idField) == -1));
   }
 
   onSubmit():void {

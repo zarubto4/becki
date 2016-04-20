@@ -3,8 +3,8 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add or View an Issue'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="addItem ? 'Add' : null" data-on-action-click="onAddClick($event)">
-  <div data-bind-list-view="items" data-bind-addable="addItem" data-on-add-click="onAddClick($event)">
+<div data-bind-layout="'Add or View an Issue'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="'Add'" data-on-action-click="onAddClick($event)">
+  <div data-bind-list-view="items" data-on-add-click="onAddClick($event)">
     <div class="spinner"></div>
   </div>
 </div>

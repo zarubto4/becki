@@ -54,6 +54,8 @@ export class Component implements ng.OnInit {
 
   schemeField:string;
 
+  createVersion:boolean;
+
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
@@ -77,6 +79,7 @@ export class Component implements ng.OnInit {
     this.showGroups = false;
     this.groupField = "";
     this.schemeField = `{"blocks":{}}`;
+    this.createVersion = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -90,65 +93,47 @@ export class Component implements ng.OnInit {
         .then(scheme => {
           return Promise.all<any>([
               scheme,
-              this.backEnd.getUserRolesAndPermissionsCurrent(),
-              this.backEnd.request("GET", scheme.project)
+              this.backEnd.getProject(scheme.project_id)
           ]);
         })
         .then(result => {
           let scheme:libBackEnd.InteractionsScheme;
-          let permissions:libBackEnd.RolesAndPermissions;
           let project:libBackEnd.Project;
           [scheme, project] = result;
           if (!scheme.versionObjects.length) {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error("the scheme has no version"));
           }
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
-          let listGroups = libBackEnd.containsPermissions(permissions, ["project.owner"]);
-          if (!listGroups) {
-            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view applications."));
-          }
           let lastVersion = _.max(scheme.versionObjects, version => version.date_of_create);
+          if (lastVersion.files_id.length != 1) {
+            // TODO: https://github.com/angular/angular/issues/4558
+            return Promise.reject<any>(new Error("the scheme version does not have only one file"));
+          }
           return Promise.all<any>([
             scheme,
-            listGroups ? this.backEnd.getProjectApplicationGroups(project.id) : [],
+            Promise.all(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id))),
             lastVersion,
-            this.backEnd.request("GET", lastVersion.allFiles)
+            this.backEnd.getFile(lastVersion.files_id[0])
           ]);
         })
         .then(result => {
           let scheme:libBackEnd.InteractionsScheme;
           let groups:libBackEnd.ApplicationGroup[];
           let lastVersion:libBackEnd.Version;
-          let files:libBackEnd.File[];
-          [scheme, groups, lastVersion, files] = result;
-          if (files.length != 1) {
-            // TODO: https://github.com/angular/angular/issues/4558
-            return Promise.reject<any>(new Error("the scheme version does not have only one file"));
-          }
-          return Promise.all<any>([
-            scheme,
-            Promise.all(groups.map(group => Promise.all<any>([group, group.b_progam_connected_version ? this.backEnd.request("GET", group.b_progam_connected_version) : null]))),
-            lastVersion,
-            this.backEnd.request("GET", files[0].fileContent)
-          ]);
-        })
-        .then(result => {
-          let scheme:libBackEnd.InteractionsScheme;
-          let groups:[libBackEnd.ApplicationGroup, libBackEnd.Version][];
-          let lastVersion:libBackEnd.Version;
-          let file:libBackEnd.FileContent;
+          let file:libBackEnd.File;
           [scheme, groups, lastVersion, file] = result;
           this.schemeName = scheme.name;
           this.breadcrumbs[3].label = scheme.name;
-          this.showGroups = groups.length > 1 || (groups.length == 1 && !groups[0][0].m_programs.length);
-          let group = groups.find(pair => pair[1] && pair[1].id == lastVersion.id);
+          this.showGroups = groups.length > 1 || (groups.length == 1 && !groups[0].m_programs.length);
+          let group = groups.find(group => group.b_progam_connected_version_id && group.b_progam_connected_version_id == lastVersion.id);
           if (group) {
-            this.groupField = group[0].id;
+            this.groupField = group.id;
           }
-          this.groups = groups.map(pair => pair[0]);
-          this.schemeField = file.content;
+          this.groups = groups;
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-195
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-195"));
+          this.schemeField = file.fileContent;
+          this.createVersion = scheme.update_permission;
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The scheme ${this.schemeId} cannot be loaded.`, reason));

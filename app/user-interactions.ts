@@ -29,7 +29,7 @@ class InteractionsModeratorItem extends libPatternFlyListView.Item {
   constructor(moderator:libBackEnd.InteractionsModerator, project:string, removable:boolean) {
     "use strict";
 
-    super(moderator.homer_id, moderator.homer_id, moderator.online ? "online" : "offline", undefined, removable);
+    super(moderator.id, moderator.id, moderator.type_of_device, undefined, removable);
     this.project = project;
   }
 }
@@ -41,8 +41,6 @@ class InteractionsModeratorItem extends libPatternFlyListView.Item {
 export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
-
-  addItem:boolean;
 
   showModerators:boolean;
 
@@ -64,7 +62,6 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("User", home.link),
       new libBeckiLayout.LabeledLink("Interactions", ["UserInteractions"])
     ];
-    this.addItem = false;
     this.showModerators = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
@@ -81,38 +78,20 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
-          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
-          let projects:Promise<libBackEnd.Project[]>;
-          if (hasPermission) {
-            projects = this.backEnd.getProjects();
-          } else {
-            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view schemes and moderators."));
-            projects = Promise.resolve([]);
-          }
-          return Promise.all<any>([hasPermission, projects]);
-        })
-        .then(result => {
-          let hasPermission:boolean;
-          let projects:libBackEnd.Project[];
-          [hasPermission, projects] = result;
+    this.backEnd.getProjects()
+        .then(projects => {
           return Promise.all<any>([
-            hasPermission,
-            Promise.all(projects.map(project => this.backEnd.getProjectInteractionsSchemes(project.id))),
-            Promise.all(projects.map(project => Promise.all<any>([this.backEnd.getProjectInteractionsModerators(project.id), project])))
+            Promise.all([].concat(...projects.map(project => project.b_programs_id)).map(id => this.backEnd.getInteractionsScheme(id))),
+            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-197
+            Promise.all([].concat(...projects.map(project => project.homers_id.map(id => [id, project]))).map(pair => Promise.all<any>([this.backEnd.getInteractionsModerator(pair[0]), pair[1]])))
           ]);
         })
         .then(result => {
-          let hasPermission:boolean;
-          let schemes:libBackEnd.InteractionsScheme[][];
-          let moderators:[libBackEnd.InteractionsModerator[], libBackEnd.Project][];
-          [hasPermission, schemes, moderators] = result;
-          this.addItem = hasPermission;
-          this.schemes = [].concat(...schemes).map(scheme => new libPatternFlyListView.Item(scheme.b_program_id, scheme.name, scheme.program_description, hasPermission ? ["UserInteractionsScheme", {scheme: scheme.b_program_id}] : undefined, hasPermission));
-          this.moderators = [].concat(...moderators.map(pair => pair[0].map(moderator => new InteractionsModeratorItem(moderator, pair[1].id, hasPermission))));
+          let schemes:libBackEnd.InteractionsScheme[];
+          let moderators:[libBackEnd.InteractionsModerator, libBackEnd.Project][];
+          [schemes, moderators] = result;
+          this.schemes = schemes.map(scheme => new libPatternFlyListView.Item(scheme.id, scheme.name, scheme.program_description, ["UserInteractionsScheme", {scheme: scheme.id}], scheme.delete_permission));
+          this.moderators = moderators.map(pair => new InteractionsModeratorItem(pair[0], pair[1].id, pair[1].update_permission));
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Interactions cannot be loaded.", reason)));
   }

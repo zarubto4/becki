@@ -71,22 +71,13 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The type ${this.id} cannot be loaded.`, reason));
         });
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-192"));
   }
 
   validateField():()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          if (!libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"])) {
-            return Promise.reject('You are not allowed to list other types.');
-          }
-        })
-        .then(() => this.backEnd.getIssueTypes())
-        .then(types => !types.find(type => type.id != this.id && type.type == this.field));
+    return () => this.backEnd.getIssueTypes().then(types => !types.find(type => type.id != this.id && type.type == this.field));
   }
 
   onSubmit():void {

@@ -31,7 +31,7 @@ class SelectableDeviceItem extends libPatternFlyListView.Item {
   constructor(device:libBackEnd.Device, project:string, removable:boolean) {
     "use strict";
 
-    super(device.id, device.id, device.isActive ? "active" : "inactive", undefined, removable);
+    super(device.id, device.id, device.type_of_board.name, undefined, removable);
     this.project = project;
     this.selected = false;
   }
@@ -85,23 +85,10 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
-    this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          this.addDevice = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor", "Board Owner", "Project Owner", "board.edit"]);
-          let deleteDevice = libBackEnd.containsPermissions(permissions, ["Board Owner", "Project Owner", "board.edit"]);
-          if (libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"])) {
-            this.backEnd.getProjects()
-                .then(projects => Promise.all(projects.map(project => Promise.all<any>([this.backEnd.getProjectDevices(project.id), project]))))
-                .then((devices:[libBackEnd.Device[], libBackEnd.Project][]) => this.devices = [].concat(...devices.map(pair => pair[0].map(device => new SelectableDeviceItem(device, pair[1].id, deleteDevice)))))
-                .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
-          } else {
-            this.devices = [];
-            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view devices."));
-          }
-        })
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
+    this.backEnd.getProjects()
+        .then(projects => Promise.all([].concat(...projects.map(project => project.boards_id.map(id => [id, project]))).map(pair => Promise.all<any>([this.backEnd.getDevice(pair[0]), pair[1]]))))
+        .then((devices:[libBackEnd.Device, libBackEnd.Project][]) => this.devices = devices.map(pair => new SelectableDeviceItem(pair[0], pair[1].id, pair[1].update_permission)))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
   }
 
   onAddDeviceClick():void {

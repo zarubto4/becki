@@ -16,7 +16,6 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
 import * as libBeckiLayout from "./lib-becki/layout";
@@ -37,6 +36,8 @@ export class Component implements ng.OnInit {
   nameField:string;
 
   descriptionField:string;
+
+  addProgram:boolean;
 
   backEnd:libBeckiBackEnd.Service;
 
@@ -59,6 +60,7 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "";
     this.descriptionField = "";
+    this.addProgram = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -68,22 +70,16 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-192"));
+    this.backEnd.getProject(this.projectId)
+        .then(project => this.addProgram = project.update_permission)
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("The project cannot be loaded.", reason)));
   }
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          if (!libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"])) {
-            return Promise.reject("You are not allowed to list other programs.");
-          }
-        })
-        .then(() => this.backEnd.getDevicePrograms(this.projectId))
-        .then(programs => !programs.find(program => program.program_name == this.nameField));
+    return () => this.backEnd.getDevicePrograms(this.projectId).then(programs => !programs.find(program => program.program_name == this.nameField));
   }
 
   onSubmit():void {
@@ -96,6 +92,8 @@ export class Component implements ng.OnInit {
           this.router.navigate(["Project", {project: this.projectId}]);
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-203
+          this.notifications.current.push(new libBeckiNotifications.Warning("TYRION-203"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The program cannot be created.", reason));
         });
   }

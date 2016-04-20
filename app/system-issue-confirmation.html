@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + confirmation?.type + "\" Confirmation"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="editing">
+<div data-bind-layout='"Edit the \"" + confirmation?.type + "\" Confirmation"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing || !editConfirmation ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="editing">
   <form class="clearfix" data-on-submit="onSubmit($event)">
     <template data-bind-ng-switch-when="true">
       <div class="form-group">

@@ -51,8 +51,6 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
-  addApplication:boolean;
-
   applications:libPatternFlyListView.Item[];
 
   backEnd:libBeckiBackEnd.Service;
@@ -75,7 +73,6 @@ export class Component implements ng.OnInit {
     this.editGroup = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    this.addApplication = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -92,35 +89,23 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.editing = false;
-    this.backEnd.getApplicationGroup(this.id)
-        .then(group => {
-          return Promise.all<any>([
-            group,
-            this.backEnd.getUserRolesAndPermissionsCurrent(),
-            this.backEnd.getProjects(),
-            this.backEnd.request("GET", group.project)
-          ]);
-        })
+    Promise.all<any>([
+          this.backEnd.getApplicationGroup(this.id),
+          this.backEnd.getProjects()
+        ])
         .then(result => {
-          let permissions:libBackEnd.RolesAndPermissions;
           let projects:libBackEnd.Project[];
-          let project:libBackEnd.Project;
-          [this.group, permissions, projects, project] = result;
+          [this.group, projects] = result;
           this.breadcrumbs[3].label = this.group.program_name;
-          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner"]);
-          this.editGroup = hasPermission;
-          this.project = projects.length > 1 ? project.project_name : null;
+          this.editGroup = this.group.edit_permission;
+          this.project = projects.length > 1 ? projects.find(project => project.id == this.group.project_id).project_name : null;
           this.nameField = this.group.program_name;
           this.descriptionField = this.group.program_description;
-          this.addApplication = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
-          let viewApplication = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
-          this.applications = this.group.m_programs.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, viewApplication ? ["UserApplication", {application: application.id}] : undefined, hasPermission));
+          this.applications = this.group.m_programs.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["UserApplication", {application: application.id}], application.delete_permission));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The group ${this.id} cannot be loaded.`, reason));
         });
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
   }
 
   onEditClick():void {
@@ -133,14 +118,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          if (!libBackEnd.containsPermissions(permissions, ["project.owner"])) {
-            return Promise.reject('You are not allowed to view groups.');
-          }
-        })
-        .then(() => this.backEnd.getApplicationGroups())
-        .then(groups => !groups.find(group => group.id != this.id && group.program_name == this.nameField));
+    return () => this.backEnd.getApplicationGroups().then(groups => !groups.find(group => group.id != this.id && group.program_name == this.nameField));
   }
 
   onSubmit():void {

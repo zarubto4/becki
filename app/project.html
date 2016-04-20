@@ -22,7 +22,7 @@
           </label>
           <textarea class="form-control" required minlength="24" data-bindon-ng-model="descriptionField"></textarea>
         </div>
-        <button class="btn btn-primary pull-right" type="submit" data-bind-disabled="!editProject" data-bind-title="editProject ? '' : 'You are not allowed to edit projects.'">Update</button>
+        <button class="btn btn-primary pull-right" type="submit" data-bind-disabled="!editProject" data-bind-title="editProject ? '' : 'You are not allowed to edit this project.'">Update</button>
       </form>
     </div>
     <div class="col-xs-12 col-sm-4">
@@ -55,14 +55,12 @@
     </div>
     <div class="col-xs-12 col-sm-6">
       <div>
-        <template data-bind-ng-if="addStandaloneProgram">
-          <div class="pull-right">
-            <button type="button" class="btn btn-default" data-on-click="onStandaloneProgramAddClick($event)">Add</button>
-          </div>
-        </template>
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" data-on-click="onStandaloneProgramAddClick($event)">Add</button>
+        </div>
         <h2>Standalone Programs</h2>
       </div>
-      <div data-bind-list-view="standalonePrograms" data-bind-addable="addStandaloneProgram" data-on-add-click="onStandaloneProgramAddClick($event)" data-on-remove-click="onStandaloneProgramRemoveClick($event)">
+      <div data-bind-list-view="standalonePrograms" data-on-add-click="onStandaloneProgramAddClick($event)" data-on-remove-click="onStandaloneProgramRemoveClick($event)">
         <div class="spinner"></div>
       </div>
     </div>

@@ -78,8 +78,7 @@ class Comment {
     this.id = comment.postId;
     this.body = comment.text_of_post;
     this.author = libBackEnd.composeUserString(comment.author);
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-190
-    this.date = `${timestampToString(comment.date_of_create)} (issue/TYRION-190)`;
+    this.date = timestampToString(comment.date_of_create);
     this.likes = comment.likes;
     this.tags = comment.hashTags;
     this.editing = false;
@@ -136,8 +135,7 @@ class Item {
     this.id = item.postId;
     this.body = item.text_of_post;
     this.author = libBackEnd.composeUserString(item.author);
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-190
-    this.date = `${timestampToString(item.date_of_create)} (issue/TYRION-190)`;
+    this.date = timestampToString(item.date_of_create);
     this.likes = item.likes;
     this.comments = item.comments.map(comment => new Comment(comment));
     this.tags = item.hashTags;
@@ -201,11 +199,7 @@ export class Component implements ng.OnInit {
 
   confirmations:libBackEnd.IssueConfirmation[];
 
-  deleteConfirmation:boolean;
-
   related:RemovableIssueLink[];
-
-  deleteRelated:boolean;
 
   types:libBackEnd.IssueType[];
 
@@ -213,19 +207,7 @@ export class Component implements ng.OnInit {
 
   projects:libBackEnd.Project[];
 
-  importScheme:boolean;
-
-  markItem:boolean;
-
-  confirmItem:boolean;
-
-  editItem:boolean;
-
-  deleteItem:boolean;
-
   answerBodyField:string;
-
-  createItem:boolean;
 
   backEnd:libBeckiBackEnd.Service;
 
@@ -244,15 +226,7 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Loading...", ["Issue", {issue: this.id}])
     ];
     this.confirmationToRemove = null;
-    this.deleteConfirmation = false;
-    this.deleteRelated = false;
-    this.importScheme = false;
-    this.markItem = false;
-    this.confirmItem = false;
-    this.editItem = false;
-    this.deleteItem = false;
     this.answerBodyField = libBeckiFieldIssueBody.EMPTY;
-    this.createItem = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -282,28 +256,9 @@ export class Component implements ng.OnInit {
     this.backEnd.getIssueTypes()
         .then(types => this.types = types)
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue types cannot be loaded.", reason)));
-    this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
-          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
-          this.deleteConfirmation = hasPermission;
-          this.deleteRelated = hasPermission;
-          this.importScheme = hasPermission;
-          if (hasPermission) {
-            this.backEnd.getProjects()
-                .then(projects => this.projects = projects)
-                .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
-          } else {
-            this.projects = [];
-          }
-          this.markItem = hasPermission;
-          this.confirmItem = hasPermission;
-          this.editItem = hasPermission;
-          this.deleteItem = hasPermission;
-          this.createItem = hasPermission;
-        })
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
+    this.backEnd.getProjects()
+        .then(projects => this.projects = projects.filter(project => project.update_permission))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
   }
 
   onConfirmationRemoveClick(confirmation:libBackEnd.IssueConfirmation):void {
@@ -371,13 +326,8 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          if (!libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"])) {
-            return Promise.reject('You are not allowed to list other schemes.');
-          }
-        })
-        .then(() => this.backEnd.getProjectInteractionsSchemes(projectId))
+    return () => this.backEnd.getProject(projectId)
+        .then(project => Promise.all(project.b_programs_id.map(id => this.backEnd.getInteractionsScheme(id))))
         .then(schemes => !schemes.find(scheme => scheme.name == name));
   }
 
@@ -387,7 +337,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createInteractionsScheme(item.interactionsNameField, item.interactionsDescriptionField, item.interactionsProjectField)
         .then(scheme => {
-          return this.backEnd.addVersionToInteractionsScheme("The original", `Imported from issue ${this.id}`, item.interactionsSchemeField, scheme.b_program_id);
+          return this.backEnd.addVersionToInteractionsScheme("The original", `Imported from issue ${this.id}`, item.interactionsSchemeField, scheme.id);
         })
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The scheme has been imported."));

@@ -15,39 +15,10 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
-export function containsPermissions(rolesAndPermissions:RolesAndPermissions, permissions:string[]):boolean {
-  "use strict";
-
-  return permissions.every(permission => rolesAndPermissions.permissions.find(permission2 => permission2.value == permission) != undefined);
-}
-
-// TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-188
 export function composeUserString(user:User):string {
   "use strict";
 
-  if (user.nick_name) {
-    return user.nick_name;
-  }
-
-  let nameParts:string[] = [];
-  if (user.first_name) {
-    nameParts.push(user.first_name);
-  }
-  if (user.middle_name) {
-    nameParts.push(user.middle_name);
-  }
-  if (user.last_name) {
-    nameParts.push(user.last_name);
-  }
-  if (nameParts) {
-    return nameParts.join(" ");
-  }
-
-  if (user.mail) {
-    return user.mail;
-  }
-
-  return null;
+  return user.nick_name || user.full_name || user.mail || null;
 }
 
 /**
@@ -202,7 +173,6 @@ export class PermissionMissingError extends UnauthorizedError {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-// TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-188
 export interface User {
 
   id:string;
@@ -211,13 +181,7 @@ export interface User {
 
   nick_name:string;
 
-  first_name:string;
-
-  middle_name:string;
-
-  last_name:string;
-
-  first_title:string;
+  full_name:string;
 
   last_title:string;
 
@@ -242,6 +206,16 @@ export interface Role {
   name:string;
 
   description:string;
+
+  persons_id:string[];
+
+  create_permission:boolean;
+
+  read_permission:boolean;
+
+  edit_permission:boolean;
+
+  delete_permission:boolean;
 }
 
 export interface Permission {
@@ -295,6 +269,12 @@ export interface ApplicationDevice {
   landscape_max_screens:number;
 
   touch_screen:boolean;
+
+  read_permission:boolean;
+
+  edit_permission:boolean;
+
+  delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -316,15 +296,21 @@ export interface ApplicationGroup {
 
   date_of_create:number;
 
-  project:string;
+  project_id:string;
 
   m_programs:Application[];
 
-  b_program:string;
+  b_program_id:string;
 
   auto_incrementing:boolean;
 
-  b_progam_connected_version:string;
+  b_progam_connected_version_id:string;
+
+  edit_permission:boolean;
+
+  update_permission:boolean;
+
+  delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -336,11 +322,11 @@ export interface Application {
 
   program_description:string;
 
-  screen_size_type:string;
+  screen_size_type_id:string;
 
   m_code?:string;
 
-  m_code_url:string;
+  m_code_id:string;
 
   date_of_create:number;
 
@@ -354,7 +340,13 @@ export interface Application {
 
   websocket_address:string;
 
-  m_project:string;
+  m_project_id:string;
+
+  read_permission:boolean;
+
+  edit_permission:boolean;
+
+  delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -366,14 +358,7 @@ export interface Producer {
 
   description:string;
 
-  type_of_boards:string;
-}
-
-export interface FileContent {
-
-  content:string;
-
-  file_name:string;
+  type_of_boards_id:string[];
 }
 
 export interface File {
@@ -383,6 +368,10 @@ export interface File {
   file_name:string;
 
   fileContent:string;
+
+  edit_permission:boolean;
+
+  delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -396,9 +385,7 @@ export interface Version {
 
   date_of_create:number;
 
-  files:number;
-
-  allFiles:string;
+  files_id:string[];
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -410,9 +397,7 @@ export interface Library {
 
   description:string;
 
-  versions:string;
-
-  versionsCount:number;
+  versions_id:string[];
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -424,11 +409,9 @@ export interface LibraryGroup {
 
   description:string;
 
-  versions:string;
+  versions_id:string;
 
-  processors:string;
-
-  versionsCount:number;
+  processors_id:string[];
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -444,13 +427,9 @@ export interface Processor {
 
   speed:number;
 
-  singleLibraries:string;
+  singleLibraries:string[];
 
-  libraryGroups:string;
-
-  singleLibrariesCount:number;
-
-  libraryGroupsCount:number;
+  libraryGroups:string[];
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -460,17 +439,13 @@ export interface DeviceType {
 
   name:string;
 
-  producer:string;
+  producer_id:string;
 
   description:string;
 
-  processor:string;
+  processor_id:string;
 
-  libraries:string;
-
-  libraryGroups:string;
-
-  boards:string;
+  boards_id:string[];
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -485,6 +460,14 @@ export interface DeviceProgram {
   version_objects:Version[];
 
   dateOfCreate:number;
+
+  project_id:string;
+
+  read_permission:boolean;
+
+  edit_permission:boolean;
+
+  delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -492,13 +475,17 @@ export interface Device {
 
   id:string;
 
-  type_of_board:string;
+  type_of_board:DeviceType;
 
   isActive:boolean;
 
   personal_description:any;
 
-  projects:string;
+  type_of_board_id:string;
+
+  edit_permission:boolean;
+
+  delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -508,11 +495,19 @@ export interface StandaloneProgramCategory {
 
   name:string;
 
-  generalDescription:string;
+  general_description:string;
 
   blockoBlocks:StandaloneProgram[];
 
-  project:string;
+  project_id:string;
+
+  create_permission:boolean;
+
+  read_permission:boolean;
+
+  edit_permission:boolean;
+
+  delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -522,15 +517,17 @@ export interface StandaloneProgram {
 
   name:string;
 
-  author:string;
+  author_id:string;
 
   general_description:string;
 
-  type_of_block:string;
+  type_of_block_id:string;
 
-  versions:string;
+  versions:string[];
 
-  countOfversions:number;
+  edit_permission:boolean;
+
+  delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -550,7 +547,7 @@ export interface StandaloneProgramCollection {
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface InteractionsScheme {
 
-  b_program_id:string;
+  id:string;
 
   name:string;
 
@@ -564,13 +561,19 @@ export interface InteractionsScheme {
 
   lastUpdate:number;
 
-  project:string;
+  project_id:string;
+
+  edit_permission:boolean;
+
+  update_permission:boolean;
+
+  delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface InteractionsModerator {
 
-  homer_id:string;
+  id:string;
 
   type_of_device:string;
 
@@ -579,6 +582,16 @@ export interface InteractionsModerator {
   version:string;
 
   active_boards?:Device[];
+
+  project_id:string;
+
+  create_permission:boolean;
+
+  edit_permission:boolean;
+
+  update_permission:boolean;
+
+  delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -590,37 +603,31 @@ export interface Project {
 
   project_description:string;
 
-  m_projects:string;
+  m_projects_id:string[];
 
-  c_programs:string;
+  c_programs_id:string[];
 
-  boards:string;
+  boards_id:string[];
 
-  b_programs:string;
+  b_programs_id:string[];
 
-  homers:string;
+  homers_id:string[];
 
-  owners:string;
+  owners_id:string[];
 
-  screen_size_types:string;
+  screen_size_types_id:string[];
 
-  type_of_blocks:string;
+  type_of_blocks_id:string[];
 
-  count_m_projects:number;
+  edit_permission:boolean;
 
-  count_c_programs:number;
+  update_permission:boolean;
 
-  count_Boards:number;
+  share_permission:boolean;
 
-  count_b_programs:number;
+  unshare_permission:boolean;
 
-  count_Homers:number;
-
-  count_owners:number;
-
-  count_screen_size_types:number;
-
-  count_type_of_blocks:number;
+  delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -641,6 +648,14 @@ export interface IssueConfirmation {
   color:string;
 
   size:number;
+
+  create_permission:boolean;
+
+  read_permission:boolean;
+
+  edit_permission:boolean;
+
+  delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -773,6 +788,8 @@ export abstract class BackEnd {
 
   public static ROLE_PATH = "/secure/role";
 
+  public static STANDALONE_PROGRAM_CATEGORY_PATH = "/project/typeOfBlock";
+
   public static STANDALONE_PROGRAM_PATH = "/project/blockoBlock";
 
   /**
@@ -872,7 +889,7 @@ export abstract class BackEnd {
     this.notifications = null;
     if (window.localStorage.getItem("authToken")) {
       // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-177
-      this.notifications = new EventSource(`${BackEnd.BASE_URL}/notification/${window.localStorage.getItem("authToken")}`);
+      this.notifications = new EventSource(`${BackEnd.BASE_URL}/notification/connection/${window.localStorage.getItem("authToken")}`);
     }
   }
 
@@ -891,7 +908,6 @@ export abstract class BackEnd {
       throw "password >= 8 and username >= 9 and email required";
     }
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-188
     return this.requestPath("POST", BackEnd.USER_PATH, {nick_name, mail, password}, [201]).then(JSON.stringify);
   }
 
@@ -921,22 +937,15 @@ export abstract class BackEnd {
     return this.requestPath("GET", `/secure/person/system_acces/${id}`);
   }
 
-  public getUserRolesAndPermissionsCurrent():Promise<RolesAndPermissions> {
+  public updateUser(id:string, full_name:string, nick_name:string, date_of_birth:string, first_title:string, last_title:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("GET", "/login/person");
-  }
-
-  public updateUser(id:string, first_name:string, middle_name:string, last_name:string, nick_name:string, date_of_birth:string, first_title:string, last_title:string):Promise<string> {
-    "use strict";
-
-    if (!first_name || !middle_name || !last_name || !nick_name || !date_of_birth) {
-      throw "first name, middle name, last name, username and birthdate required";
+    if (!full_name || !nick_name || !date_of_birth) {
+      throw "name, username and birthdate required";
     }
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-188
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-189
-    return this.requestPath("PUT", `${BackEnd.USER_PATH}/${id}`, {nick_name, first_name, middle_name, last_name, date_of_birth, first_title, last_title}, [200, 201]).then(JSON.stringify);
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-213
+    return this.requestPath("PUT", `${BackEnd.USER_PATH}/${id}`, {nick_name, full_name, date_of_birth, first_title, last_title}, [200, 201]).then(JSON.stringify);
   }
 
   public addRoleToUser(role:string, user:string):Promise<string> {
@@ -1050,8 +1059,8 @@ export abstract class BackEnd {
   public createApplicationDevice(name:string, width:number, height:number, columns:number, rows:number, project_id:string) {
     "use strict";
 
-    if (!name || !Number.isInteger(width) || !Number.isInteger(height) || !Number.isInteger(columns) || !Number.isInteger(rows)) {
-      throw "name, integer width, integer height, integer columns and integer rows required";
+    if (name.length < 3 || !Number.isInteger(width) || !Number.isInteger(height) || !Number.isInteger(columns) || !Number.isInteger(rows)) {
+      throw "name >= 3, integer width, integer height, integer columns and integer rows required";
     }
 
     return this.requestPath("POST", BackEnd.APPLICATION_DEVICE_PATH, {name, height_lock: false, width_lock: false, touch_screen: false, project_id, landscape_height: width, landscape_width: height, landscape_square_height: columns, landscape_square_width: rows, landscape_max_screens: 10, landscape_min_screens: 1, portrait_height: height, portrait_width: width, portrait_square_height: rows, portrait_square_width: columns, portrait_max_screens: 10, portrait_min_screens: 1}, [201]).then(JSON.stringify);
@@ -1072,8 +1081,8 @@ export abstract class BackEnd {
   public updateApplicationDevice(id:string, name:string, width:number, height:number, columns:number, rows:number, width_lock:boolean, height_lock:boolean, portrait_min_screens:number, portrait_max_screens:number, landscape_min_screens:number, landscape_max_screens:number, touch_screen:boolean, project_id:string):Promise<string> {
     "use strict";
 
-    if (!name || !Number.isInteger(width) || !Number.isInteger(height) || !Number.isInteger(columns) || !Number.isInteger(rows) || !Number.isInteger(portrait_min_screens) || !Number.isInteger(portrait_max_screens) || !Number.isInteger(landscape_min_screens) || !Number.isInteger(landscape_max_screens)) {
-      throw "name, integer width, integer height, integer columns, integer rows and integer screen counts required";
+    if (name.length < 3 || !Number.isInteger(width) || !Number.isInteger(height) || !Number.isInteger(columns) || !Number.isInteger(rows) || !Number.isInteger(portrait_min_screens) || !Number.isInteger(portrait_max_screens) || !Number.isInteger(landscape_min_screens) || !Number.isInteger(landscape_max_screens)) {
+      throw "name >= 3, integer width, integer height, integer columns, integer rows and integer screen counts required";
     }
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-173
@@ -1090,6 +1099,7 @@ export abstract class BackEnd {
   public createApplicationGroup(program_name:string, program_description:string, projectId:string):Promise<ApplicationGroup> {
     "use strict";
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-198
     return this.requestPath("POST", `${BackEnd.APPLICATION_GROUP_PATH}/${projectId}`, {program_description, program_name}, [201]);
   }
 
@@ -1171,13 +1181,6 @@ export abstract class BackEnd {
     return this.requestPath("GET", `${BackEnd.PRODUCER_PATH}/${id}`);
   }
 
-  public getProducerDescription(id:string):Promise<string> {
-    "use strict";
-
-    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-    return this.requestPath<{description:string}>("GET", `${BackEnd.PRODUCER_PATH}/description/${id}`).then(result => result.description);
-  }
-
   public getProducers():Promise<Producer[]> {
     "use strict";
 
@@ -1198,6 +1201,13 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath("DELETE", `${BackEnd.PRODUCER_PATH}/${id}`).then(JSON.stringify);
+  }
+
+  public getFile(id:string):Promise<File> {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-195
+    return this.requestPath("GET", `/file/fileRecord/${id}`);
   }
 
   public createLibrary(library_name:string, description:string):Promise<string> {
@@ -1328,6 +1338,7 @@ export abstract class BackEnd {
       throw "name >= 4, code >= 4 and description >= 24 required";
     }
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-211
     return this.requestPath("POST", BackEnd.PROCESSOR_PATH, {processor_name, description, processor_code, speed}, [201]).then(JSON.stringify);
   }
 
@@ -1366,6 +1377,8 @@ export abstract class BackEnd {
       throw "name >= 8 and description required";
     }
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-199
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-200
     return this.requestPath("POST", BackEnd.DEVICE_TYPE_PATH, {name, description, producer_id, processor_id}, [201]).then(JSON.stringify);
   }
 
@@ -1404,6 +1417,7 @@ export abstract class BackEnd {
       throw "name >= 8";
     }
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-203
     return this.requestPath("POST", `${BackEnd.DEVICE_PROGRAM_PATH}/${projectId}`, {program_name, program_description}, [201]).then(JSON.stringify);
   }
 
@@ -1466,7 +1480,15 @@ export abstract class BackEnd {
       throw "ID required";
     }
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-201
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-212
     return this.requestPath("POST", BackEnd.DEVICE_PATH, {type_of_board_id, hardware_unique_id}, [201]).then(JSON.stringify);
+  }
+
+  public getDevice(id:string):Promise<Device> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.DEVICE_PATH}/${id}`);
   }
 
   public getDevices():Promise<Device[]> {
@@ -1482,10 +1504,16 @@ export abstract class BackEnd {
     return this.requestPath("POST", `${BackEnd.DEVICE_PROGRAM_PATH}/uploud/${program}/${device}`, {}).then(JSON.stringify);
   }
 
+  public getStandaloneProgramCategory(id:string):Promise<StandaloneProgramCategory> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.STANDALONE_PROGRAM_CATEGORY_PATH}/${id}`);
+  }
+
   public getStandaloneProgramCategories():Promise<StandaloneProgramCategory[]> {
     "use strict";
 
-    return this.requestPath("GET", "/project/typeOfBlock");
+    return this.requestPath("GET", BackEnd.STANDALONE_PROGRAM_CATEGORY_PATH);
   }
 
   public createStandaloneProgram(name:string, type_of_block_id:string, general_description:string):Promise<StandaloneProgram> {
@@ -1495,6 +1523,9 @@ export abstract class BackEnd {
       throw "name and description required";
     }
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-205
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-206
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-207
     return this.requestPath("POST", BackEnd.STANDALONE_PROGRAM_PATH, {general_description, name, type_of_block_id}, [201]);
   }
 
@@ -1603,7 +1634,15 @@ export abstract class BackEnd {
       throw "ID required";
     }
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-196
     return this.requestPath("POST", BackEnd.INTERACTIONS_MODERATOR_PATH, {homer_id, type_of_device}, [201]).then(JSON.stringify);
+  }
+
+  public getInteractionsModerator(id:string):Promise<InteractionsModerator> {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-197
+    return this.requestPath("GET", `${BackEnd.INTERACTIONS_MODERATOR_PATH}/${id}`);
   }
 
   public getInteractionsModerators():Promise<InteractionsModerator[]> {
@@ -1663,55 +1702,6 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath<Project>("GET", `${BackEnd.PROJECT_PATH}/${id}`);
-  }
-
-  public getProjectApplicationGroups(id:string):Promise<ApplicationGroup[]> {
-    "use strict";
-
-    return this.requestPath("GET", `${BackEnd.APPLICATION_GROUP_PATH}/project/${id}`);
-  }
-
-  public getProjectDevicePrograms(id:string):Promise<DeviceProgram[]> {
-    "use strict";
-
-    return this.requestPath("GET", `${BackEnd.PROJECT_PATH}/c_programs/${id}`);
-  }
-
-  public getProjectDevices(id:string):Promise<Device[]> {
-    "use strict";
-
-    return this.requestPath("GET", `${BackEnd.PROJECT_PATH}/boards/${id}`);
-  }
-
-  public getProjectStandaloneProgramCategories(id:string):Promise<StandaloneProgramCategory[]> {
-    "use strict";
-
-    return this.requestPath("GET", `${BackEnd.STANDALONE_PROGRAM_PATH}/project/${id}`);
-  }
-
-  public getProjectInteractionsSchemes(id:string):Promise<InteractionsScheme[]> {
-    "use strict";
-
-    return this.requestPath("GET", `${BackEnd.PROJECT_PATH}/b_programs/${id}`);
-  }
-
-  public getProjectInteractionsModerators(id:string):Promise<InteractionsModerator[]> {
-    "use strict";
-
-    return this.requestPath("GET", `${BackEnd.PROJECT_PATH}/homers/${id}`);
-  }
-
-  public getProjectOwners(id:string):Promise<User[]> {
-    "use strict";
-
-    return this.requestPath("GET", `${BackEnd.PROJECT_PATH}/owners/${id}`);
-  }
-
-  public getProjectApplicationDevices(id:string):Promise<ApplicationDevice[]> {
-    "use strict";
-
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-173
-    return this.requestPath("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/project/${id}`, [200, 201]);
   }
 
   /**

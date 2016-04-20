@@ -42,14 +42,12 @@
     </template>
   </form>
   <template data-bind-ng-switch-when="false">
-    <template data-bind-ng-if="addApplication">
-      <div>
-        <div class="pull-right">
-          <button type="button" class="btn btn-default" data-on-click="onAddApplicationClick($event)">Add</button>
-        </div>
-        <h2>Applications</h2>
+    <div>
+      <div class="pull-right">
+        <button type="button" class="btn btn-default" data-on-click="onAddApplicationClick($event)">Add</button>
       </div>
-    </template>
+      <h2>Applications</h2>
+    </div>
     <div data-bind-list-view="applications" data-on-add-click="onAddApplicationClick($event)" data-on-remove-click="onRemoveApplicationClick($event)">
       <div class="spinner"></div>
     </div>

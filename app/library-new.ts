@@ -59,24 +59,16 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-192"));
   }
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          if (!libBackEnd.containsPermissions(permissions, ["libraryGroup.read"])) {
-            return Promise.reject("You are not allowed to list other libraries.");
-          }
-        })
-        .then(() => Promise.all<any>([
+    return () => Promise.all<any>([
           this.backEnd.getLibraries(),
           this.backEnd.getLibraryGroups(),
-        ]))
+        ])
         .then(result => {
           let libraries:libBackEnd.Library[];
           let groups:libBackEnd.LibraryGroup[];

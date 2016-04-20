@@ -83,7 +83,8 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.getProjectStandaloneProgramCategories(this.projectId)
+    this.backEnd.getProject(this.projectId)
+        .then(project => Promise.all(project.type_of_blocks_id.map(id => this.backEnd.getStandaloneProgramCategory(id))))
         .then(categories => this.categories = categories)
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Categories cannot be loaded.", reason)));
   }
@@ -92,14 +93,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          if (!libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"])) {
-            return Promise.reject('You are not allowed to list other programs.');
-          }
-        })
-        .then(() => this.backEnd.getStandaloneProgramCategories())
-        .then(categories => ![].concat(...categories.map(category => category.blockoBlocks)).find(program => program.name == this.nameField));
+    return () => this.backEnd.getStandaloneProgramCategories().then(categories => ![].concat(...categories.map(category => category.blockoBlocks)).find(program => program.name == this.nameField));
   }
 
   onSubmit():void {
@@ -115,6 +109,12 @@ export class Component implements ng.OnInit {
           this.router.navigate(["Project", {project: this.projectId}]);
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-205
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-205"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-206
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-206"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-207
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-207"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The program cannot be created.", reason));
         });
   }

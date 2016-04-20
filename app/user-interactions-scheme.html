@@ -76,7 +76,7 @@
         <div class="checkbox" data-bind-class.disabled="!moderator.model.online" template="ngFor #moderator of moderators">
           <label>
             <input type="checkbox" data-bind-disabled="!moderator.model.online" data-bindon-ng-model="moderator.selected">
-            {{moderator.model.homer_id}}
+            {{moderator.model.id}}
             <template data-bind-ng-if="!moderator.model.online">(offline)</template>
           </label>
         </div>

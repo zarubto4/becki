@@ -85,19 +85,9 @@ export class Component implements ng.OnInit {
 
   editing:boolean;
 
-  editRoles:boolean;
-
-  editPermissions:boolean;
-
   tab:string;
 
-  viewRolesAndPermissions:boolean;
-
-  firstNameField:string;
-
-  middleNameField:string;
-
-  lastNameField:string;
+  nameField:string;
 
   usernameField:string;
 
@@ -128,13 +118,8 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Loading...", ["User", {user: this.id}])
     ];
     this.editing = false;
-    this.editRoles = false;
-    this.editPermissions = false;
     this.tab = 'account';
-    this.viewRolesAndPermissions = false;
-    this.firstNameField = "Loading...";
-    this.middleNameField = "Loading...";
-    this.lastNameField = "Loading...";
+    this.nameField = "Loading...";
     this.usernameField = "Loading...";
     this.birthdateField = "";
     this.birthdateString = "Loading...";
@@ -159,9 +144,7 @@ export class Component implements ng.OnInit {
           let birthdate = new Date(user.date_of_birth * 1000);
           this.userString = libBackEnd.composeUserString(user);
           this.breadcrumbs[2].label = libBackEnd.composeUserString(user);
-          this.firstNameField = user.first_name;
-          this.middleNameField = user.middle_name;
-          this.lastNameField = user.last_name;
+          this.nameField = user.full_name;
           this.usernameField = user.nick_name;
           this.birthdateField = composeDateString(birthdate);
           this.birthdateString = birthdate.toLocaleDateString();
@@ -170,39 +153,20 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The user ${this.id} cannot be loaded.`, reason));
         });
-    this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(currentPermissions => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
-          this.editRoles = libBackEnd.containsPermissions(currentPermissions, ["role.manager", "role.person"]);
-          this.editPermissions = libBackEnd.containsPermissions(currentPermissions, ["permission.connect_with_person", "permission.disconnect_with_person"]);
-          this.viewRolesAndPermissions = libBackEnd.containsPermissions(currentPermissions, ["permission.read", "role.manager"]);
-          if (this.viewRolesAndPermissions) {
-            return Promise.all<any>([
-                  this.backEnd.getRoles(),
-                  this.backEnd.getPermissions(),
-                  this.backEnd.getUserRolesAndPermissions(this.id)
-                ])
-                .then(result => {
-                  let roles:libBackEnd.Role[];
-                  let permissions:libBackEnd.Permission[];
-                  let userPermissions:libBackEnd.RolesAndPermissions;
-                  [roles, permissions, userPermissions] = result;
-                  this.roles = roles.map(role => new Selectable(role, userPermissions.roles.find(userRole => userRole.id == role.id) != undefined));
-                  // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-191
-                  this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-191"));
-                  this.permissions = permissions.map(permission => new Selectable(permission, userPermissions.permissions.find(userPermission => userPermission.value == permission.value) != undefined));
-                });
-          } else {
-            this.roles = [];
-            this.permissions = [];
-            if (["roles", "permissions"].indexOf(this.tab) >= 0) {
-              this.tab = "account";
-            }
-          }
-        })
-        .catch(reason => {
-          this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason));
+    Promise.all<any>([
+          this.backEnd.getRoles(),
+          this.backEnd.getPermissions(),
+          this.backEnd.getUserRolesAndPermissions(this.id)
+        ])
+        .then(result => {
+          let roles:libBackEnd.Role[];
+          let permissions:libBackEnd.Permission[];
+          let userPermissions:libBackEnd.RolesAndPermissions;
+          [roles, permissions, userPermissions] = result;
+          this.roles = roles.map(role => new Selectable(role, userPermissions.roles.find(userRole => userRole.id == role.id) != undefined));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-191
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-191"));
+          this.permissions = permissions.map(permission => new Selectable(permission, userPermissions.permissions.find(userPermission => userPermission.value == permission.value) != undefined));
         });
   }
 
@@ -234,14 +198,14 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.updateUser(this.id, this.firstNameField, this.middleNameField, this.lastNameField, this.usernameField, parseDateString(this.birthdateField).getTime().toString(), this.user.first_title, this.user.last_title)
+    this.backEnd.updateUser(this.id, this.nameField, this.usernameField, parseDateString(this.birthdateField).getTime().toString(), "", this.user.last_title)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The user has been updated."));
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-189
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-189"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-213
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-213"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The user cannot be updated.", reason));
         });
   }

@@ -36,6 +36,8 @@ export class Component implements ng.OnInit {
 
   idField:string;
 
+  addCollaborator:boolean;
+
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
@@ -56,6 +58,7 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("New Collaborator", ["NewProjectCollaborator", {project: this.projectId}])
     ];
     this.idField = "";
+    this.addCollaborator = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -65,22 +68,16 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-192"));
+    this.backEnd.getProject(this.projectId)
+        .then(project => this.addCollaborator = project.share_permission)
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("The project cannot be loaded.", reason)));
   }
 
   validateIdField():()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          if (!libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"])) {
-            return Promise.reject('You are not allowed to list other collaborators.');
-          }
-        })
-        .then(() => this.backEnd.getProjectOwners(this.projectId))
-        .then(collaborators => !collaborators.find(collaborator => collaborator.id == this.idField));
+    return () => this.backEnd.getProject(this.projectId).then(project => !project.owners_id.indexOf(this.idField));
   }
 
   onSubmit():void {

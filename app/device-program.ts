@@ -16,7 +16,6 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
-import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
 import * as libBeckiLayout from "./lib-becki/layout";
@@ -89,22 +88,13 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    Promise.all<any>([
-          this.backEnd.getDeviceProgram(this.id),
-          this.backEnd.getUserRolesAndPermissionsCurrent()
-        ])
-        .then(result => {
-          let program: libBackEnd.DeviceProgram;
-          let permissions: libBackEnd.RolesAndPermissions;
-          [program, permissions] = result;
+    this.backEnd.getDeviceProgram(this.id)
+        .then(program => {
           this.nameField = program.program_name;
           this.descriptionField = program.program_description;
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
-          let hasPermission = libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"]);
-          this.editProgram = hasPermission;
+          this.editProgram = program.edit_permission;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-126
-          this.versions = program.version_objects.map(version => new libPatternFlyListView.Item(version.id, `${version.version_name} (issue/TYRION-126)`, version.version_description, undefined, hasPermission));
+          this.versions = program.version_objects.map(version => new libPatternFlyListView.Item(version.id, `${version.version_name} (issue/TYRION-126)`, version.version_description));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The program ${this.id} cannot be loaded.`, reason));
@@ -115,14 +105,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          if (!libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"])) {
-            return Promise.reject("You are not allowed to list other programs.");
-          }
-        })
-        .then(() => this.backEnd.getDevicePrograms(this.projectId))
-        .then(programs => !programs.find(program => program.id != this.id && program.program_name == this.nameField));
+    return () => this.backEnd.getDevicePrograms(this.projectId).then(programs => !programs.find(program => program.id != this.id && program.program_name == this.nameField));
   }
 
   onSubmit():void {

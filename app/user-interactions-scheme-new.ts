@@ -85,7 +85,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.getProjects()
         .then(projects => {
-          this.projects = projects;
+          this.projects = projects.filter(project => project.update_permission);
           this.loadFromProject();
         })
         .catch(reason => {
@@ -105,16 +105,9 @@ export class Component implements ng.OnInit {
     this.showGroups = false;
     this.groups = [];
     if (this.getProject()) {
-      this.backEnd.getUserRolesAndPermissionsCurrent()
-          .then(permissions => {
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-            this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
-            if (libBackEnd.containsPermissions(permissions, ["project.owner"])) {
-              return this.backEnd.getProjectApplicationGroups(this.getProject());
-            } else {
-              this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view applications."));
-              return [];
-            }
+      this.backEnd.getProject(this.getProject())
+          .then(project => {
+            return Promise.all(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id)));
           })
           .then(groups => {
             this.showGroups = groups.length > 1 || (groups.length == 1 && !groups[0].m_programs.length);
@@ -136,15 +129,9 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          if (!libBackEnd.containsPermissions(permissions, ["project.owner", "Project_Editor"])) {
-            return Promise.reject('You are not allowed to list other schemes.');
-          }
-        })
-        .then(() => this.backEnd.getProjects())
-        .then(projects => Promise.all(projects.map(project => this.backEnd.getProjectInteractionsSchemes(project.id))))
-        .then(schemes => ![].concat(...schemes).find(scheme => scheme.name == this.nameField));
+    return () => this.backEnd.getProjects()
+        .then(projects => Promise.all([].concat(...projects.map(project => project.b_programs_id)).map(id => this.backEnd.getInteractionsScheme(id))))
+        .then(schemes => !schemes.find(scheme => scheme.name == this.nameField));
   }
 
   onSubmit():void {
@@ -162,7 +149,7 @@ export class Component implements ng.OnInit {
           return this.backEnd.createInteractionsScheme(this.nameField, this.descriptionField, project);
         })
         .then(scheme => {
-          return this.backEnd.addVersionToInteractionsScheme("Initial version", "", this.schemeField, scheme.b_program_id);
+          return this.backEnd.addVersionToInteractionsScheme("Initial version", "", this.schemeField, scheme.id);
         })
         .then(version => {
           return this.groupField ? this.backEnd.addApplicationGroupToInteractionsScheme(this.groupField, version.id, false) : null;

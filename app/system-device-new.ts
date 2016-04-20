@@ -70,14 +70,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          if (!libBackEnd.containsPermissions(permissions, ["board.read"])) {
-            return Promise.reject('You are not allowed to list other devices.');
-          }
-        })
-        .then(() => this.backEnd.getDevices())
-        .then(devices => !devices.find(device => device.id == this.idField));
+    return () => this.backEnd.getDevices().then(devices => !devices.find(device => device.id == this.idField));
   }
 
   onSubmit():void {
@@ -90,6 +83,10 @@ export class Component implements ng.OnInit {
           this.router.navigate(["System"]);
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-201
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-201"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-212
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-212"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The device cannot be created.", reason));
         });
   }

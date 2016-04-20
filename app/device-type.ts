@@ -46,8 +46,6 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
-  editType:boolean;
-
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
@@ -67,7 +65,6 @@ export class Component implements ng.OnInit {
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    this.editType = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -77,66 +74,29 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
+    this.backEnd.getProducers()
+        .then(producers => this.producers = producers)
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Producers cannot be loaded.", reason)));
+    this.backEnd.getProcessors()
+        .then(processors => this.processors = processors)
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));
     this.backEnd.getDeviceType(this.id)
         .then(type => {
-          return Promise.all<any>([
-            type,
-            this.backEnd.request("GET", type.producer),
-            this.backEnd.request("GET", type.processor)
-          ]);
-        })
-        .then(result => {
-          let type:libBackEnd.DeviceType;
-          let producer:libBackEnd.Producer;
-          let processor:libBackEnd.Processor;
-          [type, producer, processor] = result;
           this.nameField = type.name;
-          this.producerField = producer.id;
-          this.processorField = processor.id;
+          this.producerField = type.producer_id;
+          this.processorField = type.processor_id;
           this.descriptionField = type.description;
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The type ${this.id} cannot be loaded.`, reason));
         });
-    this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(currentPermissions => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-192
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-192"));
-          let viewProducers = libBackEnd.containsPermissions(currentPermissions, ["producer.edit"]);
-          if (viewProducers) {
-            this.backEnd.getProducers()
-                .then(producers => this.producers = producers)
-                .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Producers cannot be loaded.", reason)));
-          } else {
-            this.producers = [];
-            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view producers."));
-          }
-          let viewProcessors = libBackEnd.containsPermissions(currentPermissions, ["processor.read"]);
-          if (viewProcessors) {
-            this.backEnd.getProcessors()
-                .then(processors => this.processors = processors)
-                .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));
-          } else {
-            this.processors = [];
-            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to view processors."));
-          }
-          this.editType = libBackEnd.containsPermissions(currentPermissions, ["type_of_board.edit"]);
-        })
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Permissions cannot be loaded.`, reason)));
   }
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getUserRolesAndPermissionsCurrent()
-        .then(permissions => {
-          if (!libBackEnd.containsPermissions(permissions, ["type_of_board.read"])) {
-            return Promise.reject("You are not allowed to list other types.");
-          }
-        })
-        .then(() => this.backEnd.getDeviceTypes())
-        .then(types => !types.find(type => type.id != this.id && type.name == this.nameField));
+    return () => this.backEnd.getDeviceTypes().then(types => !types.find(type => type.id != this.id && type.name == this.nameField));
   }
 
   onSubmit():void {

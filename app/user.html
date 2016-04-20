@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + userString + "\" User Account, Its Roles or Permissions"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing || (tab == 'roles' && !editRoles) || (tab == 'permissions' && !editPermissions) ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="tab">
+<div data-bind-layout='"Edit the \"" + userString + "\" User Account, Its Roles or Permissions"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="tab">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="tab == 'account'">
       <a data-on-click="onTabClick('account', $event)" style="cursor: pointer">
@@ -11,12 +11,12 @@
       </a>
     </li>
     <li data-bind-class.active="tab == 'roles'">
-      <a data-on-click="onTabClick(viewRolesAndPermissions ? 'roles' : tab, $event)" data-bind-style.cursor="viewRolesAndPermissions ? 'pointer' : 'not-allowed'" data-bind-style.opacity="viewRolesAndPermissions ? 'initial' : 0.65" data-bind-title="viewRolesAndPermissions ? '' : 'You are not allowed to view roles.'">
+      <a data-on-click="onTabClick('roles', $event)" style="cursor: pointer">
         Roles
       </a>
     </li>
     <li data-bind-class.active="tab == 'permissions'">
-      <a data-on-click="onTabClick(viewRolesAndPermissions ? 'permissions' : tab, $event)" data-bind-style.cursor="viewRolesAndPermissions ? 'pointer' : 'not-allowed'" data-bind-style.opacity="viewRolesAndPermissions ? 'initial' : 0.65" data-bind-title="viewRolesAndPermissions ? '' : 'You are not allowed to view permissions.'">
+      <a data-on-click="onTabClick('permissions', $event)" style="cursor: pointer">
         Individual Permissions
       </a>
     </li>
@@ -28,19 +28,13 @@
           <template data-bind-ng-switch-when="true">
             <span class="glyphicon glyphicon-pencil"></span>
           </template>
-          First Name, Middle Name and Last Name
+          Name
         </label>
         <template data-bind-ng-switch-when="true">
-          <div class="form-inline">
-            <input class="form-control" required data-bindon-ng-model="firstNameField">
-            <input class="form-control" required data-bindon-ng-model="middleNameField">
-            <input class="form-control" required data-bindon-ng-model="lastNameField">
-          </div>
+          <input class="form-control" required data-bindon-ng-model="nameField">
         </template>
         <template data-bind-ng-switch-when="false">
-          <p class="form-control-static">
-            {{user?.first_name}} {{user?.middle_name}} {{user?.last_name}}
-          </p>
+          <p class="form-control-static">{{user?.full_name}}</p>
         </template>
       </div>
       <div class="form-group">
