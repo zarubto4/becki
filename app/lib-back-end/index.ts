@@ -165,7 +165,7 @@ export class PermissionMissingError extends UnauthorizedError {
     this.userMessage = userMessage;
   }
 
-  static fromReponse(response:Response):PermissionMissingError {
+  static fromResponse(response:Response):PermissionMissingError {
     "use strict";
 
     return new PermissionMissingError((<{message:string}>response.body).message);
