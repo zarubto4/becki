@@ -74,7 +74,6 @@ import * as userInteractionsModeratorNew from "./user-interactions-moderator-new
 import * as userInteractionsScheme from "./user-interactions-scheme";
 import * as userInteractionsSchemeNew from "./user-interactions-scheme-new";
 import * as userInteractionsSchemeVersion from "./user-interactions-scheme-version";
-import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-version-new";
 
 @ngRouter.RouteConfig([
   {path: "/", redirectTo: "/user/applications"},
@@ -117,7 +116,6 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
   {path: "/user/interactions/moderator/new", component: userInteractionsModeratorNew.Component, as: "NewUserInteractionsModerator"},
   {path: "/user/interactions/scheme/new", component: userInteractionsSchemeNew.Component, as: "NewUserInteractionsScheme"},
   {path: "/user/interactions/schemes/:scheme", component: userInteractionsScheme.Component, as: "UserInteractionsScheme"},
-  {path: "/user/interactions/schemes/:scheme/version/new", component: userInteractionsSchemeVersionNew.Component, as: "NewUserInteractionsSchemeVersion"},
   {path: "/user/interactions/schemes/:scheme/versions/:version", component: userInteractionsSchemeVersion.Component, as: "UserInteractionsSchemeVersion"},
   {path: "/user/project/new", component: projectNew.Component, as: "NewProject"},
   {path: "/user/projects", component: projects.Component, as: "Projects"},

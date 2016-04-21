@@ -13,12 +13,14 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
+import * as _ from "underscore";
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiFieldInteractionsScheme from "./lib-becki/field-interactions-scheme";
 import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
@@ -27,6 +29,7 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
   templateUrl: "app/user-interactions-scheme.html",
   directives: [
     libBeckiCustomValidator.Directive,
+    libBeckiFieldInteractionsScheme.Component,
     libBeckiLayout.Component,
     libPatternFlyListView.Component,
     ng.FORM_DIRECTIVES,
@@ -55,6 +58,26 @@ export class Component implements ng.OnInit {
 
   description:string;
 
+  versionNameField:string;
+
+  versionName:string;
+
+  versionDescriptionField:string;
+
+  versionDescription:string;
+
+  showApplicationGroups:boolean;
+
+  versionApplicationGroupField:string;
+
+  applicationGroups:libBackEnd.ApplicationGroup[];
+
+  versionApplicationGroups:libBackEnd.ApplicationGroup[];
+
+  versionSchemeField:string;
+
+  versionScheme:string;
+
   addVersion:boolean;
 
   versions:libPatternFlyListView.Item[];
@@ -63,9 +86,7 @@ export class Component implements ng.OnInit {
 
   notifications:libBeckiNotifications.Service;
 
-  router:ngRouter.Router;
-
-  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
     "use strict";
 
     this.id = routeParams.get("scheme");
@@ -82,10 +103,17 @@ export class Component implements ng.OnInit {
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.description = "Loading...";
+    this.versionNameField = "";
+    this.versionName = "Loading...";
+    this.versionDescriptionField = "";
+    this.versionDescription = "Loading...";
+    this.showApplicationGroups = false;
+    this.versionApplicationGroupField = "";
+    this.versionSchemeField = `{"blocks":{}}`;
+    this.versionScheme = `{"blocks":{}}`;
     this.addVersion = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
-    this.router = router;
   }
 
   onInit():void {
@@ -107,6 +135,30 @@ export class Component implements ng.OnInit {
           let scheme:libBackEnd.InteractionsScheme;
           let projects:libBackEnd.Project[];
           [scheme, projects] = result;
+          if (!scheme.versionObjects.length) {
+            // TODO: https://github.com/angular/angular/issues/4558
+            return Promise.reject<any>(new Error("the scheme has no version"));
+          }
+          let lastVersion = _.max(scheme.versionObjects, version => version.date_of_create);
+          if (lastVersion.files_id.length != 1) {
+            // TODO: https://github.com/angular/angular/issues/4558
+            return Promise.reject<any>(new Error("the scheme version does not have only one file"));
+          }
+          let project = projects.find(project => project.id == scheme.project_id);
+          return Promise.all<any>([
+            scheme,
+            projects,
+            lastVersion,
+            Promise.all(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id))),
+            this.backEnd.getFile(lastVersion.files_id[0])
+          ]);
+        })
+        .then(result => {
+          let scheme:libBackEnd.InteractionsScheme;
+          let projects:libBackEnd.Project[];
+          let version:libBackEnd.Version;
+          let versionFile:libBackEnd.BackEndFile;
+          [scheme, projects, version, this.applicationGroups, versionFile] = result;
           this.name = scheme.name;
           this.breadcrumbs[3].label = scheme.name;
           this.editScheme = scheme.edit_permission;
@@ -114,6 +166,19 @@ export class Component implements ng.OnInit {
           this.nameField = scheme.name;
           this.descriptionField = scheme.program_description;
           this.description = scheme.program_description;
+          this.versionNameField = version.version_name;
+          this.versionName = version.version_name;
+          this.versionDescriptionField = version.version_description;
+          this.versionDescription = version.version_description;
+          this.showApplicationGroups = this.applicationGroups.length > 1 || (this.applicationGroups.length == 1 && !this.applicationGroups[0].m_programs.length);
+          this.versionApplicationGroups = this.applicationGroups.filter(group => group.b_progam_connected_version_id && group.b_progam_connected_version_id == version.id);
+          if (this.versionApplicationGroups.length) {
+            this.versionApplicationGroupField = this.versionApplicationGroups[0].id;
+          }
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-195
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-195"));
+          this.versionSchemeField = versionFile.fileContent;
+          this.versionScheme = versionFile.fileContent;
           this.addVersion = scheme.update_permission;
           this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, version.version_description, ["UserInteractionsSchemeVersion", {scheme: this.id, version: version.id}], false));
         })
@@ -169,10 +234,26 @@ export class Component implements ng.OnInit {
     this.editing = false;
   }
 
-  onAddVersionClick():void {
+  validateVersionNameField():()=>Promise<boolean> {
     "use strict";
 
-    this.notifications.shift();
-    this.router.navigate(["NewUserInteractionsSchemeVersion", {scheme: this.id}]);
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => this.backEnd.getInteractionsScheme(this.id).then(scheme => !scheme.versionObjects.find(version => version.version_name == this.versionNameField));
+  }
+
+  onVersionSubmit():void {
+    "use strict";
+
+    this.backEnd.addVersionToInteractionsScheme(this.versionNameField, this.versionDescriptionField, this.versionSchemeField, this.id)
+        .then(version => {
+          return this.versionApplicationGroupField ? this.backEnd.addApplicationGroupToInteractionsScheme(this.versionApplicationGroupField, version.id, false) : null;
+        })
+        .then(() => {
+          this.notifications.current.push(new libBeckiNotifications.Success("The version has been created."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger("The version cannot be created.", reason));
+        });
   }
 }
