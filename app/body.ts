@@ -65,6 +65,7 @@ import * as userApplicationGroupNew from "./user-application-group-new";
 import * as userApplicationNew from "./user-application-new";
 import * as userApplications from "./user-applications";
 import * as userApplicationsVision from "./user-applications-vision";
+import * as userConnections from "./user-connections";
 import * as userDeviceNew from "./user-device-new";
 import * as userDevices from "./user-devices";
 import * as userInteractions from "./user-interactions";
@@ -108,6 +109,7 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
   {path: "/user/application/vision", component: userApplicationsVision.Component, as: "UserApplicationsVision"},
   {path: "/user/applications", component: userApplications.Component, as: "UserApplications"},
   {path: "/user/applications/:application", component: userApplication.Component, as: "UserApplication"},
+  {path: "/user/connections", component: userConnections.Component, as: "UserConnections"},
   {path: "/user/device/new", component: userDeviceNew.Component, as: "NewUserDevice"},
   {path: "/user/devices", component: userDevices.Component, as: "UserDevices"},
   {path: "/user/interactions", component: userInteractions.Component, as: "UserInteractions"},
@@ -132,6 +134,7 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
   templateUrl: "app/body.html",
   providers: [
     libBeckiModal.Service,
+    ng.provide("connections", {useValue: ["UserConnections"]}),
     ng.provide("home", {useValue: new libBeckiLayout.LabeledLink("No Name", ["UserApplications"])}),
     ng.provide("navigation", {
       useValue: [

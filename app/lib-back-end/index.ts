@@ -199,6 +199,30 @@ export declare class EventSource {
   constructor(url:string);
 }
 
+export interface Connection {
+
+  connection_id:string;
+
+  // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-217
+  created:number;
+
+  access_age:number;
+
+  user_agent:string;
+
+  typeOfConnection:string;
+
+  notification_subscriber:boolean;
+
+  providerUserId:string;
+
+  providerKey:string;
+
+  returnUrl:string;
+
+  social_tokenVerified:boolean;
+}
+
 export interface Role {
 
   id:string;
@@ -1028,6 +1052,18 @@ export abstract class BackEnd {
       this.unsetToken();
       return JSON.stringify(body);
     });
+  }
+
+  public getConnections():Promise<Connection[]> {
+    "use strict";
+
+    return this.requestPath("GET", "/coreClient/connections");
+  }
+
+  public removeConnection(id:string):Promise<string> {
+    "use strict";
+
+    return this.requestPath("DELETE", `/coreClient/connection/${id}`).then(JSON.stringify);
   }
 
   public getRoles():Promise<Role[]> {

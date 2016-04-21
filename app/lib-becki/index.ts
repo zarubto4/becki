@@ -13,6 +13,12 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
+export function timestampToString(timestamp:number):string {
+  "use strict";
+
+  return new Date(timestamp * 1000).toLocaleString();
+}
+
 export function getAdvancedField(field:string, options:string[]):string {
   "use strict";
 

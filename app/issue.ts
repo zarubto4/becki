@@ -17,6 +17,7 @@ import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
 import * as libBackEnd from "./lib-back-end/index";
+import * as libBecki from "./lib-becki/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
 import * as libBeckiFieldInteractionsScheme from "./lib-becki/field-interactions-scheme";
@@ -25,12 +26,6 @@ import * as libBeckiFieldIssueTags from "./lib-becki/field-issue-tags";
 import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libBootstrapDropdown from "./lib-bootstrap/dropdown";
-
-function timestampToString(timestamp:number):string {
-  "use strict";
-
-  return new Date(timestamp * 1000).toLocaleString();
-}
 
 class RemovableIssueLink {
 
@@ -78,7 +73,7 @@ class Comment {
     this.id = comment.postId;
     this.body = comment.text_of_post;
     this.author = libBackEnd.composeUserString(comment.author);
-    this.date = timestampToString(comment.date_of_create);
+    this.date = libBecki.timestampToString(comment.date_of_create);
     this.likes = comment.likes;
     this.tags = comment.hashTags;
     this.editing = false;
@@ -135,7 +130,7 @@ class Item {
     this.id = item.postId;
     this.body = item.text_of_post;
     this.author = libBackEnd.composeUserString(item.author);
-    this.date = timestampToString(item.date_of_create);
+    this.date = libBecki.timestampToString(item.date_of_create);
     this.likes = item.likes;
     this.comments = item.comments.map(comment => new Comment(comment));
     this.tags = item.hashTags;

@@ -51,6 +51,8 @@ export class Component implements ng.OnInit, ng.OnDestroy {
 
   navbarState:string;
 
+  connections:any[];
+
   navigation:LabeledLink[];
 
   @ng.Output()
@@ -64,11 +66,12 @@ export class Component implements ng.OnInit, ng.OnDestroy {
 
   router:ngRouter.Router;
 
-  constructor(@ng.Inject("home") home:LabeledLink, @ng.Inject("navigation") navigation:LabeledLink[], backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(@ng.Inject("home") home:LabeledLink, @ng.Inject("connections") connections:any[], @ng.Inject("navigation") navigation:LabeledLink[], backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.home = home;
     this.navbarState = "expanded";
+    this.connections = connections;
     this.navigation = navigation;
     this.actionClick = new ng.EventEmitter();
     this.lastWindowWidth = null;
@@ -90,6 +93,12 @@ export class Component implements ng.OnInit, ng.OnDestroy {
 
     // TODO: https://groups.google.com/d/msg/angular/IJf-KyGC3Gs/h33mlUTrAwAJ
     document.documentElement.classList.remove(...HTML_CLASSES);
+  }
+
+  onConnectionsClick():void {
+    "use strict";
+
+    this.router.navigate(this.connections);
   }
 
   onSignOutClick():void {
