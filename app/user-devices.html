@@ -3,21 +3,21 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, Update or Remove a Device'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="showUpdate || !addDevice ? null : 'Add'" data-on-action-click="onAddDeviceClick($event)" data-bind-ng-switch="showUpdate">
+<div data-bind-layout="'Add, Update or Remove a Device'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="showUpload || !addDevice ? null : 'Add'" data-on-action-click="onAddDeviceClick($event)" data-bind-ng-switch="showUpload">
   <ul class="nav nav-tabs">
-    <li data-bind-class.active="!showUpdate">
+    <li data-bind-class.active="!showUpload">
       <a data-on-click="onDevicesClick($event)" style="cursor: pointer">
         Devices
       </a>
     </li>
-    <li data-bind-class.active="showUpdate">
-      <a data-on-click="onUpdateClick($event)" style="cursor: pointer">
-        Update
+    <li data-bind-class.active="showUpload">
+      <a data-on-click="onUploadClick($event)" style="cursor: pointer">
+        Upload Program
       </a>
     </li>
   </ul>
   <template data-bind-ng-switch-when="true">
-    <form class="clearfix" data-on-submit="onUpdateSubmit($event)" style="margin-top: 2em">
+    <form class="clearfix" data-on-submit="onUploadSubmit($event)" style="margin-top: 2em">
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon-list"></span>
@@ -35,9 +35,9 @@
           <span class="glyphicon glyphicon-file"></span>
           File
         </label>
-        <input class="form-control" type="file" required data-var-update-field>
+        <input class="form-control" type="file" required data-var-upload-field>
       </div>
-      <button class="btn btn-primary pull-right" type="submit">Update</button>
+      <button class="btn btn-primary pull-right" type="submit">Upload</button>
     </form>
   </template>
   <template data-bind-ng-switch-when="false">

@@ -45,14 +45,14 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
-  showUpdate:boolean;
+  showUpload:boolean;
 
   addDevice:boolean;
 
   devices:SelectableDeviceItem[];
 
-  @ng.ViewChild("updateField")
-  updateField:ng.ElementRef;
+  @ng.ViewChild("uploadField")
+  uploadField:ng.ElementRef;
 
   backEnd:libBeckiBackEnd.Service;
 
@@ -68,7 +68,7 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("User", home.link),
       new libBeckiLayout.LabeledLink("Devices", ["UserDevices"])
     ];
-    this.showUpdate = false;
+    this.showUpload = false;
     this.addDevice = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
@@ -100,13 +100,13 @@ export class Component implements ng.OnInit {
   onDevicesClick():void {
     "use strict";
 
-    this.showUpdate = false;
+    this.showUpload = false;
   }
 
-  onUpdateClick():void {
+  onUploadClick():void {
     "use strict";
 
-    this.showUpdate = true;
+    this.showUpload = true;
   }
 
   onRemoveDeviceClick(id:string):void {
@@ -124,7 +124,7 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onUpdateSubmit():void {
+  onUploadSubmit():void {
     "use strict";
 
     let devices = this.devices.filter(selectable => selectable.selected).map(selectable => selectable.id);
