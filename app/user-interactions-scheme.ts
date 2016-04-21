@@ -23,20 +23,6 @@ import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
 
-class SelectableModerator {
-
-  model:libBackEnd.InteractionsModerator;
-
-  selected:boolean;
-
-  constructor(model:libBackEnd.InteractionsModerator) {
-    "use strict";
-
-    this.model = model;
-    this.selected = false;
-  }
-}
-
 @ng.Component({
   templateUrl: "app/user-interactions-scheme.html",
   directives: [
@@ -71,10 +57,6 @@ export class Component implements ng.OnInit {
 
   versions:libPatternFlyListView.Item[];
 
-  uploadVersionField:string;
-
-  moderators:SelectableModerator[];
-
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
@@ -98,7 +80,6 @@ export class Component implements ng.OnInit {
     this.descriptionField = "Loading...";
     this.description = "Loading...";
     this.addVersion = false;
-    this.uploadVersionField = "";
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -115,29 +96,14 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.editing = false;
-    this.backEnd.getInteractionsScheme(this.id)
-        .then(scheme => {
-          return Promise.all<any>([
-              scheme,
-              this.backEnd.getProject(scheme.project_id)
-          ]);
-        })
-        .then(result => {
-          let scheme:libBackEnd.InteractionsScheme;
-          let project:libBackEnd.Project;
-          [scheme, project] = result;
-          return Promise.all<any>([
-            scheme,
-            this.backEnd.getProjects(),
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-197
-            Promise.all(project.homers_id.map(id => this.backEnd.getInteractionsModerator(id)))
-          ]);
-        })
+    Promise.all<any>([
+          this.backEnd.getInteractionsScheme(this.id),
+          this.backEnd.getProjects()
+        ])
         .then(result => {
           let scheme:libBackEnd.InteractionsScheme;
           let projects:libBackEnd.Project[];
-          let moderators:libBackEnd.InteractionsModerator[];
-          [scheme, projects, moderators] = result;
+          [scheme, projects] = result;
           this.name = scheme.name;
           this.breadcrumbs[3].label = scheme.name;
           this.editScheme = scheme.edit_permission;
@@ -147,7 +113,6 @@ export class Component implements ng.OnInit {
           this.description = scheme.program_description;
           this.addVersion = scheme.update_permission;
           this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, version.version_description, ["UserInteractionsSchemeVersion", {scheme: this.id, version: version.id}], false));
-          this.moderators = moderators.filter(moderator => moderator.update_permission).map(moderator => new SelectableModerator(moderator));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The scheme ${this.id} cannot be loaded.`, reason));
@@ -194,24 +159,5 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.router.navigate(["NewUserInteractionsSchemeVersion", {scheme: this.id}]);
-  }
-
-  onUploadSubmit():void {
-    "use strict";
-
-    let moderators = this.moderators.filter(selectable => selectable.selected).map(selectable => selectable.model.id);
-    if (!moderators.length) {
-      return;
-    }
-
-    this.notifications.shift();
-    Promise.all(moderators.map(id => this.backEnd.addSchemeToInteractionsModerator(this.uploadVersionField, id, this.id)))
-        .then(() => {
-          this.notifications.current.push(new libBeckiNotifications.Success("The scheme has been uploaded."));
-          this.refresh();
-        })
-        .catch(reason => {
-          this.notifications.current.push(new libBeckiNotifications.Danger("The scheme cannot be uploaded.", reason));
-        });
   }
 }

@@ -22,31 +22,53 @@ import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
 
-class InteractionsModeratorItem extends libPatternFlyListView.Item {
+class InteractionsSchemeItem extends libPatternFlyListView.Item {
+
+  versions:libBackEnd.Version[];
+
+  constructor(scheme:libBackEnd.InteractionsScheme) {
+    "use strict";
+
+    super(scheme.id, scheme.name, scheme.program_description, ["UserInteractionsScheme", {scheme: scheme.id}], scheme.delete_permission);
+    this.versions = scheme.versionObjects;
+  }
+}
+
+class SelectableInteractionsModeratorItem extends libPatternFlyListView.Item {
 
   project:string;
 
-  constructor(moderator:libBackEnd.InteractionsModerator, project:string, removable:boolean) {
+  online:boolean;
+
+  selected:boolean;
+
+  constructor(moderator:libBackEnd.InteractionsModerator, project:libBackEnd.Project) {
     "use strict";
 
-    super(moderator.id, moderator.id, moderator.type_of_device, undefined, removable);
-    this.project = project;
+    super(moderator.id, moderator.id, moderator.type_of_device, undefined, project.update_permission);
+    this.project = project.id;
+    this.online = moderator.online;
+    this.selected = false;
   }
 }
 
 @ng.Component({
   templateUrl: "app/user-interactions.html",
-  directives: [libBeckiLayout.Component, libPatternFlyListView.Component, ng.CORE_DIRECTIVES],
+  directives: [libBeckiLayout.Component, libPatternFlyListView.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES],
 })
 export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
-  showModerators:boolean;
+  tab:string;
 
-  schemes:libPatternFlyListView.Item[];
+  schemes:InteractionsSchemeItem[];
 
-  moderators:InteractionsModeratorItem[];
+  uploadSchemeField:string;
+
+  uploadVersionField:string;
+
+  moderators:SelectableInteractionsModeratorItem[];
 
   backEnd:libBeckiBackEnd.Service;
 
@@ -62,7 +84,9 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("User", home.link),
       new libBeckiLayout.LabeledLink("Interactions", ["UserInteractions"])
     ];
-    this.showModerators = false;
+    this.tab = 'schemes';
+    this.uploadSchemeField = "";
+    this.uploadVersionField = "";
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -90,8 +114,8 @@ export class Component implements ng.OnInit {
           let schemes:libBackEnd.InteractionsScheme[];
           let moderators:[libBackEnd.InteractionsModerator, libBackEnd.Project][];
           [schemes, moderators] = result;
-          this.schemes = schemes.map(scheme => new libPatternFlyListView.Item(scheme.id, scheme.name, scheme.program_description, ["UserInteractionsScheme", {scheme: scheme.id}], scheme.delete_permission));
-          this.moderators = moderators.map(pair => new InteractionsModeratorItem(pair[0], pair[1].id, pair[1].update_permission));
+          this.schemes = schemes.map(scheme => new InteractionsSchemeItem(scheme));
+          this.moderators = moderators.map(pair => new SelectableInteractionsModeratorItem(pair[0], pair[1]));
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Interactions cannot be loaded.", reason)));
   }
@@ -99,10 +123,13 @@ export class Component implements ng.OnInit {
   onAddClick():void {
     "use strict";
 
-    if (this.showModerators) {
-      this.onAddModeratorClick();
-    } else {
-      this.onAddSchemeClick();
+    switch (this.tab) {
+      case "schemes":
+        this.onAddSchemeClick();
+        break;
+      case "moderators":
+        this.onAddModeratorClick();
+        break;
     }
   }
 
@@ -118,16 +145,10 @@ export class Component implements ng.OnInit {
     this.router.navigate(["NewUserInteractionsModerator"]);
   }
 
-  onSchemesClick():void {
+  onTabClick(tab:string):void {
     "use strict";
 
-    this.showModerators = false;
-  }
-
-  onModeratorsClick():void {
-    "use strict";
-
-    this.showModerators = true;
+    this.tab = tab;
   }
 
   onRemoveSchemeClick(id:string):void {
@@ -143,6 +164,39 @@ export class Component implements ng.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-185
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-185"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The scheme cannot be removed.", reason));
+        });
+  }
+
+  getUploadVersions():libBackEnd.Version[] {
+    "use strict";
+
+    let scheme = this.schemes.find(scheme => scheme.id == this.uploadSchemeField);
+    return scheme ? scheme.versions : [];
+  }
+
+  onUploadSchemeFieldChange():void {
+    "use strict";
+
+    let versions = this.getUploadVersions();
+    this.uploadVersionField = versions.length ? versions[0].id : "";
+  }
+
+  onUploadSubmit():void {
+    "use strict";
+
+    let moderators = this.moderators.filter(moderator => moderator.selected).map(moderator => moderator.id);
+    if (!moderators.length) {
+      return;
+    }
+
+    this.notifications.shift();
+    Promise.all(moderators.map(id => this.backEnd.addSchemeToInteractionsModerator(this.uploadVersionField, id, this.uploadSchemeField)))
+        .then(() => {
+          this.notifications.current.push(new libBeckiNotifications.Success("The scheme has been uploaded."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger("The scheme cannot be uploaded.", reason));
         });
   }
 

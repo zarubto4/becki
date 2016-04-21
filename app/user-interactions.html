@@ -3,26 +3,70 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, View or Remove a Scheme or a Moderator of Interactions'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="showModerators">
+<div data-bind-layout="'Add, View, Update or Remove a Scheme or a Moderator of Interactions'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="tab == 'upload' ? null : 'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
   <ul class="nav nav-tabs">
-    <li data-bind-class.active="!showModerators">
-      <a data-on-click="onSchemesClick($event)" style="cursor: pointer">
+    <li data-bind-class.active="tab == 'schemes'">
+      <a data-on-click="onTabClick('schemes', $event)" style="cursor: pointer">
         Schemes
       </a>
     </li>
-    <li data-bind-class.active="showModerators">
-      <a data-on-click="onModeratorsClick($event)" style="cursor: pointer">
+    <li data-bind-class.active="tab == 'upload'">
+      <a data-on-click="onTabClick('upload', $event)" style="cursor: pointer">
+        Upload Scheme
+      </a>
+    </li>
+    <li data-bind-class.active="tab == 'moderators'">
+      <a data-on-click="onTabClick('moderators', $event)" style="cursor: pointer">
         Moderators
       </a>
     </li>
   </ul>
-  <template data-bind-ng-switch-when="true">
-    <div data-bind-list-view="moderators" data-on-add-click="onAddModeratorClick($event)" data-on-remove-click="onRemoveModeratorClick($event)">
+  <template data-bind-ng-switch-when="'schemes'">
+    <div data-bind-list-view="schemes" data-on-add-click="onAddSchemeClick($event)" data-on-remove-click="onRemoveSchemeClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
-  <template data-bind-ng-switch-when="false">
-    <div data-bind-list-view="schemes" data-on-add-click="onAddSchemeClick($event)" data-on-remove-click="onRemoveSchemeClick($event)">
+  <template data-bind-ng-switch-when="'upload'">
+    <form class="clearfix" data-on-submit="onUploadSubmit($event)" style="margin-top: 2em">
+      <div class="form-group">
+        <label>
+          <span class="glyphicon glyphicon-list"></span>
+          Moderator IDs
+        </label>
+        <!-- TODO: https://github.com/angular/angular/issues/4427 -->
+        <div class="checkbox" data-bind-class.disabled="!moderator.online" template="ngFor #moderator of moderators">
+          <label>
+            <input type="checkbox" data-bind-disabled="!moderator.online" data-bindon-ng-model="moderator.selected">
+            {{moderator.id}}
+            <template data-bind-ng-if="!moderator.online">(offline)</template>
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>
+          <span class="glyphicon glyphicon-link"></span>
+          Scheme
+        </label>
+        <div class="form-inline">
+          <select class="form-control" required data-bindon-ng-model="uploadSchemeField" data-on-ng-model-change="onUploadSchemeFieldChange($event)">
+            <option value="">Select name...</option>
+            <option data-bind-value="scheme.id" template="ngFor #scheme of schemes">
+              {{scheme.name}}
+            </option>
+          </select>
+          <select class="form-control" required data-bindon-ng-model="uploadVersionField">
+            <option value="">Select version...</option>
+            <option data-bind-value="version.id" template="ngFor #version of getUploadVersions()">
+              {{version.version_name}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-primary pull-right" type="submit">Upload</button>
+    </form>
+  </template>
+  <template data-bind-ng-switch-when="'moderators'">
+    <div data-bind-list-view="moderators" data-on-add-click="onAddModeratorClick($event)" data-on-remove-click="onRemoveModeratorClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
