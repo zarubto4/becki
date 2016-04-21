@@ -35,6 +35,7 @@ import * as libBeckiFieldCode from "./lib-becki/field-code";
 import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiModal from "./lib-becki/modal";
 import * as libBeckiNotifications from "./lib-becki/notifications";
+import * as libBeckiWebsocket from "./lib-becki/websocket";
 import * as libraryGroup from "./library-group";
 import * as libraryGroupNew from "./library-group-new";
 import * as library from "./library";
@@ -133,7 +134,10 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
   selector: "[body]",
   templateUrl: "app/body.html",
   providers: [
+    libBeckiBackEnd.Service,
     libBeckiModal.Service,
+    libBeckiNotifications.Service,
+    libBeckiWebsocket.Service,
     ng.provide("connections", {useValue: ["UserConnections"]}),
     ng.provide("home", {useValue: new libBeckiLayout.LabeledLink("No Name", ["UserApplications"])}),
     ng.provide("navigation", {
@@ -150,6 +154,7 @@ import * as userInteractionsSchemeVersionNew from "./user-interactions-scheme-ve
         new libBeckiLayout.LabeledLink("Projects (TODO)", ["Projects"], "book")
       ]
     }),
+    ng.provide("signing", {useValue: ["Signing"]})
   ],
   directives: [libBeckiFieldCode.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
   inputs: ["body"],

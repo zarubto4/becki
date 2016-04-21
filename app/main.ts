@@ -20,16 +20,10 @@ import * as ngHttp from "angular2/http";
 import * as ngRouter from "angular2/router";
 
 import * as body from "./body";
-import * as libBeckiBackEnd from "./lib-becki/back-end";
-import * as libBeckiNotifications from "./lib-becki/notifications";
-import * as libBeckiWebsocket from "./lib-becki/websocket";
 
 ng.bootstrap(
     body.Component,
     [
-      libBeckiBackEnd.Service,
-      libBeckiNotifications.Service,
-      libBeckiWebsocket.Service,
       ngHttp.HTTP_PROVIDERS,
       ngRouter.ROUTER_PROVIDERS,
       ng.provide(ngRouter.LocationStrategy, {useClass: ngRouter.HashLocationStrategy})

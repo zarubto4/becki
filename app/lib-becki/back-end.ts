@@ -29,6 +29,8 @@ export class Service extends libBackEnd.BackEnd {
    */
   http:ngHttp.Http;
 
+  signing:any[];
+
   router:ngRouter.Router;
 
   zone:ng.NgZone;
@@ -40,11 +42,12 @@ export class Service extends libBackEnd.BackEnd {
    *
    * @param http a service that is able to perform HTTP requests.
    */
-  public constructor(http:ngHttp.Http, router:ngRouter.Router, zone:ng.NgZone) {
+  public constructor(http:ngHttp.Http, @ng.Inject("signing") signing:any[], router:ngRouter.Router, zone:ng.NgZone) {
     "use strict";
 
     super();
     this.http = http;
+    this.signing = signing;
     this.router = router;
     this.zone = zone;
     this.notificationsNew = new ng.EventEmitter();
@@ -68,7 +71,7 @@ export class Service extends libBackEnd.BackEnd {
     }));
     return new Promise(resolve => this.http.request(ngRequest).subscribe((ngResponse:ngHttp.Response) => {
       if (ngResponse.status == 401) {
-        this.router.navigate(["Signing"]);
+        this.router.navigate(this.signing);
       }
       resolve(new libBackEnd.Response(ngResponse.status, ngResponse.json()));
     }));
