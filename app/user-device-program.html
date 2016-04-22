@@ -3,97 +3,109 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + name + "\" Program"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="editing">
-  <h2>Details</h2>
-  <form class="clearfix" data-on-submit="onSubmit($event)">
-    <template data-bind-ng-switch-when="true">
-      <div class="form-group">
-        <label>
-          <span class="glyphicon glyphicon-pencil"></span>
-          Name
-        </label>
-        <input class="form-control" required minlength="8" data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
-      </div>
-    </template>
-    <div class="form-group">
-      <label>
-        <template data-bind-ng-switch-when="true">
-          <span class="glyphicon glyphicon-pencil"></span>
-        </template>
-        Description
-      </label>
-      <template data-bind-ng-switch-when="true">
-        <textarea class="form-control" data-bindon-ng-model="descriptionField"></textarea>
-      </template>
-      <template data-bind-ng-switch-when="false">
-        <p class="form-control-static">{{description}}</p>
-      </template>
-    </div>
-    <template data-bind-ng-switch-when="true">
-      <div class="pull-right">
-        <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-        <button class="btn btn-primary" type="submit" data-bind-disabled="!editProgram" data-bind-title="editProgram ? '' : 'You are not allowed to edit programs.'">Edit</button>
-      </div>
-    </template>
-  </form>
-  <form class="clearfix" data-on-submit="onVersionSubmit($event)">
-    <div class="form-group">
-      <label>
-        <template data-bind-ng-switch-when="true">
-          <span class="glyphicon glyphicon-pencil"></span>
-        </template>
-        Version Name
-      </label>
-      <template data-bind-ng-switch-when="true">
-        <input class="form-control" required data-bindon-ng-model="versionNameField" data-bind-custom-validator="validateVersionNameField()" data-message="This name is used already. Please choose another one.">
-      </template>
-      <template data-bind-ng-switch-when="false">
-        <p class="form-control-static">{{versionName}}</p>
-      </template>
-    </div>
-    <div class="form-group">
-      <label>
-        <template data-bind-ng-switch-when="true">
-          <span class="glyphicon glyphicon-pencil"></span>
-        </template>
-        Version Description
-      </label>
-      <template data-bind-ng-switch-when="true">
-        <textarea class="form-control" data-bindon-ng-model="versionDescriptionField"></textarea>
-      </template>
-      <template data-bind-ng-switch-when="false">
-        <p class="form-control-static">{{versionDescription}}</p>
-      </template>
-    </div>
-    <div class="form-group">
-      <label>
-        <template data-bind-ng-switch-when="true">
-          <span class="glyphicon glyphicon-console"></span>
-        </template>
-        Code
-      </label>
-      <template data-bind-ng-switch-when="true">
-        <div data-bindon-field-code="versionCodeField" data-bind-mode="'text/x-csrc'">
-          <div class="spinner"></div>
-        </div>
-      </template>
-      <template data-bind-ng-switch-when="false">
-        <div data-bindon-field-code="versionCode" data-bind-mode="'text/x-csrc'" data-bind-readonly="true">
-          <div class="spinner"></div>
-        </div>
-      </template>
-    </div>
-    <template data-bind-ng-switch-when="true">
-      <div class="pull-right">
-        <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-        <button class="btn btn-primary" type="submit" data-bind-disabled="!editProgram" data-bind-title="editProgram ? '' : 'You are not allowed to create a new version.'">Update</button>
-      </div>
-    </template>
-  </form>
-  <template data-bind-ng-switch-when="false">
-    <h2>Versions</h2>
+<div data-bind-layout='"Edit the \"" + name + "\" Program"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="showHistory || editing ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="showHistory">
+  <ul class="nav nav-tabs">
+    <li data-bind-class.active="!showHistory">
+      <a data-on-click="onDetailsClick($event)" style="cursor: pointer">
+        Details
+      </a>
+    </li>
+    <li data-bind-class.active="showHistory">
+      <a data-on-click="onHistoryClick($event)" style="cursor: pointer">
+        History
+      </a>
+    </li>
+  </ul>
+  <template data-bind-ng-switch-when="true">
     <div data-bind-list-view="versions" data-bind-addable="false" data-on-remove-click="onVersionRemoveClick($event)">
       <div class="spinner"></div>
     </div>
+  </template>
+  <template data-bind-ng-switch-when="false">
+    <form class="clearfix" style="margin-top: 2em" data-on-submit="onSubmit($event)" data-bind-ng-switch="editing">
+      <template data-bind-ng-switch-when="true">
+        <div class="form-group">
+          <label>
+            <span class="glyphicon glyphicon-pencil"></span>
+            Name
+          </label>
+          <input class="form-control" required minlength="8" data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
+        </div>
+      </template>
+      <div class="form-group">
+        <label>
+          <template data-bind-ng-switch-when="true">
+            <span class="glyphicon glyphicon-pencil"></span>
+          </template>
+          Description
+        </label>
+        <template data-bind-ng-switch-when="true">
+          <textarea class="form-control" data-bindon-ng-model="descriptionField"></textarea>
+        </template>
+        <template data-bind-ng-switch-when="false">
+          <p class="form-control-static">{{description}}</p>
+        </template>
+      </div>
+      <template data-bind-ng-switch-when="true">
+        <div class="pull-right">
+          <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+          <button class="btn btn-primary" type="submit" data-bind-disabled="!editProgram" data-bind-title="editProgram ? '' : 'You are not allowed to edit programs.'">Edit</button>
+        </div>
+      </template>
+    </form>
+    <form class="clearfix" data-on-submit="onVersionSubmit($event)" data-bind-ng-switch="editing">
+      <div class="form-group">
+        <label>
+          <template data-bind-ng-switch-when="true">
+            <span class="glyphicon glyphicon-pencil"></span>
+          </template>
+          Version Name
+        </label>
+        <template data-bind-ng-switch-when="true">
+          <input class="form-control" required data-bindon-ng-model="versionNameField" data-bind-custom-validator="validateVersionNameField()" data-message="This name is used already. Please choose another one.">
+        </template>
+        <template data-bind-ng-switch-when="false">
+          <p class="form-control-static">{{versionName}}</p>
+        </template>
+      </div>
+      <div class="form-group">
+        <label>
+          <template data-bind-ng-switch-when="true">
+            <span class="glyphicon glyphicon-pencil"></span>
+          </template>
+          Version Description
+        </label>
+        <template data-bind-ng-switch-when="true">
+          <textarea class="form-control" data-bindon-ng-model="versionDescriptionField"></textarea>
+        </template>
+        <template data-bind-ng-switch-when="false">
+          <p class="form-control-static">{{versionDescription}}</p>
+        </template>
+      </div>
+      <div class="form-group">
+        <label>
+          <template data-bind-ng-switch-when="true">
+            <span class="glyphicon glyphicon-console"></span>
+          </template>
+          Code
+        </label>
+        <template data-bind-ng-switch-when="true">
+          <div data-bindon-field-code="versionCodeField" data-bind-mode="'text/x-csrc'">
+            <div class="spinner"></div>
+          </div>
+        </template>
+        <template data-bind-ng-switch-when="false">
+          <div data-bindon-field-code="versionCode" data-bind-mode="'text/x-csrc'" data-bind-readonly="true">
+            <div class="spinner"></div>
+          </div>
+        </template>
+      </div>
+      <template data-bind-ng-switch-when="true">
+        <div class="pull-right">
+          <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+          <button class="btn btn-primary" type="submit" data-bind-disabled="!editProgram" data-bind-title="editProgram ? '' : 'You are not allowed to create a new version.'">Update</button>
+        </div>
+      </template>
+    </form>
   </template>
 </div>

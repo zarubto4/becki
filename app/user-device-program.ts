@@ -45,6 +45,8 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
+  showHistory:boolean;
+
   editing:boolean;
 
   nameField:string;
@@ -84,6 +86,7 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Device Programs", ["Projects"]),
       new libBeckiLayout.LabeledLink("Loading...", ["UserDeviceProgram", {program: this.id}])
     ];
+    this.showHistory = false;
     this.editing = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
@@ -158,6 +161,18 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.editing = !this.editing;
+  }
+
+  onDetailsClick():void {
+    "use strict";
+
+    this.showHistory = false;
+  }
+
+  onHistoryClick():void {
+    "use strict";
+
+    this.showHistory = true;
   }
 
   validateNameField():()=>Promise<boolean> {
