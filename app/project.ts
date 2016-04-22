@@ -108,7 +108,7 @@ export class Component implements ng.OnInit {
           this.editProject = project.edit_permission;
           this.addCollaborator = project.share_permission;
           this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composeUserString(collaborator, true), null, undefined, project.unshare_permission));
-          this.interactionsBlocks = [].concat(...groups.map(group => group.blockoBlocks.map(block => new libPatternFlyListView.Item(block.id, block.name, block.general_description, ["InteractionsBlock", {project: this.id, block: block.id}], block.delete_permission))));
+          this.interactionsBlocks = [].concat(...groups.map(group => group.blockoBlocks.map(block => new libPatternFlyListView.Item(block.id, block.name, block.general_description, ["UserInteractionsBlock", {block: block.id}], block.delete_permission))));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The project ${this.id} cannot be loaded.`, reason));

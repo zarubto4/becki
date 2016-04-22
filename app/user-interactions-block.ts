@@ -23,14 +23,12 @@ import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
-  templateUrl: "app/interactions-block.html",
+  templateUrl: "app/user-interactions-block.html",
   directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
   id:string;
-
-  projectId:string;
 
   heading:string;
 
@@ -54,15 +52,12 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.id = routeParams.get("block");
-    this.projectId = routeParams.get("project");
     this.heading = `Block ${this.id}`;
     this.breadcrumbs = [
       home,
-      new libBeckiLayout.LabeledLink("User", ["Projects"]),
-      new libBeckiLayout.LabeledLink("Projects", ["Projects"]),
-      new libBeckiLayout.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new libBeckiLayout.LabeledLink("Interactions Blocks", ["Project", {project: this.projectId}]),
-      new libBeckiLayout.LabeledLink(`Block ${this.id}`, ["InteractionsBlock", {project: this.projectId, block: this.id}])
+      new libBeckiLayout.LabeledLink("User", home.link),
+      new libBeckiLayout.LabeledLink("Interactions Blocks", ["Projects"]),
+      new libBeckiLayout.LabeledLink(`Block ${this.id}`, ["UserInteractionsBlock", {block: this.id}])
     ];
     this.nameField = "Loading...";
     this.groupField = "";
@@ -103,7 +98,7 @@ export class Component implements ng.OnInit {
     this.backEnd.updateInteractionsBlock(this.id, this.nameField, this.descriptionField, this.groupField)
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The block has been updated."));
-          this.router.navigate(["Project", {project: this.projectId}]);
+          this.router.navigate(["Projects"]);
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The block cannot be updated.", reason));
@@ -114,6 +109,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Project", {project: this.projectId}]);
+    this.router.navigate(["Projects"]);
   }
 }
