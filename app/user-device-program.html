@@ -37,6 +37,24 @@
     </template>
   </form>
   <template data-bind-ng-switch-when="false">
+    <form class="clearfix">
+      <div class="form-group">
+        <label>Version Name</label>
+        <p class="form-control-static">{{versionName}}</p>
+      </div>
+      <div class="form-group">
+        <label>Version Description</label>
+        <p class="form-control-static">{{versionDescription}}</p>
+      </div>
+      <div class="form-group">
+        <label>Code</label>
+        <div data-bindon-field-code="versionCode" data-bind-mode="'text/x-csrc'" data-bind-readonly="true">
+          <div class="spinner"></div>
+        </div>
+      </div>
+    </form>
+  </template>
+  <template data-bind-ng-switch-when="false">
     <div>
       <template data-bind-ng-if="editProgram">
         <div class="pull-right">

@@ -13,11 +13,14 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
+import * as _ from "underscore";
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
+import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiFieldCode from "./lib-becki/field-code";
 import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
@@ -26,6 +29,7 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
   templateUrl: "app/user-device-program.html",
   directives: [
     libBeckiCustomValidator.Directive,
+    libBeckiFieldCode.Component,
     libBeckiLayout.Component,
     libPatternFlyListView.Component,
     ng.CORE_DIRECTIVES,
@@ -48,6 +52,12 @@ export class Component implements ng.OnInit {
   descriptionField:string;
 
   description:string;
+
+  versionName:string;
+
+  versionDescription:string;
+
+  versionCode:string;
 
   editProgram:boolean;
 
@@ -74,6 +84,9 @@ export class Component implements ng.OnInit {
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.description = "Loading...";
+    this.versionName = "Loading...";
+    this.versionDescription = "Loading...";
+    this.versionCode = "Loading...";
     this.editProgram = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
@@ -93,11 +106,36 @@ export class Component implements ng.OnInit {
     this.editing = false;
     this.backEnd.getDeviceProgram(this.id)
         .then(program => {
+          if (!program.version_objects.length) {
+            // TODO: https://github.com/angular/angular/issues/4558
+            return Promise.reject<any>(new Error("the program has no version"));
+          }
+          let lastVersion = _.max(program.version_objects, version => version.date_of_create);
+          if (lastVersion.files_id.length != 1) {
+            // TODO: https://github.com/angular/angular/issues/4558
+            return Promise.reject<any>(new Error("the program version does not have only one file"));
+          }
+          return Promise.all<any>([
+            program,
+            lastVersion,
+            this.backEnd.getFile(lastVersion.files_id[0])
+          ]);
+        })
+        .then(result => {
+          let program:libBackEnd.DeviceProgram;
+          let version:libBackEnd.Version;
+          let versionFile:libBackEnd.BackEndFile;
+          [program, version, versionFile] = result;
           this.name = program.program_name;
           this.breadcrumbs[3].label = program.program_name;
           this.nameField = program.program_name;
           this.descriptionField = program.program_description;
           this.description = program.program_description;
+          this.versionName = version.version_name;
+          this.versionDescription = version.version_description;
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-195
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-195"));
+          //this.versionCode = versionFile.fileContent;
           this.editProgram = program.edit_permission;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-126
           this.versions = program.version_objects.map(version => new libPatternFlyListView.Item(version.id, `${version.version_name} (issue/TYRION-126)`, version.version_description));

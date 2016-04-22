@@ -32,6 +32,9 @@ export class Component implements ng.AfterViewInit, ng.OnChanges, ng.OnDestroy {
   @ng.Input()
   mode:string;
 
+  @ng.Input()
+  readonly:boolean;
+
   @ng.ViewChild("field")
   field:ng.ElementRef;
 
@@ -55,7 +58,7 @@ export class Component implements ng.AfterViewInit, ng.OnChanges, ng.OnDestroy {
   afterViewInit():void {
     "use strict";
 
-    this.editor = CodeMirror.fromTextArea(this.field.nativeElement, {mode: this.mode});
+    this.editor = CodeMirror.fromTextArea(this.field.nativeElement, {mode: this.mode, readOnly: this.readonly ? "nocursor" : false});
     // see https://github.com/angular/angular/issues/6103
     // see https://github.com/codemirror/CodeMirror/issues/3735
     this.editor.on("changes", () => {
