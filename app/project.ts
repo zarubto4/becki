@@ -23,18 +23,6 @@ import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
 
-class SelectableItem extends libPatternFlyListView.Item {
-
-  selected:boolean;
-
-  constructor(id:string, name:string, description:string, link:any[] = null) {
-    "use strict";
-
-    super(id, name, description, link);
-    this.selected = false;
-  }
-}
-
 @ng.Component({
   templateUrl: "app/project.html",
   directives: [
@@ -66,12 +54,6 @@ export class Component implements ng.OnInit {
 
   standalonePrograms:libPatternFlyListView.Item[];
 
-  devices:SelectableItem[];
-
-  deviceUploadingProgramField:string;
-
-  devicePrograms:libBackEnd.DeviceProgram[];
-
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
@@ -93,7 +75,6 @@ export class Component implements ng.OnInit {
     this.descriptionField = "Loading...";
     this.editProject = false;
     this.addCollaborator = false;
-    this.deviceUploadingProgramField = "";
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -114,25 +95,20 @@ export class Component implements ng.OnInit {
           return Promise.all<any>([
             project,
             Promise.all(project.owners_id.map(id => this.backEnd.getUser(id))),
-            Promise.all(project.type_of_blocks_id.map(id => this.backEnd.getStandaloneProgramCategory(id))),
-            Promise.all(project.boards_id.map(id => this.backEnd.getDevice(id))),
-            Promise.all(project.c_programs_id.map(id => this.backEnd.getDeviceProgram(id)))
+            Promise.all(project.type_of_blocks_id.map(id => this.backEnd.getStandaloneProgramCategory(id)))
           ]);
         })
         .then(result => {
           let project:libBackEnd.Project;
           let collaborators:libBackEnd.User[];
           let categories:libBackEnd.StandaloneProgramCategory[];
-          let devices:libBackEnd.Device[];
-          let devicePrograms:libBackEnd.DeviceProgram[];
-          [project, collaborators, categories, devices, this.devicePrograms] = result;
+          [project, collaborators, categories] = result;
           this.nameField = project.project_name;
           this.descriptionField = project.project_description;
           this.editProject = project.edit_permission;
           this.addCollaborator = project.share_permission;
           this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composeUserString(collaborator, true), null, undefined, project.unshare_permission));
           this.standalonePrograms = [].concat(...categories.map(category => category.blockoBlocks.map(program => new libPatternFlyListView.Item(program.id, program.name, program.general_description, ["StandaloneProgram", {project: this.id, program: program.id}], program.delete_permission))));
-          this.devices = devices.map(device => new SelectableItem(device.id, device.id, device.type_of_board.name));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The project ${this.id} cannot be loaded.`, reason));
@@ -197,23 +173,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The program cannot be removed.", reason));
-        });
-  }
-
-  onDeviceUploadingSubmit():void {
-    "use strict";
-
-    this.notifications.shift();
-    let devices = this.devices.filter(selectable => selectable.selected).map(selectable => selectable.id);
-    Promise.all(devices.map(id => this.backEnd.addProgramToDevice(this.deviceUploadingProgramField, id)))
-        .then(() => {
-          this.notifications.current.push(new libBeckiNotifications.Success("The program has been uploaded."));
-          this.refresh();
-        })
-        .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-128
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-128"));
-          this.notifications.current.push(new libBeckiNotifications.Danger("The program cannot be uploaded.", reason));
         });
   }
 }

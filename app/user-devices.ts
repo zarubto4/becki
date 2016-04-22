@@ -22,6 +22,18 @@ import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
 
+class DeviceProgramItem  extends libPatternFlyListView.Item {
+
+  versions:libBackEnd.Version[];
+
+  constructor(program:libBackEnd.DeviceProgram) {
+    "use strict";
+
+    super(program.id, program.program_name, program.program_description, ["UserDeviceProgram", {program: program.id}], program.delete_permission);
+    this.versions = program.version_objects;
+  }
+}
+
 class SelectableDeviceItem extends libPatternFlyListView.Item {
 
   project:string;
@@ -51,12 +63,16 @@ export class Component implements ng.OnInit {
 
   addDevice:boolean;
 
-  programs:libPatternFlyListView.Item[];
+  programs:DeviceProgramItem[];
 
   devices:SelectableDeviceItem[];
 
-  @ng.ViewChild("uploadField")
-  uploadField:ng.ElementRef;
+  uploadProgramField:string;
+
+  uploadProgramVersionField:string;
+
+  @ng.ViewChild("uploadBinaryField")
+  uploadBinaryField:ng.ElementRef;
 
   backEnd:libBeckiBackEnd.Service;
 
@@ -75,6 +91,8 @@ export class Component implements ng.OnInit {
     this.tab = 'programs';
     this.addProgram = false;
     this.addDevice = false;
+    this.uploadProgramField = "";
+    this.uploadProgramVersionField = "";
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -101,7 +119,7 @@ export class Component implements ng.OnInit {
           let programs:libBackEnd.DeviceProgram[];
           let devices:[libBackEnd.Device, libBackEnd.Project][];
           [programs, devices] = result;
-          this.programs = programs.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, ["UserDeviceProgram", {program: program.id}], program.delete_permission));
+          this.programs = programs.map(program => new DeviceProgramItem(program));
           this.devices = devices.map(pair => new SelectableDeviceItem(pair[0], pair[1].id, pair[1].update_permission));
         })
         .catch(reason => {
@@ -154,7 +172,42 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onUploadSubmit():void {
+  getUploadProgramVersions():libBackEnd.Version[] {
+    "use strict";
+
+    let program = this.programs.find(program => program.id == this.uploadProgramField);
+    return program ? program.versions : [];
+  }
+
+  onUploadProgramFieldChange():void {
+    "use strict";
+
+    let versions = this.getUploadProgramVersions();
+    this.uploadProgramVersionField = versions.length ? versions[0].id : "";
+  }
+
+  onUploadProgramSubmit():void {
+    "use strict";
+
+    let devices = this.devices.filter(selectable => selectable.selected).map(selectable => selectable.id);
+    if (!devices.length) {
+      return;
+    }
+
+    this.notifications.shift();
+    Promise.all(devices.map(id => this.backEnd.addProgramToDevice(this.uploadProgramField, id)))
+        .then(() => {
+          this.notifications.current.push(new libBeckiNotifications.Success("The program has been uploaded."));
+          this.refresh();
+        })
+        .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-128
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-128"));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The program cannot be uploaded.", reason));
+        });
+  }
+
+  onUploadBinarySubmit():void {
     "use strict";
 
     let devices = this.devices.filter(selectable => selectable.selected).map(selectable => selectable.id);

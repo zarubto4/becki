@@ -52,36 +52,4 @@
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-xs-12">
-      <h2>Device Upload</h2>
-      <form class="clearfix" data-on-submit="onDeviceUploadingSubmit($event)">
-        <div class="form-group">
-          <label>
-            <span class="glyphicon glyphicon-list"></span>
-            Device IDs
-          </label>
-          <div class="checkbox" template="ngFor #device of devices">
-            <label>
-              <input type="checkbox" data-bindon-ng-model="device.selected">
-              {{device.name}}
-            </label>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>
-            <span class="glyphicon glyphicon-console"></span>
-            Program
-          </label>
-          <select class="form-control" required data-bindon-ng-model="deviceUploadingProgramField">
-            <option value="">Select name...</option>
-            <option data-bind-value="program.id" template="ngFor #program of devicePrograms">
-              {{program.program_name}}
-            </option>
-          </select>
-        </div>
-        <button class="btn btn-primary pull-right" type="submit">Upload</button>
-      </form>
-    </div>
-  </div>
 </div>

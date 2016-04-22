@@ -3,15 +3,20 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, View, Update or Remove a Device or a Program'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="(tab == 'upload') || (tab == 'devices' && !addDevice) ? null : 'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
+<div data-bind-layout="'Add, View, Update or Remove a Device or a Program'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="['uploadProgram', 'uploadBinary'].indexOf(tab) != -1 || (tab == 'devices' && !addDevice) ? null : 'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="tab == 'programs'">
       <a data-on-click="onTabClick('programs', $event)" style="cursor: pointer">
         Programs
       </a>
     </li>
-    <li data-bind-class.active="tab == 'upload'">
-      <a data-on-click="onTabClick('upload', $event)" style="cursor: pointer">
+    <li data-bind-class.active="tab == 'uploadProgram'">
+      <a data-on-click="onTabClick('uploadProgram', $event)" style="cursor: pointer">
+        Upload Program
+      </a>
+    </li>
+    <li data-bind-class.active="tab == 'uploadBinary'">
+      <a data-on-click="onTabClick('uploadBinary', $event)" style="cursor: pointer">
         Upload Binary File
       </a>
     </li>
@@ -26,8 +31,45 @@
       <div class="spinner"></div>
     </div>
   </template>
-  <template data-bind-ng-switch-when="'upload'">
-    <form class="clearfix" data-on-submit="onUploadSubmit($event)" style="margin-top: 2em">
+  <template data-bind-ng-switch-when="'uploadProgram'">
+    <form class="clearfix" data-on-submit="onUploadProgramSubmit($event)" style="margin-top: 2em">
+      <div class="form-group">
+        <label>
+          <span class="glyphicon glyphicon-list"></span>
+          Device IDs
+        </label>
+        <div class="checkbox" template="ngFor #device of devices">
+          <label>
+            <input type="checkbox" data-bindon-ng-model="device.selected">
+            {{device.name}}
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>
+          <span class="glyphicon glyphicon-console"></span>
+          Program
+        </label>
+        <div class="form-inline">
+          <select class="form-control" required data-bindon-ng-model="uploadProgramField" data-on-ng-model-change="onUploadProgramFieldChange($event)">
+            <option value="">Select name...</option>
+            <option data-bind-value="program.id" template="ngFor #program of programs">
+              {{program.name}}
+            </option>
+          </select>
+          <select class="form-control" required data-bindon-ng-model="uploadProgramVersionField">
+            <option value="">Select version...</option>
+            <option data-bind-value="version.id" template="ngFor #version of getUploadProgramVersions()">
+              {{version.version_name}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-primary pull-right" type="submit">Upload</button>
+    </form>
+  </template>
+  <template data-bind-ng-switch-when="'uploadBinary'">
+    <form class="clearfix" data-on-submit="onUploadBinarySubmit($event)" style="margin-top: 2em">
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon-list"></span>
@@ -45,7 +87,7 @@
           <span class="glyphicon glyphicon-file"></span>
           File
         </label>
-        <input class="form-control" type="file" required data-var-upload-field>
+        <input class="form-control" type="file" required data-var-upload-binary-field>
       </div>
       <button class="btn btn-primary pull-right" type="submit">Upload</button>
     </form>
