@@ -159,7 +159,7 @@ export class Component implements ng.OnInit {
   onInteractionsBlockAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewInteractionsBlock", {project: this.id}]);
+    this.router.navigate(["NewUserInteractionsBlock"]);
   }
 
   onInteractionsBlockRemoveClick(id:string):void {

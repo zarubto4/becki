@@ -24,7 +24,7 @@ import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
-  templateUrl: "app/interactions-block-new.html",
+  templateUrl: "app/user-interactions-block-new.html",
   directives: [
     libBeckiCustomValidator.Directive,
     libBeckiFieldCode.Component,
@@ -34,10 +34,6 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
   ]
 })
 export class Component implements ng.OnInit {
-
-  projectId:string;
-
-  heading:string;
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
@@ -57,18 +53,13 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(@ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.projectId = routeParams.get("project");
-    this.heading = `New Block (Project ${this.projectId})`;
     this.breadcrumbs = [
       home,
       new libBeckiLayout.LabeledLink("User", ["Projects"]),
-      new libBeckiLayout.LabeledLink("Projects", ["Projects"]),
-      new libBeckiLayout.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new libBeckiLayout.LabeledLink("Interactions Blocks", ["Project", {project: this.projectId}]),
-      new libBeckiLayout.LabeledLink("New Block", ["NewInteractionsBlock", {project: this.projectId}])
+      new libBeckiLayout.LabeledLink("New Interactions Block", ["NewUserInteractionsBlock"])
     ];
     this.nameField = "";
     this.groupField = "";
@@ -83,8 +74,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.getProject(this.projectId)
-        .then(project => Promise.all(project.type_of_blocks_id.map(id => this.backEnd.getInteractionsBlockGroup(id))))
+    this.backEnd.getInteractionsBlockGroups()
         .then(groups => this.groups = groups)
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Groups cannot be loaded.", reason)));
   }
@@ -106,7 +96,7 @@ export class Component implements ng.OnInit {
         })
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The block have been created."));
-          this.router.navigate(["Project", {project: this.projectId}]);
+          this.router.navigate(["Projects"]);
         })
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-205
@@ -123,6 +113,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Project", {project: this.projectId}]);
+    this.router.navigate(["Projects"]);
   }
 }

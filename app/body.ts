@@ -23,7 +23,6 @@ import * as deviceType from "./device-type";
 import * as deviceTypeNew from "./device-type-new";
 import * as devices from "./devices";
 import * as interactionsBlock from "./interactions-block";
-import * as interactionsBlockNew from "./interactions-block-new";
 import * as issue from "./issue";
 import * as issueConfirmationNew from "./issue-confirmation-new";
 import * as issueNew from "./issue-new";
@@ -69,6 +68,7 @@ import * as userDeviceProgram from "./user-device-program";
 import * as userDeviceProgramNew from "./user-device-program-new";
 import * as userDevices from "./user-devices";
 import * as userInteractions from "./user-interactions";
+import * as userInteractionsBlockNew from "./user-interactions-block-new";
 import * as userInteractionsModeratorNew from "./user-interactions-moderator-new";
 import * as userInteractionsScheme from "./user-interactions-scheme";
 import * as userInteractionsSchemeNew from "./user-interactions-scheme-new";
@@ -114,6 +114,7 @@ import * as userInteractionsSchemeVersion from "./user-interactions-scheme-versi
   {path: "/user/device/programs/:program", component: userDeviceProgram.Component, as: "UserDeviceProgram"},
   {path: "/user/devices", component: userDevices.Component, as: "UserDevices"},
   {path: "/user/interactions", component: userInteractions.Component, as: "UserInteractions"},
+  {path: "/user/interactions/block/new", component: userInteractionsBlockNew.Component, as: "NewUserInteractionsBlock"},
   {path: "/user/interactions/moderator/new", component: userInteractionsModeratorNew.Component, as: "NewUserInteractionsModerator"},
   {path: "/user/interactions/scheme/new", component: userInteractionsSchemeNew.Component, as: "NewUserInteractionsScheme"},
   {path: "/user/interactions/schemes/:scheme", component: userInteractionsScheme.Component, as: "UserInteractionsScheme"},
@@ -122,7 +123,6 @@ import * as userInteractionsSchemeVersion from "./user-interactions-scheme-versi
   {path: "/user/projects", component: projects.Component, as: "Projects"},
   {path: "/user/projects/:project", component: project.Component, as: "Project"},
   {path: "/user/projects/:project/collaborator/new", component: projectCollaboratorNew.Component, as: "NewProjectCollaborator"},
-  {path: "/user/projects/:project/interactions-block/new", component: interactionsBlockNew.Component, as: "NewInteractionsBlock"},
   {path: "/user/projects/:project/interactions-blocks/:block", component: interactionsBlock.Component, as: "InteractionsBlock"},
   {path: "/users/:user", component: user.Component, as: "User"},
 ])
