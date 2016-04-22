@@ -28,6 +28,7 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
     libBeckiCustomValidator.Directive,
     libBeckiLayout.Component,
     libPatternFlyListView.Component,
+    ng.CORE_DIRECTIVES,
     ng.FORM_DIRECTIVES,
     ngRouter.ROUTER_DIRECTIVES
   ]
