@@ -3,37 +3,50 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + name + "\" Program"' data-bind-breadcrumbs="breadcrumbs">
+<div data-bind-layout='"Edit the \"" + name + "\" Program"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="editing">
   <h2>Details</h2>
   <form class="clearfix" data-on-submit="onSubmit($event)">
-    <div class="form-group">
-      <label>
-        <span class="glyphicon glyphicon-pencil"></span>
-        Name
-      </label>
-      <input class="form-control" required minlength="8" data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
-    </div>
-    <div class="form-group">
-      <label>
-        <span class="glyphicon glyphicon-pencil"></span>
-        Description
-      </label>
-      <textarea class="form-control" data-bindon-ng-model="descriptionField"></textarea>
-    </div>
-    <div class="pull-right">
-      <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-      <button class="btn btn-primary" type="submit" data-bind-disabled="!editProgram" data-bind-title="editProgram ? '' : 'You are not allowed to edit programs.'">Edit</button>
-    </div>
-  </form>
-  <div>
-    <template data-bind-ng-if="editProgram">
-      <div class="pull-right">
-        <button type="button" class="btn btn-default" data-on-click="onVersionAddClick($event)">Add</button>
+    <template data-bind-ng-switch-when="true">
+      <div class="form-group">
+        <label>
+          <span class="glyphicon glyphicon-pencil"></span>
+          Name
+        </label>
+        <input class="form-control" required minlength="8" data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
       </div>
     </template>
-    <h2>Versions</h2>
-  </div>
-  <div data-bind-list-view="versions" data-bind-addable="editProgram" data-on-add-click="onVersionAddClick($event)" data-on-remove-click="onVersionRemoveClick($event)">
-    <div class="spinner"></div>
-  </div>
+    <div class="form-group">
+      <label>
+        <template data-bind-ng-switch-when="true">
+          <span class="glyphicon glyphicon-pencil"></span>
+        </template>
+        Description
+      </label>
+      <template data-bind-ng-switch-when="true">
+        <textarea class="form-control" data-bindon-ng-model="descriptionField"></textarea>
+      </template>
+      <template data-bind-ng-switch-when="false">
+        <p class="form-control-static">{{description}}</p>
+      </template>
+    </div>
+    <template data-bind-ng-switch-when="true">
+      <div class="pull-right">
+        <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+        <button class="btn btn-primary" type="submit" data-bind-disabled="!editProgram" data-bind-title="editProgram ? '' : 'You are not allowed to edit programs.'">Edit</button>
+      </div>
+    </template>
+  </form>
+  <template data-bind-ng-switch-when="false">
+    <div>
+      <template data-bind-ng-if="editProgram">
+        <div class="pull-right">
+          <button type="button" class="btn btn-default" data-on-click="onVersionAddClick($event)">Add</button>
+        </div>
+      </template>
+      <h2>Versions</h2>
+    </div>
+    <div data-bind-list-view="versions" data-bind-addable="editProgram" data-on-add-click="onVersionAddClick($event)" data-on-remove-click="onVersionRemoveClick($event)">
+      <div class="spinner"></div>
+    </div>
+  </template>
 </div>

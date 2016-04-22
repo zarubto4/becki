@@ -41,9 +41,13 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
+  editing:boolean;
+
   nameField:string;
 
   descriptionField:string;
+
+  description:string;
 
   editProgram:boolean;
 
@@ -66,8 +70,10 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Device Programs", ["Projects"]),
       new libBeckiLayout.LabeledLink("Loading...", ["UserDeviceProgram", {program: this.id}])
     ];
+    this.editing = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
+    this.description = "Loading...";
     this.editProgram = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
@@ -84,12 +90,14 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
+    this.editing = false;
     this.backEnd.getDeviceProgram(this.id)
         .then(program => {
           this.name = program.program_name;
           this.breadcrumbs[3].label = program.program_name;
           this.nameField = program.program_name;
           this.descriptionField = program.program_description;
+          this.description = program.program_description;
           this.editProgram = program.edit_permission;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-126
           this.versions = program.version_objects.map(version => new libPatternFlyListView.Item(version.id, `${version.version_name} (issue/TYRION-126)`, version.version_description));
@@ -97,6 +105,12 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The program ${this.id} cannot be loaded.`, reason));
         });
+  }
+
+  onEditClick():void {
+    "use strict";
+
+    this.editing = !this.editing;
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -126,7 +140,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Projects"]);
+    this.editing = false;
   }
 
   onVersionAddClick():void {
