@@ -64,7 +64,7 @@ export class Component implements ng.OnInit {
       home,
       new libBeckiLayout.LabeledLink("User", home.link),
       new libBeckiLayout.LabeledLink("Device Programs", ["Projects"]),
-      new libBeckiLayout.LabeledLink(`Program ${this.id}`, ["UserDeviceProgram", {program: this.id}])
+      new libBeckiLayout.LabeledLink("Loading...", ["UserDeviceProgram", {program: this.id}])
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
@@ -87,6 +87,7 @@ export class Component implements ng.OnInit {
     this.backEnd.getDeviceProgram(this.id)
         .then(program => {
           this.name = program.program_name;
+          this.breadcrumbs[3].label = program.program_name;
           this.nameField = program.program_name;
           this.descriptionField = program.program_description;
           this.editProgram = program.edit_permission;
