@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout="heading" data-bind-breadcrumbs="breadcrumbs">
+<div data-bind-layout='"Edit the \"" + name + "\" Program"' data-bind-breadcrumbs="breadcrumbs">
   <h2>Details</h2>
   <form class="clearfix" data-on-submit="onSubmit($event)">
     <div class="form-group">
@@ -22,7 +22,7 @@
     </div>
     <div class="pull-right">
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-      <button class="btn btn-primary" type="submit" data-bind-disabled="!editProgram" data-bind-title="editProgram ? '' : 'You are not allowed to edit programs.'">Update</button>
+      <button class="btn btn-primary" type="submit" data-bind-disabled="!editProgram" data-bind-title="editProgram ? '' : 'You are not allowed to edit programs.'">Edit</button>
     </div>
   </form>
   <div>
