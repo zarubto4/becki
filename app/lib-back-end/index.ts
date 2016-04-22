@@ -1432,7 +1432,7 @@ export abstract class BackEnd {
     return this.requestPath("DELETE", `${BackEnd.DEVICE_TYPE_PATH}/${id}`).then(JSON.stringify);
   }
 
-  public createDeviceProgram(program_name:string, program_description:string, projectId:string):Promise<string> {
+  public createDeviceProgram(program_name:string, program_description:string, projectId:string):Promise<DeviceProgram> {
     "use strict";
 
     if (program_name.length < 8) {
@@ -1440,7 +1440,7 @@ export abstract class BackEnd {
     }
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-203
-    return this.requestPath("POST", `${BackEnd.DEVICE_PROGRAM_PATH}/${projectId}`, {program_name, program_description}, [201]).then(JSON.stringify);
+    return this.requestPath("POST", `${BackEnd.DEVICE_PROGRAM_PATH}/${projectId}`, {program_name, program_description}, [201]);
   }
 
   public getDeviceProgram(id:string):Promise<DeviceProgram> {

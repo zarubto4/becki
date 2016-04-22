@@ -20,12 +20,19 @@ import * as libBackEnd from "./lib-back-end/index";
 import * as libBecki from "./lib-becki/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
+import * as libBeckiFieldCode from "./lib-becki/field-code";
 import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/user-device-program-new.html",
-  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [
+    libBeckiCustomValidator.Directive,
+    libBeckiFieldCode.Component,
+    libBeckiLayout.Component,
+    ng.CORE_DIRECTIVES,
+    ng.FORM_DIRECTIVES
+  ]
 })
 export class Component implements ng.OnInit {
 
@@ -38,6 +45,8 @@ export class Component implements ng.OnInit {
   nameField:string;
 
   descriptionField:string;
+
+  codeField:string;
 
   backEnd:libBeckiBackEnd.Service;
 
@@ -56,6 +65,7 @@ export class Component implements ng.OnInit {
     this.projectField = "";
     this.nameField = "";
     this.descriptionField = "";
+    this.codeField = "";
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -92,6 +102,9 @@ export class Component implements ng.OnInit {
         )
         .then(project => {
           return this.backEnd.createDeviceProgram(this.nameField, this.descriptionField, project);
+        })
+        .then(program => {
+          return this.backEnd.addVersionToDeviceProgram("Initial version", "", this.codeField, program.id);
         })
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The program has been created."));
