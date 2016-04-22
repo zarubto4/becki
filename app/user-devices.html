@@ -3,20 +3,30 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, Update or Remove a Device'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="showUpload || !addDevice ? null : 'Add'" data-on-action-click="onAddDeviceClick($event)" data-bind-ng-switch="showUpload">
+<div data-bind-layout="'Add, View, Update or Remove a Device or a Program'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="(tab == 'upload') || (tab == 'devices' && !addDevice) ? null : 'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
   <ul class="nav nav-tabs">
-    <li data-bind-class.active="!showUpload">
-      <a data-on-click="onDevicesClick($event)" style="cursor: pointer">
+    <li data-bind-class.active="tab == 'programs'">
+      <a data-on-click="onTabClick('programs', $event)" style="cursor: pointer">
+        Programs
+      </a>
+    </li>
+    <li data-bind-class.active="tab == 'upload'">
+      <a data-on-click="onTabClick('upload', $event)" style="cursor: pointer">
+        Upload Binary File
+      </a>
+    </li>
+    <li data-bind-class.active="tab == 'devices'">
+      <a data-on-click="onTabClick('devices', $event)" style="cursor: pointer">
         Devices
       </a>
     </li>
-    <li data-bind-class.active="showUpload">
-      <a data-on-click="onUploadClick($event)" style="cursor: pointer">
-        Upload Program
-      </a>
-    </li>
   </ul>
-  <template data-bind-ng-switch-when="true">
+  <template data-bind-ng-switch-when="'programs'">
+    <div data-bind-list-view="programs" data-on-add-click="onAddProgramClick($event)" data-on-remove-click="onRemoveProgramClick($event)">
+      <div class="spinner"></div>
+    </div>
+  </template>
+  <template data-bind-ng-switch-when="'upload'">
     <form class="clearfix" data-on-submit="onUploadSubmit($event)" style="margin-top: 2em">
       <div class="form-group">
         <label>
@@ -40,7 +50,7 @@
       <button class="btn btn-primary pull-right" type="submit">Upload</button>
     </form>
   </template>
-  <template data-bind-ng-switch-when="false">
+  <template data-bind-ng-switch-when="'devices'">
     <div data-bind-list-view="devices" data-bind-addable="addDevice" data-on-add-click="onAddDeviceClick($event)" data-on-remove-click="onRemoveDeviceClick($event)">
       <div class="spinner"></div>
     </div>

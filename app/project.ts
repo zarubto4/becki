@@ -64,15 +64,13 @@ export class Component implements ng.OnInit {
 
   collaborators:libPatternFlyListView.Item[];
 
-  addDeviceProgram:boolean;
-
-  devicePrograms:libPatternFlyListView.Item[];
-
   standalonePrograms:libPatternFlyListView.Item[];
 
   devices:SelectableItem[];
 
   deviceUploadingProgramField:string;
+
+  devicePrograms:libBackEnd.DeviceProgram[];
 
   backEnd:libBeckiBackEnd.Service;
 
@@ -95,7 +93,6 @@ export class Component implements ng.OnInit {
     this.descriptionField = "Loading...";
     this.editProject = false;
     this.addCollaborator = false;
-    this.addDeviceProgram = false;
     this.deviceUploadingProgramField = "";
     this.backEnd = backEnd;
     this.notifications = notifications;
@@ -117,25 +114,23 @@ export class Component implements ng.OnInit {
           return Promise.all<any>([
             project,
             Promise.all(project.owners_id.map(id => this.backEnd.getUser(id))),
-            Promise.all(project.c_programs_id.map(id => this.backEnd.getDeviceProgram(id))),
             Promise.all(project.type_of_blocks_id.map(id => this.backEnd.getStandaloneProgramCategory(id))),
-            Promise.all(project.boards_id.map(id => this.backEnd.getDevice(id)))
+            Promise.all(project.boards_id.map(id => this.backEnd.getDevice(id))),
+            Promise.all(project.c_programs_id.map(id => this.backEnd.getDeviceProgram(id)))
           ]);
         })
         .then(result => {
           let project:libBackEnd.Project;
           let collaborators:libBackEnd.User[];
-          let devicePrograms:libBackEnd.DeviceProgram[];
           let categories:libBackEnd.StandaloneProgramCategory[];
           let devices:libBackEnd.Device[];
-          [project, collaborators, devicePrograms, categories, devices] = result;
+          let devicePrograms:libBackEnd.DeviceProgram[];
+          [project, collaborators, categories, devices, this.devicePrograms] = result;
           this.nameField = project.project_name;
           this.descriptionField = project.project_description;
           this.editProject = project.edit_permission;
           this.addCollaborator = project.share_permission;
           this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composeUserString(collaborator, true), null, undefined, project.unshare_permission));
-          this.addDeviceProgram = project.update_permission;
-          this.devicePrograms = devicePrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, ["UserDeviceProgram", {program: program.id}], program.delete_permission));
           this.standalonePrograms = [].concat(...categories.map(category => category.blockoBlocks.map(program => new libPatternFlyListView.Item(program.id, program.name, program.general_description, ["StandaloneProgram", {project: this.id, program: program.id}], program.delete_permission))));
           this.devices = devices.map(device => new SelectableItem(device.id, device.id, device.type_of_board.name));
         })
@@ -182,26 +177,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The collaborator cannot be removed.", reason));
-        });
-  }
-
-  onDeviceProgramAddClick():void {
-    "use strict";
-
-    this.router.navigate(["NewUserDeviceProgram"]);
-  }
-
-  onDeviceProgramRemoveClick(id:string):void {
-    "use strict";
-
-    this.notifications.shift();
-    this.backEnd.deleteDeviceProgram(id)
-        .then(() => {
-          this.notifications.current.push(new libBeckiNotifications.Success("The program has been removed."));
-          this.refresh();
-        })
-        .catch(reason => {
-          this.notifications.current.push(new libBeckiNotifications.Danger("The program cannot be removed.", reason));
         });
   }
 

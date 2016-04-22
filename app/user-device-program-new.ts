@@ -59,7 +59,7 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       home,
-      new libBeckiLayout.LabeledLink("User", ["Projects"]),
+      new libBeckiLayout.LabeledLink("User", home.link),
       new libBeckiLayout.LabeledLink("New Device Program", ["NewUserDeviceProgram"])
     ];
     this.projectField = "";
@@ -108,7 +108,7 @@ export class Component implements ng.OnInit {
         })
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The program has been created."));
-          this.router.navigate(["Projects"]);
+          this.router.navigate(["UserDevices"]);
         })
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-203
@@ -121,6 +121,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Projects"]);
+    this.router.navigate(["UserDevices"]);
   }
 }

@@ -45,9 +45,13 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
-  showUpload:boolean;
+  tab:string;
+
+  addProgram:boolean;
 
   addDevice:boolean;
+
+  programs:libPatternFlyListView.Item[];
 
   devices:SelectableDeviceItem[];
 
@@ -68,7 +72,8 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("User", home.link),
       new libBeckiLayout.LabeledLink("Devices", ["UserDevices"])
     ];
-    this.showUpload = false;
+    this.tab = 'programs';
+    this.addProgram = false;
     this.addDevice = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
@@ -86,9 +91,41 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getProjects()
-        .then(projects => Promise.all([].concat(...projects.map(project => project.boards_id.map(id => [id, project]))).map(pair => Promise.all<any>([this.backEnd.getDevice(pair[0]), pair[1]]))))
-        .then((devices:[libBackEnd.Device, libBackEnd.Project][]) => this.devices = devices.map(pair => new SelectableDeviceItem(pair[0], pair[1].id, pair[1].update_permission)))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
+        .then(projects => {
+          return Promise.all<any>([
+            Promise.all([].concat(...projects.map(project => project.c_programs_id)).map(id => this.backEnd.getDeviceProgram(id))),
+            Promise.all([].concat(...projects.map(project => project.boards_id.map(id => [id, project]))).map(pair => Promise.all<any>([this.backEnd.getDevice(pair[0]), pair[1]])))
+          ]);
+        })
+        .then(result => {
+          let programs:libBackEnd.DeviceProgram[];
+          let devices:[libBackEnd.Device, libBackEnd.Project][];
+          [programs, devices] = result;
+          this.programs = programs.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, ["UserDeviceProgram", {program: program.id}], program.delete_permission));
+          this.devices = devices.map(pair => new SelectableDeviceItem(pair[0], pair[1].id, pair[1].update_permission));
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason));
+        });
+  }
+
+  onAddClick():void {
+    "use strict";
+
+    switch (this.tab) {
+      case "programs":
+        this.onAddProgramClick();
+        break;
+      case "devices":
+        this.onAddDeviceClick();
+        break;
+    }
+  }
+
+  onAddProgramClick():void {
+    "use strict";
+
+    this.router.navigate(["NewUserDeviceProgram"]);
   }
 
   onAddDeviceClick():void {
@@ -97,16 +134,37 @@ export class Component implements ng.OnInit {
     this.router.navigate(["NewUserDevice"]);
   }
 
-  onDevicesClick():void {
+  onTabClick(tab:string):void {
     "use strict";
 
-    this.showUpload = false;
+    this.tab = tab;
   }
 
-  onUploadClick():void {
+  onRemoveProgramClick(id:string):void {
     "use strict";
 
-    this.showUpload = true;
+    this.notifications.shift();
+    this.backEnd.deleteDeviceProgram(id)
+        .then(() => {
+          this.notifications.current.push(new libBeckiNotifications.Success("The program has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger("The program cannot be removed.", reason));
+        });
+  }
+
+  onUploadSubmit():void {
+    "use strict";
+
+    let devices = this.devices.filter(selectable => selectable.selected).map(selectable => selectable.id);
+    if (!devices.length) {
+      return;
+    }
+
+    this.notifications.shift();
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-37#comment=109-118
+    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-37"));
   }
 
   onRemoveDeviceClick(id:string):void {
@@ -122,18 +180,5 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The device cannot be removed.", reason));
         });
-  }
-
-  onUploadSubmit():void {
-    "use strict";
-
-    let devices = this.devices.filter(selectable => selectable.selected).map(selectable => selectable.id);
-    if (!devices.length) {
-      return;
-    }
-
-    this.notifications.shift();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-37#comment=109-118
-    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-37"));
   }
 }

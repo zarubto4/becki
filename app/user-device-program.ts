@@ -83,7 +83,7 @@ export class Component implements ng.OnInit {
     this.breadcrumbs = [
       home,
       new libBeckiLayout.LabeledLink("User", home.link),
-      new libBeckiLayout.LabeledLink("Device Programs", ["Projects"]),
+      new libBeckiLayout.LabeledLink("Device Programs", ["UserDevices"]),
       new libBeckiLayout.LabeledLink("Loading...", ["UserDeviceProgram", {program: this.id}])
     ];
     this.showHistory = false;
