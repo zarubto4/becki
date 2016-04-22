@@ -53,9 +53,15 @@ export class Component implements ng.OnInit {
 
   description:string;
 
+  versionNameField:string;
+
   versionName:string;
 
+  versionDescriptionField:string;
+
   versionDescription:string;
+
+  versionCodeField:string;
 
   versionCode:string;
 
@@ -67,9 +73,7 @@ export class Component implements ng.OnInit {
 
   notifications:libBeckiNotifications.Service;
 
-  router:ngRouter.Router;
-
-  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
     "use strict";
 
     this.id = routeParams.get("program");
@@ -84,13 +88,15 @@ export class Component implements ng.OnInit {
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.description = "Loading...";
+    this.versionNameField = "Loading...";
     this.versionName = "Loading...";
+    this.versionDescriptionField = "Loading...";
     this.versionDescription = "Loading...";
+    this.versionCodeField = "Loading...";
     this.versionCode = "Loading...";
     this.editProgram = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
-    this.router = router;
   }
 
   onInit():void {
@@ -131,10 +137,13 @@ export class Component implements ng.OnInit {
           this.nameField = program.program_name;
           this.descriptionField = program.program_description;
           this.description = program.program_description;
+          this.versionNameField = version.version_name;
           this.versionName = version.version_name;
+          this.versionDescriptionField = version.version_description;
           this.versionDescription = version.version_description;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-195
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-195"));
+          //this.versionCodeField = versionFile.fileContent;
           //this.versionCode = versionFile.fileContent;
           this.editProgram = program.edit_permission;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-126
@@ -181,10 +190,25 @@ export class Component implements ng.OnInit {
     this.editing = false;
   }
 
-  onVersionAddClick():void {
+  validateVersionNameField():()=>Promise<boolean> {
     "use strict";
 
-    this.router.navigate(["NewDeviceProgramVersion", {program: this.id}]);
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => this.backEnd.getDeviceProgram(this.id).then(program => !program.version_objects.find(version => version.version_name == this.versionNameField));
+  }
+
+  onVersionSubmit():void {
+    "use strict";
+
+    this.notifications.shift();
+    this.backEnd.addVersionToDeviceProgram(this.versionNameField, this.versionDescriptionField, this.versionCodeField, this.id)
+        .then(() => {
+          this.notifications.current.push(new libBeckiNotifications.Success("The version has been created."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger("The version cannot be created.", reason));
+        });
   }
 
   onVersionRemoveClick(id:string):void {

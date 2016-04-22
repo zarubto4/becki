@@ -19,7 +19,6 @@ import * as ngRouter from "angular2/router";
 import * as theGrid from "the-grid";
 
 import * as applicationDevice from "./application-device";
-import * as deviceProgramVersionNew from "./device-program-version-new";
 import * as deviceType from "./device-type";
 import * as deviceTypeNew from "./device-type-new";
 import * as devices from "./devices";
@@ -122,7 +121,6 @@ import * as userInteractionsSchemeVersion from "./user-interactions-scheme-versi
   {path: "/user/project/new", component: projectNew.Component, as: "NewProject"},
   {path: "/user/projects", component: projects.Component, as: "Projects"},
   {path: "/user/projects/:project", component: project.Component, as: "Project"},
-  {path: "/user/projects/:project/device-programs/:program/version/new", component: deviceProgramVersionNew.Component, as: "NewDeviceProgramVersion"},
   {path: "/user/projects/:project/collaborator/new", component: projectCollaboratorNew.Component, as: "NewProjectCollaborator"},
   {path: "/user/projects/:project/standalone-program/new", component: standaloneProgramNew.Component, as: "NewStandaloneProgram"},
   {path: "/user/projects/:project/standalone-programs/:program", component: standaloneProgram.Component, as: "StandaloneProgram"},

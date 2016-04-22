@@ -36,34 +36,63 @@
       </div>
     </template>
   </form>
-  <template data-bind-ng-switch-when="false">
-    <form class="clearfix">
-      <div class="form-group">
-        <label>Version Name</label>
+  <form class="clearfix" data-on-submit="onVersionSubmit($event)">
+    <div class="form-group">
+      <label>
+        <template data-bind-ng-switch-when="true">
+          <span class="glyphicon glyphicon-pencil"></span>
+        </template>
+        Version Name
+      </label>
+      <template data-bind-ng-switch-when="true">
+        <input class="form-control" required data-bindon-ng-model="versionNameField" data-bind-custom-validator="validateVersionNameField()" data-message="This name is used already. Please choose another one.">
+      </template>
+      <template data-bind-ng-switch-when="false">
         <p class="form-control-static">{{versionName}}</p>
-      </div>
-      <div class="form-group">
-        <label>Version Description</label>
+      </template>
+    </div>
+    <div class="form-group">
+      <label>
+        <template data-bind-ng-switch-when="true">
+          <span class="glyphicon glyphicon-pencil"></span>
+        </template>
+        Version Description
+      </label>
+      <template data-bind-ng-switch-when="true">
+        <textarea class="form-control" data-bindon-ng-model="versionDescriptionField"></textarea>
+      </template>
+      <template data-bind-ng-switch-when="false">
         <p class="form-control-static">{{versionDescription}}</p>
-      </div>
-      <div class="form-group">
-        <label>Code</label>
+      </template>
+    </div>
+    <div class="form-group">
+      <label>
+        <template data-bind-ng-switch-when="true">
+          <span class="glyphicon glyphicon-console"></span>
+        </template>
+        Code
+      </label>
+      <template data-bind-ng-switch-when="true">
+        <div data-bindon-field-code="versionCodeField" data-bind-mode="'text/x-csrc'">
+          <div class="spinner"></div>
+        </div>
+      </template>
+      <template data-bind-ng-switch-when="false">
         <div data-bindon-field-code="versionCode" data-bind-mode="'text/x-csrc'" data-bind-readonly="true">
           <div class="spinner"></div>
         </div>
-      </div>
-    </form>
-  </template>
-  <template data-bind-ng-switch-when="false">
-    <div>
-      <template data-bind-ng-if="editProgram">
-        <div class="pull-right">
-          <button type="button" class="btn btn-default" data-on-click="onVersionAddClick($event)">Add</button>
-        </div>
       </template>
-      <h2>Versions</h2>
     </div>
-    <div data-bind-list-view="versions" data-bind-addable="editProgram" data-on-add-click="onVersionAddClick($event)" data-on-remove-click="onVersionRemoveClick($event)">
+    <template data-bind-ng-switch-when="true">
+      <div class="pull-right">
+        <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+        <button class="btn btn-primary" type="submit" data-bind-disabled="!editProgram" data-bind-title="editProgram ? '' : 'You are not allowed to create a new version.'">Update</button>
+      </div>
+    </template>
+  </form>
+  <template data-bind-ng-switch-when="false">
+    <h2>Versions</h2>
+    <div data-bind-list-view="versions" data-bind-addable="false" data-on-remove-click="onVersionRemoveClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
