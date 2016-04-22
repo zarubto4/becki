@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, View, Update or Remove a Device or a Program'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="['uploadProgram', 'uploadBinary'].indexOf(tab) != -1 || (tab == 'devices' && !addDevice) ? null : 'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
+<div data-bind-layout="'Add, View, Update or Remove a Device or a Program'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="['uploadProgram', 'uploadBinary'].indexOf(tab) != -1 ? null : 'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="tab == 'programs'">
       <a data-on-click="onTabClick('programs', $event)" style="cursor: pointer">
@@ -93,7 +93,7 @@
     </form>
   </template>
   <template data-bind-ng-switch-when="'devices'">
-    <div data-bind-list-view="devices" data-bind-addable="addDevice" data-on-add-click="onAddDeviceClick($event)" data-on-remove-click="onRemoveDeviceClick($event)">
+    <div data-bind-list-view="devices" data-on-add-click="onAddDeviceClick($event)" data-on-remove-click="onRemoveDeviceClick($event)">
       <div class="spinner"></div>
     </div>
   </template>

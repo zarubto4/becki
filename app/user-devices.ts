@@ -59,10 +59,6 @@ export class Component implements ng.OnInit {
 
   tab:string;
 
-  addProgram:boolean;
-
-  addDevice:boolean;
-
   programs:DeviceProgramItem[];
 
   devices:SelectableDeviceItem[];
@@ -89,8 +85,6 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Devices", ["UserDevices"])
     ];
     this.tab = 'programs';
-    this.addProgram = false;
-    this.addDevice = false;
     this.uploadProgramField = "";
     this.uploadProgramVersionField = "";
     this.backEnd = backEnd;
