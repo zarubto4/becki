@@ -20,7 +20,6 @@ import * as theGrid from "the-grid";
 
 import * as applicationDevice from "./application-device";
 import * as deviceProgram from "./device-program";
-import * as deviceProgramNew from "./device-program-new";
 import * as deviceProgramVersionNew from "./device-program-version-new";
 import * as deviceType from "./device-type";
 import * as deviceTypeNew from "./device-type-new";
@@ -68,6 +67,7 @@ import * as userApplications from "./user-applications";
 import * as userApplicationsVision from "./user-applications-vision";
 import * as userConnections from "./user-connections";
 import * as userDeviceNew from "./user-device-new";
+import * as userDeviceProgramNew from "./user-device-program-new";
 import * as userDevices from "./user-devices";
 import * as userInteractions from "./user-interactions";
 import * as userInteractionsModeratorNew from "./user-interactions-moderator-new";
@@ -111,6 +111,7 @@ import * as userInteractionsSchemeVersion from "./user-interactions-scheme-versi
   {path: "/user/applications/:application", component: userApplication.Component, as: "UserApplication"},
   {path: "/user/connections", component: userConnections.Component, as: "UserConnections"},
   {path: "/user/device/new", component: userDeviceNew.Component, as: "NewUserDevice"},
+  {path: "/user/device/program/new", component: userDeviceProgramNew.Component, as: "NewUserDeviceProgram"},
   {path: "/user/devices", component: userDevices.Component, as: "UserDevices"},
   {path: "/user/interactions", component: userInteractions.Component, as: "UserInteractions"},
   {path: "/user/interactions/moderator/new", component: userInteractionsModeratorNew.Component, as: "NewUserInteractionsModerator"},
@@ -120,7 +121,6 @@ import * as userInteractionsSchemeVersion from "./user-interactions-scheme-versi
   {path: "/user/project/new", component: projectNew.Component, as: "NewProject"},
   {path: "/user/projects", component: projects.Component, as: "Projects"},
   {path: "/user/projects/:project", component: project.Component, as: "Project"},
-  {path: "/user/projects/:project/device-program/new", component: deviceProgramNew.Component, as: "NewDeviceProgram"},
   {path: "/user/projects/:project/device-programs/:program", component: deviceProgram.Component, as: "DeviceProgram"},
   {path: "/user/projects/:project/device-programs/:program/version/new", component: deviceProgramVersionNew.Component, as: "NewDeviceProgramVersion"},
   {path: "/user/projects/:project/collaborator/new", component: projectCollaboratorNew.Component, as: "NewProjectCollaborator"},

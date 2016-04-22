@@ -16,28 +16,28 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
+import * as libBackEnd from "./lib-back-end/index";
+import * as libBecki from "./lib-becki/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
 import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
-  templateUrl: "app/device-program-new.html",
-  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.FORM_DIRECTIVES]
+  templateUrl: "app/user-device-program-new.html",
+  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
-  projectId:string;
-
-  heading:string;
-
   breadcrumbs:libBeckiLayout.LabeledLink[];
+
+  projectField:string;
+
+  projects:libBackEnd.Project[];
 
   nameField:string;
 
   descriptionField:string;
-
-  addProgram:boolean;
 
   backEnd:libBeckiBackEnd.Service;
 
@@ -45,22 +45,17 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(@ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.projectId = routeParams.get("project");
-    this.heading = `New Program (Project ${this.projectId})`;
     this.breadcrumbs = [
       home,
       new libBeckiLayout.LabeledLink("User", ["Projects"]),
-      new libBeckiLayout.LabeledLink("Projects", ["Projects"]),
-      new libBeckiLayout.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new libBeckiLayout.LabeledLink("Device Programs", ["Project", {project: this.projectId}]),
-      new libBeckiLayout.LabeledLink("New Program", ["NewDeviceProgram", {project: this.projectId}])
+      new libBeckiLayout.LabeledLink("New Device Program", ["NewUserDeviceProgram"])
     ];
+    this.projectField = "";
     this.nameField = "";
     this.descriptionField = "";
-    this.addProgram = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -70,26 +65,37 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.getProject(this.projectId)
-        .then(project => this.addProgram = project.update_permission)
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("The project cannot be loaded.", reason)));
+    this.backEnd.getProjects()
+        .then(projects => this.projects = projects.filter(project => project.update_permission))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Projects cannot be loaded: ${reason}`)));
   }
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getDevicePrograms(this.projectId).then(programs => !programs.find(program => program.program_name == this.nameField));
+    return () => this.backEnd.getProjects()
+        .then(projects => Promise.all([].concat(...projects.map(project => this.backEnd.getDevicePrograms(project.id)))))
+        .then(programs => !programs.find(program => program.program_name == this.nameField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.createDeviceProgram(this.nameField, this.descriptionField, this.projectId)
+    Promise.resolve(
+            libBecki.getAdvancedField(this.projectField, this.projects.map(project => project.id)) || this.backEnd.createDefaultProject().then(project => {
+              this.projects = [project];
+              this.projectField = project.id;
+              return project.id;
+            })
+        )
+        .then(project => {
+          return this.backEnd.createDeviceProgram(this.nameField, this.descriptionField, project);
+        })
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The program has been created."));
-          this.router.navigate(["Project", {project: this.projectId}]);
+          this.router.navigate(["Projects"]);
         })
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-203
@@ -102,6 +108,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Project", {project: this.projectId}]);
+    this.router.navigate(["Projects"]);
   }
 }
