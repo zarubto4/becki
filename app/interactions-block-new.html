@@ -15,12 +15,12 @@
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon-list"></span>
-        Category
+        Group
       </label>
-      <select class="form-control" required data-bindon-ng-model="categoryField">
-        <option value="">Select category...</option>
-        <option data-bind-value="category.id" template="ngFor #category of categories">
-          {{category.name}}
+      <select class="form-control" required data-bindon-ng-model="groupField">
+        <option value="">Select name...</option>
+        <option data-bind-value="group.id" template="ngFor #group of groups">
+          {{group.name}}
         </option>
       </select>
     </div>

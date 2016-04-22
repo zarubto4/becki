@@ -22,6 +22,8 @@ import * as applicationDevice from "./application-device";
 import * as deviceType from "./device-type";
 import * as deviceTypeNew from "./device-type-new";
 import * as devices from "./devices";
+import * as interactionsBlock from "./interactions-block";
+import * as interactionsBlockNew from "./interactions-block-new";
 import * as issue from "./issue";
 import * as issueConfirmationNew from "./issue-confirmation-new";
 import * as issueNew from "./issue-new";
@@ -46,8 +48,6 @@ import * as projectCollaboratorNew from "./project-collaborator-new";
 import * as projectNew from "./project-new";
 import * as projects from "./projects";
 import * as signing from "./signing";
-import * as standaloneProgram from "./standalone-program";
-import * as standaloneProgramNew from "./standalone-program-new";
 import * as system from "./system";
 import * as systemDeviceNew from "./system-device-new";
 import * as systemInteractionsModeratorNew from "./system-interactions-moderator-new";
@@ -122,8 +122,8 @@ import * as userInteractionsSchemeVersion from "./user-interactions-scheme-versi
   {path: "/user/projects", component: projects.Component, as: "Projects"},
   {path: "/user/projects/:project", component: project.Component, as: "Project"},
   {path: "/user/projects/:project/collaborator/new", component: projectCollaboratorNew.Component, as: "NewProjectCollaborator"},
-  {path: "/user/projects/:project/standalone-program/new", component: standaloneProgramNew.Component, as: "NewStandaloneProgram"},
-  {path: "/user/projects/:project/standalone-programs/:program", component: standaloneProgram.Component, as: "StandaloneProgram"},
+  {path: "/user/projects/:project/interactions-block/new", component: interactionsBlockNew.Component, as: "NewInteractionsBlock"},
+  {path: "/user/projects/:project/interactions-blocks/:block", component: interactionsBlock.Component, as: "InteractionsBlock"},
   {path: "/users/:user", component: user.Component, as: "User"},
 ])
 @ng.Component({

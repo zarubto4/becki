@@ -513,7 +513,7 @@ export interface Device {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface StandaloneProgramCategory {
+export interface InteractionsBlockGroup {
 
   id:string;
 
@@ -521,7 +521,7 @@ export interface StandaloneProgramCategory {
 
   general_description:string;
 
-  blockoBlocks:StandaloneProgram[];
+  blockoBlocks:InteractionsBlock[];
 
   project_id:string;
 
@@ -535,7 +535,7 @@ export interface StandaloneProgramCategory {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface StandaloneProgram {
+export interface InteractionsBlock {
 
   id:string;
 
@@ -769,6 +769,10 @@ export abstract class BackEnd {
 
   public static DEVICE_TYPE_PATH = "/compilation/typeOfBoard";
 
+  public static INTERACTIONS_BLOCK_GROUP_PATH = "/project/typeOfBlock";
+
+  public static INTERACTIONS_BLOCK_PATH = "/project/blockoBlock";
+
   public static INTERACTIONS_MODERATOR_PATH = "/project/homer";
 
   public static INTERACTIONS_SCHEME_PATH = "/project/b_program";
@@ -797,10 +801,6 @@ export abstract class BackEnd {
   public static PROJECT_PATH = "/project/project";
 
   public static ROLE_PATH = "/secure/role";
-
-  public static STANDALONE_PROGRAM_CATEGORY_PATH = "/project/typeOfBlock";
-
-  public static STANDALONE_PROGRAM_PATH = "/project/blockoBlock";
 
   /**
    * An absolute path to the permission resources.
@@ -1520,19 +1520,19 @@ export abstract class BackEnd {
     return this.requestPath("POST", `${BackEnd.DEVICE_PROGRAM_PATH}/uploud/${program}/${device}`, {}).then(JSON.stringify);
   }
 
-  public getStandaloneProgramCategory(id:string):Promise<StandaloneProgramCategory> {
+  public getInteractionsBlockGroup(id:string):Promise<InteractionsBlockGroup> {
     "use strict";
 
-    return this.requestPath("GET", `${BackEnd.STANDALONE_PROGRAM_CATEGORY_PATH}/${id}`);
+    return this.requestPath("GET", `${BackEnd.INTERACTIONS_BLOCK_GROUP_PATH}/${id}`);
   }
 
-  public getStandaloneProgramCategories():Promise<StandaloneProgramCategory[]> {
+  public getInteractionsBlockGroups():Promise<InteractionsBlockGroup[]> {
     "use strict";
 
-    return this.requestPath("GET", BackEnd.STANDALONE_PROGRAM_CATEGORY_PATH);
+    return this.requestPath("GET", BackEnd.INTERACTIONS_BLOCK_GROUP_PATH);
   }
 
-  public createStandaloneProgram(name:string, type_of_block_id:string, general_description:string):Promise<StandaloneProgram> {
+  public createInteractionsBlock(name:string, type_of_block_id:string, general_description:string):Promise<InteractionsBlock> {
     "use strict";
 
     if (!name || !general_description) {
@@ -1542,16 +1542,16 @@ export abstract class BackEnd {
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-205
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-206
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-207
-    return this.requestPath("POST", BackEnd.STANDALONE_PROGRAM_PATH, {general_description, name, type_of_block_id}, [201]);
+    return this.requestPath("POST", BackEnd.INTERACTIONS_BLOCK_PATH, {general_description, name, type_of_block_id}, [201]);
   }
 
-  public getStandaloneProgram(id:string):Promise<StandaloneProgram> {
+  public getInteractionsBlock(id:string):Promise<InteractionsBlock> {
     "use strict";
 
-    return this.requestPath("GET", `${BackEnd.STANDALONE_PROGRAM_PATH}/${id}`);
+    return this.requestPath("GET", `${BackEnd.INTERACTIONS_BLOCK_PATH}/${id}`);
   }
 
-  public updateStandaloneProgram(id:string, name:string, general_description:string, type_of_block_id:string):Promise<string> {
+  public updateInteractionsBlock(id:string, name:string, general_description:string, type_of_block_id:string):Promise<string> {
     "use strict";
 
     if (!name || !general_description) {
@@ -1559,10 +1559,10 @@ export abstract class BackEnd {
     }
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-173
-    return this.requestPath("PUT", `${BackEnd.STANDALONE_PROGRAM_PATH}/${id}`, {general_description, name, type_of_block_id}, [200, 201]).then(JSON.stringify);
+    return this.requestPath("PUT", `${BackEnd.INTERACTIONS_BLOCK_PATH}/${id}`, {general_description, name, type_of_block_id}, [200, 201]).then(JSON.stringify);
   }
 
-  public addVersionToStandaloneProgram(version_name:string, version_description:string, logic_json:string, program:string):Promise<string> {
+  public addVersionToInteractionsBlock(version_name:string, version_description:string, logic_json:string, program:string):Promise<string> {
     "use strict";
 
     if (!version_name || !version_description || !logic_json) {
@@ -1570,13 +1570,13 @@ export abstract class BackEnd {
     }
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-173
-    return this.requestPath("POST", `${BackEnd.STANDALONE_PROGRAM_PATH}/version/${program}`, {version_name, version_description, design_json: "-", logic_json}, [200, 201]).then(JSON.stringify);
+    return this.requestPath("POST", `${BackEnd.INTERACTIONS_BLOCK_PATH}/version/${program}`, {version_name, version_description, design_json: "-", logic_json}, [200, 201]).then(JSON.stringify);
   }
 
-  public deleteStandaloneProgram(id:string):Promise<string> {
+  public deleteInteractionsBlock(id:string):Promise<string> {
     "use strict";
 
-    return this.requestPath("DELETE", `${BackEnd.STANDALONE_PROGRAM_PATH}/${id}`).then(JSON.stringify);
+    return this.requestPath("DELETE", `${BackEnd.INTERACTIONS_BLOCK_PATH}/${id}`).then(JSON.stringify);
   }
 
   /**

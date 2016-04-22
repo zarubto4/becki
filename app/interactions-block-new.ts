@@ -24,7 +24,7 @@ import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
-  templateUrl: "app/standalone-program-new.html",
+  templateUrl: "app/interactions-block-new.html",
   directives: [
     libBeckiCustomValidator.Directive,
     libBeckiFieldCode.Component,
@@ -43,9 +43,9 @@ export class Component implements ng.OnInit {
 
   nameField:string;
 
-  categoryField:string;
+  groupField:string;
 
-  categories:libBackEnd.StandaloneProgramCategory[];
+  groups:libBackEnd.InteractionsBlockGroup[];
 
   descriptionField:string;
 
@@ -61,17 +61,17 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.projectId = routeParams.get("project");
-    this.heading = `New Program (Project ${this.projectId})`;
+    this.heading = `New Block (Project ${this.projectId})`;
     this.breadcrumbs = [
       home,
       new libBeckiLayout.LabeledLink("User", ["Projects"]),
       new libBeckiLayout.LabeledLink("Projects", ["Projects"]),
       new libBeckiLayout.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new libBeckiLayout.LabeledLink("Standalone Programs", ["Project", {project: this.projectId}]),
-      new libBeckiLayout.LabeledLink("New Program", ["NewStandaloneProgram", {project: this.projectId}])
+      new libBeckiLayout.LabeledLink("Interactions Blocks", ["Project", {project: this.projectId}]),
+      new libBeckiLayout.LabeledLink("New Block", ["NewInteractionsBlock", {project: this.projectId}])
     ];
     this.nameField = "";
-    this.categoryField = "";
+    this.groupField = "";
     this.descriptionField = "";
     this.codeField = "";
     this.backEnd = backEnd;
@@ -84,28 +84,28 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.backEnd.getProject(this.projectId)
-        .then(project => Promise.all(project.type_of_blocks_id.map(id => this.backEnd.getStandaloneProgramCategory(id))))
-        .then(categories => this.categories = categories)
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Categories cannot be loaded.", reason)));
+        .then(project => Promise.all(project.type_of_blocks_id.map(id => this.backEnd.getInteractionsBlockGroup(id))))
+        .then(groups => this.groups = groups)
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Groups cannot be loaded.", reason)));
   }
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getStandaloneProgramCategories().then(categories => ![].concat(...categories.map(category => category.blockoBlocks)).find(program => program.name == this.nameField));
+    return () => this.backEnd.getInteractionsBlockGroups().then(groups => ![].concat(...groups.map(group => group.blockoBlocks)).find(block => block.name == this.nameField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.createStandaloneProgram(this.nameField, this.categoryField, this.descriptionField)
-        .then(program => {
-          return this.backEnd.addVersionToStandaloneProgram("Initial version", "An automatically created version.", this.codeField, program.id);
+    this.backEnd.createInteractionsBlock(this.nameField, this.groupField, this.descriptionField)
+        .then(block => {
+          return this.backEnd.addVersionToInteractionsBlock("Initial version", "An automatically created version.", this.codeField, block.id);
         })
         .then(() => {
-          this.notifications.next.push(new libBeckiNotifications.Success("The program have been created."));
+          this.notifications.next.push(new libBeckiNotifications.Success("The block have been created."));
           this.router.navigate(["Project", {project: this.projectId}]);
         })
         .catch(reason => {
@@ -115,7 +115,7 @@ export class Component implements ng.OnInit {
           this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-206"));
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-207
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-207"));
-          this.notifications.current.push(new libBeckiNotifications.Danger("The program cannot be created.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The block cannot be created.", reason));
         });
   }
 

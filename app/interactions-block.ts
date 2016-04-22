@@ -23,7 +23,7 @@ import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
-  templateUrl: "app/standalone-program.html",
+  templateUrl: "app/interactions-block.html",
   directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
@@ -38,11 +38,11 @@ export class Component implements ng.OnInit {
 
   nameField:string;
 
-  categoryField:string;
+  groupField:string;
 
   descriptionField:string;
 
-  editProgram:boolean;
+  editBlock:boolean;
 
   backEnd:libBeckiBackEnd.Service;
 
@@ -53,21 +53,21 @@ export class Component implements ng.OnInit {
   constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.id = routeParams.get("program");
+    this.id = routeParams.get("block");
     this.projectId = routeParams.get("project");
-    this.heading = `Program ${this.id}`;
+    this.heading = `Block ${this.id}`;
     this.breadcrumbs = [
       home,
       new libBeckiLayout.LabeledLink("User", ["Projects"]),
       new libBeckiLayout.LabeledLink("Projects", ["Projects"]),
       new libBeckiLayout.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new libBeckiLayout.LabeledLink("Standalone Programs", ["Project", {project: this.projectId}]),
-      new libBeckiLayout.LabeledLink(`Program ${this.id}`, ["StandaloneProgram", {project: this.projectId, program: this.id}])
+      new libBeckiLayout.LabeledLink("Interactions Blocks", ["Project", {project: this.projectId}]),
+      new libBeckiLayout.LabeledLink(`Block ${this.id}`, ["InteractionsBlock", {project: this.projectId, block: this.id}])
     ];
     this.nameField = "Loading...";
-    this.categoryField = "";
+    this.groupField = "";
     this.descriptionField = "Loading...";
-    this.editProgram = false;
+    this.editBlock = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -77,15 +77,15 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.getStandaloneProgram(this.id)
-        .then(program => {
-          this.nameField = program.name;
-          this.descriptionField = program.general_description;
-          this.categoryField = program.type_of_block_id;
-          this.editProgram = program.edit_permission;
+    this.backEnd.getInteractionsBlock(this.id)
+        .then(block => {
+          this.nameField = block.name;
+          this.descriptionField = block.general_description;
+          this.groupField = block.type_of_block_id;
+          this.editBlock = block.edit_permission;
         })
         .catch(reason => {
-          this.notifications.current.push(new libBeckiNotifications.Danger(`The program ${this.id} cannot be loaded.`, reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger(`The block ${this.id} cannot be loaded.`, reason));
         });
   }
 
@@ -93,20 +93,20 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getStandaloneProgramCategories().then(categories => ![].concat(...categories.map(category => category.blockoBlocks)).find(program => program.id != this.id && program.name == this.nameField));
+    return () => this.backEnd.getInteractionsBlockGroups().then(groups => ![].concat(...groups.map(group => group.blockoBlocks)).find(block => block.id != this.id && block.name == this.nameField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.updateStandaloneProgram(this.id, this.nameField, this.descriptionField, this.categoryField)
+    this.backEnd.updateInteractionsBlock(this.id, this.nameField, this.descriptionField, this.groupField)
         .then(() => {
-          this.notifications.next.push(new libBeckiNotifications.Success("The program has been updated."));
+          this.notifications.next.push(new libBeckiNotifications.Success("The block has been updated."));
           this.router.navigate(["Project", {project: this.projectId}]);
         })
         .catch(reason => {
-          this.notifications.current.push(new libBeckiNotifications.Danger("The program cannot be updated.", reason));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The block cannot be updated.", reason));
         });
   }
 
