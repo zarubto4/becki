@@ -19,7 +19,6 @@ import * as ngRouter from "angular2/router";
 import * as theGrid from "the-grid";
 
 import * as applicationDevice from "./application-device";
-import * as deviceProgram from "./device-program";
 import * as deviceProgramVersionNew from "./device-program-version-new";
 import * as deviceType from "./device-type";
 import * as deviceTypeNew from "./device-type-new";
@@ -67,6 +66,7 @@ import * as userApplications from "./user-applications";
 import * as userApplicationsVision from "./user-applications-vision";
 import * as userConnections from "./user-connections";
 import * as userDeviceNew from "./user-device-new";
+import * as userDeviceProgram from "./user-device-program";
 import * as userDeviceProgramNew from "./user-device-program-new";
 import * as userDevices from "./user-devices";
 import * as userInteractions from "./user-interactions";
@@ -112,6 +112,7 @@ import * as userInteractionsSchemeVersion from "./user-interactions-scheme-versi
   {path: "/user/connections", component: userConnections.Component, as: "UserConnections"},
   {path: "/user/device/new", component: userDeviceNew.Component, as: "NewUserDevice"},
   {path: "/user/device/program/new", component: userDeviceProgramNew.Component, as: "NewUserDeviceProgram"},
+  {path: "/user/device/programs/:program", component: userDeviceProgram.Component, as: "UserDeviceProgram"},
   {path: "/user/devices", component: userDevices.Component, as: "UserDevices"},
   {path: "/user/interactions", component: userInteractions.Component, as: "UserInteractions"},
   {path: "/user/interactions/moderator/new", component: userInteractionsModeratorNew.Component, as: "NewUserInteractionsModerator"},
@@ -121,7 +122,6 @@ import * as userInteractionsSchemeVersion from "./user-interactions-scheme-versi
   {path: "/user/project/new", component: projectNew.Component, as: "NewProject"},
   {path: "/user/projects", component: projects.Component, as: "Projects"},
   {path: "/user/projects/:project", component: project.Component, as: "Project"},
-  {path: "/user/projects/:project/device-programs/:program", component: deviceProgram.Component, as: "DeviceProgram"},
   {path: "/user/projects/:project/device-programs/:program/version/new", component: deviceProgramVersionNew.Component, as: "NewDeviceProgramVersion"},
   {path: "/user/projects/:project/collaborator/new", component: projectCollaboratorNew.Component, as: "NewProjectCollaborator"},
   {path: "/user/projects/:project/standalone-program/new", component: standaloneProgramNew.Component, as: "NewStandaloneProgram"},

@@ -31,8 +31,6 @@ export class Component implements ng.OnInit {
 
   programId:string;
 
-  projectId:string;
-
   heading:string;
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
@@ -53,17 +51,17 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.programId = routeParams.get("program");
-    this.projectId = routeParams.get("project");
     this.heading = `New Version (Program ${this.programId})`;
+    let projectId = routeParams.get("project");
     this.breadcrumbs = [
       home,
       new libBeckiLayout.LabeledLink("User", ["Projects"]),
       new libBeckiLayout.LabeledLink("Projects", ["Projects"]),
-      new libBeckiLayout.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new libBeckiLayout.LabeledLink("Device Programs", ["Project", {project: this.projectId}]),
-      new libBeckiLayout.LabeledLink(`Program ${this.programId}`, ["DeviceProgram", {project: this.projectId, program: this.programId}]),
-      new libBeckiLayout.LabeledLink("Versions", ["DeviceProgram", {project: this.projectId, program: this.programId}]),
-      new libBeckiLayout.LabeledLink("New Version", ["NewDeviceProgramVersion", {project: this.projectId, program: this.programId}])
+      new libBeckiLayout.LabeledLink(`Project ${projectId}`, ["Project", {project: projectId}]),
+      new libBeckiLayout.LabeledLink("Device Programs", ["Project", {project: projectId}]),
+      new libBeckiLayout.LabeledLink(`Program ${this.programId}`, ["UserDeviceProgram", {program: this.programId}]),
+      new libBeckiLayout.LabeledLink("Versions", ["UserDeviceProgram", {program: this.programId}]),
+      new libBeckiLayout.LabeledLink("New Version", ["NewDeviceProgramVersion", {project: projectId, program: this.programId}])
     ];
     this.nameField = "";
     this.descriptionField = "";
@@ -93,7 +91,7 @@ export class Component implements ng.OnInit {
     this.backEnd.addVersionToDeviceProgram(this.nameField, this.descriptionField, this.codeField, this.programId)
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The version has been created."));
-          this.router.navigate(["DeviceProgram", {project: this.projectId, program: this.programId}]);
+          this.router.navigate(["UserDeviceProgram", {program: this.programId}]);
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The version cannot be created.", reason));
@@ -104,6 +102,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["DeviceProgram", {project: this.projectId, program: this.programId}]);
+    this.router.navigate(["UserDeviceProgram", {program: this.programId}]);
   }
 }

@@ -135,7 +135,7 @@ export class Component implements ng.OnInit {
           this.addCollaborator = project.share_permission;
           this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composeUserString(collaborator, true), null, undefined, project.unshare_permission));
           this.addDeviceProgram = project.update_permission;
-          this.devicePrograms = devicePrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, ["DeviceProgram", {project: this.id, program: program.id}], program.delete_permission));
+          this.devicePrograms = devicePrograms.map(program => new libPatternFlyListView.Item(program.id, program.program_name, program.program_description, ["UserDeviceProgram", {program: program.id}], program.delete_permission));
           this.standalonePrograms = [].concat(...categories.map(category => category.blockoBlocks.map(program => new libPatternFlyListView.Item(program.id, program.name, program.general_description, ["StandaloneProgram", {project: this.id, program: program.id}], program.delete_permission))));
           this.devices = devices.map(device => new SelectableItem(device.id, device.id, device.type_of_board.name));
         })

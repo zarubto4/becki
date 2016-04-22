@@ -23,7 +23,7 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
 
 @ng.Component({
-  templateUrl: "app/device-program.html",
+  templateUrl: "app/user-device-program.html",
   directives: [
     libBeckiCustomValidator.Directive,
     libBeckiLayout.Component,
@@ -36,8 +36,6 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
 export class Component implements ng.OnInit {
 
   id:string;
-
-  projectId:string;
 
   heading:string;
 
@@ -61,15 +59,12 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.id = routeParams.get("program");
-    this.projectId = routeParams.get("project");
     this.heading = `Program ${this.id}`;
     this.breadcrumbs = [
       home,
-      new libBeckiLayout.LabeledLink("User", ["Projects"]),
-      new libBeckiLayout.LabeledLink("Projects", ["Projects"]),
-      new libBeckiLayout.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new libBeckiLayout.LabeledLink("Device Programs", ["Project", {project: this.projectId}]),
-      new libBeckiLayout.LabeledLink(`Program ${this.id}`, ["DeviceProgram", {project: this.projectId, program: this.id}])
+      new libBeckiLayout.LabeledLink("User", home.link),
+      new libBeckiLayout.LabeledLink("Device Programs", ["Projects"]),
+      new libBeckiLayout.LabeledLink(`Program ${this.id}`, ["UserDeviceProgram", {program: this.id}])
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
@@ -106,7 +101,9 @@ export class Component implements ng.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getDevicePrograms(this.projectId).then(programs => !programs.find(program => program.id != this.id && program.program_name == this.nameField));
+    return () => this.backEnd.getProjects()
+        .then(projects => Promise.all([].concat(...projects.map(project => this.backEnd.getDevicePrograms(project.id)))))
+        .then(programs => !programs.find(program => program.id != this.id && program.program_name == this.nameField));
   }
 
   onSubmit():void {
@@ -127,13 +124,13 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Project", {project: this.projectId}]);
+    this.router.navigate(["Projects"]);
   }
 
   onVersionAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewDeviceProgramVersion", {project: this.projectId, program: this.id}]);
+    this.router.navigate(["NewDeviceProgramVersion", {program: this.id}]);
   }
 
   onVersionRemoveClick(id:string):void {
