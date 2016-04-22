@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout="heading" data-bind-breadcrumbs="breadcrumbs">
+<div data-bind-layout='"Edit the \"" + name + "\" Block"' data-bind-breadcrumbs="breadcrumbs">
   <form class="clearfix" data-on-submit="onSubmit($event)">
     <div class="form-group">
       <label>
@@ -21,7 +21,7 @@
     </div>
     <div class="pull-right">
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-      <button class="btn btn-primary" type="submit" data-bind-disabled="!editBlock" data-bind-title="editBlock ? '' : 'You are not allowed to edit blocks.'">Update</button>
+      <button class="btn btn-primary" type="submit" data-bind-disabled="!editBlock" data-bind-title="editBlock ? '' : 'You are not allowed to edit blocks.'">Edit</button>
     </div>
   </form>
 </div>

@@ -30,7 +30,7 @@ export class Component implements ng.OnInit {
 
   id:string;
 
-  heading:string;
+  name:string;
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
@@ -52,7 +52,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.id = routeParams.get("block");
-    this.heading = `Block ${this.id}`;
+    this.name = "Loading...";
     this.breadcrumbs = [
       home,
       new libBeckiLayout.LabeledLink("User", home.link),
@@ -74,6 +74,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.getInteractionsBlock(this.id)
         .then(block => {
+          this.name = block.name;
           this.nameField = block.name;
           this.descriptionField = block.general_description;
           this.groupField = block.type_of_block_id;
