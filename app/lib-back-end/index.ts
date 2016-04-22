@@ -1475,12 +1475,6 @@ export abstract class BackEnd {
     return this.requestPath("PUT", `${BackEnd.DEVICE_PROGRAM_PATH}/update/${program}`, {version_name, version_description, files: [{file_name: "main", content}]}, [201]).then(JSON.stringify);
   }
 
-  public removeVersionFromDeviceProgram(versionId:string, programId:string):Promise<string> {
-    "use strict";
-
-    return this.requestPath("DELETE", `${BackEnd.DEVICE_PROGRAM_PATH}/version/${programId}/${versionId}`).then(JSON.stringify);
-  }
-
   public deleteDeviceProgram(id:string):Promise<string> {
     "use strict";
 

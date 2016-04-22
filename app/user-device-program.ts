@@ -150,7 +150,7 @@ export class Component implements ng.OnInit {
           //this.versionCode = versionFile.fileContent;
           this.editProgram = program.edit_permission;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-126
-          this.versions = program.version_objects.map(version => new libPatternFlyListView.Item(version.id, `${version.version_name} (issue/TYRION-126)`, version.version_description));
+          this.versions = program.version_objects.map(version => new libPatternFlyListView.Item(version.id, `${version.version_name} (issue/TYRION-126)`, version.version_description, undefined, false));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The program ${this.id} cannot be loaded.`, reason));
@@ -223,20 +223,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The version cannot be created.", reason));
-        });
-  }
-
-  onVersionRemoveClick(id:string):void {
-    "use strict";
-
-    this.notifications.shift();
-    this.backEnd.removeVersionFromDeviceProgram(id, this.id)
-        .then(() => {
-          this.notifications.current.push(new libBeckiNotifications.Success("The version has been removed."));
-          this.refresh();
-        })
-        .catch(reason => {
-          this.notifications.current.push(new libBeckiNotifications.Danger("The version cannot be removed.", reason));
         });
   }
 }
