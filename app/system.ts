@@ -30,15 +30,15 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
-  tab:string;
+  tab:string[];
 
   moderators:libPatternFlyListView.Item[];
 
   devices:libPatternFlyListView.Item[];
 
-  types:libPatternFlyListView.Item[];
+  issueTypes:libPatternFlyListView.Item[];
 
-  confirmations:libPatternFlyListView.Item[];
+  issueConfirmations:libPatternFlyListView.Item[];
 
   backEnd:libBeckiBackEnd.Service;
 
@@ -53,7 +53,7 @@ export class Component implements ng.OnInit {
       home,
       new libBeckiLayout.LabeledLink("System", ["System"])
     ];
-    this.tab = "moderators";
+    this.tab = ["moderators"];
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -82,10 +82,10 @@ export class Component implements ng.OnInit {
         .then(devices => this.devices = devices.map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.type_of_board.name, undefined, device.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
     this.backEnd.getIssueTypes()
-        .then(types => this.types = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, ["SystemIssueType", {type: type.id}])))
+        .then(types => this.issueTypes = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, ["SystemIssueType", {type: type.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue types cannot be loaded.", reason)));
     this.backEnd.getIssueConfirmations()
-        .then(confirmations => this.confirmations = confirmations.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null, ["SystemIssueConfirmation", {confirmation: confirmation.id}], confirmation.delete_permission)))
+        .then(confirmations => this.issueConfirmations = confirmations.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null, ["SystemIssueConfirmation", {confirmation: confirmation.id}], confirmation.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue confirmations cannot be loaded.", reason)));
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-186
     this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-186"));
@@ -94,18 +94,22 @@ export class Component implements ng.OnInit {
   onAddClick():void {
     "use strict";
 
-    switch (this.tab) {
+    switch (this.tab[0]) {
       case "moderators":
         this.onAddModeratorClick();
         break;
       case "devices":
         this.onAddDeviceClick();
         break;
-      case "types":
-        this.onAddTypeClick();
-        break;
-      case "confirmations":
-        this.onAddConfirmationClick();
+      case "issues":
+        switch (this.tab[1]) {
+          case "types":
+            this.onAddIssueTypeClick();
+            break;
+          case "confirmations":
+            this.onAddIssueConfirmationClick();
+            break;
+        }
         break;
     }
   }
@@ -122,19 +126,19 @@ export class Component implements ng.OnInit {
     this.router.navigate(["NewSystemDevice"]);
   }
 
-  onAddTypeClick():void {
+  onAddIssueTypeClick():void {
     "use strict";
 
     this.router.navigate(["NewSystemIssueType"]);
   }
 
-  onAddConfirmationClick():void {
+  onAddIssueConfirmationClick():void {
     "use strict";
 
     this.router.navigate(["NewSystemIssueConfirmation"]);
   }
 
-  onTabClick(tab:string):void {
+  onTabClick(tab:string[]):void {
     "use strict";
 
     this.tab = tab;
@@ -162,7 +166,7 @@ export class Component implements ng.OnInit {
     this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-89"));
   }
 
-  onRemoveTypeClick(id:string):void {
+  onRemoveIssueTypeClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
@@ -176,7 +180,7 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onRemoveConfirmationClick(id:string):void {
+  onRemoveIssueConfirmationClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
