@@ -44,8 +44,7 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       home,
-      new libBeckiLayout.LabeledLink("User", ["Projects"]),
-      new libBeckiLayout.LabeledLink("Projects", ["Projects"]),
+      new libBeckiLayout.LabeledLink("User", home.link),
       new libBeckiLayout.LabeledLink("New Project", ["NewUserProject"])
     ];
     this.nameField = "";
