@@ -41,7 +41,6 @@ import * as processor from "./processor";
 import * as processorNew from "./processor-new";
 import * as producer from "./producer";
 import * as producerNew from "./producer-new";
-import * as projectCollaboratorNew from "./project-collaborator-new";
 import * as projectNew from "./project-new";
 import * as projects from "./projects";
 import * as signing from "./signing";
@@ -73,6 +72,7 @@ import * as userInteractionsScheme from "./user-interactions-scheme";
 import * as userInteractionsSchemeNew from "./user-interactions-scheme-new";
 import * as userInteractionsSchemeVersion from "./user-interactions-scheme-version";
 import * as userProject from "./user-project";
+import * as userProjectCollaboratorNew from "./user-project-collaborator-new";
 
 @ngRouter.RouteConfig([
 {path: "/", redirectTo: "/user/applications"},
@@ -123,7 +123,7 @@ import * as userProject from "./user-project";
   {path: "/user/project/new", component: projectNew.Component, as: "NewProject"},
   {path: "/user/projects", component: projects.Component, as: "Projects"},
   {path: "/user/projects/:project", component: userProject.Component, as: "UserProject"},
-  {path: "/user/projects/:project/collaborator/new", component: projectCollaboratorNew.Component, as: "NewProjectCollaborator"},
+  {path: "/user/projects/:project/collaborator/new", component: userProjectCollaboratorNew.Component, as: "NewUserProjectCollaborator"},
   {path: "/users/:user", component: user.Component, as: "User"},
 ])
 @ng.Component({

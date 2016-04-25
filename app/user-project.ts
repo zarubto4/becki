@@ -176,7 +176,7 @@ export class Component implements ng.OnInit {
   onCollaboratorAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewProjectCollaborator", {project: this.id}]);
+    this.router.navigate(["NewUserProjectCollaborator", {project: this.id}]);
   }
 
   onCollaboratorRemoveClick(id:string):void {

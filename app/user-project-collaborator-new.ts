@@ -23,7 +23,7 @@ import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
-  templateUrl: "app/project-collaborator-new.html",
+  templateUrl: "app/user-project-collaborator-new.html",
   directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
@@ -55,7 +55,7 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Projects", ["Projects"]),
       new libBeckiLayout.LabeledLink(`Project ${this.projectId}`, ["UserProject", {project: this.projectId}]),
       new libBeckiLayout.LabeledLink("Collaborators", ["UserProject", {project: this.projectId}]),
-      new libBeckiLayout.LabeledLink("New Collaborator", ["NewProjectCollaborator", {project: this.projectId}])
+      new libBeckiLayout.LabeledLink("New Collaborator", ["NewUserProjectCollaborator", {project: this.projectId}])
     ];
     this.idField = "";
     this.addCollaborator = false;
