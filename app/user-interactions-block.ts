@@ -57,7 +57,7 @@ export class Component implements ng.OnInit {
       home,
       new libBeckiLayout.LabeledLink("User", home.link),
       new libBeckiLayout.LabeledLink("Interactions Blocks", ["Projects"]),
-      new libBeckiLayout.LabeledLink(`Block ${this.id}`, ["UserInteractionsBlock", {block: this.id}])
+      new libBeckiLayout.LabeledLink("Loading...", ["UserInteractionsBlock", {block: this.id}])
     ];
     this.nameField = "Loading...";
     this.groupField = "";
@@ -75,6 +75,7 @@ export class Component implements ng.OnInit {
     this.backEnd.getInteractionsBlock(this.id)
         .then(block => {
           this.name = block.name;
+          this.breadcrumbs[3].label = block.name;
           this.nameField = block.name;
           this.descriptionField = block.general_description;
           this.groupField = block.type_of_block_id;
