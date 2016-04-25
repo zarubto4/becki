@@ -53,8 +53,7 @@ export class Component implements ng.OnInit {
       home,
       new libBeckiLayout.LabeledLink("User", home.link),
       new libBeckiLayout.LabeledLink("Projects", ["Projects"]),
-      new libBeckiLayout.LabeledLink(`Project ${this.projectId}`, ["UserProject", {project: this.projectId}]),
-      new libBeckiLayout.LabeledLink("Collaborators", ["UserProject", {project: this.projectId}]),
+      new libBeckiLayout.LabeledLink("Loading...", ["UserProject", {project: this.projectId}]),
       new libBeckiLayout.LabeledLink("New Collaborator", ["NewUserProjectCollaborator", {project: this.projectId}])
     ];
     this.idField = "";
@@ -71,6 +70,7 @@ export class Component implements ng.OnInit {
     this.backEnd.getProject(this.projectId)
         .then(project => {
           this.projectName = project.project_name;
+          this.breadcrumbs[3].label = project.project_name;
           this.addCollaborator = project.share_permission;
         })
         .catch(reason => {
