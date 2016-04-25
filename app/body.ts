@@ -141,13 +141,13 @@ import * as userProjects from "./user-projects";
         new libBeckiLayout.LabeledLink("Applications", ["UserApplications"], "mobile"),
         new libBeckiLayout.LabeledLink("Interactions", ["UserInteractions"], "link"),
         new libBeckiLayout.LabeledLink("Devices", ["UserDevices"], "rocket"),
+        new libBeckiLayout.LabeledLink("Projects", ["UserProjects"], "book"),
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
         new libBeckiLayout.LabeledLink("System (TYRION-155)", ["System"], "globe"),
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-208
         new libBeckiLayout.LabeledLink("Issues (TYRION-208)", ["Issues"], "bug"),
         new libBeckiLayout.LabeledLink("Applications (Vision)", ["UserApplicationsVision"], "mobile"),
-        new libBeckiLayout.LabeledLink("Devices (TODO)", ["Devices"], "tachometer"),
-        new libBeckiLayout.LabeledLink("Projects (TODO)", ["UserProjects"], "book")
+        new libBeckiLayout.LabeledLink("Devices (TODO)", ["Devices"], "tachometer")
       ]
     }),
     ng.provide("signing", {useValue: ["Signing"]})
