@@ -22,7 +22,7 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
 
 @ng.Component({
-  templateUrl: "app/projects.html",
+  templateUrl: "app/user-projects.html",
   directives: [libBeckiLayout.Component, libPatternFlyListView.Component],
 })
 export class Component implements ng.OnInit {
@@ -42,8 +42,8 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       home,
-      new libBeckiLayout.LabeledLink("User", ["Projects"]),
-      new libBeckiLayout.LabeledLink("Projects", ["Projects"])
+      new libBeckiLayout.LabeledLink("User", ["UserProjects"]),
+      new libBeckiLayout.LabeledLink("Projects", ["UserProjects"])
     ];
     this.backEnd = backEnd;
     this.notifications = notifications;

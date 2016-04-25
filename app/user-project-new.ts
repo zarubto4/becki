@@ -74,7 +74,7 @@ export class Component implements ng.OnInit {
     this.backEnd.createProject(this.nameField, this.descriptionField)
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The project has been created."));
-          this.router.navigate(["Projects"]);
+          this.router.navigate(["UserProjects"]);
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The project cannot be created.", reason));
@@ -85,6 +85,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Projects"]);
+    this.router.navigate(["UserProjects"]);
   }
 }

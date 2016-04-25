@@ -41,7 +41,6 @@ import * as processor from "./processor";
 import * as processorNew from "./processor-new";
 import * as producer from "./producer";
 import * as producerNew from "./producer-new";
-import * as projects from "./projects";
 import * as signing from "./signing";
 import * as system from "./system";
 import * as systemDeviceNew from "./system-device-new";
@@ -73,6 +72,7 @@ import * as userInteractionsSchemeVersion from "./user-interactions-scheme-versi
 import * as userProject from "./user-project";
 import * as userProjectCollaboratorNew from "./user-project-collaborator-new";
 import * as userProjectNew from "./user-project-new";
+import * as userProjects from "./user-projects";
 
 @ngRouter.RouteConfig([
 {path: "/", redirectTo: "/user/applications"},
@@ -121,7 +121,7 @@ import * as userProjectNew from "./user-project-new";
   {path: "/user/interactions/schemes/:scheme", component: userInteractionsScheme.Component, as: "UserInteractionsScheme"},
   {path: "/user/interactions/schemes/:scheme/versions/:version", component: userInteractionsSchemeVersion.Component, as: "UserInteractionsSchemeVersion"},
   {path: "/user/project/new", component: userProjectNew.Component, as: "NewUserProject"},
-  {path: "/user/projects", component: projects.Component, as: "Projects"},
+  {path: "/user/projects", component: userProjects.Component, as: "UserProjects"},
   {path: "/user/projects/:project", component: userProject.Component, as: "UserProject"},
   {path: "/user/projects/:project/collaborator/new", component: userProjectCollaboratorNew.Component, as: "NewUserProjectCollaborator"},
   {path: "/users/:user", component: user.Component, as: "User"},
@@ -147,7 +147,7 @@ import * as userProjectNew from "./user-project-new";
         new libBeckiLayout.LabeledLink("Issues (TYRION-208)", ["Issues"], "bug"),
         new libBeckiLayout.LabeledLink("Applications (Vision)", ["UserApplicationsVision"], "mobile"),
         new libBeckiLayout.LabeledLink("Devices (TODO)", ["Devices"], "tachometer"),
-        new libBeckiLayout.LabeledLink("Projects (TODO)", ["Projects"], "book")
+        new libBeckiLayout.LabeledLink("Projects (TODO)", ["UserProjects"], "book")
       ]
     }),
     ng.provide("signing", {useValue: ["Signing"]})
