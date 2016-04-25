@@ -30,7 +30,7 @@ export class Component implements ng.OnInit {
 
   id:string;
 
-  heading:string;
+  name:string;
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
@@ -59,7 +59,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.id = routeParams.get("library");
-    this.heading = `Library ${this.id}`;
+    this.name = "Loading...";
     this.breadcrumbs = [
       home,
       new libBeckiLayout.LabeledLink("System", ["Devices"]),
@@ -93,6 +93,7 @@ export class Component implements ng.OnInit {
         .then(result => {
           let library:libBackEnd.Library;
           [library, this.versions] = result;
+          this.name = library.library_name;
           this.nameField = library.library_name;
           this.descriptionField = library.description;
         })
@@ -117,7 +118,7 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onUpdatingSubmit():void {
+  onEditSubmit():void {
     "use strict";
 
     this.notifications.shift();
