@@ -42,6 +42,8 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
+  showCollaborators:boolean;
+
   editing:boolean;
 
   nameField:string;
@@ -73,6 +75,7 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Projects", ["Projects"]),
       new libBeckiLayout.LabeledLink("Loading...", ["UserProject", {project: this.id}])
     ];
+    this.showCollaborators = false;
     this.editing = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
@@ -120,10 +123,26 @@ export class Component implements ng.OnInit {
         });
   }
 
-  onEditClick():void {
+  onLayoutActionClick():void {
     "use strict";
 
-    this.editing = !this.editing;
+    if (this.showCollaborators) {
+      this.onCollaboratorAddClick();
+    } else {
+      this.editing = !this.editing;
+    }
+  }
+
+  onDetailsClick():void {
+    "use strict";
+
+    this.showCollaborators = false;
+  }
+
+  onCollaboratorsClick():void {
+    "use strict";
+
+    this.showCollaborators = true;
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -133,7 +152,7 @@ export class Component implements ng.OnInit {
     return () => this.backEnd.getProjects().then(projects => !projects.find(project => project.id != this.id && project.project_name == this.nameField));
   }
 
-  onUpdatingSubmit():void {
+  onSubmit():void {
     "use strict";
 
     this.notifications.shift();

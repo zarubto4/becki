@@ -3,50 +3,55 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + name + "\" Project"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="editing">
-  <h2>Details</h2>
-  <form class="clearfix" data-on-submit="onUpdatingSubmit($event)">
-    <template data-bind-ng-switch-when="true">
-      <div class="form-group">
-        <label>
-          <span class="glyphicon glyphicon-pencil"></span>
-          Name
-        </label>
-        <input class="form-control" required minlength="8" data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
-      </div>
-    </template>
-    <div class="form-group">
-      <label>
-        <template data-bind-ng-switch-when="true">
-          <span class="glyphicon glyphicon-pencil"></span>
-        </template>
-        Description
-      </label>
-      <template data-bind-ng-switch-when="true">
-        <textarea class="form-control" required minlength="24" data-bindon-ng-model="descriptionField"></textarea>
-      </template>
-      <template data-bind-ng-switch-when="false">
-        <p class="form-control-static">{{description}}</p>
-      </template>
-    </div>
-    <template data-bind-ng-switch-when="true">
-      <div class="pull-right">
-        <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-        <button class="btn btn-primary" type="submit" data-bind-disabled="!editProject" data-bind-title="editProject ? '' : 'You are not allowed to edit this project.'">Edit</button>
-      </div>
-    </template>
-  </form>
-  <template data-bind-ng-switch-when="false">
-    <div>
-      <template data-bind-ng-if="addCollaborator">
-        <div class="pull-right">
-          <button type="button" class="btn btn-default" data-on-click="onCollaboratorAddClick($event)">Add</button>
-        </div>
-      </template>
-      <h2>Collaborators</h2>
-    </div>
+<div data-bind-layout='"Edit the \"" + name + "\" Project"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="showCollaborators ? 'Add' : editing ? null : 'Edit'" data-on-action-click="onLayoutActionClick($event)" data-bind-ng-switch="showCollaborators">
+  <ul class="nav nav-tabs">
+    <li data-bind-class.active="!showCollaborators">
+      <a data-on-click="onDetailsClick($event)" style="cursor: pointer">
+        Details
+      </a>
+    </li>
+    <li data-bind-class.active="showCollaborators">
+      <a data-on-click="onCollaboratorsClick($event)" style="cursor: pointer">
+        Collaborators
+      </a>
+    </li>
+  </ul>
+  <template data-bind-ng-switch-when="true">
     <div data-bind-list-view="collaborators" data-bind-addable="addCollaborator" data-on-add-click="onCollaboratorAddClick($event)" data-on-remove-click="onCollaboratorRemoveClick($event)">
       <div class="spinner"></div>
     </div>
+  </template>
+  <template data-bind-ng-switch-when="false">
+    <form class="clearfix" style="margin-top: 2em" data-on-submit="onSubmit($event)" data-bind-ng-switch="editing">
+      <template data-bind-ng-switch-when="true">
+        <div class="form-group">
+          <label>
+            <span class="glyphicon glyphicon-pencil"></span>
+            Name
+          </label>
+          <input class="form-control" required minlength="8" data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
+        </div>
+      </template>
+      <div class="form-group">
+        <label>
+          <template data-bind-ng-switch-when="true">
+            <span class="glyphicon glyphicon-pencil"></span>
+          </template>
+          Description
+        </label>
+        <template data-bind-ng-switch-when="true">
+          <textarea class="form-control" required minlength="24" data-bindon-ng-model="descriptionField"></textarea>
+        </template>
+        <template data-bind-ng-switch-when="false">
+          <p class="form-control-static">{{description}}</p>
+        </template>
+      </div>
+      <template data-bind-ng-switch-when="true">
+        <div class="pull-right">
+          <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+          <button class="btn btn-primary" type="submit" data-bind-disabled="!editProject" data-bind-title="editProject ? '' : 'You are not allowed to edit this project.'">Edit</button>
+        </div>
+      </template>
+    </form>
   </template>
 </div>
