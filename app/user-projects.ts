@@ -42,7 +42,7 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       home,
-      new libBeckiLayout.LabeledLink("User", ["UserProjects"]),
+      new libBeckiLayout.LabeledLink("User", home.link),
       new libBeckiLayout.LabeledLink("Projects", ["UserProjects"])
     ];
     this.backEnd = backEnd;
