@@ -24,7 +24,7 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
 
 @ng.Component({
-  templateUrl: "app/project.html",
+  templateUrl: "app/user-project.html",
   directives: [
     libBeckiCustomValidator.Directive,
     libBeckiLayout.Component,
@@ -67,7 +67,7 @@ export class Component implements ng.OnInit {
       home,
       new libBeckiLayout.LabeledLink("User", home.link),
       new libBeckiLayout.LabeledLink("Projects", ["Projects"]),
-      new libBeckiLayout.LabeledLink(`Project ${this.id}`, ["Project", {project: this.id}])
+      new libBeckiLayout.LabeledLink(`Project ${this.id}`, ["UserProject", {project: this.id}])
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";

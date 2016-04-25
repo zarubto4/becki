@@ -53,8 +53,8 @@ export class Component implements ng.OnInit {
       home,
       new libBeckiLayout.LabeledLink("User", ["Projects"]),
       new libBeckiLayout.LabeledLink("Projects", ["Projects"]),
-      new libBeckiLayout.LabeledLink(`Project ${this.projectId}`, ["Project", {project: this.projectId}]),
-      new libBeckiLayout.LabeledLink("Collaborators", ["Project", {project: this.projectId}]),
+      new libBeckiLayout.LabeledLink(`Project ${this.projectId}`, ["UserProject", {project: this.projectId}]),
+      new libBeckiLayout.LabeledLink("Collaborators", ["UserProject", {project: this.projectId}]),
       new libBeckiLayout.LabeledLink("New Collaborator", ["NewProjectCollaborator", {project: this.projectId}])
     ];
     this.idField = "";
@@ -87,7 +87,7 @@ export class Component implements ng.OnInit {
     this.backEnd.addCollaboratorToProject(this.idField, this.projectId)
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The collaborator has been added."));
-          this.router.navigate(["Project", {project: this.projectId}]);
+          this.router.navigate(["UserProject", {project: this.projectId}]);
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The collaborator cannot be added.", reason));
@@ -98,6 +98,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Project", {project: this.projectId}]);
+    this.router.navigate(["UserProject", {project: this.projectId}]);
   }
 }

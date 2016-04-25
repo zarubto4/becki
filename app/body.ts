@@ -41,7 +41,6 @@ import * as processor from "./processor";
 import * as processorNew from "./processor-new";
 import * as producer from "./producer";
 import * as producerNew from "./producer-new";
-import * as project from "./project";
 import * as projectCollaboratorNew from "./project-collaborator-new";
 import * as projectNew from "./project-new";
 import * as projects from "./projects";
@@ -73,9 +72,10 @@ import * as userInteractionsModeratorNew from "./user-interactions-moderator-new
 import * as userInteractionsScheme from "./user-interactions-scheme";
 import * as userInteractionsSchemeNew from "./user-interactions-scheme-new";
 import * as userInteractionsSchemeVersion from "./user-interactions-scheme-version";
+import * as userProject from "./user-project";
 
 @ngRouter.RouteConfig([
-  {path: "/", redirectTo: "/user/applications"},
+{path: "/", redirectTo: "/user/applications"},
   {path: "/application/devices/:device", component: applicationDevice.Component, as: "ApplicationDevice"},
   {path: "/device/type/new", component: deviceTypeNew.Component, as: "NewDeviceType"},
   {path: "/device/types/:type", component: deviceType.Component, as: "DeviceType"},
@@ -122,7 +122,7 @@ import * as userInteractionsSchemeVersion from "./user-interactions-scheme-versi
   {path: "/user/interactions/schemes/:scheme/versions/:version", component: userInteractionsSchemeVersion.Component, as: "UserInteractionsSchemeVersion"},
   {path: "/user/project/new", component: projectNew.Component, as: "NewProject"},
   {path: "/user/projects", component: projects.Component, as: "Projects"},
-  {path: "/user/projects/:project", component: project.Component, as: "Project"},
+  {path: "/user/projects/:project", component: userProject.Component, as: "UserProject"},
   {path: "/user/projects/:project/collaborator/new", component: projectCollaboratorNew.Component, as: "NewProjectCollaborator"},
   {path: "/users/:user", component: user.Component, as: "User"},
 ])

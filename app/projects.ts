@@ -61,7 +61,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getProjects()
-        .then(projects => this.items = projects.map(project => new libPatternFlyListView.Item(project.id, project.project_name, project.project_description, ["Project", {project: project.id}], project.delete_permission)))
+        .then(projects => this.items = projects.map(project => new libPatternFlyListView.Item(project.id, project.project_name, project.project_description, ["UserProject", {project: project.id}], project.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
   }
 
