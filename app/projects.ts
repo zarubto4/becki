@@ -68,7 +68,7 @@ export class Component implements ng.OnInit {
   onAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewProject"]);
+    this.router.navigate(["NewUserProject"]);
   }
 
   onRemoveClick(id:string):void {

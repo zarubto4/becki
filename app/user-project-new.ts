@@ -22,7 +22,7 @@ import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
-  templateUrl: "app/project-new.html",
+  templateUrl: "app/user-project-new.html",
   directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
@@ -46,7 +46,7 @@ export class Component implements ng.OnInit {
       home,
       new libBeckiLayout.LabeledLink("User", ["Projects"]),
       new libBeckiLayout.LabeledLink("Projects", ["Projects"]),
-      new libBeckiLayout.LabeledLink("New Project", ["NewProject"])
+      new libBeckiLayout.LabeledLink("New Project", ["NewUserProject"])
     ];
     this.nameField = "";
     this.descriptionField = "";
