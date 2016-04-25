@@ -42,9 +42,13 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
+  editing:boolean;
+
   nameField:string;
 
   descriptionField:string;
+
+  description:string;
 
   editProject:boolean;
 
@@ -69,8 +73,10 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Projects", ["Projects"]),
       new libBeckiLayout.LabeledLink("Loading...", ["UserProject", {project: this.id}])
     ];
+    this.editing = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
+    this.description = "Loading...";
     this.editProject = false;
     this.addCollaborator = false;
     this.backEnd = backEnd;
@@ -88,6 +94,7 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
+    this.editing = false;
     this.backEnd.getProject(this.id)
         .then(project => {
           return Promise.all<any>([
@@ -103,6 +110,7 @@ export class Component implements ng.OnInit {
           this.breadcrumbs[3].label = project.project_name;
           this.nameField = project.project_name;
           this.descriptionField = project.project_description;
+          this.description = project.project_description;
           this.editProject = project.edit_permission;
           this.addCollaborator = project.share_permission;
           this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composeUserString(collaborator, true), null, undefined, project.unshare_permission));
@@ -110,6 +118,12 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The project ${this.id} cannot be loaded.`, reason));
         });
+  }
+
+  onEditClick():void {
+    "use strict";
+
+    this.editing = !this.editing;
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -131,6 +145,13 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The project cannot be updated.", reason));
         });
+  }
+
+  onCancelClick():void {
+    "use strict";
+
+    this.notifications.shift();
+    this.editing = false;
   }
 
   onCollaboratorAddClick():void {
