@@ -87,7 +87,7 @@ export class Component implements ng.OnInit {
   onLibraryAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewLibrary"]);
+    this.router.navigate(["NewSystemLibrary"]);
   }
 
   onLibraryRemoveClick(id:string):void {

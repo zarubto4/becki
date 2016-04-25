@@ -23,7 +23,7 @@ import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
-  templateUrl: "app/library-new.html",
+  templateUrl: "app/system-library-new.html",
   directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
@@ -45,8 +45,8 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       home,
-      new libBeckiLayout.LabeledLink("Libraries", ["Devices"]),
-      new libBeckiLayout.LabeledLink("New Library", ["NewLibrary"])
+      new libBeckiLayout.LabeledLink("System", ["Devices"]),
+      new libBeckiLayout.LabeledLink("New Library", ["NewSystemLibrary"])
     ];
     this.nameField = "";
     this.descriptionField = "";
