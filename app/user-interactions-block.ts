@@ -24,7 +24,7 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/user-interactions-block.html",
-  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.FORM_DIRECTIVES]
+  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -34,21 +34,23 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
+  editing:boolean;
+
+  editBlock:boolean;
+
   nameField:string;
 
   groupField:string;
 
   descriptionField:string;
 
-  editBlock:boolean;
+  description:string;
 
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
 
-  router:ngRouter.Router;
-
-  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
     "use strict";
 
     this.id = routeParams.get("block");
@@ -59,31 +61,46 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Interactions Blocks", ["Projects"]),
       new libBeckiLayout.LabeledLink("Loading...", ["UserInteractionsBlock", {block: this.id}])
     ];
+    this.editing = false;
+    this.editBlock = false;
     this.nameField = "Loading...";
     this.groupField = "";
     this.descriptionField = "Loading...";
-    this.editBlock = false;
+    this.description = "Loading...";
     this.backEnd = backEnd;
     this.notifications = notifications;
-    this.router = router;
   }
 
   onInit():void {
     "use strict";
 
     this.notifications.shift();
+    this.refresh();
+  }
+
+  refresh():void {
+    "use strict";
+
+    this.editing = false;
     this.backEnd.getInteractionsBlock(this.id)
         .then(block => {
           this.name = block.name;
           this.breadcrumbs[3].label = block.name;
+          this.editBlock = block.edit_permission;
           this.nameField = block.name;
           this.descriptionField = block.general_description;
+          this.description = block.general_description;
           this.groupField = block.type_of_block_id;
-          this.editBlock = block.edit_permission;
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The block ${this.id} cannot be loaded.`, reason));
         });
+  }
+
+  onEditClick():void {
+    "use strict";
+
+    this.editing = !this.editing;
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -99,8 +116,8 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateInteractionsBlock(this.id, this.nameField, this.descriptionField, this.groupField)
         .then(() => {
-          this.notifications.next.push(new libBeckiNotifications.Success("The block has been updated."));
-          this.router.navigate(["Projects"]);
+          this.notifications.current.push(new libBeckiNotifications.Success("The block has been updated."));
+          this.refresh();
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The block cannot be updated.", reason));
@@ -111,6 +128,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Projects"]);
+    this.editing = false;
   }
 }

@@ -3,25 +3,36 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + name + "\" Block"' data-bind-breadcrumbs="breadcrumbs">
+<div data-bind-layout='"Edit the \"" + name + "\" Block"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing || !editBlock ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="editing">
   <form class="clearfix" data-on-submit="onSubmit($event)">
+    <template data-bind-ng-switch-when="true">
+      <div class="form-group">
+        <label>
+          <span class="glyphicon glyphicon-pencil"></span>
+          Name
+        </label>
+        <input class="form-control" required data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
+      </div>
+    </template>
     <div class="form-group">
       <label>
-        <span class="glyphicon glyphicon-pencil"></span>
-        Name
-      </label>
-      <input class="form-control" required data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
-    </div>
-    <div class="form-group">
-      <label>
-        <span class="glyphicon glyphicon-pencil"></span>
+        <template data-bind-ng-switch-when="true">
+          <span class="glyphicon glyphicon-pencil"></span>
+        </template>
         Description
       </label>
-      <textarea class="form-control" required data-bindon-ng-model="descriptionField"></textarea>
+      <template data-bind-ng-switch-when="true">
+        <textarea class="form-control" required data-bindon-ng-model="descriptionField"></textarea>
+      </template>
+      <template data-bind-ng-switch-when="false">
+        <p class="form-control-static">{{description}}</p>
+      </template>
     </div>
-    <div class="pull-right">
-      <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-      <button class="btn btn-primary" type="submit" data-bind-disabled="!editBlock" data-bind-title="editBlock ? '' : 'You are not allowed to edit blocks.'">Edit</button>
-    </div>
+    <template data-bind-ng-switch-when="true">
+      <div class="pull-right">
+        <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+        <button class="btn btn-primary" type="submit">Edit</button>
+      </div>
+    </template>
   </form>
 </div>
