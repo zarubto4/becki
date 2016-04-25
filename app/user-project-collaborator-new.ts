@@ -30,7 +30,7 @@ export class Component implements ng.OnInit {
 
   projectId:string;
 
-  heading:string;
+  projectName:string;
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
@@ -48,7 +48,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.projectId = routeParams.get("project");
-    this.heading = `New Collaborator (Project ${this.projectId})`;
+    this.projectName = "Loading...";
     this.breadcrumbs = [
       home,
       new libBeckiLayout.LabeledLink("User", home.link),
@@ -69,8 +69,13 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.backEnd.getProject(this.projectId)
-        .then(project => this.addCollaborator = project.share_permission)
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("The project cannot be loaded.", reason)));
+        .then(project => {
+          this.projectName = project.project_name;
+          this.addCollaborator = project.share_permission;
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger("The project cannot be loaded.", reason));
+        });
   }
 
   validateIdField():()=>Promise<boolean> {
