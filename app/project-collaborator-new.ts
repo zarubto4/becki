@@ -51,7 +51,7 @@ export class Component implements ng.OnInit {
     this.heading = `New Collaborator (Project ${this.projectId})`;
     this.breadcrumbs = [
       home,
-      new libBeckiLayout.LabeledLink("User", ["Projects"]),
+      new libBeckiLayout.LabeledLink("User", home.link),
       new libBeckiLayout.LabeledLink("Projects", ["Projects"]),
       new libBeckiLayout.LabeledLink(`Project ${this.projectId}`, ["UserProject", {project: this.projectId}]),
       new libBeckiLayout.LabeledLink("Collaborators", ["UserProject", {project: this.projectId}]),
