@@ -65,7 +65,7 @@ export class Component implements ng.OnInit {
     this.heading = `Project ${this.id}`;
     this.breadcrumbs = [
       home,
-      new libBeckiLayout.LabeledLink("User", ["Projects"]),
+      new libBeckiLayout.LabeledLink("User", home.link),
       new libBeckiLayout.LabeledLink("Projects", ["Projects"]),
       new libBeckiLayout.LabeledLink(`Project ${this.id}`, ["Project", {project: this.id}])
     ];
