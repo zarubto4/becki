@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout="heading" data-bind-breadcrumbs="breadcrumbs">
+<div data-bind-layout='"Edit the \"" + name + "\" Project"' data-bind-breadcrumbs="breadcrumbs">
   <h2>Details</h2>
   <form class="clearfix" data-on-submit="onUpdatingSubmit($event)">
     <div class="form-group">
@@ -20,7 +20,7 @@
       </label>
       <textarea class="form-control" required minlength="24" data-bindon-ng-model="descriptionField"></textarea>
     </div>
-    <button class="btn btn-primary pull-right" type="submit" data-bind-disabled="!editProject" data-bind-title="editProject ? '' : 'You are not allowed to edit this project.'">Update</button>
+    <button class="btn btn-primary pull-right" type="submit" data-bind-disabled="!editProject" data-bind-title="editProject ? '' : 'You are not allowed to edit this project.'">Edit</button>
   </form>
   <div>
     <template data-bind-ng-if="addCollaborator">

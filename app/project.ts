@@ -38,7 +38,7 @@ export class Component implements ng.OnInit {
 
   id:string;
 
-  heading:string;
+  name:string;
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
@@ -62,7 +62,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.id = routeParams.get("project");
-    this.heading = `Project ${this.id}`;
+    this.name = "Loading...";
     this.breadcrumbs = [
       home,
       new libBeckiLayout.LabeledLink("User", home.link),
@@ -99,6 +99,7 @@ export class Component implements ng.OnInit {
           let project:libBackEnd.Project;
           let collaborators:libBackEnd.User[];
           [project, collaborators] = result;
+          this.name = project.project_name;
           this.nameField = project.project_name;
           this.descriptionField = project.project_description;
           this.editProject = project.edit_permission;
