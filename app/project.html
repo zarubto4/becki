@@ -4,52 +4,33 @@
   -->
 
 <div data-bind-layout="heading" data-bind-breadcrumbs="breadcrumbs">
-  <div class="row">
-    <div class="col-xs-12 col-sm-8">
-      <h2>Details</h2>
-      <form class="clearfix" data-on-submit="onUpdatingSubmit($event)">
-        <div class="form-group">
-          <label>
-            <span class="glyphicon glyphicon-pencil"></span>
-            Name
-          </label>
-          <input class="form-control" required minlength="8" data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
-        </div>
-        <div class="form-group">
-          <label>
-            <span class="glyphicon glyphicon-pencil"></span>
-            Description
-          </label>
-          <textarea class="form-control" required minlength="24" data-bindon-ng-model="descriptionField"></textarea>
-        </div>
-        <button class="btn btn-primary pull-right" type="submit" data-bind-disabled="!editProject" data-bind-title="editProject ? '' : 'You are not allowed to edit this project.'">Update</button>
-      </form>
+  <h2>Details</h2>
+  <form class="clearfix" data-on-submit="onUpdatingSubmit($event)">
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-pencil"></span>
+        Name
+      </label>
+      <input class="form-control" required minlength="8" data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
     </div>
-    <div class="col-xs-12 col-sm-4">
-      <div>
-        <template data-bind-ng-if="addCollaborator">
-          <div class="pull-right">
-            <button type="button" class="btn btn-default" data-on-click="onCollaboratorAddClick($event)">Add</button>
-          </div>
-        </template>
-        <h2>Collaborators</h2>
-      </div>
-      <div data-bind-list-view="collaborators" data-bind-addable="addCollaborator" data-on-add-click="onCollaboratorAddClick($event)" data-on-remove-click="onCollaboratorRemoveClick($event)">
-        <div class="spinner"></div>
-      </div>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-pencil"></span>
+        Description
+      </label>
+      <textarea class="form-control" required minlength="24" data-bindon-ng-model="descriptionField"></textarea>
     </div>
+    <button class="btn btn-primary pull-right" type="submit" data-bind-disabled="!editProject" data-bind-title="editProject ? '' : 'You are not allowed to edit this project.'">Update</button>
+  </form>
+  <div>
+    <template data-bind-ng-if="addCollaborator">
+      <div class="pull-right">
+        <button type="button" class="btn btn-default" data-on-click="onCollaboratorAddClick($event)">Add</button>
+      </div>
+    </template>
+    <h2>Collaborators</h2>
   </div>
-  <div class="row">
-    <div class="col-xs-12">
-      <div>
-        <div class="pull-right">
-          <button type="button" class="btn btn-default" data-on-click="onInteractionsBlockAddClick($event)">Add</button>
-        </div>
-        <h2>Interactions Blocks</h2>
-      </div>
-      <div data-bind-list-view="interactionsBlocks" data-on-add-click="onInteractionsBlockAddClick($event)" data-on-remove-click="onInteractionsBlockRemoveClick($event)">
-        <div class="spinner"></div>
-      </div>
-    </div>
+  <div data-bind-list-view="collaborators" data-bind-addable="addCollaborator" data-on-add-click="onCollaboratorAddClick($event)" data-on-remove-click="onCollaboratorRemoveClick($event)">
+    <div class="spinner"></div>
   </div>
 </div>

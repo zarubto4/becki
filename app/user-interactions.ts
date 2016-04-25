@@ -64,6 +64,8 @@ export class Component implements ng.OnInit {
 
   schemes:InteractionsSchemeItem[];
 
+  blocks:libPatternFlyListView.Item[];
+
   uploadSchemeField:string;
 
   uploadVersionField:string;
@@ -106,15 +108,18 @@ export class Component implements ng.OnInit {
         .then(projects => {
           return Promise.all<any>([
             Promise.all([].concat(...projects.map(project => project.b_programs_id)).map(id => this.backEnd.getInteractionsScheme(id))),
+            Promise.all([].concat(...projects.map(project => project.type_of_blocks_id)).map(id => this.backEnd.getInteractionsBlockGroup(id))),
             // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-197
             Promise.all([].concat(...projects.map(project => project.homers_id.map(id => [id, project]))).map(pair => Promise.all<any>([this.backEnd.getInteractionsModerator(pair[0]), pair[1]])))
           ]);
         })
         .then(result => {
           let schemes:libBackEnd.InteractionsScheme[];
+          let groups:libBackEnd.InteractionsBlockGroup[];
           let moderators:[libBackEnd.InteractionsModerator, libBackEnd.Project][];
-          [schemes, moderators] = result;
+          [schemes, groups, moderators] = result;
           this.schemes = schemes.map(scheme => new InteractionsSchemeItem(scheme));
+          this.blocks = [].concat(...groups.map(group => group.blockoBlocks)).map(block => new libPatternFlyListView.Item(block.id, block.name, block.general_description, ["UserInteractionsBlock", {block: block.id}], block.delete_permission));
           this.moderators = moderators.map(pair => new SelectableInteractionsModeratorItem(pair[0], pair[1]));
         })
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Interactions cannot be loaded.", reason)));
@@ -127,6 +132,9 @@ export class Component implements ng.OnInit {
       case "schemes":
         this.onAddSchemeClick();
         break;
+      case "blocks":
+        this.onAddBlockClick();
+        break;
       case "moderators":
         this.onAddModeratorClick();
         break;
@@ -137,6 +145,12 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.router.navigate(["NewUserInteractionsScheme"]);
+  }
+
+  onAddBlockClick():void {
+    "use strict";
+
+    this.router.navigate(["NewUserInteractionsBlock"]);
   }
 
   onAddModeratorClick():void {
@@ -164,6 +178,20 @@ export class Component implements ng.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-185
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-185"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The scheme cannot be removed.", reason));
+        });
+  }
+
+  onRemoveBlockClick(id:string):void {
+    "use strict";
+
+    this.notifications.shift();
+    this.backEnd.deleteInteractionsBlock(id)
+        .then(() => {
+          this.notifications.current.push(new libBeckiNotifications.Success("The block has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger("The block cannot be removed.", reason));
         });
   }
 

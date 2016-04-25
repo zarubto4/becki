@@ -58,7 +58,7 @@ export class Component implements ng.OnInit {
     this.breadcrumbs = [
       home,
       new libBeckiLayout.LabeledLink("User", home.link),
-      new libBeckiLayout.LabeledLink("Interactions Blocks", ["Projects"]),
+      new libBeckiLayout.LabeledLink("Interactions Blocks", ["UserInteractions"]),
       new libBeckiLayout.LabeledLink("Loading...", ["UserInteractionsBlock", {block: this.id}])
     ];
     this.editing = false;

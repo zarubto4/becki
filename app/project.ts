@@ -52,8 +52,6 @@ export class Component implements ng.OnInit {
 
   collaborators:libPatternFlyListView.Item[];
 
-  interactionsBlocks:libPatternFlyListView.Item[];
-
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
@@ -94,21 +92,18 @@ export class Component implements ng.OnInit {
         .then(project => {
           return Promise.all<any>([
             project,
-            Promise.all(project.owners_id.map(id => this.backEnd.getUser(id))),
-            Promise.all(project.type_of_blocks_id.map(id => this.backEnd.getInteractionsBlockGroup(id)))
+            Promise.all(project.owners_id.map(id => this.backEnd.getUser(id)))
           ]);
         })
         .then(result => {
           let project:libBackEnd.Project;
           let collaborators:libBackEnd.User[];
-          let groups:libBackEnd.InteractionsBlockGroup[];
-          [project, collaborators, groups] = result;
+          [project, collaborators] = result;
           this.nameField = project.project_name;
           this.descriptionField = project.project_description;
           this.editProject = project.edit_permission;
           this.addCollaborator = project.share_permission;
           this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composeUserString(collaborator, true), null, undefined, project.unshare_permission));
-          this.interactionsBlocks = [].concat(...groups.map(group => group.blockoBlocks.map(block => new libPatternFlyListView.Item(block.id, block.name, block.general_description, ["UserInteractionsBlock", {block: block.id}], block.delete_permission))));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The project ${this.id} cannot be loaded.`, reason));
@@ -153,26 +148,6 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The collaborator cannot be removed.", reason));
-        });
-  }
-
-  onInteractionsBlockAddClick():void {
-    "use strict";
-
-    this.router.navigate(["NewUserInteractionsBlock"]);
-  }
-
-  onInteractionsBlockRemoveClick(id:string):void {
-    "use strict";
-
-    this.notifications.shift();
-    this.backEnd.deleteInteractionsBlock(id)
-        .then(() => {
-          this.notifications.current.push(new libBeckiNotifications.Success("The block has been removed."));
-          this.refresh();
-        })
-        .catch(reason => {
-          this.notifications.current.push(new libBeckiNotifications.Danger("The block cannot be removed.", reason));
         });
   }
 }

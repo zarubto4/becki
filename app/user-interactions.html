@@ -3,11 +3,16 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, View, Update or Remove a Scheme or a Moderator of Interactions'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="tab == 'upload' ? null : 'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
+<div data-bind-layout="'Add, View, Update or Remove a Scheme, a Block or a Moderator of Interactions'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="tab == 'upload' ? null : 'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="tab == 'schemes'">
       <a data-on-click="onTabClick('schemes', $event)" style="cursor: pointer">
         Schemes
+      </a>
+    </li>
+    <li data-bind-class.active="tab == 'blocks'">
+      <a data-on-click="onTabClick('blocks', $event)" style="cursor: pointer">
+        Blocks
       </a>
     </li>
     <li data-bind-class.active="tab == 'upload'">
@@ -23,6 +28,11 @@
   </ul>
   <template data-bind-ng-switch-when="'schemes'">
     <div data-bind-list-view="schemes" data-on-add-click="onAddSchemeClick($event)" data-on-remove-click="onRemoveSchemeClick($event)">
+      <div class="spinner"></div>
+    </div>
+  </template>
+  <template data-bind-ng-switch-when="'blocks'">
+    <div data-bind-list-view="blocks" data-on-add-click="onAddBlockClick($event)" data-on-remove-click="onRemoveBlockClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
