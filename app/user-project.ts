@@ -67,7 +67,7 @@ export class Component implements ng.OnInit {
       home,
       new libBeckiLayout.LabeledLink("User", home.link),
       new libBeckiLayout.LabeledLink("Projects", ["Projects"]),
-      new libBeckiLayout.LabeledLink(`Project ${this.id}`, ["UserProject", {project: this.id}])
+      new libBeckiLayout.LabeledLink("Loading...", ["UserProject", {project: this.id}])
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
@@ -100,6 +100,7 @@ export class Component implements ng.OnInit {
           let collaborators:libBackEnd.User[];
           [project, collaborators] = result;
           this.name = project.project_name;
+          this.breadcrumbs[3].label = project.project_name;
           this.nameField = project.project_name;
           this.descriptionField = project.project_description;
           this.editProject = project.edit_permission;
