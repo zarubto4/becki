@@ -30,7 +30,7 @@ export class Component implements ng.OnInit {
 
   id:string;
 
-  heading:string;
+  group:libBackEnd.LibraryGroup;
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
@@ -48,7 +48,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.id = routeParams.get("group");
-    this.heading = `Library Group ${this.id}`;
     this.breadcrumbs = [
       home,
       new libBeckiLayout.LabeledLink("System", ["Devices"]),
@@ -68,6 +67,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.getLibraryGroup(this.id)
         .then(group => {
+          this.group = group;
           this.nameField = group.group_name;
           this.descriptionField = group.description;
         })
