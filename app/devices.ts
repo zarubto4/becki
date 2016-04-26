@@ -72,7 +72,7 @@ export class Component implements ng.OnInit {
   onProducerAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewProducer"]);
+    this.router.navigate(["NewSystemProducer"]);
   }
 
   onProducerRemoveClick(id:string):void {
