@@ -62,7 +62,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getProducers()
-        .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, producer.description, ["Producer", {producer: producer.id}])))
+        .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, producer.description, ["SystemProducer", {producer: producer.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Producers cannot be loaded.", reason)));
     this.backEnd.getDeviceTypes()
         .then(deviceTypes => this.deviceTypes = deviceTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, ["DeviceType", {type: type.id}])))

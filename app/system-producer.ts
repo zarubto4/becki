@@ -22,7 +22,7 @@ import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
-  templateUrl: "app/producer.html",
+  templateUrl: "app/system-producer.html",
   directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
@@ -50,8 +50,9 @@ export class Component implements ng.OnInit {
     this.heading = `Producer ${this.id}`;
     this.breadcrumbs = [
       home,
+      new libBeckiLayout.LabeledLink("System", ["Devices"]),
       new libBeckiLayout.LabeledLink("Producers", ["Devices"]),
-      new libBeckiLayout.LabeledLink(`Producer ${this.id}`, ["Producer", {producer: this.id}])
+      new libBeckiLayout.LabeledLink(`Producer ${this.id}`, ["SystemProducer", {producer: this.id}])
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
