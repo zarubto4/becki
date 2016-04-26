@@ -1271,14 +1271,14 @@ export abstract class BackEnd {
     return this.requestPath("PUT", `${BackEnd.LIBRARY_PATH}/${id}`, {library_name, description}, [200, 201]).then(JSON.stringify);
   }
 
-  public addVersionToLibrary(version_name:string, version_description:string, id:string):Promise<string> {
+  public addVersionToLibrary(version_name:string, version_description:string, id:string):Promise<Version> {
     "use strict";
 
     if (version_name.length < 8 || version_description.length < 8) {
       throw "name >= 8 and description >= 8 required";
     }
 
-    return this.requestPath("POST", `${BackEnd.LIBRARY_PATH}/version/${id}`, {version_name, version_description}, [201]).then(JSON.stringify);
+    return this.requestPath("POST", `${BackEnd.LIBRARY_PATH}/version/${id}`, {version_name, version_description}, [201]);
   }
 
   public updateFileOfLibrary(file:File, version:string, id:string):Promise<string> {
@@ -1287,10 +1287,6 @@ export abstract class BackEnd {
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-118
     // TODO: https://github.com/angular/angular/issues/2803
     return new Promise((resolve, reject) => {
-      let url = `${BackEnd.BASE_URL}/compilation/library/uploud/${id}`;
-      if (version) {
-        url += `/${version}`;
-      }
       let formdata = new FormData();
       formdata.append("file", file);
       let request = new XMLHttpRequest();
@@ -1302,7 +1298,7 @@ export abstract class BackEnd {
         }
       });
       request.addEventListener("error", reject);
-      request.open("POST", url);
+      request.open("POST", `${BackEnd.BASE_URL}/compilation/library/uploud/${id}/${version}`);
       // TODO: https://github.com/angular/angular/issues/7303
       request.setRequestHeader("X-AUTH-TOKEN", window.localStorage.getItem("authToken"));
       request.send(formdata);
