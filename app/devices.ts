@@ -29,8 +29,6 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
-  processors:libPatternFlyListView.Item[];
-
   producers:libPatternFlyListView.Item[];
 
   deviceTypes:libPatternFlyListView.Item[];
@@ -63,35 +61,12 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    this.backEnd.getProcessors()
-        .then(processors => this.processors = processors.map(processor => new libPatternFlyListView.Item(processor.id, processor.processor_name, processor.processor_code, ["SystemProcessor", {processor: processor.id}])))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));
     this.backEnd.getProducers()
         .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, producer.description, ["Producer", {producer: producer.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Producers cannot be loaded.", reason)));
     this.backEnd.getDeviceTypes()
         .then(deviceTypes => this.deviceTypes = deviceTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, ["DeviceType", {type: type.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Device types cannot be loaded.", reason)));
-  }
-
-  onProcessorAddClick():void {
-    "use strict";
-
-    this.router.navigate(["NewSystemProcessor"]);
-  }
-
-  onProcessorRemoveClick(id:string):void {
-    "use strict";
-
-    this.notifications.shift();
-    this.backEnd.deleteProcessor(id)
-        .then(() => {
-          this.notifications.current.push(new libBeckiNotifications.Success("The processor has been removed."));
-          this.refresh();
-        })
-        .catch(reason => {
-          this.notifications.current.push(new libBeckiNotifications.Danger("The processor cannot be removed.", reason));
-        });
   }
 
   onProducerAddClick():void {

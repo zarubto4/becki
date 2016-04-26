@@ -39,6 +39,11 @@
             Devices
           </a>
         </li>
+        <li data-bind-class.active="tab[1] == 'processors'">
+          <a data-on-click="onTabClick(['devices', 'processors'], $event)" style="cursor: pointer">
+            Processors
+          </a>
+        </li>
         <li data-bind-class.active="tab[1] == 'groups'">
           <a data-on-click="onTabClick(['devices', 'groups'], $event)" style="cursor: pointer">
             Library Groups
@@ -52,6 +57,11 @@
       </ul>
       <template data-bind-ng-switch-when="'devices'">
         <div data-bind-list-view="devices" data-on-add-click="onAddDeviceClick($event)" data-on-remove-click="onRemoveDeviceClick($event)">
+          <div class="spinner"></div>
+        </div>
+      </template>
+      <template data-bind-ng-switch-when="'processors'">
+        <div data-bind-list-view="processors" data-on-add-click="onAddProcessorClick($event)" data-on-remove-click="onRemoveProcessorClick($event)">
           <div class="spinner"></div>
         </div>
       </template>

@@ -36,6 +36,8 @@ export class Component implements ng.OnInit {
 
   devices:libPatternFlyListView.Item[];
 
+  processors:libPatternFlyListView.Item[];
+
   libraryGroups:libPatternFlyListView.Item[];
 
   libraries:libPatternFlyListView.Item[];
@@ -85,6 +87,9 @@ export class Component implements ng.OnInit {
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
         .then(devices => this.devices = devices.map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.type_of_board.name, undefined, device.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
+    this.backEnd.getProcessors()
+        .then(processors => this.processors = processors.map(processor => new libPatternFlyListView.Item(processor.id, processor.processor_name, processor.processor_code, ["SystemProcessor", {processor: processor.id}])))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));
     this.backEnd.getLibraryGroups()
         .then(groups => this.libraryGroups = groups.map(group => new libPatternFlyListView.Item(group.id, group.group_name, group.description, ["SystemLibraryGroup", {group: group.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Library groups cannot be loaded.", reason)));
@@ -112,6 +117,9 @@ export class Component implements ng.OnInit {
         switch (this.tab[1]) {
           case "devices":
             this.onAddDeviceClick();
+            break;
+          case "processors":
+            this.onAddProcessorClick();
             break;
           case "groups":
             this.onAddLibraryGroupClick();
@@ -144,6 +152,12 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.router.navigate(["NewSystemDevice"]);
+  }
+
+  onAddProcessorClick():void {
+    "use strict";
+
+    this.router.navigate(["NewSystemProcessor"]);
   }
 
   onAddLibraryGroupClick():void {
@@ -196,6 +210,20 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     // see https://youtrack.byzance.cz/youtrack/issue/TYRION-89
     this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-89"));
+  }
+
+  onRemoveProcessorClick(id:string):void {
+    "use strict";
+
+    this.notifications.shift();
+    this.backEnd.deleteProcessor(id)
+        .then(() => {
+          this.notifications.current.push(new libBeckiNotifications.Success("The processor has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger("The processor cannot be removed.", reason));
+        });
   }
 
   onRemoveLibraryGroupClick(id:string):void {

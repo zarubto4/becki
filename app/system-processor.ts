@@ -54,8 +54,8 @@ export class Component implements ng.OnInit {
     this.id = routeParams.get("processor");
     this.breadcrumbs = [
       home,
-      new libBeckiLayout.LabeledLink("System", ["Devices"]),
-      new libBeckiLayout.LabeledLink("Processors", ["Devices"]),
+      new libBeckiLayout.LabeledLink("System", ["System"]),
+      new libBeckiLayout.LabeledLink("Processors", ["System"]),
       new libBeckiLayout.LabeledLink("Loading...", ["SystemProcessor", {processor: this.id}])
     ];
     this.editing = false;

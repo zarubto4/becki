@@ -48,7 +48,7 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       home,
-      new libBeckiLayout.LabeledLink("System", ["Devices"]),
+      new libBeckiLayout.LabeledLink("System", ["System"]),
       new libBeckiLayout.LabeledLink("New Processor", ["NewSystemProcessor"])
     ];
     this.nameField = "";
@@ -80,7 +80,7 @@ export class Component implements ng.OnInit {
     this.backEnd.createProcessor(this.nameField, this.codeField, this.descriptionField, this.speedField)
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The processor has been created."));
-          this.router.navigate(["Devices"]);
+          this.router.navigate(["System"]);
         })
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-211
@@ -93,6 +93,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Devices"]);
+    this.router.navigate(["System"]);
   }
 }
