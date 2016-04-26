@@ -13,6 +13,7 @@
  * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
 
+import * as _ from "underscore";
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
@@ -24,7 +25,7 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/system-library.html",
-  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.FORM_DIRECTIVES]
+  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -34,11 +35,17 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
+  editing:boolean;
+
   nameField:string;
 
   descriptionField:string;
 
+  description:string;
+
   versionNameField:string;
+
+  version:libBackEnd.Version;
 
   versionDescriptionField:string;
 
@@ -49,9 +56,7 @@ export class Component implements ng.OnInit {
 
   notifications:libBeckiNotifications.Service;
 
-  router:ngRouter.Router;
-
-  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
     "use strict";
 
     this.id = routeParams.get("library");
@@ -62,13 +67,14 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Libraries", ["Devices"]),
       new libBeckiLayout.LabeledLink("Loading...", ["SystemLibrary", {library: this.id}])
     ];
+    this.editing = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
-    this.versionNameField = "";
-    this.versionDescriptionField = "";
+    this.description = "Loading...";
+    this.versionNameField = "Loading...";
+    this.versionDescriptionField = "Loading...";
     this.backEnd = backEnd;
     this.notifications = notifications;
-    this.router = router;
   }
 
   onInit():void {
@@ -81,16 +87,33 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    this.backEnd.getLibrary(this.id)
-        .then(library => {
+    this.editing = false;
+    Promise.all<any>([
+          this.backEnd.getLibrary(this.id),
+          this.backEnd.getLibraryVersions(this.id)
+        ])
+        .then(result => {
+          let library:libBackEnd.Library;
+          let versions:libBackEnd.Version[];
+          [library, versions] = result;
           this.name = library.library_name;
           this.breadcrumbs[3].label = library.library_name;
           this.nameField = library.library_name;
           this.descriptionField = library.description;
+          this.description = library.description;
+          this.version = versions.length ? _.max(versions, version => version.date_of_create) : null;
+          this.versionNameField = this.version ? this.version.version_name : "";
+          this.versionDescriptionField = this.version ? this.version.version_description : "";
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The library ${this.id} cannot be loaded.`, reason));
         });
+  }
+
+  onEditClick():void {
+    "use strict";
+
+    this.editing = !this.editing;
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -115,12 +138,19 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateLibrary(this.id, this.nameField, this.descriptionField)
         .then(() => {
-          this.notifications.next.push(new libBeckiNotifications.Success("The library has been updated."));
-          this.router.navigate(["Devices"]);
+          this.notifications.current.push(new libBeckiNotifications.Success("The library has been updated."));
+          this.refresh();
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The library cannot be updated.", reason));
         });
+  }
+
+  onCancelClick():void {
+    "use strict";
+
+    this.notifications.shift();
+    this.editing = false;
   }
 
   onVersionSubmit():void {
@@ -133,8 +163,6 @@ export class Component implements ng.OnInit {
         })
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The version has been created."));
-          this.versionNameField = "";
-          this.versionDescriptionField = "";
           this.versionFileField.nativeElement.value = "";
           this.refresh();
         })
@@ -143,12 +171,5 @@ export class Component implements ng.OnInit {
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-118"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The version cannot be created.", reason));
         });
-  }
-
-  onCancelClick():void {
-    "use strict";
-
-    this.notifications.shift();
-    this.router.navigate(["Devices"]);
   }
 }
