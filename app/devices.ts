@@ -29,8 +29,6 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
-  libraries:libPatternFlyListView.Item[];
-
   libraryGroups:libPatternFlyListView.Item[];
 
   processors:libPatternFlyListView.Item[];
@@ -67,9 +65,6 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    this.backEnd.getLibraries()
-        .then(libraries => this.libraries = libraries.map(library => new libPatternFlyListView.Item(library.id, library.library_name, library.description, ["SystemLibrary", {library: library.id}])))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Libraries cannot be loaded.", reason)));
     this.backEnd.getLibraryGroups()
         .then(groups => this.libraryGroups = groups.map(group => new libPatternFlyListView.Item(group.id, group.group_name, group.description, ["LibraryGroup", {group: group.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Library groups cannot be loaded.", reason)));
@@ -82,26 +77,6 @@ export class Component implements ng.OnInit {
     this.backEnd.getDeviceTypes()
         .then(deviceTypes => this.deviceTypes = deviceTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, ["DeviceType", {type: type.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Device types cannot be loaded.", reason)));
-  }
-
-  onLibraryAddClick():void {
-    "use strict";
-
-    this.router.navigate(["NewSystemLibrary"]);
-  }
-
-  onLibraryRemoveClick(id:string):void {
-    "use strict";
-
-    this.notifications.shift();
-    this.backEnd.deleteLibrary(id)
-        .then(() => {
-          this.notifications.current.push(new libBeckiNotifications.Success("The library has been removed."));
-          this.refresh();
-        })
-        .catch(reason => {
-          this.notifications.current.push(new libBeckiNotifications.Danger("The library cannot be removed.", reason));
-        });
   }
 
   onLibraryGroupAddClick():void {

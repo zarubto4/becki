@@ -36,6 +36,8 @@ export class Component implements ng.OnInit {
 
   devices:libPatternFlyListView.Item[];
 
+  libraries:libPatternFlyListView.Item[];
+
   issueTypes:libPatternFlyListView.Item[];
 
   issueConfirmations:libPatternFlyListView.Item[];
@@ -81,6 +83,9 @@ export class Component implements ng.OnInit {
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
         .then(devices => this.devices = devices.map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.type_of_board.name, undefined, device.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
+    this.backEnd.getLibraries()
+        .then(libraries => this.libraries = libraries.map(library => new libPatternFlyListView.Item(library.id, library.library_name, library.description, ["SystemLibrary", {library: library.id}])))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Libraries cannot be loaded.", reason)));
     this.backEnd.getIssueTypes()
         .then(types => this.issueTypes = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, ["SystemIssueType", {type: type.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue types cannot be loaded.", reason)));
@@ -99,7 +104,14 @@ export class Component implements ng.OnInit {
         this.onAddModeratorClick();
         break;
       case "devices":
-        this.onAddDeviceClick();
+        switch (this.tab[1]) {
+          case "devices":
+            this.onAddDeviceClick();
+            break;
+          case "libraries":
+            this.onAddLibraryClick();
+            break;
+        }
         break;
       case "issues":
         switch (this.tab[1]) {
@@ -124,6 +136,12 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.router.navigate(["NewSystemDevice"]);
+  }
+
+  onAddLibraryClick():void {
+    "use strict";
+
+    this.router.navigate(["NewSystemLibrary"]);
   }
 
   onAddIssueTypeClick():void {
@@ -164,6 +182,20 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     // see https://youtrack.byzance.cz/youtrack/issue/TYRION-89
     this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-89"));
+  }
+
+  onRemoveLibraryClick(id:string):void {
+    "use strict";
+
+    this.notifications.shift();
+    this.backEnd.deleteLibrary(id)
+        .then(() => {
+          this.notifications.current.push(new libBeckiNotifications.Success("The library has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger("The library cannot be removed.", reason));
+        });
   }
 
   onRemoveIssueTypeClick(id:string):void {

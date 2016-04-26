@@ -45,7 +45,7 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       home,
-      new libBeckiLayout.LabeledLink("System", ["Devices"]),
+      new libBeckiLayout.LabeledLink("System", ["System"]),
       new libBeckiLayout.LabeledLink("New Library", ["NewSystemLibrary"])
     ];
     this.nameField = "";
@@ -85,7 +85,7 @@ export class Component implements ng.OnInit {
     this.backEnd.createLibrary(this.nameField, this.descriptionField)
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The library has been created."));
-          this.router.navigate(["Devices"]);
+          this.router.navigate(["System"]);
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The library cannot be created.", reason));
@@ -96,6 +96,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Devices"]);
+    this.router.navigate(["System"]);
   }
 }

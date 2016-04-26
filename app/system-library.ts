@@ -63,8 +63,8 @@ export class Component implements ng.OnInit {
     this.name = "Loading...";
     this.breadcrumbs = [
       home,
-      new libBeckiLayout.LabeledLink("System", ["Devices"]),
-      new libBeckiLayout.LabeledLink("Libraries", ["Devices"]),
+      new libBeckiLayout.LabeledLink("System", ["System"]),
+      new libBeckiLayout.LabeledLink("Libraries", ["System"]),
       new libBeckiLayout.LabeledLink("Loading...", ["SystemLibrary", {library: this.id}])
     ];
     this.editing = false;
