@@ -64,7 +64,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getProcessors()
-        .then(processors => this.processors = processors.map(processor => new libPatternFlyListView.Item(processor.id, processor.processor_name, processor.processor_code, ["Processor", {processor: processor.id}])))
+        .then(processors => this.processors = processors.map(processor => new libPatternFlyListView.Item(processor.id, processor.processor_name, processor.processor_code, ["SystemProcessor", {processor: processor.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));
     this.backEnd.getProducers()
         .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, producer.description, ["Producer", {producer: producer.id}])))
