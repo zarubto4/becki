@@ -16,6 +16,7 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
+import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
 import * as libBeckiLayout from "./lib-becki/layout";
@@ -29,7 +30,7 @@ export class Component implements ng.OnInit {
 
   id:string;
 
-  heading:string;
+  processor:libBackEnd.Processor;
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
@@ -51,7 +52,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.id = routeParams.get("processor");
-    this.heading = `Processor ${this.id}`;
     this.breadcrumbs = [
       home,
       new libBeckiLayout.LabeledLink("System", ["Devices"]),
@@ -73,6 +73,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.getProcessor(this.id)
         .then(processor => {
+          this.processor = processor;
           this.nameField = processor.processor_name;
           this.codeField = processor.processor_code;
           this.descriptionField = processor.description;
