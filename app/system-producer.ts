@@ -16,6 +16,7 @@
 import * as ng from "angular2/angular2";
 import * as ngRouter from "angular2/router";
 
+import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
 import * as libBeckiLayout from "./lib-becki/layout";
@@ -29,7 +30,7 @@ export class Component implements ng.OnInit {
 
   id:string;
 
-  heading:string;
+  producer:libBackEnd.Producer;
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
@@ -47,7 +48,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.id = routeParams.get("producer");
-    this.heading = `Producer ${this.id}`;
     this.breadcrumbs = [
       home,
       new libBeckiLayout.LabeledLink("System", ["Devices"]),
@@ -67,6 +67,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.getProducer(this.id)
         .then(producer => {
+          this.producer = producer;
           this.nameField = producer.name;
           this.descriptionField = producer.description;
         })
