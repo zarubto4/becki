@@ -24,7 +24,7 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/system-processor.html",
-  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.FORM_DIRECTIVES]
+  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -33,6 +33,8 @@ export class Component implements ng.OnInit {
   processor:libBackEnd.Processor;
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
+
+  editing:boolean;
 
   nameField:string;
 
@@ -46,9 +48,7 @@ export class Component implements ng.OnInit {
 
   notifications:libBeckiNotifications.Service;
 
-  router:ngRouter.Router;
-
-  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
     "use strict";
 
     this.id = routeParams.get("processor");
@@ -58,19 +58,26 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Processors", ["Devices"]),
       new libBeckiLayout.LabeledLink("Loading...", ["SystemProcessor", {processor: this.id}])
     ];
+    this.editing = false;
     this.nameField = "Loading...";
     this.codeField = "Loading...";
     this.descriptionField = "Loading...";
     this.speedField = 0;
     this.backEnd = backEnd;
     this.notifications = notifications;
-    this.router = router;
   }
 
   onInit():void {
     "use strict";
 
     this.notifications.shift();
+    this.refresh();
+  }
+
+  refresh():void {
+    "use strict";
+
+    this.editing = false;
     this.backEnd.getProcessor(this.id)
         .then(processor => {
           this.breadcrumbs[3].label = processor.processor_name;
@@ -83,6 +90,12 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The processor ${this.id} cannot be loaded.`, reason));
         });
+  }
+
+  onEditClick():void {
+    "use strict";
+
+    this.editing = !this.editing;
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -98,8 +111,8 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateProcessor(this.id, this.nameField, this.codeField, this.descriptionField, this.speedField)
         .then(() => {
-          this.notifications.next.push(new libBeckiNotifications.Success("The processor has been updated."));
-          this.router.navigate(["Devices"]);
+          this.notifications.current.push(new libBeckiNotifications.Success("The processor has been updated."));
+          this.refresh();
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The processor cannot be updated.", reason));
@@ -110,6 +123,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Devices"]);
+    this.refresh();
   }
 }
