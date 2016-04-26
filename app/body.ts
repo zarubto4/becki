@@ -33,7 +33,6 @@ import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiModal from "./lib-becki/modal";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libBeckiWebsocket from "./lib-becki/websocket";
-import * as libraryGroup from "./library-group";
 import * as processor from "./processor";
 import * as processorNew from "./processor-new";
 import * as producer from "./producer";
@@ -47,6 +46,7 @@ import * as systemIssueConfirmationNew from "./system-issue-confirmation-new";
 import * as systemIssueType from "./system-issue-type";
 import * as systemIssueTypeNew from "./system-issue-type-new";
 import * as systemLibrary from "./system-library";
+import * as systemLibraryGroup from "./system-library-group";
 import * as systemLibraryGroupNew from "./system-library-group-new";
 import * as systemLibraryNew from "./system-library-new";
 import * as user from "./user";
@@ -85,7 +85,6 @@ import * as userProjects from "./user-projects";
   {path: "/issues/:issue", component: issue.Component, as: "Issue"},
   {path: "/issues/:issue/confirmation/new", component: issueConfirmationNew.Component, as: "NewIssueConfirmation"},
   {path: "/issues/:issue/related/new", component: issueRelatedNew.Component, as: "NewRelatedIssue"},
-  {path: "/library/groups/:group", component: libraryGroup.Component, as: "LibraryGroup"},
   {path: "/processor/new", component: processorNew.Component, as: "NewProcessor"},
   {path: "/processors/:processor", component: processor.Component, as: "Processor"},
   {path: "/producer/new", component: producerNew.Component, as: "NewProducer"},
@@ -100,6 +99,7 @@ import * as userProjects from "./user-projects";
   {path: "/system/issue/types/:type", component: systemIssueType.Component, as: "SystemIssueType"},
   {path: "/system/libraries/:library", component: systemLibrary.Component, as: "SystemLibrary"},
   {path: "/system/library/group/new", component: systemLibraryGroupNew.Component, as: "NewSystemLibraryGroup"},
+  {path: "/system/library/groups/:group", component: systemLibraryGroup.Component, as: "SystemLibraryGroup"},
   {path: "/system/library/new", component: systemLibraryNew.Component, as: "NewSystemLibrary"},
   {path: "/user/application/device/new", component: userApplicationDeviceNew.Component, as: "NewUserApplicationDevice"},
   {path: "/user/application/group/new", component: userApplicationGroupNew.Component, as: "NewUserApplicationGroup"},

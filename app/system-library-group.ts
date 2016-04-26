@@ -23,7 +23,7 @@ import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
-  templateUrl: "app/library-group.html",
+  templateUrl: "app/system-library-group.html",
   directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
@@ -51,9 +51,9 @@ export class Component implements ng.OnInit {
     this.heading = `Library Group ${this.id}`;
     this.breadcrumbs = [
       home,
-      new libBeckiLayout.LabeledLink("Libraries", ["Devices"]),
-      new libBeckiLayout.LabeledLink("Groups", ["Devices"]),
-      new libBeckiLayout.LabeledLink(`Group ${this.id}`, ["LibraryGroup", {group: this.id}])
+      new libBeckiLayout.LabeledLink("System", ["Devices"]),
+      new libBeckiLayout.LabeledLink("Library Groups", ["Devices"]),
+      new libBeckiLayout.LabeledLink(`Group ${this.id}`, ["SystemLibraryGroup", {group: this.id}])
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
