@@ -56,7 +56,7 @@ export class Component implements ng.OnInit {
       home,
       new libBeckiLayout.LabeledLink("System", ["Devices"]),
       new libBeckiLayout.LabeledLink("Processors", ["Devices"]),
-      new libBeckiLayout.LabeledLink(`Processor ${this.id}`, ["SystemProcessor", {processor: this.id}])
+      new libBeckiLayout.LabeledLink("Loading...", ["SystemProcessor", {processor: this.id}])
     ];
     this.nameField = "Loading...";
     this.codeField = "Loading...";
@@ -73,6 +73,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.getProcessor(this.id)
         .then(processor => {
+          this.breadcrumbs[3].label = processor.processor_name;
           this.processor = processor;
           this.nameField = processor.processor_name;
           this.codeField = processor.processor_code;
