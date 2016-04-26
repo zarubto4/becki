@@ -34,6 +34,8 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
+  editing:boolean;
+
   producers:libBackEnd.Producer[];
 
   processors:libBackEnd.Processor[];
@@ -46,13 +48,13 @@ export class Component implements ng.OnInit {
 
   descriptionField:string;
 
+  description:string;
+
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
 
-  router:ngRouter.Router;
-
-  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
     "use strict";
 
     this.id = routeParams.get("type");
@@ -62,17 +64,25 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Device Types", ["Devices"]),
       new libBeckiLayout.LabeledLink("Loading...", ["SystemDeviceType", {type: this.id}])
     ];
+    this.editing = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
+    this.description = "Loading...";
     this.backEnd = backEnd;
     this.notifications = notifications;
-    this.router = router;
   }
 
   onInit():void {
     "use strict";
 
     this.notifications.shift();
+    this.refresh();
+  }
+
+  refresh():void {
+    "use strict";
+
+    this.editing = false;
     this.backEnd.getDeviceType(this.id)
         .then(type => {
           this.type = type;
@@ -81,6 +91,7 @@ export class Component implements ng.OnInit {
           this.producerField = type.producer_id;
           this.processorField = type.processor_id;
           this.descriptionField = type.description;
+          this.description = type.description;
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The type ${this.id} cannot be loaded.`, reason));
@@ -93,11 +104,29 @@ export class Component implements ng.OnInit {
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));
   }
 
+  onEditClick():void {
+    "use strict";
+
+    this.editing = !this.editing;
+  }
+
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     return () => this.backEnd.getDeviceTypes().then(types => !types.find(type => type.id != this.id && type.name == this.nameField));
+  }
+
+  getProducer():libBackEnd.Producer {
+    "use strict";
+
+    return this.type && this.producers && this.producers.length ? this.producers.find(producer => producer.id == this.type.producer_id) : null;
+  }
+
+  getProcessor():libBackEnd.Processor {
+    "use strict";
+
+    return this.type && this.processors && this.processors.length ? this.processors.find(processor => processor.id == this.type.processor_id) : null;
   }
 
   onSubmit():void {
@@ -106,8 +135,8 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateDeviceType(this.id, this.nameField, this.producerField, this.processorField, this.descriptionField)
         .then(() => {
-          this.notifications.next.push(new libBeckiNotifications.Success("The type has been updated."));
-          this.router.navigate(["Devices"]);
+          this.notifications.current.push(new libBeckiNotifications.Success("The type has been updated."));
+          this.refresh();
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The type cannot be updated.", reason));
@@ -118,6 +147,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Devices"]);
+    this.refresh();
   }
 }
