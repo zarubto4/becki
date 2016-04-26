@@ -23,7 +23,7 @@ import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
-  templateUrl: "app/device-type.html",
+  templateUrl: "app/system-device-type.html",
   directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
@@ -59,9 +59,9 @@ export class Component implements ng.OnInit {
     this.heading = `Type ${this.id}`;
     this.breadcrumbs = [
       home,
-      new libBeckiLayout.LabeledLink("Devices", ["Devices"]),
-      new libBeckiLayout.LabeledLink("Types", ["Devices"]),
-      new libBeckiLayout.LabeledLink(`Type ${this.id}`, ["DeviceType", {type: this.id}])
+      new libBeckiLayout.LabeledLink("System", ["Devices"]),
+      new libBeckiLayout.LabeledLink("Device Types", ["Devices"]),
+      new libBeckiLayout.LabeledLink(`Type ${this.id}`, ["SystemDeviceType", {type: this.id}])
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
