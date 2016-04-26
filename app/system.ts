@@ -42,6 +42,8 @@ export class Component implements ng.OnInit {
 
   libraries:libPatternFlyListView.Item[];
 
+  producers:libPatternFlyListView.Item[];
+
   issueTypes:libPatternFlyListView.Item[];
 
   issueConfirmations:libPatternFlyListView.Item[];
@@ -96,6 +98,9 @@ export class Component implements ng.OnInit {
     this.backEnd.getLibraries()
         .then(libraries => this.libraries = libraries.map(library => new libPatternFlyListView.Item(library.id, library.library_name, library.description, ["SystemLibrary", {library: library.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Libraries cannot be loaded.", reason)));
+    this.backEnd.getProducers()
+        .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, producer.description, ["SystemProducer", {producer: producer.id}])))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Producers cannot be loaded.", reason)));
     this.backEnd.getIssueTypes()
         .then(types => this.issueTypes = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, ["SystemIssueType", {type: type.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue types cannot be loaded.", reason)));
@@ -126,6 +131,9 @@ export class Component implements ng.OnInit {
             break;
           case "libraries":
             this.onAddLibraryClick();
+            break;
+          case "producers":
+            this.onAddProducerClick();
             break;
         }
         break;
@@ -170,6 +178,12 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.router.navigate(["NewSystemLibrary"]);
+  }
+
+  onAddProducerClick():void {
+    "use strict";
+
+    this.router.navigate(["NewSystemProducer"]);
   }
 
   onAddIssueTypeClick():void {
@@ -251,6 +265,20 @@ export class Component implements ng.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The library cannot be removed.", reason));
+        });
+  }
+
+  onRemoveProducerClick(id:string):void {
+    "use strict";
+
+    this.notifications.shift();
+    this.backEnd.deleteProducer(id)
+        .then(() => {
+          this.notifications.current.push(new libBeckiNotifications.Success("The producer has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger("The producer cannot be removed.", reason));
         });
   }
 

@@ -54,6 +54,11 @@
             Libraries
           </a>
         </li>
+        <li data-bind-class.active="tab[1] == 'producers'">
+          <a data-on-click="onTabClick(['devices', 'producers'], $event)" style="cursor: pointer">
+            Producers
+          </a>
+        </li>
       </ul>
       <template data-bind-ng-switch-when="'devices'">
         <div data-bind-list-view="devices" data-on-add-click="onAddDeviceClick($event)" data-on-remove-click="onRemoveDeviceClick($event)">
@@ -72,6 +77,11 @@
       </template>
       <template data-bind-ng-switch-when="'libraries'">
         <div data-bind-list-view="libraries" data-on-add-click="onAddLibraryClick($event)" data-on-remove-click="onRemoveLibraryClick($event)">
+          <div class="spinner"></div>
+        </div>
+      </template>
+      <template data-bind-ng-switch-when="'producers'">
+        <div data-bind-list-view="producers" data-on-add-click="onAddProducerClick($event)" data-on-remove-click="onRemoveProducerClick($event)">
           <div class="spinner"></div>
         </div>
       </template>

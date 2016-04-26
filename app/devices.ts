@@ -29,8 +29,6 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
-  producers:libPatternFlyListView.Item[];
-
   deviceTypes:libPatternFlyListView.Item[];
 
   backEnd:libBeckiBackEnd.Service;
@@ -61,32 +59,9 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    this.backEnd.getProducers()
-        .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, producer.description, ["SystemProducer", {producer: producer.id}])))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Producers cannot be loaded.", reason)));
     this.backEnd.getDeviceTypes()
         .then(deviceTypes => this.deviceTypes = deviceTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, ["DeviceType", {type: type.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Device types cannot be loaded.", reason)));
-  }
-
-  onProducerAddClick():void {
-    "use strict";
-
-    this.router.navigate(["NewSystemProducer"]);
-  }
-
-  onProducerRemoveClick(id:string):void {
-    "use strict";
-
-    this.notifications.shift();
-    this.backEnd.deleteProducer(id)
-        .then(() => {
-          this.notifications.current.push(new libBeckiNotifications.Success("The producer has been removed."));
-          this.refresh();
-        })
-        .catch(reason => {
-          this.notifications.current.push(new libBeckiNotifications.Danger("The producer cannot be removed.", reason));
-        });
   }
 
   onDeviceTypeAddClick():void {
