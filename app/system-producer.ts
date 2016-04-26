@@ -52,7 +52,7 @@ export class Component implements ng.OnInit {
       home,
       new libBeckiLayout.LabeledLink("System", ["Devices"]),
       new libBeckiLayout.LabeledLink("Producers", ["Devices"]),
-      new libBeckiLayout.LabeledLink(`Producer ${this.id}`, ["SystemProducer", {producer: this.id}])
+      new libBeckiLayout.LabeledLink("Loading...", ["SystemProducer", {producer: this.id}])
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
@@ -68,6 +68,7 @@ export class Component implements ng.OnInit {
     this.backEnd.getProducer(this.id)
         .then(producer => {
           this.producer = producer;
+          this.breadcrumbs[3].label = producer.name;
           this.nameField = producer.name;
           this.descriptionField = producer.description;
         })
