@@ -24,7 +24,7 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
   templateUrl: "app/system-library-group.html",
-  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.FORM_DIRECTIVES]
+  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
 
@@ -34,6 +34,8 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
+  editing:boolean;
+
   nameField:string;
 
   descriptionField:string;
@@ -42,9 +44,7 @@ export class Component implements ng.OnInit {
 
   notifications:libBeckiNotifications.Service;
 
-  router:ngRouter.Router;
-
-  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
     "use strict";
 
     this.id = routeParams.get("group");
@@ -54,17 +54,24 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Library Groups", ["Devices"]),
       new libBeckiLayout.LabeledLink("Loading...", ["SystemLibraryGroup", {group: this.id}])
     ];
+    this.editing = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.backEnd = backEnd;
     this.notifications = notifications;
-    this.router = router;
   }
 
   onInit():void {
     "use strict";
 
     this.notifications.shift();
+    this.refresh();
+  }
+
+  refresh():void {
+    "use strict";
+
+    this.editing = false;
     this.backEnd.getLibraryGroup(this.id)
         .then(group => {
           this.group = group;
@@ -75,6 +82,12 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The group ${this.id} cannot be loaded.`, reason));
         });
+  }
+
+  onEditClick():void {
+    "use strict";
+
+    this.editing = !this.editing;
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -100,8 +113,8 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.updateLibraryGroup(this.id, this.nameField, this.descriptionField)
         .then(() => {
-          this.notifications.next.push(new libBeckiNotifications.Success("The group has been updated."));
-          this.router.navigate(["Devices"]);
+          this.notifications.current.push(new libBeckiNotifications.Success("The group has been updated."));
+          this.refresh();
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The group cannot be updated.", reason));
@@ -112,6 +125,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["Devices"]);
+    this.editing = false;
   }
 }
