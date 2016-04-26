@@ -82,7 +82,7 @@ export class Component implements ng.OnInit {
   onLibraryGroupAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewLibraryGroup"]);
+    this.router.navigate(["NewSystemLibraryGroup"]);
   }
 
   onLibraryGroupRemoveClick(id:string):void {
