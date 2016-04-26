@@ -60,8 +60,8 @@ export class Component implements ng.OnInit {
     this.id = routeParams.get("type");
     this.breadcrumbs = [
       home,
-      new libBeckiLayout.LabeledLink("System", ["Devices"]),
-      new libBeckiLayout.LabeledLink("Device Types", ["Devices"]),
+      new libBeckiLayout.LabeledLink("System", ["System"]),
+      new libBeckiLayout.LabeledLink("Device Types", ["System"]),
       new libBeckiLayout.LabeledLink("Loading...", ["SystemDeviceType", {type: this.id}])
     ];
     this.editing = false;

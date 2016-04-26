@@ -19,7 +19,6 @@ import * as ngRouter from "angular2/router";
 import * as theGrid from "the-grid";
 
 import * as applicationDevice from "./application-device";
-import * as devices from "./devices";
 import * as issue from "./issue";
 import * as issueConfirmationNew from "./issue-confirmation-new";
 import * as issueNew from "./issue-new";
@@ -77,7 +76,6 @@ import * as userProjects from "./user-projects";
 @ngRouter.RouteConfig([
 {path: "/", redirectTo: "/user/applications"},
   {path: "/application/devices/:device", component: applicationDevice.Component, as: "ApplicationDevice"},
-  {path: "/devices", component: devices.Component, as: "Devices"},
   {path: "/issue/new", component: issueNew.Component, as: "NewIssue"},
   {path: "/issues", component: issues.Component, as: "Issues"},
   {path: "/issues/:issue", component: issue.Component, as: "Issue"},
@@ -139,15 +137,14 @@ import * as userProjects from "./user-projects";
     ng.provide("navigation", {
       useValue: [
         new libBeckiLayout.LabeledLink("Applications", ["UserApplications"], "mobile"),
+        new libBeckiLayout.LabeledLink("Applications (Vision)", ["UserApplicationsVision"], "mobile"),
         new libBeckiLayout.LabeledLink("Interactions", ["UserInteractions"], "link"),
         new libBeckiLayout.LabeledLink("Devices", ["UserDevices"], "rocket"),
         new libBeckiLayout.LabeledLink("Projects", ["UserProjects"], "book"),
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
         new libBeckiLayout.LabeledLink("System (TYRION-155)", ["System"], "globe"),
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-208
-        new libBeckiLayout.LabeledLink("Issues (TYRION-208)", ["Issues"], "bug"),
-        new libBeckiLayout.LabeledLink("Applications (Vision)", ["UserApplicationsVision"], "mobile"),
-        new libBeckiLayout.LabeledLink("Devices (TODO)", ["Devices"], "tachometer")
+        new libBeckiLayout.LabeledLink("Issues (TYRION-208)", ["Issues"], "bug")
       ]
     }),
     ng.provide("signing", {useValue: ["Signing"]})

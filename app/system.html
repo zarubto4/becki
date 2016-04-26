@@ -39,6 +39,11 @@
             Devices
           </a>
         </li>
+        <li data-bind-class.active="tab[1] == 'types'">
+          <a data-on-click="onTabClick(['devices', 'types'], $event)" style="cursor: pointer">
+            Types
+          </a>
+        </li>
         <li data-bind-class.active="tab[1] == 'processors'">
           <a data-on-click="onTabClick(['devices', 'processors'], $event)" style="cursor: pointer">
             Processors
@@ -62,6 +67,11 @@
       </ul>
       <template data-bind-ng-switch-when="'devices'">
         <div data-bind-list-view="devices" data-on-add-click="onAddDeviceClick($event)" data-on-remove-click="onRemoveDeviceClick($event)">
+          <div class="spinner"></div>
+        </div>
+      </template>
+      <template data-bind-ng-switch-when="'types'">
+        <div data-bind-list-view="deviceTypes" data-on-add-click="onAddDeviceTypeClick($event)" data-on-remove-click="onRemoveDeviceTypeClick($event)">
           <div class="spinner"></div>
         </div>
       </template>
