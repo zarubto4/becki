@@ -52,7 +52,7 @@ export class Component implements ng.OnInit {
       home,
       new libBeckiLayout.LabeledLink("System", ["Devices"]),
       new libBeckiLayout.LabeledLink("Library Groups", ["Devices"]),
-      new libBeckiLayout.LabeledLink(`Group ${this.id}`, ["SystemLibraryGroup", {group: this.id}])
+      new libBeckiLayout.LabeledLink("Loading...", ["SystemLibraryGroup", {group: this.id}])
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
@@ -68,6 +68,7 @@ export class Component implements ng.OnInit {
     this.backEnd.getLibraryGroup(this.id)
         .then(group => {
           this.group = group;
+          this.breadcrumbs[3].label = group.group_name;
           this.nameField = group.group_name;
           this.descriptionField = group.description;
         })
