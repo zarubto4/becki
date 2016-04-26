@@ -50,8 +50,8 @@ export class Component implements ng.OnInit {
     this.id = routeParams.get("group");
     this.breadcrumbs = [
       home,
-      new libBeckiLayout.LabeledLink("System", ["Devices"]),
-      new libBeckiLayout.LabeledLink("Library Groups", ["Devices"]),
+      new libBeckiLayout.LabeledLink("System", ["System"]),
+      new libBeckiLayout.LabeledLink("Library Groups", ["System"]),
       new libBeckiLayout.LabeledLink("Loading...", ["SystemLibraryGroup", {group: this.id}])
     ];
     this.editing = false;

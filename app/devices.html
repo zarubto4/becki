@@ -4,52 +4,31 @@
   -->
 
 <div data-bind-layout="'Devices'" data-bind-breadcrumbs="breadcrumbs">
-  <div class="row">
-    <div class="col-xs-12 col-sm-4">
-      <div>
-        <div class="pull-right">
-          <button type="button" class="btn btn-default" data-on-click="onLibraryGroupAddClick($event)">Add</button>
-        </div>
-        <h2>Library groups</h2>
-      </div>
-      <div data-bind-list-view="libraryGroups" data-on-add-click="onLibraryGroupAddClick($event)" data-on-remove-click="onLibraryGroupRemoveClick($event)">
-        <div class="spinner"></div>
-      </div>
+  <div>
+    <div class="pull-right">
+      <button type="button" class="btn btn-default" data-on-click="onProcessorAddClick($event)">Add</button>
     </div>
-    <div class="col-xs-12 col-sm-8">
-      <div>
-        <div class="pull-right">
-          <button type="button" class="btn btn-default" data-on-click="onProcessorAddClick($event)">Add</button>
-        </div>
-        <h2>Processors</h2>
-      </div>
-      <div data-bind-list-view="processors" data-on-add-click="onProcessorAddClick($event)" data-on-remove-click="onProcessorRemoveClick($event)">
-        <div class="spinner"></div>
-      </div>
-    </div>
+    <h2>Processors</h2>
   </div>
-  <div class="row">
-    <div class="col-xs-12 col-sm-4">
-      <div>
-        <div class="pull-right">
-          <button type="button" class="btn btn-default" data-on-click="onProducerAddClick($event)">Add</button>
-        </div>
-        <h2>Producers</h2>
-      </div>
-      <div data-bind-list-view="producers" data-on-add-click="onProducerAddClick($event)" data-on-remove-click="onProducerRemoveClick($event)">
-        <div class="spinner"></div>
-      </div>
+  <div data-bind-list-view="processors" data-on-add-click="onProcessorAddClick($event)" data-on-remove-click="onProcessorRemoveClick($event)">
+    <div class="spinner"></div>
+  </div>
+  <div>
+    <div class="pull-right">
+      <button type="button" class="btn btn-default" data-on-click="onProducerAddClick($event)">Add</button>
     </div>
-    <div class="col-xs-12 col-sm-8">
-      <div>
-        <div class="pull-right">
-          <button type="button" class="btn btn-default" data-on-click="onDeviceTypeAddClick($event)">Add</button>
-        </div>
-        <h2>Device Types</h2>
-      </div>
-      <div data-bind-list-view="deviceTypes" data-on-add-click="onDeviceTypeAddClick($event)" data-on-remove-click="onDeviceTypeRemoveClick($event)">
-        <div class="spinner"></div>
-      </div>
+    <h2>Producers</h2>
+  </div>
+  <div data-bind-list-view="producers" data-on-add-click="onProducerAddClick($event)" data-on-remove-click="onProducerRemoveClick($event)">
+    <div class="spinner"></div>
+  </div>
+  <div>
+    <div class="pull-right">
+      <button type="button" class="btn btn-default" data-on-click="onDeviceTypeAddClick($event)">Add</button>
     </div>
+    <h2>Device Types</h2>
+  </div>
+  <div data-bind-list-view="deviceTypes" data-on-add-click="onDeviceTypeAddClick($event)" data-on-remove-click="onDeviceTypeRemoveClick($event)">
+    <div class="spinner"></div>
   </div>
 </div>

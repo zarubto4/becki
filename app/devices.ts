@@ -29,8 +29,6 @@ export class Component implements ng.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
-  libraryGroups:libPatternFlyListView.Item[];
-
   processors:libPatternFlyListView.Item[];
 
   producers:libPatternFlyListView.Item[];
@@ -65,9 +63,6 @@ export class Component implements ng.OnInit {
   refresh():void {
     "use strict";
 
-    this.backEnd.getLibraryGroups()
-        .then(groups => this.libraryGroups = groups.map(group => new libPatternFlyListView.Item(group.id, group.group_name, group.description, ["SystemLibraryGroup", {group: group.id}])))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Library groups cannot be loaded.", reason)));
     this.backEnd.getProcessors()
         .then(processors => this.processors = processors.map(processor => new libPatternFlyListView.Item(processor.id, processor.processor_name, processor.processor_code, ["Processor", {processor: processor.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));
@@ -77,26 +72,6 @@ export class Component implements ng.OnInit {
     this.backEnd.getDeviceTypes()
         .then(deviceTypes => this.deviceTypes = deviceTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, ["DeviceType", {type: type.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Device types cannot be loaded.", reason)));
-  }
-
-  onLibraryGroupAddClick():void {
-    "use strict";
-
-    this.router.navigate(["NewSystemLibraryGroup"]);
-  }
-
-  onLibraryGroupRemoveClick(id:string):void {
-    "use strict";
-
-    this.notifications.shift();
-    this.backEnd.deleteLibraryGroup(id)
-        .then(() => {
-          this.notifications.current.push(new libBeckiNotifications.Success("The library group has been removed."));
-          this.refresh();
-        })
-        .catch(reason => {
-          this.notifications.current.push(new libBeckiNotifications.Danger("The library group cannot be removed.", reason));
-        });
   }
 
   onProcessorAddClick():void {

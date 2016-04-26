@@ -36,6 +36,8 @@ export class Component implements ng.OnInit {
 
   devices:libPatternFlyListView.Item[];
 
+  libraryGroups:libPatternFlyListView.Item[];
+
   libraries:libPatternFlyListView.Item[];
 
   issueTypes:libPatternFlyListView.Item[];
@@ -83,6 +85,9 @@ export class Component implements ng.OnInit {
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
         .then(devices => this.devices = devices.map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.type_of_board.name, undefined, device.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
+    this.backEnd.getLibraryGroups()
+        .then(groups => this.libraryGroups = groups.map(group => new libPatternFlyListView.Item(group.id, group.group_name, group.description, ["SystemLibraryGroup", {group: group.id}])))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Library groups cannot be loaded.", reason)));
     this.backEnd.getLibraries()
         .then(libraries => this.libraries = libraries.map(library => new libPatternFlyListView.Item(library.id, library.library_name, library.description, ["SystemLibrary", {library: library.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Libraries cannot be loaded.", reason)));
@@ -107,6 +112,9 @@ export class Component implements ng.OnInit {
         switch (this.tab[1]) {
           case "devices":
             this.onAddDeviceClick();
+            break;
+          case "groups":
+            this.onAddLibraryGroupClick();
             break;
           case "libraries":
             this.onAddLibraryClick();
@@ -136,6 +144,12 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.router.navigate(["NewSystemDevice"]);
+  }
+
+  onAddLibraryGroupClick():void {
+    "use strict";
+
+    this.router.navigate(["NewSystemLibraryGroup"]);
   }
 
   onAddLibraryClick():void {
@@ -182,6 +196,20 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     // see https://youtrack.byzance.cz/youtrack/issue/TYRION-89
     this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-89"));
+  }
+
+  onRemoveLibraryGroupClick(id:string):void {
+    "use strict";
+
+    this.notifications.shift();
+    this.backEnd.deleteLibraryGroup(id)
+        .then(() => {
+          this.notifications.current.push(new libBeckiNotifications.Success("The library group has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger("The library group cannot be removed.", reason));
+        });
   }
 
   onRemoveLibraryClick(id:string):void {
