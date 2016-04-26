@@ -64,7 +64,7 @@ export class Component implements ng.OnInit {
       home,
       new libBeckiLayout.LabeledLink("System", ["Devices"]),
       new libBeckiLayout.LabeledLink("Libraries", ["Devices"]),
-      new libBeckiLayout.LabeledLink(`Library ${this.id}`, ["SystemLibrary", {library: this.id}])
+      new libBeckiLayout.LabeledLink("Loading...", ["SystemLibrary", {library: this.id}])
     ];
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
@@ -94,6 +94,7 @@ export class Component implements ng.OnInit {
           let library:libBackEnd.Library;
           [library, this.versions] = result;
           this.name = library.library_name;
+          this.breadcrumbs[3].label = library.library_name;
           this.nameField = library.library_name;
           this.descriptionField = library.description;
         })
