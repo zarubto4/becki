@@ -20,7 +20,6 @@ import * as theGrid from "the-grid";
 
 import * as applicationDevice from "./application-device";
 import * as deviceType from "./device-type";
-import * as deviceTypeNew from "./device-type-new";
 import * as devices from "./devices";
 import * as issue from "./issue";
 import * as issueConfirmationNew from "./issue-confirmation-new";
@@ -36,6 +35,7 @@ import * as libBeckiWebsocket from "./lib-becki/websocket";
 import * as signing from "./signing";
 import * as system from "./system";
 import * as systemDeviceNew from "./system-device-new";
+import * as systemDeviceTypeNew from "./system-device-type-new";
 import * as systemInteractionsModeratorNew from "./system-interactions-moderator-new";
 import * as systemIssueConfirmation from "./system-issue-confirmation";
 import * as systemIssueConfirmationNew from "./system-issue-confirmation-new";
@@ -77,7 +77,6 @@ import * as userProjects from "./user-projects";
 @ngRouter.RouteConfig([
 {path: "/", redirectTo: "/user/applications"},
   {path: "/application/devices/:device", component: applicationDevice.Component, as: "ApplicationDevice"},
-  {path: "/device/type/new", component: deviceTypeNew.Component, as: "NewDeviceType"},
   {path: "/device/types/:type", component: deviceType.Component, as: "DeviceType"},
   {path: "/devices", component: devices.Component, as: "Devices"},
   {path: "/issue/new", component: issueNew.Component, as: "NewIssue"},
@@ -88,6 +87,7 @@ import * as userProjects from "./user-projects";
   {path: "/signing", component: signing.Component, as: "Signing"},
   {path: "/system", component: system.Component, as: "System"},
   {path: "/system/device/new", component: systemDeviceNew.Component, as: "NewSystemDevice"},
+  {path: "/system/device/type/new", component: systemDeviceTypeNew.Component, as: "NewSystemDeviceType"},
   {path: "/system/interactions/moderator/new", component: systemInteractionsModeratorNew.Component, as: "NewSystemInteractionsModerator"},
   {path: "/system/issue/confirmation/new", component: systemIssueConfirmationNew.Component, as: "NewSystemIssueConfirmation"},
   {path: "/system/issue/confirmations/:confirmation", component: systemIssueConfirmation.Component, as: "SystemIssueConfirmation"},

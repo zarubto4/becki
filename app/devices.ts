@@ -67,7 +67,7 @@ export class Component implements ng.OnInit {
   onDeviceTypeAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewDeviceType"]);
+    this.router.navigate(["NewSystemDeviceType"]);
   }
 
   onDeviceTypeRemoveClick(id:string):void {
