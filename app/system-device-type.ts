@@ -30,7 +30,7 @@ export class Component implements ng.OnInit {
 
   id:string;
 
-  heading:string;
+  type:libBackEnd.DeviceType;
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
@@ -56,7 +56,6 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.id = routeParams.get("type");
-    this.heading = `Type ${this.id}`;
     this.breadcrumbs = [
       home,
       new libBeckiLayout.LabeledLink("System", ["Devices"]),
@@ -74,14 +73,9 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.getProducers()
-        .then(producers => this.producers = producers)
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Producers cannot be loaded.", reason)));
-    this.backEnd.getProcessors()
-        .then(processors => this.processors = processors)
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));
     this.backEnd.getDeviceType(this.id)
         .then(type => {
+          this.type = type;
           this.nameField = type.name;
           this.producerField = type.producer_id;
           this.processorField = type.processor_id;
@@ -90,6 +84,12 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The type ${this.id} cannot be loaded.`, reason));
         });
+    this.backEnd.getProducers()
+        .then(producers => this.producers = producers)
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Producers cannot be loaded.", reason)));
+    this.backEnd.getProcessors()
+        .then(processors => this.processors = processors)
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));
   }
 
   validateNameField():()=>Promise<boolean> {
