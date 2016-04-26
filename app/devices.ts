@@ -77,7 +77,7 @@ export class Component implements ng.OnInit {
   onProcessorAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewProcessor"]);
+    this.router.navigate(["NewSystemProcessor"]);
   }
 
   onProcessorRemoveClick(id:string):void {

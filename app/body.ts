@@ -34,7 +34,6 @@ import * as libBeckiModal from "./lib-becki/modal";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libBeckiWebsocket from "./lib-becki/websocket";
 import * as processor from "./processor";
-import * as processorNew from "./processor-new";
 import * as producer from "./producer";
 import * as producerNew from "./producer-new";
 import * as signing from "./signing";
@@ -49,6 +48,7 @@ import * as systemLibrary from "./system-library";
 import * as systemLibraryGroup from "./system-library-group";
 import * as systemLibraryGroupNew from "./system-library-group-new";
 import * as systemLibraryNew from "./system-library-new";
+import * as systemProcessorNew from "./system-processor-new";
 import * as user from "./user";
 import * as userApplication from "./user-application";
 import * as userApplicationDeviceNew from "./user-application-device-new";
@@ -85,7 +85,6 @@ import * as userProjects from "./user-projects";
   {path: "/issues/:issue", component: issue.Component, as: "Issue"},
   {path: "/issues/:issue/confirmation/new", component: issueConfirmationNew.Component, as: "NewIssueConfirmation"},
   {path: "/issues/:issue/related/new", component: issueRelatedNew.Component, as: "NewRelatedIssue"},
-  {path: "/processor/new", component: processorNew.Component, as: "NewProcessor"},
   {path: "/processors/:processor", component: processor.Component, as: "Processor"},
   {path: "/producer/new", component: producerNew.Component, as: "NewProducer"},
   {path: "/producers/:producer", component: producer.Component, as: "Producer"},
@@ -101,6 +100,7 @@ import * as userProjects from "./user-projects";
   {path: "/system/library/group/new", component: systemLibraryGroupNew.Component, as: "NewSystemLibraryGroup"},
   {path: "/system/library/groups/:group", component: systemLibraryGroup.Component, as: "SystemLibraryGroup"},
   {path: "/system/library/new", component: systemLibraryNew.Component, as: "NewSystemLibrary"},
+  {path: "/system/processor/new", component: systemProcessorNew.Component, as: "NewSystemProcessor"},
   {path: "/user/application/device/new", component: userApplicationDeviceNew.Component, as: "NewUserApplicationDevice"},
   {path: "/user/application/group/new", component: userApplicationGroupNew.Component, as: "NewUserApplicationGroup"},
   {path: "/user/application/groups/:group", component: userApplicationGroup.Component, as: "UserApplicationGroup"},

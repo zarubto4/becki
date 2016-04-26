@@ -22,7 +22,7 @@ import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ng.Component({
-  templateUrl: "app/processor-new.html",
+  templateUrl: "app/system-processor-new.html",
   directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.FORM_DIRECTIVES]
 })
 export class Component implements ng.OnInit {
@@ -48,8 +48,8 @@ export class Component implements ng.OnInit {
 
     this.breadcrumbs = [
       home,
-      new libBeckiLayout.LabeledLink("Processors", ["Devices"]),
-      new libBeckiLayout.LabeledLink("New Processor", ["NewProcessor"])
+      new libBeckiLayout.LabeledLink("System", ["Devices"]),
+      new libBeckiLayout.LabeledLink("New Processor", ["NewSystemProcessor"])
     ];
     this.nameField = "";
     this.codeField = "";
