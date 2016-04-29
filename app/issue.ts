@@ -33,10 +33,12 @@ class RemovableIssueLink {
 
   removing:boolean;
 
+  removeLink:boolean;
+
   get targetLink():any[] {
     "use strict";
 
-    return ["Issue", {issue: this.model.answer.postId}];
+    return ["Issue", {issue: this.model.answer.id}];
   }
 
   constructor(model:libBackEnd.IssueLink) {
@@ -44,6 +46,7 @@ class RemovableIssueLink {
 
     this.model = model;
     this.removing = false;
+    this.removeLink = model.delete_permission;
   }
 }
 
@@ -67,18 +70,25 @@ class Comment {
 
   bodyField:string;
 
+  editComment:boolean;
+
+  removeComment:boolean;
+
   constructor(comment:libBackEnd.Comment) {
     "use strict";
 
-    this.id = comment.postId;
+    this.id = comment.id;
     this.body = comment.text_of_post;
     this.author = libBackEnd.composeUserString(comment.author);
-    this.date = libBecki.timestampToString(comment.date_of_create);
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-190
+    this.date = `${libBecki.timestampToString(comment.date_of_create)} (issue/TYRION-190)`;
     this.likes = comment.likes;
     this.tags = comment.hashTags;
     this.editing = false;
     this.removing = false;
     this.bodyField = comment.text_of_post;
+    this.editComment = comment.edit_permission;
+    this.removeComment = comment.delete_permission;
   }
 }
 
@@ -124,13 +134,20 @@ class Item {
 
   confirmable:boolean;
 
+  editItem:boolean;
+
+  commentItem:boolean;
+
+  removeItem:boolean;
+
   constructor(item:libBackEnd.Issue|libBackEnd.Answer) {
     "use strict";
 
-    this.id = item.postId;
+    this.id = item.id;
     this.body = item.text_of_post;
     this.author = libBackEnd.composeUserString(item.author);
-    this.date = libBecki.timestampToString(item.date_of_create);
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-190
+    this.date = `${libBecki.timestampToString(item.date_of_create)} (issue/TYRION-190)`;
     this.likes = item.likes;
     this.comments = item.comments.map(comment => new Comment(comment));
     this.tags = item.hashTags;
@@ -147,6 +164,9 @@ class Item {
     this.interactionsSchemeField = libBeckiFieldIssueBody.getInteractions(item.text_of_post);
     this.markable = false;
     this.confirmable = false;
+    this.editItem = item.edit_permission;
+    this.commentItem = item.comment_permission;
+    this.removeItem = item.delete_permission;
   }
 }
 
@@ -202,6 +222,8 @@ export class Component implements ng.OnInit {
 
   projects:libBackEnd.Project[];
 
+  createAnswer:boolean;
+
   answerBodyField:string;
 
   backEnd:libBeckiBackEnd.Service;
@@ -221,6 +243,7 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Loading...", ["Issue", {issue: this.id}])
     ];
     this.confirmationToRemove = null;
+    this.createAnswer = false;
     this.answerBodyField = libBeckiFieldIssueBody.EMPTY;
     this.backEnd = backEnd;
     this.notifications = notifications;
@@ -232,6 +255,8 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.refresh();
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-219
+    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-219"));
   }
 
   refresh():void {
@@ -244,6 +269,7 @@ export class Component implements ng.OnInit {
           this.confirmations = issue.type_of_confirms;
           this.related = issue.linked_answers.map(link => new RemovableIssueLink(link));
           this.items = [].concat(new Issue(issue), issue.answers.map(answer => new Item(answer)));
+          this.createAnswer = issue.answer_permission;
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The issue ${this.id} cannot be loaded.`, reason));
@@ -252,7 +278,7 @@ export class Component implements ng.OnInit {
         .then(types => this.types = types)
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue types cannot be loaded.", reason)));
     this.backEnd.getProjects()
-        .then(projects => this.projects = projects.filter(project => project.update_permission))
+        .then(projects => this.projects = projects)
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
   }
 
@@ -274,6 +300,8 @@ export class Component implements ng.OnInit {
           this.refresh();
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-226
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-226"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The confirmation cannot be removed.", reason));
         });
   }
@@ -488,8 +516,6 @@ export class Component implements ng.OnInit {
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-184
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-184"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The comment cannot be created.", reason));
         });
   }

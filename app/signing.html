@@ -41,8 +41,8 @@
               <span class="help-block">Don't have an <a data-on-click="onSignUpClick($event)" style="cursor: pointer">account</a>?</span>
             </div>
             <div class="col-xs-4 col-sm-4 col-md-4 submit">
-              <button type="submit" class="btn btn-primary btn-lg">Sign In
-              </button>
+              <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-232 -->
+              <button type="submit" class="btn btn-primary btn-lg">Sign In (issue/TYRION-232)</button>
             </div>
           </div>
         </form>
@@ -81,7 +81,7 @@
           <div class="form-group">
             <label class="col-sm-2 col-md-2 control-label">Username</label>
             <div class="col-sm-10 col-md-10">
-              <input class="form-control" required minlength="9" data-bindon-ng-model="upUsernameField" data-bind-custom-validator="validateUpUsernameField()" data-message="This username is used already. Please choose another one.">
+              <input class="form-control" required minlength="8" data-bindon-ng-model="upUsernameField" data-bind-custom-validator="validateUpUsernameField()" data-message="This username is used already. Please choose another one.">
             </div>
           </div>
           <div class="form-group">

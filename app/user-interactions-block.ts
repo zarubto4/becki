@@ -36,8 +36,6 @@ export class Component implements ng.OnInit {
 
   editing:boolean;
 
-  editBlock:boolean;
-
   nameField:string;
 
   groupField:string;
@@ -62,7 +60,6 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Loading...", ["UserInteractionsBlock", {block: this.id}])
     ];
     this.editing = false;
-    this.editBlock = false;
     this.nameField = "Loading...";
     this.groupField = "";
     this.descriptionField = "Loading...";
@@ -76,6 +73,8 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.refresh();
+    //TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-235
+    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-235"));
   }
 
   refresh():void {
@@ -86,7 +85,6 @@ export class Component implements ng.OnInit {
         .then(block => {
           this.name = block.name;
           this.breadcrumbs[3].label = block.name;
-          this.editBlock = block.edit_permission;
           this.nameField = block.name;
           this.descriptionField = block.general_description;
           this.description = block.general_description;

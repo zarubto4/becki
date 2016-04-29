@@ -68,17 +68,27 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.backEnd.getApplications()
-        .then(applications => this.applications = applications.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["UserApplication", {application: application.id}], application.delete_permission)))
+        .then(applications => this.applications = applications.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["UserApplication", {application: application.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Applications cannot be loaded.", reason)));
     this.backEnd.getApplicationDevices()
         .then(devices => this.devices = [].concat(
             devices.public_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "global", ["ApplicationDevice", {device: device.id}], device.delete_permission)),
             devices.private_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "project specific", ["ApplicationDevice", {device: device.id}], device.delete_permission))
         ))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
+        .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-219
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-219"));
+          this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason));
+        });
     this.backEnd.getApplicationGroups()
         .then(groups => this.groups = groups.map(group => new libPatternFlyListView.Item(group.id, group.program_name, group.program_description, ["UserApplicationGroup", {group: group.id}], group.delete_permission)))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Groups cannot be loaded.", reason)));
+        .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-221
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-221"));
+          this.notifications.current.push(new libBeckiNotifications.Danger("Groups cannot be loaded.", reason));
+        });
   }
 
   onAddClick():void {
@@ -131,6 +141,8 @@ export class Component implements ng.OnInit {
           this.refresh();
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-230
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-230"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The application cannot be removed.", reason));
         });
   }

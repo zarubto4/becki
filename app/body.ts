@@ -143,8 +143,7 @@ import * as userProjects from "./user-projects";
         new libBeckiLayout.LabeledLink("Projects", ["UserProjects"], "book"),
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
         new libBeckiLayout.LabeledLink("System (TYRION-155)", ["System"], "globe"),
-        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-208
-        new libBeckiLayout.LabeledLink("Issues (TYRION-208)", ["Issues"], "bug")
+        new libBeckiLayout.LabeledLink("Issues", ["Issues"], "bug")
       ]
     }),
     ng.provide("signing", {useValue: ["Signing"]})

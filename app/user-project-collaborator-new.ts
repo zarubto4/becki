@@ -74,6 +74,8 @@ export class Component implements ng.OnInit {
           this.addCollaborator = project.share_permission;
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-219
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-219"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The project cannot be loaded.", reason));
         });
   }

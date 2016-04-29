@@ -79,6 +79,8 @@ export class Component implements ng.OnInit {
           this.router.navigate(["System"]);
         })
         .catch((reason) => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-220
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-220"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The moderator cannot be created.", reason));
         });
   }

@@ -67,8 +67,6 @@ export class Component implements ng.OnInit {
 
   versionCode:string;
 
-  editProgram:boolean;
-
   versions:libPatternFlyListView.Item[];
 
   backEnd:libBeckiBackEnd.Service;
@@ -97,7 +95,6 @@ export class Component implements ng.OnInit {
     this.versionDescription = "Loading...";
     this.versionCodeField = "Loading...";
     this.versionCode = "Loading...";
-    this.editProgram = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
   }
@@ -148,7 +145,6 @@ export class Component implements ng.OnInit {
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-195"));
           //this.versionCodeField = versionFile.fileContent;
           //this.versionCode = versionFile.fileContent;
-          this.editProgram = program.edit_permission;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-126
           this.versions = program.version_objects.map(version => new libPatternFlyListView.Item(version.id, `${version.version_name} (issue/TYRION-126)`, version.version_description, undefined, false));
         })

@@ -10,7 +10,7 @@
         <span class="glyphicon glyphicon-pencil"></span>
         ID
       </label>
-      <input class="form-control" required data-bindon-ng-model="idField" data-bind-custom-validator="validateIdField()" data-message="This ID is registered already.">
+      <input class="form-control" required minlength="8" data-bindon-ng-model="idField" data-bind-custom-validator="validateIdField()" data-message="This ID is registered already.">
     </div>
     <div class="form-group">
       <label>

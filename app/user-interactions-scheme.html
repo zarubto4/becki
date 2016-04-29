@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + name + "\" Scheme"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="showHistory || editing || !editScheme ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="showHistory">
+<div data-bind-layout='"Edit the \"" + name + "\" Scheme"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="showHistory || editing ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="showHistory">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="!showHistory">
       <a data-on-click="onDetailsClick($event)" style="cursor: pointer">

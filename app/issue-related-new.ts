@@ -66,7 +66,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.getIssues()
         .then(issues => {
-          let issue = issues.find(issue => issue.postId == this.issueId);
+          let issue = issues.find(issue => issue.id == this.issueId);
           if (!issue) {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error(`issue ${this.issueId} not found`));
@@ -74,7 +74,7 @@ export class Component implements ng.OnInit {
           this.issueTitle = issue.name;
           this.breadcrumbs[2].label = issue.name;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-          this.issues = issues.filter(issue2 => issue2.postId != this.issueId && issue.linked_answers.find(related => related.answer.postId == issue2.postId) === undefined);
+          this.issues = issues.filter(issue2 => issue2.id != this.issueId && issue.linked_answers.find(related => related.answer.id == issue2.id) === undefined);
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("Issues cannot be loaded.", reason));

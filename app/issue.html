@@ -32,9 +32,11 @@
           </template>
           <template data-bind-ng-switch-when="false">
             <a data-bind-router-link="link.targetLink">{{link.model.answer.name}}</a>
-            <a class="text-danger" data-on-click="onRelatedRemoveClick(link, $event)" style="cursor: pointer">
-              <span class="pficon pficon-close"></span>
-            </a>
+            <template data-bind-ng-if="link.removeLink">
+              <a class="text-danger" data-on-click="onRelatedRemoveClick(link, $event)" style="cursor: pointer">
+                <span class="pficon pficon-close"></span>
+              </a>
+            </template>
           </template>
         </li>
       </ul>
@@ -79,7 +81,7 @@
                     <span class="glyphicon glyphicon-pencil"></span>
                     Title
                   </label>
-                  <input class="form-control" required data-bindon-ng-model="item.titleField">
+                  <input class="form-control" required minlength="8" data-bindon-ng-model="item.titleField">
                 </div>
               </template>
               <div class="form-group">
@@ -169,26 +171,30 @@
             Do you really want to remove this?
           </template>
           <template data-bind-ng-if="!item.editing && !item.importing && !item.removing">
-            <div class="dropdown dropdown-kebab-pf pull-right">
-              <button class="btn btn-link dropdown-toggle" type="button">
-                <span class="fa fa-ellipsis-v"></span>
-              </button>
-              <ul class="dropdown-menu dropdown-menu-right">
-                <template data-bind-ng-if="item.interactionsSchemeField != null">
-                  <li><a data-on-click="onItemImportClick(item, $event)" style="cursor: pointer">Import</a></li>
-                </template>
-                <template data-bind-ng-if="item.markable">
-                  <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-208 -->
-                  <li><a data-on-click="onItemMarkClick(item, $event)" style="cursor: pointer">Mark (TYRION-208)</a></li>
-                </template>
-                <template data-bind-ng-if="item.confirmable">
-                  <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-209 -->
-                  <li><a data-on-click="onItemConfirmationAddClick(item, $event)" style="cursor: pointer">Confirm (issue/TYRION-209)</a></li>
-                </template>
-                <li><a data-on-click="onItemEditClick(item, $event)" style="cursor: pointer">Edit</a></li>
-                <li><a data-on-click="onItemRemoveClick(item, $event)" style="cursor: pointer">Remove</a></li>
-              </ul>
-            </div>
+            <template data-bind-ng-if="item.interactionsSchemeField != null || item.markable || item.confirmable || item.editItem || item.removeItem">
+              <div class="dropdown dropdown-kebab-pf pull-right">
+                <button class="btn btn-link dropdown-toggle" type="button">
+                  <span class="fa fa-ellipsis-v"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                  <template data-bind-ng-if="item.interactionsSchemeField != null">
+                    <li><a data-on-click="onItemImportClick(item, $event)" style="cursor: pointer">Import</a></li>
+                  </template>
+                  <template data-bind-ng-if="item.markable">
+                    <li><a data-on-click="onItemMarkClick(item, $event)" style="cursor: pointer">Mark</a></li>
+                  </template>
+                  <template data-bind-ng-if="item.confirmable">
+                    <li><a data-on-click="onItemConfirmationAddClick(item, $event)" style="cursor: pointer">Confirm</a></li>
+                  </template>
+                  <template data-bind-ng-if="item.editItem">
+                    <li><a data-on-click="onItemEditClick(item, $event)" style="cursor: pointer">Edit</a></li>
+                  </template>
+                  <template data-bind-ng-if="item.removeItem">
+                    <li><a data-on-click="onItemRemoveClick(item, $event)" style="cursor: pointer">Remove</a></li>
+                  </template>
+                </ul>
+              </div>
+            </template>
             <div data-bindon-field-issue-body="item.body" data-bind-readonly="true">
               <div class="spinner"></div>
             </div>
@@ -212,7 +218,7 @@
                         <span class="glyphicon glyphicon-comment"></span>
                         Comment
                       </label>
-                      <textarea class="form-control" required data-bindon-ng-model="comment.bodyField"></textarea>
+                      <textarea class="form-control" required minlength="4" data-bindon-ng-model="comment.bodyField"></textarea>
                     </div>
                     <div class="pull-right">
                       <button class="btn btn-danger" type="button" data-on-click="onCommentEditingCancelClick(comment, $event)">
@@ -246,15 +252,21 @@
                           <span class="glyphicon glyphicon-thumbs-down"></span>
                         </button>
                       </div>
-                      <div class="dropdown dropdown-kebab-pf pull-right" style="margin-left: 10px">
-                        <button class="btn btn-link dropdown-toggle" type="button">
-                          <span class="fa fa-ellipsis-v"></span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                          <li><a data-on-click="onCommentEditClick(comment, $event)" style="cursor: pointer">Edit</a></li>
-                          <li><a data-on-click="onCommentRemoveClick(comment, $event)" style="cursor: pointer">Remove</a></li>
-                        </ul>
-                      </div>
+                      <template data-bind-ng-if="comment.editComment || comment.removeComment">
+                        <div class="dropdown dropdown-kebab-pf pull-right" style="margin-left: 10px">
+                          <button class="btn btn-link dropdown-toggle" type="button">
+                            <span class="fa fa-ellipsis-v"></span>
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-right">
+                            <template data-bind-ng-if="comment.editComment">
+                              <li><a data-on-click="onCommentEditClick(comment, $event)" style="cursor: pointer">Edit</a></li>
+                            </template>
+                            <template data-bind-ng-if="comment.removeComment">
+                              <li><a data-on-click="onCommentRemoveClick(comment, $event)" style="cursor: pointer">Remove</a></li>
+                            </template>
+                          </ul>
+                        </div>
+                      </template>
                     </div>
                   </div>
                   {{comment.body}}
@@ -263,35 +275,39 @@
             </div>
             <hr>
           </div>
-          <div class="media">
-            <div class="media-left">
-              <img class="media-object" src="...">
-            </div>
-            <form class="media-body" data-on-submit="onCommentCreationSubmit(item, $event)">
-              <div class="input-group">
-                <input class="form-control" type="text" required data-bindon-ng-model="item.commentField">
-                <span class="input-group-btn">
-                  <button class="btn btn-primary" type="submit">Comment</button>
-                </span>
+          <template data-bind-ng-if="item.commentItem">
+            <div class="media">
+              <div class="media-left">
+                <img class="media-object" src="...">
               </div>
-            </form>
-          </div>
+              <form class="media-body" data-on-submit="onCommentCreationSubmit(item, $event)">
+                <div class="input-group">
+                  <input class="form-control" type="text" required minlength="4" data-bindon-ng-model="item.commentField">
+                  <span class="input-group-btn">
+                    <button class="btn btn-primary" type="submit">Comment</button>
+                  </span>
+                </div>
+              </form>
+            </div>
+          </template>
         </div>
       </div>
     </div>
   </div>
-  <div class="panel panel-default">
-    <form class="panel-body clearfix" data-on-submit="onAnswerCreationSubmit($event)">
-      <div class="form-group">
-        <label>
-          <span class="glyphicon glyphicon-pencil"></span>
-          New Answer
-        </label>
-        <div data-bindon-field-issue-body="answerBodyField" data-bind-required="true">
-          <div class="spinner"></div>
+  <template data-bind-ng-if="createAnswer">
+    <div class="panel panel-default">
+      <form class="panel-body clearfix" data-on-submit="onAnswerCreationSubmit($event)">
+        <div class="form-group">
+          <label>
+            <span class="glyphicon glyphicon-pencil"></span>
+            New Answer
+          </label>
+          <div data-bindon-field-issue-body="answerBodyField" data-bind-required="true">
+            <div class="spinner"></div>
+          </div>
         </div>
-      </div>
-      <button class="btn btn-primary pull-right" type="submit">Create</button>
-    </form>
-  </div>
+        <button class="btn btn-primary pull-right" type="submit">Create</button>
+      </form>
+    </div>
+  </template>
 </div>

@@ -108,7 +108,11 @@ export class Component implements ng.OnInit {
         });
     this.backEnd.getApplicationDevices()
         .then(devices => this.devices = devices.public_types)
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Target devices cannot be loaded.", reason)));
+        .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-219
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-219"));
+          this.notifications.current.push(new libBeckiNotifications.Danger("Target devices cannot be loaded.", reason));
+        });
   }
 
   getProject():string {
@@ -147,9 +151,16 @@ export class Component implements ng.OnInit {
           .then(result => {
             let groups:libBackEnd.ApplicationGroup[];
             [groups, this.projectDevices] = result;
+            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-220
             this.groups = groups.filter(group => group.update_permission);
           })
           .catch(reason => {
+            //TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
+            this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
+            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-219
+            this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-219"));
+            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-221
+            this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-221"));
             this.notifications.current.push(new libBeckiNotifications.Danger(`Application groups/devices cannot be loaded: ${reason}`));
           });
     }
@@ -199,6 +210,10 @@ export class Component implements ng.OnInit {
           this.router.navigate(["UserApplications"]);
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-220
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-220"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-222
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-222"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The application cannot be created.", reason));
         });
   }

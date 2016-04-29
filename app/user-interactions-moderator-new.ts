@@ -63,7 +63,7 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.backEnd.getProjects()
-        .then(projects => this.projects = projects.filter(project => project.update_permission))
+        .then(projects => this.projects = projects)
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
   }
 

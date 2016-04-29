@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + userString + "\" User Account, Its Roles or Permissions"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="tab">
+<div data-bind-layout='"Edit the \"" + userString + "\" User Account, Its Roles or Permissions"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing || (tab == 'account' && !editAccount) ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="tab">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="tab == 'account'">
       <a data-on-click="onTabClick('account', $event)" style="cursor: pointer">
@@ -57,20 +57,6 @@
           <p class="form-control-static">{{user?.mail}}</p>
         </div>
       </template>
-      <div class="form-group">
-        <label>
-          <template data-bind-ng-switch-when="true">
-            <span class="glyphicon glyphicon-calendar"></span>
-          </template>
-          Birthdate
-        </label>
-        <template data-bind-ng-switch-when="true">
-          <input class="form-control" type="date" required data-bindon-ng-model="birthdateField">
-        </template>
-        <template data-bind-ng-switch-when="false">
-          <p class="form-control-static">{{birthdateString}}</p>
-        </template>
-      </div>
       <template data-bind-ng-switch-when="true">
         <div class="pull-right">
           <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
@@ -107,9 +93,9 @@
   <template data-bind-ng-switch-when="'permissions'">
     <form class="clearfix" data-on-submit="onPermissionsSubmit($event)" style="margin-top: 2em" data-bind-ng-switch="editing">
       <template data-bind-ng-switch-when="true">
-        <div class="checkbox" template="ngFor #permission of permissions">
+        <div class="checkbox" data-bind-class.disabled="!permission.selectable" template="ngFor #permission of permissions">
           <label>
-            <input type="checkbox" data-bindon-ng-model="permission.select">
+            <input type="checkbox" data-bindon-ng-model="permission.select" data-bind-disabled="!permission.selectable">
             {{permission.model.value}} ({{permission.model.description}})
           </label>
         </div>

@@ -85,7 +85,7 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.getProjects()
         .then(projects => {
-          this.projects = projects.filter(project => project.update_permission);
+          this.projects = projects;
           this.loadFromProject();
         })
         .catch(reason => {
@@ -111,9 +111,15 @@ export class Component implements ng.OnInit {
           })
           .then(groups => {
             this.showGroups = groups.length > 1 || (groups.length == 1 && !groups[0].m_programs.length);
-            this.groups = groups;
+            this.groups = groups.filter(group => group.update_permission);
           })
           .catch(reason => {
+            //TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
+            this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
+            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-219
+            this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-219"));
+            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-221
+            this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-221"));
             this.notifications.current.push(new libBeckiNotifications.Danger("Application groups cannot be loaded.", reason));
           });
     }
@@ -159,6 +165,8 @@ export class Component implements ng.OnInit {
           this.router.navigate(["UserInteractions"]);
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The scheme cannot be created.", reason));
         });
   }

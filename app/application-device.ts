@@ -36,8 +36,6 @@ export class Component implements ng.OnInit {
 
   editing:boolean;
 
-  editDevice:boolean;
-
   project:libBackEnd.Project;
 
   showProject:boolean;
@@ -68,7 +66,6 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Loading...", ["ApplicationDevice", {device: this.id}])
     ];
     this.editing = false;
-    this.editDevice = false;
     this.showProject = false;
     this.nameField = "Loading...";
     this.widthField = 1;
@@ -85,6 +82,8 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.refresh();
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-219
+    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-219"));
   }
 
   refresh():void {
@@ -100,7 +99,6 @@ export class Component implements ng.OnInit {
           [this.device, projects] = result;
           this.breadcrumbs[2].label = this.device.name;
           this.project = projects.find(project => project.screen_size_types_id.indexOf(this.id) != -1) || null;
-          this.editDevice = this.device.edit_permission;
           this.showProject = this.project && projects.length > 1;
           this.nameField = this.device.name;
           this.widthField = this.device.portrait_width;
@@ -109,6 +107,8 @@ export class Component implements ng.OnInit {
           this.rowsField = this.device.portrait_square_height;
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-219
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-219"));
           this.notifications.current.push(new libBeckiNotifications.Danger(`The device ${this.id} cannot be loaded.`, reason));
         });
   }
@@ -136,6 +136,8 @@ export class Component implements ng.OnInit {
           this.refresh();
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-225
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-225"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The device cannot be updated.", reason));
         });
   }

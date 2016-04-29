@@ -50,6 +50,8 @@ export class Component implements ng.OnInit {
 
   issueConfirmations:libPatternFlyListView.Item[];
 
+  users:libPatternFlyListView.Item[];
+
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
@@ -81,7 +83,7 @@ export class Component implements ng.OnInit {
 
     this.backEnd.getInteractionsModerators()
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-71
-        .then(moderators => this.moderators = moderators.map(moderator => new libPatternFlyListView.Item(moderator.id, `${moderator.id} (issue/TYRION-71)`, moderator.type_of_device, undefined, moderator.delete_permission)))
+        .then(moderators => this.moderators = moderators.map(moderator => new libPatternFlyListView.Item(moderator.id, `${moderator.id} (issue/TYRION-71)`, moderator.type_of_device)))
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-155"));
@@ -89,7 +91,7 @@ export class Component implements ng.OnInit {
         });
     this.backEnd.getDevices()
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
-        .then(devices => this.devices = devices.map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.type_of_board.name, undefined, device.delete_permission)))
+        .then(devices => this.devices = devices.map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.type_of_board.name)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
     this.backEnd.getDeviceTypes()
         .then(deviceTypes => this.deviceTypes = deviceTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, ["SystemDeviceType", {type: type.id}])))
@@ -110,10 +112,12 @@ export class Component implements ng.OnInit {
         .then(types => this.issueTypes = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, ["SystemIssueType", {type: type.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue types cannot be loaded.", reason)));
     this.backEnd.getIssueConfirmations()
-        .then(confirmations => this.issueConfirmations = confirmations.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null, ["SystemIssueConfirmation", {confirmation: confirmation.id}], confirmation.delete_permission)))
+        .then(confirmations => this.issueConfirmations = confirmations.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null, ["SystemIssueConfirmation", {confirmation: confirmation.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue confirmations cannot be loaded.", reason)));
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-186
-    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-186"));
+    this.backEnd.getUsers()
+        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-239
+        .then(users => this.users = users.map(user => new libPatternFlyListView.Item(user.id, libBackEnd.composeUserString(user), "(issue/TYRION-239)", ["User", {user: user.id}], user.delete_permission)))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Device types cannot be loaded.", reason)));
   }
 
   onAddClick():void {
@@ -228,6 +232,8 @@ export class Component implements ng.OnInit {
           this.refresh();
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-231
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-231"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The moderator of interactions cannot be removed.", reason));
         });
   }
@@ -320,6 +326,8 @@ export class Component implements ng.OnInit {
           this.refresh();
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-229
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-229"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The issue type cannot be removed.", reason));
         });
   }
@@ -334,7 +342,23 @@ export class Component implements ng.OnInit {
           this.refresh();
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-227
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-227"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The issue confirmation cannot be removed.", reason));
+        });
+  }
+
+  onRemoveUserClick(id:string):void {
+    "use strict";
+
+    this.notifications.shift();
+    this.backEnd.deleteUser(id)
+        .then(() => {
+          this.notifications.current.push(new libBeckiNotifications.Success("The user has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger("The user cannot be removed.", reason));
         });
   }
 }

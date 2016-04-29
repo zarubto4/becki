@@ -104,7 +104,11 @@ export class Component implements ng.OnInit {
     this.notifications.shift();
     this.backEnd.createToken(this.inEmailField, this.inPasswordField)
         .then(() => this.router.navigate(this.home.link))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("The user cannot be signed in.", reason)));
+        .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-232
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-232"));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The user cannot be signed in.", reason));
+        });
   }
 
   onFacebookSignInClick():void {
@@ -153,7 +157,7 @@ export class Component implements ng.OnInit {
     "use strict";
 
     return () => {
-      if (this.upUsernameField.length >= 9) {
+      if (this.upUsernameField.length >= 8) {
         return this.backEnd.getUsernameUsed(this.upUsernameField);
       } else {
         return Promise.resolve(true);

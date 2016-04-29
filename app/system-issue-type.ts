@@ -90,6 +90,8 @@ export class Component implements ng.OnInit {
           this.router.navigate(["System"]);
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-229
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-229"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The type cannot be updated.", reason));
         });
   }

@@ -48,8 +48,6 @@ export class Component implements ng.OnInit {
 
   editing:boolean;
 
-  editScheme:boolean;
-
   project:string;
 
   nameField:string;
@@ -99,7 +97,6 @@ export class Component implements ng.OnInit {
     ];
     this.showHistory = false;
     this.editing = false;
-    this.editScheme = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.description = "Loading...";
@@ -157,11 +154,11 @@ export class Component implements ng.OnInit {
           let scheme:libBackEnd.InteractionsScheme;
           let projects:libBackEnd.Project[];
           let version:libBackEnd.Version;
+          let applicationGroups:libBackEnd.ApplicationGroup[];
           let versionFile:libBackEnd.BackEndFile;
-          [scheme, projects, version, this.applicationGroups, versionFile] = result;
+          [scheme, projects, version, applicationGroups, versionFile] = result;
           this.name = scheme.name;
           this.breadcrumbs[3].label = scheme.name;
-          this.editScheme = scheme.edit_permission;
           this.project = projects.length > 1 ? projects.find(project => project.id == scheme.project_id).project_name : null;
           this.nameField = scheme.name;
           this.descriptionField = scheme.program_description;
@@ -170,19 +167,25 @@ export class Component implements ng.OnInit {
           this.versionName = version.version_name;
           this.versionDescriptionField = version.version_description;
           this.versionDescription = version.version_description;
-          this.showApplicationGroups = this.applicationGroups.length > 1 || (this.applicationGroups.length == 1 && !this.applicationGroups[0].m_programs.length);
-          this.versionApplicationGroups = this.applicationGroups.filter(group => group.b_progam_connected_version_id && group.b_progam_connected_version_id == version.id);
+          this.showApplicationGroups = applicationGroups.length > 1 || (applicationGroups.length == 1 && !applicationGroups[0].m_programs.length);
+          this.versionApplicationGroups = applicationGroups.filter(group => group.b_progam_connected_version_id && group.b_progam_connected_version_id == version.id);
           if (this.versionApplicationGroups.length) {
             this.versionApplicationGroupField = this.versionApplicationGroups[0].id;
           }
+          this.applicationGroups = applicationGroups.filter(group => group.update_permission);
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-195
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-195"));
           this.versionSchemeField = versionFile.fileContent;
           this.versionScheme = versionFile.fileContent;
           this.addVersion = scheme.update_permission;
-          this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, version.version_description, ["UserInteractionsSchemeVersion", {scheme: this.id, version: version.id}], false));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-238
+          this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, `${version.version_description} (issue/TYRION-238)`, ["UserInteractionsSchemeVersion", {scheme: this.id, version: version.id}], false));
         })
         .catch(reason => {
+          //TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-221
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-221"));
           this.notifications.current.push(new libBeckiNotifications.Danger(`The scheme ${this.id} cannot be loaded.`, reason));
         });
   }
@@ -253,6 +256,8 @@ export class Component implements ng.OnInit {
           this.refresh();
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The version cannot be created.", reason));
         });
   }

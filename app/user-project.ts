@@ -119,6 +119,8 @@ export class Component implements ng.OnInit {
           this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composeUserString(collaborator, true), null, undefined, project.unshare_permission));
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-219
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-219"));
           this.notifications.current.push(new libBeckiNotifications.Danger(`The project ${this.id} cannot be loaded.`, reason));
         });
   }

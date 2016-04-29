@@ -83,8 +83,6 @@ export class Component implements ng.OnInit {
           this.router.navigate(["System"]);
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-211
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-211"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The processor cannot be created.", reason));
         });
   }

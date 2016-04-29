@@ -29,7 +29,8 @@ class InteractionsSchemeItem extends libPatternFlyListView.Item {
   constructor(scheme:libBackEnd.InteractionsScheme) {
     "use strict";
 
-    super(scheme.id, scheme.name, scheme.program_description, ["UserInteractionsScheme", {scheme: scheme.id}], scheme.delete_permission);
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-238
+    super(scheme.id, scheme.name, `${scheme.program_description} (issue/TYRION-238)`, ["UserInteractionsScheme", {scheme: scheme.id}]);
     this.versions = scheme.versionObjects;
   }
 }
@@ -45,7 +46,7 @@ class SelectableInteractionsModeratorItem extends libPatternFlyListView.Item {
   constructor(moderator:libBackEnd.InteractionsModerator, project:libBackEnd.Project) {
     "use strict";
 
-    super(moderator.id, moderator.id, moderator.type_of_device, undefined, project.update_permission);
+    super(moderator.id, moderator.id, moderator.type_of_device);
     this.project = project.id;
     this.online = moderator.online;
     this.selected = false;
@@ -109,7 +110,6 @@ export class Component implements ng.OnInit {
           return Promise.all<any>([
             Promise.all([].concat(...projects.map(project => project.b_programs_id)).map(id => this.backEnd.getInteractionsScheme(id))),
             Promise.all([].concat(...projects.map(project => project.type_of_blocks_id)).map(id => this.backEnd.getInteractionsBlockGroup(id))),
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-197
             Promise.all([].concat(...projects.map(project => project.homers_id.map(id => [id, project]))).map(pair => Promise.all<any>([this.backEnd.getInteractionsModerator(pair[0]), pair[1]])))
           ]);
         })
@@ -119,10 +119,14 @@ export class Component implements ng.OnInit {
           let moderators:[libBackEnd.InteractionsModerator, libBackEnd.Project][];
           [schemes, groups, moderators] = result;
           this.schemes = schemes.map(scheme => new InteractionsSchemeItem(scheme));
-          this.blocks = [].concat(...groups.map(group => group.blockoBlocks)).map(block => new libPatternFlyListView.Item(block.id, block.name, block.general_description, ["UserInteractionsBlock", {block: block.id}], block.delete_permission));
+          this.blocks = [].concat(...groups.map(group => group.blockoBlocks)).map(block => new libPatternFlyListView.Item(block.id, block.name, block.general_description, ["UserInteractionsBlock", {block: block.id}]));
           this.moderators = moderators.map(pair => new SelectableInteractionsModeratorItem(pair[0], pair[1]));
         })
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Interactions cannot be loaded.", reason)));
+        .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-231
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-231"));
+          this.notifications.current.push(new libBeckiNotifications.Danger("Interactions cannot be loaded.", reason));
+        });
   }
 
   onAddClick():void {

@@ -77,6 +77,8 @@ export class Component implements ng.OnInit {
     this.backEnd.getInteractionsBlockGroups()
         .then(groups => this.groups = groups)
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Groups cannot be loaded.", reason)));
+    //TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-235
+    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-235"));
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -103,8 +105,8 @@ export class Component implements ng.OnInit {
           this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-205"));
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-206
           this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-206"));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-207
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-207"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-236
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-236"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The block cannot be created.", reason));
         });
   }

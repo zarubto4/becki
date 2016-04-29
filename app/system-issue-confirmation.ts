@@ -36,8 +36,6 @@ export class Component implements ng.OnInit {
 
   editing:boolean;
 
-  editConfirmation:boolean;
-
   nameField:string;
 
   colorField:string;
@@ -61,7 +59,6 @@ export class Component implements ng.OnInit {
       new libBeckiLayout.LabeledLink("Loading...", ["SystemIssueConfirmation", {confirmation: this.id}]),
     ];
     this.editing = false;
-    this.editConfirmation = false;
     this.nameField = "Loading...";
     this.colorField = "#ffffff";
     this.sizeField = 12;
@@ -85,7 +82,6 @@ export class Component implements ng.OnInit {
         .then(confirmation => {
           this.confirmation = confirmation;
           this.breadcrumbs[3].label = confirmation.type;
-          this.editConfirmation = confirmation.edit_permission;
           this.nameField = confirmation.type;
           this.colorField = confirmation.color;
           this.sizeField = confirmation.size;
@@ -118,6 +114,8 @@ export class Component implements ng.OnInit {
           this.refresh();
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-228
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-228"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The confirmation cannot be updated.", reason));
         });
   }

@@ -22,38 +22,6 @@ import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
 import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
-function composeDateString(date:Date):string {
-  "use strict";
-
-  let year = date.getFullYear();
-  let month = ("0" + (date.getMonth() + 1).toString()).slice(-2);
-  let day = ("0" + date.getDate().toString()).slice(-2);
-  return `${year}-${month}-${day}`;
-}
-
-function parseDateString(dateString:string):Date {
-  "use strict";
-
-  let dateStrings = /^(\d{4,})-(\d{2})-(\d{2})$/.exec(dateString);
-  if (!dateStrings) {
-    throw "invalid date format";
-  }
-
-  let year = parseInt(dateStrings[1]);
-  let month = parseInt(dateStrings[2]) - 1;
-  let day = parseInt(dateStrings[3]);
-  if (isNaN(year) || isNaN(month) || isNaN(day)) {
-    throw "date component not a number";
-  }
-
-  let date = new Date(year, month, day);
-  if (year == 0 || date.getFullYear() != year || date.getMonth() != month || date.getDate() != day) {
-    throw "component out of range";
-  }
-
-  return date;
-}
-
 class Selectable<T> {
 
   model:T;
@@ -62,12 +30,15 @@ class Selectable<T> {
 
   select:boolean;
 
-  constructor(model:T, selected:boolean) {
+  selectable:boolean;
+
+  constructor(model:T, selected:boolean, selectable = true) {
     "use strict";
 
     this.model = model;
     this.selected = selected;
     this.select = selected;
+    this.selectable = selectable;
   }
 }
 
@@ -87,13 +58,11 @@ export class Component implements ng.OnInit {
 
   tab:string;
 
+  editAccount:boolean;
+
   nameField:string;
 
   usernameField:string;
-
-  birthdateField:string;
-
-  birthdateString:string;
 
   user:libBackEnd.User;
 
@@ -119,10 +88,9 @@ export class Component implements ng.OnInit {
     ];
     this.editing = false;
     this.tab = 'account';
+    this.editAccount = false;
     this.nameField = "Loading...";
     this.usernameField = "Loading...";
-    this.birthdateField = "";
-    this.birthdateString = "Loading...";
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -141,32 +109,45 @@ export class Component implements ng.OnInit {
     this.editing = false;
     this.backEnd.getUser(this.id)
         .then(user => {
-          let birthdate = new Date(user.date_of_birth * 1000);
           this.userString = libBackEnd.composeUserString(user, true);
           this.breadcrumbs[2].label = libBackEnd.composeUserString(user, true);
+          this.editAccount = user.edit_permission;
           this.nameField = user.full_name;
           this.usernameField = user.nick_name;
-          this.birthdateField = composeDateString(birthdate);
-          this.birthdateString = birthdate.toLocaleDateString();
           this.user = user;
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The user ${this.id} cannot be loaded.`, reason));
         });
-    Promise.all<any>([
-          this.backEnd.getRoles(),
-          this.backEnd.getPermissions(),
-          this.backEnd.getUserRolesAndPermissions(this.id)
-        ])
+    this.backEnd.getSignedUser()
+        .then(user => {
+          let roles:Promise<libBackEnd.Role[]>;
+          let permissions:Promise<libBackEnd.Permission[]>;
+          let userPermissions:Promise<libBackEnd.RolesAndPermissions>;
+          if (user.id == this.id) {
+            roles = this.backEnd.getRoles();
+            permissions = this.backEnd.getPermissions();
+            userPermissions = this.backEnd.getUserRolesAndPermissions(this.id);
+          } else {
+            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-234
+            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to list roles and permissions of other users. (issue/TYRION-234)"));
+            roles = Promise.resolve([]);
+            permissions = Promise.resolve([]);
+            userPermissions = Promise.resolve({roles: [], permissions: []});
+          }
+          return Promise.all<any>([
+            roles,
+            permissions,
+            userPermissions
+          ]);
+        })
         .then(result => {
           let roles:libBackEnd.Role[];
           let permissions:libBackEnd.Permission[];
           let userPermissions:libBackEnd.RolesAndPermissions;
           [roles, permissions, userPermissions] = result;
-          this.roles = roles.map(role => new Selectable(role, userPermissions.roles.find(userRole => userRole.id == role.id) != undefined));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-191
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-191"));
-          this.permissions = permissions.map(permission => new Selectable(permission, userPermissions.permissions.find(userPermission => userPermission.value == permission.value) != undefined));
+          this.roles = roles.map(role => new Selectable(role, userPermissions.roles.find(userRole => userRole.id == role.id) != undefined, role.update_permission));
+          this.permissions = permissions.map(permission => new Selectable(permission, userPermissions.permissions.find(userPermission => userPermission.value == permission.value) != undefined, permission.edit_person_permission));
         });
   }
 
@@ -198,14 +179,12 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.updateUser(this.id, this.nameField, this.usernameField, parseDateString(this.birthdateField).getTime().toString(), "", this.user.last_title)
+    this.backEnd.updateUser(this.id, this.nameField, this.usernameField, "", this.user.last_title)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The user has been updated."));
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-213
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-213"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The user cannot be updated.", reason));
         });
   }

@@ -85,8 +85,6 @@ export class Component implements ng.OnInit {
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-201
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-201"));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-212
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-212"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The device cannot be created.", reason));
         });
   }

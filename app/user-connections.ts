@@ -72,9 +72,21 @@ export class Component implements ng.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.getConnections()
-        .then(connections => this.items = connections.map(connection => new libPatternFlyListView.Item(connection.connection_id, libBecki.timestampToString(connection.created), composeConnectionDescription(connection))))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Connections cannot be loaded.", reason)));
+    Promise.all<any>([
+          this.backEnd.getConnections(),
+          this.backEnd.getSignedUser()
+        ])
+        .then(result => {
+          let connections:libBackEnd.Connection[];
+          let user:libBackEnd.User;
+          [connections, user] = result;
+          this.items = connections.map(connection => new libPatternFlyListView.Item(connection.connection_id, libBecki.timestampToString(connection.created), composeConnectionDescription(connection), undefined, user.edit_permission));
+        })
+        .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-237
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-237"));
+          this.notifications.current.push(new libBeckiNotifications.Danger("Connections cannot be loaded.", reason));
+        });
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-217
     this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-217"));
   }

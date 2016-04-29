@@ -75,8 +75,10 @@ export class Component implements ng.OnInit {
 
     this.notifications.shift();
     this.backEnd.getProjects()
-        .then(projects => this.projects = projects.filter(project => project.update_permission))
+        .then(projects => this.projects = projects)
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-219
+    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-219"));
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -105,6 +107,8 @@ export class Component implements ng.OnInit {
           this.router.navigate(["UserApplications"]);
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-220
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-220"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The device cannot be created.", reason));
         });
   }

@@ -123,4 +123,9 @@
       </template>
     </div>
   </template>
+  <template data-bind-ng-switch-when="'users'">
+    <div data-bind-list-view="users" data-bind-addable="false" data-on-remove-click="onRemoveUserClick($event)">
+      <div class="spinner"></div>
+    </div>
+  </template>
 </div>

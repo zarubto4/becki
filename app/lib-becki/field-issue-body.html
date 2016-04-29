@@ -11,7 +11,7 @@
     <span class="glyphicon glyphicon-paperclip"></span>
     Interactions Scheme
   </button>
-  <textarea class="form-control" data-bind-ng-model="model.body" data-bind-required="required" data-on-ng-model-change="onBodyChange($event)"></textarea>
+  <textarea class="form-control" data-bind-ng-model="model.body" data-bind-required="required" minlength="24" data-on-ng-model-change="onBodyChange($event)"></textarea>
 </template>
 <template data-bind-ng-if="model.interactions != null">
   <div style="margin-top: 1em" data-bind-field-interactions-scheme="model.interactions" data-bind-readonly="readonly" data-on-field-interactions-scheme-change="onInteractionsChange($event)">
