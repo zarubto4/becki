@@ -203,6 +203,7 @@ export declare class EventSource {
   constructor(url:string);
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Connection {
 
   connection_id:string;
@@ -261,6 +262,7 @@ export interface NotificationsCollection {
   pages:number[];
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Role {
 
   id:string;
@@ -278,6 +280,7 @@ export interface Role {
   delete_permission:boolean;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Permission {
 
   value:string;
@@ -289,6 +292,7 @@ export interface Permission {
   edit_person_permission:boolean;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface RolesAndPermissions {
 
   roles:Role[];
@@ -426,6 +430,7 @@ export interface Producer {
   type_of_boards_id:string[];
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface BackEndFile {
 
   id:string;
