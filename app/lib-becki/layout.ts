@@ -18,6 +18,7 @@ import * as ngRouter from "angular2/router";
 
 import * as backEnd from "./back-end";
 import * as notifications from "./notifications";
+import * as libBackEnd from "../lib-back-end/index";
 import * as libBootstrapDropdown from "../lib-bootstrap/dropdown";
 
 const HTML_CLASSES = ["layout-pf", "layout-pf-fixed"];
@@ -49,6 +50,10 @@ export class Component implements ng.OnInit, ng.OnDestroy {
 
   home:LabeledLink;
 
+  navbarNotificationsPage:number;
+
+  navbarNotifications:libBackEnd.NotificationsCollection;
+
   navbarState:string;
 
   connections:any[];
@@ -72,6 +77,7 @@ export class Component implements ng.OnInit, ng.OnDestroy {
     "use strict";
 
     this.home = home;
+    this.navbarNotificationsPage = 0;
     this.navbarState = "expanded";
     this.connections = connections;
     this.signing = signing;
@@ -96,6 +102,49 @@ export class Component implements ng.OnInit, ng.OnDestroy {
 
     // TODO: https://groups.google.com/d/msg/angular/IJf-KyGC3Gs/h33mlUTrAwAJ
     document.documentElement.classList.remove(...HTML_CLASSES);
+  }
+
+  showNotifications(page:number):void {
+    "use strict";
+
+    this.backEnd.getNotifications(page)
+        .then(notifications => {
+          this.navbarNotificationsPage = page;
+          this.navbarNotifications = notifications;
+        })
+        .catch(reason => {
+          this.notifications.current.push(new notifications.Danger("Notifications cannot be loaded.", reason));
+        });
+  }
+
+  onNotificationsClick():void {
+    "use strict";
+
+    this.notifications.shift();
+    this.showNotifications(0);
+  }
+
+  getNotificationIcon(notification:libBackEnd.Notification):string {
+    "use strict";
+
+    switch (notification.level) {
+      case "success":
+        return "ok";
+      case "warning":
+        return "warning-triangle-o";
+      case "error":
+        return "error-circle-o";
+      default:
+        return "info";
+    }
+  }
+
+  onShowNotificationsClick(page:number, event:Event):void {
+    "use strict";
+
+    this.notifications.shift();
+    this.showNotifications(page);
+    event.stopPropagation();
   }
 
   onConnectionsClick():void {

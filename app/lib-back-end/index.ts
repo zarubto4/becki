@@ -231,6 +231,36 @@ export interface Connection {
   delete_permission:boolean;
 }
 
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
+export interface  Notification {
+
+  id:string;
+
+  created:number;
+
+  level:string;
+
+  message:string;
+
+  read:boolean;
+
+  confirmation_required:boolean;
+}
+
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
+export interface NotificationsCollection {
+
+  notifications: Notification[];
+
+  from:number;
+
+  to:number;
+
+  total:number;
+
+  pages:number[];
+}
+
 export interface Role {
 
   id:string;
@@ -821,6 +851,8 @@ export abstract class BackEnd {
 
   public static LIBRARY_PATH = "/compilation/library";
 
+  public static NOTIFICATION_PATH = "/notification";
+
   public static PERMISSION_PATH = "/secure/permission";
 
   public static PROCESSOR_PATH = "/compilation/processor";
@@ -931,7 +963,7 @@ export abstract class BackEnd {
     this.notifications = null;
     if (window.localStorage.getItem("authToken")) {
       // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-177
-      this.notifications = new EventSource(`${BackEnd.BASE_URL}/notification/connection/${window.localStorage.getItem("authToken")}`);
+      this.notifications = new EventSource(`${BackEnd.BASE_URL}${BackEnd.NOTIFICATION_PATH}/connection/${window.localStorage.getItem("authToken")}`);
     }
   }
 
@@ -1117,6 +1149,12 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestPath("DELETE", `/coreClient/connection/${id}`).then(JSON.stringify);
+  }
+
+  public getNotifications(page:number):Promise<NotificationsCollection> {
+    "use strict";
+
+    return this.requestPath("GET", `${BackEnd.NOTIFICATION_PATH}/list/${page}`);
   }
 
   public getRoles():Promise<Role[]> {

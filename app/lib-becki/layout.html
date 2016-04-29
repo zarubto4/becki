@@ -24,6 +24,40 @@
   <nav class="collapse navbar-collapse">
     <ul class="nav navbar-nav navbar-right navbar-iconic">
       <li class="dropdown">
+        <a class="dropdown-toggle nav-item-iconic" data-on-click="onNotificationsClick($event)">
+          <span class="fa pficon-flag"></span>
+          <span class="caret"></span>
+        </a>
+        <div class="dropdown-menu infotip bottom-right">
+          <div class="arrow"></div>
+          <ul class="list-group">
+            <li class="list-group-item" template="ngFor #notification of navbarNotifications?.notifications" data-bind-ng-switch="notification.read">
+              <span class="i pficon pficon-{{getNotificationIcon(notification)}}"></span>
+              <template data-bind-ng-switch-when="true">
+                {{notification.message}}
+              </template>
+              <template data-bind-ng-switch-when="false">
+                <strong>{{notification.message}}</strong>
+              </template>
+            </li>
+          </ul>
+          <div class="footer">
+            <template data-bind-ng-if="navbarNotifications?.pages?.indexOf(navbarNotificationsPage - 1) != -1">
+              <p><a data-on-click="onShowNotificationsClick(navbarNotificationsPage - 1, $event)" style="cursor: pointer">
+                Show newer notifications
+              </a></p>
+            </template>
+            <template data-bind-ng-if="navbarNotifications?.pages?.indexOf(navbarNotificationsPage + 1) != -1">
+              <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-240 -->
+              <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-241 -->
+              <p><a data-on-click="onShowNotificationsClick(navbarNotificationsPage + 1, $event)" style="cursor: pointer">
+                Show older notifications (issue/TYRION-240) (issue/TYRION-241)
+              </a></p>
+            </template>
+          </div>
+        </div>
+      </li>
+      <li class="dropdown">
         <a class="dropdown-toggle nav-item-iconic">
           <span class="fa pficon-user"></span>
           <span class="caret"></span>
