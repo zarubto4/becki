@@ -85,7 +85,14 @@
       </a>
     </li>
     <li class="list-group-item list-group-item-separator hidden-sm hidden-md hidden-lg">
-      <a href="#" data-on-click="onSignOutClick($event)">
+      <a data-on-click="onConnectionsClick($event)" style="cursor: pointer">
+        <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-237 -->
+        <span class="fa fa-sign-in" title="Connections (issue/TYRION-237)"></span>
+        <span class="list-group-item-value">Connections (issue/TYRION-237)</span>
+      </a>
+    </li>
+    <li class="list-group-item hidden-sm hidden-md hidden-lg">
+      <a data-on-click="onSignOutClick($event)" style="cursor: pointer">
         <span class="fa fa-sign-out" title="Sign Out"></span>
         <span class="list-group-item-value">Sign Out</span>
       </a>
