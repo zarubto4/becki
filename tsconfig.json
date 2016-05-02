@@ -9,7 +9,6 @@
   },
   "files": [
     "app/main.ts",
-    "typings/codemirror/codemirror.d.ts",
-    "typings/underscore.string/underscore.string.d.ts"
+    "typings/tsd.d.ts"
   ]
 }
