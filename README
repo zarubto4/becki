@@ -38,17 +38,8 @@ Installation
 1. Configure the HTTP server to serve the top-level directory of this
    distribution.
 
-2. In that directory:
-
-   1. Run `npm install` in order to install the application dependencies
-      including the dependencies required to compile the sources into
-      JavaScript.
-
-   2. Run `npm run-script compile` in order to compile the sources into
-      JavaScript.
-
-   3. Run `npm prune --production` in order to uninstall the dependencies
-      required to compile the sources into JavaScript.
+2. In that directory, run `npm run install:javascript` in order to install the
+   application dependencies and to compile the sources into JavaScript.
 
 Contributions
 -------------
