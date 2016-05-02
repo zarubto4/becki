@@ -55,8 +55,8 @@ Contributions
 
 Following commands might be useful during a development:
 
-* `npm test` to start a HTTP server that serves the application at
-  <http://0.0.0.0:8080/>.
+* `npm test` to recompile the sources into JavaScript and to start a HTTP server
+  that serves the application at <http://0.0.0.0:8080/>.
 
 [ecmascript 5]: http://www.ecma-international.org/publications/files/ECMA-ST-ARCH/ECMA-262%205th%20edition%20December%202009.pdf
 [html5]: http://www.w3.org/TR/2014/REC-html5-20141028/
