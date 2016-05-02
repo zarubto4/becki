@@ -12,18 +12,18 @@
     "roboto-fontface": "^0.4.5",
     "systemjs": "0.19.2",
     "the-grid": "git+ssh://git@git.byzance.cz:js-components/the-grid.git#v0.1.1",
-    "tsd": "^0.6.0",
     "underscore": "^1.8.0",
     "underscore.string": "~3.2.2",
     "weathericons": "^2.0.8"
   },
   "devDependencies": {
     "http-server": "^0.9.0",
+    "tsd": "^0.6.0",
     "typescript": "1.6 - 1.7"
   },
   "scripts": {
     "compile": "tsc",
-    "postinstall": "tsd install",
+    "prepublish": "tsd install",
     "pretest": "npm run-script compile",
     "test": "http-server -c-1"
   }
