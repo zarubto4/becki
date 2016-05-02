@@ -51,7 +51,9 @@ Contributions
 
 Following commands might be useful during a development:
 
-* `npm start` to start a HTTP server that serves the application at
+* `npm install` to install the development dependencies.
+
+* `npm test` to start a HTTP server that serves the application at
   <http://0.0.0.0:8080/>.
 
 [ecmascript 5]: http://www.ecma-international.org/publications/files/ECMA-ST-ARCH/ECMA-262%205th%20edition%20December%202009.pdf
