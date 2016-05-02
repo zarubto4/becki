@@ -11,24 +11,6 @@ Becki is a front end of the IoT connectivity solution developed by MEDIA CHECK.
 It integrates all the back end services and provides a nice portable interface
 for users as well as for administrators.
 
-WARNING: This document might be outdated and the application might be flawed
-since management prefers speed over quality.
-
-Features
---------
-
-Refer to the test suite for the complete list of all the features and use cases.
-We have, nevertheless, mentioned few of them below in hope of gaining your
-attention:
-
-* register a new person
-* log a person in
-* log a person out
-* create a new project
-
-The project is not in the final shape yet. Further features are added on demand
-if they fit the purpose of the program.
-
 License
 -------
 
@@ -41,8 +23,8 @@ Requirements
 In order to serve the front end through HTTP, an HTTP server is required because
 current web browsers implement a variety of safety measures that may prevent the
 front end from functioning if accessed otherwise. Server-side dependencies can
-be installed using [npm][] not less than 2.14.0 and less than 3.0.0. Install it
-and see the installation instructions below.
+be installed using [npm][]. Install it and see the installation instructions
+below.
 
 On the other side, clients must support [HTML5][], a JavaScript based on
 [ECMAScript 5][] and [Web Storage 2][].
@@ -67,20 +49,12 @@ Installation
 Contributions
 -------------
 
-Following commands of [npm][] not less than 2.14.0 and less than 3.0.0 might be
-useful during a development:
-
-* `npm run-script install:dev` to install the development dependencies.
+Following commands might be useful during a development:
 
 * `npm start` to start a HTTP server that serves the application at
   <http://0.0.0.0:8080/>.
 
-* `npm test` to run application tests. The tests expect [Node.js][] not less
-  than 4.0.0 and less than 5.0.0 to be installed and the tested front end
-  instance to be available at <http://127.0.0.1:8080/>.
-
 [ecmascript 5]: http://www.ecma-international.org/publications/files/ECMA-ST-ARCH/ECMA-262%205th%20edition%20December%202009.pdf
 [html5]: http://www.w3.org/TR/2014/REC-html5-20141028/
-[node.js]: https://nodejs.org
 [npm]: http://www.npmjs.com/
 [web storage 2]: http://www.w3.org/TR/2015/PR-webstorage-20151126/

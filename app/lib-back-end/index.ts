@@ -2,18 +2,6 @@
  * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
  * directory of this distribution.
  */
-/**
- * A service providing access to the back end.
- *
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- *
- * Documentation in this file might be outdated and the code might be dirty and
- * flawed since management prefers speed over quality.
- *
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- */
 
 export function composeUserString(user:User, showEmail=false):string {
   "use strict";
@@ -21,26 +9,14 @@ export function composeUserString(user:User, showEmail=false):string {
   return user.nick_name || user.full_name || showEmail && user.mail || null;
 }
 
-/**
- * An HTTP request.
- */
 export class Request {
 
-  /**
-   * The HTTP method.
-   */
   method:string;
 
   url:string;
 
-  /**
-   * The HTTP headers.
-   */
   headers:{[name: string]: string};
 
-  /**
-   * The body of the request as a JSON string.
-   */
   body:string;
 
   constructor(method:string, url:string, headers:{[name: string]: string} = {}, body?:Object) {
@@ -60,27 +36,12 @@ export class Request {
   }
 }
 
-/**
- * An HTTP response.
- */
 export class Response {
 
-  /**
-   * The status code of the response.
-   */
   status:number;
 
-  /**
-   * The body of the response.
-   */
   body:Object;
 
-  /**
-   * Create a new response instance.
-   *
-   * @param status the status code of the response.
-   * @param body the response body.
-   */
   constructor(status:number, body:Object) {
     "use strict";
 
@@ -813,9 +774,6 @@ export interface IssueLink {
   delete_permission:boolean;
 }
 
-/**
- * A service providing access to the back end at 127.0.0.1:9000.
- */
 export abstract class BackEnd {
 
   public static BASE_URL = "http://127.0.0.1:9000";
@@ -864,16 +822,10 @@ export abstract class BackEnd {
 
   public static PRODUCER_PATH = "/compilation/producer";
 
-  /**
-   * An absolute path to the project resources.
-   */
   public static PROJECT_PATH = "/project/project";
 
   public static ROLE_PATH = "/secure/role";
 
-  /**
-   * An absolute path to the permission resources.
-   */
   public static TOKEN_PATH = "/coreClient/person/permission";
 
   public static USER_PATH = "/coreClient/person/person";
@@ -906,13 +858,6 @@ export abstract class BackEnd {
     this.reregisterNotifications();
   }
 
-  /**
-   * Perform an HTTP request.
-   *
-   * @param request the details of the request.
-   * @returns a promise that will be resolved with the response, or rejected
-   *          with a reason.
-   */
   protected abstract requestGeneral(request:Request):Promise<Response>;
 
   public requestPath<Response>(method:string, path:string, body?:Object, success=200):Promise<Response> {
@@ -972,14 +917,6 @@ export abstract class BackEnd {
     }
   }
 
-  /**
-   * Create a new person.
-   *
-   * @param email their email address.
-   * @param password their password.
-   * @returns a promise that will be resolved with a message describing the
-   *          result, or rejected with a reason.
-   */
   public createUser(mail:string, password:string, nick_name:string):Promise<string> {
     "use strict";
 
@@ -1070,18 +1007,6 @@ export abstract class BackEnd {
     return this.requestPath("DELETE", `${BackEnd.USER_PATH}/${user}`).then(JSON.stringify);
   }
 
-  /**
-   * Log a person in.
-   *
-   * If the communication with the back end fails, the rejection reason is an
-   * instance of {@link BackEndError}. Any other reason indicates that the login
-   * have failed.
-   *
-   * @param email their email address.
-   * @param password their password.
-   * @returns a promise that will be resolved with an authentication token, or
-   *          rejected with a reason.
-   */
   public createToken(mail:string, password:string):Promise<string> {
     "use strict";
 
@@ -1122,17 +1047,6 @@ export abstract class BackEnd {
     });
   }
 
-  /**
-   * Log a person out.
-   *
-   * If the communication with the back end fails, the rejection reason is an
-   * instance of {@link BackEndError}. Any other reason indicates that the
-   * logout have failed.
-   *
-   * @param token their authentication token.
-   * @returns a promise that will be resolved with a message describing the
-   *          result, or rejected with a reason.
-   */
   public deleteToken():Promise<string> {
     "use strict";
 
@@ -1585,14 +1499,6 @@ export abstract class BackEnd {
     return this.requestPath("DELETE", `${BackEnd.DEVICE_PROGRAM_PATH}/c_program/${id}`).then(JSON.stringify);
   }
 
-  /**
-   * Create a new light.
-   *
-   * @param id the ID of the device.
-   * @param token an authentication token.
-   * @param callback a callback called with an indicator and a message
-   *                 describing the result.
-   */
   public createDevice(hardware_unique_id:string, type_of_board_id:string):Promise<string> {
     "use strict";
 
@@ -1681,15 +1587,6 @@ export abstract class BackEnd {
     return this.requestPath("DELETE", `${BackEnd.INTERACTIONS_BLOCK_PATH}/${id}`).then(JSON.stringify);
   }
 
-  /**
-   * Create a new program.
-   *
-   * @param program the program details.
-   * @param project the ID of the associated project.
-   * @param token an authentication token.
-   * @param callback a callback called with an indicator and a message
-   *                 describing the result.
-   */
   public createInteractionsScheme(name:string, program_description:string, projectId:string):Promise<InteractionsScheme> {
     "use strict";
 
@@ -1740,12 +1637,6 @@ export abstract class BackEnd {
     return this.requestPath("DELETE", `${BackEnd.INTERACTIONS_SCHEME_PATH}/${id}`).then(JSON.stringify);
   }
 
-  /**
-   * Create a new Homer.
-   *
-   * @param id the ID of the device.
-   * @param token an authentication token.
-   */
   public createInteractionsModerator(homer_id:string, type_of_device:string):Promise<string> {
     "use strict";
 
@@ -1783,14 +1674,6 @@ export abstract class BackEnd {
     return this.requestPath("DELETE", `${BackEnd.INTERACTIONS_MODERATOR_PATH}/${id}`).then(JSON.stringify);
   }
 
-  /**
-   * Create a new project.
-   *
-   * @param project the project.
-   * @param token an authentication token.
-   * @returns a promise that will be resolved with a message describing the
-   *          result, or rejected with a reason.
-   */
   public createProject(project_name:string, project_description:string):Promise<Project> {
     "use strict";
 
@@ -1807,16 +1690,6 @@ export abstract class BackEnd {
     return this.createProject("Default project", "An automatically created project. It can be edited or removed like any other project.");
   }
 
-  /**
-   * Retrieve details about a project.
-   *
-   * @param id the ID of the project.
-   * @param token an authentication token.
-   * @param success a callback called with the project, its Homers' IDs, its
-   *                devices' IDs and a mapping from its programs' IDs to the
-   *                programs themselves in case of success.
-   * @param error a callback called with a message in case of a failure.
-   */
   public getProject(id:string):Promise<Project> {
     "use strict";
 
@@ -1824,13 +1697,6 @@ export abstract class BackEnd {
     return this.requestPath<Project>("GET", `${BackEnd.PROJECT_PATH}/${id}`);
   }
 
-  /**
-   * Retrieve all the projects of a person.
-   *
-   * @param token an authentication token of the person.
-   * @returns a promise that will be resolved with a mapping from the projects
-   *          IDs to the projects themselves, or rejected with a reason.
-   */
   public getProjects():Promise<Project[]> {
     "use strict";
 
@@ -1847,15 +1713,6 @@ export abstract class BackEnd {
     return this.requestPath<Project>("PUT", `${BackEnd.PROJECT_PATH}/${id}`, {project_name, project_description}).then(JSON.stringify);
   }
 
-  /**
-   * Add a device to a project.
-   *
-   * @param device the ID of the device.
-   * @param project the ID of the project.
-   * @param token an authentication token.
-   * @param callback a callback called with an indicator and a message
-   *                 describing the result.
-   */
   public addDeviceToProject(device:string, project:string):Promise<string> {
     "use strict";
 
@@ -1868,15 +1725,6 @@ export abstract class BackEnd {
     return this.requestPath("DELETE", `${BackEnd.DEVICE_PATH}/${device}/${project}`).then(JSON.stringify);
   }
 
-  /**
-   * Add a Homer to a project.
-   *
-   * @param homer the ID of the device.
-   * @param project the ID of the project.
-   * @param token an authentication token.
-   * @param callback a callback called with an indicator and a message
-   *                 describing the result.
-   */
   public addInteractionsModeratorToProject(moderator:string, project:string):Promise<string> {
     "use strict";
 
@@ -1901,14 +1749,6 @@ export abstract class BackEnd {
     return this.requestPath("PUT", `${BackEnd.PROJECT_PATH}/unshareProject/${project}`, {persons}).then(JSON.stringify);
   }
 
-  /**
-   * Delete a project.
-   *
-   * @param project the project.
-   * @param token an authentication token.
-   * @returns a promise that will be resolved with a message describing the
-   *          result, or rejected with a reason.
-   */
   public deleteProject(id:string):Promise<string> {
     "use strict";
 

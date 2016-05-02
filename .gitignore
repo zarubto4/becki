@@ -1,6 +1,4 @@
 /app/**/*.js
 /app/**/*.js.map
 /node_modules/
-/spec/**/*.js
-/spec/**/*.js.map
 /typings/

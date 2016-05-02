@@ -2,16 +2,6 @@
  * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
  * directory of this distribution.
  */
-/**
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- *
- * Documentation in this file might be outdated and the code might be dirty and
- * flawed since management prefers speed over quality.
- *
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- */
 
 import * as _ from "underscore";
 import * as _String from "underscore.string";
@@ -24,9 +14,6 @@ import * as libBackEnd from "../lib-back-end/index";
 @ng.Injectable()
 export class Service extends libBackEnd.BackEnd {
 
-  /**
-   * A service that is able to perform HTTP requests.
-   */
   http:ngHttp.Http;
 
   signing:any[];
@@ -37,11 +24,6 @@ export class Service extends libBackEnd.BackEnd {
 
   notificationsNew:ng.EventEmitter;
 
-  /**
-   * Create a new service instance.
-   *
-   * @param http a service that is able to perform HTTP requests.
-   */
   public constructor(http:ngHttp.Http, @ng.Inject("signing") signing:any[], router:ngRouter.Router, zone:ng.NgZone) {
     "use strict";
 
@@ -53,13 +35,6 @@ export class Service extends libBackEnd.BackEnd {
     this.notificationsNew = new ng.EventEmitter();
   }
 
-  /**
-   * Perform an HTTP request.
-   *
-   * @param request the details of the request.
-   * @returns a promise that will be resolved with the response, or rejected
-   *          with a reason.
-   */
   protected requestGeneral(request:libBackEnd.Request):Promise<libBackEnd.Response> {
     "use strict";
 
