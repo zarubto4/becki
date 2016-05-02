@@ -40,18 +40,20 @@ Installation
 
 2. In that directory:
 
-   1. Run `npm install --production` in order to install the application
-      dependencies.
+   1. Run `npm install` in order to install the application dependencies
+      including the dependencies required to compile the sources into
+      JavaScript.
 
    2. Run `npm run-script compile` in order to compile the sources into
       JavaScript.
+
+   3. Run `npm prune --production` in order to uninstall the dependencies
+      required to compile the sources into JavaScript.
 
 Contributions
 -------------
 
 Following commands might be useful during a development:
-
-* `npm install` to install the development dependencies.
 
 * `npm test` to start a HTTP server that serves the application at
   <http://0.0.0.0:8080/>.
