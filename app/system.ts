@@ -37,6 +37,8 @@ export class Component implements ngCore.OnInit {
 
   producers:libPatternFlyListView.Item[];
 
+  compilationServers:libPatternFlyListView.Item[];
+
   issueTypes:libPatternFlyListView.Item[];
 
   issueConfirmations:libPatternFlyListView.Item[];
@@ -101,6 +103,10 @@ export class Component implements ngCore.OnInit {
     this.backEnd.getProducers()
         .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, producer.description, ["SystemProducer", {producer: producer.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Producers cannot be loaded.", reason)));
+    this.backEnd.getCompilationServers()
+        .then(servers => this.compilationServers = servers.map(server =>
+            new libPatternFlyListView.Item(server.id, server.server_name, server.destination_address, null, false)))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Compilation servers cannot be loaded.", reason)));
     this.backEnd.getIssueTypes()
         .then(types => this.issueTypes = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, ["SystemIssueType", {type: type.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue types cannot be loaded.", reason)));

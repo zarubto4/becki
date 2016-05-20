@@ -539,6 +539,25 @@ export interface Device {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
+export interface CompilationServer {
+
+
+  id:string;
+
+  server_name:string;
+
+  destination_address:string;
+
+  hash_certificate:string;
+
+  server_is_online:boolean;
+
+  edit_permission:boolean;
+
+  delete_permission:boolean;
+}
+
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface InteractionsBlockGroup {
 
   id:string;
@@ -808,6 +827,8 @@ export abstract class BackEnd {
   public static APPLICATION_PATH = "/grid/m_program";
 
   public static COMMENT_PATH = "/overflow/comment";
+
+  public static COMPILATION_SERVER_PATH = "/compilation/server";
 
   public static DEVICE_PATH = "/compilation/board";
 
@@ -1543,6 +1564,11 @@ export abstract class BackEnd {
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-258
     //return this.requestRestPath("POST", `${BackEnd.DEVICE_PROGRAM_VERSION_PATH}/uploud/${programVersionId}`, {board_id}).then(JSON.stringify);
     return Promise.reject<string>("issue/TYRION-258");
+  }
+
+  public getCompilationServers():Promise<CompilationServer[]> {
+    "use strict";
+    return this.requestRestPath("GET", BackEnd.COMPILATION_SERVER_PATH);
   }
 
   public getInteractionsBlockGroup(id:string):Promise<InteractionsBlockGroup> {

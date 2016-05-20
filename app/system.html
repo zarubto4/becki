@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, View or Remove a System Items'" data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="tab[0] == 'users' ? null : 'Add'" data-on-actionClick="onAddClick($event)" data-bind-ngSwitch="tab[0]">
+<div data-bind-layout="'Add, View or Remove a System Items'" data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="tab[0] == 'users' || (tab[0] == 'devices' && tab[1] == 'servers') ? null : 'Add'" data-on-actionClick="onAddClick($event)" data-bind-ngSwitch="tab[0]">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="tab[0] == 'moderators'">
       <a data-on-click="onTabClick(['moderators'], $event)" style="cursor: pointer">
@@ -64,6 +64,11 @@
             Producers
           </a>
         </li>
+        <li data-bind-class.active="tab[1] == 'servers'">
+          <a data-on-click="onTabClick(['devices', 'servers'], $event)" style="cursor: pointer">
+            Compilation Servers
+          </a>
+        </li>
       </ul>
       <template data-bind-ngSwitchWhen="'devices'">
         <div data-bind-listView="devices" data-on-addClick="onAddDeviceClick($event)" data-on-removeClick="onRemoveDeviceClick($event)">
@@ -92,6 +97,11 @@
       </template>
       <template data-bind-ngSwitchWhen="'producers'">
         <div data-bind-listView="producers" data-on-addClick="onAddProducerClick($event)" data-on-removeClick="onRemoveProducerClick($event)">
+          <div class="spinner"></div>
+        </div>
+      </template>
+      <template data-bind-ngSwitchWhen="'servers'">
+        <div data-bind-listView="compilationServers" data-bind-addable="false">
           <div class="spinner"></div>
         </div>
       </template>
