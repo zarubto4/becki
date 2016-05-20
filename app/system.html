@@ -101,7 +101,7 @@
         </div>
       </template>
       <template data-bind-ngSwitchWhen="'servers'">
-        <div data-bind-listView="compilationServers" data-bind-addable="false">
+        <div data-bind-listView="compilationServers" data-bind-addable="false" data-on-removeClick="onRemoveCompilationServerClick($event)">
           <div class="spinner"></div>
         </div>
       </template>

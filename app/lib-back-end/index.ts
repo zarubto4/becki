@@ -1571,6 +1571,12 @@ export abstract class BackEnd {
     return this.requestRestPath("GET", BackEnd.COMPILATION_SERVER_PATH);
   }
 
+  public deleteCompilationServer(id:string):Promise<string> {
+    "use strict";
+
+    return this.requestRestPath("DELETE", `${BackEnd.COMPILATION_SERVER_PATH}/${id}`).then(JSON.stringify);
+  }
+
   public getInteractionsBlockGroup(id:string):Promise<InteractionsBlockGroup> {
     "use strict";
 

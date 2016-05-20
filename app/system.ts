@@ -105,7 +105,7 @@ export class Component implements ngCore.OnInit {
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Producers cannot be loaded.", reason)));
     this.backEnd.getCompilationServers()
         .then(servers => this.compilationServers = servers.map(server =>
-            new libPatternFlyListView.Item(server.id, server.server_name, server.destination_address, null, false)))
+            new libPatternFlyListView.Item(server.id, server.server_name, server.destination_address)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Compilation servers cannot be loaded.", reason)));
     this.backEnd.getIssueTypes()
         .then(types => this.issueTypes = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, ["SystemIssueType", {type: type.id}])))
@@ -309,6 +309,20 @@ export class Component implements ngCore.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The producer cannot be removed.", reason));
+        });
+  }
+
+  onRemoveCompilationServerClick(id:string):void {
+    "use strict";
+
+    this.notifications.shift();
+    this.backEnd.deleteCompilationServer(id)
+        .then(() => {
+          this.notifications.current.push(new libBeckiNotifications.Success("The compilation server has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger("The compilation server cannot be removed.", reason));
         });
   }
 
