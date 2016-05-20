@@ -3,46 +3,46 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + confirmation?.type + "\" Confirmation"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="editing">
+<div data-bind-layout='"Edit the \"" + confirmation?.type + "\" Confirmation"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="editing ? null : 'Edit'" data-on-actionClick="onEditClick($event)" data-bind-ngSwitch="editing">
   <form class="clearfix" data-on-submit="onSubmit($event)">
-    <template data-bind-ng-switch-when="true">
+    <template data-bind-ngSwitchWhen="true">
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon-pencil"></span>
           Name
         </label>
-        <input class="form-control" required minlength="8" data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
+        <input class="form-control" required minlength="8" data-bindon-ngModel="nameField" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
       </div>
     </template>
     <div class="form-group">
       <label>
-        <template data-bind-ng-switch-when="true">
+        <template data-bind-ngSwitchWhen="true">
           <span class="glyphicon glyphicon-text-background"></span>
         </template>
         Color
       </label>
-      <template data-bind-ng-switch-when="true">
-        <input class="form-control" type="color" required data-bindon-ng-model="colorField">
+      <template data-bind-ngSwitchWhen="true">
+        <input class="form-control" type="color" required data-bindon-ngModel="colorField">
       </template>
-      <template data-bind-ng-switch-when="false">
+      <template data-bind-ngSwitchWhen="false">
         <input class="form-control" type="color" disabled data-bind-value="confirmation?.color">
       </template>
     </div>
     <div class="form-group">
       <label>
-        <template data-bind-ng-switch-when="true">
+        <template data-bind-ngSwitchWhen="true">
           <span class="glyphicon glyphicon-text-size"></span>
         </template>
         Size
       </label>
-      <template data-bind-ng-switch-when="true">
-        <input class="form-control" type="number" required min="1" step="1" data-bindon-ng-model="sizeField">
+      <template data-bind-ngSwitchWhen="true">
+        <input class="form-control" type="number" required min="1" step="1" data-bindon-ngModel="sizeField">
       </template>
-      <template data-bind-ng-switch-when="false">
+      <template data-bind-ngSwitchWhen="false">
         <p class="form-control-static">{{confirmation?.size}}</p>
       </template>
     </div>
-    <template data-bind-ng-switch-when="true">
+    <template data-bind-ngSwitchWhen="true">
       <div class="pull-right">
         <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
         <button class="btn btn-primary" type="submit">Edit</button>

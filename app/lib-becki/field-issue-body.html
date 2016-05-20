@@ -3,18 +3,18 @@
   ~ of this distribution.
   -->
 
-<template data-bind-ng-if="readonly">
+<template data-bind-ngIf="readonly">
   <p>{{model.body}}</p>
 </template>
-<template data-bind-ng-if="!readonly">
+<template data-bind-ngIf="!readonly">
   <button type="button" class="btn btn-xs btn-default" data-bind-class.active="model.interactions != null" data-on-click="onInteractionsSchemeClick($event)">
     <span class="glyphicon glyphicon-paperclip"></span>
     Interactions Scheme
   </button>
-  <textarea class="form-control" data-bind-ng-model="model.body" data-bind-required="required" minlength="24" data-on-ng-model-change="onBodyChange($event)"></textarea>
+  <textarea class="form-control" data-bind-ngModel="model.body" data-bind-required="required" minlength="24" data-on-ngModelChange="onBodyChange($event)"></textarea>
 </template>
-<template data-bind-ng-if="model.interactions != null">
-  <div style="margin-top: 1em" data-bind-field-interactions-scheme="model.interactions" data-bind-readonly="readonly" data-on-field-interactions-scheme-change="onInteractionsChange($event)">
+<template data-bind-ngIf="model.interactions != null">
+  <div style="margin-top: 1em" data-bind-fieldInteractionsScheme="model.interactions" data-bind-readonly="readonly" data-on-fieldInteractionsSchemeChange="onInteractionsChange($event)">
     <div class="spinner"></div>
   </div>
 </template>

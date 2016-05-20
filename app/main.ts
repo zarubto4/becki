@@ -3,17 +3,19 @@
  * directory of this distribution.
  */
 
-import * as ng from "angular2/angular2";
-import * as ngHttp from "angular2/http";
-import * as ngRouter from "angular2/router";
+import * as ngCommon from "@angular/common";
+import * as ngCore from "@angular/core";
+import * as ngHttp from "@angular/http";
+import * as ngPlatformBrowserDynamic from "@angular/platform-browser-dynamic";
+import * as ngRouter from "@angular/router-deprecated";
 
 import * as body from "./body";
 
-ng.bootstrap(
+ngPlatformBrowserDynamic.bootstrap(
     body.Component,
     [
       ngHttp.HTTP_PROVIDERS,
       ngRouter.ROUTER_PROVIDERS,
-      ng.provide(ngRouter.LocationStrategy, {useClass: ngRouter.HashLocationStrategy})
+      ngCore.provide(ngCommon.LocationStrategy, {useClass: ngCommon.HashLocationStrategy})
     ]
 );

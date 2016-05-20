@@ -4,8 +4,8 @@
   -->
 
 <p>
-  <template ng-for data-var-tag data-bind-ng-for-of="getTags()">
+  <template ngFor data-var-tag data-bind-ngForOf="getTags()">
     <span class="label label-default">{{tag}}</span>
   </template>
 </p>
-<input class="form-control" data-bind-ng-model="model" data-on-ng-model-change="onModelChange($event)">
+<input class="form-control" data-bind-ngModel="model" data-on-ngModelChange="onModelChange($event)">

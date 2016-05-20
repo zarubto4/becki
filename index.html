@@ -22,10 +22,11 @@
     <link rel="stylesheet" href="node_modules/patternfly/dist/css/patternfly.css">
     <link rel="stylesheet" href="node_modules/patternfly/dist/css/patternfly-additions.css">
     <link rel="stylesheet" href="app/lib-becki/default.css">
+    <!-- @angular dependencies -->
+    <script src="node_modules/es6-shim/es6-shim.js"></script>
+    <script src="node_modules/zone.js/dist/zone.js"></script>
+    <script src="node_modules/reflect-metadata/Reflect.js"></script>
     <script src="node_modules/systemjs/dist/system.src.js"></script>
-    <script src="node_modules/angular2/bundles/angular2.js"></script>
-    <script src="node_modules/angular2/bundles/http.js"></script>
-    <script src="node_modules/angular2/bundles/router.dev.js"></script>
     <!-- the-grid dependencies -->
     <script src="node_modules/jquery/dist/jquery.js"></script>
     <!-- https://bugs.jqueryui.com/ticket/11101 -->
@@ -36,34 +37,30 @@
     <script src="node_modules/blocko/examples/angular2/js/snap.svg-min.js"></script>
     <script>
       System.config({
+        map: {
+          "@angular": "node_modules/@angular",
+          "app": "app",
+          "blocko": "/node_modules/blocko",
+          "codemirror": "/node_modules/codemirror",
+          "rxjs": "node_modules/rxjs",
+          "the-grid": "/node_modules/the-grid",
+          "underscore": "/node_modules/underscore"
+        },
         packages: {
-          "app": {
-            defaultExtension: "js",
-            main: "main"
-          },
-          "blocko": {
-            main: "js/index",
-            map: {'.': '/node_modules/blocko'}
-          },
-          "codemirror": {
-            main: "lib/codemirror",
-            map: {'.': '/node_modules/codemirror'}
-          },
-          "node_modules": {
-            defaultExtension: "js"
-          },
-          "the-grid": {
-            main: "js/index",
-            map: {'.': '/node_modules/the-grid'}
-          },
-          "underscore": {
-            main: "underscore",
-            map: {'.': '/node_modules/underscore'}
-          },
-          "underscore.string": {
-            main: "index",
-            map: {'.': '/node_modules/underscore.string'}
-          }
+          "@angular/common": {main: "index"},
+          "@angular/compiler": {main: "index"},
+          "@angular/core": {main: "index"},
+          "@angular/http": {main: "index"},
+          "@angular/platform-browser": {main: "index"},
+          "@angular/platform-browser-dynamic": {main: "index"},
+          "@angular/router-deprecated": {main: "index"},
+          "app": {main: "main", defaultExtension: "js"},
+          "blocko": {main: "js/index"},
+          "codemirror": {main: "lib/codemirror"},
+          "node_modules": {defaultExtension: "js"},
+          "rxjs": {main: "Rx"},
+          "the-grid": {main: "js/index"},
+          "underscore": {main: "underscore"}
         }
       });
       System.import("app");

@@ -3,8 +3,9 @@
  * of this distribution.
  */
 
-import * as ng from "angular2/angular2";
-import * as ngRouter from "angular2/router";
+import * as ngCommon from "@angular/common";
+import * as ngCore from "@angular/core";
+import * as ngRouter from "@angular/router-deprecated";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBecki from "./lib-becki/index";
@@ -13,11 +14,11 @@ import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
 import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
-@ng.Component({
+@ngCore.Component({
   templateUrl: "app/user-device-new.html",
-  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ngCommon.CORE_DIRECTIVES, ngCommon.FORM_DIRECTIVES]
 })
-export class Component implements ng.OnInit {
+export class Component implements ngCore.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
@@ -33,7 +34,7 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(@ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(@ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -48,7 +49,7 @@ export class Component implements ng.OnInit {
     this.router = router;
   }
 
-  onInit():void {
+  ngOnInit():void {
     "use strict";
 
     this.notifications.shift();

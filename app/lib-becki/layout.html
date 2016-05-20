@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<template data-bind-ng-if="backEnd.tasks">
+<template data-bind-ngIf="backEnd.tasks">
   <div class="overlay">
     <div class="spinner spinner-lg"></div>
   </div>
@@ -16,7 +16,7 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <a class="navbar-brand" data-bind-router-link="home.link">
+    <a class="navbar-brand" data-bind-routerLink="home.link">
       <img class="navbar-brand-icon" src="../dist/img/logo-alt.svg" alt="">
       <img class="navbar-brand-name" src="../dist/img/brand-alt.svg" data-bind-alt="home.label">
     </a>
@@ -31,23 +31,23 @@
         <div class="dropdown-menu infotip bottom-right">
           <div class="arrow"></div>
           <ul class="list-group">
-            <li class="list-group-item" template="ngFor #notification of navbarNotifications?.notifications" data-bind-ng-switch="notification.read">
+            <li class="list-group-item" template="ngFor #notification of navbarNotifications?.notifications" data-bind-ngSwitch="notification.read">
               <span class="i pficon pficon-{{getNotificationIcon(notification)}}"></span>
-              <template data-bind-ng-switch-when="true">
+              <template data-bind-ngSwitchWhen="true">
                 {{notification.message}}
               </template>
-              <template data-bind-ng-switch-when="false">
+              <template data-bind-ngSwitchWhen="false">
                 <strong>{{notification.message}}</strong>
               </template>
             </li>
           </ul>
           <div class="footer">
-            <template data-bind-ng-if="navbarNotifications?.pages?.indexOf(navbarNotificationsPage - 1) != -1">
+            <template data-bind-ngIf="navbarNotifications?.pages?.indexOf(navbarNotificationsPage - 1) != -1">
               <p><a data-on-click="onShowNotificationsClick(navbarNotificationsPage - 1, $event)" style="cursor: pointer">
                 Show newer notifications
               </a></p>
             </template>
-            <template data-bind-ng-if="navbarNotifications?.pages?.indexOf(navbarNotificationsPage + 1) != -1">
+            <template data-bind-ngIf="navbarNotifications?.pages?.indexOf(navbarNotificationsPage + 1) != -1">
               <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-214 -->
               <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-241 -->
               <p><a data-on-click="onShowNotificationsClick(navbarNotificationsPage + 1, $event)" style="cursor: pointer">
@@ -79,7 +79,7 @@
 <div class="nav-pf-vertical nav-pf-vertical-with-secondary-nav" data-bind-class.collapsed="navbarState == 'collapsed'" data-bind-class.hidden="navbarState == 'hidden'" data-bind-class.show-mobile-nav="navbarState == 'visible'">
   <ul class="list-group">
     <li class="list-group-item" template="ngFor #page of navigation">
-      <a data-bind-router-link="page.link">
+      <a data-bind-routerLink="page.link">
         <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
         <span class="list-group-item-value">{{page.label}}</span>
       </a>
@@ -109,10 +109,10 @@
         </div>
         <ol class="breadcrumb">
           <li template="ngFor #breadcrumb of breadcrumbs">
-            <a data-bind-router-link="breadcrumb.link">{{breadcrumb.label}}</a>
+            <a data-bind-routerLink="breadcrumb.link">{{breadcrumb.label}}</a>
           </li>
         </ol>
-        <template data-bind-ng-if="actionLabel">
+        <template data-bind-ngIf="actionLabel">
           <div class="pull-right">
             <button type="button" class="btn btn-default" data-on-click="onActionClick($event)">{{actionLabel}}</button>
           </div>

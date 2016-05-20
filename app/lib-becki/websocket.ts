@@ -3,11 +3,11 @@
  * of this distribution.
  */
 
-import * as ng from "angular2/angular2";
+import * as ngCore from "@angular/core";
 
 import * as notifications from "./notifications";
 
-@ng.Injectable()
+@ngCore.Injectable()
 export class Service {
   constructor(notificationsService:notifications.Service) {
     "use strict";

@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, View or Remove an Application, a Device or a Group'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
+<div data-bind-layout="'Add, View or Remove an Application, a Device or a Group'" data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="'Add'" data-on-actionClick="onAddClick($event)" data-bind-ngSwitch="tab">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="tab == 'applications'">
       <a data-on-click="onTabClick('applications', $event)" style="cursor: pointer">
@@ -21,18 +21,18 @@
       </a>
     </li>
   </ul>
-  <template data-bind-ng-switch-when="'applications'">
-    <div data-bind-list-view="applications" data-on-add-click="onAddApplicationClick($event)" data-on-remove-click="onRemoveApplicationClick($event)">
+  <template data-bind-ngSwitchWhen="'applications'">
+    <div data-bind-listView="applications" data-on-addClick="onAddApplicationClick($event)" data-on-removeClick="onRemoveApplicationClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
-  <template data-bind-ng-switch-when="'devices'">
-    <div data-bind-list-view="devices" data-on-add-click="onAddDeviceClick($event)" data-on-remove-click="onRemoveDeviceClick($event)">
+  <template data-bind-ngSwitchWhen="'devices'">
+    <div data-bind-listView="devices" data-on-addClick="onAddDeviceClick($event)" data-on-removeClick="onRemoveDeviceClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
-  <template data-bind-ng-switch-when="'groups'">
-    <div data-bind-list-view="groups" data-on-add-click="onAddGroupClick($event)" data-on-remove-click="onRemoveGroupClick($event)">
+  <template data-bind-ngSwitchWhen="'groups'">
+    <div data-bind-listView="groups" data-on-addClick="onAddGroupClick($event)" data-on-removeClick="onRemoveGroupClick($event)">
       <div class="spinner"></div>
     </div>
   </template>

@@ -3,15 +3,15 @@
  * directory of this distribution.
  */
 
-import * as _ from "underscore";
-import * as _String from "underscore.string";
-import * as ng from "angular2/angular2";
-import * as ngHttp from "angular2/http";
-import * as ngRouter from "angular2/router";
+import 'rxjs/add/operator/toPromise';
+
+import * as ngCore from "@angular/core";
+import * as ngHttp from "@angular/http";
+import * as ngRouter from "@angular/router-deprecated";
 
 import * as libBackEnd from "../lib-back-end/index";
 
-@ng.Injectable()
+@ngCore.Injectable()
 export class Service extends libBackEnd.BackEnd {
 
   http:ngHttp.Http;
@@ -20,11 +20,11 @@ export class Service extends libBackEnd.BackEnd {
 
   router:ngRouter.Router;
 
-  zone:ng.NgZone;
+  zone:ngCore.NgZone;
 
-  notificationsNew:ng.EventEmitter;
+  notificationsNew:ngCore.EventEmitter<MessageEvent>;
 
-  public constructor(http:ngHttp.Http, @ng.Inject("signing") signing:any[], router:ngRouter.Router, zone:ng.NgZone) {
+  public constructor(http:ngHttp.Http, @ngCore.Inject("signing") signing:any[], router:ngRouter.Router, zone:ngCore.NgZone) {
     "use strict";
 
     super();
@@ -32,24 +32,27 @@ export class Service extends libBackEnd.BackEnd {
     this.signing = signing;
     this.router = router;
     this.zone = zone;
-    this.notificationsNew = new ng.EventEmitter();
+    this.notificationsNew = new ngCore.EventEmitter<MessageEvent>();
   }
 
   protected requestGeneral(request:libBackEnd.Request):Promise<libBackEnd.Response> {
     "use strict";
 
     let ngRequest = new ngHttp.Request(new ngHttp.RequestOptions({
-      method: _.property(_String.capitalize(request.method.toLowerCase()))(ngHttp.RequestMethods),
+      method: request.method,
       headers: new ngHttp.Headers(request.headers),
       body: request.body,
       url: request.url
     }));
-    return new Promise(resolve => this.http.request(ngRequest).subscribe((ngResponse:ngHttp.Response) => {
-      if (ngResponse.status == 401) {
-        this.router.navigate(this.signing);
-      }
-      resolve(new libBackEnd.Response(ngResponse.status, ngResponse.json()));
-    }));
+    return this.http.request(ngRequest)
+        .toPromise()
+        .catch(ngResponse => ngResponse)
+        .then(ngResponse => {
+          if (ngResponse.status == 401) {
+            this.router.navigate(this.signing);
+          }
+          return new libBackEnd.Response(ngResponse.status, ngResponse.json());
+        });
   }
 
   public reregisterNotifications() {

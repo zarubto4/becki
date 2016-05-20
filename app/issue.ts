@@ -3,8 +3,9 @@
  * directory of this distribution.
  */
 
-import * as ng from "angular2/angular2";
-import * as ngRouter from "angular2/router";
+import * as ngCommon from "@angular/common";
+import * as ngCore from "@angular/core";
+import * as ngRouter from "@angular/router-deprecated";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBecki from "./lib-becki/index";
@@ -178,7 +179,7 @@ class Issue extends Item {
   }
 }
 
-@ng.Component({
+@ngCore.Component({
   templateUrl: "app/issue.html",
   directives: [
     libBeckiCustomValidator.Directive,
@@ -187,12 +188,12 @@ class Issue extends Item {
     libBeckiFieldIssueTags.Component,
     libBeckiLayout.Component,
     libBootstrapDropdown.DIRECTIVES,
-    ng.CORE_DIRECTIVES,
-    ng.FORM_DIRECTIVES,
+    ngCommon.CORE_DIRECTIVES,
+    ngCommon.FORM_DIRECTIVES,
     ngRouter.ROUTER_DIRECTIVES
   ]
 })
-export class Component implements ng.OnInit {
+export class Component implements ngCore.OnInit {
 
   id:string;
 
@@ -222,7 +223,7 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, @ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("issue");
@@ -240,7 +241,7 @@ export class Component implements ng.OnInit {
     this.router = router;
   }
 
-  onInit():void {
+  ngOnInit():void {
     "use strict";
 
     this.notifications.shift();
@@ -340,7 +341,7 @@ export class Component implements ng.OnInit {
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     return () => this.backEnd.getProject(projectId)
-        .then(project => Promise.all(project.b_programs_id.map(id => this.backEnd.getInteractionsScheme(id))))
+        .then(project => Promise.all<libBackEnd.InteractionsScheme>(project.b_programs_id.map(id => this.backEnd.getInteractionsScheme(id))))
         .then(schemes => !schemes.find(scheme => scheme.name == name));
   }
 

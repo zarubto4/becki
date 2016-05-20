@@ -3,60 +3,60 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + processor?.processor_name + "\" Processor"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="editing">
+<div data-bind-layout='"Edit the \"" + processor?.processor_name + "\" Processor"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="editing ? null : 'Edit'" data-on-actionClick="onEditClick($event)" data-bind-ngSwitch="editing">
   <form class="clearfix" data-on-submit="onSubmit($event)">
-    <template data-bind-ng-switch-when="true">
+    <template data-bind-ngSwitchWhen="true">
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon-pencil"></span>
           Model name
         </label>
-        <input class="form-control" required minlength="4" data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
+        <input class="form-control" required minlength="4" data-bindon-ngModel="nameField" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
       </div>
     </template>
     <div class="form-group">
       <label>
-        <template data-bind-ng-switch-when="true">
+        <template data-bind-ngSwitchWhen="true">
           <span class="glyphicon glyphicon-pencil"></span>
         </template>
         Model code
       </label>
-      <template data-bind-ng-switch-when="true">
-        <input class="form-control" required minlength="4" data-bindon-ng-model="codeField">
+      <template data-bind-ngSwitchWhen="true">
+        <input class="form-control" required minlength="4" data-bindon-ngModel="codeField">
       </template>
-      <template data-bind-ng-switch-when="false">
+      <template data-bind-ngSwitchWhen="false">
         <p class="form-control-static">{{processor?.processor_code}}</p>
       </template>
     </div>
     <div class="form-group">
       <label>
-        <template data-bind-ng-switch-when="true">
+        <template data-bind-ngSwitchWhen="true">
           <span class="glyphicon glyphicon-pencil"></span>
         </template>
         Description
       </label>
-      <template data-bind-ng-switch-when="true">
-        <textarea class="form-control" required minlength="24" data-bindon-ng-model="descriptionField"></textarea>
+      <template data-bind-ngSwitchWhen="true">
+        <textarea class="form-control" required minlength="24" data-bindon-ngModel="descriptionField"></textarea>
       </template>
-      <template data-bind-ng-switch-when="false">
+      <template data-bind-ngSwitchWhen="false">
         <p class="form-control-static">{{processor?.description}}</p>
       </template>
     </div>
     <div class="form-group">
       <label>
-        <template data-bind-ng-switch-when="true">
+        <template data-bind-ngSwitchWhen="true">
           <span class="glyphicon glyphicon-dashboard"></span>
         </template>
         Speed
       </label>
-      <template data-bind-ng-switch-when="true">
-        <input class="form-control" type="number" required step="1" data-bindon-ng-model="speedField">
+      <template data-bind-ngSwitchWhen="true">
+        <input class="form-control" type="number" required step="1" data-bindon-ngModel="speedField">
       </template>
-      <template data-bind-ng-switch-when="false">
+      <template data-bind-ngSwitchWhen="false">
         <p class="form-control-static">{{processor?.speed}}</p>
       </template>
     </div>
-    <template data-bind-ng-switch-when="true">
+    <template data-bind-ngSwitchWhen="true">
       <div class="pull-right">
         <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
         <button class="btn btn-primary" type="submit">Edit</button>

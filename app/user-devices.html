@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, View, Update or Remove a Device or a Program'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="['uploadProgram', 'uploadBinary'].indexOf(tab) != -1 ? null : 'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
+<div data-bind-layout="'Add, View, Update or Remove a Device or a Program'" data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="['uploadProgram', 'uploadBinary'].indexOf(tab) != -1 ? null : 'Add'" data-on-actionClick="onAddClick($event)" data-bind-ngSwitch="tab">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="tab == 'programs'">
       <a data-on-click="onTabClick('programs', $event)" style="cursor: pointer">
@@ -26,12 +26,12 @@
       </a>
     </li>
   </ul>
-  <template data-bind-ng-switch-when="'programs'">
-    <div data-bind-list-view="programs" data-on-add-click="onAddProgramClick($event)" data-on-remove-click="onRemoveProgramClick($event)">
+  <template data-bind-ngSwitchWhen="'programs'">
+    <div data-bind-listView="programs" data-on-addClick="onAddProgramClick($event)" data-on-removeClick="onRemoveProgramClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
-  <template data-bind-ng-switch-when="'uploadProgram'">
+  <template data-bind-ngSwitchWhen="'uploadProgram'">
     <form class="clearfix" data-on-submit="onUploadProgramSubmit($event)" style="margin-top: 2em">
       <div class="form-group">
         <label>
@@ -40,7 +40,7 @@
         </label>
         <div class="checkbox" template="ngFor #device of devices">
           <label>
-            <input type="checkbox" data-bindon-ng-model="device.selected">
+            <input type="checkbox" data-bindon-ngModel="device.selected">
             {{device.name}}
           </label>
         </div>
@@ -51,13 +51,13 @@
           Program
         </label>
         <div class="form-inline">
-          <select class="form-control" required data-bindon-ng-model="uploadProgramField" data-on-ng-model-change="onUploadProgramFieldChange($event)">
+          <select class="form-control" required data-bindon-ngModel="uploadProgramField" data-on-ngModelChange="onUploadProgramFieldChange($event)">
             <option value="">Select name...</option>
             <option data-bind-value="program.id" template="ngFor #program of programs">
               {{program.name}}
             </option>
           </select>
-          <select class="form-control" required data-bindon-ng-model="uploadProgramVersionField">
+          <select class="form-control" required data-bindon-ngModel="uploadProgramVersionField">
             <option value="">Select version...</option>
             <option data-bind-value="version.id" template="ngFor #version of getUploadProgramVersions()">
               {{version.version_name}}
@@ -68,7 +68,7 @@
       <button class="btn btn-primary pull-right" type="submit">Upload</button>
     </form>
   </template>
-  <template data-bind-ng-switch-when="'uploadBinary'">
+  <template data-bind-ngSwitchWhen="'uploadBinary'">
     <form class="clearfix" data-on-submit="onUploadBinarySubmit($event)" style="margin-top: 2em">
       <div class="form-group">
         <label>
@@ -77,7 +77,7 @@
         </label>
         <div class="checkbox" template="ngFor #device of devices">
           <label>
-            <input type="checkbox" data-bindon-ng-model="device.selected">
+            <input type="checkbox" data-bindon-ngModel="device.selected">
             {{device.name}}
           </label>
         </div>
@@ -87,13 +87,13 @@
           <span class="glyphicon glyphicon-file"></span>
           File
         </label>
-        <input class="form-control" type="file" required data-var-upload-binary-field>
+        <input class="form-control" type="file" required data-var-uploadBinaryField>
       </div>
       <button class="btn btn-primary pull-right" type="submit">Upload</button>
     </form>
   </template>
-  <template data-bind-ng-switch-when="'devices'">
-    <div data-bind-list-view="devices" data-on-add-click="onAddDeviceClick($event)" data-on-remove-click="onRemoveDeviceClick($event)">
+  <template data-bind-ngSwitchWhen="'devices'">
+    <div data-bind-listView="devices" data-on-addClick="onAddDeviceClick($event)" data-on-removeClick="onRemoveDeviceClick($event)">
       <div class="spinner"></div>
     </div>
   </template>

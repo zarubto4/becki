@@ -3,45 +3,45 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + device?.name + "\" Device"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="editing">
+<div data-bind-layout='"Edit the \"" + device?.name + "\" Device"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="editing ? null : 'Edit'" data-on-actionClick="onEditClick($event)" data-bind-ngSwitch="editing">
   <form class="clearfix" data-on-submit="onSubmit($event)">
     <div class="form-group">
       <label>Global</label>
       <p class="form-control-static">{{project ? 'no' : 'yes'}}</p>
     </div>
-    <template data-bind-ng-if="showProject">
+    <template data-bind-ngIf="showProject">
       <div class="form-group">
         <label>Project</label>
         <p class="form-control-static">{{project?.project_name}}</p>
       </div>
     </template>
-    <template data-bind-ng-switch-when="true">
+    <template data-bind-ngSwitchWhen="true">
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon-pencil"></span>
           Name
         </label>
-        <input class="form-control" required minlength="3" data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
+        <input class="form-control" required minlength="3" data-bindon-ngModel="nameField" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
       </div>
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon-resize-horizontal"></span>
           Width
         </label>
-        <input class="form-control" type="number" required step="1" data-bindon-ng-model="widthField">
+        <input class="form-control" type="number" required step="1" data-bindon-ngModel="widthField">
       </div>
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon-resize-vertical"></span>
           Height
         </label>
-        <input class="form-control" type="number" required step="1" data-bindon-ng-model="heightField">
+        <input class="form-control" type="number" required step="1" data-bindon-ngModel="heightField">
       </div>
     </template>
-    <template data-bind-ng-switch-when="false">
-      <div class="form-group" data-bind-ng-switch="device?.portrait_width != device?.landscape_height || device?.portrait_height != device?.landscape_width">
+    <template data-bind-ngSwitchWhen="false">
+      <div class="form-group" data-bind-ngSwitch="device?.portrait_width != device?.landscape_height || device?.portrait_height != device?.landscape_width">
         <label>Width × height</label>
-        <template data-bind-ng-switch-when="true">
+        <template data-bind-ngSwitchWhen="true">
           <p class="form-control-static">
             Portrait: {{device?.portrait_width}} × {{device?.portrait_height}}
           </p>
@@ -49,33 +49,33 @@
             Landscape: {{device?.landscape_width}} × {{device?.landscape_height}}
           </p>
         </template>
-        <template data-bind-ng-switch-when="false">
+        <template data-bind-ngSwitchWhen="false">
           <p class="form-control-static">
             {{device?.portrait_width}} × {{device?.portrait_height}}
           </p>
         </template>
       </div>
     </template>
-    <template data-bind-ng-switch-when="true">
+    <template data-bind-ngSwitchWhen="true">
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon glyphicon-option-horizontal"></span>
           Columns
         </label>
-        <input class="form-control" type="number" required step="1" data-bindon-ng-model="columnsField">
+        <input class="form-control" type="number" required step="1" data-bindon-ngModel="columnsField">
       </div>
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon glyphicon-option-vertical"></span>
           Rows
         </label>
-        <input class="form-control" type="number" required step="1" data-bindon-ng-model="rowsField">
+        <input class="form-control" type="number" required step="1" data-bindon-ngModel="rowsField">
       </div>
     </template>
-    <template data-bind-ng-switch-when="false">
-      <div class="form-group" data-bind-ng-switch="device?.portrait_square_width != device?.landscape_square_height || device?.portrait_square_height != device?.landscape_square_width">
+    <template data-bind-ngSwitchWhen="false">
+      <div class="form-group" data-bind-ngSwitch="device?.portrait_square_width != device?.landscape_square_height || device?.portrait_square_height != device?.landscape_square_width">
         <label>Columns × rows</label>
-        <template data-bind-ng-switch-when="true">
+        <template data-bind-ngSwitchWhen="true">
           <p class="form-control-static">
             Portrait: {{device?.portrait_square_width}} × {{device?.portrait_square_height}}
           </p>
@@ -83,14 +83,14 @@
             Landscape: {{device?.landscape_square_width}} × {{device?.landscape_square_height}}
           </p>
         </template>
-        <template data-bind-ng-switch-when="false">
+        <template data-bind-ngSwitchWhen="false">
           <p class="form-control-static">
             {{device?.portrait_square_width}} × {{device?.portrait_square_height}}
           </p>
         </template>
       </div>
     </template>
-    <template data-bind-ng-switch-when="true">
+    <template data-bind-ngSwitchWhen="true">
       <div class="pull-right">
         <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
         <button class="btn btn-primary" type="submit">Edit</button>

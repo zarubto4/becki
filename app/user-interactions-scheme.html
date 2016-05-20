@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + name + "\" Scheme"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="showHistory || editing ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="showHistory">
+<div data-bind-layout='"Edit the \"" + name + "\" Scheme"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="showHistory || editing ? null : 'Edit'" data-on-actionClick="onEditClick($event)" data-bind-ngSwitch="showHistory">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="!showHistory">
       <a data-on-click="onDetailsClick($event)" style="cursor: pointer">
@@ -16,111 +16,111 @@
       </a>
     </li>
   </ul>
-  <template data-bind-ng-switch-when="true">
-    <div data-bind-list-view="versions" data-bind-addable="false">
+  <template data-bind-ngSwitchWhen="true">
+    <div data-bind-listView="versions" data-bind-addable="false">
       <div class="spinner"></div>
     </div>
   </template>
-  <template data-bind-ng-switch-when="false">
-    <form class="clearfix" style="margin-top: 2em" data-on-submit="onSubmit($event)" data-bind-ng-switch="editing">
-      <template data-bind-ng-if="project">
+  <template data-bind-ngSwitchWhen="false">
+    <form class="clearfix" style="margin-top: 2em" data-on-submit="onSubmit($event)" data-bind-ngSwitch="editing">
+      <template data-bind-ngIf="project">
         <div class="form-group">
           <label>Project</label>
           <p class="form-control-static">{{project}}</p>
         </div>
       </template>
-      <template data-bind-ng-switch-when="true">
+      <template data-bind-ngSwitchWhen="true">
         <div class="form-group">
           <label>
             <span class="glyphicon glyphicon-pencil"></span>
             Scheme Name
           </label>
-          <input class="form-control" required minlength="8" data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
+          <input class="form-control" required minlength="8" data-bindon-ngModel="nameField" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
         </div>
       </template>
       <div class="form-group">
         <label>
-          <template data-bind-ng-switch-when="true">
+          <template data-bind-ngSwitchWhen="true">
             <span class="glyphicon glyphicon-pencil"></span>
           </template>
           Scheme Description
         </label>
-        <template data-bind-ng-switch-when="true">
-          <textarea class="form-control" data-bindon-ng-model="descriptionField"></textarea>
+        <template data-bind-ngSwitchWhen="true">
+          <textarea class="form-control" data-bindon-ngModel="descriptionField"></textarea>
         </template>
-        <template data-bind-ng-switch-when="false">
+        <template data-bind-ngSwitchWhen="false">
           <p class="form-control-static">{{description}}</p>
         </template>
       </div>
-      <template data-bind-ng-switch-when="true">
+      <template data-bind-ngSwitchWhen="true">
         <div class="pull-right">
           <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
           <button class="btn btn-primary" type="submit">Edit</button>
         </div>
       </template>
     </form>
-    <form class="clearfix" data-on-submit="onVersionSubmit($event)" data-bind-ng-switch="editing">
+    <form class="clearfix" data-on-submit="onVersionSubmit($event)" data-bind-ngSwitch="editing">
       <div class="form-group">
         <label>
-          <template data-bind-ng-switch-when="true">
+          <template data-bind-ngSwitchWhen="true">
             <span class="glyphicon glyphicon-pencil"></span>
           </template>
           Version Name
         </label>
-        <template data-bind-ng-switch-when="true">
-          <input class="form-control" required data-bindon-ng-model="versionNameField" data-bind-custom-validator="validateVersionNameField()" data-message="This name is used already. Please choose another one.">
+        <template data-bind-ngSwitchWhen="true">
+          <input class="form-control" required data-bindon-ngModel="versionNameField" data-bind-customValidator="validateVersionNameField()" data-message="This name is used already. Please choose another one.">
         </template>
-        <template data-bind-ng-switch-when="false">
+        <template data-bind-ngSwitchWhen="false">
           <p class="form-control-static">{{versionName}}</p>
         </template>
       </div>
       <div class="form-group">
         <label>
-          <template data-bind-ng-switch-when="true">
+          <template data-bind-ngSwitchWhen="true">
             <span class="glyphicon glyphicon-pencil"></span>
           </template>
           Version Description
         </label>
-        <template data-bind-ng-switch-when="true">
-          <textarea class="form-control" data-bindon-ng-model="versionDescriptionField"></textarea>
+        <template data-bind-ngSwitchWhen="true">
+          <textarea class="form-control" data-bindon-ngModel="versionDescriptionField"></textarea>
         </template>
-        <template data-bind-ng-switch-when="false">
+        <template data-bind-ngSwitchWhen="false">
           <p class="form-control-static">{{versionDescription}}</p>
         </template>
       </div>
       <div class="form-group">
         <label>
-          <template data-bind-ng-switch-when="true">
+          <template data-bind-ngSwitchWhen="true">
             <span class="glyphicon glyphicon-phone"></span>
           </template>
           {{showApplicationGroups ? 'Application groups' : 'Applications'}}
         </label>
-        <template data-bind-ng-switch-when="true">
-          <select class="form-control" data-bindon-ng-model="versionApplicationGroupField">
+        <template data-bind-ngSwitchWhen="true">
+          <select class="form-control" data-bindon-ngModel="versionApplicationGroupField">
             <option value="">Select name...</option>
-            <template ng-for data-var-group data-bind-ng-for-of="applicationGroups">
-              <option data-bind-value="group.id" data-bind-ng-switch="showApplicationGroups">
-                <template data-bind-ng-switch-when="true">
+            <template ngFor data-var-group data-bind-ngForOf="applicationGroups">
+              <option data-bind-value="group.id" data-bind-ngSwitch="showApplicationGroups">
+                <template data-bind-ngSwitchWhen="true">
                   {{group.program_name}}
                 </template>
-                <template data-bind-ng-switch-when="false">
-                  <template ng-for data-var-application data-bind-ng-for-of="group.m_programs" data-var-last="last">
-                    {{application.program_name}}<template data-bind-ng-if="!last">,</template>
+                <template data-bind-ngSwitchWhen="false">
+                  <template ngFor data-var-application data-bind-ngForOf="group.m_programs" data-var-last="last">
+                    {{application.program_name}}<template data-bind-ngIf="!last">,</template>
                   </template>
                 </template>
               </option>
             </template>
           </select>
         </template>
-        <template data-bind-ng-switch-when="false">
-          <ul class="form-control-static" data-bind-ng-switch="showApplicationGroups">
-            <template ng-for data-var-group data-bind-ng-for-of="versionApplicationGroups">
-              <template data-bind-ng-switch-when="true">
+        <template data-bind-ngSwitchWhen="false">
+          <ul class="form-control-static" data-bind-ngSwitch="showApplicationGroups">
+            <template ngFor data-var-group data-bind-ngForOf="versionApplicationGroups">
+              <template data-bind-ngSwitchWhen="true">
                 <li>
                   {{group.program_name}}
                 </li>
               </template>
-              <template data-bind-ng-switch-when="false">
+              <template data-bind-ngSwitchWhen="false">
                 <li template="ngFor #application of group.m_programs">
                   {{application.program_name}}
                 </li>
@@ -131,23 +131,23 @@
       </div>
       <div class="form-group">
         <label>
-          <template data-bind-ng-switch-when="true">
+          <template data-bind-ngSwitchWhen="true">
             <span class="glyphicon glyphicon-link"></span>
           </template>
           Scheme
         </label>
-        <template data-bind-ng-switch-when="true">
-          <div data-bindon-field-interactions-scheme="versionSchemeField">
+        <template data-bind-ngSwitchWhen="true">
+          <div data-bindon-fieldInteractionsScheme="versionSchemeField">
             <div class="spinner"></div>
           </div>
         </template>
-        <template data-bind-ng-switch-when="false">
-          <div data-bindon-field-interactions-scheme="versionScheme" data-bind-readonly="true">
+        <template data-bind-ngSwitchWhen="false">
+          <div data-bindon-fieldInteractionsScheme="versionScheme" data-bind-readonly="true">
             <div class="spinner"></div>
           </div>
         </template>
       </div>
-      <template data-bind-ng-switch-when="true">
+      <template data-bind-ngSwitchWhen="true">
         <div class="pull-right">
           <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
           <button class="btn btn-primary" type="submit" data-bind-disabled="!addVersion" data-bind-title="addVersion ? '' : 'You are not allowed to create a new version.'">Update</button>

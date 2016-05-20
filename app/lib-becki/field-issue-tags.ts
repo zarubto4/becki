@@ -3,7 +3,8 @@
  * of this distribution.
  */
 
-import * as ng from "angular2/angular2";
+import * as ngCommon from "@angular/common";
+import * as ngCore from "@angular/core";
 
 export function parseTags(tags:string):string[] {
   "use strict";
@@ -11,19 +12,19 @@ export function parseTags(tags:string):string[] {
   return tags.split(",").map(tag => tag.trim()).filter(tag => tag.length > 0);
 }
 
-@ng.Component({
-  selector: "[field-issue-tags]",
+@ngCore.Component({
+  selector: "[fieldIssueTags]",
   templateUrl: "app/lib-becki/field-issue-tags.html",
-  directives: [ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES]
+  directives: [ngCommon.CORE_DIRECTIVES, ngCommon.FORM_DIRECTIVES]
 })
 export class Component {
 
-  @ng.Input("fieldIssueTags")
+  @ngCore.Input("fieldIssueTags")
   model:string;
 
-  @ng.Output("fieldIssueTagsChange")
+  @ngCore.Output("fieldIssueTagsChange")
   // TODO: https://github.com/angular/angular/issues/6311
-  modelChange = new ng.EventEmitter(false);
+  modelChange = new ngCore.EventEmitter<string>(false);
 
   getTags():string[] {
     "use strict";

@@ -4,8 +4,9 @@
  */
 
 import * as blocko from "blocko";
-import * as ng from "angular2/angular2";
-import * as ngRouter from "angular2/router";
+import * as ngCommon from "@angular/common";
+import * as ngCore from "@angular/core";
+import * as ngRouter from "@angular/router-deprecated";
 import * as theGrid from "the-grid";
 
 import * as applicationDevice from "./application-device";
@@ -64,7 +65,6 @@ import * as userProjectNew from "./user-project-new";
 import * as userProjects from "./user-projects";
 
 @ngRouter.RouteConfig([
-{path: "/", redirectTo: "/user/applications"},
   {path: "/application/devices/:device", component: applicationDevice.Component, as: "ApplicationDevice"},
   {path: "/issue/new", component: issueNew.Component, as: "NewIssue"},
   {path: "/issues", component: issues.Component, as: "Issues"},
@@ -94,7 +94,7 @@ import * as userProjects from "./user-projects";
   {path: "/user/application/groups/:group", component: userApplicationGroup.Component, as: "UserApplicationGroup"},
   {path: "/user/application/new", component: userApplicationNew.Component, as: "NewUserApplication"},
   {path: "/user/application/vision", component: userApplicationsVision.Component, as: "UserApplicationsVision"},
-  {path: "/user/applications", component: userApplications.Component, as: "UserApplications"},
+  {path: "/user/applications", component: userApplications.Component, as: "UserApplications", useAsDefault: true},
   {path: "/user/applications/:application", component: userApplication.Component, as: "UserApplication"},
   {path: "/user/connections", component: userConnections.Component, as: "UserConnections"},
   {path: "/user/device/new", component: userDeviceNew.Component, as: "NewUserDevice"},
@@ -114,7 +114,7 @@ import * as userProjects from "./user-projects";
   {path: "/user/projects/:project/collaborator/new", component: userProjectCollaboratorNew.Component, as: "NewUserProjectCollaborator"},
   {path: "/users/:user", component: user.Component, as: "User"},
 ])
-@ng.Component({
+@ngCore.Component({
   selector: "[body]",
   templateUrl: "app/body.html",
   providers: [
@@ -122,9 +122,9 @@ import * as userProjects from "./user-projects";
     libBeckiModal.Service,
     libBeckiNotifications.Service,
     libBeckiWebsocket.Service,
-    ng.provide("connections", {useValue: ["UserConnections"]}),
-    ng.provide("home", {useValue: new libBeckiLayout.LabeledLink("No Name", ["UserApplications"])}),
-    ng.provide("navigation", {
+    ngCore.provide("connections", {useValue: ["UserConnections"]}),
+    ngCore.provide("home", {useValue: new libBeckiLayout.LabeledLink("No Name", ["UserApplications"])}),
+    ngCore.provide("navigation", {
       useValue: [
         new libBeckiLayout.LabeledLink("Applications", ["UserApplications"], "mobile"),
         new libBeckiLayout.LabeledLink("Applications (Vision)", ["UserApplicationsVision"], "mobile"),
@@ -136,9 +136,9 @@ import * as userProjects from "./user-projects";
         new libBeckiLayout.LabeledLink("Issues", ["Issues"], "bug")
       ]
     }),
-    ng.provide("signing", {useValue: ["Signing"]})
+    ngCore.provide("signing", {useValue: ["Signing"]})
   ],
-  directives: [libBeckiFieldCode.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
+  directives: [libBeckiFieldCode.Component, ngCommon.CORE_DIRECTIVES, ngCommon.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
   inputs: ["body"],
   host: {"[class.modal-open]": "modalEvent"}
 })
@@ -159,8 +159,8 @@ export class Component {
     this.router = router;
     this.notifications = [];
     this.notificationTimeout = null;
-    modal.modalChange.toRx().subscribe((event:libBeckiModal.Event) => this.modalEvent = event);
-    backEnd.notificationsNew.toRx().subscribe((event:MessageEvent) => {
+    modal.modalChange.subscribe((event:libBeckiModal.Event) => this.modalEvent = event);
+    backEnd.notificationsNew.subscribe((event:MessageEvent) => {
       let notificationData = JSON.parse(event.data);
       let notification:libBeckiNotifications.Notification;
       switch (notificationData.level) {

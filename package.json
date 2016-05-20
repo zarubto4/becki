@@ -1,29 +1,38 @@
 {
   "dependencies": {
-    "angular2": "2.0.0-alpha.45",
+    "@angular/common": "^2.0.0-rc.1",
+    "@angular/compiler": "^2.0.0-rc.1",
+    "@angular/core": "^2.0.0-rc.1",
+    "@angular/http": "^2.0.0-rc.1",
+    "@angular/platform-browser": "^2.0.0-rc.1",
+    "@angular/platform-browser-dynamic": "^2.0.0-rc.1",
+    "@angular/router-deprecated": "^2.0.0-rc.1",
     "autolayout": "^0.5.3",
     "blocko": "git+ssh://git@git.byzance.cz:js-components/blocko.git#v0.1.3",
     "codemirror": "^5.10.0",
+    "es6-shim": "^0.35.0",
     "jquery": "^2.2.1",
     "jquery-knob": "^1.2.11",
     "jqueryui": "^1.11.1",
     "material-design-icons": "^2.2.3",
     "patternfly": "^3.1.0",
+    "reflect-metadata": "^0.1.3",
     "roboto-fontface": "^0.4.5",
-    "systemjs": "0.19.2",
+    "rxjs": "5.0.0-beta.6",
+    "systemjs": "0.19.27",
     "the-grid": "git+ssh://git@git.byzance.cz:js-components/the-grid.git#v0.1.1",
     "underscore": "^1.8.0",
-    "underscore.string": "~3.2.2",
-    "weathericons": "^2.0.8"
+    "weathericons": "^2.0.8",
+    "zone.js": "^0.6.12"
   },
   "devDependencies": {
     "http-server": "^0.9.0",
-    "tsd": "^0.6.0",
-    "typescript": "1.6 - 1.7"
+    "typescript": "^1.8.10",
+    "typings": "^1.0.4"
   },
   "scripts": {
     "install:javascript": "npm install && tsc && npm prune --production",
-    "prepublish": "tsd install",
+    "prepublish": "typings install",
     "pretest": "tsc",
     "test": "http-server -c-1"
   }

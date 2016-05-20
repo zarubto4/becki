@@ -5,16 +5,16 @@
 
 <div class="modal fade" tabindex="-1" data-bind-class.in="modalEvent" data-bind-style.display="modalEvent ? 'block' : 'none'" data-bind-style.background-color="modalEvent ? 'rgba(0,0,0,0.5)' : 'initial'">
   <div class="modal-dialog">
-    <div class="modal-content" data-bind-ng-switch="getModalEventType(modalEvent)">
-      <template data-bind-ng-switch-when="'widget'">
-        <div data-bind-ng-switch="modalEvent?.readonly">
+    <div class="modal-content" data-bind-ngSwitch="getModalEventType(modalEvent)">
+      <template data-bind-ngSwitchWhen="'widget'">
+        <div data-bind-ngSwitch="modalEvent?.readonly">
           <div class="modal-header">
             <button type="button" class="close" data-on-click="onModalCloseClick($event)"><span>&times;</span></button>
             <h4 class="modal-title">
-              <template data-bind-ng-switch-when="true">
+              <template data-bind-ngSwitchWhen="true">
                 Review the Widget Configuration
               </template>
-              <template data-bind-ng-switch-when="false">
+              <template data-bind-ngSwitchWhen="false">
                 Edit the Widget
               </template>
             </h4>
@@ -22,34 +22,34 @@
           <div class="modal-body">
             <div class="form-group" template="ngFor #property of modalEvent?.widget?.configProperties">
               <label>
-                <template data-bind-ng-switch-when="false">
+                <template data-bind-ngSwitchWhen="false">
                   <span class="glyphicon glyphicon-pencil"></span>
                 </template>
                 {{property.displayName}}
               </label>
-              <template data-bind-ng-switch-when="true">
-                <p class="form-control-static" data-bind-ng-switch="getWidgetPropertyType(property)">
-                  <template data-bind-ng-switch-when="'bool'">
+              <template data-bind-ngSwitchWhen="true">
+                <p class="form-control-static" data-bind-ngSwitch="getWidgetPropertyType(property)">
+                  <template data-bind-ngSwitchWhen="'bool'">
                     {{property.value ? 'yes' : 'no'}}
                   </template>
-                  <template ng-switch-default>
+                  <template ngSwitchDefault>
                     {{property.value}}
                   </template>
                 </p>
               </template>
-              <template data-bind-ng-switch-when="false">
-                <div data-bind-ng-switch="getWidgetPropertyType(property)">
-                  <template data-bind-ng-switch-when="'int'">
-                    <input class="form-control" type="number" data-bindon-ng-model="property.value">
+              <template data-bind-ngSwitchWhen="false">
+                <div data-bind-ngSwitch="getWidgetPropertyType(property)">
+                  <template data-bind-ngSwitchWhen="'int'">
+                    <input class="form-control" type="number" data-bindon-ngModel="property.value">
                   </template>
-                  <template data-bind-ng-switch-when="'float'">
-                    <input class="form-control" type="number" step="0.01" data-bindon-ng-model="property.value">
+                  <template data-bind-ngSwitchWhen="'float'">
+                    <input class="form-control" type="number" step="0.01" data-bindon-ngModel="property.value">
                   </template>
-                  <template data-bind-ng-switch-when="'text'">
-                    <input class="form-control" data-bindon-ng-model="property.value">
+                  <template data-bind-ngSwitchWhen="'text'">
+                    <input class="form-control" data-bindon-ngModel="property.value">
                   </template>
-                  <template data-bind-ng-switch-when="'bool'">
-                    <input type="checkbox" data-bindon-ng-model="property.value">
+                  <template data-bind-ngSwitchWhen="'bool'">
+                    <input type="checkbox" data-bindon-ngModel="property.value">
                   </template>
                 </div>
               </template>
@@ -57,15 +57,15 @@
           </div>
         </div>
       </template>
-      <template data-bind-ng-switch-when="'block'">
-        <div data-bind-ng-switch="modalEvent?.readonly">
+      <template data-bind-ngSwitchWhen="'block'">
+        <div data-bind-ngSwitch="modalEvent?.readonly">
           <div class="modal-header">
             <button type="button" class="close" data-on-click="onModalCloseClick($event)"><span>&times;</span></button>
             <h4 class="modal-title">
-              <template data-bind-ng-switch-when="true">
+              <template data-bind-ngSwitchWhen="true">
                 Review the "{{modalEvent?.block?.id}}" Block Configuration
               </template>
-              <template data-bind-ng-switch-when="false">
+              <template data-bind-ngSwitchWhen="false">
                 Edit the "{{modalEvent?.block?.id}}" Block
               </template>
             </h4>
@@ -73,17 +73,17 @@
           <div class="modal-body">
             <div class="form-group" template="ngFor #property of modalEvent?.block?.getConfigProperties()">
               <label>
-                <template data-bind-ng-switch-when="false">
+                <template data-bind-ngSwitchWhen="false">
                   <span class="glyphicon glyphicon-pencil"></span>
                 </template>
                 {{property.displayName}}
               </label>
-              <template data-bind-ng-switch-when="true">
-                <p class="form-control-static" data-bind-ng-switch="getBlockPropertyType(property)">
-                  <template data-bind-ng-switch-when="'bool'">
+              <template data-bind-ngSwitchWhen="true">
+                <p class="form-control-static" data-bind-ngSwitch="getBlockPropertyType(property)">
+                  <template data-bind-ngSwitchWhen="'bool'">
                     {{property.value ? 'yes' : 'no'}}
                   </template>
-                  <template data-bind-ng-switch-when="'javascript'">
+                  <template data-bind-ngSwitchWhen="'javascript'">
                     <pre>{{property.value}}</pre>
                   </template>
                   <template ng-switch-default>
@@ -91,22 +91,22 @@
                   </template>
                 </p>
               </template>
-              <template data-bind-ng-switch-when="false">
-                <div data-bind-ng-switch="getBlockPropertyType(property)">
-                  <template data-bind-ng-switch-when="'int'">
-                    <input class="form-control" type="number" data-bindon-ng-model="property.value">
+              <template data-bind-ngSwitchWhen="false">
+                <div data-bind-ngSwitch="getBlockPropertyType(property)">
+                  <template data-bind-ngSwitchWhen="'int'">
+                    <input class="form-control" type="number" data-bindon-ngModel="property.value">
                   </template>
-                  <template data-bind-ng-switch-when="'float'">
-                    <input class="form-control" type="number" step="0.1" data-bindon-ng-model="property.value">
+                  <template data-bind-ngSwitchWhen="'float'">
+                    <input class="form-control" type="number" step="0.1" data-bindon-ngModel="property.value">
                   </template>
-                  <template data-bind-ng-switch-when="'text'">
-                    <input class="form-control" data-bindon-ng-model="property.value">
+                  <template data-bind-ngSwitchWhen="'text'">
+                    <input class="form-control" data-bindon-ngModel="property.value">
                   </template>
-                  <template data-bind-ng-switch-when="'bool'">
-                    <input type="checkbox" data-bindon-ng-model="property.value">
+                  <template data-bind-ngSwitchWhen="'bool'">
+                    <input type="checkbox" data-bindon-ngModel="property.value">
                   </template>
-                  <template data-bind-ng-switch-when="'javascript'">
-                    <div data-bindon-field-code="property.value" data-bind-mode="'text/javascript'">
+                  <template data-bind-ngSwitchWhen="'javascript'">
+                    <div data-bindon-fieldCode="property.value" data-bind-mode="'text/javascript'">
                       <div class="spinner"></div>
                     </div>
                   </template>
@@ -120,7 +120,7 @@
         <button type="button" class="btn btn-default" data-on-click="onModalCloseClick($event)">
           Close
         </button>
-        <template data-bind-ng-if="!modalEvent?.readonly">
+        <template data-bind-ngIf="!modalEvent?.readonly">
           <button type="button" class="btn btn-primary" data-on-click="onModalEditClick($event)">
             Edit
           </button>
@@ -129,12 +129,12 @@
     </div>
   </div>
 </div>
-<template data-bind-ng-if="router.navigating">
+<template data-bind-ngIf="router.navigating">
   <div class="overlay">
     <div class="spinner spinner-lg"></div>
   </div>
 </template>
-<template data-bind-ng-if="getNotification()">
+<template data-bind-ngIf="getNotification()">
   <div class="toast-pf toast-pf-top-right alert alert-{{getNotification().type}} alert-dismissable">
     <button type="button" class="close" data-on-click="onNotificationCloseClick($event)">
       <span class="pficon pficon-close"></span>

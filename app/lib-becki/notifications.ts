@@ -3,7 +3,8 @@
  * of this distribution.
  */
 
-import * as ng from "angular2/angular2";
+import * as ngCommon from "@angular/common";
+import * as ngCore from "@angular/core";
 
 import * as libBackEnd from "../lib-back-end/index";
 
@@ -87,10 +88,10 @@ export class Service {
   }
 }
 
-@ng.Component({
+@ngCore.Component({
   selector: "[notifications]",
   templateUrl: "app/lib-becki/notifications.html",
-  directives: [ng.CORE_DIRECTIVES]
+  directives: [ngCommon.CORE_DIRECTIVES]
 })
 export class Component {
 

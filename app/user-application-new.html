@@ -5,13 +5,13 @@
 
 <div data-bind-layout="'Create a New Application'" data-bind-breadcrumbs="breadcrumbs">
   <form class="clearfix" data-on-submit="onSubmit($event)">
-    <template data-bind-ng-if="projects?.length > 1">
+    <template data-bind-ngIf="projects?.length > 1">
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon-list"></span>
           Project
         </label>
-        <select class="form-control" required data-bind-disabled="selected" data-bindon-ng-model="projectField" data-on-ng-model-change="onProjectChange($event)">
+        <select class="form-control" required data-bind-disabled="selected" data-bindon-ngModel="projectField" data-on-ngModelChange="onProjectChange($event)">
           <option value="">Select name...</option>
           <option data-bind-value="project.id" template="ngFor #project of projects">
             {{project.project_name}}
@@ -19,13 +19,13 @@
         </select>
       </div>
     </template>
-    <template data-bind-ng-if="groups?.length > 1">
+    <template data-bind-ngIf="groups?.length > 1">
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon-list"></span>
           Group
         </label>
-        <select class="form-control" required data-bindon-ng-model="groupField">
+        <select class="form-control" required data-bindon-ngModel="groupField">
           <option value="">Select name...</option>
           <option data-bind-value="group.id" template="ngFor #group of groups">
             {{group.program_name}}
@@ -38,34 +38,34 @@
         <span class="glyphicon glyphicon-pencil"></span>
         Name
       </label>
-      <input class="form-control" required minlength="8" data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
+      <input class="form-control" required minlength="8" data-bindon-ngModel="nameField" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
     </div>
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon-pencil"></span>
         Description
       </label>
-      <textarea class="form-control" data-bindon-ng-model="descriptionField"></textarea>
+      <textarea class="form-control" data-bindon-ngModel="descriptionField"></textarea>
     </div>
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon-phone"></span>
         Device
       </label>
-      <select class="form-control" required data-bind-disabled="selected" data-bindon-ng-model="deviceField">
+      <select class="form-control" required data-bind-disabled="selected" data-bindon-ngModel="deviceField">
         <option value="">Select name...</option>
         <option data-bind-value="device.id" template="ngFor #device of allDevices">
           {{device.name}}
         </option>
       </select>
     </div>
-    <template data-bind-ng-if="selected">
+    <template data-bind-ngIf="selected">
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon-phone"></span>
           Screens
         </label>
-        <div data-bindon-field-application="codeField" data-bind-device="getDevice()">
+        <div data-bindon-fieldApplication="codeField" data-bind-device="getDevice()">
           <div class="spinner"></div>
         </div>
       </div>

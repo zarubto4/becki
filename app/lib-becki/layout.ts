@@ -3,8 +3,9 @@
  * directory of this distribution.
  */
 
-import * as ng from "angular2/angular2";
-import * as ngRouter from "angular2/router";
+import * as ngCommon from "@angular/common";
+import * as ngCore from "@angular/core";
+import * as ngRouter from "@angular/router-deprecated";
 
 import * as backEnd from "./back-end";
 import * as notifications from "./notifications";
@@ -30,13 +31,13 @@ export class LabeledLink {
   }
 }
 
-@ng.Component({
+@ngCore.Component({
   selector: "[layout]",
   templateUrl: "app/lib-becki/layout.html",
-  directives: [libBootstrapDropdown.DIRECTIVES, notifications.Component, ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
+  directives: [libBootstrapDropdown.DIRECTIVES, notifications.Component, ngCommon.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
   inputs: ["heading: layout", "breadcrumbs", "actionLabel"]
 })
-export class Component implements ng.OnInit, ng.OnDestroy {
+export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   home:LabeledLink;
 
@@ -52,8 +53,8 @@ export class Component implements ng.OnInit, ng.OnDestroy {
 
   navigation:LabeledLink[];
 
-  @ng.Output()
-  actionClick:ng.EventEmitter;
+  @ngCore.Output()
+  actionClick:ngCore.EventEmitter<void>;
 
   lastWindowWidth:string;
 
@@ -63,7 +64,7 @@ export class Component implements ng.OnInit, ng.OnDestroy {
 
   router:ngRouter.Router;
 
-  constructor(@ng.Inject("home") home:LabeledLink, @ng.Inject("connections") connections:any[], @ng.Inject("signing") signing:any[], @ng.Inject("navigation") navigation:LabeledLink[], backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(@ngCore.Inject("home") home:LabeledLink, @ngCore.Inject("connections") connections:any[], @ngCore.Inject("signing") signing:any[], @ngCore.Inject("navigation") navigation:LabeledLink[], backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.home = home;
@@ -72,14 +73,14 @@ export class Component implements ng.OnInit, ng.OnDestroy {
     this.connections = connections;
     this.signing = signing;
     this.navigation = navigation;
-    this.actionClick = new ng.EventEmitter();
+    this.actionClick = new ngCore.EventEmitter<void>();
     this.lastWindowWidth = null;
     this.backEnd = backEndService;
     this.notifications = notificationsService;
     this.router = router;
   }
 
-  onInit():void {
+  ngOnInit():void {
     "use strict";
 
     this.onWindowResize();
@@ -87,7 +88,7 @@ export class Component implements ng.OnInit, ng.OnDestroy {
     document.documentElement.classList.add(...HTML_CLASSES);
   }
 
-  onDestroy():void {
+  ngOnDestroy():void {
     "use strict";
 
     // TODO: https://groups.google.com/d/msg/angular/IJf-KyGC3Gs/h33mlUTrAwAJ
@@ -175,7 +176,7 @@ export class Component implements ng.OnInit, ng.OnDestroy {
     this.navbarState = DICTIONARY[this.navbarState];
   }
 
-  @ng.HostListener("window:resize")
+  @ngCore.HostListener("window:resize")
   onWindowResize():void {
     "use strict";
 

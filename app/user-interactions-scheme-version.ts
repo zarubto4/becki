@@ -3,8 +3,9 @@
  * of this distribution.
  */
 
-import * as ng from "angular2/angular2";
-import * as ngRouter from "angular2/router";
+import * as ngCommon from "@angular/common";
+import * as ngCore from "@angular/core";
+import * as ngRouter from "@angular/router-deprecated";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
@@ -12,11 +13,11 @@ import * as libBeckiFieldInteractionsScheme from "./lib-becki/field-interactions
 import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
-@ng.Component({
+@ngCore.Component({
   templateUrl: "app/user-interactions-scheme-version.html",
-  directives: [libBeckiFieldInteractionsScheme.Component, libBeckiLayout.Component, ng.CORE_DIRECTIVES]
+  directives: [libBeckiFieldInteractionsScheme.Component, libBeckiLayout.Component, ngCommon.CORE_DIRECTIVES]
 })
-export class Component implements ng.OnInit {
+export class Component implements ngCore.OnInit {
 
   id:string;
 
@@ -42,7 +43,7 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, @ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(routeParams:ngRouter.RouteParams, @ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.id = routeParams.get("version");
@@ -65,7 +66,7 @@ export class Component implements ng.OnInit {
     this.router = router;
   }
 
-  onInit():void {
+  ngOnInit():void {
     "use strict";
 
     this.notifications.shift();

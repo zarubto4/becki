@@ -3,29 +3,29 @@
  * of this distribution.
  */
 
-import * as ng from "angular2/angular2";
+import * as ngCore from "@angular/core";
 
 import * as notifications from "./notifications";
 
-@ng.Directive({
-  selector: "[custom-validator]",
+@ngCore.Directive({
+  selector: "[customValidator]",
   host: {"(input)": "clear()", "(change)": "validate()", "(blur)": "validate()"}
 })
 export class Directive {
 
-  @ng.Input()
+  @ngCore.Input("customValidator")
   customValidator:()=>Promise<boolean>;
 
-  @ng.Input()
+  @ngCore.Input()
   message:string;
 
-  field:ng.ElementRef;
+  field:ngCore.ElementRef;
 
   warned:boolean;
 
   notifications:notifications.Service;
 
-  constructor(field:ng.ElementRef, notificationsService:notifications.Service) {
+  constructor(field:ngCore.ElementRef, notificationsService:notifications.Service) {
     "use strict";
 
     this.message = "Please fill out a valid value.";

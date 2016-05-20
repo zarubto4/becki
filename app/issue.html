@@ -4,13 +4,13 @@
   -->
 
 <div data-bind-layout="heading" data-bind-breadcrumbs="breadcrumbs">
-  <p data-bind-ng-switch="!confirmationToRemove">
-    <template data-bind-ng-switch-when="true">
-      <template ng-for data-var-confirmation data-bind-ng-for-of="confirmations">
+  <p data-bind-ngSwitch="!confirmationToRemove">
+    <template data-bind-ngSwitchWhen="true">
+      <template ngFor data-var-confirmation data-bind-ngForOf="confirmations">
         <span class="label" data-bind-style.background-color="confirmation.color" style="border: 1px solid #eeeeee">{{confirmation.type}} <a data-on-click="onConfirmationRemoveClick(confirmation, $event)" style="cursor: pointer; color: #333333; margin-left: 1em"><span class="pficon pficon-close"></span></a></span>
       </template>
     </template>
-    <template data-bind-ng-switch-when="false">
+    <template data-bind-ngSwitchWhen="false">
       Do you really want to remove the confirmation?
       <button class="btn btn-danger" type="button" data-on-click="onConfirmationRemoveYesClick($event)">
         Yes
@@ -20,19 +20,19 @@
       </button>
     </template>
   </p>
-  <template data-bind-ng-if="related?.length">
+  <template data-bind-ngIf="related?.length">
     <div class="well">
       Following issues have been marked as related:
       <ul>
-        <li template="ngFor #link of related" data-bind-ng-switch="link.removing">
-          <template data-bind-ng-switch-when="true">
+        <li template="ngFor #link of related" data-bind-ngSwitch="link.removing">
+          <template data-bind-ngSwitchWhen="true">
             Do you really want to unmark this issue?
             <button class="btn btn-danger" type="button" data-on-click="onRelatedRemovingYesClick(link, $event)">Yes</button>
             <button class="btn btn-default" type="button" data-on-click="onRelatedRemovingNoClick(link, $event)">No</button>
           </template>
-          <template data-bind-ng-switch-when="false">
-            <a data-bind-router-link="link.targetLink">{{link.model.answer.name}}</a>
-            <template data-bind-ng-if="link.removeLink">
+          <template data-bind-ngSwitchWhen="false">
+            <a data-bind-routerLink="link.targetLink">{{link.model.answer.name}}</a>
+            <template data-bind-ngIf="link.removeLink">
               <a class="text-danger" data-on-click="onRelatedRemoveClick(link, $event)" style="cursor: pointer">
                 <span class="pficon pficon-close"></span>
               </a>
@@ -59,15 +59,15 @@
     <div class="media-body">
       <div class="panel panel-default">
         <div class="panel-body">
-          <template data-bind-ng-if="item.editing">
+          <template data-bind-ngIf="item.editing">
             <form class="clearfix" data-on-submit="onItemEditingSubmit(item, $event)">
-              <template data-bind-ng-if="item.hasOwnProperty('typeField')">
+              <template data-bind-ngIf="item.hasOwnProperty('typeField')">
                 <div class="form-group">
                   <label>
                     <span class="glyphicon glyphicon-list"></span>
                     Type
                   </label>
-                  <select class="form-control" required data-bindon-ng-model="item.typeField">
+                  <select class="form-control" required data-bindon-ngModel="item.typeField">
                     <option value="">Select type...</option>
                     <option data-bind-value="type.id" template="ngFor #type of types">
                       {{type.type}}
@@ -75,13 +75,13 @@
                   </select>
                 </div>
               </template>
-              <template data-bind-ng-if="item.hasOwnProperty('titleField')">
+              <template data-bind-ngIf="item.hasOwnProperty('titleField')">
                 <div class="form-group">
                   <label>
                     <span class="glyphicon glyphicon-pencil"></span>
                     Title
                   </label>
-                  <input class="form-control" required minlength="8" data-bindon-ng-model="item.titleField">
+                  <input class="form-control" required minlength="8" data-bindon-ngModel="item.titleField">
                 </div>
               </template>
               <div class="form-group">
@@ -89,17 +89,17 @@
                   <span class="glyphicon glyphicon-pencil"></span>
                   Body
                 </label>
-                <div data-bindon-field-issue-body="item.bodyField" data-bind-required="true">
+                <div data-bindon-fieldIssueBody="item.bodyField" data-bind-required="true">
                   <div class="spinner"></div>
                 </div>
               </div>
-              <template data-bind-ng-if="item.tagsEditable">
+              <template data-bind-ngIf="item.tagsEditable">
                 <div class="form-group">
                   <label>
                     <span class="glyphicon glyphicon-tag"></span>
                     Tags
                   </label>
-                  <div data-bindon-field-issue-tags="item.tagsField">
+                  <div data-bindon-fieldIssueTags="item.tagsField">
                     <div class="spinner"></div>
                   </div>
                 </div>
@@ -114,41 +114,41 @@
               </div>
             </form>
           </template>
-          <template data-bind-ng-if="item.importing">
+          <template data-bind-ngIf="item.importing">
             <form class="clearfix" data-on-submit="onItemImportingSubmit(item, $event)">
               <div class="form-group">
                 <label>
                   <span class="glyphicon glyphicon-list"></span>
                   Project
                 </label>
-                <select class="form-control" required data-bindon-ng-model="item.interactionsProjectField" data-on-ng-model-change="item.interactionsNameField = ''">
+                <select class="form-control" required data-bindon-ngModel="item.interactionsProjectField" data-on-ngModelChange="item.interactionsNameField = ''">
                   <option value="">Select name...</option>
                   <option data-bind-value="project.id" template="ngFor #project of projects">
                     {{project.project_name}}
                   </option>
                 </select>
               </div>
-              <template data-bind-ng-if="item.interactionsProjectField">
+              <template data-bind-ngIf="item.interactionsProjectField">
                 <div class="form-group">
                   <label>
                     <span class="glyphicon glyphicon-pencil"></span>
                     Name
                   </label>
-                  <input class="form-control" required minlength="8" data-bindon-ng-model="item.interactionsNameField" data-bind-custom-validator="validateInteractionsSchemeName(item.interactionsNameField, item.interactionsProjectField)" data-message="This name is used already. Please choose another one.">
+                  <input class="form-control" required minlength="8" data-bindon-ngModel="item.interactionsNameField" data-bind-customValidator="validateInteractionsSchemeName(item.interactionsNameField, item.interactionsProjectField)" data-message="This name is used already. Please choose another one.">
                 </div>
                 <div class="form-group">
                   <label>
                     <span class="glyphicon glyphicon-pencil"></span>
                     Description
                   </label>
-                  <textarea class="form-control" data-bindon-ng-model="item.interactionsDescriptionField"></textarea>
+                  <textarea class="form-control" data-bindon-ngModel="item.interactionsDescriptionField"></textarea>
                 </div>
                 <div class="form-group">
                   <label>
                     <span class="glyphicon glyphicon-link"></span>
                     Scheme
                   </label>
-                  <div data-bindon-field-interactions-scheme="item.interactionsSchemeField">
+                  <div data-bindon-fieldInteractionsScheme="item.interactionsSchemeField">
                     <div class="spinner"></div>
                   </div>
                 </div>
@@ -163,42 +163,42 @@
               </div>
             </form>
           </template>
-          <template data-bind-ng-if="item.removing">
+          <template data-bind-ngIf="item.removing">
             <div class="pull-right">
               <button class="btn btn-danger" type="button" data-on-click="onItemRemovingYesClick(item, $event)">Yes</button>
               <button class="btn btn-default" type="button" data-on-click="onItemRemovingNoClick(item, $event)">No</button>
             </div>
             Do you really want to remove this?
           </template>
-          <template data-bind-ng-if="!item.editing && !item.importing && !item.removing">
-            <template data-bind-ng-if="item.interactionsSchemeField != null || item.markable || item.confirmable || item.editItem || item.removeItem">
+          <template data-bind-ngIf="!item.editing && !item.importing && !item.removing">
+            <template data-bind-ngIf="item.interactionsSchemeField != null || item.markable || item.confirmable || item.editItem || item.removeItem">
               <div class="dropdown dropdown-kebab-pf pull-right">
                 <button class="btn btn-link dropdown-toggle" type="button">
                   <span class="fa fa-ellipsis-v"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right">
-                  <template data-bind-ng-if="item.interactionsSchemeField != null">
+                  <template data-bind-ngIf="item.interactionsSchemeField != null">
                     <li><a data-on-click="onItemImportClick(item, $event)" style="cursor: pointer">Import</a></li>
                   </template>
-                  <template data-bind-ng-if="item.markable">
+                  <template data-bind-ngIf="item.markable">
                     <li><a data-on-click="onItemMarkClick(item, $event)" style="cursor: pointer">Mark</a></li>
                   </template>
-                  <template data-bind-ng-if="item.confirmable">
+                  <template data-bind-ngIf="item.confirmable">
                     <li><a data-on-click="onItemConfirmationAddClick(item, $event)" style="cursor: pointer">Confirm</a></li>
                   </template>
-                  <template data-bind-ng-if="item.editItem">
+                  <template data-bind-ngIf="item.editItem">
                     <li><a data-on-click="onItemEditClick(item, $event)" style="cursor: pointer">Edit</a></li>
                   </template>
-                  <template data-bind-ng-if="item.removeItem">
+                  <template data-bind-ngIf="item.removeItem">
                     <li><a data-on-click="onItemRemoveClick(item, $event)" style="cursor: pointer">Remove</a></li>
                   </template>
                 </ul>
               </div>
             </template>
-            <div data-bindon-field-issue-body="item.body" data-bind-readonly="true">
+            <div data-bindon-fieldIssueBody="item.body" data-bind-readonly="true">
               <div class="spinner"></div>
             </div>
-            <template ng-for data-var-tag data-bind-ng-for-of="item.tags">
+            <template ngFor data-var-tag data-bind-ngForOf="item.tags">
               <span class="label label-default">{{tag}}</span>
             </template>
             <p class="pull-right">{{item.author}} - {{item.date}}</p>
@@ -211,14 +211,14 @@
                 <img class="media-object" src="...">
               </div>
               <div class="media-body" style="overflow: visible">
-                <template data-bind-ng-if="comment.editing">
+                <template data-bind-ngIf="comment.editing">
                   <form class="clearfix" data-on-submit="onCommentEditingSubmit(comment, $event)">
                     <div class="form-group">
                       <label>
                         <span class="glyphicon glyphicon-comment"></span>
                         Comment
                       </label>
-                      <textarea class="form-control" required minlength="4" data-bindon-ng-model="comment.bodyField"></textarea>
+                      <textarea class="form-control" required minlength="4" data-bindon-ngModel="comment.bodyField"></textarea>
                     </div>
                     <div class="pull-right">
                       <button class="btn btn-danger" type="button" data-on-click="onCommentEditingCancelClick(comment, $event)">
@@ -230,14 +230,14 @@
                     </div>
                   </form>
                 </template>
-                <template data-bind-ng-if="comment.removing">
+                <template data-bind-ngIf="comment.removing">
                   <div class="pull-right">
                     <button class="btn btn-danger" type="button" data-on-click="onCommentRemovingYesClick(comment, $event)">Yes</button>
                     <button class="btn btn-default" type="button" data-on-click="onCommentRemovingNoClick(comment, $event)">No</button>
                   </div>
                   Do you really want to remove this comment?
                 </template>
-                <template data-bind-ng-if="!comment.editing && !comment.removing">
+                <template data-bind-ngIf="!comment.editing && !comment.removing">
                   <div class="media-heading" style="font-weight: bold;">
                     {{comment.author}} - {{comment.date}}
                     <div class="pull-right">
@@ -252,16 +252,16 @@
                           <span class="glyphicon glyphicon-thumbs-down"></span>
                         </button>
                       </div>
-                      <template data-bind-ng-if="comment.editComment || comment.removeComment">
+                      <template data-bind-ngIf="comment.editComment || comment.removeComment">
                         <div class="dropdown dropdown-kebab-pf pull-right" style="margin-left: 10px">
                           <button class="btn btn-link dropdown-toggle" type="button">
                             <span class="fa fa-ellipsis-v"></span>
                           </button>
                           <ul class="dropdown-menu dropdown-menu-right">
-                            <template data-bind-ng-if="comment.editComment">
+                            <template data-bind-ngIf="comment.editComment">
                               <li><a data-on-click="onCommentEditClick(comment, $event)" style="cursor: pointer">Edit</a></li>
                             </template>
-                            <template data-bind-ng-if="comment.removeComment">
+                            <template data-bind-ngIf="comment.removeComment">
                               <li><a data-on-click="onCommentRemoveClick(comment, $event)" style="cursor: pointer">Remove</a></li>
                             </template>
                           </ul>
@@ -275,14 +275,14 @@
             </div>
             <hr>
           </div>
-          <template data-bind-ng-if="item.commentItem">
+          <template data-bind-ngIf="item.commentItem">
             <div class="media">
               <div class="media-left">
                 <img class="media-object" src="...">
               </div>
               <form class="media-body" data-on-submit="onCommentCreationSubmit(item, $event)">
                 <div class="input-group">
-                  <input class="form-control" type="text" required minlength="4" data-bindon-ng-model="item.commentField">
+                  <input class="form-control" type="text" required minlength="4" data-bindon-ngModel="item.commentField">
                   <span class="input-group-btn">
                     <button class="btn btn-primary" type="submit">Comment</button>
                   </span>
@@ -294,7 +294,7 @@
       </div>
     </div>
   </div>
-  <template data-bind-ng-if="createAnswer">
+  <template data-bind-ngIf="createAnswer">
     <div class="panel panel-default">
       <form class="panel-body clearfix" data-on-submit="onAnswerCreationSubmit($event)">
         <div class="form-group">
@@ -302,7 +302,7 @@
             <span class="glyphicon glyphicon-pencil"></span>
             New Answer
           </label>
-          <div data-bindon-field-issue-body="answerBodyField" data-bind-required="true">
+          <div data-bindon-fieldIssueBody="answerBodyField" data-bind-required="true">
             <div class="spinner"></div>
           </div>
         </div>

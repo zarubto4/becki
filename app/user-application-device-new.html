@@ -5,13 +5,13 @@
 
 <div data-bind-layout="'Add a New Device for Applications'" data-bind-breadcrumbs="breadcrumbs">
   <form class="clearfix" data-on-submit="onSubmit($event)">
-    <template data-bind-ng-if="projects?.length > 1">
+    <template data-bind-ngIf="projects?.length > 1">
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon-list"></span>
           Project
         </label>
-        <select class="form-control" required data-bindon-ng-model="projectField">
+        <select class="form-control" required data-bindon-ngModel="projectField">
           <option value="">Select name...</option>
           <option data-bind-value="project.id" template="ngFor #project of projects">
             {{project.project_name}}
@@ -24,35 +24,35 @@
         <span class="glyphicon glyphicon-pencil"></span>
         Name
       </label>
-      <input class="form-control" required minlength="3" data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
+      <input class="form-control" required minlength="3" data-bindon-ngModel="nameField" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
     </div>
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon-resize-horizontal"></span>
         Width
       </label>
-      <input class="form-control" type="number" required step="1" data-bindon-ng-model="widthField">
+      <input class="form-control" type="number" required step="1" data-bindon-ngModel="widthField">
     </div>
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon-resize-vertical"></span>
         Height
       </label>
-      <input class="form-control" type="number" required step="1" data-bindon-ng-model="heightField">
+      <input class="form-control" type="number" required step="1" data-bindon-ngModel="heightField">
     </div>
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon glyphicon-option-horizontal"></span>
         Columns
       </label>
-      <input class="form-control" type="number" required step="1" data-bindon-ng-model="columnsField">
+      <input class="form-control" type="number" required step="1" data-bindon-ngModel="columnsField">
     </div>
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon glyphicon-option-vertical"></span>
         Rows
       </label>
-      <input class="form-control" type="number" required step="1" data-bindon-ng-model="rowsField">
+      <input class="form-control" type="number" required step="1" data-bindon-ngModel="rowsField">
     </div>
     <div class="pull-right">
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>

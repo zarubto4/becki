@@ -3,8 +3,9 @@
  * directory of this distribution.
  */
 
-import * as ng from "angular2/angular2";
-import * as ngRouter from "angular2/router";
+import * as ngCommon from "@angular/common";
+import * as ngCore from "@angular/core";
+import * as ngRouter from "@angular/router-deprecated";
 
 import * as libBootstrapDropdown from "../lib-bootstrap/dropdown";
 
@@ -34,27 +35,27 @@ export class Item {
   }
 }
 
-@ng.Component({
-  selector: "[list-view]",
+@ngCore.Component({
+  selector: "[listView]",
   templateUrl: "app/lib-patternfly/list-view.html",
-  directives: [libBootstrapDropdown.DIRECTIVES, ng.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES]
+  directives: [libBootstrapDropdown.DIRECTIVES, ngCommon.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES]
 })
 export class Component {
 
-  @ng.Input("listView")
+  @ngCore.Input("listView")
   items:Item[];
 
-  @ng.Input()
+  @ngCore.Input()
   emptyTitle:string;
 
-  @ng.Input()
+  @ngCore.Input()
   addable:boolean;
 
-  @ng.Output()
-  addClick:ng.EventEmitter;
+  @ngCore.Output()
+  addClick:ngCore.EventEmitter<void>;
 
-  @ng.Output()
-  removeClick:ng.EventEmitter;
+  @ngCore.Output()
+  removeClick:ngCore.EventEmitter<string>;
 
   router:ngRouter.Router;
 
@@ -63,8 +64,8 @@ export class Component {
 
     this.emptyTitle = "No item yet";
     this.addable = true;
-    this.addClick = new ng.EventEmitter();
-    this.removeClick = new ng.EventEmitter();
+    this.addClick = new ngCore.EventEmitter<void>();
+    this.removeClick = new ngCore.EventEmitter();
     this.router = router;
   }
 

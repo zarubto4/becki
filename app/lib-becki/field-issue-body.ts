@@ -3,7 +3,8 @@
  * of this distribution.
  */
 
-import * as ng from "angular2/angular2";
+import * as ngCommon from "@angular/common";
+import * as ngCore from "@angular/core";
 
 import * as fieldInteractionsScheme from "./field-interactions-scheme";
 
@@ -15,24 +16,24 @@ export function getInteractions(model:string):string {
   return JSON.parse(model).interactions;
 }
 
-@ng.Component({
-  selector: "[field-issue-body]",
+@ngCore.Component({
+  selector: "[fieldIssueBody]",
   templateUrl: "app/lib-becki/field-issue-body.html",
-  directives: [fieldInteractionsScheme.Component, ng.CORE_DIRECTIVES, ng.FORM_DIRECTIVES],
+  directives: [fieldInteractionsScheme.Component, ngCommon.CORE_DIRECTIVES, ngCommon.FORM_DIRECTIVES],
   inputs: ["fieldIssueBody", "required"]
 })
-export class Component implements ng.OnChanges {
+export class Component implements ngCore.OnChanges {
 
   model = JSON.parse(EMPTY);
 
-  @ng.Input()
+  @ngCore.Input()
   readonly = false;
 
-  @ng.Output("fieldIssueBodyChange")
+  @ngCore.Output("fieldIssueBodyChange")
   // TODO: https://github.com/angular/angular/issues/6311
-  modelChange = new ng.EventEmitter(false);
+  modelChange = new ngCore.EventEmitter<string>(false);
 
-  onChanges(changes:{[key: string]: ng.SimpleChange}):void {
+  ngOnChanges(changes:{[key: string]: ngCore.SimpleChange}):void {
     "use strict";
 
     let modelChange = changes["fieldIssueBody"];

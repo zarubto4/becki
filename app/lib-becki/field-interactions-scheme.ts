@@ -4,31 +4,32 @@
  */
 
 import * as blocko from "blocko";
-import * as ng from "angular2/angular2";
+import * as ngCommon from "@angular/common";
+import * as ngCore from "@angular/core";
 
 import * as modal from "./modal";
 
-@ng.Component({
-  selector: "[field-interactions-scheme]",
+@ngCore.Component({
+  selector: "[fieldInteractionsScheme]",
   templateUrl: "app/lib-becki/field-interactions-scheme.html",
-  directives: [ng.CORE_DIRECTIVES]
+  directives: [ngCommon.CORE_DIRECTIVES]
 })
-export class Component implements ng.AfterViewInit {
+export class Component implements ngCore.AfterViewInit {
 
-  @ng.Input()
+  @ngCore.Input()
   readonly:boolean;
 
   controller:blocko.BlockoCore.Controller;
 
-  @ng.ViewChild("field")
-  field:ng.ElementRef;
+  @ngCore.ViewChild("field")
+  field:ngCore.ElementRef;
 
-  @ng.Output("fieldInteractionsSchemeChange")
-  modelChange:ng.EventEmitter;
+  @ngCore.Output("fieldInteractionsSchemeChange")
+  modelChange:ngCore.EventEmitter<string>;
 
   modal:modal.Service;
 
-  @ng.Input("fieldInteractionsScheme")
+  @ngCore.Input("fieldInteractionsScheme")
   set model(scheme:string) {
     "use strict";
 
@@ -46,11 +47,11 @@ export class Component implements ng.AfterViewInit {
     });
     this.controller.registerBlocks(blocko.BlockoBasicBlocks.Manager.getAllBlocks());
     // TODO: https://github.com/angular/angular/issues/6311
-    this.modelChange = new ng.EventEmitter(false);
+    this.modelChange = new ngCore.EventEmitter(false);
     this.modal = modalService;
   }
 
-  afterViewInit():void {
+  ngAfterViewInit():void {
     "use strict";
 
     let renderer = new blocko.BlockoSnapRenderer.RendererController(this.field.nativeElement);

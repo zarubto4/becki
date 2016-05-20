@@ -3,34 +3,34 @@
  * of this distribution.
  */
 
-import * as ng from "angular2/angular2";
+import * as ngCore from "@angular/core";
 import * as theGrid from "the-grid";
 
 import * as modal from "./modal";
 import * as notifications from "./notifications";
 
-@ng.Component({
-  selector: "[field-application]",
+@ngCore.Component({
+  selector: "[fieldApplication]",
   templateUrl: "app/lib-becki/field-application.html",
   inputs: ["model: fieldApplication", "device"]
 })
-export class Component implements ng.AfterViewInit, ng.OnChanges {
+export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
 
   initialModel:string;
 
   controller:theGrid.Core.Controller;
 
-  @ng.Input()
+  @ngCore.Input()
   readonly:boolean;
 
-  @ng.ViewChild("toolbar")
-  toolbar:ng.ElementRef;
+  @ngCore.ViewChild("toolbar")
+  toolbar:ngCore.ElementRef;
 
-  @ng.ViewChild("screens")
-  screens:ng.ElementRef;
+  @ngCore.ViewChild("screens")
+  screens:ngCore.ElementRef;
 
-  @ng.Output("fieldApplicationChange")
-  modelChange:ng.EventEmitter;
+  @ngCore.Output("fieldApplicationChange")
+  modelChange:ngCore.EventEmitter<string>;
 
   modal:modal.Service;
 
@@ -52,12 +52,12 @@ export class Component implements ng.AfterViewInit, ng.OnChanges {
     this.controller.registerWidget(theGrid.Widgets.KnobWidget);
     this.readonly = false;
     // TODO: https://github.com/angular/angular/issues/6311
-    this.modelChange = new ng.EventEmitter(false);
+    this.modelChange = new ngCore.EventEmitter(false);
     this.modal = modalService;
     this.notifications = notificationsService;
   }
 
-  onChanges(changes:{[key:string]: ng.SimpleChange}):void {
+  ngOnChanges(changes:{[key:string]: ngCore.SimpleChange}):void {
     "use strict";
 
     let device = changes["device"];
@@ -81,7 +81,7 @@ export class Component implements ng.AfterViewInit, ng.OnChanges {
     }
   }
 
-  afterViewInit():void {
+  ngAfterViewInit():void {
     "use strict";
 
     if (!this.controller.deviceProfile) {

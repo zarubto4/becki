@@ -3,40 +3,40 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + name + "\" Application"' data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="editing || !editApplication ? null : 'Edit'" data-on-action-click="onEditClick($event)" data-bind-ng-switch="editing">
+<div data-bind-layout='"Edit the \"" + name + "\" Application"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="editing || !editApplication ? null : 'Edit'" data-on-actionClick="onEditClick($event)" data-bind-ngSwitch="editing">
   <form class="clearfix" data-on-submit="onSubmit($event)">
-    <template data-bind-ng-if="showProject">
+    <template data-bind-ngIf="showProject">
       <div class="form-group">
         <label>Project</label>
         <p class="form-control-static">{{project?.project_name}}</p>
       </div>
     </template>
-    <template data-bind-ng-if="showGroup">
+    <template data-bind-ngIf="showGroup">
       <div class="form-group">
         <label>Group</label>
         <p class="form-control-static">{{group}}</p>
       </div>
     </template>
-    <template data-bind-ng-switch-when="true">
+    <template data-bind-ngSwitchWhen="true">
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon-pencil"></span>
           Name
         </label>
-        <input class="form-control" required minlength="8" data-bindon-ng-model="nameField" data-bind-custom-validator="validateNameField()" data-message="This name is used already. Please choose another one.">
+        <input class="form-control" required minlength="8" data-bindon-ngModel="nameField" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
       </div>
     </template>
     <div class="form-group">
       <label>
-        <template data-bind-ng-switch-when="true">
+        <template data-bind-ngSwitchWhen="true">
           <span class="glyphicon glyphicon-pencil"></span>
         </template>
         Description
       </label>
-      <template data-bind-ng-switch-when="true">
-        <textarea class="form-control" data-bindon-ng-model="descriptionField"></textarea>
+      <template data-bind-ngSwitchWhen="true">
+        <textarea class="form-control" data-bindon-ngModel="descriptionField"></textarea>
       </template>
-      <template data-bind-ng-switch-when="false">
+      <template data-bind-ngSwitchWhen="false">
         <p class="form-control-static">{{description}}</p>
       </template>
     </div>
@@ -44,27 +44,27 @@
       <label>Device</label>
       <p class="form-control-static">{{device?.name}}</p>
     </div>
-    <template data-bind-ng-if="device">
+    <template data-bind-ngIf="device">
       <div class="form-group">
         <label>
-          <template data-bind-ng-switch-when="true">
+          <template data-bind-ngSwitchWhen="true">
             <span class="glyphicon glyphicon-phone"></span>
           </template>
           Screens
         </label>
-        <template data-bind-ng-switch-when="true">
-          <div data-bindon-field-application="codeField" data-bind-device="device">
+        <template data-bind-ngSwitchWhen="true">
+          <div data-bindon-fieldApplication="codeField" data-bind-device="device">
             <div class="spinner"></div>
           </div>
         </template>
-        <template data-bind-ng-switch-when="false">
-          <div data-bindon-field-application="code" data-bind-device="device" data-bind-readonly="true">
+        <template data-bind-ngSwitchWhen="false">
+          <div data-bindon-fieldApplication="code" data-bind-device="device" data-bind-readonly="true">
             <div class="spinner"></div>
           </div>
         </template>
       </div>
     </template>
-    <template data-bind-ng-switch-when="true">
+    <template data-bind-ngSwitchWhen="true">
       <div class="pull-right">
         <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
         <button class="btn btn-primary" type="submit">Edit</button>

@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, View, Update or Remove a Scheme, a Block or a Moderator of Interactions'" data-bind-breadcrumbs="breadcrumbs" data-bind-action-label="tab == 'upload' ? null : 'Add'" data-on-action-click="onAddClick($event)" data-bind-ng-switch="tab">
+<div data-bind-layout="'Add, View, Update or Remove a Scheme, a Block or a Moderator of Interactions'" data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="tab == 'upload' ? null : 'Add'" data-on-actionClick="onAddClick($event)" data-bind-ngSwitch="tab">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="tab == 'schemes'">
       <a data-on-click="onTabClick('schemes', $event)" style="cursor: pointer">
@@ -26,18 +26,18 @@
       </a>
     </li>
   </ul>
-  <template data-bind-ng-switch-when="'schemes'">
-    <div data-bind-list-view="schemes" data-on-add-click="onAddSchemeClick($event)" data-on-remove-click="onRemoveSchemeClick($event)">
+  <template data-bind-ngSwitchWhen="'schemes'">
+    <div data-bind-listView="schemes" data-on-addClick="onAddSchemeClick($event)" data-on-removeClick="onRemoveSchemeClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
-  <template data-bind-ng-switch-when="'blocks'">
-    <div data-bind-list-view="blocks" data-on-add-click="onAddBlockClick($event)" data-on-remove-click="onRemoveBlockClick($event)">
+  <template data-bind-ngSwitchWhen="'blocks'">
+    <div data-bind-listView="blocks" data-on-addClick="onAddBlockClick($event)" data-on-removeClick="onRemoveBlockClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
-  <template data-bind-ng-switch-when="'upload'">
-    <form class="clearfix" data-on-submit="onUploadSubmit($event)" style="margin-top: 2em">
+  <template data-bind-ngSwitchWhen="'upload'">
+    <form class="clearfix" data-onSubmit="onUploadSubmit($event)" style="margin-top: 2em">
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon-list"></span>
@@ -46,9 +46,9 @@
         <!-- TODO: https://github.com/angular/angular/issues/4427 -->
         <div class="checkbox" data-bind-class.disabled="!moderator.online" template="ngFor #moderator of moderators">
           <label>
-            <input type="checkbox" data-bind-disabled="!moderator.online" data-bindon-ng-model="moderator.selected">
+            <input type="checkbox" data-bind-disabled="!moderator.online" data-bindon-ngModel="moderator.selected">
             {{moderator.id}}
-            <template data-bind-ng-if="!moderator.online">(offline)</template>
+            <template data-bind-ngIf="!moderator.online">(offline)</template>
           </label>
         </div>
       </div>
@@ -58,13 +58,13 @@
           Scheme
         </label>
         <div class="form-inline">
-          <select class="form-control" required data-bindon-ng-model="uploadSchemeField" data-on-ng-model-change="onUploadSchemeFieldChange($event)">
+          <select class="form-control" required data-bindon-ngModel="uploadSchemeField" data-on-ngModelChange="onUploadSchemeFieldChange($event)">
             <option value="">Select name...</option>
             <option data-bind-value="scheme.id" template="ngFor #scheme of schemes">
               {{scheme.name}}
             </option>
           </select>
-          <select class="form-control" required data-bindon-ng-model="uploadVersionField">
+          <select class="form-control" required data-bindon-ngModel="uploadVersionField">
             <option value="">Select version...</option>
             <option data-bind-value="version.id" template="ngFor #version of getUploadVersions()">
               {{version.version_name}}
@@ -75,8 +75,8 @@
       <button class="btn btn-primary pull-right" type="submit">Upload</button>
     </form>
   </template>
-  <template data-bind-ng-switch-when="'moderators'">
-    <div data-bind-list-view="moderators" data-on-add-click="onAddModeratorClick($event)" data-on-remove-click="onRemoveModeratorClick($event)">
+  <template data-bind-ngSwitchWhen="'moderators'">
+    <div data-bind-listView="moderators" data-on-addClick="onAddModeratorClick($event)" data-on-removeClick="onRemoveModeratorClick($event)">
       <div class="spinner"></div>
     </div>
   </template>

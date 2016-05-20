@@ -3,8 +3,9 @@
  * directory of this distribution.
  */
 
-import * as ng from "angular2/angular2";
-import * as ngRouter from "angular2/router";
+import * as ngCommon from "@angular/common";
+import * as ngCore from "@angular/core";
+import * as ngRouter from "@angular/router-deprecated";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBecki from "./lib-becki/index";
@@ -14,17 +15,17 @@ import * as libBeckiFieldInteractionsScheme from "./lib-becki/field-interactions
 import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
-@ng.Component({
+@ngCore.Component({
   templateUrl: "app/user-interactions-scheme-new.html",
   directives: [
     libBeckiCustomValidator.Directive,
     libBeckiFieldInteractionsScheme.Component,
     libBeckiLayout.Component,
-    ng.CORE_DIRECTIVES,
-    ng.FORM_DIRECTIVES
+    ngCommon.CORE_DIRECTIVES,
+    ngCommon.FORM_DIRECTIVES
   ]
 })
-export class Component implements ng.OnInit {
+export class Component implements ngCore.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
@@ -50,7 +51,7 @@ export class Component implements ng.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(@ng.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(@ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
@@ -69,7 +70,7 @@ export class Component implements ng.OnInit {
     this.router = router;
   }
 
-  onInit():void {
+  ngOnInit():void {
     "use strict";
 
     this.notifications.shift();
@@ -97,7 +98,7 @@ export class Component implements ng.OnInit {
     if (this.getProject()) {
       this.backEnd.getProject(this.getProject())
           .then(project => {
-            return Promise.all(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id)));
+            return Promise.all<libBackEnd.ApplicationGroup>(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id)));
           })
           .then(groups => {
             this.showGroups = groups.length > 1 || (groups.length == 1 && !groups[0].m_programs.length);
@@ -126,7 +127,7 @@ export class Component implements ng.OnInit {
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     return () => this.backEnd.getProjects()
-        .then(projects => Promise.all([].concat(...projects.map(project => project.b_programs_id)).map(id => this.backEnd.getInteractionsScheme(id))))
+        .then(projects => Promise.all<libBackEnd.InteractionsScheme>([].concat(...projects.map(project => project.b_programs_id)).map(id => this.backEnd.getInteractionsScheme(id))))
         .then(schemes => !schemes.find(scheme => scheme.name == this.nameField));
   }
 

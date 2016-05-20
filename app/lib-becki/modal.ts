@@ -4,7 +4,7 @@
  */
 
 import * as blocko from "blocko";
-import * as ng from "angular2/angular2";
+import * as ngCore from "@angular/core";
 import * as theGrid from "the-grid";
 
 export interface Event {
@@ -40,8 +40,8 @@ export class BlockEvent implements Event {
   }
 }
 
-@ng.Injectable()
+@ngCore.Injectable()
 export class Service {
 
-  modalChange = new ng.EventEmitter();
+  modalChange = new ngCore.EventEmitter<Event>();
 }

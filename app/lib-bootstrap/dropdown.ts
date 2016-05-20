@@ -3,15 +3,15 @@
  * of this distribution.
  */
 
-import * as ng from "angular2/angular2";
+import * as ngCore from "@angular/core";
 
-@ng.Directive({
+@ngCore.Directive({
   selector: ".dropdown-toggle",
   host: {"(click)": "onClick($event)"}
 })
 class Toggle {
 
-  click = new ng.EventEmitter();
+  click = new ngCore.EventEmitter<void>();
 
   onClick(event:Event):void {
     "use strict";
@@ -21,31 +21,31 @@ class Toggle {
   }
 }
 
-@ng.Directive({
+@ngCore.Directive({
   selector: ".dropdown",
   host: {"[class.open]": "open"}
 })
-class Dropdown implements ng.AfterViewInit {
+class Dropdown implements ngCore.AfterViewInit {
 
   open:boolean;
 
-  toggles:ng.QueryList<Toggle>;
+  toggles:ngCore.QueryList<Toggle>;
 
-  constructor(@ng.Query(Toggle) toggles:ng.QueryList<Toggle>) {
+  constructor(@ngCore.Query(Toggle) toggles:ngCore.QueryList<Toggle>) {
     "use strict";
 
     this.open = false;
     this.toggles = toggles;
   }
 
-  afterViewInit():void {
+  ngAfterViewInit():void {
     "use strict";
 
     // TODO: https://github.com/angular/angular/issues/6314
-    this.toggles.map(toggle => toggle.click.toRx().subscribe(() => this.open = !this.open));
+    this.toggles.map(toggle => toggle.click.subscribe(() => this.open = !this.open));
   }
 
-  @ng.HostListener("document:click")
+  @ngCore.HostListener("document:click")
   onDocumentClick():void {
     "use strict";
 

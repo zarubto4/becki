@@ -7,34 +7,35 @@ import "codemirror/mode/clike/clike";
 import "codemirror/mode/javascript/javascript";
 
 import * as CodeMirror from "codemirror";
-import * as ng from "angular2/angular2";
+import * as ngCommon from "@angular/common";
+import * as ngCore from "@angular/core";
 
-@ng.Component({
-  selector: "[field-code]",
+@ngCore.Component({
+  selector: "[fieldCode]",
   templateUrl: "app/lib-becki/field-code.html",
-  directives: [ng.FORM_DIRECTIVES]
+  directives: [ngCommon.FORM_DIRECTIVES]
 })
-export class Component implements ng.AfterViewInit, ng.OnChanges, ng.OnDestroy {
+export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore.OnDestroy {
 
-  @ng.Input("fieldCode")
+  @ngCore.Input("fieldCode")
   model:string;
 
-  @ng.Input()
+  @ngCore.Input()
   mode:string;
 
-  @ng.Input()
+  @ngCore.Input()
   readonly:boolean;
 
-  @ng.ViewChild("field")
-  field:ng.ElementRef;
+  @ngCore.ViewChild("field")
+  field:ngCore.ElementRef;
 
   editor:CodeMirror.EditorFromTextArea;
 
-  @ng.Output("fieldCodeChange")
+  @ngCore.Output("fieldCodeChange")
   // TODO: https://github.com/angular/angular/issues/6311
-  modelChange = new ng.EventEmitter(false);
+  modelChange = new ngCore.EventEmitter<string>(false);
 
-  onChanges(changes:{[key: string]: ng.SimpleChange}):void {
+  ngOnChanges(changes:{[key: string]: ngCore.SimpleChange}):void {
     "use strict";
 
     let model = changes["model"];
@@ -45,7 +46,7 @@ export class Component implements ng.AfterViewInit, ng.OnChanges, ng.OnDestroy {
     }
   }
 
-  afterViewInit():void {
+  ngAfterViewInit():void {
     "use strict";
 
     this.editor = CodeMirror.fromTextArea(this.field.nativeElement, {mode: this.mode, readOnly: this.readonly ? "nocursor" : false});
@@ -57,7 +58,7 @@ export class Component implements ng.AfterViewInit, ng.OnChanges, ng.OnDestroy {
     });
   }
 
-  onDestroy():void {
+  ngOnDestroy():void {
     "use strict";
 
     this.editor.toTextArea();
