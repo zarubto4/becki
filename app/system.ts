@@ -145,6 +145,9 @@ export class Component implements ngCore.OnInit {
           case "producers":
             this.onAddProducerClick();
             break;
+          case "servers":
+            this.onAddCompilationServerClick();
+            break;
         }
         break;
       case "issues":
@@ -200,6 +203,11 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.router.navigate(["NewSystemProducer"]);
+  }
+
+  onAddCompilationServerClick():void {
+    "use strict";
+    this.router.navigate(["NewSystemCompilationServer"]);
   }
 
   onAddIssueTypeClick():void {

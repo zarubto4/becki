@@ -1566,6 +1566,17 @@ export abstract class BackEnd {
     return Promise.reject<string>("issue/TYRION-258");
   }
 
+  public createCompilationServer(server_name:string):Promise<string> {
+    "use strict";
+
+    if (!server_name) {
+      throw "name required";
+    }
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-268
+    return this.requestRestPath("POST", BackEnd.COMPILATION_SERVER_PATH,{server_name}, 201).then(JSON.stringify);
+  }
+
   public getCompilationServers():Promise<CompilationServer[]> {
     "use strict";
     return this.requestRestPath("GET", BackEnd.COMPILATION_SERVER_PATH);

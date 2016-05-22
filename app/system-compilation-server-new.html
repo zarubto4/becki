@@ -1,0 +1,21 @@
+<!--
+  ~ © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+  ~ of this distribution.
+  -->
+<div data-bind-layout="'Create a New Compilation Server'" data-bind-breadcrumbs="breadcrumbs">
+    <form class="clearfix" data-on-submit="onSubmit($event)">
+        <div class="form-group">
+            <label>
+                <span class="glyphicon glyphicon-pencil"></span>
+                Server name
+            </label>
+            <input class="form-control" required data-bindon-ngModel="nameField" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
+        </div>
+
+
+        <div class="pull-right">
+            <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+            <button class="btn btn-primary"  type="submit">  Create</button>
+        </div>
+    </form>
+</div>

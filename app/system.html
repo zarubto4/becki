@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, View or Remove a System Items'" data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="tab[0] == 'users' || (tab[0] == 'devices' && tab[1] == 'servers') ? null : 'Add'" data-on-actionClick="onAddClick($event)" data-bind-ngSwitch="tab[0]">
+<div data-bind-layout="'Add, View or Remove a System Items'" data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="tab[0] == 'users' ? null : 'Add'" data-on-actionClick="onAddClick($event)" data-bind-ngSwitch="tab[0]">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="tab[0] == 'moderators'">
       <a data-on-click="onTabClick(['moderators'], $event)" style="cursor: pointer">
@@ -101,7 +101,7 @@
         </div>
       </template>
       <template data-bind-ngSwitchWhen="'servers'">
-        <div data-bind-listView="compilationServers" data-bind-addable="false" data-on-removeClick="onRemoveCompilationServerClick($event)">
+        <div data-bind-listView="compilationServers" data-on-addClick="onAddCompilationServerClick($event)" data-on-removeClick="onRemoveCompilationServerClick($event)">
           <div class="spinner"></div>
         </div>
       </template>

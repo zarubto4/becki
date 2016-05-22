@@ -23,6 +23,7 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libBeckiWebsocket from "./lib-becki/websocket";
 import * as signing from "./signing";
 import * as system from "./system";
+import * as systemCompilationServerNew from "./system-compilation-server-new";
 import * as systemDeviceNew from "./system-device-new";
 import * as systemDeviceType from "./system-device-type";
 import * as systemDeviceTypeNew from "./system-device-type-new";
@@ -73,6 +74,7 @@ import * as userProjects from "./user-projects";
   {path: "/issues/:issue/related/new", component: issueRelatedNew.Component, as: "NewRelatedIssue"},
   {path: "/signing", component: signing.Component, as: "Signing"},
   {path: "/system", component: system.Component, as: "System"},
+  {path: "/system/compilation/server/new", component: systemCompilationServerNew.Component, as: "NewSystemCompilationServer"},
   {path: "/system/device/new", component: systemDeviceNew.Component, as: "NewSystemDevice"},
   {path: "/system/device/type/new", component: systemDeviceTypeNew.Component, as: "NewSystemDeviceType"},
   {path: "/system/device/types/:type", component: systemDeviceType.Component, as: "SystemDeviceType"},
