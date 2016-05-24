@@ -75,6 +75,7 @@ export class Danger extends Notification {
   }
 }
 
+@ngCore.Injectable()
 export class Service {
 
   current:Notification[] = [];
