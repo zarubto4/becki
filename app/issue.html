@@ -6,7 +6,7 @@
 <div data-bind-layout="heading" data-bind-breadcrumbs="breadcrumbs">
   <p data-bind-ngSwitch="!confirmationToRemove">
     <template data-bind-ngSwitchWhen="true">
-      <template ngFor data-var-confirmation data-bind-ngForOf="confirmations">
+      <template ngFor data-let-confirmation data-bind-ngForOf="confirmations">
         <span class="label" data-bind-style.background-color="confirmation.color" style="border: 1px solid #eeeeee">{{confirmation.type}} <a data-on-click="onConfirmationRemoveClick(confirmation, $event)" style="cursor: pointer; color: #333333; margin-left: 1em"><span class="pficon pficon-close"></span></a></span>
       </template>
     </template>
@@ -24,7 +24,7 @@
     <div class="well">
       Following issues have been marked as related:
       <ul>
-        <li template="ngFor #link of related" data-bind-ngSwitch="link.removing">
+        <li template="ngFor let link of related" data-bind-ngSwitch="link.removing">
           <template data-bind-ngSwitchWhen="true">
             Do you really want to unmark this issue?
             <button class="btn btn-danger" type="button" data-on-click="onRelatedRemovingYesClick(link, $event)">Yes</button>
@@ -42,7 +42,7 @@
       </ul>
     </div>
   </template>
-  <div class="media" template="ngFor #item of items">
+  <div class="media" template="ngFor let item of items">
     <div class="media-left">
       <div class="btn-group-vertical">
         <button class="btn btn-default" type="button" data-on-click="onPlusClick(item.id, $event)">
@@ -69,7 +69,7 @@
                   </label>
                   <select class="form-control" required data-bindon-ngModel="item.typeField">
                     <option value="">Select type...</option>
-                    <option data-bind-value="type.id" template="ngFor #type of types">
+                    <option data-bind-value="type.id" template="ngFor let type of types">
                       {{type.type}}
                     </option>
                   </select>
@@ -123,7 +123,7 @@
                 </label>
                 <select class="form-control" required data-bindon-ngModel="item.interactionsProjectField" data-on-ngModelChange="item.interactionsNameField = ''">
                   <option value="">Select name...</option>
-                  <option data-bind-value="project.id" template="ngFor #project of projects">
+                  <option data-bind-value="project.id" template="ngFor let project of projects">
                     {{project.project_name}}
                   </option>
                 </select>
@@ -198,14 +198,14 @@
             <div data-bindon-fieldIssueBody="item.body" data-bind-readonly="true">
               <div class="spinner"></div>
             </div>
-            <template ngFor data-var-tag data-bind-ngForOf="item.tags">
+            <template ngFor data-let-tag data-bind-ngForOf="item.tags">
               <span class="label label-default">{{tag}}</span>
             </template>
             <p class="pull-right">{{item.author}} - {{item.date}}</p>
           </template>
         </div>
         <div class="panel-footer">
-          <div template="ngFor #comment of item.comments">
+          <div template="ngFor let comment of item.comments">
             <div class="media" style="overflow: visible">
               <div class="media-left">
                 <img class="media-object" src="...">

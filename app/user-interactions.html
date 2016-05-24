@@ -44,7 +44,7 @@
           Moderator IDs
         </label>
         <!-- TODO: https://github.com/angular/angular/issues/4427 -->
-        <div class="checkbox" data-bind-class.disabled="!moderator.online" template="ngFor #moderator of moderators">
+        <div class="checkbox" data-bind-class.disabled="!moderator.online" template="ngFor let moderator of moderators">
           <label>
             <input type="checkbox" data-bind-disabled="!moderator.online" data-bindon-ngModel="moderator.selected">
             {{moderator.id}}
@@ -60,13 +60,13 @@
         <div class="form-inline">
           <select class="form-control" required data-bindon-ngModel="uploadSchemeField" data-on-ngModelChange="onUploadSchemeFieldChange($event)">
             <option value="">Select name...</option>
-            <option data-bind-value="scheme.id" template="ngFor #scheme of schemes">
+            <option data-bind-value="scheme.id" template="ngFor let scheme of schemes">
               {{scheme.name}}
             </option>
           </select>
           <select class="form-control" required data-bindon-ngModel="uploadVersionField">
             <option value="">Select version...</option>
-            <option data-bind-value="version.id" template="ngFor #version of getUploadVersions()">
+            <option data-bind-value="version.id" template="ngFor let version of getUploadVersions()">
               {{version.version_name}}
             </option>
           </select>

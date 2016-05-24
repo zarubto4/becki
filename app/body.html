@@ -20,7 +20,7 @@
             </h4>
           </div>
           <div class="modal-body">
-            <div class="form-group" template="ngFor #property of modalEvent?.widget?.configProperties">
+            <div class="form-group" template="ngFor let property of modalEvent?.widget?.configProperties">
               <label>
                 <template data-bind-ngSwitchWhen="false">
                   <span class="glyphicon glyphicon-pencil"></span>
@@ -71,7 +71,7 @@
             </h4>
           </div>
           <div class="modal-body">
-            <div class="form-group" template="ngFor #property of modalEvent?.block?.getConfigProperties()">
+            <div class="form-group" template="ngFor let property of modalEvent?.block?.getConfigProperties()">
               <label>
                 <template data-bind-ngSwitchWhen="false">
                   <span class="glyphicon glyphicon-pencil"></span>

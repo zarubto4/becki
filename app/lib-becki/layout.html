@@ -31,7 +31,7 @@
         <div class="dropdown-menu infotip bottom-right">
           <div class="arrow"></div>
           <ul class="list-group">
-            <li class="list-group-item" template="ngFor #notification of navbarNotifications?.notifications" data-bind-ngSwitch="notification.read">
+            <li class="list-group-item" template="ngFor let notification of navbarNotifications?.notifications" data-bind-ngSwitch="notification.read">
               <span class="i pficon pficon-{{getNotificationIcon(notification)}}"></span>
               <template data-bind-ngSwitchWhen="true">
                 {{notification.message}}
@@ -78,7 +78,7 @@
 </nav>
 <div class="nav-pf-vertical nav-pf-vertical-with-secondary-nav" data-bind-class.collapsed="navbarState == 'collapsed'" data-bind-class.hidden="navbarState == 'hidden'" data-bind-class.show-mobile-nav="navbarState == 'visible'">
   <ul class="list-group">
-    <li class="list-group-item" template="ngFor #page of navigation">
+    <li class="list-group-item" template="ngFor let page of navigation">
       <a data-bind-routerLink="page.link">
         <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
         <span class="list-group-item-value">{{page.label}}</span>
@@ -108,7 +108,7 @@
           <div class="spinner"></div>
         </div>
         <ol class="breadcrumb">
-          <li template="ngFor #breadcrumb of breadcrumbs">
+          <li template="ngFor let breadcrumb of breadcrumbs">
             <a data-bind-routerLink="breadcrumb.link">{{breadcrumb.label}}</a>
           </li>
         </ol>

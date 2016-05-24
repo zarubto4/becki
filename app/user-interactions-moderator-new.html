@@ -13,7 +13,7 @@
         </label>
         <select class="form-control" required data-bindon-ngModel="projectField" data-on-ngModelChange="onProjectChange($event)">
           <option value="">Select name...</option>
-          <option data-bind-value="project.id" template="ngFor #project of projects">
+          <option data-bind-value="project.id" template="ngFor let project of projects">
             {{project.project_name}}
           </option>
         </select>

@@ -12,7 +12,7 @@
       </label>
       <select class="form-control" required data-bindon-ngModel="typeField">
         <option value="">Select type...</option>
-        <option data-bind-value="type.id" template="ngFor #type of types">
+        <option data-bind-value="type.id" template="ngFor let type of types">
           {{type.type}}
         </option>
       </select>

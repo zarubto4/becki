@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div class="alert alert-{{alert.type}} alert-dismissable" template="ngFor #alert of service.current">
+<div class="alert alert-{{alert.type}} alert-dismissable" template="ngFor let alert of service.current">
   <button type="button" class="close" data-on-click="onCloseClick(alert, $event)">
     <span class="pficon pficon-close"></span>
   </button>

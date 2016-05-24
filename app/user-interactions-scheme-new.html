@@ -13,7 +13,7 @@
         </label>
         <select class="form-control" required data-bindon-ngModel="projectField" data-on-ngModelChange="onProjectChange($event)">
           <option value="">Select name...</option>
-          <option data-bind-value="project.id" template="ngFor #project of projects">
+          <option data-bind-value="project.id" template="ngFor let project of projects">
             {{project.project_name}}
           </option>
         </select>
@@ -40,13 +40,13 @@
       </label>
       <select class="form-control" data-bindon-ngModel="groupField">
         <option value="">Select name...</option>
-        <template ngFor data-var-group data-bind-ngForOf="groups">
+        <template ngFor data-let-group data-bind-ngForOf="groups">
           <option data-bind-value="group.id" data-bind-ngSwitch="showGroups">
             <template data-bind-ngSwitchWhen="true">
               {{group.program_name}}
             </template>
             <template data-bind-ngSwitchWhen="false">
-              <template ngFor data-var-application data-bind-ngForOf="group.m_programs" data-var-last="last">
+              <template ngFor data-let-application data-bind-ngForOf="group.m_programs" data-let-last="last">
                 {{application.program_name}}<template data-bind-ngIf="!last">,</template>
               </template>
             </template>

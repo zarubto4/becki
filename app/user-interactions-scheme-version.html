@@ -11,14 +11,14 @@
   <div class="form-group">
     <label>{{showGroups ? 'Application groups' : 'Applications'}}</label>
     <ul class="form-control-static">
-      <template ngFor data-var-group data-bind-ngForOf="groups">
+      <template ngFor data-let-group data-bind-ngForOf="groups">
         <template data-bind-ngIf="showGroups">
           <li>
             {{group.program_name}}
           </li>
         </template>
         <template data-bind-ngIf="!showGroups">
-          <li template="ngFor #application of group.m_programs">
+          <li template="ngFor let application of group.m_programs">
             {{application.program_name}}
           </li>
         </template>

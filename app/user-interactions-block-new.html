@@ -19,7 +19,7 @@
       </label>
       <select class="form-control" required data-bindon-ngModel="groupField">
         <option value="">Select name...</option>
-        <option data-bind-value="group.id" template="ngFor #group of groups">
+        <option data-bind-value="group.id" template="ngFor let group of groups">
           {{group.name}}
         </option>
       </select>

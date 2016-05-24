@@ -12,7 +12,7 @@
       </label>
       <select class="form-control" required data-bindon-ngModel="field">
         <option value="">Select title...</option>
-        <option data-bind-value="issue.id" template="ngFor #issue of issues">
+        <option data-bind-value="issue.id" template="ngFor let issue of issues">
           {{issue.name}}
         </option>
       </select>

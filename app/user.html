@@ -68,7 +68,7 @@
   <template data-bind-ngSwitchWhen="'roles'">
     <form class="clearfix" data-on-submit="onRolesSubmit($event)" style="margin-top: 2em" data-bind-ngSwitch="editing">
       <template data-bind-ngSwitchWhen="true">
-        <div class="checkbox" template="ngFor #role of roles">
+        <div class="checkbox" template="ngFor let role of roles">
           <label>
             <input type="checkbox" data-bindon-ngModel="role.select">
             {{role.model.name}} ({{role.model.description}})
@@ -81,7 +81,7 @@
       </template>
       <template data-bind-ngSwitchWhen="false">
         <ul>
-          <li template="ngFor #role of roles" style="list-style-type: none" data-bind-ngSwitch="role.selected">
+          <li template="ngFor let role of roles" style="list-style-type: none" data-bind-ngSwitch="role.selected">
             <template data-bind-ngSwitchWhen="true">✓</template>
             <template data-bind-ngSwitchWhen="false">✗</template>
             {{role.model.name}} ({{role.model.description}})
@@ -93,7 +93,7 @@
   <template data-bind-ngSwitchWhen="'permissions'">
     <form class="clearfix" data-on-submit="onPermissionsSubmit($event)" style="margin-top: 2em" data-bind-ngSwitch="editing">
       <template data-bind-ngSwitchWhen="true">
-        <div class="checkbox" data-bind-class.disabled="!permission.selectable" template="ngFor #permission of permissions">
+        <div class="checkbox" data-bind-class.disabled="!permission.selectable" template="ngFor let permission of permissions">
           <label>
             <input type="checkbox" data-bindon-ngModel="permission.select" data-bind-disabled="!permission.selectable">
             {{permission.model.value}} ({{permission.model.description}})
@@ -106,7 +106,7 @@
       </template>
       <template data-bind-ngSwitchWhen="false">
         <ul>
-          <li template="ngFor #permission of permissions" style="list-style-type: none" data-bind-ngSwitch="permission.selected">
+          <li template="ngFor let permission of permissions" style="list-style-type: none" data-bind-ngSwitch="permission.selected">
             <template data-bind-ngSwitchWhen="true">✓</template>
             <template data-bind-ngSwitchWhen="false">✗</template>
             {{permission.model.value}} ({{permission.model.description}})

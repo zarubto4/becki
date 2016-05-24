@@ -98,13 +98,13 @@
         <template data-bind-ngSwitchWhen="true">
           <select class="form-control" data-bindon-ngModel="versionApplicationGroupField">
             <option value="">Select name...</option>
-            <template ngFor data-var-group data-bind-ngForOf="applicationGroups">
+            <template ngFor data-let-group data-bind-ngForOf="applicationGroups">
               <option data-bind-value="group.id" data-bind-ngSwitch="showApplicationGroups">
                 <template data-bind-ngSwitchWhen="true">
                   {{group.program_name}}
                 </template>
                 <template data-bind-ngSwitchWhen="false">
-                  <template ngFor data-var-application data-bind-ngForOf="group.m_programs" data-var-last="last">
+                  <template ngFor data-let-application data-bind-ngForOf="group.m_programs" data-let-last="last">
                     {{application.program_name}}<template data-bind-ngIf="!last">,</template>
                   </template>
                 </template>
@@ -114,14 +114,14 @@
         </template>
         <template data-bind-ngSwitchWhen="false">
           <ul class="form-control-static" data-bind-ngSwitch="showApplicationGroups">
-            <template ngFor data-var-group data-bind-ngForOf="versionApplicationGroups">
+            <template ngFor data-let-group data-bind-ngForOf="versionApplicationGroups">
               <template data-bind-ngSwitchWhen="true">
                 <li>
                   {{group.program_name}}
                 </li>
               </template>
               <template data-bind-ngSwitchWhen="false">
-                <li template="ngFor #application of group.m_programs">
+                <li template="ngFor let application of group.m_programs">
                   {{application.program_name}}
                 </li>
               </template>

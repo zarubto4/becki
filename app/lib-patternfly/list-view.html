@@ -6,7 +6,7 @@
 <div data-bind-ngSwitch="items?.length > 0">
   <template data-bind-ngSwitchWhen="true">
     <div class="list-group list-view-pf">
-      <div class="list-group-item clearfix" template="ngFor #item of items" data-bind-ngSwitch="item.removing">
+      <div class="list-group-item clearfix" template="ngFor let item of items" data-bind-ngSwitch="item.removing">
         <template data-bind-ngSwitchWhen="true">
           <div class="list-view-pf-actions">
             <button class="btn btn-danger" type="button" data-on-click="onConfirmationYesClick(item, $event)">Yes</button>

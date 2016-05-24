@@ -38,7 +38,7 @@
           <span class="glyphicon glyphicon-list"></span>
           Device IDs
         </label>
-        <div class="checkbox" template="ngFor #device of devices">
+        <div class="checkbox" template="ngFor let device of devices">
           <label>
             <input type="checkbox" data-bindon-ngModel="device.selected">
             {{device.name}}
@@ -53,13 +53,13 @@
         <div class="form-inline">
           <select class="form-control" required data-bindon-ngModel="uploadProgramField" data-on-ngModelChange="onUploadProgramFieldChange($event)">
             <option value="">Select name...</option>
-            <option data-bind-value="program.id" template="ngFor #program of programs">
+            <option data-bind-value="program.id" template="ngFor let program of programs">
               {{program.name}}
             </option>
           </select>
           <select class="form-control" required data-bindon-ngModel="uploadProgramVersionField">
             <option value="">Select version...</option>
-            <option data-bind-value="version.id" template="ngFor #version of getUploadProgramVersions()">
+            <option data-bind-value="version.id" template="ngFor let version of getUploadProgramVersions()">
               {{version.version_name}}
             </option>
           </select>
@@ -75,7 +75,7 @@
           <span class="glyphicon glyphicon-list"></span>
           Device IDs
         </label>
-        <div class="checkbox" template="ngFor #device of devices">
+        <div class="checkbox" template="ngFor let device of devices">
           <label>
             <input type="checkbox" data-bindon-ngModel="device.selected">
             {{device.name}}
@@ -87,7 +87,7 @@
           <span class="glyphicon glyphicon-file"></span>
           File
         </label>
-        <input class="form-control" type="file" required data-var-uploadBinaryField>
+        <input class="form-control" type="file" required data-ref-uploadBinaryField>
       </div>
       <button class="btn btn-primary pull-right" type="submit">Upload</button>
     </form>
