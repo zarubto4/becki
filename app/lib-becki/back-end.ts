@@ -3,8 +3,10 @@
  * directory of this distribution.
  */
 
-import 'rxjs/add/operator/toPromise';
+import "rxjs/add/operator/catch";
+import "rxjs/add/operator/map";
 
+import * as Rx from "rxjs";
 import * as ngCore from "@angular/core";
 import * as ngHttp from "@angular/http";
 import * as ngRouter from "@angular/router-deprecated";
@@ -35,7 +37,7 @@ export class Service extends libBackEnd.BackEnd {
     this.notificationsNew = new ngCore.EventEmitter<MessageEvent>();
   }
 
-  protected requestGeneral(request:libBackEnd.Request):Promise<libBackEnd.Response> {
+  protected requestGeneral(request:libBackEnd.Request):Rx.Observable<libBackEnd.Response> {
     "use strict";
 
     let ngRequest = new ngHttp.Request(new ngHttp.RequestOptions({
@@ -45,9 +47,8 @@ export class Service extends libBackEnd.BackEnd {
       url: request.url
     }));
     return this.http.request(ngRequest)
-        .toPromise()
-        .catch(ngResponse => ngResponse)
-        .then(ngResponse => {
+        .catch<ngHttp.Response>(ngResponse => Rx.Observable.of(ngResponse))
+        .map(ngResponse => {
           if (ngResponse.status == 401) {
             this.router.navigate(this.signing);
           }

@@ -3,6 +3,10 @@
  * directory of this distribution.
  */
 
+import "rxjs/add/operator/toPromise";
+
+import * as Rx from "rxjs";
+
 export function composeUserString(user:User, showEmail=false):string {
   "use strict";
 
@@ -858,7 +862,7 @@ export abstract class BackEnd {
     this.reregisterNotifications();
   }
 
-  protected abstract requestGeneral(request:Request):Promise<Response>;
+  protected abstract requestGeneral(request:Request):Rx.Observable<Response>;
 
   public requestPath<Response>(method:string, path:string, body?:Object, success=200):Promise<Response> {
     "use strict";
@@ -876,6 +880,7 @@ export abstract class BackEnd {
     }
     this.tasks += 1;
     return this.requestGeneral(request)
+        .toPromise()
         .then(
             response => {
               this.tasks -= 1;
