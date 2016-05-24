@@ -3,11 +3,11 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, View or Remove a System Items'" data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="tab[0] == 'users' ? null : 'Add'" data-on-actionClick="onAddClick($event)" data-bind-ngSwitch="tab[0]">
+<div data-bind-layout="'Add, View or Remove a System Items'" data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="tab[0] == 'users' || (tab[0] == 'interactions' && tab[1] == 'servers') ? null : 'Add'" data-on-actionClick="onAddClick($event)" data-bind-ngSwitch="tab[0]">
   <ul class="nav nav-tabs">
-    <li data-bind-class.active="tab[0] == 'moderators'">
-      <a data-on-click="onTabClick(['moderators'], $event)" style="cursor: pointer">
-        Moderators of Interactions
+    <li data-bind-class.active="tab[0] == 'interactions'">
+      <a data-on-click="onTabClick(['interactions', 'moderators'], $event)" style="cursor: pointer">
+        Interactions
       </a>
     </li>
     <li data-bind-class.active="tab[0] == 'devices'">
@@ -26,9 +26,30 @@
       </a>
     </li>
   </ul>
-  <template data-bind-ngSwitchWhen="'moderators'">
-    <div data-bind-listView="moderators" data-on-addClick="onAddModeratorClick($event)" data-on-removeClick="onRemoveModeratorClick($event)">
-      <div class="spinner"></div>
+  <template data-bind-ngSwitchWhen="'interactions'">
+    <div data-bind-ngSwitch="tab[1]">
+      <ul class="nav nav-tabs nav-tabs-pf">
+        <li data-bind-class.active="tab[1] == 'moderators'">
+          <a data-on-click="onTabClick(['interactions', 'moderators'], $event)" style="cursor: pointer">
+            Moderators
+          </a>
+        </li>
+        <li data-bind-class.active="tab[1] == 'servers'">
+          <a data-on-click="onTabClick(['interactions', 'servers'], $event)" style="cursor: pointer">
+            Servers
+          </a>
+        </li>
+      </ul>
+      <template data-bind-ngSwitchWhen="'moderators'">
+        <div data-bind-listView="moderators" data-on-addClick="onAddModeratorClick($event)" data-on-removeClick="onRemoveModeratorClick($event)">
+          <div class="spinner"></div>
+        </div>
+      </template>
+      <template data-bind-ngSwitchWhen="'servers'">
+        <div data-bind-listView="interactionsServers" data-bind-addable="false">
+          <div class="spinner"></div>
+        </div>
+      </template>
     </div>
   </template>
   <template data-bind-ngSwitchWhen="'devices'">

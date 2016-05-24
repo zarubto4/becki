@@ -25,6 +25,8 @@ export class Component implements ngCore.OnInit {
 
   moderators:libPatternFlyListView.Item[];
 
+  interactionsServers:libPatternFlyListView.Item[];
+
   devices:libPatternFlyListView.Item[];
 
   deviceTypes:libPatternFlyListView.Item[];
@@ -58,7 +60,7 @@ export class Component implements ngCore.OnInit {
       home,
       new libBeckiLayout.LabeledLink("System", ["System"])
     ];
-    this.tab = ["moderators"];
+    this.tab = ['interactions', 'moderators'];
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -80,6 +82,11 @@ export class Component implements ngCore.OnInit {
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
     this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-155"));
     this.moderators = [];
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+    this.backEnd.getInteractionsServers()
+        .then(servers => this.interactionsServers = servers.map(server =>
+            new libPatternFlyListView.Item(server.id, server.server_name, server.destination_address, null, false)))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Interactions servers cannot be loaded.", reason)));
     this.backEnd.getDevices(1)
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
         .then(devices => this.devices = devices.map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.isActive ? "active" : "inactive")))
@@ -122,8 +129,12 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     switch (this.tab[0]) {
-      case "moderators":
-        this.onAddModeratorClick();
+      case "interactions":
+        switch (this.tab[1]) {
+          case "moderators":
+            this.onAddModeratorClick();
+            break;
+        }
         break;
       case "devices":
         switch (this.tab[1]) {

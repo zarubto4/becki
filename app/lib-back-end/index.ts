@@ -646,6 +646,23 @@ export interface InteractionsModerator {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
+export interface InteractionsServer {
+  id: string;
+
+  server_name: string;
+
+  hash_certificate: string;
+
+  destination_address: string;
+
+  server_is_online:string;
+
+  edit_permission:boolean;
+
+  delete_permission:boolean;
+}
+
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Project {
 
   id:string;
@@ -845,6 +862,8 @@ export abstract class BackEnd {
   public static INTERACTIONS_MODERATOR_PATH = "/project/homer";
 
   public static INTERACTIONS_SCHEME_PATH = "/project/b_program";
+
+  public static INTERACTIONS_SERVER_PATH = "/project/blocko/server";
 
   public static ISSUE_CONFIRMATION_PATH = "/overflow/typeOfConfirm";
 
@@ -1723,6 +1742,12 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestRestPath("DELETE", `${BackEnd.INTERACTIONS_MODERATOR_PATH}/${id}`).then(JSON.stringify);
+  }
+
+  public getInteractionsServers():Promise<InteractionsServer[]>{
+    "use strict";
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+    return this.requestRestPath("GET", BackEnd.INTERACTIONS_SERVER_PATH);
   }
 
   public createProject(project_name:string, project_description:string):Promise<Project> {
