@@ -16,7 +16,7 @@ class Toggle {
   onClick(event:Event):void {
     "use strict";
 
-    this.click.next(null);
+    this.click.emit(null);
     event.stopPropagation();
   }
 }

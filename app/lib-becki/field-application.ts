@@ -41,8 +41,8 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
 
     this.controller = new theGrid.Core.Controller();
     this.controller.registerDataChangedCallback(() => {
-      this.modal.modalChange.next(null);
-      this.modelChange.next(this.controller.getDataJson());
+      this.modal.modalChange.emit(null);
+      this.modelChange.emit(this.controller.getDataJson());
     });
     this.controller.registerWidget(theGrid.Widgets.TimeWidget);
     this.controller.registerWidget(theGrid.Widgets.LabelWidget);
@@ -89,7 +89,7 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
     }
     let renderer = new theGrid.EditorRenderer.ControllerRenderer(this.controller, this.toolbar.nativeElement, this.screens.nativeElement);
     renderer.registerOpenConfigCallback(widget =>
-      this.modal.modalChange.next(new modal.WidgetEvent(widget, this.readonly))
+      this.modal.modalChange.emit(new modal.WidgetEvent(widget, this.readonly))
     );
     this.controller.setRenderer(renderer);
     if (this.initialModel) {

@@ -42,8 +42,8 @@ export class Component implements ngCore.AfterViewInit {
     this.readonly = false;
     this.controller = new blocko.BlockoCore.Controller();
     this.controller.registerDataChangedCallback(() => {
-      this.modal.modalChange.next(null);
-      this.modelChange.next(this.controller.getDataJson());
+      this.modal.modalChange.emit(null);
+      this.modelChange.emit(this.controller.getDataJson());
     });
     this.controller.registerBlocks(blocko.BlockoBasicBlocks.Manager.getAllBlocks());
     // TODO: https://github.com/angular/angular/issues/6311
@@ -56,7 +56,7 @@ export class Component implements ngCore.AfterViewInit {
 
     let renderer = new blocko.BlockoSnapRenderer.RendererController(this.field.nativeElement);
     renderer.registerOpenConfigCallback((block) =>
-        this.modal.modalChange.next(new modal.BlockEvent(block, this.readonly))
+        this.modal.modalChange.emit(new modal.BlockEvent(block, this.readonly))
     );
     this.controller.rendererFactory = renderer;
   }

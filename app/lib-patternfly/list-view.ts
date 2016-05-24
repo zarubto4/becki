@@ -72,7 +72,7 @@ export class Component {
   onAddClick():void {
     "use strict";
 
-    this.addClick.next(null);
+    this.addClick.emit(null);
   }
 
   onViewClick(item:Item):void {
@@ -91,7 +91,7 @@ export class Component {
     "use strict";
 
     item.removing = false;
-    this.removeClick.next(item.id);
+    this.removeClick.emit(item.id);
   }
 
   onConfirmationNoClick(item:Item):void {

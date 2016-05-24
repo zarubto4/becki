@@ -36,6 +36,6 @@ export class Component {
     "use strict";
 
     this.model = value;
-    this.modelChange.next(value);
+    this.modelChange.emit(value);
   }
 }

@@ -54,7 +54,7 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
     // see https://github.com/codemirror/CodeMirror/issues/3735
     this.editor.on("changes", () => {
       this.model = this.editor.getDoc().getValue();
-      this.modelChange.next(this.model);
+      this.modelChange.emit(this.model);
     });
   }
 

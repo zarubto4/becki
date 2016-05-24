@@ -61,7 +61,7 @@ export class Service extends libBackEnd.BackEnd {
 
     super.reregisterNotifications();
     if (this.notifications) {
-      this.notifications.onmessage = event => this.zone.run(() => this.notificationsNew.next(event));
+      this.notifications.onmessage = event => this.zone.run(() => this.notificationsNew.emit(event));
     }
   }
 }

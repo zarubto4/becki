@@ -66,6 +66,6 @@ export class Component implements ngCore.OnChanges {
   emitModelChange():void {
     "use strict";
 
-    this.modelChange.next(JSON.stringify(this.model));
+    this.modelChange.emit(JSON.stringify(this.model));
   }
 }

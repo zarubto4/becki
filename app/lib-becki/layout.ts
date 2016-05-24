@@ -161,7 +161,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
   onActionClick():void {
     "use strict";
 
-    this.actionClick.next(null);
+    this.actionClick.emit(null);
   }
 
   onNavbarToggleClick():void {
