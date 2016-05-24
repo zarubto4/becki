@@ -3,6 +3,7 @@
  * directory of this distribution.
  */
 
+import "rxjs/add/operator/map";
 import "rxjs/add/operator/toPromise";
 
 import * as Rx from "rxjs";
@@ -867,10 +868,10 @@ export abstract class BackEnd {
   public requestPath<Response>(method:string, path:string, body?:Object, success=200):Promise<Response> {
     "use strict";
 
-    return this.request(method, BackEnd.BASE_URL + path, body, success);
+    return this.request(method, BackEnd.BASE_URL + path, body, success).toPromise();
   }
 
-  public request<T>(method:string, url:string, body?:Object, success=200):Promise<T> {
+  public request<T>(method:string, url:string, body?:Object, success=200):Rx.Observable<T> {
     "use strict";
 
     let request = new Request(method, url, {}, body);
@@ -880,31 +881,22 @@ export abstract class BackEnd {
     }
     this.tasks += 1;
     return this.requestGeneral(request)
-        .toPromise()
-        .then(
-            response => {
-              this.tasks -= 1;
-              if (response.status == success) {
-                return response.body;
-              }
-              switch (response.status) {
-                case 401:
-                  // TODO: https://github.com/angular/angular/issues/4558
-                  return Promise.reject(UnauthorizedError.fromResponse(response));
-                case 403:
-                  // TODO: https://github.com/angular/angular/issues/4558
-                  return Promise.reject(PermissionMissingError.fromResponse(response));
-                default:
-                  // TODO: https://github.com/angular/angular/issues/4558
-                  return Promise.reject(BugFoundError.fromResponse(response));
-              }
-            },
-            reason => {
-              this.tasks -= 1;
-              // TODO: https://github.com/angular/angular/issues/4558
-              return Promise.reject(reason);
-            }
-        );
+        .map(response => {
+          if (response.status == success) {
+            return response.body;
+          }
+          switch (response.status) {
+            case 401:
+              throw UnauthorizedError.fromResponse(response);
+            case 403:
+              throw PermissionMissingError.fromResponse(response);
+            default:
+              throw BugFoundError.fromResponse(response);
+          }
+        })
+        .finally<T>(() => {
+          this.tasks -= 1;
+        });
   }
 
   public reregisterNotifications():void {
