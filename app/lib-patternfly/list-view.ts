@@ -65,7 +65,7 @@ export class Component {
     this.emptyTitle = "No item yet";
     this.addable = true;
     this.addClick = new ngCore.EventEmitter<void>();
-    this.removeClick = new ngCore.EventEmitter();
+    this.removeClick = new ngCore.EventEmitter<string>();
     this.router = router;
   }
 

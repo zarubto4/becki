@@ -47,7 +47,7 @@ export class Component implements ngCore.AfterViewInit {
     });
     this.controller.registerBlocks(blocko.BlockoBasicBlocks.Manager.getAllBlocks());
     // TODO: https://github.com/angular/angular/issues/6311
-    this.modelChange = new ngCore.EventEmitter(false);
+    this.modelChange = new ngCore.EventEmitter<string>(false);
     this.modal = modalService;
   }
 

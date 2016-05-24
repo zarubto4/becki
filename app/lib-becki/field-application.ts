@@ -52,7 +52,7 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
     this.controller.registerWidget(theGrid.Widgets.KnobWidget);
     this.readonly = false;
     // TODO: https://github.com/angular/angular/issues/6311
-    this.modelChange = new ngCore.EventEmitter(false);
+    this.modelChange = new ngCore.EventEmitter<string>(false);
     this.modal = modalService;
     this.notifications = notificationsService;
   }
