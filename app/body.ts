@@ -28,6 +28,7 @@ import * as systemDeviceNew from "./system-device-new";
 import * as systemDeviceType from "./system-device-type";
 import * as systemDeviceTypeNew from "./system-device-type-new";
 import * as systemInteractionsModeratorNew from "./system-interactions-moderator-new";
+import * as systemInteractionsServerNew from "./system-interactions-server-new";
 import * as systemIssueConfirmation from "./system-issue-confirmation";
 import * as systemIssueConfirmationNew from "./system-issue-confirmation-new";
 import * as systemIssueType from "./system-issue-type";
@@ -79,6 +80,7 @@ import * as userProjects from "./user-projects";
   {path: "/system/device/type/new", component: systemDeviceTypeNew.Component, as: "NewSystemDeviceType"},
   {path: "/system/device/types/:type", component: systemDeviceType.Component, as: "SystemDeviceType"},
   {path: "/system/interactions/moderator/new", component: systemInteractionsModeratorNew.Component, as: "NewSystemInteractionsModerator"},
+  {path: "/system/interactions/server/new", component: systemInteractionsServerNew.Component, as: "NewSystemInteractionsServer"},
   {path: "/system/issue/confirmation/new", component: systemIssueConfirmationNew.Component, as: "NewSystemIssueConfirmation"},
   {path: "/system/issue/confirmations/:confirmation", component: systemIssueConfirmation.Component, as: "SystemIssueConfirmation"},
   {path: "/system/issue/type/new", component: systemIssueTypeNew.Component, as: "NewSystemIssueType"},

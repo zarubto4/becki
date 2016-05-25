@@ -134,6 +134,9 @@ export class Component implements ngCore.OnInit {
           case "moderators":
             this.onAddModeratorClick();
             break;
+          case "servers":
+            this.onAddInteractionsServerClick();
+            break;
         }
         break;
       case "devices":
@@ -178,6 +181,12 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.router.navigate(["NewSystemInteractionsModerator"]);
+  }
+
+  onAddInteractionsServerClick():void{
+    "use strict";
+
+    this.router.navigate(["NewSystemInteractionsServer"]);
   }
 
   onAddDeviceClick():void {

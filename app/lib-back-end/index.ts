@@ -1744,6 +1744,18 @@ export abstract class BackEnd {
     return this.requestRestPath("DELETE", `${BackEnd.INTERACTIONS_MODERATOR_PATH}/${id}`).then(JSON.stringify);
   }
 
+  public createInteractionsServer(server_name:string):Promise<string> {
+    "use strict";
+
+    if (!server_name) {
+      throw "name required";
+    }
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-220
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-266
+    return this.requestRestPath("POST", BackEnd.INTERACTIONS_SERVER_PATH,{server_name}, 201).then(JSON.stringify);
+  }
+
   public getInteractionsServers():Promise<InteractionsServer[]>{
     "use strict";
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
