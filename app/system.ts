@@ -85,7 +85,7 @@ export class Component implements ngCore.OnInit {
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     this.backEnd.getInteractionsServers()
         .then(servers => this.interactionsServers = servers.map(server =>
-            new libPatternFlyListView.Item(server.id, server.server_name, server.destination_address, null, false)))
+            new libPatternFlyListView.Item(server.id, server.server_name, server.destination_address, null, server.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Interactions servers cannot be loaded.", reason)));
     this.backEnd.getDevices(1)
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
@@ -250,6 +250,20 @@ export class Component implements ngCore.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The moderator of interactions cannot be removed.", reason));
+        });
+  }
+
+  onRemoveInteractionsServerClick(id:string):void {
+    "use strict";
+
+    this.notifications.shift();
+    this.backEnd.deleteInteractionsServer(id)
+        .then(() => {
+          this.notifications.current.push(new libBeckiNotifications.Success("The interactions server has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger("The interactions server cannot be removed.", reason));
         });
   }
 

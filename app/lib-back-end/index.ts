@@ -1750,6 +1750,12 @@ export abstract class BackEnd {
     return this.requestRestPath("GET", BackEnd.INTERACTIONS_SERVER_PATH);
   }
 
+  public deleteInteractionsServer(id:string):Promise<string> {
+    "use strict";
+
+    return this.requestRestPath("DELETE", `${BackEnd.INTERACTIONS_SERVER_PATH}/${id}`).then(JSON.stringify);
+  }
+
   public createProject(project_name:string, project_description:string):Promise<Project> {
     "use strict";
 

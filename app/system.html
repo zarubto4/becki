@@ -46,7 +46,7 @@
         </div>
       </template>
       <template data-bind-ngSwitchWhen="'servers'">
-        <div data-bind-listView="interactionsServers" data-bind-addable="false">
+        <div data-bind-listView="interactionsServers" data-bind-addable="false" data-on-removeClick="onRemoveInteractionsServerClick($event)">
           <div class="spinner"></div>
         </div>
       </template>
