@@ -112,7 +112,7 @@ export class Component implements ngCore.OnInit {
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Producers cannot be loaded.", reason)));
     this.backEnd.getCompilationServers()
         .then(servers => this.compilationServers = servers.map(server =>
-            new libPatternFlyListView.Item(server.id, server.server_name, server.destination_address)))
+            new libPatternFlyListView.Item(server.id, server.server_name, server.destination_address, ["SystemCompilationServer", {server: server.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Compilation servers cannot be loaded.", reason)));
     this.backEnd.getIssueTypes()
         .then(types => this.issueTypes = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, ["SystemIssueType", {type: type.id}])))
