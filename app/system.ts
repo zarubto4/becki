@@ -73,6 +73,8 @@ export class Component implements ngCore.OnInit {
     this.refresh();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-246
     this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-246"));
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-269
+    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-269"));
   }
 
   refresh():void {
@@ -85,7 +87,7 @@ export class Component implements ngCore.OnInit {
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     this.backEnd.getInteractionsServers()
         .then(servers => this.interactionsServers = servers.map(server =>
-            new libPatternFlyListView.Item(server.id, server.server_name, server.destination_address, null, server.delete_permission)))
+            new libPatternFlyListView.Item(server.id, server.server_name, server.destination_address, server.edit_permission ? ["SystemInteractionsServer", {server: server.id}] : null, server.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Interactions servers cannot be loaded.", reason)));
     this.backEnd.getDevices(1)
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70

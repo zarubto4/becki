@@ -1773,6 +1773,17 @@ export abstract class BackEnd {
     return this.requestRestPath("GET", BackEnd.INTERACTIONS_SERVER_PATH);
   }
 
+  public editInteractionsServer(id:string,server_name:string):Promise<string> {
+    "use strict";
+
+    if (!server_name) {
+      throw "name required";
+    }
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-269
+    return this.requestRestPath("PUT", `${BackEnd.INTERACTIONS_SERVER_PATH}/${id}`,{server_name}).then(JSON.stringify);
+  }
+
   public deleteInteractionsServer(id:string):Promise<string> {
     "use strict";
 
