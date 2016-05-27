@@ -8,13 +8,14 @@ import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
 
 import * as modal from "./modal";
+import * as notifications from "./notifications";
 
 @ngCore.Component({
   selector: "[fieldInteractionsScheme]",
   templateUrl: "app/lib-becki/field-interactions-scheme.html",
   directives: [ngCommon.CORE_DIRECTIVES]
 })
-export class Component implements ngCore.AfterViewInit {
+export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
 
   @ngCore.Input()
   readonly:boolean;
@@ -27,6 +28,8 @@ export class Component implements ngCore.AfterViewInit {
   @ngCore.Output("fieldInteractionsSchemeChange")
   modelChange:ngCore.EventEmitter<string>;
 
+  notifications:notifications.Service;
+
   modal:modal.Service;
 
   @ngCore.Input("fieldInteractionsScheme")
@@ -36,7 +39,7 @@ export class Component implements ngCore.AfterViewInit {
     this.controller.setDataJson(scheme);
   }
 
-  constructor(modalService:modal.Service) {
+  constructor(notificationsService:notifications.Service, modalService:modal.Service) {
     "use strict";
 
     this.readonly = false;
@@ -48,12 +51,26 @@ export class Component implements ngCore.AfterViewInit {
     this.controller.registerBlocks(blocko.BlockoBasicBlocks.Manager.getAllBlocks());
     // TODO: https://github.com/angular/angular/issues/6311
     this.modelChange = new ngCore.EventEmitter<string>(false);
+    this.notifications = notificationsService;
     this.modal = modalService;
+  }
+
+  ngOnChanges(changes:{[key:string]: ngCore.SimpleChange}):void {
+    "use strict";
+
+    let readonly = changes["readonly"];
+    if (readonly && !readonly.isFirstChange()) {
+      this.notifications.current.push(new notifications.Danger("The readability cannot be changed."));
+      this.readonly = readonly.previousValue;
+    }
   }
 
   ngAfterViewInit():void {
     "use strict";
 
+    if (!this.readonly) {
+      new blocko.BlockoBasicBlocks.ExecutionController(this.controller);
+    }
     let renderer = new blocko.BlockoSnapRenderer.RendererController(this.field.nativeElement);
     renderer.registerOpenConfigCallback((block) =>
         this.modal.modalChange.emit(new modal.BlockEvent(block, this.readonly))
