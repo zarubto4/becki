@@ -20,7 +20,6 @@ import * as libBeckiFieldCode from "./lib-becki/field-code";
 import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiModal from "./lib-becki/modal";
 import * as libBeckiNotifications from "./lib-becki/notifications";
-import * as libBeckiWebsocket from "./lib-becki/websocket";
 import * as signing from "./signing";
 import * as system from "./system";
 import * as systemCompilationServer from "./system-compilation-server";
@@ -129,7 +128,6 @@ import * as userProjects from "./user-projects";
     libBeckiBackEnd.Service,
     libBeckiModal.Service,
     libBeckiNotifications.Service,
-    libBeckiWebsocket.Service,
     ngCore.provide("connections", {useValue: ["UserConnections"]}),
     ngCore.provide("home", {useValue: new libBeckiLayout.LabeledLink("No Name", ["UserApplications"])}),
     ngCore.provide("navigation", {

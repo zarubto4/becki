@@ -4,10 +4,13 @@
  */
 
 import "rxjs/add/observable/fromEvent";
+import "rxjs/add/operator/filter";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/toPromise";
 
+import * as _ from "underscore";
 import * as Rx from "rxjs";
+import * as uuid from "node-uuid";
 
 export function composeUserString(user:User, showEmail=false):string {
   "use strict";
@@ -56,6 +59,22 @@ export class RestResponse {
   }
 }
 
+interface WebSocketMessage {
+
+  messageId:string;
+
+  messageChannel:string;
+
+  messageType:string;
+}
+
+interface WebSocketErrorMessage extends WebSocketMessage {
+
+  status:string;
+
+  error:string;
+}
+
 export class BugFoundError extends Error {
 
   name = "bug found error";
@@ -84,6 +103,12 @@ export class BugFoundError extends Error {
       message = (<{message:string}>response.body).message;
     }
     return new BugFoundError(`response ${response.status}: ${JSON.stringify(content)}`, message);
+  }
+
+  static fromWsResponse(response:WebSocketErrorMessage):BugFoundError {
+    "use strict";
+
+    return new BugFoundError(`response ${JSON.stringify(response)}`, response.error);
   }
 
   static composeMessage(adminMessage:string):string {
@@ -645,6 +670,31 @@ export interface InteractionsModerator {
   delete_permission:boolean;
 }
 
+export interface InteractionsSchemeValues {
+
+  digital:{[hwId:string]:boolean};
+
+  analog:{[hwId:string]:number};
+
+  connector:{[id:string]:{inputs:{[name:string]:number}, outputs:{[name:string]:number}}};
+}
+
+export interface InteractionsSchemeValue<T> {
+
+  hwId:string;
+
+  value:T;
+}
+
+export interface InteractionsSchemeConnectorValue {
+
+  blockId:string;
+
+  connectorName:string;
+
+  value:number;
+}
+
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface InteractionsServer {
   id: string;
@@ -833,7 +883,11 @@ export interface IssueLink {
 
 export abstract class BackEnd {
 
-  public static BASE_URL = "http://127.0.0.1:9000";
+  public static REST_SCHEME = "http";
+
+  public static WS_SCHEME = "ws";
+
+  public static HOST = "127.0.0.1:9000";
 
   public static ANSWER_PATH = "/overflow/answer";
 
@@ -895,9 +949,33 @@ export abstract class BackEnd {
 
   public static VALIDATION_PATH = "/coreClient/person/valid";
 
+  public static WS_CHANNEL = "becki";
+
   private eventSource:EventSource;
 
+  private webSocket:WebSocket;
+
+  private webSocketMessageQueue:WebSocketMessage[];
+
+  private webSocketReconnectTimeout:number;
+
   public notificationReceived:Rx.Subject<Notification>;
+
+  public webSocketErrorOccurred:Rx.Subject<any>;
+
+  public interactionsOpened:Rx.Subject<void>;
+
+  public interactionsSchemeSubscribed:Rx.Subject<void>;
+
+  public interactionsSchemeValuesReceived:Rx.Subject<InteractionsSchemeValues>;
+
+  public interactionsSchemeAnalogValueReceived:Rx.Subject<InteractionsSchemeValue<number>>;
+
+  public interactionsSchemeDigitalValueReceived:Rx.Subject<InteractionsSchemeValue<boolean>>;
+
+  public interactionsSchemeInputConnectorValueReceived:Rx.Subject<InteractionsSchemeConnectorValue>;
+
+  public interactionsSchemeOutputConnectorValueReceived:Rx.Subject<InteractionsSchemeConnectorValue>;
 
   public tasks:number;
 
@@ -905,9 +983,20 @@ export abstract class BackEnd {
     "use strict";
 
     this.eventSource = null;
+    this.webSocketMessageQueue = [];
+    this.webSocketReconnectTimeout = null;
     this.notificationReceived = new Rx.Subject<Notification>();
+    this.webSocketErrorOccurred = new Rx.Subject<any>();
+    this.interactionsOpened = new Rx.Subject<void>();
+    this.interactionsSchemeSubscribed = new Rx.Subject<void>();
+    this.interactionsSchemeValuesReceived = new Rx.Subject<InteractionsSchemeValues>();
+    this.interactionsSchemeAnalogValueReceived = new Rx.Subject<InteractionsSchemeValue<number>>();
+    this.interactionsSchemeDigitalValueReceived = new Rx.Subject<InteractionsSchemeValue<boolean>>();
+    this.interactionsSchemeInputConnectorValueReceived = new Rx.Subject<InteractionsSchemeConnectorValue>();
+    this.interactionsSchemeOutputConnectorValueReceived = new Rx.Subject<InteractionsSchemeConnectorValue>();
     this.tasks = 0;
     this.reconnectEventSource();
+    this.reconnectWebSocket();
   }
 
   private setToken(token:string):void {
@@ -915,6 +1004,7 @@ export abstract class BackEnd {
 
     window.localStorage.setItem("authToken", token);
     this.reconnectEventSource();
+    this.reconnectWebSocket();
   }
 
   private unsetToken():void {
@@ -922,6 +1012,13 @@ export abstract class BackEnd {
 
     window.localStorage.removeItem("authToken");
     this.reconnectEventSource();
+    this.reconnectWebSocket();
+  }
+
+  private findEnqueuedWebSocketMessage(original:WebSocketMessage, ...keys:string[]):WebSocketMessage {
+    "use strict";
+
+    return this.webSocketMessageQueue.find(message => _.isMatch(message, _.pick(original, keys)));
   }
 
   protected abstract requestRestGeneral(request:RestRequest):Rx.Observable<RestResponse>;
@@ -929,7 +1026,7 @@ export abstract class BackEnd {
   public requestRestPath<T>(method:string, path:string, body?:Object, success=200):Promise<T> {
     "use strict";
 
-    return this.requestRest(method, BackEnd.BASE_URL + path, body, success).toPromise();
+    return this.requestRest(method, `${BackEnd.REST_SCHEME}://${BackEnd.HOST}${path}`, body, success).toPromise();
   }
 
   public requestRest<T>(method:string, url:string, body?:Object, success=200):Rx.Observable<T> {
@@ -960,6 +1057,27 @@ export abstract class BackEnd {
         });
   }
 
+  private sendWebSocketMessageQueue():void {
+    "use strict";
+
+    this.webSocketMessageQueue.splice(0).forEach(message => {
+      try {
+        this.webSocket.send(JSON.stringify(message));
+      } catch (err) {
+        if (err.code == DOMException.INVALID_STATE_ERR) {
+          this.webSocketMessageQueue.push(message);
+        }
+      }
+    });
+  }
+
+  public sendWebSocketMessage(message:WebSocketMessage):void {
+    "use strict";
+
+    this.webSocketMessageQueue.push(message);
+    this.sendWebSocketMessageQueue();
+  }
+
   private reconnectEventSource():void {
     "use strict";
 
@@ -969,12 +1087,74 @@ export abstract class BackEnd {
     this.eventSource = null;
     if (window.localStorage.getItem("authToken")) {
       // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-177
-      this.eventSource = new EventSource(`${BackEnd.BASE_URL}${BackEnd.NOTIFICATION_PATH}/connection/${window.localStorage.getItem("authToken")}`);
+      this.eventSource = new EventSource(`${BackEnd.REST_SCHEME}://${BackEnd.HOST}${BackEnd.NOTIFICATION_PATH}/connection/${window.localStorage.getItem("authToken")}`);
 
       Rx.Observable
           .fromEvent<MessageEvent>(this.eventSource, "message")
           .map(event => JSON.parse(event.data))
           .subscribe(this.notificationReceived);
+    }
+  }
+
+  private reconnectWebSocket():void {
+    "use strict";
+
+    clearTimeout(this.webSocketReconnectTimeout);
+    this.webSocketReconnectTimeout = null;
+
+    let setReconnectionTimeout = () => {
+      if (this.webSocketReconnectTimeout == null) {
+        this.webSocketReconnectTimeout = setTimeout(() => this.reconnectWebSocket(), 5000);
+      }
+    };
+
+    if (this.webSocket) {
+      this.webSocket.removeEventListener("close", setReconnectionTimeout);
+      this.webSocket.close();
+    }
+    this.webSocket = null;
+    if (window.localStorage.getItem("authToken")) {
+      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-260
+      this.webSocket = new WebSocket(`${BackEnd.WS_SCHEME}://${BackEnd.HOST}/websocket/becki/${window.localStorage.getItem("authToken")}`);
+      this.webSocket.addEventListener("close", setReconnectionTimeout);
+
+      let opened = Rx.Observable
+          .fromEvent<void>(this.webSocket, "open");
+      let channelReceived = Rx.Observable
+          .fromEvent<MessageEvent>(this.webSocket, "message")
+          .map(event => JSON.parse(event.data))
+          .filter(message => message.messageChannel == BackEnd.WS_CHANNEL);
+      let errorOccurred = Rx.Observable
+          .fromEvent(this.webSocket, "error");
+
+      opened
+          .subscribe(() => this.sendWebSocketMessageQueue());
+      opened
+          .subscribe(this.interactionsOpened);
+      channelReceived
+          .filter(message => message.status == "error")
+          .map(message => BugFoundError.fromWsResponse(message))
+          .subscribe(this.webSocketErrorOccurred);
+      channelReceived
+          .filter(message => message.messageType == "subscribe_instace" && message.status == "success")
+          .subscribe(this.interactionsSchemeSubscribed);
+      channelReceived
+          .filter(message => message.messageType == "getValues" && message.status == "success")
+          .subscribe(this.interactionsSchemeValuesReceived);
+      channelReceived
+          .filter(message => message.messageType == "newAnalogValue")
+          .subscribe(this.interactionsSchemeAnalogValueReceived);
+      channelReceived
+          .filter(message => message.messageType == "newDigitalValue")
+          .subscribe(this.interactionsSchemeDigitalValueReceived);
+      channelReceived
+          .filter(message => message.messageType == "newInputConnectorValue")
+          .subscribe(this.interactionsSchemeInputConnectorValueReceived);
+      channelReceived
+          .filter(message => message.messageType == "newOutputConnectorValue")
+          .subscribe(this.interactionsSchemeOutputConnectorValueReceived);
+      errorOccurred
+          .subscribe(this.webSocketErrorOccurred);
     }
   }
 
@@ -1371,7 +1551,7 @@ export abstract class BackEnd {
         }
       });
       request.addEventListener("error", reject);
-      request.open("POST", `${BackEnd.BASE_URL}/compilation/library/uploud/${id}/${version}`);
+      request.open("POST", `${BackEnd.REST_SCHEME}://${BackEnd.HOST}/compilation/library/uploud/${id}/${version}`);
       // TODO: https://github.com/angular/angular/issues/7303
       request.setRequestHeader("X-AUTH-TOKEN", window.localStorage.getItem("authToken"));
       request.send(formdata);
@@ -1689,6 +1869,25 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestRestPath("GET", `${BackEnd.INTERACTIONS_SCHEME_PATH}/${id}`);
+  }
+
+  public subscribeInteractionsScheme(version_id:string):void {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-262
+    let message = {messageId: uuid.v4(), messageChannel: BackEnd.WS_CHANNEL, messageType: "subscribe_instace", version_id};
+    if (!this.findEnqueuedWebSocketMessage(message, 'messageChannel', 'messageType', 'version_id')) {
+      this.sendWebSocketMessage(message);
+    }
+  }
+
+  public requestInteractionsSchemeValues(version_id:string):void {
+    "use strict";
+
+    let message = {messageId: uuid.v4(), messageChannel: BackEnd.WS_CHANNEL, messageType: "getValues", version_id};
+    if (!this.findEnqueuedWebSocketMessage(message, 'messageChannel', 'messageType', 'version_id')) {
+      this.sendWebSocketMessage(message);
+    }
   }
 
   public updateInteractionsScheme(id:string, name:string, program_description:string):Promise<string> {

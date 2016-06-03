@@ -7,6 +7,7 @@ import * as blocko from "blocko";
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
 
+import * as backEnd from "./back-end";
 import * as modal from "./modal";
 import * as notifications from "./notifications";
 
@@ -15,10 +16,13 @@ import * as notifications from "./notifications";
   templateUrl: "app/lib-becki/field-interactions-scheme.html",
   directives: [ngCommon.CORE_DIRECTIVES]
 })
-export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
+export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore.OnDestroy {
 
   @ngCore.Input()
   readonly:boolean;
+
+  @ngCore.Input()
+  spy:string;
 
   fieldController:blocko.BlockoCore.Controller;
 
@@ -29,6 +33,8 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
 
   @ngCore.Output("fieldInteractionsSchemeChange")
   modelChange:ngCore.EventEmitter<string>;
+
+  backEnd:backEnd.Service;
 
   notifications:notifications.Service;
 
@@ -41,7 +47,7 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
     this.fieldController.setDataJson(scheme);
   }
 
-  constructor(notificationsService:notifications.Service, modalService:modal.Service) {
+  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, modalService:modal.Service) {
     "use strict";
 
     this.readonly = false;
@@ -58,6 +64,56 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
     this.fieldController.registerBlocks(blocko.BlockoBasicBlocks.Manager.getAllBlocks());
     // TODO: https://github.com/angular/angular/issues/6311
     this.modelChange = new ngCore.EventEmitter<string>(false);
+    this.backEnd = backEndService;
+    this.backEnd.interactionsOpened.subscribe(() => {
+      if (this.spy) {
+        this.backEnd.requestInteractionsSchemeValues(this.spy);
+      }
+    });
+    this.backEnd.interactionsSchemeSubscribed.subscribe(() => {
+      if (this.spy) {
+        this.backEnd.requestInteractionsSchemeValues(this.spy);
+      }
+    });
+    this.backEnd.interactionsSchemeValuesReceived.subscribe(values => {
+      if (this.spy) {
+        Object.keys(values.digital).forEach(hwId => {
+          this.fieldController.setDigitalValue(hwId, values.digital[hwId]);
+        });
+        Object.keys(values.analog).forEach(hwId => {
+          this.fieldController.setAnalogValue(hwId, values.analog[hwId]);
+        });
+        Object.keys(values.connector).forEach(blockId => {
+          let block = values.connector[blockId];
+          Object.keys(block.inputs).forEach(connectorName => {
+            this.fieldController.setInputConnectorValue(blockId, connectorName, block.inputs[connectorName]);
+          });
+          Object.keys(block.outputs).forEach(connectorName => {
+            this.fieldController.setOutputConnectorValue(blockId, connectorName, block.outputs[connectorName]);
+          });
+        });
+      }
+    });
+    this.backEnd.interactionsSchemeAnalogValueReceived.subscribe(value => {
+      if (this.spy) {
+        this.fieldController.setAnalogValue(value.hwId, value.value);
+      }
+    });
+    this.backEnd.interactionsSchemeDigitalValueReceived.subscribe(value => {
+      if (this.spy) {
+        this.fieldController.setDigitalValue(value.hwId, value.value);
+      }
+    });
+    this.backEnd.interactionsSchemeInputConnectorValueReceived.subscribe(value => {
+      if (this.spy) {
+        this.fieldController.setInputConnectorValue(value.blockId, value.connectorName, value.value);
+      }
+    });
+    this.backEnd.interactionsSchemeOutputConnectorValueReceived.subscribe(value => {
+      if (this.spy) {
+        this.fieldController.setOutputConnectorValue(value.blockId, value.connectorName, value.value);
+      }
+    });
     this.notifications = notificationsService;
     this.modal = modalService;
   }
@@ -70,6 +126,15 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
       this.notifications.current.push(new notifications.Danger("The readability cannot be changed."));
       this.readonly = readonly.previousValue;
     }
+    let spy = changes["spy"];
+    if (spy && !spy.isFirstChange()) {
+      if (spy.previousValue) {
+        this.unsubscribeSpy(spy.previousValue);
+      }
+      if (spy.currentValue) {
+        this.subscribeSpy(spy.currentValue);
+      }
+    }
   }
 
   ngAfterViewInit():void {
@@ -78,7 +143,32 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
     if (!this.readonly) {
       new blocko.BlockoBasicBlocks.ExecutionController(this.fieldController);
     }
+    if (this.spy) {
+      this.subscribeSpy(this.spy);
+    }
     this.fieldRenderer.setEditorElement(this.field.nativeElement);
+  }
+
+  ngOnDestroy():void {
+    "use strict";
+
+    if (this.spy) {
+      this.unsubscribeSpy(this.spy);
+    }
+  }
+
+  subscribeSpy(spy:string):void {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-262
+    this.notifications.current.push(new notifications.Danger("issue/TYRION-262"));
+    this.backEnd.subscribeInteractionsScheme(spy);
+  }
+
+  unsubscribeSpy(spy:string):void {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-261
   }
 
   onSwitchClick():void {
