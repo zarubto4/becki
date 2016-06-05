@@ -160,13 +160,11 @@ export interface User {
 
 export declare class EventSource {
 
-  onopen:(event:Event)=>void;
-
   onmessage:(event:MessageEvent)=>void;
 
-  onerror:(event:Event)=>void;
-
   constructor(url:string);
+
+  close():void;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -903,9 +901,7 @@ export abstract class BackEnd {
     "use strict";
 
     if (this.notifications) {
-      this.notifications.onopen = null;
-      this.notifications.onmessage = null;
-      this.notifications.onerror = null;
+      this.notifications.close();
     }
     this.notifications = null;
     if (window.localStorage.getItem("authToken")) {
