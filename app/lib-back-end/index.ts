@@ -158,9 +158,7 @@ export interface User {
   delete_permission:boolean;
 }
 
-export declare class EventSource {
-
-  onmessage:(event:MessageEvent)=>void;
+export declare class EventSource extends EventTarget {
 
   constructor(url:string);
 

@@ -22,18 +22,15 @@ export class Service extends libBackEnd.BackEnd {
 
   router:ngRouter.Router;
 
-  zone:ngCore.NgZone;
-
   notificationsNew:ngCore.EventEmitter<MessageEvent>;
 
-  public constructor(http:ngHttp.Http, @ngCore.Inject("signing") signing:any[], router:ngRouter.Router, zone:ngCore.NgZone) {
+  public constructor(http:ngHttp.Http, @ngCore.Inject("signing") signing:any[], router:ngRouter.Router) {
     "use strict";
 
     super();
     this.http = http;
     this.signing = signing;
     this.router = router;
-    this.zone = zone;
     this.notificationsNew = new ngCore.EventEmitter<MessageEvent>();
   }
 
@@ -61,7 +58,7 @@ export class Service extends libBackEnd.BackEnd {
 
     super.reregisterNotifications();
     if (this.notifications) {
-      this.notifications.onmessage = event => this.zone.run(() => this.notificationsNew.emit(event));
+      this.notifications.addEventListener("message", (event:MessageEvent) => this.notificationsNew.emit(event));
     }
   }
 }
