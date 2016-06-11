@@ -68,14 +68,13 @@ export class Component implements ngCore.OnInit {
     this.backEnd.getProjects()
         .then(projects => this.projects = projects)
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-219
-    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-219"));
   }
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     return () => this.backEnd.getApplicationDevices().then(devices => ![].concat(devices.public_types, devices.private_types).find(device => device.name == this.nameField));
   }
 

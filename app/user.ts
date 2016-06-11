@@ -102,7 +102,8 @@ export class Component implements ngCore.OnInit {
         .then(user => {
           this.userString = libBackEnd.composeUserString(user, true);
           this.breadcrumbs[2].label = libBackEnd.composeUserString(user, true);
-          this.editAccount = user.edit_permission;
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-249
+          this.editAccount = true;
           this.nameField = user.full_name;
           this.usernameField = user.nick_name;
           this.user = user;
@@ -110,28 +111,11 @@ export class Component implements ngCore.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The user ${this.id} cannot be loaded.`, reason));
         });
-    this.backEnd.getSignedUser()
-        .then(user => {
-          let roles:Promise<libBackEnd.Role[]>;
-          let permissions:Promise<libBackEnd.Permission[]>;
-          let userPermissions:Promise<libBackEnd.RolesAndPermissions>;
-          if (user.id == this.id) {
-            roles = this.backEnd.getRoles();
-            permissions = this.backEnd.getPermissions();
-            userPermissions = this.backEnd.getUserRolesAndPermissions(this.id);
-          } else {
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-234
-            this.notifications.current.push(new libBeckiNotifications.Danger("You are not allowed to list roles and permissions of other users. (issue/TYRION-234)"));
-            roles = Promise.resolve([]);
-            permissions = Promise.resolve([]);
-            userPermissions = Promise.resolve({roles: [], permissions: []});
-          }
-          return Promise.all<any>([
-            roles,
-            permissions,
-            userPermissions
-          ]);
-        })
+    Promise.all<any>([
+          this.backEnd.getRoles(),
+          this.backEnd.getPermissions(),
+          this.backEnd.getUserRolesAndPermissions(this.id)
+        ])
         .then(result => {
           let roles:libBackEnd.Role[];
           let permissions:libBackEnd.Permission[];
@@ -176,6 +160,8 @@ export class Component implements ngCore.OnInit {
           this.refresh();
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-249
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-249"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The user cannot be updated.", reason));
         });
   }

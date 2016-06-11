@@ -76,8 +76,6 @@ export class Component implements ngCore.OnInit {
     this.refresh();
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
     this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-221
-    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-221"));
   }
 
   refresh():void {
@@ -85,6 +83,7 @@ export class Component implements ngCore.OnInit {
 
     this.editing = false;
     Promise.all<any>([
+          // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
           this.backEnd.getApplicationGroup(this.id),
           this.backEnd.getProjects()
         ])
@@ -96,13 +95,11 @@ export class Component implements ngCore.OnInit {
           this.project = projects.length > 1 ? projects.find(project => project.id == this.group.project_id).project_name : null;
           this.nameField = this.group.program_name;
           this.descriptionField = this.group.program_description;
-          this.applications = this.group.m_programs.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["UserApplication", {application: application.id}]));
+          this.applications = this.group.m_programs.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["UserApplication", {application: application.id}], application.delete_permission));
         })
         .catch(reason => {
           //TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
           this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-221
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-221"));
           this.notifications.current.push(new libBeckiNotifications.Danger(`The group ${this.id} cannot be loaded.`, reason));
         });
   }
@@ -117,7 +114,10 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getApplicationGroups().then(groups => !groups.find(group => group.id != this.id && group.program_name == this.nameField));
+    return () => this.backEnd.getProjects()
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+        .then(projects => Promise.all<libBackEnd.ApplicationGroup>([].concat(...projects.map(project => project.m_projects_id)).map(id => this.backEnd.getApplicationGroup(id))))
+        .then(groups => !groups.find(group => group.id != this.id && group.program_name == this.nameField));
   }
 
   onSubmit():void {
@@ -158,8 +158,6 @@ export class Component implements ngCore.OnInit {
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-230
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-230"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The application cannot be removed.", reason));
         });
   }

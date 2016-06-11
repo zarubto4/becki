@@ -24,7 +24,7 @@
         <span class="glyphicon glyphicon-pencil"></span>
         Name
       </label>
-      <input class="form-control" data-bindon-ngModel="nameField" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
+      <input class="form-control" minlength="4" data-bindon-ngModel="nameField" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
     </div>
     <div class="form-group">
       <label>
@@ -35,8 +35,7 @@
     </div>
     <div class="pull-right">
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-      <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-198 -->
-      <button class="btn btn-primary" type="submit">Create (issue/TYRION-198)</button>
+      <button class="btn btn-primary" type="submit">Create</button>
     </div>
   </form>
 </div>

@@ -137,6 +137,7 @@ export class Component implements ngCore.OnInit {
             scheme,
             projects,
             lastVersion,
+            // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
             Promise.all(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id))),
             this.backEnd.getFile(lastVersion.files_id[0])
           ]);
@@ -164,19 +165,14 @@ export class Component implements ngCore.OnInit {
             this.versionApplicationGroupField = this.versionApplicationGroups[0].id;
           }
           this.applicationGroups = applicationGroups.filter(group => group.update_permission);
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-195
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-195"));
-          this.versionSchemeField = versionFile.fileContent;
-          this.versionScheme = versionFile.fileContent;
+          this.versionSchemeField = versionFile.content;
+          this.versionScheme = versionFile.content;
           this.addVersion = scheme.update_permission;
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-238
-          this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, `${version.version_description} (issue/TYRION-238)`, ["UserInteractionsSchemeVersion", {scheme: this.id, version: version.id}], false));
+          this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, version.version_description, ["UserInteractionsSchemeVersion", {scheme: this.id, version: version.id}], false));
         })
         .catch(reason => {
           //TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
           this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-221
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-221"));
           this.notifications.current.push(new libBeckiNotifications.Danger(`The scheme ${this.id} cannot be loaded.`, reason));
         });
   }

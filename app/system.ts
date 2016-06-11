@@ -67,23 +67,25 @@ export class Component implements ngCore.OnInit {
 
     this.notifications.shift();
     this.refresh();
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-246
+    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-246"));
   }
 
   refresh():void {
     "use strict";
 
-    this.backEnd.getInteractionsModerators()
-        // see https://youtrack.byzance.cz/youtrack/issue/TYRION-71
-        .then(moderators => this.moderators = moderators.map(moderator => new libPatternFlyListView.Item(moderator.id, `${moderator.id} (issue/TYRION-71)`, moderator.type_of_device)))
-        .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-155"));
-          this.notifications.current.push(new libBeckiNotifications.Danger("Moderators of interactions cannot be loaded.", reason));
-        });
-    this.backEnd.getDevices()
+    // see https://youtrack.byzance.cz/youtrack/issue/TYRION-71
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
+    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-155"));
+    this.moderators = [];
+    this.backEnd.getDevices(1)
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
-        .then(devices => this.devices = devices.map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.type_of_board.name)))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
+        .then(devices => this.devices = devices.map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.isActive ? "active" : "inactive")))
+        .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-253
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-253"));
+          this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason));
+        });
     this.backEnd.getDeviceTypes()
         .then(deviceTypes => this.deviceTypes = deviceTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, ["SystemDeviceType", {type: type.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Device types cannot be loaded.", reason)));
@@ -106,8 +108,7 @@ export class Component implements ngCore.OnInit {
         .then(confirmations => this.issueConfirmations = confirmations.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null, ["SystemIssueConfirmation", {confirmation: confirmation.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue confirmations cannot be loaded.", reason)));
     this.backEnd.getUsers()
-        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-239
-        .then(users => this.users = users.map(user => new libPatternFlyListView.Item(user.id, libBackEnd.composeUserString(user), "(issue/TYRION-239)", ["User", {user: user.id}], user.delete_permission)))
+        .then(users => this.users = users.map(user => new libPatternFlyListView.Item(user.id, libBackEnd.composeUserString(user), "", ["User", {user: user.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Device types cannot be loaded.", reason)));
   }
 
@@ -223,8 +224,6 @@ export class Component implements ngCore.OnInit {
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-231
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-231"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The moderator of interactions cannot be removed.", reason));
         });
   }
@@ -349,6 +348,8 @@ export class Component implements ngCore.OnInit {
           this.refresh();
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-248
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-248"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The user cannot be removed.", reason));
         });
   }

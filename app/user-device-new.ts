@@ -56,6 +56,8 @@ export class Component implements ngCore.OnInit {
     this.backEnd.getProjects()
         .then(projects => this.projects = projects)
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-256
+    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-256"));
   }
 
   validateIdField():()=>Promise<boolean> {

@@ -95,11 +95,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     this.notifications.shift();
     this.backEnd.createToken(this.inEmailField, this.inPasswordField)
         .then(() => this.router.navigate(this.home.link))
-        .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-232
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-232"));
-          this.notifications.current.push(new libBeckiNotifications.Danger("The user cannot be signed in.", reason));
-        });
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("The user cannot be signed in.", reason)));
   }
 
   onFacebookSignInClick():void {

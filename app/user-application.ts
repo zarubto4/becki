@@ -100,12 +100,15 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.editing = false;
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     this.backEnd.getApplication(this.id)
         .then(application => {
           return Promise.all<any>([
             application,
             this.backEnd.getProjects(),
+            // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
             this.backEnd.getApplicationGroup(application.m_project_id),
+            // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
             this.backEnd.getApplicationDevice(application.screen_size_type_id)
           ]);
         })
@@ -134,10 +137,6 @@ export class Component implements ngCore.OnInit {
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
           this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-219
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-219"));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-221
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-221"));
           this.notifications.current.push(new libBeckiNotifications.Danger(`The application ${this.id} cannot be loaded.`, reason));
         });
   }

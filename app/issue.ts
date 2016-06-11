@@ -246,8 +246,6 @@ export class Component implements ngCore.OnInit {
 
     this.notifications.shift();
     this.refresh();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-219
-    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-219"));
   }
 
   refresh():void {
@@ -340,6 +338,7 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     return () => this.backEnd.getProject(projectId)
         .then(project => Promise.all<libBackEnd.InteractionsScheme>(project.b_programs_id.map(id => this.backEnd.getInteractionsScheme(id))))
         .then(schemes => !schemes.find(scheme => scheme.name == name));

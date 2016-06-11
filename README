@@ -29,7 +29,7 @@ below.
 On the other side, clients must support [HTML5][], a JavaScript based on
 [ECMAScript 5][] and [Web Storage 2][].
 
-And on top of that an instance of the back end version 1.06.2 has to be
+And on top of that an instance of the back end version 1.06.5 has to be
 available at address 127.0.0.1 and port 9000.
 
 Installation

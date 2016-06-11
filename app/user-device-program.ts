@@ -95,6 +95,8 @@ export class Component implements ngCore.OnInit {
 
     this.notifications.shift();
     this.refresh();
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-252
+    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-252"));
   }
 
   refresh():void {
@@ -132,10 +134,8 @@ export class Component implements ngCore.OnInit {
           this.versionName = version.version_name;
           this.versionDescriptionField = version.version_description;
           this.versionDescription = version.version_description;
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-195
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-195"));
-          //this.versionCodeField = versionFile.fileContent;
-          //this.versionCode = versionFile.fileContent;
+          this.versionCodeField = versionFile.content;
+          this.versionCode = versionFile.content;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-126
           this.versions = program.version_objects.map(version => new libPatternFlyListView.Item(version.id, `${version.version_name} (issue/TYRION-126)`, version.version_description, undefined, false));
         })
@@ -167,7 +167,7 @@ export class Component implements ngCore.OnInit {
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     return () => this.backEnd.getProjects()
-        .then(projects => Promise.all([].concat(...projects.map(project => this.backEnd.getDevicePrograms(project.id)))))
+        .then(projects => Promise.all<libBackEnd.DeviceProgram>([].concat(...projects.map(project => project.c_programs_id)).map(id => this.backEnd.getDeviceProgram(id))))
         .then(programs => !programs.find(program => program.id != this.id && program.program_name == this.nameField));
   }
 

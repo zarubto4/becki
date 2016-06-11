@@ -55,13 +55,17 @@ export class Component implements ngCore.OnInit {
     this.backEnd.getDeviceTypes()
         .then(types => this.types = types)
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Device types cannot be loaded.", reason)));
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-246
+    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-246"));
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-253
+    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-253"));
   }
 
   validateIdField():()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getDevices().then(devices => !devices.find(device => device.id == this.idField));
+    return () => this.backEnd.getDevices(1).then(devices => !devices.find(device => device.id == this.idField));
   }
 
   onSubmit():void {

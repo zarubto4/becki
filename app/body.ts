@@ -131,8 +131,7 @@ import * as userProjects from "./user-projects";
         new libBeckiLayout.LabeledLink("Interactions", ["UserInteractions"], "link"),
         new libBeckiLayout.LabeledLink("Devices", ["UserDevices"], "rocket"),
         new libBeckiLayout.LabeledLink("Projects", ["UserProjects"], "book"),
-        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
-        new libBeckiLayout.LabeledLink("System (TYRION-155)", ["System"], "globe"),
+        new libBeckiLayout.LabeledLink("System", ["System"], "globe"),
         new libBeckiLayout.LabeledLink("Issues", ["Issues"], "bug")
       ]
     }),

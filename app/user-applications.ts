@@ -7,6 +7,7 @@ import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
 import * as ngRouter from "@angular/router-deprecated";
 
+import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
@@ -59,25 +60,24 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.backEnd.getApplications()
-        .then(applications => this.applications = applications.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["UserApplication", {application: application.id}])))
+        .then(applications => this.applications = applications.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["UserApplication", {application: application.id}], application.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Applications cannot be loaded.", reason)));
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     this.backEnd.getApplicationDevices()
         .then(devices => this.devices = [].concat(
             devices.public_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "global", ["ApplicationDevice", {device: device.id}], device.delete_permission)),
             devices.private_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "project specific", ["ApplicationDevice", {device: device.id}], device.delete_permission))
         ))
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-219
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-219"));
           this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason));
         });
-    this.backEnd.getApplicationGroups()
+    this.backEnd.getProjects()
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+        .then(projects => Promise.all<libBackEnd.ApplicationGroup>([].concat(...projects.map(project => project.m_projects_id)).map(id => this.backEnd.getApplicationGroup(id))))
         .then(groups => this.groups = groups.map(group => new libPatternFlyListView.Item(group.id, group.program_name, group.program_description, ["UserApplicationGroup", {group: group.id}], group.delete_permission)))
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
           this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-221
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-221"));
           this.notifications.current.push(new libBeckiNotifications.Danger("Groups cannot be loaded.", reason));
         });
   }
@@ -132,8 +132,6 @@ export class Component implements ngCore.OnInit {
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-230
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-230"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The application cannot be removed.", reason));
         });
   }

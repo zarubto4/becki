@@ -20,8 +20,7 @@ class DeviceProgramItem  extends libPatternFlyListView.Item {
   constructor(program:libBackEnd.DeviceProgram) {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-238
-    super(program.id, program.program_name, `${program.program_description} (issue/TYRION-238)`, ["UserDeviceProgram", {program: program.id}]);
+    super(program.id, program.program_name, `${program.program_description}`, ["UserDeviceProgram", {program: program.id}]);
     this.versions = program.version_objects;
   }
 }
@@ -35,7 +34,7 @@ class SelectableDeviceItem extends libPatternFlyListView.Item {
   constructor(device:libBackEnd.Device, project:string) {
     "use strict";
 
-    super(device.id, device.id, device.type_of_board.name);
+    super(device.id, device.id, device.isActive ? "active" : "inactive");
     this.project = project;
     this.selected = false;
   }
@@ -181,14 +180,19 @@ export class Component implements ngCore.OnInit {
     }
 
     this.notifications.shift();
-    Promise.all(devices.map(id => this.backEnd.addProgramToDevice(this.uploadProgramField, id)))
+    this.backEnd.createDeviceBinary(this.uploadProgramVersionField)
+        .then(() => {
+          return this.backEnd.addBinaryToDevice(this.uploadProgramVersionField, devices);
+        })
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The program has been uploaded."));
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-128
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-128"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-257
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-257"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-258
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-258"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The program cannot be uploaded.", reason));
         });
   }

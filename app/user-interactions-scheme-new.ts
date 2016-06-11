@@ -96,8 +96,10 @@ export class Component implements ngCore.OnInit {
     this.showGroups = false;
     this.groups = [];
     if (this.getProject()) {
+      // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
       this.backEnd.getProject(this.getProject())
           .then(project => {
+            // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
             return Promise.all<libBackEnd.ApplicationGroup>(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id)));
           })
           .then(groups => {
@@ -107,10 +109,6 @@ export class Component implements ngCore.OnInit {
           .catch(reason => {
             //TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
             this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-219
-            this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-219"));
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-221
-            this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-221"));
             this.notifications.current.push(new libBeckiNotifications.Danger("Application groups cannot be loaded.", reason));
           });
     }

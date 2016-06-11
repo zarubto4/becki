@@ -10,14 +10,14 @@
         <span class="glyphicon glyphicon-pencil"></span>
         Name
       </label>
-      <input class="form-control" required minlength="8" data-bindon-ngModel="nameField" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
+      <input class="form-control" required minlength="4" data-bindon-ngModel="nameField" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
     </div>
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon-pencil"></span>
         Description
       </label>
-      <textarea class="form-control" required minlength="24" data-bindon-ngModel="descriptionField"></textarea>
+      <textarea class="form-control" required minlength="8" data-bindon-ngModel="descriptionField"></textarea>
     </div>
     <div class="pull-right">
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>

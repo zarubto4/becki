@@ -20,8 +20,7 @@ class InteractionsSchemeItem extends libPatternFlyListView.Item {
   constructor(scheme:libBackEnd.InteractionsScheme) {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-238
-    super(scheme.id, scheme.name, `${scheme.program_description} (issue/TYRION-238)`, ["UserInteractionsScheme", {scheme: scheme.id}]);
+    super(scheme.id, scheme.name, scheme.program_description, ["UserInteractionsScheme", {scheme: scheme.id}]);
     this.versions = scheme.versionObjects;
   }
 }

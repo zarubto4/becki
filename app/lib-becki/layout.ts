@@ -112,7 +112,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     "use strict";
 
     this.notifications.shift();
-    this.showNotifications(0);
+    this.showNotifications(1);
   }
 
   getNotificationIcon(notification:libBackEnd.Notification):string {

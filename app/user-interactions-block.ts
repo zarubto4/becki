@@ -66,6 +66,8 @@ export class Component implements ngCore.OnInit {
     this.refresh();
     //TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-235
     this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-235"));
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-250
+    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-250"));
   }
 
   refresh():void {

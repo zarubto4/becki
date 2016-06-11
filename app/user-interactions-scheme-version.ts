@@ -74,6 +74,7 @@ export class Component implements ngCore.OnInit {
         .then(scheme => {
           return Promise.all<any>([
               scheme,
+            // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
               this.backEnd.getProject(scheme.project_id)
           ]);
         })
@@ -93,6 +94,7 @@ export class Component implements ngCore.OnInit {
           return Promise.all<any>([
             version,
             scheme,
+            // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
             Promise.all(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id))),
             this.backEnd.getFile(version.files_id[0])
           ]);
@@ -110,17 +112,11 @@ export class Component implements ngCore.OnInit {
           this.description = version.version_description;
           this.showGroups = groups.length > 1 || (groups.length == 1 && !groups[0].m_programs.length);
           this.groups = groups.filter(group => group.b_progam_connected_version_id && group.b_progam_connected_version_id == this.id);
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-195
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-195"));
-          this.scheme = file.fileContent;
+          this.scheme = file.content;
         })
         .catch(reason => {
           //TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
           this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-219
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-219"));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-221
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-221"));
           this.notifications.current.push(new libBeckiNotifications.Danger(`The scheme ${this.schemeId} cannot be loaded.`, reason));
         });
   }

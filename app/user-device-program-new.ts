@@ -76,7 +76,7 @@ export class Component implements ngCore.OnInit {
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     return () => this.backEnd.getProjects()
-        .then(projects => Promise.all([].concat(...projects.map(project => this.backEnd.getDevicePrograms(project.id)))))
+        .then(projects => Promise.all<libBackEnd.DeviceProgram>([].concat(...projects.map(project => project.c_programs_id)).map(id => this.backEnd.getDeviceProgram(id))))
         .then(programs => !programs.find(program => program.program_name == this.nameField));
   }
 
@@ -102,8 +102,6 @@ export class Component implements ngCore.OnInit {
           this.router.navigate(["UserDevices"]);
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-203
-          this.notifications.current.push(new libBeckiNotifications.Warning("TYRION-203"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The program cannot be created.", reason));
         });
   }

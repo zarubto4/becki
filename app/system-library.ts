@@ -3,7 +3,6 @@
  * of this distribution.
  */
 
-import * as _ from "underscore";
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
 import * as ngRouter from "@angular/router-deprecated";
@@ -35,8 +34,6 @@ export class Component implements ngCore.OnInit {
   description:string;
 
   versionNameField:string;
-
-  version:libBackEnd.Version;
 
   versionDescriptionField:string;
 
@@ -79,22 +76,15 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.editing = false;
-    Promise.all<any>([
-          this.backEnd.getLibrary(this.id),
-          this.backEnd.getLibraryVersions(this.id)
-        ])
-        .then(result => {
-          let library:libBackEnd.Library;
-          let versions:libBackEnd.Version[];
-          [library, versions] = result;
+    this.backEnd.getLibrary(this.id)
+        .then(library => {
           this.name = library.library_name;
           this.breadcrumbs[3].label = library.library_name;
           this.nameField = library.library_name;
           this.descriptionField = library.description;
           this.description = library.description;
-          this.version = versions.length ? _.max(versions, version => version.date_of_create) : null;
-          this.versionNameField = this.version ? this.version.version_name : "";
-          this.versionDescriptionField = this.version ? this.version.version_description : "";
+          this.versionNameField = "";
+          this.versionDescriptionField = "";
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The library ${this.id} cannot be loaded.`, reason));

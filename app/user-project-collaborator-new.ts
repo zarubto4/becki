@@ -58,6 +58,7 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     this.backEnd.getProject(this.projectId)
         .then(project => {
           this.projectName = project.project_name;
@@ -65,8 +66,6 @@ export class Component implements ngCore.OnInit {
           this.addCollaborator = project.share_permission;
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-219
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-219"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The project cannot be loaded.", reason));
         });
   }
@@ -75,6 +74,7 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     return () => this.backEnd.getProject(this.projectId).then(project => !project.owners_id.indexOf(this.idField));
   }
 

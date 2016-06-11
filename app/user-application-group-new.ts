@@ -61,15 +61,16 @@ export class Component implements ngCore.OnInit {
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
     this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-221
-    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-221"));
   }
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getApplicationGroups().then(groups => !groups.find(group => group.program_name == this.nameField));
+    return () => this.backEnd.getProjects()
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+        .then(projects => Promise.all<libBackEnd.ApplicationGroup>([].concat(...projects.map(project => project.m_projects_id)).map(id => this.backEnd.getApplicationGroup(id))))
+        .then(groups => !groups.find(group => group.program_name == this.nameField));
   }
 
   onSubmit():void {
@@ -91,8 +92,6 @@ export class Component implements ngCore.OnInit {
           this.router.navigate(["UserApplications"]);
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-222
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-222"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The group cannot be created.", reason));
         });
   }

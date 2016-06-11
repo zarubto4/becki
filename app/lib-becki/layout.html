@@ -31,7 +31,7 @@
         <div class="dropdown-menu infotip bottom-right">
           <div class="arrow"></div>
           <ul class="list-group">
-            <li class="list-group-item" template="ngFor let notification of navbarNotifications?.notifications" data-bind-ngSwitch="notification.read">
+            <li class="list-group-item" template="ngFor let notification of navbarNotifications?.content" data-bind-ngSwitch="notification.read">
               <span class="i pficon pficon-{{getNotificationIcon(notification)}}"></span>
               <template data-bind-ngSwitchWhen="true">
                 {{notification.message}}
@@ -48,10 +48,8 @@
               </a></p>
             </template>
             <template data-bind-ngIf="navbarNotifications?.pages?.indexOf(navbarNotificationsPage + 1) != -1">
-              <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-214 -->
-              <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-241 -->
               <p><a data-on-click="onShowNotificationsClick(navbarNotificationsPage + 1, $event)" style="cursor: pointer">
-                Show older notifications (issue/TYRION-214) (issue/TYRION-241)
+                Show older notifications
               </a></p>
             </template>
           </div>
@@ -64,8 +62,7 @@
         </a>
         <ul class="dropdown-menu">
           <li>
-            <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-237 -->
-            <a data-on-click="onConnectionsClick($event)" style="cursor: pointer">Connections (issue/TYRION-237)</a>
+            <a data-on-click="onConnectionsClick($event)" style="cursor: pointer">Connections</a>
           </li>
           <li class="divider"></li>
           <li>
@@ -86,9 +83,8 @@
     </li>
     <li class="list-group-item list-group-item-separator hidden-sm hidden-md hidden-lg">
       <a data-on-click="onConnectionsClick($event)" style="cursor: pointer">
-        <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-237 -->
-        <span class="fa fa-sign-in" title="Connections (issue/TYRION-237)"></span>
-        <span class="list-group-item-value">Connections (issue/TYRION-237)</span>
+        <span class="fa fa-sign-in" title="Connections"></span>
+        <span class="list-group-item-value">Connections</span>
       </a>
     </li>
     <li class="list-group-item hidden-sm hidden-md hidden-lg">
