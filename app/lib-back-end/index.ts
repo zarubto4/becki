@@ -855,7 +855,7 @@ export abstract class BackEnd {
 
   public static VALIDATION_PATH = "/coreClient/person/valid";
 
-  private notifications:EventSource;
+  private eventSource:EventSource;
 
   public notificationReceived:Rx.Subject<Notification>;
 
@@ -864,24 +864,24 @@ export abstract class BackEnd {
   public constructor() {
     "use strict";
 
-    this.notifications = null;
+    this.eventSource = null;
     this.notificationReceived = new Rx.Subject<Notification>();
     this.tasks = 0;
-    this.reregisterNotifications();
+    this.reconnectEventSource();
   }
 
   private setToken(token:string):void {
     "use strict";
 
     window.localStorage.setItem("authToken", token);
-    this.reregisterNotifications();
+    this.reconnectEventSource();
   }
 
   private unsetToken():void {
     "use strict";
 
     window.localStorage.removeItem("authToken");
-    this.reregisterNotifications();
+    this.reconnectEventSource();
   }
 
   protected abstract requestGeneral(request:Request):Rx.Observable<Response>;
@@ -920,19 +920,19 @@ export abstract class BackEnd {
         });
   }
 
-  private reregisterNotifications():void {
+  private reconnectEventSource():void {
     "use strict";
 
-    if (this.notifications) {
-      this.notifications.close();
+    if (this.eventSource) {
+      this.eventSource.close();
     }
-    this.notifications = null;
+    this.eventSource = null;
     if (window.localStorage.getItem("authToken")) {
       // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-177
-      this.notifications = new EventSource(`${BackEnd.BASE_URL}${BackEnd.NOTIFICATION_PATH}/connection/${window.localStorage.getItem("authToken")}`);
+      this.eventSource = new EventSource(`${BackEnd.BASE_URL}${BackEnd.NOTIFICATION_PATH}/connection/${window.localStorage.getItem("authToken")}`);
 
       Rx.Observable
-          .fromEvent<MessageEvent>(this.notifications, "message")
+          .fromEvent<MessageEvent>(this.eventSource, "message")
           .map(event => JSON.parse(event.data))
           .subscribe(this.notificationReceived);
     }
