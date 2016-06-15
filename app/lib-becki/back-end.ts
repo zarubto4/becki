@@ -22,8 +22,6 @@ export class Service extends libBackEnd.BackEnd {
 
   router:ngRouter.Router;
 
-  notificationsNew:ngCore.EventEmitter<MessageEvent>;
-
   public constructor(http:ngHttp.Http, @ngCore.Inject("signing") signing:any[], router:ngRouter.Router) {
     "use strict";
 
@@ -31,7 +29,6 @@ export class Service extends libBackEnd.BackEnd {
     this.http = http;
     this.signing = signing;
     this.router = router;
-    this.notificationsNew = new ngCore.EventEmitter<MessageEvent>();
   }
 
   protected requestGeneral(request:libBackEnd.Request):Rx.Observable<libBackEnd.Response> {
@@ -51,14 +48,5 @@ export class Service extends libBackEnd.BackEnd {
           }
           return new libBackEnd.Response(ngResponse.status, ngResponse.json());
         });
-  }
-
-  public reregisterNotifications() {
-    "use strict";
-
-    super.reregisterNotifications();
-    if (this.notifications) {
-      this.notifications.addEventListener("message", (event:MessageEvent) => this.notificationsNew.emit(event));
-    }
   }
 }

@@ -3,6 +3,7 @@
  * directory of this distribution.
  */
 
+import "rxjs/add/observable/fromEvent";
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/toPromise";
 
@@ -188,8 +189,21 @@ export interface Connection {
   delete_permission:boolean;
 }
 
+export interface Notification {
+
+  created:string;
+
+  level:string;
+
+  text:string;
+
+  read:string;
+
+  confirmation_required:string;
+}
+
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface  Notification {
+export interface MissedNotification {
 
   id:string;
 
@@ -205,9 +219,9 @@ export interface  Notification {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface NotificationsCollection {
+export interface MissedNotificationsCollection {
 
-  content:Notification[];
+  content:MissedNotification[];
 
   from:number;
 
@@ -841,7 +855,9 @@ export abstract class BackEnd {
 
   public static VALIDATION_PATH = "/coreClient/person/valid";
 
-  protected notifications:EventSource;
+  private notifications:EventSource;
+
+  public notificationReceived:Rx.Subject<Notification>;
 
   public tasks:number;
 
@@ -849,6 +865,7 @@ export abstract class BackEnd {
     "use strict";
 
     this.notifications = null;
+    this.notificationReceived = new Rx.Subject<Notification>();
     this.tasks = 0;
     this.reregisterNotifications();
   }
@@ -903,7 +920,7 @@ export abstract class BackEnd {
         });
   }
 
-  public reregisterNotifications():void {
+  private reregisterNotifications():void {
     "use strict";
 
     if (this.notifications) {
@@ -913,6 +930,11 @@ export abstract class BackEnd {
     if (window.localStorage.getItem("authToken")) {
       // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-177
       this.notifications = new EventSource(`${BackEnd.BASE_URL}${BackEnd.NOTIFICATION_PATH}/connection/${window.localStorage.getItem("authToken")}`);
+
+      Rx.Observable
+          .fromEvent<MessageEvent>(this.notifications, "message")
+          .map(event => JSON.parse(event.data))
+          .subscribe(this.notificationReceived);
     }
   }
 
@@ -1068,7 +1090,7 @@ export abstract class BackEnd {
     return this.requestPath("DELETE", `/coreClient/connection/${id}`).then(JSON.stringify);
   }
 
-  public getNotifications(page:number):Promise<NotificationsCollection> {
+  public getNotifications(page:number):Promise<MissedNotificationsCollection> {
     "use strict";
 
     return this.requestPath("GET", `${BackEnd.NOTIFICATION_PATH}/list/${page}`);

@@ -43,7 +43,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   navbarNotificationsPage:number;
 
-  navbarNotifications:libBackEnd.NotificationsCollection;
+  navbarNotifications:libBackEnd.MissedNotificationsCollection;
 
   navbarState:string;
 
@@ -115,7 +115,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     this.showNotifications(1);
   }
 
-  getNotificationIcon(notification:libBackEnd.Notification):string {
+  getNotificationIcon(notification:libBackEnd.MissedNotification):string {
     "use strict";
 
     switch (notification.level) {

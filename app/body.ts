@@ -159,26 +159,25 @@ export class Component {
     this.notifications = [];
     this.notificationTimeout = null;
     modal.modalChange.subscribe((event:libBeckiModal.Event) => this.modalEvent = event);
-    backEnd.notificationsNew.subscribe((event:MessageEvent) => {
-      let notificationData = JSON.parse(event.data);
-      let notification:libBeckiNotifications.Notification;
-      switch (notificationData.level) {
+    backEnd.notificationReceived.subscribe(notification => {
+      let notificationView:libBeckiNotifications.Notification;
+      switch (notification.level) {
         case "info":
-          notification = new libBeckiNotifications.Info(notificationData.text);
+          notificationView = new libBeckiNotifications.Info(notification.text);
           break;
         case "success":
-          notification = new libBeckiNotifications.Success(notificationData.text);
+          notificationView = new libBeckiNotifications.Success(notification.text);
           break;
         case "warning":
-          notification = new libBeckiNotifications.Warning(notificationData.text);
+          notificationView = new libBeckiNotifications.Warning(notification.text);
           break;
         case "error":
-          notification = new libBeckiNotifications.Danger(notificationData.text);
+          notificationView = new libBeckiNotifications.Danger(notification.text);
           break;
         default:
           return;
       }
-      this.notifications.push(notification);
+      this.notifications.push(notificationView);
     });
   }
 
