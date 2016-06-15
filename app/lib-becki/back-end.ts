@@ -31,7 +31,7 @@ export class Service extends libBackEnd.BackEnd {
     this.router = router;
   }
 
-  protected requestGeneral(request:libBackEnd.Request):Rx.Observable<libBackEnd.Response> {
+  protected requestRestGeneral(request:libBackEnd.RestRequest):Rx.Observable<libBackEnd.RestResponse> {
     "use strict";
 
     let ngRequest = new ngHttp.Request(new ngHttp.RequestOptions({
@@ -46,7 +46,7 @@ export class Service extends libBackEnd.BackEnd {
           if (ngResponse.status == 401) {
             this.router.navigate(this.signing);
           }
-          return new libBackEnd.Response(ngResponse.status, ngResponse.json());
+          return new libBackEnd.RestResponse(ngResponse.status, ngResponse.json());
         });
   }
 }
