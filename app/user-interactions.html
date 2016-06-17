@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, View, Update or Remove a Scheme, a Block or a Moderator of Interactions'" data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="tab == 'upload' ? null : 'Add'" data-on-actionClick="onAddClick($event)" data-bind-ngSwitch="tab">
+<div data-bind-layout="'Add, View, Update or Remove a Scheme, a Block, a Moderator or a Spy of Interactions'" data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="['upload', 'spies'].indexOf(tab) != -1 ? null : 'Add'" data-on-actionClick="onAddClick($event)" data-bind-ngSwitch="tab">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="tab == 'schemes'">
       <a data-on-click="onTabClick('schemes', $event)" style="cursor: pointer">
@@ -23,6 +23,11 @@
     <li data-bind-class.active="tab == 'moderators'">
       <a data-on-click="onTabClick('moderators', $event)" style="cursor: pointer">
         Moderators
+      </a>
+    </li>
+    <li data-bind-class.active="tab == 'spies'">
+      <a data-on-click="onTabClick('spies', $event)" style="cursor: pointer">
+        Spies
       </a>
     </li>
   </ul>
@@ -77,6 +82,11 @@
   </template>
   <template data-bind-ngSwitchWhen="'moderators'">
     <div data-bind-listView="moderators" data-on-addClick="onAddModeratorClick($event)" data-on-removeClick="onRemoveModeratorClick($event)">
+      <div class="spinner"></div>
+    </div>
+  </template>
+  <template data-bind-ngSwitchWhen="'spies'">
+    <div data-bind-listView="spies" data-bind-addable="false">
       <div class="spinner"></div>
     </div>
   </template>

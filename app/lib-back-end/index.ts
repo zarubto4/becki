@@ -621,6 +621,22 @@ export interface InteractionsBlock {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
+export interface InteractionsSchemeDeploymentDetails {
+
+  uploaded:boolean;
+
+  version_id?:string;
+
+  where?:string;
+
+  cloud?:Object;
+
+  local?:Object;
+
+  m_project_id:string;
+}
+
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface InteractionsScheme {
 
   id:string;
@@ -631,7 +647,7 @@ export interface InteractionsScheme {
 
   versionObjects:Version[];
 
-  program_state:Object;
+  program_state:InteractionsSchemeDeploymentDetails;
 
   dateOfCreate:number;
 
