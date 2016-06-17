@@ -20,7 +20,9 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
   @ngCore.Input()
   readonly:boolean;
 
-  controller:blocko.BlockoCore.Controller;
+  fieldController:blocko.BlockoCore.Controller;
+
+  fieldRenderer:blocko.BlockoSnapRenderer.RendererController;
 
   @ngCore.ViewChild("field")
   field:ngCore.ElementRef;
@@ -36,19 +38,24 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
   set model(scheme:string) {
     "use strict";
 
-    this.controller.setDataJson(scheme);
+    this.fieldController.setDataJson(scheme);
   }
 
   constructor(notificationsService:notifications.Service, modalService:modal.Service) {
     "use strict";
 
     this.readonly = false;
-    this.controller = new blocko.BlockoCore.Controller();
-    this.controller.registerDataChangedCallback(() => {
+    this.fieldRenderer = new blocko.BlockoSnapRenderer.RendererController();
+    this.fieldRenderer.registerOpenConfigCallback((block) =>
+        this.modal.modalChange.emit(new modal.BlockEvent(block, this.readonly))
+    );
+    this.fieldController = new blocko.BlockoCore.Controller();
+    this.fieldController.rendererFactory = this.fieldRenderer;
+    this.fieldController.registerDataChangedCallback(() => {
       this.modal.modalChange.emit(null);
-      this.modelChange.emit(this.controller.getDataJson());
+      this.modelChange.emit(this.fieldController.getDataJson());
     });
-    this.controller.registerBlocks(blocko.BlockoBasicBlocks.Manager.getAllBlocks());
+    this.fieldController.registerBlocks(blocko.BlockoBasicBlocks.Manager.getAllBlocks());
     // TODO: https://github.com/angular/angular/issues/6311
     this.modelChange = new ngCore.EventEmitter<string>(false);
     this.notifications = notificationsService;
@@ -69,13 +76,9 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
     "use strict";
 
     if (!this.readonly) {
-      new blocko.BlockoBasicBlocks.ExecutionController(this.controller);
+      new blocko.BlockoBasicBlocks.ExecutionController(this.fieldController);
     }
-    let renderer = new blocko.BlockoSnapRenderer.RendererController(this.field.nativeElement);
-    renderer.registerOpenConfigCallback((block) =>
-        this.modal.modalChange.emit(new modal.BlockEvent(block, this.readonly))
-    );
-    this.controller.rendererFactory = renderer;
+    this.fieldRenderer.setEditorElement(this.field.nativeElement);
   }
 
   onSwitchClick():void {
@@ -168,7 +171,7 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
     if (this.readonly) {
       throw new Error("read only");
     }
-    this.controller.addBlock(new cls(this.controller.getFreeBlockId()));
+    this.fieldController.addBlock(new cls(this.fieldController.getFreeBlockId()));
   }
 
   onClearClick():void {
@@ -177,6 +180,6 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
     if (this.readonly) {
       throw new Error("read only");
     }
-    this.controller.removeAllBlocks();
+    this.fieldController.removeAllBlocks();
   }
 }
