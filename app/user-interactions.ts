@@ -113,7 +113,7 @@ export class Component implements ngCore.OnInit {
           this.schemes = schemes.map(scheme => new InteractionsSchemeItem(scheme));
           this.blocks = [].concat(...groups.map(group => group.blockoBlocks)).map(block => new libPatternFlyListView.Item(block.id, block.name, block.general_description, ["UserInteractionsBlock", {block: block.id}]));
           this.moderators = moderators.map(pair => new SelectableInteractionsModeratorItem(pair[0], pair[1]));
-          this.spies = schemes.filter(scheme => scheme.program_state.uploaded).map(scheme => new libPatternFlyListView.Item(scheme.id, scheme.name, scheme.versionObjects.find(version => version.id == scheme.program_state.version_id).version_name, undefined, false));
+          this.spies = schemes.filter(scheme => scheme.program_state.uploaded).map(scheme => new libPatternFlyListView.Item(scheme.id, scheme.name, scheme.versionObjects.find(version => version.id == scheme.program_state.version_id).version_name, ["UserInteractionsSpy", {spy: scheme.id}], false));
         })
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-231

@@ -62,6 +62,7 @@ import * as userInteractionsModeratorNew from "./user-interactions-moderator-new
 import * as userInteractionsScheme from "./user-interactions-scheme";
 import * as userInteractionsSchemeNew from "./user-interactions-scheme-new";
 import * as userInteractionsSchemeVersion from "./user-interactions-scheme-version";
+import * as userInteractionsSpy from "./user-interactions-spy";
 import * as userProject from "./user-project";
 import * as userProjectCollaboratorNew from "./user-project-collaborator-new";
 import * as userProjectNew from "./user-project-new";
@@ -115,6 +116,7 @@ import * as userProjects from "./user-projects";
   {path: "/user/interactions/scheme/new", component: userInteractionsSchemeNew.Component, as: "NewUserInteractionsScheme"},
   {path: "/user/interactions/schemes/:scheme", component: userInteractionsScheme.Component, as: "UserInteractionsScheme"},
   {path: "/user/interactions/schemes/:scheme/versions/:version", component: userInteractionsSchemeVersion.Component, as: "UserInteractionsSchemeVersion"},
+  {path: "/user/interactions/spies/:spy", component: userInteractionsSpy.Component, as: "UserInteractionsSpy"},
   {path: "/user/project/new", component: userProjectNew.Component, as: "NewUserProject"},
   {path: "/user/projects", component: userProjects.Component, as: "UserProjects"},
   {path: "/user/projects/:project", component: userProject.Component, as: "UserProject"},
