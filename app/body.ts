@@ -41,7 +41,6 @@ import * as userApplicationGroup from "./user-application-group";
 import * as userApplicationGroupNew from "./user-application-group-new";
 import * as userApplicationNew from "./user-application-new";
 import * as userApplications from "./user-applications";
-import * as userApplicationsVision from "./user-applications-vision";
 import * as userConnections from "./user-connections";
 import * as userDeviceNew from "./user-device-new";
 import * as userDeviceProgram from "./user-device-program";
@@ -84,7 +83,6 @@ import * as userProjects from "./user-projects";
   {path: "/user/application/group/new", component: userApplicationGroupNew.Component, as: "NewUserApplicationGroup"},
   {path: "/user/application/groups/:group", component: userApplicationGroup.Component, as: "UserApplicationGroup"},
   {path: "/user/application/new", component: userApplicationNew.Component, as: "NewUserApplication"},
-  {path: "/user/application/vision", component: userApplicationsVision.Component, as: "UserApplicationsVision"},
   {path: "/user/applications", component: userApplications.Component, as: "UserApplications", useAsDefault: true},
   {path: "/user/applications/:application", component: userApplication.Component, as: "UserApplication"},
   {path: "/user/connections", component: userConnections.Component, as: "UserConnections"},
@@ -118,7 +116,6 @@ import * as userProjects from "./user-projects";
     ngCore.provide("navigation", {
       useValue: [
         new libBeckiLayout.LabeledLink("Applications", ["UserApplications"], "mobile"),
-        new libBeckiLayout.LabeledLink("Applications (Vision)", ["UserApplicationsVision"], "mobile"),
         new libBeckiLayout.LabeledLink("Interactions", ["UserInteractions"], "link"),
         new libBeckiLayout.LabeledLink("Devices", ["UserDevices"], "rocket"),
         new libBeckiLayout.LabeledLink("Projects", ["UserProjects"], "book"),
