@@ -47,7 +47,14 @@ export class Component implements ngCore.OnInit {
 
   addCollaborator:boolean;
 
+  tab:string;
+
   collaborators:libPatternFlyListView.Item[];
+  c_programs:libPatternFlyListView.Item[];
+  b_programs:libPatternFlyListView.Item[];
+  m_programs:libPatternFlyListView.Item[];
+
+  projectPointer:string//only placeholder for easier debuggging
 
   backEnd:libBeckiBackEnd.Service;
 
@@ -66,7 +73,8 @@ export class Component implements ngCore.OnInit {
       new libBeckiLayout.LabeledLink("Projects", ["UserProjects"]),
       new libBeckiLayout.LabeledLink("Loading...", ["UserProject", {project: this.id}])
     ];
-    this.showCollaborators = false;
+    this.projectPointer="1";
+    this.tab="details";
     this.editing = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
@@ -85,9 +93,13 @@ export class Component implements ngCore.OnInit {
     this.refresh();
   }
 
+  onTabClick(tab:string):void {
+    "use strict";
+    this.tab = tab;
+  }
+
   refresh():void {
     "use strict";
-
     this.editing = false;
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     this.backEnd.getProject(this.id)
@@ -113,6 +125,22 @@ export class Component implements ngCore.OnInit {
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The project ${this.id} cannot be loaded.`, reason));
         });
+
+
+    this.backEnd.getDeviceProgram(this.projectPointer)
+        .then(c_program => this.c_programs =[new libPatternFlyListView.Item(c_program.id, c_program.program_name, c_program.program_description)])
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("c_programs cannot be loaded.", reason)));
+
+    this.backEnd.getApplication(this.projectPointer)
+        .then(m_program => this.m_programs =[new libPatternFlyListView.Item(m_program.id, m_program.program_name, m_program.program_description)])
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("m_programs cannot be loaded.", reason)));
+
+    this.backEnd.getInteractionsScheme(this.projectPointer)
+        .then(b_program => this.b_programs =[new libPatternFlyListView.Item(b_program.id, b_program.name, b_program.program_description)])
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("b_programs cannot be loaded.", reason)));
+
+
+
   }
 
   onLayoutActionClick():void {
@@ -123,18 +151,6 @@ export class Component implements ngCore.OnInit {
     } else {
       this.editing = !this.editing;
     }
-  }
-
-  onDetailsClick():void {
-    "use strict";
-
-    this.showCollaborators = false;
-  }
-
-  onCollaboratorsClick():void {
-    "use strict";
-
-    this.showCollaborators = true;
   }
 
   validateNameField():()=>Promise<boolean> {

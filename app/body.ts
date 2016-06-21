@@ -115,10 +115,10 @@ import * as userProjects from "./user-projects";
     ngCore.provide("home", {useValue: new libBeckiLayout.LabeledLink("No Name", ["UserApplications"])}),
     ngCore.provide("navigation", {
       useValue: [
+        new libBeckiLayout.LabeledLink("Projects", ["UserProjects"], "book"),
         new libBeckiLayout.LabeledLink("Applications", ["UserApplications"], "mobile"),
         new libBeckiLayout.LabeledLink("Interactions", ["UserInteractions"], "link"),
         new libBeckiLayout.LabeledLink("Devices", ["UserDevices"], "rocket"),
-        new libBeckiLayout.LabeledLink("Projects", ["UserProjects"], "book"),
         new libBeckiLayout.LabeledLink("System", ["System"], "globe")
       ]
     }),

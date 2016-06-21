@@ -3,55 +3,34 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + name + "\" Project"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="showCollaborators ? 'Add' : editing ? null : 'Edit'" data-on-actionClick="onLayoutActionClick($event)" data-bind-ngSwitch="showCollaborators">
-  <ul class="nav nav-tabs">
-    <li data-bind-class.active="!showCollaborators">
-      <a data-on-click="onDetailsClick($event)" style="cursor: pointer">
-        Details
-      </a>
-    </li>
-    <li data-bind-class.active="showCollaborators">
-      <a data-on-click="onCollaboratorsClick($event)" style="cursor: pointer">
-        Collaborators
-      </a>
-    </li>
-  </ul>
-  <template data-bind-ngSwitchWhen="true">
-    <div data-bind-listView="collaborators" data-bind-addable="addCollaborator" data-on-addClick="onCollaboratorAddClick($event)" data-on-removeClick="onCollaboratorRemoveClick($event)">
+<div data-bind-layout='" \"" + name + "\" Project"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="showCollaborators ? 'Add' : editing ? null : 'Edit'" data-on-actionClick="onLayoutActionClick($event)" data-bind-ngSwitch="tab"><ul class="nav nav-tabs">
+  <li data-bind-class.active="tab == 'details'">
+    <a data-on-click="onTabClick('details', $event)" style="cursor: pointer">
+      details
+    </a>
+  </li>
+  <li data-bind-class.active="tab == 'collaborators'">
+    <a data-on-click="onTabClick('collaborators', $event)" style="cursor: pointer">
+      collaborators
+    </a>
+  </li>
+</ul>
+
+
+  <template data-bind-ngSwitchWhen="'details'">
+    c_programs
+    <div data-bind-listView="c_programs" data-on-addClick="onAddCompilationClick($event)" data-on-removeClick="onRemoveCompilationClick($event)">
+      <div class="spinner"></div></div>
+    b_programs
+    <div data-bind-listView="b_programs" data-on-addClick="onAddCompilationClick($event)" data-on-removeClick="onRemoveCompilationClick($event)">
+      <div class="spinner"></div></div>
+    m_programs
+    <div data-bind-listView="m_programs" data-on-addClick="onAddCompilationClick($event)" data-on-removeClick="onRemoveCompilationClick($event)">
+      <div class="spinner"></div></div>
+  </template>
+  <template data-bind-ngSwitchWhen="'collaborators'">
+    <div data-bind-listView="collaborators" data-on-addClick="onAddBlockoClick($event)" data-on-removeClick="onRemoveBlockoClick($event)">
       <div class="spinner"></div>
     </div>
-  </template>
-  <template data-bind-ngSwitchWhen="false">
-    <form class="clearfix" style="margin-top: 2em" data-on-submit="onSubmit($event)" data-bind-ngSwitch="editing">
-      <template data-bind-ngSwitchWhen="true">
-        <div class="form-group">
-          <label>
-            <span class="glyphicon glyphicon-pencil"></span>
-            Name
-          </label>
-          <input class="form-control" required minlength="8" data-bindon-ngModel="nameField" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
-        </div>
-      </template>
-      <div class="form-group">
-        <label>
-          <template data-bind-ngSwitchWhen="true">
-            <span class="glyphicon glyphicon-pencil"></span>
-          </template>
-          Description
-        </label>
-        <template data-bind-ngSwitchWhen="true">
-          <textarea class="form-control" required minlength="24" data-bindon-ngModel="descriptionField"></textarea>
-        </template>
-        <template data-bind-ngSwitchWhen="false">
-          <p class="form-control-static">{{description}}</p>
-        </template>
-      </div>
-      <template data-bind-ngSwitchWhen="true">
-        <div class="pull-right">
-          <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-          <button class="btn btn-primary" type="submit" data-bind-disabled="!editProject" data-bind-title="editProject ? '' : 'You are not allowed to edit this project.'">Edit</button>
-        </div>
-      </template>
-    </form>
   </template>
 </div>
