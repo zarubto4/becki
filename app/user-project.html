@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout='" \"" + name + "\" Project"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="showCollaborators ? 'Add' : editing ? null : 'Edit'" data-on-actionClick="onLayoutActionClick($event)" data-bind-ngSwitch="tab"><ul class="nav nav-tabs">
+<div data-bind-layout='" \"" + name + "\" Project"' data-bind-breadcrumbs="breadcrumbs" data-bind-ngSwitch="tab"><ul class="nav nav-tabs">
   <li data-bind-class.active="tab == 'details'">
     <a data-on-click="onTabClick('details', $event)" style="cursor: pointer">
       details
@@ -19,18 +19,19 @@
 
   <template data-bind-ngSwitchWhen="'details'">
     c_programs
-    <div data-bind-listView="c_programs" data-on-addClick="onAddCompilationClick($event)" data-on-removeClick="onRemoveCompilationClick($event)">
+    <div data-bind-listView="c_programs" data-on-addClick="onAddCompilationClick($event)" data-on-removeClick="onRemoveC_programsClick($event)">
       <div class="spinner"></div></div>
     b_programs
-    <div data-bind-listView="b_programs" data-on-addClick="onAddCompilationClick($event)" data-on-removeClick="onRemoveCompilationClick($event)">
+    <div data-bind-listView="b_programs" data-on-addClick="onAddCompilationClick($event)" data-on-removeClick="onRemoveB_programsClick($event)">
       <div class="spinner"></div></div>
     m_programs
-    <div data-bind-listView="m_programs" data-on-addClick="onAddCompilationClick($event)" data-on-removeClick="onRemoveCompilationClick($event)">
+    <div data-bind-listView="m_programs" data-on-addClick="onAddCompilationClick($event)" data-on-removeClick="onRemoveM_programsClick($event)">
       <div class="spinner"></div></div>
   </template>
   <template data-bind-ngSwitchWhen="'collaborators'">
-    <div data-bind-listView="collaborators" data-on-addClick="onAddBlockoClick($event)" data-on-removeClick="onRemoveBlockoClick($event)">
+    <div data-bind-listView="collaborators" data-on-addClick="onAddBlockoClick($event)" data-on-removeClick="onRemoveCollaboratorsClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
+
 </div>

@@ -54,7 +54,9 @@ export class Component implements ngCore.OnInit {
   b_programs:libPatternFlyListView.Item[];
   m_programs:libPatternFlyListView.Item[];
 
-  projectPointer:string//only placeholder for easier debuggging
+  c_programs_id:string[];
+  b_programs_id:string[];
+  m_programs_id:string[];
 
   backEnd:libBeckiBackEnd.Service;
 
@@ -73,7 +75,6 @@ export class Component implements ngCore.OnInit {
       new libBeckiLayout.LabeledLink("Projects", ["UserProjects"]),
       new libBeckiLayout.LabeledLink("Loading...", ["UserProject", {project: this.id}])
     ];
-    this.projectPointer="1";
     this.tab="details";
     this.editing = false;
     this.nameField = "Loading...";
@@ -120,6 +121,9 @@ export class Component implements ngCore.OnInit {
           this.description = project.project_description;
           this.editProject = project.edit_permission;
           this.addCollaborator = project.share_permission;
+          this.c_programs_id = project.c_programs_id;
+          this.b_programs_id = project.b_programs_id;
+          this.m_programs_id = project.m_projects_id;
           this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composeUserString(collaborator, true), null, undefined, project.unshare_permission));
         })
         .catch(reason => {
@@ -127,31 +131,24 @@ export class Component implements ngCore.OnInit {
         });
 
 
-    this.backEnd.getDeviceProgram(this.projectPointer)
-        .then(c_program => this.c_programs =[new libPatternFlyListView.Item(c_program.id, c_program.program_name, c_program.program_description)])
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("c_programs cannot be loaded.", reason)));
-
-    this.backEnd.getApplication(this.projectPointer)
-        .then(m_program => this.m_programs =[new libPatternFlyListView.Item(m_program.id, m_program.program_name, m_program.program_description)])
+    //angular.forEach(){
+  
+      this.backEnd.getDeviceProgram("1")
+          .then(c_program => this.c_programs = [new libPatternFlyListView.Item(c_program.id, c_program.program_name, c_program.program_description,["UserDeviceProgram", {program: c_program.id}], c_program.delete_permission)])
+          .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("c_programs cannot be loaded.", reason)));
+    
+    this.backEnd.getApplication("1")
+        .then(m_program => this.m_programs =[new libPatternFlyListView.Item(m_program.id, m_program.program_name, m_program.program_description,["UserApplication", {application: m_program.id}], m_program.delete_permission)])
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("m_programs cannot be loaded.", reason)));
 
-    this.backEnd.getInteractionsScheme(this.projectPointer)
-        .then(b_program => this.b_programs =[new libPatternFlyListView.Item(b_program.id, b_program.name, b_program.program_description)])
+    this.backEnd.getInteractionsScheme("1")
+        .then(b_program => this.b_programs =[new libPatternFlyListView.Item(b_program.id, b_program.name, b_program.program_description,["UserInteractionsScheme", {scheme: b_program.id}], b_program.delete_permission)])
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("b_programs cannot be loaded.", reason)));
 
 
 
   }
-
-  onLayoutActionClick():void {
-    "use strict";
-
-    if (this.showCollaborators) {
-      this.onCollaboratorAddClick();
-    } else {
-      this.editing = !this.editing;
-    }
-  }
+  
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
