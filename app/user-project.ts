@@ -50,13 +50,10 @@ export class Component implements ngCore.OnInit {
   tab:string;
 
   collaborators:libPatternFlyListView.Item[];
-  c_programs:libPatternFlyListView.Item[];
-  b_programs:libPatternFlyListView.Item[];
-  m_programs:libPatternFlyListView.Item[];
+  devices:libPatternFlyListView.Item[];
+  schemes:libPatternFlyListView.Item[];
+  applications:libPatternFlyListView.Item[];
 
-  c_programs_id:string[];
-  b_programs_id:string[];
-  m_programs_id:string[];
 
   backEnd:libBeckiBackEnd.Service;
 
@@ -107,13 +104,19 @@ export class Component implements ngCore.OnInit {
         .then(project => {
           return Promise.all<any>([
             project,
-            Promise.all(project.owners_id.map(id => this.backEnd.getUser(id)))
+            Promise.all(project.owners_id.map(id => this.backEnd.getUser(id))),
+            Promise.all(project.c_programs_id.map(id => this.backEnd.getDeviceProgram(id))),
+            Promise.all(project.b_programs_id.map(id => this.backEnd.getInteractionsScheme(id))),
+            Promise.all(project.m_projects_id.map(id => this.backEnd.getApplication(id)))
           ]);
         })
         .then(result => {
           let project:libBackEnd.Project;
           let collaborators:libBackEnd.User[];
-          [project, collaborators] = result;
+          let Devices:libBackEnd.DeviceProgram[];
+          let Schemes:libBackEnd.InteractionsScheme[];
+          let Applications:libBackEnd.Application[];
+          [project, collaborators,Devices,Schemes,Applications] = result;
           this.name = project.project_name;
           this.breadcrumbs[3].label = project.project_name;
           this.nameField = project.project_name;
@@ -121,34 +124,59 @@ export class Component implements ngCore.OnInit {
           this.description = project.project_description;
           this.editProject = project.edit_permission;
           this.addCollaborator = project.share_permission;
-          this.c_programs_id = project.c_programs_id;
-          this.b_programs_id = project.b_programs_id;
-          this.m_programs_id = project.m_projects_id;
           this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composeUserString(collaborator, true), null, undefined, project.unshare_permission));
+          this.devices = Devices.map(device => new libPatternFlyListView.Item(device.id,device.program_name,device.program_description,["UserDeviceProgram", {program:device.id}],device.delete_permission));
+          this.schemes = Schemes.map(scheme => new libPatternFlyListView.Item(scheme.id,scheme.name,scheme.program_description,["UserInteractionsScheme", {scheme:scheme.id}],scheme.delete_permission));
+          this.applications = Applications.map(application => new libPatternFlyListView.Item(application.id,application.program_name,application.program_description,["UserApplication", {application:application.id}],application.delete_permission));
+
+
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The project ${this.id} cannot be loaded.`, reason));
         });
-
-
-    //angular.forEach(){
-  
-      this.backEnd.getDeviceProgram("1")
-          .then(c_program => this.c_programs = [new libPatternFlyListView.Item(c_program.id, c_program.program_name, c_program.program_description,["UserDeviceProgram", {program: c_program.id}], c_program.delete_permission)])
-          .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("c_programs cannot be loaded.", reason)));
-    
-    this.backEnd.getApplication("1")
-        .then(m_program => this.m_programs =[new libPatternFlyListView.Item(m_program.id, m_program.program_name, m_program.program_description,["UserApplication", {application: m_program.id}], m_program.delete_permission)])
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("m_programs cannot be loaded.", reason)));
-
-    this.backEnd.getInteractionsScheme("1")
-        .then(b_program => this.b_programs =[new libPatternFlyListView.Item(b_program.id, b_program.name, b_program.program_description,["UserInteractionsScheme", {scheme: b_program.id}], b_program.delete_permission)])
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("b_programs cannot be loaded.", reason)));
+  }
 
 
 
+  onRemoveDevicesClick(id:string):void{
+    "use strict";
+    this.notifications.shift();
+    this.backEnd.deleteDeviceProgram(id)
+        .then(() => {
+          this.notifications.current.push(new libBeckiNotifications.Success("The c_program has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger("The c_program cannot be removed.", reason));
+        });
   }
   
+
+  onRemoveSchemesClick(id:string):void{
+    "use strict";
+    this.notifications.shift();
+    this.backEnd.deleteInteractionsScheme(id)
+        .then(() => {
+          this.notifications.current.push(new libBeckiNotifications.Success("The b_program has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger("The b_program cannot be removed.", reason));
+        });
+  }
+
+  onRemoveApplicationsClick(id:string):void{
+    "use strict";
+    this.notifications.shift();
+    this.backEnd.deleteApplicationGroup(id)
+        .then(() => {
+          this.notifications.current.push(new libBeckiNotifications.Success("The M_project has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger("The M_project cannot be removed.", reason));
+        });
+  }
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
@@ -170,6 +198,27 @@ export class Component implements ngCore.OnInit {
           this.notifications.current.push(new libBeckiNotifications.Danger("The project cannot be updated.", reason));
         });
   }
+
+  onAddClick():void{
+    switch (this.tab){
+    case "devices":
+      this.router.navigate(["NewUserDeviceProgram"]);
+    break;
+
+    case "schemes":
+      this.router.navigate(["NewUserInteractionsScheme"]);
+    break;
+
+    case "applications":
+      this.router.navigate(["NewUserApplicationGroup"]);
+    break;
+
+    case "collaborators":
+      this.router.navigate(["NewUserProjectCollaborator", {project: this.id}]);
+      break;
+
+  }
+}
 
   onCancelClick():void {
     "use strict";
