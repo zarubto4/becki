@@ -4,6 +4,7 @@
  */
 
 import "ace";
+import "ace/ext-language_tools";
 import "ace/mode-c_cpp";
 import "ace/mode-javascript";
 
@@ -56,6 +57,7 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
     "use strict";
 
     this.editor = ace.edit(this.field.nativeElement);
+    this.editor.setOptions({enableBasicAutocompletion: true});
     this.editor.setReadOnly(this.readonly);
     this.editor.getSession().setMode(this.mode);
     this.editor.getSession().on("change", () => {
