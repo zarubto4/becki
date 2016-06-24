@@ -3,10 +3,10 @@
  * of this distribution.
  */
 
-import "codemirror/mode/clike/clike";
-import "codemirror/mode/javascript/javascript";
+import "ace";
+import "ace/mode-c_cpp";
+import "ace/mode-javascript";
 
-import * as CodeMirror from "codemirror";
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
 
@@ -29,7 +29,7 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
   @ngCore.ViewChild("field")
   field:ngCore.ElementRef;
 
-  editor:CodeMirror.EditorFromTextArea;
+  editor:AceAjax.Editor;
 
   @ngCore.Output("fieldCodeChange")
   modelChange = new ngCore.EventEmitter<string>();
@@ -38,21 +38,28 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
     "use strict";
 
     let model = changes["model"];
-    // see https://github.com/codemirror/CodeMirror/issues/3734
     // TODO: https://github.com/angular/angular/issues/6114
-    if (model && this.editor && model.currentValue != this.editor.getDoc().getValue()) {
-      this.editor.getDoc().setValue(model.currentValue);
+    if (model && this.editor && model.currentValue != this.editor.getValue()) {
+      this.editor.setValue(model.currentValue, 1);
+    }
+    let mode = changes["mode"];
+    if (mode && this.editor) {
+      this.editor.getSession().setMode(mode.currentValue);
+    }
+    let readonly = changes["readonly"];
+    if (readonly && this.editor) {
+      this.editor.setReadOnly(readonly.currentValue);
     }
   }
 
   ngAfterViewInit():void {
     "use strict";
 
-    this.editor = CodeMirror.fromTextArea(this.field.nativeElement, {mode: this.mode, readOnly: this.readonly ? "nocursor" : false});
-    // see https://github.com/angular/angular/issues/6103
-    // see https://github.com/codemirror/CodeMirror/issues/3735
-    this.editor.on("changes", () => {
-      this.model = this.editor.getDoc().getValue();
+    this.editor = ace.edit(this.field.nativeElement);
+    this.editor.setReadOnly(this.readonly);
+    this.editor.getSession().setMode(this.mode);
+    this.editor.getSession().on("change", () => {
+      this.model = this.editor.getValue();
       this.modelChange.emit(this.model);
     });
   }
@@ -60,6 +67,6 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
   ngOnDestroy():void {
     "use strict";
 
-    this.editor.toTextArea();
+    this.editor.destroy();
   }
 }

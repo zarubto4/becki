@@ -16,8 +16,6 @@
     <link rel="stylesheet" href="node_modules/weathericons/css/weather-icons.css">
     <!-- TODO: https://youtrack.byzance.cz/youtrack/issue/TG-6 -->
     <link rel="stylesheet" href="node_modules/roboto-fontface/css/roboto-fontface.css">
-    <!-- a codemirror dependency -->
-    <link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css">
     <!-- patternfly dependencies -->
     <link rel="stylesheet" href="node_modules/patternfly/dist/css/patternfly.css">
     <link rel="stylesheet" href="node_modules/patternfly/dist/css/patternfly-additions.css">
@@ -39,9 +37,9 @@
       System.config({
         map: {
           "@angular": "node_modules/@angular",
+          "ace": "/node_modules/ace-builds/src-min-noconflict",
           "app": "app",
           "blocko": "/node_modules/blocko",
-          "codemirror": "/node_modules/codemirror",
           "node-uuid": "/node_modules/node-uuid",
           "rxjs": "node_modules/rxjs",
           "the-grid": "/node_modules/the-grid",
@@ -55,9 +53,9 @@
           "@angular/platform-browser": {main: "index"},
           "@angular/platform-browser-dynamic": {main: "index"},
           "@angular/router-deprecated": {main: "index"},
+          "ace": {main: "ace"},
           "app": {main: "main", defaultExtension: "js"},
           "blocko": {main: "js/index"},
-          "codemirror": {main: "lib/codemirror"},
           "node-uuid": {main: "uuid"},
           "node_modules": {defaultExtension: "js"},
           "rxjs": {main: "Rx"},
