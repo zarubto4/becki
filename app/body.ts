@@ -10,11 +10,6 @@ import * as ngRouter from "@angular/router-deprecated";
 import * as theGrid from "the-grid";
 
 import * as applicationDevice from "./application-device";
-import * as issue from "./issue";
-import * as issueConfirmationNew from "./issue-confirmation-new";
-import * as issueNew from "./issue-new";
-import * as issueRelatedNew from "./issue-related-new";
-import * as issues from "./issues";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiFieldCode from "./lib-becki/field-code";
 import * as libBeckiLayout from "./lib-becki/layout";
@@ -30,10 +25,6 @@ import * as systemDeviceTypeNew from "./system-device-type-new";
 import * as systemInteractionsModeratorNew from "./system-interactions-moderator-new";
 import * as systemInteractionsServer from "./system-interactions-server";
 import * as systemInteractionsServerNew from "./system-interactions-server-new";
-import * as systemIssueConfirmation from "./system-issue-confirmation";
-import * as systemIssueConfirmationNew from "./system-issue-confirmation-new";
-import * as systemIssueType from "./system-issue-type";
-import * as systemIssueTypeNew from "./system-issue-type-new";
 import * as systemLibrary from "./system-library";
 import * as systemLibraryGroup from "./system-library-group";
 import * as systemLibraryGroupNew from "./system-library-group-new";
@@ -70,11 +61,6 @@ import * as userProjects from "./user-projects";
 
 @ngRouter.RouteConfig([
   {path: "/application/devices/:device", component: applicationDevice.Component, as: "ApplicationDevice"},
-  {path: "/issue/new", component: issueNew.Component, as: "NewIssue"},
-  {path: "/issues", component: issues.Component, as: "Issues"},
-  {path: "/issues/:issue", component: issue.Component, as: "Issue"},
-  {path: "/issues/:issue/confirmation/new", component: issueConfirmationNew.Component, as: "NewIssueConfirmation"},
-  {path: "/issues/:issue/related/new", component: issueRelatedNew.Component, as: "NewRelatedIssue"},
   {path: "/signing", component: signing.Component, as: "Signing"},
   {path: "/system", component: system.Component, as: "System"},
   {path: "/system/compilation/server/new", component: systemCompilationServerNew.Component, as: "NewSystemCompilationServer"},
@@ -85,10 +71,6 @@ import * as userProjects from "./user-projects";
   {path: "/system/interactions/moderator/new", component: systemInteractionsModeratorNew.Component, as: "NewSystemInteractionsModerator"},
   {path: "/system/interactions/server/new", component: systemInteractionsServerNew.Component, as: "NewSystemInteractionsServer"},
   {path: "/system/interactions/servers/:server", component: systemInteractionsServer.Component, as: "SystemInteractionsServer"},
-  {path: "/system/issue/confirmation/new", component: systemIssueConfirmationNew.Component, as: "NewSystemIssueConfirmation"},
-  {path: "/system/issue/confirmations/:confirmation", component: systemIssueConfirmation.Component, as: "SystemIssueConfirmation"},
-  {path: "/system/issue/type/new", component: systemIssueTypeNew.Component, as: "NewSystemIssueType"},
-  {path: "/system/issue/types/:type", component: systemIssueType.Component, as: "SystemIssueType"},
   {path: "/system/libraries/:library", component: systemLibrary.Component, as: "SystemLibrary"},
   {path: "/system/library/group/new", component: systemLibraryGroupNew.Component, as: "NewSystemLibraryGroup"},
   {path: "/system/library/groups/:group", component: systemLibraryGroup.Component, as: "SystemLibraryGroup"},
@@ -139,8 +121,7 @@ import * as userProjects from "./user-projects";
         new libBeckiLayout.LabeledLink("Interactions", ["UserInteractions"], "link"),
         new libBeckiLayout.LabeledLink("Devices", ["UserDevices"], "rocket"),
         new libBeckiLayout.LabeledLink("Projects", ["UserProjects"], "book"),
-        new libBeckiLayout.LabeledLink("System", ["System"], "globe"),
-        new libBeckiLayout.LabeledLink("Issues", ["Issues"], "bug")
+        new libBeckiLayout.LabeledLink("System", ["System"], "globe")
       ]
     }),
     ngCore.provide("signing", {useValue: ["Signing"]})

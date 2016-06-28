@@ -41,10 +41,6 @@ export class Component implements ngCore.OnInit {
 
   compilationServers:libPatternFlyListView.Item[];
 
-  issueTypes:libPatternFlyListView.Item[];
-
-  issueConfirmations:libPatternFlyListView.Item[];
-
   users:libPatternFlyListView.Item[];
 
   backEnd:libBeckiBackEnd.Service;
@@ -116,12 +112,6 @@ export class Component implements ngCore.OnInit {
         .then(servers => this.compilationServers = servers.map(server =>
             new libPatternFlyListView.Item(server.id, server.server_name, server.destination_address, ["SystemCompilationServer", {server: server.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Compilation servers cannot be loaded.", reason)));
-    this.backEnd.getIssueTypes()
-        .then(types => this.issueTypes = types.map(type => new libPatternFlyListView.Item(type.id, type.type, null, ["SystemIssueType", {type: type.id}])))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue types cannot be loaded.", reason)));
-    this.backEnd.getIssueConfirmations()
-        .then(confirmations => this.issueConfirmations = confirmations.map(confirmation => new libPatternFlyListView.Item(confirmation.id, confirmation.type, null, ["SystemIssueConfirmation", {confirmation: confirmation.id}])))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Issue confirmations cannot be loaded.", reason)));
     this.backEnd.getUsers()
         .then(users => this.users = users.map(user => new libPatternFlyListView.Item(user.id, libBackEnd.composeUserString(user), "", ["User", {user: user.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Device types cannot be loaded.", reason)));
@@ -163,16 +153,6 @@ export class Component implements ngCore.OnInit {
             break;
           case "servers":
             this.onAddCompilationServerClick();
-            break;
-        }
-        break;
-      case "issues":
-        switch (this.tab[1]) {
-          case "types":
-            this.onAddIssueTypeClick();
-            break;
-          case "confirmations":
-            this.onAddIssueConfirmationClick();
             break;
         }
         break;
@@ -230,18 +210,6 @@ export class Component implements ngCore.OnInit {
   onAddCompilationServerClick():void {
     "use strict";
     this.router.navigate(["NewSystemCompilationServer"]);
-  }
-
-  onAddIssueTypeClick():void {
-    "use strict";
-
-    this.router.navigate(["NewSystemIssueType"]);
-  }
-
-  onAddIssueConfirmationClick():void {
-    "use strict";
-
-    this.router.navigate(["NewSystemIssueConfirmation"]);
   }
 
   onTabClick(tab:string[]):void {
@@ -367,38 +335,6 @@ export class Component implements ngCore.OnInit {
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The compilation server cannot be removed.", reason));
-        });
-  }
-
-  onRemoveIssueTypeClick(id:string):void {
-    "use strict";
-
-    this.notifications.shift();
-    this.backEnd.deleteIssueType(id)
-        .then(() => {
-          this.notifications.current.push(new libBeckiNotifications.Success("The issue type has been removed."));
-          this.refresh();
-        })
-        .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-229
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-229"));
-          this.notifications.current.push(new libBeckiNotifications.Danger("The issue type cannot be removed.", reason));
-        });
-  }
-
-  onRemoveIssueConfirmationClick(id:string):void {
-    "use strict";
-
-    this.notifications.shift();
-    this.backEnd.deleteIssueConfirmation(id)
-        .then(() => {
-          this.notifications.current.push(new libBeckiNotifications.Success("The issue confirmation has been removed."));
-          this.refresh();
-        })
-        .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-227
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-227"));
-          this.notifications.current.push(new libBeckiNotifications.Danger("The issue confirmation cannot be removed.", reason));
         });
   }
 

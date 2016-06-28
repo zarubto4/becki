@@ -15,11 +15,6 @@
         Devices
       </a>
     </li>
-    <li data-bind-class.active="tab[0] == 'issues'">
-      <a data-on-click="onTabClick(['issues', 'types'], $event)" style="cursor: pointer">
-        Issues
-      </a>
-    </li>
     <li data-bind-class.active="tab[0] == 'users'">
       <a data-on-click="onTabClick(['users'], $event)" style="cursor: pointer">
         Users
@@ -123,32 +118,6 @@
       </template>
       <template data-bind-ngSwitchWhen="'servers'">
         <div data-bind-listView="compilationServers" data-on-addClick="onAddCompilationServerClick($event)" data-on-removeClick="onRemoveCompilationServerClick($event)">
-          <div class="spinner"></div>
-        </div>
-      </template>
-    </div>
-  </template>
-  <template data-bind-ngSwitchWhen="'issues'">
-    <div data-bind-ngSwitch="tab[1]">
-      <ul class="nav nav-tabs nav-tabs-pf">
-        <li data-bind-class.active="tab[1] == 'types'">
-          <a data-on-click="onTabClick(['issues', 'types'], $event)" style="cursor: pointer">
-            Types
-          </a>
-        </li>
-        <li data-bind-class.active="tab[1] == 'confirmations'">
-          <a data-on-click="onTabClick(['issues', 'confirmations'], $event)" style="cursor: pointer">
-            Confirmations
-          </a>
-        </li>
-      </ul>
-      <template data-bind-ngSwitchWhen="'types'">
-        <div data-bind-listView="issueTypes" data-on-addClick="onAddIssueTypeClick($event)" data-on-removeClick="onRemoveIssueTypeClick($event)">
-          <div class="spinner"></div>
-        </div>
-      </template>
-      <template data-bind-ngSwitchWhen="'confirmations'">
-        <div data-bind-listView="issueConfirmations" data-on-addClick="onAddIssueConfirmationClick($event)" data-on-removeClick="onRemoveIssueConfirmationClick($event)">
           <div class="spinner"></div>
         </div>
       </template>
