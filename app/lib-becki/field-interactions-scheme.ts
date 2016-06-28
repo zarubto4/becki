@@ -52,12 +52,16 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
     this.readonly = false;
     this.fieldRenderer = new blocko.BlockoSnapRenderer.RendererController();
     this.fieldRenderer.registerOpenConfigCallback((block) =>
-        modalComponent.modalEvent = new modal.BlockEvent(block, this.readonly)
+        modalComponent.showModal(new modal.BlockModel(block, this.readonly)).then(save => {
+          if (save) {
+            block.emitConfigsChanged();
+          }
+        })
     );
     this.fieldController = new blocko.BlockoCore.Controller();
     this.fieldController.rendererFactory = this.fieldRenderer;
     this.fieldController.registerDataChangedCallback(() => {
-      modalComponent.modalEvent = null;
+      modalComponent.closeModal(false);
       this.modelChange.emit(this.fieldController.getDataJson());
     });
     this.fieldController.registerBlocks(blocko.BlockoBasicBlocks.Manager.getAllBlocks());

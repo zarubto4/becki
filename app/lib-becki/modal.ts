@@ -8,7 +8,7 @@ import * as theGrid from "the-grid";
 
 import * as libBootstrapModal from "../lib-bootstrap/modal";
 
-export class WidgetEvent implements libBootstrapModal.ModalEvent {
+export class WidgetModel implements libBootstrapModal.Model {
 
   widget:theGrid.Core.Widget;
 
@@ -22,7 +22,7 @@ export class WidgetEvent implements libBootstrapModal.ModalEvent {
   }
 }
 
-export class BlockEvent implements libBootstrapModal.ModalEvent {
+export class BlockModel implements libBootstrapModal.Model {
 
   block:blocko.BlockoCore.Block;
 

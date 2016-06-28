@@ -129,11 +129,13 @@ import * as userProjects from "./user-projects";
   ],
   directives: [libBeckiFieldCode.Component, ngCommon.CORE_DIRECTIVES, ngCommon.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
   inputs: ["body"],
-  host: {"[class.modal-open]": "modalEvent"}
+  host: {"[class.modal-open]": "modal"}
 })
 export class Component implements libBootstrapModal.Component {
 
-  public modalEvent:libBootstrapModal.ModalEvent;
+  private modal:libBootstrapModal.Model;
+
+  private modalClosed:ngCore.EventEmitter<boolean>;
 
   public router:ngRouter.Router;
 
@@ -144,7 +146,8 @@ export class Component implements libBootstrapModal.Component {
   constructor(router:ngRouter.Router, backEnd:libBeckiBackEnd.Service) {
     "use strict";
 
-    this.modalEvent = null;
+    this.modal = null;
+    this.modalClosed = new ngCore.EventEmitter<boolean>();
     this.router = router;
     this.notifications = [];
     this.notificationTimeout = null;
@@ -170,13 +173,30 @@ export class Component implements libBootstrapModal.Component {
     });
   }
 
-  getModalEventType():string {
+  showModal(model:libBootstrapModal.Model):Promise<boolean> {
     "use strict";
 
-    if (this.modalEvent instanceof libBeckiModal.WidgetEvent) {
+    if (this.modal) {
+      throw "only one modal supported yet";
+    }
+    this.modal = model;
+    return new Promise(resolve => this.modalClosed.subscribe(resolve));
+  }
+
+  closeModal(result:boolean):void {
+    "use strict";
+
+    this.modal = null;
+    this.modalClosed.emit(result);
+  }
+
+  getModalType():string {
+    "use strict";
+
+    if (this.modal instanceof libBeckiModal.WidgetModel) {
       return "widget";
     }
-    if (this.modalEvent instanceof libBeckiModal.BlockEvent) {
+    if (this.modal instanceof libBeckiModal.BlockModel) {
       return "block";
     }
     return null;
@@ -218,21 +238,10 @@ export class Component implements libBootstrapModal.Component {
     }
   }
 
-  onModalCloseClick():void {
+  onModalCloseClick(result:boolean):void {
     "use strict";
 
-    this.modalEvent = null;
-  }
-
-  onModalEditClick():void {
-    "use strict";
-
-    if (this.modalEvent instanceof libBeckiModal.WidgetEvent) {
-      (<libBeckiModal.WidgetEvent>this.modalEvent).widget.emitOnConfigsChanged();
-    } else if (this.modalEvent instanceof libBeckiModal.BlockEvent) {
-      (<libBeckiModal.BlockEvent>this.modalEvent).block.emitConfigsChanged();
-    }
-    this.modalEvent = null;
+    this.closeModal(result);
   }
 
   getNotification():libBeckiNotifications.Notification {

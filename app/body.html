@@ -3,13 +3,13 @@
   ~ directory of this distribution.
   -->
 
-<div class="modal fade" tabindex="-1" data-bind-class.in="modalEvent" data-bind-style.display="modalEvent ? 'block' : 'none'" data-bind-style.background-color="modalEvent ? 'rgba(0,0,0,0.5)' : 'initial'">
+<div class="modal fade" tabindex="-1" data-bind-class.in="modal" data-bind-style.display="modal ? 'block' : 'none'" data-bind-style.background-color="modal ? 'rgba(0,0,0,0.5)' : 'initial'">
   <div class="modal-dialog">
-    <div class="modal-content" data-bind-ngSwitch="getModalEventType(modalEvent)">
+    <div class="modal-content" data-bind-ngSwitch="getModalType()">
       <template data-bind-ngSwitchWhen="'widget'">
-        <div data-bind-ngSwitch="modalEvent?.readonly">
+        <div data-bind-ngSwitch="modal?.readonly">
           <div class="modal-header">
-            <button type="button" class="close" data-on-click="onModalCloseClick($event)"><span>&times;</span></button>
+            <button type="button" class="close" data-on-click="onModalCloseClick(false, $event)"><span>&times;</span></button>
             <h4 class="modal-title">
               <template data-bind-ngSwitchWhen="true">
                 Review the Widget Configuration
@@ -20,7 +20,7 @@
             </h4>
           </div>
           <div class="modal-body">
-            <div class="form-group" template="ngFor let property of modalEvent?.widget?.configProperties">
+            <div class="form-group" template="ngFor let property of modal?.widget?.configProperties">
               <label>
                 <template data-bind-ngSwitchWhen="false">
                   <span class="glyphicon glyphicon-pencil"></span>
@@ -58,20 +58,20 @@
         </div>
       </template>
       <template data-bind-ngSwitchWhen="'block'">
-        <div data-bind-ngSwitch="modalEvent?.readonly">
+        <div data-bind-ngSwitch="modal?.readonly">
           <div class="modal-header">
-            <button type="button" class="close" data-on-click="onModalCloseClick($event)"><span>&times;</span></button>
+            <button type="button" class="close" data-on-click="onModalCloseClick(false, $event)"><span>&times;</span></button>
             <h4 class="modal-title">
               <template data-bind-ngSwitchWhen="true">
-                Review the "{{modalEvent?.block?.id}}" Block Configuration
+                Review the "{{modal?.block?.id}}" Block Configuration
               </template>
               <template data-bind-ngSwitchWhen="false">
-                Edit the "{{modalEvent?.block?.id}}" Block
+                Edit the "{{modal?.block?.id}}" Block
               </template>
             </h4>
           </div>
           <div class="modal-body">
-            <div class="form-group" template="ngFor let property of modalEvent?.block?.getConfigProperties()">
+            <div class="form-group" template="ngFor let property of modal?.block?.getConfigProperties()">
               <label>
                 <template data-bind-ngSwitchWhen="false">
                   <span class="glyphicon glyphicon-pencil"></span>
@@ -117,11 +117,11 @@
         </div>
       </template>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-on-click="onModalCloseClick($event)">
+        <button type="button" class="btn btn-default" data-on-click="onModalCloseClick(false, $event)">
           Close
         </button>
-        <template data-bind-ngIf="!modalEvent?.readonly">
-          <button type="button" class="btn btn-primary" data-on-click="onModalEditClick($event)">
+        <template data-bind-ngIf="!modal?.readonly">
+          <button type="button" class="btn btn-primary" data-on-click="onModalCloseClick(true, $event)">
             Edit
           </button>
         </template>

@@ -3,12 +3,14 @@
  * of this distribution.
  */
 
-export interface ModalEvent {
+export interface Model {
 
   readonly:boolean;
 }
 
 export abstract class Component {
 
-  modalEvent:ModalEvent;
+  abstract showModal(model:Model):Promise<boolean>;
+
+  abstract closeModal(result:boolean):void;
 }

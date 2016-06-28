@@ -42,7 +42,7 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
 
     this.controller = new theGrid.Core.Controller();
     this.controller.registerDataChangedCallback(() => {
-      this.modal.modalEvent = null;
+      this.modal.closeModal(false);
       this.modelChange.emit(this.controller.getDataJson());
     });
     this.controller.registerWidget(theGrid.Widgets.TimeWidget);
@@ -90,7 +90,11 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
     }
     let renderer = new theGrid.EditorRenderer.ControllerRenderer(this.controller, this.toolbar.nativeElement, this.screens.nativeElement);
     renderer.registerOpenConfigCallback(widget =>
-      this.modal.modalEvent = new modal.WidgetEvent(widget, this.readonly)
+      this.modal.showModal(new modal.WidgetModel(widget, this.readonly)).then(save => {
+        if (save) {
+          widget.emitOnConfigsChanged();
+        }
+      })
     );
     this.controller.setRenderer(renderer);
     if (this.initialModel) {
