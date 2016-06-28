@@ -8,6 +8,7 @@ import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
 
 import * as backEnd from "./back-end";
+import * as libBootstrapModal from "../lib-bootstrap/modal";
 import * as modal from "./modal";
 import * as notifications from "./notifications";
 
@@ -45,7 +46,7 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
     this.fieldController.setDataJson(scheme);
   }
 
-  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, modalComponent:modal.Component) {
+  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, modalComponent:libBootstrapModal.Component) {
     "use strict";
 
     this.readonly = false;

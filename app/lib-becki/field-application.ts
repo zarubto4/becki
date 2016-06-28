@@ -6,6 +6,7 @@
 import * as ngCore from "@angular/core";
 import * as theGrid from "the-grid";
 
+import * as libBootstrapModal from "../lib-bootstrap/modal";
 import * as modal from "./modal";
 import * as notifications from "./notifications";
 
@@ -32,11 +33,11 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
   @ngCore.Output("fieldApplicationChange")
   modelChange:ngCore.EventEmitter<string>;
 
-  modal:modal.Component;
+  modal:libBootstrapModal.Component;
 
   notifications:notifications.Service;
 
-  constructor(modalComponent:modal.Component, notificationsService:notifications.Service) {
+  constructor(modalComponent:libBootstrapModal.Component, notificationsService:notifications.Service) {
     "use strict";
 
     this.controller = new theGrid.Core.Controller();

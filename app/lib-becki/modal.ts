@@ -6,12 +6,9 @@
 import * as blocko from "blocko";
 import * as theGrid from "the-grid";
 
-export interface Event {
+import * as libBootstrapModal from "../lib-bootstrap/modal";
 
-  readonly:boolean;
-}
-
-export class WidgetEvent implements Event {
+export class WidgetEvent implements libBootstrapModal.ModalEvent {
 
   widget:theGrid.Core.Widget;
 
@@ -25,7 +22,7 @@ export class WidgetEvent implements Event {
   }
 }
 
-export class BlockEvent implements Event {
+export class BlockEvent implements libBootstrapModal.ModalEvent {
 
   block:blocko.BlockoCore.Block;
 
@@ -37,9 +34,4 @@ export class BlockEvent implements Event {
     this.block = widget;
     this.readonly = readonly;
   }
-}
-
-export abstract class Component {
-
-  modalEvent:Event;
 }

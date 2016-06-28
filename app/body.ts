@@ -15,6 +15,7 @@ import * as libBeckiFieldCode from "./lib-becki/field-code";
 import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiModal from "./lib-becki/modal";
 import * as libBeckiNotifications from "./lib-becki/notifications";
+import * as libBootstrapModal from "./lib-bootstrap/modal";
 import * as signing from "./signing";
 import * as system from "./system";
 import * as systemCompilationServer from "./system-compilation-server";
@@ -110,7 +111,7 @@ import * as userProjects from "./user-projects";
   templateUrl: "app/body.html",
   providers: [
     libBeckiBackEnd.Service,
-    ngCore.provide(libBeckiModal.Component, {useExisting: ngCore.forwardRef(() => Component)}),
+    ngCore.provide(libBootstrapModal.Component, {useExisting: ngCore.forwardRef(() => Component)}),
     libBeckiNotifications.Service,
     ngCore.provide("connections", {useValue: ["UserConnections"]}),
     ngCore.provide("home", {useValue: new libBeckiLayout.LabeledLink("No Name", ["UserApplications"])}),
@@ -130,9 +131,9 @@ import * as userProjects from "./user-projects";
   inputs: ["body"],
   host: {"[class.modal-open]": "modalEvent"}
 })
-export class Component implements libBeckiModal.Component {
+export class Component implements libBootstrapModal.Component {
 
-  public modalEvent:libBeckiModal.Event;
+  public modalEvent:libBootstrapModal.ModalEvent;
 
   public router:ngRouter.Router;
 
