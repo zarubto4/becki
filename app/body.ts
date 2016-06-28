@@ -110,7 +110,7 @@ import * as userProjects from "./user-projects";
   templateUrl: "app/body.html",
   providers: [
     libBeckiBackEnd.Service,
-    libBeckiModal.Service,
+    ngCore.provide(libBeckiModal.Component, {useExisting: ngCore.forwardRef(() => Component)}),
     libBeckiNotifications.Service,
     ngCore.provide("connections", {useValue: ["UserConnections"]}),
     ngCore.provide("home", {useValue: new libBeckiLayout.LabeledLink("No Name", ["UserApplications"])}),
@@ -130,7 +130,7 @@ import * as userProjects from "./user-projects";
   inputs: ["body"],
   host: {"[class.modal-open]": "modalEvent"}
 })
-export class Component {
+export class Component implements libBeckiModal.Component {
 
   public modalEvent:libBeckiModal.Event;
 
@@ -140,14 +140,13 @@ export class Component {
 
   private notificationTimeout:number;
 
-  constructor(modal:libBeckiModal.Service, router:ngRouter.Router, backEnd:libBeckiBackEnd.Service) {
+  constructor(router:ngRouter.Router, backEnd:libBeckiBackEnd.Service) {
     "use strict";
 
     this.modalEvent = null;
     this.router = router;
     this.notifications = [];
     this.notificationTimeout = null;
-    modal.modalChange.subscribe((event:libBeckiModal.Event) => this.modalEvent = event);
     backEnd.notificationReceived.subscribe(notification => {
       let notificationView:libBeckiNotifications.Notification;
       switch (notification.level) {

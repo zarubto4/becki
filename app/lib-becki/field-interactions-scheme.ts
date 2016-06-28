@@ -38,8 +38,6 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
 
   notifications:notifications.Service;
 
-  modal:modal.Service;
-
   @ngCore.Input("fieldInteractionsScheme")
   set model(scheme:string) {
     "use strict";
@@ -47,18 +45,18 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
     this.fieldController.setDataJson(scheme);
   }
 
-  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, modalService:modal.Service) {
+  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, modalComponent:modal.Component) {
     "use strict";
 
     this.readonly = false;
     this.fieldRenderer = new blocko.BlockoSnapRenderer.RendererController();
     this.fieldRenderer.registerOpenConfigCallback((block) =>
-        this.modal.modalChange.emit(new modal.BlockEvent(block, this.readonly))
+        modalComponent.modalEvent = new modal.BlockEvent(block, this.readonly)
     );
     this.fieldController = new blocko.BlockoCore.Controller();
     this.fieldController.rendererFactory = this.fieldRenderer;
     this.fieldController.registerDataChangedCallback(() => {
-      this.modal.modalChange.emit(null);
+      modalComponent.modalEvent = null;
       this.modelChange.emit(this.fieldController.getDataJson());
     });
     this.fieldController.registerBlocks(blocko.BlockoBasicBlocks.Manager.getAllBlocks());
@@ -115,7 +113,6 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
       }
     });
     this.notifications = notificationsService;
-    this.modal = modalService;
   }
 
   ngOnChanges(changes:{[key:string]: ngCore.SimpleChange}):void {

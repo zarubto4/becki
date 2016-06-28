@@ -32,16 +32,16 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
   @ngCore.Output("fieldApplicationChange")
   modelChange:ngCore.EventEmitter<string>;
 
-  modal:modal.Service;
+  modal:modal.Component;
 
   notifications:notifications.Service;
 
-  constructor(modalService:modal.Service, notificationsService:notifications.Service) {
+  constructor(modalComponent:modal.Component, notificationsService:notifications.Service) {
     "use strict";
 
     this.controller = new theGrid.Core.Controller();
     this.controller.registerDataChangedCallback(() => {
-      this.modal.modalChange.emit(null);
+      this.modal.modalEvent = null;
       this.modelChange.emit(this.controller.getDataJson());
     });
     this.controller.registerWidget(theGrid.Widgets.TimeWidget);
@@ -53,7 +53,7 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
     this.readonly = false;
     // TODO: https://github.com/angular/angular/issues/6311
     this.modelChange = new ngCore.EventEmitter<string>(false);
-    this.modal = modalService;
+    this.modal = modalComponent;
     this.notifications = notificationsService;
   }
 
@@ -89,7 +89,7 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
     }
     let renderer = new theGrid.EditorRenderer.ControllerRenderer(this.controller, this.toolbar.nativeElement, this.screens.nativeElement);
     renderer.registerOpenConfigCallback(widget =>
-      this.modal.modalChange.emit(new modal.WidgetEvent(widget, this.readonly))
+      this.modal.modalEvent = new modal.WidgetEvent(widget, this.readonly)
     );
     this.controller.setRenderer(renderer);
     if (this.initialModel) {
