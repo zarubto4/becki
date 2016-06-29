@@ -4,8 +4,17 @@
  */
 
 export interface Model {
+}
 
-  readonly:boolean;
+export class RemovalModel implements Model {
+
+  name:string;
+
+  constructor(name:string) {
+    "use strict";
+
+    this.name = name;
+  }
 }
 
 export abstract class Component {

@@ -6,67 +6,52 @@
 <div data-bind-ngSwitch="items?.length > 0">
   <template data-bind-ngSwitchWhen="true">
     <div class="list-group list-view-pf">
-      <div class="list-group-item clearfix" template="ngFor let item of items" data-bind-ngSwitch="item.removing">
-        <template data-bind-ngSwitchWhen="true">
+      <div class="list-group-item clearfix" template="ngFor let item of items">
+        <template data-bind-ngIf="item.link || item.removable">
           <div class="list-view-pf-actions">
-            <button class="btn btn-danger" type="button" data-on-click="onConfirmationYesClick(item, $event)">Yes</button>
-            <button class="btn btn-default" type="button" data-on-click="onConfirmationNoClick(item, $event)">No</button>
-          </div>
-          <div class="list-view-pf-main-info">
-            <div class="list-view-pf-body">
-              <div class="list-view-pf-description">
-                <div class="list-group-item-text">Do you really want to remove <strong>{{item.name}}</strong>?</div>
-              </div>
+            <div class="dropdown pull-right dropdown-kebab-pf">
+              <button class="btn btn-link dropdown-toggle" type="button">
+                <span class="fa fa-ellipsis-v"></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-right">
+                <template data-bind-ngIf="item.link">
+                  <li><a data-on-click="onViewClick(item, $event)" style="cursor: pointer">View</a></li>
+                </template>
+                <template data-bind-ngIf="item.removable">
+                  <li><a data-on-click="onRemoveClick(item, $event)" style="cursor: pointer">Remove</a></li>
+                </template>
+              </ul>
             </div>
           </div>
         </template>
-        <template data-bind-ngSwitchWhen="false">
-          <template data-bind-ngIf="item.link || item.removable">
-            <div class="list-view-pf-actions">
-              <div class="dropdown pull-right dropdown-kebab-pf">
-                <button class="btn btn-link dropdown-toggle" type="button">
-                  <span class="fa fa-ellipsis-v"></span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-right">
-                  <template data-bind-ngIf="item.link">
-                    <li><a data-on-click="onViewClick(item, $event)" style="cursor: pointer">View</a></li>
-                  </template>
-                  <template data-bind-ngIf="item.removable">
-                    <li><a data-on-click="onRemoveClick(item, $event)" style="cursor: pointer">Remove</a></li>
-                  </template>
-                </ul>
-              </div>
-            </div>
-          </template>
-          <div class="list-view-pf-main-info">
-            <div class="list-view-pf-body">
-              <div class="list-view-pf-description">
-                <div class="list-group-item-heading" style="white-space: initial" data-bind-title="item.name" data-bind-ngSwitch="!item.link">
-                  <template data-bind-ngSwitchWhen="true">
+        <div class="list-view-pf-main-info">
+          <div class="list-view-pf-body">
+            <div class="list-view-pf-description">
+              <div class="list-group-item-heading" style="white-space: initial" data-bind-title="item.name" data-bind-ngSwitch="!item.link">
+                <template data-bind-ngSwitchWhen="true">
+                  {{item.name}}
+                </template>
+                <template data-bind-ngSwitchWhen="false">
+                  <a data-bind-routerLink="item.link" style="color: inherit">
                     {{item.name}}
+                  </a>
+                </template>
+              </div>
+              <template data-bind-ngIf="item.description">
+                <div class="list-group-item-text" data-bind-ngSwitch="!item.link">
+                  <template data-bind-ngSwitchWhen="true">
+                    {{item.description}}
                   </template>
                   <template data-bind-ngSwitchWhen="false">
                     <a data-bind-routerLink="item.link" style="color: inherit">
-                      {{item.name}}
+                      {{item.description}}
                     </a>
                   </template>
                 </div>
-                <template data-bind-ngIf="item.description">
-                  <div class="list-group-item-text" data-bind-ngSwitch="!item.link">
-                    <template data-bind-ngSwitchWhen="true">
-                      {{item.description}}
-                    </template>
-                    <template data-bind-ngSwitchWhen="false">
-                      <a data-bind-routerLink="item.link" style="color: inherit">
-                        {{item.description}}
-                      </a>
-                    </template>
-                  </div>
-                </template>
-              </div>
+              </template>
             </div>
           </div>
-        </template>
+        </div>
       </div>
     </div>
   </template>

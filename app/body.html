@@ -6,6 +6,23 @@
 <div class="modal fade" tabindex="-1" data-bind-class.in="modal" data-bind-style.display="modal ? 'block' : 'none'" data-bind-style.background-color="modal ? 'rgba(0,0,0,0.5)' : 'initial'">
   <div class="modal-dialog">
     <div class="modal-content" data-bind-ngSwitch="getModalType()">
+      <template data-bind-ngSwitchWhen="'removal'">
+        <div class="modal-header">
+          <button type="button" class="close" data-on-click="onModalCloseClick(false, $event)"><span>&times;</span></button>
+          <h4 class="modal-title">Confirm an irreversible action</h4>
+        </div>
+        <div class="modal-body">
+          Do you really want to remove <strong>{{modal.name}}</strong>?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-on-click="onModalCloseClick(false, $event)">
+            No
+          </button>
+          <button type="button" class="btn btn-danger" data-on-click="onModalCloseClick(true, $event)">
+            Yes
+          </button>
+        </div>
+      </template>
       <template data-bind-ngSwitchWhen="'widget'">
         <div data-bind-ngSwitch="modal?.readonly">
           <div class="modal-header">
@@ -54,6 +71,16 @@
                 </div>
               </template>
             </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-on-click="onModalCloseClick(false, $event)">
+              Close
+            </button>
+            <template data-bind-ngIf="!modal?.readonly">
+              <button type="button" class="btn btn-primary" data-on-click="onModalCloseClick(true, $event)">
+                Edit
+              </button>
+            </template>
           </div>
         </div>
       </template>
@@ -114,18 +141,18 @@
               </template>
             </div>
           </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-on-click="onModalCloseClick(false, $event)">
+              Close
+            </button>
+            <template data-bind-ngIf="!modal?.readonly">
+              <button type="button" class="btn btn-primary" data-on-click="onModalCloseClick(true, $event)">
+                Edit
+              </button>
+            </template>
+          </div>
         </div>
       </template>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-on-click="onModalCloseClick(false, $event)">
-          Close
-        </button>
-        <template data-bind-ngIf="!modal?.readonly">
-          <button type="button" class="btn btn-primary" data-on-click="onModalCloseClick(true, $event)">
-            Edit
-          </button>
-        </template>
-      </div>
     </div>
   </div>
 </div>

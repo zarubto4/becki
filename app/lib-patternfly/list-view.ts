@@ -8,6 +8,7 @@ import * as ngCore from "@angular/core";
 import * as ngRouter from "@angular/router-deprecated";
 
 import * as libBootstrapDropdown from "../lib-bootstrap/dropdown";
+import * as libBootstrapModal from "../lib-bootstrap/modal";
 
 export class Item {
 
@@ -19,8 +20,6 @@ export class Item {
 
   link:any[];
 
-  removing:boolean;
-
   removable:boolean;
 
   constructor(id:string, name:string, description:string, link:any[] = null, removable = true) {
@@ -30,7 +29,6 @@ export class Item {
     this.name = name;
     this.description = description;
     this.link = link;
-    this.removing = false;
     this.removable = removable;
   }
 }
@@ -59,7 +57,9 @@ export class Component {
 
   router:ngRouter.Router;
 
-  constructor(router:ngRouter.Router) {
+  modal:libBootstrapModal.Component;
+
+  constructor(router:ngRouter.Router, modal:libBootstrapModal.Component) {
     "use strict";
 
     this.emptyTitle = "No item yet";
@@ -67,6 +67,7 @@ export class Component {
     this.addClick = new ngCore.EventEmitter<void>();
     this.removeClick = new ngCore.EventEmitter<string>();
     this.router = router;
+    this.modal = modal;
   }
 
   onAddClick():void {
@@ -84,19 +85,10 @@ export class Component {
   onRemoveClick(item:Item):void {
     "use strict";
 
-    item.removing = true;
-  }
-
-  onConfirmationYesClick(item:Item):void {
-    "use strict";
-
-    item.removing = false;
-    this.removeClick.emit(item.id);
-  }
-
-  onConfirmationNoClick(item:Item):void {
-    "use strict";
-
-    item.removing = false;
+    this.modal.showModal(new libBootstrapModal.RemovalModel(item.name)).then(remove => {
+      if (remove) {
+        this.removeClick.emit(item.id);
+      }
+    });
   }
 }
