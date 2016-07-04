@@ -3,21 +3,25 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout='" \"" + name + "\" Project"' data-bind-breadcrumbs="breadcrumbs" data-bind-ngSwitch="tab"><ul class="nav nav-tabs"  >
-  
+<div data-bind-layout='"edit the  \"" + name + "\" Project"' data-bind-actionLabel="tab == 'details' ? 'Edit project' : 'Add'" data-on-actionClick="onAddClick($event)" data-bind-breadcrumbs="breadcrumbs" data-bind-ngSwitch="tab"><ul class="nav nav-tabs"  >
+  <li data-bind-class.active="tab == 'details'">
+    <a data-on-click="onTabClick('details', $event)" style="cursor: pointer">
+      details
+    </a>
+  </li>
   <li data-bind-class.active="tab == 'devices'">
     <a data-on-click="onTabClick('devices', $event)" style="cursor: pointer">
-      c_programs
+      devices
     </a>
   </li>
   <li data-bind-class.active="tab == 'schemes'">
     <a data-on-click="onTabClick('schemes', $event)" style="cursor: pointer">
-      b_programs
+      schemes
     </a>
   </li>
   <li data-bind-class.active="tab == 'applications'">
     <a data-on-click="onTabClick('applications', $event)" style="cursor: pointer">
-      m_projects
+      applications
     </a>
   </li>
   <li data-bind-class.active="tab == 'collaborators'">
@@ -27,29 +31,34 @@
   </li>
 </ul>
 
-
+  <template data-bind-ngSwitchWhen="'details'">
+    <div  data-on-addClick="onAddClick($event)">
+      <p>
+      <b>description:</b>{{description}}
+      </p>
+    </div>
+  </template>
 <template data-bind-ngSwitchWhen="'devices'">
-    <div data-bind-listView="devices" data-on-addClick="onAddCompilationClick($event)" data-on-removeClick="onRemoveDevicesClick($event)">
+    <div data-bind-listView="devices" data-on-addClick="onAddClick($event)" data-on-removeClick="onRemoveDevicesClick($event)">
       <div class="spinner"></div>
     </div>
 </template>
 
   <template data-bind-ngSwitchWhen="'schemes'">
-  <div data-bind-listView="schemes" data-on-addClick="onAddCompilationClick($event)" data-on-removeClick="onRemoveSchemesClick($event)">
+  <div data-bind-listView="schemes" data-on-addClick="onAddClick($event)" data-on-removeClick="onRemoveSchemesClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
 
   <template data-bind-ngSwitchWhen="'applications'">
-  <div data-bind-listView="applications" data-on-addClick="onAddCompilationClick($event)" data-on-removeClick="onRemoveApplicationsClick($event)">
+  <div data-bind-listView="applications" data-on-addClick="onAddClick($event)" data-on-removeClick="onRemoveApplicationsClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
 
   <template data-bind-ngSwitchWhen="'collaborators'">
-    <div data-bind-listView="collaborators" data-on-addClick="onAddBlockoClick($event)" data-on-removeClick="onRemoveCollaboratorsClick($event)">
+    <div data-bind-listView="collaborators" data-on-addClick="onAddClick($event)" data-on-removeClick="onRemoveCollaboratorsClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
-
 </div>

@@ -58,6 +58,7 @@ import * as userProject from "./user-project";
 import * as userProjectCollaboratorNew from "./user-project-collaborator-new";
 import * as userProjectNew from "./user-project-new";
 import * as userProjects from "./user-projects";
+import * as userProjectEdit from "./user-project-edit";
 
 @ngRouter.RouteConfig([
   {path: "/application/devices/:device", component: applicationDevice.Component, as: "ApplicationDevice"},
@@ -103,6 +104,7 @@ import * as userProjects from "./user-projects";
   {path: "/user/projects/:project", component: userProject.Component, as: "UserProject"},
   {path: "/user/projects/:project/collaborator/new", component: userProjectCollaboratorNew.Component, as: "NewUserProjectCollaborator"},
   {path: "/users/:user", component: user.Component, as: "User"},
+  {path: "/user/projects/edit/:project", component: userProjectEdit.Component, as: "UserProjectEdit"},
 ])
 @ngCore.Component({
   selector: "[body]",

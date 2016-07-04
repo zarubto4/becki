@@ -33,8 +33,6 @@ export class Component implements ngCore.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
-  showCollaborators:boolean;
-
   editing:boolean;
 
   nameField:string;
@@ -107,7 +105,7 @@ export class Component implements ngCore.OnInit {
             Promise.all(project.owners_id.map(id => this.backEnd.getUser(id))),
             Promise.all(project.c_programs_id.map(id => this.backEnd.getDeviceProgram(id))),
             Promise.all(project.b_programs_id.map(id => this.backEnd.getInteractionsScheme(id))),
-            Promise.all(project.m_projects_id.map(id => this.backEnd.getApplication(id)))
+            Promise.all(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id)))
           ]);
         })
         .then(result => {
@@ -201,6 +199,10 @@ export class Component implements ngCore.OnInit {
 
   onAddClick():void{
     switch (this.tab){
+    case "details":
+      this.router.navigate(["UserProjectEdit", {project: this.id}]);
+    break;
+
     case "devices":
       this.router.navigate(["NewUserDeviceProgram"]);
     break;
