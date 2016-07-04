@@ -57,7 +57,7 @@
   </template>
 
   <template data-bind-ngSwitchWhen="'collaborators'">
-    <div data-bind-listView="collaborators" data-on-addClick="onAddClick($event)" data-on-removeClick="onRemoveCollaboratorsClick($event)">
+    <div data-bind-listView="collaborators" data-on-addClick="onAddClick($event)" data-on-removeClick="onCollaboratorRemoveClick($event)">
       <div class="spinner"></div>
     </div>
   </template>

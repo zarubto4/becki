@@ -2001,13 +2001,13 @@ export abstract class BackEnd {
   public addCollaboratorToProject(collaborator:string, project:string):Promise<string> {
     "use strict";
 
-    return this.requestRestPath("PUT", `${BackEnd.PROJECT_PATH}/shareProject/${project}`, {persons: [collaborator]}).then(JSON.stringify);
+    return this.requestRestPath("PUT", `${BackEnd.PROJECT_PATH}/shareProject/${project}`, {persons_id: [collaborator]}).then(JSON.stringify);
   }
 
-  public removeCollaboratorsFromProject(persons:string[], project:string):Promise<string> {
+  public removeCollaboratorsFromProject(persons_id:string[], project:string):Promise<string> {
     "use strict";
 
-    return this.requestRestPath("PUT", `${BackEnd.PROJECT_PATH}/unshareProject/${project}`, {persons}).then(JSON.stringify);
+    return this.requestRestPath("PUT", `${BackEnd.PROJECT_PATH}/unshareProject/${project}`, {persons_id}).then(JSON.stringify);
   }
 
   public deleteProject(id:string):Promise<string> {
