@@ -97,9 +97,10 @@
       <div class="spinner"></div>
     </div>
   </template>
-
   <template data-bind-ngSwitchWhen="'BlockGroups'">
-      <div class="spinner"></div>
+    <div data-bind-listView="BlockGroups" data-on-addClick="onAddBlockGroupsClick($event)" data-on-removeClick="onRemoveBlockGroupsClick($event)">
+    <div class="spinner"></div>
+    </div>
   </template>
 
 </div>

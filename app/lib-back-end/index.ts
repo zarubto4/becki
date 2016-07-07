@@ -1734,6 +1734,11 @@ export abstract class BackEnd {
     return this.requestRestPath("GET", `${BackEnd.INTERACTIONS_BLOCK_GROUP_PATH}/${id}`);
   }
 
+  public createInteractionsBlockGroup(name:string,general_description:string,project_id:string){
+    return this.requestRestPath("POST", `${BackEnd.INTERACTIONS_BLOCK_GROUP_PATH}`, {name, general_description,project_id}, 201);
+
+  }
+
   public getInteractionsBlockGroups():Promise<InteractionsBlockGroup[]> {
     "use strict";
 
