@@ -57,6 +57,8 @@ export class Component implements ngCore.OnInit {
 
     this.notifications.shift();
     this.refresh();
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-276
+    this.notifications.current.push(new libBeckiNotifications.Warning("ssue/TYRION-276"));
   }
 
   refresh():void {
@@ -85,15 +87,18 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => Promise.all<any>([
-          this.backEnd.getLibraries(),
-          this.backEnd.getLibraryGroups(),
-        ])
+    return () => this.backEnd.getLibraryGroups(1)
+        .then(groupCollection => {
+          return Promise.all<any>([
+            this.backEnd.getLibraries(1),
+            Promise.all(groupCollection.pages.map(page => this.backEnd.getLibraryGroups(page)))
+          ]);
+        })
         .then(result => {
           let libraries:libBackEnd.Library[];
-          let groups:libBackEnd.LibraryGroup[];
-          [libraries, groups] = result;
-          return !groups.find(group => group.id != this.id && group.group_name == this.nameField) &&
+          let groupCollections:libBackEnd.LibraryGroupCollection[];
+          [libraries, groupCollections] = result;
+          return ![].concat(...groupCollections.map(collection => collection.content)).find(group => group.id != this.id && group.group_name == this.nameField) &&
               !libraries.find(library => library.library_name == this.nameField);
         });
   }
@@ -108,6 +113,8 @@ export class Component implements ngCore.OnInit {
           this.refresh();
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-283
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-283"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The group cannot be updated.", reason));
         });
   }

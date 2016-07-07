@@ -70,6 +70,7 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     this.backEnd.getInteractionsScheme(this.schemeId)
         .then(scheme => {
           return Promise.all<any>([
@@ -82,12 +83,12 @@ export class Component implements ngCore.OnInit {
           let scheme:libBackEnd.InteractionsScheme;
           let project:libBackEnd.Project;
           [scheme, project] = result;
-          let version = scheme.versionObjects.find(version => version.id == this.id);
+          let version = scheme.program_versions.find(version => version.version_Object.id == this.id).version_Object;
           if (!version) {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error(`version ${this.id} not found in scheme ${scheme.name}`));
           }
-          if (version.files_id.length != 1) {
+          if (version.files.length != 1) {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error("the scheme version does not have only one file"));
           }
@@ -96,14 +97,14 @@ export class Component implements ngCore.OnInit {
             scheme,
             // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
             Promise.all(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id))),
-            this.backEnd.getFile(version.files_id[0])
+            this.backEnd.getFile(version.files[0].id)
           ]);
         })
         .then(result => {
           let version:libBackEnd.Version;
           let scheme:libBackEnd.InteractionsScheme;
           let groups:libBackEnd.ApplicationGroup[];
-          let file:libBackEnd.BackEndFile;
+          let file:string;
           [version, scheme, groups, file] = result;
           this.name = version.version_name;
           this.schemeName = scheme.name;
@@ -112,11 +113,9 @@ export class Component implements ngCore.OnInit {
           this.description = version.version_description;
           this.showGroups = groups.length > 1 || (groups.length == 1 && !groups[0].m_programs.length);
           this.groups = groups.filter(group => group.b_progam_connected_version_id && group.b_progam_connected_version_id == this.id);
-          this.scheme = file.content;
+          this.scheme = file;
         })
         .catch(reason => {
-          //TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
           this.notifications.current.push(new libBeckiNotifications.Danger(`The scheme ${this.schemeId} cannot be loaded.`, reason));
         });
   }

@@ -55,27 +55,28 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     this.backEnd.getInteractionsScheme(this.id)
         .then(scheme => {
           if (!scheme.program_state.uploaded) {
             return Promise.reject<any>(new Error("scheme not deployed"));
           }
-          let version = scheme.versionObjects.find(version => version.id == scheme.program_state.version_id);
+          let version = scheme.program_versions.find(version => version.version_Object.id == scheme.program_state.version_id).version_Object;
           return Promise.all<any>([
             version,
             scheme,
-            this.backEnd.getFile(version.files_id[0])
+            this.backEnd.getFile(version.files[0].id)
           ]);
         })
         .then(result => {
           let version:libBackEnd.Version;
           let scheme:libBackEnd.InteractionsScheme;
-          let versionFile:libBackEnd.BackEndFile;
+          let versionFile:string;
           [version, scheme, versionFile] = result;
           this.versionName = version.version_name;
           this.name = scheme.name;
           this.breadcrumbs[3].label = `${scheme.name} ${version.version_name}`;
-          this.scheme = versionFile.content;
+          this.scheme = versionFile;
           this.versionId = version.id;
         })
         .catch(reason => {

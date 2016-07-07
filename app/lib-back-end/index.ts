@@ -26,7 +26,7 @@ export class RestRequest {
 
   headers:{[name: string]: string};
 
-  body:string;
+  body:Object;
 
   constructor(method:string, url:string, headers:{[name: string]: string} = {}, body?:Object) {
     "use strict";
@@ -40,8 +40,7 @@ export class RestRequest {
       }
     }
     this.headers["Accept"] = "application/json";
-    this.headers["Content-Type"] = "application/json";
-    this.body = body ? JSON.stringify(body) : "";
+    this.body = body;
   }
 }
 
@@ -176,6 +175,10 @@ export interface User {
   full_name:string;
 
   last_title:string;
+
+  edit_permission:boolean;
+
+  delete_permission:boolean;
 }
 
 export declare class EventSource extends EventTarget {
@@ -431,12 +434,6 @@ export interface BackEndFile {
   id:string;
 
   file_name:string;
-
-  content:string;
-
-  edit_permission:boolean;
-
-  delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -450,7 +447,7 @@ export interface Version {
 
   date_of_create:number;
 
-  files_id:string[];
+  files:BackEndFile[];
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -465,6 +462,8 @@ export interface Library {
   versions_id:string[];
 
   edit_permission:boolean;
+
+  update_permission:boolean;
 
   delete_permission:boolean;
 }
@@ -484,7 +483,23 @@ export interface LibraryGroup {
 
   edit_permission:boolean;
 
+  update_permission:boolean;
+
   delete_permission:boolean;
+}
+
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
+export interface LibraryGroupCollection {
+
+  content:LibraryGroup[];
+
+  from:number;
+
+  to:number;
+
+  total:number;
+
+  pages:number[];
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -522,7 +537,31 @@ export interface DeviceType {
 
   processor_id:string;
 
-  boards_id:string[];
+  connectible_to_internet:boolean;
+
+  edit_permission:boolean;
+
+  register_new_device_permission:boolean;
+
+  delete_permission:boolean;
+}
+
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
+export interface DeviceProgramVersion {
+
+  version_object:Version;
+
+  virtual_input_output:string;
+
+  compilable:boolean;
+
+  compilation_restored:boolean;
+
+  compilation_in_progress:boolean;
+
+  successfully_compiled:boolean;
+
+  runing_on_board:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -534,7 +573,9 @@ export interface DeviceProgram {
 
   program_description:string;
 
-  version_objects:Version[];
+  program_versions:DeviceProgramVersion[];
+
+  type_of_board_id:string;
 
   dateOfCreate:number;
 
@@ -547,6 +588,19 @@ export interface DeviceProgram {
   delete_permission:boolean;
 }
 
+export interface DeviceCollection {
+
+  content:Device[];
+
+  from:number;
+
+  to:number;
+
+  total:number;
+
+  pages:number[];
+}
+
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Device {
 
@@ -556,11 +610,23 @@ export interface Device {
 
   isActive:boolean;
 
+  status:Object;
+
+  up_to_date:boolean;
+
   personal_description:any;
 
-  homer_id:string;
-
   project_id:string;
+
+  read_permission:boolean;
+
+  edit_permission:boolean;
+
+  update_permission:boolean;
+
+  first_connect_permission:boolean;
+
+  delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -621,9 +687,21 @@ export interface InteractionsBlock {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
+export interface InteractionsSchemeVersion {
+
+  version_Object:Version;
+
+  connected_boards:Object;
+
+  master_board:Object;
+}
+
+// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface InteractionsSchemeDeploymentDetails {
 
   uploaded:boolean;
+
+  online:boolean;
 
   version_id?:string;
 
@@ -632,6 +710,8 @@ export interface InteractionsSchemeDeploymentDetails {
   cloud?:Object;
 
   local?:Object;
+
+  online_boards:Device[];
 
   m_project_id:string;
 }
@@ -645,7 +725,7 @@ export interface InteractionsScheme {
 
   program_description:string;
 
-  versionObjects:Version[];
+  program_versions:InteractionsSchemeVersion[];
 
   program_state:InteractionsSchemeDeploymentDetails;
 
@@ -674,8 +754,6 @@ export interface InteractionsModerator {
   version:string;
 
   boards_id:string[];
-
-  active_boards?:Device[];
 
   project_id:string;
 
@@ -894,24 +972,25 @@ export abstract class BackEnd {
 
   protected abstract requestRestGeneral(request:RestRequest):Rx.Observable<RestResponse>;
 
-  public requestRestPath<T>(method:string, path:string, body?:Object, success=200):Promise<T> {
+  public requestRestPath<T>(method:string, path:string, body?:Object, success:number|number[]=200, contentType="application/json"):Promise<T> {
     "use strict";
 
-    return this.requestRest(method, `${BackEnd.REST_SCHEME}://${BackEnd.HOST}${path}`, body, success).toPromise();
+    return this.requestRest(method, `${BackEnd.REST_SCHEME}://${BackEnd.HOST}${path}`, body, success, contentType).toPromise();
   }
 
-  public requestRest<T>(method:string, url:string, body?:Object, success=200):Rx.Observable<T> {
+  public requestRest<T>(method:string, url:string, body?:Object, success:number|number[]=200, contentType="application/json"):Rx.Observable<T> {
     "use strict";
 
-    let request = new RestRequest(method, url, {}, body);
+    let request = new RestRequest(method, url, {"Content-Type": contentType}, body);
     // TODO: https://github.com/angular/angular/issues/7303
     if (window.localStorage.getItem("authToken")) {
       request.headers["X-AUTH-TOKEN"] = window.localStorage.getItem("authToken");
     }
+    let successes = success instanceof Array ? success : [success];
     this.tasks += 1;
     return this.requestRestGeneral(request)
         .map(response => {
-          if (response.status == success) {
+          if (successes.indexOf(response.status) != -1) {
             return response.body;
           }
           switch (response.status) {
@@ -1084,7 +1163,6 @@ export abstract class BackEnd {
       throw "name and username required";
     }
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-249
     return this.requestRestPath("PUT", `${BackEnd.USER_PATH}/${id}`, {nick_name, full_name, first_title, last_title}).then(JSON.stringify);
   }
 
@@ -1115,7 +1193,6 @@ export abstract class BackEnd {
   public deleteUser(user:string):Promise<string> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-248
     return this.requestRestPath("DELETE", `${BackEnd.USER_PATH}/${user}`).then(JSON.stringify);
   }
 
@@ -1127,6 +1204,7 @@ export abstract class BackEnd {
     }
 
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-274
     return this.requestRestPath<{authToken:string}>("POST", `${BackEnd.TOKEN_PATH}/login`, {mail, password}).then((body) => {
       // TODO: https://github.com/angular/angular/issues/7303
       this.setToken(body.authToken);
@@ -1177,7 +1255,6 @@ export abstract class BackEnd {
   public removeConnection(id:string):Promise<string> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-249
     return this.requestRestPath("DELETE", `/coreClient/connection/${id}`).then(JSON.stringify);
   }
 
@@ -1214,7 +1291,6 @@ export abstract class BackEnd {
     "use strict";
 
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-247
     return this.requestRestPath("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/${id}`);
   }
 
@@ -1254,7 +1330,6 @@ export abstract class BackEnd {
   public getApplicationGroup(id:string):Promise<ApplicationGroup> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     return this.requestRestPath("GET", `${BackEnd.APPLICATION_GROUP_PATH}/${id}`);
   }
@@ -1266,7 +1341,6 @@ export abstract class BackEnd {
       throw "name >= 4 required";
     }
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
     return this.requestRestPath("PUT", `${BackEnd.APPLICATION_GROUP_PATH}/${id}`, {program_description, program_name}).then(JSON.stringify);
   }
 
@@ -1290,8 +1364,8 @@ export abstract class BackEnd {
   public getApplication(id:string):Promise<Application> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-279
     return this.requestRestPath("GET", `${BackEnd.APPLICATION_PATH}/${id}`);
   }
 
@@ -1308,7 +1382,6 @@ export abstract class BackEnd {
       throw "name >= 8 and code required";
     }
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
     return this.requestRestPath("PUT", `${BackEnd.APPLICATION_PATH}/${id}`, {screen_type_id, program_name, program_description, m_code, height_lock: false, width_lock: false}).then(JSON.stringify);
   }
 
@@ -1356,10 +1429,11 @@ export abstract class BackEnd {
     return this.requestRestPath("DELETE", `${BackEnd.PRODUCER_PATH}/${id}`).then(JSON.stringify);
   }
 
-  public getFile(id:string):Promise<BackEndFile> {
+  public getFile(id:string):Promise<string> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-252
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-277
     return this.requestRestPath("GET", `/file/fileRecord/${id}`);
   }
 
@@ -1379,10 +1453,15 @@ export abstract class BackEnd {
     return this.requestRestPath("GET", `${BackEnd.LIBRARY_PATH}/${id}`);
   }
 
-  public getLibraries():Promise<Library[]> {
+  public getLibraries(page:number):Promise<Library[]> {
     "use strict";
 
-    return this.requestRestPath("PUT", `${BackEnd.LIBRARY_PATH}/filter`, {});
+    if (page < 1) {
+      throw "page >= 1 required";
+    }
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-276
+    return this.requestRestPath("PUT", `${BackEnd.LIBRARY_PATH}/filter/${page}`, {});
   }
 
   public updateLibrary(id:string, library_name:string, description:string):Promise<string> {
@@ -1409,29 +1488,13 @@ export abstract class BackEnd {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-118
-    // TODO: https://github.com/angular/angular/issues/2803
-    return new Promise((resolve, reject) => {
-      let formdata = new FormData();
-      formdata.append("file", file);
-      let request = new XMLHttpRequest();
-      request.addEventListener("load", () => {
-        if (request.status >= 200 && request.status < 300) {
-          resolve(request.response);
-        } else {
-          reject(request.response);
-        }
-      });
-      request.addEventListener("error", reject);
-      request.open("POST", `${BackEnd.REST_SCHEME}://${BackEnd.HOST}/compilation/library/uploud/${id}/${version}`);
-      // TODO: https://github.com/angular/angular/issues/7303
-      request.setRequestHeader("X-AUTH-TOKEN", window.localStorage.getItem("authToken"));
-      request.send(formdata);
-    });
+    return this.requestRestPath("POST", `${BackEnd.LIBRARY_PATH}/uploud/${id}/${version}`, {file}, undefined, "multipart/form-data").then(JSON.stringify);
   }
 
   public deleteLibrary(id:string):Promise<string> {
     "use strict";
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-282
     return this.requestRestPath("DELETE", `${BackEnd.LIBRARY_PATH}/${id}`).then(JSON.stringify);
   }
 
@@ -1442,6 +1505,7 @@ export abstract class BackEnd {
       throw "description >= 24 and name required";
     }
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-283
     return this.requestRestPath("POST", BackEnd.LIBRARY_GROUP_PATH, {description, group_name}, 201).then(JSON.stringify);
   }
 
@@ -1451,10 +1515,14 @@ export abstract class BackEnd {
     return this.requestRestPath("GET", `${BackEnd.LIBRARY_GROUP_PATH}/${id}`);
   }
 
-  public getLibraryGroups():Promise<LibraryGroup[]> {
+  public getLibraryGroups(page:number):Promise<LibraryGroupCollection> {
     "use strict";
 
-    return this.requestRestPath("PUT", `${BackEnd.LIBRARY_GROUP_PATH}/filter`, {});
+    if (page < 1) {
+      throw "page >= 1 required";
+    }
+
+    return this.requestRestPath("PUT", `${BackEnd.LIBRARY_GROUP_PATH}/filter/${page}`, {});
   }
 
   public updateLibraryGroup(id:string, group_name:string, description:string):Promise<string> {
@@ -1464,7 +1532,8 @@ export abstract class BackEnd {
       throw "description >= 24 and name required";
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.LIBRARY_GROUP_PATH}/${id}`, {description, group_name}, 201).then(JSON.stringify);
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-283
+    return this.requestRestPath("PUT", `${BackEnd.LIBRARY_GROUP_PATH}/${id}`, {description, group_name}, 200).then(JSON.stringify);
   }
 
   public deleteLibraryGroup(id:string):Promise<string> {
@@ -1511,16 +1580,14 @@ export abstract class BackEnd {
     return this.requestRestPath("DELETE", `${BackEnd.PROCESSOR_PATH}/${id}`).then(JSON.stringify);
   }
 
-  public createDeviceType(name:string, producer_id:string, processor_id:string, description:string):Promise<string> {
+  public createDeviceType(name:string, producer_id:string, processor_id:string, connectible_to_internet:boolean, description:string):Promise<string> {
     "use strict";
 
-    if (name.length < 8 || !description) {
-      throw "name >= 8 and description required";
+    if (name.length < 8 || description.length < 10) {
+      throw "name >= 8 and description >= 10 required";
     }
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-199
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-200
-    return this.requestRestPath("POST", BackEnd.DEVICE_TYPE_PATH, {name, description, producer_id, processor_id}, 201).then(JSON.stringify);
+    return this.requestRestPath("POST", BackEnd.DEVICE_TYPE_PATH, {name, description, producer_id, processor_id, connectible_to_internet}, 201).then(JSON.stringify);
   }
 
   public getDeviceType(id:string):Promise<DeviceType> {
@@ -1535,14 +1602,14 @@ export abstract class BackEnd {
     return this.requestRestPath("GET", `${BackEnd.DEVICE_TYPE_PATH}/all`);
   }
 
-  public updateDeviceType(id:string, name:string, producer_id:string, processor_id:string, description:string):Promise<string> {
+  public updateDeviceType(id:string, name:string, producer_id:string, processor_id:string, connectible_to_internet:boolean, description:string):Promise<string> {
     "use strict";
 
-    if (name.length < 8 || !description) {
-      throw "name >= 8 and description required";
+    if (name.length < 8 || description.length < 10) {
+      throw "name >= 8 and description >= 10 required";
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.DEVICE_TYPE_PATH}/${id}`, {name, description, producer_id, processor_id}).then(JSON.stringify);
+    return this.requestRestPath("PUT", `${BackEnd.DEVICE_TYPE_PATH}/${id}`, {name, description, producer_id, processor_id, connectible_to_internet}).then(JSON.stringify);
   }
 
   public deleteDeviceType(id:string):Promise<string> {
@@ -1551,40 +1618,42 @@ export abstract class BackEnd {
     return this.requestRestPath("DELETE", `${BackEnd.DEVICE_TYPE_PATH}/${id}`).then(JSON.stringify);
   }
 
-  public createDeviceProgram(program_name:string, program_description:string, projectId:string):Promise<DeviceProgram> {
+  public createDeviceProgram(program_name:string, program_description:string, type_of_board_id:string, projectId:string):Promise<DeviceProgram> {
     "use strict";
 
-    if (program_name.length < 8) {
-      throw "name >= 8";
+    if (program_name.length < 8 || !type_of_board_id) {
+      throw "name >= 8 and device type required";
     }
 
-    return this.requestRestPath("POST", `${BackEnd.DEVICE_PROGRAM_PATH}/${projectId}`, {program_name, program_description}, 201);
+    return this.requestRestPath("POST", `${BackEnd.DEVICE_PROGRAM_PATH}/${projectId}`, {program_name, program_description, type_of_board_id}, 201);
   }
 
   public getDeviceProgram(id:string):Promise<DeviceProgram> {
     "use strict";
 
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     return this.requestRestPath("GET", `${BackEnd.DEVICE_PROGRAM_PATH}/${id}`);
   }
 
-  public updateDeviceProgram(id:string, program_name:string, program_description:string):Promise<string> {
+  public updateDeviceProgram(id:string, program_name:string, program_description:string, type_of_board_id:string):Promise<string> {
     "use strict";
 
-    if (program_name.length < 8) {
-      throw "name >= 8";
+    if (program_name.length < 8 || !type_of_board_id) {
+      throw "name >= 8 and device type required";
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.DEVICE_PROGRAM_PATH}/${id}`, {program_name, program_description}).then(JSON.stringify);
+    return this.requestRestPath("PUT", `${BackEnd.DEVICE_PROGRAM_PATH}/${id}`, {program_name, program_description, type_of_board_id}).then(JSON.stringify);
   }
 
-  public addVersionToDeviceProgram(version_name:string, version_description:string, code:string, program:string):Promise<string> {
+  public addVersionToDeviceProgram(code:string, program:string):Promise<string> {
     "use strict";
 
-    if (!version_name) {
-      throw "name >= 8";
+    if (!code) {
+      throw "code required";
     }
 
-    return this.requestRestPath("POST", `${BackEnd.DEVICE_PROGRAM_VERSION_PATH}/create/${program}`, {version_name, version_description, code}, 201).then(JSON.stringify);
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-275
+    return this.requestRestPath("POST", `${BackEnd.DEVICE_PROGRAM_VERSION_PATH}/create/${program}`, {code}, [200, 201]).then(JSON.stringify);
   }
 
   public deleteDeviceProgram(id:string):Promise<string> {
@@ -1596,8 +1665,10 @@ export abstract class BackEnd {
   public createDeviceBinary(programVersionId:string):Promise<string> {
     "use strict";
 
+    // TODO: http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-257
-    return this.requestRestPath("PUT", `${BackEnd.DEVICE_PROGRAM_VERSION_PATH}/compile/${programVersionId}`, {}).then(JSON.stringify);
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-280
+    return this.requestRestPath("PUT", `${BackEnd.DEVICE_PROGRAM_VERSION_PATH}/compile/${programVersionId}`, {}, undefined, "multipart/form-data").then(JSON.stringify);
   }
 
   public createDevice(id:string, type_of_board_id:string):Promise<string> {
@@ -1614,23 +1685,25 @@ export abstract class BackEnd {
   public getDevice(id:string):Promise<Device> {
     "use strict";
 
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     return this.requestRestPath("GET", `${BackEnd.DEVICE_PATH}/${id}`);
   }
 
-  public getDevices(page:number):Promise<Device[]> {
+  public getDevices(page:number):Promise<DeviceCollection> {
     "use strict";
 
     if (page < 1) {
       throw "page >= 1 required";
     }
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-253
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     return this.requestRestPath("PUT", `${BackEnd.DEVICE_PATH}/filter/${page}`, {});
   }
 
   public addBinaryToDevice(programVersionId:string, board_id:string[]):Promise<string> {
     "use strict";
 
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-258
     //return this.requestRestPath("POST", `${BackEnd.DEVICE_PROGRAM_VERSION_PATH}/uploud/${programVersionId}`, {board_id}).then(JSON.stringify);
     return Promise.reject<string>("issue/TYRION-258");
@@ -1644,6 +1717,7 @@ export abstract class BackEnd {
     }
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-268
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-287
     return this.requestRestPath("POST", BackEnd.COMPILATION_SERVER_PATH,{server_name}, 201).then(JSON.stringify);
   }
 
@@ -1659,7 +1733,7 @@ export abstract class BackEnd {
       throw "name required";
     }
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-267
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-287
     return this.requestRestPath("PUT", `${BackEnd.COMPILATION_SERVER_PATH}/${id}`,{server_name}).then(JSON.stringify);
   }
 
@@ -1679,7 +1753,6 @@ export abstract class BackEnd {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-235
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-250
     return this.requestRestPath("GET", BackEnd.INTERACTIONS_BLOCK_GROUP_PATH);
   }
 
@@ -1690,6 +1763,7 @@ export abstract class BackEnd {
       throw "name >= 8 and description >= 24 required";
     }
 
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-220
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-251
     return this.requestRestPath("POST", BackEnd.INTERACTIONS_BLOCK_PATH, {general_description, name, type_of_block_id}, 201);
   }
@@ -1697,6 +1771,7 @@ export abstract class BackEnd {
   public getInteractionsBlock(id:string):Promise<InteractionsBlock> {
     "use strict";
 
+    // TODO: http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     return this.requestRestPath("GET", `${BackEnd.INTERACTIONS_BLOCK_PATH}/${id}`);
   }
 
@@ -1739,6 +1814,7 @@ export abstract class BackEnd {
   public getInteractionsScheme(id:string):Promise<InteractionsScheme> {
     "use strict";
 
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     return this.requestRestPath("GET", `${BackEnd.INTERACTIONS_SCHEME_PATH}/${id}`);
   }
 
@@ -1774,18 +1850,18 @@ export abstract class BackEnd {
   public addApplicationGroupToInteractionsScheme(group:string, version:string, autoupdate:boolean):Promise<string> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
     return this.requestRestPath("PUT", `${BackEnd.APPLICATION_GROUP_PATH}/connect/${group}/${version}/${autoupdate}`, {}).then(JSON.stringify);
   }
 
-  public addVersionToInteractionsScheme(version_name:string, version_description:string, program:string, programId:string):Promise<Version> {
+  public addVersionToInteractionsScheme(version_name:string, version_description:string, program:string, boards:{board_id:string, c_program_version_id:string}[], main_board:{board_id:string, c_program_version_id:string}, programId:string):Promise<InteractionsSchemeVersion> {
     "use strict";
 
-    if (!version_name || !program) {
-      throw "name and scheme required";
+    if (!version_name || !program || !main_board) {
+      throw "name, scheme and gateway required";
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.INTERACTIONS_SCHEME_PATH}/update/${programId}`, {version_name, version_description, program});
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-284
+    return this.requestRestPath("PUT", `${BackEnd.INTERACTIONS_SCHEME_PATH}/update/${programId}`, {version_name, version_description, program, main_board, boards});
   }
 
   public deleteInteractionsScheme(id:string):Promise<string> {
@@ -1802,14 +1878,14 @@ export abstract class BackEnd {
       throw "ID required";
     }
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-254
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-285
     return this.requestRestPath("POST", BackEnd.INTERACTIONS_MODERATOR_PATH, {homer_id, type_of_device}, 201).then(JSON.stringify);
   }
 
   public getInteractionsModerator(id:string):Promise<InteractionsModerator> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-231
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     return this.requestRestPath("GET", `${BackEnd.INTERACTIONS_MODERATOR_PATH}/${id}`);
   }
 
@@ -1833,7 +1909,7 @@ export abstract class BackEnd {
     }
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-220
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-266
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-288
     return this.requestRestPath("POST", BackEnd.INTERACTIONS_SERVER_PATH,{server_name}, 201).then(JSON.stringify);
   }
 
@@ -1850,7 +1926,6 @@ export abstract class BackEnd {
       throw "name required";
     }
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-269
     return this.requestRestPath("PUT", `${BackEnd.INTERACTIONS_SERVER_PATH}/${id}`,{server_name}).then(JSON.stringify);
   }
 
@@ -1902,14 +1977,13 @@ export abstract class BackEnd {
   public addDeviceToProject(device:string, project:string):Promise<string> {
     "use strict";
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-256
     return this.requestRestPath("PUT", `${BackEnd.DEVICE_PATH}/${device}/${project}`, {}).then(JSON.stringify);
   }
 
-  public removeDeviceFromProject(device:string, project:string):Promise<string> {
+  public removeDeviceFromProject(device:string):Promise<string> {
     "use strict";
 
-    return this.requestRestPath("DELETE", `${BackEnd.DEVICE_PATH}/${device}/${project}`).then(JSON.stringify);
+    return this.requestRestPath("DELETE", `${BackEnd.DEVICE_PATH}/${device}`).then(JSON.stringify);
   }
 
   public addInteractionsModeratorToProject(moderator:string, project:string):Promise<string> {

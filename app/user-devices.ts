@@ -20,22 +20,21 @@ class DeviceProgramItem  extends libPatternFlyListView.Item {
   constructor(program:libBackEnd.DeviceProgram) {
     "use strict";
 
-    super(program.id, program.program_name, `${program.program_description}`, ["UserDeviceProgram", {program: program.id}]);
-    this.versions = program.version_objects;
+    super(program.id, program.program_name, `${program.program_description}`, ["UserDeviceProgram", {program: program.id}], program.delete_permission);
+    this.versions = program.program_versions.map(version => version.version_object);
   }
 }
 
-class SelectableDeviceItem extends libPatternFlyListView.Item {
+class SelectableDevice {
 
-  project:string;
+  model:libBackEnd.Device;
 
   selected:boolean;
 
-  constructor(device:libBackEnd.Device, project:string) {
+  constructor(model:libBackEnd.Device) {
     "use strict";
 
-    super(device.id, device.id, device.isActive ? "active" : "inactive");
-    this.project = project;
+    this.model = model;
     this.selected = false;
   }
 }
@@ -52,11 +51,15 @@ export class Component implements ngCore.OnInit {
 
   programs:DeviceProgramItem[];
 
-  devices:SelectableDeviceItem[];
+  devices:libPatternFlyListView.Item[];
+
+  uploadProgramDevices:SelectableDevice[];
 
   uploadProgramField:string;
 
   uploadProgramVersionField:string;
+
+  uploadBinaryDevices:SelectableDevice[];
 
   @ngCore.ViewChild("uploadBinaryField")
   uploadBinaryField:ngCore.ElementRef;
@@ -96,7 +99,9 @@ export class Component implements ngCore.OnInit {
     this.backEnd.getProjects()
         .then(projects => {
           return Promise.all<any>([
+            // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
             Promise.all([].concat(...projects.map(project => project.c_programs_id)).map(id => this.backEnd.getDeviceProgram(id))),
+            // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
             Promise.all([].concat(...projects.map(project => project.boards_id.map(id => [id, project]))).map(pair => Promise.all<any>([this.backEnd.getDevice(pair[0]), pair[1]])))
           ]);
         })
@@ -105,7 +110,9 @@ export class Component implements ngCore.OnInit {
           let devices:[libBackEnd.Device, libBackEnd.Project][];
           [programs, devices] = result;
           this.programs = programs.map(program => new DeviceProgramItem(program));
-          this.devices = devices.map(pair => new SelectableDeviceItem(pair[0], pair[1].id));
+          this.devices = devices.map(pair => new libPatternFlyListView.Item(pair[0].id, pair[0].id, pair[0].isActive ? "active" : "inactive", undefined, pair[1].update_permission));
+          this.uploadProgramDevices = devices.filter(pair => pair[0].update_permission).map(pair => new SelectableDevice(pair[0]));
+          this.uploadBinaryDevices = devices.filter(pair => pair[0].update_permission).map(pair => new SelectableDevice(pair[0]));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason));
@@ -174,14 +181,16 @@ export class Component implements ngCore.OnInit {
   onUploadProgramSubmit():void {
     "use strict";
 
-    let devices = this.devices.filter(selectable => selectable.selected).map(selectable => selectable.id);
+    let devices = this.uploadProgramDevices.filter(selectable => selectable.selected).map(selectable => selectable.model.id);
     if (!devices.length) {
       return;
     }
 
     this.notifications.shift();
+    // TODO: http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     this.backEnd.createDeviceBinary(this.uploadProgramVersionField)
         .then(() => {
+          // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
           return this.backEnd.addBinaryToDevice(this.uploadProgramVersionField, devices);
         })
         .then(() => {
@@ -193,6 +202,8 @@ export class Component implements ngCore.OnInit {
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-257"));
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-258
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-258"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-280
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-280"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The program cannot be uploaded.", reason));
         });
   }
@@ -200,7 +211,7 @@ export class Component implements ngCore.OnInit {
   onUploadBinarySubmit():void {
     "use strict";
 
-    let devices = this.devices.filter(selectable => selectable.selected).map(selectable => selectable.id);
+    let devices = this.uploadBinaryDevices.filter(selectable => selectable.selected).map(selectable => selectable.model.id);
     if (!devices.length) {
       return;
     }
@@ -214,8 +225,7 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    let device = this.devices.find(device => device.id == id);
-    this.backEnd.removeDeviceFromProject(device.id, device.project)
+    this.backEnd.removeDeviceFromProject(id)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The device has been removed."));
           this.refresh();

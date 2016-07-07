@@ -73,8 +73,8 @@ export class Component implements ngCore.OnInit {
         .catch((reason) => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-220
           this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-220"));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-254
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-254"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-285
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-285"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The moderator cannot be created.", reason));
         });
   }

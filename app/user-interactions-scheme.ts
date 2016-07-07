@@ -39,6 +39,10 @@ export class Component implements ngCore.OnInit {
 
   editing:boolean;
 
+  editScheme:boolean;
+
+  addVersion:boolean;
+
   project:string;
 
   nameField:string;
@@ -55,6 +59,16 @@ export class Component implements ngCore.OnInit {
 
   versionDescription:string;
 
+  versionDeviceField:string;
+
+  devices:libBackEnd.Device[];
+
+  deviceTypes:libBackEnd.DeviceType[];
+
+  versionDeviceProgramField:string;
+
+  devicePrograms:libBackEnd.DeviceProgram[];
+
   showApplicationGroups:boolean;
 
   versionApplicationGroupField:string;
@@ -66,8 +80,6 @@ export class Component implements ngCore.OnInit {
   versionSchemeField:string;
 
   versionScheme:string;
-
-  addVersion:boolean;
 
   versions:libPatternFlyListView.Item[];
 
@@ -88,6 +100,8 @@ export class Component implements ngCore.OnInit {
     ];
     this.showHistory = false;
     this.editing = false;
+    this.editScheme = false;
+    this.addVersion = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.description = "Loading...";
@@ -95,11 +109,12 @@ export class Component implements ngCore.OnInit {
     this.versionName = "Loading...";
     this.versionDescriptionField = "";
     this.versionDescription = "Loading...";
+    this.versionDeviceField = "";
+    this.versionDeviceProgramField = "";
     this.showApplicationGroups = false;
     this.versionApplicationGroupField = "";
     this.versionSchemeField = `{"blocks":{}}`;
     this.versionScheme = `{"blocks":{}}`;
-    this.addVersion = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
   }
@@ -116,6 +131,7 @@ export class Component implements ngCore.OnInit {
 
     this.editing = false;
     Promise.all<any>([
+          // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
           this.backEnd.getInteractionsScheme(this.id),
           this.backEnd.getProjects()
         ])
@@ -123,12 +139,12 @@ export class Component implements ngCore.OnInit {
           let scheme:libBackEnd.InteractionsScheme;
           let projects:libBackEnd.Project[];
           [scheme, projects] = result;
-          if (!scheme.versionObjects.length) {
+          if (!scheme.program_versions.length) {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error("the scheme has no version"));
           }
-          let lastVersion = _.max(scheme.versionObjects, version => version.date_of_create);
-          if (lastVersion.files_id.length != 1) {
+          let lastVersion = _.max(scheme.program_versions.map(version => version.version_Object), version => version.date_of_create);
+          if (lastVersion.files.length != 1) {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error("the scheme version does not have only one file"));
           }
@@ -138,8 +154,12 @@ export class Component implements ngCore.OnInit {
             projects,
             lastVersion,
             // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+            Promise.all(project.boards_id.map(id => this.backEnd.getDevice(id))),
+            this.backEnd.getDeviceTypes(),
+            Promise.all(project.c_programs_id.map(id => this.backEnd.getDeviceProgram(id))),
+            // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
             Promise.all(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id))),
-            this.backEnd.getFile(lastVersion.files_id[0])
+            this.backEnd.getFile(lastVersion.files[0].id)
           ]);
         })
         .then(result => {
@@ -147,10 +167,12 @@ export class Component implements ngCore.OnInit {
           let projects:libBackEnd.Project[];
           let version:libBackEnd.Version;
           let applicationGroups:libBackEnd.ApplicationGroup[];
-          let versionFile:libBackEnd.BackEndFile;
-          [scheme, projects, version, applicationGroups, versionFile] = result;
+          let versionFile:string;
+          [scheme, projects, version, this.devices, this.deviceTypes, this.devicePrograms, applicationGroups, versionFile] = result;
           this.name = scheme.name;
           this.breadcrumbs[3].label = scheme.name;
+          this.editScheme = scheme.edit_permission;
+          this.addVersion = scheme.update_permission;
           this.project = projects.length > 1 ? projects.find(project => project.id == scheme.project_id).project_name : null;
           this.nameField = scheme.name;
           this.descriptionField = scheme.program_description;
@@ -165,14 +187,11 @@ export class Component implements ngCore.OnInit {
             this.versionApplicationGroupField = this.versionApplicationGroups[0].id;
           }
           this.applicationGroups = applicationGroups.filter(group => group.update_permission);
-          this.versionSchemeField = versionFile.content;
-          this.versionScheme = versionFile.content;
-          this.addVersion = scheme.update_permission;
-          this.versions = scheme.versionObjects.map(version => new libPatternFlyListView.Item(version.id, version.version_name, version.version_description, ["UserInteractionsSchemeVersion", {scheme: this.id, version: version.id}], false));
+          this.versionSchemeField = versionFile;
+          this.versionScheme = versionFile;
+          this.versions = scheme.program_versions.map(version => new libPatternFlyListView.Item(version.version_Object.id, version.version_Object.version_name, version.version_Object.version_description, ["UserInteractionsSchemeVersion", {scheme: this.id, version: version.version_Object.id}], false));
         })
         .catch(reason => {
-          //TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
           this.notifications.current.push(new libBeckiNotifications.Danger(`The scheme ${this.id} cannot be loaded.`, reason));
         });
   }
@@ -200,6 +219,7 @@ export class Component implements ngCore.OnInit {
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     return () => this.backEnd.getProjects()
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
         .then(projects => Promise.all<libBackEnd.InteractionsScheme>([].concat(...projects.map(project => project.b_programs_id)).map(id => this.backEnd.getInteractionsScheme(id))))
         .then(schemes => !schemes.find(scheme => scheme.id != this.id && scheme.name == this.nameField));
   }
@@ -228,23 +248,36 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getInteractionsScheme(this.id).then(scheme => !scheme.versionObjects.find(version => version.version_name == this.versionNameField));
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+    return () => this.backEnd.getInteractionsScheme(this.id).then(scheme => !scheme.program_versions.find(version => version.version_Object.version_name == this.versionNameField));
+  }
+
+  getProgramsForVersionDevice():libBackEnd.DeviceProgram[] {
+    "use strict";
+
+    if (!this.versionDeviceField) {
+      return [];
+    }
+
+    let device = this.devices.find(device => device.id == this.versionDeviceField);
+    let type = this.deviceTypes.find(type => type.id == device.type_of_board_id);
+    return this.devicePrograms.filter(program => program.type_of_board_id == type.id);
   }
 
   onVersionSubmit():void {
     "use strict";
 
-    this.backEnd.addVersionToInteractionsScheme(this.versionNameField, this.versionDescriptionField, this.versionSchemeField, this.id)
+    this.backEnd.addVersionToInteractionsScheme(this.versionNameField, this.versionDescriptionField, this.versionSchemeField, [], {board_id: this.versionDeviceField, c_program_version_id: this.versionDeviceProgramField}, this.id)
         .then(version => {
-          return this.versionApplicationGroupField ? this.backEnd.addApplicationGroupToInteractionsScheme(this.versionApplicationGroupField, version.id, false) : null;
+          return this.versionApplicationGroupField ? this.backEnd.addApplicationGroupToInteractionsScheme(this.versionApplicationGroupField, version.version_Object.id, false) : null;
         })
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The version has been created."));
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-284
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-284"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The version cannot be created.", reason));
         });
   }

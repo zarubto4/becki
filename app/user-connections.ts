@@ -70,7 +70,7 @@ export class Component implements ngCore.OnInit {
           let connections:libBackEnd.Connection[];
           let user:libBackEnd.User;
           [connections, user] = result;
-          this.items = connections.map(connection => new libPatternFlyListView.Item(connection.connection_id, libBecki.timestampToString(connection.created), composeConnectionDescription(connection)));
+          this.items = connections.map(connection => new libPatternFlyListView.Item(connection.connection_id, libBecki.timestampToString(connection.created), composeConnectionDescription(connection), null, connection.delete_permission));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("Connections cannot be loaded.", reason));
@@ -89,8 +89,6 @@ export class Component implements ngCore.OnInit {
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-249
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-249"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The connection cannot be removed.", reason));
         });
   }

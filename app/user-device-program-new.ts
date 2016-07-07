@@ -37,6 +37,10 @@ export class Component implements ngCore.OnInit {
 
   descriptionField:string;
 
+  deviceTypeField:string;
+
+  deviceTypes:libBackEnd.DeviceType[];
+
   codeField:string;
 
   backEnd:libBeckiBackEnd.Service;
@@ -56,6 +60,7 @@ export class Component implements ngCore.OnInit {
     this.projectField = "";
     this.nameField = "";
     this.descriptionField = "";
+    this.deviceTypeField = "";
     this.codeField = "";
     this.backEnd = backEnd;
     this.notifications = notifications;
@@ -67,8 +72,11 @@ export class Component implements ngCore.OnInit {
 
     this.notifications.shift();
     this.backEnd.getProjects()
-        .then(projects => this.projects = projects)
+        .then(projects => this.projects = projects.filter(project => project.update_permission))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Projects cannot be loaded: ${reason}`)));
+    this.backEnd.getDeviceTypes()
+        .then(deviceTypes => this.deviceTypes = deviceTypes)
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Device types cannot be loaded: ${reason}`)));
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -76,6 +84,7 @@ export class Component implements ngCore.OnInit {
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     return () => this.backEnd.getProjects()
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
         .then(projects => Promise.all<libBackEnd.DeviceProgram>([].concat(...projects.map(project => project.c_programs_id)).map(id => this.backEnd.getDeviceProgram(id))))
         .then(programs => !programs.find(program => program.program_name == this.nameField));
   }
@@ -92,16 +101,18 @@ export class Component implements ngCore.OnInit {
             })
         )
         .then(project => {
-          return this.backEnd.createDeviceProgram(this.nameField, this.descriptionField, project);
+          return this.backEnd.createDeviceProgram(this.nameField, this.descriptionField, this.deviceTypeField, project);
         })
         .then(program => {
-          return this.backEnd.addVersionToDeviceProgram("Initial version", "", this.codeField, program.id);
+          return this.backEnd.addVersionToDeviceProgram(this.codeField, program.id);
         })
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The program has been created."));
           this.router.navigate(["UserDevices"]);
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-275
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-275"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The program cannot be created.", reason));
         });
   }

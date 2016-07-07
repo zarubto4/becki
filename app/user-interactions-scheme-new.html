@@ -35,6 +35,30 @@
     </div>
     <div class="form-group">
       <label>
+        <span class="glyphicon glyphicon-list"></span>
+        Device
+      </label>
+      <select class="form-control" required data-bindon-ngModel="deviceField">
+        <option value="">Select ID...</option>
+        <option data-bind-value="device.id" template="ngFor let device of devices">
+          {{device.id}}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>
+        <span class="glyphicon glyphicon-list"></span>
+        Device Program
+      </label>
+      <select class="form-control" required data-bindon-ngModel="deviceProgramField">
+        <option value="">Select name...</option>
+        <option data-bind-value="program.id" template="ngFor let program of getProgramsForDevice()">
+          {{program.program_name}}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>
         <span class="glyphicon glyphicon-phone"></span>
         {{showGroups ? 'Application group' : 'Application'}}
       </label>

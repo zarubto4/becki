@@ -40,17 +40,19 @@ export class Component implements ngCore.OnInit {
 
   editing:boolean;
 
+  editProgram:boolean;
+
+  addVersion:boolean;
+
   nameField:string;
 
   descriptionField:string;
 
   description:string;
 
-  versionNameField:string;
+  deviceType:string;
 
   versionName:string;
-
-  versionDescriptionField:string;
 
   versionDescription:string;
 
@@ -77,12 +79,13 @@ export class Component implements ngCore.OnInit {
     ];
     this.showHistory = false;
     this.editing = false;
+    this.editProgram = false;
+    this.addVersion = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.description = "Loading...";
-    this.versionNameField = "Loading...";
+    this.deviceType = "";
     this.versionName = "Loading...";
-    this.versionDescriptionField = "Loading...";
     this.versionDescription = "Loading...";
     this.versionCodeField = "Loading...";
     this.versionCode = "Loading...";
@@ -103,41 +106,43 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.editing = false;
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     this.backEnd.getDeviceProgram(this.id)
         .then(program => {
-          if (!program.version_objects.length) {
+          if (!program.program_versions.length) {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error("the program has no version"));
           }
-          let lastVersion = _.max(program.version_objects, version => version.date_of_create);
-          if (lastVersion.files_id.length != 1) {
+          let lastVersion = _.max(program.program_versions.map(version => version.version_object), version => version.date_of_create);
+          if (lastVersion.files.length != 1) {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error("the program version does not have only one file"));
           }
           return Promise.all<any>([
             program,
             lastVersion,
-            this.backEnd.getFile(lastVersion.files_id[0])
+            this.backEnd.getFile(lastVersion.files[0].id)
           ]);
         })
         .then(result => {
           let program:libBackEnd.DeviceProgram;
           let version:libBackEnd.Version;
-          let versionFile:libBackEnd.BackEndFile;
+          let versionFile:string;
           [program, version, versionFile] = result;
           this.name = program.program_name;
           this.breadcrumbs[3].label = program.program_name;
+          this.editProgram = program.edit_permission;
+          this.addVersion = program.update_permission;
           this.nameField = program.program_name;
           this.descriptionField = program.program_description;
           this.description = program.program_description;
-          this.versionNameField = version.version_name;
+          this.deviceType = program.type_of_board_id;
           this.versionName = version.version_name;
-          this.versionDescriptionField = version.version_description;
           this.versionDescription = version.version_description;
-          this.versionCodeField = versionFile.content;
-          this.versionCode = versionFile.content;
+          this.versionCodeField = versionFile;
+          this.versionCode = versionFile;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-126
-          this.versions = program.version_objects.map(version => new libPatternFlyListView.Item(version.id, `${version.version_name} (issue/TYRION-126)`, version.version_description, undefined, false));
+          this.versions = program.program_versions.map(version => new libPatternFlyListView.Item(version.version_object.id, `${version.version_object.version_name} (issue/TYRION-126)`, version.version_object.version_description, undefined, false));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The program ${this.id} cannot be loaded.`, reason));
@@ -167,6 +172,7 @@ export class Component implements ngCore.OnInit {
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     return () => this.backEnd.getProjects()
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
         .then(projects => Promise.all<libBackEnd.DeviceProgram>([].concat(...projects.map(project => project.c_programs_id)).map(id => this.backEnd.getDeviceProgram(id))))
         .then(programs => !programs.find(program => program.id != this.id && program.program_name == this.nameField));
   }
@@ -175,7 +181,7 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.updateDeviceProgram(this.id, this.nameField, this.descriptionField)
+    this.backEnd.updateDeviceProgram(this.id, this.nameField, this.descriptionField, this.deviceType)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The program has been updated."));
           this.refresh();
@@ -192,23 +198,18 @@ export class Component implements ngCore.OnInit {
     this.editing = false;
   }
 
-  validateVersionNameField():()=>Promise<boolean> {
-    "use strict";
-
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getDeviceProgram(this.id).then(program => !program.version_objects.find(version => version.version_name == this.versionNameField));
-  }
-
   onVersionSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.addVersionToDeviceProgram(this.versionNameField, this.versionDescriptionField, this.versionCodeField, this.id)
+    this.backEnd.addVersionToDeviceProgram(this.versionCodeField, this.id)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The version has been created."));
           this.refresh();
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-275
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-275"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The version cannot be created.", reason));
         });
   }

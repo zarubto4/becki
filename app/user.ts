@@ -102,8 +102,7 @@ export class Component implements ngCore.OnInit {
         .then(user => {
           this.userString = libBackEnd.composeUserString(user, true);
           this.breadcrumbs[2].label = libBackEnd.composeUserString(user, true);
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-249
-          this.editAccount = true;
+          this.editAccount = user.edit_permission;
           this.nameField = user.full_name;
           this.usernameField = user.nick_name;
           this.user = user;
@@ -160,8 +159,6 @@ export class Component implements ngCore.OnInit {
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-249
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-249"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The user cannot be updated.", reason));
         });
   }

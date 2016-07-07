@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + name + "\" Program"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="showHistory || editing ? null : 'Edit'" data-on-actionClick="onEditClick($event)" data-bind-ngSwitch="showHistory">
+<div data-bind-layout='"Edit the \"" + name + "\" Program"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="showHistory || editing || (!editProgram && !addVersion) ? null : 'Edit'" data-on-actionClick="onEditClick($event)" data-bind-ngSwitch="showHistory">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="!showHistory">
       <a data-on-click="onDetailsClick($event)" style="cursor: pointer">
@@ -24,86 +24,74 @@
   <template data-bind-ngSwitchWhen="false">
     <form class="clearfix" style="margin-top: 2em" data-on-submit="onSubmit($event)" data-bind-ngSwitch="editing">
       <template data-bind-ngSwitchWhen="true">
+        <template data-bind-ngIf="editProgram">
+          <div class="form-group">
+            <label>
+              <span class="glyphicon glyphicon-pencil"></span>
+              Name
+            </label>
+            <input class="form-control" required minlength="8" data-bindon-ngModel="nameField" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
+          </div>
+          <div class="form-group">
+            <label>
+              <span class="glyphicon glyphicon-pencil"></span>
+              Description
+            </label>
+            <textarea class="form-control" data-bindon-ngModel="descriptionField"></textarea>
+          </div>
+          <div class="pull-right">
+            <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+            <button class="btn btn-primary" type="submit">Edit</button>
+          </div>
+        </template>
+      </template>
+      <template data-bind-ngSwitchWhen="false">
         <div class="form-group">
           <label>
-            <span class="glyphicon glyphicon-pencil"></span>
-            Name
+            Description
           </label>
-          <input class="form-control" required minlength="8" data-bindon-ngModel="nameField" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
-        </div>
-      </template>
-      <div class="form-group">
-        <label>
-          <template data-bind-ngSwitchWhen="true">
-            <span class="glyphicon glyphicon-pencil"></span>
-          </template>
-          Description
-        </label>
-        <template data-bind-ngSwitchWhen="true">
-          <textarea class="form-control" data-bindon-ngModel="descriptionField"></textarea>
-        </template>
-        <template data-bind-ngSwitchWhen="false">
           <p class="form-control-static">{{description}}</p>
-        </template>
-      </div>
-      <template data-bind-ngSwitchWhen="true">
-        <div class="pull-right">
-          <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-          <button class="btn btn-primary" type="submit">Edit</button>
         </div>
       </template>
     </form>
     <form class="clearfix" data-on-submit="onVersionSubmit($event)" data-bind-ngSwitch="editing">
-      <div class="form-group">
-        <label>
-          <template data-bind-ngSwitchWhen="true">
-            <span class="glyphicon glyphicon-pencil"></span>
-          </template>
-          Version Name
-        </label>
-        <template data-bind-ngSwitchWhen="true">
-          <input class="form-control" required data-bindon-ngModel="versionNameField" data-bind-customValidator="validateVersionNameField()" data-message="This name is used already. Please choose another one.">
-        </template>
-        <template data-bind-ngSwitchWhen="false">
-          <p class="form-control-static">{{versionName}}</p>
-        </template>
-      </div>
-      <div class="form-group">
-        <label>
-          <template data-bind-ngSwitchWhen="true">
-            <span class="glyphicon glyphicon-pencil"></span>
-          </template>
-          Version Description
-        </label>
-        <template data-bind-ngSwitchWhen="true">
-          <textarea class="form-control" data-bindon-ngModel="versionDescriptionField"></textarea>
-        </template>
-        <template data-bind-ngSwitchWhen="false">
-          <p class="form-control-static">{{versionDescription}}</p>
-        </template>
-      </div>
-      <div class="form-group">
-        <label>
-          <template data-bind-ngSwitchWhen="true">
-            <span class="glyphicon glyphicon-console"></span>
-          </template>
-          Code
-        </label>
-        <template data-bind-ngSwitchWhen="true">
-          <div data-bindon-fieldCode="versionCodeField" data-bind-mode="'text/x-csrc'">
-            <div class="spinner"></div>
+      <template data-bind-ngSwitchWhen="true">
+        <template data-bind-ngIf="addVersion">
+          <div class="form-group">
+            <label>
+              <span class="glyphicon glyphicon-console"></span>
+              Code
+            </label>
+            <div data-bindon-fieldCode="versionCodeField" data-bind-mode="'text/x-csrc'">
+              <div class="spinner"></div>
+            </div>
+          </div>
+          <div class="pull-right">
+            <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+            <button class="btn btn-primary" type="submit">Update</button>
           </div>
         </template>
-        <template data-bind-ngSwitchWhen="false">
+      </template>
+      <template data-bind-ngSwitchWhen="false">
+        <div class="form-group">
+          <label>
+            Version Name
+          </label>
+          <p class="form-control-static">{{versionName}}</p>
+        </div>
+        <div class="form-group">
+          <label>
+            Version Description
+          </label>
+          <p class="form-control-static">{{versionDescription}}</p>
+        </div>
+        <div class="form-group">
+          <label>
+            Code
+          </label>
           <div data-bindon-fieldCode="versionCode" data-bind-mode="'text/x-csrc'" data-bind-readonly="true">
             <div class="spinner"></div>
           </div>
-        </template>
-      </div>
-      <template data-bind-ngSwitchWhen="true">
-        <div class="pull-right">
-          <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-          <button class="btn btn-primary" type="submit">Update</button>
         </div>
       </template>
     </form>

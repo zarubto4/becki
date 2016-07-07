@@ -31,6 +31,8 @@ export class Component implements ngCore.OnInit {
 
   processorField:string;
 
+  internetEnabledField:boolean;
+
   descriptionField:string;
 
   backEnd:libBeckiBackEnd.Service;
@@ -50,6 +52,7 @@ export class Component implements ngCore.OnInit {
     this.nameField = "";
     this.producerField = "";
     this.processorField = "";
+    this.internetEnabledField = true;
     this.descriptionField = "";
     this.backEnd = backEnd;
     this.notifications = notifications;
@@ -79,16 +82,12 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.createDeviceType(this.nameField, this.producerField, this.processorField, this.descriptionField)
+    this.backEnd.createDeviceType(this.nameField, this.producerField, this.processorField, this.internetEnabledField, this.descriptionField)
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The type has been created."));
           this.router.navigate(["System"]);
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-199
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-199"));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-200
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-200"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The type cannot be created.", reason));
         });
   }

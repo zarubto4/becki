@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + type?.name + "\" Type"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="editing ? null : 'Edit'" data-on-actionClick="onEditClick($event)" data-bind-ngSwitch="editing">
+<div data-bind-layout='"Edit the \"" + type?.name + "\" Type"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="editing || !editType ? null : 'Edit'" data-on-actionClick="onEditClick($event)" data-bind-ngSwitch="editing">
   <form class="clearfix" data-on-submit="onSubmit($event)">
     <template data-bind-ngSwitchWhen="true">
       <div class="form-group">
@@ -60,7 +60,7 @@
         Description
       </label>
       <template data-bind-ngSwitchWhen="true">
-        <textarea class="form-control" required data-bindon-ngModel="descriptionField"></textarea>
+        <textarea class="form-control" required minlength="10" data-bindon-ngModel="descriptionField"></textarea>
       </template>
       <template data-bind-ngSwitchWhen="false">
         <p class="form-control-static">{{description}}</p>

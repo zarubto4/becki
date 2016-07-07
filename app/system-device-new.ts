@@ -53,19 +53,18 @@ export class Component implements ngCore.OnInit {
 
     this.notifications.shift();
     this.backEnd.getDeviceTypes()
-        .then(types => this.types = types)
+        .then(types => this.types = types.filter(type => type.register_new_device_permission))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Device types cannot be loaded.", reason)));
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-246
-    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-246"));
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-253
-    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-253"));
   }
 
   validateIdField():()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getDevices(1).then(devices => !devices.find(device => device.id == this.idField));
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+    return () => this.backEnd.getDevices(1)
+        .then(collection => Promise.all<libBackEnd.DeviceCollection>(collection.pages.map(page => this.backEnd.getDevices(page))))
+        .then(collections => ![].concat(...collections.map(collection => collection.content)).find(device => device.id == this.idField));
   }
 
   onSubmit():void {

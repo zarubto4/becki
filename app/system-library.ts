@@ -27,6 +27,10 @@ export class Component implements ngCore.OnInit {
 
   editing:boolean;
 
+  editLibrary:boolean;
+
+  addVersion:boolean;
+
   nameField:string;
 
   descriptionField:string;
@@ -56,6 +60,8 @@ export class Component implements ngCore.OnInit {
       new libBeckiLayout.LabeledLink("Loading...", ["SystemLibrary", {library: this.id}])
     ];
     this.editing = false;
+    this.editLibrary = false;
+    this.addVersion = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.description = "Loading...";
@@ -70,6 +76,8 @@ export class Component implements ngCore.OnInit {
 
     this.notifications.shift();
     this.refresh();
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-276
+    this.notifications.current.push(new libBeckiNotifications.Warning("ssue/TYRION-276"));
   }
 
   refresh():void {
@@ -80,6 +88,8 @@ export class Component implements ngCore.OnInit {
         .then(library => {
           this.name = library.library_name;
           this.breadcrumbs[3].label = library.library_name;
+          this.editLibrary = library.edit_permission;
+          this.addVersion = library.update_permission;
           this.nameField = library.library_name;
           this.descriptionField = library.description;
           this.description = library.description;
@@ -101,15 +111,19 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => Promise.all<any>([
-          this.backEnd.getLibraries(),
-          this.backEnd.getLibraryGroups(),
-        ])
+    return () => this.backEnd.getLibraryGroups(1)
+        .then(groupCollection => {
+          return Promise.all<any>([
+            this.backEnd.getLibraries(1),
+            Promise.all(groupCollection.pages.map(page => this.backEnd.getLibraryGroups(page)))
+          ]);
+        })
         .then(result => {
           let libraries:libBackEnd.Library[];
-          let groups:libBackEnd.LibraryGroup[];
-          [libraries, groups] = result;
-          return !libraries.find(library => library.id != this.id && library.library_name == this.nameField) && !groups.find(group => group.group_name == this.nameField);
+          let groupCollections:libBackEnd.LibraryGroupCollection[];
+          [libraries, groupCollections] = result;
+          return !libraries.find(library => library.id != this.id && library.library_name == this.nameField) &&
+              ![].concat(...groupCollections.map(collection => collection.content)).find(group => group.group_name == this.nameField);
         });
   }
 

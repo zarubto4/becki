@@ -135,8 +135,6 @@ export class Component implements ngCore.OnInit {
           this.code = application.m_code;
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
           this.notifications.current.push(new libBeckiNotifications.Danger(`The application ${this.id} cannot be loaded.`, reason));
         });
   }
@@ -164,8 +162,6 @@ export class Component implements ngCore.OnInit {
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The application cannot be updated.", reason));
         });
   }

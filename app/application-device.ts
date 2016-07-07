@@ -27,6 +27,8 @@ export class Component implements ngCore.OnInit {
 
   editing:boolean;
 
+  editDevice:boolean;
+
   project:libBackEnd.Project;
 
   showProject:boolean;
@@ -57,6 +59,7 @@ export class Component implements ngCore.OnInit {
       new libBeckiLayout.LabeledLink("Loading...", ["ApplicationDevice", {device: this.id}])
     ];
     this.editing = false;
+    this.editDevice = false;
     this.showProject = false;
     this.nameField = "Loading...";
     this.widthField = 1;
@@ -89,6 +92,7 @@ export class Component implements ngCore.OnInit {
           [this.device, projects] = result;
           this.breadcrumbs[2].label = this.device.name;
           this.project = projects.find(project => project.screen_size_types_id.indexOf(this.id) != -1) || null;
+          this.editDevice = this.device.edit_permission;
           this.showProject = this.project && projects.length > 1;
           this.nameField = this.device.name;
           this.widthField = this.device.portrait_width;
@@ -125,8 +129,6 @@ export class Component implements ngCore.OnInit {
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-247
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-247"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The device cannot be updated.", reason));
         });
   }

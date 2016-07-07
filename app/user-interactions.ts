@@ -13,18 +13,6 @@ import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
 
-class InteractionsSchemeItem extends libPatternFlyListView.Item {
-
-  versions:libBackEnd.Version[];
-
-  constructor(scheme:libBackEnd.InteractionsScheme) {
-    "use strict";
-
-    super(scheme.id, scheme.name, scheme.program_description, ["UserInteractionsScheme", {scheme: scheme.id}]);
-    this.versions = scheme.versionObjects;
-  }
-}
-
 class SelectableInteractionsModeratorItem extends libPatternFlyListView.Item {
 
   project:string;
@@ -36,7 +24,7 @@ class SelectableInteractionsModeratorItem extends libPatternFlyListView.Item {
   constructor(moderator:libBackEnd.InteractionsModerator, project:libBackEnd.Project) {
     "use strict";
 
-    super(moderator.id, moderator.id, moderator.type_of_device);
+    super(moderator.id, moderator.id, moderator.type_of_device, null, moderator.update_permission && project.update_permission);
     this.project = project.id;
     this.online = moderator.online;
     this.selected = false;
@@ -53,9 +41,11 @@ export class Component implements ngCore.OnInit {
 
   tab:string;
 
-  schemes:InteractionsSchemeItem[];
+  schemes:libPatternFlyListView.Item[];
 
   blocks:libPatternFlyListView.Item[];
+
+  uploadSchemes:libBackEnd.InteractionsScheme[];
 
   uploadSchemeField:string;
 
@@ -100,8 +90,10 @@ export class Component implements ngCore.OnInit {
     this.backEnd.getProjects()
         .then(projects => {
           return Promise.all<any>([
+            // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
             Promise.all([].concat(...projects.map(project => project.b_programs_id)).map(id => this.backEnd.getInteractionsScheme(id))),
             Promise.all([].concat(...projects.map(project => project.type_of_blocks_id)).map(id => this.backEnd.getInteractionsBlockGroup(id))),
+            // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
             Promise.all([].concat(...projects.map(project => project.homers_id.map(id => [id, project]))).map(pair => Promise.all<any>([this.backEnd.getInteractionsModerator(pair[0]), pair[1]])))
           ]);
         })
@@ -110,14 +102,13 @@ export class Component implements ngCore.OnInit {
           let groups:libBackEnd.InteractionsBlockGroup[];
           let moderators:[libBackEnd.InteractionsModerator, libBackEnd.Project][];
           [schemes, groups, moderators] = result;
-          this.schemes = schemes.map(scheme => new InteractionsSchemeItem(scheme));
-          this.blocks = [].concat(...groups.map(group => group.blockoBlocks)).map(block => new libPatternFlyListView.Item(block.id, block.name, block.general_description, ["UserInteractionsBlock", {block: block.id}]));
+          this.schemes = schemes.map(scheme => new libPatternFlyListView.Item(scheme.id, scheme.name, scheme.program_description, ["UserInteractionsScheme", {scheme: scheme.id}], scheme.delete_permission));
+          this.blocks = [].concat(...groups.map(group => group.blockoBlocks)).map(block => new libPatternFlyListView.Item(block.id, block.name, block.general_description, ["UserInteractionsBlock", {block: block.id}], block.delete_permission));
+          this.uploadSchemes = schemes.filter(scheme => scheme.update_permission);
           this.moderators = moderators.map(pair => new SelectableInteractionsModeratorItem(pair[0], pair[1]));
-          this.spies = schemes.filter(scheme => scheme.program_state.uploaded).map(scheme => new libPatternFlyListView.Item(scheme.id, scheme.name, scheme.versionObjects.find(version => version.id == scheme.program_state.version_id).version_name, ["UserInteractionsSpy", {spy: scheme.id}], false));
+          this.spies = schemes.filter(scheme => scheme.program_state.uploaded).map(scheme => new libPatternFlyListView.Item(scheme.id, scheme.name, scheme.program_versions.find(version => version.version_Object.id == scheme.program_state.version_id).version_Object.version_name, ["UserInteractionsSpy", {spy: scheme.id}], false));
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-231
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-231"));
           this.notifications.current.push(new libBeckiNotifications.Danger("Interactions cannot be loaded.", reason));
         });
   }
@@ -195,8 +186,8 @@ export class Component implements ngCore.OnInit {
   getUploadVersions():libBackEnd.Version[] {
     "use strict";
 
-    let scheme = this.schemes.find(scheme => scheme.id == this.uploadSchemeField);
-    return scheme ? scheme.versions : [];
+    let scheme = this.uploadSchemes.find(scheme => scheme.id == this.uploadSchemeField);
+    return scheme ? scheme.program_versions.map(version => version.version_Object) : [];
   }
 
   onUploadSchemeFieldChange():void {

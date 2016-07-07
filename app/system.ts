@@ -67,10 +67,8 @@ export class Component implements ngCore.OnInit {
 
     this.notifications.shift();
     this.refresh();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-246
-    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-246"));
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-269
-    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-269"));
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-276
+    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-276"));
   }
 
   refresh():void {
@@ -85,35 +83,34 @@ export class Component implements ngCore.OnInit {
         .then(servers => this.interactionsServers = servers.map(server =>
             new libPatternFlyListView.Item(server.id, server.server_name, server.destination_address, server.edit_permission ? ["SystemInteractionsServer", {server: server.id}] : null, server.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Interactions servers cannot be loaded.", reason)));
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     this.backEnd.getDevices(1)
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
-        .then(devices => this.devices = devices.map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.isActive ? "active" : "inactive")))
-        .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-253
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-253"));
-          this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason));
-        });
+        .then(collection => Promise.all<libBackEnd.DeviceCollection>(collection.pages.map(page => this.backEnd.getDevices(page))))
+        .then(collections => this.devices = [].concat(...collections.map(collection => collection.content)).map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.isActive ? "active" : "inactive")))
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
     this.backEnd.getDeviceTypes()
-        .then(deviceTypes => this.deviceTypes = deviceTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, ["SystemDeviceType", {type: type.id}])))
+        .then(deviceTypes => this.deviceTypes = deviceTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, ["SystemDeviceType", {type: type.id}], type.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Device types cannot be loaded.", reason)));
     this.backEnd.getProcessors()
         .then(processors => this.processors = processors.map(processor => new libPatternFlyListView.Item(processor.id, processor.processor_name, processor.processor_code, ["SystemProcessor", {processor: processor.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));
-    this.backEnd.getLibraryGroups()
-        .then(groups => this.libraryGroups = groups.map(group => new libPatternFlyListView.Item(group.id, group.group_name, group.description, ["SystemLibraryGroup", {group: group.id}])))
+    this.backEnd.getLibraryGroups(1)
+        .then(groupCollection => Promise.all<libBackEnd.LibraryGroupCollection>(groupCollection.pages.map(page => this.backEnd.getLibraryGroups(page))))
+        .then(groupCollections => this.libraryGroups = [].concat(...groupCollections.map(collection => collection.content)).map(group => new libPatternFlyListView.Item(group.id, group.group_name, group.description, ["SystemLibraryGroup", {group: group.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Library groups cannot be loaded.", reason)));
-    this.backEnd.getLibraries()
+    this.backEnd.getLibraries(1)
         .then(libraries => this.libraries = libraries.map(library => new libPatternFlyListView.Item(library.id, library.library_name, library.description, ["SystemLibrary", {library: library.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Libraries cannot be loaded.", reason)));
     this.backEnd.getProducers()
-        .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, producer.description, ["SystemProducer", {producer: producer.id}])))
+        .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, producer.description, ["SystemProducer", {producer: producer.id}], producer.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Producers cannot be loaded.", reason)));
     this.backEnd.getCompilationServers()
         .then(servers => this.compilationServers = servers.map(server =>
             new libPatternFlyListView.Item(server.id, server.server_name, server.destination_address, ["SystemCompilationServer", {server: server.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Compilation servers cannot be loaded.", reason)));
     this.backEnd.getUsers()
-        .then(users => this.users = users.map(user => new libPatternFlyListView.Item(user.id, libBackEnd.composeUserString(user), "", ["User", {user: user.id}])))
+        .then(users => this.users = users.map(user => new libPatternFlyListView.Item(user.id, libBackEnd.composeUserString(user), "", ["User", {user: user.id}], user.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Device types cannot be loaded.", reason)));
   }
 
@@ -306,6 +303,8 @@ export class Component implements ngCore.OnInit {
           this.refresh();
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-282
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-282"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The library cannot be removed.", reason));
         });
   }
@@ -348,8 +347,6 @@ export class Component implements ngCore.OnInit {
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-248
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-248"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The user cannot be removed.", reason));
         });
   }

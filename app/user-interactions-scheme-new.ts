@@ -37,6 +37,16 @@ export class Component implements ngCore.OnInit {
 
   descriptionField:string;
 
+  deviceField:string;
+
+  devices:libBackEnd.Device[];
+
+  deviceTypes:libBackEnd.DeviceType[];
+
+  deviceProgramField:string;
+
+  devicePrograms:libBackEnd.DeviceProgram[];
+
   showGroups:boolean;
 
   groupField:string;
@@ -62,6 +72,8 @@ export class Component implements ngCore.OnInit {
     this.projectField = "";
     this.nameField = "";
     this.descriptionField = "";
+    this.deviceField = "";
+    this.deviceProgramField = "";
     this.showGroups = false;
     this.groupField = "";
     this.schemeField = `{"blocks":{}}`;
@@ -74,9 +86,14 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.getProjects()
-        .then(projects => {
-          this.projects = projects;
+    Promise.all<any>([
+          this.backEnd.getProjects(),
+          this.backEnd.getDeviceTypes()
+        ])
+        .then(result => {
+          let projects:libBackEnd.Project[];
+          [projects, this.deviceTypes] = result;
+          this.projects = projects.filter(project => project.update_permission);
           this.loadFromProject();
         })
         .catch(reason => {
@@ -93,22 +110,29 @@ export class Component implements ngCore.OnInit {
   loadFromProject():void {
     "use strict";
 
+    this.devices = [];
+    this.devicePrograms = [];
     this.showGroups = false;
     this.groups = [];
     if (this.getProject()) {
       // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
       this.backEnd.getProject(this.getProject())
           .then(project => {
-            // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-            return Promise.all<libBackEnd.ApplicationGroup>(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id)));
+            return Promise.all<any>([
+              // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+              Promise.all(project.boards_id.map(id => this.backEnd.getDevice(id))),
+              Promise.all(project.c_programs_id.map(id => this.backEnd.getDeviceProgram(id))),
+              // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+              Promise.all(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id)))
+            ]);
           })
-          .then(groups => {
+          .then(result => {
+            let groups:libBackEnd.ApplicationGroup[];
+            [this.devices, this.devicePrograms, groups] = result;
             this.showGroups = groups.length > 1 || (groups.length == 1 && !groups[0].m_programs.length);
             this.groups = groups.filter(group => group.update_permission);
           })
           .catch(reason => {
-            //TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
-            this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
             this.notifications.current.push(new libBeckiNotifications.Danger("Application groups cannot be loaded.", reason));
           });
     }
@@ -125,8 +149,21 @@ export class Component implements ngCore.OnInit {
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     return () => this.backEnd.getProjects()
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
         .then(projects => Promise.all<libBackEnd.InteractionsScheme>([].concat(...projects.map(project => project.b_programs_id)).map(id => this.backEnd.getInteractionsScheme(id))))
         .then(schemes => !schemes.find(scheme => scheme.name == this.nameField));
+  }
+
+  getProgramsForDevice():libBackEnd.DeviceProgram[] {
+    "use strict";
+
+    if (!this.deviceField) {
+      return [];
+    }
+
+    let device = this.devices.find(device => device.id == this.deviceField);
+    let type = this.deviceTypes.find(type => type.id == device.type_of_board_id);
+    return this.devicePrograms.filter(program => program.type_of_board_id == type.id);
   }
 
   onSubmit():void {
@@ -144,18 +181,18 @@ export class Component implements ngCore.OnInit {
           return this.backEnd.createInteractionsScheme(this.nameField, this.descriptionField, project);
         })
         .then(scheme => {
-          return this.backEnd.addVersionToInteractionsScheme("Initial version", "", this.schemeField, scheme.id);
+          return this.backEnd.addVersionToInteractionsScheme("Initial version", "", this.schemeField, [], {board_id: this.deviceField, c_program_version_id: this.deviceProgramField}, scheme.id);
         })
         .then(version => {
-          return this.groupField ? this.backEnd.addApplicationGroupToInteractionsScheme(this.groupField, version.id, false) : null;
+          return this.groupField ? this.backEnd.addApplicationGroupToInteractionsScheme(this.groupField, version.version_Object.id, false) : null;
         })
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The scheme have been created."));
           this.router.navigate(["UserInteractions"]);
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-284
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-284"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The scheme cannot be created.", reason));
         });
   }

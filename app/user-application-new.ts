@@ -146,8 +146,6 @@ export class Component implements ngCore.OnInit {
             this.groups = groups.filter(group => group.update_permission);
           })
           .catch(reason => {
-            //TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
-            this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
             this.notifications.current.push(new libBeckiNotifications.Danger(`Application groups/devices cannot be loaded: ${reason}`));
           });
     }

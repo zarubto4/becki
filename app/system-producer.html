@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + producer?.name + "\" Producer"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="editing ? null : 'Edit'" data-on-actionClick="onEditClick($event)" data-bind-ngSwitch="editing">
+<div data-bind-layout='"Edit the \"" + producer?.name + "\" Producer"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="editing || !editProducer ? null : 'Edit'" data-on-actionClick="onEditClick($event)" data-bind-ngSwitch="editing">
   <form class="clearfix" data-on-submit="onSubmit($event)">
     <template data-bind-ngSwitchWhen="true">
       <div class="form-group">

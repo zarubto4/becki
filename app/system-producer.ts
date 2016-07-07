@@ -27,6 +27,8 @@ export class Component implements ngCore.OnInit {
 
   editing:boolean;
 
+  editProducer:boolean;
+
   nameField:string;
 
   descriptionField:string;
@@ -46,6 +48,7 @@ export class Component implements ngCore.OnInit {
       new libBeckiLayout.LabeledLink("Loading...", ["SystemProducer", {producer: this.id}])
     ];
     this.editing = false;
+    this.editProducer = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.backEnd = backEnd;
@@ -67,6 +70,7 @@ export class Component implements ngCore.OnInit {
         .then(producer => {
           this.producer = producer;
           this.breadcrumbs[3].label = producer.name;
+          this.editProducer = producer.edit_permission;
           this.nameField = producer.name;
           this.descriptionField = producer.description;
         })

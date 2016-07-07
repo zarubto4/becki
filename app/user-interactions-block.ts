@@ -27,6 +27,8 @@ export class Component implements ngCore.OnInit {
 
   editing:boolean;
 
+  editBlock:boolean;
+
   nameField:string;
 
   groupField:string;
@@ -51,6 +53,7 @@ export class Component implements ngCore.OnInit {
       new libBeckiLayout.LabeledLink("Loading...", ["UserInteractionsBlock", {block: this.id}])
     ];
     this.editing = false;
+    this.editBlock = false;
     this.nameField = "Loading...";
     this.groupField = "";
     this.descriptionField = "Loading...";
@@ -66,18 +69,18 @@ export class Component implements ngCore.OnInit {
     this.refresh();
     //TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-235
     this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-235"));
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-250
-    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-250"));
   }
 
   refresh():void {
     "use strict";
 
     this.editing = false;
+    // TODO: http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     this.backEnd.getInteractionsBlock(this.id)
         .then(block => {
           this.name = block.name;
           this.breadcrumbs[3].label = block.name;
+          this.editBlock = block.edit_permission;
           this.nameField = block.name;
           this.descriptionField = block.general_description;
           this.description = block.general_description;

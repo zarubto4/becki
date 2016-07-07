@@ -50,22 +50,27 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-276
+    this.notifications.current.push(new libBeckiNotifications.Warning("ssue/TYRION-276"));
   }
 
   validateNameField():()=>Promise<boolean> {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => Promise.all<any>([
-          this.backEnd.getLibraries(),
-          this.backEnd.getLibraryGroups(),
-        ])
+    return () => this.backEnd.getLibraryGroups(1)
+        .then(groupCollection => {
+          return Promise.all<any>([
+            this.backEnd.getLibraries(1),
+            Promise.all(groupCollection.pages.map(page => this.backEnd.getLibraryGroups(page)))
+          ]);
+        })
         .then(result => {
           let libraries:libBackEnd.Library[];
-          let groups:libBackEnd.LibraryGroup[];
-          [libraries, groups] = result;
+          let groupCollections:libBackEnd.LibraryGroupCollection[];
+          [libraries, groupCollections] = result;
           return !libraries.find(library => library.library_name == this.nameField) &&
-              !groups.find(group => group.group_name == this.nameField);
+              ![].concat(...groupCollections.map(collection => collection.content)).find(group => group.group_name == this.nameField);
         });
   }
 

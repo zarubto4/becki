@@ -27,6 +27,8 @@ export class Component implements ngCore.OnInit {
 
   editing:boolean;
 
+  editType:boolean;
+
   producers:libBackEnd.Producer[];
 
   processors:libBackEnd.Processor[];
@@ -56,6 +58,7 @@ export class Component implements ngCore.OnInit {
       new libBeckiLayout.LabeledLink("Loading...", ["SystemDeviceType", {type: this.id}])
     ];
     this.editing = false;
+    this.editType = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.description = "Loading...";
@@ -78,6 +81,7 @@ export class Component implements ngCore.OnInit {
         .then(type => {
           this.type = type;
           this.breadcrumbs[3].label = type.name;
+          this.editType = type.edit_permission;
           this.nameField = type.name;
           this.producerField = type.producer_id;
           this.processorField = type.processor_id;
@@ -124,7 +128,7 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.updateDeviceType(this.id, this.nameField, this.producerField, this.processorField, this.descriptionField)
+    this.backEnd.updateDeviceType(this.id, this.nameField, this.producerField, this.processorField, this.type.connectible_to_internet, this.descriptionField)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The type has been updated."));
           this.refresh();

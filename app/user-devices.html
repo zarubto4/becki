@@ -38,10 +38,10 @@
           <span class="glyphicon glyphicon-list"></span>
           Device IDs
         </label>
-        <div class="checkbox" template="ngFor let device of devices">
+        <div class="checkbox" template="ngFor let device of uploadProgramDevices">
           <label>
             <input type="checkbox" data-bindon-ngModel="device.selected">
-            {{device.name}}
+            {{device.model.id}}
           </label>
         </div>
       </div>
@@ -75,10 +75,10 @@
           <span class="glyphicon glyphicon-list"></span>
           Device IDs
         </label>
-        <div class="checkbox" template="ngFor let device of devices">
+        <div class="checkbox" template="ngFor let device of uploadBinaryDevices">
           <label>
             <input type="checkbox" data-bindon-ngModel="device.selected">
-            {{device.name}}
+            {{device.model.id}}
           </label>
         </div>
       </div>

@@ -74,8 +74,6 @@ export class Component implements ngCore.OnInit {
 
     this.notifications.shift();
     this.refresh();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
-    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
   }
 
   refresh():void {
@@ -98,8 +96,6 @@ export class Component implements ngCore.OnInit {
           this.applications = this.group.m_programs.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["UserApplication", {application: application.id}], application.delete_permission));
         })
         .catch(reason => {
-          //TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
           this.notifications.current.push(new libBeckiNotifications.Danger(`The group ${this.id} cannot be loaded.`, reason));
         });
   }
@@ -130,8 +126,6 @@ export class Component implements ngCore.OnInit {
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-218
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-218"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The group cannot be updated.", reason));
         });
   }
