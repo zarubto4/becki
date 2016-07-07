@@ -30,6 +30,11 @@
         Spies
       </a>
     </li>
+    <li data-bind-class.active="tab == 'BlockGroups'">
+      <a data-on-click="onTabClick('BlockGroups', $event)" style="cursor: pointer">
+        Block Groups
+      </a>
+    </li>
   </ul>
   <template data-bind-ngSwitchWhen="'schemes'">
     <div data-bind-listView="schemes" data-on-addClick="onAddSchemeClick($event)" data-on-removeClick="onRemoveSchemeClick($event)">
@@ -80,14 +85,21 @@
       <button class="btn btn-primary pull-right" type="submit">Upload</button>
     </form>
   </template>
+
   <template data-bind-ngSwitchWhen="'moderators'">
     <div data-bind-listView="moderators" data-on-addClick="onAddModeratorClick($event)" data-on-removeClick="onRemoveModeratorClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
+
   <template data-bind-ngSwitchWhen="'spies'">
     <div data-bind-listView="spies" data-bind-addable="false">
       <div class="spinner"></div>
     </div>
   </template>
+
+  <template data-bind-ngSwitchWhen="'BlockGroups'">
+      <div class="spinner"></div>
+  </template>
+
 </div>
