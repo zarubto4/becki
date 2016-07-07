@@ -33,8 +33,6 @@ export class Component implements ngCore.OnInit {
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
-  editing:boolean;
-
   nameField:string;
 
   descriptionField:string;
@@ -43,9 +41,12 @@ export class Component implements ngCore.OnInit {
 
   editProject:boolean;
 
+  addIntoProject:boolean;
+
   addCollaborator:boolean;
 
   tab:string;
+
 
   collaborators:libPatternFlyListView.Item[];
   devices:libPatternFlyListView.Item[];
@@ -71,12 +72,12 @@ export class Component implements ngCore.OnInit {
       new libBeckiLayout.LabeledLink("Loading...", ["UserProject", {project: this.id}])
     ];
     this.tab="details";
-    this.editing = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.description = "Loading...";
     this.editProject = false;
     this.addCollaborator = false;
+    this.addIntoProject = false;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -89,6 +90,36 @@ export class Component implements ngCore.OnInit {
     this.refresh();
   }
 
+  tabPermissionCheck():boolean{
+    "use strict";
+
+    switch(this.tab) {
+      case "details":
+        return this.editProject;
+        
+
+
+      case "devices":
+        return this.addIntoProject;
+        
+
+
+      case "schemes":
+        return this.addIntoProject;
+        
+
+
+      case "applications":
+        return this.addIntoProject;
+        
+
+
+      case "collaborators":
+        return this.addCollaborator;
+        
+    }
+  }
+  
   onTabClick(tab:string):void {
     "use strict";
     this.tab = tab;
@@ -96,7 +127,6 @@ export class Component implements ngCore.OnInit {
 
   refresh():void {
     "use strict";
-    this.editing = false;
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     this.backEnd.getProject(this.id)
         .then(project => {
@@ -121,6 +151,7 @@ export class Component implements ngCore.OnInit {
           this.descriptionField = project.project_description;
           this.description = project.project_description;
           this.editProject = project.edit_permission;
+          this.addIntoProject = project.update_permission;
           this.addCollaborator = project.share_permission;
           this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composeUserString(collaborator, true), null, undefined, project.unshare_permission));
           this.devices = Devices.map(device => new libPatternFlyListView.Item(device.id,device.program_name,device.program_description,["UserDeviceProgram", {program:device.id}],device.delete_permission));
@@ -134,8 +165,6 @@ export class Component implements ngCore.OnInit {
         });
   }
 
-
-
   onRemoveDevicesClick(id:string):void{
     "use strict";
     this.notifications.shift();
@@ -148,7 +177,6 @@ export class Component implements ngCore.OnInit {
           this.notifications.current.push(new libBeckiNotifications.Danger("The c_program cannot be removed.", reason));
         });
   }
-  
 
   onRemoveSchemesClick(id:string):void{
     "use strict";
@@ -176,27 +204,6 @@ export class Component implements ngCore.OnInit {
         });
   }
 
-  validateNameField():()=>Promise<boolean> {
-    "use strict";
-
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getProjects().then(projects => !projects.find(project => project.id != this.id && project.project_name == this.nameField));
-  }
-
-  onSubmit():void {
-    "use strict";
-
-    this.notifications.shift();
-    this.backEnd.updateProject(this.id, this.nameField, this.descriptionField)
-        .then(() => {
-          this.notifications.current.push(new libBeckiNotifications.Success("The project has been updated."));
-          this.refresh();
-        })
-        .catch(reason => {
-          this.notifications.current.push(new libBeckiNotifications.Danger("The project cannot be updated.", reason));
-        });
-  }
-
   onAddClick():void{
     switch (this.tab){
     case "details":
@@ -205,15 +212,15 @@ export class Component implements ngCore.OnInit {
 
     case "devices":
       this.router.navigate(["NewUserDeviceProgram"]);
-    break;
+      break;
 
     case "schemes":
       this.router.navigate(["NewUserInteractionsScheme"]);
-    break;
+      break;
 
     case "applications":
       this.router.navigate(["NewUserApplicationGroup"]);
-    break;
+      break;
 
     case "collaborators":
       this.router.navigate(["NewUserProjectCollaborator", {project: this.id}]);
@@ -221,13 +228,6 @@ export class Component implements ngCore.OnInit {
 
   }
 }
-
-  onCancelClick():void {
-    "use strict";
-
-    this.notifications.shift();
-    this.editing = false;
-  }
 
   onCollaboratorAddClick():void {
     "use strict";

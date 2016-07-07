@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<div data-bind-layout='"edit the  \"" + name + "\" Project"' data-bind-actionLabel="tab == 'details' ? 'Edit project' : 'Add'" data-on-actionClick="onAddClick($event)" data-bind-breadcrumbs="breadcrumbs" data-bind-ngSwitch="tab"><ul class="nav nav-tabs"  >
+<div data-bind-layout='"edit the  \"" + name + "\" Project"' data-bind-actionLabel="tabPermissionCheck() && tab=='details' ? 'edit project': null || tabPermissionCheck() ? 'add':null " data-on-actionClick="onAddClick($event)" data-bind-breadcrumbs="breadcrumbs" data-bind-ngSwitch="tab"><ul class="nav nav-tabs"  >
   <li data-bind-class.active="tab == 'details'">
     <a data-on-click="onTabClick('details', $event)" style="cursor: pointer">
       details
@@ -39,25 +39,25 @@
     </div>
   </template>
 <template data-bind-ngSwitchWhen="'devices'">
-    <div data-bind-listView="devices" data-on-addClick="onAddClick($event)" data-on-removeClick="onRemoveDevicesClick($event)">
+    <div data-bind-listView="devices" data-bind-addable="tabPermissionCheck()" data-on-addClick="onAddClick($event)" data-on-removeClick="onRemoveDevicesClick($event)">
       <div class="spinner"></div>
     </div>
 </template>
 
   <template data-bind-ngSwitchWhen="'schemes'">
-  <div data-bind-listView="schemes" data-on-addClick="onAddClick($event)" data-on-removeClick="onRemoveSchemesClick($event)">
+  <div data-bind-listView="schemes" data-bind-addable="tabPermissionCheck()" data-on-addClick="onAddClick($event)" data-on-removeClick="onRemoveSchemesClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
 
   <template data-bind-ngSwitchWhen="'applications'">
-  <div data-bind-listView="applications" data-on-addClick="onAddClick($event)" data-on-removeClick="onRemoveApplicationsClick($event)">
+  <div data-bind-listView="applications" data-bind-addable="tabPermissionCheck()" data-on-addClick="onAddClick($event)" data-on-removeClick="onRemoveApplicationsClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
 
   <template data-bind-ngSwitchWhen="'collaborators'">
-    <div data-bind-listView="collaborators" data-on-addClick="onAddClick($event)" data-on-removeClick="onCollaboratorRemoveClick($event)">
+    <div data-bind-listView="collaborators" data-bind-addable="tabPermissionCheck()" data-on-addClick="onAddClick($event)" data-on-removeClick="onCollaboratorRemoveClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
