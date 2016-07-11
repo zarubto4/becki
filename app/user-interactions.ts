@@ -231,6 +231,21 @@ export class Component implements ngCore.OnInit {
         });
   }
 
+  onRemoveBlockGroupsClick(id:string):void {
+    "use strict";
+
+    this.notifications.shift();
+    let moderator = this.BlockGroups.find(moderator => moderator.id == id);
+    this.backEnd.removeInteractionsBlockGroups(moderator.id)
+        .then(() => {
+          this.notifications.current.push(new libBeckiNotifications.Success("The Block Group has been removed."));
+          this.refresh();
+        })
+        .catch(reason => {
+          this.notifications.current.push(new libBeckiNotifications.Danger("The Block Group cannot be removed.", reason));
+        })
+  }
+  
   onRemoveModeratorClick(id:string):void {
     "use strict";
 

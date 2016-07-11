@@ -1734,7 +1734,9 @@ export abstract class BackEnd {
     return this.requestRestPath("GET", `${BackEnd.INTERACTIONS_BLOCK_GROUP_PATH}/${id}`);
   }
 
-  public createInteractionsBlockGroup(name:string,general_description:string,project_id:string){
+  public createInteractionsBlockGroup(name:string,general_description:string,project_id:string):Promise<InteractionsBlockGroup>{
+    "use strict";
+
     return this.requestRestPath("POST", `${BackEnd.INTERACTIONS_BLOCK_GROUP_PATH}`, {name, general_description,project_id}, 201);
 
   }
@@ -1744,7 +1746,21 @@ export abstract class BackEnd {
 
     return this.requestRestPath("GET", BackEnd.INTERACTIONS_BLOCK_GROUP_PATH);
   }
+  
+  public updateInteractionsBlockGroups(id:string,name:string,general_description:string,project_id:string):Promise<string>{
+    "use strict";
+    
+    return this.requestRestPath("PUT", `${BackEnd.INTERACTIONS_BLOCK_GROUP_PATH}/${id}`, {name, general_description,project_id}).then(JSON.stringify);
 
+
+  }
+
+  public removeInteractionsBlockGroups(group:string):Promise<string> {
+    "use strict";
+  //TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-299
+    return this.requestRestPath("DELETE", `${BackEnd.INTERACTIONS_BLOCK_GROUP_PATH}/${group}`,{}).then(JSON.stringify);
+  }
+  
   public createInteractionsBlock(name:string, type_of_block_id:string, general_description:string):Promise<InteractionsBlock> {
     "use strict";
 
@@ -1771,6 +1787,7 @@ export abstract class BackEnd {
 
     return this.requestRestPath("PUT", `${BackEnd.INTERACTIONS_BLOCK_PATH}/${id}`, {general_description, name, type_of_block_id}).then(JSON.stringify);
   }
+
 
   public addVersionToInteractionsBlock(version_name:string, version_description:string, logic_json:string, program:string):Promise<string> {
     "use strict";
@@ -1970,7 +1987,7 @@ export abstract class BackEnd {
 
     return this.requestRestPath("DELETE", `${BackEnd.DEVICE_PATH}/${device}`).then(JSON.stringify);
   }
-
+  
   public removeInteractionsModeratorFromProject(moderator:string, project:string):Promise<string> {
     "use strict";
 
