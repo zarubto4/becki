@@ -83,37 +83,29 @@ export class Component implements ngCore.OnInit {
           let scheme:libBackEnd.InteractionsScheme;
           let project:libBackEnd.Project;
           [scheme, project] = result;
-          let version = scheme.program_versions.find(version => version.version_Object.id == this.id).version_Object;
+          return Promise.all<any>([
+            scheme,
+            // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+            Promise.all(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id)))
+          ]);
+        })
+        .then(result => {
+          let scheme:libBackEnd.InteractionsScheme;
+          let groups:libBackEnd.ApplicationGroup[];
+          [scheme, groups] = result;
+          let version = scheme.program_versions.find(version => version.version_Object.id == this.id);
           if (!version) {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error(`version ${this.id} not found in scheme ${scheme.name}`));
           }
-          if (version.files.length != 1) {
-            // TODO: https://github.com/angular/angular/issues/4558
-            return Promise.reject<any>(new Error("the scheme version does not have only one file"));
-          }
-          return Promise.all<any>([
-            version,
-            scheme,
-            // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-            Promise.all(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id))),
-            this.backEnd.getFile(version.files[0].id)
-          ]);
-        })
-        .then(result => {
-          let version:libBackEnd.Version;
-          let scheme:libBackEnd.InteractionsScheme;
-          let groups:libBackEnd.ApplicationGroup[];
-          let file:string;
-          [version, scheme, groups, file] = result;
-          this.name = version.version_name;
+          this.name = version.version_Object.version_name;
           this.schemeName = scheme.name;
           this.breadcrumbs[3].label = scheme.name;
-          this.breadcrumbs[5].label = version.version_name;
-          this.description = version.version_description;
+          this.breadcrumbs[5].label = version.version_Object.version_name;
+          this.description = version.version_Object.version_description;
           this.showGroups = groups.length > 1 || (groups.length == 1 && !groups[0].m_programs.length);
           this.groups = groups.filter(group => group.b_progam_connected_version_id && group.b_progam_connected_version_id == this.id);
-          this.scheme = file;
+          this.scheme = version.program;
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The scheme ${this.schemeId} cannot be loaded.`, reason));

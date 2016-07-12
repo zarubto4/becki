@@ -52,7 +52,11 @@ export class Component implements ngCore.OnInit {
 
   deviceType:string;
 
+  versionNameField:string;
+
   versionName:string;
+
+  versionDescriptionField:string;
 
   versionDescription:string;
 
@@ -85,7 +89,9 @@ export class Component implements ngCore.OnInit {
     this.descriptionField = "Loading...";
     this.description = "Loading...";
     this.deviceType = "";
+    this.versionNameField = "Loading...";
     this.versionName = "Loading...";
+    this.versionDescriptionField = "Loading...";
     this.versionDescription = "Loading...";
     this.versionCodeField = "Loading...";
     this.versionCode = "Loading...";
@@ -98,8 +104,6 @@ export class Component implements ngCore.OnInit {
 
     this.notifications.shift();
     this.refresh();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-252
-    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-252"));
   }
 
   refresh():void {
@@ -113,22 +117,7 @@ export class Component implements ngCore.OnInit {
             // TODO: https://github.com/angular/angular/issues/4558
             return Promise.reject<any>(new Error("the program has no version"));
           }
-          let lastVersion = _.max(program.program_versions.map(version => version.version_object), version => version.date_of_create);
-          if (lastVersion.files.length != 1) {
-            // TODO: https://github.com/angular/angular/issues/4558
-            return Promise.reject<any>(new Error("the program version does not have only one file"));
-          }
-          return Promise.all<any>([
-            program,
-            lastVersion,
-            this.backEnd.getFile(lastVersion.files[0].id)
-          ]);
-        })
-        .then(result => {
-          let program:libBackEnd.DeviceProgram;
-          let version:libBackEnd.Version;
-          let versionFile:string;
-          [program, version, versionFile] = result;
+          let lastVersion = _.max(program.program_versions, version => version.version_object.date_of_create);
           this.name = program.program_name;
           this.breadcrumbs[3].label = program.program_name;
           this.editProgram = program.edit_permission;
@@ -137,10 +126,12 @@ export class Component implements ngCore.OnInit {
           this.descriptionField = program.program_description;
           this.description = program.program_description;
           this.deviceType = program.type_of_board_id;
-          this.versionName = version.version_name;
-          this.versionDescription = version.version_description;
-          this.versionCodeField = versionFile;
-          this.versionCode = versionFile;
+          this.versionNameField = lastVersion.version_object.version_name;
+          this.versionName = lastVersion.version_object.version_name;
+          this.versionDescriptionField = lastVersion.version_object.version_description;
+          this.versionDescription = lastVersion.version_object.version_description;
+          this.versionCodeField = lastVersion.version_code;
+          this.versionCode = lastVersion.version_code;
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-126
           this.versions = program.program_versions.map(version => new libPatternFlyListView.Item(version.version_object.id, `${version.version_object.version_name} (issue/TYRION-126)`, version.version_object.version_description, undefined, false));
         })
@@ -198,11 +189,18 @@ export class Component implements ngCore.OnInit {
     this.editing = false;
   }
 
+  validateVersionNameField():()=>Promise<boolean> {
+    "use strict";
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
+    return () => this.backEnd.getDeviceProgram(this.id).then(program => !program.program_versions.find(version => version.version_object.version_name == this.versionNameField));
+  }
+
   onVersionSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.addVersionToDeviceProgram(this.versionCodeField, this.id)
+    this.backEnd.addVersionToDeviceProgram(this.versionNameField, this.versionDescriptionField, this.versionCodeField, this.id)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The version has been created."));
           this.refresh();
@@ -210,6 +208,8 @@ export class Component implements ngCore.OnInit {
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-275
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-275"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-295
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-295"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The version cannot be created.", reason));
         });
   }

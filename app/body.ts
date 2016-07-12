@@ -23,7 +23,6 @@ import * as systemCompilationServerNew from "./system-compilation-server-new";
 import * as systemDeviceNew from "./system-device-new";
 import * as systemDeviceType from "./system-device-type";
 import * as systemDeviceTypeNew from "./system-device-type-new";
-import * as systemInteractionsModeratorNew from "./system-interactions-moderator-new";
 import * as systemInteractionsServer from "./system-interactions-server";
 import * as systemInteractionsServerNew from "./system-interactions-server-new";
 import * as systemLibrary from "./system-library";
@@ -69,7 +68,6 @@ import * as userProjectEdit from "./user-project-edit";
   {path: "/system/device/new", component: systemDeviceNew.Component, as: "NewSystemDevice"},
   {path: "/system/device/type/new", component: systemDeviceTypeNew.Component, as: "NewSystemDeviceType"},
   {path: "/system/device/types/:type", component: systemDeviceType.Component, as: "SystemDeviceType"},
-  {path: "/system/interactions/moderator/new", component: systemInteractionsModeratorNew.Component, as: "NewSystemInteractionsModerator"},
   {path: "/system/interactions/server/new", component: systemInteractionsServerNew.Component, as: "NewSystemInteractionsServer"},
   {path: "/system/interactions/servers/:server", component: systemInteractionsServer.Component, as: "SystemInteractionsServer"},
   {path: "/system/libraries/:library", component: systemLibrary.Component, as: "SystemLibrary"},

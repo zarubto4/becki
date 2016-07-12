@@ -217,8 +217,8 @@ export class Component implements ngCore.OnInit {
     }
 
     this.notifications.shift();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-37#comment=109-118
-    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-37"));
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-301
+    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-301"));
   }
 
   onRemoveDeviceClick(id:string):void {

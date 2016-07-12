@@ -142,8 +142,7 @@ export class Component implements ngCore.OnInit {
           .then(result => {
             let groups:libBackEnd.ApplicationGroup[];
             [groups, this.projectDevices] = result;
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-220
-            this.groups = groups.filter(group => group.update_permission);
+            this.groups = groups;
           })
           .catch(reason => {
             this.notifications.current.push(new libBeckiNotifications.Danger(`Application groups/devices cannot be loaded: ${reason}`));
@@ -195,8 +194,8 @@ export class Component implements ngCore.OnInit {
           this.router.navigate(["UserApplications"]);
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-220
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-220"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-302
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-302"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The application cannot be created.", reason));
         });
   }

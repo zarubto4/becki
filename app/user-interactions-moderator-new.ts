@@ -28,6 +28,8 @@ export class Component implements ngCore.OnInit {
 
   idField:string;
 
+  typeField:string;
+
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
@@ -44,6 +46,7 @@ export class Component implements ngCore.OnInit {
     ];
     this.projectField = "";
     this.idField = "";
+    this.typeField = "";
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -77,13 +80,15 @@ export class Component implements ngCore.OnInit {
             })
         )
         .then(project => {
-          return this.backEnd.addInteractionsModeratorToProject(this.idField, project);
+          return this.backEnd.createInteractionsModerator(this.idField, this.typeField, project);
         })
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The moderator has been added."));
           this.router.navigate(["UserInteractions"]);
         })
         .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-285
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-285"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The moderator cannot be added.", reason));
         });
   }

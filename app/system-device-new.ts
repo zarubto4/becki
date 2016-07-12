@@ -77,8 +77,6 @@ export class Component implements ngCore.OnInit {
           this.router.navigate(["System"]);
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-201
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-201"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The device cannot be created.", reason));
         });
   }

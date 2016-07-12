@@ -73,8 +73,8 @@ export class Component implements ngCore.OnInit {
                 this.router.navigate(["System"]);
             })
             .catch(reason => {
-                // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-220
-                this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-220"));
+                // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-281
+                this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-281"));
                 // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-288
                 this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-288"));
                 this.notifications.current.push(new libBeckiNotifications.Danger("The server cannot be created.", reason));

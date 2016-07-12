@@ -139,36 +139,28 @@ export class Component implements ngCore.OnInit {
           let scheme:libBackEnd.InteractionsScheme;
           let projects:libBackEnd.Project[];
           [scheme, projects] = result;
-          if (!scheme.program_versions.length) {
-            // TODO: https://github.com/angular/angular/issues/4558
-            return Promise.reject<any>(new Error("the scheme has no version"));
-          }
-          let lastVersion = _.max(scheme.program_versions.map(version => version.version_Object), version => version.date_of_create);
-          if (lastVersion.files.length != 1) {
-            // TODO: https://github.com/angular/angular/issues/4558
-            return Promise.reject<any>(new Error("the scheme version does not have only one file"));
-          }
           let project = projects.find(project => project.id == scheme.project_id);
           return Promise.all<any>([
             scheme,
             projects,
-            lastVersion,
             // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
             Promise.all(project.boards_id.map(id => this.backEnd.getDevice(id))),
             this.backEnd.getDeviceTypes(),
             Promise.all(project.c_programs_id.map(id => this.backEnd.getDeviceProgram(id))),
             // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-            Promise.all(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id))),
-            this.backEnd.getFile(lastVersion.files[0].id)
+            Promise.all(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id)))
           ]);
         })
         .then(result => {
           let scheme:libBackEnd.InteractionsScheme;
           let projects:libBackEnd.Project[];
-          let version:libBackEnd.Version;
           let applicationGroups:libBackEnd.ApplicationGroup[];
-          let versionFile:string;
-          [scheme, projects, version, this.devices, this.deviceTypes, this.devicePrograms, applicationGroups, versionFile] = result;
+          [scheme, projects, this.devices, this.deviceTypes, this.devicePrograms, applicationGroups] = result;
+          if (!scheme.program_versions.length) {
+            // TODO: https://github.com/angular/angular/issues/4558
+            return Promise.reject<any>(new Error("the scheme has no version"));
+          }
+          let lastVersion = _.max(scheme.program_versions, version => version.version_Object.date_of_create);
           this.name = scheme.name;
           this.breadcrumbs[3].label = scheme.name;
           this.editScheme = scheme.edit_permission;
@@ -177,18 +169,18 @@ export class Component implements ngCore.OnInit {
           this.nameField = scheme.name;
           this.descriptionField = scheme.program_description;
           this.description = scheme.program_description;
-          this.versionNameField = version.version_name;
-          this.versionName = version.version_name;
-          this.versionDescriptionField = version.version_description;
-          this.versionDescription = version.version_description;
+          this.versionNameField = lastVersion.version_Object.version_name;
+          this.versionName = lastVersion.version_Object.version_name;
+          this.versionDescriptionField = lastVersion.version_Object.version_description;
+          this.versionDescription = lastVersion.version_Object.version_description;
           this.showApplicationGroups = applicationGroups.length > 1 || (applicationGroups.length == 1 && !applicationGroups[0].m_programs.length);
-          this.versionApplicationGroups = applicationGroups.filter(group => group.b_progam_connected_version_id && group.b_progam_connected_version_id == version.id);
+          this.versionApplicationGroups = applicationGroups.filter(group => group.b_progam_connected_version_id && group.b_progam_connected_version_id == lastVersion.version_Object.id);
           if (this.versionApplicationGroups.length) {
             this.versionApplicationGroupField = this.versionApplicationGroups[0].id;
           }
           this.applicationGroups = applicationGroups.filter(group => group.update_permission);
-          this.versionSchemeField = versionFile;
-          this.versionScheme = versionFile;
+          this.versionSchemeField = lastVersion.program;
+          this.versionScheme = lastVersion.program;
           this.versions = scheme.program_versions.map(version => new libPatternFlyListView.Item(version.version_Object.id, version.version_Object.version_name, version.version_Object.version_description, ["UserInteractionsSchemeVersion", {scheme: this.id, version: version.version_Object.id}], false));
         })
         .catch(reason => {

@@ -67,8 +67,6 @@ export class Component implements ngCore.OnInit {
 
     this.notifications.shift();
     this.refresh();
-    //TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-235
-    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-235"));
   }
 
   refresh():void {

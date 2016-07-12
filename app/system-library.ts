@@ -76,8 +76,6 @@ export class Component implements ngCore.OnInit {
 
     this.notifications.shift();
     this.refresh();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-276
-    this.notifications.current.push(new libBeckiNotifications.Warning("ssue/TYRION-276"));
   }
 
   refresh():void {
@@ -111,18 +109,24 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getLibraryGroups(1)
-        .then(groupCollection => {
+    return () => Promise.all<any>([
+          this.backEnd.getLibraries(1),
+          this.backEnd.getLibraryGroups(1)
+        ])
+        .then(result => {
+          let libraryCollection:libBackEnd.LibraryCollection;
+          let groupCollection:libBackEnd.LibraryGroupCollection;
+          [libraryCollection, groupCollection] = result;
           return Promise.all<any>([
-            this.backEnd.getLibraries(1),
+            Promise.all(libraryCollection.pages.map(page => this.backEnd.getLibraries(page))),
             Promise.all(groupCollection.pages.map(page => this.backEnd.getLibraryGroups(page)))
           ]);
         })
         .then(result => {
-          let libraries:libBackEnd.Library[];
+          let libraryCollections:libBackEnd.LibraryCollection[];
           let groupCollections:libBackEnd.LibraryGroupCollection[];
-          [libraries, groupCollections] = result;
-          return !libraries.find(library => library.id != this.id && library.library_name == this.nameField) &&
+          [libraryCollections, groupCollections] = result;
+          return ![].concat(...libraryCollections.map(collection => collection.content)).find(library => library.id != this.id && library.library_name == this.nameField) &&
               ![].concat(...groupCollections.map(collection => collection.content)).find(group => group.group_name == this.nameField);
         });
   }

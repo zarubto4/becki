@@ -105,6 +105,7 @@ export class Component implements ngCore.OnInit {
           this.schemes = schemes.map(scheme => new libPatternFlyListView.Item(scheme.id, scheme.name, scheme.program_description, ["UserInteractionsScheme", {scheme: scheme.id}], scheme.delete_permission));
           this.blocks = [].concat(...groups.map(group => group.blockoBlocks)).map(block => new libPatternFlyListView.Item(block.id, block.name, block.general_description, ["UserInteractionsBlock", {block: block.id}], block.delete_permission));
           this.uploadSchemes = schemes.filter(scheme => scheme.update_permission);
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-293
           this.moderators = moderators.map(pair => new SelectableInteractionsModeratorItem(pair[0], pair[1]));
           this.spies = schemes.filter(scheme => scheme.program_state.uploaded).map(scheme => new libPatternFlyListView.Item(scheme.id, scheme.name, scheme.program_versions.find(version => version.version_Object.id == scheme.program_state.version_id).version_Object.version_name, ["UserInteractionsSpy", {spy: scheme.id}], false));
         })

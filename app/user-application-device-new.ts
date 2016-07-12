@@ -66,7 +66,7 @@ export class Component implements ngCore.OnInit {
 
     this.notifications.shift();
     this.backEnd.getProjects()
-        .then(projects => this.projects = projects)
+        .then(projects => this.projects = projects.filter(project => project.update_permission))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
   }
 
@@ -97,8 +97,6 @@ export class Component implements ngCore.OnInit {
           this.router.navigate(["UserApplications"]);
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-220
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-220"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The device cannot be created.", reason));
         });
   }

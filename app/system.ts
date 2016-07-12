@@ -67,20 +67,20 @@ export class Component implements ngCore.OnInit {
 
     this.notifications.shift();
     this.refresh();
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-276
-    this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-276"));
   }
 
   refresh():void {
     "use strict";
 
     // see https://youtrack.byzance.cz/youtrack/issue/TYRION-71
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-155
-    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-155"));
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-300
+    this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-300"));
     this.moderators = [];
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     this.backEnd.getInteractionsServers()
         .then(servers => this.interactionsServers = servers.map(server =>
+            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-289
+            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-290
             new libPatternFlyListView.Item(server.id, server.server_name, server.destination_address, server.edit_permission ? ["SystemInteractionsServer", {server: server.id}] : null, server.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Interactions servers cannot be loaded.", reason)));
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
@@ -100,7 +100,8 @@ export class Component implements ngCore.OnInit {
         .then(groupCollections => this.libraryGroups = [].concat(...groupCollections.map(collection => collection.content)).map(group => new libPatternFlyListView.Item(group.id, group.group_name, group.description, ["SystemLibraryGroup", {group: group.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Library groups cannot be loaded.", reason)));
     this.backEnd.getLibraries(1)
-        .then(libraries => this.libraries = libraries.map(library => new libPatternFlyListView.Item(library.id, library.library_name, library.description, ["SystemLibrary", {library: library.id}])))
+        .then(libraryCollection => Promise.all<libBackEnd.LibraryCollection>(libraryCollection.pages.map(page => this.backEnd.getLibraries(page))))
+        .then(libraryCollections => this.libraries = [].concat(...libraryCollections.map(collection => collection.content)).map(library => new libPatternFlyListView.Item(library.id, library.library_name, library.description, ["SystemLibrary", {library: library.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Libraries cannot be loaded.", reason)));
     this.backEnd.getProducers()
         .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, producer.description, ["SystemProducer", {producer: producer.id}], producer.delete_permission)))
@@ -120,9 +121,6 @@ export class Component implements ngCore.OnInit {
     switch (this.tab[0]) {
       case "interactions":
         switch (this.tab[1]) {
-          case "moderators":
-            this.onAddModeratorClick();
-            break;
           case "servers":
             this.onAddInteractionsServerClick();
             break;
@@ -154,12 +152,6 @@ export class Component implements ngCore.OnInit {
         }
         break;
     }
-  }
-
-  onAddModeratorClick():void {
-    "use strict";
-
-    this.router.navigate(["NewSystemInteractionsModerator"]);
   }
 
   onAddInteractionsServerClick():void{

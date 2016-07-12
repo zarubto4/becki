@@ -61,23 +61,12 @@ export class Component implements ngCore.OnInit {
           if (!scheme.program_state.uploaded) {
             return Promise.reject<any>(new Error("scheme not deployed"));
           }
-          let version = scheme.program_versions.find(version => version.version_Object.id == scheme.program_state.version_id).version_Object;
-          return Promise.all<any>([
-            version,
-            scheme,
-            this.backEnd.getFile(version.files[0].id)
-          ]);
-        })
-        .then(result => {
-          let version:libBackEnd.Version;
-          let scheme:libBackEnd.InteractionsScheme;
-          let versionFile:string;
-          [version, scheme, versionFile] = result;
-          this.versionName = version.version_name;
+          let version = scheme.program_versions.find(version => version.version_Object.id == scheme.program_state.version_id);
+          this.versionName = version.version_Object.version_name;
           this.name = scheme.name;
-          this.breadcrumbs[3].label = `${scheme.name} ${version.version_name}`;
-          this.scheme = versionFile;
-          this.versionId = version.id;
+          this.breadcrumbs[3].label = `${scheme.name} ${version.version_Object.version_name}`;
+          this.scheme = version.program;
+          this.versionId = version.version_Object.id;
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The spy cannot be loaded.", reason));

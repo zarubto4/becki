@@ -104,7 +104,7 @@ export class Component implements ngCore.OnInit {
           return this.backEnd.createDeviceProgram(this.nameField, this.descriptionField, this.deviceTypeField, project);
         })
         .then(program => {
-          return this.backEnd.addVersionToDeviceProgram(this.codeField, program.id);
+          return this.backEnd.addVersionToDeviceProgram("Initial version", "", this.codeField, program.id);
         })
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The program has been created."));
