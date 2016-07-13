@@ -208,8 +208,6 @@ export class Component implements ngCore.OnInit {
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-275
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-275"));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-295
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-295"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The version cannot be created.", reason));
         });
   }

@@ -66,7 +66,7 @@ export class Component implements ngCore.OnInit {
 
     this.notifications.shift();
     this.backEnd.getInteractionsBlockGroups()
-        .then(groups => this.groups = groups)
+        .then(groups => this.groups = groups.filter(group => group.update_permission))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Groups cannot be loaded.", reason)));
   }
 
@@ -90,10 +90,6 @@ export class Component implements ngCore.OnInit {
           this.router.navigate(["UserInteractions"]);
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-294
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-294"));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-296
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-296"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The block cannot be created.", reason));
         });
   }

@@ -156,9 +156,11 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.addVersionToLibrary(this.versionNameField, this.versionDescriptionField, this.id)
+    let reader = new FileReader();
+    reader.readAsText(this.versionFileField.nativeElement.files[0]);
+    reader.onloadend = event => this.backEnd.addVersionToLibrary(this.versionNameField, this.versionDescriptionField, this.id)
         .then(version => {
-          return this.backEnd.updateFileOfLibrary(this.versionFileField.nativeElement.files[0], version.id, this.id);
+          return this.backEnd.updateFileOfLibrary(reader.result, version.id);
         })
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The version has been created."));
@@ -166,8 +168,8 @@ export class Component implements ngCore.OnInit {
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-118
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-118"));
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-305
+          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-305"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The version cannot be created.", reason));
         });
   }

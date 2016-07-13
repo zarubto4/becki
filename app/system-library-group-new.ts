@@ -88,8 +88,6 @@ export class Component implements ngCore.OnInit {
           this.router.navigate(["System"]);
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-283
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-283"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The group cannot be created.", reason));
         });
   }

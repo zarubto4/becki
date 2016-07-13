@@ -73,8 +73,6 @@ export class Component{
                 this.router.navigate(["System"]);
             })
             .catch(reason => {
-                // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-287
-                this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-287"));
                 this.notifications.current.push(new libBeckiNotifications.Danger("The server cannot be updated.", reason));
             });
     }

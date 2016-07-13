@@ -87,8 +87,6 @@ export class Component implements ngCore.OnInit {
           this.router.navigate(["UserInteractions"]);
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-285
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-285"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The moderator cannot be added.", reason));
         });
   }

@@ -79,8 +79,6 @@ export class Component implements ngCore.OnInit {
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     this.backEnd.getInteractionsServers()
         .then(servers => this.interactionsServers = servers.map(server =>
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-289
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-290
             new libPatternFlyListView.Item(server.id, server.server_name, server.destination_address, server.edit_permission ? ["SystemInteractionsServer", {server: server.id}] : null, server.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Interactions servers cannot be loaded.", reason)));
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
@@ -101,7 +99,7 @@ export class Component implements ngCore.OnInit {
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Library groups cannot be loaded.", reason)));
     this.backEnd.getLibraries(1)
         .then(libraryCollection => Promise.all<libBackEnd.LibraryCollection>(libraryCollection.pages.map(page => this.backEnd.getLibraries(page))))
-        .then(libraryCollections => this.libraries = [].concat(...libraryCollections.map(collection => collection.content)).map(library => new libPatternFlyListView.Item(library.id, library.library_name, library.description, ["SystemLibrary", {library: library.id}])))
+        .then(libraryCollections => this.libraries = [].concat(...libraryCollections.map(collection => collection.content)).map(library => new libPatternFlyListView.Item(library.id, library.library_name, library.description, ["SystemLibrary", {library: library.id}], library.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Libraries cannot be loaded.", reason)));
     this.backEnd.getProducers()
         .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, producer.description, ["SystemProducer", {producer: producer.id}], producer.delete_permission)))
@@ -295,8 +293,6 @@ export class Component implements ngCore.OnInit {
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-282
-          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-282"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The library cannot be removed.", reason));
         });
   }
