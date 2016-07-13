@@ -187,23 +187,15 @@ export class Component implements ngCore.OnInit {
     }
 
     this.notifications.shift();
-    // TODO: http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    this.backEnd.createDeviceBinary(this.uploadProgramVersionField)
-        .then(() => {
-          // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-          return this.backEnd.addBinaryToDevice(this.uploadProgramVersionField, devices);
-        })
+    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+    this.backEnd.updateDeviceWithProgram(this.uploadProgramVersionField, devices)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The program has been uploaded."));
           this.refresh();
         })
         .catch(reason => {
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-257
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-257"));
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-258
           this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-258"));
-          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-280
-          this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-280"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The program cannot be uploaded.", reason));
         });
   }

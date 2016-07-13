@@ -1660,15 +1660,6 @@ export abstract class BackEnd {
     return this.requestRestPath("DELETE", `${BackEnd.DEVICE_PROGRAM_PATH}/${id}`).then(JSON.stringify);
   }
 
-  public createDeviceBinary(programVersionId:string):Promise<string> {
-    "use strict";
-
-    // TODO: http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-257
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-280
-    return this.requestRestPath("PUT", `${BackEnd.DEVICE_PROGRAM_VERSION_PATH}/compile/${programVersionId}`).then(JSON.stringify);
-  }
-
   public createDevice(id:string, type_of_board_id:string):Promise<string> {
     "use strict";
 
@@ -1697,12 +1688,12 @@ export abstract class BackEnd {
     return this.requestRestPath("PUT", `${BackEnd.DEVICE_PATH}/filter/${page}`, {});
   }
 
-  public addBinaryToDevice(programVersionId:string, board_id:string[]):Promise<string> {
+  public updateDeviceWithProgram(versionId:string, board_id:string[]):Promise<string> {
     "use strict";
 
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-258
-    //return this.requestRestPath("POST", `${BackEnd.DEVICE_PROGRAM_VERSION_PATH}/upload/${programVersionId}`, {board_id}).then(JSON.stringify);
+    //return this.requestRestPath("POST", `${BackEnd.DEVICE_PROGRAM_VERSION_PATH}/upload/${versionId}`, {board_id}).then(JSON.stringify);
     return Promise.reject<string>("issue/TYRION-258");
   }
 
