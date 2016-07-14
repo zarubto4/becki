@@ -5,6 +5,10 @@
 
 <div data-bind-layout='"Edit the \"" + name + "\" Project"' data-bind-breadcrumbs="breadcrumbs">
 <form class="clearfix" style="margin-top: 2em" data-on-submit="onSubmit($event)" data-bind-ngSwitch="editing">
+    <div class="pull-right">
+        <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+        <button class="btn btn-primary" type="submit" data-bind-disabled="!editProject" data-bind-title="editProject ? '' : 'You are not allowed to edit this project.'">Edit</button>
+    </div>
     <div class="form-group">
         <label>
             <span class="glyphicon glyphicon-pencil"></span>

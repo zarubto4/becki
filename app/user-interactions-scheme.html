@@ -25,6 +25,10 @@
     <form class="clearfix" style="margin-top: 2em" data-on-submit="onSubmit($event)" data-bind-ngSwitch="editing">
       <template data-bind-ngSwitchWhen="true">
         <template data-bind-ngIf="editScheme">
+          <div class="pull-right">
+            <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+            <button class="btn btn-primary" type="submit">Edit</button>
+          </div>
           <template data-bind-ngIf="project">
             <div class="form-group">
               <label>Project</label>
@@ -136,10 +140,6 @@
             <div data-bindon-fieldInteractionsScheme="versionSchemeField">
               <div class="spinner"></div>
             </div>
-          </div>
-          <div class="pull-right">
-            <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-            <button class="btn btn-primary" type="submit">Update</button>
           </div>
         </template>
       </template>

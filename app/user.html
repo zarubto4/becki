@@ -23,6 +23,12 @@
   </ul>
   <template data-bind-ngSwitchWhen="'account'">
     <form class="clearfix" data-on-submit="onAccountSubmit($event)" style="margin-top: 2em" data-bind-ngSwitch="editing">
+     <template data-bind-ngSwitchWhen="true">
+      <div class="pull-right">
+        <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+        <button class="btn btn-primary" type="submit">Edit</button>
+      </div>
+       </template>
       <div class="form-group">
         <label>
           <template data-bind-ngSwitchWhen="true">
@@ -68,6 +74,12 @@
   <template data-bind-ngSwitchWhen="'roles'">
     <form class="clearfix" data-on-submit="onRolesSubmit($event)" style="margin-top: 2em" data-bind-ngSwitch="editing">
       <template data-bind-ngSwitchWhen="true">
+        <div class="pull-right">
+          <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+          <button class="btn btn-primary" type="submit">Edit</button>
+        </div>
+      </template>
+      <template data-bind-ngSwitchWhen="true">
         <div class="checkbox" template="ngFor let role of roles">
           <label>
             <input type="checkbox" data-bindon-ngModel="role.select">
@@ -91,8 +103,13 @@
     </form>
   </template>
   <template data-bind-ngSwitchWhen="'permissions'">
+
     <form class="clearfix" data-on-submit="onPermissionsSubmit($event)" style="margin-top: 2em" data-bind-ngSwitch="editing">
       <template data-bind-ngSwitchWhen="true">
+        <div class="pull-right">
+          <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+          <button class="btn btn-primary" type="submit">Edit</button>
+        </div>
         <div class="checkbox" data-bind-class.disabled="!permission.selectable" template="ngFor let permission of permissions">
           <label>
             <input type="checkbox" data-bindon-ngModel="permission.select" data-bind-disabled="!permission.selectable">

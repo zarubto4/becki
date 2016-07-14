@@ -24,6 +24,12 @@
   <template data-bind-ngSwitchWhen="false">
     <form class="clearfix" style="margin-top: 2em" data-on-submit="onSubmit($event)" data-bind-ngSwitch="editing">
       <template data-bind-ngSwitchWhen="true">
+      <div class="pull-right">
+        <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+        <button class="btn btn-primary" type="submit">Update</button>
+      </div>
+  </template>
+      <template data-bind-ngSwitchWhen="true">
         <template data-bind-ngIf="editProgram">
           <div class="form-group">
             <label>
@@ -38,10 +44,6 @@
               Description
             </label>
             <textarea class="form-control" data-bindon-ngModel="descriptionField"></textarea>
-          </div>
-          <div class="pull-right">
-            <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
-            <button class="btn btn-primary" type="submit">Edit</button>
           </div>
         </template>
       </template>

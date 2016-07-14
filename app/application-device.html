@@ -5,6 +5,12 @@
 
 <div data-bind-layout='"Edit the \"" + device?.name + "\" Device"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="editing || !editDevice ? null : 'Edit'" data-on-actionClick="onEditClick($event)" data-bind-ngSwitch="editing">
   <form class="clearfix" data-on-submit="onSubmit($event)">
+    <template data-bind-ngSwitchWhen="true">
+      <div class="pull-right">
+        <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+        <button class="btn btn-primary" type="submit">Edit</button>
+      </div>
+    </template>
     <div class="form-group">
       <label>Global</label>
       <p class="form-control-static">{{project ? 'no' : 'yes'}}</p>
