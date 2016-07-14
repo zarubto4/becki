@@ -5,6 +5,10 @@
 
 <div data-bind-layout="'Create a New Applications Group'" data-bind-breadcrumbs="breadcrumbs">
   <form class="clearfix" data-on-submit="onSubmit($event)">
+    <div class="pull-right">
+      <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
+      <button class="btn btn-primary" type="submit">Create</button>
+    </div>
     <template data-bind-ngIf="projects?.length > 1">
       <div class="form-group">
         <label>
