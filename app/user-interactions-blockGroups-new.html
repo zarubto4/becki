@@ -11,7 +11,7 @@
                     <span class="glyphicon glyphicon-list"></span>
                     Project
                 </label>
-                <select class="form-control" required data-bindon-ngModel="projectField" data-on-ngModelChange="onProjectChange($event)">
+                <select class="form-control" required data-bindon-ngModel="projectField">
                     <option value="">Select name...</option>
                     <option data-bind-value="project.id" template="ngFor let project of projects">
                         {{project.project_name}}

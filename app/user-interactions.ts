@@ -108,7 +108,7 @@ export class Component implements ngCore.OnInit {
           this.blocks = [].concat(...groups.map(group => group.blockoBlocks)).map(block => new libPatternFlyListView.Item(block.id, block.name, block.general_description, ["UserInteractionsBlock", {block: block.id}], block.delete_permission));
           this.uploadSchemes = schemes.filter(scheme => scheme.update_permission);
           this.moderators = moderators.map(pair => new SelectableInteractionsModeratorItem(pair[0], pair[1]));
-          this.BlockGroups = groups.map(group => new libPatternFlyListView.Item(group.id,group.name,group.general_description,null,null));
+          this.BlockGroups = groups.map(group => new libPatternFlyListView.Item(group.id,group.name,group.general_description,["UserInteractionsBlockGroup",{group:group.id}],group.delete_permission));
           this.spies = schemes.filter(scheme => scheme.program_state.uploaded).map(scheme => new libPatternFlyListView.Item(scheme.id, scheme.name, scheme.program_versions.find(version => version.version_Object.id == scheme.program_state.version_id).version_Object.version_name, ["UserInteractionsSpy", {spy: scheme.id}], false));
         })
         .catch(reason => {

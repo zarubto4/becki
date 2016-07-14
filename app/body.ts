@@ -58,12 +58,14 @@ import * as userProjectCollaboratorNew from "./user-project-collaborator-new";
 import * as userProjectNew from "./user-project-new";
 import * as userProjects from "./user-projects";
 import * as userInteractionsBlockGroupNew from "./user-interactions-blockGroup-new";
+import * as userInteractionsBlockGroup from "./user-interactions-block-group";
 import * as userProjectEdit from "./user-project-edit";
 
 @ngRouter.RouteConfig([
   {path: "/application/devices/:device", component: applicationDevice.Component, as: "ApplicationDevice"},
   {path: "/signing", component: signing.Component, as: "Signing"},
   {path: "/system", component: system.Component, as: "System"},
+  {path: "/user/interactions/block/groups/:group", component: userInteractionsBlockGroup.Component, as: "UserInteractionsBlockGroup"},
   {path: "/user/interactions/block/group/new", component: userInteractionsBlockGroupNew.Component, as: "UserInteractionsBlockGroupNew"},
   {path: "/system/compilation/server/new", component: systemCompilationServerNew.Component, as: "NewSystemCompilationServer"},
   {path: "/system/compilation/servers/:server", component: systemCompilationServer.Component, as: "SystemCompilationServer"},
