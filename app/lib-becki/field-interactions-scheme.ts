@@ -65,8 +65,7 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
       this.modelChange.emit(this.fieldController.getDataJson());
     });
     this.fieldController.registerBlocks(blocko.BlockoBasicBlocks.Manager.getAllBlocks());
-    // TODO: https://github.com/angular/angular/issues/6311
-    this.modelChange = new ngCore.EventEmitter<string>(false);
+    this.modelChange = new ngCore.EventEmitter<string>();
     this.backEnd = backEndService;
     this.backEnd.interactionsOpened.subscribe(() => {
       if (this.spy) {
@@ -120,7 +119,7 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
     this.notifications = notificationsService;
   }
 
-  ngOnChanges(changes:{[key:string]: ngCore.SimpleChange}):void {
+  ngOnChanges(changes:ngCore.SimpleChanges):void {
     "use strict";
 
     let readonly = changes["readonly"];

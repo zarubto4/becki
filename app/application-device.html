@@ -5,7 +5,7 @@
 
 <div data-bind-layout='"Edit the \"" + device?.name + "\" Device"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="editing || !editDevice ? null : 'Edit'" data-on-actionClick="onEditClick($event)" data-bind-ngSwitch="editing">
   <form class="clearfix" data-on-submit="onSubmit($event)">
-    <template data-bind-ngSwitchWhen="true">
+    <template data-bind-ngSwitchCase="true">
       <div class="pull-right">
         <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
         <button class="btn btn-primary" type="submit">Edit</button>
@@ -21,7 +21,7 @@
         <p class="form-control-static">{{project?.project_name}}</p>
       </div>
     </template>
-    <template data-bind-ngSwitchWhen="true">
+    <template data-bind-ngSwitchCase="true">
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon-pencil"></span>
@@ -44,10 +44,10 @@
         <input class="form-control" type="number" required step="1" data-bindon-ngModel="heightField">
       </div>
     </template>
-    <template data-bind-ngSwitchWhen="false">
+    <template data-bind-ngSwitchCase="false">
       <div class="form-group" data-bind-ngSwitch="device?.portrait_width != device?.landscape_height || device?.portrait_height != device?.landscape_width">
         <label>Width × height</label>
-        <template data-bind-ngSwitchWhen="true">
+        <template data-bind-ngSwitchCase="true">
           <p class="form-control-static">
             Portrait: {{device?.portrait_width}} × {{device?.portrait_height}}
           </p>
@@ -55,14 +55,14 @@
             Landscape: {{device?.landscape_width}} × {{device?.landscape_height}}
           </p>
         </template>
-        <template data-bind-ngSwitchWhen="false">
+        <template data-bind-ngSwitchCase="false">
           <p class="form-control-static">
             {{device?.portrait_width}} × {{device?.portrait_height}}
           </p>
         </template>
       </div>
     </template>
-    <template data-bind-ngSwitchWhen="true">
+    <template data-bind-ngSwitchCase="true">
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon glyphicon-option-horizontal"></span>
@@ -78,10 +78,10 @@
         <input class="form-control" type="number" required step="1" data-bindon-ngModel="rowsField">
       </div>
     </template>
-    <template data-bind-ngSwitchWhen="false">
+    <template data-bind-ngSwitchCase="false">
       <div class="form-group" data-bind-ngSwitch="device?.portrait_square_width != device?.landscape_square_height || device?.portrait_square_height != device?.landscape_square_width">
         <label>Columns × rows</label>
-        <template data-bind-ngSwitchWhen="true">
+        <template data-bind-ngSwitchCase="true">
           <p class="form-control-static">
             Portrait: {{device?.portrait_square_width}} × {{device?.portrait_square_height}}
           </p>
@@ -89,14 +89,14 @@
             Landscape: {{device?.landscape_square_width}} × {{device?.landscape_square_height}}
           </p>
         </template>
-        <template data-bind-ngSwitchWhen="false">
+        <template data-bind-ngSwitchCase="false">
           <p class="form-control-static">
             {{device?.portrait_square_width}} × {{device?.portrait_square_height}}
           </p>
         </template>
       </div>
     </template>
-    <template data-bind-ngSwitchWhen="true">
+    <template data-bind-ngSwitchCase="true">
       <div class="pull-right">
         <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
         <button class="btn btn-primary" type="submit">Edit</button>

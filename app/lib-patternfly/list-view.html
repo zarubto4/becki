@@ -4,7 +4,7 @@
   -->
 
 <div data-bind-ngSwitch="items?.length > 0">
-  <template data-bind-ngSwitchWhen="true">
+  <template data-bind-ngSwitchCase="true">
     <div class="list-group list-view-pf">
       <div class="list-group-item clearfix" template="ngFor let item of items">
         <template data-bind-ngIf="item.link || item.removable">
@@ -28,10 +28,10 @@
           <div class="list-view-pf-body">
             <div class="list-view-pf-description">
               <div class="list-group-item-heading" style="white-space: initial" data-bind-title="item.name" data-bind-ngSwitch="!item.link">
-                <template data-bind-ngSwitchWhen="true">
+                <template data-bind-ngSwitchCase="true">
                   {{item.name}}
                 </template>
-                <template data-bind-ngSwitchWhen="false">
+                <template data-bind-ngSwitchCase="false">
                   <a data-bind-routerLink="item.link" style="color: inherit">
                     {{item.name}}
                   </a>
@@ -39,10 +39,10 @@
               </div>
               <template data-bind-ngIf="item.description">
                 <div class="list-group-item-text" data-bind-ngSwitch="!item.link">
-                  <template data-bind-ngSwitchWhen="true">
+                  <template data-bind-ngSwitchCase="true">
                     {{item.description}}
                   </template>
-                  <template data-bind-ngSwitchWhen="false">
+                  <template data-bind-ngSwitchCase="false">
                     <a data-bind-routerLink="item.link" style="color: inherit">
                       {{item.description}}
                     </a>
@@ -55,7 +55,7 @@
       </div>
     </div>
   </template>
-  <template data-bind-ngSwitchWhen="false">
+  <template data-bind-ngSwitchCase="false">
     <div class="blank-slate-pf" style="padding: 15px">
       <div class="blank-slate-pf-icon">
         <span class="pficon pficon-add-circle-o"></span>

@@ -70,10 +70,10 @@
         <option value="">Select name...</option>
         <template ngFor data-let-group data-bind-ngForOf="groups">
           <option data-bind-value="group.id" data-bind-ngSwitch="showGroups">
-            <template data-bind-ngSwitchWhen="true">
+            <template data-bind-ngSwitchCase="true">
               {{group.program_name}}
             </template>
-            <template data-bind-ngSwitchWhen="false">
+            <template data-bind-ngSwitchCase="false">
               <template ngFor data-let-application data-bind-ngForOf="group.m_programs" data-let-last="last">
                 {{application.program_name}}<template data-bind-ngIf="!last">,</template>
               </template>

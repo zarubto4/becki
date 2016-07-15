@@ -33,10 +33,10 @@
           <ul class="list-group">
             <li class="list-group-item" template="ngFor let notification of navbarNotifications?.content" data-bind-ngSwitch="notification.read">
               <span class="i pficon pficon-{{getNotificationIcon(notification)}}"></span>
-              <template data-bind-ngSwitchWhen="true">
+              <template data-bind-ngSwitchCase="true">
                 {{notification.message}}
               </template>
-              <template data-bind-ngSwitchWhen="false">
+              <template data-bind-ngSwitchCase="false">
                 <strong>{{notification.message}}</strong>
               </template>
             </li>

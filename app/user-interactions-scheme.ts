@@ -157,8 +157,7 @@ export class Component implements ngCore.OnInit {
           let applicationGroups:libBackEnd.ApplicationGroup[];
           [scheme, projects, this.devices, this.deviceTypes, this.devicePrograms, applicationGroups] = result;
           if (!scheme.program_versions.length) {
-            // TODO: https://github.com/angular/angular/issues/4558
-            return Promise.reject<any>(new Error("the scheme has no version"));
+            throw new Error("the scheme has no version");
           }
           let lastVersion = _.max(scheme.program_versions, version => version.version_Object.date_of_create);
           this.name = scheme.name;

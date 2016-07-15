@@ -21,9 +21,9 @@
       </a>
     </li>
   </ul>
-  <template data-bind-ngSwitchWhen="'account'">
+  <template data-bind-ngSwitchCase="'account'">
     <form class="clearfix" data-on-submit="onAccountSubmit($event)" style="margin-top: 2em" data-bind-ngSwitch="editing">
-     <template data-bind-ngSwitchWhen="true">
+     <template data-bind-ngSwitchCase="true">
       <div class="pull-right">
         <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
         <button class="btn btn-primary" type="submit">Edit</button>
@@ -31,39 +31,39 @@
        </template>
       <div class="form-group">
         <label>
-          <template data-bind-ngSwitchWhen="true">
+          <template data-bind-ngSwitchCase="true">
             <span class="glyphicon glyphicon-pencil"></span>
           </template>
           Name
         </label>
-        <template data-bind-ngSwitchWhen="true">
+        <template data-bind-ngSwitchCase="true">
           <input class="form-control" required data-bindon-ngModel="nameField">
         </template>
-        <template data-bind-ngSwitchWhen="false">
+        <template data-bind-ngSwitchCase="false">
           <p class="form-control-static">{{user?.full_name}}</p>
         </template>
       </div>
       <div class="form-group">
         <label>
-          <template data-bind-ngSwitchWhen="true">
+          <template data-bind-ngSwitchCase="true">
             <span class="glyphicon glyphicon-pencil"></span>
           </template>
           Username
         </label>
-        <template data-bind-ngSwitchWhen="true">
+        <template data-bind-ngSwitchCase="true">
           <input class="form-control" required data-bindon-ngModel="usernameField" data-bind-customValidator="validateAccountUsernameField()" data-message="This username is used already. Please choose another one.">
         </template>
-        <template data-bind-ngSwitchWhen="false">
+        <template data-bind-ngSwitchCase="false">
           <p class="form-control-static">{{user?.nick_name}}</p>
         </template>
       </div>
-      <template data-bind-ngSwitchWhen="false">
+      <template data-bind-ngSwitchCase="false">
         <div class="form-group">
           <label>Email</label>
           <p class="form-control-static">{{user?.mail}}</p>
         </div>
       </template>
-      <template data-bind-ngSwitchWhen="true">
+      <template data-bind-ngSwitchCase="true">
         <div class="pull-right">
           <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
           <button class="btn btn-primary" type="submit">Edit</button>
@@ -71,15 +71,15 @@
       </template>
     </form>
   </template>
-  <template data-bind-ngSwitchWhen="'roles'">
+  <template data-bind-ngSwitchCase="'roles'">
     <form class="clearfix" data-on-submit="onRolesSubmit($event)" style="margin-top: 2em" data-bind-ngSwitch="editing">
-      <template data-bind-ngSwitchWhen="true">
+      <template data-bind-ngSwitchCase="true">
         <div class="pull-right">
           <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
           <button class="btn btn-primary" type="submit">Edit</button>
         </div>
       </template>
-      <template data-bind-ngSwitchWhen="true">
+      <template data-bind-ngSwitchCase="true">
         <div class="checkbox" template="ngFor let role of roles">
           <label>
             <input type="checkbox" data-bindon-ngModel="role.select">
@@ -91,21 +91,21 @@
           <button class="btn btn-primary" type="submit">Edit</button>
         </div>
       </template>
-      <template data-bind-ngSwitchWhen="false">
+      <template data-bind-ngSwitchCase="false">
         <ul>
           <li template="ngFor let role of roles" style="list-style-type: none" data-bind-ngSwitch="role.selected">
-            <template data-bind-ngSwitchWhen="true">✓</template>
-            <template data-bind-ngSwitchWhen="false">✗</template>
+            <template data-bind-ngSwitchCase="true">✓</template>
+            <template data-bind-ngSwitchCase="false">✗</template>
             {{role.model.name}} ({{role.model.description}})
           </li>
         </ul>
       </template>
     </form>
   </template>
-  <template data-bind-ngSwitchWhen="'permissions'">
+  <template data-bind-ngSwitchCase="'permissions'">
 
     <form class="clearfix" data-on-submit="onPermissionsSubmit($event)" style="margin-top: 2em" data-bind-ngSwitch="editing">
-      <template data-bind-ngSwitchWhen="true">
+      <template data-bind-ngSwitchCase="true">
         <div class="pull-right">
           <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
           <button class="btn btn-primary" type="submit">Edit</button>
@@ -121,11 +121,11 @@
           <button class="btn btn-primary" type="submit">Edit</button>
         </div>
       </template>
-      <template data-bind-ngSwitchWhen="false">
+      <template data-bind-ngSwitchCase="false">
         <ul>
           <li template="ngFor let permission of permissions" style="list-style-type: none" data-bind-ngSwitch="permission.selected">
-            <template data-bind-ngSwitchWhen="true">✓</template>
-            <template data-bind-ngSwitchWhen="false">✗</template>
+            <template data-bind-ngSwitchCase="true">✓</template>
+            <template data-bind-ngSwitchCase="false">✗</template>
             {{permission.model.value}} ({{permission.model.description}})
           </li>
         </ul>

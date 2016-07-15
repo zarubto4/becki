@@ -26,12 +26,12 @@
       </a>
     </li>
   </ul>
-  <template data-bind-ngSwitchWhen="'programs'">
+  <template data-bind-ngSwitchCase="'programs'">
     <div data-bind-listView="programs" data-on-addClick="onAddProgramClick($event)" data-on-removeClick="onRemoveProgramClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
-  <template data-bind-ngSwitchWhen="'uploadProgram'">
+  <template data-bind-ngSwitchCase="'uploadProgram'">
     <form class="clearfix" data-on-submit="onUploadProgramSubmit($event)" style="margin-top: 2em">
       <div class="form-group">
         <label>
@@ -68,7 +68,7 @@
       <button class="btn btn-primary pull-right" type="submit">Upload</button>
     </form>
   </template>
-  <template data-bind-ngSwitchWhen="'uploadBinary'">
+  <template data-bind-ngSwitchCase="'uploadBinary'">
     <form class="clearfix" data-on-submit="onUploadBinarySubmit($event)" style="margin-top: 2em">
       <div class="form-group">
         <label>
@@ -92,7 +92,7 @@
       <button class="btn btn-primary pull-right" type="submit">Upload</button>
     </form>
   </template>
-  <template data-bind-ngSwitchWhen="'devices'">
+  <template data-bind-ngSwitchCase="'devices'">
     <div data-bind-listView="devices" data-on-addClick="onAddDeviceClick($event)" data-on-removeClick="onRemoveDeviceClick($event)">
       <div class="spinner"></div>
     </div>

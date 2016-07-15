@@ -21,17 +21,17 @@
       </a>
     </li>
   </ul>
-  <template data-bind-ngSwitchWhen="'applications'">
+  <template data-bind-ngSwitchCase="'applications'">
     <div data-bind-listView="applications" data-on-addClick="onAddApplicationClick($event)" data-on-removeClick="onRemoveApplicationClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
-  <template data-bind-ngSwitchWhen="'devices'">
+  <template data-bind-ngSwitchCase="'devices'">
     <div data-bind-listView="devices" data-on-addClick="onAddDeviceClick($event)" data-on-removeClick="onRemoveDeviceClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
-  <template data-bind-ngSwitchWhen="'groups'">
+  <template data-bind-ngSwitchCase="'groups'">
     <div data-bind-listView="groups" data-on-addClick="onAddGroupClick($event)" data-on-removeClick="onRemoveGroupClick($event)">
       <div class="spinner"></div>
     </div>

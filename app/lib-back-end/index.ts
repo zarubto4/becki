@@ -997,7 +997,7 @@ export abstract class BackEnd {
     "use strict";
 
     let request = new RestRequest(method, url, {}, body);
-    // TODO: https://github.com/angular/angular/issues/7303
+    // TODO: https://github.com/angular/angular/issues/7438
     if (window.localStorage.getItem("authToken")) {
       request.headers["X-AUTH-TOKEN"] = window.localStorage.getItem("authToken");
     }
@@ -1218,7 +1218,7 @@ export abstract class BackEnd {
 
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
     return this.requestRestPath<{authToken:string}>("POST", `${BackEnd.TOKEN_PATH}/login`, {mail, password}).then((body) => {
-      // TODO: https://github.com/angular/angular/issues/7303
+      // TODO: https://github.com/angular/angular/issues/7438
       this.setToken(body.authToken);
       return JSON.stringify(body);
     });
@@ -1230,7 +1230,7 @@ export abstract class BackEnd {
     redirectUrl = encodeURIComponent(redirectUrl);
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
     return this.requestRestPath<{authToken:string, redirect_url:string}>("GET", `/login/facebook?return_link=${redirectUrl}`).then(body => {
-      // TODO: https://github.com/angular/angular/issues/7303
+      // TODO: https://github.com/angular/angular/issues/7438
       this.setToken(body.authToken);
       return body.redirect_url;
     });
@@ -1242,7 +1242,7 @@ export abstract class BackEnd {
     redirectUrl = encodeURIComponent(redirectUrl);
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
     return this.requestRestPath<{authToken:string, redirect_url:string}>("GET", `/login/github?return_link=${redirectUrl}`).then(body => {
-      // TODO: https://github.com/angular/angular/issues/7303
+      // TODO: https://github.com/angular/angular/issues/7438
       this.setToken(body.authToken);
       return body.redirect_url;
     });
@@ -1252,7 +1252,7 @@ export abstract class BackEnd {
     "use strict";
 
     return this.requestRestPath("POST", `${BackEnd.TOKEN_PATH}/logout`, {}).then((body) => {
-      // TODO: https://github.com/angular/angular/issues/7303
+      // TODO: https://github.com/angular/angular/issues/7438
       this.unsetToken();
       return JSON.stringify(body);
     });

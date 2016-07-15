@@ -52,13 +52,12 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges {
     this.controller.registerWidget(theGrid.Widgets.FAButtonWidget);
     this.controller.registerWidget(theGrid.Widgets.KnobWidget);
     this.readonly = false;
-    // TODO: https://github.com/angular/angular/issues/6311
-    this.modelChange = new ngCore.EventEmitter<string>(false);
+    this.modelChange = new ngCore.EventEmitter<string>();
     this.modal = modalComponent;
     this.notifications = notificationsService;
   }
 
-  ngOnChanges(changes:{[key:string]: ngCore.SimpleChange}):void {
+  ngOnChanges(changes:ngCore.SimpleChanges):void {
     "use strict";
 
     let device = changes["device"];

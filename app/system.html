@@ -21,7 +21,7 @@
       </a>
     </li>
   </ul>
-  <template data-bind-ngSwitchWhen="'interactions'">
+  <template data-bind-ngSwitchCase="'interactions'">
     <div data-bind-ngSwitch="tab[1]">
       <ul class="nav nav-tabs nav-tabs-pf">
         <li data-bind-class.active="tab[1] == 'moderators'">
@@ -35,19 +35,19 @@
           </a>
         </li>
       </ul>
-      <template data-bind-ngSwitchWhen="'moderators'">
+      <template data-bind-ngSwitchCase="'moderators'">
         <div data-bind-listView="moderators" data-bind-addable="false" data-on-removeClick="onRemoveModeratorClick($event)">
           <div class="spinner"></div>
         </div>
       </template>
-      <template data-bind-ngSwitchWhen="'servers'">
+      <template data-bind-ngSwitchCase="'servers'">
         <div data-bind-listView="interactionsServers" data-on-addClick="onAddInteractionsServerClick($event)"data-on-removeClick="onRemoveInteractionsServerClick($event)">
           <div class="spinner"></div>
         </div>
       </template>
     </div>
   </template>
-  <template data-bind-ngSwitchWhen="'devices'">
+  <template data-bind-ngSwitchCase="'devices'">
     <div data-bind-ngSwitch="tab[1]">
       <ul class="nav nav-tabs nav-tabs-pf">
         <li data-bind-class.active="tab[1] == 'devices'">
@@ -86,44 +86,44 @@
           </a>
         </li>
       </ul>
-      <template data-bind-ngSwitchWhen="'devices'">
+      <template data-bind-ngSwitchCase="'devices'">
         <div data-bind-listView="devices" data-on-addClick="onAddDeviceClick($event)" data-on-removeClick="onRemoveDeviceClick($event)">
           <div class="spinner"></div>
         </div>
       </template>
-      <template data-bind-ngSwitchWhen="'types'">
+      <template data-bind-ngSwitchCase="'types'">
         <div data-bind-listView="deviceTypes" data-on-addClick="onAddDeviceTypeClick($event)" data-on-removeClick="onRemoveDeviceTypeClick($event)">
           <div class="spinner"></div>
         </div>
       </template>
-      <template data-bind-ngSwitchWhen="'processors'">
+      <template data-bind-ngSwitchCase="'processors'">
         <div data-bind-listView="processors" data-on-addClick="onAddProcessorClick($event)" data-on-removeClick="onRemoveProcessorClick($event)">
           <div class="spinner"></div>
         </div>
       </template>
-      <template data-bind-ngSwitchWhen="'groups'">
+      <template data-bind-ngSwitchCase="'groups'">
         <div data-bind-listView="libraryGroups" data-on-addClick="onAddLibraryGroupClick($event)" data-on-removeClick="onRemoveLibraryGroupClick($event)">
           <div class="spinner"></div>
         </div>
       </template>
-      <template data-bind-ngSwitchWhen="'libraries'">
+      <template data-bind-ngSwitchCase="'libraries'">
         <div data-bind-listView="libraries" data-on-addClick="onAddLibraryClick($event)" data-on-removeClick="onRemoveLibraryClick($event)">
           <div class="spinner"></div>
         </div>
       </template>
-      <template data-bind-ngSwitchWhen="'producers'">
+      <template data-bind-ngSwitchCase="'producers'">
         <div data-bind-listView="producers" data-on-addClick="onAddProducerClick($event)" data-on-removeClick="onRemoveProducerClick($event)">
           <div class="spinner"></div>
         </div>
       </template>
-      <template data-bind-ngSwitchWhen="'servers'">
+      <template data-bind-ngSwitchCase="'servers'">
         <div data-bind-listView="compilationServers" data-on-addClick="onAddCompilationServerClick($event)" data-on-removeClick="onRemoveCompilationServerClick($event)">
           <div class="spinner"></div>
         </div>
       </template>
     </div>
   </template>
-  <template data-bind-ngSwitchWhen="'users'">
+  <template data-bind-ngSwitchCase="'users'">
     <div data-bind-listView="users" data-bindAddable="false" data-on-removeClick="onRemoveUserClick($event)">
       <div class="spinner"></div>
     </div>

@@ -31,32 +31,32 @@
   </li>
 </ul>
 
-  <template data-bind-ngSwitchWhen="'details'">
+  <template data-bind-ngSwitchCase="'details'">
     <div  data-on-addClick="onAddClick($event)">
       <p>
       <b>description:</b>{{description}}
       </p>
     </div>
   </template>
-<template data-bind-ngSwitchWhen="'devices'">
+<template data-bind-ngSwitchCase="'devices'">
     <div data-bind-listView="devices" data-bind-addable="tabPermissionCheck()" data-on-addClick="onAddClick($event)" data-on-removeClick="onRemoveDevicesClick($event)">
       <div class="spinner"></div>
     </div>
 </template>
 
-  <template data-bind-ngSwitchWhen="'schemes'">
+  <template data-bind-ngSwitchCase="'schemes'">
   <div data-bind-listView="schemes" data-bind-addable="tabPermissionCheck()" data-on-addClick="onAddClick($event)" data-on-removeClick="onRemoveSchemesClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
 
-  <template data-bind-ngSwitchWhen="'applications'">
+  <template data-bind-ngSwitchCase="'applications'">
   <div data-bind-listView="applications" data-bind-addable="tabPermissionCheck()" data-on-addClick="onAddClick($event)" data-on-removeClick="onRemoveApplicationsClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
 
-  <template data-bind-ngSwitchWhen="'collaborators'">
+  <template data-bind-ngSwitchCase="'collaborators'">
     <div data-bind-listView="collaborators" data-bind-addable="tabPermissionCheck()" data-on-addClick="onAddClick($event)" data-on-removeClick="onCollaboratorRemoveClick($event)">
       <div class="spinner"></div>
     </div>

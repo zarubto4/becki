@@ -5,7 +5,7 @@
 
 <div data-bind-layout='"Edit the \"" + group?.program_name + "\" Group"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="editing || !editGroup ? null : 'Edit'" data-on-actionClick="onEditClick($event)" data-bind-ngSwitch="editing">
   <form class="clearfix" data-on-submit="onSubmit($event)">
-    <template data-bind-ngSwitchWhen="true">
+    <template data-bind-ngSwitchCase="true">
       <div class="pull-right">
         <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
         <button class="btn btn-primary" type="submit">Edit</button>
@@ -17,7 +17,7 @@
         <p class="form-control-static">{{project}}</p>
       </div>
     </template>
-    <template data-bind-ngSwitchWhen="true">
+    <template data-bind-ngSwitchCase="true">
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon-pencil"></span>
@@ -28,26 +28,26 @@
     </template>
     <div class="form-group">
       <label>
-        <template data-bind-ngSwitchWhen="true">
+        <template data-bind-ngSwitchCase="true">
           <span class="glyphicon glyphicon-pencil"></span>
         </template>
         Description
       </label>
-      <template data-bind-ngSwitchWhen="true">
+      <template data-bind-ngSwitchCase="true">
         <textarea class="form-control" data-bindon-ngModel="descriptionField"></textarea>
       </template>
-      <template data-bind-ngSwitchWhen="false">
+      <template data-bind-ngSwitchCase="false">
         <p class="form-control-static">{{group?.program_description}}</p>
       </template>
     </div>
-    <template data-bind-ngSwitchWhen="true">
+    <template data-bind-ngSwitchCase="true">
       <div class="pull-right">
         <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
         <button class="btn btn-primary" type="submit">Edit</button>
       </div>
     </template>
   </form>
-  <template data-bind-ngSwitchWhen="false">
+  <template data-bind-ngSwitchCase="false">
     <div>
       <div class="pull-right">
         <button type="button" class="btn btn-default" data-on-click="onAddApplicationClick($event)">Add</button>

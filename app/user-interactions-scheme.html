@@ -16,14 +16,14 @@
       </a>
     </li>
   </ul>
-  <template data-bind-ngSwitchWhen="true">
+  <template data-bind-ngSwitchCase="true">
     <div data-bind-listView="versions" data-bind-addable="false">
       <div class="spinner"></div>
     </div>
   </template>
-  <template data-bind-ngSwitchWhen="false">
+  <template data-bind-ngSwitchCase="false">
     <form class="clearfix" style="margin-top: 2em" data-on-submit="onSubmit($event)" data-bind-ngSwitch="editing">
-      <template data-bind-ngSwitchWhen="true">
+      <template data-bind-ngSwitchCase="true">
         <template data-bind-ngIf="editScheme">
           <div class="pull-right">
             <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
@@ -55,7 +55,7 @@
           </div>
         </template>
       </template>
-      <template data-bind-ngSwitchWhen="false">
+      <template data-bind-ngSwitchCase="false">
         <template data-bind-ngIf="project">
           <div class="form-group">
             <label>Project</label>
@@ -71,7 +71,7 @@
       </template>
     </form>
     <form class="clearfix" data-on-submit="onVersionSubmit($event)" data-bind-ngSwitch="editing">
-      <template data-bind-ngSwitchWhen="true">
+      <template data-bind-ngSwitchCase="true">
         <template data-bind-ngIf="addVersion">
           <div class="form-group">
             <label>
@@ -120,10 +120,10 @@
               <option value="">Select name...</option>
               <template ngFor data-let-group data-bind-ngForOf="applicationGroups">
                 <option data-bind-value="group.id" data-bind-ngSwitch="showApplicationGroups">
-                  <template data-bind-ngSwitchWhen="true">
+                  <template data-bind-ngSwitchCase="true">
                     {{group.program_name}}
                   </template>
-                  <template data-bind-ngSwitchWhen="false">
+                  <template data-bind-ngSwitchCase="false">
                     <template ngFor data-let-application data-bind-ngForOf="group.m_programs" data-let-last="last">
                       {{application.program_name}}<template data-bind-ngIf="!last">,</template>
                     </template>
@@ -143,7 +143,7 @@
           </div>
         </template>
       </template>
-      <template data-bind-ngSwitchWhen="false">
+      <template data-bind-ngSwitchCase="false">
         <div class="form-group">
           <label>
             Version Name
@@ -162,12 +162,12 @@
           </label>
           <ul class="form-control-static" data-bind-ngSwitch="showApplicationGroups">
             <template ngFor data-let-group data-bind-ngForOf="versionApplicationGroups">
-              <template data-bind-ngSwitchWhen="true">
+              <template data-bind-ngSwitchCase="true">
                 <li>
                   {{group.program_name}}
                 </li>
               </template>
-              <template data-bind-ngSwitchWhen="false">
+              <template data-bind-ngSwitchCase="false">
                 <li template="ngFor let application of group.m_programs">
                   {{application.program_name}}
                 </li>

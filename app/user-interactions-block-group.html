@@ -6,13 +6,13 @@
 <div data-bind-layout='"Edit the \"" + group?.name + "\" blockoGroup"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel=" edit_permission&&!editing ? 'Edit' : null  " data-on-actionClick="onEditClick($event)" data-bind-ngSwitch="editing">
 
     <form class="clearfix" data-on-submit="onSubmit($event)">
-        <template data-bind-ngSwitchWhen="true" >
+        <template data-bind-ngSwitchCase="true" >
             <div class="pull-right">
                 <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
                 <button class="btn btn-primary" type="submit">Edit</button>
             </div>
         </template>
-        <template data-bind-ngSwitchWhen="true">
+        <template data-bind-ngSwitchCase="true">
             <div class="form-group">
                 <label>
                     <span class="glyphicon glyphicon-pencil"></span>
@@ -23,15 +23,15 @@
         </template>
         <div class="form-group">
             <label>
-                <template data-bind-ngSwitchWhen="true">
+                <template data-bind-ngSwitchCase="true">
                     <span class="glyphicon glyphicon-pencil"></span>
                     Description
                 </template>
             </label>
-            <template data-bind-ngSwitchWhen="true">
+            <template data-bind-ngSwitchCase="true">
                 <textarea class="form-control"  minlength="8" data-bindon-ngModel="descriptionField"></textarea>
             </template>
-            <template data-bind-ngSwitchWhen="false" >
+            <template data-bind-ngSwitchCase="false" >
                 <label>Description</label>
                 <p class="form-control-static">{{group?.general_description}}</p>
                 <span></span>
@@ -46,7 +46,7 @@
               </template>
             </template>
         </div>
-        <template data-bind-ngSwitchWhen="true" >
+        <template data-bind-ngSwitchCase="true" >
             <div class="pull-right">
                 <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
                 <button class="btn btn-primary" type="submit">Edit</button>

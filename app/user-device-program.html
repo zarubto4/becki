@@ -16,20 +16,20 @@
       </a>
     </li>
   </ul>
-  <template data-bind-ngSwitchWhen="true">
+  <template data-bind-ngSwitchCase="true">
     <div data-bind-listView="versions" data-bind-addable="false" data-on-removeClick="onVersionRemoveClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
-  <template data-bind-ngSwitchWhen="false">
+  <template data-bind-ngSwitchCase="false">
     <form class="clearfix" style="margin-top: 2em" data-on-submit="onSubmit($event)" data-bind-ngSwitch="editing">
-      <template data-bind-ngSwitchWhen="true">
+      <template data-bind-ngSwitchCase="true">
       <div class="pull-right">
         <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
         <button class="btn btn-primary" type="submit">Update</button>
       </div>
   </template>
-      <template data-bind-ngSwitchWhen="true">
+      <template data-bind-ngSwitchCase="true">
         <template data-bind-ngIf="editProgram">
           <div class="form-group">
             <label>
@@ -47,7 +47,7 @@
           </div>
         </template>
       </template>
-      <template data-bind-ngSwitchWhen="false">
+      <template data-bind-ngSwitchCase="false">
         <div class="form-group">
           <label>
             Description
@@ -57,7 +57,7 @@
       </template>
     </form>
     <form class="clearfix" data-on-submit="onVersionSubmit($event)" data-bind-ngSwitch="editing">
-      <template data-bind-ngSwitchWhen="true">
+      <template data-bind-ngSwitchCase="true">
         <template data-bind-ngIf="addVersion">
           <div class="form-group">
             <label>
@@ -88,7 +88,7 @@
           </div>
         </template>
       </template>
-      <template data-bind-ngSwitchWhen="false">
+      <template data-bind-ngSwitchCase="false">
         <div class="form-group">
           <label>
             Version Name

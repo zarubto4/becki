@@ -25,24 +25,16 @@ class Toggle {
   selector: ".dropdown",
   host: {"[class.open]": "open"}
 })
-class Dropdown implements ngCore.AfterViewInit {
+class Dropdown implements ngCore.AfterContentInit {
 
-  open:boolean;
+  open = false;
 
-  toggles:ngCore.QueryList<Toggle>;
+  @ngCore.ContentChildren(Toggle) toggles:ngCore.QueryList<Toggle>;
 
-  constructor(@ngCore.Query(Toggle) toggles:ngCore.QueryList<Toggle>) {
+  ngAfterContentInit():void {
     "use strict";
 
-    this.open = false;
-    this.toggles = toggles;
-  }
-
-  ngAfterViewInit():void {
-    "use strict";
-
-    // TODO: https://github.com/angular/angular/issues/6314
-    this.toggles.map(toggle => toggle.click.subscribe(() => this.open = !this.open));
+    this.toggles.forEach(toggle => toggle.click.subscribe(() => this.open = !this.open));
   }
 
   @ngCore.HostListener("document:click")

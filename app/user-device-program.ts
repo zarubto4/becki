@@ -114,8 +114,7 @@ export class Component implements ngCore.OnInit {
     this.backEnd.getDeviceProgram(this.id)
         .then(program => {
           if (!program.program_versions.length) {
-            // TODO: https://github.com/angular/angular/issues/4558
-            return Promise.reject<any>(new Error("the program has no version"));
+            throw new Error("the program has no version");
           }
           let lastVersion = _.max(program.program_versions, version => version.version_object.date_of_create);
           this.name = program.program_name;

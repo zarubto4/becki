@@ -95,8 +95,7 @@ export class Component implements ngCore.OnInit {
           [scheme, groups] = result;
           let version = scheme.program_versions.find(version => version.version_Object.id == this.id);
           if (!version) {
-            // TODO: https://github.com/angular/angular/issues/4558
-            return Promise.reject<any>(new Error(`version ${this.id} not found in scheme ${scheme.name}`));
+            throw new Error(`version ${this.id} not found in scheme ${scheme.name}`);
           }
           this.name = version.version_Object.version_name;
           this.schemeName = scheme.name;

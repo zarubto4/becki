@@ -4,7 +4,6 @@
  */
 
 import * as ngCommon from "@angular/common";
-import * as ngCore from "@angular/core";
 import * as ngHttp from "@angular/http";
 import * as ngPlatformBrowserDynamic from "@angular/platform-browser-dynamic";
 import * as ngRouter from "@angular/router-deprecated";
@@ -16,6 +15,6 @@ ngPlatformBrowserDynamic.bootstrap(
     [
       ngHttp.HTTP_PROVIDERS,
       ngRouter.ROUTER_PROVIDERS,
-      ngCore.provide(ngCommon.LocationStrategy, {useClass: ngCommon.HashLocationStrategy})
+      {provide: ngCommon.LocationStrategy, useClass: ngCommon.HashLocationStrategy}
     ]
 );

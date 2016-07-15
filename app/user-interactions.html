@@ -36,24 +36,23 @@
       </a>
     </li>
   </ul>
-  <template data-bind-ngSwitchWhen="'schemes'">
+  <template data-bind-ngSwitchCase="'schemes'">
     <div data-bind-listView="schemes" data-on-addClick="onAddSchemeClick($event)" data-on-removeClick="onRemoveSchemeClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
-  <template data-bind-ngSwitchWhen="'blocks'">
+  <template data-bind-ngSwitchCase="'blocks'">
     <div data-bind-listView="blocks" data-on-addClick="onAddBlockClick($event)" data-on-removeClick="onRemoveBlockClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
-  <template data-bind-ngSwitchWhen="'upload'">
+  <template data-bind-ngSwitchCase="'upload'">
     <form class="clearfix" data-onSubmit="onUploadSubmit($event)" style="margin-top: 2em">
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon-list"></span>
           Moderator IDs
         </label>
-        <!-- TODO: https://github.com/angular/angular/issues/4427 -->
         <div class="checkbox" data-bind-class.disabled="!moderator.online" template="ngFor let moderator of moderators">
           <label>
             <input type="checkbox" data-bind-disabled="!moderator.online" data-bindon-ngModel="moderator.selected">
@@ -86,18 +85,18 @@
     </form>
   </template>
 
-  <template data-bind-ngSwitchWhen="'moderators'">
+  <template data-bind-ngSwitchCase="'moderators'">
     <div data-bind-listView="moderators" data-on-addClick="onAddModeratorClick($event)" data-on-removeClick="onRemoveModeratorClick($event)">
       <div class="spinner"></div>
     </div>
   </template>
 
-  <template data-bind-ngSwitchWhen="'spies'">
+  <template data-bind-ngSwitchCase="'spies'">
     <div data-bind-listView="spies" data-bind-addable="false">
       <div class="spinner"></div>
     </div>
   </template>
-  <template data-bind-ngSwitchWhen="'BlockGroups'">
+  <template data-bind-ngSwitchCase="'BlockGroups'">
     <div data-bind-listView="BlockGroups" data-on-addClick="onAddBlockGroupsClick($event)" data-on-removeClick="onRemoveBlockGroupsClick($event)">
     <div class="spinner"></div>
     </div>

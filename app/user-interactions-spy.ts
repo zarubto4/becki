@@ -59,7 +59,7 @@ export class Component implements ngCore.OnInit {
     this.backEnd.getInteractionsScheme(this.id)
         .then(scheme => {
           if (!scheme.program_state.uploaded) {
-            return Promise.reject<any>(new Error("scheme not deployed"));
+            throw new Error("scheme not deployed");
           }
           let version = scheme.program_versions.find(version => version.version_Object.id == scheme.program_state.version_id);
           this.versionName = version.version_Object.version_name;

@@ -32,10 +32,9 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
   editor:CodeMirror.EditorFromTextArea;
 
   @ngCore.Output("fieldCodeChange")
-  // TODO: https://github.com/angular/angular/issues/6311
-  modelChange = new ngCore.EventEmitter<string>(false);
+  modelChange = new ngCore.EventEmitter<string>();
 
-  ngOnChanges(changes:{[key: string]: ngCore.SimpleChange}):void {
+  ngOnChanges(changes:ngCore.SimpleChanges):void {
     "use strict";
 
     let model = changes["model"];

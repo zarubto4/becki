@@ -9,7 +9,7 @@
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
       <button class="btn btn-primary" type="submit">Create</button>
     </div>
-    <template data-bind-ngSwitchWhen="true">
+    <template data-bind-ngSwitchCase="true">
       <template data-bind-ngIf="editLibrary">
         <div class="form-group">
           <label>
@@ -25,7 +25,7 @@
           </label>
           <textarea class="form-control" required minlength="8" data-bindon-ngModel="descriptionField"></textarea>
         </div>
-        <template data-bind-ngSwitchWhen="true">
+        <template data-bind-ngSwitchCase="true">
           <div class="pull-right">
             <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
             <button class="btn btn-primary" type="submit">Edit</button>
@@ -33,7 +33,7 @@
         </template>
       </template>
     </template>
-    <template data-bind-ngSwitchWhen="false">
+    <template data-bind-ngSwitchCase="false">
       <div class="form-group">
         <label>
           Description
@@ -42,7 +42,7 @@
       </div>
     </template>
   </form>
-  <template data-bind-ngSwitchWhen="true">
+  <template data-bind-ngSwitchCase="true">
     <template data-bind-ngIf="addVersion">
       <form class="clearfix" data-on-submit="onVersionSubmit($event)">
         <div class="form-group">

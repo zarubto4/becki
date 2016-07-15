@@ -22,7 +22,7 @@
       <div notifications>
         <div class="spinner"></div>
       </div>
-      <template data-bind-ngSwitchWhen="true">
+      <template data-bind-ngSwitchCase="true">
         <form class="form-horizontal" data-on-submit="onSignInSubmit($event)">
           <div class="form-group">
             <label class="col-sm-2 col-md-2 control-label">Email</label>
@@ -55,7 +55,7 @@
           </button>
         </div>
       </template>
-      <template data-bind-ngSwitchWhen="false">
+      <template data-bind-ngSwitchCase="false">
         <form class="form-horizontal" data-on-submit="onSignUpSubmit($event)">
           <div class="form-group">
             <label class="col-sm-2 col-md-2 control-label">Email</label>
