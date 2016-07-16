@@ -11,7 +11,7 @@ import * as ngRouter from "@angular/router-deprecated";
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
-import * as libBeckiFieldCode from "./lib-becki/field-code";
+import * as libBeckiFieldIDE from "./lib-becki/field-ide";
 import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
@@ -20,7 +20,7 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
   templateUrl: "app/user-device-program.html",
   directives: [
     libBeckiCustomValidator.Directive,
-    libBeckiFieldCode.Component,
+    libBeckiFieldIDE.Component,
     libBeckiLayout.Component,
     libPatternFlyListView.Component,
     ngCommon.CORE_DIRECTIVES,
@@ -60,9 +60,9 @@ export class Component implements ngCore.OnInit {
 
   versionDescription:string;
 
-  versionCodeField:string;
+  versionCodeField:{[name:string]: string};
 
-  versionCode:string;
+  versionCode:{[name:string]: string};
 
   versions:libPatternFlyListView.Item[];
 
@@ -93,8 +93,8 @@ export class Component implements ngCore.OnInit {
     this.versionName = "Loading...";
     this.versionDescriptionField = "Loading...";
     this.versionDescription = "Loading...";
-    this.versionCodeField = "Loading...";
-    this.versionCode = "Loading...";
+    this.versionCodeField = {};
+    this.versionCode = {};
     this.backEnd = backEnd;
     this.notifications = notifications;
   }
@@ -117,6 +117,8 @@ export class Component implements ngCore.OnInit {
             throw new Error("the program has no version");
           }
           let lastVersion = _.max(program.program_versions, version => version.version_object.date_of_create);
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-309
+          let lastVersionFiles = <{[name:string]: string}>_.object(JSON.parse(lastVersion.version_code).user_files.map((file:{file_name:string, code:string}) => [file.file_name, file.code]));
           this.name = program.program_name;
           this.breadcrumbs[3].label = program.program_name;
           this.editProgram = program.edit_permission;
@@ -129,8 +131,8 @@ export class Component implements ngCore.OnInit {
           this.versionName = lastVersion.version_object.version_name;
           this.versionDescriptionField = lastVersion.version_object.version_description;
           this.versionDescription = lastVersion.version_object.version_description;
-          this.versionCodeField = lastVersion.version_code;
-          this.versionCode = lastVersion.version_code;
+          this.versionCodeField = _.clone(lastVersionFiles);
+          this.versionCode = _.clone(lastVersionFiles);
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-126
           this.versions = program.program_versions.map(version => new libPatternFlyListView.Item(version.version_object.id, `${version.version_object.version_name} (issue/TYRION-126)`, version.version_object.version_description, undefined, false));
         })

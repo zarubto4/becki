@@ -11,7 +11,7 @@ import * as libBackEnd from "./lib-back-end/index";
 import * as libBecki from "./lib-becki/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
-import * as libBeckiFieldCode from "./lib-becki/field-code";
+import * as libBeckiFieldIDE from "./lib-becki/field-ide";
 import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
@@ -19,7 +19,7 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
   templateUrl: "app/user-device-program-new.html",
   directives: [
     libBeckiCustomValidator.Directive,
-    libBeckiFieldCode.Component,
+    libBeckiFieldIDE.Component,
     libBeckiLayout.Component,
     ngCommon.CORE_DIRECTIVES,
     ngCommon.FORM_DIRECTIVES
@@ -41,7 +41,7 @@ export class Component implements ngCore.OnInit {
 
   deviceTypes:libBackEnd.DeviceType[];
 
-  codeField:string;
+  codeField:{[name:string]: string};
 
   backEnd:libBeckiBackEnd.Service;
 
@@ -61,7 +61,7 @@ export class Component implements ngCore.OnInit {
     this.nameField = "";
     this.descriptionField = "";
     this.deviceTypeField = "";
-    this.codeField = "";
+    this.codeField = {"main.cpp": ""};
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;

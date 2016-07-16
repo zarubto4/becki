@@ -17,6 +17,20 @@ export class RemovalModel implements Model {
   }
 }
 
+export class FilenameModel implements Model {
+
+  name:string;
+
+  separator:string;
+
+  constructor(name:string, separator:string) {
+    "use strict";
+
+    this.name = name;
+    this.separator = separator;
+  }
+}
+
 export abstract class Component {
 
   abstract showModal(model:Model):Promise<boolean>;

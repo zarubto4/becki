@@ -195,6 +195,9 @@ export class Component implements libBootstrapModal.Component {
     if (this.modal instanceof libBootstrapModal.RemovalModel) {
       return "removal";
     }
+    if (this.modal instanceof libBootstrapModal.FilenameModel) {
+      return "filename";
+    }
     if (this.modal instanceof libBeckiModal.WidgetModel) {
       return "widget";
     }

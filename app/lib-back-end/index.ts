@@ -1643,15 +1643,16 @@ export abstract class BackEnd {
     return this.requestRestPath("PUT", `${BackEnd.DEVICE_PROGRAM_PATH}/${id}`, {program_name, program_description, type_of_board_id}).then(JSON.stringify);
   }
 
-  public addVersionToDeviceProgram(version_name:string, version_description:string, code:string, program:string):Promise<string> {
+  public addVersionToDeviceProgram(version_name:string, version_description:string, files:{[name:string]: string}, program:string):Promise<string> {
     "use strict";
 
     if (version_name.length < 8) {
       throw "name >= 8 required";
     }
+    let user_files = Object.keys(files).map(file_name => ({file_name, code: files[file_name]}));
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-275
-    return this.requestRestPath("POST", `${BackEnd.DEVICE_PROGRAM_VERSION_PATH}/create/${program}`, {version_name, version_description, code}, 201).then(JSON.stringify);
+    return this.requestRestPath("POST", `${BackEnd.DEVICE_PROGRAM_VERSION_PATH}/create/${program}`, {version_name, version_description, user_files}, 201).then(JSON.stringify);
   }
 
   public deleteDeviceProgram(id:string):Promise<string> {

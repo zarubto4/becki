@@ -1,0 +1,41 @@
+<!--
+  ~ © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+  ~ of this distribution.
+  -->
+
+<template data-bind-ngIf="!readonly">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="btn-group btn-group-xs">
+        <button class="btn btn-default" type="button" data-on-click="onAddClick($event)">Add</button>
+        <button class="btn btn-default" type="button" data-bind-disabled="!selection" data-on-click="onMoveClick($event)">Move</button>
+        <button class="btn btn-danger" type="button" data-bind-disabled="!selection" data-on-click="onRemoveClick($event)">Remove</button>
+      </div>
+    </div>
+  </div>
+</template>
+<div class="row">
+  <div class="col-xs-12" data-bind-class.col-sm-4="files.hasOwnProperty(selection)">
+    <div class="form-control" style="height: 200px; overflow: auto; white-space: nowrap;">
+      <table class="table table-treegrid">
+        <tbody>
+          <tr data-bind-class.odd="path == selection" data-bind-class.hidden="isPathHidden(path)" template="ngFor let path of getPaths(true)">
+            <td class="treegrid-node" data-on-click="onPathClick(path, $event)" style="border: 0px; cursor:pointer">
+              <span class="indent" template="ngFor let parent of convertPathToPaths(path).slice(1)"></span>
+              <span class="icon expand-icon fa {{isPathExpanded(path) == null ? '' : isPathExpanded(path) ? 'fa-angle-down' : 'fa-angle-right'}}"></span>
+              <span class="icon node-icon fa {{files.hasOwnProperty(path) ? 'fa-file-o' : 'fa-folder'}}"></span>
+              {{getPathBasename(path)}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <template data-bind-ngIf="files.hasOwnProperty(selection)">
+    <div class="col-sm-8">
+      <div data-bindon-fieldCode="files[selection]" data-bind-mode="'ace/mode/c_cpp'" data-bind-readonly="readonly">
+        <div class="spinner"></div>
+      </div>
+    </div>
+  </template>
+</div>
