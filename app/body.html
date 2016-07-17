@@ -6,6 +6,33 @@
 <div class="modal fade" tabindex="-1" data-bind-class.in="modal" data-bind-style.display="modal ? 'block' : 'none'" data-bind-style.background-color="modal ? 'rgba(0,0,0,0.5)' : 'initial'">
   <div class="modal-dialog">
     <div class="modal-content" data-bind-ngSwitch="getModalType()">
+      <template data-bind-ngSwitchCase="'selection'">
+        <div class="modal-header">
+          <button type="button" class="close" data-on-click="onModalCloseClick(false, $event)"><span>&times;</span></button>
+          <h4 class="modal-title">Select From the List</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>
+              <span class="glyphicon glyphicon-list"></span>
+              List
+            </label>
+            <select class="form-control" required data-bindon-ngModel="modal.selection">
+              <option template="ngFor let option of modal.options">
+                {{option}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-on-click="onModalCloseClick(false, $event)">
+            Cancel
+          </button>
+          <button type="button" class="btn btn-primary" data-on-click="onModalCloseClick(true, $event)">
+            OK
+          </button>
+        </div>
+      </template>
       <template data-bind-ngSwitchCase="'removal'">
         <div class="modal-header">
           <button type="button" class="close" data-on-click="onModalCloseClick(false, $event)"><span>&times;</span></button>

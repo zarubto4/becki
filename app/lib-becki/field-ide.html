@@ -7,33 +7,65 @@
   <div class="row">
     <div class="col-xs-12">
       <div class="btn-group btn-group-xs">
-        <button class="btn btn-default" type="button" data-on-click="onAddClick($event)">Add</button>
-        <button class="btn btn-default" type="button" data-bind-disabled="!selection" data-on-click="onMoveClick($event)">Move</button>
+        <div class="btn-group btn-group-xs dropdown">
+          <button type="button" class="btn btn-default dropdown-toggle">
+            Add <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a data-on-click="onAddPathClick($event)" style="cursor: pointer">File</a></li>
+            <template data-bind-ngIf="canAddLibraries()">
+              <li><a data-on-click="onAddLibraryClick($event)" style="cursor: pointer">Library</a></li>
+            </template>
+          </ul>
+        </div>
+        <button class="btn btn-default" type="button" data-bind-disabled="selection?.type != 'path'" data-on-click="onMoveClick($event)">Move</button>
         <button class="btn btn-danger" type="button" data-bind-disabled="!selection" data-on-click="onRemoveClick($event)">Remove</button>
       </div>
     </div>
   </div>
 </template>
 <div class="row">
-  <div class="col-xs-12" data-bind-class.col-sm-4="files.hasOwnProperty(selection)">
+  <div class="col-xs-12" data-bind-class.col-sm-4="selection?.type == 'path' && files.hasOwnProperty(selection?.value)">
     <div class="form-control" style="height: 200px; overflow: auto; white-space: nowrap;">
       <table class="table table-treegrid">
         <tbody>
-          <tr data-bind-class.odd="path == selection" data-bind-class.hidden="isPathHidden(path)" template="ngFor let path of getPaths(true)">
+          <tr>
+            <td class="treegrid-node" style="border: 0px">
+              <span class="icon expand-icon fa"></span>
+              <span class="icon node-icon fa fa-files-o"></span>
+              Files
+            </td>
+          </tr>
+          <tr data-bind-class.odd="selection?.type == 'path' && path == selection?.value" data-bind-class.hidden="isPathHidden(path)" template="ngFor let path of getPaths(true)">
             <td class="treegrid-node" data-on-click="onPathClick(path, $event)" style="border: 0px; cursor:pointer">
-              <span class="indent" template="ngFor let parent of convertPathToPaths(path).slice(1)"></span>
+              <span class="indent" template="ngFor let parent of convertPathToPaths(path)"></span>
               <span class="icon expand-icon fa {{isPathExpanded(path) == null ? '' : isPathExpanded(path) ? 'fa-angle-down' : 'fa-angle-right'}}"></span>
               <span class="icon node-icon fa {{files.hasOwnProperty(path) ? 'fa-file-o' : 'fa-folder'}}"></span>
               {{getPathBasename(path)}}
+            </td>
+          </tr>
+          <tr>
+            <td class="treegrid-node" style="border: 0px">
+              <span class="icon expand-icon fa"></span>
+              <span class="icon node-icon fa fa-book"></span>
+              Libraries
+            </td>
+          </tr>
+          <tr data-bind-class.odd="selection?.type == 'library' && library == selection?.value" template="ngFor let library of getLibraries(true)">
+            <td class="treegrid-node" data-on-click="onLibraryClick(library, $event)" style="border: 0px; cursor:pointer">
+              <span class="indent"></span>
+              <span class="icon expand-icon fa"></span>
+              <span class="icon node-icon fa fa-book"></span>
+              {{library}}
             </td>
           </tr>
         </tbody>
       </table>
     </div>
   </div>
-  <template data-bind-ngIf="files.hasOwnProperty(selection)">
+  <template data-bind-ngIf="selection?.type == 'path' && files.hasOwnProperty(selection?.value)">
     <div class="col-sm-8">
-      <div data-bindon-fieldCode="files[selection]" data-bind-mode="'ace/mode/c_cpp'" data-bind-readonly="readonly">
+      <div data-bindon-fieldCode="files[selection.value]" data-bind-mode="'ace/mode/c_cpp'" data-bind-readonly="readonly">
         <div class="spinner"></div>
       </div>
     </div>

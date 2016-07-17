@@ -192,6 +192,9 @@ export class Component implements libBootstrapModal.Component {
   getModalType():string {
     "use strict";
 
+    if (this.modal instanceof libBootstrapModal.SelectionModel) {
+      return "selection";
+    }
     if (this.modal instanceof libBootstrapModal.RemovalModel) {
       return "removal";
     }
