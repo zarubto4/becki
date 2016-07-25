@@ -1655,6 +1655,19 @@ export abstract class BackEnd {
     return this.requestRestPath("POST", `${BackEnd.DEVICE_PROGRAM_VERSION_PATH}/create/${program}`, {version_name, version_description, user_files}, 201).then(JSON.stringify);
   }
 
+  public buildDeviceProgram(files:{[name:string]: string}, type_of_board_id:string):Promise<string> {
+    "use strict";
+
+    if (!type_of_board_id) {
+      throw "target required";
+    }
+    let user_files = Object.keys(files).map(file_name => ({file_name, code: files[file_name]}));
+
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-309
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-327
+    return this.requestRestPath("POST", `${BackEnd.DEVICE_PROGRAM_VERSION_PATH}/compile`, {type_of_board_id, code: " ", user_files}).then(JSON.stringify);
+  }
+
   public deleteDeviceProgram(id:string):Promise<string> {
     "use strict";
 

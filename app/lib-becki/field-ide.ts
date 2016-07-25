@@ -7,6 +7,7 @@ import * as _ from "underscore";
 import * as ngCore from "@angular/core";
 
 import * as fieldCode from "./field-code";
+import * as libBeckiBackEnd from "../lib-becki/back-end";
 import * as libBeckiNotifications from "../lib-becki/notifications";
 import * as libBootstrapDropdown from "../lib-bootstrap/dropdown";
 import * as libBootstrapModal from "../lib-bootstrap/modal";
@@ -29,6 +30,9 @@ export class Component {
   @ngCore.Input()
   libraries:{[name:string]: boolean};
 
+  @ngCore.Input()
+  buildTarget:string;
+
   selection:{type: string, value: string};
 
   @ngCore.Input()
@@ -38,7 +42,9 @@ export class Component {
 
   notifications:libBeckiNotifications.Service;
 
-  constructor(modalComponent:libBootstrapModal.Component, notifications:libBeckiNotifications.Service) {
+  backEnd:libBeckiBackEnd.Service;
+
+  constructor(modalComponent:libBootstrapModal.Component, notifications:libBeckiNotifications.Service, backEnd:libBeckiBackEnd.Service) {
     "use strict";
 
     this.files = {};
@@ -48,6 +54,7 @@ export class Component {
     this.selection = null;
     this.modal = modalComponent;
     this.notifications = notifications;
+    this.backEnd = backEnd;
   }
 
   getPathBasename(path:string):string {
@@ -245,6 +252,25 @@ export class Component {
         this.selection = null;
       }
     });
+  }
+
+  onBuildClick():void {
+    "use strict";
+
+    this.notifications.shift();
+    let files:{[name:string]: string} = {};
+    for (let name in this.files) {
+      if (this.files.hasOwnProperty(name)) {
+        files[name.replace(this.pathSeparator, "/")] = this.files[name];
+      }
+    }
+    this.backEnd.buildDeviceProgram(files, this.buildTarget)
+        .then(() => this.notifications.current.push(new libBeckiNotifications.Success("The project has been built successfully.")))
+        .catch(reason => {
+          // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-327
+          this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-327"));
+          this.notifications.current.push(new libBeckiNotifications.Danger("The project cannot be built.", reason));
+        });
   }
 
   onPathClick(path:string):void {

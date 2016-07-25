@@ -6,20 +6,25 @@
 <template data-bind-ngIf="!readonly">
   <div class="row">
     <div class="col-xs-12">
-      <div class="btn-group btn-group-xs">
-        <div class="btn-group btn-group-xs dropdown">
-          <button type="button" class="btn btn-default dropdown-toggle">
-            Add <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu">
-            <li><a data-on-click="onAddPathClick($event)" style="cursor: pointer">File</a></li>
-            <template data-bind-ngIf="canAddLibraries()">
-              <li><a data-on-click="onAddLibraryClick($event)" style="cursor: pointer">Library</a></li>
-            </template>
-          </ul>
+      <div class="btn-toolbar">
+        <div class="btn-group btn-group-xs">
+          <div class="btn-group btn-group-xs dropdown">
+            <button type="button" class="btn btn-default dropdown-toggle">
+              Add <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a data-on-click="onAddPathClick($event)" style="cursor: pointer">File</a></li>
+              <template data-bind-ngIf="canAddLibraries()">
+                <li><a data-on-click="onAddLibraryClick($event)" style="cursor: pointer">Library</a></li>
+              </template>
+            </ul>
+          </div>
+          <button class="btn btn-default" type="button" data-bind-disabled="selection?.type != 'path'" data-on-click="onMoveClick($event)">Move</button>
+          <button class="btn btn-danger" type="button" data-bind-disabled="!selection" data-on-click="onRemoveClick($event)">Remove</button>
         </div>
-        <button class="btn btn-default" type="button" data-bind-disabled="selection?.type != 'path'" data-on-click="onMoveClick($event)">Move</button>
-        <button class="btn btn-danger" type="button" data-bind-disabled="!selection" data-on-click="onRemoveClick($event)">Remove</button>
+        <div class="btn-group btn-group-xs pull-right">
+          <button type="button" class="btn btn-default" data-bind-disabled="!buildTarget" data-bind-title="buildTarget ? '' : 'Target device is not known.'" data-on-click="onBuildClick($event)">Build</button>
+        </div>
       </div>
     </div>
   </div>
