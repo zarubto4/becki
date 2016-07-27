@@ -22,6 +22,8 @@ export class Component {
   @ngCore.Input("fieldIDE")
   files:{[name:string]: string};
 
+  filesAnnotations:{[name:string]: AceAjax.Annotation[]};
+
   expandedDirectories:Set<string>;
 
   @ngCore.Input()
@@ -48,6 +50,7 @@ export class Component {
     "use strict";
 
     this.files = {};
+    this.filesAnnotations = {};
     this.expandedDirectories = new Set<string>();
     this.pathSeparator = "/";
     this.libraries = {};
@@ -69,6 +72,13 @@ export class Component {
 
     let separatorIndex = path.lastIndexOf(this.pathSeparator);
     return path.slice(0, Math.max(separatorIndex, 0));
+  }
+
+  removeFile(path:string):void {
+    "use strict";
+
+    delete this.files[path];
+    delete this.filesAnnotations[path];
   }
 
   convertPathToPaths(path:string):string[] {
@@ -205,13 +215,13 @@ export class Component {
         }
         if (this.files.hasOwnProperty(this.selection.value)) {
           this.files[modalModel.name] = this.files[this.selection.value];
-          delete this.files[this.selection.value];
+          this.removeFile(this.selection.value);
         } else {
           for (let name in this.files) {
             if (this.files.hasOwnProperty(name)) {
               if (name.startsWith(`${this.selection.value}${this.pathSeparator}`)) {
                 this.files[`${modalModel.name}${name.slice(this.selection.value.length)}`] = this.files[name];
-                delete this.files[name];
+                this.removeFile(name);
               }
             }
           }
@@ -234,12 +244,12 @@ export class Component {
         switch (this.selection.type) {
           case "path":
             if (this.files.hasOwnProperty(this.selection.value)) {
-              delete this.files[this.selection.value];
+              this.removeFile(this.selection.value);
             } else {
               for (let name in this.files) {
                 if (this.files.hasOwnProperty(name)) {
                   if (name.startsWith(`${this.selection.value}${this.pathSeparator}`)) {
-                    delete this.files[name];
+                    this.removeFile(name);
                   }
                 }
               }
@@ -264,6 +274,7 @@ export class Component {
         files[name.replace(this.pathSeparator, "/")] = this.files[name];
       }
     }
+    this.filesAnnotations = {};
     this.backEnd.buildDeviceProgram(files, this.buildTarget)
         .then(() => this.notifications.current.push(new libBeckiNotifications.Success("The project has been built successfully.")))
         .catch(reason => {

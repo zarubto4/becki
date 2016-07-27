@@ -27,6 +27,9 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
   @ngCore.Input()
   readonly:boolean;
 
+  @ngCore.Input()
+  annotations:AceAjax.Annotation[] = [];
+
   @ngCore.ViewChild("field")
   field:ngCore.ElementRef;
 
@@ -51,6 +54,10 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
     if (readonly && this.editor) {
       this.editor.setReadOnly(readonly.currentValue);
     }
+    let annotations = changes["annotations"];
+    if (annotations && this.editor) {
+      this.editor.getSession().setAnnotations(annotations.currentValue);
+    }
   }
 
   ngAfterViewInit():void {
@@ -60,6 +67,7 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
     this.editor.setOptions({enableBasicAutocompletion: true});
     this.editor.setReadOnly(this.readonly);
     this.editor.getSession().setMode(this.mode);
+    this.editor.getSession().setAnnotations(this.annotations);
     this.editor.getSession().on("change", () => {
       this.model = this.editor.getValue();
       this.modelChange.emit(this.model);

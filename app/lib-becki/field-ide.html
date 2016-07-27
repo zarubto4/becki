@@ -70,7 +70,7 @@
   </div>
   <template data-bind-ngIf="selection?.type == 'path' && files.hasOwnProperty(selection?.value)">
     <div class="col-sm-8">
-      <div data-bindon-fieldCode="files[selection.value]" data-bind-mode="'ace/mode/c_cpp'" data-bind-readonly="readonly">
+      <div data-bindon-fieldCode="files[selection.value]" data-bind-mode="'ace/mode/c_cpp'" data-bind-readonly="readonly" data-bind-annotations="filesAnnotations[selection.value] || []">
         <div class="spinner"></div>
       </div>
     </div>
