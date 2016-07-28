@@ -43,7 +43,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   navbarNotificationsPage:number;
 
-  navbarNotifications:libBackEnd.MissedNotificationsCollection;
+  navbarNotifications:libBackEnd.MissedNotificationsPage;
 
   navbarState:string;
 

@@ -114,20 +114,20 @@ export class Component implements ngCore.OnInit {
           this.backEnd.getLibraryGroups(1)
         ])
         .then(result => {
-          let libraryCollection:libBackEnd.LibraryCollection;
-          let groupCollection:libBackEnd.LibraryGroupCollection;
-          [libraryCollection, groupCollection] = result;
+          let librariesPage:libBackEnd.LibrariesPage;
+          let groupsPage:libBackEnd.LibraryGroupsPage;
+          [librariesPage, groupsPage] = result;
           return Promise.all<any>([
-            Promise.all(libraryCollection.pages.map(page => this.backEnd.getLibraries(page))),
-            Promise.all(groupCollection.pages.map(page => this.backEnd.getLibraryGroups(page)))
+            Promise.all(librariesPage.pages.map(number => this.backEnd.getLibraries(number))),
+            Promise.all(groupsPage.pages.map(number => this.backEnd.getLibraryGroups(number)))
           ]);
         })
         .then(result => {
-          let libraryCollections:libBackEnd.LibraryCollection[];
-          let groupCollections:libBackEnd.LibraryGroupCollection[];
-          [libraryCollections, groupCollections] = result;
-          return ![].concat(...libraryCollections.map(collection => collection.content)).find(library => library.id != this.id && library.library_name == this.nameField) &&
-              ![].concat(...groupCollections.map(collection => collection.content)).find(group => group.group_name == this.nameField);
+          let librariesPages:libBackEnd.LibrariesPage[];
+          let groupsPages:libBackEnd.LibraryGroupsPage[];
+          [librariesPages, groupsPages] = result;
+          return ![].concat(...librariesPages.map(page => page.content)).find(library => library.id != this.id && library.library_name == this.nameField) &&
+              ![].concat(...groupsPages.map(page => page.content)).find(group => group.group_name == this.nameField);
         });
   }
 

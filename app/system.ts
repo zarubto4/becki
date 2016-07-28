@@ -84,8 +84,8 @@ export class Component implements ngCore.OnInit {
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     this.backEnd.getDevices(1)
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
-        .then(collection => Promise.all<libBackEnd.DeviceCollection>(collection.pages.map(page => this.backEnd.getDevices(page))))
-        .then(collections => this.devices = [].concat(...collections.map(collection => collection.content)).map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.isActive ? "active" : "inactive")))
+        .then(page => Promise.all<libBackEnd.DevicesPage>(page.pages.map(number => this.backEnd.getDevices(number))))
+        .then(pages => this.devices = [].concat(...pages.map(page => page.content)).map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.isActive ? "active" : "inactive")))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
     this.backEnd.getDeviceTypes()
         .then(deviceTypes => this.deviceTypes = deviceTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, ["SystemDeviceType", {type: type.id}], type.delete_permission)))
@@ -94,12 +94,12 @@ export class Component implements ngCore.OnInit {
         .then(processors => this.processors = processors.map(processor => new libPatternFlyListView.Item(processor.id, processor.processor_name, processor.processor_code, ["SystemProcessor", {processor: processor.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));
     this.backEnd.getLibraryGroups(1)
-        .then(groupCollection => Promise.all<libBackEnd.LibraryGroupCollection>(groupCollection.pages.map(page => this.backEnd.getLibraryGroups(page))))
-        .then(groupCollections => this.libraryGroups = [].concat(...groupCollections.map(collection => collection.content)).map(group => new libPatternFlyListView.Item(group.id, group.group_name, group.description, ["SystemLibraryGroup", {group: group.id}])))
+        .then(groupPage => Promise.all<libBackEnd.LibraryGroupsPage>(groupPage.pages.map(page => this.backEnd.getLibraryGroups(page))))
+        .then(groupPages => this.libraryGroups = [].concat(...groupPages.map(page => page.content)).map(group => new libPatternFlyListView.Item(group.id, group.group_name, group.description, ["SystemLibraryGroup", {group: group.id}])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Library groups cannot be loaded.", reason)));
     this.backEnd.getLibraries(1)
-        .then(libraryCollection => Promise.all<libBackEnd.LibraryCollection>(libraryCollection.pages.map(page => this.backEnd.getLibraries(page))))
-        .then(libraryCollections => this.libraries = [].concat(...libraryCollections.map(collection => collection.content)).map(library => new libPatternFlyListView.Item(library.id, library.library_name, library.description, ["SystemLibrary", {library: library.id}], library.delete_permission)))
+        .then(librariesPage => Promise.all<libBackEnd.LibrariesPage>(librariesPage.pages.map(number => this.backEnd.getLibraries(number))))
+        .then(librariesPages => this.libraries = [].concat(...librariesPages.map(page => page.content)).map(library => new libPatternFlyListView.Item(library.id, library.library_name, library.description, ["SystemLibrary", {library: library.id}], library.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Libraries cannot be loaded.", reason)));
     this.backEnd.getProducers()
         .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, producer.description, ["SystemProducer", {producer: producer.id}], producer.delete_permission)))

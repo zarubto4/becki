@@ -248,7 +248,7 @@ export interface MissedNotification {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface MissedNotificationsCollection {
+export interface MissedNotificationsPage {
 
   content:MissedNotification[];
 
@@ -460,7 +460,7 @@ export interface Library {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface LibraryCollection {
+export interface LibrariesPage {
 
   content:Library[];
 
@@ -494,7 +494,7 @@ export interface LibraryGroup {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface LibraryGroupCollection {
+export interface LibraryGroupsPage {
 
   content:LibraryGroup[];
 
@@ -595,7 +595,7 @@ export interface DeviceProgram {
   delete_permission:boolean;
 }
 
-export interface DeviceCollection {
+export interface DevicesPage {
 
   content:Device[];
 
@@ -1270,7 +1270,7 @@ export abstract class BackEnd {
     return this.requestRestPath("DELETE", `/coreClient/connection/${id}`).then(JSON.stringify);
   }
 
-  public getNotifications(page:number):Promise<MissedNotificationsCollection> {
+  public getNotifications(page:number):Promise<MissedNotificationsPage> {
     "use strict";
 
     return this.requestRestPath("GET", `${BackEnd.NOTIFICATION_PATH}/list/${page}`);
@@ -1455,7 +1455,7 @@ export abstract class BackEnd {
     return this.requestRestPath("GET", `${BackEnd.LIBRARY_PATH}/${id}`);
   }
 
-  public getLibraries(page:number):Promise<LibraryCollection> {
+  public getLibraries(page:number):Promise<LibrariesPage> {
     "use strict";
 
     if (page < 1) {
@@ -1514,7 +1514,7 @@ export abstract class BackEnd {
     return this.requestRestPath("GET", `${BackEnd.LIBRARY_GROUP_PATH}/${id}`);
   }
 
-  public getLibraryGroups(page:number):Promise<LibraryGroupCollection> {
+  public getLibraryGroups(page:number):Promise<LibraryGroupsPage> {
     "use strict";
 
     if (page < 1) {
@@ -1691,7 +1691,7 @@ export abstract class BackEnd {
     return this.requestRestPath("GET", `${BackEnd.DEVICE_PATH}/${id}`);
   }
 
-  public getDevices(page:number):Promise<DeviceCollection> {
+  public getDevices(page:number):Promise<DevicesPage> {
     "use strict";
 
     if (page < 1) {

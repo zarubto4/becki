@@ -63,8 +63,8 @@ export class Component implements ngCore.OnInit {
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     return () => this.backEnd.getDevices(1)
-        .then(collection => Promise.all<libBackEnd.DeviceCollection>(collection.pages.map(page => this.backEnd.getDevices(page))))
-        .then(collections => ![].concat(...collections.map(collection => collection.content)).find(device => device.id == this.idField));
+        .then(page => Promise.all<libBackEnd.DevicesPage>(page.pages.map(number => this.backEnd.getDevices(number))))
+        .then(pages => ![].concat(...pages.map(page => page.content)).find(device => device.id == this.idField));
   }
 
   onSubmit():void {
