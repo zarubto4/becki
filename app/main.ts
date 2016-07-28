@@ -3,7 +3,6 @@
  * directory of this distribution.
  */
 
-import * as ngCommon from "@angular/common";
 import * as ngHttp from "@angular/http";
 import * as ngPlatformBrowserDynamic from "@angular/platform-browser-dynamic";
 import * as ngRouter from "@angular/router-deprecated";
@@ -14,7 +13,6 @@ ngPlatformBrowserDynamic.bootstrap(
     body.Component,
     [
       ngHttp.HTTP_PROVIDERS,
-      ngRouter.ROUTER_PROVIDERS,
-      {provide: ngCommon.LocationStrategy, useClass: ngCommon.HashLocationStrategy}
+      ngRouter.ROUTER_PROVIDERS
     ]
 );

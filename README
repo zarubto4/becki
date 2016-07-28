@@ -38,7 +38,10 @@ Installation
 1. Configure the HTTP server to serve the top-level directory of this
    distribution.
 
-2. In that directory, run `npm run install:javascript` in order to install the
+2. Configure the HTTP server to redirect every request that does not contain a
+   dot character to the default document.
+
+3. In that directory, run `npm run install:javascript` in order to install the
    application dependencies and to compile the sources into JavaScript.
 
 Contributions
@@ -47,7 +50,7 @@ Contributions
 Following commands might be useful during a development:
 
 * `npm test` to recompile the sources into JavaScript and to start an HTTP
-  server that serves the application at <http://0.0.0.0:8080/>.
+  server that serves the application at <http://localhost:3000>.
 
 [ecmascript 5]: http://www.ecma-international.org/publications/files/ECMA-ST-ARCH/ECMA-262%205th%20edition%20December%202009.pdf
 [html5]: http://www.w3.org/TR/2014/REC-html5-20141028/
