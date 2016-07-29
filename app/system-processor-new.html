@@ -14,28 +14,28 @@
         <span class="glyphicon glyphicon-pencil"></span>
         Model name
       </label>
-      <input class="form-control" required minlength="4" data-bindon-ngModel="nameField" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
+      <input class="form-control" required minlength="4" data-bindon-ngModel="nameField" name="name" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
     </div>
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon-pencil"></span>
         Model code
       </label>
-      <input class="form-control" required minlength="4" data-bindon-ngModel="codeField">
+      <input class="form-control" required minlength="4" data-bindon-ngModel="codeField" name="code">
     </div>
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon-pencil"></span>
         Description
       </label>
-      <textarea class="form-control" required minlength="24" data-bindon-ngModel="descriptionField"></textarea>
+      <textarea class="form-control" required minlength="24" data-bindon-ngModel="descriptionField" name="description"></textarea>
     </div>
     <div class="form-group">
       <label>
         <span class="glyphicon glyphicon-dashboard"></span>
         Speed
       </label>
-      <input class="form-control" type="number" required step="1" data-bindon-ngModel="speedField">
+      <input class="form-control" type="number" required step="1" data-bindon-ngModel="speedField" name="speed">
     </div>
     <div class="pull-right">
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>

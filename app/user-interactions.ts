@@ -33,7 +33,7 @@ class SelectableInteractionsModeratorItem extends libPatternFlyListView.Item {
 
 @ngCore.Component({
   templateUrl: "app/user-interactions.html",
-  directives: [libBeckiLayout.Component, libPatternFlyListView.Component, ngCommon.CORE_DIRECTIVES, ngCommon.FORM_DIRECTIVES],
+  directives: [libBeckiLayout.Component, libPatternFlyListView.Component, ngCommon.CORE_DIRECTIVES],
 })
 export class Component implements ngCore.OnInit {
 

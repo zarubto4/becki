@@ -3,7 +3,6 @@
  * of this distribution.
  */
 
-import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
 import * as ngRouter from "@angular/router-deprecated";
 
@@ -15,7 +14,7 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ngCore.Component({
   templateUrl: "app/system-producer-new.html",
-  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ngCommon.FORM_DIRECTIVES]
+  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component]
 })
 export class Component implements ngCore.OnInit {
 

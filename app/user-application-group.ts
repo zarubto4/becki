@@ -20,8 +20,7 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
     libBeckiCustomValidator.Directive,
     libBeckiLayout.Component,
     libPatternFlyListView.Component,
-    ngCommon.CORE_DIRECTIVES,
-    ngCommon.FORM_DIRECTIVES
+    ngCommon.CORE_DIRECTIVES
   ]
 })
 export class Component implements ngCore.OnInit {

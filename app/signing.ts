@@ -16,7 +16,7 @@ const REDIRECT_URL = `${window.location.pathname}#`;
 
 @ngCore.Component({
   templateUrl: "app/signing.html",
-  directives: [libBeckiCustomValidator.Directive, libBeckiNotifications.Component, ngCommon.CORE_DIRECTIVES, ngCommon.FORM_DIRECTIVES]
+  directives: [libBeckiCustomValidator.Directive, libBeckiNotifications.Component, ngCommon.CORE_DIRECTIVES]
 })
 export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 

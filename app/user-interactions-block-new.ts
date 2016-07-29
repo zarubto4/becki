@@ -20,8 +20,7 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
     libBeckiCustomValidator.Directive,
     libBeckiFieldCode.Component,
     libBeckiLayout.Component,
-    ngCommon.CORE_DIRECTIVES,
-    ngCommon.FORM_DIRECTIVES
+    ngCommon.CORE_DIRECTIVES
   ]
 })
 export class Component implements ngCore.OnInit {

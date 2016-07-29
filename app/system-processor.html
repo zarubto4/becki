@@ -17,7 +17,7 @@
           <span class="glyphicon glyphicon-pencil"></span>
           Model name
         </label>
-        <input class="form-control" required minlength="4" data-bindon-ngModel="nameField" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
+        <input class="form-control" required minlength="4" data-bindon-ngModel="nameField" name="name" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
       </div>
     </template>
     <div class="form-group">
@@ -28,7 +28,7 @@
         Model code
       </label>
       <template data-bind-ngSwitchCase="true">
-        <input class="form-control" required minlength="4" data-bindon-ngModel="codeField">
+        <input class="form-control" required minlength="4" data-bindon-ngModel="codeField" name="code">
       </template>
       <template data-bind-ngSwitchCase="false">
         <p class="form-control-static">{{processor?.processor_code}}</p>
@@ -42,7 +42,7 @@
         Description
       </label>
       <template data-bind-ngSwitchCase="true">
-        <textarea class="form-control" required minlength="24" data-bindon-ngModel="descriptionField"></textarea>
+        <textarea class="form-control" required minlength="24" data-bindon-ngModel="descriptionField" name="description"></textarea>
       </template>
       <template data-bind-ngSwitchCase="false">
         <p class="form-control-static">{{processor?.description}}</p>
@@ -56,7 +56,7 @@
         Speed
       </label>
       <template data-bind-ngSwitchCase="true">
-        <input class="form-control" type="number" required step="1" data-bindon-ngModel="speedField">
+        <input class="form-control" type="number" required step="1" data-bindon-ngModel="speedField" name="speed">
       </template>
       <template data-bind-ngSwitchCase="false">
         <p class="form-control-static">{{processor?.speed}}</p>

@@ -8,13 +8,11 @@ import "ace/ext-language_tools";
 import "ace/mode-c_cpp";
 import "ace/mode-javascript";
 
-import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
 
 @ngCore.Component({
   selector: "[fieldCode]",
-  templateUrl: "app/lib-becki/field-code.html",
-  directives: [ngCommon.FORM_DIRECTIVES]
+  templateUrl: "app/lib-becki/field-code.html"
 })
 export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore.OnDestroy {
 

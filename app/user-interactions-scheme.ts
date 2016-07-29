@@ -23,7 +23,6 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
     libBeckiFieldInteractionsScheme.Component,
     libBeckiLayout.Component,
     libPatternFlyListView.Component,
-    ngCommmon.FORM_DIRECTIVES,
     ngCommmon.CORE_DIRECTIVES
   ]
 })

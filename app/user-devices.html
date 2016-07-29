@@ -40,7 +40,7 @@
         </label>
         <div class="checkbox" template="ngFor let device of uploadProgramDevices">
           <label>
-            <input type="checkbox" data-bindon-ngModel="device.selected">
+            <input type="checkbox" data-bindon-ngModel="device.selected" name="device{{device.model.id}}">
             {{device.model.id}}
           </label>
         </div>
@@ -51,13 +51,13 @@
           Program
         </label>
         <div class="form-inline">
-          <select class="form-control" required data-bindon-ngModel="uploadProgramField" data-on-ngModelChange="onUploadProgramFieldChange($event)">
+          <select class="form-control" required data-bindon-ngModel="uploadProgramField" data-on-ngModelChange="onUploadProgramFieldChange($event)" name="program">
             <option value="">Select name...</option>
             <option data-bind-value="program.id" template="ngFor let program of programs">
               {{program.name}}
             </option>
           </select>
-          <select class="form-control" required data-bindon-ngModel="uploadProgramVersionField">
+          <select class="form-control" required data-bindon-ngModel="uploadProgramVersionField" name="version">
             <option value="">Select version...</option>
             <option data-bind-value="version.id" template="ngFor let version of getUploadProgramVersions()">
               {{version.version_name}}
@@ -77,7 +77,7 @@
         </label>
         <div class="checkbox" template="ngFor let device of uploadBinaryDevices">
           <label>
-            <input type="checkbox" data-bindon-ngModel="device.selected">
+            <input type="checkbox" data-bindon-ngModel="device.selected" name="device{{device.model.id}}">
             {{device.model.id}}
           </label>
         </div>

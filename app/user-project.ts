@@ -21,7 +21,6 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
     libBeckiLayout.Component,
     libPatternFlyListView.Component,
     ngCommon.CORE_DIRECTIVES,
-    ngCommon.FORM_DIRECTIVES,
     ngRouter.ROUTER_DIRECTIVES
   ]
 })

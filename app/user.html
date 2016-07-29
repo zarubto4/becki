@@ -37,7 +37,7 @@
           Name
         </label>
         <template data-bind-ngSwitchCase="true">
-          <input class="form-control" required data-bindon-ngModel="nameField">
+          <input class="form-control" required data-bindon-ngModel="nameField" name="name">
         </template>
         <template data-bind-ngSwitchCase="false">
           <p class="form-control-static">{{user?.full_name}}</p>
@@ -51,7 +51,7 @@
           Username
         </label>
         <template data-bind-ngSwitchCase="true">
-          <input class="form-control" required data-bindon-ngModel="usernameField" data-bind-customValidator="validateAccountUsernameField()" data-message="This username is used already. Please choose another one.">
+          <input class="form-control" required data-bindon-ngModel="usernameField" name="username" data-bind-customValidator="validateAccountUsernameField()" data-message="This username is used already. Please choose another one.">
         </template>
         <template data-bind-ngSwitchCase="false">
           <p class="form-control-static">{{user?.nick_name}}</p>
@@ -82,7 +82,7 @@
       <template data-bind-ngSwitchCase="true">
         <div class="checkbox" template="ngFor let role of roles">
           <label>
-            <input type="checkbox" data-bindon-ngModel="role.select">
+            <input type="checkbox" data-bindon-ngModel="role.select" name="role{{role.model.name}}">
             {{role.model.name}} ({{role.model.description}})
           </label>
         </div>
@@ -112,7 +112,7 @@
         </div>
         <div class="checkbox" data-bind-class.disabled="!permission.selectable" template="ngFor let permission of permissions">
           <label>
-            <input type="checkbox" data-bindon-ngModel="permission.select" data-bind-disabled="!permission.selectable">
+            <input type="checkbox" data-bindon-ngModel="permission.select" name="permission{{permission.model.value}}" data-bind-disabled="!permission.selectable">
             {{permission.model.value}} ({{permission.model.description}})
           </label>
         </div>

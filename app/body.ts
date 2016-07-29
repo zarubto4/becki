@@ -126,7 +126,7 @@ import * as userProjectEdit from "./user-project-edit";
     ]},
     {provide: "signing", useValue: ["Signing"]}
   ],
-  directives: [libBeckiFieldCode.Component, ngCommon.CORE_DIRECTIVES, ngCommon.FORM_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
+  directives: [libBeckiFieldCode.Component, ngCommon.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
   inputs: ["body"],
   host: {"[class.modal-open]": "modal"}
 })

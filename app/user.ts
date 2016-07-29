@@ -35,7 +35,7 @@ class Selectable<T> {
 
 @ngCore.Component({
   templateUrl: "app/user.html",
-  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ngCommon.CORE_DIRECTIVES, ngCommon.FORM_DIRECTIVES]
+  directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ngCommon.CORE_DIRECTIVES]
 })
 export class Component implements ngCore.OnInit {
 

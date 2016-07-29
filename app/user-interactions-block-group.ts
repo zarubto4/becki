@@ -24,7 +24,6 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
         libBeckiFieldInteractionsScheme.Component,
         libBeckiLayout.Component,
         ngCommon.CORE_DIRECTIVES,
-        ngCommon.FORM_DIRECTIVES,
         libPatternFlyListView.Component]
 })
 export class Component implements ngCore.OnInit {

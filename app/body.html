@@ -17,7 +17,7 @@
               <span class="glyphicon glyphicon-list"></span>
               List
             </label>
-            <select class="form-control" required data-bindon-ngModel="modal.selection">
+            <select class="form-control" required data-bindon-ngModel="modal.selection" name="list">
               <option template="ngFor let option of modal.options">
                 {{option}}
               </option>
@@ -61,7 +61,7 @@
               <span class="glyphicon glyphicon-hdd"></span>
               File name
             </label>
-            <input class="form-control" data-bindon-ngModel="modal.name">
+            <input class="form-control" data-bindon-ngModel="modal.name" name="name">
             <span class="help-block">Use the "{{modal.separator}}" character as a path separator. Nonexistent directories will be created for you.</span>
           </div>
         </div>
@@ -108,16 +108,16 @@
               <template data-bind-ngSwitchCase="false">
                 <div data-bind-ngSwitch="getWidgetPropertyType(property)">
                   <template data-bind-ngSwitchCase="'int'">
-                    <input class="form-control" type="number" data-bindon-ngModel="property.value">
+                    <input class="form-control" type="number" data-bindon-ngModel="property.value" name="property{{property.id}}">
                   </template>
                   <template data-bind-ngSwitchCase="'float'">
-                    <input class="form-control" type="number" step="0.01" data-bindon-ngModel="property.value">
+                    <input class="form-control" type="number" step="0.01" data-bindon-ngModel="property.value" name="property{{property.id}}">
                   </template>
                   <template data-bind-ngSwitchCase="'text'">
-                    <input class="form-control" data-bindon-ngModel="property.value">
+                    <input class="form-control" data-bindon-ngModel="property.value" name="property{{property.id}}">
                   </template>
                   <template data-bind-ngSwitchCase="'bool'">
-                    <input type="checkbox" data-bindon-ngModel="property.value">
+                    <input type="checkbox" data-bindon-ngModel="property.value" name="property{{property.id}}">
                   </template>
                 </div>
               </template>
@@ -172,16 +172,16 @@
               <template data-bind-ngSwitchCase="false">
                 <div data-bind-ngSwitch="getBlockPropertyType(property)">
                   <template data-bind-ngSwitchCase="'int'">
-                    <input class="form-control" type="number" data-bindon-ngModel="property.value">
+                    <input class="form-control" type="number" data-bindon-ngModel="property.value" name="property{{property.id}}">
                   </template>
                   <template data-bind-ngSwitchCase="'float'">
-                    <input class="form-control" type="number" step="0.1" data-bindon-ngModel="property.value">
+                    <input class="form-control" type="number" step="0.1" data-bindon-ngModel="property.value" name="property{{property.id}}">
                   </template>
                   <template data-bind-ngSwitchCase="'text'">
-                    <input class="form-control" data-bindon-ngModel="property.value">
+                    <input class="form-control" data-bindon-ngModel="property.value" name="property{{property.id}}">
                   </template>
                   <template data-bind-ngSwitchCase="'bool'">
-                    <input type="checkbox" data-bindon-ngModel="property.value">
+                    <input type="checkbox" data-bindon-ngModel="property.value" name="property{{property.id}}">
                   </template>
                   <template data-bind-ngSwitchCase="'javascript'">
                     <div data-bindon-fieldCode="property.value" data-bind-mode="'ace/mode/javascript'">

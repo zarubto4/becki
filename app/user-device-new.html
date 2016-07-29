@@ -15,7 +15,7 @@
           <span class="glyphicon glyphicon-list"></span>
           Project
         </label>
-        <select class="form-control" required data-bindon-ngModel="projectField">
+        <select class="form-control" required data-bindon-ngModel="projectField" name="project">
           <option value="">Select name...</option>
           <option data-bind-value="project.id" template="ngFor let project of projects">
             {{project.project_name}}
@@ -28,7 +28,7 @@
         <span class="glyphicon glyphicon-pencil"></span>
         ID
       </label>
-      <input class="form-control" required data-bindon-ngModel="idField" data-bind-customValidator="validateIdField()" data-message="This ID is registered already.">
+      <input class="form-control" required data-bindon-ngModel="idField" name="id" data-bind-customValidator="validateIdField()" data-message="This ID is registered already.">
     </div>
     <div class="pull-right">
       <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>

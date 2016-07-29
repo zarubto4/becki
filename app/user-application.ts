@@ -17,11 +17,7 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
 @ngCore.Component({
   templateUrl: "app/user-application.html",
   directives: [
-    libBeckiCustomValidator.Directive,
-    libBeckiFieldApplication.Component,
-    libBeckiLayout.Component,
-    ngCommon.CORE_DIRECTIVES,
-    ngCommon.FORM_DIRECTIVES
+    libBeckiCustomValidator.Directive, libBeckiFieldApplication.Component, libBeckiLayout.Component, ngCommon.CORE_DIRECTIVES
   ]
 })
 export class Component implements ngCore.OnInit {

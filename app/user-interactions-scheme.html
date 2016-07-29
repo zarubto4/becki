@@ -40,14 +40,14 @@
               <span class="glyphicon glyphicon-pencil"></span>
               Scheme Name
             </label>
-            <input class="form-control" required minlength="8" data-bindon-ngModel="nameField" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
+            <input class="form-control" required minlength="8" data-bindon-ngModel="nameField" name="name" data-bind-customValidator="validateNameField()" data-message="This name is used already. Please choose another one.">
           </div>
           <div class="form-group">
             <label>
               <span class="glyphicon glyphicon-pencil"></span>
               Scheme Description
             </label>
-            <textarea class="form-control" data-bindon-ngModel="descriptionField"></textarea>
+            <textarea class="form-control" data-bindon-ngModel="descriptionField" name="description"></textarea>
           </div>
           <div class="pull-right">
             <button class="btn btn-danger" type="button" data-on-click="onCancelClick($event)">Cancel</button>
@@ -78,21 +78,21 @@
               <span class="glyphicon glyphicon-pencil"></span>
               Version Name
             </label>
-            <input class="form-control" required data-bindon-ngModel="versionNameField" data-bind-customValidator="validateVersionNameField()" data-message="This name is used already. Please choose another one.">
+            <input class="form-control" required data-bindon-ngModel="versionNameField" name="name" data-bind-customValidator="validateVersionNameField()" data-message="This name is used already. Please choose another one.">
           </div>
           <div class="form-group">
             <label>
               <span class="glyphicon glyphicon-pencil"></span>
               Version Description
             </label>
-            <textarea class="form-control" data-bindon-ngModel="versionDescriptionField"></textarea>
+            <textarea class="form-control" data-bindon-ngModel="versionDescriptionField" name="description"></textarea>
           </div>
           <div class="form-group">
             <label>
               <span class="glyphicon glyphicon-list"></span>
               Device
             </label>
-            <select class="form-control" required data-bindon-ngModel="versionDeviceField">
+            <select class="form-control" required data-bindon-ngModel="versionDeviceField" name="device">
               <option value="">Select ID...</option>
               <option data-bind-value="device.id" template="ngFor let device of devices">
                 {{device.id}}
@@ -104,7 +104,7 @@
               <span class="glyphicon glyphicon-list"></span>
               Device Program
             </label>
-            <select class="form-control" required data-bindon-ngModel="versionDeviceProgramField">
+            <select class="form-control" required data-bindon-ngModel="versionDeviceProgramField" name="program">
               <option value="">Select name...</option>
               <option data-bind-value="program.id" template="ngFor let program of getProgramsForVersionDevice()">
                 {{program.program_name}}
@@ -116,7 +116,7 @@
               <span class="glyphicon glyphicon-phone"></span>
               {{showApplicationGroups ? 'Application groups' : 'Applications'}}
             </label>
-            <select class="form-control" data-bindon-ngModel="versionApplicationGroupField">
+            <select class="form-control" data-bindon-ngModel="versionApplicationGroupField" name="application">
               <option value="">Select name...</option>
               <template ngFor data-let-group data-bind-ngForOf="applicationGroups">
                 <option data-bind-value="group.id" data-bind-ngSwitch="showApplicationGroups">

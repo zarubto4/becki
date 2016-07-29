@@ -16,14 +16,14 @@
             <span class="glyphicon glyphicon-pencil"></span>
             Name
           </label>
-          <input class="form-control" required minlength="8" data-bindon-ngModel="nameField" data-bind-customValidator="validateNameField()" data-message="This name is used as a name of a library or a library group already. Please choose another one.">
+          <input class="form-control" required minlength="8" data-bindon-ngModel="nameField" name="name" data-bind-customValidator="validateNameField()" data-message="This name is used as a name of a library or a library group already. Please choose another one.">
         </div>
         <div class="form-group">
           <label>
             <span class="glyphicon glyphicon-pencil"></span>
             Description
           </label>
-          <textarea class="form-control" required minlength="8" data-bindon-ngModel="descriptionField"></textarea>
+          <textarea class="form-control" required minlength="8" data-bindon-ngModel="descriptionField" name="description"></textarea>
         </div>
         <template data-bind-ngSwitchCase="true">
           <div class="pull-right">
@@ -50,14 +50,14 @@
             <span class="glyphicon glyphicon-pencil"></span>
             Version Name
           </label>
-          <input class="form-control" required minlength="8" data-bindon-ngModel="versionNameField">
+          <input class="form-control" required minlength="8" data-bindon-ngModel="versionNameField" name="name">
         </div>
         <div class="form-group">
           <label>
             <span class="glyphicon glyphicon-pencil"></span>
             Version Description
           </label>
-          <textarea class="form-control" required minlength="8" data-bindon-ngModel="versionDescriptionField"></textarea>
+          <textarea class="form-control" required minlength="8" data-bindon-ngModel="versionDescriptionField" name="description"></textarea>
         </div>
         <div class="form-group">
           <label>
