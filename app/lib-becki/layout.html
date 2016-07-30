@@ -62,7 +62,7 @@
         </a>
         <ul class="dropdown-menu">
           <li>
-            <a data-on-click="onConnectionsClick($event)" style="cursor: pointer">Connections</a>
+            <a data-bind-routerLink="connections">Connections</a>
           </li>
           <li class="divider"></li>
           <li>
@@ -75,14 +75,14 @@
 </nav>
 <div class="nav-pf-vertical nav-pf-vertical-with-secondary-nav" data-bind-class.collapsed="navbarState == 'collapsed'" data-bind-class.hidden="navbarState == 'hidden'" data-bind-class.show-mobile-nav="navbarState == 'visible'">
   <ul class="list-group">
-    <li class="list-group-item" template="ngFor let page of navigation">
+    <li class="list-group-item" routerLinkActive="active" template="ngFor let page of navigation">
       <a data-bind-routerLink="page.link">
         <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
         <span class="list-group-item-value">{{page.label}}</span>
       </a>
     </li>
-    <li class="list-group-item list-group-item-separator hidden-sm hidden-md hidden-lg">
-      <a data-on-click="onConnectionsClick($event)" style="cursor: pointer">
+    <li class="list-group-item list-group-item-separator hidden-sm hidden-md hidden-lg" routerLinkActive="active">
+      <a data-bind-routerLink="connections">
         <span class="fa fa-sign-in" title="Connections"></span>
         <span class="list-group-item-value">Connections</span>
       </a>

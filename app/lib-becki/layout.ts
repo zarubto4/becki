@@ -138,12 +138,6 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     event.stopPropagation();
   }
 
-  onConnectionsClick():void {
-    "use strict";
-
-    this.router.navigate(this.connections);
-  }
-
   onSignOutClick():void {
     "use strict";
 
