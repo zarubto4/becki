@@ -4,9 +4,10 @@
  */
 
 import * as _ from "underscore";
+import * as Rx from "rxjs";
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
@@ -27,7 +28,7 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
     ngRouter.ROUTER_DIRECTIVES
   ]
 })
-export class Component implements ngCore.OnInit {
+export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   id:string;
 
@@ -65,20 +66,22 @@ export class Component implements ngCore.OnInit {
 
   versions:libPatternFlyListView.Item[];
 
+  activatedRoute:ngRouter.ActivatedRoute;
+
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
 
-  constructor(routeParams:ngRouter.RouteParams, @ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
+  routeParamsSubscription:Rx.Subscription;
+
+  constructor(@ngCore.Inject("home") home:string, activatedRoute:ngRouter.ActivatedRoute, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
     "use strict";
 
-    this.id = routeParams.get("program");
     this.name = "Loading...";
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("User", home.link),
-      new libBeckiLayout.LabeledLink("Device Programs", ["UserDevices"]),
-      new libBeckiLayout.LabeledLink("Loading...", ["UserDeviceProgram", {program: this.id}])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("User", ["/user"]),
+      new libBeckiLayout.LabeledLink("Device Programs", ["/user/device/programs"])
     ];
     this.showHistory = false;
     this.editing = false;
@@ -94,6 +97,7 @@ export class Component implements ngCore.OnInit {
     this.versionDescription = "Loading...";
     this.versionCodeField = {};
     this.versionCode = {};
+    this.activatedRoute = activatedRoute;
     this.backEnd = backEnd;
     this.notifications = notifications;
   }
@@ -102,7 +106,16 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.refresh();
+    this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+      this.id = params["program"];
+      this.refresh();
+    });
+  }
+
+  ngOnDestroy():void {
+    "use strict";
+
+    this.routeParamsSubscription.unsubscribe();
   }
 
   refresh():void {
@@ -119,7 +132,7 @@ export class Component implements ngCore.OnInit {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-309
           let lastVersionFiles = <{[name:string]: string}>_.object(JSON.parse(lastVersion.version_code).user_files.map((file:{file_name:string, code:string}) => [file.file_name, file.code]));
           this.name = program.program_name;
-          this.breadcrumbs[3].label = program.program_name;
+          this.breadcrumbs.push(new libBeckiLayout.LabeledLink(program.program_name, ["/user/device/programs", this.id]));
           this.editProgram = program.edit_permission;
           this.addVersion = program.update_permission;
           this.nameField = program.program_name;

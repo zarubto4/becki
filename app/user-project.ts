@@ -3,9 +3,10 @@
  * directory of this distribution.
  */
 
+import * as Rx from "rxjs";
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
@@ -24,7 +25,7 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
     ngRouter.ROUTER_DIRECTIVES
   ]
 })
-export class Component implements ngCore.OnInit {
+export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   id:string;
 
@@ -52,6 +53,7 @@ export class Component implements ngCore.OnInit {
   schemes:libPatternFlyListView.Item[];
   applications:libPatternFlyListView.Item[];
 
+  activatedRoute:ngRouter.ActivatedRoute;
 
   backEnd:libBeckiBackEnd.Service;
 
@@ -59,16 +61,16 @@ export class Component implements ngCore.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, @ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  routeParamsSubscription:Rx.Subscription;
+
+  constructor(@ngCore.Inject("home") home:string, activatedRoute:ngRouter.ActivatedRoute, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.id = routeParams.get("project");
     this.name = "Loading...";
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("User", home.link),
-      new libBeckiLayout.LabeledLink("Projects", ["UserProjects"]),
-      new libBeckiLayout.LabeledLink("Loading...", ["UserProject", {project: this.id}])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("User", ["/user"]),
+      new libBeckiLayout.LabeledLink("Projects", ["/user/projects"])
     ];
     this.tab="details";
     this.nameField = "Loading...";
@@ -77,6 +79,7 @@ export class Component implements ngCore.OnInit {
     this.editProject = false;
     this.addCollaborator = false;
     this.addIntoProject = false;
+    this.activatedRoute = activatedRoute;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -86,7 +89,16 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.refresh();
+    this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+      this.id = params["project"];
+      this.refresh();
+    });
+  }
+
+  ngOnDestroy():void {
+    "use strict";
+
+    this.routeParamsSubscription.unsubscribe();
   }
 
   tabPermissionCheck():boolean{
@@ -145,7 +157,7 @@ export class Component implements ngCore.OnInit {
           let Applications:libBackEnd.Application[];
           [project, collaborators,Devices,Schemes,Applications] = result;
           this.name = project.project_name;
-          this.breadcrumbs[3].label = project.project_name;
+          this.breadcrumbs.push(new libBeckiLayout.LabeledLink(project.project_name, ["/user/projects", this.id]));
           this.nameField = project.project_name;
           this.descriptionField = project.project_description;
           this.description = project.project_description;
@@ -153,9 +165,9 @@ export class Component implements ngCore.OnInit {
           this.addIntoProject = project.update_permission;
           this.addCollaborator = project.share_permission;
           this.collaborators = collaborators.map(collaborator => new libPatternFlyListView.Item(collaborator.id, libBackEnd.composeUserString(collaborator, true), null, undefined, project.unshare_permission));
-          this.devices = Devices.map(device => new libPatternFlyListView.Item(device.id,device.program_name,device.program_description,["UserDeviceProgram", {program:device.id}],device.delete_permission));
-          this.schemes = Schemes.map(scheme => new libPatternFlyListView.Item(scheme.id,scheme.name,scheme.program_description,["UserInteractionsScheme", {scheme:scheme.id}],scheme.delete_permission));
-          this.applications = Applications.map(application => new libPatternFlyListView.Item(application.id,application.program_name,application.program_description,["UserApplication", {application:application.id}],application.delete_permission));
+          this.devices = Devices.map(device => new libPatternFlyListView.Item(device.id,device.program_name,device.program_description,["/user/device/programs", device.id],device.delete_permission));
+          this.schemes = Schemes.map(scheme => new libPatternFlyListView.Item(scheme.id,scheme.name,scheme.program_description,["/user/interactions/schemes", scheme.id],scheme.delete_permission));
+          this.applications = Applications.map(application => new libPatternFlyListView.Item(application.id,application.program_name,application.program_description,["/user/applications", application.id],application.delete_permission));
 
 
         })
@@ -206,23 +218,23 @@ export class Component implements ngCore.OnInit {
   onAddClick():void{
     switch (this.tab){
     case "details":
-      this.router.navigate(["UserProjectEdit", {project: this.id}]);
+      this.router.navigate(["/user/projects", this.id, "edit"]);
     break;
 
     case "devices":
-      this.router.navigate(["NewUserDeviceProgram"]);
+      this.router.navigate(["/user/device/program/new"]);
       break;
 
     case "schemes":
-      this.router.navigate(["NewUserInteractionsScheme"]);
+      this.router.navigate(["/user/interactions/scheme/new"]);
       break;
 
     case "applications":
-      this.router.navigate(["NewUserApplicationGroup"]);
+      this.router.navigate(["/user/application/group/new"]);
       break;
 
     case "collaborators":
-      this.router.navigate(["NewUserProjectCollaborator", {project: this.id}]);
+      this.router.navigate(["/user/projects", this.id, "collaborator/new"]);
       break;
 
   }
@@ -231,7 +243,7 @@ export class Component implements ngCore.OnInit {
   onCollaboratorAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewUserProjectCollaborator", {project: this.id}]);
+    this.router.navigate(["/user/projects", this.id, "collaborator/new"]);
   }
 
   onCollaboratorRemoveClick(id:string):void {

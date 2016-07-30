@@ -5,7 +5,7 @@
 
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
@@ -63,13 +63,13 @@ export class Component implements ngCore.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(@ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(@ngCore.Inject("home") home:string, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("User", home.link),
-      new libBeckiLayout.LabeledLink("Interactions", ["UserInteractions"])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("User", ["/user"]),
+      new libBeckiLayout.LabeledLink("Interactions", ["/user/interactions"])
     ];
     this.tab = 'schemes';
     this.uploadSchemeField = "";
@@ -104,12 +104,12 @@ export class Component implements ngCore.OnInit {
           let groups:libBackEnd.InteractionsBlockGroup[];
           let moderators:[libBackEnd.InteractionsModerator, libBackEnd.Project][];
           [schemes, groups, moderators] = result;
-          this.schemes = schemes.map(scheme => new libPatternFlyListView.Item(scheme.id, scheme.name, scheme.program_description, ["UserInteractionsScheme", {scheme: scheme.id}], scheme.delete_permission));
-          this.blocks = [].concat(...groups.map(group => group.blockoBlocks)).map(block => new libPatternFlyListView.Item(block.id, block.name, block.general_description, ["UserInteractionsBlock", {block: block.id}], block.delete_permission));
+          this.schemes = schemes.map(scheme => new libPatternFlyListView.Item(scheme.id, scheme.name, scheme.program_description, ["/user/interactions/schemes", scheme.id], scheme.delete_permission));
+          this.blocks = [].concat(...groups.map(group => group.blockoBlocks)).map(block => new libPatternFlyListView.Item(block.id, block.name, block.general_description, ["/user/interactions/blocks", block.id], block.delete_permission));
           this.uploadSchemes = schemes.filter(scheme => scheme.update_permission);
           this.moderators = moderators.map(pair => new SelectableInteractionsModeratorItem(pair[0], pair[1]));
-          this.BlockGroups = groups.map(group => new libPatternFlyListView.Item(group.id,group.name,group.general_description,["UserInteractionsBlockGroup",{group:group.id}],group.delete_permission));
-          this.spies = schemes.filter(scheme => scheme.program_state.uploaded).map(scheme => new libPatternFlyListView.Item(scheme.id, scheme.name, scheme.program_versions.find(version => version.version_Object.id == scheme.program_state.version_id).version_Object.version_name, ["UserInteractionsSpy", {spy: scheme.id}], false));
+          this.BlockGroups = groups.map(group => new libPatternFlyListView.Item(group.id, group.name, group.general_description, ["/user/interactions/block/groups", group.id], group.delete_permission));
+          this.spies = schemes.filter(scheme => scheme.program_state.uploaded).map(scheme => new libPatternFlyListView.Item(scheme.id, scheme.name, scheme.program_versions.find(version => version.version_Object.id == scheme.program_state.version_id).version_Object.version_name, ["/user/interactions/spies", scheme.id], false));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("Interactions cannot be loaded.", reason));
@@ -140,26 +140,26 @@ export class Component implements ngCore.OnInit {
   onAddBlockGroupsClick():void {
     "use strict";
 
-    this.router.navigate(["UserInteractionsBlockGroupNew"]);
+    this.router.navigate(["/user/interactions/block/group/new"]);
   }
 
 
   onAddSchemeClick():void {
     "use strict";
 
-    this.router.navigate(["NewUserInteractionsScheme"]);
+    this.router.navigate(["/user/interactions/scheme/new"]);
   }
 
   onAddBlockClick():void {
     "use strict";
 
-    this.router.navigate(["NewUserInteractionsBlock"]);
+    this.router.navigate(["/user/interactions/block/new"]);
   }
 
   onAddModeratorClick():void {
     "use strict";
 
-    this.router.navigate(["NewUserInteractionsModerator"]);
+    this.router.navigate(["/user/interactions/moderator/new"]);
   }
 
   onTabClick(tab:string):void {

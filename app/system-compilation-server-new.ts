@@ -5,11 +5,11 @@
 
 
 import * as ngCore from "@angular/core";
-import * as libBackEnd from "./lib-back-end/index";
-import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
+import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
+import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
 import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
@@ -33,13 +33,13 @@ export class Component implements ngCore.OnInit {
 
     router:ngRouter.Router;
 
-    constructor(@ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+    constructor(@ngCore.Inject("home") home:string, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
         "use strict";
 
         this.breadcrumbs = [
-            home,
-            new libBeckiLayout.LabeledLink("System", ["System"]),
-            new libBeckiLayout.LabeledLink("New Compilation Server", ["NewSystemCompilationServer"])
+            new libBeckiLayout.LabeledLink(home, ["/"]),
+            new libBeckiLayout.LabeledLink("System", ["/system"]),
+            new libBeckiLayout.LabeledLink("New Compilation Server", ["/system/compilation/server/new"])
         ];
         this.nameField = "";
         this.typeField = "";
@@ -60,7 +60,7 @@ export class Component implements ngCore.OnInit {
         "use strict";
 
         this.notifications.shift();
-        this.router.navigate(["System"]);
+        this.router.navigate(["/system"]);
     }
 
     onSubmit():void{
@@ -71,7 +71,7 @@ export class Component implements ngCore.OnInit {
         this.backEnd.createCompilationServer(this.nameField)
             .then(() => {
                 this.notifications.next.push(new libBeckiNotifications.Success("The server " + this.nameField + " has been created."));
-                this.router.navigate(["System"]);
+                this.router.navigate(["/system"]);
             })
             .catch(reason => {
                 this.notifications.current.push(new libBeckiNotifications.Danger("The server cannot be created.", reason));

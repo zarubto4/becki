@@ -5,7 +5,7 @@
 
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
@@ -49,12 +49,12 @@ export class Component implements ngCore.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(@ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(@ngCore.Inject("home") home:string, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("System", ["System"])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("System", ["/system"])
     ];
     this.tab = ['interactions', 'moderators'];
     this.backEnd = backEnd;
@@ -79,7 +79,7 @@ export class Component implements ngCore.OnInit {
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     this.backEnd.getInteractionsServers()
         .then(servers => this.interactionsServers = servers.map(server =>
-            new libPatternFlyListView.Item(server.id, server.server_name, server.destination_address, server.edit_permission ? ["SystemInteractionsServer", {server: server.id}] : null, server.delete_permission)))
+            new libPatternFlyListView.Item(server.id, server.server_name, server.destination_address, server.edit_permission ? ["/system/interactions/servers", server.id] : null, server.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Interactions servers cannot be loaded.", reason)));
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     this.backEnd.getDevices(1)
@@ -88,28 +88,28 @@ export class Component implements ngCore.OnInit {
         .then(pages => this.devices = [].concat(...pages.map(page => page.content)).map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.isActive ? "active" : "inactive")))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
     this.backEnd.getDeviceTypes()
-        .then(deviceTypes => this.deviceTypes = deviceTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, ["SystemDeviceType", {type: type.id}], type.delete_permission)))
+        .then(deviceTypes => this.deviceTypes = deviceTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, ["/system/device/types", type.id], type.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Device types cannot be loaded.", reason)));
     this.backEnd.getProcessors()
-        .then(processors => this.processors = processors.map(processor => new libPatternFlyListView.Item(processor.id, processor.processor_name, processor.processor_code, ["SystemProcessor", {processor: processor.id}])))
+        .then(processors => this.processors = processors.map(processor => new libPatternFlyListView.Item(processor.id, processor.processor_name, processor.processor_code, ["/system/processors", processor.id])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));
     this.backEnd.getLibraryGroups(1)
         .then(groupPage => Promise.all<libBackEnd.LibraryGroupsPage>(groupPage.pages.map(page => this.backEnd.getLibraryGroups(page))))
-        .then(groupPages => this.libraryGroups = [].concat(...groupPages.map(page => page.content)).map(group => new libPatternFlyListView.Item(group.id, group.group_name, group.description, ["SystemLibraryGroup", {group: group.id}])))
+        .then(groupPages => this.libraryGroups = [].concat(...groupPages.map(page => page.content)).map(group => new libPatternFlyListView.Item(group.id, group.group_name, group.description, ["/system/library/groups", group.id])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Library groups cannot be loaded.", reason)));
     this.backEnd.getLibraries(1)
         .then(librariesPage => Promise.all<libBackEnd.LibrariesPage>(librariesPage.pages.map(number => this.backEnd.getLibraries(number))))
-        .then(librariesPages => this.libraries = [].concat(...librariesPages.map(page => page.content)).map(library => new libPatternFlyListView.Item(library.id, library.library_name, library.description, ["SystemLibrary", {library: library.id}], library.delete_permission)))
+        .then(librariesPages => this.libraries = [].concat(...librariesPages.map(page => page.content)).map(library => new libPatternFlyListView.Item(library.id, library.library_name, library.description, ["/system/libraries", library.id], library.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Libraries cannot be loaded.", reason)));
     this.backEnd.getProducers()
-        .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, producer.description, ["SystemProducer", {producer: producer.id}], producer.delete_permission)))
+        .then(producers => this.producers = producers.map(producer => new libPatternFlyListView.Item(producer.id, producer.name, producer.description, ["/system/producers", producer.id], producer.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Producers cannot be loaded.", reason)));
     this.backEnd.getCompilationServers()
         .then(servers => this.compilationServers = servers.map(server =>
-            new libPatternFlyListView.Item(server.id, server.server_name, server.destination_address, ["SystemCompilationServer", {server: server.id}])))
+            new libPatternFlyListView.Item(server.id, server.server_name, server.destination_address, ["/system/compilation/servers", server.id])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Compilation servers cannot be loaded.", reason)));
     this.backEnd.getUsers()
-        .then(users => this.users = users.map(user => new libPatternFlyListView.Item(user.id, libBackEnd.composeUserString(user), "", ["User", {user: user.id}], user.delete_permission)))
+        .then(users => this.users = users.map(user => new libPatternFlyListView.Item(user.id, libBackEnd.composeUserString(user), "", ["/users", user.id], user.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Device types cannot be loaded.", reason)));
   }
 
@@ -155,48 +155,49 @@ export class Component implements ngCore.OnInit {
   onAddInteractionsServerClick():void{
     "use strict";
 
-    this.router.navigate(["NewSystemInteractionsServer"]);
+    this.router.navigate(["/system/interactions/server/new"]);
   }
 
   onAddDeviceClick():void {
     "use strict";
 
-    this.router.navigate(["NewSystemDevice"]);
+    this.router.navigate(["/system/device/new"]);
   }
 
   onAddDeviceTypeClick():void {
     "use strict";
 
-    this.router.navigate(["NewSystemDeviceType"]);
+    this.router.navigate(["/system/device/type/new"]);
   }
 
   onAddProcessorClick():void {
     "use strict";
 
-    this.router.navigate(["NewSystemProcessor"]);
+    this.router.navigate(["/system/processor/new"]);
   }
 
   onAddLibraryGroupClick():void {
     "use strict";
 
-    this.router.navigate(["NewSystemLibraryGroup"]);
+    this.router.navigate(["/system/library/group/new"]);
   }
 
   onAddLibraryClick():void {
     "use strict";
 
-    this.router.navigate(["NewSystemLibrary"]);
+    this.router.navigate(["/system/library/new"]);
   }
 
   onAddProducerClick():void {
     "use strict";
 
-    this.router.navigate(["NewSystemProducer"]);
+    this.router.navigate(["/system/producer/new"]);
   }
 
   onAddCompilationServerClick():void {
     "use strict";
-    this.router.navigate(["NewSystemCompilationServer"]);
+
+    this.router.navigate(["/system/compilation/server/new"]);
   }
 
   onTabClick(tab:string[]):void {

@@ -5,11 +5,10 @@
 
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
-import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 const REDIRECT_URL = `${window.location.pathname}#`;
@@ -20,7 +19,7 @@ const REDIRECT_URL = `${window.location.pathname}#`;
 })
 export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
-  home:libBeckiLayout.LabeledLink;
+  home:string;
 
   signIn:boolean;
 
@@ -44,7 +43,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   router:ngRouter.Router;
 
-  constructor(@ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(@ngCore.Inject("home") home:string, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.home = home;
@@ -94,7 +93,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
     this.notifications.shift();
     this.backEnd.createToken(this.inEmailField, this.inPasswordField)
-        .then(() => this.router.navigate(this.home.link))
+        .then(() => this.router.navigate(["/"]))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("The user cannot be signed in.", reason)));
   }
 

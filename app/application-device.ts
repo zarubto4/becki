@@ -3,9 +3,10 @@
  * of this distribution.
  */
 
+import * as Rx from "rxjs";
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
@@ -17,7 +18,7 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
   templateUrl: "app/application-device.html",
   directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ngCommon.CORE_DIRECTIVES]
 })
-export class Component implements ngCore.OnInit {
+export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   id:string;
 
@@ -43,20 +44,22 @@ export class Component implements ngCore.OnInit {
 
   rowsField:number;
 
+  activatedRoute:ngRouter.ActivatedRoute;
+
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, @ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  routeParamsSubscription:Rx.Subscription;
+
+  constructor(@ngCore.Inject("home") home:string, activatedRoute:ngRouter.ActivatedRoute, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.id = routeParams.get("device");
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("Devices for Applications", ["UserApplications"]),
-      new libBeckiLayout.LabeledLink("Loading...", ["ApplicationDevice", {device: this.id}])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("Devices for Applications", ["/application/devices"]),
     ];
     this.editing = false;
     this.editDevice = false;
@@ -66,6 +69,7 @@ export class Component implements ngCore.OnInit {
     this.heightField = 1;
     this.columnsField = 1;
     this.rowsField = 1;
+    this.activatedRoute = activatedRoute;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -75,7 +79,16 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.refresh();
+    this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+      this.id = params["device"];
+      this.refresh();
+    });
+  }
+
+  ngOnDestroy():void {
+    "use strict";
+
+    this.routeParamsSubscription.unsubscribe();
   }
 
   refresh():void {
@@ -90,7 +103,7 @@ export class Component implements ngCore.OnInit {
         .then(result => {
           let projects:libBackEnd.Project[];
           [this.device, projects] = result;
-          this.breadcrumbs[2].label = this.device.name;
+          this.breadcrumbs.push(new libBeckiLayout.LabeledLink(this.device.name, ["/application/devices", this.id]));
           this.project = projects.find(project => project.screen_size_types_id.indexOf(this.id) != -1) || null;
           this.editDevice = this.device.edit_permission;
           this.showProject = this.project && projects.length > 1;

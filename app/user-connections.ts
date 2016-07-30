@@ -4,7 +4,7 @@
  */
 
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBecki from "./lib-becki/index";
@@ -39,13 +39,13 @@ export class Component implements ngCore.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(@ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(@ngCore.Inject("home") home:string, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("User", home.link),
-      new libBeckiLayout.LabeledLink("Connections", ["UserConnections"])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("User", ["/user"]),
+      new libBeckiLayout.LabeledLink("Connections", ["/user/connections"])
     ];
     this.backEnd = backEnd;
     this.notifications = notifications;

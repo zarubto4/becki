@@ -4,7 +4,7 @@
  */
 
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
@@ -29,13 +29,13 @@ export class Component implements ngCore.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(@ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(@ngCore.Inject("home") home:string, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("User", home.link),
-      new libBeckiLayout.LabeledLink("New Project", ["NewUserProject"])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("User", ["/user"]),
+      new libBeckiLayout.LabeledLink("New Project", ["/user/project/new"])
     ];
     this.nameField = "";
     this.descriptionField = "";
@@ -64,7 +64,7 @@ export class Component implements ngCore.OnInit {
     this.backEnd.createProject(this.nameField, this.descriptionField)
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The project has been created."));
-          this.router.navigate(["UserProjects"]);
+          this.router.navigate(["/user/projects"]);
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The project cannot be created.", reason));
@@ -75,6 +75,6 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["UserProjects"]);
+    this.router.navigate(["/user/projects"]);
   }
 }

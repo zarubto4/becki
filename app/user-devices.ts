@@ -5,7 +5,7 @@
 
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
@@ -20,7 +20,7 @@ class DeviceProgramItem  extends libPatternFlyListView.Item {
   constructor(program:libBackEnd.DeviceProgram) {
     "use strict";
 
-    super(program.id, program.program_name, `${program.program_description}`, ["UserDeviceProgram", {program: program.id}], program.delete_permission);
+    super(program.id, program.program_name, `${program.program_description}`, ["/user/device/programs", program.id], program.delete_permission);
     this.versions = program.program_versions.map(version => version.version_object);
   }
 }
@@ -70,13 +70,13 @@ export class Component implements ngCore.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(@ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(@ngCore.Inject("home") home:string, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("User", home.link),
-      new libBeckiLayout.LabeledLink("Devices", ["UserDevices"])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("User", ["/user"]),
+      new libBeckiLayout.LabeledLink("Devices", ["/user/devices"])
     ];
     this.tab = 'programs';
     this.uploadProgramField = "";
@@ -135,13 +135,13 @@ export class Component implements ngCore.OnInit {
   onAddProgramClick():void {
     "use strict";
 
-    this.router.navigate(["NewUserDeviceProgram"]);
+    this.router.navigate(["/user/device/program/new"]);
   }
 
   onAddDeviceClick():void {
     "use strict";
 
-    this.router.navigate(["NewUserDevice"]);
+    this.router.navigate(["/user/device/new"]);
   }
 
   onTabClick(tab:string):void {

@@ -4,7 +4,7 @@
  */
 
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiLayout from "./lib-becki/layout";
@@ -27,13 +27,13 @@ export class Component implements ngCore.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(@ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(@ngCore.Inject("home") home:string, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("User", home.link),
-      new libBeckiLayout.LabeledLink("Projects", ["UserProjects"])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("User", ["/user"]),
+      new libBeckiLayout.LabeledLink("Projects", ["/user/projects"])
     ];
     this.backEnd = backEnd;
     this.notifications = notifications;
@@ -51,14 +51,14 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.backEnd.getProjects()
-        .then(projects => this.items = projects.map(project => new libPatternFlyListView.Item(project.id, project.project_name, project.project_description, ["UserProject", {project: project.id}], project.delete_permission)))
+        .then(projects => this.items = projects.map(project => new libPatternFlyListView.Item(project.id, project.project_name, project.project_description, ["/user/projects", project.id], project.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason)));
   }
 
   onAddClick():void {
     "use strict";
 
-    this.router.navigate(["NewUserProject"]);
+    this.router.navigate(["/user/project/new"]);
   }
 
   onRemoveClick(id:string):void {

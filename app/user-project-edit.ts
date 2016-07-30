@@ -3,9 +3,10 @@
  * directory of this distribution.
  */
 
+import * as Rx from "rxjs";
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
@@ -24,7 +25,7 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
         ngRouter.ROUTER_DIRECTIVES
     ]
 })
-export class Component implements ngCore.OnInit {
+export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
     id:string;
 
@@ -44,6 +45,7 @@ export class Component implements ngCore.OnInit {
 
     addCollaborator:boolean;
 
+    activatedRoute:ngRouter.ActivatedRoute;
 
     backEnd:libBeckiBackEnd.Service;
 
@@ -51,22 +53,23 @@ export class Component implements ngCore.OnInit {
 
     router:ngRouter.Router;
 
-    constructor(routeParams:ngRouter.RouteParams, @ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+    routeParamsSubscription:Rx.Subscription;
+
+    constructor(@ngCore.Inject("home") home:string, activatedRoute:ngRouter.ActivatedRoute, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
         "use strict";
 
-        this.id = routeParams.get("project");
         this.name = "Loading...";
         this.breadcrumbs = [
-            home,
-            new libBeckiLayout.LabeledLink("User", home.link),
-            new libBeckiLayout.LabeledLink("Projects", ["UserProjects"]),
-            new libBeckiLayout.LabeledLink("Loading...", ["UserProject", {project: this.id}])
+            new libBeckiLayout.LabeledLink(home, ["/"]),
+            new libBeckiLayout.LabeledLink("User", ["/user"]),
+            new libBeckiLayout.LabeledLink("Projects", ["/user/projects"])
         ];
         this.editing = false;
         this.nameField = "Loading...";
         this.descriptionField = "Loading...";
         this.description = "Loading...";
         this.editProject = false;
+        this.activatedRoute = activatedRoute;
         this.backEnd = backEnd;
         this.notifications = notifications;
         this.router = router;
@@ -76,9 +79,18 @@ export class Component implements ngCore.OnInit {
         "use strict";
 
         this.notifications.shift();
-        this.refresh();
+        this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+            this.id = params["project"];
+            this.refresh();
+        });
     }
-    
+
+    ngOnDestroy():void {
+        "use strict";
+
+        this.routeParamsSubscription.unsubscribe();
+    }
+
     refresh():void {
         "use strict";
         this.editing = false;
@@ -93,7 +105,7 @@ export class Component implements ngCore.OnInit {
                 let project:libBackEnd.Project;
                 [project] = result;
                 this.name = project.project_name;
-                this.breadcrumbs[3].label = project.project_name;
+                this.breadcrumbs.push(new libBeckiLayout.LabeledLink(project.project_name, ["/user/projects", this.id]));
                 this.nameField = project.project_name;
                 this.descriptionField = project.project_description;
                 this.description = project.project_description;
@@ -131,7 +143,7 @@ export class Component implements ngCore.OnInit {
         "use strict";
 
         this.notifications.shift();
-        this.router.navigate(["UserProject", {project: this.id}]);
+        this.router.navigate(["/user/projects", this.id]);
     }
 
 }

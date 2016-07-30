@@ -3,9 +3,10 @@
  * of this distribution.
  */
 
+import * as Rx from "rxjs";
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
@@ -37,7 +38,7 @@ class Selectable<T> {
   templateUrl: "app/user.html",
   directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ngCommon.CORE_DIRECTIVES]
 })
-export class Component implements ngCore.OnInit {
+export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   id:string;
 
@@ -61,27 +62,30 @@ export class Component implements ngCore.OnInit {
 
   permissions:Selectable<libBackEnd.Permission>[];
 
+  activatedRoute:ngRouter.ActivatedRoute;
+
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, @ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  routeParamsSubscription:Rx.Subscription;
+
+  constructor(@ngCore.Inject("home") home:string, activatedRoute:ngRouter.ActivatedRoute, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.id = routeParams.get("user");
     this.userString = "Loading...";
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("Users", home.link),
-      new libBeckiLayout.LabeledLink("Loading...", ["User", {user: this.id}])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("Users", ["/"])
     ];
     this.editing = false;
     this.tab = 'account';
     this.editAccount = false;
     this.nameField = "Loading...";
     this.usernameField = "Loading...";
+    this.activatedRoute = activatedRoute;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -91,7 +95,16 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.refresh();
+    this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+      this.id = params["user"];
+      this.refresh();
+    });
+  }
+
+  ngOnDestroy():void {
+    "use strict";
+
+    this.routeParamsSubscription.unsubscribe();
   }
 
   refresh():void {
@@ -101,7 +114,7 @@ export class Component implements ngCore.OnInit {
     this.backEnd.getUser(this.id)
         .then(user => {
           this.userString = libBackEnd.composeUserString(user, true);
-          this.breadcrumbs[2].label = libBackEnd.composeUserString(user, true);
+          this.breadcrumbs.push(new libBeckiLayout.LabeledLink(libBackEnd.composeUserString(user, true), ["/users", this.id]));
           this.editAccount = user.edit_permission;
           this.nameField = user.full_name;
           this.usernameField = user.nick_name;

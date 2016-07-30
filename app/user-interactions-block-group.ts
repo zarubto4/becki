@@ -3,9 +3,10 @@
  * of this distribution.
  */
 
+import * as Rx from "rxjs";
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBecki from "./lib-becki/index";
@@ -26,7 +27,7 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
         ngCommon.CORE_DIRECTIVES,
         libPatternFlyListView.Component]
 })
-export class Component implements ngCore.OnInit {
+export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
     id:string;
 
@@ -51,21 +52,23 @@ export class Component implements ngCore.OnInit {
     descriptionField:string;
 
     edit_permission:boolean;
-    
+
+    activatedRoute:ngRouter.ActivatedRoute;
+
     backEnd:libBeckiBackEnd.Service;
 
     notifications:libBeckiNotifications.Service;
 
     router:ngRouter.Router;
 
-    constructor(router:ngRouter.Router,routeParams:ngRouter.RouteParams, @ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
+    routeParamsSubscription:Rx.Subscription;
+
+    constructor(router:ngRouter.Router, @ngCore.Inject("home") home:string, activatedRoute:ngRouter.ActivatedRoute, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
         "use strict";
 
-        this.id = routeParams.get("group");
         this.breadcrumbs = [
-            home,
-            new libBeckiLayout.LabeledLink("Interactions", ["UserInteractions"]),
-            new libBeckiLayout.LabeledLink("Loading...", ["UserInteractionsBlockGroup", {group: this.id}])
+            new libBeckiLayout.LabeledLink(home, ["/"]),
+            new libBeckiLayout.LabeledLink("Interactions Block Groups", ["/user/interactions/block/groups"])
         ];
         this.editing = false;
         this.nameField = "Loading...";
@@ -73,6 +76,7 @@ export class Component implements ngCore.OnInit {
         this.descriptionField = "Loading...";
         this.project_idField = "Loading...";
         this.edit_permission = false;
+        this.activatedRoute = activatedRoute;
         this.backEnd = backEnd;
         this.notifications = notifications;
         this.router = router;
@@ -83,11 +87,20 @@ export class Component implements ngCore.OnInit {
         "use strict";
 
         this.notifications.shift();
-        this.refresh();
+        this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+            this.id = params["group"];
+            this.refresh();
+        });
+    }
+
+    ngOnDestroy():void {
+        "use strict";
+
+        this.routeParamsSubscription.unsubscribe();
     }
 
     onAddBlocko():void{
-        this.router.navigate(["NewUserInteractionsBlock"]);
+        this.router.navigate(["/user/interactions/block/new"]);
     }
 
     refresh():void {
@@ -107,11 +120,12 @@ export class Component implements ngCore.OnInit {
                 let projects:libBackEnd.Project[];
                 [group,projects]=result;
                 this.group = group;
+                this.breadcrumbs.push(new libBeckiLayout.LabeledLink(group.name, ["/user/interactions/block/groups", this.id]));
                 this.breadcrumbs[2].label = group.name;
                 this.nameField = group.name;
                 this.project_idField=group.project_id;
                 this.descriptionField = group.general_description;
-                this.blocks = group.blockoBlocks.map( block => new libPatternFlyListView.Item(block.id, block.name,block.general_description,["UserInteractionsBlock", {block: block.id}],block.delete_permission));
+                this.blocks = group.blockoBlocks.map( block => new libPatternFlyListView.Item(block.id, block.name,block.general_description,["/user/interactions/blocks", block.id],block.delete_permission));
                 this.projects = projects;
                 this.edit_permission = group.edit_permission;
                 this.project = this.projects.find(project => group.project_id == project.id);
@@ -146,7 +160,7 @@ export class Component implements ngCore.OnInit {
     }
 
     onProjectClick():void{
-        this.router.navigate(["UserProject", {project:this.project_idField}]);
+        this.router.navigate(["/user/projects", this.project_idField]);
     }
 
     onSubmit():void {

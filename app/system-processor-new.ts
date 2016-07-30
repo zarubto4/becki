@@ -4,7 +4,7 @@
  */
 
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
@@ -33,13 +33,13 @@ export class Component implements ngCore.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(@ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(@ngCore.Inject("home") home:string, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("System", ["System"]),
-      new libBeckiLayout.LabeledLink("New Processor", ["NewSystemProcessor"])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("System", ["/system"]),
+      new libBeckiLayout.LabeledLink("New Processor", ["/system/processor/new"])
     ];
     this.nameField = "";
     this.codeField = "";
@@ -70,7 +70,7 @@ export class Component implements ngCore.OnInit {
     this.backEnd.createProcessor(this.nameField, this.codeField, this.descriptionField, this.speedField)
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The processor has been created."));
-          this.router.navigate(["System"]);
+          this.router.navigate(["/system"]);
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The processor cannot be created.", reason));
@@ -81,6 +81,6 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["System"]);
+    this.router.navigate(["/system"]);
   }
 }

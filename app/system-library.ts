@@ -3,9 +3,10 @@
  * of this distribution.
  */
 
+import * as Rx from "rxjs";
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
@@ -17,7 +18,7 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
   templateUrl: "app/system-library.html",
   directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ngCommon.CORE_DIRECTIVES]
 })
-export class Component implements ngCore.OnInit {
+export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   id:string;
 
@@ -44,20 +45,22 @@ export class Component implements ngCore.OnInit {
   @ngCore.ViewChild("versionFileField")
   versionFileField:ngCore.ElementRef;
 
+  activatedRoute:ngRouter.ActivatedRoute;
+
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
 
-  constructor(routeParams:ngRouter.RouteParams, @ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
+  routeParamsSubscription:Rx.Subscription;
+
+  constructor(@ngCore.Inject("home") home:string, activatedRoute:ngRouter.ActivatedRoute, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
     "use strict";
 
-    this.id = routeParams.get("library");
     this.name = "Loading...";
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("System", ["System"]),
-      new libBeckiLayout.LabeledLink("Libraries", ["System"]),
-      new libBeckiLayout.LabeledLink("Loading...", ["SystemLibrary", {library: this.id}])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("System", ["/system"]),
+      new libBeckiLayout.LabeledLink("Libraries", ["/system/libraries"])
     ];
     this.editing = false;
     this.editLibrary = false;
@@ -67,6 +70,7 @@ export class Component implements ngCore.OnInit {
     this.description = "Loading...";
     this.versionNameField = "Loading...";
     this.versionDescriptionField = "Loading...";
+    this.activatedRoute = activatedRoute;
     this.backEnd = backEnd;
     this.notifications = notifications;
   }
@@ -75,7 +79,16 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.refresh();
+    this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+      this.id = params["library"];
+      this.refresh();
+    });
+  }
+
+  ngOnDestroy():void {
+    "use strict";
+
+    this.routeParamsSubscription.unsubscribe();
   }
 
   refresh():void {
@@ -85,6 +98,7 @@ export class Component implements ngCore.OnInit {
     this.backEnd.getLibrary(this.id)
         .then(library => {
           this.name = library.library_name;
+          this.breadcrumbs.push(new libBeckiLayout.LabeledLink(library.library_name, ["/system/libraries", this.id]));
           this.breadcrumbs[3].label = library.library_name;
           this.editLibrary = library.edit_permission;
           this.addVersion = library.update_permission;

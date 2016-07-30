@@ -3,9 +3,10 @@
  * of this distribution.
  */
 
+import * as Rx from "rxjs";
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
@@ -23,7 +24,7 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
     ngCommon.CORE_DIRECTIVES
   ]
 })
-export class Component implements ngCore.OnInit {
+export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   id:string;
 
@@ -43,26 +44,29 @@ export class Component implements ngCore.OnInit {
 
   applications:libPatternFlyListView.Item[];
 
+  activatedRoute:ngRouter.ActivatedRoute;
+
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, @ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  routeParamsSubscription:Rx.Subscription;
+
+  constructor(@ngCore.Inject("home") home:string, activatedRoute:ngRouter.ActivatedRoute, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.id = routeParams.get("group");
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("User", home.link),
-      new libBeckiLayout.LabeledLink("Applications Groups", ["UserApplications"]),
-      new libBeckiLayout.LabeledLink("Loading...", ["UserApplicationGroup", {group: this.id}])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("User", ["/user"]),
+      new libBeckiLayout.LabeledLink("Applications Groups", ["/user/application/groups"])
     ];
     this.editing = false;
     this.editGroup = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
+    this.activatedRoute = activatedRoute;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -72,7 +76,16 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.refresh();
+    this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+      this.id = params["group"];
+      this.refresh();
+    });
+  }
+
+  ngOnDestroy():void {
+    "use strict";
+
+    this.routeParamsSubscription.unsubscribe();
   }
 
   refresh():void {
@@ -87,12 +100,12 @@ export class Component implements ngCore.OnInit {
         .then(result => {
           let projects:libBackEnd.Project[];
           [this.group, projects] = result;
-          this.breadcrumbs[3].label = this.group.program_name;
+          this.breadcrumbs.push(new libBeckiLayout.LabeledLink(this.group.program_name, ["/user/application/groups", this.id]));
           this.editGroup = this.group.edit_permission;
           this.project = projects.length > 1 ? projects.find(project => project.id == this.group.project_id).project_name : null;
           this.nameField = this.group.program_name;
           this.descriptionField = this.group.program_description;
-          this.applications = this.group.m_programs.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["UserApplication", {application: application.id}], application.delete_permission));
+          this.applications = this.group.m_programs.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["/user/applications", application.id], application.delete_permission));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The group ${this.id} cannot be loaded.`, reason));
@@ -138,7 +151,7 @@ export class Component implements ngCore.OnInit {
   onAddApplicationClick():void {
     "use strict";
 
-    this.router.navigate(["NewUserApplication"]);
+    this.router.navigate(["/user/application/new"]);
   }
 
   onRemoveApplicationClick(id:string):void {

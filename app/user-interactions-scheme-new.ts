@@ -5,7 +5,7 @@
 
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBecki from "./lib-becki/index";
@@ -60,13 +60,13 @@ export class Component implements ngCore.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(@ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(@ngCore.Inject("home") home:string, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("User", home.link),
-      new libBeckiLayout.LabeledLink("New Scheme of Interactions", ["NewUserInteractionsScheme"])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("User", ["/user"]),
+      new libBeckiLayout.LabeledLink("New Scheme of Interactions", ["/user/interactions/scheme/new"])
     ];
     this.projectField = "";
     this.nameField = "";
@@ -187,7 +187,7 @@ export class Component implements ngCore.OnInit {
         })
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The scheme have been created."));
-          this.router.navigate(["UserInteractions"]);
+          this.router.navigate(["/user/interactions/schemes"]);
         })
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-284
@@ -200,6 +200,6 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["UserInteractions"]);
+    this.router.navigate(["/user/interactions/schemes"]);
   }
 }

@@ -3,8 +3,9 @@
  * of this distribution.
  */
 
+import * as Rx from "rxjs";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
@@ -16,7 +17,7 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
   templateUrl: "app/user-project-collaborator-new.html",
   directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component]
 })
-export class Component implements ngCore.OnInit {
+export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   projectId:string;
 
@@ -28,26 +29,28 @@ export class Component implements ngCore.OnInit {
 
   addCollaborator:boolean;
 
+  activatedRoute:ngRouter.ActivatedRoute;
+
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, @ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  routeParamsSubscription:Rx.Subscription;
+
+  constructor(@ngCore.Inject("home") home:string, activatedRoute:ngRouter.ActivatedRoute, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.projectId = routeParams.get("project");
     this.projectName = "Loading...";
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("User", home.link),
-      new libBeckiLayout.LabeledLink("Projects", ["UserProjects"]),
-      new libBeckiLayout.LabeledLink("Loading...", ["UserProject", {project: this.projectId}]),
-      new libBeckiLayout.LabeledLink("New Collaborator", ["NewUserProjectCollaborator", {project: this.projectId}])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("User", ["/user"]),
+      new libBeckiLayout.LabeledLink("Projects", ["/user/projects"])
     ];
     this.idField = "";
     this.addCollaborator = false;
+    this.activatedRoute = activatedRoute;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -57,16 +60,26 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    this.backEnd.getProject(this.projectId)
-        .then(project => {
-          this.projectName = project.project_name;
-          this.breadcrumbs[3].label = project.project_name;
-          this.addCollaborator = project.share_permission;
-        })
-        .catch(reason => {
-          this.notifications.current.push(new libBeckiNotifications.Danger("The project cannot be loaded.", reason));
-        });
+    this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+      this.projectId = params["project"];
+      // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+      this.backEnd.getProject(this.projectId)
+          .then(project => {
+            this.projectName = project.project_name;
+            this.breadcrumbs.push(new libBeckiLayout.LabeledLink(project.project_name, ["/user/projects", this.projectId]));
+            this.breadcrumbs.push(new libBeckiLayout.LabeledLink("New Collaborator", ["/user/projects", this.projectId, "collaborator/new"]));
+            this.addCollaborator = project.share_permission;
+          })
+          .catch(reason => {
+            this.notifications.current.push(new libBeckiNotifications.Danger("The project cannot be loaded.", reason));
+          });
+    });
+  }
+
+  ngOnDestroy():void {
+    "use strict";
+
+    this.routeParamsSubscription.unsubscribe();
   }
 
   validateIdField():()=>Promise<boolean> {
@@ -84,7 +97,7 @@ export class Component implements ngCore.OnInit {
     this.backEnd.addCollaboratorToProject(this.idField, this.projectId)
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The collaborator has been added."));
-          this.router.navigate(["UserProject", {project: this.projectId}]);
+          this.router.navigate(["/user/projects", this.projectId]);
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The collaborator cannot be added.", reason));
@@ -95,6 +108,6 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["UserProject", {project: this.projectId}]);
+    this.router.navigate(["/user/projects", this.projectId]);
   }
 }

@@ -3,9 +3,10 @@
  * of this distribution.
  */
 
+import * as Rx from "rxjs";
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
@@ -17,7 +18,7 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
   templateUrl: "app/system-producer.html",
   directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ngCommon.CORE_DIRECTIVES]
 })
-export class Component implements ngCore.OnInit {
+export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   id:string;
 
@@ -33,24 +34,27 @@ export class Component implements ngCore.OnInit {
 
   descriptionField:string;
 
+  activatedRoute:ngRouter.ActivatedRoute;
+
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
 
-  constructor(routeParams:ngRouter.RouteParams, @ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
+  routeParamsSubscription:Rx.Subscription;
+
+  constructor(@ngCore.Inject("home") home:string, activatedRoute:ngRouter.ActivatedRoute, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
     "use strict";
 
-    this.id = routeParams.get("producer");
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("System", ["System"]),
-      new libBeckiLayout.LabeledLink("Producers", ["System"]),
-      new libBeckiLayout.LabeledLink("Loading...", ["SystemProducer", {producer: this.id}])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("System", ["/system"]),
+      new libBeckiLayout.LabeledLink("Producers", ["/system/producers"])
     ];
     this.editing = false;
     this.editProducer = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
+    this.activatedRoute = activatedRoute;
     this.backEnd = backEnd;
     this.notifications = notifications;
   }
@@ -59,7 +63,16 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.refresh();
+    this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+      this.id = params["producer"];
+      this.refresh();
+    });
+  }
+
+  ngOnDestroy():void {
+    "use strict";
+
+    this.routeParamsSubscription.unsubscribe();
   }
 
   refresh():void {
@@ -69,7 +82,7 @@ export class Component implements ngCore.OnInit {
     this.backEnd.getProducer(this.id)
         .then(producer => {
           this.producer = producer;
-          this.breadcrumbs[3].label = producer.name;
+          this.breadcrumbs.push(new libBeckiLayout.LabeledLink(producer.name, ["/system/producers", this.id]));
           this.editProducer = producer.edit_permission;
           this.nameField = producer.name;
           this.descriptionField = producer.description;

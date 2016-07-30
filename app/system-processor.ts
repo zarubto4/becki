@@ -3,9 +3,10 @@
  * of this distribution.
  */
 
+import * as Rx from "rxjs";
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
@@ -17,7 +18,7 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
   templateUrl: "app/system-processor.html",
   directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ngCommon.CORE_DIRECTIVES]
 })
-export class Component implements ngCore.OnInit {
+export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   id:string;
 
@@ -35,25 +36,28 @@ export class Component implements ngCore.OnInit {
 
   speedField:number;
 
+  activatedRoute:ngRouter.ActivatedRoute;
+
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
 
-  constructor(routeParams:ngRouter.RouteParams, @ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
+  routeParamsSubscription:Rx.Subscription;
+
+  constructor(@ngCore.Inject("home") home:string, activatedRoute:ngRouter.ActivatedRoute, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
     "use strict";
 
-    this.id = routeParams.get("processor");
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("System", ["System"]),
-      new libBeckiLayout.LabeledLink("Processors", ["System"]),
-      new libBeckiLayout.LabeledLink("Loading...", ["SystemProcessor", {processor: this.id}])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("System", ["/system"]),
+      new libBeckiLayout.LabeledLink("Processors", ["/system/processors"])
     ];
     this.editing = false;
     this.nameField = "Loading...";
     this.codeField = "Loading...";
     this.descriptionField = "Loading...";
     this.speedField = 0;
+    this.activatedRoute = activatedRoute;
     this.backEnd = backEnd;
     this.notifications = notifications;
   }
@@ -62,7 +66,16 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.refresh();
+    this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+      this.id = params["processor"];
+      this.refresh();
+    });
+  }
+
+  ngOnDestroy():void {
+    "use strict";
+
+    this.routeParamsSubscription.unsubscribe();
   }
 
   refresh():void {
@@ -71,6 +84,7 @@ export class Component implements ngCore.OnInit {
     this.editing = false;
     this.backEnd.getProcessor(this.id)
         .then(processor => {
+          this.breadcrumbs.push(new libBeckiLayout.LabeledLink(processor.processor_name, ["/system/processors", this.id]));
           this.breadcrumbs[3].label = processor.processor_name;
           this.processor = processor;
           this.nameField = processor.processor_name;

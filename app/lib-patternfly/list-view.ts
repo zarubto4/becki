@@ -5,7 +5,7 @@
 
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBootstrapDropdown from "../lib-bootstrap/dropdown";
 import * as libBootstrapModal from "../lib-bootstrap/modal";

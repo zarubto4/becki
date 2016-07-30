@@ -5,7 +5,7 @@
 
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBecki from "./lib-becki/index";
@@ -36,13 +36,13 @@ export class Component implements ngCore.OnInit {
 
   router:ngRouter.Router;
 
-  constructor(@ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(@ngCore.Inject("home") home:string, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("User", home.link),
-      new libBeckiLayout.LabeledLink("New Moderator of Interactions", ["NewUserInteractionsModerator"])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("User", ["/user"]),
+      new libBeckiLayout.LabeledLink("New Moderator of Interactions", ["/user/interactions/moderator/new"])
     ];
     this.projectField = "";
     this.idField = "";
@@ -84,7 +84,7 @@ export class Component implements ngCore.OnInit {
         })
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The moderator has been added."));
-          this.router.navigate(["UserInteractions"]);
+          this.router.navigate(["/user/interactions/moderators"]);
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger("The moderator cannot be added.", reason));
@@ -95,6 +95,6 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.router.navigate(["UserInteractions"]);
+    this.router.navigate(["/user/interactions/moderators"]);
   }
 }

@@ -4,9 +4,10 @@
  */
 
 import * as _ from "underscore";
+import * as Rx from "rxjs";
 import * as ngCommmon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
@@ -26,7 +27,7 @@ import * as libPatternFlyListView from "./lib-patternfly/list-view";
     ngCommmon.CORE_DIRECTIVES
   ]
 })
-export class Component implements ngCore.OnInit {
+export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   id:string;
 
@@ -82,20 +83,22 @@ export class Component implements ngCore.OnInit {
 
   versions:libPatternFlyListView.Item[];
 
+  activatedRoute:ngRouter.ActivatedRoute;
+
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
 
-  constructor(routeParams:ngRouter.RouteParams, @ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
+  routeParamsSubscription:Rx.Subscription;
+
+  constructor(@ngCore.Inject("home") home:string, activatedRoute:ngRouter.ActivatedRoute, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
     "use strict";
 
-    this.id = routeParams.get("scheme");
     this.name = "Loading...";
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("User", home.link),
-      new libBeckiLayout.LabeledLink("Schemes of Interactions", ["UserInteractions"]),
-      new libBeckiLayout.LabeledLink("Loading...", ["UserInteractionsScheme", {scheme: this.id}])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("User", ["/user"]),
+      new libBeckiLayout.LabeledLink("Schemes of Interactions", ["/user/interactions/schemes"])
     ];
     this.showHistory = false;
     this.editing = false;
@@ -114,6 +117,7 @@ export class Component implements ngCore.OnInit {
     this.versionApplicationGroupField = "";
     this.versionSchemeField = `{"blocks":{}}`;
     this.versionScheme = `{"blocks":{}}`;
+    this.activatedRoute = activatedRoute;
     this.backEnd = backEnd;
     this.notifications = notifications;
   }
@@ -122,7 +126,16 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.refresh();
+    this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+      this.id = params["scheme"];
+      this.refresh();
+    });
+  }
+
+  ngOnDestroy():void {
+    "use strict";
+
+    this.routeParamsSubscription.unsubscribe();
   }
 
   refresh():void {
@@ -160,7 +173,7 @@ export class Component implements ngCore.OnInit {
           }
           let lastVersion = _.max(scheme.program_versions, version => version.version_Object.date_of_create);
           this.name = scheme.name;
-          this.breadcrumbs[3].label = scheme.name;
+          this.breadcrumbs.push(new libBeckiLayout.LabeledLink(scheme.name, ["/user/interactions/schemes", this.id]));
           this.editScheme = scheme.edit_permission;
           this.addVersion = scheme.update_permission;
           this.project = projects.length > 1 ? projects.find(project => project.id == scheme.project_id).project_name : null;
@@ -179,7 +192,7 @@ export class Component implements ngCore.OnInit {
           this.applicationGroups = applicationGroups.filter(group => group.update_permission);
           this.versionSchemeField = lastVersion.program;
           this.versionScheme = lastVersion.program;
-          this.versions = scheme.program_versions.map(version => new libPatternFlyListView.Item(version.version_Object.id, version.version_Object.version_name, version.version_Object.version_description, ["UserInteractionsSchemeVersion", {scheme: this.id, version: version.version_Object.id}], false));
+          this.versions = scheme.program_versions.map(version => new libPatternFlyListView.Item(version.version_Object.id, version.version_Object.version_name, version.version_Object.version_description, ["/user/interactions/schemes", this.id, "versions", version.version_Object.id], false));
         })
         .catch(reason => {
           this.notifications.current.push(new libBeckiNotifications.Danger(`The scheme ${this.id} cannot be loaded.`, reason));

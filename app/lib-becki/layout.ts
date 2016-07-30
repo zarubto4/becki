@@ -5,7 +5,7 @@
 
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as backEnd from "./back-end";
 import * as notifications from "./notifications";
@@ -39,7 +39,7 @@ export class LabeledLink {
 })
 export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
-  home:LabeledLink;
+  home:string;
 
   navbarNotificationsPage:number;
 
@@ -64,7 +64,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   router:ngRouter.Router;
 
-  constructor(@ngCore.Inject("home") home:LabeledLink, @ngCore.Inject("connections") connections:any[], @ngCore.Inject("signing") signing:any[], @ngCore.Inject("navigation") navigation:LabeledLink[], backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor(@ngCore.Inject("home") home:string, @ngCore.Inject("connections") connections:any[], @ngCore.Inject("signing") signing:any[], @ngCore.Inject("navigation") navigation:LabeledLink[], backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
     "use strict";
 
     this.home = home;

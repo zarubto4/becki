@@ -3,9 +3,10 @@
  * of this distribution.
  */
 
+import * as Rx from "rxjs";
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
@@ -17,7 +18,7 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
   templateUrl: "app/system-device-type.html",
   directives: [libBeckiCustomValidator.Directive, libBeckiLayout.Component, ngCommon.CORE_DIRECTIVES]
 })
-export class Component implements ngCore.OnInit {
+export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   id:string;
 
@@ -43,25 +44,28 @@ export class Component implements ngCore.OnInit {
 
   description:string;
 
+  activatedRoute:ngRouter.ActivatedRoute;
+
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
 
-  constructor(routeParams:ngRouter.RouteParams, @ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
+  routeParamsSubscription:Rx.Subscription;
+
+  constructor(@ngCore.Inject("home") home:string, activatedRoute:ngRouter.ActivatedRoute, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service) {
     "use strict";
 
-    this.id = routeParams.get("type");
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("System", ["System"]),
-      new libBeckiLayout.LabeledLink("Device Types", ["System"]),
-      new libBeckiLayout.LabeledLink("Loading...", ["SystemDeviceType", {type: this.id}])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("System", ["/system"]),
+      new libBeckiLayout.LabeledLink("Device Types", ["/system/device/types"])
     ];
     this.editing = false;
     this.editType = false;
     this.nameField = "Loading...";
     this.descriptionField = "Loading...";
     this.description = "Loading...";
+    this.activatedRoute = activatedRoute;
     this.backEnd = backEnd;
     this.notifications = notifications;
   }
@@ -70,7 +74,16 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.refresh();
+    this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+      this.id = params["type"];
+      this.refresh();
+    });
+  }
+
+  ngOnDestroy():void {
+    "use strict";
+
+    this.routeParamsSubscription.unsubscribe();
   }
 
   refresh():void {
@@ -80,7 +93,7 @@ export class Component implements ngCore.OnInit {
     this.backEnd.getDeviceType(this.id)
         .then(type => {
           this.type = type;
-          this.breadcrumbs[3].label = type.name;
+          this.breadcrumbs.push(new libBeckiLayout.LabeledLink(type.name, ["/system/device/types", this.id]));
           this.editType = type.edit_permission;
           this.nameField = type.name;
           this.producerField = type.producer_id;

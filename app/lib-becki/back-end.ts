@@ -9,7 +9,7 @@ import "rxjs/add/operator/map";
 import * as Rx from "rxjs";
 import * as ngCore from "@angular/core";
 import * as ngHttp from "@angular/http";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "../lib-back-end/index";
 import * as notifications from "./notifications";

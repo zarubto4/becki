@@ -3,9 +3,10 @@
  * of this distribution.
  */
 
+import * as Rx from "rxjs";
 import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
-import * as ngRouter from "@angular/router-deprecated";
+import * as ngRouter from "@angular/router";
 
 import * as libBackEnd from "./lib-back-end/index";
 import * as libBeckiBackEnd from "./lib-becki/back-end";
@@ -20,7 +21,7 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
     libBeckiCustomValidator.Directive, libBeckiFieldApplication.Component, libBeckiLayout.Component, ngCommon.CORE_DIRECTIVES
   ]
 })
-export class Component implements ngCore.OnInit {
+export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   id:string;
 
@@ -52,22 +53,24 @@ export class Component implements ngCore.OnInit {
 
   code:string;
 
+  activatedRoute:ngRouter.ActivatedRoute;
+
   backEnd:libBeckiBackEnd.Service;
 
   notifications:libBeckiNotifications.Service;
 
   router:ngRouter.Router;
 
-  constructor(routeParams:ngRouter.RouteParams, @ngCore.Inject("home") home:libBeckiLayout.LabeledLink, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  routeParamsSubscription:Rx.Subscription;
+
+  constructor(@ngCore.Inject("home") home:string, activatedRoute:ngRouter.ActivatedRoute, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.id = routeParams.get("application");
     this.name = "Loading...";
     this.breadcrumbs = [
-      home,
-      new libBeckiLayout.LabeledLink("User", home.link),
-      new libBeckiLayout.LabeledLink("Applications", ["UserApplications"]),
-      new libBeckiLayout.LabeledLink("Loading...", ["UserApplication", {application: this.id}])
+      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("User", ["/user"]),
+      new libBeckiLayout.LabeledLink("Applications", ["/user/applications"])
     ];
     this.editing = false;
     this.editApplication = false;
@@ -80,6 +83,7 @@ export class Component implements ngCore.OnInit {
     this.device = null;
     this.codeField = "{}";
     this.code = "{}";
+    this.activatedRoute = activatedRoute;
     this.backEnd = backEnd;
     this.notifications = notifications;
     this.router = router;
@@ -89,7 +93,16 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.refresh();
+    this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+      this.id = params["application"];
+      this.refresh();
+    });
+  }
+
+  ngOnDestroy():void {
+    "use strict";
+
+    this.routeParamsSubscription.unsubscribe();
   }
 
   refresh():void {
@@ -115,7 +128,7 @@ export class Component implements ngCore.OnInit {
           let device:libBackEnd.ApplicationDevice;
           [application, projects, group, device] = result;
           this.name = application.program_name;
-          this.breadcrumbs[3].label = application.program_name;
+          this.breadcrumbs.push(new libBeckiLayout.LabeledLink(application.program_name, ["/user/applications", this.id]));
           this.editApplication = application.edit_permission;
           this.showProject = projects.length > 1;
           this.project = projects.find(project => project.id == group.project_id);
