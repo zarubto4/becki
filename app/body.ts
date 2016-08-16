@@ -13,7 +13,9 @@ import * as libBeckiBackEnd from "./lib-becki/back-end";
 import * as libBeckiFieldCode from "./lib-becki/field-code";
 import * as libBeckiModal from "./lib-becki/modal";
 import * as libBeckiNotifications from "./lib-becki/notifications";
-import * as libBootstrapModal from "./lib-bootstrap/modal";
+import * as libBootstrapModal from "./modals/modal";
+import {ModalsProjectNewComponent, ModalsProjectsNewModel} from "./modals/projects-new";
+
 
 @ngCore.Component({
   selector: "[body]",
@@ -24,7 +26,7 @@ import * as libBootstrapModal from "./lib-bootstrap/modal";
     libBeckiNotifications.Service,
     {provide: "home", useValue: "No Name"}
   ],
-  directives: [libBeckiFieldCode.Component, ngCommon.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES],
+  directives: [libBeckiFieldCode.Component, ngCommon.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES, ModalsProjectNewComponent],
   inputs: ["body"],
   host: {"[class.modal-open]": "modal"}
 })
@@ -34,7 +36,7 @@ export class Component implements libBootstrapModal.Component {
 
   private modalClosed:ngCore.EventEmitter<boolean>;
 
-  public spinnerVisible:boolean;
+  //public spinnerVisible:boolean;
 
   private notifications:libBeckiNotifications.Notification[];
 
@@ -45,16 +47,16 @@ export class Component implements libBootstrapModal.Component {
 
     this.modal = null;
     this.modalClosed = new ngCore.EventEmitter<boolean>();
-    this.spinnerVisible = false;
+    //this.spinnerVisible = false;
     this.notifications = [];
     this.notificationTimeout = null;
-    router.events.subscribe(event => {
+    /*router.events.subscribe(event => {
       if (event instanceof ngRouter.NavigationStart) {
-        this.spinnerVisible = true;
+        this.spinnerVisible = false;
       } else if (event instanceof ngRouter.NavigationEnd || event instanceof ngRouter.NavigationCancel || event instanceof ngRouter.NavigationError) {
         this.spinnerVisible = false;
       }
-    });
+    });*/
     backEnd.notificationReceived.subscribe(notification => {
       let notificationView:libBeckiNotifications.Notification;
       switch (notification.level) {
@@ -111,6 +113,9 @@ export class Component implements libBootstrapModal.Component {
     }
     if (this.modal instanceof libBeckiModal.BlockModel) {
       return "block";
+    }
+    if (this.modal instanceof ModalsProjectsNewModel) {
+      return "modals-projects-new";
     }
     return null;
   }

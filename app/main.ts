@@ -3,15 +3,9 @@
  * directory of this distribution.
  */
 
-import * as ngForms from "@angular/forms";
-import * as ngHttp from "@angular/http";
-import * as ngPlatformBrowserDynamic from "@angular/platform-browser-dynamic";
-import * as ngRouter from "@angular/router";
-
+// BEGIN only for temporary back compatibility
 import * as applicationDevice from "./application-device";
-import * as body from "./body";
-import * as libBeckiLayout from "./lib-becki/layout";
-import * as signing from "./signing";
+import * as libBackEnd from "./lib-becki/back-end";
 import * as system from "./system";
 import * as systemCompilationServer from "./system-compilation-server";
 import * as systemCompilationServerNew from "./system-compilation-server-new";
@@ -51,94 +45,205 @@ import * as userInteractionsSpy from "./user-interactions-spy";
 import * as userProject from "./user-project";
 import * as userProjectCollaboratorNew from "./user-project-collaborator-new";
 import * as userProjectNew from "./user-project-new";
-import * as userProjects from "./user-projects";
 import * as userInteractionsBlockGroupNew from "./user-interactions-blockGroup-new";
 import * as userInteractionsBlockGroup from "./user-interactions-block-group";
 import * as userProjectEdit from "./user-project-edit";
+import * as notifications from "./lib-becki/notifications";
+// END only for temporary back compatibility
 
-ngPlatformBrowserDynamic.bootstrap(
-    body.Component,
-    [
-      ngForms.disableDeprecatedForms(),
-      ngForms.provideForms(),
-      ngHttp.HTTP_PROVIDERS,
-      ngRouter.provideRouter([
-        {path: "", redirectTo: "user", pathMatch: "full"},
-        {path: "application/devices/:device", component: applicationDevice.Component},
-        {path: "application/devices", redirectTo: "user/applications"},
-        {path: "signing", component: signing.Component},
-        {path: "system", component: system.Component},
-        {path: "system/compilation/server/new", component: systemCompilationServerNew.Component},
-        {path: "system/compilation/servers/:server", component: systemCompilationServer.Component},
-        {path: "system/compilation/servers", redirectTo: "system"},
-        {path: "system/device/new", component: systemDeviceNew.Component},
-        {path: "system/device/type/new", component: systemDeviceTypeNew.Component},
-        {path: "system/device/types/:type", component: systemDeviceType.Component},
-        {path: "system/device/types", redirectTo: "system"},
-        {path: "system/interactions/server/new", component: systemInteractionsServerNew.Component},
-        {path: "system/interactions/servers/:server", component: systemInteractionsServer.Component},
-        {path: "system/interactions/servers", redirectTo: "system"},
-        {path: "system/libraries/:library", component: systemLibrary.Component},
-        {path: "system/libraries", redirectTo: "system"},
-        {path: "system/library/group/new", component: systemLibraryGroupNew.Component},
-        {path: "system/library/groups/:group", component: systemLibraryGroup.Component},
-        {path: "system/library/groups", redirectTo: "system"},
-        {path: "system/library/new", component: systemLibraryNew.Component},
-        {path: "system/processor/new", component: systemProcessorNew.Component},
-        {path: "system/processors/:processor", component: systemProcessor.Component},
-        {path: "system/processors", redirectTo: "system"},
-        {path: "system/producer/new", component: systemProducerNew.Component},
-        {path: "system/producers/:producer", component: systemProducer.Component},
-        {path: "system/producers", redirectTo: "system"},
-        // see https://github.com/angular/angular/issues/10120
-        {path: "user", children: [
-          {path: "", redirectTo: "applications", pathMatch: "full"},
-          {path: "application/device/new", component: userApplicationDeviceNew.Component},
-          {path: "application/devices", redirectTo: "applications"},
-          {path: "application/group/new", component: userApplicationGroupNew.Component},
-          {path: "application/groups/:group", component: userApplicationGroup.Component},
-          {path: "application/groups", redirectTo: "applications"},
-          {path: "application/new", component: userApplicationNew.Component},
-          {path: "applications/:application", component: userApplication.Component},
-          {path: "applications", component: userApplications.Component},
-          {path: "connections", component: userConnections.Component},
-          {path: "device/new", component: userDeviceNew.Component},
-          {path: "device/program/new", component: userDeviceProgramNew.Component},
-          {path: "device/programs/:program", component: userDeviceProgram.Component},
-          {path: "device/programs", redirectTo: "devices"},
-          {path: "devices", component: userDevices.Component},
-          {path: "interactions/block/group/new", component: userInteractionsBlockGroupNew.Component},
-          {path: "interactions/block/groups/:group", component: userInteractionsBlockGroup.Component},
-          {path: "interactions/block/groups", redirectTo: "interactions"},
-          {path: "interactions/block/new", component: userInteractionsBlockNew.Component},
-          {path: "interactions/blocks/:block", component: userInteractionsBlock.Component},
-          {path: "interactions/blocks", redirectTo: "interactions"},
-          {path: "interactions/moderator/new", component: userInteractionsModeratorNew.Component},
-          {path: "interactions/moderators", redirectTo: "interactions"},
-          {path: "interactions/scheme/new", component: userInteractionsSchemeNew.Component},
-          {path: "interactions/schemes/:scheme", component: userInteractionsScheme.Component},
-          {path: "interactions/schemes/:scheme/versions/:version", component: userInteractionsSchemeVersion.Component},
-          {path: "interactions/schemes/:scheme/versions", redirectTo: "interactions/schemes/:scheme"},
-          {path: "interactions/schemes", redirectTo: "interactions"},
-          {path: "interactions/spies/:spy", component: userInteractionsSpy.Component},
-          {path: "interactions/spies", redirectTo: "interactions"},
-          {path: "interactions", component: userInteractions.Component},
-          {path: "project/new", component: userProjectNew.Component},
-          {path: "projects/:project", component: userProject.Component},
-          {path: "projects/:project/collaborator/new", component: userProjectCollaboratorNew.Component},
-          {path: "projects/:project/edit", component: userProjectEdit.Component},
-          {path: "projects", component: userProjects.Component},
-        ]},
-        {path: "users/:user", component: user.Component},
-      ]),
-      {provide: "connections", useValue: ["/user/connections"]},
-      {provide: "navigation", useValue: [
-        new libBeckiLayout.LabeledLink("Projects", ["/user/projects"], "book"),
-        new libBeckiLayout.LabeledLink("Applications", ["/user/applications"], "mobile"),
-        new libBeckiLayout.LabeledLink("Interactions", ["/user/interactions"], "link"),
-        new libBeckiLayout.LabeledLink("Devices", ["/user/devices"], "rocket"),
-        new libBeckiLayout.LabeledLink("System", ["/system"], "globe")
-      ]},
-      {provide: "signing", useValue: ["/signing"]}
+// Angular
+import {
+    disableDeprecatedForms, provideForms, FormsModule, REACTIVE_FORM_PROVIDERS,
+    ReactiveFormsModule
+} from "@angular/forms";
+import {NgModule} from "@angular/core";
+import {HTTP_PROVIDERS, HttpModule, JsonpModule} from "@angular/http";
+import {provideRouter, RouterConfig, Routes, RouterModule} from "@angular/router";
+import {platformBrowserDynamic} from "@angular/platform-browser-dynamic";
+import {BrowserModule} from "@angular/platform-browser";
+// App
+import {AppComponent} from "./app";
+// Helpers
+import {LabeledLink} from "./helpers/LabeledLink";
+// Services
+import {FlashMessagesService} from "./services/FlashMessagesService";
+import {BackEndService} from "./services/BackEndService";
+import {AuthGuard} from "./services/AuthGuard";
+import {ModalService} from "./services/ModalService";
+import {TabMenuService} from "./services/TabMenuService";
+import {BreadcrumbsService} from "./services/BreadcrumbsService";
+import {ValidatorErrorsService} from "./services/ValidatorErrorsService";
+import {CurrentParamsService} from "./services/CurrentParamsService";
+// Views
+import {Error404Component} from "./views/error404";
+import {LoginComponent} from "./views/login";
+import {LogoutComponent} from "./views/logout";
+import {DashboardComponent} from "./views/dashboard";
+import {ProjectsComponent} from "./views/projects";
+import {ProjectsProjectComponent} from "./views/projects-project";
+import {ProjectsProjectHardwareComponent} from "./views/projects-project-hardware";
+import {ProjectsProjectBlockoComponent} from "./views/projects-project-blocko";
+import {ProjectsProjectCodeComponent} from "./views/projects-project-code";
+
+
+// DON'T USE children IN ROUTER YET!!!
+var routes:Routes = [
+    {path: "login", component: LoginComponent},
+    {path: "logout", component: LogoutComponent},
+
+    {path: "", redirectTo: "/dashboard", pathMatch: "full"},
+
+    {path: "dashboard", data:{breadName: "Dashboard"}, component: DashboardComponent, canActivate:[AuthGuard]},
+
+
+    {path: "projects", data:{breadName: "Projects"}, component: ProjectsComponent, canActivate:[AuthGuard]},
+    {path: "projects/:project", data:{breadName: ":project"}, component: ProjectsProjectComponent, canActivate:[AuthGuard]},
+    {path: "projects/:project/hardware", data:{breadName: "Hardware"}, component: ProjectsProjectHardwareComponent, canActivate:[AuthGuard]},
+    {path: "projects/:project/blocko", data:{breadName: "Blocko"}, component: ProjectsProjectBlockoComponent, canActivate:[AuthGuard]},
+    {path: "projects/:project/code", data:{breadName: "Code"}, component: ProjectsProjectCodeComponent, canActivate:[AuthGuard]},
+
+
+    // old routes
+    // BEGIN only for temporary back compatibility
+    /*{path: "old_projects/:project", component: userProject.Component},
+
+    {path: "application/devices/:device", component: applicationDevice.Component},
+    {path: "application/devices", redirectTo: "user/applications"},
+    {path: "system", component: system.Component},
+    {path: "system/compilation/server/new", component: systemCompilationServerNew.Component},
+    {path: "system/compilation/servers/:server", component: systemCompilationServer.Component},
+    {path: "system/compilation/servers", redirectTo: "system"},
+    {path: "system/device/new", component: systemDeviceNew.Component},
+    {path: "system/device/type/new", component: systemDeviceTypeNew.Component},
+    {path: "system/device/types/:type", component: systemDeviceType.Component},
+    {path: "system/device/types", redirectTo: "system"},
+    {path: "system/interactions/server/new", component: systemInteractionsServerNew.Component},
+    {path: "system/interactions/servers/:server", component: systemInteractionsServer.Component},
+    {path: "system/interactions/servers", redirectTo: "system"},
+    {path: "system/libraries/:library", component: systemLibrary.Component},
+    {path: "system/libraries", redirectTo: "system"},
+    {path: "system/library/group/new", component: systemLibraryGroupNew.Component},
+    {path: "system/library/groups/:group", component: systemLibraryGroup.Component},
+    {path: "system/library/groups", redirectTo: "system"},
+    {path: "system/library/new", component: systemLibraryNew.Component},
+    {path: "system/processor/new", component: systemProcessorNew.Component},
+    {path: "system/processors/:processor", component: systemProcessor.Component},
+    {path: "system/processors", redirectTo: "system"},
+    {path: "system/producer/new", component: systemProducerNew.Component},
+    {path: "system/producers/:producer", component: systemProducer.Component},
+    {path: "system/producers", redirectTo: "system"},
+    // see https://github.com/angular/angular/issues/10120
+    {
+        path: "user", children: [
+        {path: "", redirectTo: "applications", pathMatch: "full"},
+        {path: "application/device/new", component: userApplicationDeviceNew.Component},
+        {path: "application/devices", redirectTo: "applications"},
+        {path: "application/group/new", component: userApplicationGroupNew.Component},
+        {path: "application/groups/:group", component: userApplicationGroup.Component},
+        {path: "application/groups", redirectTo: "applications"},
+        {path: "application/new", component: userApplicationNew.Component},
+        {path: "applications/:application", component: userApplication.Component},
+        {path: "applications", component: userApplications.Component},
+        {path: "connections", component: userConnections.Component},
+        {path: "device/new", component: userDeviceNew.Component},
+        {path: "device/program/new", component: userDeviceProgramNew.Component},
+        {path: "device/programs/:program", component: userDeviceProgram.Component},
+        {path: "device/programs", redirectTo: "devices"},
+        {path: "devices", component: userDevices.Component},
+        {path: "interactions/block/group/new", component: userInteractionsBlockGroupNew.Component},
+        {path: "interactions/block/groups/:group", component: userInteractionsBlockGroup.Component},
+        {path: "interactions/block/groups", redirectTo: "interactions"},
+        {path: "interactions/block/new", component: userInteractionsBlockNew.Component},
+        {path: "interactions/blocks/:block", component: userInteractionsBlock.Component},
+        {path: "interactions/blocks", redirectTo: "interactions"},
+        {path: "interactions/moderator/new", component: userInteractionsModeratorNew.Component},
+        {path: "interactions/moderators", redirectTo: "interactions"},
+        {path: "interactions/scheme/new", component: userInteractionsSchemeNew.Component},
+        {path: "interactions/schemes/:scheme", component: userInteractionsScheme.Component},
+        {
+            path: "interactions/schemes/:scheme/versions/:version",
+            component: userInteractionsSchemeVersion.Component
+        },
+        {path: "interactions/schemes/:scheme/versions", redirectTo: "interactions/schemes/:scheme"},
+        {path: "interactions/schemes", redirectTo: "interactions"},
+        {path: "interactions/spies/:spy", component: userInteractionsSpy.Component},
+        {path: "interactions/spies", redirectTo: "interactions"},
+        {path: "interactions", component: userInteractions.Component},
+        {path: "project/new", component: userProjectNew.Component},
+        {path: "projects/:project", component: userProject.Component},
+        {path: "projects/:project/collaborator/new", component: userProjectCollaboratorNew.Component},
+        {path: "projects/:project/edit", component: userProjectEdit.Component},
+
     ]
-);
+    },
+    {path: "users/:user", component: user.Component},*/
+    // END only for temporary back compatibility
+
+    {path: "**", component: Error404Component},
+];
+
+var navigation = [
+    new LabeledLink("Dashboard", ["/dashboard"], "tasks"),
+    new LabeledLink("Projects", ["/projects"], "book"),
+    new LabeledLink("Applications", ["/user/applications"], "mobile"),
+    new LabeledLink("Interactions", ["/user/interactions"], "link"),
+    new LabeledLink("Devices", ["/user/devices"], "rocket"),
+    new LabeledLink("System", ["/system"], "globe"),
+    new LabeledLink("Log out", ["/logout"], "sign-out")
+];
+
+var tabMenus = {
+    "projects-project": [
+        new LabeledLink("Dashboard", ["/", "projects", ":project"]),
+        new LabeledLink("Hardware", ["/", "projects", ":project", "hardware"]),
+        new LabeledLink("Code", ["/", "projects", ":project", "code"]),
+        new LabeledLink("Blocko", ["/", "projects", ":project", "blocko"]),
+        new LabeledLink("Grid", ["/", "projects", ":project", "grid"]),
+        new LabeledLink("Some else", ["/", "projects", ":project", "someelse"])
+    ]
+};
+
+
+@NgModule({
+    imports: [
+        BrowserModule,
+        ReactiveFormsModule,
+        RouterModule.forRoot(routes),
+        HttpModule,
+        JsonpModule,
+    ],
+    providers: [
+        ValidatorErrorsService,
+        FlashMessagesService,
+        BackEndService, // BackEndService must be after FlashMessagesService
+        AuthGuard, // AuthGuard service must be after BackEndService
+        ModalService,
+        CurrentParamsService,
+        BreadcrumbsService,
+        TabMenuService,
+        // BEGIN only for temporary back compatibility
+        notifications.Service,
+        libBackEnd.Service,
+        // END only for temporary back compatibility
+        {provide: "routes", useValue: routes},
+        {provide: "navigation", useValue: navigation},
+        {provide: "tabMenus", useValue: tabMenus},
+    ],
+    declarations: [
+        AppComponent,
+        Error404Component,
+        LoginComponent,
+        LogoutComponent,
+        DashboardComponent,
+        ProjectsComponent,
+        ProjectsProjectComponent,
+        ProjectsProjectHardwareComponent,
+        ProjectsProjectBlockoComponent,
+        ProjectsProjectCodeComponent,
+    ],
+    exports: [ AppComponent ],
+    bootstrap: [ AppComponent ]
+})
+export class AppModule { }
+
+platformBrowserDynamic().bootstrapModule(AppModule);

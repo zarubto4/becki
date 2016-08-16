@@ -1,0 +1,18 @@
+<div class="modal fade" tabindex="-1" [class.in]="modalService.modalIn" [style.display]="modalService.modalDisplay ? 'block' : 'none'" style="background-color: rgba(0,0,0,0.5)">
+    <div class="modal-dialog">
+        <div class="modal-content" [ngSwitch]="modalService.getModalType()">
+            <template [ngSwitchCase]="'ModalsRemovalModel'">
+                <modals-removal [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-removal>
+            </template>
+            <template [ngSwitchCase]="'ModalsProjectPropertiesModel'">
+                <modals-project-properties [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-project-properties>
+            </template>
+            <template [ngSwitchCase]="'ModalsAddHardwareModel'">
+                <modals-add-hardware [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-add-hardware>
+            </template>
+            <template [ngSwitchCase]="'ModalsBlockoPropertiesModel'">
+                <modals-blocko-properties [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-blocko-properties>
+            </template>
+        </div>
+    </div>
+</div>

@@ -6,7 +6,7 @@
 import * as blocko from "blocko";
 import * as theGrid from "the-grid";
 
-import * as libBootstrapModal from "../lib-bootstrap/modal";
+import * as libBootstrapModal from "../modals/modal";
 
 export class WidgetModel implements libBootstrapModal.Model {
 

@@ -90,7 +90,7 @@ export class Service {
 }
 
 @ngCore.Component({
-  selector: "[notifications]",
+  selector: "notifications",
   templateUrl: "app/lib-becki/notifications.html",
   directives: [ngCommon.CORE_DIRECTIVES]
 })

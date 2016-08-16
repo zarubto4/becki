@@ -64,19 +64,19 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   router:ngRouter.Router;
 
-  constructor(@ngCore.Inject("home") home:string, @ngCore.Inject("connections") connections:any[], @ngCore.Inject("signing") signing:any[], @ngCore.Inject("navigation") navigation:LabeledLink[], backEndService:backEnd.Service, notificationsService:notifications.Service, router:ngRouter.Router) {
+  constructor( @ngCore.Inject("navigation") navigation:LabeledLink[], backEndService:backEnd.Service, router:ngRouter.Router) {
     "use strict";
 
-    this.home = home;
+    this.home = "h";
     this.navbarNotificationsPage = 0;
     this.navbarState = "expanded";
-    this.connections = connections;
-    this.signing = signing;
+    this.connections = [];
+    this.signing = "s";
     this.navigation = navigation;
     this.actionClick = new ngCore.EventEmitter<void>();
     this.lastWindowWidth = null;
     this.backEnd = backEndService;
-    this.notifications = notificationsService;
+    this.notifications = null;
     this.router = router;
   }
 

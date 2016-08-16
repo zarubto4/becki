@@ -3,9 +3,35 @@
   ~ directory of this distribution.
   -->
 
+<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+<div class="modal fade" id="portlet-config" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+        <h4 class="modal-title">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        Widget settings form goes here
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn blue">Save changes</button>
+        <button type="button" class="btn default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+
 <div class="modal fade" tabindex="-1" data-bind-class.in="modal" data-bind-style.display="modal ? 'block' : 'none'" data-bind-style.background-color="modal ? 'rgba(0,0,0,0.5)' : 'initial'">
   <div class="modal-dialog">
     <div class="modal-content" data-bind-ngSwitch="getModalType()">
+      <template data-bind-ngSwitchCase="'modals-projects-new'">
+        <modals-projects-new [modalModel]="modal" (modalClose)="onModalCloseClick($event)"></modals-projects-new>
+      </template>
       <template data-bind-ngSwitchCase="'selection'">
         <div class="modal-header">
           <button type="button" class="close" data-on-click="onModalCloseClick(false, $event)"><span>&times;</span></button>
@@ -207,11 +233,6 @@
     </div>
   </div>
 </div>
-<template data-bind-ngIf="spinnerVisible">
-  <div class="overlay">
-    <div class="spinner spinner-lg"></div>
-  </div>
-</template>
 <template data-bind-ngIf="getNotification()">
   <div class="toast-pf toast-pf-top-right alert alert-{{getNotification().type}} alert-dismissable">
     <button type="button" class="close" data-on-click="onNotificationCloseClick($event)">

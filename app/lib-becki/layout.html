@@ -2,120 +2,290 @@
   ~ © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
   ~ of this distribution.
   -->
-
-<template data-bind-ngIf="backEnd.tasks">
-  <div class="overlay">
-    <div class="spinner spinner-lg"></div>
-  </div>
-</template>
-<nav class="navbar navbar-pf-vertical">
-  <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-on-click="onNavbarToggleClick($event)">
-      <span class="sr-only">Toggle navigation</span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-    </button>
-    <a class="navbar-brand" data-bind-routerLink="['/']">
-      <img class="navbar-brand-icon" src="../dist/img/logo-alt.svg" alt="">
-      <img class="navbar-brand-name" src="../dist/img/brand-alt.svg" data-bind-alt="home">
-    </a>
-  </div>
-  <nav class="collapse navbar-collapse">
-    <ul class="nav navbar-nav navbar-right navbar-iconic">
-      <li class="dropdown">
-        <a class="dropdown-toggle nav-item-iconic" data-on-click="onNotificationsClick($event)">
-          <span class="fa pficon-flag"></span>
-          <span class="caret"></span>
+<div class="page-wrapper">
+  <div class="page-header navbar navbar-fixed-top">
+    <!-- BEGIN HEADER INNER -->
+    <div class="page-header-inner">
+      <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+      <a href="javascript:;" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+      </a>
+      <!-- END RESPONSIVE MENU TOGGLER -->
+      <!-- BEGIN LOGO -->
+      <div class="page-logo">
+        <a data-bind-routerLink="['/']">
+          <img src="../assets/layouts/layout/img/logo.png" alt="logo" class="logo-default"/>
         </a>
-        <div class="dropdown-menu infotip bottom-right">
-          <div class="arrow"></div>
-          <ul class="list-group">
-            <li class="list-group-item" template="ngFor let notification of navbarNotifications?.content" data-bind-ngSwitch="notification.read">
-              <span class="i pficon pficon-{{getNotificationIcon(notification)}}"></span>
-              <template data-bind-ngSwitchCase="true">
-                {{notification.message}}
-              </template>
-              <template data-bind-ngSwitchCase="false">
-                <strong>{{notification.message}}</strong>
-              </template>
+        <div class="menu-toggler sidebar-toggler hide">
+          <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
+        </div>
+      </div>
+      <!-- END LOGO -->
+      <!-- BEGIN TOP NAVIGATION MENU -->
+      <div class="top-menu">
+        <ul class="nav navbar-nav pull-right">
+          <li *ngIf="backEnd.tasks">
+            <a><i class="fa fa-spinner fa-spin"></i></a>
+          </li>
+          <!-- BEGIN NOTIFICATION DROPDOWN -->
+          <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
+            <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" data-on-click="onNotificationsClick($event)">
+              <i class="icon-bell"></i>
+              <span class="badge badge-default">?</span>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="external">
+                <h3>
+                  <span class="bold">12 pending</span> notifications</h3>
+                <a>view all</a>
+              </li>
+              <li>
+                <ul class="dropdown-menu-list scroller" style="height: 250px;">
+                  <li>
+                    <a href="#">
+                                      <span class="label label-sm label-icon label-success">
+                                      <i class="fa fa-plus"></i>
+                                      </span>
+                      New user registered. <span class="time">
+                                      Just now </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                                      <span class="label label-sm label-icon label-danger">
+                                      <i class="fa fa-bolt"></i>
+                                      </span>
+                      Server #12 overloaded. <span class="time">
+                                      15 mins </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                                      <span class="label label-sm label-icon label-warning">
+                                      <i class="fa fa-bell-o"></i>
+                                      </span>
+                      Server #2 not responding. <span class="time">
+                                      22 mins </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                                      <span class="label label-sm label-icon label-info">
+                                      <i class="fa fa-bullhorn"></i>
+                                      </span>
+                      Application error. <span class="time">
+                                      40 mins </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                                      <span class="label label-sm label-icon label-danger">
+                                      <i class="fa fa-bolt"></i>
+                                      </span>
+                      Database overloaded 68%. <span class="time">
+                                      2 hrs </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                                      <span class="label label-sm label-icon label-danger">
+                                      <i class="fa fa-bolt"></i>
+                                      </span>
+                      2 user IP blocked. <span class="time">
+                                      5 hrs </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                                      <span class="label label-sm label-icon label-warning">
+                                      <i class="fa fa-bell-o"></i>
+                                      </span>
+                      Storage Server #4 not responding. <span class="time">
+                                      45 mins </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                                      <span class="label label-sm label-icon label-info">
+                                      <i class="fa fa-bullhorn"></i>
+                                      </span>
+                      System Error. <span class="time">
+                                      55 mins </span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                                      <span class="label label-sm label-icon label-danger">
+                                      <i class="fa fa-bolt"></i>
+                                      </span>
+                      Database overloaded 68%. <span class="time">
+                                      2 hrs </span>
+                    </a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <!-- END NOTIFICATION DROPDOWN -->
+          <!-- BEGIN USER LOGIN DROPDOWN -->
+          <li class="dropdown dropdown-user">
+            <a class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+              <img alt="" class="img-circle" src="../assets/layouts/layout/img/avatar3_small.jpg"/>
+              <span class="username">
+                      Bob </span>
+              <i class="fa fa-angle-down"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a data-bind-routerLink="connections" style="cursor: pointer"><i class="icon-link"></i> Connections</a>
+              </li>
+              <li class="divider">
+              </li>
+              <li>
+                <a data-on-click="onSignOutClick($event)" style="cursor: pointer"><i class="icon-key"></i> Sign Out</a>
+              </li>
+            </ul>
+          </li>
+          <!-- END USER LOGIN DROPDOWN -->
+        </ul>
+      </div>
+      <!-- END TOP NAVIGATION MENU -->
+    </div>
+    <!-- END HEADER INNER -->
+  </div>
+  <!-- END HEADER -->
+  <div class="page-container">
+
+    <!-- BEGIN SIDEBAR -->
+    <div class="page-sidebar-wrapper">
+      <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+      <!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+      <div class="page-sidebar navbar-collapse collapse">
+        <!-- BEGIN SIDEBAR MENU -->
+        <ul class="page-sidebar-menu" data-auto-scroll="true" data-slide-speed="200">
+          <li routerLinkActive="active" template="ngFor let page of navigation">
+            <a data-bind-routerLink="page.link">
+              <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
+              <span class="title">{{page.label}}</span>
+              <span class="selected"></span>
+            </a>
+          </li>
+
+          <li routerLinkActive="active">
+            <a data-bind-routerLink="connections">
+              <span class="fa fa-sign-in" title="Connections"></span>
+              <span class="title">Connections</span>
+              <span class="selected"></span>
+            </a>
+          </li>
+          <li>
+            <a data-on-click="onSignOutClick($event)" style="cursor: pointer">
+              <span class="fa fa-sign-out" title="Sign Out"></span>
+              <span class="title">Sign Out</span>
+              <span class="selected"></span>
+            </a>
+          </li>
+
+        </ul>
+        <!-- END SIDEBAR MENU -->
+      </div>
+    </div>
+    <!-- END SIDEBAR -->
+
+
+
+
+
+
+
+
+
+
+
+    <div class="page-content-wrapper">
+      <!-- BEGIN CONTENT BODY -->
+      <div class="page-content">
+        <!-- BEGIN PAGE HEADER-->
+        <!-- BEGIN PAGE BAR -->
+        <div class="page-bar">
+          <ul class="page-breadcrumb">
+            <li template="ngFor let breadcrumb of breadcrumbs">
+              <i class="fa fa-circle"></i>
+              <a data-bind-routerLink="breadcrumb.link">{{breadcrumb.label}}</a>
             </li>
           </ul>
-          <div class="footer">
-            <template data-bind-ngIf="navbarNotifications?.pages?.indexOf(navbarNotificationsPage - 1) != -1">
-              <p><a data-on-click="onShowNotificationsClick(navbarNotificationsPage - 1, $event)" style="cursor: pointer">
-                Show newer notifications
-              </a></p>
-            </template>
-            <template data-bind-ngIf="navbarNotifications?.pages?.indexOf(navbarNotificationsPage + 1) != -1">
-              <p><a data-on-click="onShowNotificationsClick(navbarNotificationsPage + 1, $event)" style="cursor: pointer">
-                Show older notifications
-              </a></p>
-            </template>
-          </div>
         </div>
-      </li>
-      <li class="dropdown">
-        <a class="dropdown-toggle nav-item-iconic">
-          <span class="fa pficon-user"></span>
-          <span class="caret"></span>
-        </a>
-        <ul class="dropdown-menu">
-          <li>
-            <a data-bind-routerLink="connections">Connections</a>
-          </li>
-          <li class="divider"></li>
-          <li>
-            <a data-on-click="onSignOutClick($event)" style="cursor: pointer">Sign Out</a>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </nav>
-</nav>
-<div class="nav-pf-vertical nav-pf-vertical-with-secondary-nav" data-bind-class.collapsed="navbarState == 'collapsed'" data-bind-class.hidden="navbarState == 'hidden'" data-bind-class.show-mobile-nav="navbarState == 'visible'">
-  <ul class="list-group">
-    <li class="list-group-item" routerLinkActive="active" template="ngFor let page of navigation">
-      <a data-bind-routerLink="page.link">
-        <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
-        <span class="list-group-item-value">{{page.label}}</span>
-      </a>
-    </li>
-    <li class="list-group-item list-group-item-separator hidden-sm hidden-md hidden-lg" routerLinkActive="active">
-      <a data-bind-routerLink="connections">
-        <span class="fa fa-sign-in" title="Connections"></span>
-        <span class="list-group-item-value">Connections</span>
-      </a>
-    </li>
-    <li class="list-group-item hidden-sm hidden-md hidden-lg">
-      <a data-on-click="onSignOutClick($event)" style="cursor: pointer">
-        <span class="fa fa-sign-out" title="Sign Out"></span>
-        <span class="list-group-item-value">Sign Out</span>
-      </a>
-    </li>
-  </ul>
-</div>
-
-<div class="container-fluid container-pf-nav-pf-vertical container-pf-nav-pf-vertical-with-secondary" data-bind-class.collapsed-nav="navbarState == 'collapsed'" data-bind-class.hidden-nav="['hidden', 'visible'].indexOf(navbarState) != -1">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="page-header">
-        <div notifications>
-          <div class="spinner"></div>
-        </div>
-        <ol class="breadcrumb">
-          <li template="ngFor let breadcrumb of breadcrumbs">
-            <a data-bind-routerLink="breadcrumb.link">{{breadcrumb.label}}</a>
-          </li>
-        </ol>
-        <template data-bind-ngIf="actionLabel">
-          <div class="pull-right">
-            <button type="button" class="btn btn-default" data-on-click="onActionClick($event)">{{actionLabel}}</button>
-          </div>
-        </template>
-        <h1>{{heading}}</h1>
+        <!-- END PAGE BAR -->
+        <notifications></notifications>
+        <!-- BEGIN PAGE TITLE-->
+        <h1 class="page-title">{{heading}}</h1>
+        <!-- END PAGE TITLE-->
+        <!-- END PAGE HEADER-->
+        <ng-content></ng-content>
       </div>
-      <ng-content></ng-content>
+      <!-- END CONTENT BODY -->
+    </div>
+
+
+
+
+
+
+
+
+
+    <!--div class="nav-pf-vertical nav-pf-vertical-with-secondary-nav" data-bind-class.collapsed="navbarState == 'collapsed'" data-bind-class.hidden="navbarState == 'hidden'" data-bind-class.show-mobile-nav="navbarState == 'visible'">
+      <ul class="list-group">
+        <li class="list-group-item" routerLinkActive="active" template="ngFor let page of navigation">
+          <a data-bind-routerLink="page.link">
+            <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
+            <span class="list-group-item-value">{{page.label}}</span>
+          </a>
+        </li>
+        <li class="list-group-item list-group-item-separator hidden-sm hidden-md hidden-lg" routerLinkActive="active">
+          <a data-bind-routerLink="connections">
+            <span class="fa fa-sign-in" title="Connections"></span>
+            <span class="list-group-item-value">Connections</span>
+          </a>
+        </li>
+        <li class="list-group-item hidden-sm hidden-md hidden-lg">
+          <a data-on-click="onSignOutClick($event)" style="cursor: pointer">
+            <span class="fa fa-sign-out" title="Sign Out"></span>
+            <span class="list-group-item-value">Sign Out</span>
+          </a>
+        </li>
+      </ul>
+    </div-->
+
+    <!--div class="container-fluid container-pf-nav-pf-vertical container-pf-nav-pf-vertical-with-secondary" data-bind-class.collapsed-nav="navbarState == 'collapsed'" data-bind-class.hidden-nav="['hidden', 'visible'].indexOf(navbarState) != -1">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="page-header">
+            <div notifications>
+              <div class="spinner"></div>
+            </div>
+            <ol class="breadcrumb">
+              <li template="ngFor let breadcrumb of breadcrumbs">
+                <a data-bind-routerLink="breadcrumb.link">{{breadcrumb.label}}</a>
+              </li>
+            </ol>
+            <template data-bind-ngIf="actionLabel">
+              <div class="pull-right">
+                <button type="button" class="btn btn-default" data-on-click="onActionClick($event)">{{actionLabel}}</button>
+              </div>
+            </template>
+            <h1>{{heading}}</h1>
+          </div>
+          <ng-content></ng-content>
+        </div>
+      </div>
+    </div-->
+  </div>
+
+  <!-- BEGIN FOOTER -->
+  <div class="page-footer">
+    <div class="page-footer-inner"> 2016 &copy; Becki by
+      <a target="_blank" href="http://Byzance.cz">Byzance</a>
     </div>
   </div>
+  <!-- END FOOTER -->
 </div>

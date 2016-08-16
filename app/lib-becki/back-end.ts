@@ -23,12 +23,11 @@ export class Service extends libBackEnd.BackEnd {
 
   router:ngRouter.Router;
 
-  public constructor(http:ngHttp.Http, @ngCore.Inject("signing") signing:any[], router:ngRouter.Router, notificationsService:notifications.Service) {
+  public constructor(http:ngHttp.Http, router:ngRouter.Router, notificationsService:notifications.Service) {
     "use strict";
 
     super();
     this.http = http;
-    this.signing = signing;
     this.router = router;
     this.webSocketErrorOccurred.subscribe(error => notificationsService.current.push(new notifications.Danger("Communication with the back end have failed.", error)));
   }

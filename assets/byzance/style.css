@@ -1,0 +1,99 @@
+.byzance-page-center {
+    position: fixed;
+    z-index: 10051;
+    width: 100px;
+    top: 40%;
+    left: 50%;
+    margin-left: -55px;
+    text-align: center;
+}
+
+@-webkit-keyframes byzance-logo-spinner-white-keyframes
+{
+    0%{-webkit-transform:rotate(0deg);}
+    25%{-webkit-transform:rotate(90deg);}
+    50%{-webkit-transform:rotate(180deg);}
+    75%{-webkit-transform:rotate(270deg);}
+    100%{-webkit-transform:rotate(360deg);}
+}
+@-moz-keyframes byzance-logo-spinner-white-keyframes
+{
+    0%{-moz-transform:rotate(0deg);}
+    25%{-moz-transform:rotate(90deg);}
+    50%{-moz-transform:rotate(180deg);}
+    75%{-moz-transform:rotate(270deg);}
+    100%{-moz-transform:rotate(360deg);}
+}
+@-ms-keyframes byzance-logo-spinner-white-keyframes
+{
+    0%{-ms-transform:rotate(0deg);}
+    25%{-ms-transform:rotate(90deg);}
+    50%{-ms-transform:rotate(180deg);}
+    75%{-ms-transform:rotate(270deg);}
+    100%{-ms-transform:rotate(360deg);}
+}
+
+.byzance-logo-spinner-white {
+    width: 64px;
+    height: 64px;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    display: inline-block;
+    background-image: url(/assets/byzance/logo_square_white.svg);
+    -webkit-animation-name: byzance-logo-spinner-white-keyframes;
+    -webkit-animation-duration: 4s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: ease-in-out;
+    -moz-animation-name: byzance-logo-spinner-white-keyframes;
+    -moz-animation-duration: 4s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: ease-in-out;
+    -ms-animation-name: byzance-logo-spinner-white-keyframes;
+    -ms-animation-duration: 4s;
+    -ms-animation-iteration-count: infinite;
+    -ms-animation-timing-function: ease-in-out;
+}
+
+.byzance-logo-square-blue {
+    width: 64px;
+    height: 64px;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: contain;
+    display: inline-block;
+    background-image: url(/assets/byzance/logo_square_blue.svg);
+}
+
+.byzance-logo {
+    width: 210px;
+    height: 60px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: contain;
+    background-image: url(/assets/byzance/logo_white.svg);
+}
+
+.byzance-logo-size-top-menu {
+    height: 35px;
+    margin: 2px 7px;
+    width: 123px;
+}
+
+.error404-logo {
+    bottom: 5%;
+    left: 1%;
+    position: fixed;
+    width: 50%;
+    height: 50%;
+    background-position: 0% 100%;
+    opacity: 0.2;
+}
+
+.page-content {
+    min-height: calc(100vh - 84px) !important;
+}
+
+.page-header.navbar .page-logo {
+    padding-left: 15px;
+}

@@ -8,7 +8,7 @@ import * as ngCommon from "@angular/common";
 import * as ngCore from "@angular/core";
 
 import * as backEnd from "./back-end";
-import * as libBootstrapModal from "../lib-bootstrap/modal";
+import * as libBootstrapModal from "../modals/modal";
 import * as modal from "./modal";
 import * as notifications from "./notifications";
 

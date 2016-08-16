@@ -971,6 +971,10 @@ export abstract class BackEnd {
     this.reconnectWebSocket();
   }
 
+  public tokenExist():boolean {
+    return window.localStorage.getItem("authToken")?true:false;
+  }
+
   private unsetToken():void {
     "use strict";
 
@@ -1676,10 +1680,6 @@ export abstract class BackEnd {
 
   public createDevice(id:string, type_of_board_id:string):Promise<any> {
     "use strict";
-
-    if (!/^[0-9a-f]{8}$/.test(id)) {
-      throw "ID = 8 hex chars required";
-    }
 
     return this.requestRestPath("POST", BackEnd.DEVICE_PATH, {type_of_board_id, hardware_unique_ids: [id]}, 201);
   }

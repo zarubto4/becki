@@ -1,0 +1,17 @@
+<div class="row">
+    <div class="byzance-logo-square-blue error404-logo"></div>
+    <div class="col-md-12 page-404">
+        <div class="number font-blue"> 404 </div>
+        <div class="details">
+            <h3>Oops! You're lost.</h3>
+            <p>
+                We can not find the page you're looking for.
+            </p>
+            <p>
+                <a [routerLink]="['/']" class="btn blue btn-outline"> Return home </a>
+                or
+                <a (click)="onBackClick($event)" class="btn blue btn-outline"> Go back </a>
+            </p>
+        </div>
+    </div>
+</div>

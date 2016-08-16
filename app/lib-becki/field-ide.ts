@@ -10,7 +10,7 @@ import * as fieldCode from "./field-code";
 import * as libBeckiBackEnd from "../lib-becki/back-end";
 import * as libBeckiNotifications from "../lib-becki/notifications";
 import * as libBootstrapDropdown from "../lib-bootstrap/dropdown";
-import * as libBootstrapModal from "../lib-bootstrap/modal";
+import * as libBootstrapModal from "../modals/modal";
 
 @ngCore.Component({
   selector: "[fieldIDE]",

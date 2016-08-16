@@ -14,6 +14,7 @@ import * as libBeckiCustomValidator from "./lib-becki/custom-validator";
 import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
+import {Router} from "@angular/router";
 
 @ngCore.Component({
   templateUrl: "app/user-project.html",
@@ -63,12 +64,12 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   routeParamsSubscription:Rx.Subscription;
 
-  constructor(@ngCore.Inject("home") home:string, activatedRoute:ngRouter.ActivatedRoute, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:ngRouter.Router) {
+  constructor(activatedRoute:ngRouter.ActivatedRoute, backEnd:libBeckiBackEnd.Service, notifications:libBeckiNotifications.Service, router:Router) {
     "use strict";
 
     this.name = "Loading...";
     this.breadcrumbs = [
-      new libBeckiLayout.LabeledLink(home, ["/"]),
+      new libBeckiLayout.LabeledLink("home", ["/"]),
       new libBeckiLayout.LabeledLink("User", ["/user"]),
       new libBeckiLayout.LabeledLink("Projects", ["/user/projects"])
     ];

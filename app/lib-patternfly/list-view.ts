@@ -8,7 +8,7 @@ import * as ngCore from "@angular/core";
 import * as ngRouter from "@angular/router";
 
 import * as libBootstrapDropdown from "../lib-bootstrap/dropdown";
-import * as libBootstrapModal from "../lib-bootstrap/modal";
+import * as libBootstrapModal from "../modals/modal";
 
 export class Item {
 
@@ -59,7 +59,7 @@ export class Component {
 
   modal:libBootstrapModal.Component;
 
-  constructor(router:ngRouter.Router, modal:libBootstrapModal.Component) {
+  constructor(router:ngRouter.Router) {
     "use strict";
 
     this.emptyTitle = "No item yet";
