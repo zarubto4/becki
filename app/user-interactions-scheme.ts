@@ -61,21 +61,21 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   versionDeviceField:string;
 
-  devices:libBackEnd.Device[];
+  devices:libBackEnd.Board[];
 
-  deviceTypes:libBackEnd.DeviceType[];
+  deviceTypes:libBackEnd.TypeOfBoard[];
 
   versionDeviceProgramField:string;
 
-  devicePrograms:libBackEnd.DeviceProgram[];
+  devicePrograms:libBackEnd.CProgram[];
 
   showApplicationGroups:boolean;
 
   versionApplicationGroupField:string;
 
-  applicationGroups:libBackEnd.ApplicationGroup[];
+  applicationGroups:libBackEnd.MProject[];
 
-  versionApplicationGroups:libBackEnd.ApplicationGroup[];
+  versionApplicationGroups:libBackEnd.MProject[];
 
   versionSchemeField:string;
 
@@ -166,7 +166,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
         .then(result => {
           let scheme:libBackEnd.InteractionsScheme;
           let projects:libBackEnd.Project[];
-          let applicationGroups:libBackEnd.ApplicationGroup[];
+          let applicationGroups:libBackEnd.MProject[];
           [scheme, projects, this.devices, this.deviceTypes, this.devicePrograms, applicationGroups] = result;
           if (!scheme.program_versions.length) {
             throw new Error("the scheme has no version");
@@ -255,7 +255,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     return () => this.backEnd.getInteractionsScheme(this.id).then(scheme => !scheme.program_versions.find(version => version.version_Object.version_name == this.versionNameField));
   }
 
-  getProgramsForVersionDevice():libBackEnd.DeviceProgram[] {
+  getProgramsForVersionDevice():libBackEnd.CProgram[] {
     "use strict";
 
     if (!this.versionDeviceField) {

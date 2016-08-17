@@ -22,7 +22,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   id:string;
 
-  device:libBackEnd.ApplicationDevice;
+  device:libBackEnd.ScreenSizeType;
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 

@@ -48,7 +48,7 @@ export class Component implements ngCore.OnInit {
     this.breadcrumbs = [
       new libBeckiLayout.LabeledLink(home, ["/"]),
       new libBeckiLayout.LabeledLink("User", ["/user"]),
-      new libBeckiLayout.LabeledLink("New Device for Applications", ["/user/application/device/new"])
+      new libBeckiLayout.LabeledLink("New Board for Applications", ["/user/application/device/new"])
     ];
     this.projectField = "";
     this.nameField = "";

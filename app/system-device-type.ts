@@ -22,7 +22,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   id:string;
 
-  type:libBackEnd.DeviceType;
+  type:libBackEnd.TypeOfBoard;
 
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
@@ -58,7 +58,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     this.breadcrumbs = [
       new libBeckiLayout.LabeledLink(home, ["/"]),
       new libBeckiLayout.LabeledLink("System", ["/system"]),
-      new libBeckiLayout.LabeledLink("Device Types", ["/system/device/types"])
+      new libBeckiLayout.LabeledLink("Board Types", ["/system/device/types"])
     ];
     this.editing = false;
     this.editType = false;

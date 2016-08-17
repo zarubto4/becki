@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout="'Add, View, Update or Remove a Device or a Program'" data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="['uploadProgram', 'uploadBinary'].indexOf(tab) != -1 ? null : 'Add'" data-on-actionClick="onAddClick($event)" data-bind-ngSwitch="tab">
+<div data-bind-layout="'Add, View, Update or Remove a Board or a Program'" data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="['uploadProgram', 'uploadBinary'].indexOf(tab) != -1 ? null : 'Add'" data-on-actionClick="onAddClick($event)" data-bind-ngSwitch="tab">
   <ul class="nav nav-tabs">
     <li data-bind-class.active="tab == 'programs'">
       <a data-on-click="onTabClick('programs', $event)" style="cursor: pointer">
@@ -36,7 +36,7 @@
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon-list"></span>
-          Device IDs
+          Board IDs
         </label>
         <div class="checkbox" template="ngFor let device of uploadProgramDevices">
           <label>
@@ -73,7 +73,7 @@
       <div class="form-group">
         <label>
           <span class="glyphicon glyphicon-list"></span>
-          Device IDs
+          Board IDs
         </label>
         <div class="checkbox" template="ngFor let device of uploadBinaryDevices">
           <label>

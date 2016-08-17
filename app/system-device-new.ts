@@ -25,7 +25,7 @@ export class Component implements ngCore.OnInit {
 
   typeField:string;
 
-  types:libBackEnd.DeviceType[];
+  types:libBackEnd.TypeOfBoard[];
 
   backEnd:libBeckiBackEnd.Service;
 
@@ -39,7 +39,7 @@ export class Component implements ngCore.OnInit {
     this.breadcrumbs = [
       new libBeckiLayout.LabeledLink(home, ["/"]),
       new libBeckiLayout.LabeledLink("System", ["/system"]),
-      new libBeckiLayout.LabeledLink("New Device", ["/system/device/new"])
+      new libBeckiLayout.LabeledLink("New Board", ["/system/device/new"])
     ];
     this.idField = "";
     this.typeField = "";
@@ -54,7 +54,7 @@ export class Component implements ngCore.OnInit {
     this.notifications.shift();
     this.backEnd.getDeviceTypes()
         .then(types => this.types = types.filter(type => type.register_new_device_permission))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Device types cannot be loaded.", reason)));
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Board types cannot be loaded.", reason)));
   }
 
   validateIdField():()=>Promise<boolean> {
@@ -63,7 +63,7 @@ export class Component implements ngCore.OnInit {
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     return () => this.backEnd.getDevices(1)
-        .then(page => Promise.all<libBackEnd.DevicesPage>(page.pages.map(number => this.backEnd.getDevices(number))))
+        .then(page => Promise.all<libBackEnd.BoardList>(page.pages.map(number => this.backEnd.getDevices(number))))
         .then(pages => ![].concat(...pages.map(page => page.content)).find(device => device.id == this.idField));
   }
 

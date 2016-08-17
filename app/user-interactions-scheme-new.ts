@@ -38,19 +38,19 @@ export class Component implements ngCore.OnInit {
 
   deviceField:string;
 
-  devices:libBackEnd.Device[];
+  devices:libBackEnd.Board[];
 
-  deviceTypes:libBackEnd.DeviceType[];
+  deviceTypes:libBackEnd.TypeOfBoard[];
 
   deviceProgramField:string;
 
-  devicePrograms:libBackEnd.DeviceProgram[];
+  devicePrograms:libBackEnd.CProgram[];
 
   showGroups:boolean;
 
   groupField:string;
 
-  groups:libBackEnd.ApplicationGroup[];
+  groups:libBackEnd.MProject[];
 
   schemeField:string;
 
@@ -126,13 +126,13 @@ export class Component implements ngCore.OnInit {
             ]);
           })
           .then(result => {
-            let groups:libBackEnd.ApplicationGroup[];
+            let groups:libBackEnd.MProject[];
             [this.devices, this.devicePrograms, groups] = result;
             this.showGroups = groups.length > 1 || (groups.length == 1 && !groups[0].m_programs.length);
             this.groups = groups.filter(group => group.update_permission);
           })
           .catch(reason => {
-            this.notifications.current.push(new libBeckiNotifications.Danger("Application groups cannot be loaded.", reason));
+            this.notifications.current.push(new libBeckiNotifications.Danger("MProgram groups cannot be loaded.", reason));
           });
     }
   }
@@ -153,7 +153,7 @@ export class Component implements ngCore.OnInit {
         .then(schemes => !schemes.find(scheme => scheme.name == this.nameField));
   }
 
-  getProgramsForDevice():libBackEnd.DeviceProgram[] {
+  getProgramsForDevice():libBackEnd.CProgram[] {
     "use strict";
 
     if (!this.deviceField) {

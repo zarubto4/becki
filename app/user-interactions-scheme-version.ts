@@ -30,7 +30,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   showGroups:boolean;
 
-  groups:libBackEnd.ApplicationGroup[];
+  groups:libBackEnd.MProject[];
 
   scheme:string;
 
@@ -91,7 +91,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
           })
           .then(result => {
             let scheme:libBackEnd.InteractionsScheme;
-            let groups:libBackEnd.ApplicationGroup[];
+            let groups:libBackEnd.MProject[];
             [scheme, groups] = result;
             let version = scheme.program_versions.find(version => version.version_Object.id == id);
             if (!version) {

@@ -4,7 +4,7 @@
 
 import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
 import {LayoutMain} from "../layouts/main";
-import {Project, Device} from "../lib-back-end/index";
+import {Project, Board} from "../lib-back-end/index";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
 import {ROUTER_DIRECTIVES} from "@angular/router";
@@ -24,7 +24,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     routeParamsSubscription:Subscription;
 
     project:Project = null;
-    devices:Device[] = null;
+    devices:Board[] = null;
 
     constructor(injector:Injector) {super(injector)};
 
@@ -43,11 +43,11 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         this.backEndService.getProject(this.id)
             .then((project:Project) => {
                 this.project = project;
-                return Promise.all<Device>(project.boards_id.map((board_id) => {
+                return Promise.all<Board>(project.boards_id.map((board_id) => {
                     return this.backEndService.getDevice(board_id);
                 }));
             })
-            .then((devices:Device[]) => {
+            .then((devices:Board[]) => {
                 console.log(devices);
                 this.devices = devices;
             })
@@ -56,12 +56,12 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
             });
     }
 
-    onDeviceClick(device:Device):void {
+    onDeviceClick(device:Board):void {
         //TODO
-        alert("TODO!!! Device object: "+JSON.stringify(device));
+        alert("TODO!!! Board object: "+JSON.stringify(device));
     }
 
-    onRemoveClick(device:Device):void {
+    onRemoveClick(device:Board):void {
         this.modalService.showModal(new ModalsRemovalModel(device.id)).then((success) => {
             if (success) {
                 this.backEndService.removeDeviceFromProject(device.id)

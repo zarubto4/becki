@@ -4,7 +4,7 @@
 
 import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
 import {LayoutMain} from "../layouts/main";
-import {Project, DeviceProgram} from "../lib-back-end/index";
+import {Project, CProgram} from "../lib-back-end/index";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
 import {ROUTER_DIRECTIVES} from "@angular/router";
@@ -24,7 +24,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
 
     project:Project = null;
 
-    codePrograms:DeviceProgram[] = null;
+    codePrograms:CProgram[] = null;
 
     constructor(injector:Injector) {super(injector)};
 
@@ -43,11 +43,11 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         this.backEndService.getProject(this.id)
             .then((project:Project) => {
                 this.project = project;
-                return Promise.all<DeviceProgram>(project.c_programs_id.map((c_program_id) => {
+                return Promise.all<CProgram>(project.c_programs_id.map((c_program_id) => {
                     return this.backEndService.getDeviceProgram(c_program_id);
                 }));
             })
-            .then((codePrograms:DeviceProgram[]) => {
+            .then((codePrograms:CProgram[]) => {
                 this.codePrograms = codePrograms;
             })
             .catch(reason => {
@@ -56,12 +56,12 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
 
     }
 
-    onCodeClick(code:DeviceProgram):void {
+    onCodeClick(code:CProgram):void {
         //TODO
         alert("TODO!!! Code object: "+JSON.stringify(code));
     }
 
-    onRemoveClick(code:DeviceProgram):void {
+    onRemoveClick(code:CProgram):void {
         this.modalService.showModal(new ModalsRemovalModel(code.program_name)).then((success) => {
             if (success) {
                 this.backEndService.deleteDeviceProgram(code.id)
@@ -94,7 +94,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         });*/
     }
 
-    onEditClick(code:DeviceProgram):void {
+    onEditClick(code:CProgram):void {
         /*var model = new ModalsBlockoPropertiesModel(this.id, blocko.name, blocko.program_description, true, blocko.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {

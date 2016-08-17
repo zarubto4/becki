@@ -27,7 +27,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
     serverId:string;
 
-    types:libBackEnd.DeviceType[];
+    types:libBackEnd.TypeOfBoard[];
 
     activatedRoute:ngRouter.ActivatedRoute;
 

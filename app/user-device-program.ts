@@ -81,7 +81,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     this.breadcrumbs = [
       new libBeckiLayout.LabeledLink(home, ["/"]),
       new libBeckiLayout.LabeledLink("User", ["/user"]),
-      new libBeckiLayout.LabeledLink("Device Programs", ["/user/device/programs"])
+      new libBeckiLayout.LabeledLink("Board Programs", ["/user/device/programs"])
     ];
     this.showHistory = false;
     this.editing = false;
@@ -177,7 +177,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     return () => this.backEnd.getProjects()
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-        .then(projects => Promise.all<libBackEnd.DeviceProgram>([].concat(...projects.map(project => project.c_programs_id)).map(id => this.backEnd.getDeviceProgram(id))))
+        .then(projects => Promise.all<libBackEnd.CProgram>([].concat(...projects.map(project => project.c_programs_id)).map(id => this.backEnd.getDeviceProgram(id))))
         .then(programs => !programs.find(program => program.id != this.id && program.program_name == this.nameField));
   }
 

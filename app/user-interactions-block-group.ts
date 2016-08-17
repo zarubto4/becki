@@ -31,7 +31,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
     id:string;
 
-    group:libBackEnd.InteractionsBlockGroup;
+    group:libBackEnd.TypeOfBlock;
 
     breadcrumbs:libBeckiLayout.LabeledLink[];
 
@@ -116,7 +116,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
             })
             .then(result =>
             {
-                let group:libBackEnd.InteractionsBlockGroup;
+                let group:libBackEnd.TypeOfBlock;
                 let projects:libBackEnd.Project[];
                 [group,projects]=result;
                 this.group = group;

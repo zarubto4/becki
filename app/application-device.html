@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + device?.name + "\" Device"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="editing || !editDevice ? null : 'Edit'" data-on-actionClick="onEditClick($event)" data-bind-ngSwitch="editing">
+<div data-bind-layout='"Edit the \"" + device?.name + "\" Board"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="editing || !editDevice ? null : 'Edit'" data-on-actionClick="onEditClick($event)" data-bind-ngSwitch="editing">
   <form class="clearfix" data-on-submit="onSubmit($event)">
     <template data-bind-ngSwitchCase="true">
       <div class="pull-right">

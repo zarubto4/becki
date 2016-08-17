@@ -153,9 +153,9 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
         .then(result => {
           let project:libBackEnd.Project;
           let collaborators:libBackEnd.User[];
-          let Devices:libBackEnd.DeviceProgram[];
+          let Devices:libBackEnd.CProgram[];
           let Schemes:libBackEnd.InteractionsScheme[];
-          let Applications:libBackEnd.Application[];
+          let Applications:libBackEnd.MProgram[];
           [project, collaborators,Devices,Schemes,Applications] = result;
           this.name = project.project_name;
           this.breadcrumbs.push(new libBeckiLayout.LabeledLink(project.project_name, ["/user/projects", this.id]));

@@ -101,7 +101,7 @@ export class Component implements ngCore.OnInit {
         })
         .then(result => {
           let schemes:libBackEnd.InteractionsScheme[];
-          let groups:libBackEnd.InteractionsBlockGroup[];
+          let groups:libBackEnd.TypeOfBlock[];
           let moderators:[libBackEnd.InteractionsModerator, libBackEnd.Project][];
           [schemes, groups, moderators] = result;
           this.schemes = schemes.map(scheme => new libPatternFlyListView.Item(scheme.id, scheme.name, scheme.program_description, ["/user/interactions/schemes", scheme.id], scheme.delete_permission));

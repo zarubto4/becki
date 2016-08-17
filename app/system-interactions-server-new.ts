@@ -25,7 +25,7 @@ export class Component implements ngCore.OnInit {
 
     typeField:string;
 
-    types:libBackEnd.DeviceType[];
+    types:libBackEnd.TypeOfBoard[];
 
     backEnd:libBeckiBackEnd.Service;
 

@@ -31,7 +31,7 @@ export class Component implements ngCore.OnInit {
 
   groupField:string;
 
-  groups:libBackEnd.InteractionsBlockGroup[];
+  groups:libBackEnd.TypeOfBlock[];
 
   descriptionField:string;
 

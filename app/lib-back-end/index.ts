@@ -13,9 +13,7 @@ import * as Rx from "rxjs";
 import * as uuid from "node-uuid";
 
 export function composeUserString(user:User, showEmail=false):string {
-  "use strict";
-
-  return user.nick_name || user.full_name || showEmail && user.mail || null;
+    return user.nick_name || user.full_name || showEmail && user.mail || null;
 }
 
 export class RestRequest {
@@ -29,9 +27,7 @@ export class RestRequest {
   body:Object;
 
   constructor(method:string, url:string, headers:{[name: string]: string} = {}, body?:Object) {
-    "use strict";
-
-    this.method = method;
+        this.method = method;
     this.url = url;
     this.headers = {};
     for (let header in headers) {
@@ -52,9 +48,7 @@ export class RestResponse {
   body:Object;
 
   constructor(status:number, body:Object) {
-    "use strict";
-
-    this.status = status;
+        this.status = status;
     this.body = body;
   }
 }
@@ -84,9 +78,7 @@ export class BugFoundError extends Error {
   userMessage:string;
 
   constructor(adminMessage:string, userMessage?:string) {
-    "use strict";
-
-    super(BugFoundError.composeMessage(adminMessage));
+        super(BugFoundError.composeMessage(adminMessage));
     // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133
     this.message = BugFoundError.composeMessage(adminMessage);
     this.adminMessage = adminMessage;
@@ -94,9 +86,7 @@ export class BugFoundError extends Error {
   }
 
   static fromRestResponse(response:RestResponse):BugFoundError {
-    "use strict";
-
-    let content = response.body;
+        let content = response.body;
     let message:string;
     if (response.status == 400) {
       content = (<{exception:Object}>response.body).exception;
@@ -106,15 +96,11 @@ export class BugFoundError extends Error {
   }
 
   static fromWsResponse(response:WebSocketErrorMessage):BugFoundError {
-    "use strict";
-
-    return new BugFoundError(`response ${JSON.stringify(response)}`, response.error);
+        return new BugFoundError(`response ${JSON.stringify(response)}`, response.error);
   }
 
   static composeMessage(adminMessage:string):string {
-    "use strict";
-
-    return `bug found in client or server: ${adminMessage}`;
+        return `bug found in client or server: ${adminMessage}`;
   }
 }
 
@@ -125,18 +111,14 @@ export class UnauthorizedError extends Error {
   userMessage:string;
 
   constructor(userMessage:string, message = "authorized authentication token required") {
-    "use strict";
-
-    super(message);
+        super(message);
     // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133
     this.message = message;
     this.userMessage = userMessage;
   }
 
   static fromRestResponse(response:RestResponse):UnauthorizedError {
-    "use strict";
-
-    return new UnauthorizedError((<{message:string}>response.body).message);
+        return new UnauthorizedError((<{message:string}>response.body).message);
   }
 }
 
@@ -149,18 +131,14 @@ export class PermissionMissingError extends UnauthorizedError {
   userMessage:string;
 
   constructor(userMessage:string) {
-    "use strict";
-
-    super(PermissionMissingError.MESSAGE);
+        super(PermissionMissingError.MESSAGE);
     // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133
     this.message = PermissionMissingError.MESSAGE;
     this.userMessage = userMessage;
   }
 
   static fromRestResponse(response:RestResponse):PermissionMissingError {
-    "use strict";
-
-    return new PermissionMissingError((<{message:string}>response.body).message);
+        return new PermissionMissingError((<{message:string}>response.body).message);
   }
 }
 
@@ -244,6 +222,7 @@ export interface Notification_List { //
 
   unread_total:number;
 }
+
 export interface APINotification { //NOTIFIKACE!? TODO je třeba více konzultace o tomto
   id :string;
 
@@ -296,7 +275,7 @@ export interface RolesAndPermissions {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface ApplicationDevice {
+export interface ScreenSizeType {
 
   id:string;
 
@@ -338,15 +317,15 @@ export interface ApplicationDevice {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface ApplicationDeviceCollection {
+export interface ScreenSizeTypeCombination {
 
-  public_types:ApplicationDevice[];
+  public_types:ScreenSizeType[];
 
-  private_types:ApplicationDevice[];
+  private_types:ScreenSizeType[];
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface ApplicationGroup {
+export interface MProject {
 
   id:string;
 
@@ -358,7 +337,7 @@ export interface ApplicationGroup {
 
   project_id:string;
 
-  m_programs:Application[];
+  m_programs:MProgram[];
 
   b_program_id:string;
 
@@ -374,7 +353,7 @@ export interface ApplicationGroup {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface Application {
+export interface MProgram {
 
   id:string;
 
@@ -526,7 +505,7 @@ export interface Processor {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface DeviceType { //Type of board
+export interface TypeOfBoard { //Type of board
 
   id:string;
 
@@ -571,9 +550,9 @@ export interface DeviceProgramVersion {
   runing_on_board:boolean;
 }
 
-export interface B_Program_List {
+export interface BProgramList {
 
-  content : B_Program_Light[];
+  content : BProgramLight[];
 
   from : number;
 
@@ -583,7 +562,8 @@ export interface B_Program_List {
 
   pages : number[];
 }
-export interface B_Program_Light {
+
+export interface BProgramLight {
 
   b_program_id : string;
 
@@ -598,8 +578,8 @@ export interface B_Program_Light {
   b_program_version_description : string;
 }
 
-export interface Blocko_Block_List {
-  content:Blocko_Block_Light[];
+export interface BlockoBlockList {
+  content:BlockoBlockLight[];
 
   from:number;
 
@@ -609,7 +589,8 @@ export interface Blocko_Block_List {
 
   pages :number[];
 }
-export interface Blocko_Block_Light {
+
+export interface BlockoBlockLight {
 
   blocko_block_id : string;
 
@@ -631,34 +612,115 @@ export interface Blocko_Block_Light {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface DeviceProgram { //C_programs
+export interface CProgram { //C_programs
 
   id:string;
 
-  program_name:string;
+  program_name: string;
 
-  program_description:string;
+  program_description: string;
 
-  program_versions:DeviceProgramVersion[];
+  dateOfCreate: number;
 
-  type_of_board_id:string;
+  edit_permission: boolean;
 
-  dateOfCreate:number;
+  delete_permission: boolean;
 
-  producer_name:string; //tyrion Verze 1.06.6.4
+  project_name: string;
+
+
+  update_permission: boolean;
+
+  type_of_board_id: string;
+
+  type_of_board_name: string;
 
   project_id:string;
 
-  edit_permission:boolean;
-
-  update_permission:boolean;
-
-  delete_permission:boolean;
+  program_versions:CProgramVersion[];
 }
 
-export interface C_Program_List {
+export interface CProgramVersion{
 
-  content:C_Program_Light[];
+  version_object: VersionObject;
+
+  successfully_compiled: boolean;
+
+  compilation_in_progress: boolean;
+
+  compilable: boolean;
+
+  main: JsonNode;
+
+  user_files: JsonNode;
+
+  external_libraries: JsonNode;
+
+  virtual_input_output: string;
+
+  compilation_restored: boolean;
+
+  runing_on_board: string[];
+}
+
+export interface VersionObject{
+
+  id: string;
+
+  version_name: string;
+
+  version_description: string;
+
+  date_of_create: number;
+}
+
+export interface JsonNode{
+  valueNode: boolean;
+
+  containerNode: boolean;
+
+  missingNode: boolean;
+
+  nodeType: string[];
+
+  pojo: boolean;
+
+  number: boolean;
+
+  integralNumber: boolean;
+
+  floatingPointNumber: boolean;
+
+  short: boolean;
+
+  int: boolean;
+
+  double: boolean;
+
+  bigDecimal: boolean;
+
+  bigInteger:boolean;
+
+  textual: boolean;
+
+  boolean: boolean;
+
+  float: boolean;
+
+  binary: boolean;
+
+  object :boolean;
+
+  long: boolean;
+
+  array: boolean;
+
+  null: boolean;
+}
+
+export interface CProgramList {
+
+  content:CProgramLight[];
 
   from:number;
 
@@ -668,7 +730,8 @@ export interface C_Program_List {
 
   pages :number[];
 }
-export interface C_Program_Light {
+
+export interface CProgramLight {
 
   c_program_id :string;
 
@@ -683,9 +746,9 @@ export interface C_Program_Light {
   type_of_board_name :string;
 }
 
-export interface Type_Of_Block_List {
+export interface TypeOfBlockList {
 
-  content: Type_Of_Block_Light[]
+  content: TypeOfBlockLight[]
 
   from:number;
 
@@ -695,7 +758,8 @@ export interface Type_Of_Block_List {
 
   pages: number[];
 }
-export interface Type_Of_Block_Light {
+
+export interface TypeOfBlockLight {
   type_of_block_id :string;
 
   type_of_block_name :string;
@@ -703,9 +767,9 @@ export interface Type_Of_Block_Light {
   type_of_block_description :string;
 }
 
-export interface DevicesPage {
+export interface BoardList {
 
-  content:Device[];
+  content:Board[];
 
   from:number;
 
@@ -717,7 +781,7 @@ export interface DevicesPage {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface Device { //Boards
+export interface Board {
 
   id:string;
 
@@ -764,7 +828,7 @@ export interface CompilationServer {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface InteractionsBlockGroup {
+export interface TypeOfBlock {
 
   id:string;
 
@@ -772,7 +836,7 @@ export interface InteractionsBlockGroup {
 
   general_description:string;
 
-  blockoBlocks:InteractionsBlock[];
+  blockoBlocks:BlockoBlock[];
 
   project_id:string;
 
@@ -784,7 +848,7 @@ export interface InteractionsBlockGroup {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface InteractionsBlock {
+export interface BlockoBlock {
 
   id:string;
 
@@ -806,7 +870,7 @@ export interface InteractionsBlock {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface InteractionsSchemeVersion {
+export interface BProgramVersion {
 
   program:string;
 
@@ -818,7 +882,7 @@ export interface InteractionsSchemeVersion {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface InteractionsSchemeDeploymentDetails {
+export interface BProgramState {
 
   uploaded:boolean;
 
@@ -832,7 +896,7 @@ export interface InteractionsSchemeDeploymentDetails {
 
   local?:Object;
 
-  online_boards:Device[];
+  online_boards:Board[];
 
   m_project_id:string;
 }
@@ -846,9 +910,9 @@ export interface InteractionsScheme {
 
   program_description:string;
 
-  program_versions:InteractionsSchemeVersion[];
+  program_versions:BProgramVersion[];
 
-  program_state:InteractionsSchemeDeploymentDetails;
+  program_state:BProgramState;
 
   dateOfCreate:number;
 
@@ -910,7 +974,7 @@ export interface InteractionsSchemeConnectorValue {
   value:number;
 }
 
-export interface Applicable_Product { //napíše typ produktu/tarifu jenž vlastní uživatel, může jich být více než jeden
+export interface ApplicableProduct { //napíše typ produktu/tarifu jenž vlastní uživatel, může jich být více než jeden
   product_id:number;
 
   product_individual_name:string;
@@ -919,7 +983,7 @@ export interface Applicable_Product { //napíše typ produktu/tarifu jenž vlast
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface InteractionsServer { //Cloud_Homer_Server??
+export interface CloudHomerServer { //Cloud_Homer_Server??
   id: string;
 
   server_name: string;
@@ -986,7 +1050,7 @@ export interface Tariff{//Tyrion Verze 1.06.6.4
 
 }
 
-export interface Project_participant{ //Tyrion Verze 1.06.6.4
+export interface ProjectParticipant{ //Tyrion Verze 1.06.6.4
 
   full_name : string;
 
@@ -1034,7 +1098,7 @@ export interface Project { //Tyrion Verze 1.06.6.4 předěláno
 
   bugs :number;
 
-  participants :Project_participant[];
+  participants :ProjectParticipant[];
 
   update_permission :boolean ;
 
@@ -1079,6 +1143,7 @@ export interface CProgramUpdatePlan { //C_Program_Update_Plan
 
   binary_file_detail?:FileRecord;
 }
+
 export interface ProgramActualization {
   b_program_id:string;
 
@@ -1088,6 +1153,7 @@ export interface ProgramActualization {
 
   b_program_version_name:string;
 }
+
 export interface CProgramUpdateProgram {
   c_program_id:string;
 
@@ -1141,35 +1207,37 @@ export abstract class BackEnd {
 
   public static HOST = "127.0.0.1:9000";
 
-  public static APPLICATION_DEVICE_PATH = "/grid/screen_type";
+  public static ACTUALIZATION_PROCEDURE_PATH = "/project/actualization_procedure";
 
-  public static APPLICATION_GROUP_PATH = "/grid/m_project";
+  public static SCREEN_SIZE_TYPE_PATH = "/grid/screen_type";
 
-  public static APPLICATION_PATH = "/grid/m_program";
+  public static M_PROJECT_PATH  = "/grid/m_project";
 
-  public static COMPILATION_SERVER_PATH = "/compilation/server";
+  public static M_PROGRAM_PATH/*APPLICATION_PATH*/ = "/grid/m_program";
 
-  public static DEVICE_PATH = "/compilation/board";
+  public static EXTERNAL_SERVER_PATH/*COMPILATION_SERVER_PATH*/ = "/compilation/server";
 
-  public static DEVICE_PROGRAM_PATH = "/compilation/c_program/c_program";
+  public static BOARD_PATH/*DEVICE_PATH*/ = "/compilation/board";
 
-  public static DEVICE_PROGRAM_VERSION_PATH = `/compilation/c_program/version`;
+  public static C_PROGRAM_COMPILATION_PATH/*DEVICE_PROGRAM_PATH*/ = "/compilation/c_program/c_program";
 
-  public static DEVICE_PROGRAM_LIST = `/compilation/c_program/list`; //Tyrion Verze 1.06.6.4
+  public static C_PROGRAM_VERSION_PATH/*DEVICE_PROGRAM_VERSION_PATH*/ = `/compilation/c_program/version`;
 
-  public static DEVICE_TYPE_PATH = "/compilation/typeOfBoard";
+  public static C_PROGRAM_LIST/*DEVICE_PROGRAM_LIST*/ = `/compilation/c_program/list`; //Tyrion Verze 1.06.6.4
 
-  public static INTERACTIONS_BLOCK_GROUP_PATH = "/project/typeOfBlock";
+  public static TYPE_OF_BOARD_PATH/*DEVICE_TYPE_PATH*/ = "/compilation/typeOfBoard";
 
-  public static INTERACTIONS_BLOCK_PATH = "/project/blockoBlock";
+  public static TYPE_OF_BLOCK_PATH/*INTERACTIONS_BLOCK_GROUP_PATH*/ = "/project/typeOfBlock";
 
-  public static INTERACTIONS_MODERATOR_PATH = "/project/homer";
+  public static BLOCKOBLOCK_PATH/*INTERACTIONS_BLOCK_PATH*/ = "/project/blockoBlock";
 
-  public static INTERACTIONS_SCHEME_PATH = "/project/b_program";
+  public static HOMER_PATH/*INTERACTIONS_MODERATOR_PATH*/ = "/project/homer";
 
-  public static INTERACTIONS_SERVER_PATH = "/project/blocko/server";
+  public static B_PROGRAM_PATH/*INTERACTIONS_SCHEME_PATH*/ = "/project/b_program";
 
-  public static LIBRARY_GROUP_PATH = "/compilation/libraryGroup";
+  public static CLOUD_HOMER_SERVER_PATH/*INTERACTIONS_SERVER_PATH*/ = "/project/blocko/server";
+
+  public static LIBRARY_GROUP_PATH/**/ = "/compilation/libraryGroup";
 
   public static LIBRARY_PATH = "/compilation/library";
 
@@ -1230,9 +1298,7 @@ export abstract class BackEnd {
   public tasks:number;
 
   public constructor() {
-    "use strict";
-
-    this.eventSource = null;
+        this.eventSource = null;
     this.webSocketMessageQueue = [];
     this.webSocketReconnectTimeout = null;
     this.notificationReceived = new Rx.Subject<Notification>();
@@ -1250,9 +1316,7 @@ export abstract class BackEnd {
   }
 
   private setToken(token:string):void {
-    "use strict";
-
-    window.localStorage.setItem("authToken", token);
+        window.localStorage.setItem("authToken", token);
     this.reconnectEventSource();
     this.reconnectWebSocket();
   }
@@ -1262,31 +1326,23 @@ export abstract class BackEnd {
   }
 
   private unsetToken():void {
-    "use strict";
-
-    window.localStorage.removeItem("authToken");
+        window.localStorage.removeItem("authToken");
     this.reconnectEventSource();
     this.reconnectWebSocket();
   }
 
   private findEnqueuedWebSocketMessage(original:WebSocketMessage, ...keys:string[]):WebSocketMessage {
-    "use strict";
-
-    return this.webSocketMessageQueue.find(message => _.isMatch(message, _.pick(original, keys)));
+        return this.webSocketMessageQueue.find(message => _.isMatch(message, _.pick(original, keys)));
   }
 
   protected abstract requestRestGeneral(request:RestRequest):Rx.Observable<RestResponse>;
 
   public requestRestPath<T>(method:string, path:string, body?:Object, success=200):Promise<T> {
-    "use strict";
-
-    return this.requestRest(method, `${BackEnd.REST_SCHEME}://${BackEnd.HOST}${path}`, body, success).toPromise();
+        return this.requestRest(method, `${BackEnd.REST_SCHEME}://${BackEnd.HOST}${path}`, body, success).toPromise();
   }
 
   public requestRest<T>(method:string, url:string, body?:Object, success=200):Rx.Observable<T> {
-    "use strict";
-
-    let request = new RestRequest(method, url, {}, body);
+        let request = new RestRequest(method, url, {}, body);
     // TODO: https://github.com/angular/angular/issues/7438
     if (window.localStorage.getItem("authToken")) {
       request.headers["X-AUTH-TOKEN"] = window.localStorage.getItem("authToken");
@@ -1312,9 +1368,7 @@ export abstract class BackEnd {
   }
 
   private sendWebSocketMessageQueue():void {
-    "use strict";
-
-    this.webSocketMessageQueue.splice(0).forEach(message => {
+        this.webSocketMessageQueue.splice(0).forEach(message => {
       try {
         this.webSocket.send(JSON.stringify(message));
       } catch (err) {
@@ -1326,16 +1380,12 @@ export abstract class BackEnd {
   }
 
   public sendWebSocketMessage(message:WebSocketMessage):void {
-    "use strict";
-
-    this.webSocketMessageQueue.push(message);
+        this.webSocketMessageQueue.push(message);
     this.sendWebSocketMessageQueue();
   }
 
   private reconnectEventSource():void {
-    "use strict";
-
-    if (this.eventSource) {
+        if (this.eventSource) {
       this.eventSource.close();
     }
     this.eventSource = null;
@@ -1351,8 +1401,7 @@ export abstract class BackEnd {
   }
 
   private reconnectWebSocket():void {
-    "use strict";
-
+    console.log('reconnectWebSocket');
     clearTimeout(this.webSocketReconnectTimeout);
     this.webSocketReconnectTimeout = null;
 
@@ -1368,8 +1417,9 @@ export abstract class BackEnd {
     }
     this.webSocket = null;
     if (window.localStorage.getItem("authToken")) {
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-260
+      console.log('reconnectWebSocket');
       this.webSocket = new WebSocket(`${BackEnd.WS_SCHEME}://${BackEnd.HOST}/websocket/becki/${window.localStorage.getItem("authToken")}`);
+
       this.webSocket.addEventListener("close", setReconnectionTimeout);
 
       let opened = Rx.Observable
@@ -1413,9 +1463,7 @@ export abstract class BackEnd {
   }
 
   public createUser(mail:string, password:string, nick_name:string):Promise<any> {
-    "use strict";
-
-    if (!mail || password.length < 8 || nick_name.length < 8) {
+        if (!mail || password.length < 8 || nick_name.length < 8) {
       throw "password >= 8 and username >= 8 and email required";
     }
 
@@ -1423,46 +1471,32 @@ export abstract class BackEnd {
   }
 
   public getUser(id:string):Promise<User> {
-    "use strict";
-
-    return this.requestRestPath("GET", `${BackEnd.USER_PATH}/${id}`);
+        return this.requestRestPath("GET", `${BackEnd.USER_PATH}/${id}`);
   }
 
   public getUserEmailUsed(email:string):Promise<boolean> {
-    "use strict";
-
-    return this.requestRestPath<{valid:boolean}>("GET", `${BackEnd.VALIDATION_PATH}/mail/${email}`).then(body => body.valid);
+        return this.requestRestPath<{valid:boolean}>("GET", `${BackEnd.VALIDATION_PATH}/mail/${email}`).then(body => body.valid);
   }
 
   public getUsernameUsed(username:string):Promise<boolean> {
-    "use strict";
-
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-187
+        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-187
     return this.requestRestPath<{code:number}>("GET", `${BackEnd.VALIDATION_PATH}/nicknamewe/${username}`).then(body => body.code == 200);
   }
 
   public getUserRolesAndPermissions(id:string):Promise<RolesAndPermissions> {
-    "use strict";
-
-    return this.requestRestPath("GET", `/secure/person/system_acces/${id}`);
+        return this.requestRestPath("GET", `/secure/person/system_acces/${id}`);
   }
 
   public getSignedUser():Promise<User> {
-    "use strict";
-
-    return this.requestRestPath<{person:User}>("GET", "/login/person").then(result => result.person);
+        return this.requestRestPath<{person:User}>("GET", "/login/person").then(result => result.person);
   }
 
   public getUsers():Promise<User[]> {
-    "use strict";
-
-    return this.requestRestPath("GET", `${BackEnd.USER_PATH}/all`);
+        return this.requestRestPath("GET", `${BackEnd.USER_PATH}/all`);
   }
 
   public updateUser(id:string, full_name:string, nick_name:string, first_title:string, last_title:string):Promise<any> {
-    "use strict";
-
-    if (!full_name || !nick_name) {
+        if (!full_name || !nick_name) {
       throw "name and username required";
     }
 
@@ -1470,39 +1504,27 @@ export abstract class BackEnd {
   }
 
   public addRoleToUser(role:string, user:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("PUT", `${BackEnd.ROLE_PATH}/person/${user}/${role}`, {});
+        return this.requestRestPath("PUT", `${BackEnd.ROLE_PATH}/person/${user}/${role}`, {});
   }
 
   public removeRoleFromUser(role:string, user:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("DELETE", `${BackEnd.ROLE_PATH}/person/${user}/${role}`);
+        return this.requestRestPath("DELETE", `${BackEnd.ROLE_PATH}/person/${user}/${role}`);
   }
 
   public addPermissionToUser(permission:string, user:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("PUT", `${BackEnd.PERMISSION_PATH}/person/${user}/${permission}`, {});
+        return this.requestRestPath("PUT", `${BackEnd.PERMISSION_PATH}/person/${user}/${permission}`, {});
   }
 
   public removePermissionFromUser(permission:string, user:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("DELETE", `${BackEnd.PERMISSION_PATH}/person/${user}/${permission}`);
+        return this.requestRestPath("DELETE", `${BackEnd.PERMISSION_PATH}/person/${user}/${permission}`);
   }
 
   public deleteUser(user:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("DELETE", `${BackEnd.USER_PATH}/${user}`);
+        return this.requestRestPath("DELETE", `${BackEnd.USER_PATH}/${user}`);
   }
 
   public createToken(mail:string, password:string):Promise<any> {
-    "use strict";
-
-    if (!mail || !password) {
+        if (!mail || !password) {
       throw "email and password required";
     }
 
@@ -1515,9 +1537,7 @@ export abstract class BackEnd {
   }
 
   public createFacebookToken(redirectUrl:string):Promise<string> {
-    "use strict";
-
-    redirectUrl = encodeURIComponent(redirectUrl);
+        redirectUrl = encodeURIComponent(redirectUrl);
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
     return this.requestRestPath<{authToken:string, redirect_url:string}>("GET", `/login/facebook?return_link=${redirectUrl}`).then(body => {
       // TODO: https://github.com/angular/angular/issues/7438
@@ -1527,9 +1547,7 @@ export abstract class BackEnd {
   }
 
   public createGitHubToken(redirectUrl:string):Promise<string> {
-    "use strict";
-
-    redirectUrl = encodeURIComponent(redirectUrl);
+        redirectUrl = encodeURIComponent(redirectUrl);
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
     return this.requestRestPath<{authToken:string, redirect_url:string}>("GET", `/login/github?return_link=${redirectUrl}`).then(body => {
       // TODO: https://github.com/angular/angular/issues/7438
@@ -1539,9 +1557,7 @@ export abstract class BackEnd {
   }
 
   public deleteToken():Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("POST", `${BackEnd.TOKEN_PATH}/logout`, {}).then((body) => {
+        return this.requestRestPath("POST", `${BackEnd.TOKEN_PATH}/logout`, {}).then((body) => {
       // TODO: https://github.com/angular/angular/issues/7438
       this.unsetToken();
       return body;
@@ -1549,173 +1565,134 @@ export abstract class BackEnd {
   }
 
   public getConnections():Promise<Connection[]> {
-    "use strict";
-
-    return this.requestRestPath("GET", "/coreClient/connections");
+        return this.requestRestPath("GET", "/coreClient/connections");
   }
 
   public removeConnection(id:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("DELETE", `/coreClient/connection/${id}`);
+        return this.requestRestPath("DELETE", `/coreClient/connection/${id}`);
   }
 
   /*
   public getNotifications(page:number):Promise<MissedNotificationsPage> {
-    "use strict";
-
-    return this.requestRestPath("GET", `${BackEnd.NOTIFICATION_PATH}/list/${page}`);
+        return this.requestRestPath("GET", `${BackEnd.NOTIFICATION_PATH}/list/${page}`);
   }*/
 
   public getRoles():Promise<Role[]> {
-    "use strict";
-
-    return this.requestRestPath("GET", `${BackEnd.ROLE_PATH}/all`);
+        return this.requestRestPath("GET", `${BackEnd.ROLE_PATH}/all`);
   }
 
   public getPermissions():Promise<Permission[]> {
-    "use strict";
-
-    return this.requestRestPath("GET", BackEnd.PERMISSION_PATH);
+        return this.requestRestPath("GET", BackEnd.PERMISSION_PATH);
   }
 
-  public createApplicationDevice(name:string, width:number, height:number, columns:number, rows:number, project_id:string):Promise<any> {
-    "use strict";
-
-    if (name.length < 3 || !Number.isInteger(width) || !Number.isInteger(height) || !Number.isInteger(columns) || !Number.isInteger(rows)) {
+  public createScreenType(name:string, width:number, height:number, columns:number, rows:number, project_id:string):Promise<any> {
+        if (name.length < 3 || !Number.isInteger(width) || !Number.isInteger(height) || !Number.isInteger(columns) || !Number.isInteger(rows)) {
       throw "name >= 3, integer width, integer height, integer columns and integer rows required";
     }
 
-    return this.requestRestPath("POST", BackEnd.APPLICATION_DEVICE_PATH, {name, height_lock: false, width_lock: false, touch_screen: false, project_id, landscape_height: width, landscape_width: height, landscape_square_height: columns, landscape_square_width: rows, landscape_max_screens: 10, landscape_min_screens: 1, portrait_height: height, portrait_width: width, portrait_square_height: rows, portrait_square_width: columns, portrait_max_screens: 10, portrait_min_screens: 1}, 201);
+    return this.requestRestPath("POST", BackEnd.SCREEN_SIZE_TYPE_PATH, {name, height_lock: false, width_lock: false, touch_screen: false, project_id, landscape_height: width, landscape_width: height, landscape_square_height: columns, landscape_square_width: rows, landscape_max_screens: 10, landscape_min_screens: 1, portrait_height: height, portrait_width: width, portrait_square_height: rows, portrait_square_width: columns, portrait_max_screens: 10, portrait_min_screens: 1}, 201);
   }
 
-  public getApplicationDevice(id:string):Promise<ApplicationDevice> {
-    "use strict";
-
-    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/${id}`);
+  public getScreenType(id:string):Promise<ScreenSizeType> {
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+    return this.requestRestPath("GET", `${BackEnd.SCREEN_SIZE_TYPE_PATH}/${id}`);
   }
 
-  public getApplicationDevices():Promise<ApplicationDeviceCollection> {
-    "use strict";
-
-    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/all`);
+  public getScreenTypes():Promise<ScreenSizeTypeCombination> {
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+    return this.requestRestPath("GET", `${BackEnd.SCREEN_SIZE_TYPE_PATH}/all`);
   }
 
-  public getFiltredDeviceProgramList(page_number:string,project_id:string):Promise<C_Program_List>{ //Tyrion Verze 1.06.6.4 //C_program //^^
-    return this.requestRestPath("PUT",`${BackEnd.DEVICE_PROGRAM_LIST}/${page_number}`,{project_id});
+  public getFiltredC_ProgramList(page_number:string,project_id:string):Promise<CProgramList>{ //Tyrion Verze 1.06.6.4 //C_program //^^
+    return this.requestRestPath("PUT",`${BackEnd.C_PROGRAM_LIST}/${page_number}`,{project_id});
   }
 
-  public getFiltredInteractionsProgramList(page_number:string,project_id:string):Promise<B_Program_List>{ //Tyrion Verze 1.06.6.4
-    return this.requestRestPath("PUT",`${BackEnd.INTERACTIONS_SCHEME_PATH}/list/${page_number}`,{project_id});
+  public getFiltredB_ProgramList(page_number:string,project_id:string):Promise<BProgramList>{ //Tyrion Verze 1.06.6.4
+    return this.requestRestPath("PUT",`${BackEnd.B_PROGRAM_PATH}/list/${page_number}`,{project_id});
   }
 
-  public getFiltredInteractionsBlockProgramList(page_number:string,project_id:string):Promise<Blocko_Block_List>{ //Tyrion Verze 1.06.6.4
-    return this.requestRestPath("PUT",`${BackEnd.INTERACTIONS_BLOCK_PATH}/list/${page_number}`,{project_id});
+  public getFiltredBlockoBlockProgramList(page_number:string,project_id:string):Promise<BlockoBlockList>{ //Tyrion Verze 1.06.6.4
+    return this.requestRestPath("PUT",`${BackEnd.BLOCKOBLOCK_PATH}/list/${page_number}`,{project_id});
   }
 
-  public getFiltredInteractionsBlockGroupProgramList(page_number:string,project_id:string,private_type:boolean):Promise<Type_Of_Block_List>{ //Tyrion Verze 1.06.6.4
-    return this.requestRestPath("PUT",`${BackEnd.INTERACTIONS_BLOCK_GROUP_PATH}/list/${page_number}`,{project_id,private_type});
+  public getFiltredTypeOfBlockList(page_number:string,project_id:string,private_type:boolean):Promise<TypeOfBlockList>{ //Tyrion Verze 1.06.6.4
+    return this.requestRestPath("PUT",`${BackEnd.TYPE_OF_BLOCK_PATH}/list/${page_number}`,{project_id,private_type});
   }
 
   public getUnconfirmedNotification(){ //Tyrion Verze 1.06.6.4
     return this.requestRestPath("GET",`${BackEnd.UNCONFIRMED_NOTIFICATION_PATH}`);
   }
 
-  public updateApplicationDevice(id:string, name:string, width:number, height:number, columns:number, rows:number, width_lock:boolean, height_lock:boolean, portrait_min_screens:number, portrait_max_screens:number, landscape_min_screens:number, landscape_max_screens:number, touch_screen:boolean, project_id:string):Promise<any> {
-    "use strict";
-
-    if (name.length < 3 || !Number.isInteger(width) || !Number.isInteger(height) || !Number.isInteger(columns) || !Number.isInteger(rows) || !Number.isInteger(portrait_min_screens) || !Number.isInteger(portrait_max_screens) || !Number.isInteger(landscape_min_screens) || !Number.isInteger(landscape_max_screens)) {
+  public updateScreenType(id:string, name:string, width:number, height:number, columns:number, rows:number, width_lock:boolean, height_lock:boolean, portrait_min_screens:number, portrait_max_screens:number, landscape_min_screens:number, landscape_max_screens:number, touch_screen:boolean, project_id:string):Promise<any> {
+        if (name.length < 3 || !Number.isInteger(width) || !Number.isInteger(height) || !Number.isInteger(columns) || !Number.isInteger(rows) || !Number.isInteger(portrait_min_screens) || !Number.isInteger(portrait_max_screens) || !Number.isInteger(landscape_min_screens) || !Number.isInteger(landscape_max_screens)) {
       throw "name >= 3, integer width, integer height, integer columns, integer rows and integer screen counts required";
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.APPLICATION_DEVICE_PATH}/${id}`, {name, height_lock, width_lock, touch_screen, project_id, landscape_height: width, landscape_width: height, landscape_square_height: columns, landscape_square_width: rows, landscape_max_screens, landscape_min_screens, portrait_height: height, portrait_width: width, portrait_square_height: rows, portrait_square_width: columns, portrait_max_screens, portrait_min_screens});
+    return this.requestRestPath("PUT", `${BackEnd.SCREEN_SIZE_TYPE_PATH}/${id}`, {name, height_lock, width_lock, touch_screen, project_id, landscape_height: width, landscape_width: height, landscape_square_height: columns, landscape_square_width: rows, landscape_max_screens, landscape_min_screens, portrait_height: height, portrait_width: width, portrait_square_height: rows, portrait_square_width: columns, portrait_max_screens, portrait_min_screens});
   }
 
-  public deleteApplicationDevice(id:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("DELETE", `${BackEnd.APPLICATION_DEVICE_PATH}/${id}`);
+  public deleteScreenType(id:string):Promise<any> {
+        return this.requestRestPath("DELETE", `${BackEnd.SCREEN_SIZE_TYPE_PATH}/${id}`);
   }
 
-  public createApplicationGroup(program_name:string, program_description:string, projectId:string):Promise<ApplicationGroup> {
-    "use strict";
-
-    if (program_name.length < 4) {
+  public createM_Project(program_name:string, program_description:string, projectId:string):Promise<MProject> {
+        if (program_name.length < 4) {
       throw "name >= 4 required";
     }
 
-    return this.requestRestPath("POST", `${BackEnd.APPLICATION_GROUP_PATH}/${projectId}`, {program_description, program_name}, 201);
+    return this.requestRestPath("POST", `${BackEnd.M_PROJECT_PATH}/${projectId}`, {program_description, program_name}, 201);
   }
 
-  public getApplicationGroup(id:string):Promise<ApplicationGroup> {
-    "use strict";
-
-    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("GET", `${BackEnd.APPLICATION_GROUP_PATH}/${id}`);
+  public getM_Project(id:string):Promise<MProject> {
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+    return this.requestRestPath("GET", `${BackEnd.M_PROJECT_PATH}/${id}`);
   }
 
-  public updateApplicationGroup(id:string, program_name:string, program_description:string):Promise<any> {
-    "use strict";
-
-    if (program_name.length < 4) {
+  public updateM_Project(id:string, program_name:string, program_description:string):Promise<any> {
+        if (program_name.length < 4) {
       throw "name >= 4 required";
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.APPLICATION_GROUP_PATH}/${id}`, {program_description, program_name});
+    return this.requestRestPath("PUT", `${BackEnd.M_PROJECT_PATH}/${id}`, {program_description, program_name});
   }
 
-  public deleteApplicationGroup(id:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("DELETE", `${BackEnd.APPLICATION_GROUP_PATH}/${id}`);
+  public deleteM_Project(id:string):Promise<any> {
+        return this.requestRestPath("DELETE", `${BackEnd.M_PROJECT_PATH}/${id}`);
   }
 
-  public createApplication(program_name:string, program_description:string, screen_type_id:string, m_code:string, groupId:string):Promise<any> {
-    "use strict";
-
-    if (program_name.length < 8 || !m_code) {
+  public createM_Program(program_name:string, program_description:string, screen_type_id:string, m_code:string, groupId:string):Promise<any> {
+        if (program_name.length < 8 || !m_code) {
       throw "name >= 8 and code required";
     }
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-302
-    return this.requestRestPath("POST", `${BackEnd.APPLICATION_PATH}/${groupId}`, {screen_type_id, program_name, program_description, m_code, height_lock: false, width_lock: false}, 201);
+    return this.requestRestPath("POST", `${BackEnd.M_PROGRAM_PATH}/${groupId}`, {screen_type_id, program_name, program_description, m_code, height_lock: false, width_lock: false}, 201);
   }
 
-  public getApplication(id:string):Promise<Application> {
-    "use strict";
-
-    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("GET", `${BackEnd.APPLICATION_PATH}/${id}`);
+  public getM_Program(id:string):Promise<MProgram> {
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+    return this.requestRestPath("GET", `${BackEnd.M_PROGRAM_PATH}/${id}`);
   }
 
-  public getApplications():Promise<Application[]> {
-    "use strict";
+  public getM_Programs():Promise<MProgram[]> {
+        return this.requestRestPath("GET", `${BackEnd.M_PROGRAM_PATH}/app/m_programs`);
 
-    return this.requestRestPath("GET", `${BackEnd.APPLICATION_PATH}/app/m_programs`);
   }
 
-  public updateApplication(id:string, program_name:string, program_description:string, screen_type_id:string, m_code:string):Promise<any> {
-    "use strict";
-
-    if (program_name.length < 8 || !m_code) {
+  public updateM_Program(id:string, program_name:string, program_description:string, screen_type_id:string, m_code:string):Promise<any> {
+        if (program_name.length < 8 || !m_code) {
       throw "name >= 8 and code required";
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.APPLICATION_PATH}/${id}`, {screen_type_id, program_name, program_description, m_code, height_lock: false, width_lock: false});
+    return this.requestRestPath("PUT", `${BackEnd.M_PROGRAM_PATH}/${id}`, {screen_type_id, program_name, program_description, m_code, height_lock: false, width_lock: false});
   }
 
-  public deleteApplication(id:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("DELETE", `${BackEnd.APPLICATION_PATH}/${id}`);
+  public deleteM_Program(id:string):Promise<any> {
+        return this.requestRestPath("DELETE", `${BackEnd.M_PROGRAM_PATH}/${id}`);
   }
 /* //tyrion verze 1.06.6.4, odebraná API pro Becki
   public createProducer(name:string, description:string):Promise<any> {
-    "use strict";
-
-    if (name.length < 4 || description.length < 8) {
+        if (name.length < 4 || description.length < 8) {
       throw "name >= 4 and description >= 8 required";
     }
 
@@ -1723,21 +1700,15 @@ export abstract class BackEnd {
   }
 */
   public getProducer(id:string):Promise<Producer> {
-    "use strict";
-
-    return this.requestRestPath("GET", `${BackEnd.PRODUCER_PATH}/${id}`);
+        return this.requestRestPath("GET", `${BackEnd.PRODUCER_PATH}/${id}`);
   }
 
   public getProducers():Promise<Producer[]> {
-    "use strict";
-
-    return this.requestRestPath("GET", `${BackEnd.PRODUCER_PATH}/all`);
+        return this.requestRestPath("GET", `${BackEnd.PRODUCER_PATH}/all`);
   }
 /*
   public updateProducer(id:string, name:string, description:string):Promise<any> {
-    "use strict";
-
-    if (name.length < 8 || description.length < 24) {
+        if (name.length < 8 || description.length < 24) {
       throw "name >= 8 and description >= 24 required";
     }
 
@@ -1745,15 +1716,11 @@ export abstract class BackEnd {
   }*/
 /*
   public deleteProducer(id:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("DELETE", `${BackEnd.PRODUCER_PATH}/${id}`);
+        return this.requestRestPath("DELETE", `${BackEnd.PRODUCER_PATH}/${id}`);
   }
 */
   public createLibrary(library_name:string, description:string):Promise<any> {
-    "use strict";
-
-    if (library_name.length < 8 || description.length < 8) {
+        if (library_name.length < 8 || description.length < 8) {
       throw "name >= 8 and description >= 8 required";
     }
 
@@ -1761,15 +1728,11 @@ export abstract class BackEnd {
   }
 
   public getLibrary(id:string):Promise<Library> {
-    "use strict";
-
-    return this.requestRestPath("GET", `${BackEnd.LIBRARY_PATH}/${id}`);
+        return this.requestRestPath("GET", `${BackEnd.LIBRARY_PATH}/${id}`);
   }
 
   public getLibraries(page:number):Promise<LibrariesPage> {
-    "use strict";
-
-    if (page < 1) {
+        if (page < 1) {
       throw "page >= 1 required";
     }
 
@@ -1777,9 +1740,7 @@ export abstract class BackEnd {
   }
 
   public updateLibrary(id:string, library_name:string, description:string):Promise<any> {
-    "use strict";
-
-    if (library_name.length < 8 || description.length < 8) {
+        if (library_name.length < 8 || description.length < 8) {
       throw "name >= 8 and description >= 8 required";
     }
 
@@ -1787,9 +1748,7 @@ export abstract class BackEnd {
   }
 
   public addVersionToLibrary(version_name:string, version_description:string, id:string):Promise<Version> {
-    "use strict";
-
-    if (version_name.length < 8 || version_description.length < 8) {
+        if (version_name.length < 8 || version_description.length < 8) {
       throw "name >= 8 and description >= 8 required";
     }
 
@@ -1797,22 +1756,16 @@ export abstract class BackEnd {
   }
 
   public updateFileOfLibrary(content:string, version:string):Promise<any> {
-    "use strict";
-
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-305
+        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-305
     return this.requestRestPath("POST", `${BackEnd.LIBRARY_PATH}/upload/${version}`, content);
   }
 
   public deleteLibrary(id:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("DELETE", `${BackEnd.LIBRARY_PATH}/${id}`);
+        return this.requestRestPath("DELETE", `${BackEnd.LIBRARY_PATH}/${id}`);
   }
 
   public createLibraryGroup(group_name:string, description:string):Promise<any> {
-    "use strict";
-
-    if (group_name.length < 8 || description.length < 24) {
+        if (group_name.length < 8 || description.length < 24) {
       throw "name >= 8 and description >= 24 required";
     }
 
@@ -1820,15 +1773,11 @@ export abstract class BackEnd {
   }
 
   public getLibraryGroup(id:string):Promise<LibraryGroup> {
-    "use strict";
-
-    return this.requestRestPath("GET", `${BackEnd.LIBRARY_GROUP_PATH}/${id}`);
+        return this.requestRestPath("GET", `${BackEnd.LIBRARY_GROUP_PATH}/${id}`);
   }
 
   public getLibraryGroups(page:number):Promise<LibraryGroupsPage> {
-    "use strict";
-
-    if (page < 1) {
+        if (page < 1) {
       throw "page >= 1 required";
     }
 
@@ -1836,9 +1785,7 @@ export abstract class BackEnd {
   }
 
   public updateLibraryGroup(id:string, group_name:string, description:string):Promise<any> {
-    "use strict";
-
-    if (group_name.length < 8 || description.length < 24) {
+        if (group_name.length < 8 || description.length < 24) {
       throw "name >= 8 and description >= 24 required";
     }
 
@@ -1846,15 +1793,11 @@ export abstract class BackEnd {
   }
 
   public deleteLibraryGroup(id:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("DELETE", `${BackEnd.LIBRARY_GROUP_PATH}/${id}`);
+        return this.requestRestPath("DELETE", `${BackEnd.LIBRARY_GROUP_PATH}/${id}`);
   }
 
   /*public createProcessor(processor_name:string, processor_code:string, description:string, speed:number):Promise<any> {
-    "use strict";
-
-    if (processor_name.length < 4 || processor_code.length < 4 || description.length < 24 || !Number.isInteger(speed)) {
+        if (processor_name.length < 4 || processor_code.length < 4 || description.length < 24 || !Number.isInteger(speed)) {
       throw "name >= 4, code >= 4 and description >= 24 required";
     }
 
@@ -1862,21 +1805,15 @@ export abstract class BackEnd {
   }*/
 
   public getProcessor(id:string):Promise<Processor> {
-    "use strict";
-
-    return this.requestRestPath("GET", `${BackEnd.PROCESSOR_PATH}/${id}`);
+        return this.requestRestPath("GET", `${BackEnd.PROCESSOR_PATH}/${id}`);
   }
 
   public getProcessors():Promise<Processor[]> {
-    "use strict";
-
-    return this.requestRestPath("GET", BackEnd.PROCESSOR_PATH);
+        return this.requestRestPath("GET", BackEnd.PROCESSOR_PATH);
   }
 /*
   public updateProcessor(id:string, processor_name:string, processor_code:string, description:string, speed:number):Promise<any> {
-    "use strict";
-
-    if (processor_name.length < 4 || processor_code.length < 4 || description.length < 24 || !Number.isInteger(speed)) {
+        if (processor_name.length < 4 || processor_code.length < 4 || description.length < 24 || !Number.isInteger(speed)) {
       throw "name >= 4, code >= 4 and description >= 24 required";
     }
 
@@ -1885,386 +1822,302 @@ export abstract class BackEnd {
 */
   /*
   public deleteProcessor(id:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("DELETE", `${BackEnd.PROCESSOR_PATH}/${id}`);
+        return this.requestRestPath("DELETE", `${BackEnd.PROCESSOR_PATH}/${id}`);
   }
 */
   /*
   public createDeviceType(name:string, producer_id:string, processor_id:string, connectible_to_internet:boolean, description:string):Promise<any> {
-    "use strict";
-
-    if (name.length < 8 || description.length < 10) {
+        if (name.length < 8 || description.length < 10) {
       throw "name >= 8 and description >= 10 required";
     }
 
-    return this.requestRestPath("POST", BackEnd.DEVICE_TYPE_PATH, {name, description, producer_id, processor_id, connectible_to_internet}, 201);
+    return this.requestRestPath("POST", BackEnd.TYPE_OF_BOARD_PATH, {name, description, producer_id, processor_id, connectible_to_internet}, 201);
   }
 */
 
 
-  public getDeviceType(id:string):Promise<DeviceType> {
-    "use strict";
-
-    return this.requestRestPath("GET", `${BackEnd.DEVICE_TYPE_PATH}/${id}`);
+  public getTypeOfBoard(id:string):Promise<TypeOfBoard> {
+        return this.requestRestPath("GET", `${BackEnd.TYPE_OF_BOARD_PATH}/${id}`);
   }
 
-  public getDeviceTypes():Promise<DeviceType[]> {
-    "use strict";
-
-    return this.requestRestPath("GET", `${BackEnd.DEVICE_TYPE_PATH}/all`);
+  public getAllTypeOfBoard():Promise<TypeOfBoard[]> {
+        return this.requestRestPath("GET", `${BackEnd.TYPE_OF_BOARD_PATH}/all`);
   }
 /*
   public updateDeviceType(id:string, name:string, producer_id:string, processor_id:string, connectible_to_internet:boolean, description:string):Promise<any> {
-    "use strict";
-
-    if (name.length < 8 || description.length < 10) {
+        if (name.length < 8 || description.length < 10) {
       throw "name >= 8 and description >= 10 required";
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.DEVICE_TYPE_PATH}/${id}`, {name, description, producer_id, processor_id, connectible_to_internet});
+    return this.requestRestPath("PUT", `${BackEnd.TYPE_OF_BOARD_PATH}/${id}`, {name, description, producer_id, processor_id, connectible_to_internet});
   }
 */
   /*
   public deleteDeviceType(id:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("DELETE", `${BackEnd.DEVICE_TYPE_PATH}/${id}`);
+        return this.requestRestPath("DELETE", `${BackEnd.TYPE_OF_BOARD_PATH}/${id}`);
   }
 
-
-  public createDeviceProgram(program_name:string, program_description:string, type_of_board_id:string, projectId:string):Promise<DeviceProgram> {
-    "use strict";
-
-    if (program_name.length < 8 || !type_of_board_id) {
-      throw "name >= 8 and device type required";
-    }
-
-    return this.requestRestPath("POST", `${BackEnd.DEVICE_PROGRAM_PATH}/${projectId}`, {program_name, program_description, type_of_board_id}, 201);
-  }
-
-  public getDeviceProgram(id:string):Promise<DeviceProgram> {
-    "use strict";
-
-    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("GET", `${BackEnd.DEVICE_PROGRAM_PATH}/${id}`);
-  }
-
-  public updateDeviceProgram(id:string, program_name:string, program_description:string, type_of_board_id:string):Promise<any> {
-    "use strict";
-
-    if (program_name.length < 8 || !type_of_board_id) {
-      throw "name >= 8 and device type required";
-    }
-
-    return this.requestRestPath("PUT", `${BackEnd.DEVICE_PROGRAM_PATH}/${id}`, {program_name, program_description, type_of_board_id});
-  }
 */
-  public addVersionToDeviceProgram(version_name:string, version_description:string, files:{[name:string]: string}, program:string):Promise<any> {
-    "use strict";
+  public createC_Program(program_name:string, program_description:string, type_of_board_id:string, projectId:string):Promise<CProgram> {
+        if (program_name.length < 8 || !type_of_board_id) {
+      throw "name >= 8 and device type required";
+    }
 
-    if (version_name.length < 8) {
+    return this.requestRestPath("POST", `${BackEnd.C_PROGRAM_COMPILATION_PATH}/${projectId}`, {program_name, program_description, type_of_board_id}, 201);
+  }
+
+  public getC_Program(id:string):Promise<CProgram> {
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+    return this.requestRestPath("GET", `${BackEnd.C_PROGRAM_COMPILATION_PATH}/${id}`);
+  }
+
+  public updateC_Program(id:string, program_name:string, program_description:string, type_of_board_id:string):Promise<any> {
+        if (program_name.length < 8 || !type_of_board_id) {
+      throw "name >= 8 and device type required";
+    }
+
+    return this.requestRestPath("PUT", `${BackEnd.C_PROGRAM_COMPILATION_PATH}/${id}`, {program_name, program_description, type_of_board_id});
+  }
+
+  public addVersionToC_Program(version_name:string, version_description:string, files:{[name:string]: string}, program:string):Promise<any> {
+        if (version_name.length < 8) {
       throw "name >= 8 required";
     }
     let user_files = Object.keys(files).map(file_name => ({file_name, code: files[file_name]}));
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-275
-    return this.requestRestPath("POST", `${BackEnd.DEVICE_PROGRAM_VERSION_PATH}/create/${program}`, {version_name, version_description, user_files}, 201);
+    return this.requestRestPath("POST", `${BackEnd.C_PROGRAM_VERSION_PATH}/create/${program}`, {version_name, version_description, user_files}, 201);
   }
 
-  public buildDeviceProgram(files:{[name:string]: string}, type_of_board_id:string):Promise<any> {
-    "use strict";
-
-    if (!type_of_board_id) {
+  public buildC_Program(files:{[name:string]: string}, type_of_board_id:string):Promise<any> {
+        if (!type_of_board_id) {
       throw "target required";
     }
     let user_files = Object.keys(files).map(file_name => ({file_name, code: files[file_name]}));
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-309
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-327
-    return this.requestRestPath("POST", `${BackEnd.DEVICE_PROGRAM_VERSION_PATH}/compile`, {type_of_board_id, code: " ", user_files});
+    return this.requestRestPath("POST", `${BackEnd.C_PROGRAM_VERSION_PATH}/compile`, {type_of_board_id, code: " ", user_files});
   }
 
-  public deleteDeviceProgram(id:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("DELETE", `${BackEnd.DEVICE_PROGRAM_PATH}/${id}`);
+  public deleteC_Program(id:string):Promise<any> {
+        return this.requestRestPath("DELETE", `${BackEnd.C_PROGRAM_COMPILATION_PATH}/${id}`);
   }
 
-  public createDevice(id:string, type_of_board_id:string):Promise<any> {
-    "use strict";
+  public createBoard(id:string, type_of_board_id:string):Promise<any> {
+        if (!/^[0-9a-f]{8}$/.test(id)) {
+      throw "ID = 8 hex chars required";
+    }
 
-    return this.requestRestPath("POST", BackEnd.DEVICE_PATH, {type_of_board_id, hardware_unique_ids: [id]}, 201);
+    return this.requestRestPath("POST", BackEnd.BOARD_PATH, {type_of_board_id, hardware_unique_ids: [id]}, 201);
   }
 
-  public getDevice(id:string):Promise<Device> {
-    "use strict";
-
-    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("GET", `${BackEnd.DEVICE_PATH}/${id}`);
+  public getBoard(id:string):Promise<Board> {
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+    return this.requestRestPath("GET", `${BackEnd.BOARD_PATH}/${id}`);
   }
 
-  public getDevices(page:number):Promise<DevicesPage> {
-    "use strict";
-
-    if (page < 1) {
+  public getBoards(page:number):Promise<BoardList> {
+        if (page < 1) {
       throw "page >= 1 required";
     }
 
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("PUT", `${BackEnd.DEVICE_PATH}/filter/${page}`, {});
+    return this.requestRestPath("PUT", `${BackEnd.BOARD_PATH}/filter/${page}`, {});
   }
 
-  public updateDeviceWithProgram(versionId:string, board_id:string[]):Promise<any> {
-    "use strict";
+  public addBoardToProject(device:string, project:string):Promise<any> {
+    return this.requestRestPath("PUT", `${BackEnd.BOARD_PATH}/${device}/${project}`, {});
+  }
 
-    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-258
-    //return this.requestRestPath("POST", `${BackEnd.DEVICE_PROGRAM_VERSION_PATH}/upload/${versionId}`, {board_id});
-    return Promise.reject("issue/TYRION-258");
+  public removeBoard(device:string):Promise<any> {
+    return this.requestRestPath("DELETE", `${BackEnd.BOARD_PATH}/${device}`);
+  }
+
+  public updateBoardWithC_Program(versionId:string, board_id:string[]):Promise<any> {
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+    return this.requestRestPath("POST", `${BackEnd.C_PROGRAM_VERSION_PATH}/upload/${versionId}`, {board_id});
   }
 
   public createCompilationServer(server_name:string):Promise<any> {
-    "use strict";
-
-    if (server_name.length < 6) {
+        if (server_name.length < 6) {
       throw "name >= 6 required";
     }
 
-    return this.requestRestPath("POST", BackEnd.COMPILATION_SERVER_PATH,{server_name}, 201);
+    return this.requestRestPath("POST", BackEnd.EXTERNAL_SERVER_PATH,{server_name}, 201);
   }
 
   public getCompilationServers():Promise<CompilationServer[]> {
-    "use strict";
-    return this.requestRestPath("GET", BackEnd.COMPILATION_SERVER_PATH);
+        return this.requestRestPath("GET", BackEnd.EXTERNAL_SERVER_PATH);
   }
 
   public editCompilationServer(id:string,server_name:string):Promise<any> {
-    "use strict";
-
-    if (server_name.length < 6) {
+        if (server_name.length < 6) {
       throw "name >= 6 required";
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.COMPILATION_SERVER_PATH}/${id}`,{server_name});
+    return this.requestRestPath("PUT", `${BackEnd.EXTERNAL_SERVER_PATH}/${id}`,{server_name});
   }
 
   public deleteCompilationServer(id:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("DELETE", `${BackEnd.COMPILATION_SERVER_PATH}/${id}`);
+        return this.requestRestPath("DELETE", `${BackEnd.EXTERNAL_SERVER_PATH}/${id}`);
   }
 
-  public getInteractionsBlockGroup(id:string):Promise<InteractionsBlockGroup> {
-    "use strict";
-
-    return this.requestRestPath("GET", `${BackEnd.INTERACTIONS_BLOCK_GROUP_PATH}/${id}`);
+  public getTypeOfBlock(id:string):Promise<TypeOfBlock> {
+        return this.requestRestPath("GET", `${BackEnd.TYPE_OF_BLOCK_PATH}/${id}`);
   }
 
-  public createInteractionsBlockGroup(name:string,general_description:string,project_id:string):Promise<InteractionsBlockGroup>{
-    "use strict";
-
-    return this.requestRestPath("POST", `${BackEnd.INTERACTIONS_BLOCK_GROUP_PATH}`, {name, general_description,project_id}, 201);
+  public createTypeOfBlock(name:string,general_description:string,project_id:string):Promise<TypeOfBlock>{
+        return this.requestRestPath("POST", `${BackEnd.TYPE_OF_BLOCK_PATH}`, {name, general_description,project_id}, 201);
 
   }
 
-  public getInteractionsBlockGroups():Promise<InteractionsBlockGroup[]> {
-    "use strict";
-
-    return this.requestRestPath("GET", BackEnd.INTERACTIONS_BLOCK_GROUP_PATH);
+  public getAllTypeOfBlock():Promise<TypeOfBlock[]> {
+        return this.requestRestPath("GET", BackEnd.TYPE_OF_BLOCK_PATH);
   }
   
-  public updateInteractionsBlockGroups(id:string,name:string,general_description:string,project_id:string):Promise<any>{
-    "use strict";
-    
-    return this.requestRestPath("PUT", `${BackEnd.INTERACTIONS_BLOCK_GROUP_PATH}/${id}`, {name, general_description,project_id});
+  public updateTypeOfBlock(id:string,name:string,general_description:string,project_id:string):Promise<any>{
+        
+    return this.requestRestPath("PUT", `${BackEnd.TYPE_OF_BLOCK_PATH}/${id}`, {name, general_description,project_id});
 
 
   }
 
-  public removeInteractionsBlockGroups(group:string):Promise<any> {
-    "use strict";
-  //TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-299
-    return this.requestRestPath("DELETE", `${BackEnd.INTERACTIONS_BLOCK_GROUP_PATH}/${group}`,{});
+  public removeTypeOfBlock(TypeOfBlockid:string):Promise<any> {
+    return this.requestRestPath("DELETE", `${BackEnd.TYPE_OF_BLOCK_PATH}/${TypeOfBlockid}`,{});
   }
   
-  public createInteractionsBlock(name:string, type_of_block_id:string, general_description:string):Promise<InteractionsBlock> {
-    "use strict";
-
-    if (name.length < 8 || general_description.length < 24) {
+  public createBlockoBlock(name:string, type_of_block_id:string, general_description:string):Promise<BlockoBlock> {
+        if (name.length < 8 || general_description.length < 24) {
       throw "name >= 8 and description >= 24 required";
     }
 
-    return this.requestRestPath("POST", BackEnd.INTERACTIONS_BLOCK_PATH, {general_description, name, type_of_block_id}, 201);
+    return this.requestRestPath("POST", BackEnd.BLOCKOBLOCK_PATH, {general_description, name, type_of_block_id}, 201);
   }
 
-  public getInteractionsBlock(id:string):Promise<InteractionsBlock> {
-    "use strict";
-
-    // TODO: http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("GET", `${BackEnd.INTERACTIONS_BLOCK_PATH}/${id}`);
+  public getBlockoBlock(id:string):Promise<BlockoBlock> {
+        // TODO: http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+    return this.requestRestPath("GET", `${BackEnd.BLOCKOBLOCK_PATH}/${id}`);
   }
 
-  public updateInteractionsBlock(id:string, name:string, general_description:string, type_of_block_id:string):Promise<any> {
-    "use strict";
-
-    if (name.length < 8 || general_description.length < 24) {
+  public updateBlockoBlock(id:string, name:string, general_description:string, type_of_block_id:string):Promise<any> {
+        if (name.length < 8 || general_description.length < 24) {
       throw "name >= 8 and description >= 24 required";
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.INTERACTIONS_BLOCK_PATH}/${id}`, {general_description, name, type_of_block_id});
+    return this.requestRestPath("PUT", `${BackEnd.BLOCKOBLOCK_PATH}/${id}`, {general_description, name, type_of_block_id});
   }
 
-
-  public addVersionToInteractionsBlock(version_name:string, version_description:string, logic_json:string, program:string):Promise<any> {
-    "use strict";
-
-    if (!version_name || !version_description || !logic_json) {
+  public addVersionToBlockoBlock(version_name:string, version_description:string, logic_json:string, program:string):Promise<any> {
+        if (!version_name || !version_description || !logic_json) {
       throw "name, description and code required";
     }
 
-    return this.requestRestPath("POST", `${BackEnd.INTERACTIONS_BLOCK_PATH}/version/${program}`, {version_name, version_description, design_json: "-", logic_json}, 201);
+    return this.requestRestPath("POST", `${BackEnd.BLOCKOBLOCK_PATH}/version/${program}`, {version_name, version_description, design_json: "-", logic_json}, 201);
   }
 
-  public deleteInteractionsBlock(id:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("DELETE", `${BackEnd.INTERACTIONS_BLOCK_PATH}/${id}`);
+  public deleteBlockoBlock(id:string):Promise<any> {
+        return this.requestRestPath("DELETE", `${BackEnd.BLOCKOBLOCK_PATH}/${id}`);
   }
 
-  public createInteractionsScheme(name:string, program_description:string, projectId:string):Promise<InteractionsScheme> {
-    "use strict";
-
-    if (name.length < 8) {
+  public createB_Program(name:string, program_description:string, projectId:string):Promise<InteractionsScheme> {
+        if (name.length < 8) {
       throw "name >= 8 required";
     }
 
-    return this.requestRestPath("POST", `${BackEnd.INTERACTIONS_SCHEME_PATH}/${projectId}`, {program_description, name}, 201);
+    return this.requestRestPath("POST", `${BackEnd.B_PROGRAM_PATH}/${projectId}`, {program_description, name}, 201);
   }
 
-  public getInteractionsScheme(id:string):Promise<InteractionsScheme> {
-    "use strict";
-
-    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("GET", `${BackEnd.INTERACTIONS_SCHEME_PATH}/${id}`);
+  public getB_Program(id:string):Promise<InteractionsScheme> {
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+    return this.requestRestPath("GET", `${BackEnd.B_PROGRAM_PATH}/${id}`);
   }
 
-  public subscribeInteractionsScheme(version_id:string):void {
-    "use strict";
-
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-262
+  public  subscribeB_Program/*subscribeInteractionsScheme*/(version_id:string):void {
+        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-262
     let message = {messageId: uuid.v4(), messageChannel: BackEnd.WS_CHANNEL, messageType: "subscribe_instace", version_id};
     if (!this.findEnqueuedWebSocketMessage(message, 'messageChannel', 'messageType', 'version_id')) {
       this.sendWebSocketMessage(message);
     }
   }
 
-  public requestInteractionsSchemeValues(version_id:string):void {
-    "use strict";
-
-    let message = {messageId: uuid.v4(), messageChannel: BackEnd.WS_CHANNEL, messageType: "getValues", version_id};
+  public requestB_ProgramValues/*requestInteractionsSchemeValues*/(version_id:string):void {
+        let message = {messageId: uuid.v4(), messageChannel: BackEnd.WS_CHANNEL, messageType: "getValues", version_id};
     if (!this.findEnqueuedWebSocketMessage(message, 'messageChannel', 'messageType', 'version_id')) {
       this.sendWebSocketMessage(message);
     }
   }
 
-  public updateInteractionsScheme(id:string, name:string, program_description:string):Promise<any> {
-    "use strict";
-
-    if (name.length < 8) {
+  public updateB_Program(id:string, name:string, program_description:string):Promise<any> {
+        if (name.length < 8) {
       throw "name >= 8 required";
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.INTERACTIONS_SCHEME_PATH}/${id}`, {program_description, name});
+    return this.requestRestPath("PUT", `${BackEnd.B_PROGRAM_PATH}/${id}`, {program_description, name});
   }
 
-  public addApplicationGroupToInteractionsScheme(group:string, version:string, autoupdate:boolean):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("PUT", `${BackEnd.APPLICATION_GROUP_PATH}/connect/${group}/${version}/${autoupdate}`, {});
+  public addMProjectConnection(group:string, version:string, autoupdate:boolean):Promise<any> {
+        return this.requestRestPath("PUT", `${BackEnd.M_PROJECT_PATH}/connect/${group}/${version}/${autoupdate}`, {});
   }
 
-  public addVersionToInteractionsScheme(version_name:string, version_description:string, program:string, boards:{board_id:string, c_program_version_id:string}[], main_board:{board_id:string, c_program_version_id:string}, programId:string):Promise<InteractionsSchemeVersion> {
-    "use strict";
-
-    if (!version_name || !program || !main_board) {
+  public addVersionToB_Program(version_name:string, version_description:string, program:string, boards:{board_id:string, c_program_version_id:string}[], main_board:{board_id:string, c_program_version_id:string}, programId:string):Promise<BProgramVersion> {
+        if (!version_name || !program || !main_board) {
       throw "name, scheme and gateway required";
     }
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-284
-    return this.requestRestPath("PUT", `${BackEnd.INTERACTIONS_SCHEME_PATH}/update/${programId}`, {version_name, version_description, program, main_board, boards});
+    return this.requestRestPath("PUT", `${BackEnd.B_PROGRAM_PATH}/update/${programId}`, {version_name, version_description, program, main_board, boards});
   }
 
-  public deleteInteractionsScheme(id:string):Promise<any> {
-    "use strict";
-
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-185
-    return this.requestRestPath("DELETE", `${BackEnd.INTERACTIONS_SCHEME_PATH}/${id}`);
+  public deleteB_Program(id:string):Promise<any> {
+        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-185
+    return this.requestRestPath("DELETE", `${BackEnd.B_PROGRAM_PATH}/${id}`);
   }
 
-  public createInteractionsModerator(mac_address:string, type_of_device:string, project_id?:string):Promise<any> {
-    "use strict";
-
-    if (!mac_address) {
+  public createHomer(mac_address:string, type_of_device:string, project_id?:string):Promise<any> {
+        if (!mac_address) {
       throw "ID required";
     }
 
-    return this.requestRestPath("POST", BackEnd.INTERACTIONS_MODERATOR_PATH, {mac_address, type_of_device, project_id}, 201);
+    return this.requestRestPath("POST", BackEnd.HOMER_PATH, {mac_address, type_of_device, project_id}, 201);
   }
 
-  public getInteractionsModerator(id:string):Promise<InteractionsModerator> {
-    "use strict";
-
-    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("GET", `${BackEnd.INTERACTIONS_MODERATOR_PATH}/${id}`);
+  public getHomer(id:string):Promise<InteractionsModerator> {
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+    return this.requestRestPath("GET", `${BackEnd.HOMER_PATH}/${id}`);
   }
 
-  public addSchemeToInteractionsModerator(versionId:string, moderatorId:string, schemeId:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("PUT", `${BackEnd.INTERACTIONS_SCHEME_PATH}/uploadToHomer/${schemeId}/${versionId}/${moderatorId}`, {});
+  public uploadB_ProgramToHomer(versionId:string, HomerId:string, B_ProgramId:string):Promise<any> {
+        return this.requestRestPath("PUT", `${BackEnd.B_PROGRAM_PATH}/uploadToHomer/${B_ProgramId}/${versionId}/${HomerId}`, {});
   }
 
-  public deleteInteractionsModerator(id:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("DELETE", `${BackEnd.INTERACTIONS_MODERATOR_PATH}/${id}`);
+  public deleteHomer(id:string):Promise<any> {
+        return this.requestRestPath("DELETE", `${BackEnd.HOMER_PATH}/${id}`);
   }
 
-  public createInteractionsServer(server_name:string):Promise<any> {
-    "use strict";
-
-    if (!server_name) {
+  public createCloudHomerServer(server_name:string):Promise<any> {
+        if (!server_name) {
       throw "name required";
     }
-
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-281
-    return this.requestRestPath("POST", BackEnd.INTERACTIONS_SERVER_PATH,{server_name}, 201);
+    return this.requestRestPath("POST", BackEnd.CLOUD_HOMER_SERVER_PATH,{server_name}, 201);
   }
 
-  public getInteractionsServers():Promise<InteractionsServer[]>{
-    "use strict";
-    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("GET", BackEnd.INTERACTIONS_SERVER_PATH);
+  public getCloudHomerServers():Promise<CloudHomerServer[]>{
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+    return this.requestRestPath("GET", BackEnd.CLOUD_HOMER_SERVER_PATH);
   }
 
-  public editInteractionsServer(id:string,server_name:string):Promise<any> {
-    "use strict";
-
-    if (!server_name) {
+  public editCloudHomerServer(id:string,server_name:string):Promise<any> {
+        if (!server_name) {
       throw "name required";
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.INTERACTIONS_SERVER_PATH}/${id}`,{server_name});
+    return this.requestRestPath("PUT", `${BackEnd.CLOUD_HOMER_SERVER_PATH}/${id}`,{server_name});
   }
 
-  public deleteInteractionsServer(id:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("DELETE", `${BackEnd.INTERACTIONS_SERVER_PATH}/${id}`);
+  public deleteCloudHomerServer(id:string):Promise<any> {
+        return this.requestRestPath("DELETE", `${BackEnd.CLOUD_HOMER_SERVER_PATH}/${id}`);
   }
 
-  public getUserTarif():Promise<Applicable_Product[]>{ // tyrion Verze 1.06.6.4
+  public getUserTarif():Promise<ApplicableProduct[]>{ // tyrion Verze 1.06.6.4
     return this.requestRestPath("GET", `${BackEnd.TARIF_PATH}/user_applicable$`);
   }
 
@@ -2305,9 +2158,7 @@ export abstract class BackEnd {
   }
 
   public createProject(project_name:string, project_description:string,product_id:string):Promise<Project> {
-    "use strict";
-
-    if (project_name.length < 8 || project_description.length < 24) {
+        if (project_name.length < 8 || project_description.length < 24) {
       throw "name >= 8 and description >= 24 required";
     }
 
@@ -2315,67 +2166,52 @@ export abstract class BackEnd {
   }
 
   public createDefaultProject():Promise<Project> {
-    "use strict";
-
-    return this.createProject("Default project", "An automatically created project. It can be edited or removed like any other project.","1");
+        return this.createProject("Default project", "An automatically created project. It can be edited or removed like any other project.","1");
   }
 
   public getProject(id:string):Promise<Project> {
-    "use strict";
-
-    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     return this.requestRestPath<Project>("GET", `${BackEnd.PROJECT_PATH}/${id}`);
   }
 
   public getProjects():Promise<Project[]> {
-    "use strict";
-
-    return this.requestRestPath("GET", BackEnd.PROJECT_PATH);
+        return this.requestRestPath("GET", BackEnd.PROJECT_PATH);
   }
 
   public updateProject(id:string, project_name:string, project_description:string):Promise<any> {
-    "use strict";
-
-    if (project_name.length < 8 || project_description.length < 24) {
+        if (project_name.length < 8 || project_description.length < 24) {
       throw "name >= 8 and description >= 24 required";
     }
 
     return this.requestRestPath<Project>("PUT", `${BackEnd.PROJECT_PATH}/${id}`, {project_name, project_description});
   }
 
-  public addDeviceToProject(device:string, project:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("PUT", `${BackEnd.DEVICE_PATH}/${device}/${project}`, {});
-  }
-
-  public removeDeviceFromProject(device:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("DELETE", `${BackEnd.DEVICE_PATH}/${device}`);
-  }
-  
-  public removeInteractionsModeratorFromProject(moderator:string, project:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("DELETE", `${BackEnd.INTERACTIONS_MODERATOR_PATH}/${project}/${moderator}`);
+  public removeHomerFromProject(homer:string, project:string):Promise<any> {
+        return this.requestRestPath("DELETE", `${BackEnd.HOMER_PATH}/${project}/${homer}`);
   }
 
   public addCollaboratorToProject(collaborator:string, project:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("PUT", `${BackEnd.PROJECT_PATH}/shareProject/${project}`, {persons_id: [collaborator]});
+        return this.requestRestPath("PUT", `${BackEnd.PROJECT_PATH}/shareProject/${project}`, {persons_id: [collaborator]});
   }
 
   public removeCollaboratorsFromProject(persons_id:string[], project:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("PUT", `${BackEnd.PROJECT_PATH}/unshareProject/${project}`, {persons_id});
+        return this.requestRestPath("PUT", `${BackEnd.PROJECT_PATH}/unshareProject/${project}`, {persons_id});
   }
 
   public deleteProject(id:string):Promise<any> {
-    "use strict";
-
-    return this.requestRestPath("DELETE", `${BackEnd.PROJECT_PATH}/${id}`);
+        return this.requestRestPath("DELETE", `${BackEnd.PROJECT_PATH}/${id}`);
   }
+
+  public getPersonInfo():Promise<PersonBundle>{
+    return this.requestRestPath<PersonBundle>("GET", BackEnd.LOGIN_PERSON_PATH);
+  }
+
+  public updatePersonInfo(id:string,nick:string,name:string,ftitle:string,ltitle:string){
+    return this.requestRestPath("PUT", `${BackEnd.PERSON_PATH}/${id}`, {nick_name:nick,full_name:name,first_title:ftitle,last_title:ltitle});
+  }
+
+  public getActualizationProcedureInfo(actualization_procedure_id:string):Promise<ActualizationProcedure> {
+        return this.requestRestPath<ActualizationProcedure>("GET", `${BackEnd.ACTUALIZATION_PROCEDURE_PATH}/${actualization_procedure_id}`);
+  }
+
 }

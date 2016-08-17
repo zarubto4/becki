@@ -3,7 +3,7 @@
   ~ of this distribution.
   -->
 
-<div data-bind-layout='"Edit the \"" + name + "\" Application"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="editing || !editApplication ? null : 'Edit'" data-on-actionClick="onEditClick($event)" data-bind-ngSwitch="editing">
+<div data-bind-layout='"Edit the \"" + name + "\" MProgram"' data-bind-breadcrumbs="breadcrumbs" data-bind-actionLabel="editing || !editApplication ? null : 'Edit'" data-on-actionClick="onEditClick($event)" data-bind-ngSwitch="editing">
   <form class="clearfix" data-on-submit="onSubmit($event)">
     <template data-bind-ngSwitchCase="true">
       <div class="pull-right">
@@ -47,7 +47,7 @@
       </template>
     </div>
     <div class="form-group">
-      <label>Device</label>
+      <label>Board</label>
       <p class="form-control-static">{{device?.name}}</p>
     </div>
     <template data-bind-ngIf="device">

@@ -12,7 +12,7 @@ and styles that match the default Bootstrap 3 theme.
 
 ## [Documentation and Live Usage Examples](http://www.daterangepicker.com)
 
-## [See It In a Live Application](https://awio.iljmp.com/5/drpdemogh)
+## [See It In a Live MProgram](https://awio.iljmp.com/5/drpdemogh)
 
 ## License
 

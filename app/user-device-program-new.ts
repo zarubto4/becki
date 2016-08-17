@@ -38,7 +38,7 @@ export class Component implements ngCore.OnInit {
 
   deviceTypeField:string;
 
-  deviceTypes:libBackEnd.DeviceType[];
+  deviceTypes:libBackEnd.TypeOfBoard[];
 
   codeField:{[name:string]: string};
 
@@ -54,7 +54,7 @@ export class Component implements ngCore.OnInit {
     this.breadcrumbs = [
       new libBeckiLayout.LabeledLink(home, ["/"]),
       new libBeckiLayout.LabeledLink("User", ["/user"]),
-      new libBeckiLayout.LabeledLink("New Device Program", ["/user/device/program/new"])
+      new libBeckiLayout.LabeledLink("New Board Program", ["/user/device/program/new"])
     ];
     this.projectField = "";
     this.nameField = "";
@@ -75,7 +75,7 @@ export class Component implements ngCore.OnInit {
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Projects cannot be loaded: ${reason}`)));
     this.backEnd.getDeviceTypes()
         .then(deviceTypes => this.deviceTypes = deviceTypes)
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Device types cannot be loaded: ${reason}`)));
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger(`Board types cannot be loaded: ${reason}`)));
   }
 
   validateNameField():()=>Promise<boolean> {
@@ -84,7 +84,7 @@ export class Component implements ngCore.OnInit {
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     return () => this.backEnd.getProjects()
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-        .then(projects => Promise.all<libBackEnd.DeviceProgram>([].concat(...projects.map(project => project.c_programs_id)).map(id => this.backEnd.getDeviceProgram(id))))
+        .then(projects => Promise.all<libBackEnd.CProgram>([].concat(...projects.map(project => project.c_programs_id)).map(id => this.backEnd.getDeviceProgram(id))))
         .then(programs => !programs.find(program => program.program_name == this.nameField));
   }
 

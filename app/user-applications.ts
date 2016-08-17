@@ -73,7 +73,7 @@ export class Component implements ngCore.OnInit {
         });
     this.backEnd.getProjects()
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-        .then(projects => Promise.all<libBackEnd.ApplicationGroup>([].concat(...projects.map(project => project.m_projects_id)).map(id => this.backEnd.getApplicationGroup(id))))
+        .then(projects => Promise.all<libBackEnd.MProject>([].concat(...projects.map(project => project.m_projects_id)).map(id => this.backEnd.getApplicationGroup(id))))
         .then(groups => this.groups = groups.map(group => new libPatternFlyListView.Item(group.id, group.program_name, group.program_description, ["/user/application/groups", group.id], group.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Groups cannot be loaded.", reason)));
   }

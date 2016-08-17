@@ -17,7 +17,7 @@ class DeviceProgramItem  extends libPatternFlyListView.Item {
 
   versions:libBackEnd.Version[];
 
-  constructor(program:libBackEnd.DeviceProgram) {
+  constructor(program:libBackEnd.CProgram) {
     "use strict";
 
     super(program.id, program.program_name, `${program.program_description}`, ["/user/device/programs", program.id], program.delete_permission);
@@ -27,11 +27,11 @@ class DeviceProgramItem  extends libPatternFlyListView.Item {
 
 class SelectableDevice {
 
-  model:libBackEnd.Device;
+  model:libBackEnd.Board;
 
   selected:boolean;
 
-  constructor(model:libBackEnd.Device) {
+  constructor(model:libBackEnd.Board) {
     "use strict";
 
     this.model = model;
@@ -106,8 +106,8 @@ export class Component implements ngCore.OnInit {
           ]);
         })
         .then(result => {
-          let programs:libBackEnd.DeviceProgram[];
-          let devices:[libBackEnd.Device, libBackEnd.Project][];
+          let programs:libBackEnd.CProgram[];
+          let devices:[libBackEnd.Board, libBackEnd.Project][];
           [programs, devices] = result;
           this.programs = programs.map(program => new DeviceProgramItem(program));
           this.devices = devices.map(pair => new libPatternFlyListView.Item(pair[0].id, pair[0].id, pair[0].isActive ? "active" : "inactive", undefined, pair[1].update_permission));

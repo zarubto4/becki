@@ -84,12 +84,12 @@ export class Component implements ngCore.OnInit {
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     this.backEnd.getDevices(1)
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
-        .then(page => Promise.all<libBackEnd.DevicesPage>(page.pages.map(number => this.backEnd.getDevices(number))))
+        .then(page => Promise.all<libBackEnd.BoardList>(page.pages.map(number => this.backEnd.getDevices(number))))
         .then(pages => this.devices = [].concat(...pages.map(page => page.content)).map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.isActive ? "active" : "inactive")))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
     this.backEnd.getDeviceTypes()
         .then(deviceTypes => this.deviceTypes = deviceTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, ["/system/device/types", type.id], type.delete_permission)))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Device types cannot be loaded.", reason)));
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Board types cannot be loaded.", reason)));
     this.backEnd.getProcessors()
         .then(processors => this.processors = processors.map(processor => new libPatternFlyListView.Item(processor.id, processor.processor_name, processor.processor_code, ["/system/processors", processor.id])))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Processors cannot be loaded.", reason)));
@@ -110,7 +110,7 @@ export class Component implements ngCore.OnInit {
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Compilation servers cannot be loaded.", reason)));
     this.backEnd.getUsers()
         .then(users => this.users = users.map(user => new libPatternFlyListView.Item(user.id, libBackEnd.composeUserString(user), "", ["/users", user.id], user.delete_permission)))
-        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Device types cannot be loaded.", reason)));
+        .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Board types cannot be loaded.", reason)));
   }
 
   onAddClick():void {
