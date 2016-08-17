@@ -218,7 +218,7 @@ export interface Connection {
   delete_permission:boolean;
 }
 
-export interface Notification {
+export interface Notification { //flash messeages?
 
   created:string;
 
@@ -231,26 +231,8 @@ export interface Notification {
   confirmation_required:string;
 }
 
-// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface MissedNotification {
-
-  id:string;
-
-  created:number;
-
-  level:string;
-
-  message:string;
-
-  read:boolean;
-
-  confirmation_required:boolean;
-}
-
-// see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface MissedNotificationsPage {
-
-  content:MissedNotification[];
+export interface Notification_List { //
+  content:Notification[];
 
   from:number;
 
@@ -258,7 +240,21 @@ export interface MissedNotificationsPage {
 
   total:number;
 
-  pages:number[];
+  pages: number[];
+
+  unread_total:number;
+}
+export interface APINotification { //NOTIFIKACE!? TODO je třeba více konzultace o tomto
+  id :string;
+
+      level:string;
+
+      confirmation_required:boolean;
+
+      was_read:boolean;
+
+      created:string;
+
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -530,7 +526,7 @@ export interface Processor {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface DeviceType {
+export interface DeviceType { //Type of board
 
   id:string;
 
@@ -538,9 +534,13 @@ export interface DeviceType {
 
   producer_id:string;
 
+  producer_name:string; //Tyrion Verze 1.06.6.4
+
   description:string;
 
   processor_id:string;
+
+  processor_name:string; //Tyrion Verze 1.06.6.4
 
   connectible_to_internet:boolean;
 
@@ -571,8 +571,67 @@ export interface DeviceProgramVersion {
   runing_on_board:boolean;
 }
 
+export interface B_Program_List {
+
+  content : B_Program_Light[];
+
+  from : number;
+
+  to : number;
+
+  total : number;
+
+  pages : number[];
+}
+export interface B_Program_Light {
+
+  b_program_id : string;
+
+  b_program_name : string;
+
+  b_program_description : string;
+
+  b_program_version_id : string;
+
+  b_program_version_name : string;
+
+  b_program_version_description : string;
+}
+
+export interface Blocko_Block_List {
+  content:Blocko_Block_Light[];
+
+  from:number;
+
+  to :number;
+
+  total :number;
+
+  pages :number[];
+}
+export interface Blocko_Block_Light {
+
+  blocko_block_id : string;
+
+  blocko_block_name : string;
+
+  blocko_block_description : string;
+
+  blocko_block_version_id : string;
+
+  blocko_block_version_name : string;
+
+  blocko_block_version_description : string;
+
+  blocko_block_type_of_block_name : string;
+
+  blocko_block_type_of_block_id: string;
+
+  blocko_block_type_of_block_description: string;
+}
+
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface DeviceProgram {
+export interface DeviceProgram { //C_programs
 
   id:string;
 
@@ -586,6 +645,8 @@ export interface DeviceProgram {
 
   dateOfCreate:number;
 
+  producer_name:string; //tyrion Verze 1.06.6.4
+
   project_id:string;
 
   edit_permission:boolean;
@@ -593,6 +654,53 @@ export interface DeviceProgram {
   update_permission:boolean;
 
   delete_permission:boolean;
+}
+
+export interface C_Program_List {
+
+  content:C_Program_Light[];
+
+  from:number;
+
+  to:number;
+
+  total :number;
+
+  pages :number[];
+}
+export interface C_Program_Light {
+
+  c_program_id :string;
+
+  c_program_name :string;
+
+  c_program_version_id :string;
+
+  c_program_version_name :string;
+
+  type_of_board_id :string;
+
+  type_of_board_name :string;
+}
+
+export interface Type_Of_Block_List {
+
+  content: Type_Of_Block_Light[]
+
+  from:number;
+
+  to : number;
+
+  total: number;
+
+  pages: number[];
+}
+export interface Type_Of_Block_Light {
+  type_of_block_id :string;
+
+  type_of_block_name :string;
+
+  type_of_block_description :string;
 }
 
 export interface DevicesPage {
@@ -609,7 +717,7 @@ export interface DevicesPage {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface Device {
+export interface Device { //Boards
 
   id:string;
 
@@ -802,8 +910,16 @@ export interface InteractionsSchemeConnectorValue {
   value:number;
 }
 
+export interface Applicable_Product { //napíše typ produktu/tarifu jenž vlastní uživatel, může jich být více než jeden
+  product_id:number;
+
+  product_individual_name:string;
+
+  product_type:string;
+}
+
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface InteractionsServer {
+export interface InteractionsServer { //Cloud_Homer_Server??
   id: string;
 
   server_name: string;
@@ -819,42 +935,202 @@ export interface InteractionsServer {
   delete_permission:boolean;
 }
 
+export interface TariffLabel{//Tyrion Verze 1.06.6.4
+  label:string;
+  descrioption:string;
+}
+
+
+export interface TariffPrice{//Tyrion Verze 1.06.6.4
+  CZK:string;
+  EUR:string;
+}
+
+export interface UserTariff{//Tyrion Verze 1.06.6.4
+  id: string;
+  product_individual_name: string;
+  paid_until_the_day: string;
+  remaining_credit: string;
+  currency: string;
+  invoices: Object[]; //?? objekt popisující fakturu - Ta může nabívat několik stavů. To je vesměs zatím jedno jakých.
+  payment_details: PaymentDetails;
+  product_type: string;
+  payment_mode: string;
+  payment_method: string;
+}
+
+export interface PaymentDetails{ //Tyrion Verze 1.06.6.4
+  id: string;
+  company_account: boolean;
+  street: string;
+  street_number: string;
+  city: string;
+  zip_code: string;
+  country: string;
+  edit_permission:boolean;
+}
+
+export interface Tariff{//Tyrion Verze 1.06.6.4
+
+  tariff_name: string;
+
+  identificator:string;
+
+  company_details_required:boolean;   //(pokud true tak je nutné v obejtku Payment_Details uvést values s prefixem comapny_ (jako je danové číslo atd...))
+
+  required_payment_mode: boolean;   //(Slouží do budoucna - asi třeba ke zobrazení obrázku kreditní karty?)
+
+  price:TariffPrice;
+
+  labels:TariffLabel[];
+
+}
+
+export interface Project_participant{ //Tyrion Verze 1.06.6.4
+
+  full_name : string;
+
+  user_mail : string;
+
+  user_id : string;
+
+  state : string;
+}
+
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface Project {
+export interface Project { //Tyrion Verze 1.06.6.4 předěláno
 
   id:string;
 
-  project_name:string;
+  project_name :string;
 
-  project_description:string;
+  project_description :string;
 
-  m_projects_id:string[];
+  edit_permission :boolean;
 
-  c_programs_id:string[];
+  delete_permission :boolean;
 
-  boards_id:string[];
+  homers_id :string[];
 
-  b_programs_id:string[];
+  boards_id :string[];
 
-  homers_id:string[];
+  b_programs_id :string[];
 
-  owners_id:string[];
+  c_programs_id :string[];
 
-  screen_size_types_id:string[];
+  m_projects_id :string[];
 
-  type_of_blocks_id:string[];
+  type_of_blocks_id :string[],
 
-  actual_procedures_id:string[];
+  screen_size_types_id :string[];
 
-  edit_permission:boolean;
+  actual_procedures_id :string[];
 
-  update_permission:boolean;
+  product_individual_name :string;
 
-  share_permission:boolean;
+  product_id :number;
 
-  unshare_permission:boolean;
+  tier_name :string;
 
-  delete_permission:boolean;
+  bugs :number;
+
+  participants :Project_participant[];
+
+  update_permission :boolean ;
+
+  unshare_permission :boolean;
+
+  share_permission :boolean;
+
+  errors :number;
+}
+
+//ACTUALIZATION PROCEDURE START
+export interface ActualizationProcedure {
+  id?:string;
+
+  state:string;
+
+  state_fraction:string;//Tyrion Verze 1.06.6.4
+
+  state_percentage:number;//Tyrion Verze 1.06.6.4
+
+  updates:CProgramUpdatePlan[];
+
+  date_of_create:string;
+
+  date_of_finish:string;
+
+  b_program_actualization:ProgramActualization;
+}
+
+export interface CProgramUpdatePlan { //C_Program_Update_Plan
+  id:string;
+
+  state:string;
+
+  board_id:string;
+
+  Server_detail:string;//Tyrion Verze 1.06.6.4
+
+  Board_detail:string;//Tyrion Verze 1.06.6.4
+
+  c_program_detail?:CProgramUpdateProgram;
+
+  binary_file_detail?:FileRecord;
+}
+export interface ProgramActualization {
+  b_program_id:string;
+
+  b_program_version_id:string;
+
+  b_program_name:string;
+
+  b_program_version_name:string;
+}
+export interface CProgramUpdateProgram {
+  c_program_id:string;
+
+  c_program_version_id:string;
+
+  c_program_program_name:string;
+
+  c_program_version_name:string;
+}
+
+export interface FileRecord {
+  id?:string;
+
+  file_name?:string;
+}
+
+//ACTUALIZATION PROCEDURE END
+
+
+interface PersonInfo {
+  id: string,
+  mail: string,
+  nick_name: string,
+  full_name: string,
+  last_title: string,
+  edit_permission: boolean,
+  delete_permission: boolean
+}
+
+interface PersonRole{
+  id: string,
+  name: string,
+  description: string,
+  delete_permission: boolean,
+  update_permission: boolean,
+  persons_id: string [],
+  person_permissions_id: string []
+}
+
+export interface PersonBundle{
+  person:PersonInfo;
+  roles:PersonRole;
+  permissions:string[];
 }
 
 export abstract class BackEnd {
@@ -878,6 +1154,8 @@ export abstract class BackEnd {
   public static DEVICE_PROGRAM_PATH = "/compilation/c_program/c_program";
 
   public static DEVICE_PROGRAM_VERSION_PATH = `/compilation/c_program/version`;
+
+  public static DEVICE_PROGRAM_LIST = `/compilation/c_program/list`; //Tyrion Verze 1.06.6.4
 
   public static DEVICE_TYPE_PATH = "/compilation/typeOfBoard";
 
@@ -914,6 +1192,14 @@ export abstract class BackEnd {
   public static VALIDATION_PATH = "/coreClient/person/valid";
 
   public static WS_CHANNEL = "becki";
+
+  public static LOGIN_PERSON_PATH = "/login/person";
+
+  public static PERSON_PATH = "/coreClient/person/person";
+
+  public static TARIF_PATH = "/product/tarifs";
+
+  public static UNCONFIRMED_NOTIFICATION_PATH = "/notification/unconfirmed";
 
   private eventSource:EventSource;
 
@@ -1274,11 +1560,12 @@ export abstract class BackEnd {
     return this.requestRestPath("DELETE", `/coreClient/connection/${id}`);
   }
 
+  /*
   public getNotifications(page:number):Promise<MissedNotificationsPage> {
     "use strict";
 
     return this.requestRestPath("GET", `${BackEnd.NOTIFICATION_PATH}/list/${page}`);
-  }
+  }*/
 
   public getRoles():Promise<Role[]> {
     "use strict";
@@ -1314,6 +1601,26 @@ export abstract class BackEnd {
 
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
     return this.requestRestPath("GET", `${BackEnd.APPLICATION_DEVICE_PATH}/all`);
+  }
+
+  public getFiltredDeviceProgramList(page_number:string,project_id:string):Promise<C_Program_List>{ //Tyrion Verze 1.06.6.4 //C_program //^^
+    return this.requestRestPath("PUT",`${BackEnd.DEVICE_PROGRAM_LIST}/${page_number}`,{project_id});
+  }
+
+  public getFiltredInteractionsProgramList(page_number:string,project_id:string):Promise<B_Program_List>{ //Tyrion Verze 1.06.6.4
+    return this.requestRestPath("PUT",`${BackEnd.INTERACTIONS_SCHEME_PATH}/list/${page_number}`,{project_id});
+  }
+
+  public getFiltredInteractionsBlockProgramList(page_number:string,project_id:string):Promise<Blocko_Block_List>{ //Tyrion Verze 1.06.6.4
+    return this.requestRestPath("PUT",`${BackEnd.INTERACTIONS_BLOCK_PATH}/list/${page_number}`,{project_id});
+  }
+
+  public getFiltredInteractionsBlockGroupProgramList(page_number:string,project_id:string,private_type:boolean):Promise<Type_Of_Block_List>{ //Tyrion Verze 1.06.6.4
+    return this.requestRestPath("PUT",`${BackEnd.INTERACTIONS_BLOCK_GROUP_PATH}/list/${page_number}`,{project_id,private_type});
+  }
+
+  public getUnconfirmedNotification(){ //Tyrion Verze 1.06.6.4
+    return this.requestRestPath("GET",`${BackEnd.UNCONFIRMED_NOTIFICATION_PATH}`);
   }
 
   public updateApplicationDevice(id:string, name:string, width:number, height:number, columns:number, rows:number, width_lock:boolean, height_lock:boolean, portrait_min_screens:number, portrait_max_screens:number, landscape_min_screens:number, landscape_max_screens:number, touch_screen:boolean, project_id:string):Promise<any> {
@@ -1404,7 +1711,7 @@ export abstract class BackEnd {
 
     return this.requestRestPath("DELETE", `${BackEnd.APPLICATION_PATH}/${id}`);
   }
-
+/* //tyrion verze 1.06.6.4, odebraná API pro Becki
   public createProducer(name:string, description:string):Promise<any> {
     "use strict";
 
@@ -1414,7 +1721,7 @@ export abstract class BackEnd {
 
     return this.requestRestPath("POST", BackEnd.PRODUCER_PATH, {name, description}, 201);
   }
-
+*/
   public getProducer(id:string):Promise<Producer> {
     "use strict";
 
@@ -1426,7 +1733,7 @@ export abstract class BackEnd {
 
     return this.requestRestPath("GET", `${BackEnd.PRODUCER_PATH}/all`);
   }
-
+/*
   public updateProducer(id:string, name:string, description:string):Promise<any> {
     "use strict";
 
@@ -1435,14 +1742,14 @@ export abstract class BackEnd {
     }
 
     return this.requestRestPath("PUT", `${BackEnd.PRODUCER_PATH}/${id}`, {name, description});
-  }
-
+  }*/
+/*
   public deleteProducer(id:string):Promise<any> {
     "use strict";
 
     return this.requestRestPath("DELETE", `${BackEnd.PRODUCER_PATH}/${id}`);
   }
-
+*/
   public createLibrary(library_name:string, description:string):Promise<any> {
     "use strict";
 
@@ -1544,7 +1851,7 @@ export abstract class BackEnd {
     return this.requestRestPath("DELETE", `${BackEnd.LIBRARY_GROUP_PATH}/${id}`);
   }
 
-  public createProcessor(processor_name:string, processor_code:string, description:string, speed:number):Promise<any> {
+  /*public createProcessor(processor_name:string, processor_code:string, description:string, speed:number):Promise<any> {
     "use strict";
 
     if (processor_name.length < 4 || processor_code.length < 4 || description.length < 24 || !Number.isInteger(speed)) {
@@ -1552,7 +1859,7 @@ export abstract class BackEnd {
     }
 
     return this.requestRestPath("POST", BackEnd.PROCESSOR_PATH, {processor_name, description, processor_code, speed}, 201);
-  }
+  }*/
 
   public getProcessor(id:string):Promise<Processor> {
     "use strict";
@@ -1565,7 +1872,7 @@ export abstract class BackEnd {
 
     return this.requestRestPath("GET", BackEnd.PROCESSOR_PATH);
   }
-
+/*
   public updateProcessor(id:string, processor_name:string, processor_code:string, description:string, speed:number):Promise<any> {
     "use strict";
 
@@ -1575,13 +1882,15 @@ export abstract class BackEnd {
 
     return this.requestRestPath("PUT", `${BackEnd.PROCESSOR_PATH}/${id}`, {processor_name, description, processor_code, speed});
   }
-
+*/
+  /*
   public deleteProcessor(id:string):Promise<any> {
     "use strict";
 
     return this.requestRestPath("DELETE", `${BackEnd.PROCESSOR_PATH}/${id}`);
   }
-
+*/
+  /*
   public createDeviceType(name:string, producer_id:string, processor_id:string, connectible_to_internet:boolean, description:string):Promise<any> {
     "use strict";
 
@@ -1591,6 +1900,8 @@ export abstract class BackEnd {
 
     return this.requestRestPath("POST", BackEnd.DEVICE_TYPE_PATH, {name, description, producer_id, processor_id, connectible_to_internet}, 201);
   }
+*/
+
 
   public getDeviceType(id:string):Promise<DeviceType> {
     "use strict";
@@ -1603,7 +1914,7 @@ export abstract class BackEnd {
 
     return this.requestRestPath("GET", `${BackEnd.DEVICE_TYPE_PATH}/all`);
   }
-
+/*
   public updateDeviceType(id:string, name:string, producer_id:string, processor_id:string, connectible_to_internet:boolean, description:string):Promise<any> {
     "use strict";
 
@@ -1613,12 +1924,14 @@ export abstract class BackEnd {
 
     return this.requestRestPath("PUT", `${BackEnd.DEVICE_TYPE_PATH}/${id}`, {name, description, producer_id, processor_id, connectible_to_internet});
   }
-
+*/
+  /*
   public deleteDeviceType(id:string):Promise<any> {
     "use strict";
 
     return this.requestRestPath("DELETE", `${BackEnd.DEVICE_TYPE_PATH}/${id}`);
   }
+
 
   public createDeviceProgram(program_name:string, program_description:string, type_of_board_id:string, projectId:string):Promise<DeviceProgram> {
     "use strict";
@@ -1646,7 +1959,7 @@ export abstract class BackEnd {
 
     return this.requestRestPath("PUT", `${BackEnd.DEVICE_PROGRAM_PATH}/${id}`, {program_name, program_description, type_of_board_id});
   }
-
+*/
   public addVersionToDeviceProgram(version_name:string, version_description:string, files:{[name:string]: string}, program:string):Promise<any> {
     "use strict";
 
@@ -1951,20 +2264,60 @@ export abstract class BackEnd {
     return this.requestRestPath("DELETE", `${BackEnd.INTERACTIONS_SERVER_PATH}/${id}`);
   }
 
-  public createProject(project_name:string, project_description:string):Promise<Project> {
+  public getUserTarif():Promise<Applicable_Product[]>{ // tyrion Verze 1.06.6.4
+    return this.requestRestPath("GET", `${BackEnd.TARIF_PATH}/user_applicable$`);
+  }
+
+  public getRegistrationTarif(tariff_type:string,product_individual_name:string,payment_mode:string,currency_type:string,city:string,country:string,street_number:string,company_details_required:boolean,street:string,zip_code:string, registration_no : string,vat_number : string,company_name : string,company_authorized_email: string,company_authorized_phone: string,company_web: string,company_invoice_email: string,payment_method: string):Promise<UserTariff>{// tyrion Verze 1.06.6.4 //zařizuje a posílá becki nějaké informace o platbě Tyrionovi? všechny?
+  if(!company_details_required) { //podle toho jestli jsou potřeba compady details, pokud ne, jedná se o zákazníka thus tato zkrácená volba
+    return this.requestRestPath("GET", `${BackEnd.TARIF_PATH}/for_registration$`, {
+      tariff_type,
+      product_individual_name,
+      payment_mode,
+      currency_type,
+      city,
+      country,
+      street_number,
+      street,
+      zip_code
+    });// tyrion Verze 1.06.6.4 //zařizuje a posílá becki nějaké informace o platbě Tyrionovi? všechny?
+  }else {
+    return this.requestRestPath("GET", `${BackEnd.TARIF_PATH}/for_registration$`, {
+      tariff_type,
+      product_individual_name,
+      currency_type,
+      city,
+      country,
+      street_number,
+      street,
+      zip_code,
+      registration_no,
+      vat_number,
+      company_name,
+      company_authorized_email,
+      company_authorized_phone,
+      company_web,
+      company_invoice_email,
+      payment_mode,
+      payment_method
+    });
+  }
+  }
+
+  public createProject(project_name:string, project_description:string,product_id:string):Promise<Project> {
     "use strict";
 
     if (project_name.length < 8 || project_description.length < 24) {
       throw "name >= 8 and description >= 24 required";
     }
 
-    return this.requestRestPath("POST", BackEnd.PROJECT_PATH, {project_name, project_description}, 201);
+    return this.requestRestPath("POST", BackEnd.PROJECT_PATH, {project_name, project_description,product_id}, 201);
   }
 
   public createDefaultProject():Promise<Project> {
     "use strict";
 
-    return this.createProject("Default project", "An automatically created project. It can be edited or removed like any other project.");
+    return this.createProject("Default project", "An automatically created project. It can be edited or removed like any other project.","1");
   }
 
   public getProject(id:string):Promise<Project> {
