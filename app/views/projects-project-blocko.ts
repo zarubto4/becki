@@ -62,8 +62,7 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
     }
 
     onBlockoClick(blocko:BProgram):void {
-        //TODO
-        alert("TODO!!! Blocko object: "+JSON.stringify(blocko));
+        this.navigate(["/projects", this.currentParamsService.get("project"), "blocko", blocko.id]);
     }
 
     onRemoveClick(blocko:BProgram):void {

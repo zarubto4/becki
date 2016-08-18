@@ -3,9 +3,7 @@
  */
 
 import {Injectable, Inject} from "@angular/core";
-import {Params} from "@angular/router";
 import {LabeledLink} from "../helpers/LabeledLink";
-import {BackEndService} from "./BackEndService";
 import {CurrentParamsService} from "./CurrentParamsService";
 
 @Injectable()
@@ -45,7 +43,7 @@ export class TabMenuService {
             this.currentMenus[menuName].splice(0,this.currentMenus[menuName].length);
 
             this.tabMenus[menuName].forEach((ll:LabeledLink) => {
-                this.currentMenus[menuName].push(new LabeledLink(ll.label, this.resolveLink(ll.link)));
+                this.currentMenus[menuName].push(new LabeledLink(ll.label, this.resolveLink(ll.link), ll.icon, ll.options));
             });
 
         }
@@ -59,7 +57,7 @@ export class TabMenuService {
         if (!this.currentMenus[menuName]) {
             this.currentMenus[menuName] = [];
             this.tabMenus[menuName].forEach((ll:LabeledLink) => {
-                this.currentMenus[menuName].push(new LabeledLink(ll.label, this.resolveLink(ll.link)));
+                this.currentMenus[menuName].push(new LabeledLink(ll.label, this.resolveLink(ll.link), ll.icon, ll.options));
             });
         }
         return this.currentMenus[menuName];

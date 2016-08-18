@@ -29,7 +29,15 @@ export class BreadcrumbsService {
             }
         });
 
+
+        // refresh when got new names:
         this.currentParamsService.currentProjectName.subscribe(() => {
+            this.refresh();
+        });
+        this.currentParamsService.currentBlockoName.subscribe(() => {
+            this.refresh();
+        });
+        this.currentParamsService.currentCodeName.subscribe(() => {
             this.refresh();
         });
     }
@@ -45,6 +53,10 @@ export class BreadcrumbsService {
         switch (breadName) {
             case ":project":
                 return this.currentParamsService.currentProjectNameSnapshot;
+            case ":blocko":
+                return this.currentParamsService.currentBlockoNameSnapshot;
+            case ":code":
+                return this.currentParamsService.currentCodeNameSnapshot;
             default:
                 return breadName;
         }

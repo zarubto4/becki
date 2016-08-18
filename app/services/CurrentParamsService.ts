@@ -4,7 +4,7 @@
 
 import {Injectable} from "@angular/core";
 import {Router, RoutesRecognized, ActivatedRouteSnapshot, Params} from "@angular/router";
-import {Project} from "../lib-back-end/index";
+import {Project, CProgram, BProgram} from "../lib-back-end/index";
 import {BackEndService} from "./BackEndService";
 import {Observable, Observer, Subject} from "rxjs/Rx";
 
@@ -19,13 +19,23 @@ export class CurrentParamsService {
     protected currentProjectNameSubject:Subject<string> = null;
     public currentProjectNameSnapshot:string = null;
 
+    public currentBlockoName:Observable<string> = null;
+    protected currentBlockoNameSubject:Subject<string> = null;
+    public currentBlockoNameSnapshot:string = null;
+
+    public currentCodeName:Observable<string> = null;
+    protected currentCodeNameSubject:Subject<string> = null;
+    public currentCodeNameSnapshot:string = null;
+
 
 
     constructor(protected router:Router, protected backEndService:BackEndService) {
         console.log("BreadcrumbsService init");
 
         this.currentParams = this.currentParamsSubject = new Subject<Params>();
-        this.currentProjectName = this.currentProjectNameSubject = new  Subject<string>();
+        this.currentProjectName = this.currentProjectNameSubject = new Subject<string>();
+        this.currentBlockoName = this.currentBlockoNameSubject = new Subject<string>();
+        this.currentCodeName = this.currentCodeNameSubject = new Subject<string>();
 
         router.events.subscribe(event => {
             if (event instanceof RoutesRecognized) {
@@ -71,8 +81,42 @@ export class CurrentParamsService {
 
         }
 
+        if (this.currentParamsSnapshot["blocko"] != params["blocko"]) {
+
+            if (!params["blocko"]) {
+                this.currentBlockoNameSnapshot = null;
+                this.currentBlockoNameSubject.next(this.currentBlockoNameSnapshot);
+            } else {
+                this.backEndService.getBProgram(params["blocko"]).then((blocko:BProgram) => {
+                    this.currentBlockoNameSnapshot = blocko.name;
+                    this.currentBlockoNameSubject.next(this.currentBlockoNameSnapshot);
+                });
+            }
+
+        }
+
+        if (this.currentParamsSnapshot["code"] != params["code"]) {
+
+            if (!params["code"]) {
+                this.currentCodeNameSnapshot = null;
+                this.currentCodeNameSubject.next(this.currentCodeNameSnapshot);
+            } else {
+                this.backEndService.getCProgram(params["code"]).then((code:CProgram) => {
+                    this.currentCodeNameSnapshot = code.program_name;
+                    this.currentCodeNameSubject.next(this.currentCodeNameSnapshot);
+                });
+            }
+
+        }
+
         this.currentParamsSnapshot = params;
         this.currentParamsSubject.next(this.currentParamsSnapshot);
+    }
+
+    public get(paramName:string):any {
+        if (this.currentParamsSnapshot[paramName])
+            return this.currentParamsSnapshot[paramName];
+        return null;
     }
 
 }

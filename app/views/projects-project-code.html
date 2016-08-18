@@ -3,7 +3,7 @@
   ~ directory of this distribution.
   -->
 
-<layout-main tabMenu="projects-project" title="Mega super project" [title]="currentParamsService.currentProjectNameSnapshot">
+<layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot">
 
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
@@ -23,13 +23,15 @@
                 <tr>
                     <th> Name</th>
                     <th> Description</th>
+                    <th> Device type</th>
                     <th> Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let code of codePrograms">
-                    <td><a (click)="onCodeClick(code)">{{code.name}}</a></td>
+                    <td><a (click)="onCodeClick(code)">{{code.program_name}}</a></td>
                     <td> {{code.program_description}}</td>
+                    <td> {{getBoardType(code.type_of_board_id)}}</td>
                     <td>
                         <a class="btn btn-outline btn-circle btn-sm green" [class.disabled]="!code.edit_permission" (click)="onEditClick(code)">
                             <i class="fa fa-edit"></i> Edit

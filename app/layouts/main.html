@@ -202,7 +202,7 @@
 
                 <div [class.tabbable-line]="tabMenuItems">
                     <ul *ngIf="tabMenuItems" class="nav nav-tabs">
-                        <li routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" *ngFor="let tabItem of tabMenuItems">
+                        <li *ngFor="let tabItem of tabMenuItems" routerLinkActive="active" [routerLinkActiveOptions]="{exact: tabItem.options['linkActiveExact']}">
                             <a [routerLink]="tabItem.link">{{tabItem.label}}</a>
                         </li>
                     </ul>

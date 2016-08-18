@@ -64,7 +64,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     onRemoveClick(device:Board):void {
         this.modalService.showModal(new ModalsRemovalModel(device.id)).then((success) => {
             if (success) {
-                this.backEndService.removeDeviceFromProject(device.id)
+                this.backEndService.removeBoardFromProject(device.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The hardware has been removed."));
                         this.refresh();
@@ -81,7 +81,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         var model = new ModalsAddHardwareModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backEndService.removeHomerFromProject(model.id, this.id)
+                this.backEndService.addBoardToProject(model.id, this.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The hardware ${model.id} has been added to project.`));
                         this.refresh();

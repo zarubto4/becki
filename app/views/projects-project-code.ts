@@ -4,12 +4,13 @@
 
 import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
 import {LayoutMain} from "../layouts/main";
-import {Project, CProgram} from "../lib-back-end/index";
+import {Project, CProgram, TypeOfBoard} from "../lib-back-end/index";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
 import {ROUTER_DIRECTIVES} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
 import {ModalsRemovalModel} from "../modals/removal";
+import {ModalsCodePropertiesModel} from "../modals/code-poperties";
 
 @Component({
     selector: "view-projects-project-code",
@@ -26,6 +27,8 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
 
     codePrograms:CProgram[] = null;
 
+    typeOfBoards:TypeOfBoard[] = null;
+
     constructor(injector:Injector) {super(injector)};
 
     ngOnInit():void {
@@ -37,6 +40,12 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
 
     ngOnDestroy():void {
         this.routeParamsSubscription.unsubscribe();
+    }
+
+    getBoardType(typeId:string):string {
+        var typeOfBoard = this.typeOfBoards.find(dt => { return dt.id == typeId });
+        if (typeOfBoard) return typeOfBoard.name;
+        return "";
     }
 
     refresh():void {
@@ -54,11 +63,19 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
                 this.addFlashMessage(new FlashMessageError(`The project ${this.id} cannot be loaded.`, reason));
             });
 
+        this.backEndService.getAllTypeOfBoard()
+            .then((typeOfBoards:TypeOfBoard[]) => {
+                this.typeOfBoards = typeOfBoards;
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(`The types of boards cannot be loaded.`, reason));
+            });
+
+
     }
 
     onCodeClick(code:CProgram):void {
-        //TODO
-        alert("TODO!!! Code object: "+JSON.stringify(code));
+        this.navigate(["/projects", this.currentParamsService.get("project"), "code", code.id]);
     }
 
     onRemoveClick(code:CProgram):void {
@@ -78,37 +95,40 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
     }
 
     onAddClick():void {
-        /*var model = new ModalsBlockoPropertiesModel(this.id);
+        if (!this.typeOfBoards) new FlashMessageError(`The code cannot be added to project.`);
+        var model = new ModalsCodePropertiesModel(this.typeOfBoards);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backEndService.createBProgram(model.name, model.description, this.id)
+                this.backEndService.createCProgram(model.name, model.description, model.deviceType, this.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(`The blocko ${model.name} has been added to project.`));
+                        this.addFlashMessage(new FlashMessageSuccess(`The code ${model.name} has been added to project.`));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(`The blocko ${model.name} cannot be added to project.`, reason));
+                        this.addFlashMessage(new FlashMessageError(`The code ${model.name} cannot be added to project.`, reason));
                         this.refresh();
                     });
             }
-        });*/
+        });
     }
 
     onEditClick(code:CProgram):void {
-        /*var model = new ModalsBlockoPropertiesModel(this.id, blocko.name, blocko.program_description, true, blocko.name);
+        if (!this.typeOfBoards) new FlashMessageError(`The code cannot be added to project.`);
+
+        var model = new ModalsCodePropertiesModel(this.typeOfBoards, code.program_name, code.program_description, code.type_of_board_id, true, code.program_name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backEndService.updateBProgram(blocko.id, model.name, model.description)
+                this.backEndService.updateCProgram(code.id, model.name, model.description, model.deviceType)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess("The blocko has been updated."));
+                        this.addFlashMessage(new FlashMessageSuccess("The code has been updated."));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError("The blocko cannot be updated.", reason));
+                        this.addFlashMessage(new FlashMessageError("The code cannot be updated.", reason));
                         this.refresh();
                     });
             }
-        });*/
+        });
     }
 
 }

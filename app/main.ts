@@ -84,6 +84,8 @@ import {ProjectsProjectComponent} from "./views/projects-project";
 import {ProjectsProjectHardwareComponent} from "./views/projects-project-hardware";
 import {ProjectsProjectBlockoComponent} from "./views/projects-project-blocko";
 import {ProjectsProjectCodeComponent} from "./views/projects-project-code";
+import {ProjectsProjectBlockoBlockoComponent} from "./views/projects-project-blocko-blocko";
+import {ProjectsProjectCodeCodeComponent} from "./views/projects-project-code-code";
 
 
 // DON'T USE children IN ROUTER YET!!!
@@ -100,7 +102,9 @@ var routes:Routes = [
     {path: "projects/:project", data:{breadName: ":project"}, component: ProjectsProjectComponent, canActivate:[AuthGuard]},
     {path: "projects/:project/hardware", data:{breadName: "Hardware"}, component: ProjectsProjectHardwareComponent, canActivate:[AuthGuard]},
     {path: "projects/:project/blocko", data:{breadName: "Blocko"}, component: ProjectsProjectBlockoComponent, canActivate:[AuthGuard]},
+    {path: "projects/:project/blocko/:blocko", data:{breadName: ":blocko"}, component: ProjectsProjectBlockoBlockoComponent, canActivate:[AuthGuard]},
     {path: "projects/:project/code", data:{breadName: "Code"}, component: ProjectsProjectCodeComponent, canActivate:[AuthGuard]},
+    {path: "projects/:project/code/:code", data:{breadName: ":code"}, component: ProjectsProjectCodeCodeComponent, canActivate:[AuthGuard]},
 
 
     // old routes
@@ -194,10 +198,11 @@ var navigation = [
 
 var tabMenus = {
     "projects-project": [
-        new LabeledLink("Dashboard", ["/", "projects", ":project"]),
+        new LabeledLink("Dashboard", ["/", "projects", ":project"], "", {linkActiveExact:true}),
         new LabeledLink("Hardware", ["/", "projects", ":project", "hardware"]),
         new LabeledLink("Code", ["/", "projects", ":project", "code"]),
         new LabeledLink("Blocko", ["/", "projects", ":project", "blocko"]),
+        new LabeledLink("Blocks", ["/", "projects", ":project", "blocks"]),
         new LabeledLink("Grid", ["/", "projects", ":project", "grid"]),
         new LabeledLink("Some else", ["/", "projects", ":project", "someelse"])
     ]
@@ -239,7 +244,9 @@ var tabMenus = {
         ProjectsProjectComponent,
         ProjectsProjectHardwareComponent,
         ProjectsProjectBlockoComponent,
+        ProjectsProjectBlockoBlockoComponent,
         ProjectsProjectCodeComponent,
+        ProjectsProjectCodeCodeComponent,
     ],
     exports: [ AppComponent ],
     bootstrap: [ AppComponent ]

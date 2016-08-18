@@ -41,7 +41,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
         var model = new ModalsProjectPropertiesModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backEndService.createProject(model.name, model.description)
+                this.backEndService.createProject(model.name, model.description, "0") //TODO:add tarrif nebo produkt či jak se to bude jmenovat
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The project ${model.name} has been created.`));
                         this.refresh();
@@ -59,7 +59,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
         var model = new ModalsProjectPropertiesModel(project.project_name, project.project_description, true, project.project_name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backEndService.updateProject(project.id, model.name, model.description)
+                this.backEndService.updateProject(project.id, model.name, model.description)//, "0") //TODO:add tarrif nebo produkt či jak se to bude jmenovat
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The project has been updated."));
                         this.refresh();

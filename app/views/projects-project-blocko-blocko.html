@@ -1,0 +1,25 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot">
+
+    <div class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-blue"></i>
+                <span class="caption-subject font-blue sbold uppercase">Blocko <strong>{{currentParamsService.currentBlockoNameSnapshot}}</strong></span>
+            </div>
+            <div class="actions">
+            </div>
+        </div>
+        <div>
+            Name: <strong>{{blockoProgram?blockoProgram.name:""}}</strong><br>
+            Description: <strong>{{blockoProgram?blockoProgram.program_description:""}}</strong>
+        </div>
+
+
+    </div>
+
+</layout-main>

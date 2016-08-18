@@ -13,6 +13,9 @@
             <template [ngSwitchCase]="'ModalsBlockoPropertiesModel'">
                 <modals-blocko-properties [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-blocko-properties>
             </template>
+            <template [ngSwitchCase]="'ModalsCodePropertiesModel'">
+                <modals-code-properties [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-code-properties>
+            </template>
         </div>
     </div>
 </div>
