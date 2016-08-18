@@ -67,7 +67,7 @@ export class Component implements ngCore.OnInit {
         "use strict"
         this.notifications.shift();
         
-        this.backEnd.createInteractionsServer(this.nameField)
+        this.backEnd.createCloudHomerServer(this.nameField)
             .then(() => {
                 this.notifications.next.push(new libBeckiNotifications.Success("The server " + this.nameField + " has been created."));
                 this.router.navigate(["/system"]);
@@ -85,6 +85,6 @@ export class Component implements ngCore.OnInit {
 
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-        return () => this.backEnd.getInteractionsServers().then(servers => !servers.find(servers => servers.server_name == this.nameField));
+        return () => this.backEnd.getCloudHomerServers().then(servers => !servers.find(servers => servers.server_name == this.nameField));
     }
 }

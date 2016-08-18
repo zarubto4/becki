@@ -80,7 +80,7 @@ export class Component implements ngCore.OnInit {
             })
         )
         .then(project => {
-          return this.backEnd.createInteractionsModerator(this.idField, this.typeField, project);
+          return this.backEnd.createHomer(this.idField, this.typeField, project);
         })
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The moderator has been added."));

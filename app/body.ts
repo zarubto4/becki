@@ -59,21 +59,33 @@ export class Component implements libBootstrapModal.Component {
     });*/
     backEnd.notificationReceived.subscribe(notification => {
       let notificationView:libBeckiNotifications.Notification;
-      switch (notification.level) {
-        case "info":
-          notificationView = new libBeckiNotifications.Info(notification.text);
-          break;
-        case "success":
-          notificationView = new libBeckiNotifications.Success(notification.text);
-          break;
-        case "warning":
-          notificationView = new libBeckiNotifications.Warning(notification.text);
-          break;
-        case "error":
-          notificationView = new libBeckiNotifications.Danger(notification.text);
-          break;
-        default:
-          return;
+      if(notification.status!=null){
+        switch (notification.status){
+          case "success":
+            notificationView = new libBeckiNotifications.Success(notification.messageId);
+                break;
+          case "error":
+            notificationView = new libBeckiNotifications.Danger(notification.reason);
+
+
+        }
+      }else {
+        switch (notification.notification_level) {
+          case "info":
+            notificationView = new libBeckiNotifications.Info(notification.messageId);
+            break;
+          case "success":
+            notificationView = new libBeckiNotifications.Success(notification.messageId);
+            break;
+          case "warning":
+            notificationView = new libBeckiNotifications.Warning(notification.messageId);
+            break;
+          case "error":
+            notificationView = new libBeckiNotifications.Danger(notification.messageId);
+            break;
+          default:
+            return;
+        }
       }
       this.notifications.push(notificationView);
     });

@@ -108,7 +108,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
         this.editing = false;
 
-        this.backEnd.getInteractionsBlockGroup(this.id)
+        this.backEnd.getTypeOfBlock(this.id)
             .then(group => {
                 return Promise.all<any>([
                     group,
@@ -146,7 +146,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
         "use strict";
 
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-        return () => this.backEnd.getInteractionsBlockGroups().then(producers => !producers.find(producer => producer.id != this.id && producer.name == this.nameField));
+        return () => this.backEnd.getAllTypeOfBlock().then(producers => !producers.find(producer => producer.id != this.id && producer.name == this.nameField));
     }
 
     getProject():string {

@@ -163,7 +163,7 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-262
     this.notifications.current.push(new notifications.Danger("issue/TYRION-262"));
-    this.backEnd.subscribeInteractionsScheme(spy);
+    this.backEnd.subscribeB_Program(spy);
   }
 
   unsubscribeSpy(spy:string):void {

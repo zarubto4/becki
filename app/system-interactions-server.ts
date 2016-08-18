@@ -82,7 +82,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
         "use strict";
 
         this.notifications.shift();
-        this.backEnd.editInteractionsServer(this.serverId,this.nameField)
+        this.backEnd.editCloudHomerServer(this.serverId,this.nameField)
             .then(() => {
                 this.notifications.next.push(new libBeckiNotifications.Success("The server has been updated."));
                 this.router.navigate(["/system/interactions/servers"]);

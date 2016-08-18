@@ -68,7 +68,7 @@ export class Component implements ngCore.OnInit {
         this.notifications.shift();
 
 
-        this.backEnd.createCompilationServer(this.nameField)
+        this.backEnd.updateBoardWithC_Program(this.nameField)
             .then(() => {
                 this.notifications.next.push(new libBeckiNotifications.Success("The server " + this.nameField + " has been created."));
                 this.router.navigate(["/system"]);

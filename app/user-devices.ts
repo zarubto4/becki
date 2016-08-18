@@ -100,9 +100,9 @@ export class Component implements ngCore.OnInit {
         .then(projects => {
           return Promise.all<any>([
             // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-            Promise.all([].concat(...projects.map(project => project.c_programs_id)).map(id => this.backEnd.getDeviceProgram(id))),
+            Promise.all([].concat(...projects.map(project => project.c_programs_id)).map(id => this.backEnd.getC_Program(id))),
             // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-            Promise.all([].concat(...projects.map(project => project.boards_id.map(id => [id, project]))).map(pair => Promise.all<any>([this.backEnd.getDevice(pair[0]), pair[1]])))
+            Promise.all([].concat(...projects.map(project => project.boards_id.map(id => [id, project]))).map(pair => Promise.all<any>([this.backEnd.getBoard(pair[0]), pair[1]])))
           ]);
         })
         .then(result => {
@@ -154,7 +154,7 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.deleteDeviceProgram(id)
+    this.backEnd.deleteC_Program(id)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The program has been removed."));
           this.refresh();
@@ -188,7 +188,7 @@ export class Component implements ngCore.OnInit {
 
     this.notifications.shift();
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    this.backEnd.updateDeviceWithProgram(this.uploadProgramVersionField, devices)
+    this.backEnd.addBoardToProject(this.uploadProgramVersionField, devices)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The program has been uploaded."));
           this.refresh();

@@ -44,7 +44,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
             .then((project:Project) => {
                 this.project = project;
                 return Promise.all<Board>(project.boards_id.map((board_id) => {
-                    return this.backEndService.getDevice(board_id);
+                    return this.backEndService.getBoard(board_id);
                 }));
             })
             .then((devices:Board[]) => {
@@ -81,7 +81,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         var model = new ModalsAddHardwareModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backEndService.addDeviceToProject(model.id, this.id)
+                this.backEndService.removeHomerFromProject(model.id, this.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The hardware ${model.id} has been added to project.`));
                         this.refresh();

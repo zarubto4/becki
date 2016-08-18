@@ -60,7 +60,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
       let id = params["spy"];
       // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-      this.backEnd.getInteractionsScheme(id)
+      this.backEnd.getB_Program(id)
           .then(scheme => {
             if (!scheme.program_state.uploaded) {
               throw new Error("scheme not deployed");

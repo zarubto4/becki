@@ -1,3 +1,4 @@
+
 /*
  * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
  * of this distribution.
@@ -14,11 +15,10 @@ import * as libBeckiNotifications from "./lib-becki/notifications";
 import * as libPatternFlyListView from "./lib-patternfly/list-view";
 
 @ngCore.Component({
-  templateUrl: "app/system.html",
-  directives: [libPatternFlyListView.Component, libBeckiLayout.Component, ngCommon.CORE_DIRECTIVES],
+templateUrl: "app/system.html",
+directives: [libPatternFlyListView.Component, libBeckiLayout.Component, ngCommon.CORE_DIRECTIVES],
 })
 export class Component implements ngCore.OnInit {
-
   breadcrumbs:libBeckiLayout.LabeledLink[];
 
   tab:string[];
@@ -77,17 +77,17 @@ export class Component implements ngCore.OnInit {
     this.notifications.current.push(new libBeckiNotifications.Danger("issue/TYRION-300"));
     this.moderators = [];
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    this.backEnd.getInteractionsServers()
+    this.backEnd.getCloudHomerServers()
         .then(servers => this.interactionsServers = servers.map(server =>
             new libPatternFlyListView.Item(server.id, server.server_name, server.destination_address, server.edit_permission ? ["/system/interactions/servers", server.id] : null, server.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Interactions servers cannot be loaded.", reason)));
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    this.backEnd.getDevices(1)
+    this.backEnd.getBoards(1)
         // see https://youtrack.byzance.cz/youtrack/issue/TYRION-70
-        .then(page => Promise.all<libBackEnd.BoardList>(page.pages.map(number => this.backEnd.getDevices(number))))
+        .then(page => Promise.all<libBackEnd.BoardList>(page.pages.map(number => this.backEnd.getBoards(number))))
         .then(pages => this.devices = [].concat(...pages.map(page => page.content)).map(device => new libPatternFlyListView.Item(device.id, `${device.id} (issue/TYRION-70)`, device.isActive ? "active" : "inactive")))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Devices cannot be loaded.", reason)));
-    this.backEnd.getDeviceTypes()
+    this.backEnd.getAllTypeOfBoard()
         .then(deviceTypes => this.deviceTypes = deviceTypes.map(type => new libPatternFlyListView.Item(type.id, type.name, type.description, ["/system/device/types", type.id], type.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Board types cannot be loaded.", reason)));
     this.backEnd.getProcessors()
@@ -206,11 +206,17 @@ export class Component implements ngCore.OnInit {
     this.tab = tab;
   }
 
+  subNotifications():void {
+    "use strict";
+
+    this.backEnd.requestNotificationsSubscribe();
+  }
+
   onRemoveModeratorClick(id:string):void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.deleteInteractionsModerator(id)
+    this.backEnd.deleteHomer(id)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The moderator of interactions has been removed."));
           this.refresh();
@@ -224,7 +230,7 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.deleteInteractionsServer(id)
+    this.backEnd.deleteCloudHomerServer(id)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The interactions server has been removed."));
           this.refresh();

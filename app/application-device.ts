@@ -97,7 +97,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     this.editing = false;
     Promise.all<any>([
           // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-          this.backEnd.getApplicationDevice(this.id),
+          this.backEnd.getScreenType(this.id),
           this.backEnd.getProjects()
         ])
         .then(result => {
@@ -129,14 +129,14 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return () => this.backEnd.getApplicationDevices().then(devices => ![].concat(devices.public_types, devices.private_types).find(device => device.id != this.id && device.name == this.nameField));
+    return () => this.backEnd.getScreenTypes().then(devices => ![].concat(devices.public_types, devices.private_types).find(device => device.id != this.id && device.name == this.nameField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.updateApplicationDevice(this.id, this.nameField, this.widthField, this.heightField, this.columnsField, this.rowsField, this.device.width_lock, this.device.height_lock, this.device.portrait_min_screens, this.device.portrait_max_screens, this.device.landscape_min_screens, this.device.landscape_max_screens, this.device.touch_screen, this.project ? this.project.id : undefined)
+    this.backEnd.updateScreenType(this.id, this.nameField, this.widthField, this.heightField, this.columnsField, this.rowsField, this.device.width_lock, this.device.height_lock, this.device.portrait_min_screens, this.device.portrait_max_screens, this.device.landscape_min_screens, this.device.landscape_max_screens, this.device.touch_screen, this.project ? this.project.id : undefined)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The device has been updated."));
           this.refresh();

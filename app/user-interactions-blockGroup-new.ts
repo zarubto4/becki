@@ -81,7 +81,7 @@ export class Component implements ngCore.OnInit {
         "use strict";
 
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-        return () => this.backEnd.getInteractionsBlockGroups()
+        return () => this.backEnd.getAllTypeOfBlock()
             .then(groups => !groups.find(groups => groups.name == this.nameField));
     }
 
@@ -96,7 +96,7 @@ export class Component implements ngCore.OnInit {
                 return project.id;
             }))
             .then(project => {
-                return this.backEnd.createInteractionsBlockGroup(this.nameField, this.descriptionField, project);
+                return this.backEnd.createTypeOfBlock(this.nameField, this.descriptionField, project);
             })
             .then(() => {
                 this.notifications.next.push(new libBeckiNotifications.Success("The scheme have been created."));

@@ -90,7 +90,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     "use strict";
 
     this.editing = false;
-    this.backEnd.getDeviceType(this.id)
+    this.backEnd.getTypeOfBoard(this.id)
         .then(type => {
           this.type = type;
           this.breadcrumbs.push(new libBeckiLayout.LabeledLink(type.name, ["/system/device/types", this.id]));
@@ -122,7 +122,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getDeviceTypes().then(types => !types.find(type => type.id != this.id && type.name == this.nameField));
+    return () => this.backEnd.getAllTypeOfBoard().then(types => !types.find(type => type.id != this.id && type.name == this.nameField));
   }
 
   getProducer():libBackEnd.Producer {

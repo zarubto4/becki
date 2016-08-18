@@ -87,7 +87,7 @@ export class Component implements ngCore.OnInit {
     this.notifications.shift();
     Promise.all<any>([
           this.backEnd.getProjects(),
-          this.backEnd.getDeviceTypes()
+          this.backEnd.getAllTypeOfBoard()
         ])
         .then(result => {
           let projects:libBackEnd.Project[];
@@ -119,10 +119,10 @@ export class Component implements ngCore.OnInit {
           .then(project => {
             return Promise.all<any>([
               // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-              Promise.all(project.boards_id.map(id => this.backEnd.getDevice(id))),
-              Promise.all(project.c_programs_id.map(id => this.backEnd.getDeviceProgram(id))),
+              Promise.all(project.boards_id.map(id => this.backEnd.getBoard(id))),
+              Promise.all(project.c_programs_id.map(id => this.backEnd.getC_Program(id))),
               // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-              Promise.all(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id)))
+              Promise.all(project.m_projects_id.map(id => this.backEnd.getM_Project(id)))
             ]);
           })
           .then(result => {
@@ -149,7 +149,7 @@ export class Component implements ngCore.OnInit {
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     return () => this.backEnd.getProjects()
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-        .then(projects => Promise.all<libBackEnd.InteractionsScheme>([].concat(...projects.map(project => project.b_programs_id)).map(id => this.backEnd.getInteractionsScheme(id))))
+        .then(projects => Promise.all<libBackEnd.InteractionsScheme>([].concat(...projects.map(project => project.b_programs_id)).map(id => this.backEnd.getB_Program(id))))
         .then(schemes => !schemes.find(scheme => scheme.name == this.nameField));
   }
 
@@ -177,13 +177,13 @@ export class Component implements ngCore.OnInit {
             })
         )
         .then(project => {
-          return this.backEnd.createInteractionsScheme(this.nameField, this.descriptionField, project);
+          return this.backEnd.createB_Program(this.nameField, this.descriptionField, project);
         })
         .then(scheme => {
-          return this.backEnd.addVersionToInteractionsScheme("Initial version", "", this.schemeField, [], {board_id: this.deviceField, c_program_version_id: this.deviceProgramField}, scheme.id);
+          return this.backEnd.addVersionToB_Program("Initial version", "", this.schemeField, [], {board_id: this.deviceField, c_program_version_id: this.deviceProgramField}, scheme.id);
         })
         .then(version => {
-          return this.groupField ? this.backEnd.addApplicationGroupToInteractionsScheme(this.groupField, version.version_Object.id, false) : null;
+          return this.groupField ? this.backEnd.addMProjectConnection(this.groupField, version.version_Object.id, false) : null;
         })
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The scheme have been created."));

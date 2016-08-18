@@ -75,7 +75,7 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getDeviceTypes().then(types => !types.find(type => type.name == this.nameField));
+    return () => this.backEnd.getAllTypeOfBoard().then(types => !types.find(type => type.name == this.nameField));
   }
 
   onSubmit():void {

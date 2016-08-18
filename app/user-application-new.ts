@@ -97,7 +97,7 @@ export class Component implements ngCore.OnInit {
           this.notifications.current.push(new libBeckiNotifications.Danger("Projects cannot be loaded.", reason));
         });
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    this.backEnd.getApplicationDevices()
+    this.backEnd.getScreenTypes()
         .then(devices => this.devices = devices.public_types)
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Target devices cannot be loaded.", reason)));
   }
@@ -114,7 +114,7 @@ export class Component implements ngCore.OnInit {
     return libBecki.getAdvancedField(this.groupField, this.groups.map(group => group.id));
   }
 
-  getDevice():libBackEnd.ApplicationDevice {
+  getBoard():libBackEnd.ApplicationDevice {
     "use strict";
 
     return this.deviceField ? this.allDevices.find(device => device.id == this.deviceField) : null;
@@ -133,9 +133,9 @@ export class Component implements ngCore.OnInit {
           .then(project => {
             return Promise.all<any>([
               // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-              Promise.all(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id))),
+              Promise.all(project.m_projects_id.map(id => this.backEnd.getM_Project(id))),
               // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-              Promise.all(project.screen_size_types_id.map(id => this.backEnd.getApplicationDevice(id)))
+              Promise.all(project.screen_size_types_id.map(id => this.backEnd.getScreenType(id)))
             ]);
           })
           .then(result => {
@@ -159,7 +159,7 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getApplications().then(applications => !applications.find(application => application.program_name == this.nameField));
+    return () => this.backEnd.getM_Programs().then(applications => !applications.find(application => application.program_name == this.nameField));
   }
 
   onSubmit():void {
@@ -179,14 +179,14 @@ export class Component implements ngCore.OnInit {
             })
         )
         .then(project => {
-          return this.getGroup() || this.backEnd.createApplicationGroup("Default", "An automatically created group. It can be edited or removed like any other group.", project).then(group => {
+          return this.getGroup() || this.backEnd.createM_Project("Default", "An automatically created group. It can be edited or removed like any other group.", project).then(group => {
                 this.groups = [group];
                 this.groupField = group.id;
                 return group.id;
               });
         })
         .then(group => {
-          return this.backEnd.createApplication(this.nameField, this.descriptionField, this.deviceField, this.codeField, group);
+          return this.backEnd.createM_Program(this.nameField, this.descriptionField, this.deviceField, this.codeField, group);
         })
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The application has been created."));

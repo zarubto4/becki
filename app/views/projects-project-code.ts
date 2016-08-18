@@ -44,7 +44,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
             .then((project:Project) => {
                 this.project = project;
                 return Promise.all<CProgram>(project.c_programs_id.map((c_program_id) => {
-                    return this.backEndService.getDeviceProgram(c_program_id);
+                    return this.backEndService.getC_Program(c_program_id);
                 }));
             })
             .then((codePrograms:CProgram[]) => {
@@ -64,7 +64,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
     onRemoveClick(code:CProgram):void {
         this.modalService.showModal(new ModalsRemovalModel(code.program_name)).then((success) => {
             if (success) {
-                this.backEndService.deleteDeviceProgram(code.id)
+                this.backEndService.deleteC_Program(code.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The code has been removed."));
                         this.refresh();
@@ -81,7 +81,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         /*var model = new ModalsBlockoPropertiesModel(this.id);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backEndService.createInteractionsScheme(model.name, model.description, this.id)
+                this.backEndService.createB_Program(model.name, model.description, this.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The blocko ${model.name} has been added to project.`));
                         this.refresh();
@@ -98,7 +98,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         /*var model = new ModalsBlockoPropertiesModel(this.id, blocko.name, blocko.program_description, true, blocko.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backEndService.updateInteractionsScheme(blocko.id, model.name, model.description)
+                this.backEndService.updateB_Program(blocko.id, model.name, model.description)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The blocko has been updated."));
                         this.refresh();

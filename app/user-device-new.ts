@@ -77,7 +77,7 @@ export class Component implements ngCore.OnInit {
             })
         )
         .then(project => {
-          return this.backEnd.addDeviceToProject(this.idField, project);
+          return this.backEnd.removeHomerFromProject(this.idField, project);
         })
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The device has been added."));

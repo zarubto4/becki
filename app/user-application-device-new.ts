@@ -75,7 +75,7 @@ export class Component implements ngCore.OnInit {
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return () => this.backEnd.getApplicationDevices().then(devices => ![].concat(devices.public_types, devices.private_types).find(device => device.name == this.nameField));
+    return () => this.backEnd.getScreenTypes().then(devices => ![].concat(devices.public_types, devices.private_types).find(device => device.name == this.nameField));
   }
 
   onSubmit():void {
@@ -90,7 +90,7 @@ export class Component implements ngCore.OnInit {
             })
         )
         .then(project => {
-          return this.backEnd.createApplicationDevice(this.nameField, this.widthField, this.heightField, this.columnsField, this.rowsField, project);
+          return this.backEnd.createScreenType(this.nameField, this.widthField, this.heightField, this.columnsField, this.rowsField, project);
         })
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The device has been created."));

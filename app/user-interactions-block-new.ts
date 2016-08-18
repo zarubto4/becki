@@ -64,7 +64,7 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.getInteractionsBlockGroups()
+    this.backEnd.getAllTypeOfBlock()
         .then(groups => this.groups = groups.filter(group => group.update_permission))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Groups cannot be loaded.", reason)));
   }
@@ -73,16 +73,16 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getInteractionsBlockGroups().then(groups => ![].concat(...groups.map(group => group.blockoBlocks)).find(block => block.name == this.nameField));
+    return () => this.backEnd.getAllTypeOfBlock().then(groups => ![].concat(...groups.map(group => group.blockoBlocks)).find(block => block.name == this.nameField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.createInteractionsBlock(this.nameField, this.groupField, this.descriptionField)
+    this.backEnd.createBlockoBlock(this.nameField, this.groupField, this.descriptionField)
         .then(block => {
-          return this.backEnd.addVersionToInteractionsBlock("Initial version", "An automatically created version.", this.codeField, block.id);
+          return this.backEnd.addVersionToBlockoBlock("Initial version", "An automatically created version.", this.codeField, block.id);
         })
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The block have been created."));

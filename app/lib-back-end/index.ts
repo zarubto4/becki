@@ -12,2206 +12,2397 @@ import * as _ from "underscore";
 import * as Rx from "rxjs";
 import * as uuid from "node-uuid";
 
-export function composeUserString(user:User, showEmail=false):string {
+export function composeUserString(user:User, showEmail = false):string {
     return user.nick_name || user.full_name || showEmail && user.mail || null;
 }
 
 export class RestRequest {
 
-  method:string;
+    method:string;
 
-  url:string;
+    url:string;
 
-  headers:{[name: string]: string};
+    headers:{[name:string]:string};
 
-  body:Object;
+    body:Object;
 
-  constructor(method:string, url:string, headers:{[name: string]: string} = {}, body?:Object) {
+    constructor(method:string, url:string, headers:{[name:string]:string} = {}, body?:Object) {
         this.method = method;
-    this.url = url;
-    this.headers = {};
-    for (let header in headers) {
-      if (headers.hasOwnProperty(header)) {
-        this.headers[header] = headers[header];
-      }
+        this.url = url;
+        this.headers = {};
+        for (let header in headers) {
+            if (headers.hasOwnProperty(header)) {
+                this.headers[header] = headers[header];
+            }
+        }
+        this.headers["Accept"] = "application/json";
+        this.headers["Content-Type"] = "application/json";
+        this.body = body;
     }
-    this.headers["Accept"] = "application/json";
-    this.headers["Content-Type"] = "application/json";
-    this.body = body;
-  }
 }
 
 export class RestResponse {
 
-  status:number;
+    status:number;
 
-  body:Object;
+    body:Object;
 
-  constructor(status:number, body:Object) {
+    constructor(status:number, body:Object) {
         this.status = status;
-    this.body = body;
-  }
+        this.body = body;
+    }
 }
 
 interface WebSocketMessage {
 
-  messageId:string;
+    messageId:string;
 
-  messageChannel:string;
+    messageChannel:string;
 
-  messageType:string;
+    messageType:string;
 }
 
 interface WebSocketErrorMessage extends WebSocketMessage {
 
-  status:string;
+    status:string;
 
-  error:string;
+    error:string;
 }
 
 export class BugFoundError extends Error {
 
-  name = "bug found error";
+    name = "bug found error";
 
-  adminMessage:string;
+    adminMessage:string;
 
-  userMessage:string;
+    userMessage:string;
 
-  constructor(adminMessage:string, userMessage?:string) {
+    constructor(adminMessage:string, userMessage?:string) {
         super(BugFoundError.composeMessage(adminMessage));
-    // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133
-    this.message = BugFoundError.composeMessage(adminMessage);
-    this.adminMessage = adminMessage;
-    this.userMessage = userMessage;
-  }
-
-  static fromRestResponse(response:RestResponse):BugFoundError {
-        let content = response.body;
-    let message:string;
-    if (response.status == 400) {
-      content = (<{exception:Object}>response.body).exception;
-      message = (<{message:string}>response.body).message;
+        // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133
+        this.message = BugFoundError.composeMessage(adminMessage);
+        this.adminMessage = adminMessage;
+        this.userMessage = userMessage;
     }
-    return new BugFoundError(`response ${response.status}: ${JSON.stringify(content)}`, message);
-  }
 
-  static fromWsResponse(response:WebSocketErrorMessage):BugFoundError {
+    static fromRestResponse(response:RestResponse):BugFoundError {
+        let content = response.body;
+        let message:string;
+        if (response.status == 400) {
+            content = (<{exception:Object}>response.body).exception;
+            message = (<{message:string}>response.body).message;
+        }
+        return new BugFoundError(`response ${response.status}: ${JSON.stringify(content)}`, message);
+    }
+
+    static fromWsResponse(response:WebSocketErrorMessage):BugFoundError {
         return new BugFoundError(`response ${JSON.stringify(response)}`, response.error);
-  }
+    }
 
-  static composeMessage(adminMessage:string):string {
+    static composeMessage(adminMessage:string):string {
         return `bug found in client or server: ${adminMessage}`;
-  }
+    }
 }
 
 export class UnauthorizedError extends Error {
 
-  name = "request unauthorized error";
+    name = "request unauthorized error";
 
-  userMessage:string;
+    userMessage:string;
 
-  constructor(userMessage:string, message = "authorized authentication token required") {
+    constructor(userMessage:string, message = "authorized authentication token required") {
         super(message);
-    // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133
-    this.message = message;
-    this.userMessage = userMessage;
-  }
+        // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133
+        this.message = message;
+        this.userMessage = userMessage;
+    }
 
-  static fromRestResponse(response:RestResponse):UnauthorizedError {
+    static fromRestResponse(response:RestResponse):UnauthorizedError {
         return new UnauthorizedError((<{message:string}>response.body).message);
-  }
+    }
 }
 
 export class PermissionMissingError extends UnauthorizedError {
 
-  static MESSAGE = "permission required";
+    static MESSAGE = "permission required";
 
-  name = "permission missing error";
+    name = "permission missing error";
 
-  userMessage:string;
+    userMessage:string;
 
-  constructor(userMessage:string) {
+    constructor(userMessage:string) {
         super(PermissionMissingError.MESSAGE);
-    // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133
-    this.message = PermissionMissingError.MESSAGE;
-    this.userMessage = userMessage;
-  }
+        // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133
+        this.message = PermissionMissingError.MESSAGE;
+        this.userMessage = userMessage;
+    }
 
-  static fromRestResponse(response:RestResponse):PermissionMissingError {
+    static fromRestResponse(response:RestResponse):PermissionMissingError {
         return new PermissionMissingError((<{message:string}>response.body).message);
-  }
+    }
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface User {
 
-  id:string;
+    id:string;
 
-  mail:string;
+    mail:string;
 
-  nick_name:string;
+    nick_name:string;
 
-  full_name:string;
+    full_name:string;
 
-  last_title:string;
+    last_title:string;
 
-  edit_permission:boolean;
+    edit_permission:boolean;
 
-  delete_permission:boolean;
+    delete_permission:boolean;
 }
 
 export declare class EventSource extends EventTarget {
 
-  constructor(url:string);
+    constructor(url:string);
 
-  close():void;
+    close():void;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Connection {
 
-  connection_id:string;
+    connection_id:string;
 
-  // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-217
-  created:number;
+    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-217
+    created:number;
 
-  access_age:number;
+    access_age:number;
 
-  user_agent:string;
+    user_agent:string;
 
-  typeOfConnection:string;
+    typeOfConnection:string;
 
-  notification_subscriber:boolean;
+    notification_subscriber:boolean;
 
-  providerUserId:string;
+    providerUserId:string;
 
-  providerKey:string;
+    providerKey:string;
 
-  returnUrl:string;
+    returnUrl:string;
 
-  social_tokenVerified:boolean;
+    social_tokenVerified:boolean;
 
-  read_permission:boolean;
+    read_permission:boolean;
 
-  delete_permission:boolean;
+    delete_permission:boolean;
 }
 
-export interface Notification { //flash messeages?
+export interface NotificationBody {
+    type:string;
+    value:string;
+}
 
-  created:string;
+export interface Notification {
 
-  level:string;
+    messageType:string;
+    messageChannel:string;
+    notification_level:string;
+    notification_body:NotificationBody[];
+    messageId:string;
 
-  text:string;
-
-  read:string;
-
-  confirmation_required:string;
+    status:string;
+    reason:string;
 }
 
 export interface Notification_List { //
-  content:Notification[];
+    content:Notification[];
 
-  from:number;
+    from:number;
 
-  to:number;
+    to:number;
 
-  total:number;
+    total:number;
 
-  pages: number[];
+    pages:number[];
 
-  unread_total:number;
+    unread_total:number;
 }
 
-export interface APINotification { //NOTIFIKACE!? TODO je třeba více konzultace o tomto
-  id :string;
+export interface APINotification { //notifikace taky? TODO je třeba více konzultace o tomto
+    id:string;
 
-      level:string;
+    level:string;
 
-      confirmation_required:boolean;
+    confirmation_required:boolean;
 
-      was_read:boolean;
+    was_read:boolean;
 
-      created:string;
+    created:string;
 
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Role {
 
-  id:string;
+    id:string;
 
-  name:string;
+    name:string;
 
-  description:string;
+    description:string;
 
-  person_permissions_id:string[];
+    person_permissions_id:string[];
 
-  persons_id:string[];
+    persons_id:string[];
 
-  update_permission:boolean;
+    update_permission:boolean;
 
-  delete_permission:boolean;
+    delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Permission {
 
-  value:string;
+    value:string;
 
-  description:string;
+    description:string;
 
-  edit_permission:boolean;
+    edit_permission:boolean;
 
-  edit_person_permission:boolean;
+    edit_person_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface RolesAndPermissions {
 
-  roles:Role[];
+    roles:Role[];
 
-  permissions:Permission[];
+    permissions:Permission[];
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface ScreenSizeType {
 
-  id:string;
+    id:string;
 
-  name:string;
+    name:string;
 
-  portrait_width:number;
+    portrait_width:number;
 
-  portrait_height:number;
+    portrait_height:number;
 
-  landscape_width:number;
+    landscape_width:number;
 
-  landscape_height:number;
+    landscape_height:number;
 
-  portrait_square_width:number;
+    portrait_square_width:number;
 
-  portrait_square_height:number;
+    portrait_square_height:number;
 
-  landscape_square_width:number;
+    landscape_square_width:number;
 
-  landscape_square_height:number;
+    landscape_square_height:number;
 
-  width_lock:boolean;
+    width_lock:boolean;
 
-  height_lock:boolean;
+    height_lock:boolean;
 
-  portrait_min_screens:number;
+    portrait_min_screens:number;
 
-  portrait_max_screens:number;
+    portrait_max_screens:number;
 
-  landscape_min_screens:number;
+    landscape_min_screens:number;
 
-  landscape_max_screens:number;
+    landscape_max_screens:number;
 
-  touch_screen:boolean;
+    touch_screen:boolean;
 
-  edit_permission:boolean;
+    edit_permission:boolean;
 
-  delete_permission:boolean;
+    delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface ScreenSizeTypeCombination {
 
-  public_types:ScreenSizeType[];
+    public_types:ScreenSizeType[];
 
-  private_types:ScreenSizeType[];
+    private_types:ScreenSizeType[];
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface MProject {
 
-  id:string;
+    id:string;
 
-  program_name:string;
+    program_name:string;
 
-  program_description:string;
+    program_description:string;
 
-  date_of_create:number;
+    date_of_create:number;
 
-  project_id:string;
+    project_id:string;
 
-  m_programs:MProgram[];
+    m_programs:MProgram[];
 
-  b_program_id:string;
+    b_program_id:string;
 
-  auto_incrementing:boolean;
+    auto_incrementing:boolean;
 
-  b_progam_connected_version_id:string;
+    b_progam_connected_version_id:string;
 
-  edit_permission:boolean;
+    edit_permission:boolean;
 
-  update_permission:boolean;
+    update_permission:boolean;
 
-  delete_permission:boolean;
+    delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface MProgram {
 
-  id:string;
+    id:string;
 
-  program_name:string;
+    program_name:string;
 
-  program_description:string;
+    program_description:string;
 
-  screen_size_type_id:string;
+    screen_size_type_id:string;
 
-  m_code?:string;
+    m_code?:string;
 
-  m_code_id:string;
+    m_code_id:string;
 
-  date_of_create:number;
+    date_of_create:number;
 
-  last_update:number;
+    last_update:number;
 
-  height_lock:boolean;
+    height_lock:boolean;
 
-  width_lock:boolean;
+    width_lock:boolean;
 
-  qr_token:string;
+    qr_token:string;
 
-  websocket_address:string;
+    websocket_address:string;
 
-  m_project_id:string;
+    m_project_id:string;
 
-  read_qrToken_permission:boolean;
+    read_qrToken_permission:boolean;
 
-  edit_permission:boolean;
+    edit_permission:boolean;
 
-  delete_permission:boolean;
+    delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Producer {
 
-  id:string;
+    id:string;
 
-  name:string;
+    name:string;
 
-  description:string;
+    description:string;
 
-  type_of_boards_id:string[];
+    type_of_boards_id:string[];
 
-  edit_permission:boolean;
+    edit_permission:boolean;
 
-  delete_permission:boolean;
+    delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Version {
 
-  id:string;
+    id:string;
 
-  version_name:string;
+    version_name:string;
 
-  version_description:string;
+    version_description:string;
 
-  date_of_create:number;
+    date_of_create:number;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Library {
 
-  id:string;
+    id:string;
 
-  library_name:string;
+    library_name:string;
 
-  description:string;
+    description:string;
 
-  versions_id:string[];
+    versions_id:string[];
 
-  edit_permission:boolean;
+    edit_permission:boolean;
 
-  update_permission:boolean;
+    update_permission:boolean;
 
-  delete_permission:boolean;
+    delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface LibrariesPage {
 
-  content:Library[];
+    content:Library[];
 
-  from:number;
+    from:number;
 
-  to:number;
+    to:number;
 
-  total:number;
+    total:number;
 
-  pages:number[];
+    pages:number[];
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface LibraryGroup {
 
-  id:string;
+    id:string;
 
-  group_name:string;
+    group_name:string;
 
-  description:string;
+    description:string;
 
-  versions_id:string;
+    versions_id:string;
 
-  processors_id:string[];
+    processors_id:string[];
 
-  edit_permission:boolean;
+    edit_permission:boolean;
 
-  update_permission:boolean;
+    update_permission:boolean;
 
-  delete_permission:boolean;
+    delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface LibraryGroupsPage {
 
-  content:LibraryGroup[];
+    content:LibraryGroup[];
 
-  from:number;
+    from:number;
 
-  to:number;
+    to:number;
 
-  total:number;
+    total:number;
 
-  pages:number[];
+    pages:number[];
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Processor {
 
-  id:string;
+    id:string;
 
-  processor_name:string;
+    processor_name:string;
 
-  processor_code:string;
+    processor_code:string;
 
-  description:string;
+    description:string;
 
-  speed:number;
+    speed:number;
 
-  singleLibraries:string[];
+    singleLibraries:string[];
 
-  libraryGroups:string[];
+    libraryGroups:string[];
 
-  edit_permission:boolean;
+    edit_permission:boolean;
 
-  delete_permission:boolean;
+    delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface TypeOfBoard { //Type of board
 
-  id:string;
+    id:string;
 
-  name:string;
+    name:string;
 
-  producer_id:string;
+    producer_id:string;
 
-  producer_name:string; //Tyrion Verze 1.06.6.4
+    producer_name:string; //Tyrion Verze 1.06.6.4
 
-  description:string;
+    description:string;
 
-  processor_id:string;
+    processor_id:string;
 
-  processor_name:string; //Tyrion Verze 1.06.6.4
+    processor_name:string; //Tyrion Verze 1.06.6.4
 
-  connectible_to_internet:boolean;
+    connectible_to_internet:boolean;
 
-  edit_permission:boolean;
+    edit_permission:boolean;
 
-  register_new_device_permission:boolean;
+    register_new_device_permission:boolean;
 
-  delete_permission:boolean;
+    delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface DeviceProgramVersion {
 
-  version_code:string;
+    version_code:string;
 
-  version_object:Version;
+    version_object:Version;
 
-  virtual_input_output:string;
+    virtual_input_output:string;
 
-  compilable:boolean;
+    compilable:boolean;
 
-  compilation_restored:boolean;
+    compilation_restored:boolean;
 
-  compilation_in_progress:boolean;
+    compilation_in_progress:boolean;
 
-  successfully_compiled:boolean;
+    successfully_compiled:boolean;
 
-  runing_on_board:boolean;
+    runing_on_board:boolean;
 }
 
 export interface BProgramList {
 
-  content : BProgramLight[];
+    content:BProgramLight[];
 
-  from : number;
+    from:number;
 
-  to : number;
+    to:number;
 
-  total : number;
+    total:number;
 
-  pages : number[];
+    pages:number[];
 }
 
 export interface BProgramLight {
 
-  b_program_id : string;
+    b_program_id:string;
 
-  b_program_name : string;
+    b_program_name:string;
 
-  b_program_description : string;
+    b_program_description:string;
 
-  b_program_version_id : string;
+    b_program_version_id:string;
 
-  b_program_version_name : string;
+    b_program_version_name:string;
 
-  b_program_version_description : string;
+    b_program_version_description:string;
 }
 
 export interface BlockoBlockList {
-  content:BlockoBlockLight[];
+    content:BlockoBlockLight[];
 
-  from:number;
+    from:number;
 
-  to :number;
+    to:number;
 
-  total :number;
+    total:number;
 
-  pages :number[];
+    pages:number[];
 }
 
 export interface BlockoBlockLight {
 
-  blocko_block_id : string;
+    blocko_block_id:string;
 
-  blocko_block_name : string;
+    blocko_block_name:string;
 
-  blocko_block_description : string;
+    blocko_block_description:string;
 
-  blocko_block_version_id : string;
+    blocko_block_version_id:string;
 
-  blocko_block_version_name : string;
+    blocko_block_version_name:string;
 
-  blocko_block_version_description : string;
+    blocko_block_version_description:string;
 
-  blocko_block_type_of_block_name : string;
+    blocko_block_type_of_block_name:string;
 
-  blocko_block_type_of_block_id: string;
+    blocko_block_type_of_block_id:string;
 
-  blocko_block_type_of_block_description: string;
+    blocko_block_type_of_block_description:string;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface CProgram { //C_programs
 
-  id:string;
+    id:string;
 
-  program_name: string;
+    program_name:string;
 
-  program_description: string;
+    program_description:string;
 
-  dateOfCreate: number;
+    dateOfCreate:number;
 
-  edit_permission: boolean;
+    edit_permission:boolean;
 
-  delete_permission: boolean;
+    delete_permission:boolean;
 
-  project_name: string;
+    project_name:string;
 
 
-  update_permission: boolean;
+    update_permission:boolean;
 
-  type_of_board_id: string;
+    type_of_board_id:string;
 
-  type_of_board_name: string;
+    type_of_board_name:string;
 
-  project_id:string;
+    project_id:string;
 
-  program_versions:CProgramVersion[];
+    program_versions:CProgramVersion[];
 }
 
-export interface CProgramVersion{
+export interface CProgramVersion {
 
-  version_object: VersionObject;
+    version_object:VersionObject;
 
-  successfully_compiled: boolean;
+    successfully_compiled:boolean;
 
-  compilation_in_progress: boolean;
+    compilation_in_progress:boolean;
 
-  compilable: boolean;
+    compilable:boolean;
 
-  main: JsonNode;
+    main:JsonNode;
 
-  user_files: JsonNode;
+    user_files:JsonNode;
 
-  external_libraries: JsonNode;
+    external_libraries:JsonNode;
 
-  virtual_input_output: string;
+    virtual_input_output:string;
 
-  compilation_restored: boolean;
+    compilation_restored:boolean;
 
-  runing_on_board: string[];
+    runing_on_board:string[];
 }
 
-export interface VersionObject{
+export interface VersionObject {
 
-  id: string;
+    id:string;
 
-  version_name: string;
+    version_name:string;
 
-  version_description: string;
+    version_description:string;
 
-  date_of_create: number;
+    date_of_create:number;
 }
 
-export interface JsonNode{
-  valueNode: boolean;
+export interface JsonNode {
+    valueNode:boolean;
 
-  containerNode: boolean;
+    containerNode:boolean;
 
-  missingNode: boolean;
+    missingNode:boolean;
 
-  nodeType: string[];
+    nodeType:string[];
 
-  pojo: boolean;
+    pojo:boolean;
 
-  number: boolean;
+    number:boolean;
 
-  integralNumber: boolean;
+    integralNumber:boolean;
 
-  floatingPointNumber: boolean;
+    floatingPointNumber:boolean;
 
-  short: boolean;
+    short:boolean;
 
-  int: boolean;
+    int:boolean;
 
-  double: boolean;
+    double:boolean;
 
-  bigDecimal: boolean;
+    bigDecimal:boolean;
 
-  bigInteger:boolean;
+    bigInteger:boolean;
 
-  textual: boolean;
+    textual:boolean;
 
-  boolean: boolean;
+    boolean:boolean;
 
-  float: boolean;
+    float:boolean;
 
-  binary: boolean;
+    binary:boolean;
 
-  object :boolean;
+    object:boolean;
 
-  long: boolean;
+    long:boolean;
 
-  array: boolean;
+    array:boolean;
 
-  null: boolean;
+    null:boolean;
 }
 
 export interface CProgramList {
 
-  content:CProgramLight[];
+    content:CProgramLight[];
 
-  from:number;
+    from:number;
 
-  to:number;
+    to:number;
 
-  total :number;
+    total:number;
 
-  pages :number[];
+    pages:number[];
 }
 
 export interface CProgramLight {
 
-  c_program_id :string;
+    c_program_id:string;
 
-  c_program_name :string;
+    c_program_name:string;
 
-  c_program_version_id :string;
+    c_program_version_id:string;
 
-  c_program_version_name :string;
+    c_program_version_name:string;
 
-  type_of_board_id :string;
+    type_of_board_id:string;
 
-  type_of_board_name :string;
+    type_of_board_name:string;
 }
 
 export interface TypeOfBlockList {
 
-  content: TypeOfBlockLight[]
+    content:TypeOfBlockLight[]
 
-  from:number;
+    from:number;
 
-  to : number;
+    to:number;
 
-  total: number;
+    total:number;
 
-  pages: number[];
+    pages:number[];
 }
 
 export interface TypeOfBlockLight {
-  type_of_block_id :string;
+    type_of_block_id:string;
 
-  type_of_block_name :string;
+    type_of_block_name:string;
 
-  type_of_block_description :string;
+    type_of_block_description:string;
 }
 
 export interface BoardList {
 
-  content:Board[];
+    content:Board[];
 
-  from:number;
+    from:number;
 
-  to:number;
+    to:number;
 
-  total:number;
+    total:number;
 
-  pages:number[];
+    pages:number[];
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Board {
 
-  id:string;
+    id:string;
 
-  type_of_board_id:string;
+    type_of_board_id:string;
 
-  isActive:boolean;
+    isActive:boolean;
 
-  status:Object;
+    status:Object;
 
-  up_to_date:boolean;
+    up_to_date:boolean;
 
-  personal_description:any;
+    personal_description:any;
 
-  project_id:string;
+    project_id:string;
 
-  read_permission:boolean;
+    read_permission:boolean;
 
-  edit_permission:boolean;
+    edit_permission:boolean;
 
-  update_permission:boolean;
+    update_permission:boolean;
 
-  first_connect_permission:boolean;
+    first_connect_permission:boolean;
 
-  delete_permission:boolean;
+    delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface CompilationServer {
 
 
-  id:string;
+    id:string;
 
-  server_name:string;
+    server_name:string;
 
-  destination_address:string;
+    destination_address:string;
 
-  hash_certificate:string;
+    hash_certificate:string;
 
-  server_is_online:boolean;
+    server_is_online:boolean;
 
-  edit_permission:boolean;
+    edit_permission:boolean;
 
-  delete_permission:boolean;
+    delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface TypeOfBlock {
 
-  id:string;
+    id:string;
 
-  name:string;
+    name:string;
 
-  general_description:string;
+    general_description:string;
 
-  blockoBlocks:BlockoBlock[];
+    blockoBlocks:BlockoBlock[];
 
-  project_id:string;
+    project_id:string;
 
-  edit_permission:boolean;
+    edit_permission:boolean;
 
-  update_permission:boolean;
+    update_permission:boolean;
 
-  delete_permission:boolean;
+    delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface BlockoBlock {
 
-  id:string;
+    id:string;
 
-  name:string;
+    name:string;
 
-  author_id:string;
+    author_id:string;
 
-  general_description:string;
+    general_description:string;
 
-  type_of_block_id:string;
+    type_of_block_id:string;
 
-  versions:string[];
+    versions:string[];
 
-  edit_permission:boolean;
+    edit_permission:boolean;
 
-  update_permission:boolean;
+    update_permission:boolean;
 
-  delete_permission:boolean;
+    delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface BProgramVersion {
 
-  program:string;
+    program:string;
 
-  version_Object:Version;
+    version_Object:Version;
 
-  connected_boards:Object;
+    connected_boards:Object;
 
-  master_board:Object;
+    master_board:Object;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface BProgramState {
 
-  uploaded:boolean;
+    uploaded:boolean;
 
-  online:boolean;
+    online:boolean;
 
-  version_id?:string;
+    version_id?:string;
 
-  where?:string;
+    where?:string;
 
-  cloud?:Object;
+    cloud?:Object;
 
-  local?:Object;
+    local?:Object;
 
-  online_boards:Board[];
+    online_boards:Board[];
 
-  m_project_id:string;
+    m_project_id:string;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface InteractionsScheme {
 
-  id:string;
+    id:string;
 
-  name:string;
+    name:string;
 
-  program_description:string;
+    program_description:string;
 
-  program_versions:BProgramVersion[];
+    program_versions:BProgramVersion[];
 
-  program_state:BProgramState;
+    program_state:BProgramState;
 
-  dateOfCreate:number;
+    dateOfCreate:number;
 
-  lastUpdate:number;
+    lastUpdate:number;
 
-  project_id:string;
+    project_id:string;
 
-  edit_permission:boolean;
+    edit_permission:boolean;
 
-  update_permission:boolean;
+    update_permission:boolean;
 
-  delete_permission:boolean;
+    delete_permission:boolean;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface InteractionsModerator {
 
-  id:string;
+    id:string;
 
-  mac_address:string;
+    mac_address:string;
 
-  type_of_device:string;
+    type_of_device:string;
 
-  online:boolean;
+    online:boolean;
 
-  version:string;
+    version:string;
 
-  project_id:string;
+    project_id:string;
 
-  edit_permission:boolean;
+    edit_permission:boolean;
 
-  update_permission:boolean;
+    update_permission:boolean;
 
-  delete_permission:boolean;
+    delete_permission:boolean;
 }
 
 export interface InteractionsSchemeValues {
 
-  digital:{[hwId:string]:boolean};
+    digital:{[hwId:string]:boolean};
 
-  analog:{[hwId:string]:number};
+    analog:{[hwId:string]:number};
 
-  connector:{[id:string]:{inputs:{[name:string]:number}, outputs:{[name:string]:number}}};
+    connector:{[id:string]:{inputs:{[name:string]:number}, outputs:{[name:string]:number}}};
 }
 
 export interface InteractionsSchemeValue<T> {
 
-  hwId:string;
+    hwId:string;
 
-  value:T;
+    value:T;
 }
 
 export interface InteractionsSchemeConnectorValue {
 
-  blockId:string;
+    blockId:string;
 
-  connectorName:string;
+    connectorName:string;
 
-  value:number;
+    value:number;
 }
 
 export interface ApplicableProduct { //napíše typ produktu/tarifu jenž vlastní uživatel, může jich být více než jeden
-  product_id:number;
+    product_id:number;
 
-  product_individual_name:string;
+    product_individual_name:string;
 
-  product_type:string;
+    product_type:string;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface CloudHomerServer { //Cloud_Homer_Server??
-  id: string;
+    id:string;
 
-  server_name: string;
+    server_name:string;
 
-  hash_certificate: string;
+    hash_certificate:string;
 
-  destination_address: string;
+    destination_address:string;
 
-  server_is_online:string;
+    server_is_online:string;
 
-  edit_permission:boolean;
+    edit_permission:boolean;
 
-  delete_permission:boolean;
+    delete_permission:boolean;
 }
 
-export interface TariffLabel{//Tyrion Verze 1.06.6.4
-  label:string;
-  descrioption:string;
+export interface TariffLabel {//Tyrion Verze 1.06.6.4
+    label:string;
+    descrioption:string;
 }
 
 
-export interface TariffPrice{//Tyrion Verze 1.06.6.4
-  CZK:string;
-  EUR:string;
+export interface TariffPrice {//Tyrion Verze 1.06.6.4
+    CZK:string;
+    EUR:string;
 }
 
-export interface UserTariff{//Tyrion Verze 1.06.6.4
-  id: string;
-  product_individual_name: string;
-  paid_until_the_day: string;
-  remaining_credit: string;
-  currency: string;
-  invoices: Object[]; //?? objekt popisující fakturu - Ta může nabívat několik stavů. To je vesměs zatím jedno jakých.
-  payment_details: PaymentDetails;
-  product_type: string;
-  payment_mode: string;
-  payment_method: string;
+export interface UserTariff {//Tyrion Verze 1.06.6.4
+    id:string;
+    product_individual_name:string;
+    paid_until_the_day:string;
+    remaining_credit:string;
+    currency:string;
+    invoices:Object[]; //?? objekt popisující fakturu - Ta může nabívat několik stavů. To je vesměs zatím jedno jakých.
+    payment_details:PaymentDetails;
+    product_type:string;
+    payment_mode:string;
+    payment_method:string;
 }
 
-export interface PaymentDetails{ //Tyrion Verze 1.06.6.4
-  id: string;
-  company_account: boolean;
-  street: string;
-  street_number: string;
-  city: string;
-  zip_code: string;
-  country: string;
-  edit_permission:boolean;
+export interface PaymentDetails { //Tyrion Verze 1.06.6.4
+    id:string;
+    company_account:boolean;
+    street:string;
+    street_number:string;
+    city:string;
+    zip_code:string;
+    country:string;
+    edit_permission:boolean;
 }
 
-export interface Tariff{//Tyrion Verze 1.06.6.4
+export interface Tariff {//Tyrion Verze 1.06.6.4
 
-  tariff_name: string;
+    tariff_name:string;
 
-  identificator:string;
+    identificator:string;
 
-  company_details_required:boolean;   //(pokud true tak je nutné v obejtku Payment_Details uvést values s prefixem comapny_ (jako je danové číslo atd...))
+    company_details_required:boolean;   //(pokud true tak je nutné v obejtku Payment_Details uvést values s prefixem comapny_ (jako je danové číslo atd...))
 
-  required_payment_mode: boolean;   //(Slouží do budoucna - asi třeba ke zobrazení obrázku kreditní karty?)
+    required_payment_mode:boolean;   //(Slouží do budoucna - asi třeba ke zobrazení obrázku kreditní karty?)
 
-  price:TariffPrice;
+    price:TariffPrice;
 
-  labels:TariffLabel[];
+    labels:TariffLabel[];
 
 }
 
-export interface ProjectParticipant{ //Tyrion Verze 1.06.6.4
+export interface ProjectParticipant { //Tyrion Verze 1.06.6.4
 
-  full_name : string;
+    full_name:string;
 
-  user_mail : string;
+    user_mail:string;
 
-  user_id : string;
+    user_id:string;
 
-  state : string;
+    state:string;
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Project { //Tyrion Verze 1.06.6.4 předěláno
 
-  id:string;
+    id:string;
 
-  project_name :string;
+    project_name:string;
 
-  project_description :string;
+    project_description:string;
 
-  edit_permission :boolean;
+    edit_permission:boolean;
 
-  delete_permission :boolean;
+    delete_permission:boolean;
 
-  homers_id :string[];
+    homers_id:string[];
 
-  boards_id :string[];
+    boards_id:string[];
 
-  b_programs_id :string[];
+    b_programs_id:string[];
 
-  c_programs_id :string[];
+    c_programs_id:string[];
 
-  m_projects_id :string[];
+    m_projects_id:string[];
 
-  type_of_blocks_id :string[],
+    type_of_blocks_id:string[],
 
-  screen_size_types_id :string[];
+    screen_size_types_id:string[];
 
-  actual_procedures_id :string[];
+    actual_procedures_id:string[];
 
-  product_individual_name :string;
+    product_individual_name:string;
 
-  product_id :number;
+    product_id:number;
 
-  tier_name :string;
+    tier_name:string;
 
-  bugs :number;
+    bugs:number;
 
-  participants :ProjectParticipant[];
+    participants:ProjectParticipant[];
 
-  update_permission :boolean ;
+    update_permission:boolean ;
 
-  unshare_permission :boolean;
+    unshare_permission:boolean;
 
-  share_permission :boolean;
+    share_permission:boolean;
 
-  errors :number;
+    errors:number;
 }
 
 //ACTUALIZATION PROCEDURE START
 export interface ActualizationProcedure {
-  id?:string;
+    id?:string;
 
-  state:string;
+    state:string;
 
-  state_fraction:string;//Tyrion Verze 1.06.6.4
+    state_fraction:string;//Tyrion Verze 1.06.6.4
 
-  state_percentage:number;//Tyrion Verze 1.06.6.4
+    state_percentage:number;//Tyrion Verze 1.06.6.4
 
-  updates:CProgramUpdatePlan[];
+    updates:CProgramUpdatePlan[];
 
-  date_of_create:string;
+    date_of_create:string;
 
-  date_of_finish:string;
+    date_of_finish:string;
 
-  b_program_actualization:ProgramActualization;
+    b_program_actualization:ProgramActualization;
 }
 
 export interface CProgramUpdatePlan { //C_Program_Update_Plan
-  id:string;
+    id:string;
 
-  state:string;
+    state:string;
 
-  board_id:string;
+    board_id:string;
 
-  Server_detail:string;//Tyrion Verze 1.06.6.4
+    Server_detail:string;//Tyrion Verze 1.06.6.4
 
-  Board_detail:string;//Tyrion Verze 1.06.6.4
+    Board_detail:string;//Tyrion Verze 1.06.6.4
 
-  c_program_detail?:CProgramUpdateProgram;
+    c_program_detail?:CProgramUpdateProgram;
 
-  binary_file_detail?:FileRecord;
+    binary_file_detail?:FileRecord;
 }
 
 export interface ProgramActualization {
-  b_program_id:string;
+    b_program_id:string;
 
-  b_program_version_id:string;
+    b_program_version_id:string;
 
-  b_program_name:string;
+    b_program_name:string;
 
-  b_program_version_name:string;
+    b_program_version_name:string;
 }
 
 export interface CProgramUpdateProgram {
-  c_program_id:string;
+    c_program_id:string;
 
-  c_program_version_id:string;
+    c_program_version_id:string;
 
-  c_program_program_name:string;
+    c_program_program_name:string;
 
-  c_program_version_name:string;
+    c_program_version_name:string;
 }
 
 export interface FileRecord {
-  id?:string;
+    id?:string;
 
-  file_name?:string;
+    file_name?:string;
 }
 
 //ACTUALIZATION PROCEDURE END
 
 
 interface PersonInfo {
-  id: string,
-  mail: string,
-  nick_name: string,
-  full_name: string,
-  last_title: string,
-  edit_permission: boolean,
-  delete_permission: boolean
+    id:string,
+    mail:string,
+    nick_name:string,
+    full_name:string,
+    last_title:string,
+    edit_permission:boolean,
+    delete_permission:boolean
 }
 
-interface PersonRole{
-  id: string,
-  name: string,
-  description: string,
-  delete_permission: boolean,
-  update_permission: boolean,
-  persons_id: string [],
-  person_permissions_id: string []
+interface PersonRole {
+    id:string,
+    name:string,
+    description:string,
+    delete_permission:boolean,
+    update_permission:boolean,
+    persons_id:string [],
+    person_permissions_id:string []
 }
 
-export interface PersonBundle{
-  person:PersonInfo;
-  roles:PersonRole;
-  permissions:string[];
+export interface PersonBundle {
+    person:PersonInfo;
+    roles:PersonRole;
+    permissions:string[];
+}
+
+export interface WebSocketAuth {
+    websocket_token:string;
 }
 
 export abstract class BackEnd {
 
-  public static REST_SCHEME = "http";
+    public static REST_SCHEME = "http";
 
-  public static WS_SCHEME = "ws";
+    public static WS_SCHEME = "ws";
 
-  public static HOST = "127.0.0.1:9000";
+    public static HOST = "127.0.0.1:9000";
 
-  public static ACTUALIZATION_PROCEDURE_PATH = "/project/actualization_procedure";
+    public static ACTUALIZATION_PROCEDURE_PATH = "/project/actualization_procedure";
 
-  public static SCREEN_SIZE_TYPE_PATH = "/grid/screen_type";
+    public static SCREEN_SIZE_TYPE_PATH = "/grid/screen_type";
 
-  public static M_PROJECT_PATH  = "/grid/m_project";
+    public static M_PROJECT_PATH = "/grid/m_project";
 
-  public static M_PROGRAM_PATH/*APPLICATION_PATH*/ = "/grid/m_program";
+    public static M_PROGRAM_PATH/*APPLICATION_PATH*/ = "/grid/m_program";
 
-  public static EXTERNAL_SERVER_PATH/*COMPILATION_SERVER_PATH*/ = "/compilation/server";
+    public static EXTERNAL_SERVER_PATH/*COMPILATION_SERVER_PATH*/ = "/compilation/server";
 
-  public static BOARD_PATH/*DEVICE_PATH*/ = "/compilation/board";
+    public static BOARD_PATH/*DEVICE_PATH*/ = "/compilation/board";
 
-  public static C_PROGRAM_COMPILATION_PATH/*DEVICE_PROGRAM_PATH*/ = "/compilation/c_program/c_program";
+    public static C_PROGRAM_COMPILATION_PATH/*DEVICE_PROGRAM_PATH*/ = "/compilation/c_program/c_program";
 
-  public static C_PROGRAM_VERSION_PATH/*DEVICE_PROGRAM_VERSION_PATH*/ = `/compilation/c_program/version`;
+    public static C_PROGRAM_VERSION_PATH/*DEVICE_PROGRAM_VERSION_PATH*/ = `/compilation/c_program/version`;
 
-  public static C_PROGRAM_LIST/*DEVICE_PROGRAM_LIST*/ = `/compilation/c_program/list`; //Tyrion Verze 1.06.6.4
+    public static C_PROGRAM_LIST/*DEVICE_PROGRAM_LIST*/ = `/compilation/c_program/list`; //Tyrion Verze 1.06.6.4
 
-  public static TYPE_OF_BOARD_PATH/*DEVICE_TYPE_PATH*/ = "/compilation/typeOfBoard";
+    public static TYPE_OF_BOARD_PATH/*DEVICE_TYPE_PATH*/ = "/compilation/typeOfBoard";
 
-  public static TYPE_OF_BLOCK_PATH/*INTERACTIONS_BLOCK_GROUP_PATH*/ = "/project/typeOfBlock";
+    public static TYPE_OF_BLOCK_PATH/*INTERACTIONS_BLOCK_GROUP_PATH*/ = "/project/typeOfBlock";
 
-  public static BLOCKOBLOCK_PATH/*INTERACTIONS_BLOCK_PATH*/ = "/project/blockoBlock";
+    public static BLOCKOBLOCK_PATH/*INTERACTIONS_BLOCK_PATH*/ = "/project/blockoBlock";
 
-  public static HOMER_PATH/*INTERACTIONS_MODERATOR_PATH*/ = "/project/homer";
+    public static HOMER_PATH/*INTERACTIONS_MODERATOR_PATH*/ = "/project/homer";
 
-  public static B_PROGRAM_PATH/*INTERACTIONS_SCHEME_PATH*/ = "/project/b_program";
+    public static B_PROGRAM_PATH/*INTERACTIONS_SCHEME_PATH*/ = "/project/b_program";
 
-  public static CLOUD_HOMER_SERVER_PATH/*INTERACTIONS_SERVER_PATH*/ = "/project/blocko/server";
+    public static CLOUD_HOMER_SERVER_PATH/*INTERACTIONS_SERVER_PATH*/ = "/project/blocko/server";
 
-  public static LIBRARY_GROUP_PATH/**/ = "/compilation/libraryGroup";
+    public static LIBRARY_GROUP_PATH/**/ = "/compilation/libraryGroup";
 
-  public static LIBRARY_PATH = "/compilation/library";
+    public static LIBRARY_PATH = "/compilation/library";
 
-  public static NOTIFICATION_PATH = "/notification";
+    public static NOTIFICATION_PATH = "/notification";
 
-  public static PERMISSION_PATH = "/secure/permission";
+    public static PERMISSION_PATH = "/secure/permission";
 
-  public static PROCESSOR_PATH = "/compilation/processor";
+    public static PROCESSOR_PATH = "/compilation/processor";
 
-  public static PRODUCER_PATH = "/compilation/producer";
+    public static PRODUCER_PATH = "/compilation/producer";
 
-  public static PROJECT_PATH = "/project/project";
+    public static PROJECT_PATH = "/project/project";
 
-  public static ROLE_PATH = "/secure/role";
+    public static ROLE_PATH = "/secure/role";
 
-  public static TOKEN_PATH = "/coreClient/person/permission";
+    public static TOKEN_PATH = "/coreClient/person/permission";
 
-  public static USER_PATH = "/coreClient/person/person";
+    public static PASSWORD_RECOVERY_PATH = "/coreClient/mail_person_password_recovery";
 
-  public static VALIDATION_PATH = "/coreClient/person/valid";
+    public static PASSWORD_RECOVERY_CHANGE_PATH = "/coreClient/person_password_recovery";
 
-  public static WS_CHANNEL = "becki";
+    public static USER_PATH = "/coreClient/person/person";
 
-  public static LOGIN_PERSON_PATH = "/login/person";
+    public static VALIDATION_PATH = "/coreClient/person/valid";
 
-  public static PERSON_PATH = "/coreClient/person/person";
+    public static WS_CHANNEL = "becki";
 
-  public static TARIF_PATH = "/product/tarifs";
+    public static LOGIN_PERSON_PATH = "/login/person";
 
-  public static UNCONFIRMED_NOTIFICATION_PATH = "/notification/unconfirmed";
+    public static PERSON_PATH = "/coreClient/person/person";
 
-  private eventSource:EventSource;
+    public static TARIF_PATH = "/product/tarifs";
 
-  private webSocket:WebSocket;
+    public static UNCONFIRMED_NOTIFICATION_PATH = "/notification/unconfirmed";
 
-  private webSocketMessageQueue:WebSocketMessage[];
+    private eventSource:EventSource;
 
-  private webSocketReconnectTimeout:number;
+    private webSocket:WebSocket;
 
-  public notificationReceived:Rx.Subject<Notification>;
+    private webSocketMessageQueue:WebSocketMessage[];
 
-  public webSocketErrorOccurred:Rx.Subject<any>;
+    private webSocketReconnectTimeout:number;
 
-  public interactionsOpened:Rx.Subject<void>;
+    public notificationReceived:Rx.Subject<Notification>;
 
-  public interactionsSchemeSubscribed:Rx.Subject<void>;
+    public webSocketErrorOccurred:Rx.Subject<any>;
 
-  public interactionsSchemeValuesReceived:Rx.Subject<InteractionsSchemeValues>;
+    public interactionsOpened:Rx.Subject<void>;
 
-  public interactionsSchemeAnalogValueReceived:Rx.Subject<InteractionsSchemeValue<number>>;
+    public interactionsSchemeSubscribed:Rx.Subject<void>;
 
-  public interactionsSchemeDigitalValueReceived:Rx.Subject<InteractionsSchemeValue<boolean>>;
+    public interactionsSchemeValuesReceived:Rx.Subject<InteractionsSchemeValues>;
 
-  public interactionsSchemeInputConnectorValueReceived:Rx.Subject<InteractionsSchemeConnectorValue>;
+    public interactionsSchemeAnalogValueReceived:Rx.Subject<InteractionsSchemeValue<number>>;
 
-  public interactionsSchemeOutputConnectorValueReceived:Rx.Subject<InteractionsSchemeConnectorValue>;
+    public interactionsSchemeDigitalValueReceived:Rx.Subject<InteractionsSchemeValue<boolean>>;
 
-  public tasks:number;
+    public interactionsSchemeInputConnectorValueReceived:Rx.Subject<InteractionsSchemeConnectorValue>;
 
-  public constructor() {
+    public interactionsSchemeOutputConnectorValueReceived:Rx.Subject<InteractionsSchemeConnectorValue>;
+
+    public tasks:number;
+
+    public constructor() {
         this.eventSource = null;
-    this.webSocketMessageQueue = [];
-    this.webSocketReconnectTimeout = null;
-    this.notificationReceived = new Rx.Subject<Notification>();
-    this.webSocketErrorOccurred = new Rx.Subject<any>();
-    this.interactionsOpened = new Rx.Subject<void>();
-    this.interactionsSchemeSubscribed = new Rx.Subject<void>();
-    this.interactionsSchemeValuesReceived = new Rx.Subject<InteractionsSchemeValues>();
-    this.interactionsSchemeAnalogValueReceived = new Rx.Subject<InteractionsSchemeValue<number>>();
-    this.interactionsSchemeDigitalValueReceived = new Rx.Subject<InteractionsSchemeValue<boolean>>();
-    this.interactionsSchemeInputConnectorValueReceived = new Rx.Subject<InteractionsSchemeConnectorValue>();
-    this.interactionsSchemeOutputConnectorValueReceived = new Rx.Subject<InteractionsSchemeConnectorValue>();
-    this.tasks = 0;
-    this.reconnectEventSource();
-    this.reconnectWebSocket();
-  }
+        this.webSocketMessageQueue = [];
+        this.webSocketReconnectTimeout = null;
+        this.notificationReceived = new Rx.Subject<Notification>();
+        this.webSocketErrorOccurred = new Rx.Subject<any>();
+        this.interactionsOpened = new Rx.Subject<void>();
+        this.interactionsSchemeSubscribed = new Rx.Subject<void>();
+        this.interactionsSchemeValuesReceived = new Rx.Subject<InteractionsSchemeValues>();
+        this.interactionsSchemeAnalogValueReceived = new Rx.Subject<InteractionsSchemeValue<number>>();
+        this.interactionsSchemeDigitalValueReceived = new Rx.Subject<InteractionsSchemeValue<boolean>>();
+        this.interactionsSchemeInputConnectorValueReceived = new Rx.Subject<InteractionsSchemeConnectorValue>();
+        this.interactionsSchemeOutputConnectorValueReceived = new Rx.Subject<InteractionsSchemeConnectorValue>();
+        this.tasks = 0;
+        this.reconnectEventSource();
+        this.reconnectWebSocket();
+    }
 
-  private setToken(token:string):void {
+    private setToken(token:string):void {
         window.localStorage.setItem("authToken", token);
-    this.reconnectEventSource();
-    this.reconnectWebSocket();
-  }
+        this.reconnectEventSource();
+    }
 
-  public tokenExist():boolean {
-    return window.localStorage.getItem("authToken")?true:false;
-  }
+    private setWebSocketToken(token:string):void {
+        window.localStorage.setItem("authWebSocketToken", token);
+        this.reconnectWebSocket();
+    }
 
-  private unsetToken():void {
+    public tokenExist():boolean {
+        return window.localStorage.getItem("authToken") ? true : false;
+    }
+
+    private unsetToken():void {
         window.localStorage.removeItem("authToken");
-    this.reconnectEventSource();
-    this.reconnectWebSocket();
-  }
+        window.localStorage.removeItem("authWebSocketToken");
+        this.reconnectWebSocket();
+    }
 
-  private findEnqueuedWebSocketMessage(original:WebSocketMessage, ...keys:string[]):WebSocketMessage {
+    private getWebSocketToken():Promise<WebSocketAuth> {
+        return this.requestRestPath("GET", "/websocket/access_token", "{}", 200);
+    }
+
+    private findEnqueuedWebSocketMessage(original:WebSocketMessage, ...keys:string[]):WebSocketMessage {
         return this.webSocketMessageQueue.find(message => _.isMatch(message, _.pick(original, keys)));
-  }
+    }
 
-  protected abstract requestRestGeneral(request:RestRequest):Rx.Observable<RestResponse>;
+    protected abstract requestRestGeneral(request:RestRequest):Rx.Observable<RestResponse>;
 
-  public requestRestPath<T>(method:string, path:string, body?:Object, success=200):Promise<T> {
+    public requestRestPath<T>(method:string, path:string, body?:Object, success = 200):Promise<T> {
         return this.requestRest(method, `${BackEnd.REST_SCHEME}://${BackEnd.HOST}${path}`, body, success).toPromise();
-  }
+    }
 
-  public requestRest<T>(method:string, url:string, body?:Object, success=200):Rx.Observable<T> {
+    public requestRest<T>(method:string, url:string, body?:Object, success = 200):Rx.Observable<T> {
         let request = new RestRequest(method, url, {}, body);
-    // TODO: https://github.com/angular/angular/issues/7438
-    if (window.localStorage.getItem("authToken")) {
-      request.headers["X-AUTH-TOKEN"] = window.localStorage.getItem("authToken");
-    }
-    this.tasks += 1;
-    return this.requestRestGeneral(request)
-        .map(response => {
-          if (response.status == success) {
-            return response.body;
-          }
-          switch (response.status) {
-            case 401:
-              throw UnauthorizedError.fromRestResponse(response);
-            case 403:
-              throw PermissionMissingError.fromRestResponse(response);
-            default:
-              throw BugFoundError.fromRestResponse(response);
-          }
-        })
-        .finally<T>(() => {
-          this.tasks -= 1;
-        });
-  }
-
-  private sendWebSocketMessageQueue():void {
-        this.webSocketMessageQueue.splice(0).forEach(message => {
-      try {
-        this.webSocket.send(JSON.stringify(message));
-      } catch (err) {
-        if (err.code == DOMException.INVALID_STATE_ERR) {
-          this.webSocketMessageQueue.push(message);
+        // TODO: https://github.com/angular/angular/issues/7438
+        if (window.localStorage.getItem("authToken")) {
+            request.headers["X-AUTH-TOKEN"] = window.localStorage.getItem("authToken");
         }
-      }
-    });
-  }
+        this.tasks += 1;
+        return this.requestRestGeneral(request)
+            .map(response => {
+                if (response.status == success) {
+                    return response.body;
+                }
+                switch (response.status) {
+                    case 401:
+                        throw UnauthorizedError.fromRestResponse(response);
+                    case 403:
+                        throw PermissionMissingError.fromRestResponse(response);
+                    default:
+                        throw BugFoundError.fromRestResponse(response);
+                }
+            })
+            .finally<T>(() => {
+                this.tasks -= 1;
+            });
+    }
 
-  public sendWebSocketMessage(message:WebSocketMessage):void {
+    private sendWebSocketMessageQueue():void {
+        this.webSocketMessageQueue.splice(0).forEach(message => {
+            try {
+                this.webSocket.send(JSON.stringify(message));
+            } catch (err) {
+                if (err.code == DOMException.INVALID_STATE_ERR) {
+                    this.webSocketMessageQueue.push(message);
+                }
+            }
+        });
+    }
+
+    public sendWebSocketMessage(message:WebSocketMessage):void {
         this.webSocketMessageQueue.push(message);
-    this.sendWebSocketMessageQueue();
-  }
+        this.sendWebSocketMessageQueue();
+    }
 
-  private reconnectEventSource():void {
+    private reconnectEventSource():void {
         if (this.eventSource) {
-      this.eventSource.close();
+            this.eventSource.close();
+        }
+        this.eventSource = null;
+        if (window.localStorage.getItem("authToken")) {
+            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-177
+            this.eventSource = new EventSource(`${BackEnd.REST_SCHEME}://${BackEnd.HOST}${BackEnd.NOTIFICATION_PATH}/connection/${window.localStorage.getItem("authToken")}`);
+
+            Rx.Observable
+                .fromEvent<MessageEvent>(this.eventSource, "message")
+                .map(event => JSON.parse(event.data))
+                .subscribe(this.notificationReceived);
+        }
     }
-    this.eventSource = null;
-    if (window.localStorage.getItem("authToken")) {
-      // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-177
-      this.eventSource = new EventSource(`${BackEnd.REST_SCHEME}://${BackEnd.HOST}${BackEnd.NOTIFICATION_PATH}/connection/${window.localStorage.getItem("authToken")}`);
 
-      Rx.Observable
-          .fromEvent<MessageEvent>(this.eventSource, "message")
-          .map(event => JSON.parse(event.data))
-          .subscribe(this.notificationReceived);
+    private reconnectWebSocket():void {
+        console.log('recconectWebSocket, WStoken: '+window.localStorage.getItem("authWebSocketToken"));
+
+        clearTimeout(this.webSocketReconnectTimeout);
+        this.webSocketReconnectTimeout = null;
+
+
+        let setReconnectionTimeout = () => {
+            if (this.webSocketReconnectTimeout == null) {
+                this.getWebSocketToken().then(token => this.setWebSocketToken(token.websocket_token));//todle si vyžádá nový token
+                this.webSocketReconnectTimeout = setTimeout(() => this.reconnectWebSocket(), 5000);
+            }
+        };
+
+        if (this.webSocket) {
+            this.webSocket.removeEventListener("close", setReconnectionTimeout);
+            this.webSocket.close();
+        }
+        this.webSocket = null;
+        if (window.localStorage.getItem("authWebSocketToken")) {
+            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-260
+            this.webSocket = new WebSocket(`${BackEnd.WS_SCHEME}://${BackEnd.HOST}/websocket/becki/${window.localStorage.getItem("authWebSocketToken")}`);
+            this.webSocket.addEventListener("close", setReconnectionTimeout);
+
+            let opened = Rx.Observable
+                .fromEvent<void>(this.webSocket, "open");
+            let channelReceived = Rx.Observable
+                .fromEvent<MessageEvent>(this.webSocket, "message")
+                .map(event => JSON.parse(event.data))
+                .filter(message => message.messageChannel == BackEnd.WS_CHANNEL);
+            let errorOccurred = Rx.Observable
+                .fromEvent(this.webSocket, "error");
+
+            opened
+                .subscribe(() => this.sendWebSocketMessageQueue());
+            opened
+                .subscribe(this.interactionsOpened);
+            channelReceived
+                .filter(message => message.status == "error")
+                .map(message => BugFoundError.fromWsResponse(message))
+                .subscribe(this.webSocketErrorOccurred);
+            channelReceived
+                .filter(message => message.messageType == "subscribe_instace" && message.status == "success")
+                .subscribe(this.interactionsSchemeSubscribed);
+            channelReceived
+                .filter(message => message.messageType == "subscribe_notification" && message.messageType == "unsubscribe_notification" && message.messageType == "notification")
+                .subscribe(this.notificationReceived);
+            channelReceived
+                .filter(message => message.messageType == "getValues" && message.status == "success")
+                .subscribe(this.interactionsSchemeValuesReceived);
+            channelReceived
+                .filter(message => message.messageType == "newAnalogValue")
+                .subscribe(this.interactionsSchemeAnalogValueReceived);
+            channelReceived
+                .filter(message => message.messageType == "newDigitalValue")
+                .subscribe(this.interactionsSchemeDigitalValueReceived);
+            channelReceived
+                .filter(message => message.messageType == "newInputConnectorValue")
+                .subscribe(this.interactionsSchemeInputConnectorValueReceived);
+            channelReceived
+                .filter(message => message.messageType == "newOutputConnectorValue")
+                .subscribe(this.interactionsSchemeOutputConnectorValueReceived);
+            errorOccurred
+                .subscribe(this.webSocketErrorOccurred);
+        }
     }
-  }
 
-  private reconnectWebSocket():void {
-    console.log('reconnectWebSocket');
-    clearTimeout(this.webSocketReconnectTimeout);
-    this.webSocketReconnectTimeout = null;
-
-    let setReconnectionTimeout = () => {
-      if (this.webSocketReconnectTimeout == null) {
-        this.webSocketReconnectTimeout = setTimeout(() => this.reconnectWebSocket(), 5000);
-      }
-    };
-
-    if (this.webSocket) {
-      this.webSocket.removeEventListener("close", setReconnectionTimeout);
-      this.webSocket.close();
-    }
-    this.webSocket = null;
-    if (window.localStorage.getItem("authToken")) {
-      console.log('reconnectWebSocket');
-      this.webSocket = new WebSocket(`${BackEnd.WS_SCHEME}://${BackEnd.HOST}/websocket/becki/${window.localStorage.getItem("authToken")}`);
-
-      this.webSocket.addEventListener("close", setReconnectionTimeout);
-
-      let opened = Rx.Observable
-          .fromEvent<void>(this.webSocket, "open");
-      let channelReceived = Rx.Observable
-          .fromEvent<MessageEvent>(this.webSocket, "message")
-          .map(event => JSON.parse(event.data))
-          .filter(message => message.messageChannel == BackEnd.WS_CHANNEL);
-      let errorOccurred = Rx.Observable
-          .fromEvent(this.webSocket, "error");
-
-      opened
-          .subscribe(() => this.sendWebSocketMessageQueue());
-      opened
-          .subscribe(this.interactionsOpened);
-      channelReceived
-          .filter(message => message.status == "error")
-          .map(message => BugFoundError.fromWsResponse(message))
-          .subscribe(this.webSocketErrorOccurred);
-      channelReceived
-          .filter(message => message.messageType == "subscribe_instace" && message.status == "success")
-          .subscribe(this.interactionsSchemeSubscribed);
-      channelReceived
-          .filter(message => message.messageType == "getValues" && message.status == "success")
-          .subscribe(this.interactionsSchemeValuesReceived);
-      channelReceived
-          .filter(message => message.messageType == "newAnalogValue")
-          .subscribe(this.interactionsSchemeAnalogValueReceived);
-      channelReceived
-          .filter(message => message.messageType == "newDigitalValue")
-          .subscribe(this.interactionsSchemeDigitalValueReceived);
-      channelReceived
-          .filter(message => message.messageType == "newInputConnectorValue")
-          .subscribe(this.interactionsSchemeInputConnectorValueReceived);
-      channelReceived
-          .filter(message => message.messageType == "newOutputConnectorValue")
-          .subscribe(this.interactionsSchemeOutputConnectorValueReceived);
-      errorOccurred
-          .subscribe(this.webSocketErrorOccurred);
-    }
-  }
-
-  public createUser(mail:string, password:string, nick_name:string):Promise<any> {
+    public createUser(mail:string, password:string, nick_name:string):Promise<any> {
         if (!mail || password.length < 8 || nick_name.length < 8) {
-      throw "password >= 8 and username >= 8 and email required";
+            throw "password >= 8 and username >= 8 and email required";
+        }
+
+        return this.requestRestPath("POST", BackEnd.USER_PATH, {nick_name, mail, password}, 201);
     }
 
-    return this.requestRestPath("POST", BackEnd.USER_PATH, {nick_name, mail, password}, 201);
-  }
-
-  public getUser(id:string):Promise<User> {
+    public getUser(id:string):Promise<User> {
         return this.requestRestPath("GET", `${BackEnd.USER_PATH}/${id}`);
-  }
+    }
 
-  public getUserEmailUsed(email:string):Promise<boolean> {
+    public getUserEmailUsed(email:string):Promise<boolean> {
         return this.requestRestPath<{valid:boolean}>("GET", `${BackEnd.VALIDATION_PATH}/mail/${email}`).then(body => body.valid);
-  }
+    }
 
-  public getUsernameUsed(username:string):Promise<boolean> {
+    public getUsernameUsed(username:string):Promise<boolean> {
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-187
-    return this.requestRestPath<{code:number}>("GET", `${BackEnd.VALIDATION_PATH}/nicknamewe/${username}`).then(body => body.code == 200);
-  }
+        return this.requestRestPath<{code:number}>("GET", `${BackEnd.VALIDATION_PATH}/nicknamewe/${username}`).then(body => body.code == 200);
+    }
 
-  public getUserRolesAndPermissions(id:string):Promise<RolesAndPermissions> {
+    public getUserRolesAndPermissions(id:string):Promise<RolesAndPermissions> {
         return this.requestRestPath("GET", `/secure/person/system_acces/${id}`);
-  }
+    }
 
-  public getSignedUser():Promise<User> {
+    public getSignedUser():Promise<User> {
         return this.requestRestPath<{person:User}>("GET", "/login/person").then(result => result.person);
-  }
+    }
 
-  public getUsers():Promise<User[]> {
+    public getUsers():Promise<User[]> {
         return this.requestRestPath("GET", `${BackEnd.USER_PATH}/all`);
-  }
+    }
 
-  public updateUser(id:string, full_name:string, nick_name:string, first_title:string, last_title:string):Promise<any> {
+    public updateUser(id:string, full_name:string, nick_name:string, first_title:string, last_title:string):Promise<any> {
         if (!full_name || !nick_name) {
-      throw "name and username required";
+            throw "name and username required";
+        }
+
+        return this.requestRestPath("PUT", `${BackEnd.USER_PATH}/${id}`, {
+            nick_name,
+            full_name,
+            first_title,
+            last_title
+        });
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.USER_PATH}/${id}`, {nick_name, full_name, first_title, last_title});
-  }
-
-  public addRoleToUser(role:string, user:string):Promise<any> {
+    public addRoleToUser(role:string, user:string):Promise<any> {
         return this.requestRestPath("PUT", `${BackEnd.ROLE_PATH}/person/${user}/${role}`, {});
-  }
+    }
 
-  public removeRoleFromUser(role:string, user:string):Promise<any> {
+    public removeRoleFromUser(role:string, user:string):Promise<any> {
         return this.requestRestPath("DELETE", `${BackEnd.ROLE_PATH}/person/${user}/${role}`);
-  }
+    }
 
-  public addPermissionToUser(permission:string, user:string):Promise<any> {
+    public addPermissionToUser(permission:string, user:string):Promise<any> {
         return this.requestRestPath("PUT", `${BackEnd.PERMISSION_PATH}/person/${user}/${permission}`, {});
-  }
+    }
 
-  public removePermissionFromUser(permission:string, user:string):Promise<any> {
+    public removePermissionFromUser(permission:string, user:string):Promise<any> {
         return this.requestRestPath("DELETE", `${BackEnd.PERMISSION_PATH}/person/${user}/${permission}`);
-  }
+    }
 
-  public deleteUser(user:string):Promise<any> {
+    public deleteUser(user:string):Promise<any> {
         return this.requestRestPath("DELETE", `${BackEnd.USER_PATH}/${user}`);
-  }
+    }
 
-  public createToken(mail:string, password:string):Promise<any> {
+    public createToken(mail:string, password:string):Promise<any> {
         if (!mail || !password) {
-      throw "email and password required";
+            throw "email and password required";
+        }
+
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
+        return this.requestRestPath<{authToken:string}>("POST", `${BackEnd.TOKEN_PATH}/login`, {
+            mail,
+            password
+        }).then((body) => {
+            // TODO: https://github.com/angular/angular/issues/7438
+            this.setToken(body.authToken);
+            return body;
+        }).then(body => {
+            this.getWebSocketToken().then(token => this.setWebSocketToken(token.websocket_token));
+            return JSON.stringify(body);
+        })
     }
 
-    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-    return this.requestRestPath<{authToken:string}>("POST", `${BackEnd.TOKEN_PATH}/login`, {mail, password}).then((body) => {
-      // TODO: https://github.com/angular/angular/issues/7438
-      this.setToken(body.authToken);
-      return body;
-    });
-  }
-
-  public createFacebookToken(redirectUrl:string):Promise<string> {
+    public createFacebookToken(redirectUrl:string):Promise<string> {
         redirectUrl = encodeURIComponent(redirectUrl);
-    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-    return this.requestRestPath<{authToken:string, redirect_url:string}>("GET", `/login/facebook?return_link=${redirectUrl}`).then(body => {
-      // TODO: https://github.com/angular/angular/issues/7438
-      this.setToken(body.authToken);
-      return body.redirect_url;
-    });
-  }
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
+        return this.requestRestPath<{authToken:string, redirect_url:string}>("GET", `/login/facebook?return_link=${redirectUrl}`).then(body => {
+            // TODO: https://github.com/angular/angular/issues/7438
+            this.setToken(body.authToken);
+            return body.redirect_url;
+        });
+    }
 
-  public createGitHubToken(redirectUrl:string):Promise<string> {
+    public createGitHubToken(redirectUrl:string):Promise<string> {
         redirectUrl = encodeURIComponent(redirectUrl);
-    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-    return this.requestRestPath<{authToken:string, redirect_url:string}>("GET", `/login/github?return_link=${redirectUrl}`).then(body => {
-      // TODO: https://github.com/angular/angular/issues/7438
-      this.setToken(body.authToken);
-      return body.redirect_url;
-    });
-  }
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
+        return this.requestRestPath<{authToken:string, redirect_url:string}>("GET", `/login/github?return_link=${redirectUrl}`).then(body => {
+            // TODO: https://github.com/angular/angular/issues/7438
+            this.setToken(body.authToken);
+            return body.redirect_url;
+        });
+    }
 
-  public deleteToken():Promise<any> {
+    public deleteToken():Promise<any> {
         return this.requestRestPath("POST", `${BackEnd.TOKEN_PATH}/logout`, {}).then((body) => {
-      // TODO: https://github.com/angular/angular/issues/7438
-      this.unsetToken();
-      return body;
-    });
-  }
+            // TODO: https://github.com/angular/angular/issues/7438
+            this.unsetToken();
+            return body;
+        });
+    }
 
-  public getConnections():Promise<Connection[]> {
+    public getConnections():Promise<Connection[]> {
         return this.requestRestPath("GET", "/coreClient/connections");
-  }
+    }
 
-  public removeConnection(id:string):Promise<any> {
+    public removeConnection(id:string):Promise<any> {
         return this.requestRestPath("DELETE", `/coreClient/connection/${id}`);
-  }
+    }
 
-  /*
-  public getNotifications(page:number):Promise<MissedNotificationsPage> {
-        return this.requestRestPath("GET", `${BackEnd.NOTIFICATION_PATH}/list/${page}`);
-  }*/
+    /*
+     public getNotifications(page:number):Promise<MissedNotificationsPage> {
+     return this.requestRestPath("GET", `${BackEnd.NOTIFICATION_PATH}/list/${page}`);
+     }*/
 
-  public getRoles():Promise<Role[]> {
+    public sendPasswordRecovery(mail:string):Promise<string> {
+        //TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-325
+        return this.requestRestPath("POST", `${BackEnd.PASSWORD_RECOVERY_PATH}`, {mail}, 200).then(JSON.stringify);
+    }
+
+    public PasswordRecovery(mail:string, password_recovery_token:string, password:string):Promise<string> {
+        //TODO http://youtrack.byzance.cz/youtrack/issue/TYRION-326
+        return this.requestRestPath("PUT", `${BackEnd.PASSWORD_RECOVERY_CHANGE_PATH}`, {
+            mail,
+            password,
+            password_recovery_token
+        }, 200).then(json => console.log(json)).then(JSON.stringify);
+    }
+
+    public requestNotificationsSubscribe():void {
+        "use strict";
+
+        let message = {messageId: uuid.v4(), messageChannel: BackEnd.WS_CHANNEL, messageType: "subscribe_notification"};
+        if (!this.findEnqueuedWebSocketMessage(message, 'messageChannel', 'messageType')) {
+            this.sendWebSocketMessage(message);
+        }
+    }
+
+    public requestNotificationsUnsubscribe():void {
+        "use strict";
+
+        let message = {
+            messageId: uuid.v4(),
+            messageChannel: BackEnd.WS_CHANNEL,
+            messageType: "unsubscribe_notification"
+        };
+        if (!this.findEnqueuedWebSocketMessage(message, 'messageChannel', 'messageType')) {
+            this.sendWebSocketMessage(message);
+        }
+    }
+
+    public getRoles():Promise<Role[]> {
         return this.requestRestPath("GET", `${BackEnd.ROLE_PATH}/all`);
-  }
+    }
 
-  public getPermissions():Promise<Permission[]> {
+    public getPermissions():Promise<Permission[]> {
         return this.requestRestPath("GET", BackEnd.PERMISSION_PATH);
-  }
+    }
 
-  public createScreenType(name:string, width:number, height:number, columns:number, rows:number, project_id:string):Promise<any> {
+    public createScreenType(name:string, width:number, height:number, columns:number, rows:number, project_id:string):Promise<any> {
         if (name.length < 3 || !Number.isInteger(width) || !Number.isInteger(height) || !Number.isInteger(columns) || !Number.isInteger(rows)) {
-      throw "name >= 3, integer width, integer height, integer columns and integer rows required";
+            throw "name >= 3, integer width, integer height, integer columns and integer rows required";
+        }
+
+        return this.requestRestPath("POST", BackEnd.SCREEN_SIZE_TYPE_PATH, {
+            name,
+            height_lock: false,
+            width_lock: false,
+            touch_screen: false,
+            project_id,
+            landscape_height: width,
+            landscape_width: height,
+            landscape_square_height: columns,
+            landscape_square_width: rows,
+            landscape_max_screens: 10,
+            landscape_min_screens: 1,
+            portrait_height: height,
+            portrait_width: width,
+            portrait_square_height: rows,
+            portrait_square_width: columns,
+            portrait_max_screens: 10,
+            portrait_min_screens: 1
+        }, 201);
     }
 
-    return this.requestRestPath("POST", BackEnd.SCREEN_SIZE_TYPE_PATH, {name, height_lock: false, width_lock: false, touch_screen: false, project_id, landscape_height: width, landscape_width: height, landscape_square_height: columns, landscape_square_width: rows, landscape_max_screens: 10, landscape_min_screens: 1, portrait_height: height, portrait_width: width, portrait_square_height: rows, portrait_square_width: columns, portrait_max_screens: 10, portrait_min_screens: 1}, 201);
-  }
-
-  public getScreenType(id:string):Promise<ScreenSizeType> {
+    public getScreenType(id:string):Promise<ScreenSizeType> {
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("GET", `${BackEnd.SCREEN_SIZE_TYPE_PATH}/${id}`);
-  }
+        return this.requestRestPath("GET", `${BackEnd.SCREEN_SIZE_TYPE_PATH}/${id}`);
+    }
 
-  public getScreenTypes():Promise<ScreenSizeTypeCombination> {
+    public getScreenTypes():Promise<ScreenSizeTypeCombination> {
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("GET", `${BackEnd.SCREEN_SIZE_TYPE_PATH}/all`);
-  }
+        return this.requestRestPath("GET", `${BackEnd.SCREEN_SIZE_TYPE_PATH}/all`);
+    }
 
-  public getFiltredC_ProgramList(page_number:string,project_id:string):Promise<CProgramList>{ //Tyrion Verze 1.06.6.4 //C_program //^^
-    return this.requestRestPath("PUT",`${BackEnd.C_PROGRAM_LIST}/${page_number}`,{project_id});
-  }
+    public getFiltredC_ProgramList(page_number:string, project_id:string):Promise<CProgramList> { //Tyrion Verze 1.06.6.4 //C_program //^^
+        return this.requestRestPath("PUT", `${BackEnd.C_PROGRAM_LIST}/${page_number}`, {project_id});
+    }
 
-  public getFiltredB_ProgramList(page_number:string,project_id:string):Promise<BProgramList>{ //Tyrion Verze 1.06.6.4
-    return this.requestRestPath("PUT",`${BackEnd.B_PROGRAM_PATH}/list/${page_number}`,{project_id});
-  }
+    public getFiltredB_ProgramList(page_number:string, project_id:string):Promise<BProgramList> { //Tyrion Verze 1.06.6.4
+        return this.requestRestPath("PUT", `${BackEnd.B_PROGRAM_PATH}/list/${page_number}`, {project_id});
+    }
 
-  public getFiltredBlockoBlockProgramList(page_number:string,project_id:string):Promise<BlockoBlockList>{ //Tyrion Verze 1.06.6.4
-    return this.requestRestPath("PUT",`${BackEnd.BLOCKOBLOCK_PATH}/list/${page_number}`,{project_id});
-  }
+    public getFiltredBlockoBlockProgramList(page_number:string, project_id:string):Promise<BlockoBlockList> { //Tyrion Verze 1.06.6.4
+        return this.requestRestPath("PUT", `${BackEnd.BLOCKOBLOCK_PATH}/list/${page_number}`, {project_id});
+    }
 
-  public getFiltredTypeOfBlockList(page_number:string,project_id:string,private_type:boolean):Promise<TypeOfBlockList>{ //Tyrion Verze 1.06.6.4
-    return this.requestRestPath("PUT",`${BackEnd.TYPE_OF_BLOCK_PATH}/list/${page_number}`,{project_id,private_type});
-  }
+    public getFiltredTypeOfBlockList(page_number:string, project_id:string, private_type:boolean):Promise<TypeOfBlockList> { //Tyrion Verze 1.06.6.4
+        return this.requestRestPath("PUT", `${BackEnd.TYPE_OF_BLOCK_PATH}/list/${page_number}`, {
+            project_id,
+            private_type
+        });
+    }
 
-  public getUnconfirmedNotification(){ //Tyrion Verze 1.06.6.4
-    return this.requestRestPath("GET",`${BackEnd.UNCONFIRMED_NOTIFICATION_PATH}`);
-  }
+    public getUnconfirmedNotification() { //Tyrion Verze 1.06.6.4
+        return this.requestRestPath("GET", `${BackEnd.UNCONFIRMED_NOTIFICATION_PATH}`);
+    }
 
-  public updateScreenType(id:string, name:string, width:number, height:number, columns:number, rows:number, width_lock:boolean, height_lock:boolean, portrait_min_screens:number, portrait_max_screens:number, landscape_min_screens:number, landscape_max_screens:number, touch_screen:boolean, project_id:string):Promise<any> {
+    public updateScreenType(id:string, name:string, width:number, height:number, columns:number, rows:number, width_lock:boolean, height_lock:boolean, portrait_min_screens:number, portrait_max_screens:number, landscape_min_screens:number, landscape_max_screens:number, touch_screen:boolean, project_id:string):Promise<any> {
         if (name.length < 3 || !Number.isInteger(width) || !Number.isInteger(height) || !Number.isInteger(columns) || !Number.isInteger(rows) || !Number.isInteger(portrait_min_screens) || !Number.isInteger(portrait_max_screens) || !Number.isInteger(landscape_min_screens) || !Number.isInteger(landscape_max_screens)) {
-      throw "name >= 3, integer width, integer height, integer columns, integer rows and integer screen counts required";
+            throw "name >= 3, integer width, integer height, integer columns, integer rows and integer screen counts required";
+        }
+
+        return this.requestRestPath("PUT", `${BackEnd.SCREEN_SIZE_TYPE_PATH}/${id}`, {
+            name,
+            height_lock,
+            width_lock,
+            touch_screen,
+            project_id,
+            landscape_height: width,
+            landscape_width: height,
+            landscape_square_height: columns,
+            landscape_square_width: rows,
+            landscape_max_screens,
+            landscape_min_screens,
+            portrait_height: height,
+            portrait_width: width,
+            portrait_square_height: rows,
+            portrait_square_width: columns,
+            portrait_max_screens,
+            portrait_min_screens
+        });
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.SCREEN_SIZE_TYPE_PATH}/${id}`, {name, height_lock, width_lock, touch_screen, project_id, landscape_height: width, landscape_width: height, landscape_square_height: columns, landscape_square_width: rows, landscape_max_screens, landscape_min_screens, portrait_height: height, portrait_width: width, portrait_square_height: rows, portrait_square_width: columns, portrait_max_screens, portrait_min_screens});
-  }
-
-  public deleteScreenType(id:string):Promise<any> {
+    public deleteScreenType(id:string):Promise<any> {
         return this.requestRestPath("DELETE", `${BackEnd.SCREEN_SIZE_TYPE_PATH}/${id}`);
-  }
-
-  public createM_Project(program_name:string, program_description:string, projectId:string):Promise<MProject> {
-        if (program_name.length < 4) {
-      throw "name >= 4 required";
     }
 
-    return this.requestRestPath("POST", `${BackEnd.M_PROJECT_PATH}/${projectId}`, {program_description, program_name}, 201);
-  }
+    public createM_Project(program_name:string, program_description:string, projectId:string):Promise<MProject> {
+        if (program_name.length < 4) {
+            throw "name >= 4 required";
+        }
 
-  public getM_Project(id:string):Promise<MProject> {
+        return this.requestRestPath("POST", `${BackEnd.M_PROJECT_PATH}/${projectId}`, {
+            program_description,
+            program_name
+        }, 201);
+    }
+
+    public getM_Project(id:string):Promise<MProject> {
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("GET", `${BackEnd.M_PROJECT_PATH}/${id}`);
-  }
-
-  public updateM_Project(id:string, program_name:string, program_description:string):Promise<any> {
-        if (program_name.length < 4) {
-      throw "name >= 4 required";
+        return this.requestRestPath("GET", `${BackEnd.M_PROJECT_PATH}/${id}`);
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.M_PROJECT_PATH}/${id}`, {program_description, program_name});
-  }
+    public updateM_Project(id:string, program_name:string, program_description:string):Promise<any> {
+        if (program_name.length < 4) {
+            throw "name >= 4 required";
+        }
 
-  public deleteM_Project(id:string):Promise<any> {
+        return this.requestRestPath("PUT", `${BackEnd.M_PROJECT_PATH}/${id}`, {program_description, program_name});
+    }
+
+    public deleteM_Project(id:string):Promise<any> {
         return this.requestRestPath("DELETE", `${BackEnd.M_PROJECT_PATH}/${id}`);
-  }
-
-  public createM_Program(program_name:string, program_description:string, screen_type_id:string, m_code:string, groupId:string):Promise<any> {
-        if (program_name.length < 8 || !m_code) {
-      throw "name >= 8 and code required";
     }
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-302
-    return this.requestRestPath("POST", `${BackEnd.M_PROGRAM_PATH}/${groupId}`, {screen_type_id, program_name, program_description, m_code, height_lock: false, width_lock: false}, 201);
-  }
+    public createM_Program(program_name:string, program_description:string, screen_type_id:string, m_code:string, groupId:string):Promise<any> {
+        if (program_name.length < 8 || !m_code) {
+            throw "name >= 8 and code required";
+        }
 
-  public getM_Program(id:string):Promise<MProgram> {
+        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-302
+        return this.requestRestPath("POST", `${BackEnd.M_PROGRAM_PATH}/${groupId}`, {
+            screen_type_id,
+            program_name,
+            program_description,
+            m_code,
+            height_lock: false,
+            width_lock: false
+        }, 201);
+    }
+
+    public getM_Program(id:string):Promise<MProgram> {
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("GET", `${BackEnd.M_PROGRAM_PATH}/${id}`);
-  }
+        return this.requestRestPath("GET", `${BackEnd.M_PROGRAM_PATH}/${id}`);
+    }
 
-  public getM_Programs():Promise<MProgram[]> {
+    public getM_Programs():Promise<MProgram[]> {
         return this.requestRestPath("GET", `${BackEnd.M_PROGRAM_PATH}/app/m_programs`);
 
-  }
+    }
 
-  public updateM_Program(id:string, program_name:string, program_description:string, screen_type_id:string, m_code:string):Promise<any> {
+    public updateM_Program(id:string, program_name:string, program_description:string, screen_type_id:string, m_code:string):Promise<any> {
         if (program_name.length < 8 || !m_code) {
-      throw "name >= 8 and code required";
+            throw "name >= 8 and code required";
+        }
+
+        return this.requestRestPath("PUT", `${BackEnd.M_PROGRAM_PATH}/${id}`, {
+            screen_type_id,
+            program_name,
+            program_description,
+            m_code,
+            height_lock: false,
+            width_lock: false
+        });
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.M_PROGRAM_PATH}/${id}`, {screen_type_id, program_name, program_description, m_code, height_lock: false, width_lock: false});
-  }
-
-  public deleteM_Program(id:string):Promise<any> {
+    public deleteM_Program(id:string):Promise<any> {
         return this.requestRestPath("DELETE", `${BackEnd.M_PROGRAM_PATH}/${id}`);
-  }
-/* //tyrion verze 1.06.6.4, odebraná API pro Becki
-  public createProducer(name:string, description:string):Promise<any> {
-        if (name.length < 4 || description.length < 8) {
-      throw "name >= 4 and description >= 8 required";
     }
 
-    return this.requestRestPath("POST", BackEnd.PRODUCER_PATH, {name, description}, 201);
-  }
-*/
-  public getProducer(id:string):Promise<Producer> {
+    /* //tyrion verze 1.06.6.4, odebraná API pro Becki
+     public createProducer(name:string, description:string):Promise<any> {
+     if (name.length < 4 || description.length < 8) {
+     throw "name >= 4 and description >= 8 required";
+     }
+
+     return this.requestRestPath("POST", BackEnd.PRODUCER_PATH, {name, description}, 201);
+     }
+     */
+    public getProducer(id:string):Promise<Producer> {
         return this.requestRestPath("GET", `${BackEnd.PRODUCER_PATH}/${id}`);
-  }
+    }
 
-  public getProducers():Promise<Producer[]> {
+    public getProducers():Promise<Producer[]> {
         return this.requestRestPath("GET", `${BackEnd.PRODUCER_PATH}/all`);
-  }
-/*
-  public updateProducer(id:string, name:string, description:string):Promise<any> {
-        if (name.length < 8 || description.length < 24) {
-      throw "name >= 8 and description >= 24 required";
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.PRODUCER_PATH}/${id}`, {name, description});
-  }*/
-/*
-  public deleteProducer(id:string):Promise<any> {
-        return this.requestRestPath("DELETE", `${BackEnd.PRODUCER_PATH}/${id}`);
-  }
-*/
-  public createLibrary(library_name:string, description:string):Promise<any> {
+    /*
+     public updateProducer(id:string, name:string, description:string):Promise<any> {
+     if (name.length < 8 || description.length < 24) {
+     throw "name >= 8 and description >= 24 required";
+     }
+
+     return this.requestRestPath("PUT", `${BackEnd.PRODUCER_PATH}/${id}`, {name, description});
+     }*/
+    /*
+     public deleteProducer(id:string):Promise<any> {
+     return this.requestRestPath("DELETE", `${BackEnd.PRODUCER_PATH}/${id}`);
+     }
+     */
+    public createLibrary(library_name:string, description:string):Promise<any> {
         if (library_name.length < 8 || description.length < 8) {
-      throw "name >= 8 and description >= 8 required";
+            throw "name >= 8 and description >= 8 required";
+        }
+
+        return this.requestRestPath("POST", BackEnd.LIBRARY_PATH, {library_name, description}, 201);
     }
 
-    return this.requestRestPath("POST", BackEnd.LIBRARY_PATH, {library_name, description}, 201);
-  }
-
-  public getLibrary(id:string):Promise<Library> {
+    public getLibrary(id:string):Promise<Library> {
         return this.requestRestPath("GET", `${BackEnd.LIBRARY_PATH}/${id}`);
-  }
-
-  public getLibraries(page:number):Promise<LibrariesPage> {
-        if (page < 1) {
-      throw "page >= 1 required";
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.LIBRARY_PATH}/filter/${page}`, {});
-  }
+    public getLibraries(page:number):Promise<LibrariesPage> {
+        if (page < 1) {
+            throw "page >= 1 required";
+        }
 
-  public updateLibrary(id:string, library_name:string, description:string):Promise<any> {
+        return this.requestRestPath("PUT", `${BackEnd.LIBRARY_PATH}/filter/${page}`, {});
+    }
+
+    public updateLibrary(id:string, library_name:string, description:string):Promise<any> {
         if (library_name.length < 8 || description.length < 8) {
-      throw "name >= 8 and description >= 8 required";
+            throw "name >= 8 and description >= 8 required";
+        }
+
+        return this.requestRestPath("PUT", `${BackEnd.LIBRARY_PATH}/${id}`, {library_name, description});
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.LIBRARY_PATH}/${id}`, {library_name, description});
-  }
-
-  public addVersionToLibrary(version_name:string, version_description:string, id:string):Promise<Version> {
+    public addVersionToLibrary(version_name:string, version_description:string, id:string):Promise<Version> {
         if (version_name.length < 8 || version_description.length < 8) {
-      throw "name >= 8 and description >= 8 required";
+            throw "name >= 8 and description >= 8 required";
+        }
+
+        return this.requestRestPath("POST", `${BackEnd.LIBRARY_PATH}/version/${id}`, {
+            version_name,
+            version_description
+        }, 201);
     }
 
-    return this.requestRestPath("POST", `${BackEnd.LIBRARY_PATH}/version/${id}`, {version_name, version_description}, 201);
-  }
-
-  public updateFileOfLibrary(content:string, version:string):Promise<any> {
+    public updateFileOfLibrary(content:string, version:string):Promise<any> {
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-305
-    return this.requestRestPath("POST", `${BackEnd.LIBRARY_PATH}/upload/${version}`, content);
-  }
+        return this.requestRestPath("POST", `${BackEnd.LIBRARY_PATH}/upload/${version}`, content);
+    }
 
-  public deleteLibrary(id:string):Promise<any> {
+    public deleteLibrary(id:string):Promise<any> {
         return this.requestRestPath("DELETE", `${BackEnd.LIBRARY_PATH}/${id}`);
-  }
-
-  public createLibraryGroup(group_name:string, description:string):Promise<any> {
-        if (group_name.length < 8 || description.length < 24) {
-      throw "name >= 8 and description >= 24 required";
     }
 
-    return this.requestRestPath("POST", BackEnd.LIBRARY_GROUP_PATH, {description, group_name}, 201);
-  }
+    public createLibraryGroup(group_name:string, description:string):Promise<any> {
+        if (group_name.length < 8 || description.length < 24) {
+            throw "name >= 8 and description >= 24 required";
+        }
 
-  public getLibraryGroup(id:string):Promise<LibraryGroup> {
+        return this.requestRestPath("POST", BackEnd.LIBRARY_GROUP_PATH, {description, group_name}, 201);
+    }
+
+    public getLibraryGroup(id:string):Promise<LibraryGroup> {
         return this.requestRestPath("GET", `${BackEnd.LIBRARY_GROUP_PATH}/${id}`);
-  }
-
-  public getLibraryGroups(page:number):Promise<LibraryGroupsPage> {
-        if (page < 1) {
-      throw "page >= 1 required";
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.LIBRARY_GROUP_PATH}/filter/${page}`, {});
-  }
+    public getLibraryGroups(page:number):Promise<LibraryGroupsPage> {
+        if (page < 1) {
+            throw "page >= 1 required";
+        }
 
-  public updateLibraryGroup(id:string, group_name:string, description:string):Promise<any> {
+        return this.requestRestPath("PUT", `${BackEnd.LIBRARY_GROUP_PATH}/filter/${page}`, {});
+    }
+
+    public updateLibraryGroup(id:string, group_name:string, description:string):Promise<any> {
         if (group_name.length < 8 || description.length < 24) {
-      throw "name >= 8 and description >= 24 required";
+            throw "name >= 8 and description >= 24 required";
+        }
+
+        return this.requestRestPath("PUT", `${BackEnd.LIBRARY_GROUP_PATH}/${id}`, {description, group_name}, 200);
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.LIBRARY_GROUP_PATH}/${id}`, {description, group_name}, 200);
-  }
-
-  public deleteLibraryGroup(id:string):Promise<any> {
+    public deleteLibraryGroup(id:string):Promise<any> {
         return this.requestRestPath("DELETE", `${BackEnd.LIBRARY_GROUP_PATH}/${id}`);
-  }
-
-  /*public createProcessor(processor_name:string, processor_code:string, description:string, speed:number):Promise<any> {
-        if (processor_name.length < 4 || processor_code.length < 4 || description.length < 24 || !Number.isInteger(speed)) {
-      throw "name >= 4, code >= 4 and description >= 24 required";
     }
 
-    return this.requestRestPath("POST", BackEnd.PROCESSOR_PATH, {processor_name, description, processor_code, speed}, 201);
-  }*/
+    /*public createProcessor(processor_name:string, processor_code:string, description:string, speed:number):Promise<any> {
+     if (processor_name.length < 4 || processor_code.length < 4 || description.length < 24 || !Number.isInteger(speed)) {
+     throw "name >= 4, code >= 4 and description >= 24 required";
+     }
 
-  public getProcessor(id:string):Promise<Processor> {
+     return this.requestRestPath("POST", BackEnd.PROCESSOR_PATH, {processor_name, description, processor_code, speed}, 201);
+     }*/
+
+    public getProcessor(id:string):Promise<Processor> {
         return this.requestRestPath("GET", `${BackEnd.PROCESSOR_PATH}/${id}`);
-  }
+    }
 
-  public getProcessors():Promise<Processor[]> {
+    public getProcessors():Promise<Processor[]> {
         return this.requestRestPath("GET", BackEnd.PROCESSOR_PATH);
-  }
-/*
-  public updateProcessor(id:string, processor_name:string, processor_code:string, description:string, speed:number):Promise<any> {
-        if (processor_name.length < 4 || processor_code.length < 4 || description.length < 24 || !Number.isInteger(speed)) {
-      throw "name >= 4, code >= 4 and description >= 24 required";
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.PROCESSOR_PATH}/${id}`, {processor_name, description, processor_code, speed});
-  }
-*/
-  /*
-  public deleteProcessor(id:string):Promise<any> {
-        return this.requestRestPath("DELETE", `${BackEnd.PROCESSOR_PATH}/${id}`);
-  }
-*/
-  /*
-  public createDeviceType(name:string, producer_id:string, processor_id:string, connectible_to_internet:boolean, description:string):Promise<any> {
-        if (name.length < 8 || description.length < 10) {
-      throw "name >= 8 and description >= 10 required";
-    }
+    /*
+     public updateProcessor(id:string, processor_name:string, processor_code:string, description:string, speed:number):Promise<any> {
+     if (processor_name.length < 4 || processor_code.length < 4 || description.length < 24 || !Number.isInteger(speed)) {
+     throw "name >= 4, code >= 4 and description >= 24 required";
+     }
 
-    return this.requestRestPath("POST", BackEnd.TYPE_OF_BOARD_PATH, {name, description, producer_id, processor_id, connectible_to_internet}, 201);
-  }
-*/
+     return this.requestRestPath("PUT", `${BackEnd.PROCESSOR_PATH}/${id}`, {processor_name, description, processor_code, speed});
+     }
+     */
+    /*
+     public deleteProcessor(id:string):Promise<any> {
+     return this.requestRestPath("DELETE", `${BackEnd.PROCESSOR_PATH}/${id}`);
+     }
+     */
+    /*
+     public createDeviceType(name:string, producer_id:string, processor_id:string, connectible_to_internet:boolean, description:string):Promise<any> {
+     if (name.length < 8 || description.length < 10) {
+     throw "name >= 8 and description >= 10 required";
+     }
+
+     return this.requestRestPath("POST", BackEnd.TYPE_OF_BOARD_PATH, {name, description, producer_id, processor_id, connectible_to_internet}, 201);
+     }
+     */
 
 
-  public getTypeOfBoard(id:string):Promise<TypeOfBoard> {
+    public getTypeOfBoard(id:string):Promise<TypeOfBoard> {
         return this.requestRestPath("GET", `${BackEnd.TYPE_OF_BOARD_PATH}/${id}`);
-  }
+    }
 
-  public getAllTypeOfBoard():Promise<TypeOfBoard[]> {
+    public getAllTypeOfBoard():Promise<TypeOfBoard[]> {
         return this.requestRestPath("GET", `${BackEnd.TYPE_OF_BOARD_PATH}/all`);
-  }
-/*
-  public updateDeviceType(id:string, name:string, producer_id:string, processor_id:string, connectible_to_internet:boolean, description:string):Promise<any> {
-        if (name.length < 8 || description.length < 10) {
-      throw "name >= 8 and description >= 10 required";
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.TYPE_OF_BOARD_PATH}/${id}`, {name, description, producer_id, processor_id, connectible_to_internet});
-  }
-*/
-  /*
-  public deleteDeviceType(id:string):Promise<any> {
-        return this.requestRestPath("DELETE", `${BackEnd.TYPE_OF_BOARD_PATH}/${id}`);
-  }
+    /*
+     public updateDeviceType(id:string, name:string, producer_id:string, processor_id:string, connectible_to_internet:boolean, description:string):Promise<any> {
+     if (name.length < 8 || description.length < 10) {
+     throw "name >= 8 and description >= 10 required";
+     }
 
-*/
-  public createC_Program(program_name:string, program_description:string, type_of_board_id:string, projectId:string):Promise<CProgram> {
+     return this.requestRestPath("PUT", `${BackEnd.TYPE_OF_BOARD_PATH}/${id}`, {name, description, producer_id, processor_id, connectible_to_internet});
+     }
+     */
+    /*
+     public deleteDeviceType(id:string):Promise<any> {
+     return this.requestRestPath("DELETE", `${BackEnd.TYPE_OF_BOARD_PATH}/${id}`);
+     }
+
+     */
+    public createC_Program(program_name:string, program_description:string, type_of_board_id:string, projectId:string):Promise<CProgram> {
         if (program_name.length < 8 || !type_of_board_id) {
-      throw "name >= 8 and device type required";
+            throw "name >= 8 and device type required";
+        }
+
+        return this.requestRestPath("POST", `${BackEnd.C_PROGRAM_COMPILATION_PATH}/${projectId}`, {
+            program_name,
+            program_description,
+            type_of_board_id
+        }, 201);
     }
 
-    return this.requestRestPath("POST", `${BackEnd.C_PROGRAM_COMPILATION_PATH}/${projectId}`, {program_name, program_description, type_of_board_id}, 201);
-  }
-
-  public getC_Program(id:string):Promise<CProgram> {
+    public getC_Program(id:string):Promise<CProgram> {
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("GET", `${BackEnd.C_PROGRAM_COMPILATION_PATH}/${id}`);
-  }
-
-  public updateC_Program(id:string, program_name:string, program_description:string, type_of_board_id:string):Promise<any> {
-        if (program_name.length < 8 || !type_of_board_id) {
-      throw "name >= 8 and device type required";
+        return this.requestRestPath("GET", `${BackEnd.C_PROGRAM_COMPILATION_PATH}/${id}`);
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.C_PROGRAM_COMPILATION_PATH}/${id}`, {program_name, program_description, type_of_board_id});
-  }
+    public updateC_Program(id:string, program_name:string, program_description:string, type_of_board_id:string):Promise<any> {
+        if (program_name.length < 8 || !type_of_board_id) {
+            throw "name >= 8 and device type required";
+        }
 
-  public addVersionToC_Program(version_name:string, version_description:string, files:{[name:string]: string}, program:string):Promise<any> {
+        return this.requestRestPath("PUT", `${BackEnd.C_PROGRAM_COMPILATION_PATH}/${id}`, {
+            program_name,
+            program_description,
+            type_of_board_id
+        });
+    }
+
+    public addVersionToC_Program(version_name:string, version_description:string, files:{[name:string]:string}, program:string):Promise<any> {
         if (version_name.length < 8) {
-      throw "name >= 8 required";
+            throw "name >= 8 required";
+        }
+        let user_files = Object.keys(files).map(file_name => ({file_name, code: files[file_name]}));
+
+        return this.requestRestPath("POST", `${BackEnd.C_PROGRAM_VERSION_PATH}/create/${program}`, {
+            version_name,
+            version_description,
+            user_files
+        }, 201);
     }
-    let user_files = Object.keys(files).map(file_name => ({file_name, code: files[file_name]}));
 
-    return this.requestRestPath("POST", `${BackEnd.C_PROGRAM_VERSION_PATH}/create/${program}`, {version_name, version_description, user_files}, 201);
-  }
-
-  public buildC_Program(files:{[name:string]: string}, type_of_board_id:string):Promise<any> {
+    public buildC_Program(files:{[name:string]:string}, type_of_board_id:string):Promise<any> {
         if (!type_of_board_id) {
-      throw "target required";
+            throw "target required";
+        }
+        let user_files = Object.keys(files).map(file_name => ({file_name, code: files[file_name]}));
+
+        return this.requestRestPath("POST", `${BackEnd.C_PROGRAM_VERSION_PATH}/compile`, {
+            type_of_board_id,
+            code: " ",
+            user_files
+        });
     }
-    let user_files = Object.keys(files).map(file_name => ({file_name, code: files[file_name]}));
 
-    return this.requestRestPath("POST", `${BackEnd.C_PROGRAM_VERSION_PATH}/compile`, {type_of_board_id, code: " ", user_files});
-  }
-
-  public deleteC_Program(id:string):Promise<any> {
+    public deleteC_Program(id:string):Promise<any> {
         return this.requestRestPath("DELETE", `${BackEnd.C_PROGRAM_COMPILATION_PATH}/${id}`);
-  }
+    }
 
-  public createBoard(id:string, type_of_board_id:string):Promise<any> {
+    public createBoard(id:string, type_of_board_id:string):Promise<any> {
         if (!/^[0-9a-f]{8}$/.test(id)) {
-      throw "ID = 8 hex chars required";
+            throw "ID = 8 hex chars required";
+        }
+
+        return this.requestRestPath("POST", BackEnd.BOARD_PATH, {type_of_board_id, hardware_unique_ids: [id]}, 201);
     }
 
-    return this.requestRestPath("POST", BackEnd.BOARD_PATH, {type_of_board_id, hardware_unique_ids: [id]}, 201);
-  }
-
-  public getBoard(id:string):Promise<Board> {
+    public getBoard(id:string):Promise<Board> {
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("GET", `${BackEnd.BOARD_PATH}/${id}`);
-  }
+        return this.requestRestPath("GET", `${BackEnd.BOARD_PATH}/${id}`);
+    }
 
-  public getBoards(page:number):Promise<BoardList> {
+    public getBoards(page:number):Promise<BoardList> {
         if (page < 1) {
-      throw "page >= 1 required";
-    }
+            throw "page >= 1 required";
+        }
 
-    // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("PUT", `${BackEnd.BOARD_PATH}/filter/${page}`, {});
-  }
-
-  public addBoardToProject(device:string, project:string):Promise<any> {
-    return this.requestRestPath("PUT", `${BackEnd.BOARD_PATH}/${device}/${project}`, {});
-  }
-
-  public removeBoard(device:string):Promise<any> {
-    return this.requestRestPath("DELETE", `${BackEnd.BOARD_PATH}/${device}`);
-  }
-
-  public updateBoardWithC_Program(versionId:string, board_id:string[]):Promise<any> {
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("POST", `${BackEnd.C_PROGRAM_VERSION_PATH}/upload/${versionId}`, {board_id});
-  }
-
-  public createCompilationServer(server_name:string):Promise<any> {
-        if (server_name.length < 6) {
-      throw "name >= 6 required";
+        return this.requestRestPath("PUT", `${BackEnd.BOARD_PATH}/filter/${page}`, {});
     }
 
-    return this.requestRestPath("POST", BackEnd.EXTERNAL_SERVER_PATH,{server_name}, 201);
-  }
+    public addBoardToProject(device:string, project:string):Promise<any> {
+        return this.requestRestPath("PUT", `${BackEnd.BOARD_PATH}/${device}/${project}`, {});
+    }
 
-  public getCompilationServers():Promise<CompilationServer[]> {
+    public removeBoard(device:string):Promise<any> {
+        return this.requestRestPath("DELETE", `${BackEnd.BOARD_PATH}/${device}`);
+    }
+
+    public updateBoardWithC_Program(versionId:string, board_id:string[]):Promise<any> {
+        // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
+        return this.requestRestPath("POST", `${BackEnd.C_PROGRAM_VERSION_PATH}/upload/${versionId}`, {board_id});
+    }
+
+    public updateBoardWithC_Program(server_name:string):Promise<any> {
+        if (server_name.length < 6) {
+            throw "name >= 6 required";
+        }
+
+        return this.requestRestPath("POST", BackEnd.EXTERNAL_SERVER_PATH, {server_name}, 201);
+    }
+
+    public getCompilationServers():Promise<CompilationServer[]> {
         return this.requestRestPath("GET", BackEnd.EXTERNAL_SERVER_PATH);
-  }
+    }
 
-  public editCompilationServer(id:string,server_name:string):Promise<any> {
+    public editCompilationServer(id:string, server_name:string):Promise<any> {
         if (server_name.length < 6) {
-      throw "name >= 6 required";
+            throw "name >= 6 required";
+        }
+
+        return this.requestRestPath("PUT", `${BackEnd.EXTERNAL_SERVER_PATH}/${id}`, {server_name});
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.EXTERNAL_SERVER_PATH}/${id}`,{server_name});
-  }
-
-  public deleteCompilationServer(id:string):Promise<any> {
+    public deleteCompilationServer(id:string):Promise<any> {
         return this.requestRestPath("DELETE", `${BackEnd.EXTERNAL_SERVER_PATH}/${id}`);
-  }
+    }
 
-  public getTypeOfBlock(id:string):Promise<TypeOfBlock> {
+    public getTypeOfBlock(id:string):Promise<TypeOfBlock> {
         return this.requestRestPath("GET", `${BackEnd.TYPE_OF_BLOCK_PATH}/${id}`);
-  }
+    }
 
-  public createTypeOfBlock(name:string,general_description:string,project_id:string):Promise<TypeOfBlock>{
-        return this.requestRestPath("POST", `${BackEnd.TYPE_OF_BLOCK_PATH}`, {name, general_description,project_id}, 201);
+    public createTypeOfBlock(name:string, general_description:string, project_id:string):Promise<TypeOfBlock> {
+        return this.requestRestPath("POST", `${BackEnd.TYPE_OF_BLOCK_PATH}`, {
+            name,
+            general_description,
+            project_id
+        }, 201);
 
-  }
+    }
 
-  public getAllTypeOfBlock():Promise<TypeOfBlock[]> {
+    public getAllTypeOfBlock():Promise<TypeOfBlock[]> {
         return this.requestRestPath("GET", BackEnd.TYPE_OF_BLOCK_PATH);
-  }
-  
-  public updateTypeOfBlock(id:string,name:string,general_description:string,project_id:string):Promise<any>{
-        
-    return this.requestRestPath("PUT", `${BackEnd.TYPE_OF_BLOCK_PATH}/${id}`, {name, general_description,project_id});
-
-
-  }
-
-  public removeTypeOfBlock(TypeOfBlockid:string):Promise<any> {
-    return this.requestRestPath("DELETE", `${BackEnd.TYPE_OF_BLOCK_PATH}/${TypeOfBlockid}`,{});
-  }
-  
-  public createBlockoBlock(name:string, type_of_block_id:string, general_description:string):Promise<BlockoBlock> {
-        if (name.length < 8 || general_description.length < 24) {
-      throw "name >= 8 and description >= 24 required";
     }
 
-    return this.requestRestPath("POST", BackEnd.BLOCKOBLOCK_PATH, {general_description, name, type_of_block_id}, 201);
-  }
+    public updateTypeOfBlock(id:string, name:string, general_description:string, project_id:string):Promise<any> {
 
-  public getBlockoBlock(id:string):Promise<BlockoBlock> {
+        return this.requestRestPath("PUT", `${BackEnd.TYPE_OF_BLOCK_PATH}/${id}`, {
+            name,
+            general_description,
+            project_id
+        });
+
+
+    }
+
+    public removeTypeOfBlock(TypeOfBlockid:string):Promise<any> {
+        return this.requestRestPath("DELETE", `${BackEnd.TYPE_OF_BLOCK_PATH}/${TypeOfBlockid}`, {});
+    }
+
+    public createBlockoBlock(name:string, type_of_block_id:string, general_description:string):Promise<BlockoBlock> {
+        if (name.length < 8 || general_description.length < 24) {
+            throw "name >= 8 and description >= 24 required";
+        }
+
+        return this.requestRestPath("POST", BackEnd.BLOCKOBLOCK_PATH, {
+            general_description,
+            name,
+            type_of_block_id
+        }, 201);
+    }
+
+    public getBlockoBlock(id:string):Promise<BlockoBlock> {
         // TODO: http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("GET", `${BackEnd.BLOCKOBLOCK_PATH}/${id}`);
-  }
+        return this.requestRestPath("GET", `${BackEnd.BLOCKOBLOCK_PATH}/${id}`);
+    }
 
-  public updateBlockoBlock(id:string, name:string, general_description:string, type_of_block_id:string):Promise<any> {
+    public updateBlockoBlock(id:string, name:string, general_description:string, type_of_block_id:string):Promise<any> {
         if (name.length < 8 || general_description.length < 24) {
-      throw "name >= 8 and description >= 24 required";
+            throw "name >= 8 and description >= 24 required";
+        }
+
+        return this.requestRestPath("PUT", `${BackEnd.BLOCKOBLOCK_PATH}/${id}`, {
+            general_description,
+            name,
+            type_of_block_id
+        });
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.BLOCKOBLOCK_PATH}/${id}`, {general_description, name, type_of_block_id});
-  }
-
-  public addVersionToBlockoBlock(version_name:string, version_description:string, logic_json:string, program:string):Promise<any> {
+    public addVersionToBlockoBlock(version_name:string, version_description:string, logic_json:string, program:string):Promise<any> {
         if (!version_name || !version_description || !logic_json) {
-      throw "name, description and code required";
+            throw "name, description and code required";
+        }
+
+        return this.requestRestPath("POST", `${BackEnd.BLOCKOBLOCK_PATH}/version/${program}`, {
+            version_name,
+            version_description,
+            design_json: "-",
+            logic_json
+        }, 201);
     }
 
-    return this.requestRestPath("POST", `${BackEnd.BLOCKOBLOCK_PATH}/version/${program}`, {version_name, version_description, design_json: "-", logic_json}, 201);
-  }
-
-  public deleteBlockoBlock(id:string):Promise<any> {
+    public deleteBlockoBlock(id:string):Promise<any> {
         return this.requestRestPath("DELETE", `${BackEnd.BLOCKOBLOCK_PATH}/${id}`);
-  }
-
-  public createB_Program(name:string, program_description:string, projectId:string):Promise<InteractionsScheme> {
-        if (name.length < 8) {
-      throw "name >= 8 required";
     }
 
-    return this.requestRestPath("POST", `${BackEnd.B_PROGRAM_PATH}/${projectId}`, {program_description, name}, 201);
-  }
+    public createB_Program(name:string, program_description:string, projectId:string):Promise<InteractionsScheme> {
+        if (name.length < 8) {
+            throw "name >= 8 required";
+        }
 
-  public getB_Program(id:string):Promise<InteractionsScheme> {
+        return this.requestRestPath("POST", `${BackEnd.B_PROGRAM_PATH}/${projectId}`, {program_description, name}, 201);
+    }
+
+    public getB_Program(id:string):Promise<InteractionsScheme> {
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("GET", `${BackEnd.B_PROGRAM_PATH}/${id}`);
-  }
+        return this.requestRestPath("GET", `${BackEnd.B_PROGRAM_PATH}/${id}`);
+    }
 
-  public  subscribeB_Program/*subscribeInteractionsScheme*/(version_id:string):void {
+    public  subscribeB_Program/*subscribeB_Program*/(version_id:string):void {
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-262
-    let message = {messageId: uuid.v4(), messageChannel: BackEnd.WS_CHANNEL, messageType: "subscribe_instace", version_id};
-    if (!this.findEnqueuedWebSocketMessage(message, 'messageChannel', 'messageType', 'version_id')) {
-      this.sendWebSocketMessage(message);
+        let message = {
+            messageId: uuid.v4(),
+            messageChannel: BackEnd.WS_CHANNEL,
+            messageType: "subscribe_instace",
+            version_id
+        };
+        if (!this.findEnqueuedWebSocketMessage(message, 'messageChannel', 'messageType', 'version_id')) {
+            this.sendWebSocketMessage(message);
+        }
     }
-  }
 
-  public requestB_ProgramValues/*requestInteractionsSchemeValues*/(version_id:string):void {
+    public requestB_ProgramValues/*requestInteractionsSchemeValues*/(version_id:string):void {
         let message = {messageId: uuid.v4(), messageChannel: BackEnd.WS_CHANNEL, messageType: "getValues", version_id};
-    if (!this.findEnqueuedWebSocketMessage(message, 'messageChannel', 'messageType', 'version_id')) {
-      this.sendWebSocketMessage(message);
+        if (!this.findEnqueuedWebSocketMessage(message, 'messageChannel', 'messageType', 'version_id')) {
+            this.sendWebSocketMessage(message);
+        }
     }
-  }
 
-  public updateB_Program(id:string, name:string, program_description:string):Promise<any> {
+    public updateB_Program(id:string, name:string, program_description:string):Promise<any> {
         if (name.length < 8) {
-      throw "name >= 8 required";
+            throw "name >= 8 required";
+        }
+
+        return this.requestRestPath("PUT", `${BackEnd.B_PROGRAM_PATH}/${id}`, {program_description, name});
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.B_PROGRAM_PATH}/${id}`, {program_description, name});
-  }
-
-  public addMProjectConnection(group:string, version:string, autoupdate:boolean):Promise<any> {
+    public addMProjectConnection(group:string, version:string, autoupdate:boolean):Promise<any> {
         return this.requestRestPath("PUT", `${BackEnd.M_PROJECT_PATH}/connect/${group}/${version}/${autoupdate}`, {});
-  }
+    }
 
-  public addVersionToB_Program(version_name:string, version_description:string, program:string, boards:{board_id:string, c_program_version_id:string}[], main_board:{board_id:string, c_program_version_id:string}, programId:string):Promise<BProgramVersion> {
+    public addVersionToB_Program(version_name:string, version_description:string, program:string, boards:{board_id:string, c_program_version_id:string}[], main_board:{board_id:string, c_program_version_id:string}, programId:string):Promise<BProgramVersion> {
         if (!version_name || !program || !main_board) {
-      throw "name, scheme and gateway required";
+            throw "name, scheme and gateway required";
+        }
+
+        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-284
+        return this.requestRestPath("PUT", `${BackEnd.B_PROGRAM_PATH}/update/${programId}`, {
+            version_name,
+            version_description,
+            program,
+            main_board,
+            boards
+        });
     }
 
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-284
-    return this.requestRestPath("PUT", `${BackEnd.B_PROGRAM_PATH}/update/${programId}`, {version_name, version_description, program, main_board, boards});
-  }
-
-  public deleteB_Program(id:string):Promise<any> {
+    public deleteB_Program(id:string):Promise<any> {
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-185
-    return this.requestRestPath("DELETE", `${BackEnd.B_PROGRAM_PATH}/${id}`);
-  }
+        return this.requestRestPath("DELETE", `${BackEnd.B_PROGRAM_PATH}/${id}`);
+    }
 
-  public createHomer(mac_address:string, type_of_device:string, project_id?:string):Promise<any> {
+    public createHomer(mac_address:string, type_of_device:string, project_id?:string):Promise<any> {
         if (!mac_address) {
-      throw "ID required";
+            throw "ID required";
+        }
+
+        return this.requestRestPath("POST", BackEnd.HOMER_PATH, {mac_address, type_of_device, project_id}, 201);
     }
 
-    return this.requestRestPath("POST", BackEnd.HOMER_PATH, {mac_address, type_of_device, project_id}, 201);
-  }
-
-  public getHomer(id:string):Promise<InteractionsModerator> {
+    public getHomer(id:string):Promise<InteractionsModerator> {
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("GET", `${BackEnd.HOMER_PATH}/${id}`);
-  }
+        return this.requestRestPath("GET", `${BackEnd.HOMER_PATH}/${id}`);
+    }
 
-  public uploadB_ProgramToHomer(versionId:string, HomerId:string, B_ProgramId:string):Promise<any> {
+    public uploadB_ProgramToHomer(versionId:string, HomerId:string, B_ProgramId:string):Promise<any> {
         return this.requestRestPath("PUT", `${BackEnd.B_PROGRAM_PATH}/uploadToHomer/${B_ProgramId}/${versionId}/${HomerId}`, {});
-  }
+    }
 
-  public deleteHomer(id:string):Promise<any> {
+    public deleteHomer(id:string):Promise<any> {
         return this.requestRestPath("DELETE", `${BackEnd.HOMER_PATH}/${id}`);
-  }
-
-  public createCloudHomerServer(server_name:string):Promise<any> {
-        if (!server_name) {
-      throw "name required";
     }
-    // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-281
-    return this.requestRestPath("POST", BackEnd.CLOUD_HOMER_SERVER_PATH,{server_name}, 201);
-  }
 
-  public getCloudHomerServers():Promise<CloudHomerServer[]>{
+    public createCloudHomerServer(server_name:string):Promise<any> {
+        if (!server_name) {
+            throw "name required";
+        }
+        // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-281
+        return this.requestRestPath("POST", BackEnd.CLOUD_HOMER_SERVER_PATH, {server_name}, 201);
+    }
+
+    public getCloudHomerServers():Promise<CloudHomerServer[]> {
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath("GET", BackEnd.CLOUD_HOMER_SERVER_PATH);
-  }
-
-  public editCloudHomerServer(id:string,server_name:string):Promise<any> {
-        if (!server_name) {
-      throw "name required";
+        return this.requestRestPath("GET", BackEnd.CLOUD_HOMER_SERVER_PATH);
     }
 
-    return this.requestRestPath("PUT", `${BackEnd.CLOUD_HOMER_SERVER_PATH}/${id}`,{server_name});
-  }
+    public editCloudHomerServer(id:string, server_name:string):Promise<any> {
+        if (!server_name) {
+            throw "name required";
+        }
 
-  public deleteCloudHomerServer(id:string):Promise<any> {
+        return this.requestRestPath("PUT", `${BackEnd.CLOUD_HOMER_SERVER_PATH}/${id}`, {server_name});
+    }
+
+    public deleteCloudHomerServer(id:string):Promise<any> {
         return this.requestRestPath("DELETE", `${BackEnd.CLOUD_HOMER_SERVER_PATH}/${id}`);
-  }
-
-  public getUserTarif():Promise<ApplicableProduct[]>{ // tyrion Verze 1.06.6.4
-    return this.requestRestPath("GET", `${BackEnd.TARIF_PATH}/user_applicable$`);
-  }
-
-  public getRegistrationTarif(tariff_type:string,product_individual_name:string,payment_mode:string,currency_type:string,city:string,country:string,street_number:string,company_details_required:boolean,street:string,zip_code:string, registration_no : string,vat_number : string,company_name : string,company_authorized_email: string,company_authorized_phone: string,company_web: string,company_invoice_email: string,payment_method: string):Promise<UserTariff>{// tyrion Verze 1.06.6.4 //zařizuje a posílá becki nějaké informace o platbě Tyrionovi? všechny?
-  if(!company_details_required) { //podle toho jestli jsou potřeba compady details, pokud ne, jedná se o zákazníka thus tato zkrácená volba
-    return this.requestRestPath("GET", `${BackEnd.TARIF_PATH}/for_registration$`, {
-      tariff_type,
-      product_individual_name,
-      payment_mode,
-      currency_type,
-      city,
-      country,
-      street_number,
-      street,
-      zip_code
-    });// tyrion Verze 1.06.6.4 //zařizuje a posílá becki nějaké informace o platbě Tyrionovi? všechny?
-  }else {
-    return this.requestRestPath("GET", `${BackEnd.TARIF_PATH}/for_registration$`, {
-      tariff_type,
-      product_individual_name,
-      currency_type,
-      city,
-      country,
-      street_number,
-      street,
-      zip_code,
-      registration_no,
-      vat_number,
-      company_name,
-      company_authorized_email,
-      company_authorized_phone,
-      company_web,
-      company_invoice_email,
-      payment_mode,
-      payment_method
-    });
-  }
-  }
-
-  public createProject(project_name:string, project_description:string,product_id:string):Promise<Project> {
-        if (project_name.length < 8 || project_description.length < 24) {
-      throw "name >= 8 and description >= 24 required";
     }
 
-    return this.requestRestPath("POST", BackEnd.PROJECT_PATH, {project_name, project_description,product_id}, 201);
-  }
+    public getUserTarif():Promise<ApplicableProduct[]> { // tyrion Verze 1.06.6.4
+        return this.requestRestPath("GET", `${BackEnd.TARIF_PATH}/user_applicable$`);
+    }
 
-  public createDefaultProject():Promise<Project> {
-        return this.createProject("Default project", "An automatically created project. It can be edited or removed like any other project.","1");
-  }
+    public getRegistrationTarif(tariff_type:string, product_individual_name:string, payment_mode:string, currency_type:string, city:string, country:string, street_number:string, company_details_required:boolean, street:string, zip_code:string, registration_no:string, vat_number:string, company_name:string, company_authorized_email:string, company_authorized_phone:string, company_web:string, company_invoice_email:string, payment_method:string):Promise<UserTariff> {// tyrion Verze 1.06.6.4 //zařizuje a posílá becki nějaké informace o platbě Tyrionovi? všechny?
+        if (!company_details_required) { //podle toho jestli jsou potřeba compady details, pokud ne, jedná se o zákazníka thus tato zkrácená volba
+            return this.requestRestPath("GET", `${BackEnd.TARIF_PATH}/for_registration$`, {
+                tariff_type,
+                product_individual_name,
+                payment_mode,
+                currency_type,
+                city,
+                country,
+                street_number,
+                street,
+                zip_code
+            });// tyrion Verze 1.06.6.4 //zařizuje a posílá becki nějaké informace o platbě Tyrionovi? všechny?
+        } else {
+            return this.requestRestPath("GET", `${BackEnd.TARIF_PATH}/for_registration$`, {
+                tariff_type,
+                product_individual_name,
+                currency_type,
+                city,
+                country,
+                street_number,
+                street,
+                zip_code,
+                registration_no,
+                vat_number,
+                company_name,
+                company_authorized_email,
+                company_authorized_phone,
+                company_web,
+                company_invoice_email,
+                payment_mode,
+                payment_method
+            });
+        }
+    }
 
-  public getProject(id:string):Promise<Project> {
+    public createProject(project_name:string, project_description:string, product_id:string):Promise<Project> {
+        if (project_name.length < 8 || project_description.length < 24) {
+            throw "name >= 8 and description >= 24 required";
+        }
+
+        return this.requestRestPath("POST", BackEnd.PROJECT_PATH, {project_name, project_description, product_id}, 201);
+    }
+
+    public createDefaultProject():Promise<Project> {
+        return this.createProject("Default project", "An automatically created project. It can be edited or removed like any other project.", "1");
+    }
+
+    public getProject(id:string):Promise<Project> {
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return this.requestRestPath<Project>("GET", `${BackEnd.PROJECT_PATH}/${id}`);
-  }
-
-  public getProjects():Promise<Project[]> {
-        return this.requestRestPath("GET", BackEnd.PROJECT_PATH);
-  }
-
-  public updateProject(id:string, project_name:string, project_description:string):Promise<any> {
-        if (project_name.length < 8 || project_description.length < 24) {
-      throw "name >= 8 and description >= 24 required";
+        return this.requestRestPath<Project>("GET", `${BackEnd.PROJECT_PATH}/${id}`);
     }
 
-    return this.requestRestPath<Project>("PUT", `${BackEnd.PROJECT_PATH}/${id}`, {project_name, project_description});
-  }
+    public getProjects():Promise<Project[]> {
+        return this.requestRestPath("GET", BackEnd.PROJECT_PATH);
+    }
 
-  public removeHomerFromProject(homer:string, project:string):Promise<any> {
+    public updateProject(id:string, project_name:string, project_description:string):Promise<any> {
+        if (project_name.length < 8 || project_description.length < 24) {
+            throw "name >= 8 and description >= 24 required";
+        }
+
+        return this.requestRestPath<Project>("PUT", `${BackEnd.PROJECT_PATH}/${id}`, {
+            project_name,
+            project_description
+        });
+    }
+
+    public removeHomerFromProject(homer:string, project:string):Promise<any> {
         return this.requestRestPath("DELETE", `${BackEnd.HOMER_PATH}/${project}/${homer}`);
-  }
+    }
 
-  public addCollaboratorToProject(collaborator:string, project:string):Promise<any> {
+    public addCollaboratorToProject(collaborator:string, project:string):Promise<any> {
         return this.requestRestPath("PUT", `${BackEnd.PROJECT_PATH}/shareProject/${project}`, {persons_id: [collaborator]});
-  }
+    }
 
-  public removeCollaboratorsFromProject(persons_id:string[], project:string):Promise<any> {
+    public removeCollaboratorsFromProject(persons_id:string[], project:string):Promise<any> {
         return this.requestRestPath("PUT", `${BackEnd.PROJECT_PATH}/unshareProject/${project}`, {persons_id});
-  }
+    }
 
-  public deleteProject(id:string):Promise<any> {
+    public deleteProject(id:string):Promise<any> {
         return this.requestRestPath("DELETE", `${BackEnd.PROJECT_PATH}/${id}`);
-  }
+    }
 
-  public getPersonInfo():Promise<PersonBundle>{
-    return this.requestRestPath<PersonBundle>("GET", BackEnd.LOGIN_PERSON_PATH);
-  }
+    public getPersonInfo():Promise<PersonBundle> {
+        return this.requestRestPath<PersonBundle>("GET", BackEnd.LOGIN_PERSON_PATH);
+    }
 
-  public updatePersonInfo(id:string,nick:string,name:string,ftitle:string,ltitle:string){
-    return this.requestRestPath("PUT", `${BackEnd.PERSON_PATH}/${id}`, {nick_name:nick,full_name:name,first_title:ftitle,last_title:ltitle});
-  }
+    public updatePersonInfo(id:string, nick:string, name:string, ftitle:string, ltitle:string) {
+        return this.requestRestPath("PUT", `${BackEnd.PERSON_PATH}/${id}`, {
+            nick_name: nick,
+            full_name: name,
+            first_title: ftitle,
+            last_title: ltitle
+        });
+    }
 
-  public getActualizationProcedureInfo(actualization_procedure_id:string):Promise<ActualizationProcedure> {
+    public getActualizationProcedureInfo(actualization_procedure_id:string):Promise<ActualizationProcedure> {
         return this.requestRestPath<ActualizationProcedure>("GET", `${BackEnd.ACTUALIZATION_PROCEDURE_PATH}/${actualization_procedure_id}`);
-  }
+    }
 
 }

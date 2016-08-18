@@ -145,9 +145,9 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
           return Promise.all<any>([
             project,
             Promise.all(project.owners_id.map(id => this.backEnd.getUser(id))),
-            Promise.all(project.c_programs_id.map(id => this.backEnd.getDeviceProgram(id))),
-            Promise.all(project.b_programs_id.map(id => this.backEnd.getInteractionsScheme(id))),
-            Promise.all(project.m_projects_id.map(id => this.backEnd.getApplicationGroup(id)))
+            Promise.all(project.c_programs_id.map(id => this.backEnd.getC_Program(id))),
+            Promise.all(project.b_programs_id.map(id => this.backEnd.getB_Program(id))),
+            Promise.all(project.m_projects_id.map(id => this.backEnd.getM_Project(id)))
           ]);
         })
         .then(result => {
@@ -180,7 +180,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
   onRemoveDevicesClick(id:string):void{
     "use strict";
     this.notifications.shift();
-    this.backEnd.deleteDeviceProgram(id)
+    this.backEnd.deleteC_Program(id)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The c_program has been removed."));
           this.refresh();
@@ -193,7 +193,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
   onRemoveSchemesClick(id:string):void{
     "use strict";
     this.notifications.shift();
-    this.backEnd.deleteInteractionsScheme(id)
+    this.backEnd.deleteB_Program(id)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The b_program has been removed."));
           this.refresh();
@@ -206,7 +206,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
   onRemoveApplicationsClick(id:string):void{
     "use strict";
     this.notifications.shift();
-    this.backEnd.deleteApplicationGroup(id)
+    this.backEnd.deleteM_Project(id)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The M_project has been removed."));
           this.refresh();

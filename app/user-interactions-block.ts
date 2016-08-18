@@ -87,7 +87,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
     this.editing = false;
     // TODO: http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    this.backEnd.getInteractionsBlock(this.id)
+    this.backEnd.getBlockoBlock(this.id)
         .then(block => {
           this.name = block.name;
           this.breadcrumbs.push(new libBeckiLayout.LabeledLink(block.name, ["/user/interactions/blocks", this.id]));
@@ -112,14 +112,14 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getInteractionsBlockGroups().then(groups => ![].concat(...groups.map(group => group.blockoBlocks)).find(block => block.id != this.id && block.name == this.nameField));
+    return () => this.backEnd.getAllTypeOfBlock().then(groups => ![].concat(...groups.map(group => group.blockoBlocks)).find(block => block.id != this.id && block.name == this.nameField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.updateInteractionsBlock(this.id, this.nameField, this.descriptionField, this.groupField)
+    this.backEnd.updateBlockoBlock(this.id, this.nameField, this.descriptionField, this.groupField)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The block has been updated."));
           this.refresh();

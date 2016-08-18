@@ -52,7 +52,7 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.getDeviceTypes()
+    this.backEnd.getAllTypeOfBoard()
         .then(types => this.types = types.filter(type => type.register_new_device_permission))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Board types cannot be loaded.", reason)));
   }
@@ -62,8 +62,8 @@ export class Component implements ngCore.OnInit {
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return () => this.backEnd.getDevices(1)
-        .then(page => Promise.all<libBackEnd.BoardList>(page.pages.map(number => this.backEnd.getDevices(number))))
+    return () => this.backEnd.getBoards(1)
+        .then(page => Promise.all<libBackEnd.BoardList>(page.pages.map(number => this.backEnd.getBoards(number))))
         .then(pages => ![].concat(...pages.map(page => page.content)).find(device => device.id == this.idField));
   }
 
@@ -71,7 +71,7 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.createDevice(this.idField, this.typeField)
+    this.backEnd.createBoard(this.idField, this.typeField)
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The device has been created."));
           this.router.navigate(["/system"]);

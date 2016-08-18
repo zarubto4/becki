@@ -59,11 +59,11 @@ export class Component implements ngCore.OnInit {
   refresh():void {
     "use strict";
 
-    this.backEnd.getApplications()
+    this.backEnd.getM_Programs()
         .then(applications => this.applications = applications.map(application => new libPatternFlyListView.Item(application.id, application.program_name, application.program_description, ["/user/applications", application.id], application.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Applications cannot be loaded.", reason)));
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    this.backEnd.getApplicationDevices()
+    this.backEnd.getScreenTypes()
         .then(devices => this.devices = [].concat(
             devices.public_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "global", ["/application/devices", device.id], device.delete_permission)),
             devices.private_types.map(device => new libPatternFlyListView.Item(device.id, device.name, "project specific", ["/application/devices", device.id], device.delete_permission))
@@ -73,7 +73,7 @@ export class Component implements ngCore.OnInit {
         });
     this.backEnd.getProjects()
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-        .then(projects => Promise.all<libBackEnd.MProject>([].concat(...projects.map(project => project.m_projects_id)).map(id => this.backEnd.getApplicationGroup(id))))
+        .then(projects => Promise.all<libBackEnd.MProject>([].concat(...projects.map(project => project.m_projects_id)).map(id => this.backEnd.getM_Project(id))))
         .then(groups => this.groups = groups.map(group => new libPatternFlyListView.Item(group.id, group.program_name, group.program_description, ["/user/application/groups", group.id], group.delete_permission)))
         .catch(reason => this.notifications.current.push(new libBeckiNotifications.Danger("Groups cannot be loaded.", reason)));
   }
@@ -122,7 +122,7 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.deleteApplication(id)
+    this.backEnd.deleteM_Program(id)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The application has been removed."));
           this.refresh();
@@ -136,7 +136,7 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.deleteApplicationDevice(id)
+    this.backEnd.deleteScreenType(id)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The device has been removed."));
           this.refresh();
@@ -150,7 +150,7 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.deleteApplicationGroup(id)
+    this.backEnd.deleteM_Project(id)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The group has been removed."));
           this.refresh();
