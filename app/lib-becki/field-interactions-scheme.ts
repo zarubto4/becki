@@ -77,7 +77,7 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
         this.backEnd.requestInteractionsSchemeValues(this.spy);
       }
     });
-    this.backEnd.interactionsSchemeValuesReceived.subscribe(values => {
+    this.backEnd.BProgramValuesReceived.subscribe(values => {
       if (this.spy) {
         Object.keys(values.digital).forEach(hwId => {
           this.fieldController.setDigitalValue(hwId, values.digital[hwId]);
@@ -96,22 +96,22 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
         });
       }
     });
-    this.backEnd.interactionsSchemeAnalogValueReceived.subscribe(value => {
+    this.backEnd.BProgramAnalogValueReceived.subscribe(value => {
       if (this.spy) {
         this.fieldController.setAnalogValue(value.hwId, value.value);
       }
     });
-    this.backEnd.interactionsSchemeDigitalValueReceived.subscribe(value => {
+    this.backEnd.BProgramDigitalValueReceived.subscribe(value => {
       if (this.spy) {
         this.fieldController.setDigitalValue(value.hwId, value.value);
       }
     });
-    this.backEnd.interactionsSchemeInputConnectorValueReceived.subscribe(value => {
+    this.backEnd.BProgramInputConnectorValueReceived.subscribe(value => {
       if (this.spy) {
         this.fieldController.setInputConnectorValue(value.blockId, value.connectorName, value.value);
       }
     });
-    this.backEnd.interactionsSchemeOutputConnectorValueReceived.subscribe(value => {
+    this.backEnd.BProgramOutputConnectorValueReceived.subscribe(value => {
       if (this.spy) {
         this.fieldController.setOutputConnectorValue(value.blockId, value.connectorName, value.value);
       }
@@ -163,7 +163,7 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-262
     this.notifications.current.push(new notifications.Danger("issue/TYRION-262"));
-    this.backEnd.subscribeB_Program(spy);
+    this.backEnd.subscribeBProgram(spy);
   }
 
   unsubscribeSpy(spy:string):void {

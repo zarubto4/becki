@@ -45,7 +45,7 @@ export class Component implements ngCore.OnInit {
 
   blocks:libPatternFlyListView.Item[];
 
-  uploadSchemes:libBackEnd.InteractionsScheme[];
+  uploadSchemes:libBackEnd.BProgram[];
 
   BlockGroups:libPatternFlyListView.Item[];
 
@@ -93,14 +93,14 @@ export class Component implements ngCore.OnInit {
         .then(projects => {
           return Promise.all<any>([
             // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-            Promise.all([].concat(...projects.map(project => project.b_programs_id)).map(id => this.backEnd.getB_Program(id))),
+            Promise.all([].concat(...projects.map(project => project.b_programs_id)).map(id => this.backEnd.getBProgram(id))),
             Promise.all([].concat(...projects.map(project => project.type_of_blocks_id)).map(id => this.backEnd.getTypeOfBlock(id))),
             // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
             Promise.all([].concat(...projects.map(project => project.homers_id.map(id => [id, project]))).map(pair => Promise.all<any>([this.backEnd.getHomer(pair[0]), pair[1]])))
           ]);
         })
         .then(result => {
-          let schemes:libBackEnd.InteractionsScheme[];
+          let schemes:libBackEnd.BProgram[];
           let groups:libBackEnd.TypeOfBlock[];
           let moderators:[libBackEnd.InteractionsModerator, libBackEnd.Project][];
           [schemes, groups, moderators] = result;
@@ -172,7 +172,7 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.deleteB_Program(id)
+    this.backEnd.deleteBProgram(id)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The scheme has been removed."));
           this.refresh();
@@ -221,7 +221,7 @@ export class Component implements ngCore.OnInit {
     }
 
     this.notifications.shift();
-    Promise.all(moderators.map(id => this.backEnd.uploadB_ProgramToHomer(this.uploadVersionField, id, this.uploadSchemeField)))
+    Promise.all(moderators.map(id => this.backEnd.uploadBProgramToHomer(this.uploadVersionField, id, this.uploadSchemeField)))
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The scheme has been uploaded."));
           this.refresh();
@@ -236,7 +236,7 @@ export class Component implements ngCore.OnInit {
 
     this.notifications.shift();
     let moderator = this.BlockGroups.find(moderator => moderator.id == id);
-    this.backEnd.removeTypeOfBlock(moderator.id)
+    this.backEnd.deleteTypeOfBlock(moderator.id)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The Block Group has been removed."));
           this.refresh();

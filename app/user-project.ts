@@ -145,16 +145,16 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
           return Promise.all<any>([
             project,
             Promise.all(project.owners_id.map(id => this.backEnd.getUser(id))),
-            Promise.all(project.c_programs_id.map(id => this.backEnd.getC_Program(id))),
-            Promise.all(project.b_programs_id.map(id => this.backEnd.getB_Program(id))),
-            Promise.all(project.m_projects_id.map(id => this.backEnd.getM_Project(id)))
+            Promise.all(project.c_programs_id.map(id => this.backEnd.getCProgram(id))),
+            Promise.all(project.b_programs_id.map(id => this.backEnd.getBProgram(id))),
+            Promise.all(project.m_projects_id.map(id => this.backEnd.getMProject(id)))
           ]);
         })
         .then(result => {
           let project:libBackEnd.Project;
           let collaborators:libBackEnd.User[];
           let Devices:libBackEnd.CProgram[];
-          let Schemes:libBackEnd.InteractionsScheme[];
+          let Schemes:libBackEnd.BProgram[];
           let Applications:libBackEnd.MProgram[];
           [project, collaborators,Devices,Schemes,Applications] = result;
           this.name = project.project_name;
@@ -180,7 +180,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
   onRemoveDevicesClick(id:string):void{
     "use strict";
     this.notifications.shift();
-    this.backEnd.deleteC_Program(id)
+    this.backEnd.deleteCProgram(id)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The c_program has been removed."));
           this.refresh();
@@ -193,7 +193,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
   onRemoveSchemesClick(id:string):void{
     "use strict";
     this.notifications.shift();
-    this.backEnd.deleteB_Program(id)
+    this.backEnd.deleteBProgram(id)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The b_program has been removed."));
           this.refresh();
@@ -206,7 +206,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
   onRemoveApplicationsClick(id:string):void{
     "use strict";
     this.notifications.shift();
-    this.backEnd.deleteM_Project(id)
+    this.backEnd.deleteMProject(id)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The M_project has been removed."));
           this.refresh();

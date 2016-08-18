@@ -110,13 +110,13 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
     this.editing = false;
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    this.backEnd.getM_Program(this.id)
+    this.backEnd.getMProgram(this.id)
         .then(application => {
           return Promise.all<any>([
             application,
             this.backEnd.getProjects(),
             // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-            this.backEnd.getM_Project(application.m_project_id),
+            this.backEnd.getMProject(application.m_project_id),
             // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
             this.backEnd.getScreenType(application.screen_size_type_id)
           ]);
@@ -158,14 +158,14 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getM_Programs().then(applications => !applications.find(application => application.id != this.id && application.program_name == this.nameField));
+    return () => this.backEnd.getMPrograms().then(applications => !applications.find(application => application.id != this.id && application.program_name == this.nameField));
   }
 
   onSubmit():void {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.updateM_Program(this.id, this.nameField, this.descriptionField, this.device.id, this.codeField)
+    this.backEnd.updateMProgram(this.id, this.nameField, this.descriptionField, this.device.id, this.codeField)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The application has been updated."));
           this.refresh();

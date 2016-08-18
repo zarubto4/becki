@@ -100,7 +100,7 @@ export class Component implements ngCore.OnInit {
         .then(projects => {
           return Promise.all<any>([
             // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-            Promise.all([].concat(...projects.map(project => project.c_programs_id)).map(id => this.backEnd.getC_Program(id))),
+            Promise.all([].concat(...projects.map(project => project.c_programs_id)).map(id => this.backEnd.getCProgram(id))),
             // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
             Promise.all([].concat(...projects.map(project => project.boards_id.map(id => [id, project]))).map(pair => Promise.all<any>([this.backEnd.getBoard(pair[0]), pair[1]])))
           ]);
@@ -154,7 +154,7 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.deleteC_Program(id)
+    this.backEnd.deleteCProgram(id)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The program has been removed."));
           this.refresh();

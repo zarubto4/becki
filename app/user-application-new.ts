@@ -133,7 +133,7 @@ export class Component implements ngCore.OnInit {
           .then(project => {
             return Promise.all<any>([
               // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-              Promise.all(project.m_projects_id.map(id => this.backEnd.getM_Project(id))),
+              Promise.all(project.m_projects_id.map(id => this.backEnd.getMProject(id))),
               // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
               Promise.all(project.screen_size_types_id.map(id => this.backEnd.getScreenType(id)))
             ]);
@@ -159,7 +159,7 @@ export class Component implements ngCore.OnInit {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getM_Programs().then(applications => !applications.find(application => application.program_name == this.nameField));
+    return () => this.backEnd.getMPrograms().then(applications => !applications.find(application => application.program_name == this.nameField));
   }
 
   onSubmit():void {
@@ -179,14 +179,14 @@ export class Component implements ngCore.OnInit {
             })
         )
         .then(project => {
-          return this.getGroup() || this.backEnd.createM_Project("Default", "An automatically created group. It can be edited or removed like any other group.", project).then(group => {
+          return this.getGroup() || this.backEnd.createMProject("Default", "An automatically created group. It can be edited or removed like any other group.", project).then(group => {
                 this.groups = [group];
                 this.groupField = group.id;
                 return group.id;
               });
         })
         .then(group => {
-          return this.backEnd.createM_Program(this.nameField, this.descriptionField, this.deviceField, this.codeField, group);
+          return this.backEnd.createMProgram(this.nameField, this.descriptionField, this.deviceField, this.codeField, group);
         })
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The application has been created."));

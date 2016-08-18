@@ -94,7 +94,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     this.editing = false;
     Promise.all<any>([
           // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-          this.backEnd.getM_Project(this.id),
+          this.backEnd.getMProject(this.id),
           this.backEnd.getProjects()
         ])
         .then(result => {
@@ -124,7 +124,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     return () => this.backEnd.getProjects()
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-        .then(projects => Promise.all<libBackEnd.ApplicationGroup>([].concat(...projects.map(project => project.m_projects_id)).map(id => this.backEnd.getM_Project(id))))
+        .then(projects => Promise.all<libBackEnd.ApplicationGroup>([].concat(...projects.map(project => project.m_projects_id)).map(id => this.backEnd.getMProject(id))))
         .then(groups => !groups.find(group => group.id != this.id && group.program_name == this.nameField));
   }
 
@@ -132,7 +132,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.updateM_Project(this.id, this.nameField, this.descriptionField)
+    this.backEnd.updateMProject(this.id, this.nameField, this.descriptionField)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The group has been updated."));
           this.refresh();
@@ -158,7 +158,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.deleteM_Program(id)
+    this.backEnd.deleteMProgram(id)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The application has been removed."));
           this.refresh();

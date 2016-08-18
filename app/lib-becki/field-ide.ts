@@ -275,7 +275,7 @@ export class Component {
       }
     }
     this.filesAnnotations = {};
-    this.backEnd.buildC_Program(files, this.buildTarget)
+    this.backEnd.buildCProgram(files, this.buildTarget)
         .then(() => this.notifications.current.push(new libBeckiNotifications.Success("The project has been built successfully.")))
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-327

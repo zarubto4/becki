@@ -123,7 +123,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
     this.editing = false;
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    this.backEnd.getC_Program(this.id)
+    this.backEnd.getCProgram(this.id)
         .then(program => {
           if (!program.program_versions.length) {
             throw new Error("the program has no version");
@@ -177,7 +177,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     return () => this.backEnd.getProjects()
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-        .then(projects => Promise.all<libBackEnd.CProgram>([].concat(...projects.map(project => project.c_programs_id)).map(id => this.backEnd.getC_Program(id))))
+        .then(projects => Promise.all<libBackEnd.CProgram>([].concat(...projects.map(project => project.c_programs_id)).map(id => this.backEnd.getCProgram(id))))
         .then(programs => !programs.find(program => program.id != this.id && program.program_name == this.nameField));
   }
 
@@ -185,7 +185,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.updateC_Program(this.id, this.nameField, this.descriptionField, this.deviceType)
+    this.backEnd.updateCProgram(this.id, this.nameField, this.descriptionField, this.deviceType)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The program has been updated."));
           this.refresh();
@@ -206,7 +206,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     "use strict";
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
-    return () => this.backEnd.getC_Program(this.id).then(program => !program.program_versions.find(version => version.version_object.version_name == this.versionNameField));
+    return () => this.backEnd.getCProgram(this.id).then(program => !program.program_versions.find(version => version.version_object.version_name == this.versionNameField));
   }
 
   onVersionSubmit():void {

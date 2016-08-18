@@ -67,7 +67,7 @@ export class Component implements ngCore.OnInit {
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     return () => this.backEnd.getProjects()
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-        .then(projects => Promise.all<libBackEnd.ApplicationGroup>([].concat(...projects.map(project => project.m_projects_id)).map(id => this.backEnd.getM_Project(id))))
+        .then(projects => Promise.all<libBackEnd.ApplicationGroup>([].concat(...projects.map(project => project.m_projects_id)).map(id => this.backEnd.getMProject(id))))
         .then(groups => !groups.find(group => group.program_name == this.nameField));
   }
 
@@ -83,7 +83,7 @@ export class Component implements ngCore.OnInit {
             })
         )
         .then(project => {
-          return this.backEnd.createM_Project(this.nameField, this.descriptionField, project);
+          return this.backEnd.createMProject(this.nameField, this.descriptionField, project);
         })
         .then(() => {
           this.notifications.next.push(new libBeckiNotifications.Success("The group has been created."));

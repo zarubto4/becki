@@ -71,7 +71,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
       let id = params["version"];
       let schemeId = params["scheme"];
       // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-      this.backEnd.getB_Program(schemeId)
+      this.backEnd.getBProgram(schemeId)
           .then(scheme => {
             return Promise.all<any>([
               scheme,
@@ -80,17 +80,17 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
             ]);
           })
           .then(result => {
-            let scheme:libBackEnd.InteractionsScheme;
+            let scheme:libBackEnd.BProgram;
             let project:libBackEnd.Project;
             [scheme, project] = result;
             return Promise.all<any>([
               scheme,
               // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-              Promise.all(project.m_projects_id.map(id => this.backEnd.getM_Project(id)))
+              Promise.all(project.m_projects_id.map(id => this.backEnd.getMProject(id)))
             ]);
           })
           .then(result => {
-            let scheme:libBackEnd.InteractionsScheme;
+            let scheme:libBackEnd.BProgram;
             let groups:libBackEnd.MProject[];
             [scheme, groups] = result;
             let version = scheme.program_versions.find(version => version.version_Object.id == id);

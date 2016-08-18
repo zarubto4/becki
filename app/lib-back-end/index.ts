@@ -906,7 +906,7 @@ export interface BProgramState {
 }
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
-export interface InteractionsScheme {
+export interface BProgram {
 
     id:string;
 
@@ -953,7 +953,7 @@ export interface InteractionsModerator {
     delete_permission:boolean;
 }
 
-export interface InteractionsSchemeValues {
+export interface BProgramValues {
 
     digital:{[hwId:string]:boolean};
 
@@ -962,14 +962,14 @@ export interface InteractionsSchemeValues {
     connector:{[id:string]:{inputs:{[name:string]:number}, outputs:{[name:string]:number}}};
 }
 
-export interface InteractionsSchemeValue<T> {
+export interface BprogramValue<T> {
 
     hwId:string;
 
     value:T;
 }
 
-export interface InteractionsSchemeConnectorValue {
+export interface BProgramConnectorValue {
 
     blockId:string;
 
@@ -1297,15 +1297,15 @@ export abstract class BackEnd {
 
     public interactionsSchemeSubscribed:Rx.Subject<void>;
 
-    public interactionsSchemeValuesReceived:Rx.Subject<InteractionsSchemeValues>;
+    public BProgramValuesReceived:Rx.Subject<BProgramValues>;
 
-    public interactionsSchemeAnalogValueReceived:Rx.Subject<InteractionsSchemeValue<number>>;
+    public BProgramAnalogValueReceived:Rx.Subject<BprogramValue<number>>;
 
-    public interactionsSchemeDigitalValueReceived:Rx.Subject<InteractionsSchemeValue<boolean>>;
+    public BProgramDigitalValueReceived:Rx.Subject<BprogramValue<boolean>>;
 
-    public interactionsSchemeInputConnectorValueReceived:Rx.Subject<InteractionsSchemeConnectorValue>;
+    public BProgramInputConnectorValueReceived:Rx.Subject<BProgramConnectorValue>;
 
-    public interactionsSchemeOutputConnectorValueReceived:Rx.Subject<InteractionsSchemeConnectorValue>;
+    public BProgramOutputConnectorValueReceived:Rx.Subject<BProgramConnectorValue>;
 
     public tasks:number;
 
@@ -1317,11 +1317,11 @@ export abstract class BackEnd {
         this.webSocketErrorOccurred = new Rx.Subject<any>();
         this.interactionsOpened = new Rx.Subject<void>();
         this.interactionsSchemeSubscribed = new Rx.Subject<void>();
-        this.interactionsSchemeValuesReceived = new Rx.Subject<InteractionsSchemeValues>();
-        this.interactionsSchemeAnalogValueReceived = new Rx.Subject<InteractionsSchemeValue<number>>();
-        this.interactionsSchemeDigitalValueReceived = new Rx.Subject<InteractionsSchemeValue<boolean>>();
-        this.interactionsSchemeInputConnectorValueReceived = new Rx.Subject<InteractionsSchemeConnectorValue>();
-        this.interactionsSchemeOutputConnectorValueReceived = new Rx.Subject<InteractionsSchemeConnectorValue>();
+        this.BProgramValuesReceived = new Rx.Subject<BProgramValues>();
+        this.BProgramAnalogValueReceived = new Rx.Subject<BprogramValue<number>>();
+        this.BProgramDigitalValueReceived = new Rx.Subject<BprogramValue<boolean>>();
+        this.BProgramInputConnectorValueReceived = new Rx.Subject<BProgramConnectorValue>();
+        this.BProgramOutputConnectorValueReceived = new Rx.Subject<BProgramConnectorValue>();
         this.tasks = 0;
         this.reconnectEventSource();
         this.reconnectWebSocket();
@@ -1469,19 +1469,19 @@ export abstract class BackEnd {
                 .subscribe(this.notificationReceived);
             channelReceived
                 .filter(message => message.messageType == "getValues" && message.status == "success")
-                .subscribe(this.interactionsSchemeValuesReceived);
+                .subscribe(this.BProgramValuesReceived);
             channelReceived
                 .filter(message => message.messageType == "newAnalogValue")
-                .subscribe(this.interactionsSchemeAnalogValueReceived);
+                .subscribe(this.BProgramAnalogValueReceived);
             channelReceived
                 .filter(message => message.messageType == "newDigitalValue")
-                .subscribe(this.interactionsSchemeDigitalValueReceived);
+                .subscribe(this.BProgramDigitalValueReceived);
             channelReceived
                 .filter(message => message.messageType == "newInputConnectorValue")
-                .subscribe(this.interactionsSchemeInputConnectorValueReceived);
+                .subscribe(this.BProgramInputConnectorValueReceived);
             channelReceived
                 .filter(message => message.messageType == "newOutputConnectorValue")
-                .subscribe(this.interactionsSchemeOutputConnectorValueReceived);
+                .subscribe(this.BProgramOutputConnectorValueReceived);
             errorOccurred
                 .subscribe(this.webSocketErrorOccurred);
         }
@@ -1693,19 +1693,19 @@ export abstract class BackEnd {
         return this.requestRestPath("GET", `${BackEnd.SCREEN_SIZE_TYPE_PATH}/all`);
     }
 
-    public getFiltredC_ProgramList(page_number:string, project_id:string):Promise<CProgramList> { //Tyrion Verze 1.06.6.4 //C_program //^^
+    public getFilteredCProgramList(page_number:string, project_id:string):Promise<CProgramList> { //Tyrion Verze 1.06.6.4 //C_program //^^
         return this.requestRestPath("PUT", `${BackEnd.C_PROGRAM_LIST}/${page_number}`, {project_id});
     }
 
-    public getFiltredB_ProgramList(page_number:string, project_id:string):Promise<BProgramList> { //Tyrion Verze 1.06.6.4
+    public getFilteredBProgramList(page_number:string, project_id:string):Promise<BProgramList> { //Tyrion Verze 1.06.6.4
         return this.requestRestPath("PUT", `${BackEnd.B_PROGRAM_PATH}/list/${page_number}`, {project_id});
     }
 
-    public getFiltredBlockoBlockProgramList(page_number:string, project_id:string):Promise<BlockoBlockList> { //Tyrion Verze 1.06.6.4
+    public getFilteredBlockoBlockProgramList(page_number:string, project_id:string):Promise<BlockoBlockList> { //Tyrion Verze 1.06.6.4
         return this.requestRestPath("PUT", `${BackEnd.BLOCKOBLOCK_PATH}/list/${page_number}`, {project_id});
     }
 
-    public getFiltredTypeOfBlockList(page_number:string, project_id:string, private_type:boolean):Promise<TypeOfBlockList> { //Tyrion Verze 1.06.6.4
+    public getFilteredTypeOfBlockList(page_number:string, project_id:string, private_type:boolean):Promise<TypeOfBlockList> { //Tyrion Verze 1.06.6.4
         return this.requestRestPath("PUT", `${BackEnd.TYPE_OF_BLOCK_PATH}/list/${page_number}`, {
             project_id,
             private_type
@@ -1746,7 +1746,7 @@ export abstract class BackEnd {
         return this.requestRestPath("DELETE", `${BackEnd.SCREEN_SIZE_TYPE_PATH}/${id}`);
     }
 
-    public createM_Project(program_name:string, program_description:string, projectId:string):Promise<MProject> {
+    public createMProject(program_name:string, program_description:string, projectId:string):Promise<MProject> {
         if (program_name.length < 4) {
             throw "name >= 4 required";
         }
@@ -1757,12 +1757,12 @@ export abstract class BackEnd {
         }, 201);
     }
 
-    public getM_Project(id:string):Promise<MProject> {
+    public getMProject(id:string):Promise<MProject> {
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
         return this.requestRestPath("GET", `${BackEnd.M_PROJECT_PATH}/${id}`);
     }
 
-    public updateM_Project(id:string, program_name:string, program_description:string):Promise<any> {
+    public updateMProject(id:string, program_name:string, program_description:string):Promise<any> {
         if (program_name.length < 4) {
             throw "name >= 4 required";
         }
@@ -1770,11 +1770,11 @@ export abstract class BackEnd {
         return this.requestRestPath("PUT", `${BackEnd.M_PROJECT_PATH}/${id}`, {program_description, program_name});
     }
 
-    public deleteM_Project(id:string):Promise<any> {
+    public deleteMProject(id:string):Promise<any> {
         return this.requestRestPath("DELETE", `${BackEnd.M_PROJECT_PATH}/${id}`);
     }
 
-    public createM_Program(program_name:string, program_description:string, screen_type_id:string, m_code:string, groupId:string):Promise<any> {
+    public createMProgram(program_name:string, program_description:string, screen_type_id:string, m_code:string, groupId:string):Promise<any> {
         if (program_name.length < 8 || !m_code) {
             throw "name >= 8 and code required";
         }
@@ -1790,17 +1790,17 @@ export abstract class BackEnd {
         }, 201);
     }
 
-    public getM_Program(id:string):Promise<MProgram> {
+    public getMProgram(id:string):Promise<MProgram> {
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
         return this.requestRestPath("GET", `${BackEnd.M_PROGRAM_PATH}/${id}`);
     }
 
-    public getM_Programs():Promise<MProgram[]> {
+    public getMPrograms():Promise<MProgram[]> {
         return this.requestRestPath("GET", `${BackEnd.M_PROGRAM_PATH}/app/m_programs`);
 
     }
 
-    public updateM_Program(id:string, program_name:string, program_description:string, screen_type_id:string, m_code:string):Promise<any> {
+    public updateMProgram(id:string, program_name:string, program_description:string, screen_type_id:string, m_code:string):Promise<any> {
         if (program_name.length < 8 || !m_code) {
             throw "name >= 8 and code required";
         }
@@ -1815,7 +1815,7 @@ export abstract class BackEnd {
         });
     }
 
-    public deleteM_Program(id:string):Promise<any> {
+    public deleteMProgram(id:string):Promise<any> {
         return this.requestRestPath("DELETE", `${BackEnd.M_PROGRAM_PATH}/${id}`);
     }
 
@@ -1993,7 +1993,7 @@ export abstract class BackEnd {
      }
 
      */
-    public createC_Program(program_name:string, program_description:string, type_of_board_id:string, projectId:string):Promise<CProgram> {
+    public createCProgram(program_name:string, program_description:string, type_of_board_id:string, projectId:string):Promise<CProgram> {
         if (program_name.length < 8 || !type_of_board_id) {
             throw "name >= 8 and device type required";
         }
@@ -2005,12 +2005,12 @@ export abstract class BackEnd {
         }, 201);
     }
 
-    public getC_Program(id:string):Promise<CProgram> {
+    public getCProgram(id:string):Promise<CProgram> {
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
         return this.requestRestPath("GET", `${BackEnd.C_PROGRAM_COMPILATION_PATH}/${id}`);
     }
 
-    public updateC_Program(id:string, program_name:string, program_description:string, type_of_board_id:string):Promise<any> {
+    public updateCProgram(id:string, program_name:string, program_description:string, type_of_board_id:string):Promise<any> {
         if (program_name.length < 8 || !type_of_board_id) {
             throw "name >= 8 and device type required";
         }
@@ -2022,7 +2022,7 @@ export abstract class BackEnd {
         });
     }
 
-    public addVersionToC_Program(version_name:string, version_description:string, files:{[name:string]:string}, program:string):Promise<any> {
+    public addVersionToCProgram(version_name:string, version_description:string, files:{[name:string]:string}, program:string):Promise<any> {
         if (version_name.length < 8) {
             throw "name >= 8 required";
         }
@@ -2035,7 +2035,7 @@ export abstract class BackEnd {
         }, 201);
     }
 
-    public buildC_Program(files:{[name:string]:string}, type_of_board_id:string):Promise<any> {
+    public buildCProgram(files:{[name:string]:string}, type_of_board_id:string):Promise<any> {
         if (!type_of_board_id) {
             throw "target required";
         }
@@ -2048,7 +2048,7 @@ export abstract class BackEnd {
         });
     }
 
-    public deleteC_Program(id:string):Promise<any> {
+    public deleteCProgram(id:string):Promise<any> {
         return this.requestRestPath("DELETE", `${BackEnd.C_PROGRAM_COMPILATION_PATH}/${id}`);
     }
 
@@ -2074,20 +2074,20 @@ export abstract class BackEnd {
         return this.requestRestPath("PUT", `${BackEnd.BOARD_PATH}/filter/${page}`, {});
     }
 
-    public addBoardToProject(device:string, project:string):Promise<any> {
-        return this.requestRestPath("PUT", `${BackEnd.BOARD_PATH}/${device}/${project}`, {});
+    public addBoardToProject(board:string, project:string):Promise<any> {
+        return this.requestRestPath("PUT", `${BackEnd.BOARD_PATH}//${board}/${project}`, {});
     }
 
-    public removeBoard(device:string):Promise<any> {
-        return this.requestRestPath("DELETE", `${BackEnd.BOARD_PATH}/${device}`);
+    public removeBoardFromProject(board:string):Promise<any> {
+         return this.requestRestPath("DELETE", `${BackEnd.BOARD_PATH}/${board}`);
     }
 
-    public updateBoardWithC_Program(versionId:string, board_id:string[]):Promise<any> {
+    public updateBoardWithCProgram(versionId:string, board_id:string[]):Promise<any> {
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
         return this.requestRestPath("POST", `${BackEnd.C_PROGRAM_VERSION_PATH}/upload/${versionId}`, {board_id});
     }
 
-    public updateBoardWithC_Program(server_name:string):Promise<any> {
+    public postCompilationServer(server_name:string):Promise<any> {
         if (server_name.length < 6) {
             throw "name >= 6 required";
         }
@@ -2139,7 +2139,7 @@ export abstract class BackEnd {
 
     }
 
-    public removeTypeOfBlock(TypeOfBlockid:string):Promise<any> {
+    public deleteTypeOfBlock(TypeOfBlockid:string):Promise<any> {
         return this.requestRestPath("DELETE", `${BackEnd.TYPE_OF_BLOCK_PATH}/${TypeOfBlockid}`, {});
     }
 
@@ -2189,7 +2189,7 @@ export abstract class BackEnd {
         return this.requestRestPath("DELETE", `${BackEnd.BLOCKOBLOCK_PATH}/${id}`);
     }
 
-    public createB_Program(name:string, program_description:string, projectId:string):Promise<InteractionsScheme> {
+    public createBProgram(name:string, program_description:string, projectId:string):Promise<BProgram> {
         if (name.length < 8) {
             throw "name >= 8 required";
         }
@@ -2197,12 +2197,12 @@ export abstract class BackEnd {
         return this.requestRestPath("POST", `${BackEnd.B_PROGRAM_PATH}/${projectId}`, {program_description, name}, 201);
     }
 
-    public getB_Program(id:string):Promise<InteractionsScheme> {
+    public getBProgram(id:string):Promise<BProgram> {
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
         return this.requestRestPath("GET", `${BackEnd.B_PROGRAM_PATH}/${id}`);
     }
 
-    public  subscribeB_Program/*subscribeB_Program*/(version_id:string):void {
+    public  subscribeBProgram(version_id:string):void {
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-262
         let message = {
             messageId: uuid.v4(),
@@ -2215,14 +2215,14 @@ export abstract class BackEnd {
         }
     }
 
-    public requestB_ProgramValues/*requestInteractionsSchemeValues*/(version_id:string):void {
+    public requestBProgramValues/*requestInteractionsSchemeValues*/(version_id:string):void {
         let message = {messageId: uuid.v4(), messageChannel: BackEnd.WS_CHANNEL, messageType: "getValues", version_id};
         if (!this.findEnqueuedWebSocketMessage(message, 'messageChannel', 'messageType', 'version_id')) {
             this.sendWebSocketMessage(message);
         }
     }
 
-    public updateB_Program(id:string, name:string, program_description:string):Promise<any> {
+    public updateBProgram(id:string, name:string, program_description:string):Promise<any> {
         if (name.length < 8) {
             throw "name >= 8 required";
         }
@@ -2234,7 +2234,7 @@ export abstract class BackEnd {
         return this.requestRestPath("PUT", `${BackEnd.M_PROJECT_PATH}/connect/${group}/${version}/${autoupdate}`, {});
     }
 
-    public addVersionToB_Program(version_name:string, version_description:string, program:string, boards:{board_id:string, c_program_version_id:string}[], main_board:{board_id:string, c_program_version_id:string}, programId:string):Promise<BProgramVersion> {
+    public addVersionToBProgram(version_name:string, version_description:string, program:string, boards:{board_id:string, c_program_version_id:string}[], main_board:{board_id:string, c_program_version_id:string}, programId:string):Promise<BProgramVersion> {
         if (!version_name || !program || !main_board) {
             throw "name, scheme and gateway required";
         }
@@ -2249,7 +2249,7 @@ export abstract class BackEnd {
         });
     }
 
-    public deleteB_Program(id:string):Promise<any> {
+    public deleteBProgram(id:string):Promise<any> {
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-185
         return this.requestRestPath("DELETE", `${BackEnd.B_PROGRAM_PATH}/${id}`);
     }
@@ -2267,7 +2267,7 @@ export abstract class BackEnd {
         return this.requestRestPath("GET", `${BackEnd.HOMER_PATH}/${id}`);
     }
 
-    public uploadB_ProgramToHomer(versionId:string, HomerId:string, B_ProgramId:string):Promise<any> {
+    public uploadBProgramToHomer(versionId:string, HomerId:string, B_ProgramId:string):Promise<any> {
         return this.requestRestPath("PUT", `${BackEnd.B_PROGRAM_PATH}/uploadToHomer/${B_ProgramId}/${versionId}/${HomerId}`, {});
     }
 

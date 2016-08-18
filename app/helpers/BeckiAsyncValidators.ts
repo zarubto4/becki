@@ -5,7 +5,7 @@
 import {FormControl, AsyncValidatorFn} from "@angular/forms";
 import {Observable, Observer} from "rxjs/Rx";
 import {BackEndService} from "../services/BackEndService";
-import {InteractionsScheme, Project} from "../lib-back-end/index";
+import {BProgram, Project} from "../lib-back-end/index";
 
 export class AsyncValidatorDebounce {
     _validate:(x: any) => any;
@@ -72,11 +72,11 @@ export class BeckiAsyncValidators {
                 }
                 backEnd.getProject(projId)
                     .then((project:Project) => {
-                        Promise.all<InteractionsScheme>(project.b_programs_id.map((b_program_id) => {
-                            return backEnd.getB_Program(b_program_id);
+                        Promise.all<BProgram>(project.b_programs_id.map((b_program_id) => {
+                            return backEnd.getBProgram(b_program_id);
                         }))
-                            .then((blockoPrograms:InteractionsScheme[]) => {
-                                if (blockoPrograms.find((blockoProgram:InteractionsScheme) => blockoProgram.name == control.value)) {
+                            .then((blockoPrograms:BProgram[]) => {
+                                if (blockoPrograms.find((blockoProgram:BProgram) => blockoProgram.name == control.value)) {
                                     resolve({"blockoNameTaken": true}); // invalid
                                 } else {
                                     resolve(null); // valid

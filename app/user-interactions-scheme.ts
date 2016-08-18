@@ -144,11 +144,11 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     this.editing = false;
     Promise.all<any>([
           // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-          this.backEnd.getB_Program(this.id),
+          this.backEnd.getBProgram(this.id),
           this.backEnd.getProjects()
         ])
         .then(result => {
-          let scheme:libBackEnd.InteractionsScheme;
+          let scheme:libBackEnd.BProgram;
           let projects:libBackEnd.Project[];
           [scheme, projects] = result;
           let project = projects.find(project => project.id == scheme.project_id);
@@ -158,13 +158,13 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
             // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
             Promise.all(project.boards_id.map(id => this.backEnd.getBoard(id))),
             this.backEnd.getAllTypeOfBoard(),
-            Promise.all(project.c_programs_id.map(id => this.backEnd.getC_Program(id))),
+            Promise.all(project.c_programs_id.map(id => this.backEnd.getCProgram(id))),
             // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-            Promise.all(project.m_projects_id.map(id => this.backEnd.getM_Project(id)))
+            Promise.all(project.m_projects_id.map(id => this.backEnd.getMProject(id)))
           ]);
         })
         .then(result => {
-          let scheme:libBackEnd.InteractionsScheme;
+          let scheme:libBackEnd.BProgram;
           let projects:libBackEnd.Project[];
           let applicationGroups:libBackEnd.MProject[];
           [scheme, projects, this.devices, this.deviceTypes, this.devicePrograms, applicationGroups] = result;
@@ -223,7 +223,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     return () => this.backEnd.getProjects()
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-        .then(projects => Promise.all<libBackEnd.InteractionsScheme>([].concat(...projects.map(project => project.b_programs_id)).map(id => this.backEnd.getB_Program(id))))
+        .then(projects => Promise.all<libBackEnd.BProgram>([].concat(...projects.map(project => project.b_programs_id)).map(id => this.backEnd.getBProgram(id))))
         .then(schemes => !schemes.find(scheme => scheme.id != this.id && scheme.name == this.nameField));
   }
 
@@ -231,7 +231,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     "use strict";
 
     this.notifications.shift();
-    this.backEnd.updateB_Program(this.id, this.nameField, this.descriptionField)
+    this.backEnd.updateBProgram(this.id, this.nameField, this.descriptionField)
         .then(() => {
           this.notifications.current.push(new libBeckiNotifications.Success("The scheme has been updated."));
           this.refresh();
@@ -252,7 +252,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-    return () => this.backEnd.getB_Program(this.id).then(scheme => !scheme.program_versions.find(version => version.version_Object.version_name == this.versionNameField));
+    return () => this.backEnd.getBProgram(this.id).then(scheme => !scheme.program_versions.find(version => version.version_Object.version_name == this.versionNameField));
   }
 
   getProgramsForVersionDevice():libBackEnd.CProgram[] {
@@ -270,7 +270,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
   onVersionSubmit():void {
     "use strict";
 
-    this.backEnd.addVersionToB_Program(this.versionNameField, this.versionDescriptionField, this.versionSchemeField, [], {board_id: this.versionDeviceField, c_program_version_id: this.versionDeviceProgramField}, this.id)
+    this.backEnd.addVersionToBProgram(this.versionNameField, this.versionDescriptionField, this.versionSchemeField, [], {board_id: this.versionDeviceField, c_program_version_id: this.versionDeviceProgramField}, this.id)
         .then(version => {
           return this.versionApplicationGroupField ? this.backEnd.addMProjectConnection(this.versionApplicationGroupField, version.version_Object.id, false) : null;
         })

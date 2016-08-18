@@ -84,7 +84,7 @@ export class Component implements ngCore.OnInit {
     // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-98
     return () => this.backEnd.getProjects()
         // see http://youtrack.byzance.cz/youtrack/issue/TYRION-219#comment=109-417
-        .then(projects => Promise.all<libBackEnd.CProgram>([].concat(...projects.map(project => project.c_programs_id)).map(id => this.backEnd.getC_Program(id))))
+        .then(projects => Promise.all<libBackEnd.CProgram>([].concat(...projects.map(project => project.c_programs_id)).map(id => this.backEnd.getCProgram(id))))
         .then(programs => !programs.find(program => program.program_name == this.nameField));
   }
 
@@ -100,7 +100,7 @@ export class Component implements ngCore.OnInit {
             })
         )
         .then(project => {
-          return this.backEnd.createC_Program(this.nameField, this.descriptionField, this.deviceTypeField, project);
+          return this.backEnd.createCProgram(this.nameField, this.descriptionField, this.deviceTypeField, project);
         })
         .then(program => {
           return this.backEnd.addVersionToDeviceProgram("Initial version", "", this.codeField, program.id);
