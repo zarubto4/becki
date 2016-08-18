@@ -2300,11 +2300,11 @@ export abstract class BackEnd {
         return this.requestRestPath("DELETE", `${BackEnd.CLOUD_HOMER_SERVER_PATH}/${id}`);
     }
 
-    public getUserTarif():Promise<ApplicableProduct[]> { // tyrion Verze 1.06.6.4
+    public getUserProduct():Promise<ApplicableProduct[]> { // tyrion Verze 1.06.6.4
         return this.requestRestPath("GET", `${BackEnd.TARIF_PATH}/user_applicable$`);
     }
 
-    public getRegistrationTarif(tariff_type:string, product_individual_name:string, payment_mode:string, currency_type:string, city:string, country:string, street_number:string, company_details_required:boolean, street:string, zip_code:string, registration_no:string, vat_number:string, company_name:string, company_authorized_email:string, company_authorized_phone:string, company_web:string, company_invoice_email:string, payment_method:string):Promise<UserTariff> {// tyrion Verze 1.06.6.4 //zařizuje a posílá becki nějaké informace o platbě Tyrionovi? všechny?
+    public getRegistrationProducts(tariff_type:string, product_individual_name:string, payment_mode:string, currency_type:string, city:string, country:string, street_number:string, company_details_required:boolean, street:string, zip_code:string, registration_no:string, vat_number:string, company_name:string, company_authorized_email:string, company_authorized_phone:string, company_web:string, company_invoice_email:string, payment_method:string):Promise<UserTariff> {// tyrion Verze 1.06.6.4 //zařizuje a posílá becki nějaké informace o platbě Tyrionovi? všechny?
         if (!company_details_required) { //podle toho jestli jsou potřeba compady details, pokud ne, jedná se o zákazníka thus tato zkrácená volba
             return this.requestRestPath("GET", `${BackEnd.TARIF_PATH}/for_registration$`, {
                 tariff_type,
@@ -2361,14 +2361,15 @@ export abstract class BackEnd {
         return this.requestRestPath("GET", BackEnd.PROJECT_PATH);
     }
 
-    public updateProject(id:string, project_name:string, project_description:string):Promise<any> {
+    public updateProject(id:string, project_name:string, project_description:string,product_id:string):Promise<any> {
         if (project_name.length < 8 || project_description.length < 24) {
             throw "name >= 8 and description >= 24 required";
         }
 
         return this.requestRestPath<Project>("PUT", `${BackEnd.PROJECT_PATH}/${id}`, {
             project_name,
-            project_description
+            project_description,
+            product_id
         });
     }
 
