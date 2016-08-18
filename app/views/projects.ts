@@ -38,10 +38,11 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
     }
 
     onAddClick():void {
-        var model = new ModalsProjectPropertiesModel();
+        console.log("ADDDD!!!!");
+        var model = new ModalsProjectPropertiesModel([]);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backEndService.createProject(model.name, model.description, "0") //TODO:add tarrif nebo produkt či jak se to bude jmenovat
+                this.backEndService.createProject(model.name, model.description, model.product) //TODO:add tarrif nebo produkt či jak se to bude jmenovat
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The project ${model.name} has been created.`));
                         this.refresh();
@@ -56,10 +57,10 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
     }
 
     onEditClick(project:Project):void {
-        var model = new ModalsProjectPropertiesModel(project.project_name, project.project_description, true, project.project_name);
+        var model = new ModalsProjectPropertiesModel([],project.project_name, project.project_description, project.product_id, true, project.project_name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backEndService.updateProject(project.id, model.name, model.description)//, "0") //TODO:add tarrif nebo produkt či jak se to bude jmenovat
+                this.backEndService.updateProject(project.id, model.name, model.description,model.product)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The project has been updated."));
                         this.refresh();

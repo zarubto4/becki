@@ -25,7 +25,7 @@ import {ValidatorErrorsService} from "../services/ValidatorErrorsService";
 export class BeckiFormInput {
 
     @Input()
-    control:AbstractControl;
+    control:AbstractControl = null;
 
     @Input()
     label:string = "Unknown label";

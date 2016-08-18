@@ -10,19 +10,22 @@ import {BeckiAsyncValidators} from "../helpers/BeckiAsyncValidators";
 import {BackEndService} from "../services/BackEndService";
 import {BeckiFormInput} from "../components/BeckiFormInput";
 import {ModalModel} from "../services/ModalService";
+import {ApplicableProduct} from "../lib-back-end/index";
+import {BeckiFormSelect, BeckiFormSelectOption, beckiFormSelectOptionsMaker} from "../components/BeckiFormSelect";
+
 
 
 
 
 export class ModalsProjectPropertiesModel implements ModalModel {
-    constructor(public name:string = "", public description:string = "", public edit:boolean = false, public exceptName:string = null) {
+    constructor(public products:ApplicableProduct[], public name:string = "", public description:string = "", public product:string = "", public edit:boolean = false, public exceptName:string = null) {
     }
 }
 
 @Component({
     selector: "modals-project-properties",
     templateUrl: "app/modals/project-properties.html",
-    directives: [CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, BeckiFormInput]
+    directives: [CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, BeckiFormInput, BeckiFormSelect]
 })
 export class ModalsProjectPropertiesComponent implements OnInit {
 
@@ -32,26 +35,33 @@ export class ModalsProjectPropertiesComponent implements OnInit {
     @Output()
     modalClose = new EventEmitter<boolean>();
 
+    options:BeckiFormSelectOption[] = null;
+
     form: FormGroup;
 
     constructor(private backEndService:BackEndService, private formBuilder:FormBuilder) {
-
+        console.log(this.form);
         this.form = this.formBuilder.group({
             "name": ["", [Validators.required, Validators.minLength(8)], BeckiAsyncValidators.ifValidator((value) => {
                 return !(this.modalModel && this.modalModel.exceptName && this.modalModel.exceptName == value);
             }, BeckiAsyncValidators.projectNameTaken(this.backEndService))],
-            "description": ["", [Validators.required, Validators.minLength(24)]]
+            "description": ["", [Validators.required, Validators.minLength(24)]],
+            "product": ["",[Validators.required]]
         });
+        console.log(this.form);
     }
 
     ngOnInit() {
-        (<FormControl>(this.form.controls["name"])).updateValue(this.modalModel.name);
-        (<FormControl>(this.form.controls["description"])).updateValue(this.modalModel.description);
+        this.options = beckiFormSelectOptionsMaker(this.modalModel.products, "product_id", "product_type");
+        (<FormControl>(this.form.controls["name"])).setValue(this.modalModel.name);
+        (<FormControl>(this.form.controls["description"])).setValue(this.modalModel.description);
+        (<FormControl>(this.form.controls["product"])).setValue(this.modalModel.product);
     }
 
     onSubmitClick():void {
         this.modalModel.name = this.form.controls["name"].value;
         this.modalModel.description = this.form.controls["description"].value;
+        this.modalModel.product = this.form.controls["product"].value;
         this.modalClose.emit(true);
     }
 

@@ -54,7 +54,7 @@ export interface BeckiFormSelectOption {
 export class BeckiFormSelect {
 
     @Input()
-    control:AbstractControl;
+    control:AbstractControl = null;
 
     @Input()
     label:string = "Unknown label";
