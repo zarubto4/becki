@@ -1082,9 +1082,9 @@ export interface Project { //Tyrion Verze 1.06.6.4 předěláno
 
     boards_id:string[];
 
-    b_programs_id:string[];
+    b_programs:{name:string,id:string}[];
 
-    c_programs_id:string[];
+    c_programs:{name:string,id:string}[];
 
     m_projects_id:string[];
 
@@ -2301,12 +2301,12 @@ export abstract class BackEnd {
     }
 
     public getUserProduct():Promise<ApplicableProduct[]> { // tyrion Verze 1.06.6.4
-        return this.requestRestPath("GET", `${BackEnd.TARIF_PATH}/user_applicable$`);
+        return this.requestRestPath("GET", `${BackEnd.TARIF_PATH}/user_applicable`);
     }
 
     public getRegistrationProducts(tariff_type:string, product_individual_name:string, payment_mode:string, currency_type:string, city:string, country:string, street_number:string, company_details_required:boolean, street:string, zip_code:string, registration_no:string, vat_number:string, company_name:string, company_authorized_email:string, company_authorized_phone:string, company_web:string, company_invoice_email:string, payment_method:string):Promise<UserTariff> {// tyrion Verze 1.06.6.4 //zařizuje a posílá becki nějaké informace o platbě Tyrionovi? všechny?
         if (!company_details_required) { //podle toho jestli jsou potřeba compady details, pokud ne, jedná se o zákazníka thus tato zkrácená volba
-            return this.requestRestPath("GET", `${BackEnd.TARIF_PATH}/for_registration$`, {
+            return this.requestRestPath("GET", `${BackEnd.TARIF_PATH}/for_registration`, {
                 tariff_type,
                 product_individual_name,
                 payment_mode,
@@ -2318,7 +2318,7 @@ export abstract class BackEnd {
                 zip_code
             });// tyrion Verze 1.06.6.4 //zařizuje a posílá becki nějaké informace o platbě Tyrionovi? všechny?
         } else {
-            return this.requestRestPath("GET", `${BackEnd.TARIF_PATH}/for_registration$`, {
+            return this.requestRestPath("GET", `${BackEnd.TARIF_PATH}/for_registration`, {
                 tariff_type,
                 product_individual_name,
                 currency_type,

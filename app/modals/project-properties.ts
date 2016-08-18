@@ -40,7 +40,6 @@ export class ModalsProjectPropertiesComponent implements OnInit {
     form: FormGroup;
 
     constructor(private backEndService:BackEndService, private formBuilder:FormBuilder) {
-        console.log(this.form);
         this.form = this.formBuilder.group({
             "name": ["", [Validators.required, Validators.minLength(8)], BeckiAsyncValidators.ifValidator((value) => {
                 return !(this.modalModel && this.modalModel.exceptName && this.modalModel.exceptName == value);
@@ -48,7 +47,6 @@ export class ModalsProjectPropertiesComponent implements OnInit {
             "description": ["", [Validators.required, Validators.minLength(24)]],
             "product": ["",[Validators.required]]
         });
-        console.log(this.form);
     }
 
     ngOnInit() {

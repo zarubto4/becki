@@ -5,7 +5,7 @@
 
 import {Component, OnInit, Injector} from "@angular/core";
 import {LayoutMain} from "../layouts/main";
-import {Project} from "../lib-back-end/index";
+import {Project, ApplicableProduct} from "../lib-back-end/index";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
 import {ModalsRemovalModel} from "../modals/removal";
@@ -23,6 +23,8 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
 
     projects:Project[];
 
+    products:ApplicableProduct[];
+
     ngOnInit():void {
         this.refresh();
     }
@@ -31,6 +33,9 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
         this.backEndService.getProjects()
             .then(projects => this.projects = projects)
             .catch(reason => this.addFlashMessage(new FlashMessageError("Projects cannot be loaded.", reason)));
+        this.backEndService.getUserProduct()
+            .then(products => this.products = products)
+            .catch(reason => this.addFlashMessage(new FlashMessageError("Products cannot be loaded.", reason)));
     }
 
     onProjectClick(project:Project):void {
@@ -38,8 +43,9 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
     }
 
     onAddClick():void {
-        console.log("ADDDD!!!!");
-        var model = new ModalsProjectPropertiesModel([]);
+        if (!this.products) this.addFlashMessage(new FlashMessageError("Cannot add project now."));
+
+        var model = new ModalsProjectPropertiesModel(this.products);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.backEndService.createProject(model.name, model.description, model.product) //TODO:add tarrif nebo produkt či jak se to bude jmenovat
@@ -57,7 +63,9 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
     }
 
     onEditClick(project:Project):void {
-        var model = new ModalsProjectPropertiesModel([],project.project_name, project.project_description, project.product_id, true, project.project_name);
+        if (!this.products) this.addFlashMessage(new FlashMessageError("Cannot add project now."));
+
+        var model = new ModalsProjectPropertiesModel(this.products,project.project_name, project.project_description, ""+project.product_id, true, project.project_name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.backEndService.updateProject(project.id, model.name, model.description,model.product)

@@ -52,8 +52,8 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         this.backEndService.getProject(this.id)
             .then((project:Project) => {
                 this.project = project;
-                return Promise.all<CProgram>(project.c_programs_id.map((c_program_id) => {
-                    return this.backEndService.getCProgram(c_program_id);
+                return Promise.all<CProgram>(project.c_programs.map((c_program) => {
+                    return this.backEndService.getCProgram(c_program.id);
                 }));
             })
             .then((codePrograms:CProgram[]) => {

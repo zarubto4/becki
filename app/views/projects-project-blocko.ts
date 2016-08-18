@@ -47,8 +47,8 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
         this.backEndService.getProject(this.id)
             .then((project:Project) => {
                 this.project = project;
-                return Promise.all<BProgram>(project.b_programs_id.map((b_program_id) => {
-                    return this.backEndService.getBProgram(b_program_id);
+                return Promise.all<BProgram>(project.b_programs.map((b_program) => {
+                    return this.backEndService.getBProgram(b_program.id);
                 }));
             })
             .then((blockoPrograms:BProgram[]) => {
