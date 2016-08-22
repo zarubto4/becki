@@ -160,13 +160,6 @@ export interface User {
     delete_permission:boolean;
 }
 
-export declare class EventSource extends EventTarget {
-
-    constructor(url:string);
-
-    close():void;
-}
-
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Connection {
 
@@ -1183,7 +1176,7 @@ export interface FileRecord {
 //ACTUALIZATION PROCEDURE END
 
 
-interface PersonInfo {
+export interface PersonInfo {
     id:string,
     mail:string,
     nick_name:string,
@@ -1193,7 +1186,7 @@ interface PersonInfo {
     delete_permission:boolean
 }
 
-interface PersonRole {
+export interface PersonRole {
     id:string,
     name:string,
     description:string,
@@ -1287,8 +1280,6 @@ export abstract class BackEnd {
 
     public static UNCONFIRMED_NOTIFICATION_PATH = "/notification/unconfirmed";
 
-    private eventSource:EventSource;
-
     private webSocket:WebSocket;
 
     private webSocketMessageQueue:WebSocketMessage[];
@@ -1315,8 +1306,12 @@ export abstract class BackEnd {
 
     public tasks:number;
 
+
+    protected personInfoSnapshotDirty:boolean = true;
+    public personInfoSnapshot:PersonInfo = null;
+    public personInfo:Rx.Subject<PersonInfo> = null;
+
     public constructor() {
-        this.eventSource = null;
         this.webSocketMessageQueue = [];
         this.webSocketReconnectTimeout = null;
         this.notificationReceived = new Rx.Subject<Notification>();
@@ -1328,19 +1323,43 @@ export abstract class BackEnd {
         this.BProgramDigitalValueReceived = new Rx.Subject<BprogramValue<boolean>>();
         this.BProgramInputConnectorValueReceived = new Rx.Subject<BProgramConnectorValue>();
         this.BProgramOutputConnectorValueReceived = new Rx.Subject<BProgramConnectorValue>();
+        this.personInfo = new Rx.Subject<PersonInfo>();
         this.tasks = 0;
-        this.reconnectEventSource();
-        this.reconnectWebSocket();
+    }
+
+    protected refreshPersonInfo():void {
+        this.personInfoSnapshotDirty = true;
+        if (this.tokenExist()) {
+            this.getPersonInfo()
+                .then((pi) => {
+                    this.personInfoSnapshotDirty = false;
+                    this.personInfoSnapshot = pi.person;
+                    this.personInfo.next(this.personInfoSnapshot);
+                    this.connectWebSocket();
+                })
+                .catch((error) => {
+                    console.log(error);
+                    this.unsetToken(); // TODO: maybe check error type before force logout user
+                    this.personInfoSnapshotDirty = false;
+                    this.personInfoSnapshot = null;
+                    this.personInfo.next(this.personInfoSnapshot);
+                    this.disconnectWebSocket();
+                });
+        } else {
+            this.personInfoSnapshotDirty = false;
+            this.personInfoSnapshot = null;
+            this.personInfo.next(this.personInfoSnapshot);
+            this.disconnectWebSocket();
+        }
+    }
+
+    private getToken():string {
+        return window.localStorage.getItem("authToken");
     }
 
     private setToken(token:string):void {
         window.localStorage.setItem("authToken", token);
-        this.reconnectEventSource();
-    }
-
-    private setWebSocketToken(token:string):void {
-        window.localStorage.setItem("authWebSocketToken", token);
-        this.reconnectWebSocket();
+        this.refreshPersonInfo();
     }
 
     public tokenExist():boolean {
@@ -1349,8 +1368,7 @@ export abstract class BackEnd {
 
     private unsetToken():void {
         window.localStorage.removeItem("authToken");
-        window.localStorage.removeItem("authWebSocketToken");
-        this.reconnectWebSocket();
+        this.refreshPersonInfo();
     }
 
     private getWebSocketToken():Promise<WebSocketAuth> {
@@ -1370,8 +1388,8 @@ export abstract class BackEnd {
     public requestRest<T>(method:string, url:string, body?:Object, success = 200):Rx.Observable<T> {
         let request = new RestRequest(method, url, {}, body);
         // TODO: https://github.com/angular/angular/issues/7438
-        if (window.localStorage.getItem("authToken")) {
-            request.headers["X-AUTH-TOKEN"] = window.localStorage.getItem("authToken");
+        if (this.tokenExist()) {
+            request.headers["X-AUTH-TOKEN"] = this.getToken();
         }
         this.tasks += 1;
         return this.requestRestGeneral(request)
@@ -1410,87 +1428,85 @@ export abstract class BackEnd {
         this.sendWebSocketMessageQueue();
     }
 
-    private reconnectEventSource():void {
-       /* if (this.eventSource) {
-            this.eventSource.close();
-        }
-        this.eventSource = null;
-        if (window.localStorage.getItem("authToken")) {
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-177
-            this.eventSource = new EventSource(`${BackEnd.REST_SCHEME}://${BackEnd.HOST}${BackEnd.NOTIFICATION_PATH}/connection/${window.localStorage.getItem("authToken")}`);
-
-            Rx.Observable
-                .fromEvent<MessageEvent>(this.eventSource, "message")
-                .map(event => JSON.parse(event.data))
-                .subscribe(this.notificationReceived);
-        }*/
-    }
-
-    private reconnectWebSocket():void {
-        console.log('recconectWebSocket, WStoken: '+window.localStorage.getItem("authWebSocketToken"));
-
+    // define function as property is needed to can set it as event listener (class methods is called with wrong this)
+    protected reconnectWebSocketAfterTimeout = () => {
+        console.log("reconnectWebSocketAfterTimeout()");
         clearTimeout(this.webSocketReconnectTimeout);
-        this.webSocketReconnectTimeout = null;
+        this.webSocketReconnectTimeout = setTimeout(() => {
+            this.connectWebSocket()
+        }, 5000);
+    };
 
-
-        let setReconnectionTimeout = () => {
-            if (this.webSocketReconnectTimeout == null) {
-                this.getWebSocketToken().then(token => this.setWebSocketToken(token.websocket_token));//todle si vyžádá nový token
-                this.webSocketReconnectTimeout = setTimeout(() => this.reconnectWebSocket(), 5000);
-            }
-        };
-
+    protected disconnectWebSocket():void {
+        console.log("disconnectWebSocket()");
         if (this.webSocket) {
-            this.webSocket.removeEventListener("close", setReconnectionTimeout);
+            this.webSocket.removeEventListener("close", this.reconnectWebSocketAfterTimeout);
             this.webSocket.close();
         }
         this.webSocket = null;
-        if (window.localStorage.getItem("authWebSocketToken")) {
-            // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-260
-            this.webSocket = new WebSocket(`${BackEnd.WS_SCHEME}://${BackEnd.HOST}/websocket/becki/${window.localStorage.getItem("authWebSocketToken")}`);
-            this.webSocket.addEventListener("close", setReconnectionTimeout);
+    }
 
-            let opened = Rx.Observable
-                .fromEvent<void>(this.webSocket, "open");
-            let channelReceived = Rx.Observable
-                .fromEvent<MessageEvent>(this.webSocket, "message")
-                .map(event => JSON.parse(event.data))
-                .filter(message => message.messageChannel == BackEnd.WS_CHANNEL);
-            let errorOccurred = Rx.Observable
-                .fromEvent(this.webSocket, "error");
-
-            opened
-                .subscribe(() => this.sendWebSocketMessageQueue());
-            opened
-                .subscribe(this.interactionsOpened);
-            channelReceived
-                .filter(message => message.status == "error")
-                .map(message => BugFoundError.fromWsResponse(message))
-                .subscribe(this.webSocketErrorOccurred);
-            channelReceived
-                .filter(message => message.messageType == "subscribe_instace" && message.status == "success")
-                .subscribe(this.interactionsSchemeSubscribed);
-            channelReceived
-                .filter(message => message.messageType == "subscribe_notification" || message.messageType == "unsubscribe_notification" || message.messageType == "notification")
-                .subscribe(this.notificationReceived);
-            channelReceived
-                .filter(message => message.messageType == "getValues" && message.status == "success")
-                .subscribe(this.BProgramValuesReceived);
-            channelReceived
-                .filter(message => message.messageType == "newAnalogValue")
-                .subscribe(this.BProgramAnalogValueReceived);
-            channelReceived
-                .filter(message => message.messageType == "newDigitalValue")
-                .subscribe(this.BProgramDigitalValueReceived);
-            channelReceived
-                .filter(message => message.messageType == "newInputConnectorValue")
-                .subscribe(this.BProgramInputConnectorValueReceived);
-            channelReceived
-                .filter(message => message.messageType == "newOutputConnectorValue")
-                .subscribe(this.BProgramOutputConnectorValueReceived);
-            errorOccurred
-                .subscribe(this.webSocketErrorOccurred);
+    protected connectWebSocket():void {
+        if (!this.tokenExist()) {
+            console.log("connectWebSocket() :: cannot connect now, user token doesn't exists.");
+            return;
         }
+        this.disconnectWebSocket();
+        console.log("connectWebSocket()");
+
+        this.getWebSocketToken()
+            .then((webSocketToken) => {
+
+                console.log("connectWebSocket() :: webSocketToken = "+webSocketToken.websocket_token);
+
+                this.webSocket = new WebSocket(`${BackEnd.WS_SCHEME}://${BackEnd.HOST}/websocket/becki/${webSocketToken.websocket_token}`);
+                this.webSocket.addEventListener("close", this.reconnectWebSocketAfterTimeout);
+
+                let opened = Rx.Observable
+                    .fromEvent<void>(this.webSocket, "open");
+                let channelReceived = Rx.Observable
+                    .fromEvent<MessageEvent>(this.webSocket, "message")
+                    .map(event => JSON.parse(event.data))
+                    .filter(message => message.messageChannel == BackEnd.WS_CHANNEL);
+                let errorOccurred = Rx.Observable
+                    .fromEvent(this.webSocket, "error");
+
+                opened
+                    .subscribe(() => this.sendWebSocketMessageQueue());
+                opened
+                    .subscribe(this.interactionsOpened);
+                channelReceived
+                    .filter(message => message.status == "error")
+                    .map(message => BugFoundError.fromWsResponse(message))
+                    .subscribe(this.webSocketErrorOccurred);
+                channelReceived
+                    .filter(message => message.messageType == "subscribe_instace" && message.status == "success")
+                    .subscribe(this.interactionsSchemeSubscribed);
+                channelReceived
+                    .filter(message => message.messageType == "subscribe_notification" || message.messageType == "unsubscribe_notification" || message.messageType == "notification")
+                    .subscribe(this.notificationReceived);
+                channelReceived
+                    .filter(message => message.messageType == "getValues" && message.status == "success")
+                    .subscribe(this.BProgramValuesReceived);
+                channelReceived
+                    .filter(message => message.messageType == "newAnalogValue")
+                    .subscribe(this.BProgramAnalogValueReceived);
+                channelReceived
+                    .filter(message => message.messageType == "newDigitalValue")
+                    .subscribe(this.BProgramDigitalValueReceived);
+                channelReceived
+                    .filter(message => message.messageType == "newInputConnectorValue")
+                    .subscribe(this.BProgramInputConnectorValueReceived);
+                channelReceived
+                    .filter(message => message.messageType == "newOutputConnectorValue")
+                    .subscribe(this.BProgramOutputConnectorValueReceived);
+                errorOccurred
+                    .subscribe(this.webSocketErrorOccurred);
+
+            })
+            .catch((error) => {
+                this.webSocketErrorOccurred.next(error);
+            });
     }
 
     public createUser(mail:string, password:string, nick_name:string):Promise<any> {
@@ -1573,7 +1589,6 @@ export abstract class BackEnd {
             this.setToken(body.authToken);
             return body;
         }).then(body => {
-            this.getWebSocketToken().then(token => this.setWebSocketToken(token.websocket_token));
             return JSON.stringify(body);
         })
     }
@@ -1634,17 +1649,17 @@ export abstract class BackEnd {
     }
 
     public requestNotificationsSubscribe():void {
-        "use strict";
-
-        let message = {messageId: uuid.v4(), messageChannel: BackEnd.WS_CHANNEL, messageType: "subscribe_notification"};
+        let message = {
+            messageId: uuid.v4(),
+            messageChannel: BackEnd.WS_CHANNEL,
+            messageType: "subscribe_notification"
+        };
         if (!this.findEnqueuedWebSocketMessage(message, 'messageChannel', 'messageType')) {
             this.sendWebSocketMessage(message);
         }
     }
 
     public requestNotificationsUnsubscribe():void {
-        "use strict";
-
         let message = {
             messageId: uuid.v4(),
             messageChannel: BackEnd.WS_CHANNEL,

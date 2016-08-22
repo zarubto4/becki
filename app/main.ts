@@ -68,7 +68,7 @@ import {LabeledLink} from "./helpers/LabeledLink";
 // Services
 import {FlashMessagesService} from "./services/FlashMessagesService";
 import {BackEndService} from "./services/BackEndService";
-import {AuthGuard} from "./services/AuthGuard";
+import {AuthGuard, NonAuthGuard} from "./services/AuthGuard";
 import {ModalService} from "./services/ModalService";
 import {TabMenuService} from "./services/TabMenuService";
 import {BreadcrumbsService} from "./services/BreadcrumbsService";
@@ -91,7 +91,7 @@ import {ProjectsProjectCodeCodeComponent} from "./views/projects-project-code-co
 
 // DON'T USE children IN ROUTER YET!!!
 var routes:Routes = [
-    {path: "login", component: LoginComponent},
+    {path: "login", component: LoginComponent, canActivate:[NonAuthGuard]},
     {path: "logout", component: LogoutComponent},
 
     {path: "", redirectTo: "/dashboard", pathMatch: "full"},
@@ -223,6 +223,7 @@ var tabMenus = {
         FlashMessagesService,
         BackEndService, // BackEndService must be after FlashMessagesService
         AuthGuard, // AuthGuard service must be after BackEndService
+        NonAuthGuard, // NonAuthGuard service must be after BackEndService
         NotificationService,
         ModalService,
         CurrentParamsService,

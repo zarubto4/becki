@@ -127,9 +127,10 @@
                     <!-- BEGIN USER LOGIN DROPDOWN -->
                     <li class="dropdown dropdown-user">
                         <a class="dropdown-toggle" (click)="onUserToggleClick($events)">
-                            <img alt="" class="img-circle" src="../assets/layouts/layout/img/avatar3_small.jpg"/>
+                            <img alt="" class="img-circle" [attr.src]="backEndService.gravatarIcon"/>
                             <span class="username">
-                      Bob </span>
+                                {{backEndService.personInfoSnapshot?backEndService.personInfoSnapshot.full_name:""}}
+                            </span>
                             <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu" [style.display]="showUserMenu?'block':'none'">

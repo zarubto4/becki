@@ -12,12 +12,42 @@ export class AuthGuard implements CanActivate {
     constructor(private backEndService:BackEndService, private router:Router) {
     }
 
-    canActivate() {
+    canActivate():Promise<boolean> {
         console.log('AuthGuard#canActivate called');
-        if (!this.backEndService.tokenExist()) {
-            this.router.navigate(['/login']);
-            return false
-        }
-        return true;
+        return new Promise<boolean>((resolve) => {
+            this.backEndService.isLoggedIn()
+                .then(loggedIn => {
+                    console.log("AuthGuard#loggedIn = "+loggedIn);
+                    if (loggedIn) {
+                        resolve(true);
+                    } else {
+                        this.router.navigate(['/login']);
+                        resolve(false);
+                    }
+                });
+        });
+    }
+}
+
+@Injectable()
+export class NonAuthGuard implements CanActivate {
+
+    constructor(private backEndService:BackEndService, private router:Router) {
+    }
+
+    canActivate():Promise<boolean> {
+        console.log('NonAuthGuard#canActivate called');
+        return new Promise<boolean>((resolve) => {
+            this.backEndService.isLoggedIn()
+                .then(loggedIn => {
+                    console.log("NonAuthGuard#loggedIn = "+loggedIn);
+                    if (!loggedIn) {
+                        resolve(true);
+                    } else {
+                        this.router.navigate(['/']);
+                        resolve(false);
+                    }
+                });
+        });
     }
 }

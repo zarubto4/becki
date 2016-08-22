@@ -72,8 +72,8 @@ export class BeckiAsyncValidators {
                 }
                 backEnd.getProject(projId)
                     .then((project:Project) => {
-                        Promise.all<BProgram>(project.b_programs_id.map((b_program_id) => {
-                            return backEnd.getBProgram(b_program_id);
+                        Promise.all<BProgram>(project.b_programs.map((b_program) => {
+                            return backEnd.getBProgram(b_program.id);
                         }))
                             .then((blockoPrograms:BProgram[]) => {
                                 if (blockoPrograms.find((blockoProgram:BProgram) => blockoProgram.name == control.value)) {
