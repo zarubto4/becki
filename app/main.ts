@@ -74,6 +74,7 @@ import {TabMenuService} from "./services/TabMenuService";
 import {BreadcrumbsService} from "./services/BreadcrumbsService";
 import {ValidatorErrorsService} from "./services/ValidatorErrorsService";
 import {CurrentParamsService} from "./services/CurrentParamsService";
+import {NotificationService} from "./services/NotificationService";
 // Views
 import {Error404Component} from "./views/error404";
 import {LoginComponent} from "./views/login";
@@ -222,6 +223,7 @@ var tabMenus = {
         FlashMessagesService,
         BackEndService, // BackEndService must be after FlashMessagesService
         AuthGuard, // AuthGuard service must be after BackEndService
+        NotificationService,
         ModalService,
         CurrentParamsService,
         BreadcrumbsService,

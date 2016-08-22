@@ -12,6 +12,7 @@ import {Subscription} from "rxjs/Rx";
 import {BreadcrumbsService} from "../services/BreadcrumbsService";
 import {TabMenuService} from "../services/TabMenuService";
 import {LabeledLink} from "../helpers/LabeledLink";
+import {NotificationService} from "../services/NotificationService";
 
 
 const BODY_CLASSES = ["page-header-fixed"];
@@ -36,7 +37,7 @@ export class LayoutMain implements OnInit, OnDestroy {
 
     sidebarClosed:boolean = false;
 
-    constructor(private backEndService:BackEndService, @Inject("navigation") private navigation:LabeledLink[], private breadcrumbsService:BreadcrumbsService, private tabMenuService:TabMenuService, private activatedRoute:ActivatedRoute) {
+    constructor(protected notificationsService:NotificationService, private backEndService:BackEndService, @Inject("navigation") private navigation:LabeledLink[], private breadcrumbsService:BreadcrumbsService, private tabMenuService:TabMenuService, private activatedRoute:ActivatedRoute) {
     }
 
     // define function as property is needed to can set it as event listener (class methods is called with wrong this)

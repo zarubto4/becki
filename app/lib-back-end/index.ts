@@ -197,48 +197,48 @@ export interface Connection {
 }
 
 export interface NotificationBody {
+
     type:string;
+
     value:string;
 }
 
 export interface Notification {
 
-    messageType:string;
-    messageChannel:string;
-    notification_level:string;
-    notification_body:NotificationBody[];
-    messageId:string;
-
-    status:string;
-    reason:string;
-}
-
-export interface Notification_List { //
-    content:Notification[];
-
-    from:number;
-
-    to:number;
-
-    total:number;
-
-    pages:number[];
-
-    unread_total:number;
-}
-
-export interface APINotification { //notifikace taky? TODO je třeba více konzultace o tomto
     id:string;
 
-    level:string;
+    level:string;// ['info', 'success', 'warning', 'error', 'question'],
 
-    confirmation_required:boolean;
+    confirmation_required : boolean;
 
     was_read:boolean;
 
-    created:string;
+    created:number;
 
+    messageType:string;
+
+    messageChannel:string;
+
+    notification_level:string;
+
+    notification_body:NotificationBody[];
+
+    messageId:string;
+
+    status:string;
+
+    reason:string;
 }
+
+export interface NotificationList {
+    content : Notification[];
+    from :number; // value position from all subjects. Minimum is 0. ,
+    to: number; // Minimum is "from" Maximum is "total" ,
+    total :number;// Total subjects ,
+    pages:number[];// Numbers of pages, which you can call ,
+    unread_total:number // Total unread subjects
+}
+
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface Role {
@@ -885,6 +885,12 @@ export interface BProgramVersion {
     master_board:Object;
 }
 
+export interface OkResult{
+    state: string;
+    code: number;
+    message: string;
+}
+
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
 export interface BProgramState {
 
@@ -1405,7 +1411,7 @@ export abstract class BackEnd {
     }
 
     private reconnectEventSource():void {
-        if (this.eventSource) {
+       /* if (this.eventSource) {
             this.eventSource.close();
         }
         this.eventSource = null;
@@ -1417,7 +1423,7 @@ export abstract class BackEnd {
                 .fromEvent<MessageEvent>(this.eventSource, "message")
                 .map(event => JSON.parse(event.data))
                 .subscribe(this.notificationReceived);
-        }
+        }*/
     }
 
     private reconnectWebSocket():void {
@@ -1465,7 +1471,7 @@ export abstract class BackEnd {
                 .filter(message => message.messageType == "subscribe_instace" && message.status == "success")
                 .subscribe(this.interactionsSchemeSubscribed);
             channelReceived
-                .filter(message => message.messageType == "subscribe_notification" && message.messageType == "unsubscribe_notification" && message.messageType == "notification")
+                .filter(message => message.messageType == "subscribe_notification" || message.messageType == "unsubscribe_notification" || message.messageType == "notification")
                 .subscribe(this.notificationReceived);
             channelReceived
                 .filter(message => message.messageType == "getValues" && message.status == "success")
@@ -1712,7 +1718,7 @@ export abstract class BackEnd {
         });
     }
 
-    public getUnconfirmedNotification() { //Tyrion Verze 1.06.6.4
+    public getUnconfirmedNotification():Promise<OkResult> { //Tyrion Verze 1.06.6.4
         return this.requestRestPath("GET", `${BackEnd.UNCONFIRMED_NOTIFICATION_PATH}`);
     }
 
