@@ -4,46 +4,55 @@
 import {Injectable} from "@angular/core";
 import {BackEndService} from "./BackEndService";
 import * as libBackEnd from "../lib-back-end/index";
+import moment = require("moment/moment");
 
 export abstract class Notification {
-    constructor(public type:string, public icon:string, public body:string, reason?:Object) {
 
+    protected _relativeTime:string = 0;
+    constructor(public id:string, public type:string, public icon:string, public body:string, public time:number, reason?:Object) {
+
+        this._relativeTime=String(moment(this.time).startOf('hour').fromNow());
+
+
+
+        //ID potvrzení čtení notifikací
     }
+
 }
 
 export class NotificationSuccess extends Notification {
-    constructor(body:string, reason?:Object) {
-        super("success", "check-circle", body, reason);
+    constructor(public id:string, body:string,time:number, reason?:Object) {
+        super(id, "success", "check-circle", body,time, reason);
     }
 }
 
 export class NotificationInfo extends Notification {
-    constructor(body:string, reason?:Object) {
-        super("info", "info-circle", body, reason);
+    constructor(public id:string, body:string,time:number, reason?:Object) {
+        super(id, "info", "info-circle", body,time, reason);
     }
 }
 
 export class NotificationWarning extends Notification {
-    constructor(body:string, reason?:Object) {
-        super("warning", "exclamation-triangle", body, reason);
+    constructor(public id:string, body:string,time:number, reason?:Object) {
+        super(id, "warning", "exclamation-triangle", body,time, reason);
     }
 }
 
 export class NotificationDanger extends Notification {
-    constructor(body:string, reason?:Object) {
-        super("danger", "times-circle", body, reason);
+    constructor(public id:string, body:string,time:number, reason?:Object) {
+        super(id, "danger", "times-circle", body,time, reason);
     }
 }
 
 export class NotificationError extends Notification {
-    constructor(body:string, reason?:Object) {
-        super("danger", "times-circle", body, reason);
+    constructor(public id:string, body:string,time:number, reason?:Object) {
+        super(id, "danger", "times-circle", body,time, reason);
     }
 }
 
 export class NotificationQuestion extends Notification {
-    constructor(body:string, reason?:Object) {
-        super("info", "eye"/*fa-question-circle-o*/, body, reason);
+    constructor(public id:string, body:string,time:number, reason?:Object) {
+        super(id, "info", "eye"/*fa-question-circle-o*/, body,time, reason);
     }
 }
 
@@ -51,39 +60,80 @@ export class NotificationQuestion extends Notification {
 export class NotificationService {
 
     public notifications:Notification[] = [];
+    
+    public menuNotifications:Notification[] = [];
 
+    public unreadedNotifications:number=0;
     constructor(protected backEndService:BackEndService) {
         console.log("NotificationService init");
-        this.backEndService.requestNotificationsSubscribe();//přihlásí se automaticky k odběru notifikací
+        // není potřeba, udělá si to sám WS  ... this.backEndService.requestNotificationsSubscribe();//přihlásí se automaticky k odběru notifikací
         this.backEndService.getUnconfirmedNotification();//.then(console.log("get uncomfirmed notifications")); //TODO nebylo by třeba je napsat někam jinam?
+
+        this.backEndService.personInfo.subscribe((pi) => {
+            if (pi) {
+                //TODO:request first ten
+                this.getRestApiNotifications();
+
+
+            } else {
+                this.notificationCleanArray();
+            }
+        });
 
         this.backEndService.notificationReceived.subscribe(notification => {
             if (notification.messageType == "subscribe_notification" || notification.messageType == "unsubscribe_notification") {
                 console.log("subscribed");
             } else {
-                switch (notification.notification_level) {
-                    case "info":
-                        this.notifications.push(new NotificationInfo(this.notificationBodyUnparse(notification)));
-                        break;
-
-                    case "success":
-                        this.notifications.push(new NotificationSuccess(this.notificationBodyUnparse(notification)));
-                        break;
-
-                    case "warning":
-                        this.notifications.push(new NotificationWarning(this.notificationBodyUnparse(notification)));
-                        break;
-
-                    case "error":
-                        this.notifications.push(new NotificationError(this.notificationBodyUnparse(notification)));
-                        break;
-
-                    case "question":
-                        this.notifications.push(new NotificationInfo(this.notificationBodyUnparse(notification)));
-                        break;
-                }
+                this.unreadedNotifications++;
+                this.notificationLevelSort(notification);
             }
         });
+    }
+
+    wasReadedNotifications():void{
+        this.unreadedNotifications=0;
+    }
+
+
+    countUnreadNotifications():number { //tato metoda bude nejspíše smazána, je zde pouze pro jednodušší přístup k promněné která se bude nejspíše měnit
+        return this.unreadedNotifications;
+    }
+
+    notificationLevelSort(notification:libBackEnd.Notification):void {
+        switch (notification.notification_level) {
+            case "info":
+                this.addNotification(new NotificationInfo(notification.messageId, this.notificationBodyUnparse(notification),notification.created));
+                break;
+
+            case "success":
+                this.addNotification(new NotificationSuccess(notification.messageId, this.notificationBodyUnparse(notification),notification.created));
+                break;
+
+            case "warning":
+                this.addNotification(new NotificationWarning(notification.messageId, this.notificationBodyUnparse(notification),notification.created));
+                break;
+
+            case "error":
+                this.addNotification(new NotificationError(notification.messageId, this.notificationBodyUnparse(notification),notification.created));
+                break;
+
+            case "question":
+                this.addNotification(new NotificationInfo(notification.messageId, this.notificationBodyUnparse(notification),notification.created));
+                break;
+        }
+    }
+
+    addNotification(notification:Notification):void {
+        this.notifications.push(notification);
+        this.menuNotifications = this.notifications.slice(0, 10);
+        console.log(this.notifications.map(note => note.id));
+        console.log(this.menuNotifications.map(note => note.id));
+
+    }
+
+    notificationCleanArray():void {
+        this.notifications = [];
+        this.menuNotifications = [];
     }
 
     notificationBodyUnparse(notification:libBackEnd.Notification):string {
@@ -112,12 +162,13 @@ export class NotificationService {
         return bodyText;
     }
 
-
-    getFirstTenNotifications():Notification[] {
-        var listedNotification:Notification[];
-
-        listedNotification = this.notifications.slice(0, 10);
-
-        return listedNotification;
+    getRestApiNotifications(page = 1):Promise<Notification[]> {
+        this.notificationCleanArray();
+        this.backEndService.getNotificationsByPage(page).then(list => list.content.map(notification => {
+            this.notificationLevelSort(notification);
+        })).then(() => {
+            return this.notifications
+        });
+        return null;
     }
 }

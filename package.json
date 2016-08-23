@@ -17,6 +17,7 @@
     "jquery-knob": "^1.2.11",
     "jqueryui": "^1.11.1",
     "material-design-icons": "^2.2.3",
+    "moment": "^2.14.1",
     "node-uuid": "^1.4.7",
     "patternfly": "^3.1.0",
     "reflect-metadata": "^0.1.3",

@@ -84,6 +84,7 @@ export class LayoutMain implements OnInit, OnDestroy {
     }
 
     onNotificationToggleClick() {
+        this.notificationsService.wasReadedNotifications();
         this.showNotificationMenu = !this.showNotificationMenu;
         this.showUserMenu = false;
     }

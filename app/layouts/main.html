@@ -28,14 +28,30 @@
                     <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
                         <a class="dropdown-toggle" (click)="onNotificationToggleClick($event)">
                             <i class="icon-bell"></i>
-                            <span class="badge badge-default">?</span>
+                            <span class="badge badge-default">{{notificationsService.countUnreadNotifications()}}</span>
                         </a>
-                        <ul class="dropdown-menu" [style.display]="showNotificationMenu?'block':'none'" >
+                        <ul class="dropdown-menu" [style.display]="showNotificationMenu?'block':'none'">
                             <li class="external">
                                 <h3>
-                                    <span class="bold">12 pending</span> notifications</h3>
-                                <a>view all</a>
+                                    <span class="bold">{{notificationsService.countUnreadNotifications()}} pending</span> notifications</h3>
+                                <a href="#">view all</a>
                             </li>
+                            <ul class="dropdown-menu-list scroller">
+                                <li *ngFor="let note of notificationsService.menuNotifications">
+
+                                    <a>
+                                        <span class="time">{{note._relativeTime}}</span>
+                                        <span class="details">
+                                            <span class="label label-sm label-icon label-{{note.type}}">
+                                                <i class="fa fa-{{note.icon}}"></i>
+                                            </span>
+                                            <span [innerHTML]="note.body" style=""></span>
+                                        </span>
+                                    </a>
+
+                                </li>
+                            </ul>
+<!--
                             <li>
                                 <ul class="dropdown-menu-list scroller" style="height: 250px;">
                                     <li>
@@ -47,80 +63,9 @@
                                       Just now </span>
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="#">
-                                      <span class="label label-sm label-icon label-danger">
-                                      <i class="fa fa-bolt"></i>
-                                      </span>
-                                            Server #12 overloaded. <span class="time">
-                                      15 mins </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                      <span class="label label-sm label-icon label-warning">
-                                      <i class="fa fa-bell-o"></i>
-                                      </span>
-                                            Server #2 not responding. <span class="time">
-                                      22 mins </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                      <span class="label label-sm label-icon label-info">
-                                      <i class="fa fa-bullhorn"></i>
-                                      </span>
-                                            Application error. <span class="time">
-                                      40 mins </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                      <span class="label label-sm label-icon label-danger">
-                                      <i class="fa fa-bolt"></i>
-                                      </span>
-                                            Database overloaded 68%. <span class="time">
-                                      2 hrs </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                      <span class="label label-sm label-icon label-danger">
-                                      <i class="fa fa-bolt"></i>
-                                      </span>
-                                            2 user IP blocked. <span class="time">
-                                      5 hrs </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                      <span class="label label-sm label-icon label-warning">
-                                      <i class="fa fa-bell-o"></i>
-                                      </span>
-                                            Storage Server #4 not responding. <span class="time">
-                                      45 mins </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                      <span class="label label-sm label-icon label-info">
-                                      <i class="fa fa-bullhorn"></i>
-                                      </span>
-                                            System Error. <span class="time">
-                                      55 mins </span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                      <span class="label label-sm label-icon label-danger">
-                                      <i class="fa fa-bolt"></i>
-                                      </span>
-                                            Database overloaded 68%. <span class="time">
-                                      2 hrs </span>
-                                        </a>
-                                    </li>
                                 </ul>
                             </li>
+-->
                         </ul>
                     </li>
                     <!-- END NOTIFICATION DROPDOWN -->
@@ -175,15 +120,6 @@
         <!-- END SIDEBAR -->
 
 
-
-
-
-
-
-
-
-
-
         <div class="page-content-wrapper">
             <!-- BEGIN CONTENT BODY -->
             <div class="page-content">
@@ -203,7 +139,8 @@
 
                 <div [class.tabbable-line]="tabMenuItems">
                     <ul *ngIf="tabMenuItems" class="nav nav-tabs">
-                        <li *ngFor="let tabItem of tabMenuItems" routerLinkActive="active" [routerLinkActiveOptions]="{exact: tabItem.options['linkActiveExact']}">
+                        <li *ngFor="let tabItem of tabMenuItems" routerLinkActive="active"
+                            [routerLinkActiveOptions]="{exact: tabItem.options['linkActiveExact']}">
                             <a [routerLink]="tabItem.link">{{tabItem.label}}</a>
                         </li>
                     </ul>
@@ -219,13 +156,6 @@
             </div>
             <!-- END CONTENT BODY -->
         </div>
-
-
-
-
-
-
-
 
 
         <!--div class="nav-pf-vertical nav-pf-vertical-with-secondary-nav" data-bind-class.collapsed="navbarState == 'collapsed'" data-bind-class.hidden="navbarState == 'hidden'" data-bind-class.show-mobile-nav="navbarState == 'visible'">

@@ -197,7 +197,7 @@ export interface NotificationBody {
 }
 
 export interface Notification {
-
+    //rest-api
     id:string;
 
     level:string;// ['info', 'success', 'warning', 'error', 'question'],
@@ -208,6 +208,8 @@ export interface Notification {
 
     created:number;
 
+
+    //websocket
     messageType:string;
 
     messageChannel:string;
@@ -224,13 +226,20 @@ export interface Notification {
 }
 
 export interface NotificationList {
+    
     content : Notification[];
+    
     from :number; // value position from all subjects. Minimum is 0. ,
+    
     to: number; // Minimum is "from" Maximum is "total" ,
+    
     total :number;// Total subjects ,
+    
     pages:number[];// Numbers of pages, which you can call ,
+    
     unread_total:number // Total unread subjects
 }
+
 
 
 // see http://youtrack.byzance.cz/youtrack/issue/TYRION-105#comment=109-253
@@ -1312,6 +1321,7 @@ export abstract class BackEnd {
     public personInfo:Rx.Subject<PersonInfo> = null;
 
     public constructor() {
+        this.webSocket = null;
         this.webSocketMessageQueue = [];
         this.webSocketReconnectTimeout = null;
         this.notificationReceived = new Rx.Subject<Notification>();
@@ -1412,15 +1422,21 @@ export abstract class BackEnd {
     }
 
     private sendWebSocketMessageQueue():void {
-        this.webSocketMessageQueue.splice(0).forEach(message => {
-            try {
-                this.webSocket.send(JSON.stringify(message));
-            } catch (err) {
-                if (err.code == DOMException.INVALID_STATE_ERR) {
-                    this.webSocketMessageQueue.push(message);
+        console.log("sendWebSocketMessageQueue() websocket="+this.webSocket);
+        if (this.webSocket) {
+            this.webSocketMessageQueue.slice().forEach(message => {
+                try {
+                    console.log("posila se: " + message.messageType + message.messageChannel);
+                    this.webSocket.send(JSON.stringify(message));
+                    var i = this.webSocketMessageQueue.indexOf(message);
+                    if (i > -1) {
+                        this.webSocketMessageQueue.splice(i);
+                    }
+                } catch (err) {
+                    console.log("ERR"+err);
                 }
-            }
-        });
+            });
+        }
     }
 
     public sendWebSocketMessage(message:WebSocketMessage):void {
@@ -1459,7 +1475,7 @@ export abstract class BackEnd {
 
                 console.log("connectWebSocket() :: webSocketToken = "+webSocketToken.websocket_token);
 
-                this.webSocket = new WebSocket(`${BackEnd.WS_SCHEME}://${BackEnd.HOST}/websocket/becki/${webSocketToken.websocket_token}`);
+                this.webSocket = new WebSocket(`${BackEnd.WS_SCHEME}://localhost:8888/websocket/becki/${webSocketToken.websocket_token}`);
                 this.webSocket.addEventListener("close", this.reconnectWebSocketAfterTimeout);
 
                 let opened = Rx.Observable
@@ -1471,10 +1487,15 @@ export abstract class BackEnd {
                 let errorOccurred = Rx.Observable
                     .fromEvent(this.webSocket, "error");
 
+                opened.
+                subscribe(() => {
+                    this.requestNotificationsSubscribe();
+                });
                 opened
                     .subscribe(() => this.sendWebSocketMessageQueue());
                 opened
                     .subscribe(this.interactionsOpened);
+
                 channelReceived
                     .filter(message => message.status == "error")
                     .map(message => BugFoundError.fromWsResponse(message))
@@ -1629,10 +1650,10 @@ export abstract class BackEnd {
         return this.requestRestPath("DELETE", `/coreClient/connection/${id}`);
     }
 
-    /*
-     public getNotifications(page:number):Promise<MissedNotificationsPage> {
+
+     public getNotificationsByPage(page:number):Promise<NotificationList> {
      return this.requestRestPath("GET", `${BackEnd.NOTIFICATION_PATH}/list/${page}`);
-     }*/
+     }
 
     public sendPasswordRecovery(mail:string):Promise<string> {
         //TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-325
@@ -1649,12 +1670,14 @@ export abstract class BackEnd {
     }
 
     public requestNotificationsSubscribe():void {
+        console.log("requestNotificationsSubscribe Start");
         let message = {
             messageId: uuid.v4(),
             messageChannel: BackEnd.WS_CHANNEL,
             messageType: "subscribe_notification"
         };
         if (!this.findEnqueuedWebSocketMessage(message, 'messageChannel', 'messageType')) {
+            console.log("requestNotificationsSubscribe Posilam");
             this.sendWebSocketMessage(message);
         }
     }
@@ -1733,7 +1756,7 @@ export abstract class BackEnd {
         });
     }
 
-    public getUnconfirmedNotification():Promise<OkResult> { //Tyrion Verze 1.06.6.4
+    public getUnconfirmedNotification():Promise<OkResult> { //Tyrion Verze 1.06.6.4 //TODO zjistit co dělá a co s ní
         return this.requestRestPath("GET", `${BackEnd.UNCONFIRMED_NOTIFICATION_PATH}`);
     }
 
