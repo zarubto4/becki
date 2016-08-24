@@ -16,22 +16,34 @@
                 </a>
             </div> -->
         </div>
-        <div class="table-scrollable">
-            <table class="table table-hover">
-                <tbody>
-                <tr *ngFor="let note of notificationService.notifications">
-                    <a>
-                        <span class="time">{{note._relativeTime}}</span>
-                        <span class="details">
-                              <span class="label label-sm label-icon label-{{note.type}}">
-                                 <i class="fa fa-{{note.icon}}"></i>
-                              </span>
-                            <span [innerHTML]="note.body" style=""></span>
-                        </span>
+        <div class="portlet-body">
+
+            <ul class="feeds">
+
+                <li *ngFor="let note of notificationService.notifications">
+                    <a href="javascript:;">
+                        <div class="col1">
+                            <div class="cont">
+                                <div class="cont-col1">
+                                    <div class="label label-sm label-{{note.type}}">
+                                        <i class="fa fa-{{note.icon}}"></i>
+                                    </div>
+                                </div>
+                                <div class="cont-col2">
+                                    <div class="desc"> <span [innerHTML]="note.body" style=""></span>
+                                         </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col2" style='white-space: nowrap'>
+                            <div class="date"> {{note._relativeTime}} </div>
+                        </div>
                     </a>
-                </tr>
-                </tbody>
-            </table>
+                </li>
+
+            </ul>
+
+
         </div>
     </div>
 </layout-main>

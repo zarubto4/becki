@@ -68,7 +68,26 @@ export class NotificationService {
     public unreadedNotifications:number=0;
     constructor(protected backEndService:BackEndService) {
         console.log("NotificationService init");
-        // není potřeba, udělá si to sám WS  ... this.backEndService.requestNotificationsSubscribe();//přihlásí se automaticky k odběru notifikací
+
+
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+
         this.backEndService.getUnconfirmedNotification();//.then(console.log("get uncomfirmed notifications")); //TODO nebylo by třeba je napsat někam jinam?
 
         this.backEndService.personInfo.subscribe((pi) => {
@@ -82,16 +101,21 @@ export class NotificationService {
             }
         });
 
-        this.backEndService.notificationReceived.subscribe(notification => {
+        this.backEndService.notificationReceived.subscribe(notification => { //TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-360
             if (notification.messageType == "subscribe_notification" || notification.messageType == "unsubscribe_notification") {
-                console.log("subscribed");
+                console.log("(un)subscribed");
             } else {
                 this.unreadedNotifications++;
-                this.notificationLevelSort(notification);
+                var notif = this.notificationParse(notification);
+                this.addNotification(notif);
+                this.showToastr(notif);
             }
         });
     }
 
+    showToastr(notification:Notification):void{
+        toastr[notification.type](notification.body);
+    }
     wasReadedNotifications():void{ //TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-360
         //až bude sjednoceno názosloví je třeba za pomocí was_read
         this.unreadedNotifications=0;
@@ -102,28 +126,29 @@ export class NotificationService {
         return this.unreadedNotifications;
     }
 
-    notificationLevelSort(notification:libBackEnd.Notification):void {
+    notificationParse(notification:libBackEnd.Notification):Notification {
         switch (notification.notification_level) {
             case "info":
-                this.addNotification(new NotificationInfo(notification.messageId, this.notificationBodyUnparse(notification),notification.created));
+                return new NotificationInfo(notification.messageId, this.notificationBodyUnparse(notification),notification.created);
                 break;
 
             case "success":
-                this.addNotification(new NotificationSuccess(notification.messageId, this.notificationBodyUnparse(notification),notification.created));
+                return new NotificationSuccess(notification.messageId, this.notificationBodyUnparse(notification),notification.created);
                 break;
 
             case "warning":
-                this.addNotification(new NotificationWarning(notification.messageId, this.notificationBodyUnparse(notification),notification.created));
+                return new NotificationWarning(notification.messageId, this.notificationBodyUnparse(notification),notification.created);
                 break;
 
             case "error":
-                this.addNotification(new NotificationError(notification.messageId, this.notificationBodyUnparse(notification),notification.created));
+                return new NotificationError(notification.messageId, this.notificationBodyUnparse(notification),notification.created);
                 break;
 
             case "question":
-                this.addNotification(new NotificationInfo(notification.messageId, this.notificationBodyUnparse(notification),notification.created));
+                return new NotificationInfo(notification.messageId, this.notificationBodyUnparse(notification),notification.created);
                 break;
         }
+        return null;
     }
 
     addNotification(notification:Notification):void {
@@ -166,7 +191,7 @@ export class NotificationService {
     getRestApiNotifications(page = 1):Promise<Notification[]> {
         this.notificationCleanArray();
         this.backEndService.getNotificationsByPage(page).then(list => list.content.map(notification => {
-            this.notificationLevelSort(notification);
+            this.addNotification(this.notificationParse(notification));
         })).then(() => {
             return this.notifications
         });
