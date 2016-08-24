@@ -88,6 +88,7 @@ import {ProjectsProjectCodeComponent} from "./views/projects-project-code";
 import {ProjectsProjectBlockoBlockoComponent} from "./views/projects-project-blocko-blocko";
 import {ProjectsProjectCodeCodeComponent} from "./views/projects-project-code-code";
 import {NotificationsComponent} from "./views/notifications";
+import {ProfileComponent} from "./views/profile";
 
 // DON'T USE children IN ROUTER YET!!!
 var routes:Routes = [
@@ -99,6 +100,8 @@ var routes:Routes = [
     {path: "dashboard", data:{breadName: "Dashboard"}, component: DashboardComponent, canActivate:[AuthGuard]},
 
     {path: "notifications", data:{breadName: "Notifications"}, component: NotificationsComponent, canActivate:[AuthGuard]},
+
+    {path: "profile", data:{breadName: "Profile"}, component: ProfileComponent, canActivate:[AuthGuard]},
 
     {path: "projects", data:{breadName: "Projects"}, component: ProjectsComponent, canActivate:[AuthGuard]},
     {path: "projects/:project", data:{breadName: ":project"}, component: ProjectsProjectComponent, canActivate:[AuthGuard]},
@@ -252,6 +255,7 @@ var tabMenus = {
         ProjectsProjectCodeComponent,
         ProjectsProjectCodeCodeComponent,
         NotificationsComponent,
+        ProfileComponent,
     ],
     exports: [ AppComponent ],
     bootstrap: [ AppComponent ]
