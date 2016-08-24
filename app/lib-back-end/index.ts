@@ -1422,11 +1422,9 @@ export abstract class BackEnd {
     }
 
     private sendWebSocketMessageQueue():void {
-        console.log("sendWebSocketMessageQueue() websocket="+this.webSocket);
         if (this.webSocket) {
             this.webSocketMessageQueue.slice().forEach(message => {
                 try {
-                    console.log("posila se: " + message.messageType + message.messageChannel);
                     this.webSocket.send(JSON.stringify(message));
                     var i = this.webSocketMessageQueue.indexOf(message);
                     if (i > -1) {
@@ -1468,22 +1466,28 @@ export abstract class BackEnd {
             return;
         }
         this.disconnectWebSocket();
-        console.log("connectWebSocket()");
 
         this.getWebSocketToken()
             .then((webSocketToken) => {
 
                 console.log("connectWebSocket() :: webSocketToken = "+webSocketToken.websocket_token);
 
-                this.webSocket = new WebSocket(`${BackEnd.WS_SCHEME}://localhost:8888/websocket/becki/${webSocketToken.websocket_token}`);
+                this.webSocket = new WebSocket(`${BackEnd.WS_SCHEME}://${BackEnd.HOST}/websocket/becki/${webSocketToken.websocket_token}`);
                 this.webSocket.addEventListener("close", this.reconnectWebSocketAfterTimeout);
 
                 let opened = Rx.Observable
                     .fromEvent<void>(this.webSocket, "open");
                 let channelReceived = Rx.Observable
                     .fromEvent<MessageEvent>(this.webSocket, "message")
-                    .map(event => JSON.parse(event.data))
-                    .filter(message => message.messageChannel == BackEnd.WS_CHANNEL);
+                    .map(event => { //TODO: think why is this triggered 8 times (for 8 subscribes)
+                        try {
+                            return JSON.parse(event.data);
+                        } catch (e) {
+                            console.log("parse: "+e);
+                        }
+                        return null;
+                    })
+                    .filter(message => (message && message.messageChannel == BackEnd.WS_CHANNEL));
                 let errorOccurred = Rx.Observable
                     .fromEvent(this.webSocket, "error");
 
@@ -1670,14 +1674,12 @@ export abstract class BackEnd {
     }
 
     public requestNotificationsSubscribe():void {
-        console.log("requestNotificationsSubscribe Start");
         let message = {
             messageId: uuid.v4(),
             messageChannel: BackEnd.WS_CHANNEL,
             messageType: "subscribe_notification"
         };
         if (!this.findEnqueuedWebSocketMessage(message, 'messageChannel', 'messageType')) {
-            console.log("requestNotificationsSubscribe Posilam");
             this.sendWebSocketMessage(message);
         }
     }

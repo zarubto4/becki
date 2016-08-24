@@ -6,12 +6,14 @@ import {BackEndService} from "./BackEndService";
 import * as libBackEnd from "../lib-back-end/index";
 import moment = require("moment/moment");
 
+
 export abstract class Notification {
 
-    protected _relativeTime:string = 0;
+    protected _relativeTime:string = "";
     constructor(public id:string, public type:string, public icon:string, public body:string, public time:number, reason?:Object) {
 
-        this._relativeTime=String(moment(this.time).startOf('hour').fromNow());
+        this._relativeTime= moment(this.time).startOf('hour').fromNow();
+
 
 
 
@@ -90,7 +92,8 @@ export class NotificationService {
         });
     }
 
-    wasReadedNotifications():void{
+    wasReadedNotifications():void{ //TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-360
+        //až bude sjednoceno názosloví je třeba za pomocí was_read
         this.unreadedNotifications=0;
     }
 
@@ -124,10 +127,8 @@ export class NotificationService {
     }
 
     addNotification(notification:Notification):void {
-        this.notifications.push(notification);
+        this.notifications.unshift(notification);
         this.menuNotifications = this.notifications.slice(0, 10);
-        console.log(this.notifications.map(note => note.id));
-        console.log(this.menuNotifications.map(note => note.id));
 
     }
 

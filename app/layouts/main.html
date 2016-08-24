@@ -28,13 +28,13 @@
                     <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
                         <a class="dropdown-toggle" (click)="onNotificationToggleClick($event)">
                             <i class="icon-bell"></i>
-                            <span class="badge badge-default">{{notificationsService.countUnreadNotifications()}}</span>
+                            <span class="badge badge-default" *ngIf="notificationsService.countUnreadNotifications()">{{notificationsService.countUnreadNotifications()}}</span>
                         </a>
                         <ul class="dropdown-menu" [style.display]="showNotificationMenu?'block':'none'">
                             <li class="external">
                                 <h3>
                                     <span class="bold">{{notificationsService.countUnreadNotifications()}} pending</span> notifications</h3>
-                                <a href="#">view all</a>
+                                <a [routerLink]="['/notifications']">view all</a>
                             </li>
                             <ul class="dropdown-menu-list scroller">
                                 <li *ngFor="let note of notificationsService.menuNotifications">
