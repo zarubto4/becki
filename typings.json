@@ -6,6 +6,7 @@
     "moment": "registry:dt/moment#2.8.0+20160316155526",
     "node-uuid/node-uuid-base": "registry:dt/node-uuid/node-uuid-base#0.0.0+20160316155526",
     "node-uuid/node-uuid-cjs": "registry:dt/node-uuid/node-uuid-cjs#0.0.0+20160316155526",
+    "toastr": "registry:dt/toastr#2.1.1+20160510010435",
     "underscore": "registry:dt/underscore#1.7.0+20160505190121"
   }
 }
