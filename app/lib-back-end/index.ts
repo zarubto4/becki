@@ -2068,7 +2068,7 @@ export abstract class BackEnd {
         });
     }
 
-    public addVersionToCProgram(version_name:string, version_description:string, files:{[name:string]:string}, program:string):Promise<any> {
+    public addVersionToCProgram(version_name:string, version_description:string, main:string, files:{[name:string]:string}, program:string):Promise<any> {
         if (version_name.length < 8) {
             throw "name >= 8 required";
         }
@@ -2077,6 +2077,7 @@ export abstract class BackEnd {
         return this.requestRestPath("POST", `${BackEnd.C_PROGRAM_VERSION_PATH}/create/${program}`, {
             version_name,
             version_description,
+            main,
             user_files
         }, 201);
     }

@@ -11,16 +11,22 @@ import {ROUTER_DIRECTIVES} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
 import {ModalsRemovalModel} from "../modals/removal";
 import {ModalsCodePropertiesModel} from "../modals/code-poperties";
+import {IDEComponent} from "../lib-becki/field-ide";
+import {AceEditor} from "../components/AceEditor";
+import {CodeIDE} from "../components/CodeIDE";
 
 @Component({
     selector: "view-projects-project-code-code",
     templateUrl: "app/views/projects-project-code-code.html",
-    directives: [ROUTER_DIRECTIVES, LayoutMain],
+    directives: [ROUTER_DIRECTIVES, LayoutMain, IDEComponent, CodeIDE],
 })
 export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     projectId: string;
     codeId: string;
+
+    someCode:string;
+    someCode2:string;
 
     routeParamsSubscription:Subscription;
 
@@ -44,7 +50,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     refresh():void {
 
-        //this.backEndService.addVersionToDeviceProgram("verzeeeeee 1", "hele asi fajn veerze", {"neco.cpp":"something"}, this.codeId);
+        //this.backEndService.addVersionToCProgram("verzeeeeee 1", "hele asi fajn veerze programu kterej se super mega ultra dobrej", "hlavní program", {"neco.cpp":"something"}, this.codeId);
 
         this.backEndService.getCProgram(this.codeId)
             .then((codeProgram:CProgram) => {

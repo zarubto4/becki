@@ -7,17 +7,14 @@ import * as _ from "underscore";
 import * as ngCore from "@angular/core";
 
 import * as fieldCode from "./field-code";
-import * as libBeckiBackEnd from "../lib-becki/back-end";
-import * as libBeckiNotifications from "../lib-becki/notifications";
-import * as libBootstrapDropdown from "../lib-bootstrap/dropdown";
-import * as libBootstrapModal from "../modals/modal";
+import {BackEndService} from "../services/BackEndService";
 
 @ngCore.Component({
-  selector: "[fieldIDE]",
+  selector: "fieldIDE",
   templateUrl: "app/lib-becki/field-ide.html",
-  directives: [fieldCode.Component, libBootstrapDropdown.DIRECTIVES]
+  directives: [fieldCode.Component]
 })
-export class Component {
+export class IDEComponent {
 
   @ngCore.Input("fieldIDE")
   files:{[name:string]: string};
@@ -40,13 +37,13 @@ export class Component {
   @ngCore.Input()
   readonly:boolean;
 
-  modal:libBootstrapModal.Component;
+  modal:any;
 
-  notifications:libBeckiNotifications.Service;
+  notifications:any;
 
-  backEnd:libBeckiBackEnd.Service;
+  backEnd:BackEndService;
 
-  constructor(modalComponent:libBootstrapModal.Component, notifications:libBeckiNotifications.Service, backEnd:libBeckiBackEnd.Service) {
+  constructor(backEnd:BackEndService) {
     "use strict";
 
     this.files = {};
@@ -55,8 +52,8 @@ export class Component {
     this.pathSeparator = "/";
     this.libraries = {};
     this.selection = null;
-    this.modal = modalComponent;
-    this.notifications = notifications;
+    this.modal = {};
+    this.notifications = {};
     this.backEnd = backEnd;
   }
 
@@ -166,7 +163,7 @@ export class Component {
       }
     }
     parts.push("new_file.cpp");
-    let modalModel = new libBootstrapModal.FilenameModel(parts.join(this.pathSeparator), this.pathSeparator);
+    /*let modalModel = new libBootstrapModal.FilenameModel(parts.join(this.pathSeparator), this.pathSeparator);
 
     this.modal.showModal(modalModel).then(add => {
       if (add) {
@@ -177,7 +174,7 @@ export class Component {
         this.files[modalModel.name] = "";
         this.selection = {type: "path", value: modalModel.name};
       }
-    });
+    });*/
   }
 
   onAddLibraryClick():void {
@@ -188,14 +185,14 @@ export class Component {
     }
 
     this.notifications.shift();
-    let modalModel = new libBootstrapModal.SelectionModel(Object.keys(this.libraries).filter(name => !this.libraries[name]).sort());
+    /*let modalModel = new libBootstrapModal.SelectionModel(Object.keys(this.libraries).filter(name => !this.libraries[name]).sort());
 
     this.modal.showModal(modalModel).then(add => {
       if (add) {
         this.libraries[modalModel.selection] = true;
         this.selection = {type: "library", value: modalModel.selection};
       }
-    });
+    });*/
   }
 
   onMoveClick():void {
@@ -206,7 +203,7 @@ export class Component {
     }
 
     this.notifications.shift();
-    let modalModel = new libBootstrapModal.FilenameModel(this.selection.value, this.pathSeparator);
+    /*let modalModel = new libBootstrapModal.FilenameModel(this.selection.value, this.pathSeparator);
     this.modal.showModal(modalModel).then(move => {
       if (move) {
         if (this.getPaths().indexOf(modalModel.name) != -1) {
@@ -228,7 +225,7 @@ export class Component {
         }
         this.selection.value = modalModel.name;
       }
-    });
+    });*/
   }
 
   onRemoveClick():void {
@@ -239,7 +236,7 @@ export class Component {
     }
 
     this.notifications.shift();
-    this.modal.showModal(new libBootstrapModal.RemovalModel(this.selection.value)).then(remove => {
+   /* this.modal.showModal(new libBootstrapModal.RemovalModel(this.selection.value)).then(remove => {
       if (remove) {
         switch (this.selection.type) {
           case "path":
@@ -261,7 +258,7 @@ export class Component {
         }
         this.selection = null;
       }
-    });
+    });*/
   }
 
   onBuildClick():void {
@@ -275,13 +272,13 @@ export class Component {
       }
     }
     this.filesAnnotations = {};
-    this.backEnd.buildCProgram(files, this.buildTarget)
+    /*this.backEnd.buildCProgram(files, this.buildTarget)
         .then(() => this.notifications.current.push(new libBeckiNotifications.Success("The project has been built successfully.")))
         .catch(reason => {
           // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-327
           this.notifications.current.push(new libBeckiNotifications.Warning("issue/TYRION-327"));
           this.notifications.current.push(new libBeckiNotifications.Danger("The project cannot be built.", reason));
-        });
+        });*/
   }
 
   onPathClick(path:string):void {

@@ -1,0 +1,21 @@
+<div>
+
+
+    <a (click)="debug_addFile()">Add file</a>
+    <a (click)="debug_logFiles()">Log files</a>
+    <div class="tabbable-custom nav-justified">
+        <ul class="nav nav-tabs">
+            <li *ngFor="let file of openFiles; let i = index" [class.active]="i == openFilesTabIndex" (click)="openFilesOpenTab(i)">
+                <a>{{file.fileName}}</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <li *ngFor="let file of openFiles; let i = index" class="tab-pane" [class.active]="i == openFilesTabIndex">
+                <a>{{file.fileName}}</a>
+                <ace-editor [(code)]="file.content"></ace-editor>
+            </li>
+        </div>
+
+    </div>
+
+</div>
