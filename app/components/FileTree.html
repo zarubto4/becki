@@ -1,0 +1,19 @@
+<li [class.jstree-node]="!root" [class.jstree-last]="last" [class.jstree-open]="open" [class.jstree-closed]="!open">
+    <i class="jstree-icon jstree-ocl" (click)="toggleOpenClick()"></i>
+    <span class="jstree-anchor" tabindex="-1">
+        <i class="jstree-icon jstree-themeicon fa fa-folder icon-state-warning jstree-themeicon-custom"></i>
+        {{fileTreeObject.name}}
+    </span>
+    <ul class="jstree-children">
+        <div *ngFor="let child of fileTreeObject.children; let last = last">
+            <file-tree *ngIf="child.directory" [fileTreeObject]="child" [last]="last" [root]="false"></file-tree>
+            <li *ngIf="!child.directory" class="jstree-node jstree-leaf" [class.jstree-last]="last">
+                <i class="jstree-icon jstree-ocl"></i>
+                <span class="jstree-anchor" tabindex="-1">
+                    <i class="jstree-icon jstree-themeicon fa fa-file icon-lg jstree-themeicon-custom" role="presentation"></i>
+                    {{child.name}}
+                </span>
+            </li>
+        </div>
+    </ul>
+</li>

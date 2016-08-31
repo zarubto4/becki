@@ -3,19 +3,31 @@
 
     <a (click)="debug_addFile()">Add file</a>
     <a (click)="debug_logFiles()">Log files</a>
-    <div class="tabbable-custom nav-justified">
-        <ul class="nav nav-tabs">
-            <li *ngFor="let file of openFiles; let i = index" [class.active]="i == openFilesTabIndex" (click)="openFilesOpenTab(i)">
-                <a>{{file.fileName}}</a>
-            </li>
-        </ul>
-        <div class="tab-content">
-            <li *ngFor="let file of openFiles; let i = index" class="tab-pane" [class.active]="i == openFilesTabIndex">
-                <a>{{file.fileName}}</a>
-                <ace-editor [(code)]="file.content"></ace-editor>
-            </li>
+    <div class="row">
+        <div class="col-md-3 portlet light bordered">
+            <div class="jstree jstree-default">
+                <ul class="jstree-container-ul jstree-children">
+                    <file-tree [fileTreeObject]="testFiles"></file-tree>
+                </ul>
+            </div>
         </div>
-
+        <div class="col-md-9">
+            <div class="tabbable-custom nav-justified">
+                <ul class="nav nav-tabs">
+                    <li *ngFor="let file of openFiles; let i = index" [class.active]="i == openFilesTabIndex" (click)="openFilesOpenTab(i)">
+                        <a>
+                            {{file.fileName}}
+                            <i class="fa fa-times" (click)="openFilesCloseTab(file)"></i>
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <li *ngFor="let file of openFiles; let i = index" class="tab-pane" [class.active]="i == openFilesTabIndex">
+                        <ace-editor [(code)]="file.content" mode="ace/mode/c_cpp"></ace-editor>
+                    </li>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>
