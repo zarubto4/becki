@@ -16,6 +16,9 @@
             <template [ngSwitchCase]="'ModalsCodePropertiesModel'">
                 <modals-code-properties [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-code-properties>
             </template>
+            <template [ngSwitchCase]="'ModalsCodeFileDialogModel'">
+                <modals-code-file-dialog [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-code-file-dialog>
+            </template>
         </div>
     </div>
 </div>

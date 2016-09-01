@@ -1,23 +1,43 @@
 <div>
-
-
-    <a (click)="debug_addFile()">Add file</a>
-    <a (click)="debug_logFiles()">Log files</a>
     <div class="row">
-        <div class="col-md-3 portlet light bordered">
-            <div class="jstree jstree-default">
+        <div class="col-md-12">
+            <button type="button" class="btn default green-haze" (click)="toolbarAddFileClick()">
+                <i class="fa fa-file-text"></i> Add file
+            </button>
+            <button type="button" class="btn default green-haze" (click)="toolbarAddDirectoryClick()">
+                <i class="fa fa-folder"></i> Add directory
+            </button>
+            <button type="button" class="btn default blue-steel" (click)="toolbarMoveClick()">
+                <i class="fa fa-arrow-circle-right"></i> Move
+            </button>
+            <button type="button" class="btn default blue-steel" (click)="toolbarRenameClick()">
+                <i class="fa fa-i-cursor"></i> Rename
+            </button>
+            <button type="button" class="btn default red" (click)="toolbarRemoveClick()">
+                <i class="fa fa-trash"></i> Remove
+            </button>
+
+            <button type="button" class="btn btn-default" (click)="debug_logFiles()">
+                <i class="fa fa-terminal"></i> Log files
+            </button>
+        </div>
+    </div>
+    <div class="row"><div class="spacer15"></div></div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="jstree jstree-default portlet light bordered" style="overflow-x: auto;">
                 <ul class="jstree-container-ul jstree-children">
-                    <file-tree [fileTreeObject]="testFiles"></file-tree>
+                    <file-tree [fileTreeObject]="rootFileTreeObject" (newSelected)="selectFto($event)"></file-tree>
                 </ul>
             </div>
         </div>
-        <div class="col-md-9">
-            <div class="tabbable-custom nav-justified">
-                <ul class="nav nav-tabs">
+        <div class="col-md-9 no-padding-left">
+            <div class="tabbable-custom">
+                <ul class="nav nav-tabs nav-tabs-with-spacer">
                     <li *ngFor="let file of openFiles; let i = index" [class.active]="i == openFilesTabIndex" (click)="openFilesOpenTab(i)">
-                        <a>
-                            {{file.fileName}}
-                            <i class="fa fa-times" (click)="openFilesCloseTab(file)"></i>
+                        <a title="/{{file.objectFullPath}}">
+                            {{file.objectName}}
+                            <i class="fa fa-times" (click)="openFilesCloseTab(file)" role="button"></i>
                         </a>
                     </li>
                 </ul>
@@ -25,9 +45,14 @@
                     <li *ngFor="let file of openFiles; let i = index" class="tab-pane" [class.active]="i == openFilesTabIndex">
                         <ace-editor [(code)]="file.content" mode="ace/mode/c_cpp"></ace-editor>
                     </li>
+                    <li *ngIf="openFiles.length == 0" class="tab-pane active">
+                        <h3 style="margin: 10px 0;">
+                            <i class="fa fa-chevron-left"></i>
+                            Open file in file browser
+                        </h3>
+                    </li>
                 </div>
             </div>
         </div>
     </div>
-
 </div>

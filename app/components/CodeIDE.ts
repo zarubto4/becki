@@ -11,28 +11,102 @@ import {
     EventEmitter, SimpleChanges
 } from "@angular/core";
 import {AceEditor} from "./AceEditor";
-import {FileTree, FileTreeObject} from "./FileTree";
+import {FileTree, FileTreeObject, FileTreeObjectInterface} from "./FileTree";
+import {ModalsCodeFileDialogModel, ModalsCodeFileDialogType} from "../modals/code-file-dialog";
+import {ModalService} from "../services/ModalService";
+import {FlashMessagesService, FlashMessageError} from "../services/FlashMessagesService";
 
-export class CodeFile {
+export abstract class CodeFileSystemObject implements FileTreeObjectInterface {
+    objectFullPath:string;
 
-    filePath:string;
+    open: boolean = false;
 
+    constructor(objectFullPath:string) {
+        this.objectFullPath = objectFullPath;
+    }
+
+    get color():string {
+        return this.open?"gray":"silver";
+    }
+
+    get bold():boolean {
+        return false;
+    }
+
+    get changes():boolean {
+        return false;
+    }
+
+    get objectName():string {
+        var i = this.objectFullPath.lastIndexOf("/");
+        if (i > -1) {
+            return this.objectFullPath.substr(i+1);
+        }
+        return this.objectFullPath;
+    }
+
+    get objectPath():string {
+        var i = this.objectFullPath.lastIndexOf("/");
+        if (i > -1) {
+            return this.objectFullPath.substr(0, i);
+        }
+        return "";
+    }
+
+}
+
+export class CodeFile extends CodeFileSystemObject{
+
+    contentOriginal:string;
     content:string;
 
-    constructor(filePath:string, contnet:string) {
-        this.filePath = filePath;
-        this.content = contnet;
+    constructor(objectFullPath:string, content:string) {
+        super(objectFullPath);
+        this.contentOriginal = content;
+        this.content = content;
     }
 
-    get fileName():string {
-        var i = this.filePath.lastIndexOf("/");
+    get extension():string {
+        var i = this.objectName.lastIndexOf(".");
         if (i > -1) {
-            return this.filePath.substr(this.filePath.lastIndexOf("/")+1);
+            return this.objectName.substr(i+1);
         }
-        return this.filePath;
+        return "";
+    }
+
+    get color():string {
+        var ext = this.extension.toLowerCase();
+        if (ext == "cpp") {
+            return "#067084";
+        } else if (ext == "h") {
+            return "#782c1f";
+        } else if (ext == "c") {
+            return "#013284";
+        }
+        return "silver";
     }
 
 
+    get bold():boolean {
+        return this.open;
+    }
+
+    get changes():boolean {
+        return this.contentOriginal != this.content;
+    }
+
+}
+
+export class CodeDirectory extends CodeFileSystemObject {
+
+    get color():string {
+        return "#ffc50d";
+    }
+
+    // for directory is path = fullPath;
+    get objectPath():string {
+        return this.objectFullPath;
+    }
 }
 
 
@@ -43,50 +117,164 @@ export class CodeFile {
 })
 export class CodeIDE {
 
-    openFilesTabIndex:number = 0;
-
-    openFiles:CodeFile[] = [
+    files:CodeFile[] = [
+        new CodeFile("ahoj.cpp", "Ahoj.cpp"),
+        new CodeFile("zlobi.cpp", "Ahoj zoozoz"),
+        new CodeFile("zidle/main.txt", "Ahoj"),
         new CodeFile("main.cpp", "Ahoj"),
         new CodeFile("test.h", "Bum"),
-        new CodeFile("test.cpp", "Bum1"),
+        new CodeFile("test.c", "Bum1"),
         new CodeFile("robot/robot.h", "Bum3"),
+        new CodeFile("robot/robot.cpp", "Bum3"),
+        new CodeFile("robot/hadr/robot.h", "Bum3"),
+        new CodeFile("robot/hadr/františek/dobrota/pako.h", "Bum3"),
     ];
 
-    testFiles:FileTreeObject;
-
-    constructor() {
+    directories:CodeDirectory[] = [];
 
 
-        this.testFiles = new FileTreeObject();
-        this.testFiles.name = "Project";
+    openFilesTabIndex:number = 0;
 
-        var f1 = new FileTreeObject();
-        f1.name = "david.txt";
+    openFiles:CodeFile[] = [];
 
-        var f2 = new FileTreeObject();
-        f2.name = "hradek.txt";
+    rootFileTreeObject:FileTreeObject<CodeFileSystemObject>;
 
-        var f3 = new FileTreeObject();
-        f3.name = "roman.txt";
+    selectedFto:FileTreeObject<CodeFileSystemObject>;
 
-        var f4 = new FileTreeObject();
-        f4.name = "petr.txt";
+    constructor(protected modalService:ModalService, protected flashMessagesService:FlashMessagesService) {
 
-        var f5 = new FileTreeObject();
-        f5.name = "Slozka";
-        f5.children = [f3, f4];
+        this.refreshRootFileTree();
 
-        var f6 = new FileTreeObject();
-        f6.name = "xxx.txt";
+    }
 
-        var f7 = new FileTreeObject();
-        f7.name = "porn.txt";
+    generateDirectoriesFromFiles() {
 
-        var f8 = new FileTreeObject();
-        f8.name = "Slozka22";
-        f8.children = [f7, f6];
+        this.files.forEach((file) => {
+            var path = file.objectPath;
 
-        this.testFiles.children = [f1, f8, f2, f5];
+            if (path != "") {
+
+                var parts = path.split("/");
+
+                var fullPath = "";
+
+                for (var i = 0; i < parts.length; i++) {
+
+                    if (fullPath == "") {
+                        fullPath += parts[i];
+                    } else {
+                        fullPath += "/"+parts[i];
+                    }
+
+                    var dir:CodeDirectory = null;
+                    for (var x = 0; x < this.directories.length; x++) {
+                        if (this.directories[x].objectFullPath == fullPath) {
+                            dir = this.directories[x];
+                        }
+                    }
+                    if (!dir) {
+                        this.directories.push(new CodeDirectory(fullPath));
+                    }
+
+                }
+
+            }
+
+        })
+    }
+
+    refreshRootFileTree() {
+
+        // generate missing directories in filesystem
+        this.generateDirectoriesFromFiles();
+
+
+        var selectedData:CodeFileSystemObject = null;
+        if (this.selectedFto && this.selectedFto.data) {
+            selectedData = this.selectedFto.data;
+        }
+
+        var newRootFileTreeObject = new FileTreeObject<CodeFileSystemObject>("/");
+        newRootFileTreeObject.children = []; // make directory
+        newRootFileTreeObject.color = "#ffc50d";
+        newRootFileTreeObject.open = (this.rootFileTreeObject)?this.rootFileTreeObject.open:true;
+
+        var newSelectFto:FileTreeObject<CodeFileSystemObject> = newRootFileTreeObject;
+
+        // initialize directories
+        this.directories.forEach((dir:CodeDirectory) => {
+
+            var parts = dir.objectFullPath.split("/");
+
+            var parentFto = newRootFileTreeObject;
+
+            for (var i = 0; i < parts.length; i++) {
+
+                var partName = parts[i];
+                var newFto:FileTreeObject<CodeFileSystemObject> = parentFto.childByName(partName, true);
+                if (!newFto) {
+                    newFto = new FileTreeObject<CodeFileSystemObject>(partName);
+                    newFto.children = []; // make directory
+                    parentFto.children.push(newFto);
+                }
+
+                parentFto = newFto;
+
+            }
+
+            parentFto.data = dir;
+            if (dir == selectedData) {
+                newSelectFto = parentFto;
+            }
+
+        });
+
+        // initialize files
+        this.files.forEach((file:CodeFile) => {
+
+            var parts = file.objectFullPath.split("/");
+
+            var parentFto = newRootFileTreeObject;
+
+            for (var i = 0; i < (parts.length-1); i++) {
+
+                var partName = parts[i];
+                var newFto:FileTreeObject<CodeFileSystemObject> = parentFto.childByName(partName, true);
+                if (!newFto) {
+                    throw "Missing folder "+partName+" in path "+file.objectFullPath;
+                }
+                parentFto = newFto;
+
+            }
+
+            var fto = new FileTreeObject<CodeFileSystemObject>(parts[(parts.length-1)]);
+            fto.data = file;
+            parentFto.children.push(fto);
+
+            if (file == selectedData) {
+                newSelectFto = fto;
+            }
+
+        });
+
+        newRootFileTreeObject.sortChildren();
+        this.rootFileTreeObject = newRootFileTreeObject;
+        this.selectedFto = newSelectFto;
+        this.rootFileTreeObject.select(newSelectFto);
+
+    }
+
+    selectFto(fto:FileTreeObject<CodeFileSystemObject>) {
+        this.selectedFto = fto;
+
+        if (fto.data && fto.data instanceof CodeFile) {
+            var cf = <CodeFile>fto.data;
+            if (this.openFiles.indexOf(cf) == -1) {
+                this.openFiles.push(cf);
+                cf.open = true;
+            }
+            this.openFilesTabIndex = this.openFiles.indexOf(cf);
+        }
 
     }
 
@@ -98,20 +286,288 @@ export class CodeIDE {
         var i = this.openFiles.indexOf(file);
         if (i > -1) {
             this.openFiles.splice(i, 1);
+            file.open = false;
             if (this.openFilesTabIndex >= this.openFiles.length) {
                 this.openFilesTabIndex = (this.openFiles.length-1);
             }
         }
     }
 
-    debug_addFile() {
-        var filename = "nextOne"+Math.random();
-        this.openFiles.push(new CodeFile(filename, "Testík2"));
+    isFileExist(fileFullPath:string) {
+        var exist = false;
+        this.files.forEach((f)=> {
+            if (f.objectFullPath == fileFullPath) {
+                exist = true;
+            }
+        });
+        return exist;
+    }
+
+    isDirectoryExist(dirFullPath:string) {
+        var exist = false;
+        this.directories.forEach((f)=> {
+            if (f.objectFullPath == dirFullPath) {
+                exist = true;
+            }
+        });
+        return exist;
+    }
+
+    remove() {
 
     }
 
+    toolbarAddFileClick() {
+        var selectedDir:CodeDirectory = null;
+        if (this.selectedFto && this.selectedFto.data instanceof CodeDirectory) {
+            selectedDir = this.selectedFto.data;
+        }
+        var model = new ModalsCodeFileDialogModel(ModalsCodeFileDialogType.AddFile, "", this.directories, selectedDir);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+
+                var newFullPath = (model.selectedDirectory?model.selectedDirectory.objectFullPath+"/":"")+model.objectName;
+
+                if (this.isFileExist(newFullPath)) {
+                    this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot add, file at path <b>/"+newFullPath+"</b> already exist.", null, true));
+                } else {
+                    this.files.push(new CodeFile(newFullPath, ""));
+                    this.refreshRootFileTree();
+                }
+
+            }
+        });
+    }
+
+    toolbarAddDirectoryClick() {
+        var selectedDir:CodeDirectory = null;
+        if (this.selectedFto && this.selectedFto.data instanceof CodeDirectory) {
+            selectedDir = this.selectedFto.data;
+        }
+        var model = new ModalsCodeFileDialogModel(ModalsCodeFileDialogType.AddDirectory, "", this.directories, selectedDir);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+
+                var newFullPath = (model.selectedDirectory?model.selectedDirectory.objectFullPath+"/":"")+model.objectName;
+
+                if (this.isDirectoryExist(newFullPath)) {
+                    this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot add, directory at path <b>/"+newFullPath+"</b> already exist.", null, true));
+                } else {
+                    this.directories.push(new CodeDirectory(newFullPath));
+                    this.refreshRootFileTree();
+                }
+
+            }
+        });
+    }
+
+    toolbarMoveClick() {
+        if (!this.selectedFto) return;
+        if (!this.selectedFto.data) {
+            this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot move <b>/</b> directory.", null, true));
+            return;
+        }
+        var selData = this.selectedFto.data;
+        if (selData instanceof CodeFile) {
+
+            var model = new ModalsCodeFileDialogModel(ModalsCodeFileDialogType.MoveFile, selData.objectName, this.directories, null, "/"+selData.objectFullPath);
+            this.modalService.showModal(model).then((success) => {
+                if (success) {
+
+                    var newFullPath = (model.selectedDirectory?model.selectedDirectory.objectFullPath+"/":"")+model.objectName;
+
+                    if (selData.objectFullPath == newFullPath) return;
+
+                    if (this.isFileExist(newFullPath)) {
+                        this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot move, file at path <b>/"+newFullPath+"</b> already exist.", null, true));
+                    } else {
+                        selData.objectFullPath = newFullPath;
+                        this.refreshRootFileTree();
+                    }
+
+                }
+            });
+
+        } else if (selData instanceof CodeDirectory) {
+
+            var model = new ModalsCodeFileDialogModel(ModalsCodeFileDialogType.MoveDirectory, selData.objectName, this.directories, null, "/"+selData.objectFullPath);
+            this.modalService.showModal(model).then((success) => {
+                if (success) {
+
+                    var newFullPath = (model.selectedDirectory?model.selectedDirectory.objectFullPath+"/":"")+model.objectName;
+
+                    if (selData.objectFullPath == newFullPath) return;
+
+                    if (this.isDirectoryExist(newFullPath)) {
+                        this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot move, directory at path <b>/"+newFullPath+"</b> already exist.", null, true));
+                    } else {
+                        var oldFullPathSlash = selData.objectFullPath+"/";
+                        var newFullPathSlash = newFullPath+"/";
+
+                        if (newFullPathSlash.indexOf(oldFullPathSlash) == 0) {
+                            this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot move directory to it's <b>children</b>. ", null, true));
+                            return
+                        }
+
+                        selData.objectFullPath = newFullPath;
+
+                        this.files.forEach((f) => {
+                            if (f.objectFullPath.indexOf(oldFullPathSlash) == 0) {
+                                f.objectFullPath = newFullPathSlash + f.objectFullPath.substr(oldFullPathSlash.length);
+                            }
+                        });
+
+                        this.directories.forEach((d) => {
+                            if (d.objectFullPath.indexOf(oldFullPathSlash) == 0) {
+                                d.objectFullPath = newFullPathSlash + d.objectFullPath.substr(oldFullPathSlash.length);
+                            }
+                        });
+
+                        this.refreshRootFileTree();
+                    }
+
+                }
+            });
+
+        }
+    }
+
+    toolbarRenameClick() {
+        if (!this.selectedFto) return;
+        if (!this.selectedFto.data) {
+            this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot rename <b>/</b> directory.", null, true));
+            return;
+        }
+        var selData = this.selectedFto.data;
+        if (selData instanceof CodeFile) {
+
+            var model = new ModalsCodeFileDialogModel(ModalsCodeFileDialogType.RenameFile, selData.objectName, null, null, "/"+selData.objectFullPath);
+            this.modalService.showModal(model).then((success) => {
+                if (success) {
+
+                    if (model.objectName == selData.objectName) return;
+
+                    var newFullPath = (selData.objectPath!=""?selData.objectPath+"/":"")+model.objectName;
+
+                    if (this.isFileExist(newFullPath)) {
+                        this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot rename, file at path <b>/"+newFullPath+"</b> already exist.", null, true));
+                    } else {
+                        selData.objectFullPath = newFullPath;
+                        this.refreshRootFileTree();
+                    }
+
+                }
+            });
+        } else if (selData instanceof CodeDirectory) {
+
+            var model = new ModalsCodeFileDialogModel(ModalsCodeFileDialogType.RenameDirectory, selData.objectName, null, null, "/"+selData.objectFullPath);
+            this.modalService.showModal(model).then((success) => {
+                if (success) {
+
+                    if (model.objectName == selData.objectName) return;
+
+                    var newFullPath = model.objectName;
+                    var i = selData.objectFullPath.lastIndexOf("/");
+                    if (i > -1) {
+                        newFullPath = selData.objectFullPath.substr(0, i)+"/"+model.objectName;
+                    }
+
+                    if (this.isDirectoryExist(newFullPath)) {
+                        this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot rename, directory at path <b>/"+newFullPath+"</b> already exist.", null, true));
+                    } else {
+
+                        var oldFullPathSlash = selData.objectFullPath+"/";
+                        var newFullPathSlash = newFullPath+"/";
+
+                        selData.objectFullPath = newFullPath;
+
+                        this.files.forEach((f) => {
+                            if (f.objectFullPath.indexOf(oldFullPathSlash) == 0) {
+                                f.objectFullPath = newFullPathSlash + f.objectFullPath.substr(oldFullPathSlash.length);
+                            }
+                        });
+
+                        this.directories.forEach((d) => {
+                            if (d.objectFullPath.indexOf(oldFullPathSlash) == 0) {
+                                d.objectFullPath = newFullPathSlash + d.objectFullPath.substr(oldFullPathSlash.length);
+                            }
+                        });
+
+                        this.refreshRootFileTree();
+                    }
+
+                }
+            });
+
+        }
+    }
+
+    toolbarRemoveClick() {
+        if (!this.selectedFto) return;
+        if (!this.selectedFto.data) {
+            this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot remove <b>/</b> directory.", null, true));
+            return;
+        }
+        var selData = this.selectedFto.data;
+        if (selData instanceof CodeFile) {
+
+            var model = new ModalsCodeFileDialogModel(ModalsCodeFileDialogType.RemoveFile, "", null, null, "/"+selData.objectFullPath);
+            this.modalService.showModal(model).then((success) => {
+                if (success) {
+
+                    this.openFilesCloseTab(selData);
+                    var i = this.files.indexOf(selData);
+                    if (i > -1) {
+                        this.files.splice(i, 1);
+                    }
+
+                    this.refreshRootFileTree();
+
+                }
+            });
+
+        } else if (selData instanceof CodeDirectory) {
+
+            var model = new ModalsCodeFileDialogModel(ModalsCodeFileDialogType.RemoveDirectory, "", null, null, "/"+selData.objectFullPath);
+            this.modalService.showModal(model).then((success) => {
+                if (success) {
+
+                    var cd = selData;
+
+                    var deletePath = cd.objectPath+"/";
+
+                    var filesToDelete:CodeFile[] = [];
+                    this.files.forEach((f)=>{
+                        if (f.objectFullPath.indexOf(deletePath) == 0) filesToDelete.push(f);
+                    });
+                    filesToDelete.forEach((f)=>{
+                        this.openFilesCloseTab(f);
+                        var i = this.files.indexOf(f);
+                        if (i > -1) {
+                            this.files.splice(i, 1);
+                        }
+                    });
+
+                    var dirsToDelete:CodeDirectory[] = [cd];
+                    this.directories.forEach((d)=>{
+                        if (d.objectFullPath.indexOf(deletePath) == 0) dirsToDelete.push(d);
+                    });
+                    dirsToDelete.forEach((d)=>{
+                        var i = this.directories.indexOf(d);
+                        if (i > -1) {
+                            this.directories.splice(i, 1);
+                        }
+                    });
+
+                    this.refreshRootFileTree();
+
+                }
+            });
+
+        }
+    }
+
     debug_logFiles() {
-        console.log(this.openFiles);
-        console.log(this.testFiles);
+        console.log(this.files);
     }
 }

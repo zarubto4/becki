@@ -12,7 +12,8 @@ import {FlashMessagesService, FlashMessage} from "../services/FlashMessagesServi
 <div class="alert alert-{{flashMessage.type}} alert-dismissable {{flashMessage.visit()}}" *ngFor="let flashMessage of flashMessagesService.messages">
     <i class="fa fa-{{flashMessage.icon}}"></i>
     <button type="button" class="close" (click)="onCloseClick(flashMessage, $event)"></button>
-    {{flashMessage.body}}
+    <span *ngIf="flashMessage.htmlBody" [innerHTML]="flashMessage.body"></span>
+    <span *ngIf="!flashMessage.htmlBody">{{flashMessage.body}}</span>
 </div>
 `
 })

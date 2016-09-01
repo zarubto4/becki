@@ -11,7 +11,12 @@ export abstract class FlashMessage {
     visited:boolean = false;
     visitedTimeout:any = null;
 
-    constructor(public type:string, public icon:string, public body:string, reason?:Object) {
+    htmlBody:boolean = false;
+
+    constructor(public type:string, public icon:string, public body:string, reason?:Object, htmlBody?:boolean) {
+        if (htmlBody) {
+            this.htmlBody = htmlBody;
+        }
         if (reason instanceof libBackEnd.BugFoundError) {
             this.body += " An unexpected error ";
             if (reason.userMessage) {
@@ -46,32 +51,32 @@ export abstract class FlashMessage {
 }
 
 export class FlashMessageSuccess extends FlashMessage {
-    constructor(body:string, reason?:Object) {
-        super("success", "check-circle", body, reason);
+    constructor(body:string, reason?:Object, htmlBody?:boolean) {
+        super("success", "check-circle", body, reason, htmlBody);
     }
 }
 
 export class FlashMessageInfo extends FlashMessage {
-    constructor(body:string, reason?:Object) {
-        super("info", "info-circle", body, reason);
+    constructor(body:string, reason?:Object, htmlBody?:boolean) {
+        super("info", "info-circle", body, reason, htmlBody);
     }
 }
 
 export class FlashMessageWarning extends FlashMessage {
-    constructor(body:string, reason?:Object) {
-        super("warning", "exclamation-triangle", body, reason);
+    constructor(body:string, reason?:Object, htmlBody?:boolean) {
+        super("warning", "exclamation-triangle", body, reason, htmlBody);
     }
 }
 
 export class FlashMessageDanger extends FlashMessage {
-    constructor(body:string, reason?:Object) {
-        super("danger", "times-circle", body, reason);
+    constructor(body:string, reason?:Object, htmlBody?:boolean) {
+        super("danger", "times-circle", body, reason, htmlBody);
     }
 }
 
 export class FlashMessageError extends FlashMessage {
-    constructor(body:string, reason?:Object) {
-        super("danger", "times-circle", body, reason);
+    constructor(body:string, reason?:Object, htmlBody?:boolean) {
+        super("danger", "times-circle", body, reason, htmlBody);
     }
 }
 

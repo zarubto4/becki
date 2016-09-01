@@ -1,0 +1,23 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title" [innerHTML]="textTitle"></h4>
+    </div>
+    <div class="modal-body">
+        <form *ngIf="neededName" [formGroup]="form">
+            <becki-form-input [control]="form.controls.objectName" [label]="textLabel"></becki-form-input>
+        </form>
+        <div *ngIf="neededDirectory">
+            <label>Into directory</label>
+            <div class="jstree jstree-default portlet light bordered" style="overflow-x: auto;">
+                <ul class="jstree-container-ul jstree-children">
+                    <file-tree [fileTreeObject]="rootFileTreeObject" (newSelected)="selectFto($event)" [privateOpen]="true" [onlyDirectiories]="true"></file-tree>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn green btn-outline" [disabled]="!(((neededDirectory && selectedFto) || (!neededDirectory)) && ((neededName && form.valid) || (!neededName)))" (click)="onSubmitClick()">{{textSubmit}}</button>
+        <button type="button" class="btn red btn-outline" (click)="onCancelClick()">{{textCancel}}</button>
+    </div>
+</div>

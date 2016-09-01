@@ -59,7 +59,6 @@ export class AceEditor implements AfterViewInit, OnChanges, OnDestroy {
     }
 
     ngAfterViewInit():void {
-        console.log("ACE::ngInit");
         this.editor = ace.edit(this.field.nativeElement);
         this.editor.setOptions({enableBasicAutocompletion: true});
         this.editor.setReadOnly(this.readonly);

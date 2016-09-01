@@ -15,7 +15,7 @@ import {LabeledLink} from "../helpers/LabeledLink";
 import {NotificationService} from "../services/NotificationService";
 
 
-const BODY_CLASSES = ["page-header-fixed"];
+const BODY_CLASSES = ["page-header-fixed", "page-container-bg-solid"];
 
 @Component({
     selector: "layout-main",

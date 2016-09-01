@@ -20,6 +20,11 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered padding-20">
+                <code-ide></code-ide>
+            </div>
+        </div>
         <div class="col-md-3">
             <div class="portlet portlet light bordered">
                 <div class="portlet-title">
@@ -33,21 +38,16 @@
                 <div *ngIf="codeProgram">
                     <table class="table table-condensed table-hover">
                         <tbody>
-                            <tr *ngFor="let version of codeProgram.program_versions">
-                                <td>
-                                    <button type="button" class="btn btn-icon-only green pull-right"><i class="fa fa-ellipsis-v"></i></button>
-                                    <a (click)="onBlockoClick(version)">{{version.version_object.version_name}}</a>
-                                    <div class="clearfix"></div>
-                                </td>
-                            </tr>
+                        <tr *ngFor="let version of codeProgram.program_versions">
+                            <td>
+                                <button type="button" class="btn btn-icon-only green pull-right"><i class="fa fa-ellipsis-v"></i></button>
+                                <a (click)="onBlockoClick(version)">{{version.version_object.version_name}}</a>
+                                <div class="clearfix"></div>
+                            </td>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-9">
-            <div class="portlet light bordered">
-                <code-ide></code-ide>
             </div>
         </div>
     </div>

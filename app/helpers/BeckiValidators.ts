@@ -13,4 +13,12 @@ export class BeckiValidators {
         return {"email": true}; // invalid
     }
 
+    public static filename:ValidatorFn = (c: AbstractControl) => {
+        // http://stackoverflow.com/questions/11100821/javascript-regex-for-validating-filenames
+        if (c.value.match(/^(?!\.)(?!com[0-9]$)(?!con$)(?!lpt[0-9]$)(?!nul$)(?!prn$)[^\|\*\?\\:<>/$"]*[^\.\|\*\?\\:<>/$"]+$/)) {
+            return null; // valid
+        }
+        return {"filename": true}; // invalid
+    }
+
 }

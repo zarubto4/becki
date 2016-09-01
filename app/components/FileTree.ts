@@ -10,13 +10,114 @@ import {
     EventEmitter, SimpleChanges, DoCheck, AfterContentChecked, ChangeDetectionStrategy, forwardRef
 } from "@angular/core";
 
-export class FileTreeObject {
-    name:string = "";
-    icon:string = "";
-    children:FileTreeObject[] = null;
+
+export interface FileTreeObjectInterface {
+    color:string;
+    open:boolean;
+    bold:boolean;
+    changes:boolean;
+}
+
+export class FileTreeObject<T extends FileTreeObjectInterface> {
+    name:string = null;
+    children:FileTreeObject<T>[] = null;
+
+    data:T = null;
+
+    selected:boolean = false;
+
+    private _icon:string = null;
+    private _color:string = "silver";
+
+    constructor(name:string, icon:string = null) {
+        this.name = name;
+        this._icon = icon;
+    }
+
+    get icon():string {
+        if (this._icon) {
+            return this._icon;
+        }
+        if (this.directory) {
+            return "folder";
+        } else {
+            return "file-text";
+        }
+    }
 
     get directory():boolean {
         return Array.isArray(this.children);
+    }
+
+    set open(val:boolean) {
+        if (this.data) {
+            this.data.open = val;
+        }
+    }
+
+    get open():boolean {
+        if (this.data) {
+            return this.data.open;
+        }
+        return true;
+    }
+
+    set color(val:string) {
+        this._color = val;
+    }
+
+    get color():string {
+        if (this.data) {
+            return this.data.color;
+        }
+        return this._color;
+    }
+
+    get bold():boolean {
+        if (this.data) {
+            return this.data.bold;
+        }
+        return false;
+    }
+
+    get changes():boolean {
+        if (this.data) {
+            return this.data.changes;
+        }
+        return false;
+    }
+
+    public childByName(name:string, directory:boolean):FileTreeObject<T> {
+        for (var x = 0; x < this.children.length; x++) {
+            if (this.children[x].name == name) {
+                if (directory == this.children[x].directory) {
+                    return this.children[x];
+                }
+            }
+        }
+        return null;
+    }
+
+    public sortChildren(directoriesFirst:boolean = true) {
+        this.children.sort((a,b) => {
+            if (directoriesFirst) {
+                if (a.directory && !b.directory) return -1;
+                if (!a.directory && b.directory) return 1;
+            }
+            return a.name.localeCompare(b.name);
+        });
+        this.children.forEach((c) => {
+            if (c.directory) c.sortChildren(directoriesFirst);
+        });
+    }
+
+    public select(fto:FileTreeObject<T>) {
+        this.selected = (this == fto);
+        if (this.children) {
+            this.children.forEach((f) => {
+                f.select(fto);
+            });
+        }
     }
 }
 
@@ -27,10 +128,8 @@ export class FileTreeObject {
 })
 export class FileTree {
 
-    open:boolean = false;
-
     @Input()
-    fileTreeObject:FileTreeObject;
+    fileTreeObject:FileTreeObject<any>;
 
     @Input()
     last:boolean = true;
@@ -38,8 +137,41 @@ export class FileTree {
     @Input()
     root:boolean = true;
 
+    @Input()
+    privateOpen = false;
+    _open = true;
+
+    @Input()
+    onlyDirectiories = false;
+
+    @Output()
+    newSelected = new EventEmitter<FileTreeObject<any>>();
+
+    @Output()
+    internalObjClicked = new EventEmitter<FileTreeObject<any>>();
+
     toggleOpenClick() {
-        this.open = !this.open;
+        if (this.privateOpen) {
+            this._open = !this._open;
+        } else {
+            this.fileTreeObject.open = !this.fileTreeObject.open;
+        }
+    }
+
+    get open():boolean {
+        if (this.privateOpen) {
+            return this._open;
+        } else {
+            return this.fileTreeObject.open;
+        }
+    }
+
+    internalObjClick(fto:FileTreeObject<any>) {
+        this.internalObjClicked.emit(fto);
+        this.newSelected.emit(fto);
+        if (this.root && this.fileTreeObject) {
+            this.fileTreeObject.select(fto);
+        }
     }
 
 }
