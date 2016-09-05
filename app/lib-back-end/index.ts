@@ -656,9 +656,9 @@ export interface CProgramVersion {
 
     compilable:boolean;
 
-    main:JsonNode;
+    main:string;
 
-    user_files:JsonNode;
+    user_files: {code:string, file_name:string}[];
 
     external_libraries:JsonNode;
 

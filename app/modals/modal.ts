@@ -13,11 +13,20 @@ import {ModalsAddHardwareComponent} from "./add-hardware";
 import {ModalsBlockoPropertiesComponent} from "./blocko-properties";
 import {ModalsCodePropertiesComponent} from "./code-poperties";
 import {ModalsCodeFileDialogComponent} from "./code-file-dialog";
+import {ModalsConfirmComponent} from "./confirm";
 
 @Component({
     selector: "modal",
     templateUrl: "app/modals/modal.html",
-    directives: [CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, ModalsProjectPropertiesComponent, ModalsRemovalComponent, ModalsAddHardwareComponent, ModalsBlockoPropertiesComponent, ModalsCodePropertiesComponent, ModalsCodeFileDialogComponent]
+    directives: [CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES,
+        ModalsProjectPropertiesComponent,
+        ModalsRemovalComponent,
+        ModalsAddHardwareComponent,
+        ModalsBlockoPropertiesComponent,
+        ModalsCodePropertiesComponent,
+        ModalsCodeFileDialogComponent,
+        ModalsConfirmComponent,
+    ]
 })
 export class ModalComponent {
     constructor(protected modalService:ModalService) {}

@@ -5,44 +5,71 @@
 
 <layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot">
 
-    <div class="portlet portlet light bordered">
-        <div class="portlet-title">
-            <div class="caption">
-                <i class="icon-settings font-blue"></i>
-                <span class="caption-subject font-blue sbold uppercase">Code <strong>{{currentParamsService.currentCodeNameSnapshot}}</strong></span>
-            </div>
-            <div class="actions">
-            </div>
-        </div>
-        <div>
-            Name: <strong>{{codeProgram?codeProgram.program_name:""}}</strong><br>
-            Description: <strong>{{codeProgram?codeProgram.program_description:""}}</strong>
-        </div>
-    </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="portlet light bordered padding-20">
-                <code-ide></code-ide>
-            </div>
-        </div>
-        <div class="col-md-3">
             <div class="portlet portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
                         <i class="icon-settings font-blue"></i>
-                        <span class="caption-subject font-blue sbold uppercase">Versions</span>
+                        <span class="caption-subject font-blue sbold uppercase">Code <strong>{{currentParamsService.currentCodeNameSnapshot}}</strong></span>
                     </div>
                     <div class="actions">
                     </div>
                 </div>
-                <div *ngIf="codeProgram">
+                <div>
+                    Name: <strong>{{codeProgram?codeProgram.program_name:""}}</strong><br>
+                    Description: <strong>{{codeProgram?codeProgram.program_description:""}}</strong>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="portlet light bordered padding-20">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-note font-blue"></i>
+                        <span class="caption-subject font-blue sbold uppercase">IDE</span>
+                    </div>
+                </div>
+                <code-ide [files]="selectedCodeFiles"></code-ide>
+                <div>
+                    <button type="button" class="pull-right btn default green-haze" (click)="onSaveClick()">
+                        <i class="fa fa-floppy-o"></i> Save
+                    </button>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-list font-blue"></i>
+                        <span class="caption-subject font-blue sbold uppercase">Saved versions</span>
+                    </div>
+                    <div class="actions">
+                    </div>
+                </div>
+                <div *ngIf="codeProgramVersions">
                     <table class="table table-condensed table-hover">
+                        <thead>
+                        <tr>
+                            <th> Name</th>
+                            <th> Description</th>
+                            <th> Actions</th>
+                        </tr>
+                        </thead>
                         <tbody>
-                        <tr *ngFor="let version of codeProgram.program_versions">
+                        <tr *ngFor="let version of codeProgramVersions">
+                            <td>
+                                <a (click)="onProgramVersionClick(version)">
+                                    {{version.version_object.version_name}}
+                                </a>
+                            </td>
+                            <td>
+                                {{version.version_object.version_description}}
+                            </td>
                             <td>
                                 <button type="button" class="btn btn-icon-only green pull-right"><i class="fa fa-ellipsis-v"></i></button>
-                                <a (click)="onBlockoClick(version)">{{version.version_object.version_name}}</a>
-                                <div class="clearfix"></div>
                             </td>
                         </tr>
                         </tbody>

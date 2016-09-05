@@ -111,13 +111,20 @@ export class FileTreeObject<T extends FileTreeObjectInterface> {
         });
     }
 
-    public select(fto:FileTreeObject<T>) {
-        this.selected = (this == fto);
+    public select(fto:FileTreeObject<T>, alsoOpen:boolean = false):boolean {
+        var inSelected = false;
         if (this.children) {
             this.children.forEach((f) => {
-                f.select(fto);
+                if (f.select(fto, alsoOpen))
+                    inSelected = true;
             });
+            if (alsoOpen && inSelected)
+                this.open = true;
         }
+        this.selected = (this == fto);
+        if (this == fto)
+            inSelected = true;
+        return inSelected;
     }
 }
 

@@ -14,7 +14,7 @@ import {
 
 @Component({
     selector: "ace-editor",
-    template: `<div data-ref-field class="form-control" style="position: relative; height: 200px;">{{code}}</div>`
+    template: `<div data-ref-field class="form-control" style="position: relative; height: 60vh;">{{code}}</div>`
 })
 export class AceEditor implements AfterViewInit, OnChanges, OnDestroy {
 

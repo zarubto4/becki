@@ -14,14 +14,17 @@ import {AceEditor} from "./AceEditor";
 import {FileTree, FileTreeObject, FileTreeObjectInterface} from "./FileTree";
 import {ModalsCodeFileDialogModel, ModalsCodeFileDialogType} from "../modals/code-file-dialog";
 import {ModalService} from "../services/ModalService";
-import {FlashMessagesService, FlashMessageError} from "../services/FlashMessagesService";
+import {ModalsConfirmModel} from "../modals/confirm";
 
 export abstract class CodeFileSystemObject implements FileTreeObjectInterface {
+
+    originalObjectFullPath:string;
     objectFullPath:string;
 
     open: boolean = false;
 
     constructor(objectFullPath:string) {
+        this.originalObjectFullPath = objectFullPath;
         this.objectFullPath = objectFullPath;
     }
 
@@ -34,7 +37,7 @@ export abstract class CodeFileSystemObject implements FileTreeObjectInterface {
     }
 
     get changes():boolean {
-        return false;
+        return (this.originalObjectFullPath != this.objectFullPath);
     }
 
     get objectName():string {
@@ -55,15 +58,21 @@ export abstract class CodeFileSystemObject implements FileTreeObjectInterface {
 
 }
 
-export class CodeFile extends CodeFileSystemObject{
+export class CodeFile extends CodeFileSystemObject {
 
     contentOriginal:string;
     content:string;
 
-    constructor(objectFullPath:string, content:string) {
+    constructor(objectFullPath:string, content:string = null) {
         super(objectFullPath);
-        this.contentOriginal = content;
-        this.content = content;
+        if (!content) {
+            this.originalObjectFullPath = "";
+            this.contentOriginal = "";
+            this.content = "";
+        } else {
+            this.contentOriginal = content;
+            this.content = content;
+        }
     }
 
     get extension():string {
@@ -92,7 +101,7 @@ export class CodeFile extends CodeFileSystemObject{
     }
 
     get changes():boolean {
-        return this.contentOriginal != this.content;
+        return ((this.originalObjectFullPath != this.objectFullPath) || (this.contentOriginal != this.content));
     }
 
 }
@@ -109,29 +118,32 @@ export class CodeDirectory extends CodeFileSystemObject {
     }
 }
 
+/*
+ [
+ new CodeFile("ahoj.cpp", "Ahoj.cpp"),
+ new CodeFile("zlobi.cpp", "Ahoj zoozoz"),
+ new CodeFile("zidle/main.txt", "Ahoj"),
+ new CodeFile("main.cpp", "Ahoj"),
+ new CodeFile("test.h", "Bum"),
+ new CodeFile("test.c", "Bum1"),
+ new CodeFile("robot/robot.h", "Bum3"),
+ new CodeFile("robot/robot.cpp", "Bum3"),
+ new CodeFile("robot/hadr/robot.h", "Bum3"),
+ new CodeFile("robot/hadr/františek/dobrota/pako.h", "Bum3"),
+ ]
+ */
 
 @Component({
     selector: "code-ide",
     templateUrl: "app/components/CodeIDE.html",
     directives: [AceEditor, FileTree]
 })
-export class CodeIDE {
+export class CodeIDE implements OnChanges {
 
-    files:CodeFile[] = [
-        new CodeFile("ahoj.cpp", "Ahoj.cpp"),
-        new CodeFile("zlobi.cpp", "Ahoj zoozoz"),
-        new CodeFile("zidle/main.txt", "Ahoj"),
-        new CodeFile("main.cpp", "Ahoj"),
-        new CodeFile("test.h", "Bum"),
-        new CodeFile("test.c", "Bum1"),
-        new CodeFile("robot/robot.h", "Bum3"),
-        new CodeFile("robot/robot.cpp", "Bum3"),
-        new CodeFile("robot/hadr/robot.h", "Bum3"),
-        new CodeFile("robot/hadr/františek/dobrota/pako.h", "Bum3"),
-    ];
+    @Input()
+    files:CodeFile[] = null;
 
     directories:CodeDirectory[] = [];
-
 
     openFilesTabIndex:number = 0;
 
@@ -141,13 +153,29 @@ export class CodeIDE {
 
     selectedFto:FileTreeObject<CodeFileSystemObject>;
 
-    constructor(protected modalService:ModalService, protected flashMessagesService:FlashMessagesService) {
+    constructor(protected modalService:ModalService) {
 
         this.refreshRootFileTree();
 
     }
 
+    ngOnChanges(changes:SimpleChanges):void {
+        let files = changes["files"];
+        if (files) {
+            this.files = files.currentValue;
+            this.directories = [];
+            this.openFiles = [];
+            this.openFilesTabIndex = 0;
+            this.refreshRootFileTree();
+        }
+    }
+
+    showModalError(title:string, text:string) {
+        this.modalService.showModal(new ModalsConfirmModel(title, text, true, "OK", null));
+    }
+
     generateDirectoriesFromFiles() {
+        if (!Array.isArray(this.files)) return;
 
         this.files.forEach((file) => {
             var path = file.objectPath;
@@ -183,14 +211,15 @@ export class CodeIDE {
         })
     }
 
-    refreshRootFileTree() {
+    refreshRootFileTree(selectFileObject:CodeFileSystemObject = null) {
+        if (!Array.isArray(this.files)) return;
 
         // generate missing directories in filesystem
         this.generateDirectoriesFromFiles();
 
 
-        var selectedData:CodeFileSystemObject = null;
-        if (this.selectedFto && this.selectedFto.data) {
+        var selectedData:CodeFileSystemObject = selectFileObject;
+        if (!selectedData && this.selectedFto && this.selectedFto.data) {
             selectedData = this.selectedFto.data;
         }
 
@@ -260,7 +289,7 @@ export class CodeIDE {
         newRootFileTreeObject.sortChildren();
         this.rootFileTreeObject = newRootFileTreeObject;
         this.selectedFto = newSelectFto;
-        this.rootFileTreeObject.select(newSelectFto);
+        this.rootFileTreeObject.select(newSelectFto, true);
 
     }
 
@@ -279,7 +308,7 @@ export class CodeIDE {
     }
 
     openFilesOpenTab(index:number) {
-            this.openFilesTabIndex = index;
+        this.openFilesTabIndex = index;
     }
 
     openFilesCloseTab(file:CodeFile) {
@@ -294,6 +323,8 @@ export class CodeIDE {
     }
 
     isFileExist(fileFullPath:string) {
+        if (!Array.isArray(this.files)) return;
+
         var exist = false;
         this.files.forEach((f)=> {
             if (f.objectFullPath == fileFullPath) {
@@ -329,10 +360,11 @@ export class CodeIDE {
                 var newFullPath = (model.selectedDirectory?model.selectedDirectory.objectFullPath+"/":"")+model.objectName;
 
                 if (this.isFileExist(newFullPath)) {
-                    this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot add, file at path <b>/"+newFullPath+"</b> already exist.", null, true));
+                    this.showModalError("Error", "Cannot add, file at path <b>/"+newFullPath+"</b> already exist.");
                 } else {
-                    this.files.push(new CodeFile(newFullPath, ""));
-                    this.refreshRootFileTree();
+                    var obj = new CodeFile(newFullPath);
+                    this.files.push(obj);
+                    this.refreshRootFileTree(obj);
                 }
 
             }
@@ -351,10 +383,11 @@ export class CodeIDE {
                 var newFullPath = (model.selectedDirectory?model.selectedDirectory.objectFullPath+"/":"")+model.objectName;
 
                 if (this.isDirectoryExist(newFullPath)) {
-                    this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot add, directory at path <b>/"+newFullPath+"</b> already exist.", null, true));
+                    this.showModalError("Error", "Cannot add, directory at path <b>/"+newFullPath+"</b> already exist.");
                 } else {
-                    this.directories.push(new CodeDirectory(newFullPath));
-                    this.refreshRootFileTree();
+                    var obj = new CodeDirectory(newFullPath)
+                    this.directories.push(obj);
+                    this.refreshRootFileTree(obj);
                 }
 
             }
@@ -364,7 +397,7 @@ export class CodeIDE {
     toolbarMoveClick() {
         if (!this.selectedFto) return;
         if (!this.selectedFto.data) {
-            this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot move <b>/</b> directory.", null, true));
+            this.showModalError("Error", "Cannot move <b>/</b> directory.");
             return;
         }
         var selData = this.selectedFto.data;
@@ -379,7 +412,7 @@ export class CodeIDE {
                     if (selData.objectFullPath == newFullPath) return;
 
                     if (this.isFileExist(newFullPath)) {
-                        this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot move, file at path <b>/"+newFullPath+"</b> already exist.", null, true));
+                        this.showModalError("Error", "Cannot move, file at path <b>/"+newFullPath+"</b> already exist.");
                     } else {
                         selData.objectFullPath = newFullPath;
                         this.refreshRootFileTree();
@@ -399,13 +432,13 @@ export class CodeIDE {
                     if (selData.objectFullPath == newFullPath) return;
 
                     if (this.isDirectoryExist(newFullPath)) {
-                        this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot move, directory at path <b>/"+newFullPath+"</b> already exist.", null, true));
+                        this.showModalError("Error", "Cannot move, directory at path <b>/"+newFullPath+"</b> already exist.");
                     } else {
                         var oldFullPathSlash = selData.objectFullPath+"/";
                         var newFullPathSlash = newFullPath+"/";
 
                         if (newFullPathSlash.indexOf(oldFullPathSlash) == 0) {
-                            this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot move directory to it's <b>children</b>. ", null, true));
+                            this.showModalError("Error", "Cannot move directory to it's <b>children</b>. ");
                             return
                         }
 
@@ -435,7 +468,7 @@ export class CodeIDE {
     toolbarRenameClick() {
         if (!this.selectedFto) return;
         if (!this.selectedFto.data) {
-            this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot rename <b>/</b> directory.", null, true));
+            this.showModalError("Error", "Cannot rename <b>/</b> directory.");
             return;
         }
         var selData = this.selectedFto.data;
@@ -450,7 +483,7 @@ export class CodeIDE {
                     var newFullPath = (selData.objectPath!=""?selData.objectPath+"/":"")+model.objectName;
 
                     if (this.isFileExist(newFullPath)) {
-                        this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot rename, file at path <b>/"+newFullPath+"</b> already exist.", null, true));
+                        this.showModalError("Error", "Cannot rename, file at path <b>/"+newFullPath+"</b> already exist.");
                     } else {
                         selData.objectFullPath = newFullPath;
                         this.refreshRootFileTree();
@@ -473,7 +506,7 @@ export class CodeIDE {
                     }
 
                     if (this.isDirectoryExist(newFullPath)) {
-                        this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot rename, directory at path <b>/"+newFullPath+"</b> already exist.", null, true));
+                        this.showModalError("Error", "Cannot rename, directory at path <b>/"+newFullPath+"</b> already exist.");
                     } else {
 
                         var oldFullPathSlash = selData.objectFullPath+"/";
@@ -505,7 +538,7 @@ export class CodeIDE {
     toolbarRemoveClick() {
         if (!this.selectedFto) return;
         if (!this.selectedFto.data) {
-            this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot remove <b>/</b> directory.", null, true));
+            this.showModalError("Error", "Cannot remove <b>/</b> directory.");
             return;
         }
         var selData = this.selectedFto.data;

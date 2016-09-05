@@ -1,0 +1,12 @@
+<div>
+    <div class="modal-header">
+        <button *ngIf="modalModel.showCloseBtn" type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title" [innerHTML]="modalModel.title"></h4>
+    </div>
+    <div class="modal-body" [innerHTML]="modalModel.text"></div>
+    <div class="modal-footer">
+        <button *ngFor="let btn of modalModel.btnOthers;" type="button" class="btn green btn-outline" (click)="onOthersClick(btn)">{{btn}}</button>
+        <button *ngIf="modalModel.btnYes" type="button" class="btn green btn-outline" (click)="onYesClick()">{{modalModel.btnYes}}</button>
+        <button *ngIf="modalModel.btnNo" type="button" class="btn red btn-outline" (click)="onNoClick()">{{modalModel.btnNo}}</button>
+    </div>
+</div>
