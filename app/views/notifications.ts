@@ -20,6 +20,7 @@ export class NotificationsComponent extends BaseMainComponent implements OnInit{
 
 
     ngOnInit(): void {
+        //TODO s novým tyrionem zkontrolovat zda se všechny notifikace načítají správně
         this.notificationService.getRestApiNotifications();
     }
 }

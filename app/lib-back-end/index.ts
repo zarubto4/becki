@@ -1721,12 +1721,10 @@ export abstract class BackEnd {
      }
 
     public sendPasswordRecovery(mail:string):Promise<string> {
-        //TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-325
         return this.requestRestPath("POST", `${BackEnd.PASSWORD_RECOVERY_PATH}`, {mail}, 200).then(JSON.stringify);
     }
 
     public PasswordRecovery(mail:string, password_recovery_token:string, password:string):Promise<string> {
-        //TODO http://youtrack.byzance.cz/youtrack/issue/TYRION-326
         return this.requestRestPath("PUT", `${BackEnd.PASSWORD_RECOVERY_CHANGE_PATH}`, {
             mail,
             password,

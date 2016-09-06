@@ -1,3 +1,7 @@
+<!--
+  ~ © 2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
 <layout-not-logged>
     <!-- BEGIN LOGIN FORM -->
     <form class="login-form" [formGroup]="loginForm">
@@ -10,7 +14,7 @@
         <becki-form-input [control]="loginForm.controls.password" [label]="'Password'" [type]="'password'"></becki-form-input>
         <div class="form-actions">
             <button type="submit" class="btn green uppercase" (click)="onLoginClick($event)" [disabled]="!loginForm.valid">Login</button>
-            <a href="javascript:alert('TODO!');" id="forget-password" class="forget-password">Forgot Password?</a>
+            <a [routerLink]="['/forgotPassword']" class="forget-password">Forgot Password?</a>
         </div>
         <div class="login-options">
             <h4>Or login with</h4>

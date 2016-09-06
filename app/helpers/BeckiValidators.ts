@@ -12,6 +12,12 @@ export class BeckiValidators {
         }
         return {"email": true}; // invalid
     }
+    public static passwordConfirm:ValidatorFn = (a:AbstractControl/*,b:AbstractControl*/) => {
+        if (a.value /*== b.value*/) { //TODO dodělat zítra validátor na confirm password //a.value.match??
+            return null; // valid
+        }
+        return {"password": true}; // invalid
+    }
 
     public static filename:ValidatorFn = (c: AbstractControl) => {
         // http://stackoverflow.com/questions/11100821/javascript-regex-for-validating-filenames
