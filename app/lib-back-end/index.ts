@@ -104,6 +104,61 @@ export class BugFoundError extends Error {
     }
 }
 
+export class CodeError extends Error {
+
+    constructor(msg:string) {
+        super(msg);
+        this.message = msg;
+    }
+
+    static fromRestResponse(response:RestResponse):CodeError {
+        let content = response.body;
+        if (response.status == 477) {
+            return new CodeError(`External server is offline: ${JSON.stringify(content)}`);
+        }
+        if (response.status == 478) {
+            return new CodeError(`External server side error: ${JSON.stringify(content)}`);
+        }
+        return new CodeError("Unknown error");
+    }
+
+}
+
+export interface CodeCompileErrorMessage {
+    filename: string;
+    type:string;
+    text:string;
+    codeWhitespace:string;
+    code:string;
+
+    line:number;
+    column:number;
+    adjustedColumn:number;
+    startIndex:number;
+    endIndex:number;
+}
+
+export class CodeCompileError extends Error {
+
+    errors:CodeCompileErrorMessage[] = [];
+
+    constructor(msg:string) {
+        super(msg);
+        this.message = msg;
+    }
+
+    static fromRestResponse(response:RestResponse):CodeCompileError {
+        var cce = new CodeCompileError(`Compile error.`);
+        if (Array.isArray(response.body)) {
+            cce.errors = <CodeCompileErrorMessage[]>response.body;
+        }
+        return cce;
+
+
+    }
+
+}
+
 export class UnauthorizedError extends Error {
 
     name = "request unauthorized error";
@@ -1412,6 +1467,12 @@ export abstract class BackEnd {
                         throw UnauthorizedError.fromRestResponse(response);
                     case 403:
                         throw PermissionMissingError.fromRestResponse(response);
+                    case 422:
+                        throw CodeCompileError.fromRestResponse(response);
+                    case 477:
+                        throw CodeError.fromRestResponse(response);
+                    case 478:
+                        throw CodeError.fromRestResponse(response);
                     default:
                         throw BugFoundError.fromRestResponse(response);
                 }
@@ -2082,7 +2143,7 @@ export abstract class BackEnd {
         }, 201);
     }
 
-    public buildCProgram(files:{[name:string]:string}, type_of_board_id:string):Promise<any> {
+    public buildCProgram(main:string, files:{[name:string]:string}, type_of_board_id:string):Promise<any> {
         if (!type_of_board_id) {
             throw "target required";
         }
@@ -2090,7 +2151,7 @@ export abstract class BackEnd {
 
         return this.requestRestPath("POST", `${BackEnd.C_PROGRAM_VERSION_PATH}/compile`, {
             type_of_board_id,
-            code: " ",
+            main,
             user_files
         });
     }

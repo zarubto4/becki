@@ -16,10 +16,6 @@
             <button type="button" class="btn default red" (click)="toolbarRemoveClick()">
                 <i class="fa fa-trash"></i> Remove
             </button>
-
-            <button type="button" class="btn btn-default" (click)="debug_logFiles()">
-                <i class="fa fa-terminal"></i> Log files
-            </button>
         </div>
     </div>
     <div class="row"><div class="spacer15"></div></div>
@@ -43,7 +39,7 @@
                 </ul>
                 <div class="tab-content">
                     <li *ngFor="let file of openFiles; let i = index" class="tab-pane" [class.active]="i == openFilesTabIndex">
-                        <ace-editor [(code)]="file.content" mode="ace/mode/c_cpp"></ace-editor>
+                        <ace-editor [(code)]="file.content" mode="ace/mode/c_cpp" [annotations]="file.annotations"></ace-editor>
                     </li>
                     <li *ngIf="openFiles.length == 0" class="tab-pane active">
                         <h3 style="margin: 10px 0;">

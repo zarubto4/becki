@@ -22,6 +22,9 @@
             <template [ngSwitchCase]="'ModalsConfirmModel'">
                 <modals-confirm [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-confirm>
             </template>
+            <template [ngSwitchCase]="'ModalsVersionDialogModel'">
+                <modals-version-dialog [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-version-dialog>
+            </template>
         </div>
     </div>
 </div>

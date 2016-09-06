@@ -14,6 +14,7 @@ import {ModalsBlockoPropertiesComponent} from "./blocko-properties";
 import {ModalsCodePropertiesComponent} from "./code-poperties";
 import {ModalsCodeFileDialogComponent} from "./code-file-dialog";
 import {ModalsConfirmComponent} from "./confirm";
+import {ModalsVersionDialogComponent} from "./version-dialog";
 
 @Component({
     selector: "modal",
@@ -26,6 +27,7 @@ import {ModalsConfirmComponent} from "./confirm";
         ModalsCodePropertiesComponent,
         ModalsCodeFileDialogComponent,
         ModalsConfirmComponent,
+        ModalsVersionDialogComponent,
     ]
 })
 export class ModalComponent {

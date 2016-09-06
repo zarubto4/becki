@@ -63,6 +63,10 @@ export class CodeFile extends CodeFileSystemObject {
     contentOriginal:string;
     content:string;
 
+    fixedPath:boolean = false;
+
+    annotations:AceAjax.Annotation[];
+
     constructor(objectFullPath:string, content:string = null) {
         super(objectFullPath);
         if (!content) {
@@ -143,6 +147,9 @@ export class CodeIDE implements OnChanges {
     @Input()
     files:CodeFile[] = null;
 
+    @Input()
+    defaultOpenFilename:string = null;
+
     directories:CodeDirectory[] = [];
 
     openFilesTabIndex:number = 0;
@@ -167,6 +174,19 @@ export class CodeIDE implements OnChanges {
             this.openFiles = [];
             this.openFilesTabIndex = 0;
             this.refreshRootFileTree();
+
+            // TODO: maybe do it as call method by ViewChild
+            if (this.defaultOpenFilename && this.files) {
+                var file:CodeFile = null;
+                this.files.forEach((f)=> {
+                    if (f.objectFullPath == this.defaultOpenFilename) {
+                        file = f;
+                    }
+                });
+                if (file) {
+                    this.openFilesOpenFile(file);
+                }
+            }
         }
     }
 
@@ -297,14 +317,18 @@ export class CodeIDE implements OnChanges {
         this.selectedFto = fto;
 
         if (fto.data && fto.data instanceof CodeFile) {
-            var cf = <CodeFile>fto.data;
-            if (this.openFiles.indexOf(cf) == -1) {
-                this.openFiles.push(cf);
-                cf.open = true;
-            }
-            this.openFilesTabIndex = this.openFiles.indexOf(cf);
+            this.openFilesOpenFile(<CodeFile>fto.data);
         }
 
+    }
+
+    openFilesOpenFile(file:CodeFile) {
+        if (this.files.indexOf(file) == -1) return;
+        if (this.openFiles.indexOf(file) == -1) {
+            this.openFiles.push(file);
+            file.open = true;
+        }
+        this.openFilesTabIndex = this.openFiles.indexOf(file);
     }
 
     openFilesOpenTab(index:number) {
@@ -344,9 +368,6 @@ export class CodeIDE implements OnChanges {
         return exist;
     }
 
-    remove() {
-
-    }
 
     toolbarAddFileClick() {
         var selectedDir:CodeDirectory = null;
@@ -402,6 +423,11 @@ export class CodeIDE implements OnChanges {
         }
         var selData = this.selectedFto.data;
         if (selData instanceof CodeFile) {
+
+            if (selData.fixedPath) {
+                this.showModalError("Error", "Cannot move <b>/"+selData.objectFullPath+"</b> file.");
+                return;
+            }
 
             var model = new ModalsCodeFileDialogModel(ModalsCodeFileDialogType.MoveFile, selData.objectName, this.directories, null, "/"+selData.objectFullPath);
             this.modalService.showModal(model).then((success) => {
@@ -474,6 +500,11 @@ export class CodeIDE implements OnChanges {
         var selData = this.selectedFto.data;
         if (selData instanceof CodeFile) {
 
+            if (selData.fixedPath) {
+                this.showModalError("Error", "Cannot rename <b>/"+selData.objectFullPath+"</b> file.");
+                return;
+            }
+
             var model = new ModalsCodeFileDialogModel(ModalsCodeFileDialogType.RenameFile, selData.objectName, null, null, "/"+selData.objectFullPath);
             this.modalService.showModal(model).then((success) => {
                 if (success) {
@@ -544,6 +575,12 @@ export class CodeIDE implements OnChanges {
         var selData = this.selectedFto.data;
         if (selData instanceof CodeFile) {
 
+
+            if (selData.fixedPath) {
+                this.showModalError("Error", "Cannot remove <b>/"+selData.objectFullPath+"</b> file.");
+                return;
+            }
+
             var model = new ModalsCodeFileDialogModel(ModalsCodeFileDialogType.RemoveFile, "", null, null, "/"+selData.objectFullPath);
             this.modalService.showModal(model).then((success) => {
                 if (success) {
@@ -600,7 +637,4 @@ export class CodeIDE implements OnChanges {
         }
     }
 
-    debug_logFiles() {
-        console.log(this.files);
-    }
 }

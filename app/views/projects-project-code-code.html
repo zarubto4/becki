@@ -18,7 +18,8 @@
                 </div>
                 <div>
                     Name: <strong>{{codeProgram?codeProgram.program_name:""}}</strong><br>
-                    Description: <strong>{{codeProgram?codeProgram.program_description:""}}</strong>
+                    Description: <strong>{{codeProgram?codeProgram.program_description:""}}</strong><br>
+                    Device type: <strong>{{codeProgram?codeProgram.type_of_board_name:""}}</strong>
                 </div>
             </div>
         </div>
@@ -29,13 +30,47 @@
                         <i class="icon-note font-blue"></i>
                         <span class="caption-subject font-blue sbold uppercase">IDE</span>
                     </div>
+                    <div *ngIf="selectedProgramVersion" class="caption pull-right">
+                        <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="changesInSelectedVersion().length > 0" class="changes"></span> {{selectedProgramVersion.version_object.version_name}}</span>
+                    </div>
                 </div>
-                <code-ide [files]="selectedCodeFiles"></code-ide>
+                <code-ide [files]="selectedCodeFiles" defaultOpenFilename="main.cpp"></code-ide>
                 <div>
-                    <button type="button" class="pull-right btn default green-haze" (click)="onSaveClick()">
-                        <i class="fa fa-floppy-o"></i> Save
-                    </button>
+                    <div class="pull-right">
+                        <button type="button" class="btn default yellow-gold" (click)="onBuildClick()" [disabled]="buildInProgress">
+                            <i class="fa fa-play" *ngIf="!buildInProgress"></i> <i class="fa fa-spinner fa-spin" *ngIf="buildInProgress"></i> Build
+                        </button>
+                        <button type="button" class="btn default green-haze" (click)="onSaveClick()" [disabled]="changesInSelectedVersion().length == 0">
+                            <i class="fa fa-floppy-o"></i> Save
+                        </button>
+                    </div>
                     <div class="clearfix"></div>
+                </div>
+
+                <div *ngIf="buildErrors">
+                    <div class="spacer30"></div>
+                    <div  class="portlet light bordered">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-play font-red"></i>
+                                <span class="caption-subject bold uppercase font-red">Build errors</span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <div *ngFor="let buildError of buildErrors" class="mt-element-ribbon bg-grey-steel">
+                                <div class="ribbon ribbon-shadow uppercase" [class.ribbon-color-danger]="buildError.type=='error'" [class.ribbon-color-warning]="buildError.type=='warning'" >{{buildError.type}}</div>
+                                <p class="ribbon-content">
+                                    File: <b>{{buildError.filename}}</b>
+                                    Line: <b>{{buildError.line}}</b>
+                                    <br>
+                                    <b>{{buildError.text}}</b>
+                                    <br>
+                                    <code>{{buildError.code}}</code>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -55,21 +90,17 @@
                         <tr>
                             <th> Name</th>
                             <th> Description</th>
-                            <th> Actions</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr *ngFor="let version of codeProgramVersions">
-                            <td>
+                            <td [class.bold]="selectedProgramVersion == version">
                                 <a (click)="onProgramVersionClick(version)">
                                     {{version.version_object.version_name}}
                                 </a>
                             </td>
                             <td>
                                 {{version.version_object.version_description}}
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-icon-only green pull-right"><i class="fa fa-ellipsis-v"></i></button>
                             </td>
                         </tr>
                         </tbody>
