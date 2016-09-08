@@ -10,15 +10,15 @@
 import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
 import {CORE_DIRECTIVES} from "@angular/common";
 import {REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
-import {BackEndService} from "../services/BackEndService";
+import {BackendService} from "../services/BackendService";
 import {BeckiFormInput} from "../components/BeckiFormInput";
 import {ModalModel} from "../services/ModalService";
-import {TypeOfBoard} from "../lib-back-end/index";
 import {BeckiFormSelect, BeckiFormSelectOption, beckiFormSelectOptionsMaker} from "../components/BeckiFormSelect";
+import {ITypeOfBoard} from "../backend/TyrionAPI";
 
 
 export class ModalsCodePropertiesModel implements ModalModel {
-    constructor(public typeOfBoards:TypeOfBoard[], public name:string = "", public description:string = "", public deviceType:string = "",  public edit:boolean = false, public exceptName:string = null) {
+    constructor(public typeOfBoards:ITypeOfBoard[], public name:string = "", public description:string = "", public deviceType:string = "",  public edit:boolean = false, public exceptName:string = null) {
     }
 }
 
@@ -39,7 +39,7 @@ export class ModalsCodePropertiesComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private backEndService:BackEndService, private formBuilder:FormBuilder) {
+    constructor(private backendService:BackendService, private formBuilder:FormBuilder) {
 
         this.form = this.formBuilder.group({ //TODO: async name validation
             "name": ["", [Validators.required, Validators.minLength(8)]],

@@ -4,8 +4,7 @@
 
 import {Injectable, Inject, Injector} from "@angular/core";
 import {Route, Routes, ActivatedRoute, Params, Router, ActivatedRouteSnapshot, NavigationEnd} from "@angular/router";
-import {Project} from "../lib-back-end/index";
-import {BackEndService} from "./BackEndService";
+import {BackendService} from "./BackendService";
 import {LabeledLink} from "../helpers/LabeledLink";
 import {CurrentParamsService} from "./CurrentParamsService";
 
@@ -18,7 +17,7 @@ export class BreadcrumbsService {
 
     protected breadNameCache:{ [key:string]:string } = {};
 
-    constructor(@Inject("routes") protected routes:Routes, protected router:Router, protected currentParamsService:CurrentParamsService, protected backEndService:BackEndService) {
+    constructor(@Inject("routes") protected routes:Routes, protected router:Router, protected currentParamsService:CurrentParamsService, protected backendService:BackendService) {
         console.log("BreadcrumbsService init");
 
         this.refresh();

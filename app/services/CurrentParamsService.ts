@@ -4,9 +4,9 @@
 
 import {Injectable} from "@angular/core";
 import {Router, RoutesRecognized, ActivatedRouteSnapshot, Params} from "@angular/router";
-import {Project, CProgram, BProgram} from "../lib-back-end/index";
-import {BackEndService} from "./BackEndService";
-import {Observable, Observer, Subject} from "rxjs/Rx";
+import {BackendService} from "./BackendService";
+import {Observable, Subject} from "rxjs/Rx";
+import {IProject, IBProgram, ICProgram} from "../backend/TyrionAPI";
 
 @Injectable()
 export class CurrentParamsService {
@@ -29,7 +29,7 @@ export class CurrentParamsService {
 
 
 
-    constructor(protected router:Router, protected backEndService:BackEndService) {
+    constructor(protected router:Router, protected backendService:BackendService) {
         console.log("BreadcrumbsService init");
 
         this.currentParams = this.currentParamsSubject = new Subject<Params>();
@@ -73,7 +73,7 @@ export class CurrentParamsService {
                 this.currentProjectNameSnapshot = null;
                 this.currentProjectNameSubject.next(this.currentProjectNameSnapshot);
             } else {
-                this.backEndService.getProject(params["project"]).then((project:Project) => {
+                this.backendService.getProject(params["project"]).then((project:IProject) => {
                     this.currentProjectNameSnapshot = project.project_name;
                     this.currentProjectNameSubject.next(this.currentProjectNameSnapshot);
                 });
@@ -87,7 +87,7 @@ export class CurrentParamsService {
                 this.currentBlockoNameSnapshot = null;
                 this.currentBlockoNameSubject.next(this.currentBlockoNameSnapshot);
             } else {
-                this.backEndService.getBProgram(params["blocko"]).then((blocko:BProgram) => {
+                this.backendService.getBProgram(params["blocko"]).then((blocko:IBProgram) => {
                     this.currentBlockoNameSnapshot = blocko.name;
                     this.currentBlockoNameSubject.next(this.currentBlockoNameSnapshot);
                 });
@@ -101,7 +101,7 @@ export class CurrentParamsService {
                 this.currentCodeNameSnapshot = null;
                 this.currentCodeNameSubject.next(this.currentCodeNameSnapshot);
             } else {
-                this.backEndService.getCProgram(params["code"]).then((code:CProgram) => {
+                this.backendService.getCProgram(params["code"]).then((code:ICProgram) => {
                     this.currentCodeNameSnapshot = code.program_name;
                     this.currentCodeNameSubject.next(this.currentCodeNameSnapshot);
                 });

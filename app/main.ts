@@ -67,7 +67,7 @@ import {AppComponent} from "./app";
 import {LabeledLink} from "./helpers/LabeledLink";
 // Services
 import {FlashMessagesService} from "./services/FlashMessagesService";
-import {BackEndService} from "./services/BackEndService";
+import {BackendService} from "./services/BackendService";
 import {AuthGuard, NonAuthGuard} from "./services/AuthGuard";
 import {ModalService} from "./services/ModalService";
 import {TabMenuService} from "./services/TabMenuService";
@@ -225,9 +225,9 @@ var tabMenus = {
     providers: [
         ValidatorErrorsService,
         FlashMessagesService,
-        BackEndService, // BackEndService must be after FlashMessagesService
-        AuthGuard, // AuthGuard service must be after BackEndService
-        NonAuthGuard, // NonAuthGuard service must be after BackEndService
+        BackendService, // BackendService must be after FlashMessagesService
+        AuthGuard, // AuthGuard service must be after BackendService
+        NonAuthGuard, // NonAuthGuard service must be after BackendService
         NotificationService,
         ModalService,
         CurrentParamsService,

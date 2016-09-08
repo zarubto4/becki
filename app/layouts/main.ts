@@ -6,7 +6,7 @@
 import {Component, OnDestroy, OnInit, Input, Inject} from "@angular/core";
 import {CORE_DIRECTIVES} from "@angular/common";
 import {ROUTER_DIRECTIVES, ActivatedRoute, Params} from "@angular/router";
-import {BackEndService} from "../services/BackEndService";
+import {BackendService} from "../services/BackendService";
 import {FlashMessagesComponent} from "../components/FlashMessagesComponent";
 import {Subscription} from "rxjs/Rx";
 import {BreadcrumbsService} from "../services/BreadcrumbsService";
@@ -37,7 +37,7 @@ export class LayoutMain implements OnInit, OnDestroy {
 
     sidebarClosed:boolean = false;
 
-    constructor(protected notificationsService:NotificationService, private backEndService:BackEndService, @Inject("navigation") private navigation:LabeledLink[], private breadcrumbsService:BreadcrumbsService, private tabMenuService:TabMenuService, private activatedRoute:ActivatedRoute) {
+    constructor(protected notificationsService:NotificationService, private backendService:BackendService, @Inject("navigation") private navigation:LabeledLink[], private breadcrumbsService:BreadcrumbsService, private tabMenuService:TabMenuService, private activatedRoute:ActivatedRoute) {
     }
 
     // define function as property is needed to can set it as event listener (class methods is called with wrong this)

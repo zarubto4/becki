@@ -2,9 +2,9 @@
  * Created by DominikKrisztof on 22/08/16.
  */
 import {Injectable} from "@angular/core";
-import {BackEndService} from "./BackEndService";
-import * as libBackEnd from "../lib-back-end/index";
+import {BackendService} from "./BackendService";
 import moment = require("moment/moment");
+import {INotification} from "../backend/TyrionAPI";
 
 
 export abstract class Notification {
@@ -66,7 +66,7 @@ export class NotificationService {
     public menuNotifications:Notification[] = [];
 
     public unreadedNotifications:number=0;
-    constructor(protected backEndService:BackEndService) {
+    constructor(protected backendService:BackendService) {
         console.log("NotificationService init");
 
 
@@ -78,19 +78,19 @@ export class NotificationService {
             "positionClass": "toast-top-right",
             "preventDuplicates": false,
             "onclick": null,
-            "showDuration": "300",
-            "hideDuration": "1000",
-            "timeOut": "5000",
-            "extendedTimeOut": "1000",
+            "showDuration": 300,
+            "hideDuration": 1000,
+            "timeOut": 5000,
+            "extendedTimeOut": 1000,
             "showEasing": "swing",
             "hideEasing": "linear",
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
         };
 
-        this.backEndService.getUnconfirmedNotification();//.then(console.log("get uncomfirmed notifications")); //TODO nebylo by třeba je napsat někam jinam?
+        this.backendService.getAllUnconfirmedNotifications();//.then(console.log("get uncomfirmed notifications")); //TODO nebylo by třeba je napsat někam jinam?
 
-        this.backEndService.personInfo.subscribe((pi) => {
+        this.backendService.personInfo.subscribe((pi) => {
             if (pi) {
                 //TODO:request first ten
                 this.getRestApiNotifications();
@@ -101,7 +101,7 @@ export class NotificationService {
             }
         });
 
-        this.backEndService.notificationReceived.subscribe(notification => { //TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-360
+        this.backendService.notificationReceived.subscribe(notification => { //TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-360
             if (notification.messageType == "subscribe_notification" || notification.messageType == "unsubscribe_notification") {
                 console.log("(un)subscribed");
             } else {
@@ -114,7 +114,7 @@ export class NotificationService {
     }
 
     showToastr(notification:Notification):void{
-        toastr[notification.type](notification.body);
+        (<any>toastr)[notification.type](notification.body);
     }
     wasReadedNotifications():void{ //TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-360
         //až bude sjednoceno názosloví je třeba za pomocí was_read
@@ -126,27 +126,18 @@ export class NotificationService {
         return this.unreadedNotifications;
     }
 
-    notificationParse(notification:libBackEnd.Notification):Notification {
+    notificationParse(notification:INotification):Notification {
         switch (notification.notification_level) {
             case "info":
-                return new NotificationInfo(notification.messageId, this.notificationBodyUnparse(notification),notification.created);
-                break;
-
+                return new NotificationInfo(notification.id, this.notificationBodyUnparse(notification),notification.created);
             case "success":
-                return new NotificationSuccess(notification.messageId, this.notificationBodyUnparse(notification),notification.created);
-                break;
-
+                return new NotificationSuccess(notification.id, this.notificationBodyUnparse(notification),notification.created);
             case "warning":
-                return new NotificationWarning(notification.messageId, this.notificationBodyUnparse(notification),notification.created);
-                break;
-
+                return new NotificationWarning(notification.id, this.notificationBodyUnparse(notification),notification.created);
             case "error":
-                return new NotificationError(notification.messageId, this.notificationBodyUnparse(notification),notification.created);
-                break;
-
+                return new NotificationError(notification.id, this.notificationBodyUnparse(notification),notification.created);
             case "question":
-                return new NotificationInfo(notification.messageId, this.notificationBodyUnparse(notification),notification.created);
-                break;
+                return new NotificationInfo(notification.id, this.notificationBodyUnparse(notification),notification.created);
         }
         return null;
     }
@@ -162,10 +153,10 @@ export class NotificationService {
         this.menuNotifications = [];
     }
 
-    notificationBodyUnparse(notification:libBackEnd.Notification):string {
+    notificationBodyUnparse(notification:INotification):string {
         let bodyText:string;
         bodyText = "";
-        notification.notification_body.map((body:any) => {
+        (<any[]>notification.notification_body).map((body:any) => {
             switch (body.type) {
                 case "text":
                     bodyText += body.value;
@@ -190,7 +181,7 @@ export class NotificationService {
 
     getRestApiNotifications(page = 1):Promise<Notification[]> {
         this.notificationCleanArray();
-        this.backEndService.getNotificationsByPage(page).then(list => list.content.map(notification => {
+        this.backendService.listNotifications(page).then(list => list.content.map(notification => {
             this.addNotification(this.notificationParse(notification));
         })).then(() => {
             return this.notifications

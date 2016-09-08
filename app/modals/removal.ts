@@ -8,17 +8,7 @@
 
 import {Input, Output, EventEmitter,  Component} from "@angular/core";
 import {CORE_DIRECTIVES} from "@angular/common";
-import {BeckiAsyncValidators} from "../helpers/BeckiAsyncValidators";
-import {BackEndService} from "../services/BackEndService";
-import {BeckiFormInput} from "../components/BeckiFormInput";
-import {
-    FlashMessagesService, FlashMessageSuccess,
-    FlashMessageError
-} from "../services/FlashMessagesService";
 import {ModalModel} from "../services/ModalService";
-
-
-
 
 export class ModalsRemovalModel implements ModalModel {
     constructor(public name:string) {}

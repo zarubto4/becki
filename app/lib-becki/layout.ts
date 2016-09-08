@@ -64,7 +64,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
 
   router:ngRouter.Router;
 
-  constructor( @ngCore.Inject("navigation") navigation:LabeledLink[], backEndService:backEnd.Service, router:ngRouter.Router) {
+  constructor( @ngCore.Inject("navigation") navigation:LabeledLink[], backendService:backEnd.Service, router:ngRouter.Router) {
     "use strict";
 
     this.home = "h";
@@ -75,7 +75,7 @@ export class Component implements ngCore.OnInit, ngCore.OnDestroy {
     this.navigation = navigation;
     this.actionClick = new ngCore.EventEmitter<void>();
     this.lastWindowWidth = null;
-    this.backEnd = backEndService;
+    this.backEnd = backendService;
     this.notifications = null;
     this.router = router;
   }

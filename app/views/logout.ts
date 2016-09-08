@@ -6,7 +6,7 @@ import {Component} from '@angular/core';
 import {CORE_DIRECTIVES} from "@angular/common";
 import {Router, ROUTER_DIRECTIVES} from "@angular/router";
 
-import {BackEndService} from "../services/BackEndService";
+import {BackendService} from "../services/BackendService";
 import {Nl2Br} from "../pipes/Nl2Br";
 import {LayoutNotLogged} from "../layouts/not-logged";
 
@@ -22,7 +22,7 @@ export class LogoutComponent {
 
     logoutInProgress:boolean = false;
 
-    constructor(private backEndService:BackEndService, private router: Router) {
+    constructor(private backendService:BackendService, private router: Router) {
 
         this.logout();
 
@@ -30,7 +30,7 @@ export class LogoutComponent {
 
     logout():void {
         this.logoutInProgress = true;
-        this.backEndService.deleteToken()
+        this.backendService.logout()
             .then(() => {
                 this.logoutInProgress = false;
                 this.router.navigate(['/login']);

@@ -4,10 +4,9 @@
 
 import {Component, Injector, OnInit} from '@angular/core';
 import {LayoutMain} from "../layouts/main";
-import * as ngCore from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {NotificationService} from "../services/NotificationService";
-import {BackEndService} from "../services/BackEndService";
+import {BackendService} from "../services/BackendService";
 
 @Component({
     selector: "profile",
@@ -16,7 +15,7 @@ import {BackEndService} from "../services/BackEndService";
 })
 export class ProfileComponent extends BaseMainComponent implements OnInit{
 
-    constructor(injector:Injector,protected backEndService:BackEndService,protected notificationService:NotificationService) {super(injector)};
+    constructor(injector:Injector,protected backendService:BackendService,protected notificationService:NotificationService) {super(injector)};
 
 
     ngOnInit(): void {

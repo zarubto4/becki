@@ -7,7 +7,7 @@ import * as _ from "underscore";
 import * as ngCore from "@angular/core";
 
 import * as fieldCode from "./field-code";
-import {BackEndService} from "../services/BackEndService";
+import {BackendService} from "../services/BackendService";
 
 @ngCore.Component({
   selector: "fieldIDE",
@@ -41,9 +41,9 @@ export class IDEComponent {
 
   notifications:any;
 
-  backEnd:BackEndService;
+  backEnd:BackendService;
 
-  constructor(backEnd:BackEndService) {
+  constructor(backEnd:BackendService) {
     "use strict";
 
     this.files = {};

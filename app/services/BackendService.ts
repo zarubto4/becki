@@ -5,22 +5,22 @@
 import "rxjs/add/operator/catch";
 import "rxjs/add/operator/map";
 
-import {BackEnd, RestRequest, RestResponse, PersonInfo} from "../lib-back-end/index";
 import {FlashMessagesService, FlashMessageError} from "./FlashMessagesService";
 import {Injectable} from "@angular/core";
 import {Http, RequestOptionsArgs, Headers, Response} from "@angular/http";
 import {Router} from "@angular/router";
 import {Observable} from "rxjs/Rx";
 import {MD5} from "crypto-js";
+import {BeckiBackend, RestRequest, RestResponse} from "../backend/BeckiBackend";
 
 @Injectable()
-export class BackEndService extends BackEnd {
+export class BackendService extends BeckiBackend {
 
     public gravatarIcon:string = "";
 
     constructor(protected http:Http, protected router:Router, protected flashMessagesService:FlashMessagesService) {
         super();
-        console.log("BackEndService init");
+        console.log("BackendService init");
         this.webSocketErrorOccurred.subscribe(error => flashMessagesService.addFlashMessage(new FlashMessageError("Communication with the back end have failed.", error)));
         this.personInfo.subscribe(pi => {
             if (pi) {

@@ -46,7 +46,7 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
     this.fieldController.setDataJson(scheme);
   }
 
-  constructor(backEndService:backEnd.Service, notificationsService:notifications.Service, modalComponent:libBootstrapModal.Component) {
+  constructor(backendService:backEnd.Service, notificationsService:notifications.Service, modalComponent:libBootstrapModal.Component) {
     "use strict";
 
     this.readonly = false;
@@ -66,7 +66,7 @@ export class Component implements ngCore.AfterViewInit, ngCore.OnChanges, ngCore
     });
     this.fieldController.registerBlocks(blocko.BlockoBasicBlocks.Manager.getAllBlocks());
     this.modelChange = new ngCore.EventEmitter<string>();
-    this.backEnd = backEndService;
+    this.backEnd = backendService;
     this.backEnd.interactionsOpened.subscribe(() => {
       if (this.spy) {
         this.backEnd.requestInteractionsSchemeValues(this.spy);

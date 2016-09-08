@@ -4,13 +4,13 @@
 
 import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
 import {LayoutMain} from "../layouts/main";
-import {Project, Board} from "../lib-back-end/index";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
 import {ROUTER_DIRECTIVES} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
 import {ModalsAddHardwareModel} from "../modals/add-hardware";
 import {ModalsRemovalModel} from "../modals/removal";
+import {IProject, IBoard} from "../backend/TyrionAPI";
 
 @Component({
     selector: "view-projects-project-hardware",
@@ -23,8 +23,8 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
 
     routeParamsSubscription:Subscription;
 
-    project:Project = null;
-    devices:Board[] = null;
+    project:IProject = null;
+    devices:IBoard[] = null;
 
     constructor(injector:Injector) {super(injector)};
 
@@ -40,14 +40,14 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     }
 
     refresh():void {
-        this.backEndService.getProject(this.id)
-            .then((project:Project) => {
+        this.backendService.getProject(this.id)
+            .then((project:IProject) => {
                 this.project = project;
-                return Promise.all<Board>(project.boards_id.map((board_id) => {
-                    return this.backEndService.getBoard(board_id);
+                return Promise.all<IBoard>(project.boards_id.map((board_id) => {
+                    return this.backendService.getBoard(board_id);
                 }));
             })
-            .then((devices:Board[]) => {
+            .then((devices:IBoard[]) => {
                 console.log(devices);
                 this.devices = devices;
             })
@@ -56,15 +56,15 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
             });
     }
 
-    onDeviceClick(device:Board):void {
+    onDeviceClick(device:IBoard):void {
         //TODO
         alert("TODO!!! Board object: "+JSON.stringify(device));
     }
 
-    onRemoveClick(device:Board):void {
+    onRemoveClick(device:IBoard):void {
         this.modalService.showModal(new ModalsRemovalModel(device.id)).then((success) => {
             if (success) {
-                this.backEndService.removeBoardFromProject(device.id)
+                this.backendService.disconnectBoard(device.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The hardware has been removed."));
                         this.refresh();
@@ -81,7 +81,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         var model = new ModalsAddHardwareModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backEndService.addBoardToProject(model.id, this.id)
+                this.backendService.connectBoard(model.id, this.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The hardware ${model.id} has been added to project.`));
                         this.refresh();

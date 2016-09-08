@@ -4,13 +4,11 @@
 
 import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
 import {LayoutMain} from "../layouts/main";
-import {Project, BProgram} from "../lib-back-end/index";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
 import {ROUTER_DIRECTIVES} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
-import {ModalsRemovalModel} from "../modals/removal";
-import {ModalsBlockoPropertiesModel} from "../modals/blocko-properties";
+import {IProject, IBProgram} from "../backend/TyrionAPI";
 
 @Component({
     selector: "view-projects-project-blocko-blocko",
@@ -24,8 +22,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     routeParamsSubscription:Subscription;
 
-    project:Project = null;
-    blockoProgram:BProgram = null;
+    project:IProject = null;
+    blockoProgram:IBProgram = null;
 
     constructor(injector:Injector) {super(injector)};
 
@@ -42,16 +40,16 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     }
 
     refresh():void {
-        /*this.backEndService.getProject(this.projectId)
+        /*this.backendService.getProject(this.projectId)
             .then((project:Project) => {
                 this.project = project;
-                return this.backEndService.getInteractionsScheme(this.blockoId);
+                return this.backendService.getInteractionsScheme(this.blockoId);
             })
             .catch(reason => {
                 this.addFlashMessage(new FlashMessageError(`The blocko cannot be loaded.`, reason));
             });*/
-        this.backEndService.getBProgram(this.blockoId)
-            .then((blockoProgram:BProgram) => {
+        this.backendService.getBProgram(this.blockoId)
+            .then((blockoProgram) => {
                 this.blockoProgram = blockoProgram;
                 console.log(this.blockoProgram);
             })
@@ -59,7 +57,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 this.addFlashMessage(new FlashMessageError(`The blocko cannot be loaded.`, reason));
             });
 
-        //this.backEndService.addVersionToInteractionsScheme("testName", "testDescription", "{}", [], {board_id:"", c_program_version_id:""}, this.blockoId);
+        //this.backendService.addVersionToInteractionsScheme("testName", "testDescription", "{}", [], {board_id:"", c_program_version_id:""}, this.blockoId);
 
     }
 

@@ -4,15 +4,13 @@
 
 import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
 import {LayoutMain} from "../layouts/main";
-import {Project} from "../lib-back-end/index";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
 import {ROUTER_DIRECTIVES} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
 import {FormGroup, REACTIVE_FORM_DIRECTIVES, FormControl} from "@angular/forms";
-import {Validators} from "@angular/common";
-import {BeckiAsyncValidators} from "../helpers/BeckiAsyncValidators";
 import {BeckiFormInput} from "../components/BeckiFormInput";
+import {IProject} from "../backend/TyrionAPI";
 
 @Component({
     selector: "view-projects-project",
@@ -25,7 +23,7 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
 
     routeParamsSubscription:Subscription;
 
-    project:Project = null;
+    project:IProject = null;
 
     constructor(injector:Injector) {
         super(injector);
@@ -43,7 +41,7 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
     }
 
     refresh():void {
-        this.backEndService.getProject(this.id)
+        this.backendService.getProject(this.id)
             .then(project => {
                 this.project = project;
             })

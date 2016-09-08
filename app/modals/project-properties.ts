@@ -7,18 +7,18 @@ import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
 import {CORE_DIRECTIVES} from "@angular/common";
 import {REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 import {BeckiAsyncValidators} from "../helpers/BeckiAsyncValidators";
-import {BackEndService} from "../services/BackEndService";
+import {BackendService} from "../services/BackendService";
 import {BeckiFormInput} from "../components/BeckiFormInput";
 import {ModalModel} from "../services/ModalService";
-import {ApplicableProduct} from "../lib-back-end/index";
 import {BeckiFormSelect, BeckiFormSelectOption, beckiFormSelectOptionsMaker} from "../components/BeckiFormSelect";
+import {IApplicableProduct} from "../backend/TyrionAPI";
 
 
 
 
 
 export class ModalsProjectPropertiesModel implements ModalModel {
-    constructor(public products:ApplicableProduct[], public name:string = "", public description:string = "", public product:string = "", public edit:boolean = false, public exceptName:string = null) {
+    constructor(public products:IApplicableProduct[], public name:string = "", public description:string = "", public product:string = "", public edit:boolean = false, public exceptName:string = null) {
     }
 }
 
@@ -39,11 +39,11 @@ export class ModalsProjectPropertiesComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private backEndService:BackEndService, private formBuilder:FormBuilder) {
+    constructor(private backendService:BackendService, private formBuilder:FormBuilder) {
         this.form = this.formBuilder.group({
             "name": ["", [Validators.required, Validators.minLength(8)], BeckiAsyncValidators.ifValidator((value) => {
                 return !(this.modalModel && this.modalModel.exceptName && this.modalModel.exceptName == value);
-            }, BeckiAsyncValidators.projectNameTaken(this.backEndService))],
+            }, BeckiAsyncValidators.projectNameTaken(this.backendService))],
             "description": ["", [Validators.required, Validators.minLength(24)]],
             "product": ["",[Validators.required]]
         });

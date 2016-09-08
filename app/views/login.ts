@@ -7,12 +7,12 @@ import {CORE_DIRECTIVES} from "@angular/common";
 import {Router} from "@angular/router";
 import {FormGroup, Validators, FormBuilder, REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
 
-import {BackEndService} from "../services/BackEndService";
+import {BackendService} from "../services/BackendService";
 import {BeckiValidators} from "../helpers/BeckiValidators";
 import {Nl2Br} from "../pipes/Nl2Br";
 import {LayoutNotLogged} from "../layouts/not-logged";
-import {PermissionMissingError} from "../lib-back-end/index";
 import {BeckiFormInput} from "../components/BeckiFormInput";
+import {PermissionMissingError} from "../backend/BeckiBackend";
 
 const REDIRECT_URL = `${window.location.pathname}`;
 
@@ -28,7 +28,7 @@ export class LoginComponent {
 
     loginError: string = null;
 
-    constructor(private backEndService:BackEndService, private formBuilder: FormBuilder, private router: Router) {
+    constructor(private backendService:BackendService, private formBuilder: FormBuilder, private router: Router) {
 
         this.loginForm = this.formBuilder.group({
             "email": ["", [Validators.required, BeckiValidators.email]],
@@ -42,7 +42,7 @@ export class LoginComponent {
     }
 
     onLoginClick():void {
-        this.backEndService.createToken(this.loginForm.controls["email"].value, this.loginForm.controls["password"].value)
+        this.backendService.login(this.loginForm.controls["email"].value, this.loginForm.controls["password"].value)
             .then(() => this.router.navigate(["/"]))
             .catch(reason => {
                 if (reason instanceof PermissionMissingError) {
@@ -54,7 +54,7 @@ export class LoginComponent {
     }
 
     onFacebookLoginInClick():void {
-        this.backEndService.createFacebookToken(REDIRECT_URL)
+        this.backendService.loginFacebook(REDIRECT_URL)
             .then(url => this.redirect(url))
             .catch(reason => {
                 if (reason instanceof PermissionMissingError) {
@@ -66,7 +66,7 @@ export class LoginComponent {
     }
 
     onGitHubLoginInClick():void {
-        this.backEndService.createGitHubToken(REDIRECT_URL)
+        this.backendService.loginGitHub(REDIRECT_URL)
             .then(url => this.redirect(url))
             .catch(reason => {
                 if (reason instanceof PermissionMissingError) {

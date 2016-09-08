@@ -9,8 +9,7 @@
 import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
 import {CORE_DIRECTIVES} from "@angular/common";
 import {REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
-import {BeckiAsyncValidators} from "../helpers/BeckiAsyncValidators";
-import {BackEndService} from "../services/BackEndService";
+import {BackendService} from "../services/BackendService";
 import {BeckiFormInput} from "../components/BeckiFormInput";
 import {ModalModel} from "../services/ModalService";
 
@@ -37,7 +36,7 @@ export class ModalsAddHardwareComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private backEndService:BackEndService, private formBuilder:FormBuilder) {
+    constructor(private backendService:BackendService, private formBuilder:FormBuilder) {
 
         this.form = this.formBuilder.group({
             "id": ["", [Validators.required]]
@@ -45,7 +44,7 @@ export class ModalsAddHardwareComponent implements OnInit {
     }
 
     ngOnInit() {
-        (<FormControl>(this.form.controls["id"])).updateValue(this.modalModel.id);
+        (<FormControl>(this.form.controls["id"])).setValue(this.modalModel.id);
     }
 
     onSubmitClick():void {

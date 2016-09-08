@@ -4,20 +4,19 @@
 
 import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
 import {LayoutMain} from "../layouts/main";
-import {Project, CProgram, CProgramVersion, CodeCompileError, CodeCompileErrorMessage} from "../lib-back-end/index";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
 import {ROUTER_DIRECTIVES} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
-import {ModalsRemovalModel} from "../modals/removal";
-import {ModalsCodePropertiesModel} from "../modals/code-poperties";
 import {IDEComponent} from "../lib-becki/field-ide";
-import {AceEditor} from "../components/AceEditor";
 import {CodeIDE, CodeFile} from "../components/CodeIDE";
 import {ModalsConfirmModel} from "../modals/confirm";
 import {ModalsVersionDialogModel} from "../modals/version-dialog";
+import {IProject, ICProgram, ICProgramVersion, IUserFiles} from "../backend/TyrionAPI";
+import {ICodeCompileErrorMessage, CodeCompileError} from "../backend/BeckiBackend";
 
 import moment = require("moment/moment");
+
 
 @Component({
     selector: "view-projects-project-code-code",
@@ -31,15 +30,15 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     routeParamsSubscription:Subscription;
 
-    project:Project = null;
+    project:IProject = null;
 
-    codeProgram:CProgram = null;
-    codeProgramVersions:CProgramVersion[] = null;
+    codeProgram:ICProgram = null;
+    codeProgramVersions:ICProgramVersion[] = null;
 
-    selectedProgramVersion:CProgramVersion = null;
+    selectedProgramVersion:ICProgramVersion = null;
     selectedCodeFiles:CodeFile[] = null;
 
-    buildErrors:CodeCompileErrorMessage[] = null;
+    buildErrors:ICodeCompileErrorMessage[] = null;
     buildInProgress:boolean = false;
 
     constructor(injector:Injector) {super(injector)};
@@ -58,10 +57,10 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     refresh():void {
 
-        //this.backEndService.addVersionToCProgram("verzeeeeee 1", "hele asi fajn veerze programu kterej se super mega ultra dobrej", "hlavní program", {"neco.cpp":"something"}, this.codeId);
+        //this.backendService.addVersionToCProgram("verzeeeeee 1", "hele asi fajn veerze programu kterej se super mega ultra dobrej", "hlavní program", {"neco.cpp":"something"}, this.codeId);
 
-        this.backEndService.getCProgram(this.codeId)
-            .then((codeProgram:CProgram) => {
+        this.backendService.getCProgram(this.codeId)
+            .then((codeProgram:ICProgram) => {
                 console.log(codeProgram);
                 this.codeProgram = codeProgram;
 
@@ -83,7 +82,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     }
 
-    selectProgramVersion(programVersion:CProgramVersion) {
+    selectProgramVersion(programVersion:ICProgramVersion) {
         if (!this.codeProgramVersions) return;
         if (this.codeProgramVersions.indexOf(programVersion) == -1) return;
 
@@ -91,12 +90,12 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
         var codeFiles:CodeFile[] = [];
         if (Array.isArray(programVersion.user_files)) {
-            codeFiles = programVersion.user_files.map((uf) => {
+            codeFiles = (<IUserFiles[]>programVersion.user_files).map((uf) => { //TODO: remove after fix swagger
                 return new CodeFile(uf.file_name, uf.code);
             });
         }
 
-        var main = new CodeFile("main.cpp", programVersion.main);
+        var main = new CodeFile("main.cpp", <string>programVersion.main);  //TODO: remove after fix swagger
         main.fixedPath = true;
         codeFiles.push(main);
 
@@ -106,7 +105,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     }
 
-    onProgramVersionClick(programVersion:CProgramVersion) {
+    onProgramVersionClick(programVersion:ICProgramVersion) {
 
         if (this.selectedProgramVersion) {
 
@@ -163,18 +162,21 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             if (success) {
                 var main = "";
 
-                var userFiles:{[name:string]:string} = {};
+                var userFiles:IUserFiles[] = [];
 
                 this.selectedCodeFiles.forEach((file) => {
                     if (file.objectFullPath == "main.cpp") {
                         main = file.content;
                     } else {
-                        userFiles[file.objectFullPath] = file.content;
+                        userFiles.push({
+                            file_name: file.objectFullPath,
+                            code: file.content
+                        });
                     }
                 });
 
 
-                this.backEndService.addVersionToCProgram(m.name, m.description, main, userFiles, this.codeId)
+                this.backendService.createCProgramVersion(this.codeId, {version_name: m.name, version_description: m.description, main: main, user_files: userFiles})
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("Version <b>"+m.name+"</b> saved successfully.", null, true));
                         this.refresh();
@@ -191,7 +193,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
         var main = "";
 
-        var userFiles:{[name:string]:string} = {};
+        var userFiles:IUserFiles[] = [];
 
         this.buildErrors = null;
         this.selectedCodeFiles.forEach((file) => {
@@ -200,12 +202,15 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             if (file.objectFullPath == "main.cpp") {
                 main = file.content;
             } else {
-                userFiles[file.objectFullPath] = file.content;
+                userFiles.push({
+                    file_name: file.objectFullPath,
+                    code: file.content
+                });
             }
         });
 
         this.buildInProgress = true;
-        this.backEndService.buildCProgram(main, userFiles, this.codeProgram.type_of_board_id)
+        this.backendService.compileCProgram({main: main, user_files: userFiles, type_of_board_id: this.codeProgram.type_of_board_id})
             .then((success)=> {
                 this.buildInProgress = false;
                 console.log(success);

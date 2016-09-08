@@ -11,7 +11,7 @@ import {ModalsRemovalComponent} from "./removal";
 import {ModalsProjectPropertiesComponent} from "./project-properties";
 import {ModalsAddHardwareComponent} from "./add-hardware";
 import {ModalsBlockoPropertiesComponent} from "./blocko-properties";
-import {ModalsCodePropertiesComponent} from "./code-poperties";
+import {ModalsCodePropertiesComponent} from "./code-properties";
 import {ModalsCodeFileDialogComponent} from "./code-file-dialog";
 import {ModalsConfirmComponent} from "./confirm";
 import {ModalsVersionDialogComponent} from "./version-dialog";

@@ -4,7 +4,7 @@
 
 
 import {Router, ActivatedRoute} from "@angular/router";
-import {BackEndService} from "../services/BackEndService";
+import {BackendService} from "../services/BackendService";
 import {ModalService} from "../services/ModalService";
 import {FlashMessagesService, FlashMessage} from "../services/FlashMessagesService";
 import {Injector} from "@angular/core";
@@ -13,7 +13,7 @@ import {CurrentParamsService} from "../services/CurrentParamsService";
 
 export abstract class BaseMainComponent {
 
-    protected backEndService:BackEndService = null;
+    protected backendService:BackendService = null;
     protected router:Router = null;
     protected activatedRoute:ActivatedRoute = null;
     protected modalService:ModalService = null;
@@ -24,7 +24,7 @@ export abstract class BaseMainComponent {
     constructor(injector:Injector) {
         console.log("BaseMainComponent init");
         if (injector) {
-            this.backEndService = injector.get(BackEndService);
+            this.backendService = injector.get(BackendService);
             this.router = injector.get(Router);
             this.activatedRoute = injector.get(ActivatedRoute);
             this.modalService = injector.get(ModalService);

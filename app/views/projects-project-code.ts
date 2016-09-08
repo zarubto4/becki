@@ -4,13 +4,13 @@
 
 import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
 import {LayoutMain} from "../layouts/main";
-import {Project, CProgram, TypeOfBoard} from "../lib-back-end/index";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
 import {ROUTER_DIRECTIVES} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
 import {ModalsRemovalModel} from "../modals/removal";
-import {ModalsCodePropertiesModel} from "../modals/code-poperties";
+import {ModalsCodePropertiesModel} from "../modals/code-properties";
+import {IProject, ICProgram, ITypeOfBoard} from "../backend/TyrionAPI";
 
 @Component({
     selector: "view-projects-project-code",
@@ -23,11 +23,11 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
 
     routeParamsSubscription:Subscription;
 
-    project:Project = null;
+    project:IProject = null;
 
-    codePrograms:CProgram[] = null;
+    codePrograms:ICProgram[] = null;
 
-    typeOfBoards:TypeOfBoard[] = null;
+    typeOfBoards:ITypeOfBoard[] = null;
 
     constructor(injector:Injector) {super(injector)};
 
@@ -49,22 +49,22 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
     }
 
     refresh():void {
-        this.backEndService.getProject(this.id)
-            .then((project:Project) => {
+        this.backendService.getProject(this.id)
+            .then((project:IProject) => {
                 this.project = project;
-                return Promise.all<CProgram>(project.c_programs.map((c_program) => {
-                    return this.backEndService.getCProgram(c_program.id);
+                return Promise.all<ICProgram>(project.c_programs.map((c_program) => {
+                    return this.backendService.getCProgram(c_program.id);
                 }));
             })
-            .then((codePrograms:CProgram[]) => {
+            .then((codePrograms:ICProgram[]) => {
                 this.codePrograms = codePrograms;
             })
             .catch(reason => {
                 this.addFlashMessage(new FlashMessageError(`The project ${this.id} cannot be loaded.`, reason));
             });
 
-        this.backEndService.getAllTypeOfBoard()
-            .then((typeOfBoards:TypeOfBoard[]) => {
+        this.backendService.getAllTypeOfBoards()
+            .then((typeOfBoards:ITypeOfBoard[]) => {
                 this.typeOfBoards = typeOfBoards;
             })
             .catch(reason => {
@@ -74,14 +74,14 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
 
     }
 
-    onCodeClick(code:CProgram):void {
+    onCodeClick(code:ICProgram):void {
         this.navigate(["/projects", this.currentParamsService.get("project"), "code", code.id]);
     }
 
-    onRemoveClick(code:CProgram):void {
+    onRemoveClick(code:ICProgram):void {
         this.modalService.showModal(new ModalsRemovalModel(code.program_name)).then((success) => {
             if (success) {
-                this.backEndService.deleteCProgram(code.id)
+                this.backendService.deleteCProgram(code.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The code has been removed."));
                         this.refresh();
@@ -99,7 +99,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         var model = new ModalsCodePropertiesModel(this.typeOfBoards);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backEndService.createCProgram(model.name, model.description, model.deviceType, this.id)
+                this.backendService.createCProgram(this.id, {program_name: model.name, program_description: model.description, type_of_board_id: model.deviceType})
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The code ${model.name} has been added to project.`));
                         this.refresh();
@@ -112,13 +112,13 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         });
     }
 
-    onEditClick(code:CProgram):void {
+    onEditClick(code:ICProgram):void {
         if (!this.typeOfBoards) new FlashMessageError(`The code cannot be added to project.`);
 
         var model = new ModalsCodePropertiesModel(this.typeOfBoards, code.program_name, code.program_description, code.type_of_board_id, true, code.program_name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backEndService.updateCProgram(code.id, model.name, model.description, model.deviceType)
+                this.backendService.editCProgram(code.id, {program_name: model.name, program_description: model.description, type_of_board_id: model.deviceType})
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The code has been updated."));
                         this.refresh();

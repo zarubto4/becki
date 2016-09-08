@@ -4,8 +4,8 @@
 
 import {FormControl, AsyncValidatorFn} from "@angular/forms";
 import {Observable, Observer} from "rxjs/Rx";
-import {BackEndService} from "../services/BackEndService";
-import {BProgram, Project} from "../lib-back-end/index";
+import {BackendService} from "../services/BackendService";
+import {IBProgram} from "../backend/TyrionAPI";
 
 export class AsyncValidatorDebounce {
     _validate:(x: any) => any;
@@ -42,10 +42,10 @@ export class AsyncValidatorDebounce {
 
 export class BeckiAsyncValidators {
 
-    public static projectNameTaken(backEnd:BackEndService):AsyncValidatorFn {
+    public static projectNameTaken(backEnd:BackendService):AsyncValidatorFn {
         return AsyncValidatorDebounce.debounce((control:FormControl) => {
             return new Promise<any>((resolve, reject) => {
-                backEnd.getProjects()
+                backEnd.getAllProjects()
                     .then((projects) => {
                         if (projects.find(project => project.project_name == control.value)) {
                             resolve({"projectNameTaken": true}); // invalid
@@ -60,7 +60,7 @@ export class BeckiAsyncValidators {
         });
     }
 
-    public static blockoNameTaken(backEnd:BackEndService, projectId:string|(()=>string)):AsyncValidatorFn {
+    public static blockoNameTaken(backEnd:BackendService, projectId:string|(()=>string)):AsyncValidatorFn {
         return AsyncValidatorDebounce.debounce((control:FormControl) => {
             return new Promise<any>((resolve, reject) => {
                 var projId:string = null;
@@ -71,12 +71,12 @@ export class BeckiAsyncValidators {
                     return;
                 }
                 backEnd.getProject(projId)
-                    .then((project:Project) => {
-                        Promise.all<BProgram>(project.b_programs.map((b_program) => {
+                    .then((project) => {
+                        Promise.all<IBProgram>(project.b_programs.map((b_program) => {
                             return backEnd.getBProgram(b_program.id);
                         }))
-                            .then((blockoPrograms:BProgram[]) => {
-                                if (blockoPrograms.find((blockoProgram:BProgram) => blockoProgram.name == control.value)) {
+                            .then((blockoPrograms:IBProgram[]) => {
+                                if (blockoPrograms.find((blockoProgram:IBProgram) => blockoProgram.name == control.value)) {
                                     resolve({"blockoNameTaken": true}); // invalid
                                 } else {
                                     resolve(null); // valid

@@ -21,7 +21,7 @@
             <!-- BEGIN TOP NAVIGATION MENU -->
             <div class="top-menu">
                 <ul class="nav navbar-nav pull-right">
-                    <li *ngIf="backEndService.tasks">
+                    <li *ngIf="backendService.tasks">
                         <a><i class="fa fa-spinner fa-spin"></i></a>
                     </li>
                     <!-- BEGIN NOTIFICATION DROPDOWN -->
@@ -72,9 +72,9 @@
                     <!-- BEGIN USER LOGIN DROPDOWN -->
                     <li class="dropdown dropdown-user">
                         <a class="dropdown-toggle" (click)="onUserToggleClick($events)">
-                            <img alt="" class="img-circle" [attr.src]="backEndService.gravatarIcon"/>
+                            <img alt="" class="img-circle" [attr.src]="backendService.gravatarIcon"/>
                             <span class="username">
-                                {{backEndService.personInfoSnapshot?backEndService.personInfoSnapshot.full_name:""}}
+                                {{backendService.personInfoSnapshot?backendService.personInfoSnapshot.full_name:""}}
                             </span>
                             <i class="fa fa-angle-down"></i>
                         </a>

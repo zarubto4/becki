@@ -10,10 +10,9 @@ import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
 import {CORE_DIRECTIVES} from "@angular/common";
 import {REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 import {BeckiAsyncValidators} from "../helpers/BeckiAsyncValidators";
-import {BackEndService} from "../services/BackEndService";
+import {BackendService} from "../services/BackendService";
 import {BeckiFormInput} from "../components/BeckiFormInput";
 import {ModalModel} from "../services/ModalService";
-import {ActivatedRouteSnapshot, ActivatedRoute} from "@angular/router";
 
 
 
@@ -38,12 +37,12 @@ export class ModalsBlockoPropertiesComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private backEndService:BackEndService, private formBuilder:FormBuilder) {
+    constructor(private backendService:BackendService, private formBuilder:FormBuilder) {
 
         this.form = this.formBuilder.group({
             "name": ["", [Validators.required, Validators.minLength(8)], BeckiAsyncValidators.ifValidator((value) => {
                 return !(this.modalModel && this.modalModel.exceptName && this.modalModel.exceptName == value);
-            }, BeckiAsyncValidators.blockoNameTaken(this.backEndService, () => {
+            }, BeckiAsyncValidators.blockoNameTaken(this.backendService, () => {
                 return this.modalModel.projectId;
             }))],
             "description": ["", [Validators.required, Validators.minLength(24)]]
@@ -51,8 +50,8 @@ export class ModalsBlockoPropertiesComponent implements OnInit {
     }
 
     ngOnInit() {
-        (<FormControl>(this.form.controls["name"])).updateValue(this.modalModel.name);
-        (<FormControl>(this.form.controls["description"])).updateValue(this.modalModel.description);
+        (<FormControl>(this.form.controls["name"])).setValue(this.modalModel.name);
+        (<FormControl>(this.form.controls["description"])).setValue(this.modalModel.description);
     }
 
     onSubmitClick():void {

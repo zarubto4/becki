@@ -10,11 +10,9 @@
 import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
 import {CORE_DIRECTIVES} from "@angular/common";
 import {REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
-import {BackEndService} from "../services/BackEndService";
+import {BackendService} from "../services/BackendService";
 import {BeckiFormInput} from "../components/BeckiFormInput";
 import {ModalModel} from "../services/ModalService";
-import {TypeOfBoard} from "../lib-back-end/index";
-import {BeckiFormSelect, BeckiFormSelectOption, beckiFormSelectOptionsMaker} from "../components/BeckiFormSelect";
 import {CodeDirectory} from "../components/CodeIDE";
 import {FileTreeObject, FileTree} from "../components/FileTree";
 import {BeckiValidators} from "../helpers/BeckiValidators";
@@ -62,7 +60,7 @@ export class ModalsCodeFileDialogComponent implements OnInit {
     textSubmit:string = "Done";
     textCancel:string = "Cancel";
 
-    constructor(private backEndService:BackEndService, private formBuilder:FormBuilder) {
+    constructor(private backendService:BackendService, private formBuilder:FormBuilder) {
     }
 
     ngOnInit() {

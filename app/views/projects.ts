@@ -5,11 +5,11 @@
 
 import {Component, OnInit, Injector} from "@angular/core";
 import {LayoutMain} from "../layouts/main";
-import {Project, ApplicableProduct} from "../lib-back-end/index";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
 import {ModalsRemovalModel} from "../modals/removal";
 import {ModalsProjectPropertiesModel} from "../modals/project-properties";
+import {IApplicableProduct, IProject} from "../backend/TyrionAPI";
 
 
 @Component({
@@ -21,24 +21,24 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
 
     constructor(injector:Injector) {super(injector)};
 
-    projects:Project[];
+    projects:IProject[];
 
-    products:ApplicableProduct[];
+    products:IApplicableProduct[];
 
     ngOnInit():void {
         this.refresh();
     }
 
     refresh():void {
-        this.backEndService.getProjects()
+        this.backendService.getAllProjects()
             .then(projects => this.projects = projects)
             .catch(reason => this.addFlashMessage(new FlashMessageError("Projects cannot be loaded.", reason)));
-        this.backEndService.getUserProduct()
+        this.backendService.getAllTarifsUserApplicables()
             .then(products => this.products = products)
             .catch(reason => this.addFlashMessage(new FlashMessageError("Products cannot be loaded.", reason)));
     }
 
-    onProjectClick(project:Project):void {
+    onProjectClick(project:IProject):void {
         this.navigate(["/projects", project.id])
     }
 
@@ -48,7 +48,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
         var model = new ModalsProjectPropertiesModel(this.products);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backEndService.createProject(model.name, model.description, model.product) //TODO:add tarrif nebo produkt či jak se to bude jmenovat
+                this.backendService.createProject({project_name: model.name, project_description: model.description, product_id: parseInt(model.product)}) //TODO:add tarrif nebo produkt či jak se to bude jmenovat
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The project ${model.name} has been created.`));
                         this.refresh();
@@ -62,13 +62,13 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
         });
     }
 
-    onEditClick(project:Project):void {
+    onEditClick(project:IProject):void {
         if (!this.products) this.addFlashMessage(new FlashMessageError("Cannot add project now."));
 
         var model = new ModalsProjectPropertiesModel(this.products,project.project_name, project.project_description, ""+project.product_id, true, project.project_name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backEndService.updateProject(project.id, model.name, model.description,model.product)
+                this.backendService.editProject(project.id, {project_name: model.name, project_description: model.description, product_id: parseInt(model.product)})
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The project has been updated."));
                         this.refresh();
@@ -81,10 +81,10 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
         });
     }
 
-    onRemoveClick(project:Project):void {
+    onRemoveClick(project:IProject):void {
         this.modalService.showModal(new ModalsRemovalModel(project.project_name)).then((success) => {
             if (success) {
-                this.backEndService.deleteProject(project.id)
+                this.backendService.deleteProject(project.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The project has been removed."));
                         this.refresh();

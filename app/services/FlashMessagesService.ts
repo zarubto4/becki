@@ -3,8 +3,7 @@
  */
 
 import {Injectable} from "@angular/core";
-
-import * as libBackEnd from "../lib-back-end/index";
+import {BugFoundError, PermissionMissingError, UnauthorizedError} from "../backend/BeckiBackend";
 
 export abstract class FlashMessage {
 
@@ -17,18 +16,18 @@ export abstract class FlashMessage {
         if (htmlBody) {
             this.htmlBody = htmlBody;
         }
-        if (reason instanceof libBackEnd.BugFoundError) {
+        if (reason instanceof BugFoundError) {
             this.body += " An unexpected error ";
             if (reason.userMessage) {
                 this.body += `with message "${reason.userMessage}" `;
             }
             this.body += `have occurred. Please, report following text to administrators in order to get it fixed: ${JSON.stringify(reason.adminMessage)}`;
-        } else if (reason instanceof libBackEnd.PermissionMissingError) {
+        } else if (reason instanceof PermissionMissingError) {
             if (reason.userMessage) {
                 this.body += ` An authorization error with message "${reason.userMessage}" have occurred.`;
             }
             this.body += " Please ask an authorized person to give you the necessary permissions.";
-        } else if (reason instanceof libBackEnd.UnauthorizedError) {
+        } else if (reason instanceof UnauthorizedError) {
             this.body += ` An authorization error with message "${reason.userMessage}" have occurred. Please sign in.`;
         }
     }

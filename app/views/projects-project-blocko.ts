@@ -7,13 +7,13 @@
 
 import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
 import {LayoutMain} from "../layouts/main";
-import {Project, BProgram} from "../lib-back-end/index";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
 import {ROUTER_DIRECTIVES} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
 import {ModalsRemovalModel} from "../modals/removal";
 import {ModalsBlockoPropertiesModel} from "../modals/blocko-properties";
+import {IBProgram, IProject} from "../backend/TyrionAPI";
 
 @Component({
     selector: "view-projects-project-blocko",
@@ -26,9 +26,9 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
 
     routeParamsSubscription:Subscription;
 
-    project:Project = null;
+    project:IProject = null;
 
-    blockoPrograms:BProgram[] = null;
+    blockoPrograms:IBProgram[] = null;
 
     constructor(injector:Injector) {super(injector)};
 
@@ -44,14 +44,14 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
     }
 
     refresh():void {
-        this.backEndService.getProject(this.id)
-            .then((project:Project) => {
+        this.backendService.getProject(this.id)
+            .then((project:IProject) => {
                 this.project = project;
-                return Promise.all<BProgram>(project.b_programs.map((b_program) => {
-                    return this.backEndService.getBProgram(b_program.id);
+                return Promise.all<IBProgram>(project.b_programs.map((b_program) => {
+                    return this.backendService.getBProgram(b_program.id);
                 }));
             })
-            .then((blockoPrograms:BProgram[]) => {
+            .then((blockoPrograms:IBProgram[]) => {
                 console.log(blockoPrograms);
                 this.blockoPrograms = blockoPrograms;
             })
@@ -61,14 +61,14 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
 
     }
 
-    onBlockoClick(blocko:BProgram):void {
+    onBlockoClick(blocko:IBProgram):void {
         this.navigate(["/projects", this.currentParamsService.get("project"), "blocko", blocko.id]);
     }
 
-    onRemoveClick(blocko:BProgram):void {
+    onRemoveClick(blocko:IBProgram):void {
         this.modalService.showModal(new ModalsRemovalModel(blocko.name)).then((success) => {
             if (success) {
-                this.backEndService.deleteBProgram(blocko.id)
+                this.backendService.deleteBProgram(blocko.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The blocko has been removed."));
                         this.refresh();
@@ -85,7 +85,7 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
         var model = new ModalsBlockoPropertiesModel(this.id);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backEndService.createBProgram(model.name, model.description, this.id)
+                this.backendService.createBProgram(this.id, {name: model.name, program_description:model.description})
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The blocko ${model.name} has been added to project.`));
                         this.refresh();
@@ -98,11 +98,11 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
         });
     }
 
-    onEditClick(blocko:BProgram):void {
+    onEditClick(blocko:IBProgram):void {
         var model = new ModalsBlockoPropertiesModel(this.id, blocko.name, blocko.program_description, true, blocko.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backEndService.updateBProgram(blocko.id, model.name, model.description)
+                this.backendService.editBProgram(blocko.id, {name: model.name, program_description:model.description})
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The blocko has been updated."));
                         this.refresh();
