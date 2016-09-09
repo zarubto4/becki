@@ -7,11 +7,14 @@ import {LayoutMain} from "../layouts/main";
 import * as ngCore from "@angular/core";
 import {CORE_DIRECTIVES} from "@angular/common";
 import {BaseMainComponent} from "./BaseMainComponent";
-import {BackEndService} from "../services/BackEndService";
 import {LayoutNotLogged} from "../layouts/not-logged";
 import {BeckiFormInput} from "../components/BeckiFormInput";
 import {REACTIVE_FORM_DIRECTIVES, Validators, FormGroup} from "@angular/forms";
 import {BeckiValidators} from "../helpers/BeckiValidators";
+import {FlashMessagesComponent} from "../components/FlashMessagesComponent";
+import {FlashMessageSuccess, FlashMessageError, FlashMessagesService} from "../services/FlashMessagesService";
+import {BackendService} from "../services/BackendService";
+
 
 @Component({
     selector: "forgotPassword",
@@ -26,16 +29,12 @@ export class ForgotPasswordComponent extends BaseMainComponent implements OnInit
     showFailed:boolean;
     failedReason:string;
 
-    constructor(injector:Injector,protected backEndService:BackEndService) {
+    constructor(injector:Injector,protected backendService:BackendService,protected flashMessagesService:FlashMessagesService ) {
         super(injector);
 
         this.forgotPasswordForm = this.formBuilder.group({
             "email": ["", [Validators.required, BeckiValidators.email]]
         });
-
-        this.showFailed=false;
-        this.showSuccess=true;
-        this.failedReason="Lol 420 blaze it";
     }
 
 
@@ -44,16 +43,15 @@ export class ForgotPasswordComponent extends BaseMainComponent implements OnInit
     }
 
     sendRecovery():void {
-        this.backEndService.sendPasswordRecovery(this.forgotPasswordForm.controls["email"].value)
+        this.backendService.recoveryMailPersonPassword({mail:this.forgotPasswordForm.controls["email"].value})
             .then(() => {
-                this.showSuccess = true;
-                this.showFailed = false;
-                console.log(this.showSuccess);
+                this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("email with instructions was sent"));
+                this.router.navigate(["/"]);
+
             })
             .catch(reason => {
-                this.showSuccess = true;
-                this.showFailed = false;
-                this.failedReason = reason
+                this.flashMessagesService.addFlashMessage(new FlashMessageError("email cannot be sent, " + reason));
+                console.log("err send recovery"+reason);
             })
     }
 

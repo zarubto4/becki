@@ -138,6 +138,11 @@ export class NotificationService {
                 return new NotificationError(notification.id, this.notificationBodyUnparse(notification),notification.created);
             case "question":
                 return new NotificationInfo(notification.id, this.notificationBodyUnparse(notification),notification.created);
+
+
+            /*case "object": //tato věc bude ukazovat na konkrétní objekt v becki, bude třeba to sjednoti a další metodu na to
+                return new NotificationInfo(notification.messageId, this.notificationBodyUnparse(notification),notification.created);
+                break; */
         }
         return null;
     }

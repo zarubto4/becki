@@ -19,9 +19,10 @@ export class ValidatorErrorsService {
             if (errors["projectNameTaken"]) return "This project name is already taken.";
             if (errors["blockoNameTaken"]) return "This blocko name is already taken.";
             if (errors["email"]) return "Invalid email.";
+            if (errors["passwordSame"]) return "Passwords are different.";
             if (errors["filename"]) return "Invalid file/directory name.";
         }
-        return "Unknown error.";
+        return "Unknown error ("+Object.keys(errors)+").";
     }
 
 }

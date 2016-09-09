@@ -9,13 +9,14 @@
 import {Component, OnInit, OnDestroy} from "@angular/core";
 import {CORE_DIRECTIVES} from "@angular/common";
 import {ROUTER_DIRECTIVES} from "@angular/router";
+import {FlashMessagesComponent} from "../components/FlashMessagesComponent";
 
 const BODY_CLASSES = ["login"];
 
 @Component({
     selector: "layout-not-logged",
     templateUrl: "app/layouts/not-logged.html",
-    directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES]
+    directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES, FlashMessagesComponent]
 })
 export class LayoutNotLogged implements OnInit, OnDestroy {
 

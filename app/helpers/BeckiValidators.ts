@@ -2,7 +2,7 @@
  * Created by davidhradek on 03.08.16.
  */
 
-import {AbstractControl, ValidatorFn} from "@angular/forms";
+import {AbstractControl, ValidatorFn, FormGroup} from "@angular/forms";
 
 export class BeckiValidators {
 
@@ -11,13 +11,23 @@ export class BeckiValidators {
             return null; // valid
         }
         return {"email": true}; // invalid
+    };
+
+    public static passwordSame(form:()=>FormGroup, fieldName:string):ValidatorFn {
+        return (a:AbstractControl) => {
+            if (form) {
+                var f = form();
+                if (f && f.controls[fieldName]) {
+                    if (a.value == f.controls[fieldName].value) {
+                        return null; // valid
+                    }
+                }
+            }
+            return {"passwordSame": true}; // invalid
+        };
     }
-    public static passwordConfirm:ValidatorFn = (a:AbstractControl/*,b:AbstractControl*/) => {
-        if (a.value /*== b.value*/) { //TODO dodělat zítra validátor na confirm password //a.value.match??
-            return null; // valid
-        }
-        return {"password": true}; // invalid
-    }
+
+
 
     public static filename:ValidatorFn = (c: AbstractControl) => {
         // http://stackoverflow.com/questions/11100821/javascript-regex-for-validating-filenames
