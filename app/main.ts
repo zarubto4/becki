@@ -90,14 +90,14 @@ import {ProjectsProjectCodeCodeComponent} from "./views/projects-project-code-co
 import {NotificationsComponent} from "./views/notifications";
 import {ProfileComponent} from "./views/profile";
 import {ForgotPasswordComponent} from "./views/forgot-password";
-import {passwordRestartComponent} from "./views/password-restart";
+import {PasswordRestartComponent} from "./views/password-restart";
 
 // DON'T USE children IN ROUTER YET!!!
 var routes:Routes = [
     {path: "login", component: LoginComponent, canActivate:[NonAuthGuard]},
     {path: "logout", component: LogoutComponent},
     {path: "forgotPassword", component: ForgotPasswordComponent, canActivate:[NonAuthGuard]},
-    {path: "passwordRestart/:token", component: passwordRestartComponent, canActivate:[NonAuthGuard]},
+    {path: "passwordRestart/:token", component: PasswordRestartComponent, canActivate:[NonAuthGuard]},
 
 
     {path: "", redirectTo: "/dashboard", pathMatch: "full"},
@@ -262,6 +262,8 @@ var tabMenus = {
         NotificationsComponent,
         ProfileComponent,
         ForgotPasswordComponent,
+        PasswordRestartComponent,
+
     ],
     exports: [ AppComponent ],
     bootstrap: [ AppComponent ]

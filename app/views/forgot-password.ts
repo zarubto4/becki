@@ -9,11 +9,12 @@ import {CORE_DIRECTIVES} from "@angular/common";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {LayoutNotLogged} from "../layouts/not-logged";
 import {BeckiFormInput} from "../components/BeckiFormInput";
-import {REACTIVE_FORM_DIRECTIVES, Validators, FormGroup} from "@angular/forms";
+import {REACTIVE_FORM_DIRECTIVES, Validators, FormGroup, FormBuilder} from "@angular/forms";
 import {BeckiValidators} from "../helpers/BeckiValidators";
 import {FlashMessagesComponent} from "../components/FlashMessagesComponent";
 import {FlashMessageSuccess, FlashMessageError, FlashMessagesService} from "../services/FlashMessagesService";
 import {BackendService} from "../services/BackendService";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -21,7 +22,7 @@ import {BackendService} from "../services/BackendService";
     directives: [LayoutNotLogged,CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, BeckiFormInput],
     templateUrl: "app/views/forgot-password.html"
 })
-export class ForgotPasswordComponent extends BaseMainComponent implements OnInit{
+export class ForgotPasswordComponent implements OnInit{
 
     forgotPasswordForm:FormGroup;
 
@@ -29,8 +30,7 @@ export class ForgotPasswordComponent extends BaseMainComponent implements OnInit
     showFailed:boolean;
     failedReason:string;
 
-    constructor(injector:Injector,protected backendService:BackendService,protected flashMessagesService:FlashMessagesService ) {
-        super(injector);
+    constructor(protected formBuilder:FormBuilder,protected router:Router,protected backendService:BackendService,protected flashMessagesService:FlashMessagesService ) {
 
         this.forgotPasswordForm = this.formBuilder.group({
             "email": ["", [Validators.required, BeckiValidators.email]]
@@ -46,7 +46,7 @@ export class ForgotPasswordComponent extends BaseMainComponent implements OnInit
         this.backendService.recoveryMailPersonPassword({mail:this.forgotPasswordForm.controls["email"].value})
             .then(() => {
                 this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("email with instructions was sent"));
-                this.router.navigate(["/"]);
+                //this.router.navigate(["/"]);
 
             })
             .catch(reason => {
@@ -56,7 +56,7 @@ export class ForgotPasswordComponent extends BaseMainComponent implements OnInit
     }
 
     clickButtonBack():void{
-        this.router.navigate(["/"]);
+        //this.router.navigate(["/"]);
     }
 
 }

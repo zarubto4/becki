@@ -9,10 +9,10 @@ import {CORE_DIRECTIVES} from "@angular/common";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {LayoutNotLogged} from "../layouts/not-logged";
 import {BeckiFormInput} from "../components/BeckiFormInput";
-import {REACTIVE_FORM_DIRECTIVES, Validators, FormGroup, FormControl} from "@angular/forms";
+import {REACTIVE_FORM_DIRECTIVES, Validators, FormGroup, FormControl, FormBuilder} from "@angular/forms";
 import {BeckiValidators} from "../helpers/BeckiValidators";
 import {Subscription} from "rxjs";
-import {ROUTER_DIRECTIVES} from "@angular/router";
+import {ROUTER_DIRECTIVES, Router, ActivatedRoute} from "@angular/router";
 import {
     FlashMessagesService, FlashMessageSuccess, FlashMessage,
     FlashMessageError
@@ -24,7 +24,7 @@ import {BackendService} from "../services/BackendService";
     directives: [LayoutNotLogged, CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, BeckiFormInput, ROUTER_DIRECTIVES],
     templateUrl: "app/views/password-restart.html"
 })
-export class passwordRestartComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class PasswordRestartComponent implements OnInit, OnDestroy {
 
     passwordRestartForm: FormGroup;
 
@@ -32,8 +32,7 @@ export class passwordRestartComponent extends BaseMainComponent implements OnIni
 
     token: string;
 
-    constructor(injector: Injector, protected backEndService:BackendService, protected flashMessagesService: FlashMessagesService) {
-        super(injector);
+    constructor(protected activatedRoute:ActivatedRoute,protected router:Router,protected formBuilder:FormBuilder,protected backEndService:BackendService, protected flashMessagesService: FlashMessagesService) {
 
         this.passwordRestartForm = this.formBuilder.group({
             "email": ["", [Validators.required, BeckiValidators.email]],
@@ -43,7 +42,7 @@ export class passwordRestartComponent extends BaseMainComponent implements OnIni
     }
 
     onSubmit(): void {
-        this.backEndService.recoveryPersonPassword({mail:this.passwordRestartForm.controls["email"].value, password:this.token,password_recovery_token: this.passwordRestartForm.controls["password"].value})
+        this.backEndService.recoveryPersonPassword({mail:this.passwordRestartForm.controls["email"].value, password_recovery_token:this.token, password: this.passwordRestartForm.controls["password"].value})
             .then(()=> {
             this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("password was succesfully changed"));
             this.router.navigate(["/"]);
