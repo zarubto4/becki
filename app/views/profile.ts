@@ -20,21 +20,19 @@ export class ProfileComponent extends BaseMainComponent implements OnInit{
 
     editPermission:boolean;
 
-    id:number;
-
     nickName:string;
 
     fullName:string;
 
     email:string;
 
+    state:string;
+
 
     ngOnInit(): void {
         var personObject = this.backEndService.personInfoSnapshot;
 
         this.editPermission=personObject.edit_permission;
-
-        this.id=personObject.id;
 
         this.nickName=personObject.nick_name;
 
