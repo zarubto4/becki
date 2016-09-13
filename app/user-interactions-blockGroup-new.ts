@@ -16,7 +16,7 @@ import * as libBeckiLayout from "./lib-becki/layout";
 import * as libBeckiNotifications from "./lib-becki/notifications";
 
 @ngCore.Component({
-    templateUrl: "app/user-interactions-blockGroups-new",
+    templateUrl: "app/user-interactions-blockGroups-new.html",
     directives: [
         libBeckiCustomValidator.Directive,
         libBeckiFieldInteractionsScheme.Component,

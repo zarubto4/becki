@@ -30,7 +30,12 @@
     "zone.js": "^0.6.12"
   },
   "devDependencies": {
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-angular-embed-templates": "^2.3.0",
+    "gulp-typescript": "^2.13.6",
     "lite-server": "^2.2.2",
+    "systemjs-builder": "^0.15.31",
     "typescript": "^1.8.10",
     "typings": "^1.0.4"
   },
