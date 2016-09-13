@@ -19,7 +19,7 @@
         <div class="portlet-body">
 
             <ul class="feeds">
-
+               <!-- <template ngIf="notificationService.notifications.length != 0"> -->
                 <li *ngFor="let note of notificationService.notifications">
                     <a href="javascript:;">
                         <div class="col1">
@@ -30,7 +30,7 @@
                                     </div>
                                 </div>
                                 <div class="cont-col2">
-                                    <div class="desc"> <span [innerHTML]="note.body" style=""></span>
+                                    <div class="desc"> <span [innerHTML]="note.body" style=""></span> <!-- TODO přidat že pokud již nejsou notifikace tak se napíše "no more notification" a zablokuje se listování -->
                                          </div>
                                 </div>
                             </div>
@@ -40,10 +40,13 @@
                         </div>
                     </a>
                 </li>
-
+             <!--   </template> -->
+           <!--     <template ngIf="notificationService.notifications.length == 0">
+                    <div class="col1">No more messeages</div>
+                </template> -->
             </ul>
 
-
+                <div><a (click)="listGetNewerNotifications()">newer</a> <a (click)="listGetOlderNotifications()">older</a></div> <!-- TODO udělat že tlačítko newer se nezobrazí na první stránce -->
         </div>
     </div>
 </layout-main>

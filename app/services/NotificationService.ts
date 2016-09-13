@@ -12,8 +12,7 @@ export abstract class Notification {
     protected _relativeTime:string = "";
     constructor(public id:string, public type:string, public icon:string, public body:string, public time:number, reason?:Object) {
 
-        this._relativeTime= moment(this.time).startOf('hour').fromNow();
-
+        this._relativeTime= moment(this.time).startOf('minute').fromNow(false);
 
 
 
@@ -52,11 +51,7 @@ export class NotificationError extends Notification {
     }
 }
 
-export class NotificationQuestion extends Notification {
-    constructor(public id:string, body:string,time:number, reason?:Object) {
-        super(id, "info", "eye"/*fa-question-circle-o*/, body,time, reason);
-    }
-}
+
 
 @Injectable()
 export class NotificationService {
@@ -101,7 +96,7 @@ export class NotificationService {
             }
         });
 
-        this.backendService.notificationReceived.subscribe(notification => { //TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-360
+        this.backendService.notificationReceived.subscribe(notification => {
             if (notification.messageType == "subscribe_notification" || notification.messageType == "unsubscribe_notification") {
                 console.log("(un)subscribed");
             } else {
@@ -114,9 +109,36 @@ export class NotificationService {
     }
 
     showToastr(notification:Notification):void{
-        (<any>toastr)[notification.type](notification.body);
+        var type = "info";
+        switch (notification.type) {
+            case "info":
+                type = "info";
+                break;
+
+            case "success":
+                type = "success";
+                break;
+
+            case "warning":
+                type = "warning";
+                break;
+
+            case "error":
+                type = "error";
+                break;
+
+            case "question":
+                type = "info";
+                break;
+
+            default:
+                type="info";
+                break;
+        }
+        toastr[type](notification.body);
     }
-    wasReadedNotifications():void{ //TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-360
+
+    wasReadedNotifications():void{
         //až bude sjednoceno názosloví je třeba za pomocí was_read
         this.unreadedNotifications=0;
     }
@@ -136,8 +158,6 @@ export class NotificationService {
                 return new NotificationWarning(notification.id, this.notificationBodyUnparse(notification),notification.created);
             case "error":
                 return new NotificationError(notification.id, this.notificationBodyUnparse(notification),notification.created);
-            case "question":
-                return new NotificationInfo(notification.id, this.notificationBodyUnparse(notification),notification.created);
 
 
             /*case "object": //tato věc bude ukazovat na konkrétní objekt v becki, bude třeba to sjednoti a další metodu na to
@@ -189,7 +209,8 @@ export class NotificationService {
         this.backendService.listNotifications(page).then(list => list.content.map(notification => {
             this.addNotification(this.notificationParse(notification));
         })).then(() => {
-            return this.notifications
+            this.notifications.reverse();
+            return this.notifications;
         });
         return null;
     }
