@@ -83,11 +83,10 @@ export class NotificationService {
             "hideMethod": "fadeOut"
         };
 
-        this.backendService.getAllUnconfirmedNotifications();//.then(console.log("get uncomfirmed notifications")); //TODO nebylo by třeba je napsat někam jinam?
+        this.backendService.getAllUnconfirmedNotifications();
 
         this.backendService.personInfo.subscribe((pi) => {
             if (pi) {
-                //TODO:request first ten
                 this.getRestApiNotifications();
 
 
@@ -100,10 +99,24 @@ export class NotificationService {
             if (notification.messageType == "subscribe_notification" || notification.messageType == "unsubscribe_notification") {
                 console.log("(un)subscribed");
             } else {
-                this.unreadedNotifications++;
                 var notif = this.notificationParse(notification);
-                this.addNotification(notif);
-                this.showToastr(notif);
+                switch (notification.notification_importance){
+                    case "low":
+                        this.showToastr(notif);
+                        break;
+
+                    case "normal":
+                        this.unreadedNotifications++;
+                        var notif = this.notificationParse(notification);
+                        this.addNotification(notif);
+                        this.showToastr(notif);
+                        break;
+
+                    case "high  ":
+                        //TODO zablokování celé stránky a nutnost přečtení si této notifikace, nutno probrat s Davidem
+                        break;
+
+                }
             }
         });
     }
@@ -127,10 +140,6 @@ export class NotificationService {
                 type = "error";
                 break;
 
-            case "question":
-                type = "info";
-                break;
-
             default:
                 type="info";
                 break;
@@ -139,7 +148,7 @@ export class NotificationService {
     }
 
     wasReadedNotifications():void{
-        //až bude sjednoceno názosloví je třeba za pomocí was_read
+        //TODO na najetou notifikaci poslat sem "was read" a odebrat jednu nezobrazenou notifikaci
         this.unreadedNotifications=0;
     }
 
@@ -158,8 +167,6 @@ export class NotificationService {
                 return new NotificationWarning(notification.id, this.notificationBodyUnparse(notification),notification.created);
             case "error":
                 return new NotificationError(notification.id, this.notificationBodyUnparse(notification),notification.created);
-
-
             /*case "object": //tato věc bude ukazovat na konkrétní objekt v becki, bude třeba to sjednoti a další metodu na to
                 return new NotificationInfo(notification.messageId, this.notificationBodyUnparse(notification),notification.created);
                 break; */
@@ -200,12 +207,15 @@ export class NotificationService {
                     break;
             }
         });
-        console.log(bodyText);
+        if(notification.confirmation_required){
+            bodyText += ("<input (click)='#'> OK "); //TODO notification confirmed bude držet dokud se neodklikne, změnit tady nastavení toastr messeage
+        }
         return bodyText;
     }
 
     getRestApiNotifications(page = 1):Promise<Notification[]> {
         this.notificationCleanArray();
+        //TODO existuje "unread total, nepřečtené notifikace zvýrazníme podle boolean "was_read", poté co se na ně najede tak poslat že jsoou přečtené
         this.backendService.listNotifications(page).then(list => list.content.map(notification => {
             this.addNotification(this.notificationParse(notification));
         })).then(() => {

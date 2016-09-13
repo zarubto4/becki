@@ -26,7 +26,7 @@ export class BackendService extends BeckiBackend {
             if (pi) {
                 var email = this.personInfoSnapshot.mail || "";
                 var md5 = MD5(email.trim().toLowerCase());
-                this.gravatarIcon = "https://www.gravatar.com/avatar/"+md5+"?d=retro";
+                this.gravatarIcon = "https://www.gravatar.com/avatar/"+md5+"?d=retro"; //TODO Tyrion poskytuje vlastní ikonky, můžeme přejít z gravatara na ně
             } else {
                 this.gravatarIcon = "";
             }
