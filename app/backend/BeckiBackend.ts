@@ -218,9 +218,9 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     public static WS_SCHEME = "ws";
 
-    public static HOST = "127.0.0.1:9000";
-
     public static WS_CHANNEL = "becki";
+
+    public host = "127.0.0.1:9000";
 
     private webSocket:WebSocket = null;
 
@@ -252,6 +252,10 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     public constructor() {
         super();
+        // TODO: make better enviroment detection
+        if (location && location.hostname) {
+            this.host = location.hostname + ":9000";
+        }
     }
 
     // GENERIC REQUESTS
@@ -259,7 +263,7 @@ export abstract class BeckiBackend extends TyrionAPI {
     protected abstract requestRestGeneral(request:RestRequest):Rx.Observable<RestResponse>;
 
     public requestRestPath<T>(method:string, path:string, body:Object, success:number[]):Promise<T> {
-        return this.requestRest(method, `${BeckiBackend.REST_SCHEME}://${BeckiBackend.HOST}${path}`, body, success).toPromise();
+        return this.requestRest(method, `${BeckiBackend.REST_SCHEME}://${this.host}${path}`, body, success).toPromise();
     }
 
     public requestRest<T>(method:string, url:string, body:Object, success:number[]):Rx.Observable<T> {
@@ -448,7 +452,7 @@ export abstract class BeckiBackend extends TyrionAPI {
 
                 console.log("connectWebSocket() :: webSocketToken = "+webSocketToken.websocket_token);
 
-                this.webSocket = new WebSocket(`${BeckiBackend.WS_SCHEME}://${BeckiBackend.HOST}/websocket/becki/${webSocketToken.websocket_token}`);
+                this.webSocket = new WebSocket(`${BeckiBackend.WS_SCHEME}://${this.host}/websocket/becki/${webSocketToken.websocket_token}`);
                 this.webSocket.addEventListener("close", this.reconnectWebSocketAfterTimeout);
 
                 let opened = Rx.Observable
