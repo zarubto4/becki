@@ -252,7 +252,7 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     public constructor() {
         super();
-        // TODO: make better enviroment detection
+        // TODO: make better environment detection
         if (location && location.hostname) {
             this.host = location.hostname + ":9000";
         }

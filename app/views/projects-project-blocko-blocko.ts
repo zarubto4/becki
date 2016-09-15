@@ -2,18 +2,19 @@
  * Created by davidhradek on 17.08.16.
  */
 
-import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
+import {Component, OnInit, Injector, OnDestroy, ViewChild} from "@angular/core";
 import {LayoutMain} from "../layouts/main";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
 import {ROUTER_DIRECTIVES} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
 import {IProject, IBProgram} from "../backend/TyrionAPI";
+import {BlockoView} from "../components/BlockoView";
 
 @Component({
     selector: "view-projects-project-blocko-blocko",
     templateUrl: "app/views/projects-project-blocko-blocko.html",
-    directives: [ROUTER_DIRECTIVES, LayoutMain],
+    directives: [ROUTER_DIRECTIVES, LayoutMain, BlockoView],
 })
 export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
@@ -24,6 +25,9 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     project:IProject = null;
     blockoProgram:IBProgram = null;
+
+    @ViewChild(BlockoView)
+    blockoView:BlockoView;
 
     constructor(injector:Injector) {super(injector)};
 

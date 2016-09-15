@@ -4,35 +4,8 @@
 
 import {EventEmitter, Injectable} from "@angular/core";
 
-export interface ModalModel {
-}
-
-export class SelectionModel implements ModalModel {
-
-    options:string[];
-
-    selection:string;
-
-    constructor(options:string[]) {
-        "use strict";
-
-        this.options = options;
-        this.selection = options[0];
-    }
-}
-
-export class FilenameModel implements ModalModel {
-
-    name:string;
-
-    separator:string;
-
-    constructor(name:string, separator:string) {
-        "use strict";
-
-        this.name = name;
-        this.separator = separator;
-    }
+export abstract class ModalModel {
+    modalWide:boolean = false;
 }
 
 @Injectable()

@@ -256,3 +256,19 @@ span.changes {
     left: -2000%;
     height: 2000%;
 }
+
+.blocko-view {
+    padding: 0;
+    height: 500px;
+    font-size: 0;
+}
+
+.blocko-view svg {
+    font-size:14px;
+}
+
+@media (min-width: 768px) {
+    .modal-dialog.modal-width-80 {
+        width: 80%;
+    }
+}

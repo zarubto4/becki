@@ -17,8 +17,9 @@ import {ModalModel} from "../services/ModalService";
 
 
 
-export class ModalsBlockoPropertiesModel implements ModalModel {
+export class ModalsBlockoPropertiesModel extends ModalModel {
     constructor(public projectId:string, public name:string = "", public description:string = "", public edit:boolean = false, public exceptName:string = null) {
+        super();
     }
 }
 

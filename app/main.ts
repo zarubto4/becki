@@ -3,54 +3,6 @@
  * directory of this distribution.
  */
 
-// BEGIN only for temporary back compatibility
-import * as applicationDevice from "./application-device";
-import * as libBackEnd from "./lib-becki/back-end";
-import * as system from "./system";
-import * as systemCompilationServer from "./system-compilation-server";
-import * as systemCompilationServerNew from "./system-compilation-server-new";
-import * as systemDeviceNew from "./system-device-new";
-import * as systemDeviceType from "./system-device-type";
-import * as systemDeviceTypeNew from "./system-device-type-new";
-import * as systemInteractionsServer from "./system-interactions-server";
-import * as systemInteractionsServerNew from "./system-interactions-server-new";
-import * as systemLibrary from "./system-library";
-import * as systemLibraryGroup from "./system-library-group";
-import * as systemLibraryGroupNew from "./system-library-group-new";
-import * as systemLibraryNew from "./system-library-new";
-import * as systemProcessor from "./system-processor";
-import * as systemProcessorNew from "./system-processor-new";
-import * as systemProducer from "./system-producer";
-import * as systemProducerNew from "./system-producer-new";
-import * as user from "./user";
-import * as userApplication from "./user-application";
-import * as userApplicationDeviceNew from "./user-application-device-new";
-import * as userApplicationGroup from "./user-application-group";
-import * as userApplicationGroupNew from "./user-application-group-new";
-import * as userApplicationNew from "./user-application-new";
-import * as userApplications from "./user-applications";
-import * as userConnections from "./user-connections";
-import * as userDeviceNew from "./user-device-new";
-import * as userDeviceProgram from "./user-device-program";
-import * as userDeviceProgramNew from "./user-device-program-new";
-import * as userDevices from "./user-devices";
-import * as userInteractions from "./user-interactions";
-import * as userInteractionsBlock from "./user-interactions-block";
-import * as userInteractionsBlockNew from "./user-interactions-block-new";
-import * as userInteractionsModeratorNew from "./user-interactions-moderator-new";
-import * as userInteractionsScheme from "./user-interactions-scheme";
-import * as userInteractionsSchemeNew from "./user-interactions-scheme-new";
-import * as userInteractionsSchemeVersion from "./user-interactions-scheme-version";
-import * as userInteractionsSpy from "./user-interactions-spy";
-import * as userProject from "./user-project";
-import * as userProjectCollaboratorNew from "./user-project-collaborator-new";
-import * as userProjectNew from "./user-project-new";
-import * as userInteractionsBlockGroupNew from "./user-interactions-blockGroup-new";
-import * as userInteractionsBlockGroup from "./user-interactions-block-group";
-import * as userProjectEdit from "./user-project-edit";
-import * as notifications from "./lib-becki/notifications";
-// END only for temporary back compatibility
-
 // Angular
 import {
     disableDeprecatedForms, provideForms, FormsModule, REACTIVE_FORM_PROVIDERS,
@@ -238,10 +190,6 @@ var tabMenus = {
         CurrentParamsService,
         BreadcrumbsService,
         TabMenuService,
-        // BEGIN only for temporary back compatibility
-        notifications.Service,
-        libBackEnd.Service,
-        // END only for temporary back compatibility
         {provide: "routes", useValue: routes},
         {provide: "navigation", useValue: navigation},
         {provide: "tabMenus", useValue: tabMenus},

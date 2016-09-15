@@ -1,0 +1,19 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title">Edit JS code for block <b>{{this.modalModel.jsBlock.id}}</b></h4>
+    </div>
+    <div class="modal-body">
+
+        <ace-editor [code]="jsCode" (codeChange)="newJsCode($event)" mode="ace/mode/javascript"></ace-editor>
+
+        <div *ngIf="jsError" class="mt-element-ribbon bg-grey-steel">
+            <div class="ribbon ribbon-shadow ribbon-color-danger">{{jsError.name}}</div>
+            <p class="ribbon-content" [innerHTML]="jsError.message"></p>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn green btn-outline" (click)="onSubmitClick()">Save</button>
+        <button type="button" class="btn red btn-outline" (click)="onCancelClick()">Cancel</button>
+    </div>
+</div>

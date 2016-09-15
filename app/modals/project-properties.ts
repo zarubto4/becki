@@ -17,9 +17,8 @@ import {IApplicableProduct} from "../backend/TyrionAPI";
 
 
 
-export class ModalsProjectPropertiesModel implements ModalModel {
-    constructor(public products:IApplicableProduct[], public name:string = "", public description:string = "", public product:string = "", public edit:boolean = false, public exceptName:string = null) {
-    }
+export class ModalsProjectPropertiesModel extends ModalModel {
+    constructor(public products:IApplicableProduct[], public name:string = "", public description:string = "", public product:string = "", public edit:boolean = false, public exceptName:string = null) {super();}
 }
 
 @Component({

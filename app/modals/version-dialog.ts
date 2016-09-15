@@ -12,9 +12,8 @@ import {REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, Validators, FormContro
 import {BeckiFormInput} from "../components/BeckiFormInput";
 import {ModalModel} from "../services/ModalService";
 
-export class ModalsVersionDialogModel implements ModalModel {
-    constructor(public name:string = "", public description:string = "", public edit:boolean = false) {
-    }
+export class ModalsVersionDialogModel extends ModalModel {
+    constructor(public name:string = "", public description:string = "", public edit:boolean = false) {super();}
 }
 
 @Component({

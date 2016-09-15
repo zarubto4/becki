@@ -10,8 +10,8 @@ import {Input, Output, EventEmitter,  Component} from "@angular/core";
 import {CORE_DIRECTIVES} from "@angular/common";
 import {ModalModel} from "../services/ModalService";
 
-export class ModalsRemovalModel implements ModalModel {
-    constructor(public name:string) {}
+export class ModalsRemovalModel extends ModalModel {
+    constructor(public name:string) {super();}
 }
 
 @Component({

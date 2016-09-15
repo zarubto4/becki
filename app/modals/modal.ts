@@ -15,6 +15,8 @@ import {ModalsCodePropertiesComponent} from "./code-properties";
 import {ModalsCodeFileDialogComponent} from "./code-file-dialog";
 import {ModalsConfirmComponent} from "./confirm";
 import {ModalsVersionDialogComponent} from "./version-dialog";
+import {ModalsBlockoJsEditorComponent} from "./blocko-js-editor";
+import {ModalsBlockoConfigPropertiesComponent} from "./blocko-config-properties";
 
 @Component({
     selector: "modal",
@@ -28,6 +30,8 @@ import {ModalsVersionDialogComponent} from "./version-dialog";
         ModalsCodeFileDialogComponent,
         ModalsConfirmComponent,
         ModalsVersionDialogComponent,
+        ModalsBlockoJsEditorComponent,
+        ModalsBlockoConfigPropertiesComponent,
     ]
 })
 export class ModalComponent {

@@ -29,8 +29,9 @@ export enum ModalsCodeFileDialogType {
     RemoveDirectory,
 }
 
-export class ModalsCodeFileDialogModel implements ModalModel {
+export class ModalsCodeFileDialogModel extends ModalModel {
     constructor(public type:ModalsCodeFileDialogType, public objectName:string = "", public directories:CodeDirectory[] = null, public selectedDirectory:CodeDirectory = null, public objectFullName:string = "") {
+        super();
     }
 }
 

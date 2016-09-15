@@ -17,8 +17,9 @@ import {BeckiFormSelect, BeckiFormSelectOption, beckiFormSelectOptionsMaker} fro
 import {ITypeOfBoard} from "../backend/TyrionAPI";
 
 
-export class ModalsCodePropertiesModel implements ModalModel {
+export class ModalsCodePropertiesModel extends ModalModel {
     constructor(public typeOfBoards:ITypeOfBoard[], public name:string = "", public description:string = "", public deviceType:string = "",  public edit:boolean = false, public exceptName:string = null) {
+        super();
     }
 }
 

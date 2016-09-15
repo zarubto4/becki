@@ -16,8 +16,9 @@ import {ModalModel} from "../services/ModalService";
 
 
 
-export class ModalsAddHardwareModel implements ModalModel {
+export class ModalsAddHardwareModel extends ModalModel {
     constructor(public id:string = "") {
+        super();
     }
 }
 

@@ -12,10 +12,10 @@ import {ModalModel} from "../services/ModalService";
 
 
 
-export class ModalsConfirmModel implements ModalModel {
+export class ModalsConfirmModel extends ModalModel {
 
     public clickedButton:string = null;
-    constructor(public title:string, public text:string, public showCloseBtn:boolean = true, public btnYes:string = "Yes", public btnNo:string = "No", public btnOthers:string[] = null) {}
+    constructor(public title:string, public text:string, public showCloseBtn:boolean = true, public btnYes:string = "Yes", public btnNo:string = "No", public btnOthers:string[] = null) {super();}
 }
 
 @Component({
