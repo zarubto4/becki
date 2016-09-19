@@ -25,7 +25,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-9">
             <div class="portlet light bordered padding-20">
                 <div class="portlet-title">
                     <div class="caption">
@@ -39,6 +39,63 @@
                 <blocko-view></blocko-view>
             </div>
             <div class="clearfix"></div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="portlet light bordered padding-20">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-note font-blue"></i>
+                        <span class="caption-subject font-blue sbold uppercase">Blocks</span>
+                    </div>
+                </div>
+
+                <div class="portlet-body">
+                    <div class="panel-group accordion blocko-blocks-group-list">
+
+                        <div *ngFor="let staticBlocksGroup of staticBlocks;" class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle collapsed" (click)="onToggleGroup(staticBlocksGroup.id)">
+                                        <i class="fa fa-pull-right fa-minus-square-o" [class.fa-minus-square-o]="blockGroupsOpenToggle[staticBlocksGroup.id]" [class.fa-plus-square-o]="!blockGroupsOpenToggle[staticBlocksGroup.id]"></i>
+                                        {{staticBlocksGroup.name}} ({{staticBlocksGroup.blockoBlocks.length}})
+                                    </a>
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse" [class.in]="blockGroupsOpenToggle[staticBlocksGroup.id]">
+                                <div class="panel-body">
+                                    <div *ngIf="staticBlocksGroup.blockoBlocks.length == 0" style="color: gray; text-align: center;">No blocks in this group</div>
+                                    <div *ngFor="let block of staticBlocksGroup.blockoBlocks;" [draggable]="draggableOptions" [draggable-data]="block" (draggable-onStop)="onDragStop($event)" (draggable-onStart)="onDragStart($event)" class="blocko-block" [style.backgroundColor]="block.backgroundColor">
+                                        {{block.name}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngFor="let blocksType of blockGroups;" class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle collapsed" (click)="onToggleGroup(blocksType.id)">
+                                        <i class="fa fa-pull-right fa-minus-square-o" [class.fa-minus-square-o]="blockGroupsOpenToggle[blocksType.id]" [class.fa-plus-square-o]="!blockGroupsOpenToggle[blocksType.id]"></i>
+                                        {{blocksType.name}} ({{blocksType.blockoBlocks.length}})
+                                    </a>
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse" [class.in]="blockGroupsOpenToggle[blocksType.id]">
+                                <div class="panel-body">
+                                    <div *ngIf="blocksType.blockoBlocks.length == 0" style="color: gray; text-align: center;">No blocks in this group</div>
+                                    <div *ngFor="let block of blocksType.blockoBlocks;" [draggable]="draggableOptions" [draggable-data]="block" (draggable-onStop)="onDragStop($event)" (draggable-onStart)="onDragStart($event)" class="blocko-block">
+                                        {{block.name}} <span style="color:gray;">({{blocksLastVersions[block.id]?blocksLastVersions[block.id].name:"no version"}})</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
         </div>
     </div>
 

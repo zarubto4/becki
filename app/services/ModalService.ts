@@ -2,7 +2,7 @@
  * Created by davidhradek on 08.08.16.
  */
 
-import {EventEmitter, Injectable} from "@angular/core";
+import {EventEmitter, Injectable, NgZone} from "@angular/core";
 
 export abstract class ModalModel {
     modalWide:boolean = false;
@@ -20,7 +20,7 @@ export class ModalService {
     private modalModel:ModalModel;
     private modalClosed:EventEmitter<boolean> = new EventEmitter<boolean>();
 
-    constructor() {
+    constructor(protected ngZone:NgZone) {
         console.log("ModalService init");
     }
 
@@ -44,7 +44,12 @@ export class ModalService {
         clearTimeout(this.animationTimeout);
         this.modalDisplay = true;
         this.modalIn = false;
-        this.animationTimeout = setTimeout(() => this.modalIn=true, 5);
+        this.animationTimeout = setTimeout(() => {
+            this.modalIn=true;
+            this.ngZone.run(()=>{}); // this is needed to reload state of modal when call from blocko ... I don't know why...
+        }, 5);
+
+        this.ngZone.run(()=>{}); // this is needed to reload state of modal when call from blocko ... I don't know why...
 
         return new Promise(resolve => this.modalClosed.subscribe(resolve));
     }

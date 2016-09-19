@@ -106,6 +106,34 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
         this.addBlock(BlockoBasicBlocks.JSBlock);
     }
 
+    addStaticBlock(blockName:string, x:number = 0, y:number = 0):void {
+
+        if (this.readonly) {
+            throw new Error("read only");
+        }
+
+        var bc:BlockoCore.BlockClass = this.blockoController.getBlockClassByVisutalType(blockName);
+        if (!bc) throw new Error("block "+blockName+" not found");
+
+        var b:BlockoCore.Block = new bc(this.blockoController.getFreeBlockId());
+        b.x = Math.round(x/10)*10; //TODO: move this to blocko
+        b.y = Math.round(y/10)*10;
+        this.blockoController.addBlock(b);
+    }
+
+    addJsBlock(jsCode:string, x:number = 0, y:number = 0):void {
+
+        if (this.readonly) {
+            throw new Error("read only");
+        }
+
+        var b = new BlockoBasicBlocks.JSBlock(this.blockoController.getFreeBlockId(), jsCode);
+        b.x = Math.round(x/10)*10; //TODO: move this to blocko
+        b.y = Math.round(y/10)*10;
+        this.blockoController.addBlock(b);
+    }
+
+
     addBlock(cls:BlockoCore.BlockClass):void {
         if (this.readonly) {
             throw new Error("read only");

@@ -261,10 +261,31 @@ span.changes {
     padding: 0;
     height: 500px;
     font-size: 0;
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
 }
 
 .blocko-view svg {
     font-size:14px;
+}
+
+.blocko-blocks-group-list {
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+}
+
+.blocko-block {
+    border: 1px black solid;
+    padding: 5px;
+    margin: 2px 0;
+    cursor: move;
+    text-align: center;
+    border-radius: 5px !important;
+    background-color: powderblue;
 }
 
 @media (min-width: 768px) {
