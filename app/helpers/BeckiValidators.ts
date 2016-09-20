@@ -13,6 +13,13 @@ export class BeckiValidators {
         return {"email": true}; // invalid
     };
 
+    public static number:ValidatorFn = (c: AbstractControl) => {
+        if (c.value.match(/^[0-9]/)) {
+            return null; // valid
+        }
+        return {"number": true}; // invalid
+    };
+
     public static passwordSame(form:()=>FormGroup, fieldName:string):ValidatorFn {
         return (a:AbstractControl) => {
             if (form) {

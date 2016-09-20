@@ -1,0 +1,40 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title">fill the tariff info </h4>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="form">
+
+            <becki-form-input [control]="form.controls.city" label="city"></becki-form-input>
+            <becki-form-input [control]="form.controls.country" label="country"></becki-form-input> <!-- //bude výběr? -->
+            <becki-form-input [control]="form.controls.currency_type" label="currency_type"></becki-form-input>  <!-- //bude výběr?        -->
+            <becki-form-input [control]="form.controls.payment_method" label="payment_method"></becki-form-input><!-- //pouze pokud platí? -->
+            <becki-form-input [control]="form.controls.payment_mode" label="payment_mode"></becki-form-input>    <!-- //pouze pokud platí? -->
+            <becki-form-input [control]="form.controls.product_individual_name" label="product_individual_name"></becki-form-input>
+            <becki-form-input [control]="form.controls.registration_no" label="registration_no"></becki-form-input>
+            <becki-form-input [control]="form.controls.street" label="street"></becki-form-input>
+            <becki-form-input [control]="form.controls.street_number" [type]="number" label="street_number"></becki-form-input>
+            <becki-form-input [control]="form.controls.tariff_type" label="tariff_type"></becki-form-input>
+            <becki-form-input [control]="form.controls.zip_code" label="zip_code"></becki-form-input>
+
+
+            <becki-form-input [control]="form.controls.vat_number" label="vat_number"></becki-form-input> <!-- //? CZ28496639 -->
+
+            <input type="checkbox" (change)="isCompany=!isCompany" [value]="isCompany">I have a company<br> <!-- TODO je třeba  vyřešit lépe -->
+            <div *ngIf="isCompany">
+                <p></p>
+            <becki-form-input [control]="form.controls.company_authorized_email" [type]="email" label="company_authorized_email"></becki-form-input>
+            <becki-form-input [control]="form.controls.company_authorized_phone" [type]="number"  label="company_authorized_phone"></becki-form-input>
+            <becki-form-input [control]="form.controls.company_invoice_email" [type]="email" label="company_invoice_email"></becki-form-input>
+            <becki-form-input [control]="form.controls.company_name" label="company_name"></becki-form-input>
+            <becki-form-input [control]="form.controls.company_web" label="company_web"></becki-form-input>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn green btn-outline" [disabled]="!form.valid" (click)="onSubmitClick()">Add</button>
+        <button type="button" class="btn red btn-outline" (click)="onCancelClick()">Cancel</button>
+    </div>
+</div>
