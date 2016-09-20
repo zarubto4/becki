@@ -10,17 +10,21 @@ import {ROUTER_DIRECTIVES} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
 import {
     IProject, IBProgram, ITypeOfBlock, IBlockoBlock, IBlockoBlockShortVersion,
-    IBlockoBlockVersion
+    IBlockoBlockVersion, IBoardsForBlocko, IHardwareGroup, IBoard, ICProgramVersion, ICProgram, IConnectedBoard
 } from "../backend/TyrionAPI";
 import {BlockoView} from "../components/BlockoView";
 import {Draggable, DraggableEventParams} from "../components/Draggable";
+import {CProgramVersionSelector} from "../components/CProgramVersionSelector";
+import {ModalsBlockoAddHardwareModel} from "../modals/blocko-add-hardware";
+import {ModalsConfirmModel} from "../modals/confirm";
+import {BlockoTargetInterface} from "blocko";
 
 declare var $:JQueryStatic;
 
 @Component({
     selector: "view-projects-project-blocko-blocko",
     templateUrl: "app/views/projects-project-blocko-blocko.html",
-    directives: [ROUTER_DIRECTIVES, LayoutMain, BlockoView, Draggable],
+    directives: [ROUTER_DIRECTIVES, LayoutMain, BlockoView, Draggable, CProgramVersionSelector],
 })
 export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
@@ -32,12 +36,30 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     project:IProject = null;
     blockoProgram:IBProgram = null;
 
+    // blocko blocks:
+
     blockGroups:ITypeOfBlock[] = null;
     blockGroupsOpenToggle:{[id:string]:boolean} = {};
 
     blocksLastVersions:{[id:string]:IBlockoBlockShortVersion} = {};
 
     blocksCache:{[blockId_versionId:string]:IBlockoBlockVersion} = {};
+
+
+    // hw:
+
+    allBoardsDetails:IBoardsForBlocko = null;
+
+    boardById:{ [id:string]:IBoard } = {};
+
+    selectedHardware:IHardwareGroup[] = [];/*[
+        {
+            main_board:{board_id:"002600513533510B34353732",c_program_version_id:"1"},
+            boards: [
+                {board_id:"BBBBBBBBBB_999999999", c_program_version_id:null}
+            ]
+        }
+    ];*/
 
     @ViewChild(BlockoView)
     blockoView:BlockoView;
@@ -217,6 +239,229 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     }
 
+    getCProgramsForBoardType(boardTypeId:string):ICProgram[] {
+        if (!this.allBoardsDetails || !this.allBoardsDetails.c_programs) return [];
+        return this.allBoardsDetails.c_programs.filter((cp) => (cp.type_of_board_id == boardTypeId));
+    }
+
+    hwCProgramVersionChanged(hwObj:IConnectedBoard, cProgramVersion:string) {
+        hwObj.c_program_version_id = cProgramVersion;
+
+        this.updateBlockoInterfaces();
+    }
+
+    hwRemove(hwId:string) {
+        var i = -1;
+        this.selectedHardware.forEach((sh, index) => {
+            if (sh.main_board && sh.main_board.board_id == hwId) {
+                i = index;
+            }
+        });
+        if (i > -1) {
+            this.selectedHardware.splice(i, 1);
+        } else {
+            this.selectedHardware.forEach((sh) => {
+                if (sh.boards && Array.isArray(sh.boards)) {
+                    var ii = -1;
+                    sh.boards.forEach((b, index) => {
+                        if (b.board_id == hwId) {
+                            ii = index;
+                        }
+                    });
+                    if (ii > -1) {
+                        sh.boards.splice(ii, 1);
+                    }
+                }
+            });
+        }
+
+        this.updateBlockoInterfaces();
+    }
+
+    getAllUsedHwIds():string[] {
+        var out:string[] = [];
+        if (this.selectedHardware) {
+            this.selectedHardware.forEach((sh) => {
+                if (sh.main_board && sh.main_board.board_id) {
+                    out.push(sh.main_board.board_id);
+                }
+                if (sh.boards && Array.isArray(sh.boards)) {
+                    sh.boards.forEach((b) => {
+                        if (b.board_id) {
+                            out.push(b.board_id);
+                        }
+                    })
+                }
+            })
+        }
+        return out;
+    }
+
+    getAllFreeMainBoards():IBoard[] {
+        if (!this.allBoardsDetails || !this.allBoardsDetails.boards) return [];
+        var used = this.getAllUsedHwIds();
+        var out:IBoard[] = [];
+        this.allBoardsDetails.boards.forEach((b) => {
+            if (b.main_board && used.indexOf(b.id) == -1) {
+                out.push(b);
+            }
+        });
+        return out;
+    }
+
+    getAllFreeSubBoards():IBoard[] {
+        if (!this.allBoardsDetails || !this.allBoardsDetails.boards) return [];
+        var used = this.getAllUsedHwIds();
+        var out:IBoard[] = [];
+        this.allBoardsDetails.boards.forEach((b) => {
+            if (!b.main_board && used.indexOf(b.id) == -1) {
+                out.push(b);
+            }
+        });
+        return out;
+    }
+
+    hwAdd(parentHwId:string = null) {
+
+        if (!parentHwId) {
+            var mainBoards = this.getAllFreeMainBoards();
+
+            if (!mainBoards || mainBoards.length == 0) {
+                this.modalService.showModal(new ModalsConfirmModel("Error", "No available main boards hardware.", true, "OK", null));
+                return;
+            }
+
+            var m = new ModalsBlockoAddHardwareModel(mainBoards);
+            this.modalService.showModal(m)
+                .then((success) => {
+                    if (success && m.selectedBoard) {
+                        this.selectedHardware.push({
+                            boards: [],
+                            main_board: {
+                                board_id: m.selectedBoard.id,
+                                c_program_version_id: null
+                            }
+                        });
+
+                        this.updateBlockoInterfaces();
+
+                    }
+                });
+
+        } else {
+
+            var subBoards = this.getAllFreeSubBoards();
+
+            if (!subBoards || subBoards.length == 0) {
+                this.modalService.showModal(new ModalsConfirmModel("Error", "No available padavan boards hardware.", true, "OK", null));
+                return;
+            }
+
+            var m = new ModalsBlockoAddHardwareModel(subBoards);
+            this.modalService.showModal(m)
+                .then((success) => {
+                    if (success && m.selectedBoard) {
+
+                        var parentObj = this.selectedHardware.find((sh) => (sh.main_board && sh.main_board.board_id && sh.main_board.board_id == parentHwId));
+
+                        if (!parentObj.boards) parentObj.boards = [];
+                        parentObj.boards.push({
+                            board_id: m.selectedBoard.id,
+                            c_program_version_id: null
+                        });
+
+                        this.updateBlockoInterfaces();
+
+                    }
+                });
+        }
+
+    }
+
+    getCProgramVersionById(programVersionId:string):ICProgramVersion {
+        var ret:ICProgramVersion = null;
+
+        if (this.allBoardsDetails && this.allBoardsDetails.c_programs) {
+
+            this.allBoardsDetails.c_programs.forEach((cp) => {
+                if (cp.program_versions) {
+                    cp.program_versions.forEach((pv) => {
+                        if (pv.version_object.id == programVersionId) {
+                            ret = pv;
+                        }
+                    })
+                }
+            });
+        }
+
+        return ret;
+    }
+
+    getTargetNameByBoardTypeId(boardTypeId:string):string {
+        var out:string = null;
+        if (this.allBoardsDetails && this.allBoardsDetails.typeOfBoards) {
+            this.allBoardsDetails.typeOfBoards.forEach((tob) => {
+                if (tob.id == boardTypeId) {
+                    out = tob.target_name;
+                }
+            })
+        }
+        return out;
+    }
+
+    updateBlockoInterfaces():void {
+
+        var outInterface:BlockoTargetInterface[] = [];
+
+        var addInterface = (hwId:string, cProgramVersionId:string) => {
+            console.log("hwId"+hwId+" cProgramVersionId"+cProgramVersionId);
+            if (hwId && cProgramVersionId) {
+                var board = this.boardById[hwId];
+                var targetName:string = null;
+                if (board) {
+                    targetName = this.getTargetNameByBoardTypeId(board.type_of_board_id);
+                }
+                var cpv = this.getCProgramVersionById(cProgramVersionId);
+
+                console.log("board"+board);
+                console.log("targetName"+targetName);
+                console.log("cpv"+cpv);
+
+                if (board && targetName && cpv && cpv.virtual_input_output) {
+                    var interfaceData = JSON.parse(cpv.virtual_input_output);
+                    if (interfaceData) {
+                        outInterface.push({
+                            "targetType": targetName,
+                            "targetId": hwId,
+                            "displayName": board.personal_description?board.personal_description:board.id,
+                            "interface": interfaceData
+                        });
+                    }
+                }
+            }
+        };
+
+        if (this.selectedHardware) {
+
+            this.selectedHardware.forEach((sh) => {
+                if (sh.main_board) {
+                    addInterface(sh.main_board.board_id, sh.main_board.c_program_version_id);
+                }
+                if (sh.boards && Array.isArray(sh.boards)) {
+                    sh.boards.forEach((b) => {
+                        addInterface(b.board_id, b.c_program_version_id);
+                    });
+                }
+            });
+
+            console.log(JSON.stringify(outInterface));
+
+            this.blockoView.setInterfaces(outInterface);
+
+        }
+
+    }
+
     refresh():void {
         /*this.backendService.getProject(this.projectId)
             .then((project:Project) => {
@@ -259,6 +504,18 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 this.addFlashMessage(new FlashMessageError(`List of blocks cannot be loaded.`, reason));
             });
 
+        this.backendService.getAllBoardDetails(this.projectId)
+            .then((allBoardsDetails)=> {
+                this.allBoardsDetails = allBoardsDetails;
+
+                console.log(allBoardsDetails);
+
+                this.boardById = {};
+                this.allBoardsDetails.boards.forEach((board) => {
+                    this.boardById[board.id] = board;
+                });
+
+            });
         //this.backendService.addVersionToInteractionsScheme("testName", "testDescription", "{}", [], {board_id:"", c_program_version_id:""}, this.blockoId);
 
     }

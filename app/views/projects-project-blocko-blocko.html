@@ -25,6 +25,66 @@
     </div>
 
     <div class="row">
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-settings font-blue"></i>
+                        <span class="caption-subject font-blue sbold uppercase">Hardware</span>
+                    </div>
+                    <div class="actions">
+                    </div>
+                </div>
+                <div>
+
+                    <template ngIf="selectedHardware && selectedHardware.length">
+                        <div *ngFor="let hwGroup of selectedHardware;">
+                            <div *ngIf="boardById[hwGroup.main_board.board_id]" class="mt-element-ribbon bg-grey-steel">
+                                <div class="ribbon ribbon-shadow bg-blue font-white no-padding-left-right"><span class="ribbon-padding">{{boardById[hwGroup.main_board.board_id].type_of_board_name}}</span><span *ngIf="boardById[hwGroup.main_board.board_id].personal_description" class="bg-blue-soft ribbon-padding">{{boardById[hwGroup.main_board.board_id].personal_description}}</span><span class="bg-blue-dark ribbon-padding">{{hwGroup.main_board.board_id}}</span></div>
+                                <button type="button" class="btn default red pull-right" (click)="hwRemove(hwGroup.main_board.board_id)">
+                                    <i class="fa fa-remove"></i> Remove device
+                                </button>
+                                <button type="button" class="btn default green pull-right" (click)="hwAdd(hwGroup.main_board.board_id)">
+                                    <i class="fa fa-plus"></i> Add device
+                                </button>
+                                <div class="ribbon-content no-padding-left-right no-padding-bottom">
+
+                                    <c-program-version-selector [value]="hwGroup.main_board.c_program_version_id" (valueChanged)="hwCProgramVersionChanged(hwGroup.main_board, $event)" [cPrograms]="getCProgramsForBoardType(boardById[hwGroup.main_board.board_id].type_of_board_id)"></c-program-version-selector>
+
+                                    <template ngIf="hwGroup.boards">
+                                        <div *ngFor="let board of hwGroup.boards;">
+                                            <div *ngIf="boardById[board.board_id]" class="mt-element-ribbon bg-grey-salt">
+                                                <div class="ribbon ribbon-shadow bg-blue font-white no-padding-left-right"><span class="ribbon-padding">{{boardById[board.board_id].type_of_board_name}}</span><span *ngIf="boardById[board.board_id].personal_description" class="bg-blue-soft ribbon-padding">{{boardById[board.board_id].personal_description}}</span><span class="bg-blue-dark ribbon-padding">{{board.board_id}}</span></div>
+                                                <button type="button" class="btn default red pull-right" (click)="hwRemove(board.board_id)">
+                                                    <i class="fa fa-remove"></i> Remove device
+                                                </button>
+                                                <div class="ribbon-content no-padding-left-right no-padding-bottom">
+                                                    <c-program-version-selector [value]="board.c_program_version_id" (valueChanged)="hwCProgramVersionChanged(board, $event)" [cPrograms]="getCProgramsForBoardType(boardById[board.board_id].type_of_board_id)"></c-program-version-selector>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <h3 *ngIf="!(selectedHardware && selectedHardware.length)" style="margin: 20px 0;">
+                        <i class="fa fa-chevron-down"></i>
+                        No devices added in this Blocko program
+                    </h3>
+
+                    <button type="button" class="btn default green" (click)="hwAdd()">
+                        <i class="fa fa-plus"></i> Add device
+                    </button>
+
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
         <div class="col-md-9">
             <div class="portlet light bordered padding-20">
                 <div class="portlet-title">

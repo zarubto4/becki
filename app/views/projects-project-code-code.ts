@@ -44,6 +44,10 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
     constructor(injector:Injector) {super(injector)};
 
     ngOnInit():void {
+        var main = new CodeFile("main.cpp", "#include \"byzance.h\"\n\nint main() {\n    while (true) {\n        // your code here\n    }\n}\n");
+        main.fixedPath = true;
+        this.selectedCodeFiles = [main];
+
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.projectId = params["project"];
             this.codeId = params["code"];

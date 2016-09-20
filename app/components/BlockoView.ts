@@ -15,6 +15,7 @@ import {CORE_DIRECTIVES} from "@angular/common";
 import {ModalService} from "../services/ModalService";
 import {ModalsBlockoJsEditorModel} from "../modals/blocko-js-editor";
 import {ModalsBlockoConfigPropertiesModel} from "../modals/blocko-config-properties";
+import {BlockoTargetInterface} from "blocko";
 
 @Component({
     selector: "blocko-view",
@@ -139,6 +140,10 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
             throw new Error("read only");
         }
         this.blockoController.addBlock(new cls(this.blockoController.getFreeBlockId()));
+    }
+
+    setInterfaces(ifaces:BlockoTargetInterface[]):void {
+        this.blockoController.setInterfaces(ifaces);
     }
 
     onClearClick():void {
