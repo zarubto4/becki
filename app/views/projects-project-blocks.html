@@ -1,0 +1,36 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot">
+
+    <div class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-blue"></i>
+                <span class="caption-subject font-blue sbold uppercase">Blocks</span>
+            </div>
+            <div class="actions">
+                <a class="btn btn-outline btn-circle btn-sm blue" (click)="onAddClick()">
+                    <i class="fa fa-plus"></i> Add
+                </a>
+            </div>
+        </div>
+        <div class="table-scrollable">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th> Name</th>
+                    <th> Description</th>
+                    <th> Device type</th>
+                    <th> Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</layout-main>

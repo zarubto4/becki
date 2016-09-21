@@ -43,6 +43,7 @@ import {NotificationsComponent} from "./views/notifications";
 import {ProfileComponent} from "./views/profile";
 import {ForgotPasswordComponent} from "./views/forgot-password";
 import {PasswordRestartComponent} from "./views/password-restart";
+import {ProjectsProjectBlocksComponent} from "./views/projects-project-blocks";
 
 // DON'T USE children IN ROUTER YET!!!
 var routes:Routes = [
@@ -67,6 +68,7 @@ var routes:Routes = [
     {path: "projects/:project/blocko/:blocko", data:{breadName: ":blocko"}, component: ProjectsProjectBlockoBlockoComponent, canActivate:[AuthGuard]},
     {path: "projects/:project/code", data:{breadName: "Code"}, component: ProjectsProjectCodeComponent, canActivate:[AuthGuard]},
     {path: "projects/:project/code/:code", data:{breadName: ":code"}, component: ProjectsProjectCodeCodeComponent, canActivate:[AuthGuard]},
+    {path: "projects/:project/blocks", data:{breadName: "Blocks"}, component: ProjectsProjectBlocksComponent, canActivate:[AuthGuard]},
 
 
     // old routes
@@ -211,6 +213,7 @@ var tabMenus = {
         ProfileComponent,
         ForgotPasswordComponent,
         PasswordRestartComponent,
+        ProjectsProjectBlocksComponent,
 
     ],
     exports: [ AppComponent ],
