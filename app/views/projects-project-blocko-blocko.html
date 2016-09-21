@@ -39,20 +39,20 @@
 
                     <template ngIf="selectedHardware && selectedHardware.length">
                         <div *ngFor="let hwGroup of selectedHardware;">
-                            <div *ngIf="boardById[hwGroup.main_board.board_id]" class="mt-element-ribbon bg-grey-steel">
-                                <div class="ribbon ribbon-shadow bg-blue font-white no-padding-left-right"><span class="ribbon-padding">{{boardById[hwGroup.main_board.board_id].type_of_board_name}}</span><span *ngIf="boardById[hwGroup.main_board.board_id].personal_description" class="bg-blue-soft ribbon-padding">{{boardById[hwGroup.main_board.board_id].personal_description}}</span><span class="bg-blue-dark ribbon-padding">{{hwGroup.main_board.board_id}}</span></div>
-                                <button type="button" class="btn default red pull-right" (click)="hwRemove(hwGroup.main_board.board_id)">
+                            <div *ngIf="boardById[hwGroup.main_board_pair.board_id]" class="mt-element-ribbon bg-grey-steel">
+                                <div class="ribbon ribbon-shadow bg-blue font-white no-padding-left-right"><span class="ribbon-padding">{{boardById[hwGroup.main_board_pair.board_id].type_of_board_name}}</span><span *ngIf="boardById[hwGroup.main_board_pair.board_id].personal_description" class="bg-blue-soft ribbon-padding">{{boardById[hwGroup.main_board_pair.board_id].personal_description}}</span><span class="bg-blue-dark ribbon-padding">{{hwGroup.main_board_pair.board_id}}</span></div>
+                                <button type="button" class="btn default red pull-right" (click)="hwRemove(hwGroup.main_board_pair.board_id)">
                                     <i class="fa fa-remove"></i> Remove device
                                 </button>
-                                <button type="button" class="btn default green pull-right" (click)="hwAdd(hwGroup.main_board.board_id)">
+                                <button type="button" class="btn default green pull-right" (click)="hwAdd(hwGroup.main_board_pair.board_id)">
                                     <i class="fa fa-plus"></i> Add device
                                 </button>
                                 <div class="ribbon-content no-padding-left-right no-padding-bottom">
 
-                                    <c-program-version-selector [value]="hwGroup.main_board.c_program_version_id" (valueChanged)="hwCProgramVersionChanged(hwGroup.main_board, $event)" [cPrograms]="getCProgramsForBoardType(boardById[hwGroup.main_board.board_id].type_of_board_id)"></c-program-version-selector>
+                                    <c-program-version-selector [value]="hwGroup.main_board_pair.c_program_version_id" (valueChanged)="hwCProgramVersionChanged(hwGroup.main_board_pair, $event)" [cPrograms]="getCProgramsForBoardType(boardById[hwGroup.main_board_pair.board_id].type_of_board_id)"></c-program-version-selector>
 
-                                    <template ngIf="hwGroup.boards">
-                                        <div *ngFor="let board of hwGroup.boards;">
+                                    <template ngIf="hwGroup.device_board_pairs">
+                                        <div *ngFor="let board of hwGroup.device_board_pairs;">
                                             <div *ngIf="boardById[board.board_id]" class="mt-element-ribbon bg-grey-salt">
                                                 <div class="ribbon ribbon-shadow bg-blue font-white no-padding-left-right"><span class="ribbon-padding">{{boardById[board.board_id].type_of_board_name}}</span><span *ngIf="boardById[board.board_id].personal_description" class="bg-blue-soft ribbon-padding">{{boardById[board.board_id].personal_description}}</span><span class="bg-blue-dark ribbon-padding">{{board.board_id}}</span></div>
                                                 <button type="button" class="btn default red pull-right" (click)="hwRemove(board.board_id)">
@@ -93,10 +93,32 @@
                         <span class="caption-subject font-blue sbold uppercase">Blocko</span>
                     </div>
                     <div *ngIf="selectedProgramVersion" class="caption pull-right">
-                        <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="changesInSelectedVersion().length > 0" class="changes"></span> {{selectedProgramVersion.version_object.version_name}}</span>
+                        <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="true" class="changes"></span> {{selectedProgramVersion.version_object.version_name}}</span>
                     </div>
                 </div>
-                <blocko-view></blocko-view>
+
+                <div>
+                    <div class="pull-right">
+                        <button type="button" class="btn default red" (click)="onClearClick()">
+                            <i class="fa fa-trash-o"></i> Clear program
+                        </button>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div style="margin: 10px 0;">
+                    <blocko-view></blocko-view>
+                </div>
+
+                <div>
+                    <div class="pull-right">
+                        <button type="button" class="btn default green-haze" (click)="onSaveClick()">
+                            <i class="fa fa-floppy-o"></i> Save
+                        </button>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
             </div>
             <div class="clearfix"></div>
         </div>
@@ -118,14 +140,14 @@
                                 <h4 class="panel-title">
                                     <a class="accordion-toggle collapsed" (click)="onToggleGroup(staticBlocksGroup.id)">
                                         <i class="fa fa-pull-right fa-minus-square-o" [class.fa-minus-square-o]="blockGroupsOpenToggle[staticBlocksGroup.id]" [class.fa-plus-square-o]="!blockGroupsOpenToggle[staticBlocksGroup.id]"></i>
-                                        {{staticBlocksGroup.name}} ({{staticBlocksGroup.blockoBlocks.length}})
+                                        {{staticBlocksGroup.name}} ({{staticBlocksGroup.blocko_blocks.length}})
                                     </a>
                                 </h4>
                             </div>
                             <div class="panel-collapse collapse" [class.in]="blockGroupsOpenToggle[staticBlocksGroup.id]">
                                 <div class="panel-body">
-                                    <div *ngIf="staticBlocksGroup.blockoBlocks.length == 0" style="color: gray; text-align: center;">No blocks in this group</div>
-                                    <div *ngFor="let block of staticBlocksGroup.blockoBlocks;" [draggable]="draggableOptions" [draggable-data]="block" (draggable-onStop)="onDragStop($event)" (draggable-onStart)="onDragStart($event)" class="blocko-block" [style.backgroundColor]="block.backgroundColor">
+                                    <div *ngIf="staticBlocksGroup.blocko_blocks.length == 0" style="color: gray; text-align: center;">No blocks in this group</div>
+                                    <div *ngFor="let block of staticBlocksGroup.blocko_blocks;" [draggable]="draggableOptions" [draggable-data]="block" (draggable-onStop)="onDragStop($event)" (draggable-onStart)="onDragStart($event)" class="blocko-block" [style.backgroundColor]="block.backgroundColor">
                                         {{block.name}}
                                     </div>
                                 </div>
@@ -137,14 +159,14 @@
                                 <h4 class="panel-title">
                                     <a class="accordion-toggle collapsed" (click)="onToggleGroup(blocksType.id)">
                                         <i class="fa fa-pull-right fa-minus-square-o" [class.fa-minus-square-o]="blockGroupsOpenToggle[blocksType.id]" [class.fa-plus-square-o]="!blockGroupsOpenToggle[blocksType.id]"></i>
-                                        {{blocksType.name}} ({{blocksType.blockoBlocks.length}})
+                                        {{blocksType.name}} ({{blocksType.blocko_blocks.length}})
                                     </a>
                                 </h4>
                             </div>
                             <div class="panel-collapse collapse" [class.in]="blockGroupsOpenToggle[blocksType.id]">
                                 <div class="panel-body">
-                                    <div *ngIf="blocksType.blockoBlocks.length == 0" style="color: gray; text-align: center;">No blocks in this group</div>
-                                    <div *ngFor="let block of blocksType.blockoBlocks;" [draggable]="draggableOptions" [draggable-data]="block" (draggable-onStop)="onDragStop($event)" (draggable-onStart)="onDragStart($event)" class="blocko-block">
+                                    <div *ngIf="blocksType.blocko_blocks.length == 0" style="color: gray; text-align: center;">No blocks in this group</div>
+                                    <div *ngFor="let block of blocksType.blocko_blocks;" [draggable]="draggableOptions" [draggable-data]="block" (draggable-onStop)="onDragStop($event)" (draggable-onStart)="onDragStart($event)" class="blocko-block">
                                         {{block.name}} <span style="color:gray;">({{blocksLastVersions[block.id]?blocksLastVersions[block.id].name:"no version"}})</span>
                                     </div>
                                 </div>
@@ -156,6 +178,47 @@
 
             </div>
 
+        </div>
+
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-list font-blue"></i>
+                        <span class="caption-subject font-blue sbold uppercase">Saved versions</span>
+                    </div>
+                    <div class="actions">
+                    </div>
+                </div>
+                <div *ngIf="blockoProgramVersions">
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                        <tr>
+                            <th> Name</th>
+                            <th> Description</th>
+                            <th> Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let version of blockoProgramVersions">
+                            <td [class.bold]="selectedProgramVersion == version">
+                                <a (click)="onProgramVersionClick(version)">
+                                    {{version.version_object.version_name}}
+                                </a>
+                            </td>
+                            <td>
+                                {{version.version_object.version_description}}
+                            </td>
+                            <td>
+                                <button type="button" class="btn default green" (click)="onRunProgramVersionClick(version)">
+                                    <i class="fa fa-play"></i> Run
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 

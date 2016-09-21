@@ -37,14 +37,6 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
     @ViewChild("field")
     field:ElementRef;
 
-    @Output()
-    dataChange:EventEmitter<string> = new EventEmitter<string>();
-
-    @Input()
-    set data(scheme:string) {
-        this.blockoController.setDataJson(scheme);
-    }
-
     constructor(protected modalService:ModalService) {
         this.blockoRenderer = new BlockoSnapRenderer.RendererController();
         this.blockoRenderer.registerOpenConfigCallback((block) => {
@@ -59,7 +51,7 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
         this.blockoController.registerDataChangedCallback(() => {
             //TODO: why? modalComponent.closeModal(false);
             console.log("CHANGED!!!!!!");
-            this.dataChange.emit(this.blockoController.getDataJson());
+            //this.dataChange.emit(this.blockoController.getDataJson());
         });
         this.blockoController.registerBlocks(BlockoBasicBlocks.Manager.getAllBlocks());
     }
@@ -103,10 +95,6 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
         */
     }
 
-    onJsClick():void {
-        this.addBlock(BlockoBasicBlocks.JSBlock);
-    }
-
     addStaticBlock(blockName:string, x:number = 0, y:number = 0):void {
 
         if (this.readonly) {
@@ -142,14 +130,22 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
         this.blockoController.addBlock(new cls(this.blockoController.getFreeBlockId()));
     }
 
-    setInterfaces(ifaces:BlockoTargetInterface[]):void {
-        this.blockoController.setInterfaces(ifaces);
-    }
-
-    onClearClick():void {
+    removeAllBlocks():void {
         if (this.readonly) {
             throw new Error("read only");
         }
         this.blockoController.removeAllBlocks();
+    }
+
+    setDataJson(json:string):string {
+        return this.blockoController.setDataJson(json);
+    }
+
+    getDataJson():string {
+        return this.blockoController.getDataJson();
+    }
+
+    setInterfaces(ifaces:BlockoTargetInterface[]):void {
+        this.blockoController.setInterfaces(ifaces);
     }
 }

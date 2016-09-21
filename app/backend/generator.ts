@@ -285,6 +285,10 @@ definitionsKeys.forEach((defName) => {
                 throwError("Missing type for key "+propKey+" in definition (" + defName + ")");
             }
 
+            if (!propKey.match(/^([a-z0-9_])+$/g)) {
+                console.log(chalk.yellow("Something is wrong with property name \"" + propKey + "\" of definition \"" + defName + "\" .. property name don't contain only a-z 0-9 and _ characters."));
+            }
+
             fileWriteLine("    /**");
             fileWriteLine("     * @name "+propKey);
             fileWriteLine("     * @type "+type);

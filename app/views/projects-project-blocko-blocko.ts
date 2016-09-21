@@ -10,7 +10,8 @@ import {ROUTER_DIRECTIVES} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
 import {
     IProject, IBProgram, ITypeOfBlock, IBlockoBlock, IBlockoBlockShortVersion,
-    IBlockoBlockVersion, IBoardsForBlocko, IHardwareGroup, IBoard, ICProgramVersion, ICProgram, IConnectedBoard
+    IBlockoBlockVersion, IBoardsForBlocko, IHardwareGroup, IBoard, ICProgramVersion, ICProgram,
+    IBProgramVersion, IBPair
 } from "../backend/TyrionAPI";
 import {BlockoView} from "../components/BlockoView";
 import {Draggable, DraggableEventParams} from "../components/Draggable";
@@ -18,8 +19,11 @@ import {CProgramVersionSelector} from "../components/CProgramVersionSelector";
 import {ModalsBlockoAddHardwareModel} from "../modals/blocko-add-hardware";
 import {ModalsConfirmModel} from "../modals/confirm";
 import {BlockoTargetInterface} from "blocko";
+import {ModalsVersionDialogModel} from "../modals/version-dialog";
+
 
 declare var $:JQueryStatic;
+import moment = require("moment/moment");
 
 @Component({
     selector: "view-projects-project-blocko-blocko",
@@ -52,14 +56,12 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     boardById:{ [id:string]:IBoard } = {};
 
-    selectedHardware:IHardwareGroup[] = [];/*[
-        {
-            main_board:{board_id:"002600513533510B34353732",c_program_version_id:"1"},
-            boards: [
-                {board_id:"BBBBBBBBBB_999999999", c_program_version_id:null}
-            ]
-        }
-    ];*/
+    selectedHardware:IHardwareGroup[] = [];
+
+    // versions:
+
+    blockoProgramVersions:IBProgramVersion[] = null;
+    selectedProgramVersion:IBProgramVersion = null;
 
     @ViewChild(BlockoView)
     blockoView:BlockoView;
@@ -75,7 +77,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         {
             id: "logic_blocks",
             name: "Logic Blocks",
-            blockoBlocks: [
+            blocko_blocks: [
                 {
                     name: "NOT",
                     blockoName: "not",
@@ -101,7 +103,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         {
             id: "debug_blocks",
             name: "Debug Blocks",
-            blockoBlocks: [
+            blocko_blocks: [
                 {
                     name: "Switch",
                     blockoName: "switch",
@@ -132,7 +134,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         {
             id: "js_blocks",
             name: "JavaScript Blocks",
-            blockoBlocks: [
+            blocko_blocks: [
                 {
                     name: "All in one example",
                     blockoJsCode: "block.displayName = \"Ain1\";\nblock.backgroundColor = \"#32C5D2\";\n\nblock.addDigitalInput(\"din1\", \"Digital input 1\");\nblock.addAnalogInput(\"anIn\", \"Analog input\");\nblock.addMessageInput(\"msgInTest\", \"Test message\", [ByzanceBool, ByzanceInt, ByzanceFloat, ByzanceString]);\n\nblock.addMessageOutput(\"msgOut\", \"Message output\", [ByzanceString]);\nblock.addAnalogOutput(\"aout\", \"Analog output\");\nblock.addDigitalOutput(\"digitalOut\", \"Digital output\");\n\nblock.addConfigProperty(ConfigPropertyType.Float, \"confOffset\", \"Analog offset\", 12.3);\n\nblock.configChanged = function () { // when config changed\n    block.aout(block.anIn() + block.confOffset());  \n}\n\nblock.init = function () { // when init\n    block.aout(block.anIn() + block.confOffset());  \n}\n\nblock.onAnIn = function (val) { // when change value of anIn analog input\n    block.aout(val + block.confOffset());  \n};\n\nblock.onMsgInTest = function (msg) { // when new message on msgInTest message input\n    block.msgOut(\"Test: \"+msg[3]);  \n};\n\nblock.inputsChanged = function () { // when change any analog or digital input\n	block.digitalOut(block.din1());\n};",
@@ -244,7 +246,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         return this.allBoardsDetails.c_programs.filter((cp) => (cp.type_of_board_id == boardTypeId));
     }
 
-    hwCProgramVersionChanged(hwObj:IConnectedBoard, cProgramVersion:string) {
+    hwCProgramVersionChanged(hwObj:IBPair, cProgramVersion:string) {
         hwObj.c_program_version_id = cProgramVersion;
 
         this.updateBlockoInterfaces();
@@ -253,7 +255,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     hwRemove(hwId:string) {
         var i = -1;
         this.selectedHardware.forEach((sh, index) => {
-            if (sh.main_board && sh.main_board.board_id == hwId) {
+            if (sh.main_board_pair && sh.main_board_pair.board_id == hwId) {
                 i = index;
             }
         });
@@ -261,15 +263,15 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             this.selectedHardware.splice(i, 1);
         } else {
             this.selectedHardware.forEach((sh) => {
-                if (sh.boards && Array.isArray(sh.boards)) {
+                if (sh.device_board_pairs && Array.isArray(sh.device_board_pairs)) {
                     var ii = -1;
-                    sh.boards.forEach((b, index) => {
+                    sh.device_board_pairs.forEach((b, index) => {
                         if (b.board_id == hwId) {
                             ii = index;
                         }
                     });
                     if (ii > -1) {
-                        sh.boards.splice(ii, 1);
+                        sh.device_board_pairs.splice(ii, 1);
                     }
                 }
             });
@@ -282,11 +284,11 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         var out:string[] = [];
         if (this.selectedHardware) {
             this.selectedHardware.forEach((sh) => {
-                if (sh.main_board && sh.main_board.board_id) {
-                    out.push(sh.main_board.board_id);
+                if (sh.main_board_pair && sh.main_board_pair.board_id) {
+                    out.push(sh.main_board_pair.board_id);
                 }
-                if (sh.boards && Array.isArray(sh.boards)) {
-                    sh.boards.forEach((b) => {
+                if (sh.device_board_pairs && Array.isArray(sh.device_board_pairs)) {
+                    sh.device_board_pairs.forEach((b) => {
                         if (b.board_id) {
                             out.push(b.board_id);
                         }
@@ -336,8 +338,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 .then((success) => {
                     if (success && m.selectedBoard) {
                         this.selectedHardware.push({
-                            boards: [],
-                            main_board: {
+                            device_board_pairs: [],
+                            main_board_pair: {
                                 board_id: m.selectedBoard.id,
                                 c_program_version_id: null
                             }
@@ -362,10 +364,10 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 .then((success) => {
                     if (success && m.selectedBoard) {
 
-                        var parentObj = this.selectedHardware.find((sh) => (sh.main_board && sh.main_board.board_id && sh.main_board.board_id == parentHwId));
+                        var parentObj = this.selectedHardware.find((sh) => (sh.main_board_pair && sh.main_board_pair.board_id && sh.main_board_pair.board_id == parentHwId));
 
-                        if (!parentObj.boards) parentObj.boards = [];
-                        parentObj.boards.push({
+                        if (!parentObj.device_board_pairs) parentObj.device_board_pairs = [];
+                        parentObj.device_board_pairs.push({
                             board_id: m.selectedBoard.id,
                             c_program_version_id: null
                         });
@@ -399,8 +401,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     getTargetNameByBoardTypeId(boardTypeId:string):string {
         var out:string = null;
-        if (this.allBoardsDetails && this.allBoardsDetails.typeOfBoards) {
-            this.allBoardsDetails.typeOfBoards.forEach((tob) => {
+        if (this.allBoardsDetails && this.allBoardsDetails.type_of_boards) {
+            this.allBoardsDetails.type_of_boards.forEach((tob) => {
                 if (tob.id == boardTypeId) {
                     out = tob.target_name;
                 }
@@ -444,11 +446,11 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         if (this.selectedHardware) {
 
             this.selectedHardware.forEach((sh) => {
-                if (sh.main_board) {
-                    addInterface(sh.main_board.board_id, sh.main_board.c_program_version_id);
+                if (sh.main_board_pair) {
+                    addInterface(sh.main_board_pair.board_id, sh.main_board_pair.c_program_version_id);
                 }
-                if (sh.boards && Array.isArray(sh.boards)) {
-                    sh.boards.forEach((b) => {
+                if (sh.device_board_pairs && Array.isArray(sh.device_board_pairs)) {
+                    sh.device_board_pairs.forEach((b) => {
                         addInterface(b.board_id, b.c_program_version_id);
                     });
                 }
@@ -462,6 +464,98 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     }
 
+    onProgramVersionClick(programVersion:IBProgramVersion):void {
+        this.selectProgramVersion(programVersion);
+    }
+
+    onRunProgramVersionClick(programVersion:IBProgramVersion):void {
+
+        var m = new ModalsConfirmModel("Run program", "Really want run Blocko program version <b>"+programVersion.version_object.version_name+"</b>?");
+        this.modalService.showModal(m)
+            .then((success) => {
+                if (success) {
+                    this.backendService.uploadBProgramToCloud(programVersion.version_object.id)
+                        .then((ok)=> {
+                            this.addFlashMessage(new FlashMessageSuccess("Run Blocko version <b>"+programVersion.version_object.version_name+"</b> successfully.", null, true));
+                        })
+                        .catch((err)=> {
+                            this.addFlashMessage(new FlashMessageError("Run Blocko version <b>"+programVersion.version_object.version_name+"</b> failed.", err, true));
+                        })
+                }
+            });
+    }
+
+    onClearClick():void {
+        var m = new ModalsConfirmModel("Clear program", "Really want clear Blocko program?");
+        this.modalService.showModal(m)
+            .then((success) => {
+                if (success) {
+                    this.blockoView.removeAllBlocks();
+                }
+            });
+    }
+
+    onSaveClick():void {
+
+        var m = new ModalsVersionDialogModel(moment().format("YYYY-MM-DD HH:mm:ss"));
+        this.modalService.showModal(m).then((success) => {
+            if (success) {
+
+                this.backendService.createBProgramVersion(this.blockoId, {
+                    version_name: m.name,
+                    version_description: m.description,
+                    hardware_group: this.selectedHardware,
+                    program: this.blockoView.getDataJson()
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess("Version <b>"+m.name+"</b> saved successfully.", null, true));
+                        this.refresh();
+                    })
+                    .catch((err) => {
+                        this.addFlashMessage(new FlashMessageError("Failed saving version <b>"+m.name+"</b>", err, true));
+                    });
+            }
+        });
+
+
+    }
+
+    selectProgramVersion(programVersion:IBProgramVersion):void {
+
+        if (!this.blockoProgramVersions) return;
+        if (this.blockoProgramVersions.indexOf(programVersion) == -1) return;
+
+        this.selectedProgramVersion = programVersion;
+        this.selectedHardware = this.hardwareGroupCopy(this.selectedProgramVersion.hardware_group) || [];
+        this.blockoView.setDataJson(this.selectedProgramVersion.program);
+
+    }
+
+    hardwareGroupCopy(hwGroup:IHardwareGroup[]):IHardwareGroup[] {
+        if (!hwGroup) return null;
+        var out:IHardwareGroup[] = [];
+        hwGroup.forEach((hg)=>{
+            var hgCopy:IHardwareGroup = {
+                main_board_pair: {
+                    board_id: hg.main_board_pair.board_id,
+                    c_program_version_id: hg.main_board_pair.c_program_version_id
+                },
+                device_board_pairs: []
+            };
+
+            if (hg.device_board_pairs) {
+                hg.device_board_pairs.forEach((dbp)=>{
+                    hgCopy.device_board_pairs.push({
+                        board_id: dbp.board_id,
+                        c_program_version_id: dbp.c_program_version_id
+                    });
+                });
+            }
+            out.push(hgCopy);
+        });
+        return out;
+    }
+
     refresh():void {
         /*this.backendService.getProject(this.projectId)
             .then((project:Project) => {
@@ -473,8 +567,22 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             });*/
         this.backendService.getBProgram(this.blockoId)
             .then((blockoProgram) => {
+                console.log(blockoProgram);
+
                 this.blockoProgram = blockoProgram;
-                console.log(this.blockoProgram);
+
+                this.blockoProgramVersions = this.blockoProgram.program_versions || [];
+
+                this.blockoProgramVersions.sort((a, b)=> {
+                    if (a.version_object.date_of_create == b.version_object.date_of_create) return 0;
+                    if (a.version_object.date_of_create > b.version_object.date_of_create) return -1;
+                    return 1;
+                });
+
+                if (this.blockoProgramVersions.length) {
+                    this.selectProgramVersion(this.blockoProgramVersions[0]);
+                }
+
             })
             .catch(reason => {
                 this.addFlashMessage(new FlashMessageError(`The blocko cannot be loaded.`, reason));
@@ -486,7 +594,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 // TODO: make this better viz. TYRION-374
                 this.blocksLastVersions = {};
                 typeOfBlocks.forEach((tob) => {
-                    tob.blockoBlocks.forEach((bb) => {
+                    tob.blocko_blocks.forEach((bb) => {
                         var sortedVersion = bb.versions.sort((a,b)=> {
                             return parseInt(b.id) - parseInt(a.id);
                         });
@@ -516,8 +624,6 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 });
 
             });
-        //this.backendService.addVersionToInteractionsScheme("testName", "testDescription", "{}", [], {board_id:"", c_program_version_id:""}, this.blockoId);
-
     }
 
 }
