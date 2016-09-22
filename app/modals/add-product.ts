@@ -108,37 +108,21 @@ export class ModalsAddProductComponent implements OnInit {
 
     onSubmitClick(): void {
         this.modalModel.tariff_type = this.form.controls["tariff_type"].value;
-
         this.modalModel.product_individual_name = this.form.controls["product_individual_name"].value;
-
         this.modalModel.currency_type = this.form.controls["currency_type"].value;
-
         this.modalModel.payment_mode = this.form.controls["payment_mode"].value;
-
         this.modalModel.payment_method = this.form.controls["payment_method"].value;
-
         this.modalModel.street = this.form.controls["street"].value;
-
         this.modalModel.street_number = this.form.controls["street_number"].value;
-
         this.modalModel.city = this.form.controls["city"].value;
-
         this.modalModel.zip_code = this.form.controls["zip_code"].value;
-
         this.modalModel.country = this.form.controls["country"].value;
-
         this.modalModel.registration_no = this.form.controls["registration_no"].value;
-
         this.modalModel.vat_number = this.form.controls["vat_number"].value;
-
         this.modalModel.company_name = this.form.controls["company_name"].value;
-
         this.modalModel.company_authorized_email = this.form.controls["company_authorized_email"].value;
-
         this.modalModel.company_authorized_phone = this.form.controls["company_authorized_phone"].value;
-
         this.modalModel.company_web = this.form.controls["company_web"].value;
-
         this.modalModel.company_invoice_email = this.form.controls["company_invoice_email"].value;
         this.modalClose.emit(true);
     }
