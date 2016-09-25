@@ -95,7 +95,7 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
         */
     }
 
-    addStaticBlock(blockName:string, x:number = 0, y:number = 0):void {
+    addStaticBlock(blockName:string, x:number = 0, y:number = 0):BlockoCore.Block {
 
         if (this.readonly) {
             throw new Error("read only");
@@ -108,9 +108,10 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
         b.x = Math.round(x/10)*10; //TODO: move this to blocko
         b.y = Math.round(y/10)*10;
         this.blockoController.addBlock(b);
+        return b;
     }
 
-    addJsBlock(jsCode:string, x:number = 0, y:number = 0):void {
+    addJsBlock(jsCode:string, x:number = 0, y:number = 0):BlockoBasicBlocks.JSBlock {
 
         if (this.readonly) {
             throw new Error("read only");
@@ -120,14 +121,17 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
         b.x = Math.round(x/10)*10; //TODO: move this to blocko
         b.y = Math.round(y/10)*10;
         this.blockoController.addBlock(b);
+        return b;
     }
 
 
-    addBlock(cls:BlockoCore.BlockClass):void {
+    addBlock(cls:BlockoCore.BlockClass):BlockoCore.Block {
         if (this.readonly) {
             throw new Error("read only");
         }
-        this.blockoController.addBlock(new cls(this.blockoController.getFreeBlockId()));
+        var b = new cls(this.blockoController.getFreeBlockId());
+        this.blockoController.addBlock(b);
+        return b;
     }
 
     removeAllBlocks():void {
