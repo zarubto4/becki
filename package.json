@@ -15,7 +15,7 @@
     "@angular/router": "3.0.0-rc.1",
     "ace-builds": "git+https://github.com/ajaxorg/ace-builds.git#v1.2.3",
     "autolayout": "^0.5.3",
-    "blocko": "git+ssh://git@git.byzance.cz:js-components/blocko.git#v0.1.8",
+    "blocko": "git+ssh://git@git.byzance.cz:js-components/blocko.git#v0.1.10",
     "crypto-js": "^3.1.6",
     "es6-shim": "^0.35.0",
     "jquery": "^2.2.1",

@@ -33,6 +33,20 @@
                         <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="true" class="changes"></span> {{selectedProgramVersion.version_object.version_name}}</span>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label>Color:</label>
+                    <input class="form-control" #colorSelector type="hidden">
+                </div>
+
+                <div class="form-group">
+                    <label>Icon:</label>
+                    <div class="form-control" style="height:initial;">
+                        <div *ngFor="let icon of iconSelectOptions;" class="fa fa-icon-select-block" [class.selected]="icon.name == iconSelected" (click)="onIconSelectBlockClick(icon.name)">{{icon.icon}}</div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
                 <ace-editor [(code)]="blockCode" mode="ace/mode/javascript" ></ace-editor>
                 <div>
                     <div class="pull-right">
@@ -57,14 +71,94 @@
                         <span class="caption-subject font-blue sbold uppercase">Test</span>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="portlet-content">
+                    <div class="col-md-4" style="display: inline-block; width: calc(50% - 141px)">
 
-                </div>
-                <div class="col-md-4">
-                    <blocko-view></blocko-view>
-                </div>
-                <div class="col-md-4">
+                        <div *ngFor="let connector of testInputConnectors" class="mt-element-ribbon bg-grey-steel">
 
+                            <div class="ribbon ribbon-shadow ribbon-color-warning">{{connector.name}}</div>
+
+                            <div class="ribbon-content form-horizontal">
+
+                                <div *ngIf="connector.type == connectorTypes.DigitalInput">
+                                    <div class="col-md-6 text-right"><strong>Value</strong>:</div>
+                                    <div class="col-md-6 no-padding-left"><i class="fa fa-2x" style="vertical-align: middle;" [class.fa-toggle-on]="connector.value" [class.fa-toggle-off]="!connector.value" (click)="onDigitalInputClick(connector)"></i></div>
+                                    <div class="clearfix"></div>
+                                </div>
+
+                                <div *ngIf="connector.type == connectorTypes.AnalogInput">
+                                    <div class="col-md-6 text-right control-label"><strong>Value</strong>:</div>
+                                    <div class="col-md-6 no-padding-left"><input type="number" class="form-control" step="0.1" [value]="connector.value" (change)="onAnalogInputChange($event, connector)"></div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div *ngIf="connector.type == connectorTypes.MessageInput">
+
+
+                                    <div *ngFor="let argType of connector.argTypes; let index = index">
+
+                                        <div *ngIf="argType == argTypes.ByzanceBool">
+                                            <div class="col-md-6 text-right control-label">Bool <strong>Arg #{{index}}</strong>:</div>
+                                            <div class="col-md-6 no-padding-left"><input type="checkbox" class="form-control" [(ngModel)]="messageInputsValueCache[connector.name+index+argType]"></div>
+                                        </div>
+                                        <div *ngIf="argType == argTypes.ByzanceFloat">
+                                            <div class="col-md-6 text-right control-label">Float <strong>Arg #{{index}}</strong>:</div>
+                                            <div class="col-md-6 no-padding-left"><input type="number" class="form-control" step="0.1" [(ngModel)]="messageInputsValueCache[connector.name+index+argType]"></div>
+                                        </div>
+                                        <div *ngIf="argType == argTypes.ByzanceInt">
+                                            <div class="col-md-6 text-right control-label">Int <strong>Arg #{{index}}</strong>:</div>
+                                            <div class="col-md-6 no-padding-left"><input type="number" class="form-control" step="1" [(ngModel)]="messageInputsValueCache[connector.name+index+argType]"></div>
+                                        </div>
+                                        <div *ngIf="argType == argTypes.ByzanceString">
+                                            <div class="col-md-6 text-right control-label">String <strong>Arg #{{index}}</strong>:</div>
+                                            <div class="col-md-6 no-padding-left"><input type="text" class="form-control" [(ngModel)]="messageInputsValueCache[connector.name+index+argType]"></div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="col-md-6"></div>
+                                    <div class="col-md-6 no-padding-left">
+                                        <button class="btn default green" type="button" (click)="onMessageInputSendClick(connector)">
+                                            <i class="fa fa-paper-plane"></i> Send
+                                        </button>
+                                    </div>
+
+                                    <div class="clearfix"></div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="col-md-4" style="display: inline-block; width: 281px;">
+                        <blocko-view readonly="true"></blocko-view>
+                    </div>
+                    <div class="col-md-4" style="display: inline-block; width: calc(50% - 141px)">
+
+                        <table class="table table-hover table-light">
+                            <thead>
+                            <tr class="uppercase">
+                                <th> Time </th>
+                                <th> Output </th>
+                                <th> Value </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let log of testEventLog;">
+                                <td>
+                                    {{log.timestamp}}
+                                </td>
+                                <td> {{log.connector.name}} </td>
+                                <td> {{toReadableValue(log.value)}} </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                    <div class="clearfix"></div>
                 </div>
             </div>
         </div>

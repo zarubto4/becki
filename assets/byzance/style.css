@@ -301,6 +301,23 @@ span.changes {
     background-color: powderblue;
 }
 
+.fa-icon-select-block {
+    width: 1.5em;
+    height: 1.5em;
+    float: left;
+    font-size: 1.5em;
+    vertical-align: middle;
+    text-align: center;
+    line-height: 1.5em !important;
+    border: 1px transparent solid;
+    cursor: pointer;
+}
+
+.fa-icon-select-block.selected {
+    background-color: lightblue;
+    border: 1px black solid;
+}
+
 @media (min-width: 768px) {
     .modal-dialog.modal-width-80 {
         width: 80%;

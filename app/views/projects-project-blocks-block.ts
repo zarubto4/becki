@@ -2,7 +2,7 @@
  * Created by davidhradek on 22.09.16.
  */
 
-import {Component, OnInit, Injector, OnDestroy, ViewChild} from "@angular/core";
+import {Component, OnInit, Injector, OnDestroy, ViewChild, ElementRef} from "@angular/core";
 import {LayoutMain} from "../layouts/main";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
@@ -16,15 +16,18 @@ import {IProject, ICProgram, ICProgramVersion, IUserFiles} from "../backend/Tyri
 import {ICodeCompileErrorMessage, CodeCompileError} from "../backend/BeckiBackend";
 import {AceEditor} from "../components/AceEditor";
 import {BlockoView} from "../components/BlockoView";
-import {Blocks} from "blocko";
+import {Blocks, SnapRenderer} from "blocko";
 
 
 import moment = require("moment/moment");
+import {Core} from "blocko";
+import {BeckiFormSelectOption, BeckiFormSelect} from "../components/BeckiFormSelect";
+import {FormGroup, Validators} from "@angular/forms";
 
 @Component({
     selector: "view-projects-project-blocks-block",
     templateUrl: "app/views/projects-project-blocks-block.html",
-    directives: [ROUTER_DIRECTIVES, LayoutMain, BlockoView, AceEditor],
+    directives: [ROUTER_DIRECTIVES, LayoutMain, BlockoView, AceEditor, BeckiFormSelect],
 })
 export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
@@ -40,12 +43,39 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
     @ViewChild(BlockoView)
     blockoView:BlockoView;
 
+    @ViewChild("colorSelector")
+    colorSelector:ElementRef;
+
     jsBlock:Blocks.JSBlock;
 
+    testInputConnectors:Core.Connector[];
+    connectorTypes = Core.ConnectorType;
+    argTypes = Core.ArgType;
+
+    messageInputsValueCache:{ [key:string]:boolean|number|string } = {};
+
+    iconSelectOptions:{name:string,icon:string}[] = [];
+    iconSelected:string = "fa-remove";
+
+    colorSelected:string = "#3baedb";
+
+    testEventLog:{timestamp:string, connector:Core.Connector, eventType:Core.ConnectorEventType, value:(boolean|number|Core.Message)}[] = [];
 
     constructor(injector:Injector) {super(injector)};
 
     ngOnInit():void {
+
+        this.iconSelectOptions = [];
+        var usedIcons:string[] = [];
+        for (var key in SnapRenderer.RendererHelper.FontAwesomeMap) {
+            var fa:string = (<any>SnapRenderer.RendererHelper.FontAwesomeMap)[key];
+            if (usedIcons.indexOf(fa) > -1) continue;
+            usedIcons.push(fa);
+            this.iconSelectOptions.push({
+                name: key,
+                icon: fa
+            });
+        }
 
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.projectId = params["project"];
@@ -53,14 +83,22 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
             this.refresh();
         });
 
-        // init block
-
-        this.jsBlock = this.blockoView.addJsBlock(this.blockCode, 30, 30);
+        //TODO: move to component
+        //missing typings for minicolors
+        (<any>$(this.colorSelector.nativeElement)).minicolors({
+            theme: "bootstrap",
+            defaultValue: this.colorSelected,
+            change: (value:string) => {
+                this.colorSelected = value;
+            }
+        });
 
     }
 
     ngOnDestroy():void {
         this.routeParamsSubscription.unsubscribe();
+        //missing typings for minicolors
+        (<any>$(this.colorSelector.nativeElement)).minicolors('destroy');
     }
 
     refresh():void {
@@ -68,8 +106,69 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
 
     }
 
+    onIconSelectBlockClick(name:string) {
+        this.iconSelected = name;
+    }
+
+    toReadableValue(value:any):string {
+        return value.values?JSON.stringify(value.values):value;
+    }
+
+    onDigitalInputClick(connector:Core.Connector):void {
+        connector._inputSetValue(!connector.value);
+    }
+
+    onAnalogInputChange(event:Event, connector:Core.Connector):void {
+        connector._inputSetValue(parseFloat((<HTMLInputElement>event.target).value));
+    }
+
+    onMessageInputSendClick(connector:Core.Connector):void {
+        var values:any[] = [];
+
+        connector.argTypes.forEach((argType, index)=> {
+            var val = this.messageInputsValueCache[connector.name+index+argType];
+            if (argType == Core.ArgType.ByzanceBool && !val) {
+                val = false;
+            }
+            if (argType == Core.ArgType.ByzanceFloat && !val) {
+                val = 0;
+            }
+            if (argType == Core.ArgType.ByzanceInt && !val) {
+                val = 0;
+            }
+            if (argType == Core.ArgType.ByzanceString && !val) {
+                val = "";
+            }
+
+            values.push(val)
+        });
+
+        var m = new Core.Message(connector.argTypes, values);
+        connector._inputSetValue(m);
+
+    }
+
     onTestClick():void {
+        this.blockoView.removeAllBlocksWithoutReadonlyCheck();
+        this.testEventLog = [];
+
+        try {
+            var desginJson = JSON.stringify({backgroundColor: this.colorSelected, displayName:this.iconSelected});
+            this.jsBlock = this.blockoView.addJsBlockWithoutReadonlyCheck("ERROR", desginJson, 100, 30);
+        } catch (e) {}
+
         this.jsBlock.setJsCode(this.blockCode);
+
+        this.jsBlock.registerOutputEventCallback((connector:Core.Connector, eventType:Core.ConnectorEventType, value:(boolean|number|Core.Message)) => {
+            this.testEventLog.unshift({
+                timestamp: moment().format("HH:mm:ss.SSS"),
+                connector: connector,
+                eventType: eventType,
+                value:value
+            });
+        });
+
+        this.testInputConnectors = this.jsBlock.getInputConnectors();
     }
 
 }
