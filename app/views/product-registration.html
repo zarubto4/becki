@@ -1,43 +1,81 @@
 <layout-main [title]="'Product registration'">
 
-<div>
-    <div class="">
-        <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">fill the tariff info </h4>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet light portlet-fit bordered">
+                <div class="portlet-body">
+                    <div class="mt-element-step">
+                        <div class="row step-thin">
+                            <div class="mt-step-desc">
+                                <div class="font-dark bold uppercase">Thin</div>
+                                <div class="caption-desc font-grey-cascade">Confirm a product purchase</div>
+                                <br> </div>
+                            <div class="col-md-4 bg-grey done mt-step-col">
+                                <div class="mt-step-number bg-white font-grey">1</div>
+                                <div class="mt-step-title uppercase font-grey-cascade">Choose</div>
+                                <div class="mt-step-content font-grey-cascade">Choose a right product</div>
+                            </div>
+                            <div class="col-md-4 bg-grey mt-step-col active">
+                                <div class="mt-step-number bg-white font-grey">2</div>
+                                <div class="mt-step-title uppercase font-grey-cascade">Register</div>
+                                <div class="mt-step-content font-grey-cascade">Fill the necessary info</div>
+                            </div>
+                            <div class="col-md-4 bg-grey done mt-step-col active">
+                                <div class="mt-step-number bg-white font-grey">3</div>
+                                <div class="mt-step-title uppercase font-grey-cascade">Deploy</div>
+                                <div class="mt-step-content font-grey-cascade">start using a product</div>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="">
-        <form [formGroup]="form">
-
-            <becki-form-input [control]="form.controls.city" label="city"></becki-form-input>
-            <becki-form-input [control]="form.controls.country" label="country"></becki-form-input> <!-- //bude výběr? -->
-            <becki-form-input [control]="form.controls.currency_type" label="currency_type"></becki-form-input>  <!-- //bude výběr?        -->
-            <becki-form-input [control]="form.controls.payment_method" label="payment_method"></becki-form-input><!-- //pouze pokud platí? -->
-            <becki-form-input [control]="form.controls.payment_mode" label="payment_mode"></becki-form-input>    <!-- //pouze pokud platí? -->
-            <becki-form-input [control]="form.controls.product_individual_name" label="product_individual_name"></becki-form-input>
-            <becki-form-input [control]="form.controls.registration_no" label="registration_no"></becki-form-input>
-            <becki-form-input [control]="form.controls.street" label="street"></becki-form-input>
-            <becki-form-input [control]="form.controls.street_number" label="street_number"></becki-form-input>
-            <becki-form-input [control]="form.controls.tariff_type" label="tariff_type"></becki-form-input>
-            <becki-form-input [control]="form.controls.zip_code" label="zip_code"></becki-form-input>
 
 
-            <becki-form-input [control]="form.controls.vat_number" label="vat_number"></becki-form-input> <!-- //? CZ28496639 -->
-
-            <input type="checkbox" (change)="isCompany=!isCompany" [value]="isCompany">I have a company<br> <!-- TODO je třeba  vyřešit lépe -->
+    <form [formGroup]="form">
+    <div class="row">
+        <div class="col-md-6">
+            <div>
+                <div class="">
+                    <h4 class="modal-title">fill the tariff info </h4>
+                </div>
+                <div class="">
+                        <becki-form-input [control]="form.controls.city" label="city"></becki-form-input>
+                        <becki-form-input [control]="form.controls.country" label="country"></becki-form-input> <!-- //bude výběr? -->
+                        <becki-form-select [control]="form.controls.currency_type" label="currency type" [options]="options"></becki-form-select>
+                        <becki-form-input [control]="form.controls.payment_method" label="payment method"></becki-form-input><!-- //pouze pokud platí? -->
+                        <becki-form-input [control]="form.controls.payment_mode" label="payment mode"></becki-form-input>    <!-- //pouze pokud platí? -->
+                        <becki-form-input [control]="form.controls.product_individual_name" label="product individual name"></becki-form-input> <!-- uloží z prokliku? -->
+                        <becki-form-input [control]="form.controls.registration_no" label="registration no"></becki-form-input>
+                        <becki-form-input [control]="form.controls.street" label="street"></becki-form-input>
+                        <becki-form-input [control]="form.controls.street_number" label="street number"></becki-form-input>
+                        <becki-form-input [control]="form.controls.tariff_type" label="tariff type"></becki-form-input> <!-- nejspíše uloží z prokliku -->
+                        <becki-form-input [control]="form.controls.zip_code" label="zip code"></becki-form-input>
+                        <becki-form-input [control]="form.controls.vat_number" label="vat number"></becki-form-input> <!-- //? CZ28496639 -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <p></p>
+            <input type="checkbox" (change)="toggleIsCompany()" [value]="isCompany">I have a company<br> <!-- TODO je třeba  vyřešit lépe -->
             <div *ngIf="isCompany">
                 <p></p>
-                <becki-form-input [control]="form.controls.company_authorized_email" [type]="email" label="company_authorized_email"></becki-form-input>
-                <becki-form-input [control]="form.controls.company_authorized_phone" [type]="number"  label="company_authorized_phone"></becki-form-input>
-                <becki-form-input [control]="form.controls.company_invoice_email" [type]="email" label="company_invoice_email"></becki-form-input>
-                <becki-form-input [control]="form.controls.company_name" label="company_name"></becki-form-input>
-                <becki-form-input [control]="form.controls.company_web" label="company_web"></becki-form-input>
+                <becki-form-input [control]="form.controls.company_authorized_email" [type]="email" label="company authorized email"></becki-form-input>
+                <becki-form-input [control]="form.controls.company_authorized_phone" [type]="number"  label="company authorized phone"></becki-form-input>
+                <becki-form-input [control]="form.controls.company_invoice_email" [type]="email" label="company invoice email"></becki-form-input>
+                <becki-form-input [control]="form.controls.company_name" label="company name"></becki-form-input>
+                <becki-form-input [control]="form.controls.company_web" label="company web"></becki-form-input>
             </div>
+        </div>
+        </div>
+    </form>
+        <div class="">
+            <button type="button" class="btn green btn-outline" [disabled]="!form.valid" (click)="onSubmitClick()">Add</button>
+            <button type="button" class="btn red btn-outline" (click)="onCancelClick()">Cancel</button>
+        </div>
 
-        </form>
-    </div>
-    <div class="">
-        <button type="button" class="btn green btn-outline" [disabled]="!form.valid" (click)="onSubmitClick()">Add</button>
-        <button type="button" class="btn red btn-outline" (click)="onCancelClick()">Cancel</button>
-    </div>
-</div>
-    </layout-main>
+</layout-main>

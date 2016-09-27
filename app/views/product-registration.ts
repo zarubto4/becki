@@ -7,12 +7,13 @@ import {LayoutMain} from "../layouts/main";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {IApplicableProduct, IIndividualsTariff, IAdditionalPackage} from "../backend/TyrionAPI";
 import {FlashMessageSuccess, FlashMessageWarning, FlashMessageError} from "../services/FlashMessagesService";
-import {FormGroup, Validators} from "@angular/forms";
+import {FormGroup, Validators, FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
 import {BeckiValidators} from "../helpers/BeckiValidators";
+import {BeckiFormSelectOption, beckiFormSelectOptionsMaker} from "../components/BeckiFormSelect";
 
 @Component({
     selector: "product-registration",
-    directives: [LayoutMain],
+    directives: [LayoutMain, REACTIVE_FORM_DIRECTIVES],
     templateUrl: "app/views/product-registration.html"
 })
 export class ProductRegistrationComponent extends BaseMainComponent implements OnInit {
@@ -23,22 +24,33 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
     packageForRegistration: IAdditionalPackage[];
 
+    isCompany:boolean = false;
+
+    toggleIsCompany() {
+        this.isCompany = !this.isCompany;
+        Object.keys(this.form.controls).forEach((key)=>{
+            this.form.controls[key].updateValueAndValidity();
+        });
+    }
+
+    options:BeckiFormSelectOption[] = [{label:"CZK",value:"CZK"},{label:"EUR",value:"EUR"}];
+
     constructor(injector: Injector) {
-        super(injector)
+        super(injector);
 
 
         this.form = this.formBuilder.group({ //TODO vybrat z tohodle to, co není povinný a co je provinný pro company a podle toho se zařídít
-            "city": ["", [Validators.required, Validators.minLength(4)]],
+            "city": ["", [Validators.required, Validators.minLength(5)]],
 
-            "company_authorized_email": ["", [Validators.minLength(4)]], //company only
+            "company_authorized_email": ["", [BeckiValidators.condition(()=>this.isCompany, Validators.required), BeckiValidators.condition(()=>this.isCompany, Validators.minLength(4))]], //company only
 
-            "company_authorized_phone": ["", [Validators.minLength(4),BeckiValidators.number]], //company only
+            "company_authorized_phone": ["", [BeckiValidators.condition(()=>this.isCompany,Validators.minLength(4)),BeckiValidators.condition(()=>this.isCompany,BeckiValidators.number)]], //company only
 
-            "company_invoice_email": ["", [Validators.minLength(4), BeckiValidators.email]], //company only
+            "company_invoice_email": ["", [BeckiValidators.condition(()=>this.isCompany,Validators.minLength(4)),BeckiValidators.condition(()=>this.isCompany, BeckiValidators.email)]], //company only
 
-            "company_name": ["", [Validators.minLength(4)]],
+            "company_name": ["", [BeckiValidators.condition(()=>this.isCompany,Validators.minLength(4))]], //company only
 
-            "company_web": ["", [Validators.minLength(4)]],
+            "company_web": ["", [BeckiValidators.condition(()=>this.isCompany,Validators.minLength(4))]], //company only
 
             "country": ["", [Validators.required]],
 
@@ -51,12 +63,12 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
             "payment_mode": ["", [Validators.required]], //only if is requred payment is true
 
-            "product_individual_name": ["", [Validators.required, Validators.minLength(4)]],
+            "product_individual_name": ["", [Validators.required, Validators.minLength(5)]],
 
             //??
             "registration_no": ["", [Validators.required]], //Required: only if account is businessThe company_registration_no must have at least
 
-            "street": ["", [Validators.required, Validators.minLength(4)]],
+            "street": ["", [Validators.required, Validators.minLength(5)]],
 
             "street_number": [""],
 
@@ -65,7 +77,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             //??
             "vat_number": ["", [Validators.required]], //Required: only if account is business & from EU!!! CZ28496639 The VAT_number must have at least 4 characters
 
-            "zip_code": ["", [Validators.required, Validators.minLength(4)]],
+            "zip_code": ["", [Validators.required, Validators.minLength(5)]],
 
         })
     };
@@ -80,7 +92,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
     }
 
 
-    registerTariff(needCompanyInfo: boolean): void {
+    onSubmitClick(): void {
                 this.backendService.createTarif({
                     tariff_type: this.form.controls["tariff_type"].value,
                     product_individual_name: this.form.controls["product_individual_name"].value,

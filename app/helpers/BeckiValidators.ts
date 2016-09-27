@@ -20,6 +20,18 @@ export class BeckiValidators {
         return {"number": true}; // invalid
     };
 
+    public static condition(conditionCallback:()=>boolean, validator:ValidatorFn):ValidatorFn {
+        return (a:AbstractControl) => {
+            if (conditionCallback) {
+                var f = conditionCallback();
+                if (f) {
+                    return validator(a);
+                }
+            }
+            return null; // valid
+        };
+    }
+
     public static passwordSame(form:()=>FormGroup, fieldName:string):ValidatorFn {
         return (a:AbstractControl) => {
             if (form) {

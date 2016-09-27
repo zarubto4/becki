@@ -42,6 +42,8 @@ export class DashboardComponent extends BaseMainComponent implements OnInit {
         });
         if (typeof this.products === null) {
             this.noProducts = true;
+        }else{
+            this.noProducts = false;
         }
         this.backendService.getAllTarifsForRegistrations()
             .then(products => {
@@ -53,7 +55,7 @@ export class DashboardComponent extends BaseMainComponent implements OnInit {
 
 
 
-  registerTariff(needCompanyInfo:boolean):void {
+  registerTariff():void {
         var model = new ModalsAddProductModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {

@@ -42,7 +42,7 @@
             </div>
         </div>
     </div>
-    </div>
+
 
     <div class="portlet light portlet-fit bordered">
         <div class="portlet-title">
@@ -76,7 +76,7 @@
                             </div>
                             <div class="arrow-down arrow-grey"></div>
                             <div class="price-table-footer">
-                                <button type="button" (click)="registerTariff(false)" class="btn grey-salsa btn-outline sbold uppercase price-button">Sign Up</button>
+                                <button type="button" (click)="registerTariff()" class="btn grey-salsa btn-outline sbold uppercase price-button">Sign Up</button>
                             </div>
                         </div>
                     </div>
@@ -84,7 +84,8 @@
             </div>
         </div>
     </div>
-
-
-
+    </div>
+    <div *ngIf="!noProducts">
+        zde jsou projekty
+    </div>
 </layout-main>
