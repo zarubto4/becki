@@ -38,7 +38,7 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
 
     project:IProject = null;
 
-    blockCode:string = "block.displayName = \"JSB\";\nblock.backgroundColor = \"orange\";\n\nblock.addDigitalInput(\"din1\", \"Digital input 1\");\nblock.addAnalogInput(\"anIn\", \"Analog input\");\nblock.addMessageInput(\"msgInTest\", \"Test message\", [ByzanceBool, ByzanceInt, ByzanceFloat, ByzanceString]);\n\nblock.addMessageOutput(\"msgOut\", \"Message output\", [ByzanceString]);\nblock.addAnalogOutput(\"aout\", \"Analog output\");\nblock.addDigitalOutput(\"digitalOut\", \"Digital output\");\n\nblock.addConfigProperty(ConfigPropertyType.Float, \"confOffset\", \"Analog offset\", 44.6);\n\nblock.configChanged = function () { // when config changed\n    block.aout(block.anIn() + block.confOffset());  \n}\n\nblock.onAnIn = function (val) { // when change value of anIn analog input\n    block.aout(val + block.confOffset());  \n};\n\nblock.onMsgInTest = function (msg) { // when new message on msgInTest message input\n    block.msgOut(\"Test: \"+msg[4]);  \n};\n\nblock.inputsChanged = function () { // when change any analog or digital input\n	block.digitalOut(block.din1());\n};";
+    blockCode:string = "block.addDigitalInput(\"din1\", \"Digital input 1\");\nblock.addAnalogInput(\"anIn\", \"Analog input\");\nblock.addMessageInput(\"msgInTest\", \"Test message\", [ByzanceBool, ByzanceInt, ByzanceFloat, ByzanceString]);\n\nblock.addMessageOutput(\"msgOut\", \"Message output\", [ByzanceString]);\nblock.addAnalogOutput(\"aout\", \"Analog output\");\nblock.addDigitalOutput(\"digitalOut\", \"Digital output\");\n\nblock.addConfigProperty(ConfigPropertyType.Float, \"confOffset\", \"Analog offset\", 44.6);\n\nblock.init = block.configChanged = function () { // when init and config changed\n    block.aout(block.anIn() + block.confOffset());  \n}\n\nblock.onAnIn = function (val) { // when change value of anIn analog input\n    block.aout(val + block.confOffset());  \n};\n\nblock.onMsgInTest = function (msg) { // when new message on msgInTest message input\n    block.msgOut(\"Test: \"+msg[3]);  \n};\n\nblock.inputsChanged = function () { // when change any analog or digital input\n    block.digitalOut(block.din1());\n};";
 
     @ViewChild(BlockoView)
     blockoView:BlockoView;
@@ -47,6 +47,9 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
     colorSelector:ElementRef;
 
     jsBlock:Blocks.JSBlock;
+    jsBlockHeight:number = 0;
+
+    jsError:{ name:string, message:string };
 
     testInputConnectors:Core.Connector[];
     connectorTypes = Core.ConnectorType;
@@ -55,11 +58,14 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
     messageInputsValueCache:{ [key:string]:boolean|number|string } = {};
 
     iconSelectOptions:{name:string,icon:string}[] = [];
-    iconSelected:string = "fa-remove";
+    iconSelected:string = "fa-question";
+    iconSelectOpen:boolean = false;
 
     colorSelected:string = "#3baedb";
 
-    testEventLog:{timestamp:string, connector:Core.Connector, eventType:Core.ConnectorEventType, value:(boolean|number|Core.Message)}[] = [];
+    description:string = "";
+
+    testEventLog:{timestamp:string, connector:Core.Connector, eventType:Core.ConnectorEventType, value:(boolean|number|Core.Message), readableValue:string}[] = [];
 
     constructor(injector:Injector) {super(injector)};
 
@@ -76,6 +82,8 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
                 icon: fa
             });
         }
+
+        this.iconSelectOptions.sort((a,b)=>a.name.localeCompare(b.name));
 
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.projectId = params["project"];
@@ -108,10 +116,31 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
 
     onIconSelectBlockClick(name:string) {
         this.iconSelected = name;
+        this.iconSelectOpen = false;
+    }
+
+    onIconSelectClick() {
+        this.iconSelectOpen = !this.iconSelectOpen;
     }
 
     toReadableValue(value:any):string {
-        return value.values?JSON.stringify(value.values):value;
+        if (typeof value == "boolean") {
+            if (value) {
+                return "<span class='bold font-red'>true</span>"
+            } else {
+                return "<span class='bold font-blue'>false</span>"
+            }
+        }
+        if (typeof value == "number") {
+            return "<span class='bold font-green-jungle'>"+value+"</span>"
+        }
+        if (typeof value == "string") {
+            return "<span class='bold font-yellow-casablanca'>\""+value+"\"</span>"
+        }
+        if (value.values && Array.isArray(value.values)) {
+            return "["+value.values.map((val:any)=>this.toReadableValue(val)).join(", ")+"]"
+        }
+        return JSON.stringify(value);
     }
 
     onDigitalInputClick(connector:Core.Connector):void {
@@ -148,27 +177,84 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
 
     }
 
+    validate() {
+        try {
+            if (Blocks.JSBlock.validateJsCode(this.blockCode)) {
+                this.jsError = null;
+            } else {
+                this.jsError = { name: "Error", message: "Unknown error" };
+            }
+        } catch (e) {
+
+            var name = e.name || "Error";
+            name = name.replace(/([A-Z])/g, ' $1').trim();
+
+            var msg:string = e.message || e.toString();
+
+            if (e instanceof Blocks.JSBlockError) {
+                name = "JS Block Error";
+                msg = e.htmlMessage;
+            }
+
+            if (msg.indexOf("is not defined") > -1) {
+                var index = msg.indexOf("is not defined");
+                msg = "<b>" + msg.substr(0, index) + "</b>" + msg.substr(index);
+            }
+
+            if (msg.indexOf("is not a function") > -1) {
+                var index = msg.indexOf("is not a function");
+                msg = "<b>" + msg.substr(0, index) + "</b>" + msg.substr(index);
+            }
+
+            if (msg.indexOf("Unexpected token") == 0) {
+                var len = "Unexpected token".length;
+                msg = msg.substr(0, len) + "<b>" + msg.substr(len) + "</b>";
+            }
+
+
+            this.jsError = { name: name, message: msg };
+        }
+    }
+
     onTestClick():void {
         this.blockoView.removeAllBlocksWithoutReadonlyCheck();
+        this.jsBlock = null;
         this.testEventLog = [];
+        this.testInputConnectors = [];
+        this.jsBlockHeight = 0;
 
-        try {
-            var desginJson = JSON.stringify({backgroundColor: this.colorSelected, displayName:this.iconSelected});
-            this.jsBlock = this.blockoView.addJsBlockWithoutReadonlyCheck("ERROR", desginJson, 100, 30);
-        } catch (e) {}
+        this.validate();
+        if (!this.jsError) {
 
-        this.jsBlock.setJsCode(this.blockCode);
 
-        this.jsBlock.registerOutputEventCallback((connector:Core.Connector, eventType:Core.ConnectorEventType, value:(boolean|number|Core.Message)) => {
-            this.testEventLog.unshift({
-                timestamp: moment().format("HH:mm:ss.SSS"),
-                connector: connector,
-                eventType: eventType,
-                value:value
+            try {
+                var designJson = JSON.stringify({
+                    backgroundColor: this.colorSelected,
+                    displayName: this.iconSelected,
+                    description: this.description
+                });
+                this.jsBlock = this.blockoView.addJsBlockWithoutReadonlyCheck("", designJson, 10, 10);
+            } catch (e) {
+            }
+
+            this.jsBlock.registerOutputEventCallback((connector: Core.Connector, eventType: Core.ConnectorEventType, value: (boolean|number|Core.Message)) => {
+                this.testEventLog.unshift({
+                    timestamp: moment().format("HH:mm:ss.SSS"),
+                    connector: connector,
+                    eventType: eventType,
+                    value: value,
+                    readableValue: this.toReadableValue(value)
+                });
             });
-        });
 
-        this.testInputConnectors = this.jsBlock.getInputConnectors();
+            this.jsBlock.setJsCode(this.blockCode);
+
+            this.testInputConnectors = this.jsBlock.getInputConnectors();
+
+            this.jsBlockHeight = this.jsBlock.rendererGetBlockSize().height + 20; // for borders
+
+        }
+
     }
 
 }

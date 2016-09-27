@@ -43,7 +43,7 @@ export class ModalsBlockoJsEditorComponent implements OnInit {
 
     validate() {
         try {
-            if (this.modalModel.jsBlock.validateJsCode(this.jsCode)) {
+            if (Blocks.JSBlock.validateJsCode(this.jsCode)) {
                 this.jsError = null;
             } else {
                 this.jsError = { name: "Error", message: "Unknown error" };

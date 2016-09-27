@@ -301,7 +301,35 @@ span.changes {
     background-color: powderblue;
 }
 
-.fa-icon-select-block {
+.icon-select-icon {
+    width: 1.3em;
+    font-size: 1.3em;
+    vertical-align: middle;
+}
+
+.icon-select-down-icon {
+    font-size: 1.5em;
+    padding-top: 3px;
+}
+
+.icon-select-group {
+    position: relative;
+    width: 100%;
+}
+
+.icon-select-table {
+    position: absolute;
+    height: initial;
+    z-index: 99;
+    width: 100%;
+    display: none;
+}
+
+.icon-select-table.open {
+    display: block;
+}
+
+.icon-select-block {
     width: 1.5em;
     height: 1.5em;
     float: left;
@@ -313,10 +341,34 @@ span.changes {
     cursor: pointer;
 }
 
-.fa-icon-select-block.selected {
+.cursor-hand, .cursor-pointer {
+    cursor: pointer;
+}
+
+.icon-select-block.selected {
     background-color: lightblue;
     border: 1px black solid;
 }
+
+.blocko-overflow-visible .blocko-view {
+    overflow: visible !important;
+    z-index: 80;
+}
+
+.blocko-overflow-visible .blocko-view svg {
+    overflow: visible !important;
+}
+
+.blocko-no-borders-and-bg .blocko-view {
+    border: none !important;
+    height: inherit !important;
+    background-color: transparent !important;
+}
+
+.blocko-no-borders-and-bg .blocko-view svg {
+    background-image: none !important;
+}
+
 
 @media (min-width: 768px) {
     .modal-dialog.modal-width-80 {

@@ -35,19 +35,38 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Color:</label>
+                    <label>Block color:</label>
                     <input class="form-control" #colorSelector type="hidden">
                 </div>
 
-                <div class="form-group">
-                    <label>Icon:</label>
-                    <div class="form-control" style="height:initial;">
-                        <div *ngFor="let icon of iconSelectOptions;" class="fa fa-icon-select-block" [class.selected]="icon.name == iconSelected" (click)="onIconSelectBlockClick(icon.name)">{{icon.icon}}</div>
+                <div class="form-group icon-select-group">
+                    <label>Block icon:</label>
+                    <div class="form-control cursor-hand" (click)="onIconSelectClick()">
+                        <span class="fa icon-select-icon {{iconSelected}}"></span>
+                        {{iconSelected}}
+                        <span class="fa icon-select-down-icon fa-angle-down fa-pull-right"></span>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="form-control icon-select-table" [class.open]="iconSelectOpen">
+                        <div *ngFor="let icon of iconSelectOptions;" class="fa icon-select-block" [class.selected]="icon.name == iconSelected" (click)="onIconSelectBlockClick(icon.name)">{{icon.icon}}</div>
                         <div class="clearfix"></div>
                     </div>
                 </div>
 
+                <div class="form-group">
+                    <label>Block description:</label>
+                    <input class="form-control" [(ngModel)]="description" type="text">
+                </div>
+
                 <ace-editor [(code)]="blockCode" mode="ace/mode/javascript" ></ace-editor>
+
+                <div class="spacer30"></div>
+
+                <div *ngIf="jsError" class="mt-element-ribbon bg-grey-steel">
+                    <div class="ribbon ribbon-shadow ribbon-color-danger">{{jsError.name}}</div>
+                    <p class="ribbon-content" [innerHTML]="jsError.message"></p>
+                </div>
+
                 <div>
                     <div class="pull-right">
                         <button type="button" class="btn default yellow-gold" (click)="onTestClick()" >
@@ -70,9 +89,12 @@
                         <i class="icon-note font-blue"></i>
                         <span class="caption-subject font-blue sbold uppercase">Test</span>
                     </div>
+
+                    <h3 *ngIf="!jsBlock" class="pull-right" style="margin: 0; margin-right: 95px;">For test press button here <i class="fa fa-chevron-up"></i></h3>
+
                 </div>
                 <div class="portlet-content">
-                    <div class="col-md-4" style="display: inline-block; width: calc(50% - 141px)">
+                    <div class="col-md-4" style="display: inline-block; width: calc(50% - 51px)">
 
                         <div *ngFor="let connector of testInputConnectors" class="mt-element-ribbon bg-grey-steel">
 
@@ -102,11 +124,11 @@
                                         </div>
                                         <div *ngIf="argType == argTypes.ByzanceFloat">
                                             <div class="col-md-6 text-right control-label">Float <strong>Arg #{{index}}</strong>:</div>
-                                            <div class="col-md-6 no-padding-left"><input type="number" class="form-control" step="0.1" [(ngModel)]="messageInputsValueCache[connector.name+index+argType]"></div>
+                                            <div class="col-md-6 no-padding-left"><input type="number" class="form-control" step="0.1" value="0" [(ngModel)]="messageInputsValueCache[connector.name+index+argType]"></div>
                                         </div>
                                         <div *ngIf="argType == argTypes.ByzanceInt">
                                             <div class="col-md-6 text-right control-label">Int <strong>Arg #{{index}}</strong>:</div>
-                                            <div class="col-md-6 no-padding-left"><input type="number" class="form-control" step="1" [(ngModel)]="messageInputsValueCache[connector.name+index+argType]"></div>
+                                            <div class="col-md-6 no-padding-left"><input type="number" class="form-control" step="1" value="0" [(ngModel)]="messageInputsValueCache[connector.name+index+argType]"></div>
                                         </div>
                                         <div *ngIf="argType == argTypes.ByzanceString">
                                             <div class="col-md-6 text-right control-label">String <strong>Arg #{{index}}</strong>:</div>
@@ -131,12 +153,12 @@
                         </div>
 
                     </div>
-                    <div class="col-md-4" style="display: inline-block; width: 281px;">
-                        <blocko-view readonly="true"></blocko-view>
+                    <div class="col-md-4" style="display: inline-block; width: 101px;" [style.height]="(jsBlockHeight)+'px'">
+                        <blocko-view readonly="true" class="blocko-overflow-visible blocko-no-borders-and-bg"></blocko-view>
                     </div>
-                    <div class="col-md-4" style="display: inline-block; width: calc(50% - 141px)">
+                    <div class="col-md-4" style="display: inline-block; width: calc(50% - 51px)">
 
-                        <table class="table table-hover table-light">
+                        <table *ngIf="jsBlock" class="table table-hover table-light">
                             <thead>
                             <tr class="uppercase">
                                 <th> Time </th>
@@ -149,8 +171,8 @@
                                 <td>
                                     {{log.timestamp}}
                                 </td>
-                                <td> {{log.connector.name}} </td>
-                                <td> {{toReadableValue(log.value)}} </td>
+                                <td> <strong>{{log.connector.name}}</strong> </td>
+                                <td [innerHTML]="log.readableValue"></td>
                             </tr>
 
                             </tbody>
