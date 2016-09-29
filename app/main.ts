@@ -69,6 +69,7 @@ var routes:Routes = [
 
     {path: "profile", data:{breadName: "Profile"}, component: ProfileComponent, canActivate:[AuthGuard]},
 
+    {path: "productRegistration/:tariff", data:{breadName: "Product registration"}, component: ProductRegistrationComponent, canActivate:[AuthGuard]},
     {path: "productRegistration", data:{breadName: "Product registration"}, component: ProductRegistrationComponent, canActivate:[AuthGuard]},
 
 

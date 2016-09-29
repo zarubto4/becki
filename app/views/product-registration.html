@@ -7,21 +7,21 @@
                 <div class="portlet-body">
                     <div class="mt-element-step">
                         <div class="row step-thin">
-                            <div class="mt-step-desc">
-                                <div class="font-dark bold uppercase">Thin</div>
+                            <div class="mt-step-desc" >
+                                <div class="font-dark bold uppercase">Step by step</div>
                                 <div class="caption-desc font-grey-cascade">Confirm a product purchase</div>
                                 <br> </div>
-                            <div class="col-md-4 bg-grey done mt-step-col">
+                            <div  class="col-md-4 bg-grey mt-step-col" (click)="stepClick(1)" (mouseenter)="activeClass['1'] = true" (mouseleave)="activeClass['1'] = false" [class.active]="activeClass['1']" [class.done]="step == 1">
                                 <div class="mt-step-number bg-white font-grey">1</div>
                                 <div class="mt-step-title uppercase font-grey-cascade">Choose</div>
                                 <div class="mt-step-content font-grey-cascade">Choose a right product</div>
                             </div>
-                            <div class="col-md-4 bg-grey mt-step-col active">
+                            <div class="col-md-4 bg-grey mt-step-col " (click)="stepClick(2)" (mouseenter)="activeClass['2'] = true" (mouseleave)="activeClass['2'] = false" [class.active]="activeClass['2']" [class.done]="step == 2">
                                 <div class="mt-step-number bg-white font-grey">2</div>
                                 <div class="mt-step-title uppercase font-grey-cascade">Register</div>
                                 <div class="mt-step-content font-grey-cascade">Fill the necessary info</div>
                             </div>
-                            <div class="col-md-4 bg-grey done mt-step-col active">
+                            <div class="col-md-4 bg-grey mt-step-col " (click)="stepClick(3)" (mouseenter)="activeClass['3'] = true" (mouseleave)="activeClass['3'] = false" [class.active]="activeClass['3']" [class.done]="step == 3">
                                 <div class="mt-step-number bg-white font-grey">3</div>
                                 <div class="mt-step-title uppercase font-grey-cascade">Deploy</div>
                                 <div class="mt-step-content font-grey-cascade">start using a product</div>
@@ -36,6 +36,94 @@
     </div>
 
 
+    <div *ngIf="step===1">
+
+        <div class="portlet light portlet-fit bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-share font-green"></i>
+                    <span class="caption-subject font-green bold uppercase">Avalible tariffs</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="pricing-content-1">
+                    <div class="row">
+                        <div *ngFor="let tariff of tariffForRegistration" class="col-md-3">
+                            <div class="price-column-container border-active">
+                                <div class="price-table-head bg-blue">
+                                    <h2 class="no-margin">{{tariff.tariff_name}}</h2>
+                                </div>
+                                <div class="arrow-down border-top-blue"></div>
+
+                                <div class="price-table-pricing">
+                                    <h3><span class="price-sign">€</span>{{tariff.price.EUR}}</h3>
+                                    <p>per month</p>
+                                </div>
+                                <div class="price-table-content">
+                                    <div *ngFor="let label of tariff.labels" class="row mobile-padding">
+                                        <div class="col-xs-3 text-right mobile-padding">
+                                            <i class="icon-user"></i>
+                                        </div>
+                                        <div class="col-xs-9 text-left mobile-padding">{{label.label}}</div>
+                                    </div>
+
+                                </div>
+                                <div class="arrow-down arrow-grey"></div>
+                                <div class="price-table-footer">
+                                    <button type="button" (click)="chooseTariff(tariff)" class="btn grey-salsa btn-outline sbold uppercase price-button">Sign Up</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="portlet light portlet-fit bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-share font-green"></i>
+                    <span class="caption-subject font-green bold uppercase">Avalible packages</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="pricing-content-1">
+                    <div class="row">
+                        <div *ngFor="let package of packageForRegistration" class="col-md-3">
+                            <div class="price-column-container border-active">
+                                <div class="price-table-head bg-blue">
+                                    <h2 class="no-margin">{{package.package_name}}</h2>
+                                </div>
+                                <div class="arrow-down border-top-blue"></div>
+
+                                <div class="price-table-pricing">
+                                    <h3><span class="price-sign">€</span>{{package.price.EUR}}</h3> <!-- TODO ceny se budou měnit dle jazykové mutace-->
+                                    <p>per month</p>
+                                </div>
+                                <div class="price-table-content">
+                                    <div *ngFor="let label of package.labels" class="row mobile-padding">
+                                        <div class="col-xs-3 text-right mobile-padding">
+                                            <i class="icon-user"></i> <!-- TODO ikonku nám bude posílat tyrion -->
+                                        </div>
+                                        <div class="col-xs-9 text-left mobile-padding">{{label.label}}</div>
+                                    </div>
+
+                                </div>
+                                <div class="arrow-down arrow-grey"></div>
+                                <div class="price-table-footer">
+                                    <button type="button" (click)="registerTariff()" class="btn grey-salsa btn-outline sbold uppercase price-button">Sign Up</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+</div>
+
+<div *ngIf="step===2">
     <form [formGroup]="form">
     <div class="row">
         <div class="col-md-6">
@@ -44,18 +132,17 @@
                     <h4 class="modal-title">fill the tariff info </h4>
                 </div>
                 <div class="">
-                        <becki-form-input [control]="form.controls.city" label="city"></becki-form-input>
-                        <becki-form-input [control]="form.controls.country" label="country"></becki-form-input> <!-- //bude výběr? -->
-                        <becki-form-select [control]="form.controls.currency_type" label="currency type" [options]="options"></becki-form-select>
-                        <becki-form-input [control]="form.controls.payment_method" label="payment method"></becki-form-input><!-- //pouze pokud platí? -->
-                        <becki-form-input [control]="form.controls.payment_mode" label="payment mode"></becki-form-input>    <!-- //pouze pokud platí? -->
-                        <becki-form-input [control]="form.controls.product_individual_name" label="product individual name"></becki-form-input> <!-- uloží z prokliku? -->
-                        <becki-form-input [control]="form.controls.registration_no" label="registration no"></becki-form-input>
-                        <becki-form-input [control]="form.controls.street" label="street"></becki-form-input>
-                        <becki-form-input [control]="form.controls.street_number" label="street number"></becki-form-input>
-                        <becki-form-input [control]="form.controls.tariff_type" label="tariff type"></becki-form-input> <!-- nejspíše uloží z prokliku -->
-                        <becki-form-input [control]="form.controls.zip_code" label="zip code"></becki-form-input>
-                        <becki-form-input [control]="form.controls.vat_number" label="vat number"></becki-form-input> <!-- //? CZ28496639 -->
+                        <becki-form-input [control]="form.controls.city" label="City"></becki-form-input>
+                        <becki-form-input [control]="form.controls.country" label="Country"></becki-form-input> <!-- //bude výběr? -->
+                        <becki-form-select [control]="form.controls.currency_type" label="Currency type" [options]="options"></becki-form-select>
+                        <becki-form-input [control]="form.controls.payment_method" label="Payment method"></becki-form-input><!-- //pouze pokud platí? -->
+                        <becki-form-input [control]="form.controls.payment_mode" label="Payment mode"></becki-form-input>    <!-- //pouze pokud platí? -->
+                        <becki-form-input [control]="form.controls.product_individual_name" label="Product name"></becki-form-input> <!-- uloží z prokliku? -->
+                        <becki-form-input [control]="form.controls.registration_no" label="Registration no"></becki-form-input>
+                        <becki-form-input [control]="form.controls.street" label="Street"></becki-form-input>
+                        <becki-form-input [control]="form.controls.street_number" label="Street number"></becki-form-input>
+                    <!--     <becki-form-input [control]="form.controls.tariff_type" label="tariff type"></becki-form-input>  nejspíše uloží z prokliku -->
+                        <becki-form-input [control]="form.controls.zip_code" label="Zip code"></becki-form-input>
                 </div>
             </div>
         </div>
@@ -64,18 +151,25 @@
             <input type="checkbox" (change)="toggleIsCompany()" [value]="isCompany">I have a company<br> <!-- TODO je třeba  vyřešit lépe -->
             <div *ngIf="isCompany">
                 <p></p>
-                <becki-form-input [control]="form.controls.company_authorized_email" [type]="email" label="company authorized email"></becki-form-input>
-                <becki-form-input [control]="form.controls.company_authorized_phone" [type]="number"  label="company authorized phone"></becki-form-input>
-                <becki-form-input [control]="form.controls.company_invoice_email" [type]="email" label="company invoice email"></becki-form-input>
-                <becki-form-input [control]="form.controls.company_name" label="company name"></becki-form-input>
-                <becki-form-input [control]="form.controls.company_web" label="company web"></becki-form-input>
+                <becki-form-input [control]="form.controls.company_authorized_email" [type]="email" label="Company authorized email"></becki-form-input>
+                <becki-form-input [control]="form.controls.company_authorized_phone" [type]="number"  label="Company authorized phone"></becki-form-input>
+                <becki-form-input [control]="form.controls.company_invoice_email" [type]="email" label="Company invoice email"></becki-form-input>
+                <becki-form-input [control]="form.controls.company_name" label="Company name"></becki-form-input>
+                <becki-form-input [control]="form.controls.company_web" label="Company web"></becki-form-input>
+                <becki-form-input [control]="form.controls.vat_number" label="Vat number"></becki-form-input> <!-- //? CZ28496639 -->
+
             </div>
         </div>
         </div>
     </form>
-        <div class="">
-            <button type="button" class="btn green btn-outline" [disabled]="!form.valid" (click)="onSubmitClick()">Add</button>
+        <div class="actions">
+            <button type="button" class="btn green btn-outline" [disabled]="!form.valid" (click)="onSubmitClick()">Continue</button>
             <button type="button" class="btn red btn-outline" (click)="onCancelClick()">Cancel</button>
         </div>
+</div>
+
+
+    <div *ngIf="step===3">
+    </div>
 
 </layout-main>

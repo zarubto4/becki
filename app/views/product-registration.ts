@@ -10,6 +10,7 @@ import {FlashMessageSuccess, FlashMessageWarning, FlashMessageError} from "../se
 import {FormGroup, Validators, FORM_DIRECTIVES, REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
 import {BeckiValidators} from "../helpers/BeckiValidators";
 import {BeckiFormSelectOption, beckiFormSelectOptionsMaker} from "../components/BeckiFormSelect";
+import {Subscription} from "rxjs";
 
 @Component({
     selector: "product-registration",
@@ -20,11 +21,17 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
     form: FormGroup;
 
+    routeParamsSubscription:Subscription;
+
     tariffForRegistration: IIndividualsTariff[];
 
     packageForRegistration: IAdditionalPackage[];
 
+    step:number;
+
     isCompany:boolean = false;
+
+    activeClass:{[key:string]:boolean} = {};
 
     toggleIsCompany() {
         this.isCompany = !this.isCompany;
@@ -38,6 +45,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
     constructor(injector: Injector) {
         super(injector);
 
+        this.step=1;
 
         this.form = this.formBuilder.group({ //TODO vybrat z tohodle to, co není povinný a co je provinný pro company a podle toho se zařídít
             "city": ["", [Validators.required, Validators.minLength(5)]],
@@ -82,17 +90,37 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         })
     };
 
+    stepClick(step:number):void{
+    this.step=step;
+    }
+
     ngOnInit(): void {
+
+        this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+            if(params) {
+                this.form.controls["tariff_type"].setValue(params["tariff"]);
+                this.step = 2;
+            }
+        })
+
+
         this.backendService.getAllTarifsForRegistrations()
             .then(products => {
                 this.tariffForRegistration = products.tariffs;
                 this.packageForRegistration = products.packages;
             })
             .catch(error => console.log(error))
+
+        console.log("tariff type: "+this.form.controls["tariff_type"].value);
     }
 
+    chooseTariff(tariff:IIndividualsTariff):void{
+        this.form.controls["tariff_type"].setValue(tariff.identificator);
+        this.step=2;
+    }
 
     onSubmitClick(): void {
+        this.step=3;
                 this.backendService.createTarif({
                     tariff_type: this.form.controls["tariff_type"].value,
                     product_individual_name: this.form.controls["product_individual_name"].value,
@@ -113,7 +141,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
                     company_invoice_email: this.form.controls["company_invoice_email"].value,
                 })
                     .then(tarif => {
-                        if (tarif.gw_url) {
+                        if (tarif.gw_url) { // toto není chyba, typescript prostě neví co s tím
                             this.flashMessagesService.addFlashMessage(new FlashMessageWarning("Product was created but payment is requred, click", "<a href={{(IGoPayUrl)response.gw_url}}>here</a>"));
                         } else {
                             this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("Product was created, now you can create a new project"));
