@@ -34,33 +34,16 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Block color:</label>
-                    <input class="form-control" #colorSelector type="hidden">
-                </div>
+                <becki-form-color-picker label="Block color" [control]="blockForm.controls.color" [waitForTouch]="false"></becki-form-color-picker>
 
-                <div class="form-group icon-select-group">
-                    <label>Block icon:</label>
-                    <div class="form-control cursor-hand" (click)="onIconSelectClick()">
-                        <span class="fa icon-select-icon {{iconSelected}}"></span>
-                        {{iconSelected}}
-                        <span class="fa icon-select-down-icon fa-angle-down fa-pull-right"></span>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="form-control icon-select-table" [class.open]="iconSelectOpen">
-                        <div *ngFor="let icon of iconSelectOptions;" class="fa icon-select-block" [class.selected]="icon.name == iconSelected" (click)="onIconSelectBlockClick(icon.name)">{{icon.icon}}</div>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
+                <becki-form-fa-icon-select label="Block icon" [control]="blockForm.controls.icon" [waitForTouch]="false"></becki-form-fa-icon-select>
+
+                <becki-form-input label="Block description" [control]="blockForm.controls.description" [waitForTouch]="false"></becki-form-input>
 
                 <div class="form-group">
-                    <label>Block description:</label>
-                    <input class="form-control" [(ngModel)]="description" type="text">
+                    <label>Block code</label>
+                    <ace-editor [(code)]="blockCode" mode="ace/mode/javascript" ></ace-editor>
                 </div>
-
-                <ace-editor [(code)]="blockCode" mode="ace/mode/javascript" ></ace-editor>
-
-                <div class="spacer30"></div>
 
                 <div *ngIf="jsError" class="mt-element-ribbon bg-grey-steel">
                     <div class="ribbon ribbon-shadow ribbon-color-danger">{{jsError.name}}</div>
@@ -94,89 +77,112 @@
 
                 </div>
                 <div class="portlet-content">
-                    <div class="col-md-4" style="display: inline-block; width: calc(50% - 51px)">
+                    <div *ngIf="jsBlock" class="col-md-4" style="display: inline-block; width: calc(50% - 61px)">
 
-                        <div *ngFor="let connector of testInputConnectors" class="mt-element-ribbon bg-grey-steel">
+                        <h4 class="text-center">Inputs simulator</h4>
 
-                            <div class="ribbon ribbon-shadow ribbon-color-warning">{{connector.name}}</div>
+                        <div class="block-tester no-select">
 
-                            <div class="ribbon-content form-horizontal">
-
-                                <div *ngIf="connector.type == connectorTypes.DigitalInput">
-                                    <div class="col-md-6 text-right"><strong>Value</strong>:</div>
-                                    <div class="col-md-6 no-padding-left"><i class="fa fa-2x" style="vertical-align: middle;" [class.fa-toggle-on]="connector.value" [class.fa-toggle-off]="!connector.value" (click)="onDigitalInputClick(connector)"></i></div>
-                                    <div class="clearfix"></div>
-                                </div>
-
-                                <div *ngIf="connector.type == connectorTypes.AnalogInput">
-                                    <div class="col-md-6 text-right control-label"><strong>Value</strong>:</div>
-                                    <div class="col-md-6 no-padding-left"><input type="number" class="form-control" step="0.1" [value]="connector.value" (change)="onAnalogInputChange($event, connector)"></div>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div *ngIf="connector.type == connectorTypes.MessageInput">
+                            <div *ngFor="let connector of testInputConnectors; let iCon = index" class="row bg-color" [class.odd]="iCon%2">
 
 
+
+                                <template [ngIf]="connector.type == connectorTypes.DigitalInput">
+                                    <div class="col-md-4 bg-din bold" [class.odd]="iCon%2">{{connector.name}}</div>
+                                    <div class="col-md-8">
+                                        <div class="block-tester-message-input-label"><strong>Value</strong>:</div>
+                                        <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="connector.value" [class.fa-toggle-off]="!connector.value" (click)="onDigitalInputClick(connector)"></i>
+                                    </div>
+                                </template>
+
+                                <template [ngIf]="connector.type == connectorTypes.AnalogInput">
+                                    <div class="col-md-4 bg-ain bold" [class.odd]="iCon%2">{{connector.name}}</div>
+                                    <div class="col-md-8">
+                                        <div class="block-tester-message-input-label"><strong>Value</strong>:</div>
+                                        <input type="number" class="form-control" step="0.1" [value]="connector.value" (input)="onAnalogInputChange($event, connector)">
+                                    </div>
+                                </template>
+
+                                <template [ngIf]="connector.type == connectorTypes.MessageInput">
+                                    <div class="col-md-4 bg-min bold" [class.odd]="iCon%2">{{connector.name}}</div>
                                     <div *ngFor="let argType of connector.argTypes; let index = index">
 
-                                        <div *ngIf="argType == argTypes.ByzanceBool">
-                                            <div class="col-md-6 text-right control-label">Bool <strong>Arg #{{index}}</strong>:</div>
-                                            <div class="col-md-6 no-padding-left"><input type="checkbox" class="form-control" [(ngModel)]="messageInputsValueCache[connector.name+index+argType]"></div>
-                                        </div>
-                                        <div *ngIf="argType == argTypes.ByzanceFloat">
-                                            <div class="col-md-6 text-right control-label">Float <strong>Arg #{{index}}</strong>:</div>
-                                            <div class="col-md-6 no-padding-left"><input type="number" class="form-control" step="0.1" value="0" [(ngModel)]="messageInputsValueCache[connector.name+index+argType]"></div>
-                                        </div>
-                                        <div *ngIf="argType == argTypes.ByzanceInt">
-                                            <div class="col-md-6 text-right control-label">Int <strong>Arg #{{index}}</strong>:</div>
-                                            <div class="col-md-6 no-padding-left"><input type="number" class="form-control" step="1" value="0" [(ngModel)]="messageInputsValueCache[connector.name+index+argType]"></div>
-                                        </div>
-                                        <div *ngIf="argType == argTypes.ByzanceString">
-                                            <div class="col-md-6 text-right control-label">String <strong>Arg #{{index}}</strong>:</div>
-                                            <div class="col-md-6 no-padding-left"><input type="text" class="form-control" [(ngModel)]="messageInputsValueCache[connector.name+index+argType]"></div>
-                                        </div>
+                                        <div *ngIf="index" class="col-md-4"></div>
+
+                                        <template [ngIf]="argType == argTypes.ByzanceBool">
+                                            <div class="col-md-8">
+                                                <div class="block-tester-message-input-label">Bool <strong>Arg #{{index}}</strong>:</div>
+                                                <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="messageInputsValueCache[connector.name+argType]" [class.fa-toggle-off]="!messageInputsValueCache[connector.name+argType]" (click)="messageInputsValueCache[connector.name+argType] = !messageInputsValueCache[connector.name+argType]"></i>
+                                            </div>
+                                        </template>
+                                        <template [ngIf]="argType == argTypes.ByzanceFloat">
+                                            <div class="col-md-8">
+                                                <div class="block-tester-message-input-label">Float <strong>Arg #{{index}}</strong>:</div>
+                                                <input type="number" class="form-control" step="0.1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                            </div>
+                                        </template>
+                                        <template [ngIf]="argType == argTypes.ByzanceInt">
+                                            <div class="col-md-8">
+                                                <div class="block-tester-message-input-label">Int <strong>Arg #{{index}}</strong>:</div>
+                                                <input type="number" class="form-control" step="1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                            </div>
+                                        </template>
+                                        <template [ngIf]="argType == argTypes.ByzanceString">
+                                            <div class="col-md-8">
+                                                <div class="block-tester-message-input-label">String <strong>Arg #{{index}}</strong>:</div>
+                                                <input type="text" class="form-control" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                            </div>
+                                        </template>
 
                                     </div>
 
-                                    <div class="col-md-6"></div>
-                                    <div class="col-md-6 no-padding-left">
-                                        <button class="btn default green" type="button" (click)="onMessageInputSendClick(connector)">
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-8">
+                                        <button class="btn btn-sm default green block-tester-message-input-btn" type="button" (click)="onMessageInputSendClick(connector)">
                                             <i class="fa fa-paper-plane"></i> Send
                                         </button>
                                     </div>
 
-                                    <div class="clearfix"></div>
+                                </template>
 
-                                </div>
 
                             </div>
-
                         </div>
 
                     </div>
-                    <div class="col-md-4" style="display: inline-block; width: 101px;" [style.height]="(jsBlockHeight)+'px'">
+                    <div class="col-md-4" style="display: inline-block; width: 121px;" [style.height]="(jsBlockHeight)+'px'">
+                        <h4 *ngIf="jsBlock" class="text-center">Block</h4>
                         <blocko-view readonly="true" class="blocko-overflow-visible blocko-no-borders-and-bg"></blocko-view>
                     </div>
-                    <div class="col-md-4" style="display: inline-block; width: calc(50% - 51px)">
+                    <div *ngIf="jsBlock" class="col-md-4" style="display: inline-block; width: calc(50% - 61px)">
 
-                        <table *ngIf="jsBlock" class="table table-hover table-light">
-                            <thead>
-                            <tr class="uppercase">
-                                <th> Time </th>
-                                <th> Output </th>
-                                <th> Value </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr *ngFor="let log of testEventLog;">
-                                <td>
-                                    {{log.timestamp}}
-                                </td>
-                                <td> <strong>{{log.connector.name}}</strong> </td>
-                                <td [innerHTML]="log.readableValue"></td>
-                            </tr>
+                        <h4 class="text-center">Outputs log</h4>
 
-                            </tbody>
-                        </table>
+                        <div class="row">
+                            <table class="table table-fixed table-hover table-light block-log-table-header">
+                                <thead>
+                                    <tr class="uppercase">
+                                        <th class="block-log-timestamp"> Time </th>
+                                        <th class="block-log-name"> Output </th>
+                                        <th class="block-log-value"> Value </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="row block-log-table-wrapper">
+
+                            <table class="table table-fixed table-hover table-light">
+                                <tbody>
+                                    <tr *ngFor="let log of testEventLog;">
+                                        <td class="block-log-timestamp">
+                                            {{log.timestamp}}
+                                        </td>
+                                        <td class="block-log-name"> <strong>{{log.connector.name}}</strong> </td>
+                                        <td class="block-log-value" [innerHTML]="log.readableValue"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
 
                     </div>

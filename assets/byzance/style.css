@@ -323,6 +323,7 @@ span.changes {
     z-index: 99;
     width: 100%;
     display: none;
+    border: 1px solid #c2cad8 !important;
 }
 
 .icon-select-table.open {
@@ -369,6 +370,111 @@ span.changes {
     background-image: none !important;
 }
 
+.becki-form-color-picker .minicolors {
+    border: 1px solid #c2cad8;
+}
+.becki-form-color-picker.has-error .minicolors {
+    border-color: #e73d4a;
+}
+.becki-form-color-picker.has-warning .minicolors {
+    border-color: #c29d0b;
+}
+.becki-form-color-picker.has-success .minicolors {
+    border-color: #27a4b0;
+}
+
+
+
+.block-tester {
+    line-height: 26px;
+}
+
+.block-tester .block-tester-message-input-label {
+    width: 100px;
+    display: inline-block;
+    text-align: right;
+}
+
+.block-tester .block-tester-message-input-btn {
+    margin-left: 104px;
+}
+
+.block-tester .form-control {
+    width: 140px;
+    height: 24px;
+    margin: 0;
+    display: inline-block;
+    padding: 3px;
+    border-color: #9da0a5;
+}
+
+
+.block-tester .bg-color {
+    background-color: #e1e5ec;
+}
+.block-tester .bg-color.odd {
+    background-color: #caced4;
+}
+
+.block-tester .bg-din {
+    background-color: #3598dc;
+}
+.block-tester .bg-din.odd {
+    background-color: #2f88c6;
+}
+
+.block-tester .bg-ain {
+    background-color: #26C281;
+}
+.block-tester .bg-ain.odd {
+    background-color: #22ae74;
+}
+
+.block-tester .bg-min {
+    background-color: #f2784b;
+}
+.block-tester .bg-min.odd {
+    background-color: #d96c43;
+}
+
+.block-log-table-wrapper {
+    position: relative;
+    height: 400px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.table-fixed {
+    table-layout: fixed;
+}
+
+.block-log-table-header {
+    margin-bottom: 0;
+}
+
+.block-log-table-fixed-header div {
+    display: inline-block;
+}
+
+.block-log-timestamp, .block-log-name {
+    width: 25%;
+    word-wrap: break-word;
+}
+
+.block-log-value {
+    width: 50%;
+    word-wrap: break-word;
+}
+
+.no-select {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none;   /* Chrome/Safari/Opera */
+    -khtml-user-select: none;    /* Konqueror */
+    -moz-user-select: none;      /* Firefox */
+    -ms-user-select: none;       /* Internet Explorer/Edge */
+    user-select: none;           /* Non-prefixed version, currently
+                                  not supported by any browser */
+}
 
 @media (min-width: 768px) {
     .modal-dialog.modal-width-80 {

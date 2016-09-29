@@ -5,29 +5,24 @@
 import {Component, OnInit, Injector, OnDestroy, ViewChild, ElementRef} from "@angular/core";
 import {LayoutMain} from "../layouts/main";
 import {BaseMainComponent} from "./BaseMainComponent";
-import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
 import {ROUTER_DIRECTIVES} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
-import {IDEComponent} from "../lib-becki/field-ide";
-import {CodeIDE, CodeFile} from "../components/CodeIDE";
-import {ModalsConfirmModel} from "../modals/confirm";
-import {ModalsVersionDialogModel} from "../modals/version-dialog";
-import {IProject, ICProgram, ICProgramVersion, IUserFiles} from "../backend/TyrionAPI";
-import {ICodeCompileErrorMessage, CodeCompileError} from "../backend/BeckiBackend";
+import {IProject} from "../backend/TyrionAPI";
 import {AceEditor} from "../components/AceEditor";
 import {BlockoView} from "../components/BlockoView";
-import {Blocks, SnapRenderer} from "blocko";
+import {Blocks} from "blocko";
 
 
 import moment = require("moment/moment");
 import {Core} from "blocko";
-import {BeckiFormSelectOption, BeckiFormSelect} from "../components/BeckiFormSelect";
 import {FormGroup, Validators} from "@angular/forms";
+import {BeckiFormColorPicker} from "../components/BeckiFormColorPicker";
+import {BeckiFormFAIconSelect} from "../components/BeckiFormFAIconSelect";
 
 @Component({
     selector: "view-projects-project-blocks-block",
     templateUrl: "app/views/projects-project-blocks-block.html",
-    directives: [ROUTER_DIRECTIVES, LayoutMain, BlockoView, AceEditor, BeckiFormSelect],
+    directives: [ROUTER_DIRECTIVES, LayoutMain, BlockoView, AceEditor, BeckiFormColorPicker, BeckiFormFAIconSelect],
 })
 export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
@@ -38,89 +33,48 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
 
     project:IProject = null;
 
-    blockCode:string = "block.addDigitalInput(\"din1\", \"Digital input 1\");\nblock.addAnalogInput(\"anIn\", \"Analog input\");\nblock.addMessageInput(\"msgInTest\", \"Test message\", [ByzanceBool, ByzanceInt, ByzanceFloat, ByzanceString]);\n\nblock.addMessageOutput(\"msgOut\", \"Message output\", [ByzanceString]);\nblock.addAnalogOutput(\"aout\", \"Analog output\");\nblock.addDigitalOutput(\"digitalOut\", \"Digital output\");\n\nblock.addConfigProperty(ConfigPropertyType.Float, \"confOffset\", \"Analog offset\", 44.6);\n\nblock.init = block.configChanged = function () { // when init and config changed\n    block.aout(block.anIn() + block.confOffset());  \n}\n\nblock.onAnIn = function (val) { // when change value of anIn analog input\n    block.aout(val + block.confOffset());  \n};\n\nblock.onMsgInTest = function (msg) { // when new message on msgInTest message input\n    block.msgOut(\"Test: \"+msg[3]);  \n};\n\nblock.inputsChanged = function () { // when change any analog or digital input\n    block.digitalOut(block.din1());\n};";
-
-    @ViewChild(BlockoView)
-    blockoView:BlockoView;
-
-    @ViewChild("colorSelector")
-    colorSelector:ElementRef;
-
-    jsBlock:Blocks.JSBlock;
-    jsBlockHeight:number = 0;
-
-    jsError:{ name:string, message:string };
-
-    testInputConnectors:Core.Connector[];
     connectorTypes = Core.ConnectorType;
     argTypes = Core.ArgType;
 
+    blockForm:FormGroup = null;
+    blockCode:string = "block.addDigitalInput(\"din1\", \"Digital input 1\");\nblock.addAnalogInput(\"anIn\", \"Analog input\");\nblock.addMessageInput(\"msgInTest\", \"Test message\", [ByzanceBool, ByzanceInt, ByzanceFloat, ByzanceString]);\n\nblock.addMessageOutput(\"msgOut\", \"Message output\", [ByzanceBool, ByzanceString]);\nblock.addAnalogOutput(\"aout\", \"Analog output\");\nblock.addDigitalOutput(\"digitalOut\", \"Digital output\");\n\nblock.addConfigProperty(ConfigPropertyType.Float, \"confOffset\", \"Analog offset\", 44.6);\n\nblock.init = block.configChanged = function () { // when init and config changed\n    block.aout(block.anIn() + block.confOffset());  \n}\n\nblock.onAnIn = function (val) { // when change value of anIn analog input\n    block.aout(val + block.confOffset());  \n};\n\nblock.onMsgInTest = function (msg) { // when new message on msgInTest message input\n    block.msgOut(msg[0],\"S:\"+msg[3]+\" N:\"+(msg[1]+msg[2]));\n};\n\nblock.inputsChanged = function () { // when change any analog or digital input\n    block.digitalOut(block.din1());\n};";
+
+    jsError:{ name:string, message:string };
+
+    // Properties for test view:
+    @ViewChild(BlockoView)
+    blockoView:BlockoView;
+    jsBlock:Blocks.JSBlock;
+    jsBlockHeight:number = 0;
+    testInputConnectors:Core.Connector[];
     messageInputsValueCache:{ [key:string]:boolean|number|string } = {};
-
-    iconSelectOptions:{name:string,icon:string}[] = [];
-    iconSelected:string = "fa-question";
-    iconSelectOpen:boolean = false;
-
-    colorSelected:string = "#3baedb";
-
-    description:string = "";
-
     testEventLog:{timestamp:string, connector:Core.Connector, eventType:Core.ConnectorEventType, value:(boolean|number|Core.Message), readableValue:string}[] = [];
 
-    constructor(injector:Injector) {super(injector)};
+    constructor(injector:Injector) {
+        super(injector);
+
+        this.blockForm = this.formBuilder.group({
+            "color": ["#3baedb", [Validators.required]],
+            "icon": ["fa-question", [Validators.required]],
+            "description": ["JavaScript block!"]
+        });
+    };
 
     ngOnInit():void {
-
-        this.iconSelectOptions = [];
-        var usedIcons:string[] = [];
-        for (var key in SnapRenderer.RendererHelper.FontAwesomeMap) {
-            var fa:string = (<any>SnapRenderer.RendererHelper.FontAwesomeMap)[key];
-            if (usedIcons.indexOf(fa) > -1) continue;
-            usedIcons.push(fa);
-            this.iconSelectOptions.push({
-                name: key,
-                icon: fa
-            });
-        }
-
-        this.iconSelectOptions.sort((a,b)=>a.name.localeCompare(b.name));
-
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.projectId = params["project"];
             this.blockId = params["block"];
             this.refresh();
         });
-
-        //TODO: move to component
-        //missing typings for minicolors
-        (<any>$(this.colorSelector.nativeElement)).minicolors({
-            theme: "bootstrap",
-            defaultValue: this.colorSelected,
-            change: (value:string) => {
-                this.colorSelected = value;
-            }
-        });
-
     }
 
     ngOnDestroy():void {
         this.routeParamsSubscription.unsubscribe();
-        //missing typings for minicolors
-        (<any>$(this.colorSelector.nativeElement)).minicolors('destroy');
     }
 
     refresh():void {
         //TODO:
 
-    }
-
-    onIconSelectBlockClick(name:string) {
-        this.iconSelected = name;
-        this.iconSelectOpen = false;
-    }
-
-    onIconSelectClick() {
-        this.iconSelectOpen = !this.iconSelectOpen;
     }
 
     toReadableValue(value:any):string {
@@ -148,22 +102,36 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
     }
 
     onAnalogInputChange(event:Event, connector:Core.Connector):void {
-        connector._inputSetValue(parseFloat((<HTMLInputElement>event.target).value));
+        var f = parseFloat((<HTMLInputElement>event.target).value);
+        connector._inputSetValue(!isNaN(f)?f:0);
     }
 
     onMessageInputSendClick(connector:Core.Connector):void {
         var values:any[] = [];
 
         connector.argTypes.forEach((argType, index)=> {
-            var val = this.messageInputsValueCache[connector.name+index+argType];
-            if (argType == Core.ArgType.ByzanceBool && !val) {
-                val = false;
+            var val = this.messageInputsValueCache[connector.name+argType];
+            if (argType == Core.ArgType.ByzanceBool) {
+                if (!val) {
+                    val = false;
+                } else {
+                    val = !!val;
+                }
+
             }
-            if (argType == Core.ArgType.ByzanceFloat && !val) {
-                val = 0;
+            if (argType == Core.ArgType.ByzanceFloat) {
+                if (!val) {
+                    val = 0;
+                } else {
+                    val = parseFloat(<string>val);
+                }
             }
-            if (argType == Core.ArgType.ByzanceInt && !val) {
-                val = 0;
+            if (argType == Core.ArgType.ByzanceInt) {
+                if (!val) {
+                    val = 0;
+                } else {
+                    val = parseInt(<string>val);
+                }
             }
             if (argType == Core.ArgType.ByzanceString && !val) {
                 val = "";
@@ -216,12 +184,17 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
         }
     }
 
-    onTestClick():void {
+    cleanTestView():void {
         this.blockoView.removeAllBlocksWithoutReadonlyCheck();
         this.jsBlock = null;
         this.testEventLog = [];
         this.testInputConnectors = [];
         this.jsBlockHeight = 0;
+        this.messageInputsValueCache = {};
+    }
+
+    onTestClick():void {
+        this.cleanTestView();
 
         this.validate();
         if (!this.jsError) {
@@ -229,11 +202,11 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
 
             try {
                 var designJson = JSON.stringify({
-                    backgroundColor: this.colorSelected,
-                    displayName: this.iconSelected,
-                    description: this.description
+                    backgroundColor: this.blockForm.controls["color"].value,
+                    displayName: this.blockForm.controls["icon"].value,
+                    description: this.blockForm.controls["description"].value
                 });
-                this.jsBlock = this.blockoView.addJsBlockWithoutReadonlyCheck("", designJson, 10, 10);
+                this.jsBlock = this.blockoView.addJsBlockWithoutReadonlyCheck("", designJson, 20, 10);
             } catch (e) {
             }
 

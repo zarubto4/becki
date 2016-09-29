@@ -124,11 +124,11 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
         return b;
     }
 
-    addJsBlock(jsCode:string, x:number = 0, y:number = 0):BlockoBasicBlocks.JSBlock {
+    addJsBlock(jsCode:string, designJson:string, x:number = 0, y:number = 0):BlockoBasicBlocks.JSBlock {
         if (this.readonly) {
             throw new Error("read only");
         }
-        return this.addJsBlockWithoutReadonlyCheck(jsCode, "{}", x, y);
+        return this.addJsBlockWithoutReadonlyCheck(jsCode, designJson, x, y);
     }
 
     addJsBlockWithoutReadonlyCheck(jsCode:string, designJson:string, x:number = 0, y:number = 0):BlockoBasicBlocks.JSBlock {

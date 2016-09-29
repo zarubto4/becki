@@ -8,7 +8,7 @@
 
 import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
 import {CORE_DIRECTIVES} from "@angular/common";
-import {REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
+import {REACTIVE_FORM_DIRECTIVES, FormGroup, Validators, FormBuilder} from "@angular/forms";
 import {ModalModel} from "../services/ModalService";
 import {Blocks} from "blocko";
 import {AceEditor} from "../components/AceEditor";
@@ -38,7 +38,14 @@ export class ModalsBlockoJsEditorComponent implements OnInit {
 
     jsError:{ name:string, message:string };
 
-    constructor() {
+    blockForm:FormGroup = null;
+
+    constructor(protected formBuilder:FormBuilder) {
+        this.blockForm = this.formBuilder.group({
+            "color": ["", [Validators.required]],
+            "icon": ["", [Validators.required]],
+            "description": [""]
+        });
     }
 
     validate() {
@@ -82,6 +89,10 @@ export class ModalsBlockoJsEditorComponent implements OnInit {
 
     ngOnInit() {
         this.jsCode = this.modalModel.jsBlock.jsCode;
+        var data = JSON.parse(this.modalModel.jsBlock.designJson);
+        this.blockForm.controls["color"].setValue(data["backgroundColor"]);
+        this.blockForm.controls["icon"].setValue(data["displayName"]);
+        this.blockForm.controls["description"].setValue(data["description"]);
     }
 
     newJsCode(code:string) {
@@ -91,6 +102,12 @@ export class ModalsBlockoJsEditorComponent implements OnInit {
     onSubmitClick():void {
         this.validate();
         if (!this.jsError) {
+            var designJson = JSON.stringify({
+                backgroundColor: this.blockForm.controls["color"].value,
+                displayName: this.blockForm.controls["icon"].value,
+                description: this.blockForm.controls["description"].value
+            });
+            this.modalModel.jsBlock.setDesignJson(designJson);
             this.modalModel.jsBlock.setJsCode(this.jsCode);
             if (this.modalModel.jsBlock.controller) this.modalModel.jsBlock.controller._emitDataChanged();
             this.modalClose.emit(true);
