@@ -5,12 +5,11 @@
 import {Component, Injector, OnInit} from '@angular/core';
 import {LayoutMain} from "../layouts/main";
 import {BaseMainComponent} from "./BaseMainComponent";
-import {BeckiBackend} from "../backend/BeckiBackend";
 import {
-    IApplicableProduct, ITariff, IGoPayUrl, IProduct, IIndividualsTariff,
-    IAdditionalPackage
+    IApplicableProduct, IIndividualsTariff,
+    IAdditionalPackage, IProject
 } from "../backend/TyrionAPI";
-import {FlashMessageSuccess, FlashMessageWarning, FlashMessageError} from "../services/FlashMessagesService";
+import {FlashMessageError} from "../services/FlashMessagesService";
 
 @Component({
     selector: "view-dashboard",
@@ -25,6 +24,8 @@ export class DashboardComponent extends BaseMainComponent implements OnInit {
 
     packageForRegistration:IAdditionalPackage[];
 
+    projects:IProject[];
+
     noProducts = true;
 
     constructor(injector: Injector) {
@@ -36,6 +37,10 @@ export class DashboardComponent extends BaseMainComponent implements OnInit {
     }
 
     refresh():void{
+        this.backendService.getAllProjects()
+            .then(projects => this.projects = projects)
+            .catch(reason => this.addFlashMessage(new FlashMessageError("Projects cannot be loaded.", reason)));
+
         this.backendService.getAllTarifsUserApplicables().then(products => {
             this.products = products;
         });
