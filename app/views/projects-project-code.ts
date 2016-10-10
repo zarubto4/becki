@@ -99,7 +99,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         var model = new ModalsCodePropertiesModel(this.typeOfBoards);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backendService.createCProgram(this.id, {program_name: model.name, program_description: model.description, type_of_board_id: model.deviceType})
+                this.backendService.createCProgram({project_id: this.id, program_name: model.name, program_description: model.description, type_of_board_id: model.deviceType})
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The code ${model.name} has been added to project.`));
                         this.refresh();
@@ -118,7 +118,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         var model = new ModalsCodePropertiesModel(this.typeOfBoards, code.program_name, code.program_description, code.type_of_board_id, true, code.program_name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backendService.editCProgram(code.id, {program_name: model.name, program_description: model.description, type_of_board_id: model.deviceType})
+                this.backendService.editCProgram(code.id, {project_id: this.id, program_name: model.name, program_description: model.description, type_of_board_id: model.deviceType})
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The code has been updated."));
                         this.refresh();
