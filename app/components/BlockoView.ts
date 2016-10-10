@@ -28,6 +28,9 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
     readonly:boolean = false;
 
     @Input()
+    simpleMode:boolean = false;
+
+    @Input()
     spy:string;
 
     protected blockoController:BlockoCore.Controller;
@@ -46,6 +49,8 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
             this.modalService.showModal(new ModalsBlockoJsEditorModel(block));
         });
 
+        this.blockoRenderer.canConfigInReadonly = true;
+
         this.blockoController = new BlockoCore.Controller();
         this.blockoController.rendererFactory = this.blockoRenderer;
         this.blockoController.registerDataChangedCallback(() => {
@@ -59,8 +64,16 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
     ngOnChanges(changes:SimpleChanges):void {
 
         let readonly = changes["readonly"];
-        if (readonly && !readonly.isFirstChange()) {
-            throw new Error("The readability cannot be changed.");
+        if (readonly) {
+            if(!readonly.isFirstChange()) {
+                throw new Error("The readability cannot be changed.");
+            }
+            this.blockoRenderer.readonly = readonly.currentValue;
+        }
+
+        let simpleMode = changes["simpleMode"];
+        if (simpleMode) {
+            this.blockoRenderer.simpleMode = simpleMode.currentValue;
         }
         //TODO:
         /*let spy = changes["spy"];
@@ -75,9 +88,9 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
     }
 
     ngAfterViewInit():void {
-        if (!this.readonly) {
-            new BlockoBasicBlocks.ExecutionController(this.blockoController);
-        }
+        //if (!this.readonly) {
+        new BlockoBasicBlocks.ExecutionController(this.blockoController);
+        //}
         //TODO:
         /*
         if (this.spy) {
@@ -95,7 +108,7 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
         */
     }
 
-    addStaticBlock(blockName:string, x:number = 0, y:number = 0):void {
+    addStaticBlock(blockName:string, x:number = 0, y:number = 0):BlockoCore.Block {
 
         if (this.readonly) {
             throw new Error("read only");
@@ -108,32 +121,42 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
         b.x = Math.round(x/10)*10; //TODO: move this to blocko
         b.y = Math.round(y/10)*10;
         this.blockoController.addBlock(b);
+        return b;
     }
 
-    addJsBlock(jsCode:string, x:number = 0, y:number = 0):void {
-
+    addJsBlock(jsCode:string, designJson:string, x:number = 0, y:number = 0):BlockoBasicBlocks.JSBlock {
         if (this.readonly) {
             throw new Error("read only");
         }
+        return this.addJsBlockWithoutReadonlyCheck(jsCode, designJson, x, y);
+    }
 
-        var b = new BlockoBasicBlocks.JSBlock(this.blockoController.getFreeBlockId(), jsCode);
+    addJsBlockWithoutReadonlyCheck(jsCode:string, designJson:string, x:number = 0, y:number = 0):BlockoBasicBlocks.JSBlock {
+        var b = new BlockoBasicBlocks.JSBlock(this.blockoController.getFreeBlockId(), jsCode, designJson);
         b.x = Math.round(x/10)*10; //TODO: move this to blocko
         b.y = Math.round(y/10)*10;
         this.blockoController.addBlock(b);
+        return b;
     }
 
 
-    addBlock(cls:BlockoCore.BlockClass):void {
+    addBlock(cls:BlockoCore.BlockClass):BlockoCore.Block {
         if (this.readonly) {
             throw new Error("read only");
         }
-        this.blockoController.addBlock(new cls(this.blockoController.getFreeBlockId()));
+        var b = new cls(this.blockoController.getFreeBlockId());
+        this.blockoController.addBlock(b);
+        return b;
     }
 
     removeAllBlocks():void {
         if (this.readonly) {
             throw new Error("read only");
         }
+        this.removeAllBlocksWithoutReadonlyCheck();
+    }
+
+    removeAllBlocksWithoutReadonlyCheck():void {
         this.blockoController.removeAllBlocks();
     }
 

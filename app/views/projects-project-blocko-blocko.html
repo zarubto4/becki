@@ -98,6 +98,11 @@
                 </div>
 
                 <div>
+                    <label class="mt-checkbox mt-checkbox-outline" style="margin-top: 6px; margin-bottom: 6px;">
+                        <input type="checkbox" [(ngModel)]="advancedMode"> Advanced mode
+                        <span></span>
+                    </label>
+
                     <div class="pull-right">
                         <button type="button" class="btn default red" (click)="onClearClick()">
                             <i class="fa fa-trash-o"></i> Clear program
@@ -107,7 +112,7 @@
                 </div>
 
                 <div style="margin: 10px 0;">
-                    <blocko-view></blocko-view>
+                    <blocko-view [simpleMode]="!advancedMode"></blocko-view>
                 </div>
 
                 <div>

@@ -40,6 +40,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     project:IProject = null;
     blockoProgram:IBProgram = null;
 
+    advancedMode:boolean = false;
+
     // blocko blocks:
 
     blockGroups:ITypeOfBlock[] = null;
@@ -137,12 +139,14 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             blocko_blocks: [
                 {
                     name: "All in one example",
-                    blockoJsCode: "block.displayName = \"Ain1\";\nblock.backgroundColor = \"#32C5D2\";\n\nblock.addDigitalInput(\"din1\", \"Digital input 1\");\nblock.addAnalogInput(\"anIn\", \"Analog input\");\nblock.addMessageInput(\"msgInTest\", \"Test message\", [ByzanceBool, ByzanceInt, ByzanceFloat, ByzanceString]);\n\nblock.addMessageOutput(\"msgOut\", \"Message output\", [ByzanceString]);\nblock.addAnalogOutput(\"aout\", \"Analog output\");\nblock.addDigitalOutput(\"digitalOut\", \"Digital output\");\n\nblock.addConfigProperty(ConfigPropertyType.Float, \"confOffset\", \"Analog offset\", 12.3);\n\nblock.configChanged = function () { // when config changed\n    block.aout(block.anIn() + block.confOffset());  \n}\n\nblock.init = function () { // when init\n    block.aout(block.anIn() + block.confOffset());  \n}\n\nblock.onAnIn = function (val) { // when change value of anIn analog input\n    block.aout(val + block.confOffset());  \n};\n\nblock.onMsgInTest = function (msg) { // when new message on msgInTest message input\n    block.msgOut(\"Test: \"+msg[3]);  \n};\n\nblock.inputsChanged = function () { // when change any analog or digital input\n	block.digitalOut(block.din1());\n};",
+                    blockoDesignJson: "{\"displayName\":\"fa-font\",\"backgroundColor\":\"#32C5D2\",\"description\":\"All in one\"}",
+                    blockoJsCode: "block.addDigitalInput(\"din1\", \"Digital input 1\");\nblock.addAnalogInput(\"anIn\", \"Analog input\");\nblock.addMessageInput(\"msgInTest\", \"Test message\", [ByzanceBool, ByzanceInt, ByzanceFloat, ByzanceString]);\n\nblock.addMessageOutput(\"msgOut\", \"Message output\", [ByzanceString]);\nblock.addAnalogOutput(\"aout\", \"Analog output\");\nblock.addDigitalOutput(\"digitalOut\", \"Digital output\");\n\nblock.addConfigProperty(ConfigPropertyType.Float, \"confOffset\", \"Analog offset\", 12.3);\n\nblock.configChanged = function () { // when config changed\n    block.aout(block.anIn() + block.confOffset());  \n}\n\nblock.init = function () { // when init\n    block.aout(block.anIn() + block.confOffset());  \n}\n\nblock.onAnIn = function (val) { // when change value of anIn analog input\n    block.aout(val + block.confOffset());  \n};\n\nblock.onMsgInTest = function (msg) { // when new message on msgInTest message input\n    block.msgOut(\"Test: \"+msg[3]);  \n};\n\nblock.inputsChanged = function () { // when change any analog or digital input\n	block.digitalOut(block.din1());\n};",
                     backgroundColor: "#32C5D2"
                 },
                 {
                     name: "Analog to digital example",
-                    blockoJsCode: "block.displayName = \"A2D\";\nblock.backgroundColor = \"#1BA39C\";\n\nblock.addAnalogInput(\"ain\", \"Analog input\");\nblock.addDigitalOutput(\"dout\", \"Digital output\");\n\nblock.addConfigProperty(ConfigPropertyType.Float, \"confMin\", \"Min\", 5, {range:true, min:0, max: 100});\nblock.addConfigProperty(ConfigPropertyType.Float, \"confMax\", \"Max\", 25, {range:true, min:0, max: 100});\n\n// when config changed, init or inputs changed\nblock.configChanged = block.init = block.inputsChanged = function () { \n    block.dout( block.confMin() <= block.ain() && block.ain() <= block.confMax() );  \n}",
+                    blockoDesignJson: "{\"displayName\":\"fa-line-chart\",\"backgroundColor\":\"#1BA39C\",\"description\":\"Analog to digital\"}",
+                    blockoJsCode: "block.addAnalogInput(\"ain\", \"Analog input\");\nblock.addDigitalOutput(\"dout\", \"Digital output\");\n\nblock.addConfigProperty(ConfigPropertyType.Float, \"confMin\", \"Min\", 5, {range:true, min:0, max: 100});\nblock.addConfigProperty(ConfigPropertyType.Float, \"confMax\", \"Max\", 25, {range:true, min:0, max: 100});\n\n// when config changed, init or inputs changed\nblock.configChanged = block.init = block.inputsChanged = function () { \n    block.dout( block.confMin() <= block.ain() && block.ain() <= block.confMax() );  \n}",
                     backgroundColor: "#1BA39C"
                 }
             ]
@@ -187,7 +191,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
                 if (this.blocksCache[wantedVersionName]) {
 
-                    this.blockoView.addJsBlock(this.blocksCache[wantedVersionName].logic_json, x, y);
+                    this.blockoView.addJsBlock(this.blocksCache[wantedVersionName].logic_json, this.blocksCache[wantedVersionName].design_json, x, y);
 
                 } else {
 
@@ -195,7 +199,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     this.backendService.getBlockoBlockVersion(wantedVersion.id)
                         .then((bbv) => {
                             this.blocksCache[wantedVersionName] = bbv;
-                            this.blockoView.addJsBlock(this.blocksCache[wantedVersionName].logic_json, x, y);
+                            this.blockoView.addJsBlock(this.blocksCache[wantedVersionName].logic_json, this.blocksCache[wantedVersionName].design_json, x, y);
                         })
                         .catch(reason => {
                             this.addFlashMessage(new FlashMessageError(`The blocko block version cannot be loaded.`, reason));
@@ -210,7 +214,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
             } else if (params.data && params.data.blockoJsCode) {
 
-                this.blockoView.addJsBlock(params.data.blockoJsCode, x, y);
+                this.blockoView.addJsBlock(params.data.blockoJsCode, params.data.blockoDesignJson, x, y);
 
             } else {
                 this.addFlashMessage(new FlashMessageError(`The blocko block cannot be added.`));

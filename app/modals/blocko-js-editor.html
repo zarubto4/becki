@@ -5,7 +5,16 @@
     </div>
     <div class="modal-body">
 
-        <ace-editor [code]="jsCode" (codeChange)="newJsCode($event)" mode="ace/mode/javascript"></ace-editor>
+        <becki-form-color-picker label="Block color" [control]="blockForm.controls.color" [waitForTouch]="false"></becki-form-color-picker>
+
+        <becki-form-fa-icon-select label="Block icon" [control]="blockForm.controls.icon" [waitForTouch]="false"></becki-form-fa-icon-select>
+
+        <becki-form-input label="Block description" [control]="blockForm.controls.description" [waitForTouch]="false"></becki-form-input>
+
+        <div class="form-group">
+            <label>Block code</label>
+            <ace-editor [code]="jsCode" (codeChange)="newJsCode($event)" mode="ace/mode/javascript"></ace-editor>
+        </div>
 
         <div *ngIf="jsError" class="mt-element-ribbon bg-grey-steel">
             <div class="ribbon ribbon-shadow ribbon-color-danger">{{jsError.name}}</div>

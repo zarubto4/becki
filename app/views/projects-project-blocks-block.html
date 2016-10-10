@@ -1,0 +1,230 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-settings font-blue"></i>
+                        <span class="caption-subject font-blue sbold uppercase">Block <strong>TODO</strong></span>
+                    </div>
+                    <div class="actions">
+                    </div>
+                </div>
+                <div>
+                    Name: <strong>{{block?block.program_name:""}}</strong><br>
+                    Description: <strong>{{block?block.program_description:""}}</strong>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="portlet light bordered padding-20">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-note font-blue"></i>
+                        <span class="caption-subject font-blue sbold uppercase">Code</span>
+                    </div>
+                    <div *ngIf="selectedProgramVersion" class="caption pull-right">
+                        <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="true" class="changes"></span> {{selectedProgramVersion.version_object.version_name}}</span>
+                    </div>
+                </div>
+
+                <becki-form-color-picker label="Block color" [control]="blockForm.controls.color" [waitForTouch]="false"></becki-form-color-picker>
+
+                <becki-form-fa-icon-select label="Block icon" [control]="blockForm.controls.icon" [waitForTouch]="false"></becki-form-fa-icon-select>
+
+                <becki-form-input label="Block description" [control]="blockForm.controls.description" [waitForTouch]="false"></becki-form-input>
+
+                <div class="form-group">
+                    <label>Block code</label>
+                    <ace-editor [(code)]="blockCode" mode="ace/mode/javascript" ></ace-editor>
+                </div>
+
+                <div *ngIf="jsError" class="mt-element-ribbon bg-grey-steel">
+                    <div class="ribbon ribbon-shadow ribbon-color-danger">{{jsError.name}}</div>
+                    <p class="ribbon-content" [innerHTML]="jsError.message"></p>
+                </div>
+
+                <div>
+                    <div class="pull-right">
+                        <button type="button" class="btn default yellow-gold" (click)="onTestClick()" >
+                            <i class="fa fa-play"></i> Test
+                        </button>
+                        <button type="button" class="btn default green-haze" (click)="onSaveClick()">
+                            <i class="fa fa-floppy-o"></i> Save
+                        </button>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="portlet light bordered padding-20">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-note font-blue"></i>
+                        <span class="caption-subject font-blue sbold uppercase">Test</span>
+                    </div>
+
+                    <h3 *ngIf="!jsBlock" class="pull-right" style="margin: 0; margin-right: 95px;">For test press button here <i class="fa fa-chevron-up"></i></h3>
+
+                </div>
+                <div class="portlet-content">
+                    <div *ngIf="jsBlock" class="col-md-4" style="display: inline-block; width: calc(50% - 61px)">
+
+                        <h4 class="text-center">Inputs simulator</h4>
+
+                        <div class="block-tester no-select">
+
+                            <div *ngFor="let connector of testInputConnectors; let iCon = index" class="row bg-color" [class.odd]="iCon%2">
+
+
+
+                                <template [ngIf]="connector.type == connectorTypes.DigitalInput">
+                                    <div class="col-md-4 bg-din bold" [class.odd]="iCon%2">{{connector.name}}</div>
+                                    <div class="col-md-8">
+                                        <div class="block-tester-message-input-label"><strong>Value</strong>:</div>
+                                        <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="connector.value" [class.fa-toggle-off]="!connector.value" (click)="onDigitalInputClick(connector)"></i>
+                                    </div>
+                                </template>
+
+                                <template [ngIf]="connector.type == connectorTypes.AnalogInput">
+                                    <div class="col-md-4 bg-ain bold" [class.odd]="iCon%2">{{connector.name}}</div>
+                                    <div class="col-md-8">
+                                        <div class="block-tester-message-input-label"><strong>Value</strong>:</div>
+                                        <input type="number" class="form-control" step="0.1" [value]="connector.value" (input)="onAnalogInputChange($event, connector)">
+                                    </div>
+                                </template>
+
+                                <template [ngIf]="connector.type == connectorTypes.MessageInput">
+                                    <div class="col-md-4 bg-min bold" [class.odd]="iCon%2">{{connector.name}}</div>
+                                    <div *ngFor="let argType of connector.argTypes; let index = index">
+
+                                        <div *ngIf="index" class="col-md-4"></div>
+
+                                        <template [ngIf]="argType == argTypes.ByzanceBool">
+                                            <div class="col-md-8">
+                                                <div class="block-tester-message-input-label">Bool <strong>Arg #{{index}}</strong>:</div>
+                                                <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="messageInputsValueCache[connector.name+argType]" [class.fa-toggle-off]="!messageInputsValueCache[connector.name+argType]" (click)="messageInputsValueCache[connector.name+argType] = !messageInputsValueCache[connector.name+argType]"></i>
+                                            </div>
+                                        </template>
+                                        <template [ngIf]="argType == argTypes.ByzanceFloat">
+                                            <div class="col-md-8">
+                                                <div class="block-tester-message-input-label">Float <strong>Arg #{{index}}</strong>:</div>
+                                                <input type="number" class="form-control" step="0.1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                            </div>
+                                        </template>
+                                        <template [ngIf]="argType == argTypes.ByzanceInt">
+                                            <div class="col-md-8">
+                                                <div class="block-tester-message-input-label">Int <strong>Arg #{{index}}</strong>:</div>
+                                                <input type="number" class="form-control" step="1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                            </div>
+                                        </template>
+                                        <template [ngIf]="argType == argTypes.ByzanceString">
+                                            <div class="col-md-8">
+                                                <div class="block-tester-message-input-label">String <strong>Arg #{{index}}</strong>:</div>
+                                                <input type="text" class="form-control" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                            </div>
+                                        </template>
+
+                                    </div>
+
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-8">
+                                        <button class="btn btn-sm default green block-tester-message-input-btn" type="button" (click)="onMessageInputSendClick(connector)">
+                                            <i class="fa fa-paper-plane"></i> Send
+                                        </button>
+                                    </div>
+
+                                </template>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4" style="display: inline-block; width: 121px;" [style.height]="(jsBlockHeight)+'px'">
+                        <h4 *ngIf="jsBlock" class="text-center">Block</h4>
+                        <blocko-view readonly="true" class="blocko-overflow-visible blocko-no-borders-and-bg"></blocko-view>
+                    </div>
+                    <div *ngIf="jsBlock" class="col-md-4" style="display: inline-block; width: calc(50% - 61px)">
+
+                        <h4 class="text-center">Outputs log</h4>
+
+                        <div class="row">
+                            <table class="table table-fixed table-hover table-light block-log-table-header">
+                                <thead>
+                                    <tr class="uppercase">
+                                        <th class="block-log-timestamp"> Time </th>
+                                        <th class="block-log-name"> Output </th>
+                                        <th class="block-log-value"> Value </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="row block-log-table-wrapper">
+
+                            <table class="table table-fixed table-hover table-light">
+                                <tbody>
+                                    <tr *ngFor="let log of testEventLog;">
+                                        <td class="block-log-timestamp">
+                                            {{log.timestamp}}
+                                        </td>
+                                        <td class="block-log-name"> <strong>{{log.connector.name}}</strong> </td>
+                                        <td class="block-log-value" [innerHTML]="log.readableValue"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-list font-blue"></i>
+                        <span class="caption-subject font-blue sbold uppercase">Saved versions</span>
+                    </div>
+                    <div class="actions">
+                    </div>
+                </div>
+                <div *ngIf="codeProgramVersions">
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                        <tr>
+                            <th> Name</th>
+                            <th> Description</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let version of codeProgramVersions">
+                            <td [class.bold]="selectedProgramVersion == version">
+                                <a (click)="onProgramVersionClick(version)">
+                                    {{version.version_object.version_name}}
+                                </a>
+                            </td>
+                            <td>
+                                {{version.version_object.version_description}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</layout-main>

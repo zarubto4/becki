@@ -69,10 +69,12 @@ export class ModalsBlockoConfigPropertiesComponent implements OnInit {
         this.configProperties.forEach((configProperty) => {
 
             if (configProperty.type == Core.ConfigPropertyType.Integer) {
-                configProperty.value = parseInt(this.formModel[configProperty.name], 10);
+                var num = parseInt(this.formModel[configProperty.name], 10);
+                configProperty.value = isNaN(num)?0:num;
             }
             if (configProperty.type == Core.ConfigPropertyType.Float) {
-                configProperty.value = parseFloat(this.formModel[configProperty.name]);
+                var num = parseFloat(this.formModel[configProperty.name]);
+                configProperty.value = isNaN(num)?0:num;
             }
             if (configProperty.type == Core.ConfigPropertyType.String) {
                 configProperty.value = this.formModel[configProperty.name];
