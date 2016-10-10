@@ -34,6 +34,9 @@
             <template [ngSwitchCase]="'ModalsBlockoAddHardwareModel'">
                 <modals-blocko-add-hardware [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-blocko-add-hardware>
             </template>
+            <template [ngSwitchCase]="'ModalsGridConfigPropertiesModel'">
+                <modals-grid-config-properties [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-grid-config-properties>
+            </template>
         </div>
     </div>
 </div>
