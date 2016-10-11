@@ -585,7 +585,7 @@ span.changes {
     left: 50%;
     position: absolute;
     color: white;
-    cursor: hand;
+    cursor: hand !important;
     transform: translateX(-50%) translateY(-50%);
 }
 
