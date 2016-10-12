@@ -37,9 +37,11 @@ export class ProfileComponent extends BaseMainComponent implements OnInit{
         });
 
         this.infoForm = this.formBuilder.group({
-            "firstName": ["", [Validators.required, Validators.minLength(8)]],
-            "lastName": ["", [Validators.required, Validators.minLength(8)]],
+            "fullName": ["", [Validators.required, Validators.minLength(8)]],
+            "nickName": ["", [Validators.required, Validators.minLength(8)]],
             "interests": ["", [Validators.required, Validators.minLength(8)]],
+            "state": ["", [Validators.required, Validators.minLength(4)]],
+
             //a tak dále, je třeba se domluvit co dál se zaznamená
         });
 
@@ -73,30 +75,15 @@ export class ProfileComponent extends BaseMainComponent implements OnInit{
         this.fullName=personObject.full_name;
 
         this.email=personObject.mail;
-/*
-            (<FormControl>(this.emailForm.controls["currentEmail"])).setValue("a");
-            (<FormControl>(this.emailForm.controls["newEmail"])).setValue("a");
-            (<FormControl>(this.emailForm.controls["newEmailConfirm"])).setValue("a");
 
-
-            (<FormControl>(this.passwordForm.controls["currentPassword"])).setValue("a");
-            (<FormControl>(this.passwordForm.controls["newPassword"])).setValue("a");
-            (<FormControl>(this.passwordForm.controls["newEmailPassword"])).setValue("a");
-
-
-            (<FormControl>(this.infoForm.controls["firstName"])).setValue("a");
-            (<FormControl>(this.infoForm.controls["lastName"])).setValue("a");
-            (<FormControl>(this.infoForm.controls["interests"])).setValue("a");
-
-*/
     }
 
-    changePassword():void{
+    changePassword():void{ //TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-387
         this.backEndService.createPersonChangeProperty({property: "password",password:"new"/*toto získat z panelu na obrazovce*/})
             .then(ok => this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("Email with instructions was sent")))
             .catch(error => this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot change password",error)))
     }
-    changeEmail():void{
+    changeEmail():void{ //TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-387
         this.backEndService.createPersonChangeProperty({property: "email",email:"new"/*toto získat z panelu na obrazovce*/})
             .then(ok => this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("Email with instructions was sent")))
             .catch(error => this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot change email",error)))
@@ -104,7 +91,8 @@ export class ProfileComponent extends BaseMainComponent implements OnInit{
     }
 
     uploadProfilePicture():void{
-        this.backEndService.uploadpro
+        //API requires 'multipart/form-data' Content-Type, name of the property is 'file'.
+        this.backEndService.putPersonUploadPicture()
     }
 }
 
