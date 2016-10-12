@@ -47,10 +47,14 @@ export class CreateUserComponent implements OnInit{
     }
 
     sendCreateUser():void {
-        this.backendService.createPerson({  mail:this.CreateUserForm.controls["email"].value,nick_name:this.CreateUserForm.controls["nick_name"].value,password:this.CreateUserForm.controls["password"].value})
+        this.backendService.createPerson({ //TODO toto vyhazuje case do erroru, i když je success, zeptat se proč
+            nick_name: this.CreateUserForm.controls["nick_name"].value,
+            mail: this.CreateUserForm.controls["email"].value,
+            password:this.CreateUserForm.controls["password"].value
+        })
             .then(() => {
                 this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("email with instructions was sent"));
-                //this.router.navigate(["/"]);
+                this.router.navigate(["/"]);
 
             })
             .catch(reason => {
@@ -60,7 +64,7 @@ export class CreateUserComponent implements OnInit{
     }
 
     clickButtonBack():void{
-        //this.router.navigate(["/"]);
+        this.router.navigate(["/"]);
     }
 
 }

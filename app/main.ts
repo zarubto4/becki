@@ -45,15 +45,17 @@ import {ForgotPasswordComponent} from "./views/forgot-password";
 import {PasswordRestartComponent} from "./views/password-restart";
 import {ProjectsProjectBlocksComponent} from "./views/projects-project-blocks";
 import {CreateUserComponent} from "./views/create-user";
+import {RedirectOkComponent} from "./views/redirectOk";
 
 // DON'T USE children IN ROUTER YET!!!
 var routes:Routes = [
     {path: "login", component: LoginComponent, canActivate:[NonAuthGuard]},
     {path: "logout", component: LogoutComponent},
-    {path: "forgotPassword", component: ForgotPasswordComponent, canActivate:[NonAuthGuard]},
-    {path: "passwordRestart/:token", component: PasswordRestartComponent, canActivate:[NonAuthGuard]},
     {path: "createUser", component: CreateUserComponent, canActivate:[NonAuthGuard]},
 
+    {path: "forgotPassword", component: ForgotPasswordComponent, canActivate:[NonAuthGuard]},
+    {path: "passwordRestart/:token", component: PasswordRestartComponent, canActivate:[NonAuthGuard]},
+    {path: "redicectOk", component: RedirectOkComponent, canActivate:[NonAuthGuard]},
 
     {path: "", redirectTo: "/dashboard", pathMatch: "full"},
 
@@ -217,7 +219,7 @@ var tabMenus = {
         PasswordRestartComponent,
         ProjectsProjectBlocksComponent,
         CreateUserComponent,
-
+        RedirectOkComponent,
     ],
     exports: [ AppComponent ],
     bootstrap: [ AppComponent ]
