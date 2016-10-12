@@ -850,7 +850,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
         this.step = 1;
 
-        this.form = this.formBuilder.group({ //TODO vybrat z tohodle to, co není povinný a co je provinný pro company a podle toho se zařídít
+        this.form = this.formBuilder.group({
             "city": ["", [Validators.required, Validators.minLength(5)]],
 
             "company_authorized_email": ["", [BeckiValidators.condition(()=>this.isCompany, Validators.required), BeckiValidators.condition(()=>this.isCompany, Validators.minLength(4))]], //company only
@@ -900,12 +900,14 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
     ngOnInit(): void {
 
+        if(this.activatedRoute.params.subscribe.length>0){
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             if (params) { //TODO vymyslet tudle podmínku aby fungovala
                 this.form.controls["tariff_type"].setValue(params["tariff"]);
                 this.step = 2;
             }
         })
+        }
 
 
         this.backendService.getAllTarifsForRegistrations()
@@ -920,9 +922,8 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
     chooseTariff(tariff: IIndividualsTariff): void {
         this.form.controls["tariff_type"].setValue(tariff.identificator);
-        this.tariffForRegistration.filter(pay => {
+        this.tariffForRegistration.filter(pay => {  //TODO, není to zbytečně složitý kus kódu?
             if (pay.identificator == this.form.controls["tariff_type"].value) {
-                console.log("ssedi:" + pay.identificator + "A" + this.form.controls["tariff_type"].value); //TODO není to zbytečě složitý kus kódu?
                 this.paymentNeed = pay.required_payment_mode;
                 this.isCompany = pay.company_details_required;
             }
