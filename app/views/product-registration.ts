@@ -5,7 +5,7 @@
 import {Component, Injector, OnInit} from '@angular/core';
 import {LayoutMain} from "../layouts/main";
 import {BaseMainComponent} from "./BaseMainComponent";
-import {IIndividualsTariff, IAdditionalPackage} from "../backend/TyrionAPI";
+import {IGeneralTariff, IAdditionalPackage} from "../backend/TyrionAPI";
 import {FlashMessageSuccess, FlashMessageWarning, FlashMessageError} from "../services/FlashMessagesService";
 import {FormGroup, Validators, REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
 import {BeckiValidators} from "../helpers/BeckiValidators";
@@ -23,7 +23,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
     routeParamsSubscription: Subscription;
 
-    tariffForRegistration: IIndividualsTariff[];
+    tariffForRegistration: IGeneralTariff[];
 
     packageForRegistration: IAdditionalPackage[];
 
@@ -900,34 +900,40 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
     ngOnInit(): void {
 
-        if(this.activatedRoute.params.subscribe.length>0){
-        this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
-            if (params) { //TODO vymyslet tudle podmínku aby fungovala
-                this.form.controls["tariff_type"].setValue(params["tariff"]);
-                this.step = 2;
-            }
-        })
-        }
-
 
         this.backendService.getAllTarifsForRegistrations()
             .then(products => {
                 this.tariffForRegistration = products.tariffs;
                 this.packageForRegistration = products.packages;
-            })
+            }).then(()=>{
+            this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+                if (params.hasOwnProperty("tariff") && this.tariffForRegistration.find(tariff =>{if(tariff.identificator==params["tariff"]){return true;}})){
+                    this.checkPaymentMode(params["tariff"]);
+                    this.step = 2;
+                }else{
+                    this.step=1;
+                }})
+
+        })
             .catch(error => console.log(error))
 
-        console.log("tariff type: " + this.form.controls["tariff_type"].value);
+
+
     }
 
-    chooseTariff(tariff: IIndividualsTariff): void {
-        this.form.controls["tariff_type"].setValue(tariff.identificator);
-        this.tariffForRegistration.filter(pay => {  //TODO, není to zbytečně složitý kus kódu?
+    checkPaymentMode(tarifIdentificator:String):void{
+        this.form.controls["tariff_type"].setValue(tarifIdentificator);
+        console.log("yay "+ this.form.controls["tariff_type"].value)
+        this.tariffForRegistration.find(pay => {
             if (pay.identificator == this.form.controls["tariff_type"].value) {
                 this.paymentNeed = pay.required_payment_mode;
                 this.isCompany = pay.company_details_required;
             }
-        });
+        })
+    }
+
+    chooseTariff(tariff: IGeneralTariff): void {
+        this.checkPaymentMode(tariff.identificator);
         this.step = 2;
     }
 
