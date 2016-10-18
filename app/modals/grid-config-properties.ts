@@ -7,11 +7,11 @@
  * directory of this distribution.
  */
 
-import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
+import {Input, Output, EventEmitter, Component, OnInit, ViewChild} from "@angular/core";
 import {CORE_DIRECTIVES} from "@angular/common";
 import {
     REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, Validators, FormControl,
-    FORM_DIRECTIVES
+    FORM_DIRECTIVES, NgModel
 } from "@angular/forms";
 import {BeckiFormInput} from "../components/BeckiFormInput";
 import {ModalModel} from "../services/ModalService";
@@ -52,6 +52,7 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
         "String": Core.ConfigPropertyType.String,
         "Color": Core.ConfigPropertyType.Color,
         "FAIcon": Core.ConfigPropertyType.FAIcon,
+        "IOName": Core.ConfigPropertyType.IOName,
     };
 
     constructor() {

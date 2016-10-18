@@ -665,6 +665,7 @@ span.changes {
 
 .the-grid__screens__screen-profile {
     position: relative;
+    text-align: center;
 }
 
 .the-grid__screens__screen-profile__name {
