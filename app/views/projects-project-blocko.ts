@@ -85,7 +85,7 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
         var model = new ModalsBlockoPropertiesModel(this.id);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backendService.createBProgram(this.id, {name: model.name, program_description:model.description})
+                this.backendService.createBProgram(this.id, {name: model.name, description:model.description})
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The blocko ${model.name} has been added to project.`));
                         this.refresh();
@@ -99,10 +99,10 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
     }
 
     onEditClick(blocko:IBProgram):void {
-        var model = new ModalsBlockoPropertiesModel(this.id, blocko.name, blocko.program_description, true, blocko.name);
+        var model = new ModalsBlockoPropertiesModel(this.id, blocko.name, blocko.description, true, blocko.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backendService.editBProgram(blocko.id, {name: model.name, program_description:model.description})
+                this.backendService.editBProgram(blocko.id, {name: model.name, description:model.description})
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The blocko has been updated."));
                         this.refresh();

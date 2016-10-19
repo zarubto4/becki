@@ -47,7 +47,7 @@ export class BeckiAsyncValidators {
             return new Promise<any>((resolve, reject) => {
                 backEnd.getAllProjects()
                     .then((projects) => {
-                        if (projects.find(project => project.project_name == control.value)) {
+                        if (projects.find(project => project.name == control.value)) {
                             resolve({"projectNameTaken": true}); // invalid
                         } else {
                             resolve(null); // valid

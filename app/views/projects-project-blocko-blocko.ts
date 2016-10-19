@@ -11,7 +11,7 @@ import {Subscription} from "rxjs/Rx";
 import {
     IProject, IBProgram, ITypeOfBlock, IBlockoBlock, IBlockoBlockShortVersion,
     IBlockoBlockVersion, IBoardsForBlocko, IHardwareGroup, IBoard, ICProgramVersion, ICProgram,
-    IBProgramVersion, IBPair
+    IBProgramVersion, IBPair, IMProject
 } from "../backend/TyrionAPI";
 import {BlockoView} from "../components/BlockoView";
 import {Draggable, DraggableEventParams} from "../components/Draggable";
@@ -24,6 +24,7 @@ import {ModalsVersionDialogModel} from "../modals/version-dialog";
 
 declare var $:JQueryStatic;
 import moment = require("moment/moment");
+import {ModalsBlockoAddGridModel} from "../modals/blocko-add-grid";
 
 @Component({
     selector: "view-projects-project-blocko-blocko",
@@ -59,6 +60,12 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     boardById:{ [id:string]:IBoard } = {};
 
     selectedHardware:IHardwareGroup[] = [];
+
+    // grid:
+
+    allGridProjects:IMProject[] = null;
+
+    selectedGridProjects:IMProject[] = [];
 
     // versions:
 
@@ -327,6 +334,31 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         return out;
     }
 
+    gridAdd() {
+        if (!this.allGridProjects) return;
+
+        var projects = this.allGridProjects.filter((gp) => this.selectedGridProjects.indexOf(gp) == -1);
+
+        if (!projects.length) return; //TODO: inform or disable button
+
+        var m = new ModalsBlockoAddGridModel(projects);
+        this.modalService.showModal(m)
+            .then((success) => {
+                if (success && m.selectedGridProject) {
+                    this.selectedGridProjects.push(m.selectedGridProject);
+                    this.updateBlockoInterfaces();
+                }
+            });
+    }
+
+    gridRemove(gridProject:IMProject) {
+        var i = this.selectedGridProjects.indexOf(gridProject);
+        if (i > -1) {
+            this.selectedGridProjects.splice(i, 1);
+            this.updateBlockoInterfaces();
+        }
+    }
+
     hwAdd(parentHwId:string = null) {
 
         if (!parentHwId) {
@@ -460,11 +492,90 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 }
             });
 
-            console.log(JSON.stringify(outInterface));
-
-            this.blockoView.setInterfaces(outInterface);
 
         }
+
+        if (this.selectedGridProjects) {
+
+            this.selectedGridProjects.forEach((gp) => {
+
+                var out = {
+                    analogInputs: {},
+                    digitalInputs: {},
+                    messageInputs: {},
+                    analogOutputs: {},
+                    digitalOutputs: {},
+                    messageOutputs: {},
+                };
+
+                if (gp.m_programs) {
+                    gp.m_programs.forEach((p) => {
+
+                        if (p.program_versions && p.program_versions.length) {
+                            var iface = JSON.parse(p.program_versions[0].virtual_input_output);
+
+                            if (iface.analogInputs) {
+                                for (var k in iface.analogInputs) {
+                                    if (!iface.analogInputs.hasOwnProperty(k)) continue;
+                                    if (!out.analogInputs[k]) out.analogInputs[k] = iface.analogInputs[k];
+                                }
+                            }
+
+                            if (iface.digitalInputs) {
+                                for (var k in iface.digitalInputs) {
+                                    if (!iface.digitalInputs.hasOwnProperty(k)) continue;
+                                    if (!out.digitalInputs[k]) out.digitalInputs[k] = iface.digitalInputs[k];
+                                }
+                            }
+
+                            if (iface.messageInputs) {
+                                for (var k in iface.messageInputs) {
+                                    if (!iface.messageInputs.hasOwnProperty(k)) continue;
+                                    if (!out.messageInputs[k]) out.messageInputs[k] = iface.messageInputs[k];
+                                }
+                            }
+
+                            if (iface.analogOutputs) {
+                                for (var k in iface.analogOutputs) {
+                                    if (!iface.analogOutputs.hasOwnProperty(k)) continue;
+                                    if (!out.analogOutputs[k]) out.analogOutputs[k] = iface.analogOutputs[k];
+                                }
+                            }
+
+                            if (iface.digitalOutputs) {
+                                for (var k in iface.digitalOutputs) {
+                                    if (!iface.digitalOutputs.hasOwnProperty(k)) continue;
+                                    if (!out.digitalOutputs[k]) out.digitalOutputs[k] = iface.digitalOutputs[k];
+                                }
+                            }
+
+                            if (iface.messageOutputs) {
+                                for (var k in iface.messageOutputs) {
+                                    if (!iface.messageOutputs.hasOwnProperty(k)) continue;
+                                    if (!out.messageOutputs[k]) out.messageOutputs[k] = iface.messageOutputs[k];
+                                }
+                            }
+
+                        }
+
+                    });
+                }
+
+                outInterface.push({
+                    "targetType": "grid_project",
+                    "targetId": gp.id,
+                    "displayName": gp.name,
+                    "interface": out
+                });
+
+            });
+
+        }
+
+        console.log(JSON.stringify(outInterface));
+
+        this.blockoView.setInterfaces(outInterface);
+
 
     }
 
@@ -614,6 +725,12 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             })
             .catch(reason => {
                 this.addFlashMessage(new FlashMessageError(`List of blocks cannot be loaded.`, reason));
+            });
+
+        this.backendService.getAllMProjectPersons()
+            .then((projects) => {
+                console.log(projects);
+                this.allGridProjects = projects;
             });
 
         this.backendService.getAllBoardDetails(this.projectId)

@@ -17,8 +17,8 @@
                     </div>
                 </div>
                 <div>
-                    Name: <strong>{{blockoProgram?blockoProgram.name:""}}</strong><br>
-                    Description: <strong>{{blockoProgram?blockoProgram.program_description:""}}</strong>
+                    Name: <strong>{{gridProgram?gridProgram.name:""}}</strong><br>
+                    Description: <strong>{{gridProgram?gridProgram.description:""}}</strong>
                 </div>
             </div>
         </div>
@@ -39,9 +39,6 @@
 
                 <div>
                     <div class="pull-right">
-                        <button type="button" class="btn default red" (click)="onClearClick()">
-                            <i class="fa fa-trash-o"></i> Clear program
-                        </button>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -92,7 +89,7 @@
                     <div class="actions">
                     </div>
                 </div>
-                <div *ngIf="blockoProgramVersions">
+                <div *ngIf="gridProgramVersions">
                     <table class="table table-condensed table-hover">
                         <thead>
                         <tr>
@@ -102,7 +99,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr *ngFor="let version of blockoProgramVersions">
+                        <tr *ngFor="let version of gridProgramVersions">
                             <td [class.bold]="selectedProgramVersion == version">
                                 <a (click)="onProgramVersionClick(version)">
                                     {{version.version_object.version_name}}
@@ -112,9 +109,7 @@
                                 {{version.version_object.version_description}}
                             </td>
                             <td>
-                                <button type="button" class="btn default green" (click)="onRunProgramVersionClick(version)">
-                                    <i class="fa fa-play"></i> Run
-                                </button>
+
                             </td>
                         </tr>
                         </tbody>

@@ -45,7 +45,8 @@ import {ForgotPasswordComponent} from "./views/forgot-password";
 import {PasswordRestartComponent} from "./views/password-restart";
 import {ProjectsProjectBlocksComponent} from "./views/projects-project-blocks";
 import {ProjectsProjectBlocksBlockComponent} from "./views/projects-project-blocks-block";
-import {ProjectsProjectGridGridComponent} from "./views/projects-project-grid-gird";
+import {ProjectsProjectGridGridComponent} from "./views/projects-project-grid-grid";
+import {ProjectsProjectGridComponent} from "./views/projects-project-grid";
 
 // DON'T USE children IN ROUTER YET!!!
 var routes:Routes = [
@@ -72,6 +73,7 @@ var routes:Routes = [
     {path: "projects/:project/code/:code", data:{breadName: ":code"}, component: ProjectsProjectCodeCodeComponent, canActivate:[AuthGuard]},
     {path: "projects/:project/blocks", data:{breadName: "Blocks"}, component: ProjectsProjectBlocksComponent, canActivate:[AuthGuard]},
     {path: "projects/:project/blocks/:block", data:{breadName: ":block"}, component: ProjectsProjectBlocksBlockComponent, canActivate:[AuthGuard]},
+    {path: "projects/:project/grid", data:{breadName: "Grid"}, component: ProjectsProjectGridComponent, canActivate:[AuthGuard]},
     {path: "projects/:project/grid/:grid", data:{breadName: ":grid"}, component: ProjectsProjectGridGridComponent, canActivate:[AuthGuard]},
 
 
@@ -219,6 +221,7 @@ var tabMenus = {
         PasswordRestartComponent,
         ProjectsProjectBlocksComponent,
         ProjectsProjectBlocksBlockComponent,
+        ProjectsProjectGridComponent,
         ProjectsProjectGridGridComponent,
 
     ],

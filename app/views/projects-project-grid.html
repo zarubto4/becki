@@ -1,0 +1,77 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot">
+
+    <div class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-settings font-blue"></i>
+                <span class="caption-subject font-blue sbold uppercase">Grid</span>
+            </div>
+            <div class="actions">
+                <a class="btn btn-outline btn-circle btn-sm blue" (click)="onProjectAddClick()">
+                    <i class="fa fa-plus"></i> Add project
+                </a>
+            </div>
+        </div>
+
+        <div class="portlet light bg-inverse" *ngFor="let project of gridProjects">
+            <div class="portlet-title">
+                <div class="caption font-purple-plum">
+                    <i class="icon-speech font-purple-plum"></i>
+                    <span class="caption-subject bold">{{project.name}}</span>
+                    <span class="caption-helper">{{project.description}}</span>
+                    <div class="caption-helper">Auto incrementing: <b>{{project.auto_incrementing?"YES":"NO"}}</b></div>
+                </div>
+                <div class="actions">
+                    <a class="btn btn-outline btn-circle btn-sm blue" (click)="onProgramAddClick(project)">
+                        <i class="fa fa-plus"></i> Add program
+                    </a>
+                    <a class="btn btn-outline btn-circle btn-sm green" (click)="onProjectEditClick(project)">
+                        <i class="fa fa-edit"></i> Edit project
+                    </a>
+                    <a class="btn btn-outline btn-circle btn-sm red" (click)="onProjectDeleteClick(project)">
+                        <i class="fa fa-remove"></i> Delete project
+                    </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+
+                <div *ngIf="project.m_programs && project.m_programs.length" class="table-scrollable">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th> Name</th>
+                            <th> Description</th>
+                            <th> Screen type</th>
+                            <th> Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let program of project.m_programs">
+                            <td><a (click)="onProgramClick(program)">{{program.name}}</a></td>
+                            <td>{{program.description}}</td>
+                            <td>{{getScreenTypeName(program.screen_size_type_id)}}</td>
+                            <td>
+                                <a class="btn btn-outline btn-circle btn-sm green" [class.disabled]="!program.edit_permission" (click)="onProgramEditClick(program)">
+                                    <i class="fa fa-edit"></i> Edit program
+                                </a>
+                                <a class="btn btn-outline btn-circle btn-sm red" [class.disabled]="!program.delete_permission" (click)="onProgramDeleteClick(program)">
+                                    <i class="fa fa-remove"></i> Delete program
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h3 *ngIf="!(project.m_programs && project.m_programs.length)" class="text-center">No programs in this project</h3>
+
+            </div>
+        </div>
+
+    </div>
+
+</layout-main>

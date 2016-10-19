@@ -19,6 +19,9 @@ import {ModalsBlockoJsEditorComponent} from "./blocko-js-editor";
 import {ModalsBlockoConfigPropertiesComponent} from "./blocko-config-properties";
 import {ModalsBlockoAddHardwareComponent} from "./blocko-add-hardware";
 import {ModalsGridConfigPropertiesComponent} from "./grid-config-properties";
+import {ModalsGridProjectPropertiesComponent} from "./grid-project-properties";
+import {ModalsGridProgramPropertiesComponent} from "./grid-program-properties";
+import {ModalsBlockoAddGridComponent} from "./blocko-add-grid";
 
 @Component({
     selector: "modal",
@@ -36,6 +39,9 @@ import {ModalsGridConfigPropertiesComponent} from "./grid-config-properties";
         ModalsBlockoConfigPropertiesComponent,
         ModalsBlockoAddHardwareComponent,
         ModalsGridConfigPropertiesComponent,
+        ModalsGridProjectPropertiesComponent,
+        ModalsGridProgramPropertiesComponent,
+        ModalsBlockoAddGridComponent,
     ]
 })
 export class ModalComponent {

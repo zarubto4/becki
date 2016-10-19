@@ -74,7 +74,7 @@ export class CurrentParamsService {
                 this.currentProjectNameSubject.next(this.currentProjectNameSnapshot);
             } else {
                 this.backendService.getProject(params["project"]).then((project:IProject) => {
-                    this.currentProjectNameSnapshot = project.project_name;
+                    this.currentProjectNameSnapshot = project.name;
                     this.currentProjectNameSubject.next(this.currentProjectNameSnapshot);
                 });
             }
@@ -102,7 +102,7 @@ export class CurrentParamsService {
                 this.currentCodeNameSubject.next(this.currentCodeNameSnapshot);
             } else {
                 this.backendService.getCProgram(params["code"]).then((code:ICProgram) => {
-                    this.currentCodeNameSnapshot = code.program_name;
+                    this.currentCodeNameSnapshot = code.name;
                     this.currentCodeNameSubject.next(this.currentCodeNameSnapshot);
                 });
             }

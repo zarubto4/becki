@@ -65,7 +65,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
     onEditClick(project:IProject):void {
         if (!this.products) this.addFlashMessage(new FlashMessageError("Cannot add project now."));
 
-        var model = new ModalsProjectPropertiesModel(this.products,project.project_name, project.project_description, ""+project.product_id, true, project.project_name);
+        var model = new ModalsProjectPropertiesModel(this.products, project.name, project.description, ""+project.product_id, true, project.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.backendService.editProject(project.id, {project_name: model.name, project_description: model.description, product_id: parseInt(model.product)})
@@ -82,7 +82,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
     }
 
     onRemoveClick(project:IProject):void {
-        this.modalService.showModal(new ModalsRemovalModel(project.project_name)).then((success) => {
+        this.modalService.showModal(new ModalsRemovalModel(project.name)).then((success) => {
             if (success) {
                 this.backendService.deleteProject(project.id)
                     .then(() => {

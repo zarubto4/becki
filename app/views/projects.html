@@ -27,8 +27,8 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let project of projects">
-                    <td><a (click)="onProjectClick(project)">{{project.project_name}}</a></td>
-                    <td>{{project.project_description}}</td>
+                    <td><a (click)="onProjectClick(project)">{{project.name}}</a></td>
+                    <td>{{project.description}}</td>
                     <td>
                         <a class="btn btn-outline btn-circle btn-sm green" [class.disabled]="!project.edit_permission" (click)="onEditClick(project)">
                             <i class="fa fa-edit"></i> Edit
