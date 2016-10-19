@@ -18,7 +18,7 @@
                 </div>
                 <div>
                     Name: <strong>{{blockoProgram?blockoProgram.name:""}}</strong><br>
-                    Description: <strong>{{blockoProgram?blockoProgram.program_description:""}}</strong>
+                    Description: <strong>{{blockoProgram?blockoProgram.description:""}}</strong>
                 </div>
             </div>
         </div>
@@ -83,6 +83,53 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-settings font-blue"></i>
+                        <span class="caption-subject font-blue sbold uppercase">Grid</span>
+                    </div>
+                    <div class="actions">
+                    </div>
+                </div>
+                <div>
+
+                    <template ngIf="selectedGrids && selectedGrids.length">
+                        <div *ngFor="let gridProject of selectedGridProjects;">
+                            <div class="mt-element-ribbon bg-grey-steel">
+                                <div class="ribbon ribbon-shadow bg-blue font-white no-padding-left-right"><span class="ribbon-padding">{{gridProject.name}}</span></div>
+                                <button type="button" class="btn default red pull-right" (click)="gridRemove(gridProject)">
+                                    <i class="fa fa-remove"></i> Remove grid project
+                                </button>
+                                <div class="ribbon-content no-padding-left-right">
+
+                                    <h4 class="col-md-12">Programs:</h4>
+                                    <div class="col-md-12" *ngFor="let program of gridProject.m_programs">
+                                        <b>{{program.name}}</b><span *ngIf="program.description"> - {{program.description}}</span>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <h3 *ngIf="!(selectedGridProjects && selectedGridProjects.length)" style="margin: 20px 0;">
+                        <i class="fa fa-chevron-down"></i>
+                        No grid projects added in this Blocko program
+                    </h3>
+
+                    <button type="button" class="btn default green" (click)="gridAdd()">
+                        <i class="fa fa-plus"></i> Add grid project
+                    </button>
+
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div class="row">
         <div class="col-md-9">

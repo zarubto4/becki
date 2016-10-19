@@ -16,7 +16,7 @@ import {ICProgram} from "../backend/TyrionAPI";
         <label>Program</label>
         <select class="form-control" [ngModel]="selectedProgramId" (ngModelChange)="onSelectedProgramIdChange($event)">
             <option [value]="null" disabled>Select program</option>
-            <option *ngFor="let cProgram of cPrograms" [value]="cProgram.id">{{cProgram.program_name}}</option>
+            <option *ngFor="let cProgram of cPrograms" [value]="cProgram.id">{{cProgram.name}}</option>
         </select>
     </div>
     <div class="form-group col-md-6" [class.has-error]="selectedProgramId && !selectedProgramVersionId">

@@ -29,7 +29,7 @@
     "roboto-fontface": "^0.4.5",
     "rxjs": "5.0.0-beta.6",
     "systemjs": "0.19.27",
-    "the-grid": "git+ssh://git@git.byzance.cz:js-components/the-grid.git#v0.1.1",
+    "the-grid": "git+ssh://git@git.byzance.cz:js-components/the-grid.git#HEAD",
     "underscore": "^1.8.0",
     "weathericons": "^2.0.8",
     "zone.js": "^0.6.12"

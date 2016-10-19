@@ -29,7 +29,7 @@
                 <tbody>
                 <tr *ngFor="let blocko of blockoPrograms">
                     <td><a (click)="onBlockoClick(blocko)">{{blocko.name}}</a></td>
-                    <td> {{blocko.program_description}}</td>
+                    <td> {{blocko.description}}</td>
                     <td>
                         <a class="btn btn-outline btn-circle btn-sm green" [class.disabled]="!blocko.edit_permission" (click)="onEditClick(blocko)">
                             <i class="fa fa-edit"></i> Edit

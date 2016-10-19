@@ -29,8 +29,8 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let code of codePrograms">
-                    <td><a (click)="onCodeClick(code)">{{code.program_name}}</a></td>
-                    <td> {{code.program_description}}</td>
+                    <td><a (click)="onCodeClick(code)">{{code.name}}</a></td>
+                    <td> {{code.description}}</td>
                     <td> {{getBoardType(code.type_of_board_id)}}</td>
                     <td>
                         <a class="btn btn-outline btn-circle btn-sm green" [class.disabled]="!code.edit_permission" (click)="onEditClick(code)">

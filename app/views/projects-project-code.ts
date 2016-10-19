@@ -79,7 +79,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
     }
 
     onRemoveClick(code:ICProgram):void {
-        this.modalService.showModal(new ModalsRemovalModel(code.program_name)).then((success) => {
+        this.modalService.showModal(new ModalsRemovalModel(code.name)).then((success) => {
             if (success) {
                 this.backendService.deleteCProgram(code.id)
                     .then(() => {
@@ -99,7 +99,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         var model = new ModalsCodePropertiesModel(this.typeOfBoards);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backendService.createCProgram({project_id: this.id, program_name: model.name, program_description: model.description, type_of_board_id: model.deviceType})
+                this.backendService.createCProgram({project_id: this.id, name: model.name, description: model.description, type_of_board_id: model.deviceType})
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The code ${model.name} has been added to project.`));
                         this.refresh();
@@ -115,10 +115,10 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
     onEditClick(code:ICProgram):void {
         if (!this.typeOfBoards) new FlashMessageError(`The code cannot be added to project.`);
 
-        var model = new ModalsCodePropertiesModel(this.typeOfBoards, code.program_name, code.program_description, code.type_of_board_id, true, code.program_name);
+        var model = new ModalsCodePropertiesModel(this.typeOfBoards, code.name, code.description, code.type_of_board_id, true, code.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backendService.editCProgram(code.id, {project_id: this.id, program_name: model.name, program_description: model.description, type_of_board_id: model.deviceType})
+                this.backendService.editCProgram(code.id, {project_id: this.id, name: model.name, description: model.description, type_of_board_id: model.deviceType})
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The code has been updated."));
                         this.refresh();

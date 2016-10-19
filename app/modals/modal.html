@@ -34,6 +34,18 @@
             <template [ngSwitchCase]="'ModalsBlockoAddHardwareModel'">
                 <modals-blocko-add-hardware [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-blocko-add-hardware>
             </template>
+            <template [ngSwitchCase]="'ModalsGridConfigPropertiesModel'">
+                <modals-grid-config-properties [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-grid-config-properties>
+            </template>
+            <template [ngSwitchCase]="'ModalsGridProjectPropertiesModel'">
+                <modals-grid-project-properties [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-grid-project-properties>
+            </template>
+            <template [ngSwitchCase]="'ModalsGridProgramPropertiesModel'">
+                <modals-grid-program-properties [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-grid-program-properties>
+            </template>
+            <template [ngSwitchCase]="'ModalsBlockoAddGridModel'">
+                <modals-blocko-add-grid [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-blocko-add-grid>
+            </template>
         </div>
     </div>
 </div>

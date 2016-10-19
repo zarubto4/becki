@@ -2,7 +2,7 @@
  * Created by davidhradek on 29.09.16.
  */
 
-import {Component, Input} from "@angular/core";
+import {Component, Input, EventEmitter, Output} from "@angular/core";
 import {AbstractControl, REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
 import {ValidatorErrorsService} from "../services/ValidatorErrorsService";
 import {Subscription} from "rxjs";
@@ -11,7 +11,7 @@ import {Subscription} from "rxjs";
     selector: "becki-form-fa-icon-select",
     directives: [REACTIVE_FORM_DIRECTIVES],
     template: `
-<div class="form-group icon-select-group" [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)" [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
+<div class="form-group icon-select-group" [class.has-success]="control && (!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid))" [class.has-error]="control && (!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid))" [class.has-warning]="control && (!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending))">
     <label>{{label}}</label>
     <div class="form-control cursor-hand" (click)="onIconSelectClick()">
         <span *ngIf="value" class="fa icon-select-icon {{value}}"></span>
@@ -23,7 +23,7 @@ import {Subscription} from "rxjs";
         <div *ngFor="let icon of iconSelectOptions;" class="fa icon-select-block" [class.selected]="icon.name == value" (click)="onIconSelectBlockClick(icon.name)">{{icon.icon}}</div>
         <div class="clearfix"></div>
     </div>
-    <span class="help-block" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)">{{validatorErrorsService.getMessageForErrors(control.errors)}}</span>
+    <span class="help-block" *ngIf="control && (!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid))">{{validatorErrorsService.getMessageForErrors(control.errors)}}</span>
 </div>
 `
 })
@@ -31,6 +31,12 @@ export class BeckiFormFAIconSelect {
 
     @Input()
     control:AbstractControl = null;
+
+    @Input()
+    value:string = "";
+
+    @Output()
+    valueChange:EventEmitter<string> = new EventEmitter<string>();
 
     @Input()
     label:string = "Unknown label";
@@ -47,7 +53,6 @@ export class BeckiFormFAIconSelect {
     iconSelectOptions:{name:string,icon:string}[] = [];
     iconSelectOpen:boolean = false;
 
-    value:string = "";
     valueSubscription:Subscription = null;
 
     constructor(protected validatorErrorsService:ValidatorErrorsService) {}
@@ -71,27 +76,36 @@ export class BeckiFormFAIconSelect {
         }
         this.iconSelectOptions.sort((a,b)=>a.name.localeCompare(b.name));
 
-        this.value = this.control.value;
-        this.valueSubscription = this.control.valueChanges.subscribe((value)=> {
-            if (value == this.value) return;
-            this.value = value;
-        });
+        if (this.control) {
+            this.value = this.control.value;
+            this.valueSubscription = this.control.valueChanges.subscribe((value)=> {
+                if (value == this.value) return;
+                this.value = value;
+            });
+        }
 
     }
 
     ngOnDestroy():void {
-        this.valueSubscription.unsubscribe();
+        if (this.valueSubscription) {
+            this.valueSubscription.unsubscribe();
+        }
     }
 
     onIconSelectBlockClick(name:string) {
         this.iconSelectOpen = false;
         this.value = name;
-        this.control.setValue(name);
+        if (this.control) {
+            this.control.setValue(name);
+        }
+        this.valueChange.emit(name);
     }
 
     onIconSelectClick() {
         if (this.iconSelectOpen) {
-            this.control.markAsTouched();
+            if (this.control) {
+                this.control.markAsTouched();
+            }
         }
         this.iconSelectOpen = !this.iconSelectOpen;
     }
