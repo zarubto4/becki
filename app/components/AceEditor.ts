@@ -39,10 +39,10 @@ export class AceEditor implements AfterViewInit, OnChanges, OnDestroy {
     codeChange = new EventEmitter<string>();
 
     ngOnChanges(changes:SimpleChanges):void {
-        let model = changes["model"];
+        let code = changes["code"];
         // TODO: https://github.com/angular/angular/issues/6114
-        if (model && this.editor && model.currentValue != this.editor.getValue()) {
-            this.editor.setValue(model.currentValue, 1);
+        if (code && this.editor && code.currentValue != this.editor.getValue()) {
+            this.editor.setValue(code.currentValue, 1);
         }
         let mode = changes["mode"];
         if (mode && this.editor) {

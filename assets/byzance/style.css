@@ -301,6 +301,20 @@ span.changes {
     background-color: powderblue;
 }
 
+.blocko-block.with-icon {
+    position: relative;
+    padding-left: 42px;
+    min-height: 42px;
+}
+
+.blocko-block i.fa {
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    font-size: 32px;
+    line-height: 32px;
+}
+
 .icon-select-icon {
     width: 1.3em;
     font-size: 1.3em;

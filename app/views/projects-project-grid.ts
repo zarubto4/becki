@@ -158,9 +158,7 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
                 this.backendService.createMProgram(project.id, {
                         name: model.name,
                         description: model.description,
-                        screen_type_id: model.screenTypeId,
-                        height_lock: false,
-                        width_lock: false
+                        screen_type_id: model.screenTypeId
                     })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid program has been added."));
@@ -184,9 +182,7 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
                 this.backendService.editMProgram(program.id, {
                         name: model.name,
                         description: model.description,
-                        screen_type_id: model.screenTypeId,
-                        height_lock: false,
-                        width_lock: false
+                        screen_type_id: model.screenTypeId
                     })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid program has been edited."));

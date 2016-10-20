@@ -49,6 +49,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     blockGroupsOpenToggle:{[id:string]:boolean} = {};
 
     blocksLastVersions:{[id:string]:IBlockoBlockShortVersion} = {};
+    blocksColors:{[id:string]:string} = {};
+    blocksIcons:{[id:string]:string} = {};
 
     blocksCache:{[blockId_versionId:string]:IBlockoBlockVersion} = {};
 
@@ -499,7 +501,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
             this.selectedGridProjects.forEach((gp) => {
 
-                var out = {
+                var out:any = {
                     analogInputs: {},
                     digitalInputs: {},
                     messageInputs: {},
@@ -708,6 +710,9 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
                 // TODO: make this better viz. TYRION-374
                 this.blocksLastVersions = {};
+                this.blocksColors = {};
+                this.blocksIcons = {};
+
                 typeOfBlocks.forEach((tob) => {
                     tob.blocko_blocks.forEach((bb) => {
                         var sortedVersion = bb.versions.sort((a,b)=> {
@@ -715,6 +720,20 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                         });
                         if (sortedVersion.length) {
                             this.blocksLastVersions[bb.id] = sortedVersion[0];
+                            if (this.blocksLastVersions[bb.id]) {
+                                var version = this.blocksLastVersions[bb.id];
+                                try {
+                                    var dj = JSON.parse(version.design_json);
+                                    if (dj["backgroundColor"]) {
+                                        this.blocksColors[bb.id] = dj["backgroundColor"];
+                                    }
+                                    if (dj["displayName"] && dj["displayName"].indexOf("fa-") == 0) {
+                                        this.blocksIcons[bb.id] = dj["displayName"];
+                                    }
+                                } catch (e) {
+                                    console.log("DesignJson parse error:"+e);
+                                }
+                            }
                         }
                     });
                 });

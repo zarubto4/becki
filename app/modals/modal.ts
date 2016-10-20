@@ -22,6 +22,8 @@ import {ModalsGridConfigPropertiesComponent} from "./grid-config-properties";
 import {ModalsGridProjectPropertiesComponent} from "./grid-project-properties";
 import {ModalsGridProgramPropertiesComponent} from "./grid-program-properties";
 import {ModalsBlockoAddGridComponent} from "./blocko-add-grid";
+import {ModalsBlocksTypePropertiesComponent} from "./blocks-type-properties";
+import {ModalsBlocksBlockPropertiesComponent} from "./blocks-block-properties";
 
 @Component({
     selector: "modal",
@@ -42,6 +44,8 @@ import {ModalsBlockoAddGridComponent} from "./blocko-add-grid";
         ModalsGridProjectPropertiesComponent,
         ModalsGridProgramPropertiesComponent,
         ModalsBlockoAddGridComponent,
+        ModalsBlocksTypePropertiesComponent,
+        ModalsBlocksBlockPropertiesComponent,
     ]
 })
 export class ModalComponent {

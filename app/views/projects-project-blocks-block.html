@@ -11,14 +11,14 @@
                 <div class="portlet-title">
                     <div class="caption">
                         <i class="icon-settings font-blue"></i>
-                        <span class="caption-subject font-blue sbold uppercase">Block <strong>TODO</strong></span>
+                        <span class="caption-subject font-blue sbold uppercase">Block <strong>{{blockoBlock?blockoBlock.name:""}}</strong></span>
                     </div>
                     <div class="actions">
                     </div>
                 </div>
                 <div>
-                    Name: <strong>{{block?block.program_name:""}}</strong><br>
-                    Description: <strong>{{block?block.program_description:""}}</strong>
+                    Name: <strong>{{blockoBlock?blockoBlock.name:""}}</strong><br>
+                    Description: <strong>{{blockoBlock?blockoBlock.general_description:""}}</strong>
                 </div>
             </div>
         </div>
@@ -42,7 +42,7 @@
 
                 <div class="form-group">
                     <label>Block code</label>
-                    <ace-editor [(code)]="blockCode" mode="ace/mode/javascript" ></ace-editor>
+                    <ace-editor [code]="blockCode" (codeChange)="newBlockCode($event)" mode="ace/mode/javascript" ></ace-editor>
                 </div>
 
                 <div *ngIf="jsError" class="mt-element-ribbon bg-grey-steel">
@@ -51,11 +51,12 @@
                 </div>
 
                 <div>
+                    <div class="font-grey-salt text-right" style="padding-bottom: 5px; transition: opacity 0.5s;" [style.opacity]="successfullyTested?'0':'1'">Block code has been changed, you must test program first than save.</div>
                     <div class="pull-right">
                         <button type="button" class="btn default yellow-gold" (click)="onTestClick()" >
                             <i class="fa fa-play"></i> Test
                         </button>
-                        <button type="button" class="btn default green-haze" (click)="onSaveClick()">
+                        <button type="button" class="btn default green-haze" [disabled]="!successfullyTested" (click)="onSaveClick()">
                             <i class="fa fa-floppy-o"></i> Save
                         </button>
                     </div>
@@ -201,7 +202,7 @@
                     <div class="actions">
                     </div>
                 </div>
-                <div *ngIf="codeProgramVersions">
+                <div *ngIf="blockoBlockVersions && blockoBlockVersions.length">
                     <table class="table table-condensed table-hover">
                         <thead>
                         <tr>
@@ -210,14 +211,14 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr *ngFor="let version of codeProgramVersions">
-                            <td [class.bold]="selectedProgramVersion == version">
-                                <a (click)="onProgramVersionClick(version)">
-                                    {{version.version_object.version_name}}
+                        <tr *ngFor="let version of blockoBlockVersions">
+                            <td [class.bold]="selectedBlockoBlockVersion && (selectedBlockoBlockVersion.id == version.id)">
+                                <a (click)="onBlockoBlockVersionClick(version)">
+                                    {{version.name}}
                                 </a>
                             </td>
                             <td>
-                                {{version.version_object.version_description}}
+                                {{version.description}}
                             </td>
                         </tr>
                         </tbody>

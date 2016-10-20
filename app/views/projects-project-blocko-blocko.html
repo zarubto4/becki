@@ -218,8 +218,10 @@
                             <div class="panel-collapse collapse" [class.in]="blockGroupsOpenToggle[blocksType.id]">
                                 <div class="panel-body">
                                     <div *ngIf="blocksType.blocko_blocks.length == 0" style="color: gray; text-align: center;">No blocks in this group</div>
-                                    <div *ngFor="let block of blocksType.blocko_blocks;" [draggable]="draggableOptions" [draggable-data]="block" (draggable-onStop)="onDragStop($event)" (draggable-onStart)="onDragStart($event)" class="blocko-block">
-                                        {{block.name}} <span style="color:gray;">({{blocksLastVersions[block.id]?blocksLastVersions[block.id].name:"no version"}})</span>
+                                    <div *ngFor="let block of blocksType.blocko_blocks;" [style.background-color]="blocksColors[block.id]" [class.with-icon]="blocksIcons[block.id]" [draggable]="draggableOptions" [draggable-data]="block" (draggable-onStop)="onDragStop($event)" (draggable-onStart)="onDragStart($event)" class="blocko-block">
+                                        <i *ngIf="blocksIcons[block.id]" class="fa {{blocksIcons[block.id]}}"></i>
+                                        <div style="color:black;">{{block.name}}</div>
+                                        <div style="font-size: 0.8em">{{blocksLastVersions[block.id]?blocksLastVersions[block.id].name:"no version"}}</div>
                                     </div>
                                 </div>
                             </div>

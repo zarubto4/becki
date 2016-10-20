@@ -7,7 +7,7 @@ import {LayoutMain} from "../layouts/main";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {ROUTER_DIRECTIVES} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
-import {IProject} from "../backend/TyrionAPI";
+import {IProject, IBlockoBlock, IBlockoBlockVersion, IBlockoBlockShortVersion} from "../backend/TyrionAPI";
 import {AceEditor} from "../components/AceEditor";
 import {BlockoView} from "../components/BlockoView";
 import {Blocks} from "blocko";
@@ -18,6 +18,8 @@ import {Core} from "blocko";
 import {FormGroup, Validators} from "@angular/forms";
 import {BeckiFormColorPicker} from "../components/BeckiFormColorPicker";
 import {BeckiFormFAIconSelect} from "../components/BeckiFormFAIconSelect";
+import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
+import {ModalsVersionDialogModel} from "../modals/version-dialog";
 
 @Component({
     selector: "view-projects-project-blocks-block",
@@ -33,11 +35,17 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
 
     project:IProject = null;
 
+    blockoBlock:IBlockoBlock = null;
+
+    blockoBlockVersions:IBlockoBlockShortVersion[] = [];
+    selectedBlockoBlockVersion:IBlockoBlockVersion = null;
+
+
     connectorTypes = Core.ConnectorType;
     argTypes = Core.ArgType;
 
     blockForm:FormGroup = null;
-    blockCode:string = "block.addDigitalInput(\"din1\", \"Digital input 1\");\nblock.addAnalogInput(\"anIn\", \"Analog input\");\nblock.addMessageInput(\"msgInTest\", \"Test message\", [ByzanceBool, ByzanceInt, ByzanceFloat, ByzanceString]);\n\nblock.addMessageOutput(\"msgOut\", \"Message output\", [ByzanceBool, ByzanceString]);\nblock.addAnalogOutput(\"aout\", \"Analog output\");\nblock.addDigitalOutput(\"digitalOut\", \"Digital output\");\n\nblock.addConfigProperty(ConfigPropertyType.Float, \"confOffset\", \"Analog offset\", 44.6);\n\nblock.init = block.configChanged = function () { // when init and config changed\n    block.aout(block.anIn() + block.confOffset());  \n}\n\nblock.onAnIn = function (val) { // when change value of anIn analog input\n    block.aout(val + block.confOffset());  \n};\n\nblock.onMsgInTest = function (msg) { // when new message on msgInTest message input\n    block.msgOut(msg[0],\"S:\"+msg[3]+\" N:\"+(msg[1]+msg[2]));\n};\n\nblock.inputsChanged = function () { // when change any analog or digital input\n    block.digitalOut(block.din1());\n};";
+    blockCode:string = "";// "block.addDigitalInput(\"din1\", \"Digital input 1\");\nblock.addAnalogInput(\"anIn\", \"Analog input\");\nblock.addMessageInput(\"msgInTest\", \"Test message\", [ByzanceBool, ByzanceInt, ByzanceFloat, ByzanceString]);\n\nblock.addMessageOutput(\"msgOut\", \"Message output\", [ByzanceBool, ByzanceString]);\nblock.addAnalogOutput(\"aout\", \"Analog output\");\nblock.addDigitalOutput(\"digitalOut\", \"Digital output\");\n\nblock.addConfigProperty(ConfigPropertyType.Float, \"confOffset\", \"Analog offset\", 44.6);\n\nblock.init = block.configChanged = function () { // when init and config changed\n    block.aout(block.anIn() + block.confOffset());  \n}\n\nblock.onAnIn = function (val) { // when change value of anIn analog input\n    block.aout(val + block.confOffset());  \n};\n\nblock.onMsgInTest = function (msg) { // when new message on msgInTest message input\n    block.msgOut(msg[0],\"S:\"+msg[3]+\" N:\"+(msg[1]+msg[2]));\n};\n\nblock.inputsChanged = function () { // when change any analog or digital input\n    block.digitalOut(block.din1());\n};";
 
     jsError:{ name:string, message:string };
 
@@ -49,6 +57,7 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
     testInputConnectors:Core.Connector[];
     messageInputsValueCache:{ [key:string]:boolean|number|string } = {};
     testEventLog:{timestamp:string, connector:Core.Connector, eventType:Core.ConnectorEventType, value:(boolean|number|Core.Message), readableValue:string}[] = [];
+    successfullyTested:boolean = false;
 
     constructor(injector:Injector) {
         super(injector);
@@ -56,7 +65,7 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
         this.blockForm = this.formBuilder.group({
             "color": ["#3baedb", [Validators.required]],
             "icon": ["fa-question", [Validators.required]],
-            "description": ["JavaScript block!"]
+            "description": [""]
         });
     };
 
@@ -72,9 +81,66 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
         this.routeParamsSubscription.unsubscribe();
     }
 
+    newBlockCode(code:string) {
+        this.successfullyTested = false;
+        this.blockCode = code;
+    }
+
     refresh():void {
         //TODO:
 
+        this.backendService.getBlockoBlock(this.blockId)
+            .then((blockoBlock) => {
+                console.log(blockoBlock);
+
+                this.blockoBlock = blockoBlock;
+
+                this.blockoBlockVersions = this.blockoBlock.versions || [];
+
+                this.blockoBlockVersions.sort((a, b)=> {
+                    if (a.date_of_create == b.date_of_create) return 0;
+                    if (a.date_of_create > b.date_of_create) return -1;
+                    return 1;
+                });
+
+                if (this.blockoBlockVersions.length) {
+                    this.selectBlockVersion(this.blockoBlockVersions[0]);
+                }
+
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(`The block cannot be loaded.`, reason));
+            });
+
+    }
+
+    onBlockoBlockVersionClick(version:IBlockoBlockShortVersion) {
+        this.selectBlockVersion(version);
+    }
+
+    selectBlockVersion(version:IBlockoBlockShortVersion) {
+        this.backendService.getBlockoBlockVersion(version.id)
+            .then((blockoBlockVersion) => {
+
+                console.log(blockoBlockVersion);
+
+                this.cleanTestView();
+
+                this.selectedBlockoBlockVersion = blockoBlockVersion;
+
+                this.blockCode = this.selectedBlockoBlockVersion.logic_json;
+
+                var designJson = JSON.parse(this.selectedBlockoBlockVersion.design_json);
+
+                if (designJson.backgroundColor) this.blockForm.controls["color"].setValue(designJson.backgroundColor);
+                if (designJson.displayName) this.blockForm.controls["icon"].setValue(designJson.displayName);
+                if (designJson.description) this.blockForm.controls["description"].setValue(designJson.description);
+
+            })
+            .catch(reason => {
+                this.selectedBlockoBlockVersion = null;console.log(this.blockCode);
+                this.addFlashMessage(new FlashMessageError(`The block version cannot be loaded.`, reason));
+            });
     }
 
     toReadableValue(value:any):string {
@@ -187,6 +253,7 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
     cleanTestView():void {
         this.blockoView.removeAllBlocksWithoutReadonlyCheck();
         this.jsBlock = null;
+        this.successfullyTested = false;
         this.testEventLog = [];
         this.testInputConnectors = [];
         this.jsBlockHeight = 0;
@@ -226,7 +293,40 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
 
             this.jsBlockHeight = this.jsBlock.rendererGetBlockSize().height + 20; // for borders
 
+            this.successfullyTested = true;
+
         }
+
+    }
+
+    onSaveClick():void {
+        if (!this.successfullyTested) return;
+
+        var m = new ModalsVersionDialogModel(moment().format("YYYY-MM-DD HH:mm:ss"));
+        this.modalService.showModal(m).then((success) => {
+            if (success) {
+
+                var designJson = JSON.stringify({
+                    backgroundColor: this.blockForm.controls["color"].value,
+                    displayName: this.blockForm.controls["icon"].value,
+                    description: this.blockForm.controls["description"].value
+                });
+
+                this.backendService.createBlockoBlockVersion(this.blockId, {
+                    version_name: m.name,
+                    version_description: m.description,
+                    logic_json: this.blockCode,
+                    design_json: designJson
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess("Version <b>"+m.name+"</b> saved successfully.", null, true));
+                        this.refresh();
+                    })
+                    .catch((err) => {
+                        this.addFlashMessage(new FlashMessageError("Failed saving version <b>"+m.name+"</b>", err, true));
+                    });
+            }
+        });
 
     }
 
