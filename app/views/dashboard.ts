@@ -6,7 +6,7 @@ import {Component, Injector, OnInit} from '@angular/core';
 import {LayoutMain} from "../layouts/main";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {
-    IApplicableProduct, IIndividualsTariff,
+    IApplicableProduct, IGeneralTariff,
     IAdditionalPackage, IProject
 } from "../backend/TyrionAPI";
 import {FlashMessageError} from "../services/FlashMessagesService";
@@ -20,7 +20,7 @@ export class DashboardComponent extends BaseMainComponent implements OnInit {
 
     products: IApplicableProduct[];
 
-    tariffForRegistration:IIndividualsTariff[];
+    tariffForRegistration:IGeneralTariff[];
 
     packageForRegistration:IAdditionalPackage[];
 
@@ -59,7 +59,7 @@ export class DashboardComponent extends BaseMainComponent implements OnInit {
 
 
 
-  registerTariff(tarrif:IIndividualsTariff):void {
+  registerTariff(tarrif:IGeneralTariff):void {
       this.router.navigate(["/productRegistration", tarrif.identificator])
     }
 

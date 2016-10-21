@@ -867,19 +867,14 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
             "vat_number": ["", [BeckiValidators.condition(()=>this.isCompany, Validators.required)]], //Required: only if account is business & from EU!!! CZ28496639 The VAT_number must have at least 4 characters
 
-
             "currency_type": ["", [Validators.required]],
 
-//??
-
             "payment_method": ["", [Validators.required]], // * @description Required: only in if required_payment_mode is truevalues =>[bank, credit_card]
-//??
 
             "payment_mode": ["", [Validators.required]], //only if is requred payment is true
 
             "product_individual_name": ["", [Validators.required, Validators.minLength(5)]],
 
-//??
             "registration_no": ["", [BeckiValidators.condition(()=>this.isCompany, Validators.required)]], //Required: only if account is businessThe company_registration_no must have at least
 
             "street": ["", [Validators.required, Validators.minLength(5)]],
@@ -888,7 +883,6 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
             "tariff_type": [""], //??
 
-//??
             "zip_code": ["", [Validators.required, Validators.minLength(5)]],
 
         })
@@ -928,6 +922,8 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             if (pay.identificator == this.form.controls["tariff_type"].value) {
                 this.paymentNeed = pay.required_payment_mode;
                 this.isCompany = pay.company_details_required;
+            }else{
+                return false;
             }
         })
     }
