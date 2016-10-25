@@ -11,7 +11,7 @@ import {Subscription} from "rxjs/Rx";
 import {
     IProject, IBProgram, ITypeOfBlock, IBlockoBlock, IBlockoBlockShortVersion,
     IBlockoBlockVersion, IBoardsForBlocko, IHardwareGroup, IBoard, ICProgramVersion, ICProgram,
-    IBProgramVersion, IBPair, IMProject, IMProjectProgramSnapShot, IMProgramSnapShot
+    IBProgramVersion, IBPair, IMProject, IMProgramSnapShot, IMProjectSnapShot
 } from "../backend/TyrionAPI";
 import {BlockoView} from "../components/BlockoView";
 import {Draggable, DraggableEventParams} from "../components/Draggable";
@@ -697,7 +697,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         this.modalService.showModal(m).then((success) => {
             if (success) {
 
-                var mProjectSnapshots:IMProjectProgramSnapShot[] = [];
+                var mProjectSnapshots:IMProjectSnapShot[] = [];
 
                 for (var projectId in this.selectedGridProgramVersions) {
                     if (!this.selectedGridProgramVersions.hasOwnProperty(projectId)) continue;
