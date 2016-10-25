@@ -93,8 +93,7 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
             if (success) {
                 this.backendService.createMProject(this.id, {
                         name: model.name,
-                        description: model.description,
-                        auto_incrementing: model.autoIncrementing
+                        description: model.description
                     })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid project has been added."));
@@ -109,14 +108,13 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
     }
 
     onProjectEditClick(project:IMProject):void {
-        var model = new ModalsGridProjectPropertiesModel(project.name, project.description, project.auto_incrementing, true, project.name);
+        var model = new ModalsGridProjectPropertiesModel(project.name, project.description, true, project.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 console.log(model);
                 this.backendService.editMProject(project.id, {
                         name: model.name,
-                        description: model.description,
-                        auto_incrementing: model.autoIncrementing
+                        description: model.description
                     })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid project has been edited."));
@@ -158,7 +156,7 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
                 this.backendService.createMProgram(project.id, {
                         name: model.name,
                         description: model.description,
-                        screen_type_id: model.screenTypeId
+                        screen_size_type_id: model.screenTypeId
                     })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid program has been added."));
@@ -182,7 +180,7 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
                 this.backendService.editMProgram(program.id, {
                         name: model.name,
                         description: model.description,
-                        screen_type_id: model.screenTypeId
+                        screen_size_type_id: model.screenTypeId
                     })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid program has been edited."));

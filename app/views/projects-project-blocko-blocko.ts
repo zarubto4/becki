@@ -11,7 +11,7 @@ import {Subscription} from "rxjs/Rx";
 import {
     IProject, IBProgram, ITypeOfBlock, IBlockoBlock, IBlockoBlockShortVersion,
     IBlockoBlockVersion, IBoardsForBlocko, IHardwareGroup, IBoard, ICProgramVersion, ICProgram,
-    IBProgramVersion, IBPair, IMProject
+    IBProgramVersion, IBPair, IMProject, IMProjectProgramSnapShot, IMProgramSnapShot
 } from "../backend/TyrionAPI";
 import {BlockoView} from "../components/BlockoView";
 import {Draggable, DraggableEventParams} from "../components/Draggable";
@@ -25,6 +25,7 @@ import {ModalsVersionDialogModel} from "../modals/version-dialog";
 declare var $:JQueryStatic;
 import moment = require("moment/moment");
 import {ModalsBlockoAddGridModel} from "../modals/blocko-add-grid";
+import {BeckiFormSelectOption, beckiFormSelectOptionsMaker} from "../components/BeckiFormSelect";
 
 @Component({
     selector: "view-projects-project-blocko-blocko",
@@ -67,7 +68,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     allGridProjects:IMProject[] = null;
 
-    selectedGridProjects:IMProject[] = [];
+    selectedGridProgramVersions:{ [projectId:string]:{ [programId:string]:string }} = {};
 
     // versions:
 
@@ -81,7 +82,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         helper: "clone",
         containment: "document",
         cursor: "move",
-        cursorAt: {left:-5, top: -5}
+        cursorAt: {left:-5, top:-5}
     };
 
     staticBlocks = [
@@ -254,6 +255,10 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     }
 
+    isEmptyObject(obj:any):boolean {
+        return (Object.keys(obj).length === 0);
+    }
+
     getCProgramsForBoardType(boardTypeId:string):ICProgram[] {
         if (!this.allBoardsDetails || !this.allBoardsDetails.c_programs) return [];
         return this.allBoardsDetails.c_programs.filter((cp) => (cp.type_of_board_id == boardTypeId));
@@ -339,7 +344,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     gridAdd() {
         if (!this.allGridProjects) return;
 
-        var projects = this.allGridProjects.filter((gp) => this.selectedGridProjects.indexOf(gp) == -1);
+        var projects = this.allGridProjects.filter((gp) => !this.selectedGridProgramVersions[gp.id]);
 
         if (!projects.length) return; //TODO: inform or disable button
 
@@ -347,18 +352,25 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         this.modalService.showModal(m)
             .then((success) => {
                 if (success && m.selectedGridProject) {
-                    this.selectedGridProjects.push(m.selectedGridProject);
+                    this.selectedGridProgramVersions[m.selectedGridProject.id] = {};
+                    /*if (m.selectedGridProject.m_programs) {
+                        m.selectedGridProject.m_programs.forEach((mp)=>{
+                            this.selectedGridProgramVersions[m.selectedGridProject.id][mp.id] = null;
+                        });
+                    }*/
                     this.updateBlockoInterfaces();
                 }
             });
     }
 
     gridRemove(gridProject:IMProject) {
-        var i = this.selectedGridProjects.indexOf(gridProject);
-        if (i > -1) {
-            this.selectedGridProjects.splice(i, 1);
-            this.updateBlockoInterfaces();
-        }
+        delete this.selectedGridProgramVersions[gridProject.id];
+        this.updateBlockoInterfaces();
+    }
+
+    gridSelectedProgramVersionIdChange(projectId:string, programId:string, programVersionId:string) {
+        this.selectedGridProgramVersions[projectId][programId] = programVersionId;
+        this.updateBlockoInterfaces();
     }
 
     hwAdd(parentHwId:string = null) {
@@ -451,10 +463,11 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     updateBlockoInterfaces():void {
 
+        console.log(this.selectedGridProgramVersions);
+
         var outInterface:BlockoTargetInterface[] = [];
 
         var addInterface = (hwId:string, cProgramVersionId:string) => {
-            console.log("hwId"+hwId+" cProgramVersionId"+cProgramVersionId);
             if (hwId && cProgramVersionId) {
                 var board = this.boardById[hwId];
                 var targetName:string = null;
@@ -462,10 +475,6 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     targetName = this.getTargetNameByBoardTypeId(board.type_of_board_id);
                 }
                 var cpv = this.getCProgramVersionById(cProgramVersionId);
-
-                console.log("board"+board);
-                console.log("targetName"+targetName);
-                console.log("cpv"+cpv);
 
                 if (board && targetName && cpv && cpv.virtual_input_output) {
                     var interfaceData = JSON.parse(cpv.virtual_input_output);
@@ -497,9 +506,11 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
         }
 
-        if (this.selectedGridProjects) {
+        if (this.allGridProjects) {
 
-            this.selectedGridProjects.forEach((gp) => {
+            this.allGridProjects.forEach((gp) => {
+
+                if (!this.selectedGridProgramVersions[gp.id]) return;
 
                 var out:any = {
                     analogInputs: {},
@@ -513,62 +524,83 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 if (gp.m_programs) {
                     gp.m_programs.forEach((p) => {
 
-                        if (p.program_versions && p.program_versions.length) {
-                            var iface = JSON.parse(p.program_versions[0].virtual_input_output);
+                        if (p.program_versions && this.selectedGridProgramVersions[gp.id] && (this.selectedGridProgramVersions[gp.id][p.id])) {
 
-                            if (iface.analogInputs) {
-                                for (var k in iface.analogInputs) {
-                                    if (!iface.analogInputs.hasOwnProperty(k)) continue;
-                                    if (!out.analogInputs[k]) out.analogInputs[k] = iface.analogInputs[k];
-                                }
-                            }
+                            var programVersion = p.program_versions.find((pv)=> (pv.version_object.id == this.selectedGridProgramVersions[gp.id][p.id]));
 
-                            if (iface.digitalInputs) {
-                                for (var k in iface.digitalInputs) {
-                                    if (!iface.digitalInputs.hasOwnProperty(k)) continue;
-                                    if (!out.digitalInputs[k]) out.digitalInputs[k] = iface.digitalInputs[k];
-                                }
-                            }
+                            if (programVersion) {
 
-                            if (iface.messageInputs) {
-                                for (var k in iface.messageInputs) {
-                                    if (!iface.messageInputs.hasOwnProperty(k)) continue;
-                                    if (!out.messageInputs[k]) out.messageInputs[k] = iface.messageInputs[k];
+                                var iface:any = {};
+                                try {
+                                    iface = JSON.parse(programVersion.virtual_input_output);
+                                } catch (e) {
+                                    console.log(e);
                                 }
-                            }
 
-                            if (iface.analogOutputs) {
-                                for (var k in iface.analogOutputs) {
-                                    if (!iface.analogOutputs.hasOwnProperty(k)) continue;
-                                    if (!out.analogOutputs[k]) out.analogOutputs[k] = iface.analogOutputs[k];
+                                if (iface.analogInputs) {
+                                    for (var k in iface.analogInputs) {
+                                        if (!iface.analogInputs.hasOwnProperty(k)) continue;
+                                        if (!out.analogInputs[k]) out.analogInputs[k] = iface.analogInputs[k];
+                                    }
                                 }
-                            }
 
-                            if (iface.digitalOutputs) {
-                                for (var k in iface.digitalOutputs) {
-                                    if (!iface.digitalOutputs.hasOwnProperty(k)) continue;
-                                    if (!out.digitalOutputs[k]) out.digitalOutputs[k] = iface.digitalOutputs[k];
+                                if (iface.digitalInputs) {
+                                    for (var k in iface.digitalInputs) {
+                                        if (!iface.digitalInputs.hasOwnProperty(k)) continue;
+                                        if (!out.digitalInputs[k]) out.digitalInputs[k] = iface.digitalInputs[k];
+                                    }
                                 }
-                            }
 
-                            if (iface.messageOutputs) {
-                                for (var k in iface.messageOutputs) {
-                                    if (!iface.messageOutputs.hasOwnProperty(k)) continue;
-                                    if (!out.messageOutputs[k]) out.messageOutputs[k] = iface.messageOutputs[k];
+                                if (iface.messageInputs) {
+                                    for (var k in iface.messageInputs) {
+                                        if (!iface.messageInputs.hasOwnProperty(k)) continue;
+                                        if (!out.messageInputs[k]) out.messageInputs[k] = iface.messageInputs[k];
+                                    }
                                 }
+
+                                if (iface.analogOutputs) {
+                                    for (var k in iface.analogOutputs) {
+                                        if (!iface.analogOutputs.hasOwnProperty(k)) continue;
+                                        if (!out.analogOutputs[k]) out.analogOutputs[k] = iface.analogOutputs[k];
+                                    }
+                                }
+
+                                if (iface.digitalOutputs) {
+                                    for (var k in iface.digitalOutputs) {
+                                        if (!iface.digitalOutputs.hasOwnProperty(k)) continue;
+                                        if (!out.digitalOutputs[k]) out.digitalOutputs[k] = iface.digitalOutputs[k];
+                                    }
+                                }
+
+                                if (iface.messageOutputs) {
+                                    for (var k in iface.messageOutputs) {
+                                        if (!iface.messageOutputs.hasOwnProperty(k)) continue;
+                                        if (!out.messageOutputs[k]) out.messageOutputs[k] = iface.messageOutputs[k];
+                                    }
+                                }
+
                             }
 
                         }
 
                     });
                 }
-
-                outInterface.push({
-                    "targetType": "grid_project",
-                    "targetId": gp.id,
-                    "displayName": gp.name,
-                    "interface": out
-                });
+                
+                if (
+                    Object.keys(out.analogInputs).length ||
+                    Object.keys(out.digitalInputs).length ||
+                    Object.keys(out.messageInputs).length ||
+                    Object.keys(out.analogOutputs).length ||
+                    Object.keys(out.digitalOutputs).length ||
+                    Object.keys(out.messageOutputs).length
+                ) {
+                    outInterface.push({
+                        "targetType": "grid_project",
+                        "targetId": gp.id,
+                        "displayName": gp.name,
+                        "interface": out
+                    });
+                }
 
             });
 
@@ -591,7 +623,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         this.modalService.showModal(m)
             .then((success) => {
                 if (success) {
-                    this.backendService.uploadBProgramToCloud(programVersion.version_object.id)
+                    this.backendService.uploadBProgramToCloud(programVersion.version_object.id, {}) //TODO: timestamp
                         .then((ok)=> {
                             this.addFlashMessage(new FlashMessageSuccess("Run Blocko version <b>"+programVersion.version_object.version_name+"</b> successfully.", null, true));
                         })
@@ -608,20 +640,90 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             .then((success) => {
                 if (success) {
                     this.blockoView.removeAllBlocks();
+                    this.updateBlockoInterfaces();
                 }
             });
     }
 
     onSaveClick():void {
 
+        // HW validation:
+        var validHw = true;
+
+        this.selectedHardware.forEach((sh) => {
+
+            if (!sh.main_board_pair || !sh.main_board_pair.c_program_version_id) {
+                validHw = false;
+            }
+            if (sh.device_board_pairs) {
+                sh.device_board_pairs.forEach((dbp) => {
+                    if (!dbp.c_program_version_id) {
+                        validHw = false;
+                    }
+                });
+            }
+        });
+
+        if (!validHw) {
+            this.modalService.showModal(new ModalsConfirmModel("Error", "Cannot save blocko now, you have <b>hardware devices</b>, without program <b>version selected</b>.", true, "OK", null));
+            return;
+        }
+
+        // Grid validation
+
+        var validGrid = true;
+        this.allGridProjects.forEach((gp) => {
+            if (this.selectedGridProgramVersions[gp.id]) {
+                if (gp.m_programs) {
+                    gp.m_programs.forEach((mp) => {
+                        if (mp.program_versions && mp.program_versions.length) {
+                            if (!this.selectedGridProgramVersions[gp.id][mp.id]) {
+                                validGrid = false;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+
+        if (!validGrid) {
+            this.modalService.showModal(new ModalsConfirmModel("Error", "Cannot save blocko now, you have <b>grid programs</b>, without program <b>version selected</b>.", true, "OK", null));
+            return;
+        }
+
+
+        // save dialog
         var m = new ModalsVersionDialogModel(moment().format("YYYY-MM-DD HH:mm:ss"));
         this.modalService.showModal(m).then((success) => {
             if (success) {
+
+                var mProjectSnapshots:IMProjectProgramSnapShot[] = [];
+
+                for (var projectId in this.selectedGridProgramVersions) {
+                    if (!this.selectedGridProgramVersions.hasOwnProperty(projectId)) continue;
+                    var programSnapshots:IMProgramSnapShot[] = [];
+
+                    for (var programId in this.selectedGridProgramVersions[projectId]) {
+                        if (!this.selectedGridProgramVersions[projectId].hasOwnProperty(programId)) continue;
+                        programSnapshots.push({
+                            m_program_id: programId,
+                            version_object_id: this.selectedGridProgramVersions[projectId][programId]
+                        });
+                    }
+
+                    mProjectSnapshots.push({
+                        m_program_snapshots: programSnapshots,
+                        m_project_id: projectId
+                    })
+                }
+
+                console.log(mProjectSnapshots);
 
                 this.backendService.createBProgramVersion(this.blockoId, {
                     version_name: m.name,
                     version_description: m.description,
                     hardware_group: this.selectedHardware,
+                    m_project_snapshots: mProjectSnapshots,
                     program: this.blockoView.getDataJson()
                 })
                     .then(() => {
@@ -644,6 +746,20 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
         this.selectedProgramVersion = programVersion;
         this.selectedHardware = this.hardwareGroupCopy(this.selectedProgramVersion.hardware_group) || [];
+
+        this.selectedGridProgramVersions = {};
+        programVersion.m_project_program_snapshots.forEach((pps) => {
+            this.selectedGridProgramVersions[pps.m_project_id] = {};
+            if (pps.m_program_snapshots) {
+                pps.m_program_snapshots.forEach((ps) => {
+                    this.selectedGridProgramVersions[pps.m_project_id][ps.m_program_id] = ps.version_object_id;
+                });
+            }
+
+        });
+
+        console.log(this.selectedGridProgramVersions);
+
         this.blockoView.setDataJson(this.selectedProgramVersion.program);
 
     }

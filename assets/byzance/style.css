@@ -743,6 +743,11 @@ span.changes {
     position: relative;
 }
 
+.hx-description {
+    font-size: 0.6em;
+    color: gray;
+}
+
 /* TheGrid end */
 
 @media (min-width: 768px) {

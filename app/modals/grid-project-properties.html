@@ -7,14 +7,6 @@
         <form [formGroup]="form">
             <becki-form-input [control]="form.controls.name" label="Blocko project name"></becki-form-input>
             <becki-form-input [control]="form.controls.description" label="Blocko project description"></becki-form-input>
-            <div class="form-group">
-                <label class="mt-checkbox mt-checkbox-outline">
-                    Auto incrementing
-                    <input type="checkbox" [formControl]="form.controls.autoIncrementing">
-                    <span></span>
-                </label>
-            </div>
-
         </form>
     </div>
     <div class="modal-footer">

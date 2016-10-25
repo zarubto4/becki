@@ -19,7 +19,7 @@ import {ModalModel} from "../services/ModalService";
 
 
 export class ModalsGridProjectPropertiesModel extends ModalModel {
-    constructor(public name:string = "", public description:string = "", public autoIncrementing:boolean = false, public edit:boolean = false, public exceptName:string = null) {
+    constructor(public name:string = "", public description:string = "", public edit:boolean = false, public exceptName:string = null) {
         super();
     }
 }
@@ -44,20 +44,17 @@ export class ModalsGridProjectPropertiesComponent implements OnInit {
         this.form = this.formBuilder.group({
             "name": ["", [Validators.required, Validators.minLength(8)]],
             "description": ["", [Validators.required, Validators.minLength(24)]],
-            "autoIncrementing": [false]
         });
     }
 
     ngOnInit() {
         (<FormControl>(this.form.controls["name"])).setValue(this.modalModel.name);
         (<FormControl>(this.form.controls["description"])).setValue(this.modalModel.description);
-        (<FormControl>(this.form.controls["autoIncrementing"])).setValue(this.modalModel.autoIncrementing);
     }
 
     onSubmitClick():void {
         this.modalModel.name = this.form.controls["name"].value;
         this.modalModel.description = this.form.controls["description"].value;
-        this.modalModel.autoIncrementing = this.form.controls["autoIncrementing"].value;
         this.modalClose.emit(true);
     }
 

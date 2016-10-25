@@ -98,24 +98,37 @@
                 <div>
 
                     <template ngIf="selectedGrids && selectedGrids.length">
-                        <div *ngFor="let gridProject of selectedGridProjects;">
-                            <div class="mt-element-ribbon bg-grey-steel">
+                        <div *ngFor="let gridProject of allGridProjects;">
+                            <div *ngIf="selectedGridProgramVersions[gridProject.id]" class="mt-element-ribbon bg-grey-steel">
                                 <div class="ribbon ribbon-shadow bg-blue font-white no-padding-left-right"><span class="ribbon-padding">{{gridProject.name}}</span></div>
                                 <button type="button" class="btn default red pull-right" (click)="gridRemove(gridProject)">
                                     <i class="fa fa-remove"></i> Remove grid project
                                 </button>
                                 <div class="ribbon-content no-padding-left-right">
 
-                                    <h4 class="col-md-12">Programs:</h4>
                                     <div class="col-md-12" *ngFor="let program of gridProject.m_programs">
-                                        <b>{{program.name}}</b><span *ngIf="program.description"> - {{program.description}}</span>
+                                        <h3>{{program.name}} <span *ngIf="program.description" class="hx-description">{{program.description}}</span></h3>
+                                        <div *ngIf="program.program_versions && program.program_versions.length" class="form-group" [class.has-error]="!selectedGridProgramVersions[gridProject.id][program.id]">
+                                            <label>Program version</label>
+                                            <select class="form-control" [ngModel]="selectedGridProgramVersions[gridProject.id][program.id]" (ngModelChange)="gridSelectedProgramVersionIdChange(gridProject.id, program.id, $event)">
+                                                <option value="undefined" disabled>Select version</option>
+                                                <option *ngFor="let programVersion of program.program_versions" [value]="programVersion.version_object.id">{{programVersion.version_object.version_name}}</option>
+                                            </select>
+                                        </div>
+                                        <div *ngIf="!(program.program_versions && program.program_versions.length)" class="form-group">
+                                            <label>Program version</label>
+                                            <select class="form-control" disabled>
+                                                <option [value]="null" disabled>No program versions</option>
+                                            </select>
+                                        </div>
                                     </div>
+
                                     <div class="clearfix"></div>
                                 </div>
                             </div>
                         </div>
                     </template>
-                    <h3 *ngIf="!(selectedGridProjects && selectedGridProjects.length)" style="margin: 20px 0;">
+                    <h3 *ngIf="isEmptyObject(selectedGridProgramVersions)" style="margin: 20px 0;">
                         <i class="fa fa-chevron-down"></i>
                         No grid projects added in this Blocko program
                     </h3>
