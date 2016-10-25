@@ -100,7 +100,7 @@ export class NotificationService {
                 console.log("(un)subscribed");
             } else {
                 var notif = this.notificationParse(notification);
-                switch ((<any>notification).notification_importance) { // TODO: remove cast to <any> after Tyrion supports notification_importance property!!!
+                switch (notification.notification_importance) {
                     case "low":
                         this.showToastr(notif);
                         break;
@@ -159,9 +159,7 @@ export class NotificationService {
                 return new NotificationWarning(notification.id, this.notificationBodyUnparse(notification), notification.created);
             case "error":
                 return new NotificationError(notification.id, this.notificationBodyUnparse(notification), notification.created);
-            /*case "object": //tato věc bude ukazovat na konkrétní objekt v becki, bude třeba to sjednoti a další metodu na to
-             return new NotificationInfo(notification.messageId, this.notificationBodyUnparse(notification),notification.created);
-             break; */
+
         }
         return null;
     }
@@ -203,6 +201,10 @@ export class NotificationService {
             bodyText += ("<input (click)='#'> OK "); //TODO notification confirmed bude držet dokud se neodklikne, změnit tady nastavení toastr messeage
         }
         return bodyText;
+    }
+
+    sentRestApiNotificationWasRead(id:string):void{
+        this.backendService.confirmNotification(id);
     }
 
     getRestApiNotifications(page = 1): Promise<Notification[]> {
