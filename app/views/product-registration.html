@@ -50,10 +50,10 @@
                     <div class="row">
                         <div *ngFor="let tariff of tariffForRegistration" class="col-md-3">
                             <div class="price-column-container border-active">
-                                <div class="price-table-head bg-blue">
+                                <div class="price-table-head bg-{{tariff.color}}">
                                     <h2 class="no-margin">{{tariff.tariff_name}}</h2>
                                 </div>
-                                <div class="arrow-down border-top-blue"></div>
+                                <div class="arrow-down border-top-{{tariff.color}}"></div>
 
                                 <div class="price-table-pricing">
                                     <h3><span class="price-sign">€</span>{{tariff.price.EUR}}</h3>
@@ -62,7 +62,7 @@
                                 <div class="price-table-content">
                                     <div *ngFor="let label of tariff.labels" class="row mobile-padding">
                                         <div class="col-xs-3 text-right mobile-padding">
-                                            <i class="icon-user"></i>
+                                            <i class="fa {{label.icon}}"></i>
                                         </div>
                                         <div class="col-xs-9 text-left mobile-padding">{{label.label}}</div>
                                     </div>
@@ -92,10 +92,10 @@
                     <div class="row">
                         <div *ngFor="let package of packageForRegistration" class="col-md-3">
                             <div class="price-column-container border-active">
-                                <div class="price-table-head bg-blue">
+                                <div class="price-table-head bg-{{package.color}}">
                                     <h2 class="no-margin">{{package.package_name}}</h2>
                                 </div>
-                                <div class="arrow-down border-top-blue"></div>
+                                <div class="arrow-down border-top-{{package.color}}"></div>
 
                                 <div class="price-table-pricing">
                                     <h3><span class="price-sign">€</span>{{package.price.EUR}}</h3> <!-- TODO ceny se budou měnit dle jazykové mutace-->
@@ -104,9 +104,9 @@
                                 <div class="price-table-content">
                                     <div *ngFor="let label of package.labels" class="row mobile-padding">
                                         <div class="col-xs-3 text-right mobile-padding">
-                                            <i class="icon-user"></i> <!-- TODO ikonku nám bude posílat tyrion -->
+                                            <i class="fa {{label.icon}}"></i>
                                         </div>
-                                        <div class="col-xs-9 text-left mobile-padding">{{label.label}}</div>
+                                        <div  class="col-xs-9 text-left mobile-padding">{{label.label}}</div> <!--(mouseenter)="" (mouseleave)=""-->
                                     </div>
 
                                 </div>
@@ -164,7 +164,6 @@
         <div *ngIf="isCompany">
         <div class="col-md-6">
             <p>Company info</p>
-             <!-- TODO je třeba  vyřešit lépe -->
                 <p></p>
                 <becki-form-input [control]="form.controls.company_authorized_email" [type]="email" label="Company authorized email"></becki-form-input>
                 <becki-form-input [control]="form.controls.company_authorized_phone" [type]="number"  label="Company authorized phone"></becki-form-input>
@@ -180,7 +179,6 @@
     </form>
         <div class="actions">
             <button type="button" class="btn green btn-outline" [disabled]="!form.valid" (click)="onSubmitClick()">Continue</button>
-            <button type="button" class="btn red btn-outline" (click)="onCancelClick()">Cancel</button>
         </div>
 </div>
 

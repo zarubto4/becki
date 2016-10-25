@@ -835,14 +835,8 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         }];
 
 
-    payment_method: BeckiFormSelectOption[] = [{label: "Bank transfer", value: "bank"}, {
-        label: "Credit card payment",
-        value: "credit_card"
-    }];
-    payment_mode: BeckiFormSelectOption[] = [{label: "Monthly", value: "monthly"}, {
-        label: "Annual",
-        value: "annual"
-    }, {label: "Per credit", value: "per_credit"}];
+    payment_method: BeckiFormSelectOption[] = [{label: "I want it free", value: "free"}];
+    payment_mode: BeckiFormSelectOption[] = [{label: "I want it free", value: "free"}];
     options: BeckiFormSelectOption[] = [{label: "CZK", value: "CZK"}, {label: "EUR", value: "EUR"}];
 
     constructor(injector: Injector) {
@@ -889,6 +883,10 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
     };
 
     stepClick(step: number): void {
+        if(step == 2 && this.form.controls["tariff_type"].value == null){
+            this.flashMessagesService.addFlashMessage(new FlashMessageError("You have to choose a tariff"));
+            return;
+        }
         this.step = step;
     }
 
@@ -902,7 +900,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             }).then(()=>{
             this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
                 if (params.hasOwnProperty("tariff") && this.tariffForRegistration.find(tariff =>{if(tariff.identificator==params["tariff"]){return true;}})){
-                    this.checkPaymentMode(params["tariff"]);
+                    this.checkPaymentModeDetails(params["tariff"]);
                     this.step = 2;
                 }else{
                     this.step=1;
@@ -915,10 +913,13 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
     }
 
-    checkPaymentMode(tarifIdentificator:String):void{
+    checkPaymentModeDetails(tarifIdentificator:String):void{
         this.form.controls["tariff_type"].setValue(tarifIdentificator);
-        console.log("yay "+ this.form.controls["tariff_type"].value)
         this.tariffForRegistration.find(pay => {
+            this.payment_method = [];
+            this.payment_mode = [];
+            pay.payment_methods.map(method => this.payment_method.push({label:method.user_description , value: method.json_identificator}));
+            pay.payment_modes.map(method => this.payment_mode.push({label:method.user_description , value: method.json_identificator}));
             if (pay.identificator == this.form.controls["tariff_type"].value) {
                 this.paymentNeed = pay.required_payment_mode;
                 this.isCompany = pay.company_details_required;
@@ -928,8 +929,9 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         })
     }
 
+
     chooseTariff(tariff: IGeneralTariff): void {
-        this.checkPaymentMode(tariff.identificator);
+        this.checkPaymentModeDetails(tariff.identificator);
         this.step = 2;
     }
 
@@ -956,7 +958,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             .then(tarif => {
                 this.step = 3;
                 this.serverResponse = tarif;
-                if (tarif.gw_url) { // TODO přetypovat na (any) a tím vyřešit tento error
+                if ((<any>tarif).gw_url) {
                     this.flashMessagesService.addFlashMessage(new FlashMessageWarning("Product was created but payment is requred, click", "<a href={{(IGoPayUrl)response.gw_url}}>here</a>"));
                 } else {
                     this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("Product was created, now you can create a new project"));
