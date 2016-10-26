@@ -25,6 +25,7 @@ import {ModalsBlockoAddGridComponent} from "./blocko-add-grid";
 import {ModalsBlocksTypePropertiesComponent} from "./blocks-type-properties";
 import {ModalsBlocksBlockPropertiesComponent} from "./blocks-block-properties";
 import { ModalsHighImportanceNotificationComponent} from "./high-importance-notification";
+import {ModalsDeviceEditDescriptionModelComponent} from "./device-edit-description";
 
 @Component({
     selector: "modal",
@@ -48,6 +49,7 @@ import { ModalsHighImportanceNotificationComponent} from "./high-importance-noti
         ModalsBlocksTypePropertiesComponent,
         ModalsBlocksBlockPropertiesComponent,
         ModalsHighImportanceNotificationComponent,
+        ModalsDeviceEditDescriptionModelComponent,
     ]
 })
 export class ModalComponent {

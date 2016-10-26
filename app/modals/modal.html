@@ -55,6 +55,9 @@
             <template [ngSwitchCase]="'ModalsHighImportanceNotificationModel'">
                 <modals-high-importance-notification [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-high-importance-notification>
             </template>
+            <template [ngSwitchCase]="'ModalsDeviceEditDescriptionModel'">
+                <modals-device-edit-description [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-device-edit-description>
+            </template>
         </div>
     </div>
 </div>

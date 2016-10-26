@@ -31,9 +31,12 @@
                     <td><a (click)="onDeviceClick(device)">{{device.id}}</a></td>
                     <td> {{device.personal_description}}</td>
                     <td>
-                        <a class="btn btn-outline btn-circle btn-sm red" [class.disabled]="!device.delete_permission" (click)="onRemoveClick(device)">
+                        <button class="btn btn-outline btn-circle btn-sm green" [disabled]="!device.edit_permission" (click)="onEditClick(device)">
+                            <i class="fa fa-edit"></i> Edit
+                        </button>
+                        <button class="btn btn-outline btn-circle btn-sm red" [disabled]="!device.delete_permission" (click)="onRemoveClick(device)">
                             <i class="fa fa-remove"></i> Delete
-                        </a>
+                        </button>
                     </td>
                 </tr>
                 </tbody>
