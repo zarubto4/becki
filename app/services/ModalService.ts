@@ -71,7 +71,7 @@ export class ModalService {
         }
         var wrapper = this.modalWrappers.find((mw) => mw.modalModel == modalModel);
         if (wrapper) {
-            throw new Error("This modalModel instnace is already open");
+            throw new Error("This modalModel instanace is already open");
         }
         var wrapper = new ModalWrapper(modalModel);
         this.modalWrappers.push(wrapper);

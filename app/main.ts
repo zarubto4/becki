@@ -5,7 +5,7 @@
  * directory of this distribution.
  */
 
-// Angular
+// Imports
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {NgModule} from "@angular/core";
 import {HttpModule, JsonpModule} from "@angular/http";
@@ -79,14 +79,7 @@ import {ModalsBlockoAddGridComponent} from "./modals/blocko-add-grid";
 import {ModalsBlocksTypePropertiesComponent} from "./modals/blocks-type-properties";
 import {ModalsBlocksBlockPropertiesComponent} from "./modals/blocks-block-properties";
 import {ModalsHighImportanceNotificationComponent} from "./modals/high-importance-notification";
-// App/Generic
-// Helpers
-// Pipes
-// Layouts
-// Services
-// Components
-// Views
-//Modals
+import {ModalsDeviceEditDescriptionComponent} from "./modals/device-edit-description";
 
 // DON'T USE children IN ROUTER YET!!!
 var routes: Routes = [
@@ -378,6 +371,7 @@ var tabMenus = {
         ModalsBlocksTypePropertiesComponent,
         ModalsBlocksBlockPropertiesComponent,
         ModalsHighImportanceNotificationComponent,
+        ModalsDeviceEditDescriptionComponent,
 
     ],
     exports: [AppComponent],

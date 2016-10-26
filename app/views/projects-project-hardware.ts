@@ -2,13 +2,19 @@
  * Created by davidhradek on 10.08.16.
  */
 
+/*
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
+ */
+
 import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
 import {Subscription} from "rxjs/Rx";
 import {ModalsAddHardwareModel} from "../modals/add-hardware";
 import {ModalsRemovalModel} from "../modals/removal";
-import {IProject, IBoard} from "../backend/TyrionAPI";
+import {IProject, IBoard, IBoardPersonalDescription} from "../backend/TyrionAPI";
+import {ModalsDeviceEditDescriptionModel} from "../modals/device-edit-description";
 
 @Component({
     selector: "view-projects-project-hardware",
@@ -55,7 +61,24 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
             });
     }
 
-    onDeviceClick(device: IBoard): void {
+    onEditClick(device:IBoard):void{
+        var model = new ModalsDeviceEditDescriptionModel(device.id,device.personal_description);
+        this.modalService.showModal(model).then((success) => {
+            if(success){
+                this.backendService.editBoardUserDescription(device.id, {personal_description:model.description})
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess("The device description was updated."));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError("The device cannot be updated.", reason));
+                        this.refresh();
+                    });
+            }
+        })
+    }
+
+    onDeviceClick(device:IBoard):void {
         //TODO
         alert("TODO!!! Board object: " + JSON.stringify(device));
     }
