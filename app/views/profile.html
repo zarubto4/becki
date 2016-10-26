@@ -86,7 +86,7 @@
                                         </form>
                                     </div>
                                     <!-- END CHANGE AVATAR TAB -->
-                                    <!-- CHANGE PASSWORD TAB --> <!-- TODO waiting for Tyrion password change -->
+                                    <!-- CHANGE PASSWORD TAB -->
                                     <div class="tab-pane" id="tab_1_3">
                                         <form action="#">
                                             <becki-form-input [placeholder]="password" label=" Current password"
@@ -100,8 +100,8 @@
                                                               [control]="passwordForm.controls.newPasswordConfirm"></becki-form-input>
 
                                             <div class="margin-top-10">
-                                                <a href="javascript:;" class="btn green"> Change Password </a>
-                                                <a href="javascript:;" class="btn default"> Cancel </a>
+                                                <button type="submit" (click)="changePassword()" class="btn green" [disabled]="!passwordForm.valid"> Change Password </button>
+                                                <button href="javascript:;" class="btn default"> Cancel </button>
                                             </div>
                                         </form>
                                     </div>
@@ -123,9 +123,9 @@
 
 
                                                 <div class="margin-top-10">
-                                                    <a (click)="changeEmail()" class="btn green" disabled="emailF">
-                                                        Change email </a>
-                                                    <a href="javascript:;" class="btn default"> Cancel </a>
+                                                    <button type="submit" (click)="changeEmail()" class="btn green" [disabled]="!emailForm.valid">
+                                                        Change email </button>
+                                                    <button href="javascript:;" class="btn default"> Cancel </button>
                                                 </div>
                                             </div>
                                         </form>

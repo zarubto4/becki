@@ -13,6 +13,7 @@ import {FormControl, FormGroup} from "@angular/forms";
 import {Validators} from "@angular/common";
 import {BeckiAsyncValidators} from "../helpers/BeckiAsyncValidators";
 import {ModalsBlockoPropertiesModel} from "../modals/blocko-properties";
+import {BeckiValidators} from "../helpers/BeckiValidators";
 
 @Component({
     selector: "profile",
@@ -25,15 +26,15 @@ export class ProfileComponent extends BaseMainComponent implements OnInit{
         super(injector);
 
         this.emailForm = this.formBuilder.group({
-            "currentEmail": ["", [Validators.required, Validators.minLength(8)]],
-            "newEmail": ["", [Validators.required, Validators.minLength(24)]],
-            "newEmailConfirm": ["", [Validators.required, Validators.minLength(24)]],
+            "currentEmail": ["", [Validators.required, Validators.minLength(8),BeckiValidators.email]], //TODO kontrola zda sedí s původním emailem
+            "newEmail": ["", [Validators.required, Validators.minLength(24), BeckiValidators.email]],
+            "newEmailConfirm": ["", [Validators.required, Validators.minLength(24),BeckiValidators.email,BeckiValidators.passwordSame(()=>this.emailForm, "newEmail")]],
         });
 
         this.passwordForm = this.formBuilder.group({
-            "currentPassword": ["", [Validators.required, Validators.minLength(8)]],
+            "currentPassword": ["", [Validators.required, Validators.minLength(8)]], //TODO kontrola zda sedí s původním heslem
             "newPassword": ["", [Validators.required, Validators.minLength(8)]],
-            "newPasswordConfirm": ["", [Validators.required, Validators.minLength(8)]],
+            "newPasswordConfirm": ["", [Validators.required, Validators.minLength(8), BeckiValidators.passwordSame(()=>this.passwordForm, "newPassword")]],
         });
 
         this.infoForm = this.formBuilder.group({
@@ -78,13 +79,14 @@ export class ProfileComponent extends BaseMainComponent implements OnInit{
 
     }
 
-    changePassword():void{ //TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-387
-        this.backEndService.createPersonChangeProperty({property: "password",password:"new"/*toto získat z panelu na obrazovce*/})
+    changePassword():void{
+        console.log("klick");
+        this.backEndService.createPersonChangeProperty({property: "password",password:this.passwordForm.controls["newPassword"].value})
             .then(ok => this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("Email with instructions was sent")))
             .catch(error => this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot change password",error)))
     }
-    changeEmail():void{ //TODO https://youtrack.byzance.cz/youtrack/issue/TYRION-387
-        this.backEndService.createPersonChangeProperty({property: "email",email:"new"/*toto získat z panelu na obrazovce*/})
+    changeEmail():void{
+        this.backEndService.createPersonChangeProperty({property: "email",email:this.emailForm.controls["newEmail"].value})
             .then(ok => this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("Email with instructions was sent")))
             .catch(error => this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot change email",error)))
 
@@ -92,7 +94,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit{
 
     uploadProfilePicture():void{
         //API requires 'multipart/form-data' Content-Type, name of the property is 'file'.
-        this.backEndService.putPersonUploadPicture()
+        this.backEndService.putPersonUploadPicture() //todo udělat něco co 1. nahraje obrázek 2. zkontroluje obrázek jestli je ve stavu jakém chceme 3. upravit ho 4. poslat ho
     }
 }
 
