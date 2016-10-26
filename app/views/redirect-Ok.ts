@@ -15,20 +15,17 @@ import {Router} from "@angular/router";
 @Component({
     selector: "redirectOk",
     directives: [LayoutNotLogged,CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, BeckiFormInput],
-    templateUrl: "app/views/redirectOk.html"
+    templateUrl: "app/views/redirect-Ok.html"
 })
 export class RedirectOkComponent implements OnInit{
 
 
 
     constructor(protected router:Router) {
-
-
     }
 
 
     ngOnInit(): void {
-
     }
 
 

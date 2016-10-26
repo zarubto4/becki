@@ -46,9 +46,9 @@ import {PasswordRestartComponent} from "./views/password-restart";
 import {ProjectsProjectBlocksComponent} from "./views/projects-project-blocks";
 import {ProjectsProjectBlocksBlockComponent} from "./views/projects-project-blocks-block";
 import {CreateUserComponent} from "./views/create-user";
-import {RedirectOkComponent} from "./views/redirectOk";
 import {ProjectsProjectGridGridComponent} from "./views/projects-project-grid-grid";
 import {ProjectsProjectGridComponent} from "./views/projects-project-grid";
+import {RedirectOkComponent} from "./views/redirect-Ok";
 import {ProductRegistrationComponent} from "./views/product-registration";
 
 // DON'T USE children IN ROUTER YET!!!
@@ -59,7 +59,7 @@ var routes:Routes = [
 
     {path: "forgotPassword", component: ForgotPasswordComponent, canActivate:[NonAuthGuard]},
     {path: "passwordRestart/:token", component: PasswordRestartComponent, canActivate:[NonAuthGuard]},
-    {path: "redicectOk", component: RedirectOkComponent, canActivate:[NonAuthGuard]},
+    {path: "redirectOk", component: RedirectOkComponent, canActivate:[NonAuthGuard]},
 
     {path: "", redirectTo: "/dashboard", pathMatch: "full"},
 

@@ -52,6 +52,9 @@
             <template [ngSwitchCase]="'ModalsBlocksBlockPropertiesModel'">
                 <modals-blocks-block-properties [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-blocks-block-properties>
             </template>
+            <template [ngSwitchCase]="'ModalsHighImportanceNotificationModel'">
+                <modals-high-importance-notification [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-high-importance-notification>
+            </template>
         </div>
     </div>
 </div>

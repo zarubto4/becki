@@ -1,11 +1,13 @@
 /**
  * Created by DominikKrisztof on 22/08/16.
  */
-import {Injectable} from "@angular/core";
+import {Injectable, NgZone} from "@angular/core";
 import {BackendService} from "./BackendService";
 import moment = require("moment/moment");
 import {INotification} from "../backend/TyrionAPI";
-
+import {ModalsHighImportanceNotificationModel} from "../modals/high-importance-notification";
+import {ModalService} from "../services/ModalService";
+import {FlashMessageSuccess, FlashMessageError} from "./FlashMessagesService";
 
 export abstract class Notification {
 
@@ -61,12 +63,12 @@ export class NotificationService {
 
     public unreadedNotifications: number = 0;
 
-    constructor(protected backendService: BackendService) {
+    constructor(protected backendService: BackendService, private modalService:ModalService) {
         console.log("NotificationService init");
 
 
         toastr.options = {
-            "closeButton": true,
+            "closeButton": false,
             "debug": false,
             "newestOnTop": true,
             "progressBar": true,
@@ -100,7 +102,8 @@ export class NotificationService {
                 console.log("(un)subscribed");
             } else {
                 var notif = this.notificationParse(notification);
-                switch ((<any>notification).notification_importance) { // TODO: remove cast to <any> after Tyrion supports notification_importance property!!!
+                console.log(notification);
+                switch (notification.notification_importance) {
                     case "low":
                         this.showToastr(notif);
                         break;
@@ -113,7 +116,13 @@ export class NotificationService {
                         break;
 
                     case "high":
-                        //TODO zablokování celé stránky a nutnost přečtení si této notifikace, nutno probrat s Davidem
+                        this.unreadedNotifications++
+                        this.modalService.showModal(new ModalsHighImportanceNotificationModel("Important messeage",notif.body,notif.id)).then((success) => {
+                            if (success) {
+                                this.sentRestApiNotificationWasRead(notif.id);
+                            }
+                        });
+
                         break;
 
                 }
@@ -140,7 +149,6 @@ export class NotificationService {
     }
 
     wasReadedNotifications(): void {
-        //TODO na najetou notifikaci poslat sem "was read" a odebrat jednu nezobrazenou notifikaci
         this.unreadedNotifications = 0;
     }
 
@@ -159,9 +167,7 @@ export class NotificationService {
                 return new NotificationWarning(notification.id, this.notificationBodyUnparse(notification), notification.created);
             case "error":
                 return new NotificationError(notification.id, this.notificationBodyUnparse(notification), notification.created);
-            /*case "object": //tato věc bude ukazovat na konkrétní objekt v becki, bude třeba to sjednoti a další metodu na to
-             return new NotificationInfo(notification.messageId, this.notificationBodyUnparse(notification),notification.created);
-             break; */
+
         }
         return null;
     }
@@ -180,7 +186,7 @@ export class NotificationService {
     notificationBodyUnparse(notification: INotification): string {
         let bodyText: string;
         bodyText = "";
-        (<any[]>notification.notification_body).map((body: any) => {
+        (notification.notification_body).map((body: any) => {
             switch (body.type) {
                 case "text":
                     bodyText += body.value;
@@ -191,18 +197,23 @@ export class NotificationService {
                     break;
 
                 case "object":
-                    bodyText += ("<a href='" + body.value + "/" + body.id + "'>" + body.label);
+                    bodyText += ("<a target='_blank' href='" + body.value + "/" + body.id + "'>" + body.label);
                     break;
 
                 case "link":
-                    bodyText += ("<a href='" + body.url + "'>" + body.label + "</a>");
+                    bodyText += ("<a target='_blank' href='" + body.url + "'>" + body.label + "</a>");
                     break;
             }
         });
-        if (notification.confirmation_required) {
-            bodyText += ("<input (click)='#'> OK "); //TODO notification confirmed bude držet dokud se neodklikne, změnit tady nastavení toastr messeage
+        if (notification.confirmation_required /*&& !notification.notification_importance.valueOf() === "high"*/) { //TODO z nějakého důvodu se nechce volat sentRestApiNotificationWasRead.
+            bodyText += ("<br><button (click)='sentRestApiNotificationWasRead(notification.id)'> OK </button>"); //TODO notification confirmed bude držet dokud se neodklikne, změnit tady nastavení toastr messeage
         }
         return bodyText;
+    }
+
+    sentRestApiNotificationWasRead(id:string):void{
+        console.log("SENDDING CONFIRMATION ");
+        this.backendService.confirmNotification(id).then().catch(error => "cant sent confirmation");
     }
 
     getRestApiNotifications(page = 1): Promise<Notification[]> {

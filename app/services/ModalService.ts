@@ -55,7 +55,6 @@ export class ModalService {
     }
 
     closeModal(result:boolean):void {
-
         clearTimeout(this.animationTimeout);
         this.modalDisplay = true;
         this.modalIn = false;
