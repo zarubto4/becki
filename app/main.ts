@@ -81,6 +81,7 @@ import {ModalsBlocksBlockPropertiesComponent} from "./modals/blocks-block-proper
 import {ModalsHighImportanceNotificationComponent} from "./modals/high-importance-notification";
 import {ModalsDeviceEditDescriptionComponent} from "./modals/device-edit-description";
 
+//@formatter:off
 // DON'T USE children IN ROUTER YET!!!
 var routes: Routes = [
     {path: "login", component: LoginComponent, canActivate: [NonAuthGuard]},
@@ -95,170 +96,28 @@ var routes: Routes = [
 
     {path: "dashboard", data: {breadName: "Dashboard"}, component: DashboardComponent, canActivate: [AuthGuard]},
 
-    {
-        path: "notifications",
-        data: {breadName: "Notifications"},
-        component: NotificationsComponent,
-        canActivate: [AuthGuard]
-    },
+    {path: "notifications", data: {breadName: "Notifications"}, component: NotificationsComponent, canActivate: [AuthGuard]},
 
     {path: "profile", data: {breadName: "Profile"}, component: ProfileComponent, canActivate: [AuthGuard]},
 
-    {
-        path: "productRegistration/:tariff",
-        data: {breadName: "Product registration"},
-        component: ProductRegistrationComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: "productRegistration",
-        data: {breadName: "Product registration"},
-        component: ProductRegistrationComponent,
-        canActivate: [AuthGuard]
-    },
-
+    {path: "productRegistration/:tariff", data: {breadName: "Product registration"}, component: ProductRegistrationComponent, canActivate: [AuthGuard]},
+    {path: "productRegistration", data: {breadName: "Product registration"}, component: ProductRegistrationComponent, canActivate: [AuthGuard]},
 
     {path: "projects", data: {breadName: "Projects"}, component: ProjectsComponent, canActivate: [AuthGuard]},
-    {
-        path: "projects/:project",
-        data: {breadName: ":project"},
-        component: ProjectsProjectComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: "projects/:project/hardware",
-        data: {breadName: "Hardware"},
-        component: ProjectsProjectHardwareComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: "projects/:project/blocko",
-        data: {breadName: "Blocko"},
-        component: ProjectsProjectBlockoComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: "projects/:project/blocko/:blocko",
-        data: {breadName: ":blocko"},
-        component: ProjectsProjectBlockoBlockoComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: "projects/:project/code",
-        data: {breadName: "Code"},
-        component: ProjectsProjectCodeComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: "projects/:project/code/:code",
-        data: {breadName: ":code"},
-        component: ProjectsProjectCodeCodeComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: "projects/:project/blocks",
-        data: {breadName: "Blocks"},
-        component: ProjectsProjectBlocksComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: "projects/:project/blocks/:block",
-        data: {breadName: ":block"},
-        component: ProjectsProjectBlocksBlockComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: "projects/:project/grid",
-        data: {breadName: "Grid"},
-        component: ProjectsProjectGridComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: "projects/:project/grid/:grid",
-        data: {breadName: ":grid"},
-        component: ProjectsProjectGridGridComponent,
-        canActivate: [AuthGuard]
-    },
-
-
-    // old routes
-    // BEGIN only for temporary back compatibility
-    /*{path: "old_projects/:project", component: userProject.Component},
-
-     {path: "application/devices/:device", component: applicationDevice.Component},
-     {path: "application/devices", redirectTo: "user/applications"},
-     {path: "system", component: system.Component},
-     {path: "system/compilation/server/new", component: systemCompilationServerNew.Component},
-     {path: "system/compilation/servers/:server", component: systemCompilationServer.Component},
-     {path: "system/compilation/servers", redirectTo: "system"},
-     {path: "system/device/new", component: systemDeviceNew.Component},
-     {path: "system/device/type/new", component: systemDeviceTypeNew.Component},
-     {path: "system/device/types/:type", component: systemDeviceType.Component},
-     {path: "system/device/types", redirectTo: "system"},
-     {path: "system/interactions/server/new", component: systemInteractionsServerNew.Component},
-     {path: "system/interactions/servers/:server", component: systemInteractionsServer.Component},
-     {path: "system/interactions/servers", redirectTo: "system"},
-     {path: "system/libraries/:library", component: systemLibrary.Component},
-     {path: "system/libraries", redirectTo: "system"},
-     {path: "system/library/group/new", component: systemLibraryGroupNew.Component},
-     {path: "system/library/groups/:group", component: systemLibraryGroup.Component},
-     {path: "system/library/groups", redirectTo: "system"},
-     {path: "system/library/new", component: systemLibraryNew.Component},
-     {path: "system/processor/new", component: systemProcessorNew.Component},
-     {path: "system/processors/:processor", component: systemProcessor.Component},
-     {path: "system/processors", redirectTo: "system"},
-     {path: "system/producer/new", component: systemProducerNew.Component},
-     {path: "system/producers/:producer", component: systemProducer.Component},
-     {path: "system/producers", redirectTo: "system"},
-     // see https://github.com/angular/angular/issues/10120
-     {
-     path: "user", children: [
-     {path: "", redirectTo: "applications", pathMatch: "full"},
-     {path: "application/device/new", component: userApplicationDeviceNew.Component},
-     {path: "application/devices", redirectTo: "applications"},
-     {path: "application/group/new", component: userApplicationGroupNew.Component},
-     {path: "application/groups/:group", component: userApplicationGroup.Component},
-     {path: "application/groups", redirectTo: "applications"},
-     {path: "application/new", component: userApplicationNew.Component},
-     {path: "applications/:application", component: userApplication.Component},
-     {path: "applications", component: userApplications.Component},
-     {path: "connections", comforgotPasswordponent: userConnections.Component},
-     {path: "device/new", component: userDeviceNew.Component},
-     {path: "device/program/new", component: userDeviceProgramNew.Component},
-     {path: "device/programs/:program", component: userDeviceProgram.Component},
-     {path: "device/programs", redirectTo: "devices"},
-     {path: "devices", component: userDevices.Component},
-     {path: "interactions/block/group/new", component: userInteractionsBlockGroupNew.Component},
-     {path: "interactions/block/groups/:group", component: userInteractionsBlockGroup.Component},
-     {path: "interactions/block/groups", redirectTo: "interactions"},
-     {path: "interactions/block/new", component: userInteractionsBlockNew.Component},
-     {path: "interactions/blocks/:block", component: userInteractionsBlock.Component},
-     {path: "interactions/blocks", redirectTo: "interactions"},
-     {path: "interactions/moderator/new", component: userInteractionsModeratorNew.Component},
-     {path: "interactions/moderators", redirectTo: "interactions"},
-     {path: "interactions/scheme/new", component: userInteractionsSchemeNew.Component},
-     {path: "interactions/schemes/:scheme", component: userInteractionsScheme.Component},
-     {
-     path: "interactions/schemes/:scheme/versions/:version",
-     component: userInteractionsSchemeVersion.Component
-     },
-     {path: "interactions/schemes/:scheme/versions", redirectTo: "interactions/schemes/:scheme"},
-     {path: "interactions/schemes", redirectTo: "interactions"},
-     {path: "interactions/spies/:spy", component: userInteractionsSpy.Component},
-     {path: "interactions/spies", redirectTo: "interactions"},
-     {path: "interactions", component: userInteractions.Component},
-     {path: "project/new", component: userProjectNew.Component},
-     {path: "projects/:project", component: userProject.Component},
-     {path: "projects/:project/collaborator/new", component: userProjectCollaboratorNew.Component},
-     {path: "projects/:project/edit", component: userProjectEdit.Component},
-
-     ]
-     },
-     {path: "users/:user", component: user.Component},*/
-    // END only for temporary back compatibility
+    {path: "projects/:project", data: {breadName: ":project"}, component: ProjectsProjectComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/hardware", data: {breadName: "Hardware"}, component: ProjectsProjectHardwareComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/blocko", data: {breadName: "Blocko"}, component: ProjectsProjectBlockoComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/blocko/:blocko", data: {breadName: ":blocko"}, component: ProjectsProjectBlockoBlockoComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/code", data: {breadName: "Code"}, component: ProjectsProjectCodeComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/code/:code", data: {breadName: ":code"}, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/blocks", data: {breadName: "Blocks"}, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/blocks/:block", data: {breadName: ":block"}, component: ProjectsProjectBlocksBlockComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/grid", data: {breadName: "Grid"}, component: ProjectsProjectGridComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/grid/:grid", data: {breadName: ":grid"}, component: ProjectsProjectGridGridComponent, canActivate: [AuthGuard]},
 
     {path: "**", component: Error404Component},
 ];
+//@formatter:on
 
 var navigation = [
     new LabeledLink("Dashboard", ["/dashboard"], "tasks"),
