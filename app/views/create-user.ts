@@ -26,10 +26,6 @@ export class CreateUserComponent implements OnInit{
 
     CreateUserForm:FormGroup;
 
-    showSuccess:boolean;
-    showFailed:boolean;
-    failedReason:string;
-
     constructor(protected formBuilder:FormBuilder,protected router:Router,protected backendService:BackendService,protected flashMessagesService:FlashMessagesService ) {
 
         this.CreateUserForm = this.formBuilder.group({

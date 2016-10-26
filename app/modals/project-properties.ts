@@ -49,7 +49,7 @@ export class ModalsProjectPropertiesComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.options = beckiFormSelectOptionsMaker(this.modalModel.products, "product_id", "product_type");
+        this.options = beckiFormSelectOptionsMaker(this.modalModel.products, "product_id", "product_individual_name"); //TODO vypsat do závorky o který product type se jedná? něco jako  product_individual_name+(product_type)?
         (<FormControl>(this.form.controls["name"])).setValue(this.modalModel.name);
         (<FormControl>(this.form.controls["description"])).setValue(this.modalModel.description);
         (<FormControl>(this.form.controls["product"])).setValue(this.modalModel.product);

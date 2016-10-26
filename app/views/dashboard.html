@@ -1,0 +1,116 @@
+<layout-main [title]="'Dashboard'">
+    <h1 class="title">Megasuper dashboard</h1>
+
+    <div *ngIf="noProducts">
+    <div class="portlet light portlet-fit bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-share font-green"></i>
+                <span class="caption-subject font-green bold uppercase">Avalible tariffs</span>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="pricing-content-1">
+                <div class="row">
+                    <div *ngFor="let tariff of tariffForRegistration" class="col-md-3">
+                        <div class="price-column-container border-active">
+                            <div class="price-table-head bg-blue">
+                                <h2 class="no-margin">{{tariff.tariff_name}}</h2>
+                            </div>
+                            <div class="arrow-down border-top-blue"></div>
+
+                            <div class="price-table-pricing">
+                                <h3><span class="price-sign">€</span>{{tariff.price.EUR}}</h3>
+                                <p>per month</p>
+                            </div>
+                            <div class="price-table-content">
+                                <div *ngFor="let label of tariff.labels" class="row mobile-padding">
+                                    <div class="col-xs-3 text-right mobile-padding">
+                                        <i class="icon-user"></i>
+                                    </div>
+                                    <div class="col-xs-9 text-left mobile-padding">{{label.label}}</div>
+                                </div>
+
+                            </div>
+                            <div class="arrow-down arrow-grey"></div>
+                            <div class="price-table-footer">
+                                <button type="button" (click)="registerTariff(tariff)" class="btn grey-salsa btn-outline sbold uppercase price-button">Sign Up</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="portlet light portlet-fit bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-share font-green"></i>
+                <span class="caption-subject font-green bold uppercase">Avalible packages</span>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="pricing-content-1">
+                <div class="row">
+                    <div *ngFor="let package of packageForRegistration" class="col-md-3">
+                        <div class="price-column-container border-active">
+                            <div class="price-table-head bg-blue">
+                                <h2 class="no-margin">{{package.package_name}}</h2>
+                            </div>
+                            <div class="arrow-down border-top-blue"></div>
+
+                            <div class="price-table-pricing">
+                                <h3><span class="price-sign">€</span>{{package.price.EUR}}</h3> <!-- TODO ceny se budou měnit dle jazykové mutace-->
+                                <p>per month</p>
+                            </div>
+                            <div class="price-table-content">
+                                <div *ngFor="let label of package.labels" class="row mobile-padding">
+                                    <div class="col-xs-3 text-right mobile-padding">
+                                        <i class="icon-user"></i> <!-- TODO ikonku nám bude posílat tyrion -->
+                                    </div>
+                                    <div class="col-xs-9 text-left mobile-padding">{{label.label}}</div>
+                                </div>
+
+                            </div>
+                            <div class="arrow-down arrow-grey"></div>
+                            <div class="price-table-footer">
+                                <button type="button" (click)="registerTariff()" class="btn grey-salsa btn-outline sbold uppercase price-button">Sign Up</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div *ngIf="!noProducts">
+        <div class="portlet portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-settings font-blue"></i>
+                    <span class="caption-subject font-blue sbold uppercase">Projects</span>
+                </div>
+            </div>
+            <div class="table-scrollable">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let project of projects">
+                        <td><a (click)="onProjectClick(project)">{{project.project_name}}</a></td>
+                        <td>{{project.project_description}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</layout-main>

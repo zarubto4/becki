@@ -49,6 +49,7 @@ import {CreateUserComponent} from "./views/create-user";
 import {RedirectOkComponent} from "./views/redirectOk";
 import {ProjectsProjectGridGridComponent} from "./views/projects-project-grid-grid";
 import {ProjectsProjectGridComponent} from "./views/projects-project-grid";
+import {ProductRegistrationComponent} from "./views/product-registration";
 
 // DON'T USE children IN ROUTER YET!!!
 var routes:Routes = [
@@ -67,6 +68,10 @@ var routes:Routes = [
     {path: "notifications", data:{breadName: "Notifications"}, component: NotificationsComponent, canActivate:[AuthGuard]},
 
     {path: "profile", data:{breadName: "Profile"}, component: ProfileComponent, canActivate:[AuthGuard]},
+
+    {path: "productRegistration/:tariff", data:{breadName: "Product registration"}, component: ProductRegistrationComponent, canActivate:[AuthGuard]},
+    {path: "productRegistration", data:{breadName: "Product registration"}, component: ProductRegistrationComponent, canActivate:[AuthGuard]},
+
 
     {path: "projects", data:{breadName: "Projects"}, component: ProjectsComponent, canActivate:[AuthGuard]},
     {path: "projects/:project", data:{breadName: ":project"}, component: ProjectsProjectComponent, canActivate:[AuthGuard]},
@@ -229,6 +234,7 @@ var tabMenus = {
         ProjectsProjectBlocksBlockComponent,
         ProjectsProjectGridComponent,
         ProjectsProjectGridGridComponent,
+        ProductRegistrationComponent,
 
     ],
     exports: [ AppComponent ],
