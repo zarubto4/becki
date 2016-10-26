@@ -1,59 +1,59 @@
-<div class="modal fade" tabindex="-1" [class.in]="modalService.modalIn" [style.display]="modalService.modalDisplay ? 'block' : 'none'" style="background-color: rgba(0,0,0,0.5)">
-    <div class="modal-dialog" [class.modal-width-80]="modalService.modalModel?modalService.modalModel.modalWide:false">
-        <div class="modal-content" [ngSwitch]="modalService.getModalType()">
+<div *ngFor="let modalWrapper of modalService.modalWrappers" class="modal fade" tabindex="-1" [class.in]="modalWrapper.modalIn" [style.display]="modalWrapper.modalDisplay ? 'block' : 'none'" style="background-color: rgba(0,0,0,0.5)">
+    <div class="modal-dialog" [class.modal-width-80]="modalWrapper.modalModel?modalWrapper.modalModel.modalWide:false">
+        <div class="modal-content" [ngSwitch]="modalWrapper.getModalType()">
             <template [ngSwitchCase]="'ModalsRemovalModel'">
-                <modals-removal [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-removal>
+                <modals-removal [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-removal>
             </template>
             <template [ngSwitchCase]="'ModalsProjectPropertiesModel'">
-                <modals-project-properties [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-project-properties>
+                <modals-project-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-project-properties>
             </template>
             <template [ngSwitchCase]="'ModalsAddHardwareModel'">
-                <modals-add-hardware [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-add-hardware>
+                <modals-add-hardware [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-add-hardware>
             </template>
             <template [ngSwitchCase]="'ModalsBlockoPropertiesModel'">
-                <modals-blocko-properties [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-blocko-properties>
+                <modals-blocko-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-blocko-properties>
             </template>
             <template [ngSwitchCase]="'ModalsCodePropertiesModel'">
-                <modals-code-properties [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-code-properties>
+                <modals-code-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-code-properties>
             </template>
             <template [ngSwitchCase]="'ModalsCodeFileDialogModel'">
-                <modals-code-file-dialog [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-code-file-dialog>
+                <modals-code-file-dialog [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-code-file-dialog>
             </template>
             <template [ngSwitchCase]="'ModalsConfirmModel'">
-                <modals-confirm [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-confirm>
+                <modals-confirm [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-confirm>
             </template>
             <template [ngSwitchCase]="'ModalsVersionDialogModel'">
-                <modals-version-dialog [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-version-dialog>
+                <modals-version-dialog [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-version-dialog>
             </template>
             <template [ngSwitchCase]="'ModalsBlockoJsEditorModel'">
-                <modals-blocko-js-editor [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-blocko-js-editor>
+                <modals-blocko-js-editor [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-blocko-js-editor>
             </template>
             <template [ngSwitchCase]="'ModalsBlockoConfigPropertiesModel'">
-                <modals-blocko-config-properties [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-blocko-config-properties>
+                <modals-blocko-config-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-blocko-config-properties>
             </template>
             <template [ngSwitchCase]="'ModalsBlockoAddHardwareModel'">
-                <modals-blocko-add-hardware [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-blocko-add-hardware>
+                <modals-blocko-add-hardware [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-blocko-add-hardware>
             </template>
             <template [ngSwitchCase]="'ModalsGridConfigPropertiesModel'">
-                <modals-grid-config-properties [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-grid-config-properties>
+                <modals-grid-config-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-grid-config-properties>
             </template>
             <template [ngSwitchCase]="'ModalsGridProjectPropertiesModel'">
-                <modals-grid-project-properties [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-grid-project-properties>
+                <modals-grid-project-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-grid-project-properties>
             </template>
             <template [ngSwitchCase]="'ModalsGridProgramPropertiesModel'">
-                <modals-grid-program-properties [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-grid-program-properties>
+                <modals-grid-program-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-grid-program-properties>
             </template>
             <template [ngSwitchCase]="'ModalsBlockoAddGridModel'">
-                <modals-blocko-add-grid [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-blocko-add-grid>
+                <modals-blocko-add-grid [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-blocko-add-grid>
             </template>
             <template [ngSwitchCase]="'ModalsBlocksTypePropertiesModel'">
-                <modals-blocks-type-properties [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-blocks-type-properties>
+                <modals-blocks-type-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-blocks-type-properties>
             </template>
             <template [ngSwitchCase]="'ModalsBlocksBlockPropertiesModel'">
-                <modals-blocks-block-properties [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-blocks-block-properties>
+                <modals-blocks-block-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-blocks-block-properties>
             </template>
             <template [ngSwitchCase]="'ModalsHighImportanceNotificationModel'">
-                <modals-high-importance-notification [modalModel]="modalService.modalModel" (modalClose)="modalService.onModalCloseClick($event)"></modals-high-importance-notification>
+                <modals-high-importance-notification [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-high-importance-notification>
             </template>
         </div>
     </div>
