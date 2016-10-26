@@ -1,0 +1,16 @@
+<!--
+ Created by dominikKrisztof on 25.10.16.
+
+ © 2016 Becki Authors. See the AUTHORS file found in the top-level
+ directory of this distribution.
+-->
+<div>
+    <div class="modal-header">
+        <h4 class="modal-title">{{modalModel.name}}</h4>
+    </div>
+    <div class="modal-body" [innerHTML]="modalModel.notification_body">
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn green btn-outline" (click)="onSubmitClick()">OK</button>
+    </div>
+</div>
