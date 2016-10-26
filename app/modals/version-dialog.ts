@@ -7,31 +7,30 @@
  */
 
 import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
-import {CORE_DIRECTIVES} from "@angular/common";
-import {REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
-import {BeckiFormInput} from "../components/BeckiFormInput";
+import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 import {ModalModel} from "../services/ModalService";
 
 export class ModalsVersionDialogModel extends ModalModel {
-    constructor(public name:string = "", public description:string = "", public edit:boolean = false) {super();}
+    constructor(public name: string = "", public description: string = "", public edit: boolean = false) {
+        super();
+    }
 }
 
 @Component({
     selector: "modals-version-dialog",
-    templateUrl: "app/modals/version-dialog.html",
-    directives: [CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, BeckiFormInput]
+    templateUrl: "app/modals/version-dialog.html"
 })
 export class ModalsVersionDialogComponent implements OnInit {
 
     @Input()
-    modalModel:ModalsVersionDialogModel;
+    modalModel: ModalsVersionDialogModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
 
     form: FormGroup;
 
-    constructor(private formBuilder:FormBuilder) {
+    constructor(private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
             "name": ["", [Validators.required, Validators.minLength(1)]],
@@ -44,17 +43,17 @@ export class ModalsVersionDialogComponent implements OnInit {
         (<FormControl>(this.form.controls["description"])).setValue(this.modalModel.description);
     }
 
-    onSubmitClick():void {
+    onSubmitClick(): void {
         this.modalModel.name = this.form.controls["name"].value;
         this.modalModel.description = this.form.controls["description"].value;
         this.modalClose.emit(true);
     }
 
-    onCloseClick():void {
+    onCloseClick(): void {
         this.modalClose.emit(false);
     }
 
-    onCancelClick():void {
+    onCancelClick(): void {
         this.modalClose.emit(false);
     }
 }

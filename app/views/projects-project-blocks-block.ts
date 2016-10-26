@@ -2,64 +2,57 @@
  * Created by davidhradek on 22.09.16.
  */
 
-import {Component, OnInit, Injector, OnDestroy, ViewChild, ElementRef} from "@angular/core";
-import {LayoutMain} from "../layouts/main";
+import {Component, OnInit, Injector, OnDestroy, ViewChild} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
-import {ROUTER_DIRECTIVES} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
 import {IProject, IBlockoBlock, IBlockoBlockVersion, IBlockoBlockShortVersion} from "../backend/TyrionAPI";
-import {AceEditor} from "../components/AceEditor";
 import {BlockoView} from "../components/BlockoView";
-import {Blocks} from "blocko";
+import {Blocks, Core} from "blocko";
+import {FormGroup, Validators} from "@angular/forms";
+import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
+import {ModalsVersionDialogModel} from "../modals/version-dialog";
 
 
 import moment = require("moment/moment");
-import {Core} from "blocko";
-import {FormGroup, Validators} from "@angular/forms";
-import {BeckiFormColorPicker} from "../components/BeckiFormColorPicker";
-import {BeckiFormFAIconSelect} from "../components/BeckiFormFAIconSelect";
-import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
-import {ModalsVersionDialogModel} from "../modals/version-dialog";
 
 @Component({
     selector: "view-projects-project-blocks-block",
     templateUrl: "app/views/projects-project-blocks-block.html",
-    directives: [ROUTER_DIRECTIVES, LayoutMain, BlockoView, AceEditor, BeckiFormColorPicker, BeckiFormFAIconSelect],
 })
 export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     projectId: string;
     blockId: string;
 
-    routeParamsSubscription:Subscription;
+    routeParamsSubscription: Subscription;
 
-    project:IProject = null;
+    project: IProject = null;
 
-    blockoBlock:IBlockoBlock = null;
+    blockoBlock: IBlockoBlock = null;
 
-    blockoBlockVersions:IBlockoBlockShortVersion[] = [];
-    selectedBlockoBlockVersion:IBlockoBlockVersion = null;
+    blockoBlockVersions: IBlockoBlockShortVersion[] = [];
+    selectedBlockoBlockVersion: IBlockoBlockVersion = null;
 
 
     connectorTypes = Core.ConnectorType;
     argTypes = Core.ArgType;
 
-    blockForm:FormGroup = null;
-    blockCode:string = "";// "block.addDigitalInput(\"din1\", \"Digital input 1\");\nblock.addAnalogInput(\"anIn\", \"Analog input\");\nblock.addMessageInput(\"msgInTest\", \"Test message\", [ByzanceBool, ByzanceInt, ByzanceFloat, ByzanceString]);\n\nblock.addMessageOutput(\"msgOut\", \"Message output\", [ByzanceBool, ByzanceString]);\nblock.addAnalogOutput(\"aout\", \"Analog output\");\nblock.addDigitalOutput(\"digitalOut\", \"Digital output\");\n\nblock.addConfigProperty(ConfigPropertyType.Float, \"confOffset\", \"Analog offset\", 44.6);\n\nblock.init = block.configChanged = function () { // when init and config changed\n    block.aout(block.anIn() + block.confOffset());  \n}\n\nblock.onAnIn = function (val) { // when change value of anIn analog input\n    block.aout(val + block.confOffset());  \n};\n\nblock.onMsgInTest = function (msg) { // when new message on msgInTest message input\n    block.msgOut(msg[0],\"S:\"+msg[3]+\" N:\"+(msg[1]+msg[2]));\n};\n\nblock.inputsChanged = function () { // when change any analog or digital input\n    block.digitalOut(block.din1());\n};";
+    blockForm: FormGroup = null;
+    blockCode: string = "";// "block.addDigitalInput(\"din1\", \"Digital input 1\");\nblock.addAnalogInput(\"anIn\", \"Analog input\");\nblock.addMessageInput(\"msgInTest\", \"Test message\", [ByzanceBool, ByzanceInt, ByzanceFloat, ByzanceString]);\n\nblock.addMessageOutput(\"msgOut\", \"Message output\", [ByzanceBool, ByzanceString]);\nblock.addAnalogOutput(\"aout\", \"Analog output\");\nblock.addDigitalOutput(\"digitalOut\", \"Digital output\");\n\nblock.addConfigProperty(ConfigPropertyType.Float, \"confOffset\", \"Analog offset\", 44.6);\n\nblock.init = block.configChanged = function () { // when init and config changed\n    block.aout(block.anIn() + block.confOffset());  \n}\n\nblock.onAnIn = function (val) { // when change value of anIn analog input\n    block.aout(val + block.confOffset());  \n};\n\nblock.onMsgInTest = function (msg) { // when new message on msgInTest message input\n    block.msgOut(msg[0],\"S:\"+msg[3]+\" N:\"+(msg[1]+msg[2]));\n};\n\nblock.inputsChanged = function () { // when change any analog or digital input\n    block.digitalOut(block.din1());\n};";
 
-    jsError:{ name:string, message:string };
+    jsError: { name: string, message: string };
 
     // Properties for test view:
     @ViewChild(BlockoView)
-    blockoView:BlockoView;
-    jsBlock:Blocks.JSBlock;
-    jsBlockHeight:number = 0;
-    testInputConnectors:Core.Connector[];
-    messageInputsValueCache:{ [key:string]:boolean|number|string } = {};
-    testEventLog:{timestamp:string, connector:Core.Connector, eventType:Core.ConnectorEventType, value:(boolean|number|Core.Message), readableValue:string}[] = [];
-    successfullyTested:boolean = false;
+    blockoView: BlockoView;
+    jsBlock: Blocks.JSBlock;
+    jsBlockHeight: number = 0;
+    testInputConnectors: Core.Connector[];
+    messageInputsValueCache: { [key: string]: boolean|number|string } = {};
+    testEventLog: {timestamp: string, connector: Core.Connector, eventType: Core.ConnectorEventType, value: (boolean|number|Core.Message), readableValue: string}[] = [];
+    successfullyTested: boolean = false;
 
-    constructor(injector:Injector) {
+    constructor(injector: Injector) {
         super(injector);
 
         this.blockForm = this.formBuilder.group({
@@ -69,7 +62,7 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
         });
     };
 
-    ngOnInit():void {
+    ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.projectId = params["project"];
             this.blockId = params["block"];
@@ -77,16 +70,16 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
         });
     }
 
-    ngOnDestroy():void {
+    ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
     }
 
-    newBlockCode(code:string) {
+    newBlockCode(code: string) {
         this.successfullyTested = false;
         this.blockCode = code;
     }
 
-    refresh():void {
+    refresh(): void {
         //TODO:
 
         this.backendService.getBlockoBlock(this.blockId)
@@ -114,11 +107,11 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
 
     }
 
-    onBlockoBlockVersionClick(version:IBlockoBlockShortVersion) {
+    onBlockoBlockVersionClick(version: IBlockoBlockShortVersion) {
         this.selectBlockVersion(version);
     }
 
-    selectBlockVersion(version:IBlockoBlockShortVersion) {
+    selectBlockVersion(version: IBlockoBlockShortVersion) {
         this.backendService.getBlockoBlockVersion(version.id)
             .then((blockoBlockVersion) => {
 
@@ -138,12 +131,13 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
 
             })
             .catch(reason => {
-                this.selectedBlockoBlockVersion = null;console.log(this.blockCode);
+                this.selectedBlockoBlockVersion = null;
+                console.log(this.blockCode);
                 this.addFlashMessage(new FlashMessageError(`The block version cannot be loaded.`, reason));
             });
     }
 
-    toReadableValue(value:any):string {
+    toReadableValue(value: any): string {
         if (typeof value == "boolean") {
             if (value) {
                 return "<span class='bold font-red'>true</span>"
@@ -152,31 +146,31 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
             }
         }
         if (typeof value == "number") {
-            return "<span class='bold font-green-jungle'>"+value+"</span>"
+            return "<span class='bold font-green-jungle'>" + value + "</span>"
         }
         if (typeof value == "string") {
-            return "<span class='bold font-yellow-casablanca'>\""+value+"\"</span>"
+            return "<span class='bold font-yellow-casablanca'>\"" + value + "\"</span>"
         }
         if (value.values && Array.isArray(value.values)) {
-            return "["+value.values.map((val:any)=>this.toReadableValue(val)).join(", ")+"]"
+            return "[" + value.values.map((val: any)=>this.toReadableValue(val)).join(", ") + "]"
         }
         return JSON.stringify(value);
     }
 
-    onDigitalInputClick(connector:Core.Connector):void {
+    onDigitalInputClick(connector: Core.Connector): void {
         connector._inputSetValue(!connector.value);
     }
 
-    onAnalogInputChange(event:Event, connector:Core.Connector):void {
+    onAnalogInputChange(event: Event, connector: Core.Connector): void {
         var f = parseFloat((<HTMLInputElement>event.target).value);
-        connector._inputSetValue(!isNaN(f)?f:0);
+        connector._inputSetValue(!isNaN(f) ? f : 0);
     }
 
-    onMessageInputSendClick(connector:Core.Connector):void {
-        var values:any[] = [];
+    onMessageInputSendClick(connector: Core.Connector): void {
+        var values: any[] = [];
 
         connector.argTypes.forEach((argType, index)=> {
-            var val = this.messageInputsValueCache[connector.name+argType];
+            var val = this.messageInputsValueCache[connector.name + argType];
             if (argType == Core.ArgType.ByzanceBool) {
                 if (!val) {
                     val = false;
@@ -216,14 +210,14 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
             if (Blocks.JSBlock.validateJsCode(this.blockCode)) {
                 this.jsError = null;
             } else {
-                this.jsError = { name: "Error", message: "Unknown error" };
+                this.jsError = {name: "Error", message: "Unknown error"};
             }
         } catch (e) {
 
             var name = e.name || "Error";
             name = name.replace(/([A-Z])/g, ' $1').trim();
 
-            var msg:string = e.message || e.toString();
+            var msg: string = e.message || e.toString();
 
             if (e instanceof Blocks.JSBlockError) {
                 name = "JS Block Error";
@@ -246,11 +240,11 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
             }
 
 
-            this.jsError = { name: name, message: msg };
+            this.jsError = {name: name, message: msg};
         }
     }
 
-    cleanTestView():void {
+    cleanTestView(): void {
         this.blockoView.removeAllBlocksWithoutReadonlyCheck();
         this.jsBlock = null;
         this.successfullyTested = false;
@@ -260,7 +254,7 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
         this.messageInputsValueCache = {};
     }
 
-    onTestClick():void {
+    onTestClick(): void {
         this.cleanTestView();
 
         this.validate();
@@ -299,7 +293,7 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
 
     }
 
-    onSaveClick():void {
+    onSaveClick(): void {
         if (!this.successfullyTested) return;
 
         var m = new ModalsVersionDialogModel(moment().format("YYYY-MM-DD HH:mm:ss"));
@@ -319,11 +313,11 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
                     design_json: designJson
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess("Version <b>"+m.name+"</b> saved successfully.", null, true));
+                        this.addFlashMessage(new FlashMessageSuccess("Version <b>" + m.name + "</b> saved successfully.", null, true));
                         this.refresh();
                     })
                     .catch((err) => {
-                        this.addFlashMessage(new FlashMessageError("Failed saving version <b>"+m.name+"</b>", err, true));
+                        this.addFlashMessage(new FlashMessageError("Failed saving version <b>" + m.name + "</b>", err, true));
                     });
             }
         });

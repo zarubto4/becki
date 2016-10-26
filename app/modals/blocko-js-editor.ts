@@ -7,15 +7,13 @@
  */
 
 import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
-import {CORE_DIRECTIVES} from "@angular/common";
-import {REACTIVE_FORM_DIRECTIVES, FormGroup, Validators, FormBuilder} from "@angular/forms";
+import {FormGroup, Validators, FormBuilder} from "@angular/forms";
 import {ModalModel} from "../services/ModalService";
 import {Blocks} from "blocko";
-import {AceEditor} from "../components/AceEditor";
 
 
 export class ModalsBlockoJsEditorModel extends ModalModel {
-    constructor(public jsBlock:Blocks.JSBlock) {
+    constructor(public jsBlock: Blocks.JSBlock) {
         super();
         this.modalWide = true;
     }
@@ -23,24 +21,23 @@ export class ModalsBlockoJsEditorModel extends ModalModel {
 
 @Component({
     selector: "modals-blocko-js-editor",
-    templateUrl: "app/modals/blocko-js-editor.html",
-    directives: [CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, AceEditor]
+    templateUrl: "app/modals/blocko-js-editor.html"
 })
 export class ModalsBlockoJsEditorComponent implements OnInit {
 
     @Input()
-    modalModel:ModalsBlockoJsEditorModel;
+    modalModel: ModalsBlockoJsEditorModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
 
-    jsCode:string;
+    jsCode: string;
 
-    jsError:{ name:string, message:string };
+    jsError: { name: string, message: string };
 
-    blockForm:FormGroup = null;
+    blockForm: FormGroup = null;
 
-    constructor(protected formBuilder:FormBuilder) {
+    constructor(protected formBuilder: FormBuilder) {
         this.blockForm = this.formBuilder.group({
             "color": ["", [Validators.required]],
             "icon": ["", [Validators.required]],
@@ -53,14 +50,14 @@ export class ModalsBlockoJsEditorComponent implements OnInit {
             if (Blocks.JSBlock.validateJsCode(this.jsCode)) {
                 this.jsError = null;
             } else {
-                this.jsError = { name: "Error", message: "Unknown error" };
+                this.jsError = {name: "Error", message: "Unknown error"};
             }
         } catch (e) {
 
             var name = e.name || "Error";
             name = name.replace(/([A-Z])/g, ' $1').trim();
 
-            var msg:string = e.message || e.toString();
+            var msg: string = e.message || e.toString();
 
             if (e instanceof Blocks.JSBlockError) {
                 name = "JS Block Error";
@@ -83,7 +80,7 @@ export class ModalsBlockoJsEditorComponent implements OnInit {
             }
 
 
-            this.jsError = { name: name, message: msg };
+            this.jsError = {name: name, message: msg};
         }
     }
 
@@ -95,11 +92,11 @@ export class ModalsBlockoJsEditorComponent implements OnInit {
         this.blockForm.controls["description"].setValue(data["description"]);
     }
 
-    newJsCode(code:string) {
+    newJsCode(code: string) {
         this.jsCode = code;
     }
 
-    onSubmitClick():void {
+    onSubmitClick(): void {
         this.validate();
         if (!this.jsError) {
             var designJson = JSON.stringify({
@@ -114,11 +111,11 @@ export class ModalsBlockoJsEditorComponent implements OnInit {
         }
     }
 
-    onCloseClick():void {
+    onCloseClick(): void {
         this.modalClose.emit(false);
     }
 
-    onCancelClick():void {
+    onCancelClick(): void {
         this.modalClose.emit(false);
     }
 }

@@ -25,8 +25,7 @@ import {ModalsProjectNewComponent, ModalsProjectsNewModel} from "./modals/projec
     {provide: libBootstrapModal.Component, useExisting: ngCore.forwardRef(() => Component)},
     libBeckiNotifications.Service,
     {provide: "home", useValue: "No Name"}
-  ],
-  directives: [libBeckiFieldCode.Component, ngCommon.CORE_DIRECTIVES, ngRouter.ROUTER_DIRECTIVES, ModalsProjectNewComponent],
+  ].device_board_pairs,
   inputs: ["body"],
   host: {"[class.modal-open]": "modal"}
 })

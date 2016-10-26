@@ -2,8 +2,8 @@
  * Created by davidhradek on 19.09.16.
  */
 
-import { Directive, ElementRef, Input, Output, EventEmitter} from '@angular/core';
-declare var $:JQueryStatic;
+import {Directive, ElementRef, Input, Output, EventEmitter} from "@angular/core";
+declare var $: JQueryStatic;
 
 export interface DraggableEventParams {
     directive: Draggable;
@@ -31,7 +31,7 @@ export class Draggable {
 
     ngOnInit() {
 
-        var options:any = {};
+        var options: any = {};
         for (var k in this.draggableConfig) {
             if (!this.draggableConfig.hasOwnProperty(k)) continue;
             options[k] = (<any>this.draggableConfig)[k];

@@ -13,15 +13,15 @@ import {CurrentParamsService} from "../services/CurrentParamsService";
 
 export abstract class BaseMainComponent {
 
-    protected backendService:BackendService = null;
-    protected router:Router = null;
-    protected activatedRoute:ActivatedRoute = null;
-    protected modalService:ModalService = null;
-    protected flashMessagesService:FlashMessagesService = null;
-    protected formBuilder:FormBuilder = null;
-    protected currentParamsService:CurrentParamsService = null;
+    protected backendService: BackendService = null;
+    protected router: Router = null;
+    protected activatedRoute: ActivatedRoute = null;
+    protected modalService: ModalService = null;
+    protected flashMessagesService: FlashMessagesService = null;
+    protected formBuilder: FormBuilder = null;
+    protected currentParamsService: CurrentParamsService = null;
 
-    constructor(injector:Injector) {
+    constructor(injector: Injector) {
         console.log("BaseMainComponent init");
         if (injector) {
             this.backendService = injector.get(BackendService);
@@ -36,11 +36,11 @@ export abstract class BaseMainComponent {
         }
     }
 
-    protected addFlashMessage(fm:FlashMessage):void {
+    protected addFlashMessage(fm: FlashMessage): void {
         this.flashMessagesService.addFlashMessage(fm);
     }
 
-    protected navigate(link:any[]):void {
+    protected navigate(link: any[]): void {
         this.router.navigate(link);
     }
 

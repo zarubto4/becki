@@ -7,16 +7,12 @@
  */
 
 import {Component, OnInit, OnDestroy} from "@angular/core";
-import {CORE_DIRECTIVES} from "@angular/common";
-import {ROUTER_DIRECTIVES} from "@angular/router";
-import {FlashMessagesComponent} from "../components/FlashMessagesComponent";
 
 const BODY_CLASSES = ["login"];
 
 @Component({
     selector: "layout-not-logged",
-    templateUrl: "app/layouts/not-logged.html",
-    directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES, FlashMessagesComponent]
+    templateUrl: "app/layouts/not-logged.html"
 })
 export class LayoutNotLogged implements OnInit, OnDestroy {
 
@@ -24,11 +20,11 @@ export class LayoutNotLogged implements OnInit, OnDestroy {
 
     }
 
-    ngOnInit():void {
+    ngOnInit(): void {
         document.body.classList.add(...BODY_CLASSES);
     }
 
-    ngOnDestroy():void {
+    ngOnDestroy(): void {
         document.body.classList.remove(...BODY_CLASSES);
     }
 }

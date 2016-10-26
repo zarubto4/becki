@@ -7,9 +7,21 @@
  */
 (function (global) {
     System.config({
+        paths: {
+            'npm:': 'node_modules/'
+        },
         map: {
             "app": "./app",
-            "@angular": "./node_modules/@angular",
+            // Angular
+            '@angular/core': 'npm:@angular/core/bundles/core.umd.js',
+            '@angular/common': 'npm:@angular/common/bundles/common.umd.js',
+            '@angular/compiler': 'npm:@angular/compiler/bundles/compiler.umd.js',
+            '@angular/platform-browser': 'npm:@angular/platform-browser/bundles/platform-browser.umd.js',
+            '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
+            '@angular/http': 'npm:@angular/http/bundles/http.umd.js',
+            '@angular/router': 'npm:@angular/router/bundles/router.umd.js',
+            '@angular/forms': 'npm:@angular/forms/bundles/forms.umd.js',
+            // Other
             "ace": "./node_modules/ace-builds/src-min-noconflict",
             "blocko": "./node_modules/blocko",
             "node-uuid": "./node_modules/node-uuid",
@@ -20,14 +32,6 @@
             "moment": "./node_modules/moment"
         },
         packages: {
-            "@angular/common": {main: "index"},
-            "@angular/compiler": {main: "index"},
-            "@angular/core": {main: "index"},
-            "@angular/forms": {main: "index"},
-            "@angular/http": {main: "index"},
-            "@angular/platform-browser": {main: "index"},
-            "@angular/platform-browser-dynamic": {main: "index"},
-            "@angular/router": {main: "index"},
             "ace": {main: "ace"},
             "app": {main: "main", defaultExtension: "js"},
             "blocko": {main: "js/index"},

@@ -4,11 +4,8 @@
  */
 
 import {Component, OnDestroy, OnInit, Input, Inject} from "@angular/core";
-import {CORE_DIRECTIVES} from "@angular/common";
-import {ROUTER_DIRECTIVES, ActivatedRoute, Params} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import {BackendService} from "../services/BackendService";
-import {FlashMessagesComponent} from "../components/FlashMessagesComponent";
-import {Subscription} from "rxjs/Rx";
 import {BreadcrumbsService} from "../services/BreadcrumbsService";
 import {TabMenuService} from "../services/TabMenuService";
 import {LabeledLink} from "../helpers/LabeledLink";
@@ -19,25 +16,24 @@ const BODY_CLASSES = ["page-header-fixed", "page-container-bg-solid"];
 
 @Component({
     selector: "layout-main",
-    templateUrl: "app/layouts/main.html",
-    directives: [CORE_DIRECTIVES, ROUTER_DIRECTIVES, FlashMessagesComponent]
+    templateUrl: "app/layouts/main.html"
 })
 export class LayoutMain implements OnInit, OnDestroy {
 
     @Input()
-    title:string = "";
+    title: string = "";
 
     @Input()
-    tabMenu:string = null;
+    tabMenu: string = null;
 
-    tabMenuItems:LabeledLink[] = null;
+    tabMenuItems: LabeledLink[] = null;
 
-    showUserMenu:boolean = false;
-    showNotificationMenu:boolean = false;
+    showUserMenu: boolean = false;
+    showNotificationMenu: boolean = false;
 
-    sidebarClosed:boolean = false;
+    sidebarClosed: boolean = false;
 
-    constructor(protected notificationsService:NotificationService, private backendService:BackendService, @Inject("navigation") private navigation:LabeledLink[], private breadcrumbsService:BreadcrumbsService, private tabMenuService:TabMenuService, private activatedRoute:ActivatedRoute) {
+    constructor(protected notificationsService: NotificationService, private backendService: BackendService, @Inject("navigation") private navigation: LabeledLink[], private breadcrumbsService: BreadcrumbsService, private tabMenuService: TabMenuService, private activatedRoute: ActivatedRoute) {
     }
 
     // define function as property is needed to can set it as event listener (class methods is called with wrong this)
@@ -46,7 +42,7 @@ export class LayoutMain implements OnInit, OnDestroy {
         this.showUserMenu = false;
     };
 
-    ngOnInit():void {
+    ngOnInit(): void {
         this.tabMenuItems = this.tabMenuService.getMenu(this.tabMenu);
 
         this.initSidebarClosed();
@@ -54,7 +50,7 @@ export class LayoutMain implements OnInit, OnDestroy {
         document.body.addEventListener("mouseup", this.mouseUpEvent);
     }
 
-    ngOnDestroy():void {
+    ngOnDestroy(): void {
         document.body.classList.remove(...BODY_CLASSES);
         document.body.removeEventListener("mouseup", this.mouseUpEvent);
     }
@@ -70,7 +66,7 @@ export class LayoutMain implements OnInit, OnDestroy {
 
     onSidebarToggleClick() {
         this.sidebarClosed = !this.sidebarClosed;
-        localStorage.setItem('sidebarClosed', this.sidebarClosed?"true":"false");
+        localStorage.setItem('sidebarClosed', this.sidebarClosed ? "true" : "false");
         if (this.sidebarClosed) {
             document.body.classList.add("page-sidebar-closed");
         } else {

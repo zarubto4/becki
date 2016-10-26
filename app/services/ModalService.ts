@@ -5,48 +5,50 @@
 import {EventEmitter, Injectable, NgZone} from "@angular/core";
 
 export abstract class ModalModel {
-    modalWide:boolean = false;
+    modalWide: boolean = false;
 }
 
 export class ModalWrapper {
 
     // this is needed for animations
-    modalDisplay:boolean = false;
-    modalIn:boolean = false;
+    modalDisplay: boolean = false;
+    modalIn: boolean = false;
 
-    private animationTimeout:any = null;
+    private animationTimeout: any = null;
 
-    public modalClosed:EventEmitter<boolean> = new EventEmitter<boolean>();
+    public modalClosed: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-    constructor (public modalModel:ModalModel) {
+    constructor(public modalModel: ModalModel) {
     }
 
-    getModalType():string {
+    getModalType(): string {
         if (this.modalModel) {
             return (<any>this.modalModel.constructor).name; // Maybe this can be do better
         }
         return null;
     }
 
-    showModal(ngZone:NgZone):Promise<boolean> {
+    showModal(ngZone: NgZone): Promise<boolean> {
         clearTimeout(this.animationTimeout);
         this.modalDisplay = true;
         this.modalIn = false;
         this.animationTimeout = setTimeout(() => {
-            this.modalIn=true;
-            ngZone.run(()=>{}); // this is needed to reload state of modal when call from blocko ... I don't know why...
+            this.modalIn = true;
+            ngZone.run(()=> {
+            }); // this is needed to reload state of modal when call from blocko ... I don't know why...
         }, 5);
 
-        ngZone.run(()=>{}); // this is needed to reload state of modal when call from blocko ... I don't know why...
+        ngZone.run(()=> {
+        }); // this is needed to reload state of modal when call from blocko ... I don't know why...
 
         return new Promise(resolve => this.modalClosed.subscribe(resolve));
     }
 
-    closeModal(result:boolean):void {
+    closeModal(result: boolean): void {
         clearTimeout(this.animationTimeout);
         this.modalDisplay = true;
         this.modalIn = false;
-        this.animationTimeout = setTimeout(() => this.modalDisplay=false, 250);
+        this.animationTimeout = setTimeout(() => this.modalDisplay = false, 250);
 
         this.modalModel = null;
         this.modalClosed.emit(result);
@@ -57,13 +59,13 @@ export class ModalWrapper {
 @Injectable()
 export class ModalService {
 
-    private modalWrappers:ModalWrapper[] = [];
+    private modalWrappers: ModalWrapper[] = [];
 
-    constructor(protected ngZone:NgZone) {
+    constructor(protected ngZone: NgZone) {
         console.log("ModalService init");
     }
 
-    showModal(modalModel:ModalModel):Promise<boolean> {
+    showModal(modalModel: ModalModel): Promise<boolean> {
         if (!modalModel) {
             throw new Error("Missing modalModel");
         }
@@ -76,7 +78,7 @@ export class ModalService {
         return wrapper.showModal(this.ngZone);
     }
 
-    closeModal(modalModel:ModalModel, result:boolean = false):void {
+    closeModal(modalModel: ModalModel, result: boolean = false): void {
         var wrapper = this.modalWrappers.find((mw) => mw.modalModel == modalModel);
         if (wrapper) {
             wrapper.closeModal(result);

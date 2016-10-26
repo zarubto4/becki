@@ -2,22 +2,21 @@
  * Created by davidhradek on 09.08.16.
  */
 
-import {Injectable, Inject, Injector} from "@angular/core";
-import {Route, Routes, ActivatedRoute, Params, Router, ActivatedRouteSnapshot, NavigationEnd} from "@angular/router";
+import {Injectable, Inject} from "@angular/core";
+import {Route, Routes, Router, ActivatedRouteSnapshot, NavigationEnd} from "@angular/router";
 import {BackendService} from "./BackendService";
 import {LabeledLink} from "../helpers/LabeledLink";
 import {CurrentParamsService} from "./CurrentParamsService";
 
 
-
 @Injectable()
 export class BreadcrumbsService {
 
-    protected breadcrumbs:LabeledLink[] = [];
+    protected breadcrumbs: LabeledLink[] = [];
 
-    protected breadNameCache:{ [key:string]:string } = {};
+    protected breadNameCache: { [key: string]: string } = {};
 
-    constructor(@Inject("routes") protected routes:Routes, protected router:Router, protected currentParamsService:CurrentParamsService, protected backendService:BackendService) {
+    constructor(@Inject("routes") protected routes: Routes, protected router: Router, protected currentParamsService: CurrentParamsService, protected backendService: BackendService) {
         console.log("BreadcrumbsService init");
 
         this.refresh();
@@ -41,14 +40,14 @@ export class BreadcrumbsService {
         });
     }
 
-    protected findRouteByPath(path:string):Route {
+    protected findRouteByPath(path: string): Route {
         for (var i = 0; i < this.routes.length; i++) {
             if (this.routes[i].path == path) return this.routes[i];
         }
         return null;
     }
 
-    protected resolveBreadName(breadName:string):string {
+    protected resolveBreadName(breadName: string): string {
         switch (breadName) {
             case ":project":
                 return this.currentParamsService.currentProjectNameSnapshot;
@@ -61,14 +60,14 @@ export class BreadcrumbsService {
         }
     }
 
-    private resolveLink(link:any[]):any[] {
+    private resolveLink(link: any[]): any[] {
         var params = this.currentParamsService.currentParamsSnapshot;
-        var outLink:any[] = [];
-        link.forEach((part:any) => {
+        var outLink: any[] = [];
+        link.forEach((part: any) => {
             if (typeof part == "string") {
                 for (var k in params) {
                     if (!params.hasOwnProperty(k)) continue;
-                    if (part == ":"+k) {
+                    if (part == ":" + k) {
                         part = params[k];
                     }
                 }
@@ -80,13 +79,13 @@ export class BreadcrumbsService {
 
     protected refresh() {
 
-        var currentActivatedRoute:ActivatedRouteSnapshot = this.router.routerState.snapshot.root;
+        var currentActivatedRoute: ActivatedRouteSnapshot = this.router.routerState.snapshot.root;
 
         while (currentActivatedRoute.firstChild) {
             currentActivatedRoute = currentActivatedRoute.firstChild
         }
 
-        var breadcrumbsArray:LabeledLink[] = [];
+        var breadcrumbsArray: LabeledLink[] = [];
 
         var currentRoute = currentActivatedRoute.routeConfig;
         if (!currentRoute || !currentRoute.path) return;

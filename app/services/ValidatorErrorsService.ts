@@ -11,10 +11,10 @@ export class ValidatorErrorsService {
         console.log("ValidatorErrorsService init");
     }
 
-    getMessageForErrors(errors:any) {
+    getMessageForErrors(errors: any) {
         if (errors) {
             if (errors["required"]) return "This field is required.";
-            if (errors["minlength"]) return "Minimal length of this field is "+errors["minlength"]["requiredLength"]+" characters.";
+            if (errors["minlength"]) return "Minimal length of this field is " + errors["minlength"]["requiredLength"] + " characters.";
             if (errors["nameTaken"]) return "This name is already taken.";
             if (errors["projectNameTaken"]) return "This project name is already taken.";
             if (errors["blockoNameTaken"]) return "This blocko name is already taken.";
@@ -22,7 +22,7 @@ export class ValidatorErrorsService {
             if (errors["passwordSame"]) return "Passwords are different.";
             if (errors["filename"]) return "Invalid file/directory name.";
         }
-        return "Unknown error ("+Object.keys(errors)+").";
+        return "Unknown error (" + Object.keys(errors) + ").";
     }
 
 }

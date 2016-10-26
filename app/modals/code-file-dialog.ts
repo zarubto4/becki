@@ -8,13 +8,11 @@
  */
 
 import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
-import {CORE_DIRECTIVES} from "@angular/common";
-import {REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
+import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {BackendService} from "../services/BackendService";
-import {BeckiFormInput} from "../components/BeckiFormInput";
 import {ModalModel} from "../services/ModalService";
 import {CodeDirectory} from "../components/CodeIDE";
-import {FileTreeObject, FileTree} from "../components/FileTree";
+import {FileTreeObject} from "../components/FileTree";
 import {BeckiValidators} from "../helpers/BeckiValidators";
 
 
@@ -30,38 +28,37 @@ export enum ModalsCodeFileDialogType {
 }
 
 export class ModalsCodeFileDialogModel extends ModalModel {
-    constructor(public type:ModalsCodeFileDialogType, public objectName:string = "", public directories:CodeDirectory[] = null, public selectedDirectory:CodeDirectory = null, public objectFullName:string = "") {
+    constructor(public type: ModalsCodeFileDialogType, public objectName: string = "", public directories: CodeDirectory[] = null, public selectedDirectory: CodeDirectory = null, public objectFullName: string = "") {
         super();
     }
 }
 
 @Component({
     selector: "modals-code-file-dialog",
-    templateUrl: "app/modals/code-file-dialog.html",
-    directives: [CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, BeckiFormInput, FileTree]
+    templateUrl: "app/modals/code-file-dialog.html"
 })
 export class ModalsCodeFileDialogComponent implements OnInit {
 
     @Input()
-    modalModel:ModalsCodeFileDialogModel;
+    modalModel: ModalsCodeFileDialogModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
 
     form: FormGroup;
 
-    rootFileTreeObject:FileTreeObject<CodeDirectory>;
-    selectedFto:FileTreeObject<CodeDirectory>;
+    rootFileTreeObject: FileTreeObject<CodeDirectory>;
+    selectedFto: FileTreeObject<CodeDirectory>;
 
-    neededName:boolean = false;
-    neededDirectory:boolean = false;
+    neededName: boolean = false;
+    neededDirectory: boolean = false;
 
-    textTitle:string = "";
-    textLabel:string = "";
-    textSubmit:string = "Done";
-    textCancel:string = "Cancel";
+    textTitle: string = "";
+    textLabel: string = "";
+    textSubmit: string = "Done";
+    textCancel: string = "Cancel";
 
-    constructor(private backendService:BackendService, private formBuilder:FormBuilder) {
+    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
     }
 
     ngOnInit() {
@@ -84,40 +81,40 @@ export class ModalsCodeFileDialogComponent implements OnInit {
             case ModalsCodeFileDialogType.MoveFile:
                 this.neededName = false;
                 this.neededDirectory = true;
-                this.textTitle = "Move file <b>"+this.modalModel.objectFullName+"</b>";
+                this.textTitle = "Move file <b>" + this.modalModel.objectFullName + "</b>";
                 this.textSubmit = "Move";
                 break;
             case ModalsCodeFileDialogType.MoveDirectory:
                 this.neededName = false;
                 this.neededDirectory = true;
-                this.textTitle = "Move directory <b>"+this.modalModel.objectFullName+"</b>";
+                this.textTitle = "Move directory <b>" + this.modalModel.objectFullName + "</b>";
                 this.textSubmit = "Move";
                 break;
             case ModalsCodeFileDialogType.RenameFile:
                 this.neededName = true;
                 this.neededDirectory = false;
-                this.textTitle = "Rename file <b>"+this.modalModel.objectFullName+"</b>";
+                this.textTitle = "Rename file <b>" + this.modalModel.objectFullName + "</b>";
                 this.textLabel = "File name";
                 this.textSubmit = "Rename";
                 break;
             case ModalsCodeFileDialogType.RenameDirectory:
                 this.neededName = true;
                 this.neededDirectory = false;
-                this.textTitle = "Rename directory <b>"+this.modalModel.objectFullName+"</b>";
+                this.textTitle = "Rename directory <b>" + this.modalModel.objectFullName + "</b>";
                 this.textLabel = "Directory name";
                 this.textSubmit = "Rename";
                 break;
             case ModalsCodeFileDialogType.RemoveFile:
                 this.neededName = false;
                 this.neededDirectory = false;
-                this.textTitle = "Really want remove file <b>"+this.modalModel.objectFullName+"</b> ?";
+                this.textTitle = "Really want remove file <b>" + this.modalModel.objectFullName + "</b> ?";
                 this.textSubmit = "Yes";
                 this.textCancel = "No";
                 break;
             case ModalsCodeFileDialogType.RemoveDirectory:
                 this.neededName = false;
                 this.neededDirectory = false;
-                this.textTitle = "Really want remove directory <b>"+this.modalModel.objectFullName+"</b> with all children ?";
+                this.textTitle = "Really want remove directory <b>" + this.modalModel.objectFullName + "</b> with all children ?";
                 this.textSubmit = "Yes";
                 this.textCancel = "No";
                 break;
@@ -139,12 +136,12 @@ export class ModalsCodeFileDialogComponent implements OnInit {
             this.selectedFto = newRootFileTreeObject;
 
             // initialize directories
-            this.modalModel.directories.forEach((dir:CodeDirectory) => {
+            this.modalModel.directories.forEach((dir: CodeDirectory) => {
                 var parts = dir.objectFullPath.split("/");
                 var parentFto = newRootFileTreeObject;
                 for (var i = 0; i < parts.length; i++) {
                     var partName = parts[i];
-                    var newFto:FileTreeObject<CodeDirectory> = parentFto.childByName(partName, true);
+                    var newFto: FileTreeObject<CodeDirectory> = parentFto.childByName(partName, true);
                     if (!newFto) {
                         newFto = new FileTreeObject<CodeDirectory>(partName);
                         newFto.children = []; // make directory
@@ -166,11 +163,11 @@ export class ModalsCodeFileDialogComponent implements OnInit {
 
     }
 
-    selectFto(fto:FileTreeObject<CodeDirectory>) {
+    selectFto(fto: FileTreeObject<CodeDirectory>) {
         this.selectedFto = fto;
     }
 
-    onSubmitClick():void {
+    onSubmitClick(): void {
         if (this.neededName) {
             this.modalModel.objectName = this.form.controls["objectName"].value;
         }
@@ -184,11 +181,11 @@ export class ModalsCodeFileDialogComponent implements OnInit {
         this.modalClose.emit(true);
     }
 
-    onCloseClick():void {
+    onCloseClick(): void {
         this.modalClose.emit(false);
     }
 
-    onCancelClick():void {
+    onCancelClick(): void {
         this.modalClose.emit(false);
     }
 }

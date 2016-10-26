@@ -3,13 +3,10 @@
  */
 
 import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
-import {LayoutMain} from "../layouts/main";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
-import {ROUTER_DIRECTIVES} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
-import {IDEComponent} from "../lib-becki/field-ide";
-import {CodeIDE, CodeFile} from "../components/CodeIDE";
+import {CodeFile} from "../components/CodeIDE";
 import {ModalsConfirmModel} from "../modals/confirm";
 import {ModalsVersionDialogModel} from "../modals/version-dialog";
 import {IProject, ICProgram, ICProgramVersion, IUserFiles} from "../backend/TyrionAPI";
@@ -20,30 +17,31 @@ import moment = require("moment/moment");
 
 @Component({
     selector: "view-projects-project-code-code",
-    templateUrl: "app/views/projects-project-code-code.html",
-    directives: [ROUTER_DIRECTIVES, LayoutMain, IDEComponent, CodeIDE],
+    templateUrl: "app/views/projects-project-code-code.html"
 })
 export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     projectId: string;
     codeId: string;
 
-    routeParamsSubscription:Subscription;
+    routeParamsSubscription: Subscription;
 
-    project:IProject = null;
+    project: IProject = null;
 
-    codeProgram:ICProgram = null;
-    codeProgramVersions:ICProgramVersion[] = null;
+    codeProgram: ICProgram = null;
+    codeProgramVersions: ICProgramVersion[] = null;
 
-    selectedProgramVersion:ICProgramVersion = null;
-    selectedCodeFiles:CodeFile[] = null;
+    selectedProgramVersion: ICProgramVersion = null;
+    selectedCodeFiles: CodeFile[] = null;
 
-    buildErrors:ICodeCompileErrorMessage[] = null;
-    buildInProgress:boolean = false;
+    buildErrors: ICodeCompileErrorMessage[] = null;
+    buildInProgress: boolean = false;
 
-    constructor(injector:Injector) {super(injector)};
+    constructor(injector: Injector) {
+        super(injector)
+    };
 
-    ngOnInit():void {
+    ngOnInit(): void {
         var main = new CodeFile("main.cpp", "#include \"byzance.h\"\n\nint main() {\n    while (true) {\n        // your code here\n    }\n}\n");
         main.fixedPath = true;
         this.selectedCodeFiles = [main];
@@ -55,16 +53,16 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         });
     }
 
-    ngOnDestroy():void {
+    ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
     }
 
-    refresh():void {
+    refresh(): void {
 
         //this.backendService.addVersionToCProgram("verzeeeeee 1", "hele asi fajn veerze programu kterej se super mega ultra dobrej", "hlavní program", {"neco.cpp":"something"}, this.codeId);
 
         this.backendService.getCProgram(this.codeId)
-            .then((codeProgram:ICProgram) => {
+            .then((codeProgram: ICProgram) => {
                 console.log(codeProgram);
                 this.codeProgram = codeProgram;
 
@@ -86,13 +84,13 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     }
 
-    selectProgramVersion(programVersion:ICProgramVersion) {
+    selectProgramVersion(programVersion: ICProgramVersion) {
         if (!this.codeProgramVersions) return;
         if (this.codeProgramVersions.indexOf(programVersion) == -1) return;
 
         this.selectedProgramVersion = programVersion;
 
-        var codeFiles:CodeFile[] = [];
+        var codeFiles: CodeFile[] = [];
         if (Array.isArray(programVersion.user_files)) {
             codeFiles = (<IUserFiles[]>programVersion.user_files).map((uf) => { //TODO: remove after fix swagger
                 return new CodeFile(uf.file_name, uf.code);
@@ -109,24 +107,24 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     }
 
-    onProgramVersionClick(programVersion:ICProgramVersion) {
+    onProgramVersionClick(programVersion: ICProgramVersion) {
 
         if (this.selectedProgramVersion) {
 
-            var changedFiles:string[] = this.changesInSelectedVersion();
+            var changedFiles: string[] = this.changesInSelectedVersion();
 
             if (changedFiles.length) {
 
                 var text = "";
                 if (this.selectedProgramVersion == programVersion) {
-                    text = "You have <b>unsaved changes</b> in version <b>"+this.selectedProgramVersion.version_object.version_name+"</b>, do you really want reload this version?";
+                    text = "You have <b>unsaved changes</b> in version <b>" + this.selectedProgramVersion.version_object.version_name + "</b>, do you really want reload this version?";
                 } else {
-                    text = "You have <b>unsaved changes</b> in version <b>"+this.selectedProgramVersion.version_object.version_name+"</b>, do you really want switch to version <b>"+programVersion.version_object.version_name+"</b>?";
+                    text = "You have <b>unsaved changes</b> in version <b>" + this.selectedProgramVersion.version_object.version_name + "</b>, do you really want switch to version <b>" + programVersion.version_object.version_name + "</b>?";
                 }
 
                 var confirm = new ModalsConfirmModel(
                     text,
-                    "<h5>Changed files:</h5>"+changedFiles.join("<br>")
+                    "<h5>Changed files:</h5>" + changedFiles.join("<br>")
                 );
 
                 this.modalService.showModal(confirm).then((yes) => {
@@ -146,8 +144,8 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         }
     }
 
-    changesInSelectedVersion():string[] {
-        var changedFiles:string[] = [];
+    changesInSelectedVersion(): string[] {
+        var changedFiles: string[] = [];
         if (Array.isArray(this.selectedCodeFiles)) {
             this.selectedCodeFiles.forEach((file) => {
                 if (file.changes) {
@@ -166,7 +164,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             if (success) {
                 var main = "";
 
-                var userFiles:IUserFiles[] = [];
+                var userFiles: IUserFiles[] = [];
 
                 this.selectedCodeFiles.forEach((file) => {
                     if (file.objectFullPath == "main.cpp") {
@@ -180,13 +178,18 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 });
 
 
-                this.backendService.createCProgramVersion(this.codeId, {version_name: m.name, version_description: m.description, main: main, user_files: userFiles})
+                this.backendService.createCProgramVersion(this.codeId, {
+                    version_name: m.name,
+                    version_description: m.description,
+                    main: main,
+                    user_files: userFiles
+                })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess("Version <b>"+m.name+"</b> saved successfully.", null, true));
+                        this.addFlashMessage(new FlashMessageSuccess("Version <b>" + m.name + "</b> saved successfully.", null, true));
                         this.refresh();
                     })
                     .catch((err) => {
-                        this.addFlashMessage(new FlashMessageError("Failed saving version <b>"+m.name+"</b>", err, true));
+                        this.addFlashMessage(new FlashMessageError("Failed saving version <b>" + m.name + "</b>", err, true));
                     });
             }
         });
@@ -197,7 +200,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
         var main = "";
 
-        var userFiles:IUserFiles[] = [];
+        var userFiles: IUserFiles[] = [];
 
         this.buildErrors = null;
         this.selectedCodeFiles.forEach((file) => {
@@ -214,7 +217,11 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         });
 
         this.buildInProgress = true;
-        this.backendService.compileCProgram({main: main, user_files: userFiles, type_of_board_id: this.codeProgram.type_of_board_id})
+        this.backendService.compileCProgram({
+            main: main,
+            user_files: userFiles,
+            type_of_board_id: this.codeProgram.type_of_board_id
+        })
             .then((success)=> {
                 this.buildInProgress = false;
                 console.log(success);
@@ -227,12 +234,12 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     this.buildErrors = error.errors;
 
                     // TODO: move to method
-                    var filesAnnotations:{[filename:string]:AceAjax.Annotation[]} = {};
+                    var filesAnnotations: {[filename: string]: AceAjax.Annotation[]} = {};
                     this.buildErrors.forEach((error) => {
                         var filename = error.filename.substr(1);
                         if (!filesAnnotations[filename]) filesAnnotations[filename] = [];
                         filesAnnotations[filename].push({
-                            row: error.line-1,
+                            row: error.line - 1,
                             column: 1,
                             text: error.text,
                             type: error.type

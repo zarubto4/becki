@@ -2,14 +2,11 @@
  * Created by davidhradek on 20.09.16.
  */
 
-import {Component, Input, Output, EventEmitter, AfterViewInit, OnInit} from "@angular/core";
-import {AbstractControl, REACTIVE_FORM_DIRECTIVES, FORM_DIRECTIVES} from "@angular/forms";
-import {ValidatorErrorsService} from "../services/ValidatorErrorsService";
+import {Component, Input, Output, EventEmitter, OnInit} from "@angular/core";
 import {ICProgram} from "../backend/TyrionAPI";
 
 @Component({
     selector: "c-program-version-selector",
-    directives: [FORM_DIRECTIVES],
     template: `
 <div>
     <div class="form-group col-md-6" [class.has-error]="!selectedProgramId">
@@ -36,22 +33,23 @@ import {ICProgram} from "../backend/TyrionAPI";
 export class CProgramVersionSelector implements OnInit {
 
     @Input()
-    cPrograms:ICProgram[] = null;
+    cPrograms: ICProgram[] = null;
 
     @Input()
-    value:string = null;
+    value: string = null;
 
     @Output()
-    valueChanged:EventEmitter<string> = new EventEmitter<string>();
+    valueChanged: EventEmitter<string> = new EventEmitter<string>();
 
-    selectedProgram:ICProgram = null;
-    selectedProgramId:string = null;
-    selectedProgramVersionId:string = null;
+    selectedProgram: ICProgram = null;
+    selectedProgramId: string = null;
+    selectedProgramVersionId: string = null;
 
-    constructor() {}
+    constructor() {
+    }
 
-    ngOnInit():void {
-       if (this.value) {
+    ngOnInit(): void {
+        if (this.value) {
 
             if (this.cPrograms) {
                 this.cPrograms.forEach((cp) => {
@@ -83,7 +81,7 @@ export class CProgramVersionSelector implements OnInit {
         }
     }
 
-    onSelectedProgramIdChange(newValue:string) {
+    onSelectedProgramIdChange(newValue: string) {
         if (this.selectedProgramId == newValue) return;
         this.selectedProgramId = newValue;
         this.selectedProgram = this.cPrograms.find((cp) => (cp.id == this.selectedProgramId));
@@ -92,7 +90,7 @@ export class CProgramVersionSelector implements OnInit {
         this.valueChanged.emit(this.value);
     }
 
-    onSelectedProgramVersionIdChange(newValue:string) {
+    onSelectedProgramVersionIdChange(newValue: string) {
         if (this.selectedProgramVersionId == newValue) return;
         this.selectedProgramVersionId = newValue;
         this.value = this.selectedProgramVersionId;

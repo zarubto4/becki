@@ -4,54 +4,15 @@
  */
 
 import {Component} from "@angular/core";
-import {REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
-import {CORE_DIRECTIVES} from "@angular/common";
 import {ModalService} from "../services/ModalService";
-import {ModalsRemovalComponent} from "./removal";
-import {ModalsProjectPropertiesComponent} from "./project-properties";
-import {ModalsAddHardwareComponent} from "./add-hardware";
-import {ModalsBlockoPropertiesComponent} from "./blocko-properties";
-import {ModalsCodePropertiesComponent} from "./code-properties";
-import {ModalsCodeFileDialogComponent} from "./code-file-dialog";
-import {ModalsConfirmComponent} from "./confirm";
-import {ModalsVersionDialogComponent} from "./version-dialog";
-import {ModalsBlockoJsEditorComponent} from "./blocko-js-editor";
-import {ModalsBlockoConfigPropertiesComponent} from "./blocko-config-properties";
-import {ModalsBlockoAddHardwareComponent} from "./blocko-add-hardware";
-import {ModalsGridConfigPropertiesComponent} from "./grid-config-properties";
-import {ModalsGridProjectPropertiesComponent} from "./grid-project-properties";
-import {ModalsGridProgramPropertiesComponent} from "./grid-program-properties";
-import {ModalsBlockoAddGridComponent} from "./blocko-add-grid";
-import {ModalsBlocksTypePropertiesComponent} from "./blocks-type-properties";
-import {ModalsBlocksBlockPropertiesComponent} from "./blocks-block-properties";
-import { ModalsHighImportanceNotificationComponent} from "./high-importance-notification";
 
 @Component({
     selector: "modal",
-    templateUrl: "app/modals/modal.html",
-    directives: [CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES,
-        ModalsProjectPropertiesComponent,
-        ModalsRemovalComponent,
-        ModalsAddHardwareComponent,
-        ModalsBlockoPropertiesComponent,
-        ModalsCodePropertiesComponent,
-        ModalsCodeFileDialogComponent,
-        ModalsConfirmComponent,
-        ModalsVersionDialogComponent,
-        ModalsBlockoJsEditorComponent,
-        ModalsBlockoConfigPropertiesComponent,
-        ModalsBlockoAddHardwareComponent,
-        ModalsGridConfigPropertiesComponent,
-        ModalsGridProjectPropertiesComponent,
-        ModalsGridProgramPropertiesComponent,
-        ModalsBlockoAddGridComponent,
-        ModalsBlocksTypePropertiesComponent,
-        ModalsBlocksBlockPropertiesComponent,
-        ModalsHighImportanceNotificationComponent,
-    ]
+    templateUrl: "app/modals/modal.html"
 })
 export class ModalComponent {
-    constructor(protected modalService:ModalService) {}
+    constructor(protected modalService: ModalService) {
+    }
 }
 
 

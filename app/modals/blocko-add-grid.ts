@@ -3,39 +3,36 @@
  */
 
 import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
-import {CORE_DIRECTIVES} from "@angular/common";
-import {REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
+import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 import {BackendService} from "../services/BackendService";
-import {BeckiFormInput} from "../components/BeckiFormInput";
 import {ModalModel} from "../services/ModalService";
-import {BeckiFormSelect, BeckiFormSelectOption, beckiFormSelectOptionsMaker} from "../components/BeckiFormSelect";
-import {ITypeOfBoard, IBoard, IMProject} from "../backend/TyrionAPI";
+import {BeckiFormSelectOption} from "../components/BeckiFormSelect";
+import {IMProject} from "../backend/TyrionAPI";
 
 
 export class ModalsBlockoAddGridModel extends ModalModel {
-    constructor(public gridProjects:IMProject[], public selectedGridProject:IMProject = null) {
+    constructor(public gridProjects: IMProject[], public selectedGridProject: IMProject = null) {
         super();
     }
 }
 
 @Component({
     selector: "modals-blocko-add-grid",
-    templateUrl: "app/modals/blocko-add-grid.html",
-    directives: [CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, BeckiFormInput, BeckiFormSelect]
+    templateUrl: "app/modals/blocko-add-grid.html"
 })
 export class ModalsBlockoAddGridComponent implements OnInit {
 
     @Input()
-    modalModel:ModalsBlockoAddGridModel;
+    modalModel: ModalsBlockoAddGridModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
 
-    options:BeckiFormSelectOption[] = null;
+    options: BeckiFormSelectOption[] = null;
 
     form: FormGroup;
 
-    constructor(private backendService:BackendService, private formBuilder:FormBuilder) {
+    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
             "grid": ["", [Validators.required]]
@@ -49,19 +46,19 @@ export class ModalsBlockoAddGridComponent implements OnInit {
                 label: g.name
             };
         });
-        (<FormControl>(this.form.controls["grid"])).setValue(this.modalModel.selectedGridProject?this.modalModel.selectedGridProject:"");
+        (<FormControl>(this.form.controls["grid"])).setValue(this.modalModel.selectedGridProject ? this.modalModel.selectedGridProject : "");
     }
 
-    onSubmitClick():void {
+    onSubmitClick(): void {
         this.modalModel.selectedGridProject = this.modalModel.gridProjects.find((g) => (this.form.controls["grid"].value == g.id));
         this.modalClose.emit(true);
     }
 
-    onCloseClick():void {
+    onCloseClick(): void {
         this.modalClose.emit(false);
     }
 
-    onCancelClick():void {
+    onCancelClick(): void {
         this.modalClose.emit(false);
     }
 }

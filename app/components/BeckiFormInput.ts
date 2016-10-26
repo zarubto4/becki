@@ -3,12 +3,11 @@
  */
 
 import {Component, Input} from "@angular/core";
-import {AbstractControl, REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
+import {AbstractControl} from "@angular/forms";
 import {ValidatorErrorsService} from "../services/ValidatorErrorsService";
 
 @Component({
     selector: "becki-form-input",
-    directives: [REACTIVE_FORM_DIRECTIVES],
     template: `
 <div class="form-group" [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)" [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
     <label>{{label}}</label>
@@ -25,23 +24,24 @@ import {ValidatorErrorsService} from "../services/ValidatorErrorsService";
 export class BeckiFormInput {
 
     @Input()
-    control:AbstractControl = null;
+    control: AbstractControl = null;
 
     @Input()
-    label:string = "Unknown label";
+    label: string = "Unknown label";
 
     @Input()
-    placeholder:string = null;
+    placeholder: string = null;
 
     @Input()
-    type:string = "text";
+    type: string = "text";
 
     @Input()
-    readonly:boolean = false;
+    readonly: boolean = false;
 
     @Input()
-    waitForTouch:boolean = true;
+    waitForTouch: boolean = true;
 
-    constructor(protected validatorErrorsService:ValidatorErrorsService) {}
+    constructor(protected validatorErrorsService: ValidatorErrorsService) {
+    }
 
 }

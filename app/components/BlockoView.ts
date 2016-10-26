@@ -6,41 +6,44 @@
  * directory of this distribution.
  */
 
-import {BlockoCore, BlockoSnapRenderer, BlockoBasicBlocks} from "blocko";
+import {BlockoCore, BlockoSnapRenderer, BlockoBasicBlocks, BlockoTargetInterface} from "blocko";
 import {
-    Component, AfterViewInit, OnChanges, OnDestroy, Input, Output, ViewChild, ElementRef,
-    EventEmitter, SimpleChanges
+    Component,
+    AfterViewInit,
+    OnChanges,
+    OnDestroy,
+    Input,
+    ViewChild,
+    ElementRef,
+    SimpleChanges
 } from "@angular/core";
-import {CORE_DIRECTIVES} from "@angular/common";
 import {ModalService} from "../services/ModalService";
 import {ModalsBlockoJsEditorModel} from "../modals/blocko-js-editor";
 import {ModalsBlockoConfigPropertiesModel} from "../modals/blocko-config-properties";
-import {BlockoTargetInterface} from "blocko";
 
 @Component({
     selector: "blocko-view",
-    templateUrl: "app/components/BlockoView.html",
-    directives: [CORE_DIRECTIVES]
+    templateUrl: "app/components/BlockoView.html"
 })
 export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
 
     @Input()
-    readonly:boolean = false;
+    readonly: boolean = false;
 
     @Input()
-    simpleMode:boolean = false;
+    simpleMode: boolean = false;
 
     @Input()
-    spy:string;
+    spy: string;
 
-    protected blockoController:BlockoCore.Controller;
+    protected blockoController: BlockoCore.Controller;
 
-    protected blockoRenderer:BlockoSnapRenderer.RendererController;
+    protected blockoRenderer: BlockoSnapRenderer.RendererController;
 
     @ViewChild("field")
-    field:ElementRef;
+    field: ElementRef;
 
-    constructor(protected modalService:ModalService) {
+    constructor(protected modalService: ModalService) {
         this.blockoRenderer = new BlockoSnapRenderer.RendererController();
         this.blockoRenderer.registerOpenConfigCallback((block) => {
             this.modalService.showModal(new ModalsBlockoConfigPropertiesModel(block));
@@ -61,11 +64,11 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
         this.blockoController.registerBlocks(BlockoBasicBlocks.Manager.getAllBlocks());
     }
 
-    ngOnChanges(changes:SimpleChanges):void {
+    ngOnChanges(changes: SimpleChanges): void {
 
         let readonly = changes["readonly"];
         if (readonly) {
-            if(!readonly.isFirstChange()) {
+            if (!readonly.isFirstChange()) {
                 throw new Error("The readability cannot be changed.");
             }
             this.blockoRenderer.readonly = readonly.currentValue;
@@ -77,70 +80,70 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
         }
         //TODO:
         /*let spy = changes["spy"];
-        if (spy && !spy.isFirstChange()) {
-            if (spy.previousValue) {
-                this.unsubscribeSpy(spy.previousValue);
-            }
-            if (spy.currentValue) {
-                this.subscribeSpy(spy.currentValue);
-            }
-        }*/
+         if (spy && !spy.isFirstChange()) {
+         if (spy.previousValue) {
+         this.unsubscribeSpy(spy.previousValue);
+         }
+         if (spy.currentValue) {
+         this.subscribeSpy(spy.currentValue);
+         }
+         }*/
     }
 
-    ngAfterViewInit():void {
+    ngAfterViewInit(): void {
         //if (!this.readonly) {
         new BlockoBasicBlocks.ExecutionController(this.blockoController);
         //}
         //TODO:
         /*
-        if (this.spy) {
-            this.subscribeSpy(this.spy);
-        }*/
+         if (this.spy) {
+         this.subscribeSpy(this.spy);
+         }*/
         this.blockoRenderer.setEditorElement(this.field.nativeElement);
     }
 
-    ngOnDestroy():void {
+    ngOnDestroy(): void {
         //TODO:
         /*
-        if (this.spy) {
-            this.unsubscribeSpy(this.spy);
-        }
-        */
+         if (this.spy) {
+         this.unsubscribeSpy(this.spy);
+         }
+         */
     }
 
-    addStaticBlock(blockName:string, x:number = 0, y:number = 0):BlockoCore.Block {
+    addStaticBlock(blockName: string, x: number = 0, y: number = 0): BlockoCore.Block {
 
         if (this.readonly) {
             throw new Error("read only");
         }
 
-        var bc:BlockoCore.BlockClass = this.blockoController.getBlockClassByVisutalType(blockName);
-        if (!bc) throw new Error("block "+blockName+" not found");
+        var bc: BlockoCore.BlockClass = this.blockoController.getBlockClassByVisutalType(blockName);
+        if (!bc) throw new Error("block " + blockName + " not found");
 
-        var b:BlockoCore.Block = new bc(this.blockoController.getFreeBlockId());
-        b.x = Math.round(x/10)*10; //TODO: move this to blocko
-        b.y = Math.round(y/10)*10;
+        var b: BlockoCore.Block = new bc(this.blockoController.getFreeBlockId());
+        b.x = Math.round(x / 10) * 10; //TODO: move this to blocko
+        b.y = Math.round(y / 10) * 10;
         this.blockoController.addBlock(b);
         return b;
     }
 
-    addJsBlock(jsCode:string, designJson:string, x:number = 0, y:number = 0):BlockoBasicBlocks.JSBlock {
+    addJsBlock(jsCode: string, designJson: string, x: number = 0, y: number = 0): BlockoBasicBlocks.JSBlock {
         if (this.readonly) {
             throw new Error("read only");
         }
         return this.addJsBlockWithoutReadonlyCheck(jsCode, designJson, x, y);
     }
 
-    addJsBlockWithoutReadonlyCheck(jsCode:string, designJson:string, x:number = 0, y:number = 0):BlockoBasicBlocks.JSBlock {
+    addJsBlockWithoutReadonlyCheck(jsCode: string, designJson: string, x: number = 0, y: number = 0): BlockoBasicBlocks.JSBlock {
         var b = new BlockoBasicBlocks.JSBlock(this.blockoController.getFreeBlockId(), jsCode, designJson);
-        b.x = Math.round(x/10)*10; //TODO: move this to blocko
-        b.y = Math.round(y/10)*10;
+        b.x = Math.round(x / 10) * 10; //TODO: move this to blocko
+        b.y = Math.round(y / 10) * 10;
         this.blockoController.addBlock(b);
         return b;
     }
 
 
-    addBlock(cls:BlockoCore.BlockClass):BlockoCore.Block {
+    addBlock(cls: BlockoCore.BlockClass): BlockoCore.Block {
         if (this.readonly) {
             throw new Error("read only");
         }
@@ -149,26 +152,26 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
         return b;
     }
 
-    removeAllBlocks():void {
+    removeAllBlocks(): void {
         if (this.readonly) {
             throw new Error("read only");
         }
         this.removeAllBlocksWithoutReadonlyCheck();
     }
 
-    removeAllBlocksWithoutReadonlyCheck():void {
+    removeAllBlocksWithoutReadonlyCheck(): void {
         this.blockoController.removeAllBlocks();
     }
 
-    setDataJson(json:string):string {
+    setDataJson(json: string): string {
         return this.blockoController.setDataJson(json);
     }
 
-    getDataJson():string {
+    getDataJson(): string {
         return this.blockoController.getDataJson();
     }
 
-    setInterfaces(ifaces:BlockoTargetInterface[]):void {
+    setInterfaces(ifaces: BlockoTargetInterface[]): void {
         this.blockoController.setInterfaces(ifaces);
     }
 }

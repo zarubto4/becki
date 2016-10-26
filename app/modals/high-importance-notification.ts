@@ -8,31 +8,23 @@
  */
 
 import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
-import {CORE_DIRECTIVES} from "@angular/common";
-import {REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
-import {BeckiAsyncValidators} from "../helpers/BeckiAsyncValidators";
-import {BackendService} from "../services/BackendService";
-import {BeckiFormInput} from "../components/BeckiFormInput";
 import {ModalModel} from "../services/ModalService";
 
 
-
-
 export class ModalsHighImportanceNotificationModel extends ModalModel {
-    constructor(public name:string = "", public notification_body:string = "", public messageId:string = "") {
+    constructor(public name: string = "", public notification_body: string = "", public messageId: string = "") {
         super();
     }
 }
 
 @Component({
     selector: "modals-high-importance-notification",
-    templateUrl: "app/modals/high-importance-notification.html",
-    directives: [CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, BeckiFormInput]
+    templateUrl: "app/modals/high-importance-notification.html"
 })
 export class ModalsHighImportanceNotificationComponent implements OnInit {
 
     @Input()
-    modalModel:ModalsHighImportanceNotificationModel;
+    modalModel: ModalsHighImportanceNotificationModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
@@ -41,17 +33,17 @@ export class ModalsHighImportanceNotificationComponent implements OnInit {
     }
 
     ngOnInit() {
-  }
+    }
 
-    onSubmitClick():void {
+    onSubmitClick(): void {
         this.modalClose.emit(true);
     }
 
-    onCloseClick():void {
+    onCloseClick(): void {
         this.modalClose.emit(false);
     }
 
-    onCancelClick():void {
+    onCancelClick(): void {
         this.modalClose.emit(false);
     }
 }

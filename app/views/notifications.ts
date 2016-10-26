@@ -3,22 +3,23 @@
  */
 
 
-import {Component, Injector, OnInit} from '@angular/core';
-import {LayoutMain} from "../layouts/main";
+import {Component, Injector, OnInit} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {NotificationService} from "../services/NotificationService";
 import {BackendService} from "../services/BackendService";
 
 @Component({
     selector: "view-notifications",
-    directives: [LayoutMain],
     templateUrl: "app/views/notifications.html"
 })
-export class NotificationsComponent extends BaseMainComponent implements OnInit{
+export class NotificationsComponent extends BaseMainComponent implements OnInit {
 
 
     page = 1;
-    constructor(injector:Injector,protected backendService:BackendService,protected notificationService:NotificationService) {super(injector)};
+
+    constructor(injector: Injector, protected backendService: BackendService, protected notificationService: NotificationService) {
+        super(injector)
+    };
 
 
     ngOnInit(): void {
@@ -26,15 +27,15 @@ export class NotificationsComponent extends BaseMainComponent implements OnInit{
         this.notificationService.getRestApiNotifications();
     }
 
-    listGetOlderNotifications():void{
-    this.page++;
+    listGetOlderNotifications(): void {
+        this.page++;
         this.notificationService.getRestApiNotifications(this.page);
     }
 
-    listGetNewerNotifications():void{
-        if(this.page <= 1 ){
-            this.page=1;
-        }else{
+    listGetNewerNotifications(): void {
+        if (this.page <= 1) {
+            this.page = 1;
+        } else {
             this.page--;
         }
         this.notificationService.getRestApiNotifications(this.page);

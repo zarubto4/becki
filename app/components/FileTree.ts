@@ -5,36 +5,33 @@
  * Created by davidhradek on 23.08.16.
  */
 
-import {
-    Component, OnDestroy, OnChanges, AfterViewInit, ElementRef, Input, ViewChild, Output,
-    EventEmitter, SimpleChanges, DoCheck, AfterContentChecked, ChangeDetectionStrategy, forwardRef
-} from "@angular/core";
+import {Component, Input, Output, EventEmitter} from "@angular/core";
 
 
 export interface FileTreeObjectInterface {
-    color:string;
-    open:boolean;
-    bold:boolean;
-    changes:boolean;
+    color: string;
+    open: boolean;
+    bold: boolean;
+    changes: boolean;
 }
 
 export class FileTreeObject<T extends FileTreeObjectInterface> {
-    name:string = null;
-    children:FileTreeObject<T>[] = null;
+    name: string = null;
+    children: FileTreeObject<T>[] = null;
 
-    data:T = null;
+    data: T = null;
 
-    selected:boolean = false;
+    selected: boolean = false;
 
-    private _icon:string = null;
-    private _color:string = "silver";
+    private _icon: string = null;
+    private _color: string = "silver";
 
-    constructor(name:string, icon:string = null) {
+    constructor(name: string, icon: string = null) {
         this.name = name;
         this._icon = icon;
     }
 
-    get icon():string {
+    get icon(): string {
         if (this._icon) {
             return this._icon;
         }
@@ -45,49 +42,49 @@ export class FileTreeObject<T extends FileTreeObjectInterface> {
         }
     }
 
-    get directory():boolean {
+    get directory(): boolean {
         return Array.isArray(this.children);
     }
 
-    set open(val:boolean) {
+    set open(val: boolean) {
         if (this.data) {
             this.data.open = val;
         }
     }
 
-    get open():boolean {
+    get open(): boolean {
         if (this.data) {
             return this.data.open;
         }
         return true;
     }
 
-    set color(val:string) {
+    set color(val: string) {
         this._color = val;
     }
 
-    get color():string {
+    get color(): string {
         if (this.data) {
             return this.data.color;
         }
         return this._color;
     }
 
-    get bold():boolean {
+    get bold(): boolean {
         if (this.data) {
             return this.data.bold;
         }
         return false;
     }
 
-    get changes():boolean {
+    get changes(): boolean {
         if (this.data) {
             return this.data.changes;
         }
         return false;
     }
 
-    public childByName(name:string, directory:boolean):FileTreeObject<T> {
+    public childByName(name: string, directory: boolean): FileTreeObject<T> {
         for (var x = 0; x < this.children.length; x++) {
             if (this.children[x].name == name) {
                 if (directory == this.children[x].directory) {
@@ -98,8 +95,8 @@ export class FileTreeObject<T extends FileTreeObjectInterface> {
         return null;
     }
 
-    public sortChildren(directoriesFirst:boolean = true) {
-        this.children.sort((a,b) => {
+    public sortChildren(directoriesFirst: boolean = true) {
+        this.children.sort((a, b) => {
             if (directoriesFirst) {
                 if (a.directory && !b.directory) return -1;
                 if (!a.directory && b.directory) return 1;
@@ -111,7 +108,7 @@ export class FileTreeObject<T extends FileTreeObjectInterface> {
         });
     }
 
-    public select(fto:FileTreeObject<T>, alsoOpen:boolean = false):boolean {
+    public select(fto: FileTreeObject<T>, alsoOpen: boolean = false): boolean {
         var inSelected = false;
         if (this.children) {
             this.children.forEach((f) => {
@@ -130,19 +127,18 @@ export class FileTreeObject<T extends FileTreeObjectInterface> {
 
 @Component({
     selector: "file-tree",
-    templateUrl: "app/components/FileTree.html",
-    directives: [forwardRef(function() { return FileTree; })]
+    templateUrl: "app/components/FileTree.html"
 })
 export class FileTree {
 
     @Input()
-    fileTreeObject:FileTreeObject<any>;
+    fileTreeObject: FileTreeObject<any>;
 
     @Input()
-    last:boolean = true;
+    last: boolean = true;
 
     @Input()
-    root:boolean = true;
+    root: boolean = true;
 
     @Input()
     privateOpen = false;
@@ -165,7 +161,7 @@ export class FileTree {
         }
     }
 
-    get open():boolean {
+    get open(): boolean {
         if (this.privateOpen) {
             return this._open;
         } else {
@@ -173,7 +169,7 @@ export class FileTree {
         }
     }
 
-    internalObjClick(fto:FileTreeObject<any>) {
+    internalObjClick(fto: FileTreeObject<any>) {
         this.internalObjClicked.emit(fto);
         this.newSelected.emit(fto);
         if (this.root && this.fileTreeObject) {

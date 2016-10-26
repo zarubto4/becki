@@ -3,7 +3,6 @@
  */
 
 import {TyrionAPI, INotification, IPerson, ILoginResult, IWebSocketToken} from "./TyrionAPI";
-
 import * as _ from "underscore";
 import * as Rx from "rxjs";
 import * as uuid from "node-uuid";
@@ -11,63 +10,64 @@ import * as uuid from "node-uuid";
 // INTERFACES
 
 export interface IBProgramValues {
-    digital:{[hwId:string]:boolean};
-    analog:{[hwId:string]:number};
-    connector:{[id:string]:{inputs:{[name:string]:number}, outputs:{[name:string]:number}}};
+    digital: {[hwId: string]: boolean};
+    analog: {[hwId: string]: number};
+    connector: {[id: string]: {inputs: {[name: string]: number}, outputs: {[name: string]: number}}};
 }
 
 export interface IBProgramValue<T> {
-    hwId:string;
-    value:T;
+    hwId: string;
+    value: T;
 }
 
 export interface IBProgramConnectorValue {
-    blockId:string;
-    connectorName:string;
-    value:number;
+    blockId: string;
+    connectorName: string;
+    value: number;
 }
 
 
 export interface IWebSocketMessage {
-    messageId:string;
-    messageChannel:string;
-    messageType:string;
+    messageId: string;
+    messageChannel: string;
+    messageType: string;
 }
 
 export interface IWebSocketErrorMessage extends IWebSocketMessage {
-    status:string;
-    error:string;
+    status: string;
+    error: string;
 }
 
-export interface IWebSocketNotification extends INotification, IWebSocketMessage {};
+export interface IWebSocketNotification extends INotification, IWebSocketMessage {
+}
 
 export interface ICodeCompileErrorMessage {
     filename: string;
-    type:string;
-    text:string;
-    codeWhitespace:string;
-    code:string;
+    type: string;
+    text: string;
+    codeWhitespace: string;
+    code: string;
 
-    line:number;
-    column:number;
-    adjustedColumn:number;
-    startIndex:number;
-    endIndex:number;
+    line: number;
+    column: number;
+    adjustedColumn: number;
+    startIndex: number;
+    endIndex: number;
 }
 
 // REQUEST CLASSES
 
 export class RestRequest {
 
-    method:string;
+    method: string;
 
-    url:string;
+    url: string;
 
-    headers:{[name:string]:string};
+    headers: {[name: string]: string};
 
-    body:Object;
+    body: Object;
 
-    constructor(method:string, url:string, headers:{[name:string]:string} = {}, body?:Object) {
+    constructor(method: string, url: string, headers: {[name: string]: string} = {}, body?: Object) {
         this.method = method;
         this.url = url;
         this.headers = {};
@@ -84,11 +84,11 @@ export class RestRequest {
 
 export class RestResponse {
 
-    status:number;
+    status: number;
 
-    body:Object;
+    body: Object;
 
-    constructor(status:number, body:Object) {
+    constructor(status: number, body: Object) {
         this.status = status;
         this.body = body;
     }
@@ -100,11 +100,11 @@ export class BugFoundError extends Error {
 
     name = "bug found error";
 
-    adminMessage:string;
+    adminMessage: string;
 
-    userMessage:string;
+    userMessage: string;
 
-    constructor(adminMessage:string, userMessage?:string) {
+    constructor(adminMessage: string, userMessage?: string) {
         super(BugFoundError.composeMessage(adminMessage));
         // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133
         this.message = BugFoundError.composeMessage(adminMessage);
@@ -112,33 +112,33 @@ export class BugFoundError extends Error {
         this.userMessage = userMessage;
     }
 
-    static fromRestResponse(response:RestResponse):BugFoundError {
+    static fromRestResponse(response: RestResponse): BugFoundError {
         let content = response.body;
-        let message:string;
+        let message: string;
         if (response.status == 400) {
-            content = (<{exception:Object}>response.body).exception;
-            message = (<{message:string}>response.body).message;
+            content = (<{exception: Object}>response.body).exception;
+            message = (<{message: string}>response.body).message;
         }
         return new BugFoundError(`response ${response.status}: ${JSON.stringify(content)}`, message);
     }
 
-    static fromWsResponse(response:IWebSocketErrorMessage):BugFoundError {
+    static fromWsResponse(response: IWebSocketErrorMessage): BugFoundError {
         return new BugFoundError(`response ${JSON.stringify(response)}`, response.error);
     }
 
-    static composeMessage(adminMessage:string):string {
+    static composeMessage(adminMessage: string): string {
         return `bug found in client or server: ${adminMessage}`;
     }
 }
 
 export class CodeError extends Error {
 
-    constructor(msg:string) {
+    constructor(msg: string) {
         super(msg);
         this.message = msg;
     }
 
-    static fromRestResponse(response:RestResponse):CodeError {
+    static fromRestResponse(response: RestResponse): CodeError {
         let content = response.body;
         if (response.status == 477) {
             return new CodeError(`External server is offline: ${JSON.stringify(content)}`);
@@ -153,14 +153,14 @@ export class CodeError extends Error {
 
 export class CodeCompileError extends Error {
 
-    errors:ICodeCompileErrorMessage[] = [];
+    errors: ICodeCompileErrorMessage[] = [];
 
-    constructor(msg:string) {
+    constructor(msg: string) {
         super(msg);
         this.message = msg;
     }
 
-    static fromRestResponse(response:RestResponse):CodeCompileError {
+    static fromRestResponse(response: RestResponse): CodeCompileError {
         var cce = new CodeCompileError(`Compile error.`);
         if (Array.isArray(response.body)) {
             cce.errors = <ICodeCompileErrorMessage[]>response.body;
@@ -176,17 +176,17 @@ export class UnauthorizedError extends Error {
 
     name = "request unauthorized error";
 
-    userMessage:string;
+    userMessage: string;
 
-    constructor(userMessage:string, message = "authorized authentication token required") {
+    constructor(userMessage: string, message = "authorized authentication token required") {
         super(message);
         // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133
         this.message = message;
         this.userMessage = userMessage;
     }
 
-    static fromRestResponse(response:RestResponse):UnauthorizedError {
-        return new UnauthorizedError((<{message:string}>response.body).message);
+    static fromRestResponse(response: RestResponse): UnauthorizedError {
+        return new UnauthorizedError((<{message: string}>response.body).message);
     }
 }
 
@@ -196,17 +196,17 @@ export class PermissionMissingError extends UnauthorizedError {
 
     name = "permission missing error";
 
-    userMessage:string;
+    userMessage: string;
 
-    constructor(userMessage:string) {
+    constructor(userMessage: string) {
         super(PermissionMissingError.MESSAGE);
         // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133
         this.message = PermissionMissingError.MESSAGE;
         this.userMessage = userMessage;
     }
 
-    static fromRestResponse(response:RestResponse):PermissionMissingError {
-        return new PermissionMissingError((<{message:string}>response.body).message);
+    static fromRestResponse(response: RestResponse): PermissionMissingError {
+        return new PermissionMissingError((<{message: string}>response.body).message);
     }
 }
 
@@ -222,31 +222,31 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     public host = "127.0.0.1:9000";
 
-    private webSocket:WebSocket = null;
+    private webSocket: WebSocket = null;
 
-    private webSocketMessageQueue:IWebSocketMessage[] = [];
+    private webSocketMessageQueue: IWebSocketMessage[] = [];
 
-    private webSocketReconnectTimeout:any = null;
+    private webSocketReconnectTimeout: any = null;
 
-    public notificationReceived:Rx.Subject<IWebSocketNotification> = new Rx.Subject<IWebSocketNotification>();
+    public notificationReceived: Rx.Subject<IWebSocketNotification> = new Rx.Subject<IWebSocketNotification>();
 
-    public webSocketErrorOccurred:Rx.Subject<any> = new Rx.Subject<any>();
+    public webSocketErrorOccurred: Rx.Subject<any> = new Rx.Subject<any>();
 
-    public interactionsOpened:Rx.Subject<void> = new Rx.Subject<void>();
-    public interactionsSchemeSubscribed:Rx.Subject<void> = new Rx.Subject<void>();
+    public interactionsOpened: Rx.Subject<void> = new Rx.Subject<void>();
+    public interactionsSchemeSubscribed: Rx.Subject<void> = new Rx.Subject<void>();
 
-    public BProgramValuesReceived:Rx.Subject<IBProgramValues> = new Rx.Subject<IBProgramValues>();
-    public BProgramAnalogValueReceived:Rx.Subject<IBProgramValue<number>> = new Rx.Subject<IBProgramValue<number>>();
-    public BProgramDigitalValueReceived:Rx.Subject<IBProgramValue<boolean>> = new Rx.Subject<IBProgramValue<boolean>>();
-    public BProgramInputConnectorValueReceived:Rx.Subject<IBProgramConnectorValue> = new Rx.Subject<IBProgramConnectorValue>();
-    public BProgramOutputConnectorValueReceived:Rx.Subject<IBProgramConnectorValue> = new Rx.Subject<IBProgramConnectorValue>();
+    public BProgramValuesReceived: Rx.Subject<IBProgramValues> = new Rx.Subject<IBProgramValues>();
+    public BProgramAnalogValueReceived: Rx.Subject<IBProgramValue<number>> = new Rx.Subject<IBProgramValue<number>>();
+    public BProgramDigitalValueReceived: Rx.Subject<IBProgramValue<boolean>> = new Rx.Subject<IBProgramValue<boolean>>();
+    public BProgramInputConnectorValueReceived: Rx.Subject<IBProgramConnectorValue> = new Rx.Subject<IBProgramConnectorValue>();
+    public BProgramOutputConnectorValueReceived: Rx.Subject<IBProgramConnectorValue> = new Rx.Subject<IBProgramConnectorValue>();
 
-    public tasks:number = 0;
+    public tasks: number = 0;
 
 
-    protected personInfoSnapshotDirty:boolean = true;
-    public personInfoSnapshot:IPerson = null;
-    public personInfo:Rx.Subject<IPerson> = new Rx.Subject<IPerson>();
+    protected personInfoSnapshotDirty: boolean = true;
+    public personInfoSnapshot: IPerson = null;
+    public personInfo: Rx.Subject<IPerson> = new Rx.Subject<IPerson>();
 
     // CONSTRUCTOR
 
@@ -260,23 +260,23 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     // GENERIC REQUESTS
 
-    protected abstract requestRestGeneral(request:RestRequest):Rx.Observable<RestResponse>;
+    protected abstract requestRestGeneral(request: RestRequest): Rx.Observable<RestResponse>;
 
-    public requestRestPath<T>(method:string, path:string, body:Object, success:number[]):Promise<T> {
+    public requestRestPath<T>(method: string, path: string, body: Object, success: number[]): Promise<T> {
         return this.requestRest(method, `${BeckiBackend.REST_SCHEME}://${this.host}${path}`, body, success).toPromise();
     }
 
-    public requestRest<T>(method:string, url:string, body:Object, success:number[]):Rx.Observable<T> {
-        let request = new RestRequest(method, url, {}, body);
+    public requestRest<T>(method: string, url: string, body: Object, success: number[]): Rx.Observable<T> {
+        let request: RestRequest = new RestRequest(method, url, {}, body);
         // TODO: https://github.com/angular/angular/issues/7438
         if (this.tokenExist()) {
             request.headers["X-AUTH-TOKEN"] = this.getToken();
         }
         this.tasks += 1;
         return this.requestRestGeneral(request)
-            .map(response => {
+            .map((response: RestResponse) => {
                 if (success.indexOf(response.status) > -1) {
-                    return response.body;
+                    return <T>response.body;
                 }
                 switch (response.status) {
                     case 401:
@@ -293,34 +293,34 @@ export abstract class BeckiBackend extends TyrionAPI {
                         throw BugFoundError.fromRestResponse(response);
                 }
             })
-            .finally<T>(() => {
+            .finally(() => {
                 this.tasks -= 1;
             });
     }
 
     // TOKEN MANIPULATIONS
 
-    private getToken():string {
+    private getToken(): string {
         return window.localStorage.getItem("authToken");
     }
 
-    private setToken(token:string):void {
+    private setToken(token: string): void {
         window.localStorage.setItem("authToken", token);
         this.refreshPersonInfo();
     }
 
-    public tokenExist():boolean {
+    public tokenExist(): boolean {
         return window.localStorage.getItem("authToken") ? true : false;
     }
 
-    private unsetToken():void {
+    private unsetToken(): void {
         window.localStorage.removeItem("authToken");
         this.refreshPersonInfo();
     }
 
     // LOGIN / LOGOUT
 
-    public login(mail:string, password:string):Promise<any> {
+    public login(mail: string, password: string): Promise<any> {
         if (!mail || !password) {
             throw "email and password required";
         }
@@ -337,7 +337,7 @@ export abstract class BeckiBackend extends TyrionAPI {
             })
     }
 
-    public loginFacebook(redirectUrl:string):Promise<string> {
+    public loginFacebook(redirectUrl: string): Promise<string> {
         return this.__loginFacebook(redirectUrl)
             .then(body => {
                 this.setToken(body.authToken);
@@ -345,7 +345,7 @@ export abstract class BeckiBackend extends TyrionAPI {
             });
     }
 
-    public loginGitHub(redirectUrl:string):Promise<string> {
+    public loginGitHub(redirectUrl: string): Promise<string> {
         return this.__loginGitHub(redirectUrl)
             .then(body => {
                 this.setToken(body.authToken);
@@ -353,7 +353,7 @@ export abstract class BeckiBackend extends TyrionAPI {
             });
     }
 
-    public logout():Promise<any> {
+    public logout(): Promise<any> {
         return new Promise<any>((resolve, reject)=> {
             this.__logout()
                 .then((body) => {
@@ -369,11 +369,11 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     // PERSON INFO
 
-    protected refreshPersonInfo():void {
+    protected refreshPersonInfo(): void {
         this.personInfoSnapshotDirty = true;
         if (this.tokenExist()) {
             this.getLoggedInPerson()
-                .then((lr:ILoginResult) => {
+                .then((lr: ILoginResult) => {
                     this.personInfoSnapshotDirty = false;
                     this.personInfoSnapshot = lr.person;
                     this.personInfo.next(this.personInfoSnapshot);
@@ -397,11 +397,11 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     // WEBSOCKET METHODS
 
-    private findEnqueuedWebSocketMessage(original:IWebSocketMessage, ...keys:string[]):IWebSocketMessage {
+    private findEnqueuedWebSocketMessage(original: IWebSocketMessage, ...keys: string[]): IWebSocketMessage {
         return this.webSocketMessageQueue.find(message => _.isMatch(message, _.pick(original, keys)));
     }
 
-    private sendWebSocketMessageQueue():void {
+    private sendWebSocketMessageQueue(): void {
         if (this.webSocket) {
             this.webSocketMessageQueue.slice().forEach(message => {
                 try {
@@ -411,13 +411,13 @@ export abstract class BeckiBackend extends TyrionAPI {
                         this.webSocketMessageQueue.splice(i);
                     }
                 } catch (err) {
-                    console.log("ERR"+err);
+                    console.log("ERR" + err);
                 }
             });
         }
     }
 
-    public sendWebSocketMessage(message:IWebSocketMessage):void {
+    public sendWebSocketMessage(message: IWebSocketMessage): void {
         this.webSocketMessageQueue.push(message);
         this.sendWebSocketMessageQueue();
     }
@@ -431,7 +431,7 @@ export abstract class BeckiBackend extends TyrionAPI {
         }, 5000);
     };
 
-    protected disconnectWebSocket():void {
+    protected disconnectWebSocket(): void {
         console.log("disconnectWebSocket()");
         if (this.webSocket) {
             this.webSocket.removeEventListener("close", this.reconnectWebSocketAfterTimeout);
@@ -440,7 +440,7 @@ export abstract class BeckiBackend extends TyrionAPI {
         this.webSocket = null;
     }
 
-    protected connectWebSocket():void {
+    protected connectWebSocket(): void {
         if (!this.tokenExist()) {
             console.log("connectWebSocket() :: cannot connect now, user token doesn't exists.");
             return;
@@ -448,9 +448,9 @@ export abstract class BeckiBackend extends TyrionAPI {
         this.disconnectWebSocket();
 
         this.getWebsocketAccessToken()
-            .then((webSocketToken:IWebSocketToken) => {
+            .then((webSocketToken: IWebSocketToken) => {
 
-                console.log("connectWebSocket() :: webSocketToken = "+webSocketToken.websocket_token);
+                console.log("connectWebSocket() :: webSocketToken = " + webSocketToken.websocket_token);
 
                 this.webSocket = new WebSocket(`${BeckiBackend.WS_SCHEME}://${this.host}/websocket/becki/${webSocketToken.websocket_token}`);
                 this.webSocket.addEventListener("close", this.reconnectWebSocketAfterTimeout);
@@ -463,7 +463,7 @@ export abstract class BeckiBackend extends TyrionAPI {
                         try {
                             return JSON.parse(event.data);
                         } catch (e) {
-                            console.log("parse: "+e);
+                            console.log("parse: " + e);
                         }
                         return null;
                     })
@@ -471,8 +471,7 @@ export abstract class BeckiBackend extends TyrionAPI {
                 let errorOccurred = Rx.Observable
                     .fromEvent(this.webSocket, "error");
 
-                opened.
-                subscribe(() => {
+                opened.subscribe(() => {
                     this.requestNotificationsSubscribe();
                 });
                 opened
@@ -516,7 +515,7 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     // WebSocket Messages:
 
-    public requestNotificationsSubscribe():void {
+    public requestNotificationsSubscribe(): void {
         let message = {
             messageId: uuid.v4(),
             messageChannel: BeckiBackend.WS_CHANNEL,
@@ -527,7 +526,7 @@ export abstract class BeckiBackend extends TyrionAPI {
         }
     }
 
-    public requestNotificationsUnsubscribe():void {
+    public requestNotificationsUnsubscribe(): void {
         let message = {
             messageId: uuid.v4(),
             messageChannel: BeckiBackend.WS_CHANNEL,
@@ -538,7 +537,7 @@ export abstract class BeckiBackend extends TyrionAPI {
         }
     }
 
-    public  requestBProgramSubscribe(version_id:string):void {
+    public  requestBProgramSubscribe(version_id: string): void {
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-262
         let message = {
             messageId: uuid.v4(),
@@ -551,8 +550,13 @@ export abstract class BeckiBackend extends TyrionAPI {
         }
     }
 
-    public requestBProgramValues(version_id:string):void {
-        let message = {messageId: uuid.v4(), messageChannel: BeckiBackend.WS_CHANNEL, messageType: "getValues", version_id};
+    public requestBProgramValues(version_id: string): void {
+        let message = {
+            messageId: uuid.v4(),
+            messageChannel: BeckiBackend.WS_CHANNEL,
+            messageType: "getValues",
+            version_id
+        };
         if (!this.findEnqueuedWebSocketMessage(message, 'messageChannel', 'messageType', 'version_id')) {
             this.sendWebSocketMessage(message);
         }

@@ -2,19 +2,15 @@
  * Created by davidhradek on 03.08.16.
  */
 
-import {Component} from '@angular/core';
-import {ROUTER_DIRECTIVES} from '@angular/router';
-import {CORE_DIRECTIVES} from "@angular/common";
-import {REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
-import {ModalComponent} from "./modals/modal";
+import {Component} from "@angular/core";
 import {CurrentParamsService} from "./services/CurrentParamsService";
 
 @Component({
     selector: 'app',
-    template: "<modal></modal><router-outlet></router-outlet>",
-    directives: [ROUTER_DIRECTIVES, CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, ModalComponent]
+    template: "<modal></modal><router-outlet></router-outlet>"
 })
 export class AppComponent {
     // need inject CurrentParamsService here for init first in app
-    constructor(protected currentParamsService:CurrentParamsService) {}
+    constructor(protected currentParamsService: CurrentParamsService) {
+    }
 }

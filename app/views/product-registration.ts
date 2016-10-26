@@ -2,19 +2,17 @@
  * Created by dominik krisztof on 22/09/16.
  */
 
-import {Component, Injector, OnInit} from '@angular/core';
-import {LayoutMain} from "../layouts/main";
+import {Component, Injector, OnInit} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {IGeneralTariff, IAdditionalPackage} from "../backend/TyrionAPI";
 import {FlashMessageSuccess, FlashMessageWarning, FlashMessageError} from "../services/FlashMessagesService";
-import {FormGroup, Validators, REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
+import {FormGroup, Validators} from "@angular/forms";
 import {BeckiValidators} from "../helpers/BeckiValidators";
 import {BeckiFormSelectOption} from "../components/BeckiFormSelect";
 import {Subscription} from "rxjs";
 
 @Component({
     selector: "product-registration",
-    directives: [LayoutMain, REACTIVE_FORM_DIRECTIVES],
     templateUrl: "app/views/product-registration.html"
 })
 export class ProductRegistrationComponent extends BaseMainComponent implements OnInit {
@@ -883,7 +881,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
     };
 
     stepClick(step: number): void {
-        if(step == 2 && this.form.controls["tariff_type"].value == null){
+        if (step == 2 && this.form.controls["tariff_type"].value == null) {
             this.flashMessagesService.addFlashMessage(new FlashMessageError("You have to choose a tariff"));
             return;
         }
@@ -897,33 +895,43 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             .then(products => {
                 this.tariffForRegistration = products.tariffs;
                 this.packageForRegistration = products.packages;
-            }).then(()=>{
+            }).then(()=> {
             this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
-                if (params.hasOwnProperty("tariff") && this.tariffForRegistration.find(tariff =>{if(tariff.identificator==params["tariff"]){return true;}})){
+                if (params.hasOwnProperty("tariff") && this.tariffForRegistration.find(tariff => {
+                        if (tariff.identificator == params["tariff"]) {
+                            return true;
+                        }
+                    })) {
                     this.checkPaymentModeDetails(params["tariff"]);
                     this.step = 2;
-                }else{
-                    this.step=1;
-                }})
+                } else {
+                    this.step = 1;
+                }
+            })
 
         })
             .catch(error => console.log(error))
 
 
-
     }
 
-    checkPaymentModeDetails(tarifIdentificator:String):void{
+    checkPaymentModeDetails(tarifIdentificator: String): void {
         this.form.controls["tariff_type"].setValue(tarifIdentificator);
         this.tariffForRegistration.find(pay => {
             this.payment_method = [];
             this.payment_mode = [];
-            pay.payment_methods.map(method => this.payment_method.push({label:method.user_description , value: method.json_identificator}));
-            pay.payment_modes.map(method => this.payment_mode.push({label:method.user_description , value: method.json_identificator}));
+            pay.payment_methods.map(method => this.payment_method.push({
+                label: method.user_description,
+                value: method.json_identificator
+            }));
+            pay.payment_modes.map(method => this.payment_mode.push({
+                label: method.user_description,
+                value: method.json_identificator
+            }));
             if (pay.identificator == this.form.controls["tariff_type"].value) {
                 this.paymentNeed = pay.required_payment_mode;
                 this.isCompany = pay.company_details_required;
-            }else{
+            } else {
                 return false;
             }
         })

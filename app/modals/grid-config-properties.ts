@@ -7,43 +7,35 @@
  * directory of this distribution.
  */
 
-import {Input, Output, EventEmitter, Component, OnInit, ViewChild} from "@angular/core";
-import {CORE_DIRECTIVES} from "@angular/common";
-import {
-    REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, Validators, FormControl,
-    FORM_DIRECTIVES, NgModel
-} from "@angular/forms";
-import {BeckiFormInput} from "../components/BeckiFormInput";
+import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
+import {FormGroup} from "@angular/forms";
 import {ModalModel} from "../services/ModalService";
 import {Core} from "the-grid";
-import {BeckiFormFAIconSelect} from "../components/BeckiFormFAIconSelect";
-import {BeckiFormColorPicker} from "../components/BeckiFormColorPicker";
 
 
 export class ModalsGridConfigPropertiesModel extends ModalModel {
-    constructor(public widget:Core.Widget) {
+    constructor(public widget: Core.Widget) {
         super();
     }
 }
 
 @Component({
     selector: "modals-grid-config-properties",
-    templateUrl: "app/modals/grid-config-properties.html",
-    directives: [CORE_DIRECTIVES, FORM_DIRECTIVES, BeckiFormInput, BeckiFormFAIconSelect, BeckiFormColorPicker]
+    templateUrl: "app/modals/grid-config-properties.html"
 })
 export class ModalsGridConfigPropertiesComponent implements OnInit {
 
     @Input()
-    modalModel:ModalsGridConfigPropertiesModel;
+    modalModel: ModalsGridConfigPropertiesModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
 
-    configProperties:Core.ConfigProperty[];
+    configProperties: Core.ConfigProperty[];
 
-    form:FormGroup;
+    form: FormGroup;
 
-    formModel:{[key: string]: any} = {};
+    formModel: {[key: string]: any} = {};
 
     configPropertyType = {
         "Boolean": Core.ConfigPropertyType.Boolean,
@@ -68,7 +60,7 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
         });
     }
 
-    onSubmitClick():void {
+    onSubmitClick(): void {
 
         console.log(this.formModel);
 
@@ -76,10 +68,10 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
 
             if (configProperty.type == Core.ConfigPropertyType.Integer) {
                 var num = parseInt(this.formModel[configProperty.id], 10);
-                configProperty.value = isNaN(num)?0:num;
+                configProperty.value = isNaN(num) ? 0 : num;
             } else if (configProperty.type == Core.ConfigPropertyType.Float) {
                 var num = parseFloat(this.formModel[configProperty.id]);
-                configProperty.value = isNaN(num)?0:num;
+                configProperty.value = isNaN(num) ? 0 : num;
             } else if (configProperty.type == Core.ConfigPropertyType.Boolean) {
                 configProperty.value = !!this.formModel[configProperty.id];
             } else {
@@ -92,11 +84,11 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
         this.modalClose.emit(true);
     }
 
-    onCloseClick():void {
+    onCloseClick(): void {
         this.modalClose.emit(false);
     }
 
-    onCancelClick():void {
+    onCancelClick(): void {
         this.modalClose.emit(false);
     }
 }

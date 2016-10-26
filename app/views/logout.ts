@@ -2,33 +2,27 @@
  * Created by davidhradek on 03.08.16.
  */
 
-import {Component} from '@angular/core';
-import {CORE_DIRECTIVES} from "@angular/common";
-import {Router, ROUTER_DIRECTIVES} from "@angular/router";
-
+import {Component} from "@angular/core";
+import {Router} from "@angular/router";
 import {BackendService} from "../services/BackendService";
-import {Nl2Br} from "../pipes/Nl2Br";
-import {LayoutNotLogged} from "../layouts/not-logged";
 
 @Component({
     selector: "view-logout",
-    templateUrl: "app/views/logout.html",
-    pipes: [Nl2Br],
-    directives: [LayoutNotLogged, CORE_DIRECTIVES, ROUTER_DIRECTIVES]
+    templateUrl: "app/views/logout.html"
 })
 export class LogoutComponent {
 
-    logoutError:string = null;
+    logoutError: string = null;
 
-    logoutInProgress:boolean = false;
+    logoutInProgress: boolean = false;
 
-    constructor(private backendService:BackendService, private router: Router) {
+    constructor(private backendService: BackendService, private router: Router) {
 
         this.logout();
 
     }
 
-    logout():void {
+    logout(): void {
         this.logoutInProgress = true;
         this.backendService.logout()
             .then(() => {
@@ -41,7 +35,7 @@ export class LogoutComponent {
             });
     }
 
-    onCloseAlertClick():void {
+    onCloseAlertClick(): void {
         this.logoutError = null;
     }
 

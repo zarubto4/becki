@@ -2,29 +2,24 @@
  * Created by davidhradek on 03.08.16.
  */
 
-import {Component, Injector, OnInit} from '@angular/core';
-import {LayoutMain} from "../layouts/main";
+import {Component, Injector, OnInit} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
-import {
-    IApplicableProduct, IGeneralTariff,
-    IAdditionalPackage, IProject
-} from "../backend/TyrionAPI";
+import {IApplicableProduct, IGeneralTariff, IAdditionalPackage, IProject} from "../backend/TyrionAPI";
 import {FlashMessageError} from "../services/FlashMessagesService";
 
 @Component({
     selector: "view-dashboard",
-    directives: [LayoutMain],
     templateUrl: "app/views/dashboard.html"
 })
 export class DashboardComponent extends BaseMainComponent implements OnInit {
 
     products: IApplicableProduct[];
 
-    tariffForRegistration:IGeneralTariff[];
+    tariffForRegistration: IGeneralTariff[];
 
-    packageForRegistration:IAdditionalPackage[];
+    packageForRegistration: IAdditionalPackage[];
 
-    projects:IProject[];
+    projects: IProject[];
 
     noProducts = true;
 
@@ -36,7 +31,7 @@ export class DashboardComponent extends BaseMainComponent implements OnInit {
         this.refresh();
     }
 
-    refresh():void{
+    refresh(): void {
         this.backendService.getAllProjects()
             .then(projects => this.projects = projects)
             .catch(reason => this.addFlashMessage(new FlashMessageError("Projects cannot be loaded.", reason)));
@@ -46,27 +41,24 @@ export class DashboardComponent extends BaseMainComponent implements OnInit {
         });
         if (typeof this.products === null) {
             this.noProducts = true;
-        }else{
+        } else {
             this.noProducts = false;
         }
         this.backendService.getAllTarifsForRegistrations()
             .then(products => {
-                this.tariffForRegistration=products.tariffs;
-                this.packageForRegistration=products.packages;
+                this.tariffForRegistration = products.tariffs;
+                this.packageForRegistration = products.packages;
             })
             .catch(error => console.log(error))
     }
 
 
-
-  registerTariff(tarrif:IGeneralTariff):void {
-      this.router.navigate(["/productRegistration", tarrif.identificator])
+    registerTariff(tarrif: IGeneralTariff): void {
+        this.router.navigate(["/productRegistration", tarrif.identificator])
     }
 
 
-
-
-    }
+}
 
 
 

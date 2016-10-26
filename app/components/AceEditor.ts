@@ -7,8 +7,16 @@ import "ace/ext-language_tools";
 import "ace/mode-c_cpp";
 import "ace/mode-javascript";
 import {
-    Component, OnDestroy, OnChanges, AfterViewInit, ElementRef, Input, ViewChild, Output,
-    EventEmitter, SimpleChanges
+    Component,
+    OnDestroy,
+    OnChanges,
+    AfterViewInit,
+    ElementRef,
+    Input,
+    ViewChild,
+    Output,
+    EventEmitter,
+    SimpleChanges
 } from "@angular/core";
 
 
@@ -19,26 +27,26 @@ import {
 export class AceEditor implements AfterViewInit, OnChanges, OnDestroy {
 
     @Input()
-    code:string;
+    code: string;
 
     @Input()
-    mode:string;
+    mode: string;
 
     @Input()
-    readonly:boolean;
+    readonly: boolean;
 
     @Input()
-    annotations:AceAjax.Annotation[] = [];
+    annotations: AceAjax.Annotation[] = [];
 
     @ViewChild("field")
-    field:ElementRef;
+    field: ElementRef;
 
-    editor:AceAjax.Editor;
+    editor: AceAjax.Editor;
 
     @Output("codeChange")
     codeChange = new EventEmitter<string>();
 
-    ngOnChanges(changes:SimpleChanges):void {
+    ngOnChanges(changes: SimpleChanges): void {
         let code = changes["code"];
         // TODO: https://github.com/angular/angular/issues/6114
         if (code && this.editor && code.currentValue != this.editor.getValue()) {
@@ -58,7 +66,7 @@ export class AceEditor implements AfterViewInit, OnChanges, OnDestroy {
         }
     }
 
-    ngAfterViewInit():void {
+    ngAfterViewInit(): void {
         this.editor = ace.edit(this.field.nativeElement);
         this.editor.setOptions({enableBasicAutocompletion: true});
         this.editor.setReadOnly(this.readonly);
@@ -70,7 +78,7 @@ export class AceEditor implements AfterViewInit, OnChanges, OnDestroy {
         });
     }
 
-    ngOnDestroy():void {
+    ngOnDestroy(): void {
         this.editor.destroy();
     }
 }

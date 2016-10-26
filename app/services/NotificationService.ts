@@ -1,13 +1,12 @@
 /**
  * Created by DominikKrisztof on 22/08/16.
  */
-import {Injectable, NgZone} from "@angular/core";
+import {Injectable} from "@angular/core";
 import {BackendService} from "./BackendService";
-import moment = require("moment/moment");
 import {INotification} from "../backend/TyrionAPI";
 import {ModalsHighImportanceNotificationModel} from "../modals/high-importance-notification";
 import {ModalService} from "../services/ModalService";
-import {FlashMessageSuccess, FlashMessageError} from "./FlashMessagesService";
+import moment = require("moment/moment");
 
 export abstract class Notification {
 
@@ -63,7 +62,7 @@ export class NotificationService {
 
     public unreadedNotifications: number = 0;
 
-    constructor(protected backendService: BackendService, private modalService:ModalService) {
+    constructor(protected backendService: BackendService, private modalService: ModalService) {
         console.log("NotificationService init");
 
 
@@ -117,7 +116,7 @@ export class NotificationService {
 
                     case "high":
                         this.unreadedNotifications++
-                        this.modalService.showModal(new ModalsHighImportanceNotificationModel("Important messeage",notif.body,notif.id)).then((success) => {
+                        this.modalService.showModal(new ModalsHighImportanceNotificationModel("Important messeage", notif.body, notif.id)).then((success) => {
                             if (success) {
                                 this.sentRestApiNotificationWasRead(notif.id);
                             }
@@ -211,7 +210,7 @@ export class NotificationService {
         return bodyText;
     }
 
-    sentRestApiNotificationWasRead(id:string):void{
+    sentRestApiNotificationWasRead(id: string): void {
         console.log("SENDDING CONFIRMATION ");
         this.backendService.confirmNotification(id).then().catch(error => "cant sent confirmation");
     }

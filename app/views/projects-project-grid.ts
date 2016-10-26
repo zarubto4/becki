@@ -3,56 +3,54 @@
  */
 
 import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
-import {LayoutMain} from "../layouts/main";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
-import {ROUTER_DIRECTIVES} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
 import {ModalsRemovalModel} from "../modals/removal";
-import {ModalsBlockoPropertiesModel} from "../modals/blocko-properties";
-import {IBProgram, IProject, IMProgram, IMProject, IScreenSizeTypeCombination} from "../backend/TyrionAPI";
+import {IProject, IMProgram, IMProject, IScreenSizeTypeCombination} from "../backend/TyrionAPI";
 import {ModalsGridProjectPropertiesModel} from "../modals/grid-project-properties";
 import {ModalsGridProgramPropertiesModel} from "../modals/grid-program-properties";
 
 @Component({
     selector: "view-projects-project-grid",
     templateUrl: "app/views/projects-project-grid.html",
-    directives: [ROUTER_DIRECTIVES, LayoutMain],
 })
 export class ProjectsProjectGridComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     id: string;
 
-    routeParamsSubscription:Subscription;
+    routeParamsSubscription: Subscription;
 
-    project:IProject = null;
+    project: IProject = null;
 
-    gridProjects:IMProject[] = null;
+    gridProjects: IMProject[] = null;
 
-    screenTypes:IScreenSizeTypeCombination = null;
+    screenTypes: IScreenSizeTypeCombination = null;
 
-    constructor(injector:Injector) {super(injector)};
+    constructor(injector: Injector) {
+        super(injector)
+    };
 
-    ngOnInit():void {
+    ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.id = params["project"];
             this.refresh();
         });
     }
 
-    ngOnDestroy():void {
+    ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
     }
 
-    refresh():void {
+    refresh(): void {
         this.backendService.getProject(this.id)
-            .then((project:IProject) => {
+            .then((project: IProject) => {
                 this.project = project;
                 return Promise.all<IMProject>(project.m_projects.map((m_project) => {
                     return this.backendService.getMProject(m_project.id);
                 }));
             })
-            .then((gridProjects:IMProject[]) => {
+            .then((gridProjects: IMProject[]) => {
                 console.log(gridProjects);
                 this.gridProjects = gridProjects;
             })
@@ -67,11 +65,11 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
 
     }
 
-    onProgramClick(grid:IMProgram):void {
+    onProgramClick(grid: IMProgram): void {
         this.navigate(["/projects", this.currentParamsService.get("project"), "grid", grid.id]);
     }
 
-    getScreenTypeName(screenTypeId:string):string {
+    getScreenTypeName(screenTypeId: string): string {
         if (this.screenTypes && this.screenTypes.private_types) {
             var screen = this.screenTypes.private_types.find((t)=>t.id == screenTypeId);
             if (screen) {
@@ -87,14 +85,14 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
         return "";
     }
 
-    onProjectAddClick():void {
+    onProjectAddClick(): void {
         var model = new ModalsGridProjectPropertiesModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.backendService.createMProject(this.id, {
-                        name: model.name,
-                        description: model.description
-                    })
+                    name: model.name,
+                    description: model.description
+                })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid project has been added."));
                         this.refresh();
@@ -107,15 +105,15 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
         });
     }
 
-    onProjectEditClick(project:IMProject):void {
+    onProjectEditClick(project: IMProject): void {
         var model = new ModalsGridProjectPropertiesModel(project.name, project.description, true, project.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 console.log(model);
                 this.backendService.editMProject(project.id, {
-                        name: model.name,
-                        description: model.description
-                    })
+                    name: model.name,
+                    description: model.description
+                })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid project has been edited."));
                         this.refresh();
@@ -128,7 +126,7 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
         });
     }
 
-    onProjectDeleteClick(project:IMProject):void {
+    onProjectDeleteClick(project: IMProject): void {
 
         this.modalService.showModal(new ModalsRemovalModel(project.name)).then((success) => {
             if (success) {
@@ -146,7 +144,7 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
 
     }
 
-    onProgramAddClick(project:IMProject):void {
+    onProgramAddClick(project: IMProject): void {
         if (!this.screenTypes) return;
 
         var model = new ModalsGridProgramPropertiesModel(this.screenTypes);
@@ -154,10 +152,10 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.backendService.createMProgram(project.id, {
-                        name: model.name,
-                        description: model.description,
-                        screen_size_type_id: model.screenTypeId
-                    })
+                    name: model.name,
+                    description: model.description,
+                    screen_size_type_id: model.screenTypeId
+                })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid program has been added."));
                         this.refresh();
@@ -170,7 +168,7 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
         });
     }
 
-    onProgramEditClick(program:IMProgram):void {
+    onProgramEditClick(program: IMProgram): void {
         if (!this.screenTypes) return;
 
         var model = new ModalsGridProgramPropertiesModel(this.screenTypes, program.name, program.description, program.screen_size_type_id, true);
@@ -178,10 +176,10 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.backendService.editMProgram(program.id, {
-                        name: model.name,
-                        description: model.description,
-                        screen_size_type_id: model.screenTypeId
-                    })
+                    name: model.name,
+                    description: model.description,
+                    screen_size_type_id: model.screenTypeId
+                })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid program has been edited."));
                         this.refresh();
@@ -194,7 +192,7 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
         });
     }
 
-    onProgramDeleteClick(program:IMProgram):void {
+    onProgramDeleteClick(program: IMProgram): void {
 
         this.modalService.showModal(new ModalsRemovalModel(program.name)).then((success) => {
             if (success) {

@@ -4,47 +4,43 @@
  */
 
 import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
-import {CORE_DIRECTIVES} from "@angular/common";
-import {REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
+import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 import {BeckiAsyncValidators} from "../helpers/BeckiAsyncValidators";
 import {BackendService} from "../services/BackendService";
-import {BeckiFormInput} from "../components/BeckiFormInput";
 import {ModalModel} from "../services/ModalService";
-import {BeckiFormSelect, BeckiFormSelectOption, beckiFormSelectOptionsMaker} from "../components/BeckiFormSelect";
+import {BeckiFormSelectOption, beckiFormSelectOptionsMaker} from "../components/BeckiFormSelect";
 import {IApplicableProduct} from "../backend/TyrionAPI";
 
 
-
-
-
 export class ModalsProjectPropertiesModel extends ModalModel {
-    constructor(public products:IApplicableProduct[], public name:string = "", public description:string = "", public product:string = "", public edit:boolean = false, public exceptName:string = null) {super();}
+    constructor(public products: IApplicableProduct[], public name: string = "", public description: string = "", public product: string = "", public edit: boolean = false, public exceptName: string = null) {
+        super();
+    }
 }
 
 @Component({
     selector: "modals-project-properties",
-    templateUrl: "app/modals/project-properties.html",
-    directives: [CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, BeckiFormInput, BeckiFormSelect]
+    templateUrl: "app/modals/project-properties.html"
 })
 export class ModalsProjectPropertiesComponent implements OnInit {
 
     @Input()
-    modalModel:ModalsProjectPropertiesModel;
+    modalModel: ModalsProjectPropertiesModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
 
-    options:BeckiFormSelectOption[] = null;
+    options: BeckiFormSelectOption[] = null;
 
     form: FormGroup;
 
-    constructor(private backendService:BackendService, private formBuilder:FormBuilder) {
+    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
         this.form = this.formBuilder.group({
             "name": ["", [Validators.required, Validators.minLength(8)], BeckiAsyncValidators.ifValidator((value) => {
                 return !(this.modalModel && this.modalModel.exceptName && this.modalModel.exceptName == value);
             }, BeckiAsyncValidators.projectNameTaken(this.backendService))],
             "description": ["", [Validators.required, Validators.minLength(24)]],
-            "product": ["",[Validators.required]]
+            "product": ["", [Validators.required]]
         });
     }
 
@@ -55,18 +51,18 @@ export class ModalsProjectPropertiesComponent implements OnInit {
         (<FormControl>(this.form.controls["product"])).setValue(this.modalModel.product);
     }
 
-    onSubmitClick():void {
+    onSubmitClick(): void {
         this.modalModel.name = this.form.controls["name"].value;
         this.modalModel.description = this.form.controls["description"].value;
         this.modalModel.product = this.form.controls["product"].value;
         this.modalClose.emit(true);
     }
 
-    onCloseClick():void {
+    onCloseClick(): void {
         this.modalClose.emit(false);
     }
 
-    onCancelClick():void {
+    onCancelClick(): void {
         this.modalClose.emit(false);
     }
 }

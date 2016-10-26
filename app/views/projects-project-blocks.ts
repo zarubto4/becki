@@ -4,46 +4,44 @@
 
 
 import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
-import {LayoutMain} from "../layouts/main";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
-import {ROUTER_DIRECTIVES} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
 import {ModalsRemovalModel} from "../modals/removal";
-import {ModalsCodePropertiesModel} from "../modals/code-properties";
-import {IProject, ICProgram, ITypeOfBoard, ITypeOfBlock, IBlockoBlock} from "../backend/TyrionAPI";
+import {IProject, ITypeOfBlock, IBlockoBlock} from "../backend/TyrionAPI";
 import {ModalsBlocksTypePropertiesModel} from "../modals/blocks-type-properties";
 import {ModalsBlocksBlockPropertiesModel} from "../modals/blocks-block-properties";
 
 @Component({
     selector: "view-projects-project-blocks",
     templateUrl: "app/views/projects-project-blocks.html",
-    directives: [ROUTER_DIRECTIVES, LayoutMain],
 })
 export class ProjectsProjectBlocksComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     id: string;
 
-    routeParamsSubscription:Subscription;
+    routeParamsSubscription: Subscription;
 
-    project:IProject = null;
+    project: IProject = null;
 
-    groups:ITypeOfBlock[] = [];
+    groups: ITypeOfBlock[] = [];
 
-    constructor(injector:Injector) {super(injector)};
+    constructor(injector: Injector) {
+        super(injector)
+    };
 
-    ngOnInit():void {
+    ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.id = params["project"];
             this.refresh();
         });
     }
 
-    ngOnDestroy():void {
+    ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
     }
 
-    onGroupAddClick():void {
+    onGroupAddClick(): void {
         var model = new ModalsBlocksTypePropertiesModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -64,7 +62,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
         });
     }
 
-    onGroupEditClick(group:ITypeOfBlock):void {
+    onGroupEditClick(group: ITypeOfBlock): void {
         var model = new ModalsBlocksTypePropertiesModel(group.name, group.general_description, true, group.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -84,7 +82,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
         });
     }
 
-    onGroupDeleteClick(group:ITypeOfBlock):void {
+    onGroupDeleteClick(group: ITypeOfBlock): void {
 
         this.modalService.showModal(new ModalsRemovalModel(group.name)).then((success) => {
             if (success) {
@@ -102,11 +100,11 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
 
     }
 
-    onBlockClick(block:IBlockoBlock):void {
+    onBlockClick(block: IBlockoBlock): void {
         this.navigate(["/projects", this.currentParamsService.get("project"), "blocks", block.id]);
     }
 
-    onBlockAddClick(group:ITypeOfBlock):void {
+    onBlockAddClick(group: ITypeOfBlock): void {
 
         var model = new ModalsBlocksBlockPropertiesModel();
         this.modalService.showModal(model).then((success) => {
@@ -129,7 +127,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
 
     }
 
-    onBlockEditClick(block:IBlockoBlock):void {
+    onBlockEditClick(block: IBlockoBlock): void {
 
         var model = new ModalsBlocksBlockPropertiesModel(block.name, block.general_description, true, block.name);
         this.modalService.showModal(model).then((success) => {
@@ -152,7 +150,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
 
     }
 
-    onBlockDeleteClick(block:IBlockoBlock):void {
+    onBlockDeleteClick(block: IBlockoBlock): void {
 
         this.modalService.showModal(new ModalsRemovalModel(block.name)).then((success) => {
             if (success) {
@@ -171,9 +169,9 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
     }
 
 
-    refresh():void {
+    refresh(): void {
         this.backendService.getProject(this.id)
-            .then((project:IProject) => {
+            .then((project: IProject) => {
                 this.project = project;
                 console.log(this.project);
 
@@ -181,7 +179,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
                     return this.backendService.getTypeOfBlock(typeOfBlockId);
                 }));
             })
-            .then((typeOfBlocks:ITypeOfBlock[]) => {
+            .then((typeOfBlocks: ITypeOfBlock[]) => {
                 console.log(typeOfBlocks);
                 this.groups = typeOfBlocks;
             })

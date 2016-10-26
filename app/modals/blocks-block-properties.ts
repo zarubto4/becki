@@ -7,39 +7,32 @@
  */
 
 import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
-import {CORE_DIRECTIVES} from "@angular/common";
-import {REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
-import {BeckiAsyncValidators} from "../helpers/BeckiAsyncValidators";
+import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 import {BackendService} from "../services/BackendService";
-import {BeckiFormInput} from "../components/BeckiFormInput";
 import {ModalModel} from "../services/ModalService";
-import {BeckiFormSelect, BeckiFormSelectOption, beckiFormSelectOptionsMaker} from "../components/BeckiFormSelect";
-import {IApplicableProduct} from "../backend/TyrionAPI";
-
-
-
 
 
 export class ModalsBlocksBlockPropertiesModel extends ModalModel {
-    constructor(public name:string = "", public description:string = "", public edit:boolean = false, public exceptName:string = null) {super();}
+    constructor(public name: string = "", public description: string = "", public edit: boolean = false, public exceptName: string = null) {
+        super();
+    }
 }
 
 @Component({
     selector: "modals-blocks-block-properties",
-    templateUrl: "app/modals/blocks-block-properties.html",
-    directives: [CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, BeckiFormInput]
+    templateUrl: "app/modals/blocks-block-properties.html"
 })
 export class ModalsBlocksBlockPropertiesComponent implements OnInit {
 
     @Input()
-    modalModel:ModalsBlocksBlockPropertiesModel;
+    modalModel: ModalsBlocksBlockPropertiesModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
 
     form: FormGroup;
 
-    constructor(private backendService:BackendService, private formBuilder:FormBuilder) {
+    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
         this.form = this.formBuilder.group({
             "name": ["", [Validators.required, Validators.minLength(8)]],
             "description": ["", [Validators.required, Validators.minLength(24)]]
@@ -51,17 +44,17 @@ export class ModalsBlocksBlockPropertiesComponent implements OnInit {
         (<FormControl>(this.form.controls["description"])).setValue(this.modalModel.description);
     }
 
-    onSubmitClick():void {
+    onSubmitClick(): void {
         this.modalModel.name = this.form.controls["name"].value;
         this.modalModel.description = this.form.controls["description"].value;
         this.modalClose.emit(true);
     }
 
-    onCloseClick():void {
+    onCloseClick(): void {
         this.modalClose.emit(false);
     }
 
-    onCancelClick():void {
+    onCancelClick(): void {
         this.modalClose.emit(false);
     }
 }

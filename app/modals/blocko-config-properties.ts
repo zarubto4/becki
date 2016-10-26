@@ -8,41 +8,34 @@
  */
 
 import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
-import {CORE_DIRECTIVES} from "@angular/common";
-import {
-    REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, Validators, FormControl,
-    FORM_DIRECTIVES
-} from "@angular/forms";
-import {BackendService} from "../services/BackendService";
-import {BeckiFormInput} from "../components/BeckiFormInput";
+import {FormGroup} from "@angular/forms";
 import {ModalModel} from "../services/ModalService";
 import {Core} from "blocko";
 
 
 export class ModalsBlockoConfigPropertiesModel extends ModalModel {
-    constructor(public block:Core.Block) {
+    constructor(public block: Core.Block) {
         super();
     }
 }
 
 @Component({
     selector: "modals-blocko-config-properties",
-    templateUrl: "app/modals/blocko-config-properties.html",
-    directives: [CORE_DIRECTIVES, FORM_DIRECTIVES, BeckiFormInput]
+    templateUrl: "app/modals/blocko-config-properties.html"
 })
 export class ModalsBlockoConfigPropertiesComponent implements OnInit {
 
     @Input()
-    modalModel:ModalsBlockoConfigPropertiesModel;
+    modalModel: ModalsBlockoConfigPropertiesModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
 
-    configProperties:Core.ConfigProperty[];
+    configProperties: Core.ConfigProperty[];
 
-    form:FormGroup;
+    form: FormGroup;
 
-    formModel:{[key: string]: any} = {};
+    formModel: {[key: string]: any} = {};
 
     configPropertyType = {
         "Boolean": Core.ConfigPropertyType.Boolean,
@@ -64,17 +57,17 @@ export class ModalsBlockoConfigPropertiesComponent implements OnInit {
         });
     }
 
-    onSubmitClick():void {
+    onSubmitClick(): void {
 
         this.configProperties.forEach((configProperty) => {
 
             if (configProperty.type == Core.ConfigPropertyType.Integer) {
                 var num = parseInt(this.formModel[configProperty.name], 10);
-                configProperty.value = isNaN(num)?0:num;
+                configProperty.value = isNaN(num) ? 0 : num;
             }
             if (configProperty.type == Core.ConfigPropertyType.Float) {
                 var num = parseFloat(this.formModel[configProperty.name]);
-                configProperty.value = isNaN(num)?0:num;
+                configProperty.value = isNaN(num) ? 0 : num;
             }
             if (configProperty.type == Core.ConfigPropertyType.String) {
                 configProperty.value = this.formModel[configProperty.name];
@@ -89,11 +82,11 @@ export class ModalsBlockoConfigPropertiesComponent implements OnInit {
         this.modalClose.emit(true);
     }
 
-    onCloseClick():void {
+    onCloseClick(): void {
         this.modalClose.emit(false);
     }
 
-    onCancelClick():void {
+    onCancelClick(): void {
         this.modalClose.emit(false);
     }
 }

@@ -4,7 +4,6 @@
 
 import "rxjs/add/operator/catch";
 import "rxjs/add/operator/map";
-
 import {FlashMessagesService, FlashMessageError} from "./FlashMessagesService";
 import {Injectable} from "@angular/core";
 import {Http, RequestOptionsArgs, Headers, Response} from "@angular/http";
@@ -16,9 +15,9 @@ import {BeckiBackend, RestRequest, RestResponse} from "../backend/BeckiBackend";
 @Injectable()
 export class BackendService extends BeckiBackend {
 
-    public gravatarIcon:string = "";
+    public gravatarIcon: string = "";
 
-    constructor(protected http:Http, protected router:Router, protected flashMessagesService:FlashMessagesService) {
+    constructor(protected http: Http, protected router: Router, protected flashMessagesService: FlashMessagesService) {
         super();
         console.log("BackendService init");
         this.webSocketErrorOccurred.subscribe(error => flashMessagesService.addFlashMessage(new FlashMessageError("Communication with the back end have failed.", error)));
@@ -26,7 +25,7 @@ export class BackendService extends BeckiBackend {
             if (pi) {
                 var email = this.personInfoSnapshot.mail || "";
                 var md5 = MD5(email.trim().toLowerCase());
-                this.gravatarIcon = "https://www.gravatar.com/avatar/"+md5+"?d=retro"; //TODO Tyrion poskytuje vlastní ikonky, můžeme přejít z gravatara na ně
+                this.gravatarIcon = "https://www.gravatar.com/avatar/" + md5 + "?d=retro"; //TODO Tyrion poskytuje vlastní ikonky, můžeme přejít z gravatara na ně
             } else {
                 this.gravatarIcon = "";
             }
@@ -34,14 +33,14 @@ export class BackendService extends BeckiBackend {
         this.refreshPersonInfo();
     }
 
-    protected requestRestGeneral(request:RestRequest):Observable<RestResponse> {
-        let optionsArgs:RequestOptionsArgs = {
+    protected requestRestGeneral(request: RestRequest): Observable<RestResponse> {
+        let optionsArgs: RequestOptionsArgs = {
             method: request.method,
             headers: new Headers(request.headers),
             body: ""
         };
         if (request.body) {
-            switch(optionsArgs.headers.get("Content-Type")) {
+            switch (optionsArgs.headers.get("Content-Type")) {
                 case "application/json":
                     optionsArgs.body = JSON.stringify(request.body);
                     break;
@@ -51,7 +50,7 @@ export class BackendService extends BeckiBackend {
         }
         return this.http.request(request.url, optionsArgs)
             .catch<Response>(ngResponse => Observable.of(ngResponse))
-            .map((ngResponse:Response) => {
+            .map((ngResponse: Response) => {
                 if (ngResponse.status == 401) {
                     this.router.navigate(["/login"]);
                 }
@@ -59,7 +58,7 @@ export class BackendService extends BeckiBackend {
             });
     }
 
-    public isLoggedIn():Promise<boolean> {
+    public isLoggedIn(): Promise<boolean> {
         return new Promise<boolean>((resolve) => {
             if (!this.personInfoSnapshotDirty) {
                 resolve(!!this.personInfoSnapshot);

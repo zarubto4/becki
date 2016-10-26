@@ -3,16 +3,23 @@
  */
 
 import {
-    Component, Input, OnInit, ElementRef, ViewChild, OnDestroy, EventEmitter, Output,
-    SimpleChanges, OnChanges
+    Component,
+    Input,
+    OnInit,
+    ElementRef,
+    ViewChild,
+    OnDestroy,
+    EventEmitter,
+    Output,
+    SimpleChanges,
+    OnChanges
 } from "@angular/core";
-import {AbstractControl, REACTIVE_FORM_DIRECTIVES} from "@angular/forms";
+import {AbstractControl} from "@angular/forms";
 import {ValidatorErrorsService} from "../services/ValidatorErrorsService";
 import {Subscription} from "rxjs";
 
 @Component({
     selector: "becki-form-color-picker",
-    directives: [REACTIVE_FORM_DIRECTIVES],
     template: `
 <div class="form-group becki-form-color-picker" [class.has-success]="control && (!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid))" [class.has-error]="control && (!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid))" [class.has-warning]="control && (!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending))">
     <label>{{label}}</label>
@@ -24,26 +31,27 @@ import {Subscription} from "rxjs";
 export class BeckiFormColorPicker implements OnInit, OnDestroy, OnChanges {
 
     @Input()
-    control:AbstractControl = null;
+    control: AbstractControl = null;
 
     @Input()
-    value:string = "";
+    value: string = "";
 
     @Output()
-    valueChange:EventEmitter<string> = new EventEmitter<string>();
+    valueChange: EventEmitter<string> = new EventEmitter<string>();
 
     @Input()
-    label:string = "Unknown label";
+    label: string = "Unknown label";
 
     @Input()
-    waitForTouch:boolean = true;
+    waitForTouch: boolean = true;
 
     @ViewChild("colorSelector")
-    colorSelector:ElementRef;
+    colorSelector: ElementRef;
 
-    valueSubscription:Subscription = null;
+    valueSubscription: Subscription = null;
 
-    constructor(protected validatorErrorsService:ValidatorErrorsService) {}
+    constructor(protected validatorErrorsService: ValidatorErrorsService) {
+    }
 
     ngOnInit(): void {
         if (this.control) {
@@ -60,7 +68,7 @@ export class BeckiFormColorPicker implements OnInit, OnDestroy, OnChanges {
         (<any>$(this.colorSelector.nativeElement)).minicolors({
             theme: "bootstrap",
             defaultValue: this.value,
-            change: (value:string) => {
+            change: (value: string) => {
                 this.value = value;
                 if (this.control) {
                     this.control.setValue(value);
@@ -75,7 +83,7 @@ export class BeckiFormColorPicker implements OnInit, OnDestroy, OnChanges {
         });
     }
 
-    ngOnChanges(changes:SimpleChanges):void {
+    ngOnChanges(changes: SimpleChanges): void {
         let valueChanged = changes["value"];
         if (valueChanged) {
             var value = valueChanged.currentValue;
@@ -85,7 +93,7 @@ export class BeckiFormColorPicker implements OnInit, OnDestroy, OnChanges {
         }
     }
 
-    ngOnDestroy():void {
+    ngOnDestroy(): void {
         if (this.valueSubscription) {
             this.valueSubscription.unsubscribe();
         }

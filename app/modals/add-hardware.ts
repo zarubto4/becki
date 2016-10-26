@@ -7,37 +7,32 @@
  */
 
 import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
-import {CORE_DIRECTIVES} from "@angular/common";
-import {REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
+import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 import {BackendService} from "../services/BackendService";
-import {BeckiFormInput} from "../components/BeckiFormInput";
 import {ModalModel} from "../services/ModalService";
 
 
-
-
 export class ModalsAddHardwareModel extends ModalModel {
-    constructor(public id:string = "") {
+    constructor(public id: string = "") {
         super();
     }
 }
 
 @Component({
     selector: "modals-add-hardware",
-    templateUrl: "app/modals/add-hardware.html",
-    directives: [CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, BeckiFormInput]
+    templateUrl: "app/modals/add-hardware.html"
 })
 export class ModalsAddHardwareComponent implements OnInit {
 
     @Input()
-    modalModel:ModalsAddHardwareModel;
+    modalModel: ModalsAddHardwareModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
 
     form: FormGroup;
 
-    constructor(private backendService:BackendService, private formBuilder:FormBuilder) {
+    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
             "id": ["", [Validators.required]]
@@ -48,16 +43,16 @@ export class ModalsAddHardwareComponent implements OnInit {
         (<FormControl>(this.form.controls["id"])).setValue(this.modalModel.id);
     }
 
-    onSubmitClick():void {
+    onSubmitClick(): void {
         this.modalModel.id = this.form.controls["id"].value;
         this.modalClose.emit(true);
     }
 
-    onCloseClick():void {
+    onCloseClick(): void {
         this.modalClose.emit(false);
     }
 
-    onCancelClick():void {
+    onCancelClick(): void {
         this.modalClose.emit(false);
     }
 }

@@ -2,33 +2,27 @@
  * Created by dominikkrisztof on 24/08/16.
  */
 
-import {Component, Injector, OnInit} from '@angular/core';
-import {LayoutMain} from "../layouts/main";
-import * as ngCore from "@angular/core";
+import {Component, Injector, OnInit} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {NotificationService} from "../services/NotificationService";
 import {BackendService} from "../services/BackendService";
 import {FlashMessageSuccess, FlashMessageError} from "../services/FlashMessagesService";
-import {FormControl, FormGroup} from "@angular/forms";
-import {Validators} from "@angular/common";
-import {BeckiAsyncValidators} from "../helpers/BeckiAsyncValidators";
-import {ModalsBlockoPropertiesModel} from "../modals/blocko-properties";
+import {FormGroup, Validators} from "@angular/forms";
 import {BeckiValidators} from "../helpers/BeckiValidators";
 
 @Component({
     selector: "profile",
-    directives: [LayoutMain],
     templateUrl: "app/views/profile.html"
 })
-export class ProfileComponent extends BaseMainComponent implements OnInit{
+export class ProfileComponent extends BaseMainComponent implements OnInit {
 
-    constructor(injector:Injector,protected backEndService:BackendService,protected notificationService:NotificationService) {
+    constructor(injector: Injector, protected backEndService: BackendService, protected notificationService: NotificationService) {
         super(injector);
 
         this.emailForm = this.formBuilder.group({
-            "currentEmail": ["", [Validators.required, Validators.minLength(8),BeckiValidators.email]], //TODO kontrola zda sedí s původním emailem
+            "currentEmail": ["", [Validators.required, Validators.minLength(8), BeckiValidators.email]], //TODO kontrola zda sedí s původním emailem
             "newEmail": ["", [Validators.required, Validators.minLength(24), BeckiValidators.email]],
-            "newEmailConfirm": ["", [Validators.required, Validators.minLength(24),BeckiValidators.email,BeckiValidators.passwordSame(()=>this.emailForm, "newEmail")]],
+            "newEmailConfirm": ["", [Validators.required, Validators.minLength(24), BeckiValidators.email, BeckiValidators.passwordSame(()=>this.emailForm, "newEmail")]],
         });
 
         this.passwordForm = this.formBuilder.group({
@@ -55,44 +49,51 @@ export class ProfileComponent extends BaseMainComponent implements OnInit{
 
     infoForm: FormGroup;
 
-    editPermission:boolean;
+    editPermission: boolean;
 
-    nickName:string;
+    nickName: string;
 
-    fullName:string;
+    fullName: string;
 
-    email:string;
+    email: string;
 
-    state:string;
+    state: string;
 
 
     ngOnInit(): void {
         var personObject = this.backEndService.personInfoSnapshot;
 
-        this.editPermission=personObject.edit_permission;
+        this.editPermission = personObject.edit_permission;
 
-        this.nickName=personObject.nick_name;
+        this.nickName = personObject.nick_name;
 
-        this.fullName=personObject.full_name;
+        this.fullName = personObject.full_name;
 
-        this.email=personObject.mail;
+        this.email = personObject.mail;
 
     }
 
-    changePassword():void{
+    changePassword(): void {
         console.log("klick");
-        this.backEndService.createPersonChangeProperty({property: "password",password:this.passwordForm.controls["newPassword"].value})
+        this.backEndService.createPersonChangeProperty({
+            property: "password",
+            password: this.passwordForm.controls["newPassword"].value
+        })
             .then(ok => this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("Email with instructions was sent")))
-            .catch(error => this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot change password",error)))
+            .catch(error => this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot change password", error)))
     }
-    changeEmail():void{
-        this.backEndService.createPersonChangeProperty({property: "email",email:this.emailForm.controls["newEmail"].value})
+
+    changeEmail(): void {
+        this.backEndService.createPersonChangeProperty({
+            property: "email",
+            email: this.emailForm.controls["newEmail"].value
+        })
             .then(ok => this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("Email with instructions was sent")))
-            .catch(error => this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot change email",error)))
+            .catch(error => this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot change email", error)))
 
     }
 
-    uploadProfilePicture():void{
+    uploadProfilePicture(): void {
         //API requires 'multipart/form-data' Content-Type, name of the property is 'file'.
         this.backEndService.putPersonUploadPicture() //todo udělat něco co 1. nahraje obrázek 2. zkontroluje obrázek jestli je ve stavu jakém chceme 3. upravit ho 4. poslat ho
     }

@@ -8,38 +8,32 @@
  */
 
 import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
-import {CORE_DIRECTIVES} from "@angular/common";
-import {REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
-import {BeckiAsyncValidators} from "../helpers/BeckiAsyncValidators";
+import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 import {BackendService} from "../services/BackendService";
-import {BeckiFormInput} from "../components/BeckiFormInput";
 import {ModalModel} from "../services/ModalService";
 
 
-
-
 export class ModalsGridProjectPropertiesModel extends ModalModel {
-    constructor(public name:string = "", public description:string = "", public edit:boolean = false, public exceptName:string = null) {
+    constructor(public name: string = "", public description: string = "", public edit: boolean = false, public exceptName: string = null) {
         super();
     }
 }
 
 @Component({
     selector: "modals-grid-project-properties",
-    templateUrl: "app/modals/grid-project-properties.html",
-    directives: [CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, BeckiFormInput]
+    templateUrl: "app/modals/grid-project-properties.html"
 })
 export class ModalsGridProjectPropertiesComponent implements OnInit {
 
     @Input()
-    modalModel:ModalsGridProjectPropertiesModel;
+    modalModel: ModalsGridProjectPropertiesModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
 
     form: FormGroup;
 
-    constructor(private backendService:BackendService, private formBuilder:FormBuilder) {
+    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
             "name": ["", [Validators.required, Validators.minLength(8)]],
@@ -52,17 +46,17 @@ export class ModalsGridProjectPropertiesComponent implements OnInit {
         (<FormControl>(this.form.controls["description"])).setValue(this.modalModel.description);
     }
 
-    onSubmitClick():void {
+    onSubmitClick(): void {
         this.modalModel.name = this.form.controls["name"].value;
         this.modalModel.description = this.form.controls["description"].value;
         this.modalClose.emit(true);
     }
 
-    onCloseClick():void {
+    onCloseClick(): void {
         this.modalClose.emit(false);
     }
 
-    onCancelClick():void {
+    onCancelClick(): void {
         this.modalClose.emit(false);
     }
 }

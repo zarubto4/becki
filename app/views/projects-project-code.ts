@@ -3,10 +3,8 @@
  */
 
 import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
-import {LayoutMain} from "../layouts/main";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
-import {ROUTER_DIRECTIVES} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
 import {ModalsRemovalModel} from "../modals/removal";
 import {ModalsCodePropertiesModel} from "../modals/code-properties";
@@ -15,48 +13,51 @@ import {IProject, ICProgram, ITypeOfBoard} from "../backend/TyrionAPI";
 @Component({
     selector: "view-projects-project-code",
     templateUrl: "app/views/projects-project-code.html",
-    directives: [ROUTER_DIRECTIVES, LayoutMain],
 })
 export class ProjectsProjectCodeComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     id: string;
 
-    routeParamsSubscription:Subscription;
+    routeParamsSubscription: Subscription;
 
-    project:IProject = null;
+    project: IProject = null;
 
-    codePrograms:ICProgram[] = null;
+    codePrograms: ICProgram[] = null;
 
-    typeOfBoards:ITypeOfBoard[] = null;
+    typeOfBoards: ITypeOfBoard[] = null;
 
-    constructor(injector:Injector) {super(injector)};
+    constructor(injector: Injector) {
+        super(injector)
+    };
 
-    ngOnInit():void {
+    ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.id = params["project"];
             this.refresh();
         });
     }
 
-    ngOnDestroy():void {
+    ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
     }
 
-    getBoardType(typeId:string):string {
-        var typeOfBoard = this.typeOfBoards.find(dt => { return dt.id == typeId });
+    getBoardType(typeId: string): string {
+        var typeOfBoard = this.typeOfBoards.find(dt => {
+            return dt.id == typeId
+        });
         if (typeOfBoard) return typeOfBoard.name;
         return "";
     }
 
-    refresh():void {
+    refresh(): void {
         this.backendService.getProject(this.id)
-            .then((project:IProject) => {
+            .then((project: IProject) => {
                 this.project = project;
                 return Promise.all<ICProgram>(project.c_programs.map((c_program) => {
                     return this.backendService.getCProgram(c_program.id);
                 }));
             })
-            .then((codePrograms:ICProgram[]) => {
+            .then((codePrograms: ICProgram[]) => {
                 this.codePrograms = codePrograms;
             })
             .catch(reason => {
@@ -64,7 +65,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
             });
 
         this.backendService.getAllTypeOfBoards()
-            .then((typeOfBoards:ITypeOfBoard[]) => {
+            .then((typeOfBoards: ITypeOfBoard[]) => {
                 this.typeOfBoards = typeOfBoards;
             })
             .catch(reason => {
@@ -74,11 +75,11 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
 
     }
 
-    onCodeClick(code:ICProgram):void {
+    onCodeClick(code: ICProgram): void {
         this.navigate(["/projects", this.currentParamsService.get("project"), "code", code.id]);
     }
 
-    onRemoveClick(code:ICProgram):void {
+    onRemoveClick(code: ICProgram): void {
         this.modalService.showModal(new ModalsRemovalModel(code.name)).then((success) => {
             if (success) {
                 this.backendService.deleteCProgram(code.id)
@@ -94,12 +95,17 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         });
     }
 
-    onAddClick():void {
+    onAddClick(): void {
         if (!this.typeOfBoards) new FlashMessageError(`The code cannot be added to project.`);
         var model = new ModalsCodePropertiesModel(this.typeOfBoards);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backendService.createCProgram({project_id: this.id, name: model.name, description: model.description, type_of_board_id: model.deviceType})
+                this.backendService.createCProgram({
+                    project_id: this.id,
+                    name: model.name,
+                    description: model.description,
+                    type_of_board_id: model.deviceType
+                })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The code ${model.name} has been added to project.`));
                         this.refresh();
@@ -112,13 +118,18 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         });
     }
 
-    onEditClick(code:ICProgram):void {
+    onEditClick(code: ICProgram): void {
         if (!this.typeOfBoards) new FlashMessageError(`The code cannot be added to project.`);
 
         var model = new ModalsCodePropertiesModel(this.typeOfBoards, code.name, code.description, code.type_of_board_id, true, code.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backendService.editCProgram(code.id, {project_id: this.id, name: model.name, description: model.description, type_of_board_id: model.deviceType})
+                this.backendService.editCProgram(code.id, {
+                    project_id: this.id,
+                    name: model.name,
+                    description: model.description,
+                    type_of_board_id: model.deviceType
+                })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The code has been updated."));
                         this.refresh();

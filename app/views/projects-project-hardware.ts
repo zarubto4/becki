@@ -3,10 +3,8 @@
  */
 
 import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
-import {LayoutMain} from "../layouts/main";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
-import {ROUTER_DIRECTIVES} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
 import {ModalsAddHardwareModel} from "../modals/add-hardware";
 import {ModalsRemovalModel} from "../modals/removal";
@@ -15,39 +13,40 @@ import {IProject, IBoard} from "../backend/TyrionAPI";
 @Component({
     selector: "view-projects-project-hardware",
     templateUrl: "app/views/projects-project-hardware.html",
-    directives: [ROUTER_DIRECTIVES, LayoutMain],
 })
 export class ProjectsProjectHardwareComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     id: string;
 
-    routeParamsSubscription:Subscription;
+    routeParamsSubscription: Subscription;
 
-    project:IProject = null;
-    devices:IBoard[] = null;
+    project: IProject = null;
+    devices: IBoard[] = null;
 
-    constructor(injector:Injector) {super(injector)};
+    constructor(injector: Injector) {
+        super(injector)
+    };
 
-    ngOnInit():void {
+    ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.id = params["project"];
             this.refresh();
         });
     }
 
-    ngOnDestroy():void {
+    ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
     }
 
-    refresh():void {
+    refresh(): void {
         this.backendService.getProject(this.id)
-            .then((project:IProject) => {
+            .then((project: IProject) => {
                 this.project = project;
                 return Promise.all<IBoard>(project.boards_id.map((board_id) => {
                     return this.backendService.getBoard(board_id);
                 }));
             })
-            .then((devices:IBoard[]) => {
+            .then((devices: IBoard[]) => {
                 console.log(devices);
                 this.devices = devices;
             })
@@ -56,12 +55,12 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
             });
     }
 
-    onDeviceClick(device:IBoard):void {
+    onDeviceClick(device: IBoard): void {
         //TODO
-        alert("TODO!!! Board object: "+JSON.stringify(device));
+        alert("TODO!!! Board object: " + JSON.stringify(device));
     }
 
-    onRemoveClick(device:IBoard):void {
+    onRemoveClick(device: IBoard): void {
         this.modalService.showModal(new ModalsRemovalModel(device.id)).then((success) => {
             if (success) {
                 this.backendService.disconnectBoard(device.id)
@@ -77,7 +76,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         });
     }
 
-    onAddClick():void {
+    onAddClick(): void {
         var model = new ModalsAddHardwareModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {

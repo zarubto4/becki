@@ -7,12 +7,12 @@ import {BugFoundError, PermissionMissingError, UnauthorizedError} from "../backe
 
 export abstract class FlashMessage {
 
-    visited:boolean = false;
-    visitedTimeout:any = null;
+    visited: boolean = false;
+    visitedTimeout: any = null;
 
-    htmlBody:boolean = false;
+    htmlBody: boolean = false;
 
-    constructor(public type:string, public icon:string, public body:string, reason?:Object, htmlBody?:boolean) {
+    constructor(public type: string, public icon: string, public body: string, reason?: Object, htmlBody?: boolean) {
         if (htmlBody) {
             this.htmlBody = htmlBody;
         }
@@ -32,14 +32,14 @@ export abstract class FlashMessage {
         }
     }
 
-    visitStop():void {
+    visitStop(): void {
         if (this.visitedTimeout) {
             clearTimeout(this.visitedTimeout);
             this.visitedTimeout = null;
         }
     }
 
-    visit():void {
+    visit(): void {
         if (this.visited || this.visitedTimeout) return;
         this.visitedTimeout = setTimeout(() => {
             this.visitedTimeout = null;
@@ -50,31 +50,31 @@ export abstract class FlashMessage {
 }
 
 export class FlashMessageSuccess extends FlashMessage {
-    constructor(body:string, reason?:Object, htmlBody?:boolean) {
+    constructor(body: string, reason?: Object, htmlBody?: boolean) {
         super("success", "check-circle", body, reason, htmlBody);
     }
 }
 
 export class FlashMessageInfo extends FlashMessage {
-    constructor(body:string, reason?:Object, htmlBody?:boolean) {
+    constructor(body: string, reason?: Object, htmlBody?: boolean) {
         super("info", "info-circle", body, reason, htmlBody);
     }
 }
 
 export class FlashMessageWarning extends FlashMessage {
-    constructor(body:string, reason?:Object, htmlBody?:boolean) {
+    constructor(body: string, reason?: Object, htmlBody?: boolean) {
         super("warning", "exclamation-triangle", body, reason, htmlBody);
     }
 }
 
 export class FlashMessageDanger extends FlashMessage {
-    constructor(body:string, reason?:Object, htmlBody?:boolean) {
+    constructor(body: string, reason?: Object, htmlBody?: boolean) {
         super("danger", "times-circle", body, reason, htmlBody);
     }
 }
 
 export class FlashMessageError extends FlashMessage {
-    constructor(body:string, reason?:Object, htmlBody?:boolean) {
+    constructor(body: string, reason?: Object, htmlBody?: boolean) {
         super("danger", "times-circle", body, reason, htmlBody);
     }
 }
@@ -82,18 +82,18 @@ export class FlashMessageError extends FlashMessage {
 @Injectable()
 export class FlashMessagesService {
 
-    messages:FlashMessage[] = [];
+    messages: FlashMessage[] = [];
 
     constructor() {
         console.log("FlashMessagesService init");
     }
 
-    addFlashMessage(fm:FlashMessage):void {
+    addFlashMessage(fm: FlashMessage): void {
         this.messages.push(fm);
     }
 
     // remove message (called on click on close btn in FlashMessagesComponent)
-    removeFlashMessage(fm:FlashMessage):void {
+    removeFlashMessage(fm: FlashMessage): void {
         var index = this.messages.indexOf(fm);
         if (index > -1) {
             this.messages.splice(index, 1);
@@ -101,15 +101,15 @@ export class FlashMessagesService {
     }
 
     // stop visiting all messages (called on destroy of FlashMessagesComponent)
-    visitStop():void {
-        this.messages.forEach((fm:FlashMessage) => {
+    visitStop(): void {
+        this.messages.forEach((fm: FlashMessage) => {
             fm.visitStop();
         })
     }
 
     // remove all visited messages (called on destroy of FlashMessagesComponent)
-    flushVisited():void {
-        this.messages = this.messages.filter((fm:FlashMessage) => {
+    flushVisited(): void {
+        this.messages = this.messages.filter((fm: FlashMessage) => {
             return !fm.visited;
         });
     }

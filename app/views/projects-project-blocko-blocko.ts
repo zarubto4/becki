@@ -3,86 +3,93 @@
  */
 
 import {Component, OnInit, Injector, OnDestroy, ViewChild} from "@angular/core";
-import {LayoutMain} from "../layouts/main";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
-import {ROUTER_DIRECTIVES} from "@angular/router";
 import {Subscription} from "rxjs/Rx";
 import {
-    IProject, IBProgram, ITypeOfBlock, IBlockoBlock, IBlockoBlockShortVersion,
-    IBlockoBlockVersion, IBoardsForBlocko, IHardwareGroup, IBoard, ICProgramVersion, ICProgram,
-    IBProgramVersion, IBPair, IMProject, IMProgramSnapShot, IMProjectSnapShot
+    IProject,
+    IBProgram,
+    ITypeOfBlock,
+    IBlockoBlockShortVersion,
+    IBlockoBlockVersion,
+    IBoardsForBlocko,
+    IHardwareGroup,
+    IBoard,
+    ICProgramVersion,
+    ICProgram,
+    IBProgramVersion,
+    IBPair,
+    IMProject,
+    IMProgramSnapShot,
+    IMProjectSnapShot
 } from "../backend/TyrionAPI";
 import {BlockoView} from "../components/BlockoView";
-import {Draggable, DraggableEventParams} from "../components/Draggable";
-import {CProgramVersionSelector} from "../components/CProgramVersionSelector";
+import {DraggableEventParams} from "../components/Draggable";
 import {ModalsBlockoAddHardwareModel} from "../modals/blocko-add-hardware";
 import {ModalsConfirmModel} from "../modals/confirm";
 import {BlockoTargetInterface} from "blocko";
 import {ModalsVersionDialogModel} from "../modals/version-dialog";
-
-
-declare var $:JQueryStatic;
-import moment = require("moment/moment");
 import {ModalsBlockoAddGridModel} from "../modals/blocko-add-grid";
-import {BeckiFormSelectOption, beckiFormSelectOptionsMaker} from "../components/BeckiFormSelect";
+
+
+declare var $: JQueryStatic;
+import moment = require("moment/moment");
 
 @Component({
     selector: "view-projects-project-blocko-blocko",
     templateUrl: "app/views/projects-project-blocko-blocko.html",
-    directives: [ROUTER_DIRECTIVES, LayoutMain, BlockoView, Draggable, CProgramVersionSelector],
 })
 export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     projectId: string;
     blockoId: string;
 
-    routeParamsSubscription:Subscription;
+    routeParamsSubscription: Subscription;
 
-    project:IProject = null;
-    blockoProgram:IBProgram = null;
+    project: IProject = null;
+    blockoProgram: IBProgram = null;
 
-    advancedMode:boolean = false;
+    advancedMode: boolean = false;
 
     // blocko blocks:
 
-    blockGroups:ITypeOfBlock[] = null;
-    blockGroupsOpenToggle:{[id:string]:boolean} = {};
+    blockGroups: ITypeOfBlock[] = null;
+    blockGroupsOpenToggle: {[id: string]: boolean} = {};
 
-    blocksLastVersions:{[id:string]:IBlockoBlockShortVersion} = {};
-    blocksColors:{[id:string]:string} = {};
-    blocksIcons:{[id:string]:string} = {};
+    blocksLastVersions: {[id: string]: IBlockoBlockShortVersion} = {};
+    blocksColors: {[id: string]: string} = {};
+    blocksIcons: {[id: string]: string} = {};
 
-    blocksCache:{[blockId_versionId:string]:IBlockoBlockVersion} = {};
+    blocksCache: {[blockId_versionId: string]: IBlockoBlockVersion} = {};
 
 
     // hw:
 
-    allBoardsDetails:IBoardsForBlocko = null;
+    allBoardsDetails: IBoardsForBlocko = null;
 
-    boardById:{ [id:string]:IBoard } = {};
+    boardById: { [id: string]: IBoard } = {};
 
-    selectedHardware:IHardwareGroup[] = [];
+    selectedHardware: IHardwareGroup[] = [];
 
     // grid:
 
-    allGridProjects:IMProject[] = null;
+    allGridProjects: IMProject[] = null;
 
-    selectedGridProgramVersions:{ [projectId:string]:{ [programId:string]:string }} = {};
+    selectedGridProgramVersions: { [projectId: string]: { [programId: string]: string }} = {};
 
     // versions:
 
-    blockoProgramVersions:IBProgramVersion[] = null;
-    selectedProgramVersion:IBProgramVersion = null;
+    blockoProgramVersions: IBProgramVersion[] = null;
+    selectedProgramVersion: IBProgramVersion = null;
 
     @ViewChild(BlockoView)
-    blockoView:BlockoView;
+    blockoView: BlockoView;
 
-    draggableOptions:JQueryUI.DraggableOptions = {
+    draggableOptions: JQueryUI.DraggableOptions = {
         helper: "clone",
         containment: "document",
         cursor: "move",
-        cursorAt: {left:-5, top:-5}
+        cursorAt: {left: -5, top: -5}
     };
 
     staticBlocks = [
@@ -163,9 +170,11 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         }
     ];
 
-    constructor(injector:Injector) {super(injector)};
+    constructor(injector: Injector) {
+        super(injector)
+    };
 
-    ngOnInit():void {
+    ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.projectId = params["project"];
             this.blockoId = params["blocko"];
@@ -173,15 +182,15 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         });
     }
 
-    ngOnDestroy():void {
+    ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
     }
 
-    onToggleGroup(groupId:string) {
+    onToggleGroup(groupId: string) {
         this.blockGroupsOpenToggle[groupId] = !this.blockGroupsOpenToggle[groupId];
     }
 
-    onDragStop(params:DraggableEventParams) {
+    onDragStop(params: DraggableEventParams) {
 
         var dragOffset = params.ui.offset;
         var blockoOffset = $(this.blockoView.field.nativeElement).offset();
@@ -190,14 +199,14 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
         //var blockoOffset = $(this.blocko.field.nativeElement).width();
 
-        if ((dragOffset.top >= blockoOffset.top) && (dragOffset.left >= blockoOffset.left) && (dragOffset.top <= (blockoOffset.top+blockoHeight)) && (dragOffset.left <= (blockoOffset.left+blockoWidth))) {
+        if ((dragOffset.top >= blockoOffset.top) && (dragOffset.left >= blockoOffset.left) && (dragOffset.top <= (blockoOffset.top + blockoHeight)) && (dragOffset.left <= (blockoOffset.left + blockoWidth))) {
             var x = dragOffset.left - blockoOffset.left;
             var y = dragOffset.top - blockoOffset.top;
 
             if (params.data && params.data.id && this.blocksLastVersions[params.data.id]) {
 
                 var wantedVersion = this.blocksLastVersions[params.data.id];
-                var wantedVersionName = params.data.id+"_"+wantedVersion.id;
+                var wantedVersionName = params.data.id + "_" + wantedVersion.id;
 
                 if (this.blocksCache[wantedVersionName]) {
 
@@ -234,12 +243,12 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     }
 
-    onDragStart(params:DraggableEventParams) {
+    onDragStart(params: DraggableEventParams) {
 
         // prefetch
         if (params.data && params.data.id && this.blocksLastVersions[params.data.id]) {
             var wantedVersion = this.blocksLastVersions[params.data.id];
-            var wantedVersionName = params.data.id+"_"+wantedVersion.id;
+            var wantedVersionName = params.data.id + "_" + wantedVersion.id;
             if (!this.blocksCache[wantedVersionName]) {
                 this.backendService.getBlockoBlockVersion(wantedVersion.id)
                     .then((bbv) => {
@@ -255,22 +264,22 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     }
 
-    isEmptyObject(obj:any):boolean {
+    isEmptyObject(obj: any): boolean {
         return (Object.keys(obj).length === 0);
     }
 
-    getCProgramsForBoardType(boardTypeId:string):ICProgram[] {
+    getCProgramsForBoardType(boardTypeId: string): ICProgram[] {
         if (!this.allBoardsDetails || !this.allBoardsDetails.c_programs) return [];
         return this.allBoardsDetails.c_programs.filter((cp) => (cp.type_of_board_id == boardTypeId));
     }
 
-    hwCProgramVersionChanged(hwObj:IBPair, cProgramVersion:string) {
+    hwCProgramVersionChanged(hwObj: IBPair, cProgramVersion: string) {
         hwObj.c_program_version_id = cProgramVersion;
 
         this.updateBlockoInterfaces();
     }
 
-    hwRemove(hwId:string) {
+    hwRemove(hwId: string) {
         var i = -1;
         this.selectedHardware.forEach((sh, index) => {
             if (sh.main_board_pair && sh.main_board_pair.board_id == hwId) {
@@ -298,8 +307,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         this.updateBlockoInterfaces();
     }
 
-    getAllUsedHwIds():string[] {
-        var out:string[] = [];
+    getAllUsedHwIds(): string[] {
+        var out: string[] = [];
         if (this.selectedHardware) {
             this.selectedHardware.forEach((sh) => {
                 if (sh.main_board_pair && sh.main_board_pair.board_id) {
@@ -317,10 +326,10 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         return out;
     }
 
-    getAllFreeMainBoards():IBoard[] {
+    getAllFreeMainBoards(): IBoard[] {
         if (!this.allBoardsDetails || !this.allBoardsDetails.boards) return [];
         var used = this.getAllUsedHwIds();
-        var out:IBoard[] = [];
+        var out: IBoard[] = [];
         this.allBoardsDetails.boards.forEach((b) => {
             if (b.main_board && used.indexOf(b.id) == -1) {
                 out.push(b);
@@ -329,10 +338,10 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         return out;
     }
 
-    getAllFreeSubBoards():IBoard[] {
+    getAllFreeSubBoards(): IBoard[] {
         if (!this.allBoardsDetails || !this.allBoardsDetails.boards) return [];
         var used = this.getAllUsedHwIds();
-        var out:IBoard[] = [];
+        var out: IBoard[] = [];
         this.allBoardsDetails.boards.forEach((b) => {
             if (!b.main_board && used.indexOf(b.id) == -1) {
                 out.push(b);
@@ -354,26 +363,26 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 if (success && m.selectedGridProject) {
                     this.selectedGridProgramVersions[m.selectedGridProject.id] = {};
                     /*if (m.selectedGridProject.m_programs) {
-                        m.selectedGridProject.m_programs.forEach((mp)=>{
-                            this.selectedGridProgramVersions[m.selectedGridProject.id][mp.id] = null;
-                        });
-                    }*/
+                     m.selectedGridProject.m_programs.forEach((mp)=>{
+                     this.selectedGridProgramVersions[m.selectedGridProject.id][mp.id] = null;
+                     });
+                     }*/
                     this.updateBlockoInterfaces();
                 }
             });
     }
 
-    gridRemove(gridProject:IMProject) {
+    gridRemove(gridProject: IMProject) {
         delete this.selectedGridProgramVersions[gridProject.id];
         this.updateBlockoInterfaces();
     }
 
-    gridSelectedProgramVersionIdChange(projectId:string, programId:string, programVersionId:string) {
+    gridSelectedProgramVersionIdChange(projectId: string, programId: string, programVersionId: string) {
         this.selectedGridProgramVersions[projectId][programId] = programVersionId;
         this.updateBlockoInterfaces();
     }
 
-    hwAdd(parentHwId:string = null) {
+    hwAdd(parentHwId: string = null) {
 
         if (!parentHwId) {
             var mainBoards = this.getAllFreeMainBoards();
@@ -430,8 +439,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     }
 
-    getCProgramVersionById(programVersionId:string):ICProgramVersion {
-        var ret:ICProgramVersion = null;
+    getCProgramVersionById(programVersionId: string): ICProgramVersion {
+        var ret: ICProgramVersion = null;
 
         if (this.allBoardsDetails && this.allBoardsDetails.c_programs) {
 
@@ -449,8 +458,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         return ret;
     }
 
-    getTargetNameByBoardTypeId(boardTypeId:string):string {
-        var out:string = null;
+    getTargetNameByBoardTypeId(boardTypeId: string): string {
+        var out: string = null;
         if (this.allBoardsDetails && this.allBoardsDetails.type_of_boards) {
             this.allBoardsDetails.type_of_boards.forEach((tob) => {
                 if (tob.id == boardTypeId) {
@@ -461,16 +470,16 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         return out;
     }
 
-    updateBlockoInterfaces():void {
+    updateBlockoInterfaces(): void {
 
         console.log(this.selectedGridProgramVersions);
 
-        var outInterface:BlockoTargetInterface[] = [];
+        var outInterface: BlockoTargetInterface[] = [];
 
-        var addInterface = (hwId:string, cProgramVersionId:string) => {
+        var addInterface = (hwId: string, cProgramVersionId: string) => {
             if (hwId && cProgramVersionId) {
                 var board = this.boardById[hwId];
-                var targetName:string = null;
+                var targetName: string = null;
                 if (board) {
                     targetName = this.getTargetNameByBoardTypeId(board.type_of_board_id);
                 }
@@ -482,7 +491,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                         outInterface.push({
                             "targetType": targetName,
                             "targetId": hwId,
-                            "displayName": board.personal_description?board.personal_description:board.id,
+                            "displayName": board.personal_description ? board.personal_description : board.id,
                             "interface": interfaceData
                         });
                     }
@@ -512,7 +521,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
                 if (!this.selectedGridProgramVersions[gp.id]) return;
 
-                var out:any = {
+                var out: any = {
                     analogInputs: {},
                     digitalInputs: {},
                     messageInputs: {},
@@ -530,7 +539,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
                             if (programVersion) {
 
-                                var iface:any = {};
+                                var iface: any = {};
                                 try {
                                     iface = JSON.parse(programVersion.virtual_input_output);
                                 } catch (e) {
@@ -585,7 +594,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
                     });
                 }
-                
+
                 if (
                     Object.keys(out.analogInputs).length ||
                     Object.keys(out.digitalInputs).length ||
@@ -613,28 +622,28 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     }
 
-    onProgramVersionClick(programVersion:IBProgramVersion):void {
+    onProgramVersionClick(programVersion: IBProgramVersion): void {
         this.selectProgramVersion(programVersion);
     }
 
-    onRunProgramVersionClick(programVersion:IBProgramVersion):void {
+    onRunProgramVersionClick(programVersion: IBProgramVersion): void {
 
-        var m = new ModalsConfirmModel("Run program", "Really want run Blocko program version <b>"+programVersion.version_object.version_name+"</b>?");
+        var m = new ModalsConfirmModel("Run program", "Really want run Blocko program version <b>" + programVersion.version_object.version_name + "</b>?");
         this.modalService.showModal(m)
             .then((success) => {
                 if (success) {
                     this.backendService.uploadBProgramToCloud(programVersion.version_object.id, {}) //TODO: timestamp
                         .then((ok)=> {
-                            this.addFlashMessage(new FlashMessageSuccess("Run Blocko version <b>"+programVersion.version_object.version_name+"</b> successfully.", null, true));
+                            this.addFlashMessage(new FlashMessageSuccess("Run Blocko version <b>" + programVersion.version_object.version_name + "</b> successfully.", null, true));
                         })
                         .catch((err)=> {
-                            this.addFlashMessage(new FlashMessageError("Run Blocko version <b>"+programVersion.version_object.version_name+"</b> failed.", err, true));
+                            this.addFlashMessage(new FlashMessageError("Run Blocko version <b>" + programVersion.version_object.version_name + "</b> failed.", err, true));
                         })
                 }
             });
     }
 
-    onClearClick():void {
+    onClearClick(): void {
         var m = new ModalsConfirmModel("Clear program", "Really want clear Blocko program?");
         this.modalService.showModal(m)
             .then((success) => {
@@ -645,7 +654,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             });
     }
 
-    onSaveClick():void {
+    onSaveClick(): void {
 
         // HW validation:
         var validHw = true;
@@ -697,11 +706,11 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         this.modalService.showModal(m).then((success) => {
             if (success) {
 
-                var mProjectSnapshots:IMProjectSnapShot[] = [];
+                var mProjectSnapshots: IMProjectSnapShot[] = [];
 
                 for (var projectId in this.selectedGridProgramVersions) {
                     if (!this.selectedGridProgramVersions.hasOwnProperty(projectId)) continue;
-                    var programSnapshots:IMProgramSnapShot[] = [];
+                    var programSnapshots: IMProgramSnapShot[] = [];
 
                     for (var programId in this.selectedGridProgramVersions[projectId]) {
                         if (!this.selectedGridProgramVersions[projectId].hasOwnProperty(programId)) continue;
@@ -727,11 +736,11 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     program: this.blockoView.getDataJson()
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess("Version <b>"+m.name+"</b> saved successfully.", null, true));
+                        this.addFlashMessage(new FlashMessageSuccess("Version <b>" + m.name + "</b> saved successfully.", null, true));
                         this.refresh();
                     })
                     .catch((err) => {
-                        this.addFlashMessage(new FlashMessageError("Failed saving version <b>"+m.name+"</b>", err, true));
+                        this.addFlashMessage(new FlashMessageError("Failed saving version <b>" + m.name + "</b>", err, true));
                     });
             }
         });
@@ -739,7 +748,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     }
 
-    selectProgramVersion(programVersion:IBProgramVersion):void {
+    selectProgramVersion(programVersion: IBProgramVersion): void {
 
         if (!this.blockoProgramVersions) return;
         if (this.blockoProgramVersions.indexOf(programVersion) == -1) return;
@@ -764,11 +773,11 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     }
 
-    hardwareGroupCopy(hwGroup:IHardwareGroup[]):IHardwareGroup[] {
+    hardwareGroupCopy(hwGroup: IHardwareGroup[]): IHardwareGroup[] {
         if (!hwGroup) return null;
-        var out:IHardwareGroup[] = [];
-        hwGroup.forEach((hg)=>{
-            var hgCopy:IHardwareGroup = {
+        var out: IHardwareGroup[] = [];
+        hwGroup.forEach((hg)=> {
+            var hgCopy: IHardwareGroup = {
                 main_board_pair: {
                     board_id: hg.main_board_pair.board_id,
                     c_program_version_id: hg.main_board_pair.c_program_version_id
@@ -777,7 +786,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             };
 
             if (hg.device_board_pairs) {
-                hg.device_board_pairs.forEach((dbp)=>{
+                hg.device_board_pairs.forEach((dbp)=> {
                     hgCopy.device_board_pairs.push({
                         board_id: dbp.board_id,
                         c_program_version_id: dbp.c_program_version_id
@@ -789,15 +798,15 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         return out;
     }
 
-    refresh():void {
+    refresh(): void {
         /*this.backendService.getProject(this.projectId)
-            .then((project:Project) => {
-                this.project = project;
-                return this.backendService.getInteractionsScheme(this.blockoId);
-            })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(`The blocko cannot be loaded.`, reason));
-            });*/
+         .then((project:Project) => {
+         this.project = project;
+         return this.backendService.getInteractionsScheme(this.blockoId);
+         })
+         .catch(reason => {
+         this.addFlashMessage(new FlashMessageError(`The blocko cannot be loaded.`, reason));
+         });*/
         this.backendService.getBProgram(this.blockoId)
             .then((blockoProgram) => {
                 console.log(blockoProgram);
@@ -831,7 +840,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
                 typeOfBlocks.forEach((tob) => {
                     tob.blocko_blocks.forEach((bb) => {
-                        var sortedVersion = bb.versions.sort((a,b)=> {
+                        var sortedVersion = bb.versions.sort((a, b)=> {
                             return parseInt(b.id) - parseInt(a.id);
                         });
                         if (sortedVersion.length) {
@@ -847,7 +856,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                                         this.blocksIcons[bb.id] = dj["displayName"];
                                     }
                                 } catch (e) {
-                                    console.log("DesignJson parse error:"+e);
+                                    console.log("DesignJson parse error:" + e);
                                 }
                             }
                         }

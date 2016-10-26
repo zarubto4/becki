@@ -8,33 +8,27 @@
  */
 
 import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
-import {CORE_DIRECTIVES} from "@angular/common";
-import {REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
-import {BeckiAsyncValidators} from "../helpers/BeckiAsyncValidators";
+import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 import {BackendService} from "../services/BackendService";
-import {BeckiFormInput} from "../components/BeckiFormInput";
 import {ModalModel} from "../services/ModalService";
 import {IScreenSizeTypeCombination} from "../backend/TyrionAPI";
-import {BeckiFormSelect, beckiFormSelectOptionsMaker, BeckiFormSelectOption} from "../components/BeckiFormSelect";
-
-
+import {beckiFormSelectOptionsMaker, BeckiFormSelectOption} from "../components/BeckiFormSelect";
 
 
 export class ModalsGridProgramPropertiesModel extends ModalModel {
-    constructor(public screenTypes:IScreenSizeTypeCombination, public name:string = "", public description:string = "", public screenTypeId:string = "", public edit:boolean = false, public exceptName:string = null) {
+    constructor(public screenTypes: IScreenSizeTypeCombination, public name: string = "", public description: string = "", public screenTypeId: string = "", public edit: boolean = false, public exceptName: string = null) {
         super();
     }
 }
 
 @Component({
     selector: "modals-grid-program-properties",
-    templateUrl: "app/modals/grid-program-properties.html",
-    directives: [CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, BeckiFormInput, BeckiFormSelect]
+    templateUrl: "app/modals/grid-program-properties.html"
 })
 export class ModalsGridProgramPropertiesComponent implements OnInit {
 
     @Input()
-    modalModel:ModalsGridProgramPropertiesModel;
+    modalModel: ModalsGridProgramPropertiesModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
@@ -43,7 +37,7 @@ export class ModalsGridProgramPropertiesComponent implements OnInit {
 
     options: BeckiFormSelectOption[] = [];
 
-    constructor(private backendService:BackendService, private formBuilder:FormBuilder) {
+    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
             "name": ["", [Validators.required, Validators.minLength(8)]],
@@ -64,18 +58,18 @@ export class ModalsGridProgramPropertiesComponent implements OnInit {
         (<FormControl>(this.form.controls["screenTypeId"])).setValue(this.modalModel.screenTypeId);
     }
 
-    onSubmitClick():void {
+    onSubmitClick(): void {
         this.modalModel.name = this.form.controls["name"].value;
         this.modalModel.description = this.form.controls["description"].value;
         this.modalModel.screenTypeId = this.form.controls["screenTypeId"].value;
         this.modalClose.emit(true);
     }
 
-    onCloseClick():void {
+    onCloseClick(): void {
         this.modalClose.emit(false);
     }
 
-    onCancelClick():void {
+    onCancelClick(): void {
         this.modalClose.emit(false);
     }
 }

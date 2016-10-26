@@ -2,22 +2,22 @@
  * Created by davidhradek on 03.08.16.
  */
 
-import { Injectable }     from '@angular/core';
-import {CanActivate, Router}    from '@angular/router';
+import {Injectable} from "@angular/core";
+import {CanActivate, Router} from "@angular/router";
 import {BackendService} from "./BackendService";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
 
-    constructor(private backendService:BackendService, private router:Router) {
+    constructor(private backendService: BackendService, private router: Router) {
     }
 
-    canActivate():Promise<boolean> {
+    canActivate(): Promise<boolean> {
         console.log('AuthGuard#canActivate called');
         return new Promise<boolean>((resolve) => {
             this.backendService.isLoggedIn()
                 .then(loggedIn => {
-                    console.log("AuthGuard#loggedIn = "+loggedIn);
+                    console.log("AuthGuard#loggedIn = " + loggedIn);
                     if (loggedIn) {
                         resolve(true);
                     } else {
@@ -32,15 +32,15 @@ export class AuthGuard implements CanActivate {
 @Injectable()
 export class NonAuthGuard implements CanActivate {
 
-    constructor(private backendService:BackendService, private router:Router) {
+    constructor(private backendService: BackendService, private router: Router) {
     }
 
-    canActivate():Promise<boolean> {
+    canActivate(): Promise<boolean> {
         console.log('NonAuthGuard#canActivate called');
         return new Promise<boolean>((resolve) => {
             this.backendService.isLoggedIn()
                 .then(loggedIn => {
-                    console.log("NonAuthGuard#loggedIn = "+loggedIn);
+                    console.log("NonAuthGuard#loggedIn = " + loggedIn);
                     if (!loggedIn) {
                         resolve(true);
                     } else {

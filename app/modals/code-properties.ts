@@ -8,39 +8,36 @@
  */
 
 import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
-import {CORE_DIRECTIVES} from "@angular/common";
-import {REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
+import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 import {BackendService} from "../services/BackendService";
-import {BeckiFormInput} from "../components/BeckiFormInput";
 import {ModalModel} from "../services/ModalService";
-import {BeckiFormSelect, BeckiFormSelectOption, beckiFormSelectOptionsMaker} from "../components/BeckiFormSelect";
+import {BeckiFormSelectOption, beckiFormSelectOptionsMaker} from "../components/BeckiFormSelect";
 import {ITypeOfBoard} from "../backend/TyrionAPI";
 
 
 export class ModalsCodePropertiesModel extends ModalModel {
-    constructor(public typeOfBoards:ITypeOfBoard[], public name:string = "", public description:string = "", public deviceType:string = "",  public edit:boolean = false, public exceptName:string = null) {
+    constructor(public typeOfBoards: ITypeOfBoard[], public name: string = "", public description: string = "", public deviceType: string = "", public edit: boolean = false, public exceptName: string = null) {
         super();
     }
 }
 
 @Component({
     selector: "modals-code-properties",
-    templateUrl: "app/modals/code-properties.html",
-    directives: [CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, BeckiFormInput, BeckiFormSelect]
+    templateUrl: "app/modals/code-properties.html"
 })
 export class ModalsCodePropertiesComponent implements OnInit {
 
     @Input()
-    modalModel:ModalsCodePropertiesModel;
+    modalModel: ModalsCodePropertiesModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
 
-    options:BeckiFormSelectOption[] = null;
+    options: BeckiFormSelectOption[] = null;
 
     form: FormGroup;
 
-    constructor(private backendService:BackendService, private formBuilder:FormBuilder) {
+    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({ //TODO: async name validation
             "name": ["", [Validators.required, Validators.minLength(8)]],
@@ -56,18 +53,18 @@ export class ModalsCodePropertiesComponent implements OnInit {
         (<FormControl>(this.form.controls["deviceType"])).setValue(this.modalModel.deviceType);
     }
 
-    onSubmitClick():void {
+    onSubmitClick(): void {
         this.modalModel.name = this.form.controls["name"].value;
         this.modalModel.description = this.form.controls["description"].value;
         this.modalModel.deviceType = this.form.controls["deviceType"].value;
         this.modalClose.emit(true);
     }
 
-    onCloseClick():void {
+    onCloseClick(): void {
         this.modalClose.emit(false);
     }
 
-    onCancelClick():void {
+    onCancelClick(): void {
         this.modalClose.emit(false);
     }
 }

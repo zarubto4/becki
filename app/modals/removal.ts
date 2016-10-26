@@ -6,23 +6,23 @@
  * directory of this distribution.
  */
 
-import {Input, Output, EventEmitter,  Component} from "@angular/core";
-import {CORE_DIRECTIVES} from "@angular/common";
+import {Input, Output, EventEmitter, Component} from "@angular/core";
 import {ModalModel} from "../services/ModalService";
 
 export class ModalsRemovalModel extends ModalModel {
-    constructor(public name:string) {super();}
+    constructor(public name: string) {
+        super();
+    }
 }
 
 @Component({
     selector: "modals-removal",
-    templateUrl: "app/modals/removal.html",
-    directives: [CORE_DIRECTIVES]
+    templateUrl: "app/modals/removal.html"
 })
 export class ModalsRemovalComponent {
 
     @Input()
-    modalModel:ModalsRemovalModel;
+    modalModel: ModalsRemovalModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
@@ -31,15 +31,15 @@ export class ModalsRemovalComponent {
 
     }
 
-    onCloseClick():void {
+    onCloseClick(): void {
         this.modalClose.emit(false);
     }
 
-    onYesClick():void {
+    onYesClick(): void {
         this.modalClose.emit(true);
     }
 
-    onNoClick():void {
+    onNoClick(): void {
         this.modalClose.emit(false);
     }
 }

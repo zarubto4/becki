@@ -7,38 +7,33 @@
  */
 
 import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
-import {CORE_DIRECTIVES} from "@angular/common";
-import {REACTIVE_FORM_DIRECTIVES, FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
+import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 import {BeckiAsyncValidators} from "../helpers/BeckiAsyncValidators";
 import {BackendService} from "../services/BackendService";
-import {BeckiFormInput} from "../components/BeckiFormInput";
 import {ModalModel} from "../services/ModalService";
 
 
-
-
 export class ModalsBlockoPropertiesModel extends ModalModel {
-    constructor(public projectId:string, public name:string = "", public description:string = "", public edit:boolean = false, public exceptName:string = null) {
+    constructor(public projectId: string, public name: string = "", public description: string = "", public edit: boolean = false, public exceptName: string = null) {
         super();
     }
 }
 
 @Component({
     selector: "modals-blocko-properties",
-    templateUrl: "app/modals/blocko-properties.html",
-    directives: [CORE_DIRECTIVES, REACTIVE_FORM_DIRECTIVES, BeckiFormInput]
+    templateUrl: "app/modals/blocko-properties.html"
 })
 export class ModalsBlockoPropertiesComponent implements OnInit {
 
     @Input()
-    modalModel:ModalsBlockoPropertiesModel;
+    modalModel: ModalsBlockoPropertiesModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
 
     form: FormGroup;
 
-    constructor(private backendService:BackendService, private formBuilder:FormBuilder) {
+    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
             "name": ["", [Validators.required, Validators.minLength(8)], BeckiAsyncValidators.ifValidator((value) => {
@@ -55,17 +50,17 @@ export class ModalsBlockoPropertiesComponent implements OnInit {
         (<FormControl>(this.form.controls["description"])).setValue(this.modalModel.description);
     }
 
-    onSubmitClick():void {
+    onSubmitClick(): void {
         this.modalModel.name = this.form.controls["name"].value;
         this.modalModel.description = this.form.controls["description"].value;
         this.modalClose.emit(true);
     }
 
-    onCloseClick():void {
+    onCloseClick(): void {
         this.modalClose.emit(false);
     }
 
-    onCancelClick():void {
+    onCancelClick(): void {
         this.modalClose.emit(false);
     }
 }
