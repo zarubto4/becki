@@ -20,9 +20,9 @@
                                     <li class="active">
                                         <a href="#tab_1_1" data-toggle="tab" aria-expanded="true">Personal Info</a>
                                     </li>
-                                   <!-- <li class="">
+                                    <li class="">
                                         <a href="#tab_1_2" data-toggle="tab" aria-expanded="false">Change Avatar</a>
-                                    </li> -->
+                                    </li>
                                     <li class="">
                                         <a href="#tab_1_3" data-toggle="tab" aria-expanded="false">Change Password</a>
                                     </li>
@@ -36,33 +36,15 @@
                                     <!-- PERSONAL INFO TAB -->
                                     <div class="tab-pane active" id="tab_1_1">
                                         <form role="form" action="#">
-                                            <div class="form-group">
-                                                <label class="control-label">First Name</label>
-                                                <input type="text" placeholder="John" class="form-control"></div>
-                                            <div class="form-group">
-                                                <label class="control-label">Last Name</label>
-                                                <input type="text" placeholder="Doe" class="form-control"></div>
-                                            <div class="form-group">
-                                                <label class="control-label">Mobile Number</label>
-                                                <input type="text" placeholder="+1 646 580 DEMO (6284)"
-                                                       class="form-control"></div>
-                                            <div class="form-group">
-                                                <label class="control-label">Interests</label>
-                                                <input type="text" placeholder="Design, Web etc." class="form-control">
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label">Occupation</label>
-                                                <input type="text" placeholder="Web Developer" class="form-control">
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label">About</label>
-                                                <textarea class="form-control" rows="3"
-                                                          placeholder="We are KeenThemes!!!"></textarea>
-                                            </div>
-                                            <div class="form-group">
-                                                <label class="control-label">Website Url</label>
-                                                <input type="text" placeholder="http://www.mywebsite.com"
-                                                       class="form-control"></div>
+
+                                            <becki-form-input [placeholder]="fullName" label="full name" [type]="text"
+                                                              [control]="infoForm.controls.fullName"></becki-form-input>
+                                            <becki-form-input [placeholder]="nickName" label="nick Name" [type]="text"
+                                                              [control]="infoForm.controls.nickName"></becki-form-input>
+                                            <becki-form-input [placeholder]="state" label="state" [type]="text"
+                                                              [control]="infoForm.controls.state"></becki-form-input>
+
+
                                             <div class="margiv-top-10">
                                                 <a href="javascript:;" class="btn green"> Save Changes </a>
                                                 <a href="javascript:;" class="btn default"> Cancel </a>
@@ -71,11 +53,9 @@
                                     </div>
                                     <!-- END PERSONAL INFO TAB -->
                                     <!-- CHANGE AVATAR TAB -->
-                                 <!--   <div class="tab-pane" id="tab_1_2">
-                                        <p> Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry
-                                            richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard
-                                            dolor brunch. Food truck quinoa nesciunt laborum
-                                            eiusmod. </p>
+                                    <div class="tab-pane" id="tab_1_2">
+                                        <p> you can change your avatar icon here <strong>maximal size of your avatar is
+                                            2Mb!</strong></p>
                                         <form action="#" role="form">
                                             <div class="form-group">
                                                 <div class="fileinput fileinput-new" data-provides="fileinput">
@@ -104,23 +84,24 @@
                                                 <a href="javascript:;" class="btn default"> Cancel </a>
                                             </div>
                                         </form>
-                                    </div> -->
+                                    </div>
                                     <!-- END CHANGE AVATAR TAB -->
                                     <!-- CHANGE PASSWORD TAB -->
                                     <div class="tab-pane" id="tab_1_3">
                                         <form action="#">
-                                            <div class="form-group">
-                                                <label class="control-label">Current Password</label>
-                                                <input type="password" class="form-control"></div>
-                                            <div class="form-group">
-                                                <label class="control-label">New Password</label>
-                                                <input type="password" class="form-control"></div>
-                                            <div class="form-group">
-                                                <label class="control-label">Re-type New Password</label>
-                                                <input type="password" class="form-control"></div>
+                                            <becki-form-input [placeholder]="password" label=" Current password"
+                                                              type="password"
+                                                              [control]="passwordForm.controls.currentPassword"></becki-form-input>
+                                            <becki-form-input [placeholder]="password" label="New Password"
+                                                              type="password"
+                                                              [control]="passwordForm.controls.newPassword"></becki-form-input>
+                                            <becki-form-input [placeholder]="password" label="Re-type New Password"
+                                                              type="password"
+                                                              [control]="passwordForm.controls.newPasswordConfirm"></becki-form-input>
+
                                             <div class="margin-top-10">
-                                                <a href="javascript:;" class="btn green"> Change Password </a>
-                                                <a href="javascript:;" class="btn default"> Cancel </a>
+                                                <button type="submit" (click)="changePassword()" class="btn green" [disabled]="!passwordForm.valid"> Change Password </button>
+                                                <button href="javascript:;" class="btn default"> Cancel </button>
                                             </div>
                                         </form>
                                     </div>
@@ -129,17 +110,23 @@
                                     <div class="tab-pane" id="tab_1_4">
                                         <form action="#">
                                             <div class="form-group">
-                                                <label class="control-label">current Email</label>
-                                                <input type="email" class="form-control"></div>
-                                            <div class="form-group">
-                                                <label class="control-label">New Email</label>
-                                                <input type="email" class="form-control"></div>
-                                            <div class="form-group">
-                                                <label class="control-label">Password</label>
-                                                <input type="password" class="form-control"></div>
-                                            <div class="margin-top-10">
-                                                <a href="javascript:;" class="btn green"> Change email </a>
-                                                <a href="javascript:;" class="btn default"> Cancel </a>
+
+                                                <becki-form-input [placeholder]="old_email" label="Old email"
+                                                                  type="email"
+                                                                  [control]="emailForm.controls.currentEmail"></becki-form-input>
+                                                <becki-form-input [placeholder]="new_email" label="New e-mail"
+                                                                  type="email"
+                                                                  [control]="emailForm.controls.newEmail"></becki-form-input>
+                                                <becki-form-input [placeholder]="confirm_new_email"
+                                                                  label="Re-type new e-mail" type="email"
+                                                                  [control]="emailForm.controls.newEmailConfirm"></becki-form-input>
+
+
+                                                <div class="margin-top-10">
+                                                    <button type="submit" (click)="changeEmail()" class="btn green" [disabled]="!emailForm.valid">
+                                                        Change email </button>
+                                                    <button href="javascript:;" class="btn default"> Cancel </button>
+                                                </div>
                                             </div>
                                         </form>
                                     </div>
