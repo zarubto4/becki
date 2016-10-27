@@ -28,6 +28,7 @@ export class BlockUIService {
         this.blockUIOpen = false;
         this.blockUITimeout = setTimeout(() => {
             this.blockUIOpen = true;
+            document.body.classList.add("block-ui-blur");
         }, 5);
 
     }
@@ -39,6 +40,7 @@ export class BlockUIService {
         clearTimeout(this.blockUITimeout);
 
         this.blockUIOpen = false;
+        document.body.classList.remove("block-ui-blur");
         this.blockUITimeout = setTimeout(() => {
             this.blockUIDisplay = false;
         }, 400);

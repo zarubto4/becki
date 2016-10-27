@@ -842,6 +842,30 @@ span.changes {
 
 /* block ui */
 
+body .page-wrapper {
+    filter: blur(0);
+    -webkit-transition: filter 0.2s;
+    transition: filter 0.2s;
+}
+
+body.block-ui-blur .page-wrapper {
+    filter: blur(2px);
+}
+
+body {
+    filter: grayscale(0);
+    -webkit-transition: filter 0.2s;
+    transition: filter 0.2s;
+}
+
+body.block-ui-blur {
+    filter: grayscale(0.6);
+}
+
+body.block-ui-blur .page-container, body.block-ui-blur .page-footer {
+    background-color: #364150;
+}
+
 .block-ui-overlay {
     z-index: 9996;
     border: none;
@@ -855,8 +879,8 @@ span.changes {
     opacity: 0;
     cursor: wait;
     position: fixed;
-    -webkit-transition: opacity 0.5s;
-    transition: opacity 0.5s;
+    -webkit-transition: opacity 0.4s;
+    transition: opacity 0.4s;
 }
 .block-ui-overlay.open {
     opacity: 0.05;
