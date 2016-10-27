@@ -2,7 +2,7 @@
  * Created by davidhradek on 07.09.16.
  */
 
-/// <reference path="../../typings/index.d.ts" />
+/// <reference path="../typings/index.d.ts" />
 
 import * as program from "commander";
 import {readFileSync, writeFileSync} from "fs";
@@ -14,7 +14,7 @@ var request = require('sync-request');
 program
     .version('0.0.1')
     .option('-i, --input [input]', 'Input Swagger file or url (default: http://127.0.0.1:9000/api-docs)', "http://127.0.0.1:9000/api-docs")
-    .option('-o, --output [output]', 'Output TypeScript file (default: TyrionAPI.ts)', "TyrionAPI.ts")
+    .option('-o, --output [output]', 'Output TypeScript file (default: ../app/backend/TyrionAPI.ts)', "../app/backend/TyrionAPI.ts")
     .option('-c, --className [className]', 'Output TypeScript class name (default: TyrionAPI)', "TyrionAPI")
     .option('-p, --prefixInterfaces [prefixInterfaces]', 'Prefix for all TypeScript interfaces (default: I)', "I")
     .option('-d, --debug', 'More output informations')

@@ -1,5 +1,4 @@
-///<reference path="modals/blocko-js-editor.ts"/>
-///<reference path="modals/grid-config-properties.ts"/>
+///<reference path="../typings/index.d.ts"/>
 /*
  * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
  * directory of this distribution.

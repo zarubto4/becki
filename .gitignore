@@ -5,6 +5,8 @@
 
 /dist/
 
+/generator/generator.js
+
 # system files
 .DS_Store
 
