@@ -42,37 +42,37 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
     }
 
     getBoardType(typeId: string): string {
-        var typeOfBoard = this.typeOfBoards.find(dt => {
-            return dt.id == typeId
-        });
+        var typeOfBoard:ITypeOfBoard = null;
+        if (this.typeOfBoards) {
+            typeOfBoard = this.typeOfBoards.find(dt => {
+                return dt.id == typeId
+            });
+        }
         if (typeOfBoard) return typeOfBoard.name;
         return "";
     }
 
     refresh(): void {
+        this.blockUI();
         this.backendService.getProject(this.id)
             .then((project: IProject) => {
                 this.project = project;
-                return Promise.all<ICProgram>(project.c_programs.map((c_program) => {
+                return this.backendService.getAllTypeOfBoards();
+            })
+            .then((typeOfBoards: ITypeOfBoard[]) => {
+                this.typeOfBoards = typeOfBoards;
+                return Promise.all<ICProgram>(this.project.c_programs.map((c_program) => {
                     return this.backendService.getCProgram(c_program.id);
                 }));
             })
             .then((codePrograms: ICProgram[]) => {
                 this.codePrograms = codePrograms;
+                this.unblockUI();
             })
             .catch(reason => {
                 this.addFlashMessage(new FlashMessageError(`The project ${this.id} cannot be loaded.`, reason));
+                this.unblockUI();
             });
-
-        this.backendService.getAllTypeOfBoards()
-            .then((typeOfBoards: ITypeOfBoard[]) => {
-                this.typeOfBoards = typeOfBoards;
-            })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(`The types of boards cannot be loaded.`, reason));
-            });
-
-
     }
 
     onCodeClick(code: ICProgram): void {
@@ -82,14 +82,15 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
     onRemoveClick(code: ICProgram): void {
         this.modalService.showModal(new ModalsRemovalModel(code.name)).then((success) => {
             if (success) {
+                this.blockUI();
                 this.backendService.deleteCProgram(code.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The code has been removed."));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The code cannot be removed.", reason));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     });
             }
         });
@@ -100,6 +101,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         var model = new ModalsCodePropertiesModel(this.typeOfBoards);
         this.modalService.showModal(model).then((success) => {
             if (success) {
+                this.blockUI();
                 this.backendService.createCProgram({
                     project_id: this.id,
                     name: model.name,
@@ -108,11 +110,11 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The code ${model.name} has been added to project.`));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(`The code ${model.name} cannot be added to project.`, reason));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     });
             }
         });
@@ -124,6 +126,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         var model = new ModalsCodePropertiesModel(this.typeOfBoards, code.name, code.description, code.type_of_board_id, true, code.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
+                this.blockUI();
                 this.backendService.editCProgram(code.id, {
                     project_id: this.id,
                     name: model.name,
@@ -132,11 +135,11 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The code has been updated."));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The code cannot be updated.", reason));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     });
             }
         });

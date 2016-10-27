@@ -43,6 +43,7 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
     }
 
     refresh(): void {
+        this.blockUI();
         this.backendService.getProject(this.id)
             .then((project: IProject) => {
                 this.project = project;
@@ -53,14 +54,14 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
             .then((gridProjects: IMProject[]) => {
                 console.log(gridProjects);
                 this.gridProjects = gridProjects;
+                return this.backendService.getAllScreenTypes();
+            })
+            .then((st) => {
+                this.screenTypes = st;
+                this.unblockUI();
             })
             .catch(reason => {
                 this.addFlashMessage(new FlashMessageError(`The project ${this.id} cannot be loaded.`, reason));
-            });
-
-        this.backendService.getAllScreenTypes()
-            .then((st) => {
-                this.screenTypes = st;
             });
 
     }
@@ -89,17 +90,18 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
         var model = new ModalsGridProjectPropertiesModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {
+                this.blockUI();
                 this.backendService.createMProject(this.id, {
                     name: model.name,
                     description: model.description
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid project has been added."));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The grid project cannot be added.", reason));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     });
             }
         });
@@ -110,17 +112,18 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 console.log(model);
+                this.blockUI();
                 this.backendService.editMProject(project.id, {
                     name: model.name,
                     description: model.description
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid project has been edited."));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The grid project cannot be edited.", reason));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     });
             }
         });
@@ -130,14 +133,15 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
 
         this.modalService.showModal(new ModalsRemovalModel(project.name)).then((success) => {
             if (success) {
+                this.blockUI();
                 this.backendService.deleteMProject(project.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid project has been removed."));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The grid project cannot be removed.", reason));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     });
             }
         });
@@ -151,6 +155,7 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
 
         this.modalService.showModal(model).then((success) => {
             if (success) {
+                this.blockUI();
                 this.backendService.createMProgram(project.id, {
                     name: model.name,
                     description: model.description,
@@ -158,11 +163,11 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid program has been added."));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The grid program cannot be added.", reason));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     });
             }
         });
@@ -175,6 +180,7 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
 
         this.modalService.showModal(model).then((success) => {
             if (success) {
+                this.blockUI();
                 this.backendService.editMProgram(program.id, {
                     name: model.name,
                     description: model.description,
@@ -182,11 +188,11 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid program has been edited."));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The grid program cannot be edited.", reason));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     });
             }
         });
@@ -196,14 +202,15 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
 
         this.modalService.showModal(new ModalsRemovalModel(program.name)).then((success) => {
             if (success) {
+                this.blockUI();
                 this.backendService.deleteMProgram(program.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid program has been removed."));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The grid program cannot be removed.", reason));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     });
             }
         });

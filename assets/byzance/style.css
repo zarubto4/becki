@@ -155,6 +155,98 @@
     -ms-animation-timing-function: ease-in-out;
 }
 
+@-webkit-keyframes byzance-logo-spinner-blue-keyframes
+{
+    0%{-webkit-transform:rotate(0deg);}
+    25%{-webkit-transform:rotate(90deg);}
+    50%{-webkit-transform:rotate(180deg);}
+    75%{-webkit-transform:rotate(270deg);}
+    100%{-webkit-transform:rotate(360deg);}
+}
+@-moz-keyframes byzance-logo-spinner-blue-keyframes
+{
+    0%{-moz-transform:rotate(0deg);}
+    25%{-moz-transform:rotate(90deg);}
+    50%{-moz-transform:rotate(180deg);}
+    75%{-moz-transform:rotate(270deg);}
+    100%{-moz-transform:rotate(360deg);}
+}
+@-ms-keyframes byzance-logo-spinner-blue-keyframes
+{
+    0%{-ms-transform:rotate(0deg);}
+    25%{-ms-transform:rotate(90deg);}
+    50%{-ms-transform:rotate(180deg);}
+    75%{-ms-transform:rotate(270deg);}
+    100%{-ms-transform:rotate(360deg);}
+}
+
+.byzance-logo-spinner-blue {
+    width: 64px;
+    height: 64px;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    display: inline-block;
+    background-image: url(/assets/byzance/logo_square_blue.svg);
+    -webkit-animation-name: byzance-logo-spinner-blue-keyframes;
+    -webkit-animation-duration: 4s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: ease-in-out;
+    -moz-animation-name: byzance-logo-spinner-blue-keyframes;
+    -moz-animation-duration: 4s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: ease-in-out;
+    -ms-animation-name: byzance-logo-spinner-blue-keyframes;
+    -ms-animation-duration: 4s;
+    -ms-animation-iteration-count: infinite;
+    -ms-animation-timing-function: ease-in-out;
+}
+
+@-webkit-keyframes byzance-logo-spinner-black-keyframes
+{
+    0%{-webkit-transform:rotate(0deg);}
+    25%{-webkit-transform:rotate(90deg);}
+    50%{-webkit-transform:rotate(180deg);}
+    75%{-webkit-transform:rotate(270deg);}
+    100%{-webkit-transform:rotate(360deg);}
+}
+@-moz-keyframes byzance-logo-spinner-black-keyframes
+{
+    0%{-moz-transform:rotate(0deg);}
+    25%{-moz-transform:rotate(90deg);}
+    50%{-moz-transform:rotate(180deg);}
+    75%{-moz-transform:rotate(270deg);}
+    100%{-moz-transform:rotate(360deg);}
+}
+@-ms-keyframes byzance-logo-spinner-black-keyframes
+{
+    0%{-ms-transform:rotate(0deg);}
+    25%{-ms-transform:rotate(90deg);}
+    50%{-ms-transform:rotate(180deg);}
+    75%{-ms-transform:rotate(270deg);}
+    100%{-ms-transform:rotate(360deg);}
+}
+
+.byzance-logo-spinner-black {
+    width: 64px;
+    height: 64px;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    display: inline-block;
+    background-image: url(/assets/byzance/logo_square_black.svg);
+    -webkit-animation-name: byzance-logo-spinner-black-keyframes;
+    -webkit-animation-duration: 4s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: ease-in-out;
+    -moz-animation-name: byzance-logo-spinner-black-keyframes;
+    -moz-animation-duration: 4s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: ease-in-out;
+    -ms-animation-name: byzance-logo-spinner-black-keyframes;
+    -ms-animation-duration: 4s;
+    -ms-animation-iteration-count: infinite;
+    -ms-animation-timing-function: ease-in-out;
+}
+
 .byzance-logo-square-blue {
     width: 64px;
     height: 64px;
@@ -746,6 +838,88 @@ span.changes {
 .hx-description {
     font-size: 0.6em;
     color: gray;
+}
+
+/* block ui */
+
+.block-ui-overlay {
+    z-index: 9996;
+    border: none;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    background-color: rgb(85, 85, 85);
+    opacity: 0;
+    cursor: wait;
+    position: fixed;
+    -webkit-transition: opacity 0.5s;
+    transition: opacity 0.5s;
+}
+.block-ui-overlay.open {
+    opacity: 0.05;
+}
+
+.block-ui-msg-wrapper {
+    z-index: 9997;
+    position: fixed;
+    padding: 0px;
+    margin: 0px;
+    width: 30%;
+    top: 40%;
+    left: 35%;
+    text-align: center;
+    color: rgb(0, 0, 0);
+    border: 0px;
+    cursor: wait;
+    opacity: 0;
+    -webkit-transition: opacity 0.4s cubic-bezier(0.23, 1, 0.32, 1), -webkit-transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: opacity 0.4s cubic-bezier(0.23, 1, 0.32, 1), transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    -webkit-transform: scale(0);
+    transform: scale(0);
+}
+.block-ui-msg-wrapper.open {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+
+.block-ui-msg-wrapper .block-ui-msg {
+    display: inline-block;
+    min-width: 125px;
+    margin-left: -60px;
+    padding: 10px;
+    margin: 0 auto;
+    color: #000 !important;
+    font-size: 13px;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid silver;
+    background-color: #ffffff;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -ms-border-radius: 4px;
+    -o-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+}
+
+.block-ui-msg-wrapper .block-ui-msg .byzance-logo-spinner-blue, .block-ui-msg-wrapper .block-ui-msg .byzance-logo-spinner-black {
+    width: 32px;
+    height: 32px;
+    vertical-align: middle;
+}
+
+.block-ui-msg-wrapper .block-ui-msg span {
+    line-height: 32px;
+    height: 32px;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 /* TheGrid end */

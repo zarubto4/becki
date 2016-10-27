@@ -36,12 +36,15 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
     }
 
     refresh(): void {
+        this.blockUI();
         this.backendService.getProject(this.id)
             .then(project => {
                 this.project = project;
+                this.unblockUI();
             })
             .catch(reason => {
                 this.addFlashMessage(new FlashMessageError(`The project ${this.id} cannot be loaded.`, reason));
+                this.unblockUI();
             });
     }
 }

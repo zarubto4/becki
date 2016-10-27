@@ -26,7 +26,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     routeParamsSubscription: Subscription;
 
-    project: IProject = null;
+    //project: IProject = null;
 
     codeProgram: ICProgram = null;
     codeProgramVersions: ICProgramVersion[] = null;
@@ -59,8 +59,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     refresh(): void {
 
-        //this.backendService.addVersionToCProgram("verzeeeeee 1", "hele asi fajn veerze programu kterej se super mega ultra dobrej", "hlavní program", {"neco.cpp":"something"}, this.codeId);
-
+        this.blockUI();
         this.backendService.getCProgram(this.codeId)
             .then((codeProgram: ICProgram) => {
                 console.log(codeProgram);
@@ -77,6 +76,8 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 if (this.codeProgramVersions.length > 0) {
                     this.selectProgramVersion(this.codeProgramVersions[0]);
                 }
+
+                this.unblockUI();
             })
             .catch(reason => {
                 this.addFlashMessage(new FlashMessageError(`The code types cannot be loaded.`, reason));

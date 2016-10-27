@@ -7,7 +7,7 @@ import {CurrentParamsService} from "./services/CurrentParamsService";
 
 @Component({
     selector: 'app',
-    template: "<modal></modal><router-outlet></router-outlet>"
+    template: "<block-ui></block-ui><modal></modal><router-outlet></router-outlet>"
 })
 export class AppComponent {
     // need inject CurrentParamsService here for init first in app

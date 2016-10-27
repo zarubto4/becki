@@ -43,6 +43,7 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
     }
 
     refresh(): void {
+        this.blockUI();
         this.backendService.getProject(this.id)
             .then((project: IProject) => {
                 this.project = project;
@@ -53,9 +54,11 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
             .then((blockoPrograms: IBProgram[]) => {
                 console.log(blockoPrograms);
                 this.blockoPrograms = blockoPrograms;
+                this.unblockUI();
             })
             .catch(reason => {
                 this.addFlashMessage(new FlashMessageError(`The project ${this.id} cannot be loaded.`, reason));
+                this.unblockUI();
             });
 
     }
@@ -67,14 +70,15 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
     onRemoveClick(blocko: IBProgram): void {
         this.modalService.showModal(new ModalsRemovalModel(blocko.name)).then((success) => {
             if (success) {
+                this.blockUI();
                 this.backendService.deleteBProgram(blocko.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The blocko has been removed."));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The blocko cannot be removed.", reason));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     });
             }
         });
@@ -84,14 +88,15 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
         var model = new ModalsBlockoPropertiesModel(this.id);
         this.modalService.showModal(model).then((success) => {
             if (success) {
+                this.blockUI();
                 this.backendService.createBProgram(this.id, {name: model.name, description: model.description})
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The blocko ${model.name} has been added to project.`));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(`The blocko ${model.name} cannot be added to project.`, reason));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     });
             }
         });
@@ -101,14 +106,15 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
         var model = new ModalsBlockoPropertiesModel(this.id, blocko.name, blocko.description, true, blocko.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
+                this.blockUI();
                 this.backendService.editBProgram(blocko.id, {name: model.name, description: model.description})
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The blocko has been updated."));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The blocko cannot be updated.", reason));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     });
             }
         });

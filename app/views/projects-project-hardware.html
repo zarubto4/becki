@@ -17,7 +17,7 @@
                 </a>
             </div>
         </div>
-        <div class="table-scrollable">
+        <div *ngIf="(devices && devices.length)" class="table-scrollable">
             <table class="table table-hover">
                 <thead>
                 <tr>
@@ -42,6 +42,8 @@
                 </tbody>
             </table>
         </div>
+        <h3 *ngIf="!devices" class="text-center">Loading...</h3>
+        <h3 *ngIf="devices && devices.length == 0" class="text-center">No hardware in this project</h3>
     </div>
 
 </layout-main>

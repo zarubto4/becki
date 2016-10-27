@@ -26,7 +26,7 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
 
     routeParamsSubscription: Subscription;
 
-    project: IProject = null;
+    //project: IProject = null;
 
     blockoBlock: IBlockoBlock = null;
 
@@ -80,8 +80,8 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
     }
 
     refresh(): void {
-        //TODO:
 
+        this.blockUI();
         this.backendService.getBlockoBlock(this.blockId)
             .then((blockoBlock) => {
                 console.log(blockoBlock);
@@ -97,12 +97,14 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
                 });
 
                 if (this.blockoBlockVersions.length) {
-                    this.selectBlockVersion(this.blockoBlockVersions[0]);
+                    this.selectBlockVersion(this.blockoBlockVersions[0]); // also unblockUI
+                } else {
+                    this.unblockUI();
                 }
-
             })
             .catch(reason => {
                 this.addFlashMessage(new FlashMessageError(`The block cannot be loaded.`, reason));
+                this.unblockUI();
             });
 
     }
@@ -112,6 +114,7 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
     }
 
     selectBlockVersion(version: IBlockoBlockShortVersion) {
+        this.blockUI();
         this.backendService.getBlockoBlockVersion(version.id)
             .then((blockoBlockVersion) => {
 
@@ -129,11 +132,13 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
                 if (designJson.displayName) this.blockForm.controls["icon"].setValue(designJson.displayName);
                 if (designJson.description) this.blockForm.controls["description"].setValue(designJson.description);
 
+                this.unblockUI();
             })
             .catch(reason => {
                 this.selectedBlockoBlockVersion = null;
                 console.log(this.blockCode);
                 this.addFlashMessage(new FlashMessageError(`The block version cannot be loaded.`, reason));
+                this.unblockUI();
             });
     }
 
@@ -306,6 +311,7 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
                     description: this.blockForm.controls["description"].value
                 });
 
+                this.blockUI();
                 this.backendService.createBlockoBlockVersion(this.blockId, {
                     version_name: m.name,
                     version_description: m.description,
@@ -314,10 +320,11 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("Version <b>" + m.name + "</b> saved successfully.", null, true));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch((err) => {
                         this.addFlashMessage(new FlashMessageError("Failed saving version <b>" + m.name + "</b>", err, true));
+                        this.unblockUI();
                     });
             }
         });

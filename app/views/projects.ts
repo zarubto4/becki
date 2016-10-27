@@ -30,16 +30,29 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
     }
 
     refresh(): void {
-        this.backendService.getAllProjects()
-            .then(projects => this.projects = projects)
-            .catch(reason => this.addFlashMessage(new FlashMessageError("Projects cannot be loaded.", reason)));
-        this.backendService.getAllTarifsUserApplicables()
-            .then(products => this.products = products)
-            .catch(reason => this.addFlashMessage(new FlashMessageError("Products cannot be loaded.", reason)));
+        this.blockUI();
+        Promise.all<any>([this.backendService.getAllProjects(), this.backendService.getAllTarifsUserApplicables()])
+            .then((values) => {
+                this.projects = values[0];
+                this.products = values[1];
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.addFlashMessage(new FlashMessageError("Projects cannot be loaded.", reason));
+                this.unblockUI();
+            });
     }
 
     onProjectClick(project: IProject): void {
         this.navigate(["/projects", project.id])
+    }
+
+    onTestClick(): void {
+        this.blockUIService.blockUI();
+
+        setTimeout(() => {
+            this.blockUIService.unblockUI();
+        }, 5000);
     }
 
     onAddClick(): void {
@@ -48,6 +61,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
         var model = new ModalsProjectPropertiesModel(this.products);
         this.modalService.showModal(model).then((success) => {
             if (success) {
+                this.blockUI();
                 this.backendService.createProject({
                     project_name: model.name,
                     project_description: model.description,
@@ -55,14 +69,13 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
                 }) //TODO:add tarrif nebo produkt či jak se to bude jmenovat
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The project ${model.name} has been created.`));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(`The project ${model.name} cannot be created.`, reason));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     });
             }
-            this.refresh();
         });
     }
 
@@ -72,6 +85,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
         var model = new ModalsProjectPropertiesModel(this.products, project.name, project.description, "" + project.product_id, true, project.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
+                this.blockUI();
                 this.backendService.editProject(project.id, {
                     project_name: model.name,
                     project_description: model.description,
@@ -79,11 +93,11 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The project has been updated."));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The project cannot be updated.", reason));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     });
             }
         });
@@ -92,14 +106,15 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
     onRemoveClick(project: IProject): void {
         this.modalService.showModal(new ModalsRemovalModel(project.name)).then((success) => {
             if (success) {
+                this.blockUI();
                 this.backendService.deleteProject(project.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The project has been removed."));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The project cannot be removed.", reason));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     });
             }
         });

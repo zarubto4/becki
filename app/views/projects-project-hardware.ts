@@ -45,6 +45,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     }
 
     refresh(): void {
+        this.blockUI();
         this.backendService.getProject(this.id)
             .then((project: IProject) => {
                 this.project = project;
@@ -55,9 +56,11 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
             .then((devices: IBoard[]) => {
                 console.log(devices);
                 this.devices = devices;
+                this.unblockUI();
             })
             .catch(reason => {
                 this.addFlashMessage(new FlashMessageError(`The project ${this.id} cannot be loaded.`, reason));
+                this.unblockUI();
             });
     }
 
@@ -65,14 +68,15 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         var model = new ModalsDeviceEditDescriptionModel(device.id,device.personal_description);
         this.modalService.showModal(model).then((success) => {
             if(success){
+                this.blockUI();
                 this.backendService.editBoardUserDescription(device.id, {personal_description:model.description})
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The device description was updated."));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The device cannot be updated.", reason));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     });
             }
         })
@@ -86,14 +90,15 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     onRemoveClick(device: IBoard): void {
         this.modalService.showModal(new ModalsRemovalModel(device.id)).then((success) => {
             if (success) {
+                this.blockUI();
                 this.backendService.disconnectBoard(device.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The hardware has been removed."));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The hardware cannot be removed.", reason));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     });
             }
         });
@@ -103,14 +108,15 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         var model = new ModalsAddHardwareModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {
+                this.blockUI();
                 this.backendService.connectBoard(model.id, this.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The hardware ${model.id} has been added to project.`));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(`The hardware ${model.id} cannot be added to project.`, reason));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     });
             }
         });

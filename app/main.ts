@@ -80,6 +80,8 @@ import {ModalsBlocksTypePropertiesComponent} from "./modals/blocks-type-properti
 import {ModalsBlocksBlockPropertiesComponent} from "./modals/blocks-block-properties";
 import {ModalsHighImportanceNotificationComponent} from "./modals/high-importance-notification";
 import {ModalsDeviceEditDescriptionComponent} from "./modals/device-edit-description";
+import {BlockUIService} from "./services/BlockUIService";
+import {BlockUIComponent} from "./components/BlockUIComponent";
 
 //@formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -137,7 +139,6 @@ var tabMenus = {
         new LabeledLink("Blocko", ["/", "projects", ":project", "blocko"]),
         new LabeledLink("Blocks", ["/", "projects", ":project", "blocks"]),
         new LabeledLink("Grid", ["/", "projects", ":project", "grid"]),
-        new LabeledLink("Some else", ["/", "projects", ":project", "someelse"])
     ]
 };
 
@@ -158,6 +159,7 @@ var tabMenus = {
         AuthGuard, // AuthGuard service must be after BackendService
         NonAuthGuard, // NonAuthGuard service must be after BackendService
         NotificationService,
+        BlockUIService,
         ModalService,
         CurrentParamsService,
         BreadcrumbsService,
@@ -170,6 +172,7 @@ var tabMenus = {
         // Generic app components
         AppComponent,
         ModalComponent,
+        BlockUIComponent,
         // Layouts components
         LayoutMain,
         LayoutNotLogged,

@@ -104,8 +104,9 @@
                     </thead>
                     <tbody>
                     <tr *ngFor="let project of projects">
-                        <td><a (click)="onProjectClick(project)">{{project.project_name}}</a></td>
-                        <td>{{project.project_description}}</td>
+                        <td><a (click)="onProjectClick(project)">{{project.name}}</a></td>
+                        <td>{{project.description}}</td>
+                        <td></td>
                     </tr>
                     </tbody>
                 </table>

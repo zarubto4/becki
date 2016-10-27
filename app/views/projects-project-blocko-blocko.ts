@@ -632,12 +632,15 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         this.modalService.showModal(m)
             .then((success) => {
                 if (success) {
+                    this.blockUI();
                     this.backendService.uploadBProgramToCloud(programVersion.version_object.id, {}) //TODO: timestamp
                         .then((ok)=> {
                             this.addFlashMessage(new FlashMessageSuccess("Run Blocko version <b>" + programVersion.version_object.version_name + "</b> successfully.", null, true));
+                            this.unblockUI();
                         })
                         .catch((err)=> {
                             this.addFlashMessage(new FlashMessageError("Run Blocko version <b>" + programVersion.version_object.version_name + "</b> failed.", err, true));
+                            this.unblockUI();
                         })
                 }
             });
@@ -728,6 +731,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
                 console.log(mProjectSnapshots);
 
+                this.blockUI();
                 this.backendService.createBProgramVersion(this.blockoId, {
                     version_name: m.name,
                     version_description: m.description,
@@ -737,10 +741,11 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("Version <b>" + m.name + "</b> saved successfully.", null, true));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch((err) => {
                         this.addFlashMessage(new FlashMessageError("Failed saving version <b>" + m.name + "</b>", err, true));
+                        this.unblockUI();
                     });
             }
         });
@@ -799,39 +804,18 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     }
 
     refresh(): void {
-        /*this.backendService.getProject(this.projectId)
-         .then((project:Project) => {
-         this.project = project;
-         return this.backendService.getInteractionsScheme(this.blockoId);
-         })
-         .catch(reason => {
-         this.addFlashMessage(new FlashMessageError(`The blocko cannot be loaded.`, reason));
-         });*/
-        this.backendService.getBProgram(this.blockoId)
-            .then((blockoProgram) => {
-                console.log(blockoProgram);
 
-                this.blockoProgram = blockoProgram;
+        this.blockUI();
 
-                this.blockoProgramVersions = this.blockoProgram.program_versions || [];
-
-                this.blockoProgramVersions.sort((a, b)=> {
-                    if (a.version_object.date_of_create == b.version_object.date_of_create) return 0;
-                    if (a.version_object.date_of_create > b.version_object.date_of_create) return -1;
-                    return 1;
-                });
-
-                if (this.blockoProgramVersions.length) {
-                    this.selectProgramVersion(this.blockoProgramVersions[0]);
-                }
-
-            })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(`The blocko cannot be loaded.`, reason));
-            });
-
-        this.backendService.getAllTypeOfBlocks()
-            .then((typeOfBlocks)=> {
+        Promise.all<any>([
+            this.backendService.getAllTypeOfBlocks(),
+            this.backendService.getAllMProjectPersons(),
+            this.backendService.getAllBoardDetails(this.projectId)
+        ])
+            .then((values) => {
+                var typeOfBlocks:ITypeOfBlock[] = values[0];
+                var projects:IMProject[] = values[1];
+                var allBoardsDetails:IBoardsForBlocko = values[2];
 
                 // TODO: make this better viz. TYRION-374
                 this.blocksLastVersions = {};
@@ -864,21 +848,11 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 });
 
                 this.blockGroups = typeOfBlocks;
-
                 console.log(typeOfBlocks);
-            })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(`List of blocks cannot be loaded.`, reason));
-            });
 
-        this.backendService.getAllMProjectPersons()
-            .then((projects) => {
                 console.log(projects);
                 this.allGridProjects = projects;
-            });
 
-        this.backendService.getAllBoardDetails(this.projectId)
-            .then((allBoardsDetails)=> {
                 this.allBoardsDetails = allBoardsDetails;
 
                 console.log(allBoardsDetails);
@@ -888,7 +862,33 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     this.boardById[board.id] = board;
                 });
 
+
+                return this.backendService.getBProgram(this.blockoId);
+            })
+            .then((blockoProgram) => {
+                console.log(blockoProgram);
+
+                this.blockoProgram = blockoProgram;
+
+                this.blockoProgramVersions = this.blockoProgram.program_versions || [];
+
+                this.blockoProgramVersions.sort((a, b)=> {
+                    if (a.version_object.date_of_create == b.version_object.date_of_create) return 0;
+                    if (a.version_object.date_of_create > b.version_object.date_of_create) return -1;
+                    return 1;
+                });
+
+                if (this.blockoProgramVersions.length) {
+                    this.selectProgramVersion(this.blockoProgramVersions[0]);
+                }
+
+                this.unblockUI();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(`The blocko cannot be loaded.`, reason));
+                this.unblockUI();
             });
+
     }
 
 }

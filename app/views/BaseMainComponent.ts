@@ -10,6 +10,7 @@ import {FlashMessagesService, FlashMessage} from "../services/FlashMessagesServi
 import {Injector} from "@angular/core";
 import {FormBuilder} from "@angular/forms";
 import {CurrentParamsService} from "../services/CurrentParamsService";
+import {BlockUIService} from "../services/BlockUIService";
 
 export abstract class BaseMainComponent {
 
@@ -20,6 +21,7 @@ export abstract class BaseMainComponent {
     protected flashMessagesService: FlashMessagesService = null;
     protected formBuilder: FormBuilder = null;
     protected currentParamsService: CurrentParamsService = null;
+    protected blockUIService: BlockUIService = null;
 
     constructor(injector: Injector) {
         console.log("BaseMainComponent init");
@@ -31,6 +33,7 @@ export abstract class BaseMainComponent {
             this.flashMessagesService = injector.get(FlashMessagesService);
             this.formBuilder = injector.get(FormBuilder);
             this.currentParamsService = injector.get(CurrentParamsService);
+            this.blockUIService = injector.get(BlockUIService);
         } else {
             throw "Injector is not defined! ... Don't you forget to add \"constructor(injector:Injector) {super(injector)};\" in inherited class?"
         }
@@ -42,6 +45,14 @@ export abstract class BaseMainComponent {
 
     protected navigate(link: any[]): void {
         this.router.navigate(link);
+    }
+
+    protected blockUI(): void {
+        this.blockUIService.blockUI();
+    }
+
+    protected unblockUI(): void {
+        this.blockUIService.unblockUI();
     }
 
 }

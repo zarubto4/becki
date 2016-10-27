@@ -25,7 +25,7 @@ export class ProjectsProjectGridGridComponent extends BaseMainComponent implemen
 
     routeParamsSubscription: Subscription;
 
-    project: IProject = null;
+    //project: IProject = null;
     gridProgram: IMProgram = null;
     gridProgramVersions: IMProgramVersion[] = [];
     selectedProgramVersion: IMProgramVersion = null;
@@ -50,7 +50,7 @@ export class ProjectsProjectGridGridComponent extends BaseMainComponent implemen
     }
 
     refresh(): void {
-
+        this.blockUI();
         this.backendService.getMProgram(this.gridId)
             .then((gridProgram) => {
                 console.log(gridProgram);
@@ -69,9 +69,11 @@ export class ProjectsProjectGridGridComponent extends BaseMainComponent implemen
                     this.selectProgramVersion(this.gridProgramVersions[0]);
                 }
 
+                this.unblockUI();
             })
             .catch(reason => {
                 this.addFlashMessage(new FlashMessageError(`The grid cannot be loaded.`, reason));
+                this.unblockUI();
             });
 
 
@@ -96,7 +98,7 @@ export class ProjectsProjectGridGridComponent extends BaseMainComponent implemen
         var m = new ModalsVersionDialogModel(moment().format("YYYY-MM-DD HH:mm:ss"));
         this.modalService.showModal(m).then((success) => {
             if (success) {
-
+                this.blockUI();
                 this.backendService.createMProgramVersion(this.gridId, {
                     version_name: m.name,
                     version_description: m.description,
@@ -105,10 +107,11 @@ export class ProjectsProjectGridGridComponent extends BaseMainComponent implemen
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("Version <b>" + m.name + "</b> saved successfully.", null, true));
-                        this.refresh();
+                        this.refresh(); // also unblockUI
                     })
                     .catch((err) => {
                         this.addFlashMessage(new FlashMessageError("Failed saving version <b>" + m.name + "</b>", err, true));
+                        this.unblockUI();
                     });
             }
         });
