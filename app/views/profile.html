@@ -37,17 +37,16 @@
                                     <div class="tab-pane active" id="tab_1_1">
                                         <form role="form" action="#">
 
-                                            <becki-form-input [placeholder]="fullName" label="full name" [type]="text"
+                                            <becki-form-input [placeholder]="fullName" label="Full Name" [type]="text"
                                                               [control]="infoForm.controls.fullName"></becki-form-input>
-                                            <becki-form-input [placeholder]="nickName" label="nick Name" [type]="text"
+                                            <becki-form-input [placeholder]="nickName" label="Nick Name" [type]="text"
                                                               [control]="infoForm.controls.nickName"></becki-form-input>
-                                            <becki-form-input [placeholder]="state" label="state" [type]="text"
-                                                              [control]="infoForm.controls.state"></becki-form-input>
+                                            <becki-form-select label="state" [options]="country_list"
+                                                              [control]="infoForm.controls.state"></becki-form-select>
 
 
                                             <div class="margiv-top-10">
                                                 <a href="javascript:;" class="btn green"> Save Changes </a>
-                                                <a href="javascript:;" class="btn default"> Cancel </a>
                                             </div>
                                         </form>
                                     </div>
@@ -81,7 +80,6 @@
                                             </div>
                                             <div class="margin-top-10">
                                                 <a href="javascript:;" class="btn green"> Submit </a>
-                                                <a href="javascript:;" class="btn default"> Cancel </a>
                                             </div>
                                         </form>
                                     </div>
@@ -101,7 +99,6 @@
 
                                             <div class="margin-top-10">
                                                 <button type="submit" (click)="changePassword()" class="btn green" [disabled]="!passwordForm.valid"> Change Password </button>
-                                                <button href="javascript:;" class="btn default"> Cancel </button>
                                             </div>
                                         </form>
                                     </div>
@@ -125,7 +122,6 @@
                                                 <div class="margin-top-10">
                                                     <button type="submit" (click)="changeEmail()" class="btn green" [disabled]="!emailForm.valid">
                                                         Change email </button>
-                                                    <button href="javascript:;" class="btn default"> Cancel </button>
                                                 </div>
                                             </div>
                                         </form>
