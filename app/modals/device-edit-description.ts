@@ -12,7 +12,7 @@ import {ModalModel} from "../services/ModalService";
 
 
 export class ModalsDeviceEditDescriptionModel extends ModalModel {
-    constructor(public name: string = "", public description: string = "") {
+    constructor(public id: string = "", public description: string = "") {
         super();
     }
 }
@@ -29,22 +29,17 @@ export class ModalsDeviceEditDescriptionComponent implements OnInit {
     @Output()
     modalClose = new EventEmitter<boolean>();
 
-
-    name: string;
-
     form: FormGroup;
 
     constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
-            "description": ["", [Validators.required, Validators.minLength(24)]],
+            "description": [""],
         });
     }
 
     ngOnInit() {
-        console.log(this.modalModel);
         (<FormControl>(this.form.controls["description"])).setValue(this.modalModel.description);
-        this.name = this.modalModel.name;
     }
 
     onSubmitClick(): void {

@@ -262,6 +262,11 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
     onTestClick(): void {
         this.cleanTestView();
 
+        if (!this.blockCode) {
+            this.jsError = {name: "Block Error", message: "Block code cannot be empty"};
+            return;
+        }
+
         this.validate();
         if (!this.jsError) {
 

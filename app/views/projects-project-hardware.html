@@ -7,35 +7,39 @@
 
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
-            <div class="caption">
-                <i class="icon-settings font-blue"></i>
-                <span class="caption-subject font-blue sbold uppercase">Hardware</span>
+            <div class="becki-caption">
+                <span class="font-blue-dark sbold uppercase">
+                    <i class="fa fa-microchip"></i>
+                    Hardware
+                </span>
             </div>
-            <div class="actions">
-                <a class="btn btn-outline btn-circle btn-sm blue" (click)="onAddClick($event)">
-                    <i class="fa fa-plus"></i> Add
-                </a>
+            <div class="becki-actions">
+                <button class="btn blue" (click)="onAddClick($event)">
+                    <i class="fa fa-plus-circle"></i> Add hardware device
+                </button>
             </div>
         </div>
         <div *ngIf="(devices && devices.length)" class="table-scrollable">
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th> ID</th>
-                    <th> Description</th>
-                    <th> Actions</th>
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th class="full-width">Description</th>
+                    <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let device of devices">
-                    <td><a (click)="onDeviceClick(device)">{{device.id}}</a></td>
-                    <td> {{device.personal_description}}</td>
-                    <td>
-                        <button class="btn btn-outline btn-circle btn-sm green" [disabled]="!device.edit_permission" (click)="onEditClick(device)">
-                            <i class="fa fa-edit"></i> Edit
+                    <td class="no-wrap"><a (click)="onDeviceClick(device)">{{device.id}}</a></td>
+                    <td class="no-wrap">{{device.type_of_board_name}}</td>
+                    <td>{{device.personal_description}}</td>
+                    <td class="no-wrap">
+                        <button title="Device properties" class="btn btn-icon-only green" [disabled]="!device.edit_permission" (click)="onEditClick(device)">
+                            <i class="fa fa-cog"></i>
                         </button>
-                        <button class="btn btn-outline btn-circle btn-sm red" [disabled]="!device.delete_permission" (click)="onRemoveClick(device)">
-                            <i class="fa fa-remove"></i> Delete
+                        <button title="Remove device" class="btn btn-icon-only red" [disabled]="!device.delete_permission" (click)="onRemoveClick(device)">
+                            <i class="fa fa-trash"></i>
                         </button>
                     </td>
                 </tr>

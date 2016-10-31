@@ -946,6 +946,45 @@ body.block-ui-blur .page-container, body.block-ui-blur .page-footer {
     vertical-align: middle;
 }
 
+.becki-caption {
+    float: left;
+    display: inline-block;
+    font-size: 18px;
+    line-height: 18px;
+    padding: 13px 0;
+}
+
+.becki-caption .becki-caption-helper{
+    font-size: 0.7em;
+    color: gray;
+}
+
+.becki-caption.version {
+    float: right;
+    font-size: 1em;
+}
+
+.becki-actions {
+    float: right;
+    display: inline-block;
+    padding: 6px 0;
+}
+
+.portlet.box.grey-steel {
+    border: 1px solid #e9edef;
+    border-top: 0;
+}
+
+/* Tables helpers */
+
+table .full-width {
+    width: 100%;
+}
+
+table .no-wrap {
+    white-space: nowrap;
+}
+
 /* TheGrid end */
 
 @media (min-width: 768px) {

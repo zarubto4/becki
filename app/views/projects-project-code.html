@@ -7,38 +7,40 @@
 
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
-            <div class="caption">
-                <i class="icon-settings font-blue"></i>
-                <span class="caption-subject font-blue sbold uppercase">Code</span>
+            <div class="becki-caption">
+                <span class="font-blue-dark sbold uppercase">
+                    <i class="fa fa-code"></i>
+                    Code
+                </span>
             </div>
-            <div class="actions">
-                <a class="btn btn-outline btn-circle btn-sm blue" (click)="onAddClick()">
-                    <i class="fa fa-plus"></i> Add
-                </a>
+            <div class="becki-actions">
+                <button class="btn blue" (click)="onAddClick()">
+                    <i class="fa fa-plus-circle"></i> Add code program
+                </button>
             </div>
         </div>
         <div *ngIf="(codePrograms && codePrograms.length)" class="table-scrollable">
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th> Name</th>
-                    <th> Description</th>
-                    <th> Device type</th>
-                    <th> Actions</th>
+                    <th>Name</th>
+                    <th>Device type</th>
+                    <th class="full-width">Description</th>
+                    <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let code of codePrograms">
-                    <td><a (click)="onCodeClick(code)">{{code.name}}</a></td>
-                    <td> {{code.description}}</td>
-                    <td> {{getBoardType(code.type_of_board_id)}}</td>
-                    <td>
-                        <a class="btn btn-outline btn-circle btn-sm green" [class.disabled]="!code.edit_permission" (click)="onEditClick(code)">
-                            <i class="fa fa-edit"></i> Edit
-                        </a>
-                        <a class="btn btn-outline btn-circle btn-sm red" [class.disabled]="!code.delete_permission" (click)="onRemoveClick(code)">
-                            <i class="fa fa-remove"></i> Delete
-                        </a>
+                    <td class="no-wrap"><a (click)="onCodeClick(code)">{{code.name}}</a></td>
+                    <td class="no-wrap">{{getBoardType(code.type_of_board_id)}}</td>
+                    <td>{{code.description}}</td>
+                    <td class="no-wrap">
+                        <button title="Code program properties" class="btn btn-icon-only green" [disabled]="!code.edit_permission" (click)="onEditClick(code)">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="Remove code program" class="btn btn-icon-only red" [disabled]="!code.delete_permission" (click)="onRemoveClick(code)">
+                            <i class="fa fa-trash"></i>
+                        </button>
                     </td>
                 </tr>
                 </tbody>

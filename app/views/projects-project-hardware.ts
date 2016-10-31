@@ -49,6 +49,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         this.backendService.getProject(this.id)
             .then((project: IProject) => {
                 this.project = project;
+                console.log(project);
                 return Promise.all<IBoard>(project.boards_id.map((board_id) => {
                     return this.backendService.getBoard(board_id);
                 }));

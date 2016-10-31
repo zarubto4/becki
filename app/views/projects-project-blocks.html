@@ -7,35 +7,39 @@
 
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
-            <div class="caption">
-                <i class="icon-settings font-blue"></i>
-                <span class="caption-subject font-blue sbold uppercase">Blocks</span>
+            <div class="becki-caption">
+                <span class="font-blue-dark sbold uppercase">
+                    <i class="fa fa-cubes"></i>
+                    Blocks
+                </span>
             </div>
-            <div class="actions">
-                <a class="btn btn-outline btn-circle btn-sm blue" (click)="onGroupAddClick()">
-                    <i class="fa fa-plus"></i> Add group
-                </a>
+            <div class="becki-actions">
+                <button class="btn blue" (click)="onGroupAddClick()">
+                    <i class="fa fa-plus-circle"></i> Add blocks group
+                </button>
             </div>
         </div>
 
 
-        <div class="portlet light bg-inverse" *ngFor="let group of groups">
+        <div class="portlet box grey-steel" *ngFor="let group of groups">
             <div class="portlet-title">
-                <div class="caption font-purple-plum">
-                    <i class="icon-speech font-purple-plum"></i>
-                    <span class="caption-subject bold">{{group.name}}</span>
-                    <span class="caption-helper">{{group.general_description}}</span>
+                <div class="becki-caption font-blue-dark">
+                    <span class="font-blue-dark bold">
+                        <i class="fa fa-cube"></i>
+                        {{group.name}}
+                    </span>
+                    <span class="becki-caption-helper">{{group.general_description}}</span>
                 </div>
-                <div class="actions">
-                    <a class="btn btn-outline btn-circle btn-sm blue" (click)="onBlockAddClick(group)">
-                        <i class="fa fa-plus"></i> Add blocks
-                    </a>
-                    <a class="btn btn-outline btn-circle btn-sm green" (click)="onGroupEditClick(group)">
-                        <i class="fa fa-edit"></i> Edit group
-                    </a>
-                    <a class="btn btn-outline btn-circle btn-sm red" (click)="onGroupDeleteClick(group)">
-                        <i class="fa fa-remove"></i> Delete group
-                    </a>
+                <div class="becki-actions">
+                    <button class="btn blue" [disabled]="!group.update_permission" (click)="onBlockAddClick(group)">
+                        <i class="fa fa-plus-circle"></i> Add block
+                    </button>
+                    <button title="Group properties" class="btn btn-icon-only green" [disabled]="!group.edit_permission" (click)="onGroupEditClick(group)">
+                        <i class="fa fa-cog"></i>
+                    </button>
+                    <button title="Remove group" class="btn btn-icon-only red" [disabled]="!group.delete_permission" (click)="onGroupDeleteClick(group)">
+                        <i class="fa fa-trash"></i>
+                    </button>
                 </div>
             </div>
             <div class="portlet-body">
@@ -44,22 +48,22 @@
                     <table class="table table-hover">
                         <thead>
                         <tr>
-                            <th> Name</th>
-                            <th> Description</th>
-                            <th> Actions</th>
+                            <th>Name</th>
+                            <th class="full-width">Description</th>
+                            <th class="text-center">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr *ngFor="let block of group.blocko_blocks">
-                            <td><a (click)="onBlockClick(block)">{{block.name}}</a></td>
+                            <td class="no-wrap"><a (click)="onBlockClick(block)">{{block.name}}</a></td>
                             <td>{{block.general_description}}</td>
-                            <td>
-                                <a class="btn btn-outline btn-circle btn-sm green" [class.disabled]="!block.edit_permission" (click)="onBlockEditClick(block)">
-                                    <i class="fa fa-edit"></i> Edit block
-                                </a>
-                                <a class="btn btn-outline btn-circle btn-sm red" [class.disabled]="!block.delete_permission" (click)="onBlockDeleteClick(block)">
-                                    <i class="fa fa-remove"></i> Delete block
-                                </a>
+                            <td class="no-wrap">
+                                <button title="Block properties" class="btn btn-icon-only green" [disabled]="!block.edit_permission" (click)="onBlockEditClick(block)">
+                                    <i class="fa fa-cog"></i>
+                                </button>
+                                <button title="Remove block" class="btn btn-icon-only red" [disabled]="!block.delete_permission" (click)="onBlockDeleteClick(block)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
                             </td>
                         </tr>
                         </tbody>

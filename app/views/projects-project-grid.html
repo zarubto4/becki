@@ -7,35 +7,39 @@
 
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
-            <div class="caption">
-                <i class="icon-settings font-blue"></i>
-                <span class="caption-subject font-blue sbold uppercase">Grid</span>
+            <div class="becki-caption">
+                <span class="font-blue-dark sbold uppercase">
+                    <i class="fa fa-desktop"></i>
+                    Grid
+                </span>
             </div>
-            <div class="actions">
-                <a class="btn btn-outline btn-circle btn-sm blue" (click)="onProjectAddClick()">
-                    <i class="fa fa-plus"></i> Add project
-                </a>
+            <div class="becki-actions">
+                <button class="btn blue" (click)="onProjectAddClick()">
+                    <i class="fa fa-plus-circle"></i> Add grid project
+                </button>
             </div>
         </div>
 
         <div *ngIf="(gridProjects && gridProjects.length)">
-            <div class="portlet light bg-inverse" *ngFor="let project of gridProjects">
+            <div class="portlet box grey-steel" *ngFor="let project of gridProjects">
                 <div class="portlet-title">
-                    <div class="caption font-purple-plum">
-                        <i class="icon-speech font-purple-plum"></i>
-                        <span class="caption-subject bold">{{project.name}}</span>
-                        <span class="caption-helper">{{project.description}}</span>
+                    <div class="becki-caption font-blue-dark">
+                        <span class="font-blue-dark bold">
+                            <i class="fa fa-desktop"></i>
+                            {{project.name}}
+                        </span>
+                        <span class="becki-caption-helper">{{project.description}}</span>
                     </div>
-                    <div class="actions">
-                        <a class="btn btn-outline btn-circle btn-sm blue" (click)="onProgramAddClick(project)">
-                            <i class="fa fa-plus"></i> Add program
-                        </a>
-                        <a class="btn btn-outline btn-circle btn-sm green" (click)="onProjectEditClick(project)">
-                            <i class="fa fa-edit"></i> Edit project
-                        </a>
-                        <a class="btn btn-outline btn-circle btn-sm red" (click)="onProjectDeleteClick(project)">
-                            <i class="fa fa-remove"></i> Delete project
-                        </a>
+                    <div class="becki-actions">
+                        <button class="btn blue" [disabled]="!project.update_permission" (click)="onProgramAddClick(project)">
+                            <i class="fa fa-plus-circle"></i> Add program
+                        </button>
+                        <button title="Project properties" class="btn btn-icon-only green" [disabled]="!project.edit_permission" (click)="onProjectEditClick(project)">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="Remove project" class="btn btn-icon-only red" [disabled]="!project.delete_permission" (click)="onProjectDeleteClick(project)">
+                            <i class="fa fa-trash"></i>
+                        </button>
                     </div>
                 </div>
                 <div class="portlet-body">
@@ -44,24 +48,24 @@
                         <table class="table table-hover">
                             <thead>
                             <tr>
-                                <th> Name</th>
-                                <th> Description</th>
-                                <th> Screen type</th>
-                                <th> Actions</th>
+                                <th>Name</th>
+                                <th>Screen type</th>
+                                <th class="full-width">Description</th>
+                                <th class="text-center">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr *ngFor="let program of project.m_programs">
-                                <td><a (click)="onProgramClick(program)">{{program.name}}</a></td>
+                                <td class="no-wrap"><a (click)="onProgramClick(program)">{{program.name}}</a></td>
+                                <td class="no-wrap">{{getScreenTypeName(program.screen_size_type_id)}}</td>
                                 <td>{{program.description}}</td>
-                                <td>{{getScreenTypeName(program.screen_size_type_id)}}</td>
-                                <td>
-                                    <a class="btn btn-outline btn-circle btn-sm green" [class.disabled]="!program.edit_permission" (click)="onProgramEditClick(program)">
-                                        <i class="fa fa-edit"></i> Edit program
-                                    </a>
-                                    <a class="btn btn-outline btn-circle btn-sm red" [class.disabled]="!program.delete_permission" (click)="onProgramDeleteClick(program)">
-                                        <i class="fa fa-remove"></i> Delete program
-                                    </a>
+                                <td class="no-wrap">
+                                    <button title="Program properties" class="btn btn-icon-only green" [disabled]="!program.edit_permission" (click)="onProgramEditClick(program)">
+                                        <i class="fa fa-cog"></i>
+                                    </button>
+                                    <button title="Remove program" class="btn btn-icon-only red" [disabled]="!program.delete_permission" (click)="onProgramDeleteClick(program)">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                             </tbody>

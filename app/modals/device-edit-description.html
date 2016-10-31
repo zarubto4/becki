@@ -8,16 +8,15 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">Edit the device description</h4>
+        <h4 class="modal-title">Edit hardware device properties</h4>
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <h2>Device ID: {{name}}</h2>
-            <becki-form-input [control]="form.controls.description" label="device description"></becki-form-input>
+            <becki-form-input [control]="form.controls.description" label="Hardware device description"></becki-form-input>
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn green btn-outline" [disabled]="!form.valid" (click)="onSubmitClick()">Update</button>
-        <button type="button" class="btn red btn-outline" (click)="onCancelClick()">Cancel</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">Save</button>
+        <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
     </div>
 </div>

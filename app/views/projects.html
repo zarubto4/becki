@@ -6,17 +6,19 @@
 <layout-main [title]="'Projects'">
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
-            <div class="caption">
-                <i class="icon-settings font-blue"></i>
-                <span class="caption-subject font-blue sbold uppercase">Projects</span>
+            <div class="becki-caption">
+                <span class="font-blue-dark sbold uppercase">
+                    <i class="fa fa-tasks"></i>
+                    Projects
+                </span>
             </div>
-            <div class="actions">
-                <a class="btn btn-outline btn-circle btn-sm red" (click)="onTestClick()">
-                    <i class="fa fa-car"></i> Test
-                </a>
-                <a class="btn btn-outline btn-circle btn-sm blue" (click)="onAddClick()">
-                    <i class="fa fa-plus"></i> Add
-                </a>
+            <div class="becki-actions">
+                <button class="btn btn-outline btn-sm white" (click)="onTestClick()">
+                    <i class="fa fa-spinner"></i> Test UI blocker
+                </button>
+                <button class="btn blue" (click)="onAddClick()">
+                    <i class="fa fa-plus-circle"></i> Add project
+                </button>
             </div>
         </div>
         <div class="table-scrollable">
@@ -24,21 +26,21 @@
                 <thead>
                 <tr>
                     <th>Name</th>
-                    <th>Description</th>
-                    <th>Actions</th>
+                    <th class="full-width">Description</th>
+                    <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let project of projects">
-                    <td><a (click)="onProjectClick(project)">{{project.name}}</a></td>
+                    <td class="no-wrap"><a (click)="onProjectClick(project)">{{project.name}}</a></td>
                     <td>{{project.description}}</td>
-                    <td>
-                        <a class="btn btn-outline btn-circle btn-sm green" [class.disabled]="!project.edit_permission" (click)="onEditClick(project)">
-                            <i class="fa fa-edit"></i> Edit
-                        </a>
-                        <a class="btn btn-outline btn-circle btn-sm red" [class.disabled]="!project.delete_permission" (click)="onRemoveClick(project)">
-                            <i class="fa fa-remove"></i> Delete
-                        </a>
+                    <td class="no-wrap">
+                        <button title="Project properties" class="btn btn-icon-only green" [disabled]="!project.edit_permission" (click)="onEditClick(project)">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="Remove project" class="btn btn-icon-only red" [disabled]="!project.delete_permission" (click)="onRemoveClick(project)">
+                            <i class="fa fa-trash"></i>
+                        </button>
                     </td>
                 </tr>
                 </tbody>

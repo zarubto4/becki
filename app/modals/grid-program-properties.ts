@@ -40,8 +40,8 @@ export class ModalsGridProgramPropertiesComponent implements OnInit {
     constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
-            "name": ["", [Validators.required, Validators.minLength(8)]],
-            "description": ["", [Validators.required, Validators.minLength(24)]],
+            "name": ["", [Validators.required, Validators.minLength(4)]],
+            "description": [""],
             "screenTypeId": ["", [Validators.required]],
         });
     }

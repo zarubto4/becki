@@ -121,12 +121,12 @@ var routes: Routes = [
 //@formatter:on
 
 var navigation = [
-    new LabeledLink("Dashboard", ["/dashboard"], "tasks"),
-    new LabeledLink("Projects", ["/projects"], "book"),
-    new LabeledLink("Applications", ["/user/applications"], "mobile"),
+    new LabeledLink("Dashboard", ["/dashboard"], "tachometer"),
+    new LabeledLink("Projects", ["/projects"], "tasks"),
+    /*new LabeledLink("Applications", ["/user/applications"], "mobile"),
     new LabeledLink("Interactions", ["/user/interactions"], "link"),
     new LabeledLink("Devices", ["/user/devices"], "rocket"),
-    new LabeledLink("System", ["/system"], "globe"),
+    new LabeledLink("System", ["/system"], "globe"),*/
     new LabeledLink("Log out", ["/logout"], "sign-out")
 ];
 

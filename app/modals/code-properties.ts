@@ -38,25 +38,29 @@ export class ModalsCodePropertiesComponent implements OnInit {
     form: FormGroup;
 
     constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
-
-        this.form = this.formBuilder.group({ //TODO: async name validation
-            "name": ["", [Validators.required, Validators.minLength(8)]],
-            "description": ["", [Validators.required, Validators.minLength(24)]],
-            "deviceType": ["", [Validators.required]]
-        });
     }
 
     ngOnInit() {
         this.options = beckiFormSelectOptionsMaker(this.modalModel.typeOfBoards, "id", "name");
-        (<FormControl>(this.form.controls["name"])).setValue(this.modalModel.name);
-        (<FormControl>(this.form.controls["description"])).setValue(this.modalModel.description);
-        (<FormControl>(this.form.controls["deviceType"])).setValue(this.modalModel.deviceType);
+
+        var input:{[key: string]: any;} = {
+            "name": [this.modalModel.name, [Validators.required, Validators.minLength(4)]],
+            "description": [this.modalModel.description]
+        };
+
+        if (this.modalModel.edit == false) {
+            input["deviceType"] = [this.modalModel.deviceType, [Validators.required]];
+        }
+
+        this.form = this.formBuilder.group(input);
     }
 
     onSubmitClick(): void {
         this.modalModel.name = this.form.controls["name"].value;
         this.modalModel.description = this.form.controls["description"].value;
-        this.modalModel.deviceType = this.form.controls["deviceType"].value;
+        if (this.modalModel.edit == false) {
+            this.modalModel.deviceType = this.form.controls["deviceType"].value;
+        }
         this.modalClose.emit(true);
     }
 
