@@ -21,7 +21,7 @@
                 </button>
             </div>
         </div>
-        <div class="table-scrollable">
+        <div  *ngIf="(projects && projects.length)" class="table-scrollable">
             <table class="table table-hover">
                 <thead>
                 <tr>
@@ -46,5 +46,7 @@
                 </tbody>
             </table>
         </div>
+        <h3 *ngIf="!projects" class="text-center">Loading...</h3>
+        <h3 *ngIf="projects && projects.length == 0" class="text-center">No project</h3>
     </div>
 </layout-main>

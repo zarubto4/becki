@@ -47,14 +47,14 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     refresh(): void {
         this.blockUI();
         this.backendService.getProject(this.id)
-            .then((project: IProject) => {
+            .then((project) => {
                 this.project = project;
                 console.log(project);
                 return Promise.all<IBoard>(project.boards_id.map((board_id) => {
                     return this.backendService.getBoard(board_id);
                 }));
             })
-            .then((devices: IBoard[]) => {
+            .then((devices) => {
                 console.log(devices);
                 this.devices = devices;
                 this.unblockUI();

@@ -178,7 +178,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
     refresh(): void {
         this.blockUI();
         this.backendService.getProject(this.id)
-            .then((project: IProject) => {
+            .then((project) => {
                 this.project = project;
                 console.log(this.project);
 
@@ -186,7 +186,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
                     return this.backendService.getTypeOfBlock(typeOfBlockId);
                 }));
             })
-            .then((typeOfBlocks: ITypeOfBlock[]) => {
+            .then((typeOfBlocks) => {
                 console.log(typeOfBlocks);
                 this.groups = typeOfBlocks;
                 this.unblockUI();

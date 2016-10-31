@@ -55,17 +55,17 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
     refresh(): void {
         this.blockUI();
         this.backendService.getProject(this.id)
-            .then((project: IProject) => {
+            .then((project) => {
                 this.project = project;
                 return this.backendService.getAllTypeOfBoards();
             })
-            .then((typeOfBoards: ITypeOfBoard[]) => {
+            .then((typeOfBoards) => {
                 this.typeOfBoards = typeOfBoards;
                 return Promise.all<ICProgram>(this.project.c_programs.map((c_program) => {
                     return this.backendService.getCProgram(c_program.id);
                 }));
             })
-            .then((codePrograms: ICProgram[]) => {
+            .then((codePrograms) => {
                 this.codePrograms = codePrograms;
                 this.unblockUI();
             })

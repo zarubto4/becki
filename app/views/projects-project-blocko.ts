@@ -45,13 +45,13 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
     refresh(): void {
         this.blockUI();
         this.backendService.getProject(this.id)
-            .then((project: IProject) => {
+            .then((project) => {
                 this.project = project;
                 return Promise.all<IBProgram>(project.b_programs.map((b_program) => {
                     return this.backendService.getBProgram(b_program.id);
                 }));
             })
-            .then((blockoPrograms: IBProgram[]) => {
+            .then((blockoPrograms) => {
                 console.log(blockoPrograms);
                 this.blockoPrograms = blockoPrograms;
                 this.unblockUI();

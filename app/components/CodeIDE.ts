@@ -580,8 +580,8 @@ export class CodeIDE implements OnChanges {
             this.modalService.showModal(model).then((success) => {
                 if (success) {
 
-                    this.openFilesCloseTab(selData);
-                    var i = this.files.indexOf(selData);
+                    this.openFilesCloseTab(<CodeFile>selData);
+                    var i = this.files.indexOf(<CodeFile>selData);
                     if (i > -1) {
                         this.files.splice(i, 1);
                     }

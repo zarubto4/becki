@@ -812,7 +812,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             this.backendService.getAllMProjectPersons(),
             this.backendService.getAllBoardDetails(this.projectId)
         ])
-            .then((values) => {
+            .then((values:[ITypeOfBlock[], IMProject[], IBoardsForBlocko]) => {
                 var typeOfBlocks:ITypeOfBlock[] = values[0];
                 var projects:IMProject[] = values[1];
                 var allBoardsDetails:IBoardsForBlocko = values[2];

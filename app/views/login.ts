@@ -8,6 +8,7 @@ import {FormGroup, Validators, FormBuilder} from "@angular/forms";
 import {BackendService} from "../services/BackendService";
 import {BeckiValidators} from "../helpers/BeckiValidators";
 import {PermissionMissingError} from "../backend/BeckiBackend";
+import {BlockUIService} from "../services/BlockUIService";
 
 const REDIRECT_URL = `${window.location.pathname}`;
 
@@ -21,7 +22,7 @@ export class LoginComponent {
 
     loginError: string = null;
 
-    constructor(private backendService: BackendService, private formBuilder: FormBuilder, private router: Router) {
+    constructor(private backendService: BackendService, private formBuilder: FormBuilder, private router: Router, private blockUIService: BlockUIService) {
 
         this.loginForm = this.formBuilder.group({
             "email": ["", [Validators.required, BeckiValidators.email]],
@@ -35,9 +36,14 @@ export class LoginComponent {
     }
 
     onLoginClick(): void {
+        this.blockUIService.blockUI();
         this.backendService.login(this.loginForm.controls["email"].value, this.loginForm.controls["password"].value)
-            .then(() => this.router.navigate(["/"]))
+            .then(() => {
+                this.blockUIService.unblockUI();
+                this.router.navigate(["/"]);
+            })
             .catch(reason => {
+                this.blockUIService.unblockUI();
                 if (reason instanceof PermissionMissingError) {
                     this.loginError = (<PermissionMissingError>reason).userMessage;
                 } else {
@@ -47,9 +53,14 @@ export class LoginComponent {
     }
 
     onFacebookLoginInClick(): void {
+        this.blockUIService.blockUI();
         this.backendService.loginFacebook(REDIRECT_URL)
-            .then(url => this.redirect(url))
+            .then(url => {
+                this.blockUIService.unblockUI();
+                this.redirect(url)
+            })
             .catch(reason => {
+                this.blockUIService.unblockUI();
                 if (reason instanceof PermissionMissingError) {
                     this.loginError = (<PermissionMissingError>reason).userMessage;
                 } else {
@@ -59,9 +70,14 @@ export class LoginComponent {
     }
 
     onGitHubLoginInClick(): void {
+        this.blockUIService.blockUI();
         this.backendService.loginGitHub(REDIRECT_URL)
-            .then(url => this.redirect(url))
+            .then(url => {
+                this.blockUIService.unblockUI();
+                this.redirect(url)
+            })
             .catch(reason => {
+                this.blockUIService.unblockUI();
                 if (reason instanceof PermissionMissingError) {
                     this.loginError = (<PermissionMissingError>reason).userMessage;
                 } else {

@@ -54,7 +54,7 @@ export class CurrentParamsService {
             }
         }
         if (activatedRouteSnapshot.children) {
-            activatedRouteSnapshot.children.forEach((ars: ActivatedRouteSnapshot) => {
+            activatedRouteSnapshot.children.forEach((ars) => {
                 var pp = this.getParamsRecursive(ars);
                 for (var k in pp) {
                     if (pp.hasOwnProperty(k)) p[k] = pp[k];
@@ -72,7 +72,7 @@ export class CurrentParamsService {
                 this.currentProjectNameSnapshot = null;
                 this.currentProjectNameSubject.next(this.currentProjectNameSnapshot);
             } else {
-                this.backendService.getProject(params["project"]).then((project: IProject) => {
+                this.backendService.getProject(params["project"]).then((project) => {
                     this.currentProjectNameSnapshot = project.name;
                     this.currentProjectNameSubject.next(this.currentProjectNameSnapshot);
                 });
@@ -86,7 +86,7 @@ export class CurrentParamsService {
                 this.currentBlockoNameSnapshot = null;
                 this.currentBlockoNameSubject.next(this.currentBlockoNameSnapshot);
             } else {
-                this.backendService.getBProgram(params["blocko"]).then((blocko: IBProgram) => {
+                this.backendService.getBProgram(params["blocko"]).then((blocko) => {
                     this.currentBlockoNameSnapshot = blocko.name;
                     this.currentBlockoNameSubject.next(this.currentBlockoNameSnapshot);
                 });
@@ -100,7 +100,7 @@ export class CurrentParamsService {
                 this.currentCodeNameSnapshot = null;
                 this.currentCodeNameSubject.next(this.currentCodeNameSnapshot);
             } else {
-                this.backendService.getCProgram(params["code"]).then((code: ICProgram) => {
+                this.backendService.getCProgram(params["code"]).then((code) => {
                     this.currentCodeNameSnapshot = code.name;
                     this.currentCodeNameSubject.next(this.currentCodeNameSnapshot);
                 });

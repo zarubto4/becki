@@ -45,13 +45,13 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
     refresh(): void {
         this.blockUI();
         this.backendService.getProject(this.id)
-            .then((project: IProject) => {
+            .then((project) => {
                 this.project = project;
                 return Promise.all<IMProject>(project.m_projects.map((m_project) => {
                     return this.backendService.getMProject(m_project.id);
                 }));
             })
-            .then((gridProjects: IMProject[]) => {
+            .then((gridProjects) => {
                 console.log(gridProjects);
                 this.gridProjects = gridProjects;
                 return this.backendService.getAllScreenTypes();

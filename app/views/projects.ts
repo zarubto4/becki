@@ -32,7 +32,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
     refresh(): void {
         this.blockUI();
         Promise.all<any>([this.backendService.getAllProjects(), this.backendService.getAllTarifsUserApplicables()])
-            .then((values) => {
+            .then((values:[IProject[], IApplicableProduct[]]) => {
                 this.projects = values[0];
                 this.products = values[1];
                 this.unblockUI();

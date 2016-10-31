@@ -61,7 +61,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
         this.blockUI();
         this.backendService.getCProgram(this.codeId)
-            .then((codeProgram: ICProgram) => {
+            .then((codeProgram) => {
                 console.log(codeProgram);
                 this.codeProgram = codeProgram;
 
