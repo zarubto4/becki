@@ -23,8 +23,8 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
 
         this.emailForm = this.formBuilder.group({
             "currentEmail": ["", [Validators.required, Validators.minLength(8), BeckiValidators.email]], //TODO kontrola zda sedí s původním emailem
-            "newEmail": ["", [Validators.required, Validators.minLength(24), BeckiValidators.email]],
-            "newEmailConfirm": ["", [Validators.required, Validators.minLength(24), BeckiValidators.email, BeckiValidators.passwordSame(()=>this.emailForm, "newEmail")]],
+            "newEmail": ["", [Validators.required,  BeckiValidators.email]],
+            "newEmailConfirm": ["", [Validators.required, BeckiValidators.email, BeckiValidators.passwordSame(()=>this.emailForm, "newEmail")]],
         });
 
         this.passwordForm = this.formBuilder.group({
@@ -95,24 +95,37 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
 
 
     changePassword(): void {
+        this.blockUI();
         this.backEndService.createPersonChangeProperty({
             property: "password",
             password: this.passwordForm.controls["newPassword"].value
         })
-            .then(ok => this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("Email with instructions was sent")))
-            .catch(error => this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot change password", error)))
+            .then(ok =>{
+                this.unblockUI();
+        this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("Email with instructions was sent"))})
+            .catch(error =>{
+            this.unblockUI();
+        this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot change password", error))})
     }
 
     changeEmail(): void {
+        this.blockUI();
         this.backEndService.validatePersonEntity({key:"mail",value:this.emailForm.controls["newEmail"].value}).then(response =>{
             if(response.valid){
                 this.backEndService.createPersonChangeProperty({
                     property: "email",
                     email: this.emailForm.controls["newEmail"].value
                 })
-                    .then(ok => this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("Email with instructions was sent")))
-                    .catch(error => this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot change email", error)))
+                    .then(ok =>{
+                        this.unblockUI();
+                        this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("Email with instructions was sent"))
+                    })
+                    .catch(error =>{
+                        this.unblockUI();
+                        this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot change email", error))
+                    })
             }else {
+                this.unblockUI();
                 this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot change email, ", response.message));
             }
         })
