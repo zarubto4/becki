@@ -3,14 +3,14 @@
   ~ directory of this distribution.
   -->
 
-<layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot">
+<layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
-                <span class="font-blue-dark sbold uppercase">
-                    <i class="fa fa-cubes"></i>
-                    Blocks
+                <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-fw fa-cubes"></i>
+                    Custom blocks - all groups
                 </span>
             </div>
             <div class="becki-actions">
@@ -19,59 +19,30 @@
                 </button>
             </div>
         </div>
-
-
-        <div class="portlet box grey-steel" *ngFor="let group of groups">
-            <div class="portlet-title">
-                <div class="becki-caption font-blue-dark">
-                    <span class="font-blue-dark bold">
-                        <i class="fa fa-cube"></i>
-                        {{group.name}}
-                    </span>
-                    <span class="becki-caption-helper">{{group.general_description}}</span>
-                </div>
-                <div class="becki-actions">
-                    <button class="btn blue" [disabled]="!group.update_permission" (click)="onBlockAddClick(group)">
-                        <i class="fa fa-plus-circle"></i> Add block
-                    </button>
-                    <button title="Group properties" class="btn btn-icon-only green" [disabled]="!group.edit_permission" (click)="onGroupEditClick(group)">
-                        <i class="fa fa-cog"></i>
-                    </button>
-                    <button title="Remove group" class="btn btn-icon-only red" [disabled]="!group.delete_permission" (click)="onGroupDeleteClick(group)">
-                        <i class="fa fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="portlet-body">
-
-                <div *ngIf="(group.blocko_blocks && group.blocko_blocks.length)" class="table-scrollable">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th class="full-width">Description</th>
-                            <th class="text-center">Actions</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr *ngFor="let block of group.blocko_blocks">
-                            <td class="no-wrap"><a (click)="onBlockClick(block)">{{block.name}}</a></td>
-                            <td>{{block.general_description}}</td>
-                            <td class="no-wrap">
-                                <button title="Block properties" class="btn btn-icon-only green" [disabled]="!block.edit_permission" (click)="onBlockEditClick(block)">
-                                    <i class="fa fa-cog"></i>
-                                </button>
-                                <button title="Remove block" class="btn btn-icon-only red" [disabled]="!block.delete_permission" (click)="onBlockDeleteClick(block)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <h3 *ngIf="!(group.blocko_blocks && group.blocko_blocks.length)" class="text-center">No blocks in this group</h3>
-
-            </div>
+        <div *ngIf="(groups && groups.length)" class="table-scrollable">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th class="full-width">Description</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let group of groups">
+                    <td class="no-wrap"><a (click)="onGroupClick(group)">{{group.name}}</a></td>
+                    <td>{{group.general_description}}</td>
+                    <td class="no-wrap">
+                        <button title="Group properties" class="btn btn-icon-only green" [disabled]="!group.edit_permission" (click)="onGroupEditClick(group)">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="Remove group" class="btn btn-icon-only red" [disabled]="!group.delete_permission" (click)="onGroupDeleteClick(group)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
         <h3 *ngIf="!groups" class="text-center">Loading...</h3>
         <h3 *ngIf="groups && groups.length == 0" class="text-center">No blocks group in this project</h3>

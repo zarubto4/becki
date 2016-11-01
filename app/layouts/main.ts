@@ -4,7 +4,7 @@
  */
 
 import {Component, OnDestroy, OnInit, Input, Inject} from "@angular/core";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {BackendService} from "../services/BackendService";
 import {BreadcrumbsService} from "../services/BreadcrumbsService";
 import {TabMenuService} from "../services/TabMenuService";
@@ -24,6 +24,9 @@ export class LayoutMain implements OnInit, OnDestroy {
     title: string = "";
 
     @Input()
+    subtitle: string = "";
+
+    @Input()
     tabMenu: string = null;
 
     tabMenuItems: LabeledLink[] = null;
@@ -33,16 +36,53 @@ export class LayoutMain implements OnInit, OnDestroy {
 
     sidebarClosed: boolean = false;
 
-    constructor(protected notificationsService: NotificationService, private backendService: BackendService, @Inject("navigation") private navigation: LabeledLink[], private breadcrumbsService: BreadcrumbsService, private tabMenuService: TabMenuService, private activatedRoute: ActivatedRoute) {
+    openTabMenuIndex: number = -1;
+
+    constructor(protected notificationsService: NotificationService, private backendService: BackendService, @Inject("navigation") private navigation: LabeledLink[], private breadcrumbsService: BreadcrumbsService, private tabMenuService: TabMenuService, private activatedRoute: ActivatedRoute, private router:Router) {
+    }
+
+    isRouterLinkActive(ll: LabeledLink):boolean {
+        if (ll.options['items']) {
+            var isActive = false;
+            ll.options['items'].forEach((lll:LabeledLink) => {
+                if (this.router.isActive(lll.link.join("/"), lll.options['linkActiveExact'])) {
+                    isActive = true;
+                }
+            });
+            return isActive;
+        } else {
+            return this.router.isActive(ll.link.join("/"), ll.options['linkActiveExact']);
+        }
+    }
+
+    toggleTabMenu(index:number) {
+        if (this.openTabMenuIndex == index) {
+            this.openTabMenuIndex = -1;
+        } else {
+            this.openTabMenuIndex = index;
+        }
     }
 
     // define function as property is needed to can set it as event listener (class methods is called with wrong this)
     mouseUpEvent = () => {
-        this.showNotificationMenu = false;
-        this.showUserMenu = false;
+        var oldShowNotificationMenu = this.showNotificationMenu;
+        var oldShowUserMenu = this.showUserMenu;
+        var oldOpenTabMenuIndex = this.openTabMenuIndex;
+        setTimeout(() => {
+            if (oldShowNotificationMenu == this.showNotificationMenu) {
+                this.showNotificationMenu = false;
+            }
+            if (oldShowUserMenu == this.showUserMenu) {
+                this.showUserMenu = false;
+            }
+            if (oldOpenTabMenuIndex == this.openTabMenuIndex) {
+                this.openTabMenuIndex = -1;
+            }
+        }, 1);
     };
 
     ngOnInit(): void {
+        this.openTabMenuIndex = -1;
         this.tabMenuItems = this.tabMenuService.getMenu(this.tabMenu);
 
         this.initSidebarClosed();

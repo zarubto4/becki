@@ -5,7 +5,10 @@
 import {Component, OnInit, Injector, OnDestroy, ViewChild} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {Subscription} from "rxjs/Rx";
-import {IProject, IBlockoBlock, IBlockoBlockVersion, IBlockoBlockShortVersion} from "../backend/TyrionAPI";
+import {
+    IProject, IBlockoBlock, IBlockoBlockVersion, IBlockoBlockShortVersion,
+    ITypeOfBlock
+} from "../backend/TyrionAPI";
 import {BlockoView} from "../components/BlockoView";
 import {Blocks, Core} from "blocko";
 import {FormGroup, Validators} from "@angular/forms";
@@ -16,17 +19,20 @@ import {ModalsVersionDialogModel} from "../modals/version-dialog";
 import moment = require("moment/moment");
 
 @Component({
-    selector: "view-projects-project-blocks-block",
-    templateUrl: "app/views/projects-project-blocks-block.html",
+    selector: "view-projects-project-blocks-blocks-block",
+    templateUrl: "app/views/projects-project-blocks-blocks-block.html",
 })
-export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     projectId: string;
     blockId: string;
+    blocksId: string;
 
     routeParamsSubscription: Subscription;
 
     //project: IProject = null;
+
+    group: ITypeOfBlock = null;
 
     blockoBlock: IBlockoBlock = null;
 
@@ -66,6 +72,7 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.projectId = params["project"];
             this.blockId = params["block"];
+            this.blocksId = params["blocks"];
             this.refresh();
         });
     }
@@ -82,7 +89,11 @@ export class ProjectsProjectBlocksBlockComponent extends BaseMainComponent imple
     refresh(): void {
 
         this.blockUI();
-        this.backendService.getBlockoBlock(this.blockId)
+        this.backendService.getTypeOfBlock(this.blocksId)
+            .then((typeOfBlock) => {
+                this.group = typeOfBlock;
+                return this.backendService.getBlockoBlock(this.blockId);
+            })
             .then((blockoBlock) => {
                 console.log(blockoBlock);
 

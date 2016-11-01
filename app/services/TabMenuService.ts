@@ -19,6 +19,7 @@ export class TabMenuService {
     }
 
     private resolveLink(link: any[]): any[] {
+        if (!link) return null;
         var params = this.currentParamsService.currentParamsSnapshot;
         var outLink: any[] = [];
         link.forEach((part: any) => {
@@ -35,6 +36,22 @@ export class TabMenuService {
         return outLink;
     }
 
+    private resolveOptions(options:{[key: string]: any}):{[key: string]: any} {
+        var outOptions:{[key: string]: any} = {};
+        for (var key in options) {
+            if (!options.hasOwnProperty(key)) continue;
+            if (key == "items") {
+                outOptions["items"] = [];
+                options["items"].forEach((ll:LabeledLink) => {
+                    outOptions["items"].push(new LabeledLink(ll.label, this.resolveLink(ll.link), ll.icon, ll.options));
+                })
+            } else {
+                outOptions[key] = options[key];
+            }
+        }
+        return outOptions;
+    }
+
     private refresh() {
         for (var menuName in this.currentMenus) {
             if (!this.currentMenus.hasOwnProperty(menuName)) continue;
@@ -43,7 +60,7 @@ export class TabMenuService {
             this.currentMenus[menuName].splice(0, this.currentMenus[menuName].length);
 
             this.tabMenus[menuName].forEach((ll: LabeledLink) => {
-                this.currentMenus[menuName].push(new LabeledLink(ll.label, this.resolveLink(ll.link), ll.icon, ll.options));
+                this.currentMenus[menuName].push(new LabeledLink(ll.label, this.resolveLink(ll.link), ll.icon, this.resolveOptions(ll.options)));
             });
 
         }
@@ -57,7 +74,7 @@ export class TabMenuService {
         if (!this.currentMenus[menuName]) {
             this.currentMenus[menuName] = [];
             this.tabMenus[menuName].forEach((ll: LabeledLink) => {
-                this.currentMenus[menuName].push(new LabeledLink(ll.label, this.resolveLink(ll.link), ll.icon, ll.options));
+                this.currentMenus[menuName].push(new LabeledLink(ll.label, this.resolveLink(ll.link), ll.icon, this.resolveOptions(ll.options)));
             });
         }
         return this.currentMenus[menuName];

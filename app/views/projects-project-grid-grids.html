@@ -1,0 +1,57 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+    <div class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="becki-caption">
+                <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-desktop"></i>
+                    Grid programs - project <strong>{{gridProject?gridProject.name:""}}</strong>
+                </span>
+            </div>
+            <div class="becki-actions">
+                <button class="btn blue" [disabled]="!gridProject || !gridProject.update_permission" (click)="onProgramAddClick(gridProject)">
+                    <i class="fa fa-plus-circle"></i> Add grid program
+                </button>
+            </div>
+        </div>
+        <div>
+            Name: <strong>{{gridProject?gridProject.name:""}}</strong><br>
+            Description: <strong>{{gridProject?gridProject.description:""}}</strong>
+        </div>
+        <div *ngIf="gridProject && gridProject.m_programs && gridProject.m_programs.length" class="table-scrollable">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Screen type</th>
+                    <th class="full-width">Description</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let program of gridProject.m_programs">
+                    <td class="no-wrap"><a (click)="onProgramClick(program)">{{program.name}}</a></td>
+                    <td class="no-wrap">{{getScreenTypeName(program.screen_size_type_id)}}</td>
+                    <td>{{program.description}}</td>
+                    <td class="no-wrap">
+                        <button title="Program properties" class="btn btn-icon-only green" [disabled]="!program.edit_permission" (click)="onProgramEditClick(program)">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="Remove program" class="btn btn-icon-only red" [disabled]="!program.delete_permission" (click)="onProgramDeleteClick(program)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <h3 *ngIf="!gridProject" class="text-center">Loading...</h3>
+        <h3 *ngIf="gridProject && !(gridProject.m_programs && gridProject.m_programs.length)" class="text-center">No grid programs in this grid project</h3>
+    </div>
+
+</layout-main>

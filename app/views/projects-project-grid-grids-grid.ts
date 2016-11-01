@@ -6,7 +6,7 @@ import {Component, OnInit, Injector, OnDestroy, ViewChild} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
 import {Subscription} from "rxjs/Rx";
-import {IProject, IMProgram, IMProgramVersion} from "../backend/TyrionAPI";
+import {IProject, IMProgram, IMProgramVersion, IMProject} from "../backend/TyrionAPI";
 import {GridView} from "../components/GridView";
 import {ModalsVersionDialogModel} from "../modals/version-dialog";
 
@@ -15,17 +15,19 @@ import moment = require("moment/moment");
 
 
 @Component({
-    selector: "view-projects-project-grid-grid",
-    templateUrl: "app/views/projects-project-grid-grid.html",
+    selector: "view-projects-project-grid-grids-grid",
+    templateUrl: "app/views/projects-project-grid-grids-grid.html",
 })
-export class ProjectsProjectGridGridComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     projectId: string;
     gridId: string;
+    gridsId: string;
 
     routeParamsSubscription: Subscription;
 
     //project: IProject = null;
+    gridProject: IMProject = null;
     gridProgram: IMProgram = null;
     gridProgramVersions: IMProgramVersion[] = [];
     selectedProgramVersion: IMProgramVersion = null;
@@ -40,6 +42,7 @@ export class ProjectsProjectGridGridComponent extends BaseMainComponent implemen
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.projectId = params["project"];
+            this.gridsId = params["grids"];
             this.gridId = params["grid"];
             this.refresh();
         });
@@ -51,7 +54,12 @@ export class ProjectsProjectGridGridComponent extends BaseMainComponent implemen
 
     refresh(): void {
         this.blockUI();
-        this.backendService.getMProgram(this.gridId)
+        this.backendService.getMProject(this.gridsId)
+            .then((gridProject) => {
+                console.log(gridProject);
+                this.gridProject = gridProject;
+                return this.backendService.getMProgram(this.gridId)
+            })
             .then((gridProgram) => {
                 console.log(gridProgram);
 

@@ -140,15 +140,26 @@
 
                 <h1 *ngIf="title" class="page-title text-center">
                     {{title}}
+                    <div *ngIf="subtitle" class="page-subtitle text-center">
+                        {{subtitle}}
+                    </div>
                 </h1>
 
                 <div [class.tabbable-line]="tabMenuItems">
                     <ul *ngIf="tabMenuItems" class="nav nav-tabs">
-                        <li *ngFor="let tabItem of tabMenuItems" routerLinkActive="active"
-                            [routerLinkActiveOptions]="{exact: tabItem.options['linkActiveExact']}">
-                            <a [routerLink]="tabItem.link">{{tabItem.label}}</a>
+                        <li *ngFor="let tabItem of tabMenuItems; let index = index" [class.active]="isRouterLinkActive(tabItem)" [class.dropdown]="tabItem.options['items']" [class.open]="openTabMenuIndex == index">
+                            <a *ngIf="!tabItem.options['items']" [routerLink]="tabItem.link"><span *ngIf="tabItem.icon" class="fa fa-fw fa-{{tabItem.icon}}"></span> {{tabItem.label}} </a>
+                            <a *ngIf="tabItem.options['items']" (click)="toggleTabMenu(index)" class="cursor-hand"><span *ngIf="tabItem.icon" class="fa fa-fw fa-{{tabItem.icon}}"></span> {{tabItem.label}} <span class="fa fa-angle-down"></span></a>
+                            <ul *ngIf="tabItem.options['items']" class="dropdown-menu becki-tab-menu-dropdown">
+                                <li *ngFor="let subTabItem of tabItem.options['items']" [class.active]="isRouterLinkActive(subTabItem)">
+                                    <a [routerLink]="subTabItem.link"><span *ngIf="subTabItem.icon" class="fa fa-fw fa-{{subTabItem.icon}}"></span> {{subTabItem.label}} </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
+
+
+
                     <div [class.tab-content]="tabMenuItems">
                         <div class="active" [class.tab-pane]="tabMenuItems">
                             <flash-messages-component></flash-messages-component>

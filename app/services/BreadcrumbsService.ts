@@ -38,6 +38,18 @@ export class BreadcrumbsService {
         this.currentParamsService.currentCodeName.subscribe(() => {
             this.refresh();
         });
+        this.currentParamsService.currentBlocksGroupName.subscribe(() => {
+            this.refresh();
+        });
+        this.currentParamsService.currentBlockName.subscribe(() => {
+            this.refresh();
+        });
+        this.currentParamsService.currentGridProjectName.subscribe(() => {
+            this.refresh();
+        });
+        this.currentParamsService.currentGridName.subscribe(() => {
+            this.refresh();
+        });
     }
 
     protected findRouteByPath(path: string): Route {
@@ -55,6 +67,14 @@ export class BreadcrumbsService {
                 return this.currentParamsService.currentBlockoNameSnapshot;
             case ":code":
                 return this.currentParamsService.currentCodeNameSnapshot;
+            case ":blocks":
+                return this.currentParamsService.currentBlocksGroupNameSnapshot;
+            case ":block":
+                return this.currentParamsService.currentBlockNameSnapshot;
+            case ":grids":
+                return this.currentParamsService.currentGridProjectNameSnapshot;
+            case ":grid":
+                return this.currentParamsService.currentGridNameSnapshot;
             default:
                 return breadName;
         }

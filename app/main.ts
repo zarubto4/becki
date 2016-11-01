@@ -54,9 +54,8 @@ import {ProfileComponent} from "./views/profile";
 import {ForgotPasswordComponent} from "./views/forgot-password";
 import {PasswordRestartComponent} from "./views/password-restart";
 import {ProjectsProjectBlocksComponent} from "./views/projects-project-blocks";
-import {ProjectsProjectBlocksBlockComponent} from "./views/projects-project-blocks-block";
+import {ProjectsProjectBlocksBlocksBlockComponent} from "./views/projects-project-blocks-blocks-block";
 import {CreateUserComponent} from "./views/create-user";
-import {ProjectsProjectGridGridComponent} from "./views/projects-project-grid-grid";
 import {ProjectsProjectGridComponent} from "./views/projects-project-grid";
 import {RedirectOkComponent} from "./views/redirect-ok";
 import {ProductRegistrationComponent} from "./views/product-registration";
@@ -81,6 +80,9 @@ import {ModalsHighImportanceNotificationComponent} from "./modals/high-importanc
 import {ModalsDeviceEditDescriptionComponent} from "./modals/device-edit-description";
 import {BlockUIService} from "./services/BlockUIService";
 import {BlockUIComponent} from "./components/BlockUIComponent";
+import {ProjectsProjectBlocksBlocksComponent} from "./views/projects-project-blocks-blocks";
+import {ProjectsProjectGridGridsComponent} from "./views/projects-project-grid-grids";
+import {ProjectsProjectGridGridsGridComponent} from "./views/projects-project-grid-grids-grid";
 
 //@formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -106,15 +108,17 @@ var routes: Routes = [
 
     {path: "projects", data: {breadName: "Projects"}, component: ProjectsComponent, canActivate: [AuthGuard]},
     {path: "projects/:project", data: {breadName: ":project"}, component: ProjectsProjectComponent, canActivate: [AuthGuard]},
-    {path: "projects/:project/hardware", data: {breadName: "Hardware"}, component: ProjectsProjectHardwareComponent, canActivate: [AuthGuard]},
-    {path: "projects/:project/blocko", data: {breadName: "Blocko"}, component: ProjectsProjectBlockoComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/hardware", data: {breadName: "Hardware devices"}, component: ProjectsProjectHardwareComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/blocko", data: {breadName: "Blocko programs"}, component: ProjectsProjectBlockoComponent, canActivate: [AuthGuard]},
     {path: "projects/:project/blocko/:blocko", data: {breadName: ":blocko"}, component: ProjectsProjectBlockoBlockoComponent, canActivate: [AuthGuard]},
-    {path: "projects/:project/code", data: {breadName: "Code"}, component: ProjectsProjectCodeComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/code", data: {breadName: "Code programs"}, component: ProjectsProjectCodeComponent, canActivate: [AuthGuard]},
     {path: "projects/:project/code/:code", data: {breadName: ":code"}, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard]},
-    {path: "projects/:project/blocks", data: {breadName: "Blocks"}, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard]},
-    {path: "projects/:project/blocks/:block", data: {breadName: ":block"}, component: ProjectsProjectBlocksBlockComponent, canActivate: [AuthGuard]},
-    {path: "projects/:project/grid", data: {breadName: "Grid"}, component: ProjectsProjectGridComponent, canActivate: [AuthGuard]},
-    {path: "projects/:project/grid/:grid", data: {breadName: ":grid"}, component: ProjectsProjectGridGridComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/blocks", data: {breadName: "Custom blocks"}, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/blocks/:blocks", data: {breadName: ":blocks"}, component: ProjectsProjectBlocksBlocksComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/blocks/:blocks/:block", data: {breadName: ":block"}, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/grid", data: {breadName: "Grid programs"}, component: ProjectsProjectGridComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/grid/:grids", data: {breadName: ":grids"}, component: ProjectsProjectGridGridsComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/grid/:grids/:grid", data: {breadName: ":grid"}, component: ProjectsProjectGridGridsGridComponent, canActivate: [AuthGuard]},
 
     {path: "**", component: Error404Component},
 ];
@@ -132,12 +136,20 @@ var navigation = [
 
 var tabMenus = {
     "projects-project": [
-        new LabeledLink("Dashboard", ["/", "projects", ":project"], "", {linkActiveExact: true}),
-        new LabeledLink("Hardware", ["/", "projects", ":project", "hardware"]),
-        new LabeledLink("Code", ["/", "projects", ":project", "code"]),
-        new LabeledLink("Blocko", ["/", "projects", ":project", "blocko"]),
-        new LabeledLink("Blocks", ["/", "projects", ":project", "blocks"]),
-        new LabeledLink("Grid", ["/", "projects", ":project", "grid"]),
+        new LabeledLink("Dashboard", ["/", "projects", ":project"], "tachometer", {linkActiveExact: true}),
+        new LabeledLink("Code", null, "code", {items:[
+            new LabeledLink("Code programs", ["/", "projects", ":project", "code"], "code"),
+            new LabeledLink("Hardware devices", ["/", "projects", ":project", "hardware"], "microchip"),
+        ]}),
+        new LabeledLink("Blocko", null, "sitemap fa-rotate-90", {items:[
+            new LabeledLink("Blocko programs", ["/", "projects", ":project", "blocko"], "sitemap fa-rotate-90"),
+            new LabeledLink("Custom blocks", ["/", "projects", ":project", "blocks"], "cubes"),
+        ]}),
+        new LabeledLink("Grid", null, "desktop", {items:[
+            new LabeledLink("Grid programs", ["/", "projects", ":project", "grid"], "desktop"),
+            new LabeledLink("Screen profiles", ["/", "projects", ":project", "screen-profiles"], "arrows"),
+        ]}),
+        new LabeledLink("Participants", ["/", "projects", ":project", "participants"], "users"),
     ]
 };
 
@@ -209,9 +221,11 @@ var tabMenus = {
         ProjectsProjectBlocksComponent,
         CreateUserComponent,
         RedirectOkComponent,
-        ProjectsProjectBlocksBlockComponent,
+        ProjectsProjectBlocksBlocksComponent,
+        ProjectsProjectBlocksBlocksBlockComponent,
         ProjectsProjectGridComponent,
-        ProjectsProjectGridGridComponent,
+        ProjectsProjectGridGridsComponent,
+        ProjectsProjectGridGridsGridComponent,
         ProductRegistrationComponent,
         // Modals components
         ModalsProjectPropertiesComponent,

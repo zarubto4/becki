@@ -19,6 +19,10 @@ export class CurrentParamsService {
     protected currentProjectNameSubject: Subject<string> = null;
     public currentProjectNameSnapshot: string = null;
 
+    public currentProjectDescription: Observable<string> = null;
+    protected currentProjectDescriptionSubject: Subject<string> = null;
+    public currentProjectDescriptionSnapshot: string = null;
+
     public currentBlockoName: Observable<string> = null;
     protected currentBlockoNameSubject: Subject<string> = null;
     public currentBlockoNameSnapshot: string = null;
@@ -27,14 +31,34 @@ export class CurrentParamsService {
     protected currentCodeNameSubject: Subject<string> = null;
     public currentCodeNameSnapshot: string = null;
 
+    public currentBlocksGroupName: Observable<string> = null;
+    protected currentBlocksGroupNameSubject: Subject<string> = null;
+    public currentBlocksGroupNameSnapshot: string = null;
+
+    public currentBlockName: Observable<string> = null;
+    protected currentBlockNameSubject: Subject<string> = null;
+    public currentBlockNameSnapshot: string = null;
+
+    public currentGridProjectName: Observable<string> = null;
+    protected currentGridProjectNameSubject: Subject<string> = null;
+    public currentGridProjectNameSnapshot: string = null;
+
+    public currentGridName: Observable<string> = null;
+    protected currentGridNameSubject: Subject<string> = null;
+    public currentGridNameSnapshot: string = null;
 
     constructor(protected router: Router, protected backendService: BackendService) {
         console.log("BreadcrumbsService init");
 
         this.currentParams = this.currentParamsSubject = new Subject<Params>();
         this.currentProjectName = this.currentProjectNameSubject = new Subject<string>();
+        this.currentProjectDescription = this.currentProjectDescriptionSubject = new Subject<string>();
         this.currentBlockoName = this.currentBlockoNameSubject = new Subject<string>();
         this.currentCodeName = this.currentCodeNameSubject = new Subject<string>();
+        this.currentBlocksGroupName = this.currentBlocksGroupNameSubject = new Subject<string>();
+        this.currentBlockName = this.currentBlockNameSubject = new Subject<string>();
+        this.currentGridProjectName = this.currentGridProjectNameSubject = new Subject<string>();
+        this.currentGridName = this.currentGridNameSubject = new Subject<string>();
 
         router.events.subscribe(event => {
             if (event instanceof RoutesRecognized) {
@@ -71,10 +95,14 @@ export class CurrentParamsService {
             if (!params["project"]) {
                 this.currentProjectNameSnapshot = null;
                 this.currentProjectNameSubject.next(this.currentProjectNameSnapshot);
+                this.currentProjectDescriptionSnapshot = null;
+                this.currentProjectDescriptionSubject.next(this.currentProjectDescriptionSnapshot);
             } else {
                 this.backendService.getProject(params["project"]).then((project) => {
                     this.currentProjectNameSnapshot = project.name;
                     this.currentProjectNameSubject.next(this.currentProjectNameSnapshot);
+                    this.currentProjectDescriptionSnapshot = project.description;
+                    this.currentProjectDescriptionSubject.next(this.currentProjectDescriptionSnapshot);
                 });
             }
 
@@ -103,6 +131,62 @@ export class CurrentParamsService {
                 this.backendService.getCProgram(params["code"]).then((code) => {
                     this.currentCodeNameSnapshot = code.name;
                     this.currentCodeNameSubject.next(this.currentCodeNameSnapshot);
+                });
+            }
+
+        }
+
+        if (this.currentParamsSnapshot["blocks"] != params["blocks"]) {
+
+            if (!params["blocks"]) {
+                this.currentBlocksGroupNameSnapshot = null;
+                this.currentBlocksGroupNameSubject.next(this.currentBlocksGroupNameSnapshot);
+            } else {
+                this.backendService.getTypeOfBlock(params["blocks"]).then((blocks) => {
+                    this.currentBlocksGroupNameSnapshot = blocks.name;
+                    this.currentBlocksGroupNameSubject.next(this.currentBlocksGroupNameSnapshot);
+                });
+            }
+
+        }
+
+        if (this.currentParamsSnapshot["block"] != params["block"]) {
+
+            if (!params["block"]) {
+                this.currentBlockNameSnapshot = null;
+                this.currentBlockNameSubject.next(this.currentBlockNameSnapshot);
+            } else {
+                this.backendService.getBlockoBlock(params["block"]).then((block) => {
+                    this.currentBlockNameSnapshot = block.name;
+                    this.currentBlockNameSubject.next(this.currentBlockNameSnapshot);
+                });
+            }
+
+        }
+
+        if (this.currentParamsSnapshot["grids"] != params["grids"]) {
+
+            if (!params["grids"]) {
+                this.currentGridProjectNameSnapshot = null;
+                this.currentGridProjectNameSubject.next(this.currentGridProjectNameSnapshot);
+            } else {
+                this.backendService.getMProject(params["grids"]).then((gridProject) => {
+                    this.currentGridProjectNameSnapshot = gridProject.name;
+                    this.currentGridProjectNameSubject.next(this.currentGridProjectNameSnapshot);
+                });
+            }
+
+        }
+
+        if (this.currentParamsSnapshot["grid"] != params["grid"]) {
+
+            if (!params["grid"]) {
+                this.currentGridNameSnapshot = null;
+                this.currentGridNameSubject.next(this.currentGridNameSnapshot);
+            } else {
+                this.backendService.getMProgram(params["grid"]).then((gridProgram) => {
+                    this.currentGridNameSnapshot = gridProgram.name;
+                    this.currentGridNameSubject.next(this.currentGridNameSnapshot);
                 });
             }
 

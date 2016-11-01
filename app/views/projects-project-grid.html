@@ -3,14 +3,14 @@
   ~ directory of this distribution.
   -->
 
-<layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot">
+<layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
-                <span class="font-blue-dark sbold uppercase">
-                    <i class="fa fa-desktop"></i>
-                    Grid
+                <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-desktop"></i>
+                    Grid programs - all grid projects
                 </span>
             </div>
             <div class="becki-actions">
@@ -19,66 +19,33 @@
                 </button>
             </div>
         </div>
-
-        <div *ngIf="(gridProjects && gridProjects.length)">
-            <div class="portlet box grey-steel" *ngFor="let project of gridProjects">
-                <div class="portlet-title">
-                    <div class="becki-caption font-blue-dark">
-                        <span class="font-blue-dark bold">
-                            <i class="fa fa-desktop"></i>
-                            {{project.name}}
-                        </span>
-                        <span class="becki-caption-helper">{{project.description}}</span>
-                    </div>
-                    <div class="becki-actions">
-                        <button class="btn blue" [disabled]="!project.update_permission" (click)="onProgramAddClick(project)">
-                            <i class="fa fa-plus-circle"></i> Add program
-                        </button>
-                        <button title="Project properties" class="btn btn-icon-only green" [disabled]="!project.edit_permission" (click)="onProjectEditClick(project)">
+        <div *ngIf="(gridProjects && gridProjects.length)" class="table-scrollable">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th class="full-width">Description</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let gridProject of gridProjects">
+                    <td class="no-wrap"><a (click)="onProjectClick(gridProject)">{{gridProject.name}}</a></td>
+                    <td>{{gridProject.description}}</td>
+                    <td class="no-wrap">
+                        <button title="Group properties" class="btn btn-icon-only green" [disabled]="!gridProject.edit_permission" (click)="onProjectEditClick(gridProject)">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="Remove project" class="btn btn-icon-only red" [disabled]="!project.delete_permission" (click)="onProjectDeleteClick(project)">
+                        <button title="Remove group" class="btn btn-icon-only red" [disabled]="!gridProject.delete_permission" (click)="onProjectDeleteClick(gridProject)">
                             <i class="fa fa-trash"></i>
                         </button>
-                    </div>
-                </div>
-                <div class="portlet-body">
-
-                    <div *ngIf="project.m_programs && project.m_programs.length" class="table-scrollable">
-                        <table class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Screen type</th>
-                                <th class="full-width">Description</th>
-                                <th class="text-center">Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr *ngFor="let program of project.m_programs">
-                                <td class="no-wrap"><a (click)="onProgramClick(program)">{{program.name}}</a></td>
-                                <td class="no-wrap">{{getScreenTypeName(program.screen_size_type_id)}}</td>
-                                <td>{{program.description}}</td>
-                                <td class="no-wrap">
-                                    <button title="Program properties" class="btn btn-icon-only green" [disabled]="!program.edit_permission" (click)="onProgramEditClick(program)">
-                                        <i class="fa fa-cog"></i>
-                                    </button>
-                                    <button title="Remove program" class="btn btn-icon-only red" [disabled]="!program.delete_permission" (click)="onProgramDeleteClick(program)">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <h3 *ngIf="!(project.m_programs && project.m_programs.length)" class="text-center">No grid programs in this grid project</h3>
-
-                </div>
-            </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
         <h3 *ngIf="!gridProjects" class="text-center">Loading...</h3>
         <h3 *ngIf="gridProjects && gridProjects.length == 0" class="text-center">No grid projects in this project</h3>
-
     </div>
 
 </layout-main>

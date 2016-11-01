@@ -3,16 +3,16 @@
   ~ directory of this distribution.
   -->
 
-<layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot">
+<layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
     <div class="row">
         <div class="col-md-12">
             <div class="portlet portlet light bordered">
                 <div class="portlet-title">
                     <div class="becki-caption">
-                        <span class="font-blue-dark sbold uppercase">
-                            <i class="fa fa-code"></i>
-                            Code <strong>{{currentParamsService.currentCodeNameSnapshot}}</strong>
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-code"></i>
+                             Code programs - program <strong>{{currentParamsService.currentCodeNameSnapshot}}</strong>
                         </span>
                     </div>
                 </div>
@@ -27,8 +27,8 @@
             <div class="portlet light bordered padding-20">
                 <div class="portlet-title">
                     <div class="becki-caption">
-                        <span class="font-blue-dark sbold uppercase">
-                            <i class="fa fa-file-code-o"></i>
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-file-code-o"></i>
                             IDE
                         </span>
                     </div>
@@ -80,8 +80,8 @@
             <div class="portlet portlet light bordered">
                 <div class="portlet-title">
                     <div class="becki-caption">
-                        <span class="font-blue-dark sbold uppercase">
-                            <i class="fa fa-code-fork"></i>
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-code-fork"></i>
                             Saved versions
                         </span>
                     </div>

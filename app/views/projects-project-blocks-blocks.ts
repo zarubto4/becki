@@ -1,4 +1,8 @@
 /**
+ * Created by davidhradek on 01.11.16.
+ */
+
+/**
  * Created by davidhradek on 21.09.16.
  */
 
@@ -13,18 +17,19 @@ import {ModalsBlocksTypePropertiesModel} from "../modals/blocks-type-properties"
 import {ModalsBlocksBlockPropertiesModel} from "../modals/blocks-block-properties";
 
 @Component({
-    selector: "view-projects-project-blocks",
-    templateUrl: "app/views/projects-project-blocks.html",
+    selector: "view-projects-project-blocks-blocks",
+    templateUrl: "app/views/projects-project-blocks-blocks.html",
 })
-export class ProjectsProjectBlocksComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     id: string;
+    blocksId: string;
 
     routeParamsSubscription: Subscription;
 
-    project: IProject = null;
+    //project: IProject = null;
 
-    groups: ITypeOfBlock[] = [];
+    group: ITypeOfBlock = null;
 
     constructor(injector: Injector) {
         super(injector)
@@ -33,6 +38,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.id = params["project"];
+            this.blocksId = params["blocks"];
             this.refresh();
         });
     }
@@ -41,61 +47,70 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
         this.routeParamsSubscription.unsubscribe();
     }
 
-    onGroupAddClick(): void {
-        var model = new ModalsBlocksTypePropertiesModel();
+    onBlockClick(block: IBlockoBlock): void {
+        this.navigate(["/projects", this.currentParamsService.get("project"), "blocks", this.blocksId, block.id]);
+    }
+
+    onBlockAddClick(group: ITypeOfBlock): void {
+
+        var model = new ModalsBlocksBlockPropertiesModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.createTypeOfBlock({
-                    project_id: this.id,
+                this.backendService.createBlockoBlock({
+                    type_of_block_id: group.id,
                     name: model.name,
                     general_description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess("The blocks group has been added."));
+                        this.addFlashMessage(new FlashMessageSuccess("The block has been added."));
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError("The blocks group cannot be added.", reason));
+                        this.addFlashMessage(new FlashMessageError("The block cannot be added.", reason));
                         this.refresh(); // also unblockUI
                     });
             }
         });
+
     }
 
-    onGroupEditClick(group: ITypeOfBlock): void {
-        var model = new ModalsBlocksTypePropertiesModel(group.name, group.general_description, true, group.name);
+    onBlockEditClick(block: IBlockoBlock): void {
+
+        var model = new ModalsBlocksBlockPropertiesModel(block.name, block.general_description, true, block.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editTypeOfBlock(group.id, {
+                this.backendService.editBlockoBlock(block.id, {
                     name: model.name,
-                    general_description: model.description
+                    general_description: model.description,
+                    type_of_block_id: block.type_of_block_id // tohle je trochu divný ne?
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess("The blocks group has been edited."));
+                        this.addFlashMessage(new FlashMessageSuccess("The block has been edited."));
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError("The blocks group cannot be edited.", reason));
+                        this.addFlashMessage(new FlashMessageError("The block cannot be edited.", reason));
                         this.refresh(); // also unblockUI
                     });
             }
         });
+
     }
 
-    onGroupDeleteClick(group: ITypeOfBlock): void {
+    onBlockDeleteClick(block: IBlockoBlock): void {
 
-        this.modalService.showModal(new ModalsRemovalModel(group.name)).then((success) => {
+        this.modalService.showModal(new ModalsRemovalModel(block.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteTypeOfBlock(group.id)
+                this.backendService.deleteBlockoBlock(block.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess("The blocks group has been removed."));
+                        this.addFlashMessage(new FlashMessageSuccess("The block has been removed."));
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError("The blocks group cannot be removed.", reason));
+                        this.addFlashMessage(new FlashMessageError("The block cannot be removed.", reason));
                         this.refresh(); // also unblockUI
                     });
             }
@@ -103,24 +118,12 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
 
     }
 
-    onGroupClick(group: ITypeOfBlock): void {
-        this.navigate(["/projects", this.currentParamsService.get("project"), "blocks", group.id]);
-    }
 
     refresh(): void {
         this.blockUI();
-        this.backendService.getProject(this.id)
-            .then((project) => {
-                this.project = project;
-                console.log(this.project);
-
-                return Promise.all<ITypeOfBlock>(project.type_of_blocks_id.map((typeOfBlockId) => {
-                    return this.backendService.getTypeOfBlock(typeOfBlockId);
-                }));
-            })
-            .then((typeOfBlocks) => {
-                console.log(typeOfBlocks);
-                this.groups = typeOfBlocks;
+        this.backendService.getTypeOfBlock(this.blocksId)
+            .then((typeOfBlock) => {
+                this.group = typeOfBlock;
                 this.unblockUI();
             })
             .catch(reason => {
