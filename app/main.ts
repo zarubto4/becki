@@ -83,6 +83,7 @@ import {BlockUIComponent} from "./components/BlockUIComponent";
 import {ProjectsProjectBlocksBlocksComponent} from "./views/projects-project-blocks-blocks";
 import {ProjectsProjectGridGridsComponent} from "./views/projects-project-grid-grids";
 import {ProjectsProjectGridGridsGridComponent} from "./views/projects-project-grid-grids-grid";
+import {FinancialComponent} from "./views/financial";
 
 //@formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -102,6 +103,8 @@ var routes: Routes = [
     {path: "notifications", data: {breadName: "Notifications"}, component: NotificationsComponent, canActivate: [AuthGuard]},
 
     {path: "profile", data: {breadName: "Profile"}, component: ProfileComponent, canActivate: [AuthGuard]},
+
+    {path: "financial", data: {breadName: "Financial"}, component: FinancialComponent, canActivate: [AuthGuard]},
 
     {path: "productRegistration/:tariff", data: {breadName: "Product registration"}, component: ProductRegistrationComponent, canActivate: [AuthGuard]},
     {path: "productRegistration", data: {breadName: "Product registration"}, component: ProductRegistrationComponent, canActivate: [AuthGuard]},
@@ -127,6 +130,7 @@ var routes: Routes = [
 var navigation = [
     new LabeledLink("Dashboard", ["/dashboard"], "tachometer"),
     new LabeledLink("Projects", ["/projects"], "tasks"),
+    new LabeledLink("Financial", ["/financial"],"bank"),
     /*new LabeledLink("Applications", ["/user/applications"], "mobile"),
     new LabeledLink("Interactions", ["/user/interactions"], "link"),
     new LabeledLink("Devices", ["/user/devices"], "rocket"),
@@ -207,6 +211,7 @@ var tabMenus = {
         LoginComponent,
         LogoutComponent,
         DashboardComponent,
+        FinancialComponent,
         ProjectsComponent,
         ProjectsProjectComponent,
         ProjectsProjectHardwareComponent,

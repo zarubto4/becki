@@ -1,6 +1,7 @@
 /**
- * Created by davidhradek on 03.08.16.
+ * Created by dominik.krisztof on 02.11.16.
  */
+
 
 import {Component, Injector, OnInit} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
@@ -8,17 +9,26 @@ import {IApplicableProduct, IGeneralTariff, IAdditionalPackage, IProject} from "
 import {FlashMessageError} from "../services/FlashMessagesService";
 
 @Component({
-    selector: "view-dashboard",
-    templateUrl: "app/views/dashboard.html"
+    selector: "view-financial",
+    templateUrl: "app/views/financial.html"
 })
-export class DashboardComponent extends BaseMainComponent implements OnInit {
+export class FinancialComponent extends BaseMainComponent implements OnInit {
+
+
 
     constructor(injector: Injector) {
         super(injector)
     };
 
     ngOnInit(): void {
+        this.refresh();
     }
+
+    refresh(): void {
+
+    }
+
+
 
 
 }
