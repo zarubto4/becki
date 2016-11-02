@@ -11,7 +11,7 @@
                                 <div class="font-dark bold uppercase">Step by step</div>
                                 <div class="caption-desc font-grey-cascade">Confirm a product purchase</div>
                                 <br> </div>
-                            <div  class="col-md-4 bg-grey mt-step-col" (click)="stepClick(1)" (mouseenter)="activeClass['1'] = true" (mouseleave)="activeClass['1'] = false" [class.active]="activeClass['1']" [class.done]="step == 1">
+                            <div class="col-md-4 bg-grey mt-step-col" (click)="stepClick(1)" (mouseenter)="activeClass['1'] = true" (mouseleave)="activeClass['1'] = false" [class.active]="activeClass['1']" [class.done]="step == 1">
                                 <div class="mt-step-number bg-white font-grey">1</div>
                                 <div class="mt-step-title uppercase font-grey-cascade">Choose</div>
                                 <div class="mt-step-content font-grey-cascade">Choose a right product</div>
@@ -106,7 +106,7 @@
                                         <div class="col-xs-3 text-right mobile-padding">
                                             <i class="fa {{label.icon}}"></i>
                                         </div>
-                                        <div  class="col-xs-9 text-left mobile-padding">{{label.label}}</div> <!--(mouseenter)="" (mouseleave)=""-->
+                                        <div class="col-xs-9 text-left mobile-padding">{{label.label}}</div> <!--(mouseenter)="" (mouseleave)=""-->
                                     </div>
 
                                 </div>
@@ -124,7 +124,7 @@
 </div>
 
 <div *ngIf="step===2">
-    <form [formGroup]="form">
+    <form *ngIf="form" [formGroup]="form">
     <div class="row">
         <div class="col-md-6">
             <div>
@@ -147,38 +147,35 @@
                     </select>
                             </div>
                         </div>
-                    
-                        <becki-form-select [control]="form.controls.currency_type" label="Currency type" [options]="options"></becki-form-select>
-                    <div *ngIf="paymentNeed">
-                        <becki-form-select [control]="form.controls.payment_method" label="Payment method" [options]="payment_method"></becki-form-select>
-                        <becki-form-select [control]="form.controls.payment_mode" label="Payment mode" [options]="payment_mode"></becki-form-select>
-                    </div>
+                        <becki-form-select *ngIf="paymentNeed" [control]="form.controls.currency_type" label="Currency type" [options]="currency_type"></becki-form-select>
+                        <becki-form-select *ngIf="paymentNeed" [control]="form.controls.payment_method" label="Payment method" [options]="payment_method"></becki-form-select>
+                        <becki-form-select *ngIf="paymentNeed" [control]="form.controls.payment_mode" label="Payment mode" [options]="payment_mode"></becki-form-select>
                         <becki-form-input [control]="form.controls.product_individual_name" label="Product name (Your unique name for this tarrif)"></becki-form-input> <!-- uloží z prokliku? -->
                         <becki-form-input [control]="form.controls.street" label="Street"></becki-form-input>
                         <becki-form-input [control]="form.controls.street_number" label="Street number"></becki-form-input>
-                    <!--     <becki-form-input [control]="form.controls.tariff_type" label="tariff type"></becki-form-input>  nejspíše uloží z prokliku -->
+                    <!--     <becki-form-input [control]="form.controls.tariff_type" label="tariff type"></becki-form-input>   uloží z prokliku -->
                         <becki-form-input [control]="form.controls.zip_code" label="Zip code"></becki-form-input>
                 </div>
             </div>
         </div>
-        <div *ngIf="isCompany">
+   <!--     <div *ngIf="isCompany">
         <div class="col-md-6">
             <p>Company info</p>
                 <p></p>
-                <becki-form-input [control]="form.controls.company_authorized_email" [type]="email" label="Company authorized email"></becki-form-input>
-                <becki-form-input [control]="form.controls.company_authorized_phone" [type]="number"  label="Company authorized phone"></becki-form-input>
-                <becki-form-input [control]="form.controls.company_invoice_email" [type]="email" label="Company invoice email"></becki-form-input>
-                <becki-form-input [control]="form.controls.company_name" label="Company name"></becki-form-input>
-                <becki-form-input [control]="form.controls.company_web" label="Company web"></becki-form-input>
-                <becki-form-input [control]="form.controls.registration_no" label="Registration no"></becki-form-input>
-                <becki-form-input [control]="form.controls.vat_number" label="Vat number"></becki-form-input> <!-- //? CZ28496639 -->
-
+                <becki-form-input *ngIf="isCompany" [control]="form.controls.company_authorized_email" [type]="email" label="Company authorized email"></becki-form-input>
+                <becki-form-input *ngIf="isCompany" [control]="form.controls.company_authorized_phone" [type]="number"  label="Company authorized phone"></becki-form-input>
+                <becki-form-input *ngIf="isCompany" [control]="form.controls.company_invoice_email" [type]="email" label="Company invoice email"></becki-form-input>
+                <becki-form-input *ngIf="isCompany" [control]="form.controls.company_name" label="Company name"></becki-form-input>
+                <becki-form-input *ngIf="isCompany" [control]="form.controls.company_web" label="Company web"></becki-form-input>
+                <becki-form-input *ngIf="isCompany" [control]="form.controls.registration_no" label="Registration no"></becki-form-input>
+                <becki-form-input *ngIf="isCompany" [control]="form.controls.vat_number" label="Vat number"></becki-form-input> <!-- //? CZ28496639 -->
+   <!--
             </div>
-        </div>
+        </div>        -->
         </div>
     </form>
         <div class="actions">
-            <button type="button" class="btn green btn-outline" [disabled]="!form.valid" (click)="onSubmitClick()">Continue</button>
+            <button type="button" class="btn green btn-outline" [disabled]="!form || !form.valid" (click)="onSubmitClick()">Continue</button>
         </div>
 </div>
 
