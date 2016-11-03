@@ -12,6 +12,7 @@ import {ModalsVersionDialogModel} from "../modals/version-dialog";
 
 declare var $: JQueryStatic;
 import moment = require("moment/moment");
+import {ModalsConfirmModel} from "../modals/confirm";
 
 
 @Component({
@@ -31,6 +32,8 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
     gridProgram: IMProgram = null;
     gridProgramVersions: IMProgramVersion[] = [];
     selectedProgramVersion: IMProgramVersion = null;
+
+    gridDeviceProfile:string = "mobile";
 
     @ViewChild(GridView)
     gridView: GridView;
@@ -87,6 +90,10 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
 
     }
 
+    onAddPageClick(): void {
+        this.gridView.addPage();
+    }
+
     onProgramVersionClick(programVersion: IMProgramVersion): void {
         this.selectProgramVersion(programVersion);
     }
@@ -98,7 +105,22 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
 
         this.selectedProgramVersion = programVersion;
         this.gridView.setDataJson(this.selectedProgramVersion.m_code);
+        this.gridDeviceProfile = this.gridView.getDeviceProfile();
 
+    }
+
+    onChangeGridDeviceProfile(newValue:string): void {
+        var oldValue = this.gridDeviceProfile;
+        this.gridDeviceProfile = newValue;
+        var m = new ModalsConfirmModel("Grid size class change","Changing grid size class <strong>delete all your pages</strong>, are you sure?");
+        this.modalService.showModal(m)
+            .then((success) => {
+                if (success) {
+                    this.gridView.setDeviceProfile(this.gridDeviceProfile);
+                } else {
+                    this.gridDeviceProfile = oldValue;
+                }
+            })
     }
 
     onSaveClick(): void {

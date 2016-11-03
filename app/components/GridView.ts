@@ -51,9 +51,9 @@ export class GridView implements AfterViewInit, OnChanges {
     }
 
     ngAfterViewInit(): void {
-        if (!this.gridController.deviceProfile) {
-            this.gridController.deviceProfile = new DeviceProfiles.iPhone6();
-        }
+        //if (!this.gridController.deviceProfile) {
+            //this.gridController.deviceProfile = new DeviceProfiles.iPhone6();
+        //}
 
         this.gridRenderer = new EditorRenderer.ControllerRenderer(this.gridController, this.widgets, this.screens.nativeElement);
         this.gridRenderer.registerOpenConfigCallback(widget => {
@@ -63,12 +63,24 @@ export class GridView implements AfterViewInit, OnChanges {
         this.gridController.setRenderer(this.gridRenderer);
     }
 
+    addPage(): void {
+        this.gridController.addPage();
+    }
+
     getDataJson(): string {
         return this.gridController.getDataJson();
     }
 
     setDataJson(data: string): void {
         this.gridController.setDataJson(data);
+    }
+
+    setDeviceProfile(deviceProfile: string): void {
+        this.gridController.setDeviceProfileByName(deviceProfile);
+    }
+
+    getDeviceProfile(): string {
+        return this.gridController.deviceProfile.name;
     }
 
     getInterfaceJson(): string {

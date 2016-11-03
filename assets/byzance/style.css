@@ -586,6 +586,7 @@ span.changes {
 
 .the-grid__widgets-catalog, .the-grid__screens {
     box-sizing: border-box;
+    white-space: nowrap;
 }
 
 .the-grid__widgets-catalog *, .the-grid__widgets-catalog *:before, .the-grid__widgets-catalog *:after, .the-grid__screens *, .the-grid__screens *:before, .the-grid__screens *:after {
@@ -833,6 +834,7 @@ span.changes {
     padding-top: 32px;
     background-color: #ccc;
     position: relative;
+    vertical-align: top;
 }
 
 .hx-description {
@@ -1023,6 +1025,11 @@ body.block-ui-blur .page-container, body.block-ui-blur .page-footer {
     font-weight: normal;
     letter-spacing: 0;
     margin-top: 10px;
+}
+
+.no-full-width {
+    width: auto;
+    display: inline-block;
 }
 
 /* Tables helpers */

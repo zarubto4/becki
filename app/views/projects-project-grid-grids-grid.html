@@ -41,12 +41,23 @@
                 </div>
 
                 <div>
+                    <div class="pull-left">
+                        <button type="button" class="btn default green-haze" (click)="onAddPageClick()">
+                            <i class="fa fa-plus"></i> Add page
+                        </button>
+                    </div>
                     <div class="pull-right">
+                        <label>Grid size class: </label>
+                        <select class="form-control no-full-width" [ngModel]="gridDeviceProfile" (ngModelChange)="onChangeGridDeviceProfile($event)">
+                            <option value="mobile">Mobile</option>
+                            <option value="tablet">Tablet</option>
+                            <option value="desktop">Desktop</option>
+                        </select>
                     </div>
                     <div class="clearfix"></div>
                 </div>
 
-                <div style="margin: 10px 0;">
+                <div style="margin: 10px 0; overflow-x: auto;">
                     <grid-view [widgets]="widgets"></grid-view>
                 </div>
 
