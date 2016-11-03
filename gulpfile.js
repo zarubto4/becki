@@ -15,12 +15,15 @@ gulp.task('clean', function () {
     return del('dist/**/*');
 });
 
+var tsConfig = tscConfig.compilerOptions;
+tsConfig["typescript"] = require('typescript');
+
 // TypeScript compile
 gulp.task('compile-ts', ['clean'], function () {
     return gulp
         .src('app/**/*.ts')
         .pipe(embedTemplates({basePath: __dirname})) // inline templates
-        .pipe(typescript(tscConfig.compilerOptions))
+        .pipe(typescript(tsConfig))
         .pipe(gulp.dest('dist/app'));
 });
 

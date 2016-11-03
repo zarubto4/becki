@@ -44,7 +44,7 @@
     "lite-server": "^2.2.2",
     "sync-request": "^3.0.1",
     "systemjs-builder": "^0.15.31",
-    "typescript": "^1.8.10",
+    "typescript": "^2.0.6",
     "typings": "^1.0.4"
   },
   "scripts": {
