@@ -30,22 +30,13 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
     step: number;
 
-
     isCompany: boolean = false;
 
     paymentNeed: boolean = false;
 
     activeClass: {[key: string]: boolean} = {};
 
-    toggleIsCompany() {
-        this.isCompany = !this.isCompany;
-        Object.keys(this.form.controls).forEach((key)=> {
-            this.form.controls[key].updateValueAndValidity();
-        });
-    }
-
     countryList: BeckiFormSelectOption[] = StaticOptionLists.countryList;
-
 
     payment_method: BeckiFormSelectOption[];
     payment_mode: BeckiFormSelectOption[];
@@ -114,6 +105,8 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         this.paymentNeed = tariff.required_payment_mode;
         this.isCompany = tariff.company_details_required;
 
+        this.currency_type= [{label: "CZK", value: "CZK"}, {label: "EUR", value: "EUR"}];//TODO pak smazat až bude měna dodávána
+
         var input: {[key: string]: any;} = {
             "city": ["", [Validators.required, Validators.minLength(5)]],
 
@@ -129,7 +122,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
             "zip_code": ["", [Validators.required, Validators.minLength(5)]],
 
-        };
+    };
 
         if (this.paymentNeed) {
 
@@ -138,11 +131,13 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             input["payment_method"] = ["", [Validators.required]];// * @description Required: only in if required_payment_mode is truevalues =>[bank, credit_card]
 
             input["payment_mode"] = ["", [Validators.required]];//only if is requred payment is true
+
+
         }
 
         if (this.isCompany) {
 
-            input["company_authorized_email"] = ["", [Validators.required, this.isCompany, Validators.minLength(4)]]; //company only
+            input["company_authorized_email"] = ["", [Validators.required, Validators.minLength(4)]]; //company only
 
             input["company_authorized_phone"] = ["", [Validators.minLength(4), BeckiValidators.number]]; //company only
 
@@ -155,8 +150,9 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             input["registration_no"] = ["", [Validators.required]]; //Required: only if account is businessThe company_registration_no must have at least
 
             input["vat_number"] = ["", [Validators.required]]; //Required: only if account is business & from EU!!! CZ28496639 The VAT_number must have at least 4 characters
-        }
 
+        }
+        this.form=null;
         this.form = this.formBuilder.group(input);
         this.step = 2;
     }

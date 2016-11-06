@@ -112,7 +112,7 @@
                                 </div>
                                 <div class="arrow-down arrow-grey"></div>
                                 <div class="price-table-footer">
-                                    <button type="button" (click)="registerTariff()" class="btn grey-salsa btn-outline sbold uppercase price-button">Sign Up</button>
+                                    <button type="button" (click)="registerTariff()" class="btn grey-salsa btn-outline sbold uppercase price-button">Up</button>
                                 </div>
                             </div>
                         </div>
@@ -131,22 +131,8 @@
                 <div class="">
                     <h4 class="modal-title">fill the tariff info </h4>
                 </div>
-                <div class="">
                         <becki-form-input [control]="form.controls.city" label="City"></becki-form-input>
-                    <div class="form-group">
-                        <label for="single-prepend-text" class="control-label">Country</label>
-                        <div class="input-group select2-bootstrap-prepend">
-                                                <span class="input-group-btn">
-                                                    <button class="btn btn-default" type="button" data-select2-open="single-prepend-text">
-                                                        <span class="glyphicon glyphicon-search"></span>
-                                                    </button>
-                                                </span>
-                            <select id="single-prepend-text" class="form-control select2 select2-hidden-accessible" tabindex="1" aria-hidden="true">
-                                <option></option>
-                                <option *ngFor="let country of countryList" value="country.value">{{country.label}}</option>
-                    </select>
-                            </div>
-                        </div>
+                        <becki-form-select [control]="form.controls.country" label="country" [options]="countryList"></becki-form-select>
                         <becki-form-select *ngIf="paymentNeed" [control]="form.controls.currency_type" label="Currency type" [options]="currency_type"></becki-form-select>
                         <becki-form-select *ngIf="paymentNeed" [control]="form.controls.payment_method" label="Payment method" [options]="payment_method"></becki-form-select>
                         <becki-form-select *ngIf="paymentNeed" [control]="form.controls.payment_mode" label="Payment mode" [options]="payment_mode"></becki-form-select>
@@ -157,8 +143,8 @@
                         <becki-form-input [control]="form.controls.zip_code" label="Zip code"></becki-form-input>
                 </div>
             </div>
-        </div>
-   <!--     <div *ngIf="isCompany">
+
+       <div *ngIf="isCompany">
         <div class="col-md-6">
             <p>Company info</p>
                 <p></p>
@@ -169,10 +155,10 @@
                 <becki-form-input *ngIf="isCompany" [control]="form.controls.company_web" label="Company web"></becki-form-input>
                 <becki-form-input *ngIf="isCompany" [control]="form.controls.registration_no" label="Registration no"></becki-form-input>
                 <becki-form-input *ngIf="isCompany" [control]="form.controls.vat_number" label="Vat number"></becki-form-input> <!-- //? CZ28496639 -->
-   <!--
+
             </div>
-        </div>        -->
         </div>
+    </div>
     </form>
         <div class="actions">
             <button type="button" class="btn green btn-outline" [disabled]="!form || !form.valid" (click)="onSubmitClick()">Continue</button>
