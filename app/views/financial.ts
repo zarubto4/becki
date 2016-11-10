@@ -5,7 +5,7 @@
 
 import {Component, Injector, OnInit} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
-import {IApplicableProduct, IGeneralTariff, IAdditionalPackage, IProject} from "../backend/TyrionAPI";
+import {IProduct} from "../backend/TyrionAPI";
 import {FlashMessageError} from "../services/FlashMessagesService";
 
 @Component({
@@ -14,7 +14,9 @@ import {FlashMessageError} from "../services/FlashMessagesService";
 })
 export class FinancialComponent extends BaseMainComponent implements OnInit {
 
+    products:IProduct[];
 
+    test:boolean=false;
 
     constructor(injector: Injector) {
         super(injector)
@@ -24,13 +26,26 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
         this.refresh();
     }
 
-    refresh(): void {
-
+    onProductClick():void{
+        console.log("WIP https://app.moqups.com/tomas.zaruba/HmWfwRJML2/edit/page/a4aa77b19 ")
     }
 
+    onAddProductClick():void{
+        this.router.navigate(["/productRegistration"]);
+    }
 
-
-
+    refresh(): void {
+        this.blockUI();
+        this.backendService.getAllProducts()
+            .then(products =>{
+                this.products=products;
+                this.unblockUI();
+            })
+            .catch(reason=>{
+                this.addFlashMessage(new FlashMessageError("Projects cannot be loaded.", reason));
+                this.unblockUI();
+            })
+    }
 }
 
 

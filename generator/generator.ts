@@ -80,8 +80,11 @@ var CONFIG = {
         "put:/project/shareProject/{project_id}": "shareProject",
         "put:/project/unshareProject/{project_id}": "unshareProject",
         "get:/websocket/access_token": "getWebsocketAccessToken",
+        "put:/product/activate/{product_id}": "productActivate",
+        "put:/product/deactivate/{product_id}": "productDeactivate",
+        "put:/invoice/send_remainder/{invoice_id}": "sendInvoiceRemainder",
     },
-    methodsIgnoreParts: ["coreClient", "compilation", "grid", "filter", "product", "list", "deactivateBoard", "create", "edit", "upload", "update", "all", "validate", "recovery", "connect", "disconnect"],
+    methodsIgnoreParts: ["coreClient", "compilation", "grid", "get", "filter", "list", "deactivateBoard", "create", "edit", "upload", "update", "all", "validate", "recovery", "connect", "disconnect"],
     methodsOkCodes: [200, 201],
 };
 
