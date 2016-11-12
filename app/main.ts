@@ -84,6 +84,7 @@ import {ProjectsProjectBlocksBlocksComponent} from "./views/projects-project-blo
 import {ProjectsProjectGridGridsComponent} from "./views/projects-project-grid-grids";
 import {ProjectsProjectGridGridsGridComponent} from "./views/projects-project-grid-grids-grid";
 import {FinancialComponent} from "./views/financial";
+import {FinancialProductComponent} from "./views/financial-product";
 
 //@formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -105,6 +106,9 @@ var routes: Routes = [
     {path: "profile", data: {breadName: "Profile"}, component: ProfileComponent, canActivate: [AuthGuard]},
 
     {path: "financial", data: {breadName: "Financial"}, component: FinancialComponent, canActivate: [AuthGuard]},
+    {path: "financial/Product", data: {breadName: "Product"}, component: FinancialProductComponent, canActivate: [AuthGuard]},
+
+
 
     {path: "productRegistration/:tariff", data: {breadName: "Product registration"}, component: ProductRegistrationComponent, canActivate: [AuthGuard]},
     {path: "productRegistration", data: {breadName: "Product registration"}, component: ProductRegistrationComponent, canActivate: [AuthGuard]},
@@ -212,6 +216,7 @@ var tabMenus = {
         LogoutComponent,
         DashboardComponent,
         FinancialComponent,
+        FinancialProductComponent,
         ProjectsComponent,
         ProjectsProjectComponent,
         ProjectsProjectHardwareComponent,

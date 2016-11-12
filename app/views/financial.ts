@@ -1,3 +1,7 @@
+/*
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
+ */
 /**
  * Created by dominik.krisztof on 02.11.16.
  */
@@ -27,7 +31,7 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
     }
 
     onProductClick():void{
-        console.log("WIP https://app.moqups.com/tomas.zaruba/HmWfwRJML2/edit/page/a4aa77b19 ")
+        this.router.navigate(["/financial/Product"])
     }
 
     onAddProductClick():void{
