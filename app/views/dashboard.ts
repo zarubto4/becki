@@ -4,8 +4,6 @@
 
 import {Component, Injector, OnInit} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
-import {IApplicableProduct, IGeneralTariff, IAdditionalPackage, IProject} from "../backend/TyrionAPI";
-import {FlashMessageError} from "../services/FlashMessagesService";
 
 @Component({
     selector: "view-dashboard",

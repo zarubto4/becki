@@ -101,6 +101,7 @@
         </div>
         <!-- END HEADER INNER -->
     </div>
+    <flash-messages-component></flash-messages-component>
     <!-- END HEADER -->
     <div class="page-container">
 
@@ -162,7 +163,6 @@
 
                     <div [class.tab-content]="tabMenuItems">
                         <div class="active" [class.tab-pane]="tabMenuItems">
-                            <flash-messages-component></flash-messages-component>
                             <ng-content></ng-content>
                         </div>
                     </div>

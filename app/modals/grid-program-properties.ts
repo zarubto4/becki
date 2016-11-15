@@ -11,12 +11,11 @@ import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
 import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 import {BackendService} from "../services/BackendService";
 import {ModalModel} from "../services/ModalService";
-import {IScreenSizeTypeCombination} from "../backend/TyrionAPI";
 import {beckiFormSelectOptionsMaker, BeckiFormSelectOption} from "../components/BeckiFormSelect";
 
 
 export class ModalsGridProgramPropertiesModel extends ModalModel {
-    constructor(public screenTypes: IScreenSizeTypeCombination, public name: string = "", public description: string = "", public screenTypeId: string = "", public edit: boolean = false, public exceptName: string = null) {
+    constructor(public name: string = "", public description: string = "", public edit: boolean = false, public exceptName: string = null) {
         super();
     }
 }
@@ -35,33 +34,22 @@ export class ModalsGridProgramPropertiesComponent implements OnInit {
 
     form: FormGroup;
 
-    options: BeckiFormSelectOption[] = [];
-
     constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
             "name": ["", [Validators.required, Validators.minLength(4)]],
-            "description": [""],
-            "screenTypeId": ["", [Validators.required]],
+            "description": [""]
         });
     }
 
     ngOnInit() {
-
-        var optionsPrivate = beckiFormSelectOptionsMaker(this.modalModel.screenTypes.private_types, "id", "name");
-        var optionsPublic = beckiFormSelectOptionsMaker(this.modalModel.screenTypes.public_types, "id", "name");
-
-        this.options = optionsPrivate.concat(optionsPublic);
-
         (<FormControl>(this.form.controls["name"])).setValue(this.modalModel.name);
         (<FormControl>(this.form.controls["description"])).setValue(this.modalModel.description);
-        (<FormControl>(this.form.controls["screenTypeId"])).setValue(this.modalModel.screenTypeId);
     }
 
     onSubmitClick(): void {
         this.modalModel.name = this.form.controls["name"].value;
         this.modalModel.description = this.form.controls["description"].value;
-        this.modalModel.screenTypeId = this.form.controls["screenTypeId"].value;
         this.modalClose.emit(true);
     }
 

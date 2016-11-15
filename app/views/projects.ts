@@ -5,10 +5,13 @@
 
 import {Component, OnInit, Injector} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
-import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
+import {
+    FlashMessageError, FlashMessageSuccess, FlashMessageDanger,
+    FlashMessageInfo, FlashMessageWarning, FlashMessage
+} from "../services/FlashMessagesService";
 import {ModalsRemovalModel} from "../modals/removal";
 import {ModalsProjectPropertiesModel} from "../modals/project-properties";
-import {IApplicableProduct, IProject} from "../backend/TyrionAPI";
+import {IProject, IProductsAllApplicable, IProductDetail} from "../backend/TyrionAPI";
 
 
 @Component({
@@ -23,7 +26,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
 
     projects: IProject[];
 
-    products: IApplicableProduct[];
+    products: IProductDetail[];
 
     ngOnInit(): void {
         this.refresh();
@@ -31,10 +34,10 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
 
     refresh(): void {
         this.blockUI();
-        Promise.all<any>([this.backendService.getAllProjects(), this.backendService.getAllTarifsUserApplicables()])
-            .then((values:[IProject[], IApplicableProduct[]]) => {
+        Promise.all<any>([this.backendService.getAllProjects(), this.backendService.getAllProductUserApplicables()])
+            .then((values:[IProject[], IProductsAllApplicable]) => {
                 this.projects = values[0];
-                this.products = values[1];
+                this.products = values[1].list;
                 this.unblockUI();
             })
             .catch((reason) => {
@@ -53,6 +56,25 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
         setTimeout(() => {
             this.blockUIService.unblockUI();
         }, 5000);
+    }
+
+    onTest2Click(): void {
+        var text = "";
+        switch (Math.floor(Math.random()*4)) {
+            case 0: text = "This is test flash message ... is this okay or its worng?"; break;
+            case 1: text = "Cannot add project now."; break;
+            case 2: text = "Project created successfully ... its great ... I love it <3 :-)"; break;
+            case 3: text = "Some really really long message. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."; break;
+        }
+        var m:FlashMessage = null;
+        switch (Math.floor(Math.random()*4)) {
+            case 0: m = new FlashMessageDanger(text); break;
+            case 1: m = new FlashMessageSuccess(text); break;
+            case 2: m = new FlashMessageInfo(text); break;
+            case 3: m = new FlashMessageWarning(text); break;
+        }
+        this.flashMessagesService.addFlashMessage(m);
+        //this.navigate(["projects", "1"]);
     }
 
     onAddClick(): void {

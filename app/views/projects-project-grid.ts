@@ -7,9 +7,8 @@ import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
 import {Subscription} from "rxjs/Rx";
 import {ModalsRemovalModel} from "../modals/removal";
-import {IProject, IMProgram, IMProject, IScreenSizeTypeCombination} from "../backend/TyrionAPI";
+import {IProject, IMProject} from "../backend/TyrionAPI";
 import {ModalsGridProjectPropertiesModel} from "../modals/grid-project-properties";
-import {ModalsGridProgramPropertiesModel} from "../modals/grid-program-properties";
 
 @Component({
     selector: "view-projects-project-grid",

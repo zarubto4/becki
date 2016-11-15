@@ -7,10 +7,14 @@ import {BugFoundError, PermissionMissingError, UnauthorizedError} from "../backe
 
 export abstract class FlashMessage {
 
+    onTopTimeout: any = null;
     visited: boolean = false;
-    visitedTimeout: any = null;
 
     htmlBody: boolean = false;
+
+    isTop: boolean = false;
+    open: boolean = false;
+    flashMessagesService:FlashMessagesService = null;
 
     constructor(public type: string, public icon: string, public body: string, reason?: Object, htmlBody?: boolean) {
         if (htmlBody) {
@@ -32,20 +36,32 @@ export abstract class FlashMessage {
         }
     }
 
-    visitStop(): void {
-        if (this.visitedTimeout) {
-            clearTimeout(this.visitedTimeout);
-            this.visitedTimeout = null;
+    visit(): void {
+        if (this.visited) return;
+        this.visited = true;
+        setTimeout(() => {
+            this.open = true;
+        }, 5);
+    }
+
+    unsetTop(): void {
+        if (this.onTopTimeout) {
+            clearTimeout(this.onTopTimeout);
         }
     }
 
-    visit(): void {
-        if (this.visited || this.visitedTimeout) return;
-        this.visitedTimeout = setTimeout(() => {
-            this.visitedTimeout = null;
-            this.visited = true;
-        }, 1000);
-        // after 1s of message on screen (called visit() and don't interrupted by visitStop()) we set visited to true
+    setTop(): void {
+        this.onTopTimeout = setTimeout(() => {
+            this.close()
+        }, 5000);
+    }
+
+    close(): void {
+        this.open = false;
+        setTimeout(() => {
+            if (this.flashMessagesService) this.flashMessagesService.removeFlashMessage(this);
+            this.flashMessagesService = null;
+        }, 500);
     }
 }
 
@@ -89,7 +105,12 @@ export class FlashMessagesService {
     }
 
     addFlashMessage(fm: FlashMessage): void {
+        this.messages.forEach((m) => {
+            m.unsetTop();
+        });
+        fm.flashMessagesService = this;
         this.messages.push(fm);
+        fm.setTop();
     }
 
     // remove message (called on click on close btn in FlashMessagesComponent)
@@ -98,19 +119,8 @@ export class FlashMessagesService {
         if (index > -1) {
             this.messages.splice(index, 1);
         }
-    }
-
-    // stop visiting all messages (called on destroy of FlashMessagesComponent)
-    visitStop(): void {
-        this.messages.forEach((fm: FlashMessage) => {
-            fm.visitStop();
-        })
-    }
-
-    // remove all visited messages (called on destroy of FlashMessagesComponent)
-    flushVisited(): void {
-        this.messages = this.messages.filter((fm: FlashMessage) => {
-            return !fm.visited;
-        });
+        if (this.messages.length) {
+            this.messages[this.messages.length - 1].setTop();
+        }
     }
 }

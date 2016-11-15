@@ -809,13 +809,13 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
         Promise.all<any>([
             this.backendService.getAllTypeOfBlocks(),
-            this.backendService.getAllMProjectPersons(),
-            this.backendService.getAllBoardDetails(this.projectId)
+            this.backendService.getAllBlockoDetails(this.projectId)
         ])
-            .then((values:[ITypeOfBlock[], IMProject[], IBoardsForBlocko]) => {
+            .then((values:[ITypeOfBlock[], IBoardsForBlocko]) => {
                 var typeOfBlocks:ITypeOfBlock[] = values[0];
-                var projects:IMProject[] = values[1];
-                var allBoardsDetails:IBoardsForBlocko = values[2];
+                var blockoDetails:IBoardsForBlocko = values[1];
+
+                var projects:IMProject[] = blockoDetails.m_projects;
 
                 // TODO: make this better viz. TYRION-374
                 this.blocksLastVersions = {};
@@ -853,9 +853,9 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 console.log(projects);
                 this.allGridProjects = projects;
 
-                this.allBoardsDetails = allBoardsDetails;
+                this.allBoardsDetails = blockoDetails;
 
-                console.log(allBoardsDetails);
+                console.log(blockoDetails);
 
                 this.boardById = {};
                 this.allBoardsDetails.boards.forEach((board) => {

@@ -1049,3 +1049,73 @@ table .no-wrap {
         width: 80%;
     }
 }
+
+/* flash messages */
+
+.flash-message {
+    position: fixed;
+    width: 60%;
+    top: 50px;
+    left: 20%;
+    opacity: 0.9;
+    z-index: 9990;
+    color: white;
+    min-height: 60px;
+    transform: translateY(-100%);
+    transition: transform 0.5s;
+}
+
+.flash-message.open {
+    transform: translateY(0);
+}
+
+.flash-message .fm-icon {
+    font-size: 40px;
+    line-height: 40px;
+    width: 40px;
+    margin: 10px;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.flash-message .fm-text {
+    vertical-align: top;
+    margin: 20px;
+    display: inline-block;
+    margin-left: 60px;
+    font-size: 15px;
+}
+
+.flash-message .fm-close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    border: none;
+    background-color: transparent;
+    color: white;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+}
+
+.flash-message .fm-close .fa {
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    vertical-align: initial;
+}
+
+.flash-message.fm-warning {
+    background-color: #c29d0b;
+}
+.flash-message.fm-danger {
+    background-color: #e73d4a;
+}
+.flash-message.fm-info {
+    background-color: #327ad5;
+}
+.flash-message.fm-success {
+    background-color: #27a4b0;
+}

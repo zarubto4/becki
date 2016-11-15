@@ -9,11 +9,11 @@ import {BeckiAsyncValidators} from "../helpers/BeckiAsyncValidators";
 import {BackendService} from "../services/BackendService";
 import {ModalModel} from "../services/ModalService";
 import {BeckiFormSelectOption, beckiFormSelectOptionsMaker} from "../components/BeckiFormSelect";
-import {IApplicableProduct} from "../backend/TyrionAPI";
+import {IProductDetail} from "../backend/TyrionAPI";
 
 
 export class ModalsProjectPropertiesModel extends ModalModel {
-    constructor(public products: IApplicableProduct[], public name: string = "", public description: string = "", public product: string = "", public edit: boolean = false, public exceptName: string = null) {
+    constructor(public products: IProductDetail[], public name: string = "", public description: string = "", public product: string = "", public edit: boolean = false, public exceptName: string = null) {
         super();
     }
 }

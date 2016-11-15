@@ -8,26 +8,21 @@ import {FlashMessagesService, FlashMessage} from "../services/FlashMessagesServi
 @Component({
     selector: "flash-messages-component",
     template: `
-<div class="alert alert-{{flashMessage.type}} alert-dismissable {{flashMessage.visit()}}" *ngFor="let flashMessage of flashMessagesService.messages">
-    <i class="fa fa-{{flashMessage.icon}}"></i>
-    <button type="button" class="close" (click)="onCloseClick(flashMessage, $event)"></button>
-    <span *ngIf="flashMessage.htmlBody" [innerHTML]="flashMessage.body"></span>
-    <span *ngIf="!flashMessage.htmlBody">{{flashMessage.body}}</span>
+<div class="flash-message fm-{{flashMessage.type}} {{flashMessage.visit()}}" *ngFor="let flashMessage of flashMessagesService.messages" [class.open]="flashMessage.open">
+    <i class="fm-icon fa fa-{{flashMessage.icon}}"></i>
+    <button type="button" class="fm-close" (click)="onCloseClick(flashMessage, $event)"><i class="fa fa-close"></i></button>
+    <span class="fm-text" *ngIf="flashMessage.htmlBody" [innerHTML]="flashMessage.body"></span>
+    <span class="fm-text" *ngIf="!flashMessage.htmlBody">{{flashMessage.body}}</span>
 </div>
 `
 })
-export class FlashMessagesComponent implements OnDestroy {
+export class FlashMessagesComponent {
 
     constructor(protected flashMessagesService: FlashMessagesService) {
     }
 
     onCloseClick(fm: FlashMessage) {
-        this.flashMessagesService.removeFlashMessage(fm);
-    }
-
-    ngOnDestroy(): void {
-        this.flashMessagesService.visitStop();
-        this.flashMessagesService.flushVisited();
+        fm.close();
     }
 
 }

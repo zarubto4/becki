@@ -7,8 +7,7 @@ import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
 import {Subscription} from "rxjs/Rx";
 import {ModalsRemovalModel} from "../modals/removal";
-import {IProject, IMProgram, IMProject, IScreenSizeTypeCombination} from "../backend/TyrionAPI";
-import {ModalsGridProjectPropertiesModel} from "../modals/grid-project-properties";
+import {IProject, IMProgram, IMProject} from "../backend/TyrionAPI";
 import {ModalsGridProgramPropertiesModel} from "../modals/grid-program-properties";
 
 @Component({
@@ -25,8 +24,6 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
     //project: IProject = null;
 
     gridProject: IMProject = null;
-
-    screenTypes: IScreenSizeTypeCombination = null;
 
     constructor(injector: Injector) {
         super(injector)
@@ -50,14 +47,11 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
             .then((gridProject) => {
                 console.log(gridProject);
                 this.gridProject = gridProject;
-                return this.backendService.getAllScreenTypes();
-            })
-            .then((st) => {
-                this.screenTypes = st;
                 this.unblockUI();
             })
             .catch(reason => {
                 this.addFlashMessage(new FlashMessageError(`The project ${this.id} cannot be loaded.`, reason));
+                this.unblockUI();
             });
 
     }
@@ -66,34 +60,15 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
         this.navigate(["/projects", this.currentParamsService.get("project"), "grid", this.gridsId, grid.id]);
     }
 
-    getScreenTypeName(screenTypeId: string): string {
-        if (this.screenTypes && this.screenTypes.private_types) {
-            var screen = this.screenTypes.private_types.find((t)=>t.id == screenTypeId);
-            if (screen) {
-                return screen.name;
-            }
-        }
-        if (this.screenTypes && this.screenTypes.public_types) {
-            var screen = this.screenTypes.public_types.find((t)=>t.id == screenTypeId);
-            if (screen) {
-                return screen.name;
-            }
-        }
-        return "";
-    }
-
     onProgramAddClick(project: IMProject): void {
-        if (!this.screenTypes) return;
-
-        var model = new ModalsGridProgramPropertiesModel(this.screenTypes);
+        var model = new ModalsGridProgramPropertiesModel();
 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.backendService.createMProgram(project.id, {
                     name: model.name,
-                    description: model.description,
-                    screen_size_type_id: model.screenTypeId
+                    description: model.description
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid program has been added."));
@@ -108,9 +83,7 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
     }
 
     onProgramEditClick(program: IMProgram): void {
-        if (!this.screenTypes) return;
-
-        var model = new ModalsGridProgramPropertiesModel(this.screenTypes, program.name, program.description, program.screen_size_type_id, true);
+        var model = new ModalsGridProgramPropertiesModel(program.name, program.description, true);
 
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -118,7 +91,6 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
                 this.backendService.editMProgram(program.id, {
                     name: model.name,
                     description: model.description,
-                    screen_size_type_id: model.screenTypeId
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid program has been edited."));
