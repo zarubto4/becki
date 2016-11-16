@@ -51,6 +51,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     advancedMode: boolean = false;
 
+    connectionsTab:string = "hardware";
+
     // blocko blocks:
 
     blockGroups: ITypeOfBlock[] = null;
