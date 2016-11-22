@@ -8,7 +8,7 @@ import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
 import {ModalsRemovalModel} from "../modals/removal";
 import {ModalsProjectPropertiesModel} from "../modals/project-properties";
-import {IApplicableProduct, IProject} from "../backend/TyrionAPI";
+import {IProject, IProductsAllApplicable, IProductDetail} from "../backend/TyrionAPI";
 
 
 @Component({
@@ -23,7 +23,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
 
     projects: IProject[];
 
-    products: IApplicableProduct[];
+    products: IProductsAllApplicable;
 
     ngOnInit(): void {
         this.refresh();
@@ -31,8 +31,8 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
 
     refresh(): void {
         this.blockUI();
-        Promise.all<any>([this.backendService.getAllProjects(), this.backendService.getAllTarifsUserApplicables()])
-            .then((values:[IProject[], IApplicableProduct[]]) => {
+        Promise.all<any>([this.backendService.getAllProjects(), this.backendService.getAllProductUserApplicables()])
+            .then((values:[IProject[], IProductsAllApplicable]) => {
                 this.projects = values[0];
                 this.products = values[1];
                 this.unblockUI();
@@ -58,7 +58,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
     onAddClick(): void {
         if (!this.products) this.addFlashMessage(new FlashMessageError("Cannot add project now."));
 
-        var model = new ModalsProjectPropertiesModel(this.products);
+        var model = new ModalsProjectPropertiesModel(this.products.list);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
@@ -82,7 +82,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
     onEditClick(project: IProject): void {
         if (!this.products) this.addFlashMessage(new FlashMessageError("Cannot add project now."));
 
-        var model = new ModalsProjectPropertiesModel(this.products, project.name, project.description, "" + project.product_id, true, project.name);
+        var model = new ModalsProjectPropertiesModel(this.products.list, project.name, project.description, "" + project.product_id, true, project.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();

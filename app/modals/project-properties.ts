@@ -9,11 +9,11 @@ import {BeckiAsyncValidators} from "../helpers/BeckiAsyncValidators";
 import {BackendService} from "../services/BackendService";
 import {ModalModel} from "../services/ModalService";
 import {BeckiFormSelectOption, beckiFormSelectOptionsMaker} from "../components/BeckiFormSelect";
-import {IProductsAllApplicable} from "../backend/TyrionAPI";
+import {IProductsAllApplicable, IProductDetail} from "../backend/TyrionAPI";
 
 
 export class ModalsProjectPropertiesModel extends ModalModel {
-    constructor(public products: IProductsAllApplicable[], public name: string = "", public description: string = "", public product: string = "", public edit: boolean = false, public exceptName: string = null) {
+    constructor(public products: IProductDetail[], public name: string = "", public description: string = "", public product: string = "", public edit: boolean = false, public exceptName: string = null) {
         super();
     }
 }
@@ -34,6 +34,7 @@ export class ModalsProjectPropertiesComponent implements OnInit {
 
     form: FormGroup;
 
+
     constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
         this.form = this.formBuilder.group({
             "name": ["", [Validators.required, Validators.minLength(4)], BeckiAsyncValidators.ifValidator((value) => {
@@ -45,7 +46,7 @@ export class ModalsProjectPropertiesComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.options = beckiFormSelectOptionsMaker(this.modalModel.products, "product_id", "product_individual_name"); //TODO vypsat do závorky o který product type se jedná? něco jako  product_individual_name+(product_type)?
+        this.options = beckiFormSelectOptionsMaker(this.modalModel.products, "id", "product_individual_name"); //TODO vypsat do závorky o který product type se jedná? něco jako  product_individual_name+(product_type)?
         (<FormControl>(this.form.controls["name"])).setValue(this.modalModel.name);
         (<FormControl>(this.form.controls["description"])).setValue(this.modalModel.description);
         (<FormControl>(this.form.controls["product"])).setValue(this.modalModel.product);
