@@ -6,11 +6,11 @@
 import {Router, ActivatedRoute} from "@angular/router";
 import {BackendService} from "../services/BackendService";
 import {ModalService} from "../services/ModalService";
-import {FlashMessagesService, FlashMessage} from "../services/FlashMessagesService";
 import {Injector} from "@angular/core";
 import {FormBuilder} from "@angular/forms";
 import {CurrentParamsService} from "../services/CurrentParamsService";
 import {BlockUIService} from "../services/BlockUIService";
+import {NotificationService, FlashMessage} from "../services/NotificationService";
 
 export abstract class BaseMainComponent {
 
@@ -18,7 +18,7 @@ export abstract class BaseMainComponent {
     protected router: Router = null;
     protected activatedRoute: ActivatedRoute = null;
     protected modalService: ModalService = null;
-    protected flashMessagesService: FlashMessagesService = null;
+    protected notificationService: NotificationService = null;
     protected formBuilder: FormBuilder = null;
     protected currentParamsService: CurrentParamsService = null;
     protected blockUIService: BlockUIService = null;
@@ -30,7 +30,7 @@ export abstract class BaseMainComponent {
             this.router = injector.get(Router);
             this.activatedRoute = injector.get(ActivatedRoute);
             this.modalService = injector.get(ModalService);
-            this.flashMessagesService = injector.get(FlashMessagesService);
+            this.notificationService = injector.get(NotificationService);
             this.formBuilder = injector.get(FormBuilder);
             this.currentParamsService = injector.get(CurrentParamsService);
             this.blockUIService = injector.get(BlockUIService);
@@ -40,7 +40,7 @@ export abstract class BaseMainComponent {
     }
 
     protected addFlashMessage(fm: FlashMessage): void {
-        this.flashMessagesService.addFlashMessage(fm);
+        this.notificationService.addFlashMessage(fm);
     }
 
     protected navigate(link: any[]): void {

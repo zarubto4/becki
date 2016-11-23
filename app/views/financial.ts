@@ -6,7 +6,7 @@
 import {Component, Injector, OnInit} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {IProduct} from "../backend/TyrionAPI";
-import {FlashMessageError} from "../services/FlashMessagesService";
+import {FlashMessageError} from "../services/NotificationService";
 
 @Component({
     selector: "view-financial",

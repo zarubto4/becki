@@ -9,7 +9,7 @@
 
 import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
-import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
+import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationService";
 import {Subscription} from "rxjs/Rx";
 import {ModalsAddHardwareModel} from "../modals/add-hardware";
 import {ModalsRemovalModel} from "../modals/removal";

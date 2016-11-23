@@ -4,7 +4,7 @@
 
 import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
-import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
+import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationService";
 import {Subscription} from "rxjs/Rx";
 import {CodeFile} from "../components/CodeIDE";
 import {ModalsConfirmModel} from "../modals/confirm";
@@ -186,11 +186,11 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     user_files: userFiles
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess("Version <b>" + m.name + "</b> saved successfully.", null, true));
+                        this.addFlashMessage(new FlashMessageSuccess("Version <b>" + m.name + "</b> saved successfully."));
                         this.refresh();
                     })
                     .catch((err) => {
-                        this.addFlashMessage(new FlashMessageError("Failed saving version <b>" + m.name + "</b>", err, true));
+                        this.addFlashMessage(new FlashMessageError("Failed saving version <b>" + m.name + "</b>", err));
                     });
             }
         });
@@ -226,7 +226,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             .then((success)=> {
                 this.buildInProgress = false;
                 console.log(success);
-                this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("Build successfully."));
+                this.addFlashMessage(new FlashMessageSuccess("Build successfully."));
             })
             .catch((error) => {
                 this.buildInProgress = false;
@@ -255,7 +255,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     });
 
                 } else {
-                    this.flashMessagesService.addFlashMessage(new FlashMessageError(error.toString()));
+                    this.addFlashMessage(new FlashMessageError(error.toString()));
                 }
             });
     }

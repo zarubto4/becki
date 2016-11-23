@@ -4,7 +4,7 @@
 
 import {Component, OnInit, Injector, OnDestroy, ViewChild} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
-import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
+import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationService";
 import {Subscription} from "rxjs/Rx";
 import {
     IProject,
@@ -637,11 +637,11 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     this.blockUI();
                     this.backendService.uploadBProgramToCloud(programVersion.version_object.id, {}) //TODO: timestamp
                         .then((ok)=> {
-                            this.addFlashMessage(new FlashMessageSuccess("Run Blocko version <b>" + programVersion.version_object.version_name + "</b> successfully.", null, true));
+                            this.addFlashMessage(new FlashMessageSuccess("Run Blocko version <b>" + programVersion.version_object.version_name + "</b> successfully."));
                             this.unblockUI();
                         })
                         .catch((err)=> {
-                            this.addFlashMessage(new FlashMessageError("Run Blocko version <b>" + programVersion.version_object.version_name + "</b> failed.", err, true));
+                            this.addFlashMessage(new FlashMessageError("Run Blocko version <b>" + programVersion.version_object.version_name + "</b> failed.", err));
                             this.unblockUI();
                         })
                 }
@@ -742,11 +742,11 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     program: this.blockoView.getDataJson()
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess("Version <b>" + m.name + "</b> saved successfully.", null, true));
+                        this.addFlashMessage(new FlashMessageSuccess("Version <b>" + m.name + "</b> saved successfully."));
                         this.refresh(); // also unblockUI
                     })
                     .catch((err) => {
-                        this.addFlashMessage(new FlashMessageError("Failed saving version <b>" + m.name + "</b>", err, true));
+                        this.addFlashMessage(new FlashMessageError("Failed saving version <b>" + m.name + "</b>", err));
                         this.unblockUI();
                     });
             }

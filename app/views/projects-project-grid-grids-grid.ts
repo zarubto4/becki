@@ -4,7 +4,7 @@
 
 import {Component, OnInit, Injector, OnDestroy, ViewChild} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
-import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
+import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationService";
 import {Subscription} from "rxjs/Rx";
 import {IProject, IMProgram, IMProgramVersion, IMProject} from "../backend/TyrionAPI";
 import {GridView} from "../components/GridView";
@@ -136,11 +136,11 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                     virtual_input_output: this.gridView.getInterfaceJson()
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess("Version <b>" + m.name + "</b> saved successfully.", null, true));
+                        this.addFlashMessage(new FlashMessageSuccess("Version <b>" + m.name + "</b> saved successfully."));
                         this.refresh(); // also unblockUI
                     })
                     .catch((err) => {
-                        this.addFlashMessage(new FlashMessageError("Failed saving version <b>" + m.name + "</b>", err, true));
+                        this.addFlashMessage(new FlashMessageError("Failed saving version <b>" + m.name + "</b>", err));
                         this.unblockUI();
                     });
             }

@@ -6,9 +6,9 @@
 import {Component, OnInit, Injector} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {
-    FlashMessageError, FlashMessageSuccess, FlashMessageDanger,
+    FlashMessageError, FlashMessageSuccess,
     FlashMessageInfo, FlashMessageWarning, FlashMessage
-} from "../services/FlashMessagesService";
+} from "../services/NotificationService";
 import {ModalsRemovalModel} from "../modals/removal";
 import {ModalsProjectPropertiesModel} from "../modals/project-properties";
 import {IProject, IProductsAllApplicable, IProductDetail} from "../backend/TyrionAPI";
@@ -68,12 +68,12 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
         }
         var m:FlashMessage = null;
         switch (Math.floor(Math.random()*4)) {
-            case 0: m = new FlashMessageDanger(text); break;
+            case 0: m = new FlashMessageError(text); break;
             case 1: m = new FlashMessageSuccess(text); break;
             case 2: m = new FlashMessageInfo(text); break;
             case 3: m = new FlashMessageWarning(text); break;
         }
-        this.flashMessagesService.addFlashMessage(m);
+        this.notificationService.addFlashMessage(m);
         //this.navigate(["projects", "1"]);
     }
 
@@ -110,8 +110,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
                 this.blockUI();
                 this.backendService.editProject(project.id, {
                     project_name: model.name,
-                    project_description: model.description,
-                    product_id: parseInt(model.product)
+                    project_description: model.description
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The project has been updated."));

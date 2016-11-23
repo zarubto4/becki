@@ -4,7 +4,7 @@
 
 import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
-import {FlashMessageError} from "../services/FlashMessagesService";
+import {FlashMessageError} from "../services/NotificationService";
 import {Subscription} from "rxjs/Rx";
 import {IProject} from "../backend/TyrionAPI";
 

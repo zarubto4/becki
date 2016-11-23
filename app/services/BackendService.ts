@@ -4,7 +4,7 @@
 
 import "rxjs/add/operator/catch";
 import "rxjs/add/operator/map";
-import {FlashMessagesService, FlashMessageError} from "./FlashMessagesService";
+import {NotificationService, FlashMessageError} from "./NotificationService";
 import {Injectable} from "@angular/core";
 import {Http, RequestOptionsArgs, Headers, Response} from "@angular/http";
 import {Router} from "@angular/router";
@@ -17,10 +17,9 @@ export class BackendService extends BeckiBackend {
 
     public gravatarIcon: string = "";
 
-    constructor(protected http: Http, protected router: Router, protected flashMessagesService: FlashMessagesService) {
+    constructor(protected http: Http, protected router: Router) {
         super();
         console.log("BackendService init");
-        this.webSocketErrorOccurred.subscribe(error => flashMessagesService.addFlashMessage(new FlashMessageError("Communication with the back end have failed.", error)));
         this.personInfo.subscribe(pi => {
             if (pi) {
                 var email = this.personInfoSnapshot.mail || "";

@@ -25,47 +25,27 @@
                         <a><i class="fa fa-spinner fa-spin"></i></a>
                     </li>
                     <!-- BEGIN NOTIFICATION DROPDOWN -->
-                    <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
+                    <li class="dropdown dropdown-extended dropdown-notification">
                         <a class="dropdown-toggle" (click)="onNotificationToggleClick($event)">
                             <i class="icon-bell"></i>
-                            <span class="badge badge-default" *ngIf="notificationsService.countUnreadNotifications()">{{notificationsService.countUnreadNotifications()}}</span>
+                            <span class="badge badge-default" *ngIf="notificationService.unreadNotificationsCount">{{notificationService.unreadNotificationsCount}}</span>
                         </a>
-                        <ul class="dropdown-menu" [style.display]="showNotificationMenu?'block':'none'">
+                        <ul class="dropdown-menu toolbar-notification-menu" [style.display]="showNotificationMenu?'block':'none'">
                             <li class="external">
                                 <h3>
-                                    <span class="bold">{{notificationsService.countUnreadNotifications()}} pending</span> notifications</h3>
+                                    <span class="bold">{{notificationService.unreadNotificationsCount}} unread</span> notifications</h3>
                                 <a [routerLink]="['/notifications']">view all</a>
                             </li>
-                            <ul class="dropdown-menu-list scroller">
-                                <li *ngFor="let note of notificationsService.menuNotifications">
-
-                                    <a>
-                                        <span class="time">{{note._relativeTime}}</span>
-                                        <span class="details">
-                                            <span class="label label-sm label-icon label-{{note.type}}">
-                                                <i class="fa fa-{{note.icon}}"></i>
-                                            </span>
-                                            <span [innerHTML]="note.body" style=""></span>
-                                        </span>
-                                    </a>
-
+                            <ul class="dropdown-menu-list notification-list n-list-scrolling">
+                                <li *ngFor="let notification of notificationService.toolbarNotifications" class="notification n-{{notification.type}}" [class.n-unread]="!notification.wasRead">
+                                    <i class="n-icon fa fa-{{notification.icon}}"></i>
+                                    <span class="n-text" *ngIf="notification.htmlBody" [innerHTML]="notification.htmlBody"></span>
+                                    <span class="n-text" *ngIf="notification.elementsBody"><template ngFor let-element="$implicit" [ngForOf]="notification.elementsBody"><span *ngIf="element.type == 'text'" [class.n-bold]="element.bold" [class.n-italic]="element.italic" [class.n-underline]="element.underline">{{element.text}}</span><a *ngIf="element.type == 'object'" (click)="onObjectClick(notification, element)" [class.n-bold]="element.bold" [class.n-italic]="element.italic" [class.n-underline]="element.underline">{{element.text}}</a><a *ngIf="element.type == 'link'" [href]="element.url" target="_blank" [class.n-bold]="element.bold" [class.n-italic]="element.italic" [class.n-underline]="element.underline">{{element.text}}</a></template></span>
+                                    <span class="n-time">{{notification.relativeTime}}</span>
+                                    <div class="clearfix"></div>
                                 </li>
+                                <li *ngIf="notificationService.toolbarNotifications.length == 0" class="no-notifications"> No notifications </li>
                             </ul>
-<!--
-                            <li>
-                                <ul class="dropdown-menu-list scroller" style="height: 250px;">
-                                    <li>
-                                        <a href="#">
-                                      <span class="label label-sm label-icon label-success">
-                                      <i class="fa fa-plus"></i>
-                                      </span>
-                                            New user registered. <span class="time">
-                                      Just now </span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
--->
                         </ul>
                     </li>
                     <!-- END NOTIFICATION DROPDOWN -->
@@ -79,11 +59,6 @@
                             <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu" [style.display]="showUserMenu?'block':'none'">
-                            <li>
-                                <a [routerLink]="['/connections']"><i class="icon-link"></i> Connections</a>
-                            </li>
-                            <li class="divider">
-                            </li>
                             <li>
                                 <a [routerLink]="['/profile']"><i class="icon-settings"></i> Profile</a>
                             </li>
@@ -101,7 +76,7 @@
         </div>
         <!-- END HEADER INNER -->
     </div>
-    <flash-messages-component></flash-messages-component>
+    <notifications-overlay-component></notifications-overlay-component>
     <!-- END HEADER -->
     <div class="page-container">
 
@@ -124,7 +99,6 @@
             </div>
         </div>
         <!-- END SIDEBAR -->
-
 
         <div class="page-content-wrapper">
             <!-- BEGIN CONTENT BODY -->
@@ -173,53 +147,6 @@
             <!-- END CONTENT BODY -->
         </div>
 
-
-        <!--div class="nav-pf-vertical nav-pf-vertical-with-secondary-nav" data-bind-class.collapsed="navbarState == 'collapsed'" data-bind-class.hidden="navbarState == 'hidden'" data-bind-class.show-mobile-nav="navbarState == 'visible'">
-          <ul class="list-group">
-            <li class="list-group-item" routerLinkActive="active" template="ngFor let page of navigation">
-              <a data-bind-routerLink="page.link">
-                <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
-                <span class="list-group-item-value">{{page.label}}</span>
-              </a>
-            </li>
-            <li class="list-group-item list-group-item-separator hidden-sm hidden-md hidden-lg" routerLinkActive="active">
-              <a data-bind-routerLink="connections">
-                <span class="fa fa-sign-in" title="Connections"></span>
-                <span class="list-group-item-value">Connections</span>
-              </a>
-            </li>
-            <li class="list-group-item hidden-sm hidden-md hidden-lg">
-              <a data-on-click="onSignOutClick($event)" style="cursor: pointer">
-                <span class="fa fa-sign-out" title="Sign Out"></span>
-                <span class="list-group-item-value">Sign Out</span>
-              </a>
-            </li>
-          </ul>
-        </div-->
-
-        <!--div class="container-fluid container-pf-nav-pf-vertical container-pf-nav-pf-vertical-with-secondary" data-bind-class.collapsed-nav="navbarState == 'collapsed'" data-bind-class.hidden-nav="['hidden', 'visible'].indexOf(navbarState) != -1">
-          <div class="row">
-            <div class="col-md-12">
-              <div class="page-header">
-                <div notifications>
-                  <div class="spinner"></div>
-                </div>
-                <ol class="breadcrumb">
-                  <li template="ngFor let breadcrumb of breadcrumbs">
-                    <a data-bind-routerLink="breadcrumb.link">{{breadcrumb.label}}</a>
-                  </li>
-                </ol>
-                <template data-bind-ngIf="actionLabel">
-                  <div class="pull-right">
-                    <button type="button" class="btn btn-default" data-on-click="onActionClick($event)">{{actionLabel}}</button>
-                  </div>
-                </template>
-                <h1>{{heading}}</h1>
-              </div>
-              <ng-content></ng-content>
-            </div>
-          </div>
-        </div-->
     </div>
 
     <!-- BEGIN FOOTER -->

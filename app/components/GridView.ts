@@ -43,6 +43,7 @@ export class GridView implements AfterViewInit, OnChanges {
         this.gridController.registerWidget(Widgets.ButtonWidget);
         this.gridController.registerWidget(Widgets.FAButtonWidget);
         this.gridController.registerWidget(Widgets.KnobWidget);
+        this.gridController.registerWidgetService(Widgets.TimeService);
         Core.Controller.cleanWidgetIONameCounter();
 
     }

@@ -5,7 +5,7 @@
 
 import {Component, Injector, OnInit} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
-import {NotificationService} from "../services/NotificationService";
+import {NotificationService, FlashMessageError} from "../services/NotificationService";
 import {BackendService} from "../services/BackendService";
 
 @Component({
@@ -13,31 +13,50 @@ import {BackendService} from "../services/BackendService";
     templateUrl: "app/views/notifications.html"
 })
 export class NotificationsComponent extends BaseMainComponent implements OnInit {
+    
+    loading = false;
 
-
-    page = 1;
-
-    constructor(injector: Injector, protected backendService: BackendService, protected notificationService: NotificationService) {
+    constructor(injector: Injector) {
         super(injector)
     };
 
-
     ngOnInit(): void {
-        //TODO s novým tyrionem zkontrolovat zda se všechny notifikace načítají správně
-        this.notificationService.getRestApiNotifications();
+        this.loading = true;
+        this.notificationService.getRestApiNotifications()
+            .then(() => {
+                // delayed mark as read for animation in notifications list (CSS animation)
+                setTimeout(() => {
+                    this.notificationService.markNotificationsRead(this.notificationService.notifications);
+                }, 1);
+                this.loading = false;
+            })
+            .catch((err) => {
+                this.notificationService.addFlashMessage(new FlashMessageError("Cannot load notifications", err));
+                this.loading = false;
+            });
     }
 
-    listGetOlderNotifications(): void {
-        this.page++;
-        this.notificationService.getRestApiNotifications(this.page);
+    canLoadMore(): boolean {
+        return (this.notificationService.notifications.length < this.notificationService.totalNotificationsCount);
     }
 
-    listGetNewerNotifications(): void {
-        if (this.page <= 1) {
-            this.page = 1;
-        } else {
-            this.page--;
+    onLoadOlderClick(): void {
+        if (this.notificationService.notifications.length < this.notificationService.totalNotificationsCount) {
+            var page = 1 + Math.floor(this.notificationService.notifications.length / 25); // TODO: mít někde konstantu s počtem notif na page
+
+            this.loading = true;
+            this.notificationService.getRestApiNotifications(page)
+                .then(() => {
+                    // delayed mark as read for animation in notifications list (CSS animation)
+                    setTimeout(() => {
+                        this.notificationService.markNotificationsRead(this.notificationService.notifications);
+                    }, 1);
+                    this.loading = false;
+                })
+                .catch((err) => {
+                    this.notificationService.addFlashMessage(new FlashMessageError("Cannot load notifications", err));
+                    this.loading = false;
+                });
         }
-        this.notificationService.getRestApiNotifications(this.page);
     }
 }

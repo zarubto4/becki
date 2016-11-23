@@ -3,227 +3,392 @@
  */
 import {Injectable} from "@angular/core";
 import {BackendService} from "./BackendService";
-import {INotification} from "../backend/TyrionAPI";
+import {INotification, INotificationElement} from "../backend/TyrionAPI";
 import {ModalsHighImportanceNotificationModel} from "../modals/high-importance-notification";
 import {ModalService} from "../services/ModalService";
+
 import moment = require("moment/moment");
+import {IWebSocketNotification} from "../backend/BeckiBackend";
 
 export abstract class Notification {
 
-    protected _relativeTime: string = "";
+    visited: boolean = false;
 
-    constructor(public id: string, public type: string, public icon: string, public body: string, public time: number, reason?: Object) {
+    htmlBody: string = null;
+    elementsBody: INotificationElement[] = null;
 
-        this._relativeTime = moment(this.time).startOf('minute').fromNow(false);
+    isTop: boolean = false;
+    opened: boolean = false;
+    closed: boolean = false;
+    overed: boolean = false;
+    closeTime: number = 5000;
+    notificationService:NotificationService = null;
 
+    relativeTime: string = "";
 
-        //ID potvrzení čtení notifikací
+    highImportance: boolean = false;
+    wasRead:boolean = false;
+
+    constructor(public id: string, public type: string, public icon: string, body: string|INotificationElement[], public time: number, reason?: Object) {
+        if (typeof body == "string") {
+            this.htmlBody = body;
+        } else {
+            this.elementsBody = body;
+        }
+        this.tick(0);
+    }
+
+    public static fromINotification(n:INotification):Notification {
+
+        var out:Notification = null;
+
+        switch (n.notification_level) {
+            case "info":
+                out = new NotificationInfo(n.id, n.notification_body, n.created);
+                break;
+            case "success":
+                out = new NotificationSuccess(n.id, n.notification_body, n.created);
+                break;
+            case "warning":
+                out = new NotificationWarning(n.id, n.notification_body, n.created);
+                break;
+            case "error":
+                out = new NotificationError(n.id, n.notification_body, n.created);
+                break;
+        }
+
+        if (out) {
+            if(n.notification_importance == "high") {
+                out.highImportance = true;
+            }
+            if (n.was_read) {
+                out.wasRead = n.was_read;
+            }
+        }
+
+        return out;
+    }
+
+    closeProgressWidth(): string {
+        return ((5000-this.closeTime)/50)+"%";
+    }
+
+    visit(): void {
+        if (this.visited) return;
+        this.visited = true;
+        setTimeout(() => {
+            this.opened = true;
+        }, 5);
+    }
+
+    overlayTick(tickInterval:number): void {
+        if (this.closed) return;
+        if (this.overed) return;
+        if (this.highImportance) return;
+        this.closeTime -= tickInterval;
+        if (this.closeTime <= 0) {
+            this.close();
+        }
+    }
+
+    tick(tickInterval:number): void {
+        if (!this.time) return;
+        this.relativeTime = moment(this.time).startOf('minute').fromNow(false);
+    }
+
+    over(): void {
+        this.overed = true;
+    }
+
+    out(): void {
+        this.overed = false;
+    }
+
+    close(): void {
+        if (this.closed) return;
+        this.closed = true;
+        setTimeout(() => {
+            if (this.notificationService) this.notificationService.removeOverlayNotification(this);
+            this.notificationService = null;
+        }, 500);
     }
 
 }
 
+// Remote notifications
 export class NotificationSuccess extends Notification {
-    constructor(public id: string, body: string, time: number, reason?: Object) {
-        super(id, "success", "check-circle", body, time, reason);
+    constructor(public id: string, body: INotificationElement[], time: number) {
+        super(id, "success", "check-circle", body, time);
     }
 }
 
 export class NotificationInfo extends Notification {
-    constructor(public id: string, body: string, time: number, reason?: Object) {
-        super(id, "info", "info-circle", body, time, reason);
+    constructor(public id: string, body: INotificationElement[], time: number) {
+        super(id, "info", "info-circle", body, time);
     }
 }
 
 export class NotificationWarning extends Notification {
-    constructor(public id: string, body: string, time: number, reason?: Object) {
-        super(id, "warning", "exclamation-triangle", body, time, reason);
-    }
-}
-
-export class NotificationDanger extends Notification {
-    constructor(public id: string, body: string, time: number, reason?: Object) {
-        super(id, "danger", "times-circle", body, time, reason);
+    constructor(public id: string, body: INotificationElement[], time: number) {
+        super(id, "warning", "exclamation-triangle", body, time);
     }
 }
 
 export class NotificationError extends Notification {
-    constructor(public id: string, body: string, time: number, reason?: Object) {
-        super(id, "danger", "times-circle", body, time, reason);
+    constructor(public id: string, body: INotificationElement[], time: number) {
+        super(id, "danger", "times-circle", body, time);
     }
 }
 
+// Local flash messages notifications
+export abstract class FlashMessage extends Notification {
+    constructor(public type: string, icon:string, body: string, reason: Object) {
+        super(null, type, icon, body, null, reason);
+    }
+}
+
+export class FlashMessageSuccess extends FlashMessage {
+    constructor(body: string, reason?: Object) {
+        super("success", "check-circle", body, reason);
+    }
+}
+
+export class FlashMessageInfo extends FlashMessage {
+    constructor(body: string, reason?: Object) {
+        super("info", "info-circle", body, reason);
+    }
+}
+
+export class FlashMessageWarning extends FlashMessage {
+    constructor(body: string, reason?: Object) {
+        super("warning", "exclamation-triangle", body, reason);
+    }
+}
+
+export class FlashMessageError extends FlashMessage {
+    constructor(body: string, reason?: Object) {
+        super("danger", "times-circle", body, reason);
+    }
+}
 
 @Injectable()
 export class NotificationService {
 
     public notifications: Notification[] = [];
 
-    public menuNotifications: Notification[] = [];
+    public toolbarNotifications: Notification[] = []; //toolbar
 
-    public unreadedNotifications: number = 0;
+    public overlayNotifications: Notification[] = [];
 
-    constructor(protected backendService: BackendService, private modalService: ModalService) {
+    public unreadNotificationsCount: number = 0;
+    public totalNotificationsCount: number = 0;
+
+    public highImportanceOverlay: boolean = false;
+    public highImportanceOverlayOpen: boolean = false;
+
+    constructor(protected backendService: BackendService) {
         console.log("NotificationService init");
 
+        // tick for overlay notifs
+        setInterval(() => {
+            this.overlayNotifications.forEach((n) => {
+                n.overlayTick(100);
+            });
+        }, 100);
 
-        toastr.options = {
-            "closeButton": false,
-            "debug": false,
-            "newestOnTop": true,
-            "progressBar": true,
-            "positionClass": "toast-top-right",
-            "preventDuplicates": false,
-            "onclick": null,
-            "showDuration": 300,
-            "hideDuration": 1000,
-            "timeOut": 5000,
-            "extendedTimeOut": 1000,
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-        };
+        // tick for all notifs
+        setInterval(() => {
+            this.notifications.forEach((n) => {
+                n.tick(10000);
+            });
+        }, 10000);
 
-        this.backendService.getAllUnconfirmedNotifications();
+        // update notifications info only when user is logged in
+        if (this.backendService.personInfoSnapshot) {
+            this.backendService.getAllUnconfirmedNotifications();
+            this.getRestApiNotifications();
+        }
 
+        // and update notifications info after user log in/out
         this.backendService.personInfo.subscribe((pi) => {
             if (pi) {
+                this.notificationCleanAll();
+                this.backendService.getAllUnconfirmedNotifications();
                 this.getRestApiNotifications();
-
-
             } else {
-                this.notificationCleanArray();
+                this.notificationCleanAll();
             }
         });
 
+        // register error handler for websocket error
+        this.backendService.webSocketErrorOccurred.subscribe(error => this.addFlashMessage(new FlashMessageError("Communication with the back end have failed.", error)));
+
+        // subscribe websocket notifications
         this.backendService.notificationReceived.subscribe(notification => {
             if (notification.messageType == "subscribe_notification" || notification.messageType == "unsubscribe_notification") {
                 console.log("(un)subscribed");
             } else {
-                var notif = this.notificationParse(notification);
                 console.log(notification);
+                var notif:Notification = Notification.fromINotification(notification);
                 switch (notification.notification_importance) {
                     case "low":
-                        this.showToastr(notif);
+                        this.addOverlayNotification(notif);
                         break;
-
                     case "normal":
-                        this.unreadedNotifications++;
-                        var notif = this.notificationParse(notification);
-                        this.addNotification(notif);
-                        this.showToastr(notif);
-                        break;
+                        if (!notif.wasRead) {
+                            this.unreadNotificationsCount++;
+                        }
+                        this.totalNotificationsCount++;
 
+                        this.addSavedNotification(notif);
+                        this.addOverlayNotification(notif);
+                        break;
                     case "high":
-                        this.unreadedNotifications++
-                        this.modalService.showModal(new ModalsHighImportanceNotificationModel("Important messeage", notif.body, notif.id)).then((success) => {
-                            if (success) {
-                                this.sentRestApiNotificationWasRead(notif.id);
-                            }
-                        });
+                        if (!notif.wasRead) {
+                            this.unreadNotificationsCount++;
+                        }
+                        this.totalNotificationsCount++;
 
+                        this.addSavedNotification(notif);
+                        this.addOverlayNotification(notif);
                         break;
-
                 }
             }
         });
     }
 
-    showToastr(notification: Notification): void {
-        switch (notification.type) {
-            case "success":
-                toastr.success(notification.body);
-                break;
-            case "warning":
-                toastr.warning(notification.body);
-                break;
-            case "error":
-                toastr.error(notification.body);
-                break;
-            case "info":
-            default:
-                toastr.info(notification.body);
-                break;
+    // flash messages :
+    addFlashMessage(fm: FlashMessage): void {
+        fm.notificationService = this;
+        this.overlayNotifications.unshift(fm);
+    }
+
+    // remove message (called on click on close btn in FlashMessagesComponent)
+    removeFlashMessage(fm: FlashMessage): void {
+        fm.notificationService = null;
+        var index = this.overlayNotifications.indexOf(fm);
+        if (index > -1) {
+            this.overlayNotifications.splice(index, 1);
         }
     }
 
-    wasReadedNotifications(): void {
-        this.unreadedNotifications = 0;
-    }
+    addOverlayNotification(n: Notification): void {
+        n.notificationService = this;
+        this.overlayNotifications.unshift(n);
 
+        //this.markNotificationsRead([n]); // TODO: only when mouse moved
 
-    countUnreadNotifications(): number { //tato metoda bude nejspíše smazána, je zde pouze pro jednodušší přístup k promněné která se bude nejspíše měnit
-        return this.unreadedNotifications;
-    }
-
-    notificationParse(notification: INotification): Notification {
-        switch (notification.notification_level) {
-            case "info":
-                return new NotificationInfo(notification.id, this.notificationBodyUnparse(notification), notification.created);
-            case "success":
-                return new NotificationSuccess(notification.id, this.notificationBodyUnparse(notification), notification.created);
-            case "warning":
-                return new NotificationWarning(notification.id, this.notificationBodyUnparse(notification), notification.created);
-            case "error":
-                return new NotificationError(notification.id, this.notificationBodyUnparse(notification), notification.created);
-
-        }
-        return null;
-    }
-
-    addNotification(notification: Notification): void {
-        this.notifications.unshift(notification);
-        this.menuNotifications = this.notifications.slice(0, 10);
-
-    }
-
-    notificationCleanArray(): void {
-        this.notifications = [];
-        this.menuNotifications = [];
-    }
-
-    notificationBodyUnparse(notification: INotification): string {
-        let bodyText: string;
-        bodyText = "";
-        (notification.notification_body).map((body: any) => {
-            switch (body.type) {
-                case "text":
-                    bodyText += body.value;
-                    break;
-
-                case "bold_text":
-                    bodyText += ("<b>" + body.value + "</b>");
-                    break;
-
-                case "object":
-                    bodyText += ("<a target='_blank' href='" + body.value + "/" + body.id + "'>" + body.label);
-                    break;
-
-                case "link":
-                    bodyText += ("<a target='_blank' href='" + body.url + "'>" + body.label + "</a>");
-                    break;
+        var high = false;
+        this.overlayNotifications.forEach((nn) => {
+            if (nn.highImportance) {
+                high = true;
             }
         });
-        if (notification.confirmation_required /*&& !notification.notification_importance.valueOf() === "high"*/) { //TODO z nějakého důvodu se nechce volat sentRestApiNotificationWasRead.
-            bodyText += ("<br><button (click)='sentRestApiNotificationWasRead(notification.id)'> OK </button>"); //TODO notification confirmed bude držet dokud se neodklikne, změnit tady nastavení toastr messeage
-        }
-        return bodyText;
+        this.setHighImportanceOverlay(high);
     }
 
-    sentRestApiNotificationWasRead(id: string): void {
+    // remove notification (called on click on close btn in NotificationOverlayComponent)
+    removeOverlayNotification(n: Notification): void {
+        n.notificationService = null;
+        var index = this.overlayNotifications.indexOf(n);
+        if (index > -1) {
+            this.overlayNotifications.splice(index, 1);
+        }
+
+        var high = false;
+        this.overlayNotifications.forEach((nn) => {
+            if (nn.highImportance) {
+                high = true;
+            }
+        });
+        this.setHighImportanceOverlay(high);
+    }
+
+    protected highImportanceOverlayTimeout: any = null;
+    protected setHighImportanceOverlay(high: boolean) {
+        if (this.highImportanceOverlay != high) {
+            if (this.highImportanceOverlayTimeout) clearTimeout(this.highImportanceOverlayTimeout);
+            if (high) {
+                this.highImportanceOverlay = true;
+                this.highImportanceOverlayTimeout = setTimeout(() => {
+                    this.highImportanceOverlayOpen = true;
+                }, 1);
+            } else {
+                this.highImportanceOverlayOpen = false;
+                this.highImportanceOverlayTimeout = setTimeout(() => {
+                    this.highImportanceOverlay = false;
+                }, 500);
+            }
+        }
+    }
+
+    addSavedNotification(n:Notification): void {
+        this.notifications.unshift(n);
+        this.toolbarNotifications = this.notifications.slice(0, 10);
+    }
+
+    notificationCleanAll(): void {
+        this.unreadNotificationsCount = 0;
+        this.notifications = [];
+        this.toolbarNotifications = [];
+        this.overlayNotifications = [];
+    }
+
+    markNotificationsRead(n:Notification[]):void {
+        var ids = n.map((nn) => {
+            if (nn.id && !nn.wasRead) {
+                nn.wasRead = true;
+                return nn.id;
+            }
+            return null;
+        }).filter((nnn) => !!nnn);
+        if (!ids.length) return;
+        console.log("MARK READ: ", ids);
+        this.unreadNotificationsCount -= ids.length;
+        this.backendService.markNotificationRead({notification_id: ids}); // TODO: možná něco udělat s chybou :-)
+    }
+
+    mouseMove():void {
+        this.markNotificationsRead(this.overlayNotifications);
+    }
+
+    /* TODO: sentRestApiNotificationWasRead(id: string): void {
         console.log("SENDDING CONFIRMATION ");
         this.backendService.confirmNotification(id).then().catch(error => "cant sent confirmation");
+    } */
+
+    private isNotificationExists(id:string):boolean {
+        return !!this.notifications.find((n) => n.id == id);
     }
 
     getRestApiNotifications(page = 1): Promise<Notification[]> {
-        this.notificationCleanArray();
-        //TODO existuje "unread total, nepřečtené notifikace zvýrazníme podle boolean "was_read", poté co se na ně najede tak poslat že jsoou přečtené
-        this.backendService.listNotifications(page).then(list => list.content.map(notification => {
-            this.addNotification(this.notificationParse(notification));
-        })).then(() => {
-            this.notifications.reverse();
-            return this.notifications;
-        });
-        return null;
+        return this.backendService.listNotifications(page)
+            .then(list => {
+                this.unreadNotificationsCount = list.unread_total;
+                this.totalNotificationsCount = list.total;
+
+                console.log(list);
+
+                list.content.forEach((n) => {
+                    // TODO: maybe update it!
+                    if (!this.isNotificationExists(n.id)) {
+                        var nn = Notification.fromINotification(n);
+                        this.notifications.unshift(nn);
+                    }
+                });
+
+                this.notifications = this.notifications.sort((a,b) => {
+                    if (a.time > b.time) {
+                        return -1;
+                    } else if (a.time < b.time) {
+                        return 1;
+                    }
+                    return 0;
+                });
+
+                this.toolbarNotifications = this.notifications.slice(0, 10);
+
+                return this.notifications;
+            });
     }
 }

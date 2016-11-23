@@ -12,7 +12,7 @@ import {
 import {BlockoView} from "../components/BlockoView";
 import {Blocks, Core} from "blocko";
 import {FormGroup, Validators} from "@angular/forms";
-import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
+import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationService";
 import {ModalsVersionDialogModel} from "../modals/version-dialog";
 
 
@@ -335,11 +335,11 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                     design_json: designJson
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess("Version <b>" + m.name + "</b> saved successfully.", null, true));
+                        this.addFlashMessage(new FlashMessageSuccess("Version <b>" + m.name + "</b> saved successfully."));
                         this.refresh(); // also unblockUI
                     })
                     .catch((err) => {
-                        this.addFlashMessage(new FlashMessageError("Failed saving version <b>" + m.name + "</b>", err, true));
+                        this.addFlashMessage(new FlashMessageError("Failed saving version <b>" + m.name + "</b>", err));
                         this.unblockUI();
                     });
             }

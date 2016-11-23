@@ -6,7 +6,7 @@ import {Component, Injector, OnInit} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {NotificationService} from "../services/NotificationService";
 import {BackendService} from "../services/BackendService";
-import {FlashMessageSuccess, FlashMessageError} from "../services/FlashMessagesService";
+import {FlashMessageSuccess, FlashMessageError} from "../services/NotificationService";
 import {FormGroup, Validators} from "@angular/forms";
 import {BeckiValidators} from "../helpers/BeckiValidators";
 import {BeckiFormSelectOption} from "../components/BeckiFormSelect";
@@ -102,10 +102,10 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
         })
             .then(ok =>{
                 this.unblockUI();
-        this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("Email with instructions was sent"))})
+        this.addFlashMessage(new FlashMessageSuccess("Email with instructions was sent"))})
             .catch(error =>{
             this.unblockUI();
-        this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot change password", error))})
+        this.addFlashMessage(new FlashMessageError("Cannot change password", error))})
     }
 
     changeEmail(): void {
@@ -118,15 +118,15 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
                 })
                     .then(ok =>{
                         this.unblockUI();
-                        this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("Email with instructions was sent"))
+                        this.addFlashMessage(new FlashMessageSuccess("Email with instructions was sent"))
                     })
                     .catch(error =>{
                         this.unblockUI();
-                        this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot change email", error))
+                        this.addFlashMessage(new FlashMessageError("Cannot change email", error))
                     })
             }else {
                 this.unblockUI();
-                this.flashMessagesService.addFlashMessage(new FlashMessageError("Cannot change email, ", response.message));
+                this.addFlashMessage(new FlashMessageError("Cannot change email, ", response.message));
             }
         })
 

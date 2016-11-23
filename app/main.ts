@@ -17,7 +17,6 @@ import {LabeledLink} from "./helpers/LabeledLink";
 import {Nl2Br} from "./pipes/Nl2Br";
 import {LayoutMain} from "./layouts/main";
 import {LayoutNotLogged} from "./layouts/not-logged";
-import {FlashMessagesService} from "./services/FlashMessagesService";
 import {BackendService} from "./services/BackendService";
 import {AuthGuard, NonAuthGuard} from "./services/AuthGuard";
 import {ModalService} from "./services/ModalService";
@@ -36,7 +35,6 @@ import {CodeIDE} from "./components/CodeIDE";
 import {CProgramVersionSelector} from "./components/CProgramVersionSelector";
 import {Draggable} from "./components/Draggable";
 import {FileTree} from "./components/FileTree";
-import {FlashMessagesComponent} from "./components/FlashMessagesComponent";
 import {GridView} from "./components/GridView";
 import {Error404Component} from "./views/error404";
 import {LoginComponent} from "./views/login";
@@ -84,6 +82,7 @@ import {ProjectsProjectBlocksBlocksComponent} from "./views/projects-project-blo
 import {ProjectsProjectGridGridsComponent} from "./views/projects-project-grid-grids";
 import {ProjectsProjectGridGridsGridComponent} from "./views/projects-project-grid-grids-grid";
 import {FinancialComponent} from "./views/financial";
+import {NotificationsOverlayComponent} from "./components/NotificationsOverlayComponent";
 
 //@formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -169,11 +168,10 @@ var tabMenus = {
     ],
     providers: [
         ValidatorErrorsService,
-        FlashMessagesService,
-        BackendService, // BackendService must be after FlashMessagesService
+        BackendService,
         AuthGuard, // AuthGuard service must be after BackendService
         NonAuthGuard, // NonAuthGuard service must be after BackendService
-        NotificationService,
+        NotificationService, // NotificationService must be after BackendService
         BlockUIService,
         ModalService,
         CurrentParamsService,
@@ -204,8 +202,8 @@ var tabMenus = {
         CProgramVersionSelector,
         Draggable,
         FileTree,
-        FlashMessagesComponent,
         GridView,
+        NotificationsOverlayComponent,
         // Views components
         Error404Component,
         LoginComponent,

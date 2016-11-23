@@ -7,7 +7,7 @@ import {Validators, FormGroup, FormBuilder} from "@angular/forms";
 import {BeckiValidators} from "../helpers/BeckiValidators";
 import {Subscription} from "rxjs";
 import {Router, ActivatedRoute} from "@angular/router";
-import {FlashMessagesService, FlashMessageSuccess, FlashMessageError} from "../services/FlashMessagesService";
+import {NotificationService, FlashMessageSuccess, FlashMessageError} from "../services/NotificationService";
 import {BackendService} from "../services/BackendService";
 
 @Component({
@@ -22,7 +22,7 @@ export class PasswordRestartComponent implements OnInit, OnDestroy {
 
     token: string;
 
-    constructor(protected activatedRoute: ActivatedRoute, protected router: Router, protected formBuilder: FormBuilder, protected backEndService: BackendService, protected flashMessagesService: FlashMessagesService) {
+    constructor(protected activatedRoute: ActivatedRoute, protected router: Router, protected formBuilder: FormBuilder, protected backEndService: BackendService, protected notificationService: NotificationService) {
 
         this.passwordRestartForm = this.formBuilder.group({
             "email": ["", [Validators.required, BeckiValidators.email]],
@@ -38,11 +38,11 @@ export class PasswordRestartComponent implements OnInit, OnDestroy {
             password: this.passwordRestartForm.controls["password"].value
         })
             .then(()=> {
-                this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("password was succesfully changed"));
+                this.notificationService.addFlashMessage(new FlashMessageSuccess("password was successfully changed"));
                 this.router.navigate(["/"]);
             })
             .catch(reason => {
-                this.flashMessagesService.addFlashMessage(new FlashMessageError("password cannot be changed, " + reason));
+                this.notificationService.addFlashMessage(new FlashMessageError("password cannot be changed, " + reason));
             });
     }
 

@@ -38,7 +38,7 @@ export class LayoutMain implements OnInit, OnDestroy {
 
     openTabMenuIndex: number = -1;
 
-    constructor(protected notificationsService: NotificationService, private backendService: BackendService, @Inject("navigation") private navigation: LabeledLink[], private breadcrumbsService: BreadcrumbsService, private tabMenuService: TabMenuService, private activatedRoute: ActivatedRoute, private router:Router) {
+    constructor(protected notificationService: NotificationService, private backendService: BackendService, @Inject("navigation") private navigation: LabeledLink[], private breadcrumbsService: BreadcrumbsService, private tabMenuService: TabMenuService, private activatedRoute: ActivatedRoute, private router:Router) {
     }
 
     isRouterLinkActive(ll: LabeledLink):boolean {
@@ -81,18 +81,34 @@ export class LayoutMain implements OnInit, OnDestroy {
         }, 1);
     };
 
+    private notifMouseMoveSend: boolean = false;
+    mouseMoveEvent = () => {
+        if (this.notifMouseMoveSend) return;
+        this.notifMouseMoveSend = true;
+        setTimeout(() => {
+            this.notifMouseMoveSend = false;
+        }, 500);
+
+        if (this.notificationService) {
+            this.notificationService.mouseMove();
+        }
+    };
+
     ngOnInit(): void {
         this.openTabMenuIndex = -1;
         this.tabMenuItems = this.tabMenuService.getMenu(this.tabMenu);
+        this.notifMouseMoveSend = false;
 
         this.initSidebarClosed();
         document.body.classList.add(...BODY_CLASSES);
         document.body.addEventListener("mouseup", this.mouseUpEvent);
+        document.body.addEventListener("mousemove", this.mouseMoveEvent);
     }
 
     ngOnDestroy(): void {
         document.body.classList.remove(...BODY_CLASSES);
         document.body.removeEventListener("mouseup", this.mouseUpEvent);
+        document.body.removeEventListener("mousemove", this.mouseMoveEvent);
     }
 
     initSidebarClosed() {
@@ -120,9 +136,15 @@ export class LayoutMain implements OnInit, OnDestroy {
     }
 
     onNotificationToggleClick() {
-        this.notificationsService.wasReadedNotifications();
         this.showNotificationMenu = !this.showNotificationMenu;
         this.showUserMenu = false;
+
+        if (this.showNotificationMenu) {
+            // delayed mark as read for animation in toolbar menu (CSS animation)
+            setTimeout(() => {
+                this.notificationService.markNotificationsRead(this.notificationService.toolbarNotifications);
+            }, 1);
+        }
     }
 
 }
