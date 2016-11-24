@@ -64,7 +64,23 @@ export class LayoutMain implements OnInit, OnDestroy {
     }
 
     // define function as property is needed to can set it as event listener (class methods is called with wrong this)
-    mouseUpEvent = () => {
+    mouseUpEvent = (e: MouseEvent) => {
+
+        // ignore click on opened dropdowns menus
+        var dropdowns = document.getElementsByClassName("dropdown-menu");
+        var onSome = false;
+        for (var i = 0; i < dropdowns.length; ++i) {
+            if (onSome) continue;
+            var item = dropdowns[i];
+            var bcr = item.getBoundingClientRect();
+            if (bcr.left <= e.clientX && e.clientX <= bcr.right && bcr.top <= e.clientY && e.clientY <= bcr.bottom) {
+                onSome = true;
+            }
+        }
+        if (onSome) {
+            return;
+        }
+
         var oldShowNotificationMenu = this.showNotificationMenu;
         var oldShowUserMenu = this.showUserMenu;
         var oldOpenTabMenuIndex = this.openTabMenuIndex;

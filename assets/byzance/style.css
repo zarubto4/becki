@@ -1244,7 +1244,7 @@ table .no-wrap {
     position: absolute;
     transition: width 0.1s linear;
     left: 0;
-    bottom: 0;
+    top: 0;
     opacity: 0.2;
     background-color: black;
 }
@@ -1304,6 +1304,19 @@ table .no-wrap {
     height: 20px;
     text-align: center;
     vertical-align: initial;
+}
+
+.notification-holder .notification .n-buttons {
+    border-top: 1px rgba(0,0,0,0.2) solid;
+    padding: 7px;
+    text-align: center;
+    background-color: rgba(0,0,0,0.2);
+}
+
+.notification-holder .notification .n-buttons .btn {
+    margin-right: 5px;
+    margin-left: 5px;
+    min-width: 50px;
 }
 
 .notification-holder .notification .notification-inner.n-warning,
@@ -1420,7 +1433,7 @@ table .no-wrap {
 .notification-list .notification .n-text {
     clear: both;
     display: block;
-    margin-left: 35px;
+    margin-left: 30px;
     padding: 7px 7px 0;
 }
 
@@ -1436,4 +1449,25 @@ table .no-wrap {
 
 .notification-load-more-btn {
     padding: 15px;
+}
+
+
+.notification-list .notification .n-buttons {
+    clear: both;
+    border-top: 1px rgba(0,0,0,0.1) solid;
+    padding: 7px;
+    text-align: center;
+    margin-left: 30px;
+    transition: background-color 1s;
+    background-color: rgba(0,0,0,0.1);
+}
+
+.notification-list .notification .n-buttons.n-unconfirmed {
+    background-color: rgba(255, 252, 174, 0.75);
+}
+
+.notification-list .notification .n-buttons .btn {
+    margin-right: 5px;
+    margin-left: 5px;
+    min-width: 50px;
 }

@@ -3,7 +3,7 @@
  */
 import {Injectable} from "@angular/core";
 import {BackendService} from "./BackendService";
-import {INotification, INotificationElement} from "../backend/TyrionAPI";
+import {INotification, INotificationElement, INotificationButton} from "../backend/TyrionAPI";
 import {ModalsHighImportanceNotificationModel} from "../modals/high-importance-notification";
 import {ModalService} from "../services/ModalService";
 
@@ -28,6 +28,9 @@ export abstract class Notification {
 
     highImportance: boolean = false;
     wasRead:boolean = false;
+    confirmed:boolean = false;
+
+    buttons: INotificationButton[] = null;
 
     constructor(public id: string, public type: string, public icon: string, body: string|INotificationElement[], public time: number, reason?: Object) {
         if (typeof body == "string") {
@@ -64,6 +67,12 @@ export abstract class Notification {
             if (n.was_read) {
                 out.wasRead = n.was_read;
             }
+            if (n.confirmed) {
+                out.confirmed = n.confirmed;
+            }
+            if (n.buttons) {
+                out.buttons = n.buttons;
+            }
         }
 
         return out;
@@ -93,7 +102,7 @@ export abstract class Notification {
 
     tick(tickInterval:number): void {
         if (!this.time) return;
-        this.relativeTime = moment(this.time).startOf('minute').fromNow(false);
+        this.relativeTime = moment(this.time).fromNow();
     }
 
     over(): void {
@@ -352,10 +361,17 @@ export class NotificationService {
         this.markNotificationsRead(this.overlayNotifications);
     }
 
-    /* TODO: sentRestApiNotificationWasRead(id: string): void {
-        console.log("SENDDING CONFIRMATION ");
-        this.backendService.confirmNotification(id).then().catch(error => "cant sent confirmation");
-    } */
+    onObjectClick(n:Notification, e:INotificationElement) {
+        console.log(e);
+        // TODO: open objects in Becki
+    }
+
+    onButtonClick(n:Notification, b:INotificationButton) {
+        n.confirmed = true;
+        n.close();
+        // TODO: confirm
+        //this.backendService.con
+    }
 
     private isNotificationExists(id:string):boolean {
         return !!this.notifications.find((n) => n.id == id);

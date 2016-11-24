@@ -4,7 +4,7 @@
 
 import {Component, OnDestroy} from "@angular/core";
 import {NotificationService, FlashMessage, Notification} from "../services/NotificationService";
-import {INotificationElement} from "../backend/TyrionAPI";
+import {INotificationElement, INotificationButton} from "../backend/TyrionAPI";
 
 @Component({
     selector: "notifications-overlay-component",
@@ -14,9 +14,12 @@ import {INotificationElement} from "../backend/TyrionAPI";
     <div class="notification {{notification.visit()}}" *ngFor="let notification of notificationService.overlayNotifications" [class.n-high-importance]="notification.highImportance" [class.n-state-open]="notification.opened" [class.n-state-close]="notification.closed">
         <div class="notification-inner n-{{notification.type}}" [class.n-state-over]="notification.overed" (mouseover)="onOver(notification)" (mouseout)="onOut(notification)">
             <i class="n-icon fa fa-{{notification.icon}}"></i>
-            <button type="button" class="n-close" (click)="onCloseClick(notification, $event)"><i class="fa fa-close"></i></button>
+            <button *ngIf="!notification.highImportance || !(notification.buttons && notification.buttons.length)" type="button" class="n-close" (click)="onCloseClick(notification, $event)"><i class="fa fa-close"></i></button>
             <span class="n-text" *ngIf="notification.htmlBody" [innerHTML]="notification.htmlBody"></span>
             <span class="n-text" *ngIf="notification.elementsBody"><template ngFor let-element="$implicit" [ngForOf]="notification.elementsBody"><span *ngIf="element.type == 'text'" [class.n-bold]="element.bold" [class.n-italic]="element.italic" [class.n-underline]="element.underline">{{element.text}}</span><a *ngIf="element.type == 'object'" (click)="onObjectClick(notification, element)" [class.n-bold]="element.bold" [class.n-italic]="element.italic" [class.n-underline]="element.underline">{{element.text}}</a><a *ngIf="element.type == 'link'" [href]="element.url" target="_blank" [class.n-bold]="element.bold" [class.n-italic]="element.italic" [class.n-underline]="element.underline">{{element.text}}</a></template></span>
+            <div class="n-buttons" *ngIf="notification.buttons && notification.buttons.length">
+                <button *ngFor="let button of notification.buttons" class="btn btn-sm {{button.color}}" (click)="onButtonClick(notification, button)" [disabled]="notification.confirmed" [class.n-bold]="button.bold" [class.n-italic]="button.italic" [class.n-underline]="button.underline">{{button.text}}</button>
+            </div>
             <div class="n-progress" [style.width]="notification.closeProgressWidth()"></div>
         </div>
     </div>
@@ -41,7 +44,11 @@ export class NotificationsOverlayComponent {
     }
 
     onObjectClick(n:Notification, e:INotificationElement) {
-        console.log(e);
+        this.notificationService.onObjectClick(n, e);
+    }
+
+    onButtonClick(n:Notification, b:INotificationButton) {
+        this.notificationService.onButtonClick(n, b);
     }
 
 }

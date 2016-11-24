@@ -83,6 +83,7 @@ import {ProjectsProjectGridGridsComponent} from "./views/projects-project-grid-g
 import {ProjectsProjectGridGridsGridComponent} from "./views/projects-project-grid-grids-grid";
 import {FinancialComponent} from "./views/financial";
 import {NotificationsOverlayComponent} from "./components/NotificationsOverlayComponent";
+import {NotificationsListComponent} from "./components/NotificationsListComponent";
 
 //@formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -204,6 +205,7 @@ var tabMenus = {
         FileTree,
         GridView,
         NotificationsOverlayComponent,
+        NotificationsListComponent,
         // Views components
         Error404Component,
         LoginComponent,
