@@ -1,3 +1,8 @@
+/*
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
+ */
+
 /**
  * Created by dominikkrisztof on 11/10/16.
  */
@@ -8,6 +13,7 @@ import {BeckiValidators} from "../helpers/BeckiValidators";
 import {FlashMessageSuccess, FlashMessageError, FlashMessagesService} from "../services/FlashMessagesService";
 import {BackendService} from "../services/BackendService";
 import {Router} from "@angular/router";
+import {BlockUIService} from "../services/BlockUIService";
 
 
 @Component({
@@ -18,7 +24,7 @@ export class CreateUserComponent implements OnInit {
 
     CreateUserForm: FormGroup;
 
-    constructor(protected formBuilder: FormBuilder, protected router: Router, protected backendService: BackendService, protected flashMessagesService: FlashMessagesService) {
+    constructor( protected formBuilder: FormBuilder, protected router: Router, protected backendService: BackendService, protected flashMessagesService: FlashMessagesService) {
 
         this.CreateUserForm = this.formBuilder.group({
             "email": ["", [Validators.required, BeckiValidators.email]],
@@ -35,7 +41,7 @@ export class CreateUserComponent implements OnInit {
     }
 
     sendCreateUser(): void {
-        this.backendService.createPerson({ //TODO toto vyhazuje case do erroru, i když je success, zeptat se proč
+        this.backendService.createPerson( {
             nick_name: this.CreateUserForm.controls["nick_name"].value,
             mail: this.CreateUserForm.controls["email"].value,
             password: this.CreateUserForm.controls["password"].value
@@ -43,7 +49,6 @@ export class CreateUserComponent implements OnInit {
             .then(() => {
                 this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("email with instructions was sent"));
                 this.router.navigate(["/"]);
-
             })
             .catch(reason => {
                 this.flashMessagesService.addFlashMessage(new FlashMessageError("email cannot be sent, " + reason));
