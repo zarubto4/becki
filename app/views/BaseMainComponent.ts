@@ -10,7 +10,10 @@ import {Injector} from "@angular/core";
 import {FormBuilder} from "@angular/forms";
 import {CurrentParamsService} from "../services/CurrentParamsService";
 import {BlockUIService} from "../services/BlockUIService";
-import {NotificationService, FlashMessage} from "../services/NotificationService";
+import {
+    NotificationService, FlashMessage, FlashMessageInfo,
+    FlashMessageSuccess, FlashMessageWarning, FlashMessageError
+} from "../services/NotificationService";
 
 export abstract class BaseMainComponent {
 
@@ -53,6 +56,30 @@ export abstract class BaseMainComponent {
 
     protected unblockUI(): void {
         this.blockUIService.unblockUI();
+    }
+
+    protected fmInfo(msg:string, reason?:Object): FlashMessage {
+        var fm = new FlashMessageInfo(msg, reason);
+        this.addFlashMessage(fm);
+        return fm;
+    }
+
+    protected fmSuccess(msg:string, reason?:Object): FlashMessage {
+        var fm = new FlashMessageSuccess(msg, reason);
+        this.addFlashMessage(fm);
+        return fm;
+    }
+
+    protected fmWarning(msg:string, reason?:Object): FlashMessage {
+        var fm = new FlashMessageWarning(msg, reason);
+        this.addFlashMessage(fm);
+        return fm;
+    }
+
+    protected fmError(msg:string, reason?:Object): FlashMessage {
+        var fm = new FlashMessageError(msg, reason);
+        this.addFlashMessage(fm);
+        return fm;
     }
 
 }

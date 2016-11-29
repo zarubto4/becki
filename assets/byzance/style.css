@@ -1458,7 +1458,7 @@ table .no-wrap {
     padding: 7px;
     text-align: center;
     margin-left: 30px;
-    transition: background-color 1s;
+    transition: background-color 10s;
     background-color: rgba(0,0,0,0.1);
 }
 

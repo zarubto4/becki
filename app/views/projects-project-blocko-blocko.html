@@ -250,6 +250,60 @@
                 <div class="portlet-title">
                     <div class="becki-caption">
                         <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-cloud"></i>
+                            Instance in cloud
+                        </span>
+                    </div>
+                </div>
+                <div>
+
+                    <div *ngIf="blockoProgram && blockoProgram.instance_details">
+
+                        <div class="actions pull-right">
+                            <button *ngIf="!blockoProgram.instance_details.online && blockoProgram.instance_details.version_id" class="btn green-jungle"  (click)="onTurnOnClick()">
+                                <i class="fa fa-power-off"></i> Turn on
+                            </button>
+
+                            <button *ngIf="blockoProgram.instance_details.online" class="btn red" (click)="onTurnOffClick()">
+                                <i class="fa fa-power-off"></i> Turn off
+                            </button>
+
+                            <button class="btn blue-hoki" (click)="onChangeVersionClick()">
+                                <i class="fa fa-code-fork"></i> Change version
+                            </button>
+                        </div>
+
+                        <div>
+                            <strong>Instance:</strong>
+                            <a *ngIf="blockoProgram.instance_details.instance_id" (click)="onInstanceIdClick(blockoProgram.instance_details.instance_id)">{{blockoProgram.instance_details.instance_id}}</a>
+                            <span class="font-grey-salsa" *ngIf="!blockoProgram.instance_details.instance_id">None</span>
+                        </div>
+                        <div>
+                            <strong>Version:</strong>
+                            <a *ngIf="blockoProgram.instance_details.version_name" (click)="onProgramVersionIdClick(blockoProgram.instance_details.version_id)">{{blockoProgram.instance_details.version_name}}</a>
+                            <span class="font-grey-salsa" *ngIf="!blockoProgram.instance_details.version_name">None</span>
+                        </div>
+                        <div>
+                            <strong>Status:</strong>
+                            <span *ngIf="blockoProgram.instance_details.online" class="font-green-jungle">Online</span>
+                            <span *ngIf="!blockoProgram.instance_details.online" class="font-red">Offline</span>
+                        </div>
+                        <div>
+                            <strong>Server:</strong>
+                            <span class="font-green-jungle" *ngIf="blockoProgram.instance_details.server_name">{{blockoProgram.instance_details.server_name}}</span>
+                            <span class="font-grey-salsa" *ngIf="!blockoProgram.instance_details.server_name">None</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
                             <i class="fa fa-fw fa-code-fork"></i>
                             Saved versions
                         </span>
@@ -275,9 +329,7 @@
                                 {{version.version_object.version_description}}
                             </td>
                             <td class="no-wrap">
-                                <button title="Run on cloud" class="btn btn-icon-only green" (click)="onRunProgramVersionClick(version)">
-                                    <i class="fa fa-cloud-upload"></i>
-                                </button>
+
                             </td>
                         </tr>
                         </tbody>

@@ -4,7 +4,7 @@
 
 import {Component, OnInit, Injector, OnDestroy, ViewChild} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
-import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationService";
+import {FlashMessageError, FlashMessageSuccess, FlashMessageInfo} from "../services/NotificationService";
 import {Subscription} from "rxjs/Rx";
 import {
     IProject,
@@ -34,6 +34,8 @@ import {ModalsBlockoAddGridModel} from "../modals/blocko-add-grid";
 
 declare var $: JQueryStatic;
 import moment = require("moment/moment");
+import { NullSafe, NullSafeDefault } from '../helpers/NullSafe';
+import { ModalsBlockoVersionSelectModel } from '../modals/blocko-version-select';
 
 @Component({
     selector: "view-projects-project-blocko-blocko",
@@ -624,28 +626,77 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     }
 
+    onInstanceIdClick(instanceId: string): void {
+        this.fmWarning("Not implemented yet!");
+    }
+
     onProgramVersionClick(programVersion: IBProgramVersion): void {
         this.selectProgramVersion(programVersion);
     }
 
-    onRunProgramVersionClick(programVersion: IBProgramVersion): void {
-
-        var m = new ModalsConfirmModel("Run program", "Really want run Blocko program version <b>" + programVersion.version_object.version_name + "</b>?");
+    onChangeVersionClick(): void {
+        if (!this.blockoProgramVersions || !this.blockoProgramVersions.length) {
+            this.fmWarning("Must create some version first.");
+            return;
+        }
+        var m = new ModalsBlockoVersionSelectModel(this.blockoProgramVersions, NullSafe(() => this.blockoProgram.instance_details.version_id));
         this.modalService.showModal(m)
             .then((success) => {
                 if (success) {
                     this.blockUI();
-                    this.backendService.uploadBProgramToCloud(programVersion.version_object.id, {}) //TODO: timestamp
-                        .then((ok)=> {
-                            this.addFlashMessage(new FlashMessageSuccess("Run Blocko version <b>" + programVersion.version_object.version_name + "</b> successfully."));
-                            this.unblockUI();
+                    this.backendService.cloudInstanceUpload(m.programVersion, {})
+                        .then(() => {
+                            this.refresh();
                         })
-                        .catch((err)=> {
-                            this.addFlashMessage(new FlashMessageError("Run Blocko version <b>" + programVersion.version_object.version_name + "</b> failed.", err));
+                        .catch((err) => {
                             this.unblockUI();
-                        })
+                            this.fmError("Cannot change version.", err);
+                        });
                 }
             });
+    }
+
+    onProgramVersionIdClick(programVersionId: string): void {
+        var programVersion = this.blockoProgramVersions.find((pv) => pv.version_object.id == programVersionId);
+        if (programVersion) {
+            this.selectProgramVersion(programVersion);
+        } else {
+            this.fmError("Program version not found");
+        }
+    }
+
+    onTurnOnClick(): void {
+        if (NullSafe(() => this.blockoProgram.instance_details.version_id)) {
+            this.blockUI();
+            this.backendService.cloudInstanceUpload(this.blockoProgram.instance_details.version_id, {})
+                .then(() => {
+                    this.refresh();
+                })
+                .catch((err) => {
+                    this.unblockUI();
+                    this.fmError("Cannot turn instance on.", err);
+                });
+
+        } else {
+            this.fmWarning("Cannot turn instance on.");
+        }
+    }
+
+    onTurnOffClick(): void {
+        if (NullSafe(() => this.blockoProgram.instance_details.instance_id)) {
+            this.blockUI();
+            this.backendService.cloudInstanceShutDown(this.blockoProgram.instance_details.instance_id)
+                .then(() => {
+                    this.refresh();
+                })
+                .catch((err) => {
+                    this.unblockUI();
+                    this.fmError("Cannot turn instance off.", err);
+                });
+
+        } else {
+            this.fmWarning("Cannot turn instance off.");
+        }
     }
 
     onClearClick(): void {

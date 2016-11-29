@@ -58,6 +58,9 @@
             <template [ngSwitchCase]="'ModalsDeviceEditDescriptionModel'">
                 <modals-device-edit-description [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-device-edit-description>
             </template>
+            <template [ngSwitchCase]="'ModalsBlockoVersionSelectModel'">
+                <modals-blocko-version-select [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-blocko-version-select>
+            </template>
         </div>
     </div>
 </div>

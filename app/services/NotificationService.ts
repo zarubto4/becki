@@ -9,6 +9,7 @@ import {ModalService} from "../services/ModalService";
 
 import moment = require("moment/moment");
 import {IWebSocketNotification} from "../backend/BeckiBackend";
+import {NullSafe} from "../helpers/NullSafe";
 
 export abstract class Notification {
 
@@ -35,6 +36,10 @@ export abstract class Notification {
     constructor(public id: string, public type: string, public icon: string, body: string|INotificationElement[], public time: number, reason?: Object) {
         if (typeof body == "string") {
             this.htmlBody = body;
+            var userMessage = NullSafe(() => <string>(<any>reason).userMessage);
+            if (userMessage) {
+                this.htmlBody += "<br><b>"+userMessage+"</b>";
+            }
         } else {
             this.elementsBody = body;
         }

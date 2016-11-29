@@ -84,6 +84,7 @@ import {ProjectsProjectGridGridsGridComponent} from "./views/projects-project-gr
 import {FinancialComponent} from "./views/financial";
 import {NotificationsOverlayComponent} from "./components/NotificationsOverlayComponent";
 import {NotificationsListComponent} from "./components/NotificationsListComponent";
+import { ModalsBlockoVersionSelectComponent } from './modals/blocko-version-select';
 
 //@formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -252,6 +253,7 @@ var tabMenus = {
         ModalsBlocksBlockPropertiesComponent,
         ModalsHighImportanceNotificationComponent,
         ModalsDeviceEditDescriptionComponent,
+        ModalsBlockoVersionSelectComponent,
 
     ],
     exports: [AppComponent],
