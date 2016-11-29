@@ -50,7 +50,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
     };
 
     stepClick(step: number,fromUser:boolean): void {
-        if(fromUser&&step>=this.step){
+        if(fromUser&&step>this.step){
             this.flashMessagesService.addFlashMessage(new FlashMessageError("You have to go step by step"));
             return;
         }
@@ -110,7 +110,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         /*    label: method.user_description,
             value: method.json_identificator
         })); */
-
+        console.log(tariff.extensionses);
 
 
         this.currency_type= [{label: "CZK", value: "CZK"}, {label: "EUR", value: "EUR"}];//TODO pak smazat až bude měna dodávána

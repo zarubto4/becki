@@ -9,8 +9,6 @@
                         <div class="row step-thin">
                             <div class="mt-step-desc">
                                 <div class="font-dark bold uppercase">Step by step</div>
-
-                                <!-- TODO v produkční fázi odebrat všechny proklikávátka na step! -->
                                 <div class="caption-desc font-grey-cascade">Confirm a product purchase</div>
                                 <br></div>
                             <div class="col-md-3 bg-grey mt-step-col" (click)="stepClick(1,true)"
@@ -71,7 +69,9 @@
                                 <div class="arrow-down border-top-{{tariff.color| lowercase}}"></div>
 
                                 <div class="price-table-pricing">
-                                    <h3><span class="price-sign">€</span>{{tariff.price.EUR}}</h3> <!-- TODO price selector-->
+                                    <h4 style="margin: 0 10px; color: gray;" class="pull-right">{{tariff.price.USD}}<span class="becki-payment-secondary price-sign" >$</span></h4>
+                                    <h4 style="margin: 0 10px;color: gray;" class="pull-left">{{tariff.price.CZK}}<span class="becki-payment-secondary price-sign">CZK</span></h4>
+                                    <h3 style="clear: both;padding-top: 10px;"><span class="price-sign">€</span>{{tariff.price.EUR}}</h3> <!-- TODO price selector-->
                                     <p>per month</p>
                                 </div>
                                 <div class="price-table-content">
@@ -80,7 +80,7 @@
                                             <i class="fa {{label.icon| lowercase}}"></i>
                                         </div>
                                         <div class="col-xs-9 text-left mobile-padding">{{label.label}}</div>
-                                        <!-- TODO zobrazit Description, metronic tooltips s data-content vyhazuje erorr -->
+                                        <!-- TODO zobrazit Description, metronic tooltips s data-content vyhazuje error -->
                                     </div>
 
                                 </div>
@@ -111,7 +111,7 @@
                     <div class="pricing-content-1">
                         <div [class.col-md-6]="selectedTariff.company_details_required">
                             <becki-form-input [control]="form.controls.city" label="City"></becki-form-input>
-                            <becki-form-select [control]="form.controls.country" label="country"
+                            <becki-form-select [control]="form.controls.country" label="Country"
                                                [options]="countryList"></becki-form-select>
                             <becki-form-select [control]="form.controls.currency_type" label="Currency type" [options]="currency_type"></becki-form-select>
                             <becki-form-select *ngIf="selectedTariff.required_payment_method" [control]="form.controls.payment_method" label="Payment method" [options]="payment_method"></becki-form-select>
@@ -173,8 +173,8 @@
             </div>
             <div class="portlet-body">
                 <div class="pricing-content-1">
-                    <div *ngIf="packageForRegistration">
-                        <div *ngIf="packageForRegistration.length==0">
+                    <div *ngIf="selectedTariff.extensionses">
+                        <div *ngIf="selectedTariff.extensionses.length==0">
                             <h3 class="text-center">There is no additional packages, click continue</h3>
                         </div>
                     </div>
@@ -187,7 +187,9 @@
                                 </div>
                                 <div class="arrow-down border-top-{{package.color | lowercase}}"></div>
                                 <div class="price-table-pricing">
-                                    <h3><span class="price-sign">€</span>{{package.price.EUR}}</h3> <!-- TODO price selector-->
+                                    <h4 style="margin: 0 10px; color: gray;" class="pull-right">{{package.price.USD}}<span class="becki-payment-secondary price-sign" >$</span></h4>
+                                    <h4 style="margin: 0 10px;color: gray;" class="pull-left">{{package.price.CZK}}<span class="becki-payment-secondary price-sign">CZK</span></h4>
+                                    <h3 style="clear: both;padding-top: 10px;"><span class="price-sign">€</span>{{package.price.EUR}}</h3> <!-- TODO price selector--> <!-- TODO price selector-->
                                     <!-- TODO ceny se budou měnit dle jazykové mutace-->
                                     <p>per month</p>
                                 </div>
@@ -249,64 +251,64 @@
                             <table class="table table-hover table-light">
                                 <tbody>
                                 <tr>
-                                    <td> city: </td>
+                                    <td> City: </td>
                                     <td> {{form.controls["city"].value}} </td>
                                 </tr>
                                 <tr>
-                                    <td> country: </td>
+                                    <td> Country: </td>
                                     <td> {{form.controls["country"].value}} </td>
                                 </tr>
 
                                 <tr>
-                                    <td> currency_type: </td>
+                                    <td> Currency type: </td>
                                     <td> {{form.controls["currency_type"].value}} </td>
                                 </tr>
                                 <tr *ngIf="form.controls['payment_method']">
-                                    <td> payment_method: </td>
+                                    <td> Payment method: </td>
                                     <td> {{form.controls["payment_method"].value}} </td>
                                 </tr>
                                 <tr *ngIf="form.controls['payment_mode']">
-                                    <td> payment_mode: </td>
+                                    <td> Payment mode: </td>
                                     <td> {{form.controls["payment_mode"].value}} </td>
                                 </tr>
                                 <tr>
-                                    <td> product_individual_name: </td>
+                                    <td> Product individual name: </td>
                                     <td> {{form.controls["product_individual_name"].value}} </td>
                                 </tr>
                                 <tr>
-                                    <td> street_number: </td>
+                                    <td> Street number: </td>
                                     <td> {{form.controls["street_number"].value}} </td>
                                 </tr>
                                 <tr>
-                                    <td> zip_code: </td>
+                                    <td> Zip code: </td>
                                     <td> {{form.controls["zip_code"].value}} </td>
                                 </tr>
                                 <tr *ngIf="form.controls['company_authorized_email']">
-                                    <td> company_authorized_email: </td>
+                                    <td> Company authorized email: </td>
                                     <td> {{form.controls["company_authorized_email"].value}} </td>
                                 </tr>
                                 <tr *ngIf="form.controls['company_authorized_phone']">
-                                    <td> company_authorized_phone: </td>
+                                    <td> Company authorized phone: </td>
                                     <td> {{form.controls["company_authorized_phone"].value}} </td>
                                 </tr>
                                 <tr *ngIf="form.controls['company_invoice_email']">
-                                    <td> company_invoice_email: </td>
+                                    <td> Company invoice email: </td>
                                     <td> {{form.controls["company_invoice_email"].value}} </td>
                                 </tr>
                                 <tr *ngIf="form.controls['company_name']">
-                                    <td> company_name: </td>
+                                    <td> Company name: </td>
                                     <td> {{form.controls["company_name"].value}} </td>
                                 </tr>
                                 <tr *ngIf="form.controls['company_web']">
-                                    <td> company_web: </td>
+                                    <td> Company web: </td>
                                     <td> {{form.controls["company_web"].value}} </td>
                                 </tr>
                                 <tr  *ngIf="form.controls['registration_no']">
-                                    <td> registration_no: </td>
+                                    <td> Registration no.: </td>
                                     <td> {{form.controls["registration_no"].value}} </td>
                                 </tr>
                                 <tr *ngIf="form.controls['vat_number']">
-                                    <td> vat_number: </td>
+                                    <td> Vat number: </td>
                                     <td> {{form.controls["vat_number"].value}} </td>
                                 </tr>
                                 </tbody>
@@ -333,12 +335,14 @@
                                 <tr>
                                     <th> Tarrif </th>
                                     <th> Description </th>
+                                    <th> Price </th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
                                     <td> {{selectedTariff.tariff_name}} </td>
                                     <td> {{selectedTariff.tariff_description}}  </td>
+                                    <td> {{selectedTariff.price.EUR}}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -360,6 +364,7 @@
                                    <tr>
                                        <th> Package </th>
                                        <th> Description </th>
+                                       <th> Price </th>
                                        <th>  </th>
                                    </tr>
                                    </thead>
@@ -367,6 +372,7 @@
                                    <tr>
                                        <td>{{package.name}}</td>
                                        <td>{{package.description}}</td>
+                                       <td>{{package.price.EUR}}</td>
                                        <td> <i (click)="addExtension(package)" class="font-red fa fa-trash fa-2x"></i></td>
                                    </tr>
                                    </tbody>
