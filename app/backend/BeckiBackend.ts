@@ -118,6 +118,9 @@ export class BugFoundError extends Error {
         if (response.status == 400) {
             content = (<{exception: Object}>response.body).exception;
             message = (<{message: string}>response.body).message;
+            if (!message) {
+                message = (<{error: string}>response.body).error;
+            }
         }
         return new BugFoundError(`response ${response.status}: ${JSON.stringify(content)}`, message);
     }

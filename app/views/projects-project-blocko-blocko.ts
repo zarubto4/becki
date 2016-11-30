@@ -34,7 +34,7 @@ import {ModalsBlockoAddGridModel} from "../modals/blocko-add-grid";
 
 declare var $: JQueryStatic;
 import moment = require("moment/moment");
-import { NullSafe, NullSafeDefault } from '../helpers/NullSafe';
+import {NullSafe, NullSafeDefault} from '../helpers/NullSafe';
 import { ModalsBlockoVersionSelectModel } from '../modals/blocko-version-select';
 
 @Component({
@@ -53,7 +53,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     advancedMode: boolean = false;
 
-    connectionsTab:string = "hardware";
+    connectionsTab:string = "";
 
     // blocko blocks:
 
@@ -188,6 +188,27 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
+    }
+
+    onToggleConnectionsTab(tabName:string) {
+        if (this.connectionsTab == tabName) {
+            this.connectionsTab = "";
+        } else {
+            this.connectionsTab = tabName
+        }
+    }
+
+    connectionsHwCount() {
+        var yodaCount = this.selectedHardware.length;
+        var padawansCount = 0;
+        this.selectedHardware.forEach((sh) => {
+            padawansCount += sh.device_board_pairs.length;
+        });
+        return yodaCount + " + " + padawansCount;
+    }
+
+    connectionsGridCount() {
+        return Object.keys(this.selectedGridProgramVersions).length;
     }
 
     onToggleGroup(groupId: string) {
@@ -854,6 +875,12 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             out.push(hgCopy);
         });
         return out;
+    }
+
+    versionRunning(v:IBProgramVersion):boolean {
+        var vId = NullSafe(() => v.version_object.id);
+        var cId = NullSafe(() => this.blockoProgram.instance_details.version_id);
+        return (vId && cId && vId == cId); 
     }
 
     refresh(): void {

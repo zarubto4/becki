@@ -27,7 +27,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="portlet portlet light bordered">
-                <div class="portlet-title tabbable-line">
+                <div class="portlet-title tabbable-line" [class.no-opened-tab]="connectionsTab == ''">
                     <div class="becki-caption">
                         <span class="font-blue-dark uppercase">
                             <i class="fa fa-fw fa-list-ul"></i>
@@ -37,10 +37,10 @@
 
                     <ul class="nav nav-tabs margin-left-15 pull-left">
                         <li [class.active]="connectionsTab == 'hardware'">
-                            <a (click)="connectionsTab = 'hardware'">Hardware</a>
+                            <a class="cursor-pointer" (click)="onToggleConnectionsTab('hardware')">Hardware <span class="font-grey-salsa">({{connectionsHwCount()}})</span></a>
                         </li>
                         <li [class.active]="connectionsTab == 'grid'">
-                            <a (click)="connectionsTab = 'grid'">Grid</a>
+                            <a class="cursor-pointer" (click)="onToggleConnectionsTab('grid')">Grid <span class="font-grey-salsa">({{connectionsGridCount()}})</span></a>
                         </li>
                     </ul>
                 </div>
@@ -260,11 +260,11 @@
                     <div *ngIf="blockoProgram && blockoProgram.instance_details">
 
                         <div class="actions pull-right">
-                            <button *ngIf="!blockoProgram.instance_details.online && blockoProgram.instance_details.version_id" class="btn green-jungle"  (click)="onTurnOnClick()">
+                            <button *ngIf="!blockoProgram.instance_details.uploaded && blockoProgram.instance_details.version_id" class="btn green-jungle"  (click)="onTurnOnClick()">
                                 <i class="fa fa-power-off"></i> Turn on
                             </button>
 
-                            <button *ngIf="blockoProgram.instance_details.online" class="btn red" (click)="onTurnOffClick()">
+                            <button *ngIf="blockoProgram.instance_details.uploaded" class="btn red" (click)="onTurnOffClick()">
                                 <i class="fa fa-power-off"></i> Turn off
                             </button>
 
@@ -290,7 +290,10 @@
                         </div>
                         <div>
                             <strong>Server:</strong>
-                            <span class="font-green-jungle" *ngIf="blockoProgram.instance_details.server_name">{{blockoProgram.instance_details.server_name}}</span>
+                            <span class="font-grey-mint" *ngIf="blockoProgram.instance_details.server_name">
+                                {{blockoProgram.instance_details.server_name}}
+                                (<span *ngIf="blockoProgram.instance_details.server_online" class="font-green-jungle">Online</span><span *ngIf="!blockoProgram.instance_details.server_online" class="font-red">Offline</span>)
+                            </span>
                             <span class="font-grey-salsa" *ngIf="!blockoProgram.instance_details.server_name">None</span>
                         </div>
 
@@ -314,6 +317,7 @@
                         <thead>
                         <tr>
                             <th>Name</th>
+                            <th class="text-center no-wrap">In cloud</th>
                             <th class="full-width">Description</th>
                             <th class="text-center">Actions</th>
                         </tr>
@@ -325,6 +329,7 @@
                                     {{version.version_object.version_name}}
                                 </a>
                             </td>
+                            <th class="text-center"><i class="fa fa-cloud fa-fw font-green-jungle" [class.font-red]="!versionRunning(version)"></i></th>
                             <td>
                                 {{version.version_object.version_description}}
                             </td>

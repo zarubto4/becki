@@ -382,6 +382,11 @@ span.changes {
 .spacer100 { height: 100px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
 .spacer200 { height: 200px; width: 100%; font-size: 0; margin: 0; padding: 0; border: 0; display: block; }
 
+.portlet .portlet-title.no-opened-tab {
+    border-bottom: 0 !important;
+    margin-bottom: -5px !important;
+}
+
 .nav-tabs-with-spacer.nav.nav-tabs {
     overflow: hidden;
 }
