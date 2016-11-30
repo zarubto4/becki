@@ -20,8 +20,6 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
     form: FormGroup;
 
-    pricing:string="EUR";
-
     routeParamsSubscription: Subscription;
 
     tariffForRegistration: IGeneralTariff[];
@@ -150,7 +148,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
         if (this.selectedTariff.company_details_required) {
 
-            input["company_authorized_email"] = ["", [Validators.required, Validators.minLength(4)]]; //company only
+            input["company_authorized_email"] = ["", [Validators.required, Validators.minLength(4),BeckiValidators.email]]; //company only
 
             input["company_authorized_phone"] = ["", [Validators.minLength(4), BeckiValidators.number]]; //company only
 
@@ -160,9 +158,9 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
             input["company_web"] = ["", [Validators.minLength(4)]]; //company only
 
-            input["registration_no"] = ["", [Validators.required]]; //Required: only if account is businessThe company_registration_no must have at least
+            input["registration_no"] = ["", ]; //TODO Validators.required when !inEu() but when country is chosen
 
-            input["vat_number"] = ["", [Validators.required]]; //Required: only if account is business & from EU!!! CZ28496639 The VAT_number must have at least 4 characters
+            input["vat_number"] = ["", [BeckiValidators.generalVATnumber]]; //TODO Validators.required when inEu()
 
         }
         this.form=null;
@@ -178,6 +176,13 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         this.selectedExtensions.push(selected);
     }
     }
+
+    inEu():boolean{
+        if(this.form.controls["country"].value) {
+            return this.countryList.find(country => country.value == this.form.controls["country"].value).data;
+        }
+        return false;
+        }
 
     onSubmitClick(): void {
 this.blockUI();
@@ -213,11 +218,23 @@ this.blockUI();
             tariffData=Object.assign(tariffData,payModeTariffData);
         }
 
+        if(this.inEu()){
+            var companyTariffData: any = {
+                vat_number:this.form.controls["vat_number"].value
+            }
+            tariffData=Object.assign(tariffData,companyTariffData);
+        }else {
+            var companyTariffData: any = {
+
+                registration_no: this.form.controls["registration_no"].value
+            }
+            tariffData=Object.assign(tariffData,companyTariffData);
+
+        }
 
         if(this.selectedTariff.company_details_required) {
             var companyTariffData: any = {
-                registration_no:this.form.controls["registration_no"].value,
-                vat_number:this.form.controls["vat_number"].value,
+
                 company_name:this.form.controls["company_name"].value,
                 company_authorized_email:this.form.controls["company_authorized_email"].value,
                 company_authorized_phone:this.form.controls["company_authorized_phone"].value,
@@ -230,6 +247,8 @@ this.blockUI();
 
 
         console.log(tariffData);
+
+
         this.backendService.createProduct(<ITariffRegister>tariffData)
             .then(tarif => {
                 this.unblockUI();

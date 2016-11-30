@@ -21,6 +21,8 @@ export class ValidatorErrorsService {
             if (errors["email"]) return "Invalid email.";
             if (errors["passwordSame"]) return "Passwords are different.";
             if (errors["filename"]) return "Invalid file/directory name.";
+            if (errors["number"]) return "This field only accept numbers.";
+            if (errors["generalVATnumber"]) return "Invalid VATnumber format.";
         }
         return "Unknown error (" + Object.keys(errors) + ").";
     }

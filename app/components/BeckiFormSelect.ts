@@ -34,7 +34,8 @@ export var beckiFormSelectOptionsMaker = (objects: any[], valueFieldName: string
 
 export interface BeckiFormSelectOption {
     value: string,
-    label: string
+    label: string,
+    data?:any,
 }
 
 @Component({
