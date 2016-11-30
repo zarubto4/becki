@@ -32,6 +32,11 @@
     background-image: linear-gradient(to bottom, #3B5998 0%, #133783 100%);
 }
 
+.becki-payment-secondary{
+    font-size: 0.7em;
+    padding: 0 5px;
+}
+
 .btn-facebook:hover,
 .btn-facebook:focus,
 .btn-facebook:active,

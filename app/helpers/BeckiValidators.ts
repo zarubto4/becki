@@ -14,11 +14,19 @@ export class BeckiValidators {
     };
 
     public static number: ValidatorFn = (c: AbstractControl) => {
-        if (c.value.match(/^[0-9]/)) {
+        if (c.value.match(/^[0-9]*$/)) {
             return null; // valid
         }
         return {"number": true}; // invalid
     };
+
+    public static generalVATnumber: ValidatorFn = (c: AbstractControl) => {
+        if (c.value.match(/^[A-Z0-9]*$/)) {
+            return null; // valid
+        }
+        return {"generalVATnumber": true}; // invalid
+    };
+
 
     public static condition(conditionCallback: ()=>boolean, validator: ValidatorFn): ValidatorFn {
         return (a: AbstractControl) => {
