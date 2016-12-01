@@ -4,7 +4,7 @@
  */
 
 /**
- * Created by dominik.krisztof on 10.11.16.
+ * Created by dominik.krisztof on 30.11.16.
  */
 
 import {OnInit, Component, Injector, OnDestroy} from "@angular/core";
@@ -13,13 +13,11 @@ import {IProduct} from "../backend/TyrionAPI";
 import {Subscription} from "rxjs";
 
 
-
 @Component({
-    selector: "view-financial-product",
-    templateUrl: "app/views/financial-product.html",
-
+    selector: "view-financial-product-extensions",
+    templateUrl: "app/views/financial-product-extensions.html"
 })
-export class FinancialProductComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class FinancialProductExtensionsComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     id: number;
 
@@ -51,14 +49,14 @@ export class FinancialProductComponent extends BaseMainComponent implements OnIn
 
 
     refresh():void{
-    this.blockUI();
-    this.backendService.getAllProducts().then(products =>{
-       this.product = products.find(product => product.id == this.id );
-        this.unblockUI();
-    }).catch(error =>{
+        this.blockUI();
+        this.backendService.getAllProducts().then(products =>{
+            this.product = products.find(product => product.id == this.id );
+            this.unblockUI();
+        }).catch(error =>{
 
-        this.unblockUI();
-    })
+            this.unblockUI();
+        })
 
     }
 }

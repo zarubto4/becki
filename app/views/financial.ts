@@ -10,7 +10,8 @@
 import {Component, Injector, OnInit} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {IProduct} from "../backend/TyrionAPI";
-import {FlashMessageError} from "../services/FlashMessagesService";
+import {FlashMessageError, FlashMessageSuccess} from "../services/FlashMessagesService";
+import {ModalsRemovalModel} from "../modals/removal";
 
 @Component({
     selector: "view-financial",
@@ -20,8 +21,6 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
 
     products:IProduct[];
 
-    test:boolean=false;
-
     constructor(injector: Injector) {
         super(injector)
     };
@@ -30,13 +29,33 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
         this.refresh();
     }
 
-    onProductClick():void{
-        this.router.navigate(["/financial/Product"])
+    onProductClick(product:IProduct):void{
+        console.log(product);
+        this.router.navigate(["/financial",product.id])
     }
 
     onAddProductClick():void{
         this.router.navigate(["/productRegistration"]);
     }
+
+    onRemoveClick(product:IProduct):void{
+      /*  this.modalService.showModal(new ModalsRemovalModel(product.product_individual_name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.deleteProduct(product.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess("The project has been removed."));
+                        this.refresh(); // also unblockUI
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError("The project cannot be removed.", reason));
+                        this.refresh(); // also unblockUI
+                    });
+            }
+        });*/ //TODO vyřešit mazání Produktů
+    }
+
+    onEditClick(product:IProduct):void{}
 
     refresh(): void {
         this.blockUI();
@@ -44,6 +63,7 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
             .then(products =>{
                 this.products=products;
                 this.unblockUI();
+                console.log(this.products);
             })
             .catch(reason=>{
                 this.addFlashMessage(new FlashMessageError("Projects cannot be loaded.", reason));

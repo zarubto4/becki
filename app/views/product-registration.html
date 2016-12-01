@@ -296,11 +296,11 @@
                                     <td> Company web: </td>
                                     <td> {{form.controls["company_web"].value}} </td>
                                 </tr>
-                                <tr  *ngIf="form.controls['registration_no']">
+                                <tr  *ngIf="form.controls['registration_no']&&!inEu()">
                                     <td> Registration no.: </td>
                                     <td> {{form.controls["registration_no"].value}} </td>
                                 </tr>
-                                <tr *ngIf="form.controls['vat_number']">
+                                <tr *ngIf="form.controls['vat_number']&&inEu()">
                                     <td> Vat number: </td>
                                     <td> {{form.controls["vat_number"].value}} </td>
                                 </tr>

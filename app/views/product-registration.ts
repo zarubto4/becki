@@ -158,9 +158,9 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
             input["company_web"] = ["", [Validators.minLength(4)]]; //company only
 
-            input["registration_no"] = ["", ]; //TODO Validators.required when !inEu() but when country is chosen
+            input["registration_no"] = ["", ];//BeckiValidators.condition(()=>!this.inEu(), Validators.required)
 
-            input["vat_number"] = ["", [BeckiValidators.generalVATnumber]]; //TODO Validators.required when inEu()
+            input["vat_number"] = ["", ];//BeckiValidators.condition(()=>this.inEu(),BeckiValidators.generalVATnumber)
 
         }
         this.form=null;
@@ -252,12 +252,13 @@ this.blockUI();
         this.backendService.createProduct(<ITariffRegister>tariffData)
             .then(tarif => {
                 this.unblockUI();
-                this.step = 3;
                 this.serverResponse = tarif;
                 if ((<any>tarif).gw_url) {
-                    this.flashMessagesService.addFlashMessage(new FlashMessageWarning("Product was created but payment is requred, click", "<a href={{(IGoPayUrl)response.gw_url}}>here</a>"));
+                    this.flashMessagesService.addFlashMessage(new FlashMessageWarning("Product was created but payment is requred, click", "<a href={{(IGoPayUrl)response.gw_url}}>here</a>"))
+                        this.router.navigate(["/financial"]);
                 } else {
                     this.flashMessagesService.addFlashMessage(new FlashMessageSuccess("Product was created, now you can create a new project"));
+                    this.router.navigate(["/financial"]);
                 }
             })
             .catch(reason => {

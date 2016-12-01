@@ -15,6 +15,7 @@ import {AppComponent} from "./app";
 import {ModalComponent} from "./modals/modal";
 import {LabeledLink} from "./helpers/LabeledLink";
 import {Nl2Br} from "./pipes/Nl2Br";
+import {UnixTimeFormat} from "./pipes/UnixTimeFormat";
 import {LayoutMain} from "./layouts/main";
 import {LayoutNotLogged} from "./layouts/not-logged";
 import {FlashMessagesService} from "./services/FlashMessagesService";
@@ -85,6 +86,10 @@ import {ProjectsProjectGridGridsComponent} from "./views/projects-project-grid-g
 import {ProjectsProjectGridGridsGridComponent} from "./views/projects-project-grid-grids-grid";
 import {FinancialComponent} from "./views/financial";
 import {FinancialProductComponent} from "./views/financial-product";
+import {FinancialProductExtensionsComponent} from "./views/financial-product-extensions";
+import {FinancialProductInvoicesComponent} from "./views/financial-product-invoices";
+import {FinancialProductInvoicesInvoiceComponent} from "./views/financial-product-invoices-invoice";
+import {FinancialProductBillingComponent} from "./views/financial-product-billing";
 
 //@formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -106,7 +111,12 @@ var routes: Routes = [
     {path: "profile", data: {breadName: "Profile"}, component: ProfileComponent, canActivate: [AuthGuard]},
 
     {path: "financial", data: {breadName: "Financial"}, component: FinancialComponent, canActivate: [AuthGuard]},
-    {path: "financial/Product", data: {breadName: "Product"}, component: FinancialProductComponent, canActivate: [AuthGuard]},
+    {path: "financial/:product", data: {breadName: ":product"}, component: FinancialProductComponent, canActivate: [AuthGuard]},
+    {path: "financial/:product/extensions", data: {breadName: "extensions"}, component: FinancialProductExtensionsComponent, canActivate: [AuthGuard]},
+    {path: "financial/:product/invoices", data: {breadName: "invoices"}, component: FinancialProductInvoicesComponent, canActivate: [AuthGuard]},
+    {path: "financial/:product/invoices/:invoice", data: {breadName: "invoices"}, component:FinancialProductInvoicesInvoiceComponent, canActivate: [AuthGuard]},
+    {path: "financial/:product/billing", data: {breadName: "billing"}, component:FinancialProductBillingComponent, canActivate: [AuthGuard]},
+
 
 
 
@@ -158,6 +168,12 @@ var tabMenus = {
             new LabeledLink("Screen profiles", ["/", "projects", ":project", "screen-profiles"], "arrows"),
         ]}),
         new LabeledLink("Participants", ["/", "projects", ":project", "participants"], "users"),
+    ],
+    "tariffs-tarrif":[
+        new LabeledLink("Dashboard", ["/", "financial", ":product"], "tachometer", {linkActiveExact: true}),
+        new LabeledLink("Extension services", ["/", "financial", ":product","extensions"], "database"),
+        new LabeledLink("Invoices", ["/", "financial", ":product","invoices"], "dollar"),
+        new LabeledLink("Billing Preferences", ["/", "financial", ":product", "billing"], "bank"),
     ]
 };
 
@@ -197,6 +213,7 @@ var tabMenus = {
         LayoutNotLogged,
         // Pipes
         Nl2Br,
+        UnixTimeFormat,
         // Components
         AceEditor,
         BeckiFormColorPicker,
@@ -217,6 +234,10 @@ var tabMenus = {
         DashboardComponent,
         FinancialComponent,
         FinancialProductComponent,
+        FinancialProductExtensionsComponent,
+        FinancialProductInvoicesComponent,
+        FinancialProductInvoicesInvoiceComponent,
+        FinancialProductBillingComponent,
         ProjectsComponent,
         ProjectsProjectComponent,
         ProjectsProjectHardwareComponent,
