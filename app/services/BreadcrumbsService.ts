@@ -50,6 +50,9 @@ export class BreadcrumbsService {
         this.currentParamsService.currentGridName.subscribe(() => {
             this.refresh();
         });
+        this.currentParamsService.currentInstanceId.subscribe(() => {
+            this.refresh();
+        });
     }
 
     protected findRouteByPath(path: string): Route {
@@ -75,6 +78,8 @@ export class BreadcrumbsService {
                 return this.currentParamsService.currentGridProjectNameSnapshot;
             case ":grid":
                 return this.currentParamsService.currentGridNameSnapshot;
+            case ":instance":
+                return this.currentParamsService.currentInstanceIdSnapshot;
             default:
                 return breadName;
         }

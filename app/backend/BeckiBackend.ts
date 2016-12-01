@@ -26,7 +26,6 @@ export interface IBProgramConnectorValue {
     value: number;
 }
 
-
 export interface IWebSocketMessage {
     messageId: string;
     messageChannel: string;

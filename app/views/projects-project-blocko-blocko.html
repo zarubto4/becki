@@ -274,27 +274,27 @@
                         </div>
 
                         <div>
-                            <strong>Instance:</strong>
+                            Instance:
                             <a *ngIf="blockoProgram.instance_details.instance_id" (click)="onInstanceIdClick(blockoProgram.instance_details.instance_id)">{{blockoProgram.instance_details.instance_id}}</a>
-                            <span class="font-grey-salsa" *ngIf="!blockoProgram.instance_details.instance_id">None</span>
+                            <span class="font-grey-salsa bold" *ngIf="!blockoProgram.instance_details.instance_id">None</span>
                         </div>
                         <div>
-                            <strong>Version:</strong>
+                            Version:
                             <a *ngIf="blockoProgram.instance_details.version_name" (click)="onProgramVersionIdClick(blockoProgram.instance_details.version_id)">{{blockoProgram.instance_details.version_name}}</a>
-                            <span class="font-grey-salsa" *ngIf="!blockoProgram.instance_details.version_name">None</span>
+                            <span class="font-grey-salsa bold" *ngIf="!blockoProgram.instance_details.version_name">None</span>
                         </div>
                         <div>
-                            <strong>Status:</strong>
-                            <span *ngIf="blockoProgram.instance_details.online" class="font-green-jungle">Online</span>
-                            <span *ngIf="!blockoProgram.instance_details.online" class="font-red">Offline</span>
+                            Status:
+                            <span *ngIf="blockoProgram.instance_details.online" class="bold font-green-jungle">Online</span>
+                            <span *ngIf="!blockoProgram.instance_details.online" class="bold font-red">Offline</span>
                         </div>
                         <div>
-                            <strong>Server:</strong>
-                            <span class="font-grey-mint" *ngIf="blockoProgram.instance_details.server_name">
+                            Server:
+                            <span class="font-grey-mint bold" *ngIf="blockoProgram.instance_details.server_name">
                                 {{blockoProgram.instance_details.server_name}}
                                 (<span *ngIf="blockoProgram.instance_details.server_online" class="font-green-jungle">Online</span><span *ngIf="!blockoProgram.instance_details.server_online" class="font-red">Offline</span>)
                             </span>
-                            <span class="font-grey-salsa" *ngIf="!blockoProgram.instance_details.server_name">None</span>
+                            <span class="font-grey-salsa bold" *ngIf="!blockoProgram.instance_details.server_name">None</span>
                         </div>
 
                     </div>

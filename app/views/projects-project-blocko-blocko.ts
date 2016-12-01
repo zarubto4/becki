@@ -648,7 +648,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     }
 
     onInstanceIdClick(instanceId: string): void {
-        this.fmWarning("Not implemented yet!");
+        this.navigate(["/projects", this.currentParamsService.get("project"), "instances", instanceId]);
     }
 
     onProgramVersionClick(programVersion: IBProgramVersion): void {

@@ -1481,3 +1481,21 @@ table .no-wrap {
     margin-left: 5px;
     min-width: 50px;
 }
+
+ul.hw-list, ul.grid-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+ul.hw-list li, ul.grid-list li {
+    margin-bottom: 5px;
+}
+
+ul.hw-list li ul, ul.grid-list li ul {
+    list-style: none;
+    padding-left: 20px;
+}
+
+ul.hw-list li ul li, ul.grid-list li ul li {
+    margin-bottom: 0;
+}

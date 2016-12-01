@@ -47,6 +47,10 @@ export class CurrentParamsService {
     protected currentGridNameSubject: Subject<string> = null;
     public currentGridNameSnapshot: string = null;
 
+    public currentInstanceId: Observable<string> = null;
+    protected currentInstanceIdSubject: Subject<string> = null;
+    public currentInstanceIdSnapshot: string = null;
+
     constructor(protected router: Router, protected backendService: BackendService) {
         console.log("BreadcrumbsService init");
 
@@ -59,6 +63,7 @@ export class CurrentParamsService {
         this.currentBlockName = this.currentBlockNameSubject = new Subject<string>();
         this.currentGridProjectName = this.currentGridProjectNameSubject = new Subject<string>();
         this.currentGridName = this.currentGridNameSubject = new Subject<string>();
+        this.currentInstanceId = this.currentInstanceIdSubject = new Subject<string>();
 
         router.events.subscribe(event => {
             if (event instanceof RoutesRecognized) {
@@ -188,6 +193,18 @@ export class CurrentParamsService {
                     this.currentGridNameSnapshot = gridProgram.name;
                     this.currentGridNameSubject.next(this.currentGridNameSnapshot);
                 });
+            }
+
+        }
+
+        if (this.currentParamsSnapshot["instance"] != params["instance"]) {
+
+            if (!params["instance"]) {
+                this.currentInstanceIdSnapshot = null;
+                this.currentInstanceIdSubject.next(this.currentInstanceIdSnapshot);
+            } else {
+                this.currentInstanceIdSnapshot = params["instance"];
+                this.currentInstanceIdSubject.next(this.currentInstanceIdSnapshot);
             }
 
         }

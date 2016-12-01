@@ -84,6 +84,7 @@ var CONFIG = {
         "put:/product/activate/{product_id}": "productActivate",
         "put:/product/deactivate/{product_id}": "productDeactivate",
         "put:/invoice/send_remainder/{invoice_id}": "sendInvoiceRemainder",
+        "get:/instance/project/{project_id}": "getAllInstancesForProject",
     },
     methodsIgnoreParts: ["coreClient", "compilation", "grid", "get", "filter", "list", "deactivateBoard", "create", "edit", "upload", "update", "all", "validate", "recovery", "connect", "disconnect"],
     methodsOkCodes: [200, 201],

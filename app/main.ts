@@ -86,6 +86,8 @@ import {NotificationsOverlayComponent} from "./components/NotificationsOverlayCo
 import {NotificationsListComponent} from "./components/NotificationsListComponent";
 import { ModalsBlockoVersionSelectComponent } from './modals/blocko-version-select';
 import {FinancialProductComponent} from "./views/financial-product";
+import {ProjectsProjectInstancesComponent} from "./views/projects-project-instances";
+import {ProjectsProjectInstancesInstanceComponent} from "./views/projects-project-instances-instance";
 
 //@formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -127,6 +129,8 @@ var routes: Routes = [
     {path: "projects/:project/grid", data: {breadName: "Grid programs"}, component: ProjectsProjectGridComponent, canActivate: [AuthGuard]},
     {path: "projects/:project/grid/:grids", data: {breadName: ":grids"}, component: ProjectsProjectGridGridsComponent, canActivate: [AuthGuard]},
     {path: "projects/:project/grid/:grids/:grid", data: {breadName: ":grid"}, component: ProjectsProjectGridGridsGridComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/instances", data: {breadName: "Cloud instances"}, component: ProjectsProjectInstancesComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/instances/:instance", data: {breadName: ":instance"}, component: ProjectsProjectInstancesInstanceComponent, canActivate: [AuthGuard]},
 
     {path: "**", component: Error404Component},
 ];
@@ -153,6 +157,7 @@ var tabMenus = {
         new LabeledLink("Blocko", null, "sitemap fa-rotate-90", {items:[
             new LabeledLink("Blocko programs", ["/", "projects", ":project", "blocko"], "sitemap fa-rotate-90"),
             new LabeledLink("Custom blocks", ["/", "projects", ":project", "blocks"], "cubes"),
+            new LabeledLink("Cloud instances", ["/", "projects", ":project", "instances"], "cloud"),
         ]}),
         new LabeledLink("Grid", null, "desktop", {items:[
             new LabeledLink("Grid programs", ["/", "projects", ":project", "grid"], "desktop"),
@@ -238,6 +243,8 @@ var tabMenus = {
         ProjectsProjectGridGridsComponent,
         ProjectsProjectGridGridsGridComponent,
         ProductRegistrationComponent,
+        ProjectsProjectInstancesComponent,
+        ProjectsProjectInstancesInstanceComponent,
         // Modals components
         ModalsProjectPropertiesComponent,
         ModalsRemovalComponent,
