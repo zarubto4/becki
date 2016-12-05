@@ -38,6 +38,7 @@ export interface IWebSocketErrorMessage extends IWebSocketMessage {
 }
 
 export interface IWebSocketNotification extends INotification, IWebSocketMessage {
+    state: ("created"|"updated"|"confirmed"|"deleted");
 }
 
 export interface ICodeCompileErrorMessage {
@@ -480,6 +481,19 @@ export abstract class BeckiBackend extends TyrionAPI {
                     .subscribe(() => this.sendWebSocketMessageQueue());
                 opened
                     .subscribe(this.interactionsOpened);
+
+                channelReceived
+                    .filter(message => message.messageType == "ping")
+                    .subscribe((msg) => {
+                        if (this.webSocket.readyState == WebSocket.OPEN) {
+                            this.webSocket.send(JSON.stringify({
+                                messageType: "ping",
+                                messageId: msg.messageId,
+                                messageChannel: msg.messageChannel,
+                                status: "success"
+                            }));
+                        }
+                    });
 
                 channelReceived
                     .filter(message => message.status == "error")

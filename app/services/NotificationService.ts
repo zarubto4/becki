@@ -36,9 +36,12 @@ export abstract class Notification {
     constructor(public id: string, public type: string, public icon: string, body: string|INotificationElement[], public time: number, reason?: Object) {
         if (typeof body == "string") {
             this.htmlBody = body;
-            var userMessage = NullSafe(() => <string>(<any>reason).userMessage);
+            let userMessage = NullSafe(() => <string>(<any>reason).userMessage);
+            let error = NullSafe(() => <string>(<any>reason).error);
             if (userMessage) {
                 this.htmlBody += "<br><b>"+userMessage+"</b>";
+            } else if (error) {
+                this.htmlBody += "<br><b>"+error+"</b>";
             }
         } else {
             this.elementsBody = body;
@@ -81,6 +84,21 @@ export abstract class Notification {
         }
 
         return out;
+    }
+
+    public update(n:INotification) {
+        if (n.was_read) {
+            this.wasRead = n.was_read;
+        }
+        if (n.confirmed) {
+            if (!this.confirmed && !this.closed) {
+                this.close();
+            }
+            this.confirmed = n.confirmed;
+        }
+        if (n.buttons) {
+            this.buttons = n.buttons;
+        }
     }
 
     closeProgressWidth(): string {
@@ -243,29 +261,46 @@ export class NotificationService {
                 console.log("(un)subscribed");
             } else {
                 console.log(notification);
-                var notif:Notification = Notification.fromINotification(notification);
-                switch (notification.notification_importance) {
-                    case "low":
-                        this.addOverlayNotification(notif);
-                        break;
-                    case "normal":
-                        if (!notif.wasRead) {
-                            this.unreadNotificationsCount++;
-                        }
-                        this.totalNotificationsCount++;
+                if (notification.state == "created") {
+                    let notif: Notification = Notification.fromINotification(notification);
+                    switch (notification.notification_importance) {
+                        case "low":
+                            this.addOverlayNotification(notif);
+                            break;
+                        case "normal":
+                            if (!notif.wasRead) {
+                                this.unreadNotificationsCount++;
+                            }
+                            this.totalNotificationsCount++;
 
-                        this.addSavedNotification(notif);
-                        this.addOverlayNotification(notif);
-                        break;
-                    case "high":
-                        if (!notif.wasRead) {
-                            this.unreadNotificationsCount++;
-                        }
-                        this.totalNotificationsCount++;
+                            this.addSavedNotification(notif);
+                            this.addOverlayNotification(notif);
+                            break;
+                        case "high":
+                            if (!notif.wasRead) {
+                                this.unreadNotificationsCount++;
+                            }
+                            this.totalNotificationsCount++;
 
-                        this.addSavedNotification(notif);
-                        this.addOverlayNotification(notif);
-                        break;
+                            this.addSavedNotification(notif);
+                            this.addOverlayNotification(notif);
+                            break;
+                    }
+                } else if ((notification.state == "updated" || notification.state == "confirmed") && notification.id) {
+                    let notif = this.notifications.find((n) => n.id == notification.id);
+                    if (notif) {
+                        let oldWasRead = notif.wasRead;
+                        notif.update(notification);
+                        // wasRead changes to true
+                        if (oldWasRead == false && notif.wasRead == true) {
+                            this.unreadNotificationsCount--;
+                        }
+                    }
+                } else if (notification.state == "deleted" && notification.id) {
+                    var notif = this.removeNotificationById(notification.id);
+                    if (notif && notif.wasRead == false) {
+                        this.unreadNotificationsCount--;
+                    }
                 }
             }
         });
@@ -374,12 +409,37 @@ export class NotificationService {
     onButtonClick(n:Notification, b:INotificationButton) {
         n.confirmed = true;
         n.close();
-        // TODO: confirm
-        //this.backendService.con
+        this.backendService.confirmNotification(n.id, {
+            action: b.action,
+            payload: b.payload
+        })
+        .catch((e) => {
+            n.confirmed = false; // is this okay?
+            this.addFlashMessage(new FlashMessageError("Cannot confirm notification.", e));
+        });
     }
 
     private isNotificationExists(id:string):boolean {
         return !!this.notifications.find((n) => n.id == id);
+    }
+
+    private removeNotificationById(id:string):Notification {
+
+        let  notif = this.notifications.find((n) => n.id == id);
+
+        let overlayIndex = this.overlayNotifications.findIndex((n) => n.id == id);
+        if (overlayIndex > -1) {
+            this.overlayNotifications.splice(overlayIndex, 1);
+        }
+
+        let notificationIndex = this.notifications.findIndex((n) => n.id == id);
+        if (notificationIndex > -1) {
+            this.notifications.splice(notificationIndex, 1);
+        }
+
+        this.toolbarNotifications = this.notifications.slice(0, 10);
+
+        return notif;
     }
 
     getRestApiNotifications(page = 1): Promise<Notification[]> {
@@ -393,8 +453,13 @@ export class NotificationService {
                 list.content.forEach((n) => {
                     // TODO: maybe update it!
                     if (!this.isNotificationExists(n.id)) {
-                        var nn = Notification.fromINotification(n);
+                        let nn = Notification.fromINotification(n);
                         this.notifications.unshift(nn);
+                    } else {
+                        let notif = this.notifications.find((nnn) => nnn.id == n.id);
+                        if (notif) {
+                            notif.update(n);
+                        }
                     }
                 });
 
