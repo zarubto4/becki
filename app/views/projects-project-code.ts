@@ -79,6 +79,10 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         this.navigate(["/projects", this.currentParamsService.get("project"), "code", code.id]);
     }
 
+    onBoardTypeClick(boardTypeId:string): void {
+        this.navigate(["/hardware", boardTypeId]);
+    }
+
     onRemoveClick(code: ICProgram): void {
         this.modalService.showModal(new ModalsRemovalModel(code.name)).then((success) => {
             if (success) {

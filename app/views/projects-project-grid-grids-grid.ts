@@ -55,6 +55,10 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
         this.routeParamsSubscription.unsubscribe();
     }
 
+    onGridProjectClick(gridProjectId:string) {
+        this.navigate(["/projects", this.currentParamsService.get("project"), "grid", gridProjectId]);
+    }
+
     refresh(): void {
         this.blockUI();
         this.backendService.getMProject(this.gridsId)

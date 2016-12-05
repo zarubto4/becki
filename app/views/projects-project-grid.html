@@ -30,7 +30,7 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let gridProject of gridProjects">
-                    <td class="no-wrap"><a (click)="onProjectClick(gridProject)">{{gridProject.name}}</a></td>
+                    <td class="no-wrap bold"><a (click)="onProjectClick(gridProject)">{{gridProject.name}}</a></td>
                     <td>{{gridProject.description}}</td>
                     <td class="no-wrap">
                         <button title="Group properties" class="btn btn-icon-only green" [disabled]="!gridProject.edit_permission" (click)="onProjectEditClick(gridProject)">

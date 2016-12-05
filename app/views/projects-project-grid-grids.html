@@ -34,7 +34,7 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let program of gridProject.m_programs">
-                    <td class="no-wrap"><a (click)="onProgramClick(program)">{{program.name}}</a></td>
+                    <td class="no-wrap bold"><a (click)="onProgramClick(program)">{{program.name}}</a></td>
                     <td>{{program.description}}</td>
                     <td class="no-wrap">
                         <button title="Program properties" class="btn btn-icon-only green" [disabled]="!program.edit_permission" (click)="onProgramEditClick(program)">

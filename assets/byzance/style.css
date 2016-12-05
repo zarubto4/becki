@@ -1499,3 +1499,55 @@ ul.hw-list li ul, ul.grid-list li ul {
 ul.hw-list li ul li, ul.grid-list li ul li {
     margin-bottom: 0;
 }
+
+.hardware-card .mt-card-item {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.hardware-card .img-placeholder .fa {
+    transform: rotate(20deg);
+}
+
+.hardware-card .mt-card-avatar {
+    overflow: hidden;
+}
+
+.hardware-card:hover {
+    text-decoration: none;
+}
+
+.hardware-card .mt-card-avatar {
+    height: 100px;
+    background-color: #525E64;
+}
+
+.hardware-card .img-placeholder, .hardware-card .img {
+    background-color: #525E64;
+    width: 100%;
+    height: 100px;
+    text-align: center;
+    font-size: 80px;
+    line-height: 100px;
+    color: #BFBFBF;
+    position: relative;
+    transition: transform .4s linear;
+}
+
+.hardware-card .img {
+    height: auto;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.hardware-card .img-placeholder {
+    transform: translateY(0.01%);
+}
+
+.hardware-card:hover .img {
+    transform: scale(1.2) translateY(-41.6%); /* 50%/1.2 */
+}
+
+.hardware-card:hover .img-placeholder {
+    transform: scale(1.2) translateY(0.01%);
+}

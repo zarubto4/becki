@@ -19,7 +19,7 @@
                 <div>
                     Name: <strong>{{codeProgram?codeProgram.name:""}}</strong><br>
                     Description: <strong>{{codeProgram?codeProgram.description:""}}</strong><br>
-                    Device type: <strong>{{codeProgram?codeProgram.type_of_board_name:""}}</strong>
+                    Device type: <strong><a (click)="onBoardTypeClick(codeProgram.type_of_board_id)">{{codeProgram?codeProgram.type_of_board_name:""}}</a></strong>
                 </div>
             </div>
         </div>

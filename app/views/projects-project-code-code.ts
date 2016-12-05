@@ -85,6 +85,10 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     }
 
+    onBoardTypeClick(boardTypeId:string): void {
+        this.navigate(["/hardware", boardTypeId]);
+    }
+
     selectProgramVersion(programVersion: ICProgramVersion) {
         if (!this.codeProgramVersions) return;
         if (this.codeProgramVersions.indexOf(programVersion) == -1) return;

@@ -31,8 +31,8 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let device of devices">
-                    <td class="no-wrap"><a (click)="onDeviceClick(device)">{{device.id}}</a></td>
-                    <td class="no-wrap">{{device.type_of_board_name}}</td>
+                    <td class="no-wrap bold"><a (click)="onDeviceClick(device)">{{device.id}}</a></td>
+                    <td class="no-wrap"><a (click)="onBoardTypeClick(device.type_of_board_id)">{{device.type_of_board_name}}</a></td>
                     <td>{{device.personal_description}}</td>
                     <td class="no-wrap">
                         <button title="Device properties" class="btn btn-icon-only green" [disabled]="!device.edit_permission" (click)="onEditClick(device)">

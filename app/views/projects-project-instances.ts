@@ -55,4 +55,8 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
         this.navigate(["/projects", this.currentParamsService.get("project"), "instances", instance.blocko_instance_name]);
     }
 
+    onBlockoProgramClick(bProgramId:string) {
+        this.navigate(["/projects", this.currentParamsService.get("project"), "blocko", bProgramId]);
+    }
+
 }

@@ -55,6 +55,10 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
             });
     }
 
+    onBlockoProgramClick(bProgramId:string) {
+        this.navigate(["/projects", this.currentParamsService.get("project"), "blocko", bProgramId]);
+    }
+
     connectionsHwCount() {
         var yodaCount = NullSafeDefault(() => this.instance.actual_summary.hardware_group, []).length;
         var padawansCount = 0;

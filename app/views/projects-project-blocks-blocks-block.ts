@@ -81,6 +81,10 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
         this.routeParamsSubscription.unsubscribe();
     }
 
+    onBlocksGroupClick(groupId:string) {
+        this.navigate(["/projects", this.currentParamsService.get("project"), "blocks", groupId]);
+    }
+
     newBlockCode(code: string) {
         this.successfullyTested = false;
         this.blockCode = code;

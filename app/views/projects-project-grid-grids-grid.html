@@ -19,7 +19,7 @@
                 <div>
                     Name: <strong>{{gridProgram?gridProgram.name:""}}</strong><br>
                     Description: <strong>{{gridProgram?gridProgram.description:""}}</strong><br>
-                    Grid project: <strong>{{gridProject?gridProject.name:""}}</strong>
+                    Grid project: <strong><a (click)="onGridProjectClick(gridProject.id)">{{gridProject?gridProject.name:""}}</a></strong>
                 </div>
             </div>
         </div>

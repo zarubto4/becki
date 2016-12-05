@@ -88,6 +88,9 @@ import { ModalsBlockoVersionSelectComponent } from './modals/blocko-version-sele
 import {FinancialProductComponent} from "./views/financial-product";
 import {ProjectsProjectInstancesComponent} from "./views/projects-project-instances";
 import {ProjectsProjectInstancesInstanceComponent} from "./views/projects-project-instances-instance";
+import {HardwareComponent} from "./views/hardware";
+import {HardwareHardwareTypeComponent} from "./views/hardware-hardware_type";
+import {UnixTimeFormat} from "./pipes/UnixTimeFormat";
 
 //@formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -111,7 +114,8 @@ var routes: Routes = [
     {path: "financial", data: {breadName: "Financial"}, component: FinancialComponent, canActivate: [AuthGuard]},
     {path: "financial/Product", data: {breadName: "Product"}, component: FinancialProductComponent, canActivate: [AuthGuard]},
 
-
+    {path: "hardware", data: {breadName: "Hardware types"}, component: HardwareComponent, canActivate: [AuthGuard]},
+    {path: "hardware/:hardware_type", data: {breadName: ":last"}, component: HardwareHardwareTypeComponent, canActivate: [AuthGuard]},
 
     {path: "productRegistration/:tariff", data: {breadName: "Product registration"}, component: ProductRegistrationComponent, canActivate: [AuthGuard]},
     {path: "productRegistration", data: {breadName: "Product registration"}, component: ProductRegistrationComponent, canActivate: [AuthGuard]},
@@ -140,11 +144,11 @@ var navigation = [
     new LabeledLink("Dashboard", ["/dashboard"], "tachometer"),
     new LabeledLink("Projects", ["/projects"], "tasks"),
     new LabeledLink("Financial", ["/financial"],"bank"),
+    new LabeledLink("Hardware types", ["/hardware"], "microchip")
     /*new LabeledLink("Applications", ["/user/applications"], "mobile"),
     new LabeledLink("Interactions", ["/user/interactions"], "link"),
     new LabeledLink("Devices", ["/user/devices"], "rocket"),
     new LabeledLink("System", ["/system"], "globe"),*/
-    new LabeledLink("Log out", ["/logout"], "sign-out")
 ];
 
 var tabMenus = {
@@ -161,7 +165,7 @@ var tabMenus = {
         ]}),
         new LabeledLink("Grid", null, "desktop", {items:[
             new LabeledLink("Grid programs", ["/", "projects", ":project", "grid"], "desktop"),
-            new LabeledLink("Screen profiles", ["/", "projects", ":project", "screen-profiles"], "arrows"),
+            new LabeledLink("Custom widgets", ["/", "projects", ":project", "widgets"], "object-group"),
         ]}),
         new LabeledLink("Participants", ["/", "projects", ":project", "participants"], "users"),
     ]
@@ -202,6 +206,7 @@ var tabMenus = {
         LayoutNotLogged,
         // Pipes
         Nl2Br,
+        UnixTimeFormat,
         // Components
         AceEditor,
         BeckiFormColorPicker,
@@ -245,6 +250,8 @@ var tabMenus = {
         ProductRegistrationComponent,
         ProjectsProjectInstancesComponent,
         ProjectsProjectInstancesInstanceComponent,
+        HardwareComponent,
+        HardwareHardwareTypeComponent,
         // Modals components
         ModalsProjectPropertiesComponent,
         ModalsRemovalComponent,

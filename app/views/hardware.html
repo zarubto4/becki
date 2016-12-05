@@ -1,0 +1,40 @@
+<layout-main [title]="'Hardware types'">
+
+    <div class="portlet portlet light bordered">
+        <div class="mt-element-card mt-element-overlay">
+            <div class="row">
+                <div *ngFor="let device of devices; let index = index" class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                    <a class="hardware-card" (click)="onDeviceClick(device)">
+                        <div class="mt-card-item">
+                            <div class="mt-card-avatar">
+                                <img class="img" *ngIf="device.picture_link" src="{{device.picture_link}}">
+                                <div class="img-placeholder" *ngIf="!device.picture_link">
+                                    <i class="fa fa-fw fa-microchip"></i>
+                                </div>
+                            </div>
+                            <div class="mt-card-content">
+                                <h3 class="mt-card-name font-dark">{{device.name}}</h3>
+                                <p class="mt-card-desc font-grey-salsa">{{device.producer_name}}</p>
+                                <p class="mt-card-desc font-grey-mint">{{device.description}}</p>
+                                <div class="mt-card-social">
+                                    <ul>
+                                        <li *ngIf="device.connectible_to_internet">
+                                            <i class="fa fa-fw fa-plug font-grey-mint" title="Ethernet"></i>
+                                        </li>
+                                        <li *ngIf="device.connectible_to_internet">
+                                            <i class="fa fa-fw fa-wifi font-grey-mint" title="Wi-Fi"></i>
+                                        </li>
+                                        <li *ngIf="!device.connectible_to_internet">
+                                            <span class="bold font-red bg-yellow-lemon">TODO</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</layout-main>

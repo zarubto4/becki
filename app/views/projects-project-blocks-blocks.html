@@ -34,7 +34,7 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let block of group.blocko_blocks">
-                    <td class="no-wrap"><a (click)="onBlockClick(block)">{{block.name}}</a></td>
+                    <td class="no-wrap bold"><a (click)="onBlockClick(block)">{{block.name}}</a></td>
                     <td>{{block.general_description}}</td>
                     <td class="no-wrap">
                         <button title="Block properties" class="btn btn-icon-only green" [disabled]="!block.edit_permission" (click)="onBlockEditClick(block)">

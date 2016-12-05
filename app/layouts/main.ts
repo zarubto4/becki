@@ -3,7 +3,7 @@
  * directory of this distribution.
  */
 
-import {Component, OnDestroy, OnInit, Input, Inject} from "@angular/core";
+import {Component, OnDestroy, OnInit, Input, Inject, OnChanges, SimpleChanges} from "@angular/core";
 import {ActivatedRoute, Router} from "@angular/router";
 import {BackendService} from "../services/BackendService";
 import {BreadcrumbsService} from "../services/BreadcrumbsService";
@@ -18,7 +18,7 @@ const BODY_CLASSES = ["page-header-fixed", "page-container-bg-solid"];
     selector: "layout-main",
     templateUrl: "app/layouts/main.html"
 })
-export class LayoutMain implements OnInit, OnDestroy {
+export class LayoutMain implements OnInit, OnDestroy, OnChanges {
 
     @Input()
     title: string = "";
@@ -28,6 +28,9 @@ export class LayoutMain implements OnInit, OnDestroy {
 
     @Input()
     tabMenu: string = null;
+
+    @Input()
+    lastBreadName: string = "";
 
     tabMenuItems: LabeledLink[] = null;
 
@@ -39,6 +42,12 @@ export class LayoutMain implements OnInit, OnDestroy {
     openTabMenuIndex: number = -1;
 
     constructor(protected notificationService: NotificationService, private backendService: BackendService, @Inject("navigation") private navigation: LabeledLink[], private breadcrumbsService: BreadcrumbsService, private tabMenuService: TabMenuService, private activatedRoute: ActivatedRoute, private router:Router) {
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes["lastBreadName"]) {
+            this.breadcrumbsService.setLastBreadName(changes["lastBreadName"].currentValue);
+        }
     }
 
     isRouterLinkActive(ll: LabeledLink):boolean {

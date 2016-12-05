@@ -88,6 +88,10 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         alert("TODO!!! Board object: " + JSON.stringify(device));
     }
 
+    onBoardTypeClick(boardTypeId:string): void {
+        this.navigate(["/hardware", boardTypeId]);
+    }
+
     onRemoveClick(device: IBoard): void {
         this.modalService.showModal(new ModalsRemovalModel(device.id)).then((success) => {
             if (success) {

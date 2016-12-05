@@ -14,6 +14,8 @@ export class BreadcrumbsService {
 
     protected breadcrumbs: LabeledLink[] = [];
 
+    protected lastBreadName: string = "";
+
     protected breadNameCache: { [key: string]: string } = {};
 
     constructor(@Inject("routes") protected routes: Routes, protected router: Router, protected currentParamsService: CurrentParamsService, protected backendService: BackendService) {
@@ -80,6 +82,8 @@ export class BreadcrumbsService {
                 return this.currentParamsService.currentGridNameSnapshot;
             case ":instance":
                 return this.currentParamsService.currentInstanceIdSnapshot;
+            case ":last":
+                return this.lastBreadName;
             default:
                 return breadName;
         }
@@ -100,6 +104,11 @@ export class BreadcrumbsService {
             outLink.push(part);
         });
         return outLink;
+    }
+
+    public setLastBreadName(last:string) {
+        this.lastBreadName = last;
+        this.refresh();
     }
 
     protected refresh() {
