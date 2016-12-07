@@ -8,7 +8,7 @@
 
 import {OnInit, Component, Injector, OnDestroy} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
-import {IProduct} from "../backend/TyrionAPI";
+import {IProduct, IInvoice} from "../backend/TyrionAPI";
 import {Subscription} from "rxjs";
 
 
@@ -24,10 +24,37 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
 
     product: IProduct = null;
 
+    mocinvoice: IInvoice[] =[{date_of_create: "11.5.2016", id: 445, invoice_number: "dkiodifj45", payment_method: "bank", payment_status: "pay", pdf_link: "www.google.com", require_payment: true},{date_of_create: "11.5.2016", id: 445, invoice_number: "dkiodifj45", payment_method: "credit", payment_status: "pay", pdf_link: "www.google.com", require_payment: true},{date_of_create: "11.5.2016", id: 445, invoice_number: "dkiodifj45", payment_method: "bank", payment_status: "pay", pdf_link: "www.google.com", require_payment: false}];
+
+
     constructor(injector: Injector) {
         super(injector)
     };
 
+    onAddCreditsClick():void{
+
+    }
+
+    onInvoiceClick(invoice:IInvoice):void{
+        this.router.navigate(["financial",this.id,"invoices",invoice.id]); //todo špatně routuje
+    }
+
+    onPayClick(invoice:IInvoice):void{
+
+    }
+
+    onDownloadPDFClick():void{
+
+    }
+    onSendClick():void{
+
+    }
+    onPrintClick():void{
+
+    }
+    onSettingsClick():void{
+
+    }
 
     ngOnInit(): void {
         this.blockUI();
@@ -51,6 +78,7 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
         this.blockUI();
         this.backendService.getAllProducts().then(products =>{
             this.product = products.find(product => product.id == this.id );
+            console.log(this.product);
             this.unblockUI();
         }).catch(error =>{
 

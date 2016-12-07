@@ -127,14 +127,14 @@
                         <div *ngIf="selectedTariff.company_details_required" class="col-md-6">
                             <p>
                             <h2>Company info</h2>
-
+                            <becki-form-input *ngIf="!inEu()" [control]="form.controls.registration_no" label="Registration no"></becki-form-input>
+                            <becki-form-input *ngIf="inEu()" [control]="form.controls.vat_number" label="Vat number"></becki-form-input> <!--TODO předělat if na Model-Change -->
                             <becki-form-input  [control]="form.controls.company_authorized_email" [type]="email" label="Company authorized email"></becki-form-input>
                             <becki-form-input  [control]="form.controls.company_authorized_phone" [type]="number" label="Company authorized phone"></becki-form-input>
                             <becki-form-input  [control]="form.controls.company_invoice_email" [type]="email" label="Company invoice email"></becki-form-input>
                             <becki-form-input  [control]="form.controls.company_name" label="Company name"></becki-form-input>
                             <becki-form-input  [control]="form.controls.company_web" label="Company web"></becki-form-input>
-                            <becki-form-input *ngIf="!inEu()" [control]="form.controls.registration_no" label="Registration no"></becki-form-input>
-                            <becki-form-input *ngIf="inEu()" [control]="form.controls.vat_number" label="Vat number"></becki-form-input> <!--TODO předělat if na Model-Change -->
+
                         </div>
 
 

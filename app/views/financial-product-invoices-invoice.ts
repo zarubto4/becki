@@ -4,7 +4,7 @@
 
 import {OnInit, Component, Injector, OnDestroy} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
-import {IProduct} from "../backend/TyrionAPI";
+import {IProduct, IInvoiceFullDetails} from "../backend/TyrionAPI";
 import {Subscription} from "rxjs";
 
 
@@ -16,6 +16,10 @@ export class FinancialProductInvoicesInvoiceComponent extends BaseMainComponent 
 
     id: number;
 
+    invoiceId:number;
+
+    fullIvoice:IInvoiceFullDetails;
+
     routeParamsSubscription: Subscription;
 
     product: IProduct = null;
@@ -24,11 +28,18 @@ export class FinancialProductInvoicesInvoiceComponent extends BaseMainComponent 
         super(injector)
     };
 
+    getWholePrice():string{
+        var price=0;
+        this.fullIvoice.invoice_items.map(item => price+= item.unit_price);
+
+        return price.toString().substring(0,price.toString().indexOf('.')+3);
+    }
 
     ngOnInit(): void {
         this.blockUI();
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.id = params["product"];
+            this.invoiceId = params["invoice"];
             this.refresh();
             this.unblockUI();
         });
@@ -45,6 +56,15 @@ export class FinancialProductInvoicesInvoiceComponent extends BaseMainComponent 
 
     refresh():void{
         this.blockUI();
+
+        this.backendService.getInvoice(this.invoiceId).then(invoice =>{
+            this.fullIvoice = invoice;
+            this.unblockUI();
+        }).catch(error =>{
+
+            this.unblockUI();
+        })
+
         this.backendService.getAllProducts().then(products =>{
             this.product = products.find(product => product.id == this.id );
             this.unblockUI();

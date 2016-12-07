@@ -20,18 +20,10 @@ export class BeckiValidators {
         return {"number": true}; // invalid
     };
 
-    public static generalVATnumber: ValidatorFn = (c: AbstractControl) => {
-        if (c.value.match(/^[A-Z0-9]*$/)) {
-            return null; // valid
-        }
-        return {"generalVATnumber": true}; // invalid
-    };
-
-
-    public static condition(conditionCallback: ()=>boolean, validator: ValidatorFn): ValidatorFn {
+    public static condition(conditionCallback: (value: string)=>boolean, validator: ValidatorFn): ValidatorFn {
         return (a: AbstractControl) => {
             if (conditionCallback) {
-                var f = conditionCallback();
+                var f = conditionCallback(a.value);
                 if (f) {
                     return validator(a);
                 }

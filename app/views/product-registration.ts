@@ -11,6 +11,7 @@ import {BeckiValidators} from "../helpers/BeckiValidators";
 import {BeckiFormSelectOption} from "../components/BeckiFormSelect";
 import {Subscription} from "rxjs";
 import {StaticOptionLists} from "../helpers/StaticOptionLists";
+import {BeckiAsyncValidators} from "../helpers/BeckiAsyncValidators";
 
 @Component({
     selector: "product-registration",
@@ -89,6 +90,8 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
     }
 
 
+
+
     chooseTariff(tariff: IGeneralTariff): void {
         this.selectedTariff=tariff;
 
@@ -158,9 +161,9 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
             input["company_web"] = ["", [Validators.minLength(4)]]; //company only
 
-            input["registration_no"] = ["", ];//BeckiValidators.condition(()=>!this.inEu(), Validators.required)
+            input["registration_no"] = ["",[BeckiValidators.condition(()=>!this.inEu(), Validators.required)] ];
 
-            input["vat_number"] = ["", ];//BeckiValidators.condition(()=>this.inEu(),BeckiValidators.generalVATnumber)
+            input["vat_number"] = ["", [BeckiValidators.condition(()=>this.inEu(), Validators.required)], BeckiAsyncValidators.condition(()=>this.inEu(), BeckiAsyncValidators.validateEntity(this.backendService, "vat_number"))]; //GB365684514 např.
 
         }
         this.form=null;
@@ -178,10 +181,8 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
     }
 
     inEu():boolean{
-        if(this.form.controls["country"].value) {
-            return this.countryList.find(country => country.value == this.form.controls["country"].value).data;
-        }
-        return false;
+        var country =  this.countryList.find(country => this.form && country.value == this.form.controls["country"].value);
+        return  country?country.data:null;
         }
 
     onSubmitClick(): void {

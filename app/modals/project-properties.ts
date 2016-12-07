@@ -37,7 +37,7 @@ export class ModalsProjectPropertiesComponent implements OnInit {
 
     constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
         this.form = this.formBuilder.group({
-            "name": ["", [Validators.required, Validators.minLength(4)], BeckiAsyncValidators.ifValidator((value) => {
+            "name": ["", [Validators.required, Validators.minLength(4)], BeckiAsyncValidators.condition((value) => {
                 return !(this.modalModel && this.modalModel.exceptName && this.modalModel.exceptName == value);
             }, BeckiAsyncValidators.projectNameTaken(this.backendService))],
             "description": [""],

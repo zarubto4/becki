@@ -3,7 +3,6 @@
  * directory of this distribution.
  */
  -->
-
 <layout-main tabMenu="tariffs-tarrif" [title]="'Financial'">
     <div class="tabbable-line tabbable-full-width">
         <h3 class="title center-block"></h3>
@@ -11,16 +10,53 @@
             <div class="portlet-title tab able-line">
                 <div class="caption">
                     <i class="icon-bubbles font-dark hide"></i>
-                    <span class="caption-subject font-dark bold uppercase">Tariff:</span>
+                    <span class="caption-subject font-dark bold uppercase">Invoices:</span>
+                </div>
+                <div class="becki-actions">
+                    <button class="btn blue" (click)="onAddCreditsClick()">
+                        <i class="fa fa-plus-circle"></i> Add credits
+                    </button>
                 </div>
             </div>
-            <div class="portlet-body">
-                <div class="tab-content">
-                    <div class="tab-pane active">
-                        in
-                    </div>
-                </div>
-            </div>
+
+
+        <div  *ngIf="(mocinvoice && mocinvoice.length)" class="table-scrollable">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Invoice ID</th>
+                    <th>Total cost</th>
+                    <th>Time period</th>
+                    <th>Paid</th>
+                    <th class="text-right">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let invoice of mocinvoice">
+                    <td class="no-wrap"><a (click)="onInvoiceClick(invoice)">{{invoice.invoice_number}}</a></td>
+                    <td>{{invoice.id}}</td>
+                    <td><span class="font-red bg-yellow-lemon">TODO</span> <=> <span class="font-red bg-yellow-lemon">TODO</span> </td>
+                    <td><span *ngIf="!invoice.require_payment"><i class=" font-green-jungle fa fa-check fa-2x"></i></span><span *ngIf="invoice.require_payment"><a (click)="onPayClick()">PAY</a></span></td>
+                    <td class="no-wrap text-right">
+                        <button (click)="onDownloadPDFClick()" title="Download as PDF" class="btn btn-icon-only white">
+                            <i class=" fa  fa-file-pdf-o fa-2x"></i>
+                        </button>
+                        <button (click)="onSendClick()" title="Send" class="btn btn-icon-only white">
+                            <i class=" fa fa-paper-plane-o fa-2x"></i>
+                        </button>
+                        <button (click)="onPrintClick()" title="Print" class="btn btn-icon-only white">
+                            <i class=" fa fa-print fa-2x"></i>
+                        </button>
+                        <button (click)="onSettingsClick()" title="Settings" class="btn btn-icon-only white">
+                            <i class=" fa fa-gears fa-2x"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
+        <h3 *ngIf="!mocinvoice" class="text-center">Loading...</h3>
+        <h3 *ngIf="invoice && mocinvoice == 0" class="text-center">No invoice</h3>
+    </div>
     </div>
 </layout-main>

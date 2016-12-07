@@ -90,6 +90,7 @@ import {FinancialProductExtensionsComponent} from "./views/financial-product-ext
 import {FinancialProductInvoicesComponent} from "./views/financial-product-invoices";
 import {FinancialProductInvoicesInvoiceComponent} from "./views/financial-product-invoices-invoice";
 import {FinancialProductBillingComponent} from "./views/financial-product-billing";
+import {StringReplacer} from "./pipes/StringReplacer";
 
 //@formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -114,7 +115,7 @@ var routes: Routes = [
     {path: "financial/:product", data: {breadName: ":product"}, component: FinancialProductComponent, canActivate: [AuthGuard]},
     {path: "financial/:product/extensions", data: {breadName: "extensions"}, component: FinancialProductExtensionsComponent, canActivate: [AuthGuard]},
     {path: "financial/:product/invoices", data: {breadName: "invoices"}, component: FinancialProductInvoicesComponent, canActivate: [AuthGuard]},
-    {path: "financial/:product/invoices/:invoice", data: {breadName: "invoices"}, component:FinancialProductInvoicesInvoiceComponent, canActivate: [AuthGuard]},
+    {path: "financial/:product/invoices/:invoice", data: {breadName: ":invoice"}, component:FinancialProductInvoicesInvoiceComponent, canActivate: [AuthGuard]},
     {path: "financial/:product/billing", data: {breadName: "billing"}, component:FinancialProductBillingComponent, canActivate: [AuthGuard]},
 
 
@@ -214,6 +215,7 @@ var tabMenus = {
         // Pipes
         Nl2Br,
         UnixTimeFormat,
+        StringReplacer,
         // Components
         AceEditor,
         BeckiFormColorPicker,

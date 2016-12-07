@@ -14,6 +14,7 @@ import {FlashMessageSuccess, FlashMessageError, FlashMessagesService} from "../s
 import {BackendService} from "../services/BackendService";
 import {Router} from "@angular/router";
 import {BlockUIService} from "../services/BlockUIService";
+import {BeckiAsyncValidators} from "../helpers/BeckiAsyncValidators";
 
 
 @Component({
@@ -27,8 +28,8 @@ export class CreateUserComponent implements OnInit {
     constructor( protected formBuilder: FormBuilder, protected router: Router, protected backendService: BackendService, protected flashMessagesService: FlashMessagesService) {
 
         this.CreateUserForm = this.formBuilder.group({
-            "email": ["", [Validators.required, BeckiValidators.email]],
-            "nick_name": ["", [Validators.required, Validators.minLength(8), Validators.maxLength(60)]],
+            "email": ["", [Validators.required, BeckiValidators.email], BeckiAsyncValidators.validateEntity(this.backendService, "mail")],
+            "nick_name": ["", [Validators.required, Validators.minLength(8), Validators.maxLength(60)], BeckiAsyncValidators.validateEntity(this.backendService, "nick_name")],
             "password": ["", [Validators.required, Validators.minLength(8), Validators.maxLength(60)]],
             "passwordConfirm": ["", [BeckiValidators.passwordSame(()=>this.CreateUserForm, "password"), Validators.required, Validators.minLength(8), Validators.maxLength(60)]]
 
