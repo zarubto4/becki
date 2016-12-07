@@ -7,10 +7,11 @@ import moment = require("moment/moment");
 
 
 @Pipe({
-    name: 'unixTimeFormat'
+    name: 'unixTimeToDate'
 })
 export class UnixTimeFormat implements PipeTransform {
     transform(unixtime: number, format:string = "lll"):string{
+
         return moment(unixtime).format(format);
     }
 }

@@ -2,10 +2,12 @@
  * Created by davidhradek on 04.08.16.
  */
 
-import {FormControl, AsyncValidatorFn} from "@angular/forms";
+import {FormControl, AsyncValidatorFn, AbstractControl} from "@angular/forms";
 import {Observable, Observer} from "rxjs/Rx";
 import {BackendService} from "../services/BackendService";
 import {IBProgram} from "../backend/TyrionAPI";
+import {resolveEnumIdentifier} from "@angular/compiler/src/identifiers";
+import {resolve} from "url";
 
 export class AsyncValidatorDebounce {
     _validate: (x: any) => any;
@@ -45,6 +47,30 @@ export class AsyncValidatorDebounce {
 }
 
 export class BeckiAsyncValidators {
+
+    public static validateEntity(backEnd: BackendService,inputKey:string): AsyncValidatorFn{
+        return AsyncValidatorDebounce.debounce((control: FormControl) =>{
+            return new Promise<any>((resolve, reject) => {
+
+                backEnd.validatePersonEntity({key:inputKey,value:control.value})
+                    .then((entity) => {
+                    console.log(entity);
+                        if(entity.valid){
+                            resolve(null); // valid
+                        } else {
+                            let out:any = {"entityNotValid": inputKey};
+                            if (entity.message) out["entityMessage"] = entity.message;
+                            resolve(out); // invalid
+                        }
+                    })
+                    .catch(reason => {
+                        resolve({"entityNotValid": inputKey}); // invalid
+                    });
+
+            });
+        });
+
+    }
 
     public static projectNameTaken(backEnd: BackendService): AsyncValidatorFn {
         return AsyncValidatorDebounce.debounce((control: FormControl) => {
@@ -94,10 +120,10 @@ export class BeckiAsyncValidators {
         });
     }
 
-    public static ifValidator(ifFunction: (value: string)=>boolean, validator: AsyncValidatorFn) {
-        return (control: FormControl) => {
+    public static condition(conditionCallback: (value: string)=>boolean, validator: AsyncValidatorFn) {
+        return (control: AbstractControl) => {
             return new Promise<any>((resolve, reject) => {
-                if (ifFunction(control.value)) {
+                if (conditionCallback(control.value)) {
                     validator(control) // do validation
                         .then((out: any) => {
                             resolve(out);

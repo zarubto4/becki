@@ -36,7 +36,7 @@ export class ModalsBlockoPropertiesComponent implements OnInit {
     constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
-            "name": ["", [Validators.required, Validators.minLength(4)], BeckiAsyncValidators.ifValidator((value) => {
+            "name": ["", [Validators.required, Validators.minLength(4)], BeckiAsyncValidators.condition((value) => {
                 return !(this.modalModel && this.modalModel.exceptName && this.modalModel.exceptName == value);
             }, BeckiAsyncValidators.blockoNameTaken(this.backendService, () => {
                 return this.modalModel.projectId;

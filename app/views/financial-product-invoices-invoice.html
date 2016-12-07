@@ -1,0 +1,78 @@
+<!-- /*
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level
+ * directory of this distribution.
+ */
+ -->
+
+<layout-main tabMenu="tariffs-tarrif" [title]="'Invoice'">
+    <div *ngIf="fullIvoice" class="tabbable-line tabbable-full-width">
+        <h3 class="title center-block"></h3>
+        <div class="portlet light bordered">
+            <div class="portlet-title tab able-line">
+                <div class="caption">
+                    <i class="icon-bubbles font-dark hide"></i>
+                    <span class="caption-subject font-dark bold uppercase">invoice:{{fullIvoice.invoice.invoice_number}}</span>
+                </div>
+                <td class="no-wrap text-right">
+                    <button title="Download as PDF" class="btn btn-icon-only white">
+                        <i class=" fa  fa-file-pdf-o fa-2x"></i>
+                    </button>
+                    <button title="Send" class="btn btn-icon-only white">
+                        <i class=" fa fa-paper-plane-o fa-2x"></i>
+                    </button>
+                    <button title="Print" class="btn btn-icon-only white">
+                        <i class=" fa fa-print fa-2x"></i>
+                    </button>
+                    <button title="Settings" class="btn btn-icon-only white">
+                        <i class=" fa fa-gears fa-2x"></i>
+                    </button>
+                </td>
+            </div>
+            <div class="portlet-body">
+                <div class="tab-content">
+                    <div class="tab-pane active">
+                        <div class="row">
+                            <div class="col-sm-4">ID Subscription: {{fullIvoice.invoice.id}}</div>
+                            <div class="col-sm-4">Payment Mode: {{fullIvoice.invoice.payment_method}}</div>
+                            <div class="col-sm-1">Currency: {{fullIvoice.invoice.payment_status}}</div>
+                            <div class="col-sm-3">Paid in: {{fullIvoice.invoice.date_of_create}}</div>
+                        </div>
+                        <div>
+                            <div  *ngIf="(mocinvoice && mocinvoice.length)" class="table-scrollable">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>GUID</th>
+                                        <th>Billable units</th>
+                                        <th>Unite</th>
+                                        <th>Total cost</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let item of fullIvoice.invoice_items">
+                                        <td>{{item.name}}</td>
+                                        <td>{{item.unit_name}}</td>
+                                        <td>{{item.quantity}}</td>
+                                        <td>{{item.vat_rate}}</td>
+                                        <td>{{item.unit_price}}</td>
+
+                                    </tr>
+
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Total</td>
+                                        <td>{{getWholePrice()}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</layout-main>

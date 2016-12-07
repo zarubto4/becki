@@ -3,6 +3,40 @@
  * directory of this distribution.
  */
  -->
-<layout-main [title]="'Financial'">
-    <h1 class="title">Place: pepíkova velká alpha</h1>
+
+<layout-main tabMenu="tariffs-tarrif" *ngIf="product" [title]="'Financial'">
+    <div class="tabbable-line tabbable-full-width">
+    <h3 class="title center-block">{{product.product_individual_name}}</h3>
+
+
+
+
+
+    <div class="portlet light bordered">
+        <div class="portlet-title tab able-line">
+            <div class="caption">
+                <i class="icon-bubbles font-dark hide"></i>
+                <span class="caption-subject font-dark bold uppercase">Tariff:</span>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="tab-content">
+                <div class="tab-pane active">
+                    <div class=" row">
+                        <div class="col-sm-3 ">ID Subscription: {{product.subscription_id}}</div>
+                        <div class="col-sm-4 "><span class="fa font-green-jungle fa-2x fa-fw fa-bank"></span>Payment mode: {{product.payment_mode|StringReplacer}}</div>
+                        <div class="col-sm-2 ">Country: {{product.payment_details.country}}</div>
+                        <div class="col-sm-3 ">Next pay: {{product.paid_until_the_day|unixTimeToDate}}</div>
+                    </div>
+                    <div class="margin-top-15 row">
+                        <div class="col-sm-3 ">Device type: {{product.product_type}}</div>
+                        <div class="col-sm-4 "><span class="fa font-green-jungle fa-2x fa-fw fa-dollar"></span>Plan: {{product.payment_method|StringReplacer}}</div>
+                        <div class="col-sm-2 ">Currency: {{product.currency}}</div>
+                        <div class="col-sm-3 ">Next invoice: <span class="font-red bg-yellow-lemon">TODO</span> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
 </layout-main>

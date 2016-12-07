@@ -22,7 +22,17 @@ export class ValidatorErrorsService {
             if (errors["passwordSame"]) return "Passwords are different.";
             if (errors["filename"]) return "Invalid file/directory name.";
             if (errors["number"]) return "This field only accept numbers.";
-            if (errors["generalVATnumber"]) return "Invalid VATnumber format.";
+            if (errors["entityNotValid"]) {
+                if (errors["entityNotValid"] == "mail") {
+                    return "Email is already taken";
+                }else if (errors["entityNotValid"] == "nick_name") {
+                    return "Nick name is already taken";
+                }else if (errors["entityNotValid"] == "vat_number") {
+                    return "Wrong vat number (type it without spaces, dashes etc.)";
+                } else {
+                    return "Entity unknown error." + (errors["entityMessage"]?" ("+errors["entityMessage"]+")":"");
+                }
+            }
         }
         return "Unknown error (" + Object.keys(errors) + ").";
     }
