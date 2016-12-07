@@ -1551,3 +1551,7 @@ ul.hw-list li ul li, ul.grid-list li ul li {
 .hardware-card:hover .img-placeholder {
     transform: scale(1.2) translateY(0.01%);
 }
+
+.full-width {
+    width: 100%;
+}

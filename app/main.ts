@@ -91,6 +91,8 @@ import {ProjectsProjectInstancesInstanceComponent} from "./views/projects-projec
 import {HardwareComponent} from "./views/hardware";
 import {HardwareHardwareTypeComponent} from "./views/hardware-hardware_type";
 import {UnixTimeFormat} from "./pipes/UnixTimeFormat";
+import {ProjectsProjectMembersComponent} from "./views/projects-project-members";
+import {ModalsMembersAddComponent} from "./modals/members-add";
 
 //@formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -135,6 +137,7 @@ var routes: Routes = [
     {path: "projects/:project/grid/:grids/:grid", data: {breadName: ":grid"}, component: ProjectsProjectGridGridsGridComponent, canActivate: [AuthGuard]},
     {path: "projects/:project/instances", data: {breadName: "Cloud instances"}, component: ProjectsProjectInstancesComponent, canActivate: [AuthGuard]},
     {path: "projects/:project/instances/:instance", data: {breadName: ":instance"}, component: ProjectsProjectInstancesInstanceComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/members", data: {breadName: "Members"}, component: ProjectsProjectMembersComponent, canActivate: [AuthGuard]},
 
     {path: "**", component: Error404Component},
 ];
@@ -167,7 +170,7 @@ var tabMenus = {
             new LabeledLink("Grid programs", ["/", "projects", ":project", "grid"], "desktop"),
             new LabeledLink("Custom widgets", ["/", "projects", ":project", "widgets"], "object-group"),
         ]}),
-        new LabeledLink("Participants", ["/", "projects", ":project", "participants"], "users"),
+        new LabeledLink("Members", ["/", "projects", ":project", "members"], "users"),
     ]
 };
 
@@ -252,6 +255,7 @@ var tabMenus = {
         ProjectsProjectInstancesInstanceComponent,
         HardwareComponent,
         HardwareHardwareTypeComponent,
+        ProjectsProjectMembersComponent,
         // Modals components
         ModalsProjectPropertiesComponent,
         ModalsRemovalComponent,
@@ -273,6 +277,8 @@ var tabMenus = {
         ModalsHighImportanceNotificationComponent,
         ModalsDeviceEditDescriptionComponent,
         ModalsBlockoVersionSelectComponent,
+        ModalsMembersAddComponent,
+
 
     ],
     exports: [AppComponent],

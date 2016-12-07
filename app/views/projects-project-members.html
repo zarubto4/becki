@@ -1,0 +1,50 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+    <div class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="becki-caption">
+                <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-microchip"></i>
+                    Members
+                </span>
+            </div>
+            <div class="becki-actions">
+                <button class="btn blue" (click)="onMembersAddClick($event)">
+                    <i class="fa fa-plus-circle"></i> Add members
+                </button>
+            </div>
+        </div>
+        <div *ngIf="(project && project.participants && project.participants.length)" class="table-scrollable">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>E-mail</th>
+                    <th>Name</th>
+                    <th class="full-width">State</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let member of project.participants">
+                    <td class="no-wrap bold">{{member.user_email}}</td>
+                    <td class="no-wrap">{{member.full_name}}</td>
+                    <td>{{member.state}}</td>
+                    <td class="no-wrap">
+                        <button title="Remove member" class="btn btn-icon-only red" [disabled]="member.id == selfId" (click)="onMemberDeleteClick(member)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <h3 *ngIf="!project" class="text-center">Loading...</h3>
+        <h3 *ngIf="project && project.participants && project.participants.length == 0" class="text-center">No members in this project</h3>
+    </div>
+
+</layout-main>
