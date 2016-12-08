@@ -48,12 +48,12 @@ export class AsyncValidatorDebounce {
 
 export class BeckiAsyncValidators {
 
-    public static validateEntity(backEnd: BackendService,inputKey:string): AsyncValidatorFn{
+    public static validateEntity(backEnd: BackendService,inputKey:("mail"|"nick_name"|"vat_number")): AsyncValidatorFn{
         return AsyncValidatorDebounce.debounce((control: FormControl) =>{
             return new Promise<any>((resolve, reject) => {
 
                 backEnd.validatePersonEntity({key:inputKey,value:control.value})
-                    .then((entity) => {
+                    .then(entity => {
                     console.log(entity);
                         if(entity.valid){
                             resolve(null); // valid
