@@ -24,9 +24,8 @@
                         </div>
                         <div>
                             Status:
-                            <span *ngIf="false" class="bold font-green-jungle">Online</span>
-                            <span *ngIf="false" class="bold font-red">Offline</span>
-                            <span class="bold font-red bg-yellow-lemon">TODO</span>
+                            <span *ngIf="instance.instance_online" class="bold font-green-jungle">Online</span>
+                            <span *ngIf="!instance.instance_online" class="bold font-red">Offline</span>
                         </div>
                         <div>
                             Server:

@@ -4,7 +4,7 @@
 
 import {Component, OnInit, Injector, OnDestroy, ViewChild} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
-import {FlashMessageError, FlashMessageSuccess, FlashMessageInfo} from "../services/NotificationService";
+import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationService";
 import {Subscription} from "rxjs/Rx";
 import {
     IProject,
@@ -13,14 +13,13 @@ import {
     IBlockoBlockVersion,
     IBoardsForBlocko,
     IHardwareGroup,
-    IBoard,
     ICProgramVersion,
-    ICProgram,
     IBProgramVersion,
     IBPair,
     IMProject,
     IMProgramSnapShot,
-    IMProjectSnapShot, IBlockoBlockVersionShortDetail, ICProgramShortDetail
+    IMProjectSnapShot, IBlockoBlockVersionShortDetail, ICProgramShortDetail, IBoardShortDetail, IMProjectShortDetail,
+    IBProgramVersionShortDetail
 } from "../backend/TyrionAPI";
 import {BlockoView} from "../components/BlockoView";
 import {DraggableEventParams} from "../components/Draggable";
@@ -31,7 +30,7 @@ import {ModalsVersionDialogModel} from "../modals/version-dialog";
 import {ModalsBlockoAddGridModel} from "../modals/blocko-add-grid";
 
 
-declare var $: JQueryStatic;
+declare let $: JQueryStatic;
 import moment = require("moment/moment");
 import {NullSafe, NullSafeDefault} from '../helpers/NullSafe';
 import { ModalsBlockoVersionSelectModel } from '../modals/blocko-version-select';
@@ -70,19 +69,19 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     allBoardsDetails: IBoardsForBlocko = null;
 
-    boardById: { [id: string]: IBoard } = {};
+    boardById: { [id: string]: IBoardShortDetail } = {};
 
     selectedHardware: IHardwareGroup[] = [];
 
     // grid:
 
-    allGridProjects: IMProject[] = null;
+    allGridProjects: IMProjectShortDetail[] = null;
 
     selectedGridProgramVersions: { [projectId: string]: { [programId: string]: string }} = {};
 
     // versions:
 
-    blockoProgramVersions: IBProgramVersion[] = null;
+    blockoProgramVersions: IBProgramVersionShortDetail[] = null;
     selectedProgramVersion: IBProgramVersion = null;
 
     @ViewChild(BlockoView)
@@ -198,8 +197,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     }
 
     connectionsHwCount() {
-        var yodaCount = this.selectedHardware.length;
-        var padawansCount = 0;
+        let yodaCount = this.selectedHardware.length;
+        let padawansCount = 0;
         this.selectedHardware.forEach((sh) => {
             padawansCount += sh.device_board_pairs.length;
         });
@@ -216,21 +215,21 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     onDragStop(params: DraggableEventParams) {
 
-        var dragOffset = params.ui.offset;
-        var blockoOffset = $(this.blockoView.field.nativeElement).offset();
-        var blockoWidth = $(this.blockoView.field.nativeElement).width();
-        var blockoHeight = $(this.blockoView.field.nativeElement).height();
+        let dragOffset = params.ui.offset;
+        let blockoOffset = $(this.blockoView.field.nativeElement).offset();
+        let blockoWidth = $(this.blockoView.field.nativeElement).width();
+        let blockoHeight = $(this.blockoView.field.nativeElement).height();
 
         //var blockoOffset = $(this.blocko.field.nativeElement).width();
 
         if ((dragOffset.top >= blockoOffset.top) && (dragOffset.left >= blockoOffset.left) && (dragOffset.top <= (blockoOffset.top + blockoHeight)) && (dragOffset.left <= (blockoOffset.left + blockoWidth))) {
-            var x = dragOffset.left - blockoOffset.left;
-            var y = dragOffset.top - blockoOffset.top;
+            let x = dragOffset.left - blockoOffset.left;
+            let y = dragOffset.top - blockoOffset.top;
 
             if (params.data && params.data.id && this.blocksLastVersions[params.data.id]) {
 
-                var wantedVersion = this.blocksLastVersions[params.data.id];
-                var wantedVersionName = params.data.id + "_" + wantedVersion.id;
+                let wantedVersion = this.blocksLastVersions[params.data.id];
+                let wantedVersionName = params.data.id + "_" + wantedVersion.id;
 
                 if (this.blocksCache[wantedVersionName]) {
 
@@ -271,8 +270,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
         // prefetch
         if (params.data && params.data.id && this.blocksLastVersions[params.data.id]) {
-            var wantedVersion = this.blocksLastVersions[params.data.id];
-            var wantedVersionName = params.data.id + "_" + wantedVersion.id;
+            let wantedVersion = this.blocksLastVersions[params.data.id];
+            let wantedVersionName = params.data.id + "_" + wantedVersion.id;
             if (!this.blocksCache[wantedVersionName]) {
                 this.backendService.getBlockoBlockVersion(wantedVersion.id)
                     .then((bbv) => {
@@ -304,7 +303,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     }
 
     hwRemove(hwId: string) {
-        var i = -1;
+        let i = -1;
         this.selectedHardware.forEach((sh, index) => {
             if (sh.main_board_pair && sh.main_board_pair.board_id == hwId) {
                 i = index;
@@ -315,7 +314,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         } else {
             this.selectedHardware.forEach((sh) => {
                 if (sh.device_board_pairs && Array.isArray(sh.device_board_pairs)) {
-                    var ii = -1;
+                    let ii = -1;
                     sh.device_board_pairs.forEach((b, index) => {
                         if (b.board_id == hwId) {
                             ii = index;
@@ -332,7 +331,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     }
 
     getAllUsedHwIds(): string[] {
-        var out: string[] = [];
+        let out: string[] = [];
         if (this.selectedHardware) {
             this.selectedHardware.forEach((sh) => {
                 if (sh.main_board_pair && sh.main_board_pair.board_id) {
@@ -350,24 +349,24 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         return out;
     }
 
-    getAllFreeMainBoards(): IBoard[] {
+    getAllFreeMainBoards(): IBoardShortDetail[] {
         if (!this.allBoardsDetails || !this.allBoardsDetails.boards) return [];
-        var used = this.getAllUsedHwIds();
-        var out: IBoard[] = [];
+        let used = this.getAllUsedHwIds();
+        let out: IBoardShortDetail[] = [];
         this.allBoardsDetails.boards.forEach((b) => {
-            if (b.main_board && used.indexOf(b.id) == -1) {
+            if (NullSafe(()=>this.allBoardsDetails.type_of_boards.find((tob)=>tob.id==b.type_of_board_id).connectible_to_internet) && used.indexOf(b.id) == -1) {
                 out.push(b);
             }
         });
         return out;
     }
 
-    getAllFreeSubBoards(): IBoard[] {
+    getAllFreeSubBoards(): IBoardShortDetail[] {
         if (!this.allBoardsDetails || !this.allBoardsDetails.boards) return [];
-        var used = this.getAllUsedHwIds();
-        var out: IBoard[] = [];
+        let used = this.getAllUsedHwIds();
+        let out: IBoardShortDetail[] = [];
         this.allBoardsDetails.boards.forEach((b) => {
-            if (!b.main_board && used.indexOf(b.id) == -1) {
+            if (!NullSafe(()=>this.allBoardsDetails.type_of_boards.find((tob)=>tob.id==b.type_of_board_id).connectible_to_internet) && used.indexOf(b.id) == -1) {
                 out.push(b);
             }
         });
@@ -377,11 +376,11 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     gridAdd() {
         if (!this.allGridProjects) return;
 
-        var projects = this.allGridProjects.filter((gp) => !this.selectedGridProgramVersions[gp.id]);
+        let projects = this.allGridProjects.filter((gp) => !this.selectedGridProgramVersions[gp.id]);
 
         if (!projects.length) return; //TODO: inform or disable button
 
-        var m = new ModalsBlockoAddGridModel(projects);
+        let m = new ModalsBlockoAddGridModel(projects);
         this.modalService.showModal(m)
             .then((success) => {
                 if (success && m.selectedGridProject) {
@@ -409,14 +408,14 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     hwAdd(parentHwId: string = null) {
 
         if (!parentHwId) {
-            var mainBoards = this.getAllFreeMainBoards();
+            let mainBoards = this.getAllFreeMainBoards();
 
             if (!mainBoards || mainBoards.length == 0) {
                 this.modalService.showModal(new ModalsConfirmModel("Error", "No available main boards hardware.", true, "OK", null));
                 return;
             }
 
-            var m = new ModalsBlockoAddHardwareModel(mainBoards);
+            let m = new ModalsBlockoAddHardwareModel(mainBoards);
             this.modalService.showModal(m)
                 .then((success) => {
                     if (success && m.selectedBoard) {
@@ -435,19 +434,19 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
         } else {
 
-            var subBoards = this.getAllFreeSubBoards();
+            let subBoards = this.getAllFreeSubBoards();
 
             if (!subBoards || subBoards.length == 0) {
                 this.modalService.showModal(new ModalsConfirmModel("Error", "No available padavan boards hardware.", true, "OK", null));
                 return;
             }
 
-            var m = new ModalsBlockoAddHardwareModel(subBoards);
+            let m = new ModalsBlockoAddHardwareModel(subBoards);
             this.modalService.showModal(m)
                 .then((success) => {
                     if (success && m.selectedBoard) {
 
-                        var parentObj = this.selectedHardware.find((sh) => (sh.main_board_pair && sh.main_board_pair.board_id && sh.main_board_pair.board_id == parentHwId));
+                        let parentObj = this.selectedHardware.find((sh) => (sh.main_board_pair && sh.main_board_pair.board_id && sh.main_board_pair.board_id == parentHwId));
 
                         if (!parentObj.device_board_pairs) parentObj.device_board_pairs = [];
                         parentObj.device_board_pairs.push({
@@ -464,7 +463,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     }
 
     getCProgramVersionById(programVersionId: string): ICProgramVersion {
-        var ret: ICProgramVersion = null;
+        let ret: ICProgramVersion = null;
 
         if (this.allBoardsDetails && this.allBoardsDetails.c_programs) {
 
@@ -483,7 +482,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     }
 
     getTargetNameByBoardTypeId(boardTypeId: string): string {
-        var out: string = null;
+        let out: string = null;
         if (this.allBoardsDetails && this.allBoardsDetails.type_of_boards) {
             this.allBoardsDetails.type_of_boards.forEach((tob) => {
                 if (tob.id == boardTypeId) {
@@ -498,19 +497,19 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
         console.log(this.selectedGridProgramVersions);
 
-        var outInterface: BlockoTargetInterface[] = [];
+        let outInterface: BlockoTargetInterface[] = [];
 
-        var addInterface = (hwId: string, cProgramVersionId: string) => {
+        let addInterface = (hwId: string, cProgramVersionId: string) => {
             if (hwId && cProgramVersionId) {
-                var board = this.boardById[hwId];
-                var targetName: string = null;
+                let board = this.boardById[hwId];
+                let targetName: string = null;
                 if (board) {
                     targetName = this.getTargetNameByBoardTypeId(board.type_of_board_id);
                 }
-                var cpv = this.getCProgramVersionById(cProgramVersionId);
+                let cpv = this.getCProgramVersionById(cProgramVersionId);
 
                 if (board && targetName && cpv && cpv.virtual_input_output) {
-                    var interfaceData = JSON.parse(cpv.virtual_input_output);
+                    let interfaceData = JSON.parse(cpv.virtual_input_output);
                     if (interfaceData) {
                         outInterface.push({
                             "targetType": targetName,
@@ -545,7 +544,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
                 if (!this.selectedGridProgramVersions[gp.id]) return;
 
-                var out: any = {
+                let out: any = {
                     analogInputs: {},
                     digitalInputs: {},
                     messageInputs: {},
@@ -559,11 +558,11 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
                         if (p.program_versions && this.selectedGridProgramVersions[gp.id] && (this.selectedGridProgramVersions[gp.id][p.id])) {
 
-                            var programVersion = p.program_versions.find((pv)=> (pv.version_object.id == this.selectedGridProgramVersions[gp.id][p.id]));
+                            let programVersion = p.program_versions.find((pv)=> (pv.version_object.id == this.selectedGridProgramVersions[gp.id][p.id]));
 
                             if (programVersion) {
 
-                                var iface: any = {};
+                                let iface: any = {};
                                 try {
                                     iface = JSON.parse(programVersion.virtual_input_output);
                                 } catch (e) {
@@ -659,7 +658,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             this.fmWarning("Must create some version first.");
             return;
         }
-        var m = new ModalsBlockoVersionSelectModel(this.blockoProgramVersions, NullSafe(() => this.blockoProgram.instance_details.version_id));
+        let m = new ModalsBlockoVersionSelectModel(this.blockoProgramVersions, NullSafe(() => this.blockoProgram.instance_details.version_id));
         this.modalService.showModal(m)
             .then((success) => {
                 if (success) {
@@ -677,7 +676,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     }
 
     onProgramVersionIdClick(programVersionId: string): void {
-        var programVersion = this.blockoProgramVersions.find((pv) => pv.version_object.id == programVersionId);
+        let programVersion = this.blockoProgramVersions.find((pv) => pv.version_object.id == programVersionId);
         if (programVersion) {
             this.selectProgramVersion(programVersion);
         } else {
@@ -720,7 +719,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     }
 
     onClearClick(): void {
-        var m = new ModalsConfirmModel("Clear program", "Really want clear Blocko program?");
+        let m = new ModalsConfirmModel("Clear program", "Really want clear Blocko program?");
         this.modalService.showModal(m)
             .then((success) => {
                 if (success) {
@@ -733,7 +732,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     onSaveClick(): void {
 
         // HW validation:
-        var validHw = true;
+        let validHw = true;
 
         this.selectedHardware.forEach((sh) => {
 
@@ -756,7 +755,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
         // Grid validation
 
-        var validGrid = true;
+        let validGrid = true;
         this.allGridProjects.forEach((gp) => {
             if (this.selectedGridProgramVersions[gp.id]) {
                 if (gp.m_programs) {
@@ -778,15 +777,15 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
 
         // save dialog
-        var m = new ModalsVersionDialogModel(moment().format("YYYY-MM-DD HH:mm:ss"));
+        let m = new ModalsVersionDialogModel(moment().format("YYYY-MM-DD HH:mm:ss"));
         this.modalService.showModal(m).then((success) => {
             if (success) {
 
-                var mProjectSnapshots: IMProjectSnapShot[] = [];
+                let mProjectSnapshots: IMProjectSnapShot[] = [];
 
                 for (var projectId in this.selectedGridProgramVersions) {
                     if (!this.selectedGridProgramVersions.hasOwnProperty(projectId)) continue;
-                    var programSnapshots: IMProgramSnapShot[] = [];
+                    let programSnapshots: IMProgramSnapShot[] = [];
 
                     for (var programId in this.selectedGridProgramVersions[projectId]) {
                         if (!this.selectedGridProgramVersions[projectId].hasOwnProperty(programId)) continue;
@@ -826,36 +825,47 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     }
 
-    selectProgramVersion(programVersion: IBProgramVersion): void {
+    selectProgramVersion(programVersion: IBProgramVersionShortDetail): void {
 
         if (!this.blockoProgramVersions) return;
         if (this.blockoProgramVersions.indexOf(programVersion) == -1) return;
 
-        this.selectedProgramVersion = programVersion;
-        this.selectedHardware = this.hardwareGroupCopy(this.selectedProgramVersion.hardware_group) || [];
+        this.blockUI();
+        this.backendService.getBProgramVersion(programVersion.version_id)
+            .then((programVersionFull) => {
+                this.unblockUI();
 
-        this.selectedGridProgramVersions = {};
-        programVersion.m_project_program_snapshots.forEach((pps) => {
-            this.selectedGridProgramVersions[pps.m_project_id] = {};
-            if (pps.m_program_snapshots) {
-                pps.m_program_snapshots.forEach((ps) => {
-                    this.selectedGridProgramVersions[pps.m_project_id][ps.m_program_id] = ps.version_object_id;
+                this.selectedProgramVersion = programVersionFull;
+                this.selectedHardware = this.hardwareGroupCopy(this.selectedProgramVersion.hardware_group) || [];
+
+                this.selectedGridProgramVersions = {};
+                programVersionFull.m_project_program_snapshots.forEach((pps) => {
+                    this.selectedGridProgramVersions[pps.m_project_id] = {};
+                    if (pps.m_program_snapshots) {
+                        pps.m_program_snapshots.forEach((ps) => {
+                            this.selectedGridProgramVersions[pps.m_project_id][ps.m_program_id] = ps.version_object_id;
+                        });
+                    }
+
                 });
-            }
 
-        });
+                console.log(this.selectedGridProgramVersions);
 
-        console.log(this.selectedGridProgramVersions);
+                this.blockoView.setDataJson(this.selectedProgramVersion.program);
 
-        this.blockoView.setDataJson(this.selectedProgramVersion.program);
+            })
+            .catch((err) => {
+                this.unblockUI();
+                this.fmError(`Cannot load version <b>${programVersion.version_name}</b>`, err);
+            });
 
     }
 
     hardwareGroupCopy(hwGroup: IHardwareGroup[]): IHardwareGroup[] {
         if (!hwGroup) return null;
-        var out: IHardwareGroup[] = [];
+        let out: IHardwareGroup[] = [];
         hwGroup.forEach((hg)=> {
-            var hgCopy: IHardwareGroup = {
+            let hgCopy: IHardwareGroup = {
                 main_board_pair: {
                     board_id: hg.main_board_pair.board_id,
                     c_program_version_id: hg.main_board_pair.c_program_version_id
@@ -877,8 +887,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     }
 
     versionRunning(v:IBProgramVersion):boolean {
-        var vId = NullSafe(() => v.version_object.id);
-        var cId = NullSafe(() => this.blockoProgram.instance_details.version_id);
+        let vId = NullSafe(() => v.version_object.id);
+        let cId = NullSafe(() => this.blockoProgram.instance_details.version_id);
         return (vId && cId && vId == cId); 
     }
 
@@ -891,10 +901,10 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             this.backendService.getAllBlockoDetails(this.projectId)
         ])
             .then((values:[ITypeOfBlock[], IBoardsForBlocko]) => {
-                var typeOfBlocks:ITypeOfBlock[] = values[0];
-                var blockoDetails:IBoardsForBlocko = values[1];
+                let typeOfBlocks:ITypeOfBlock[] = values[0];
+                let blockoDetails:IBoardsForBlocko = values[1];
 
-                var projects:IMProject[] = blockoDetails.m_projects;
+                let projects:IMProjectShortDetail[] = blockoDetails.m_projects;
 
                 // TODO: make this better viz. TYRION-374
                 this.blocksLastVersions = {};
@@ -903,15 +913,15 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
                 typeOfBlocks.forEach((tob) => {
                     tob.blocko_blocks.forEach((bb) => {
-                        var sortedVersion = bb.versions.sort((a, b)=> {
+                        let sortedVersion = bb.versions.sort((a, b)=> {
                             return parseInt(b.id) - parseInt(a.id);
                         });
                         if (sortedVersion.length) {
                             this.blocksLastVersions[bb.id] = sortedVersion[0];
                             if (this.blocksLastVersions[bb.id]) {
-                                var version = this.blocksLastVersions[bb.id];
+                                let version = this.blocksLastVersions[bb.id];
                                 try {
-                                    var dj = JSON.parse(version.design_json);
+                                    let dj = JSON.parse(version.design_json);
                                     if (dj["backgroundColor"]) {
                                         this.blocksColors[bb.id] = dj["backgroundColor"];
                                     }
@@ -951,11 +961,11 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
                 this.blockoProgramVersions = this.blockoProgram.program_versions || [];
 
-                this.blockoProgramVersions.sort((a, b)=> {
+                /*this.blockoProgramVersions.sort((a, b)=> {
                     if (a.version_object.date_of_create == b.version_object.date_of_create) return 0;
                     if (a.version_object.date_of_create > b.version_object.date_of_create) return -1;
                     return 1;
-                });
+                });*/
 
                 if (this.blockoProgramVersions.length) {
                     this.selectProgramVersion(this.blockoProgramVersions[0]);

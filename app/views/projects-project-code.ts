@@ -50,17 +50,6 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         if (this.projectSubscription) this.projectSubscription.unsubscribe();
     }
 
-    getBoardType(typeId: string): string {
-        let typeOfBoard:ITypeOfBoard = null;
-        if (this.typeOfBoards) {
-            typeOfBoard = this.typeOfBoards.find(dt => {
-                return dt.id == typeId
-            });
-        }
-        if (typeOfBoard) return typeOfBoard.name;
-        return "";
-    }
-
     onCodeClick(code: ICProgramShortDetail): void {
         this.navigate(["/projects", this.currentParamsService.get("project"), "code", code.id]);
     }
