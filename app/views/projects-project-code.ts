@@ -8,7 +8,7 @@ import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationSe
 import {Subscription} from "rxjs/Rx";
 import {ModalsRemovalModel} from "../modals/removal";
 import {ModalsCodePropertiesModel} from "../modals/code-properties";
-import {IProject, ICProgram, ITypeOfBoard} from "../backend/TyrionAPI";
+import {IProject, ITypeOfBoard, ICProgramShortDetail} from "../backend/TyrionAPI";
 
 @Component({
     selector: "view-projects-project-code",
@@ -19,10 +19,12 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
     id: string;
 
     routeParamsSubscription: Subscription;
+    projectSubscription: Subscription;
+    typeOfBoardsSubscription: Subscription;
 
     project: IProject = null;
 
-    codePrograms: ICProgram[] = null;
+    codePrograms: ICProgramShortDetail[] = null;
 
     typeOfBoards: ITypeOfBoard[] = null;
 
@@ -33,16 +35,23 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.id = params["project"];
-            this.refresh();
+            this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
+                this.project = project;
+                this.codePrograms = project.c_programs;
+            });
+            this.typeOfBoardsSubscription = this.storageService.typeOfBoards().subscribe((typeOfBoards) => {
+                this.typeOfBoards = typeOfBoards;
+            });
         });
     }
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
+        if (this.projectSubscription) this.projectSubscription.unsubscribe();
     }
 
     getBoardType(typeId: string): string {
-        var typeOfBoard:ITypeOfBoard = null;
+        let typeOfBoard:ITypeOfBoard = null;
         if (this.typeOfBoards) {
             typeOfBoard = this.typeOfBoards.find(dt => {
                 return dt.id == typeId
@@ -52,30 +61,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         return "";
     }
 
-    refresh(): void {
-        this.blockUI();
-        this.backendService.getProject(this.id)
-            .then((project) => {
-                this.project = project;
-                return this.backendService.getAllTypeOfBoards();
-            })
-            .then((typeOfBoards) => {
-                this.typeOfBoards = typeOfBoards;
-                return Promise.all<ICProgram>(this.project.c_programs.map((c_program) => {
-                    return this.backendService.getCProgram(c_program.id);
-                }));
-            })
-            .then((codePrograms) => {
-                this.codePrograms = codePrograms;
-                this.unblockUI();
-            })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(`The project ${this.id} cannot be loaded.`, reason));
-                this.unblockUI();
-            });
-    }
-
-    onCodeClick(code: ICProgram): void {
+    onCodeClick(code: ICProgramShortDetail): void {
         this.navigate(["/projects", this.currentParamsService.get("project"), "code", code.id]);
     }
 
@@ -83,18 +69,18 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         this.navigate(["/hardware", boardTypeId]);
     }
 
-    onRemoveClick(code: ICProgram): void {
+    onRemoveClick(code: ICProgramShortDetail): void {
         this.modalService.showModal(new ModalsRemovalModel(code.name)).then((success) => {
             if (success) {
                 this.blockUI();
                 this.backendService.deleteCProgram(code.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The code has been removed."));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The code cannot be removed.", reason));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
         });
@@ -102,7 +88,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
 
     onAddClick(): void {
         if (!this.typeOfBoards) new FlashMessageError(`The code cannot be added to project.`);
-        var model = new ModalsCodePropertiesModel(this.typeOfBoards);
+        let model = new ModalsCodePropertiesModel(this.typeOfBoards);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
@@ -114,20 +100,20 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The code ${model.name} has been added to project.`));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(`The code ${model.name} cannot be added to project.`, reason));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
         });
     }
 
-    onEditClick(code: ICProgram): void {
+    onEditClick(code: ICProgramShortDetail): void {
         if (!this.typeOfBoards) new FlashMessageError(`The code cannot be added to project.`);
 
-        var model = new ModalsCodePropertiesModel(this.typeOfBoards, code.name, code.description, "", true, code.name);
+        let model = new ModalsCodePropertiesModel(this.typeOfBoards, code.name, code.description, "", true, code.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
@@ -139,11 +125,11 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The code has been updated."));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The code cannot be updated.", reason));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
         });

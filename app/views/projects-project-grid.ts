@@ -7,7 +7,7 @@ import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationService";
 import {Subscription} from "rxjs/Rx";
 import {ModalsRemovalModel} from "../modals/removal";
-import {IProject, IMProject} from "../backend/TyrionAPI";
+import {IProject, IMProject, IMProjectShortDetail} from "../backend/TyrionAPI";
 import {ModalsGridProjectPropertiesModel} from "../modals/grid-project-properties";
 
 @Component({
@@ -19,10 +19,11 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
     id: string;
 
     routeParamsSubscription: Subscription;
+    projectSubscription: Subscription;
 
     project: IProject = null;
 
-    gridProjects: IMProject[] = null;
+    gridProjects: IMProjectShortDetail[] = null;
 
     constructor(injector: Injector) {
         super(injector)
@@ -31,41 +32,24 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.id = params["project"];
-            this.refresh();
+            this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
+                this.project = project;
+                this.gridProjects = project.m_projects;
+            });
         });
     }
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
+        if (this.projectSubscription) this.projectSubscription.unsubscribe();
     }
 
-    refresh(): void {
-        this.blockUI();
-        this.backendService.getProject(this.id)
-            .then((project) => {
-                this.project = project;
-                return Promise.all<IMProject>(project.m_projects.map((m_project) => {
-                    return this.backendService.getMProject(m_project.id);
-                }));
-            })
-            .then((gridProjects) => {
-                console.log(gridProjects);
-                this.gridProjects = gridProjects;
-                this.unblockUI();
-            })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(`The project ${this.id} cannot be loaded.`, reason));
-                this.unblockUI();
-            });
-
-    }
-
-    onProjectClick(project: IMProject): void {
+    onProjectClick(project: IMProjectShortDetail): void {
         this.navigate(["/projects", this.currentParamsService.get("project"), "grid", project.id]);
     }
 
     onProjectAddClick(): void {
-        var model = new ModalsGridProjectPropertiesModel();
+        let model = new ModalsGridProjectPropertiesModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
@@ -75,18 +59,18 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid project has been added."));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The grid project cannot be added.", reason));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
         });
     }
 
-    onProjectEditClick(project: IMProject): void {
-        var model = new ModalsGridProjectPropertiesModel(project.name, project.description, true, project.name);
+    onProjectEditClick(project: IMProjectShortDetail): void {
+        let model = new ModalsGridProjectPropertiesModel(project.name, project.description, true, project.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 console.log(model);
@@ -97,29 +81,28 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid project has been edited."));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The grid project cannot be edited.", reason));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
         });
     }
 
-    onProjectDeleteClick(project: IMProject): void {
-
+    onProjectDeleteClick(project: IMProjectShortDetail): void {
         this.modalService.showModal(new ModalsRemovalModel(project.name)).then((success) => {
             if (success) {
                 this.blockUI();
                 this.backendService.deleteMProject(project.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The grid project has been removed."));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The grid project cannot be removed.", reason));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
         });

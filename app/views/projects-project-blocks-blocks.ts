@@ -77,7 +77,7 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
 
     onBlockEditClick(block: IBlockoBlock): void {
 
-        var model = new ModalsBlocksBlockPropertiesModel(block.name, block.general_description, true, block.name);
+        var model = new ModalsBlocksBlockPropertiesModel(block.name, block.description, true, block.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();

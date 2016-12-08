@@ -98,10 +98,11 @@ import {FinancialProductInvoicesComponent} from "./views/financial-product-invoi
 import {FinancialProductInvoicesInvoiceComponent} from "./views/financial-product-invoices-invoice";
 import {FinancialProductBillingComponent} from "./views/financial-product-billing";
 import {StringReplacer} from "./pipes/StringReplacer";
+import {StorageService} from "./services/StorageService";
 
 //@formatter:off
 // DON'T USE children IN ROUTER YET!!!
-var routes: Routes = [
+let routes: Routes = [
     {path: "login", component: LoginComponent, canActivate: [NonAuthGuard]},
     {path: "logout", component: LogoutComponent},
     {path: "createUser", component: CreateUserComponent, canActivate: [NonAuthGuard]},
@@ -153,7 +154,7 @@ var routes: Routes = [
 ];
 //@formatter:on
 
-var navigation = [
+let navigation = [
     new LabeledLink("Dashboard", ["/dashboard"], "tachometer"),
     new LabeledLink("Projects", ["/projects"], "tasks"),
     new LabeledLink("Financial", ["/financial"],"bank"),
@@ -164,7 +165,7 @@ var navigation = [
     new LabeledLink("System", ["/system"], "globe"),*/
 ];
 
-var tabMenus = {
+let tabMenus = {
     "projects-project": [
         new LabeledLink("Dashboard", ["/", "projects", ":project"], "tachometer", {linkActiveExact: true}),
         new LabeledLink("Code", null, "code", {items:[
@@ -181,7 +182,6 @@ var tabMenus = {
             new LabeledLink("Custom widgets", ["/", "projects", ":project", "widgets"], "object-group"),
         ]}),
         new LabeledLink("Members", ["/", "projects", ":project", "members"], "users"),
-        new LabeledLink("Participants", ["/", "projects", ":project", "participants"], "users"),
     ],
     "tariffs-tarrif":[
         new LabeledLink("Dashboard", ["/", "financial", ":product"], "tachometer", {linkActiveExact: true}),
@@ -207,6 +207,7 @@ var tabMenus = {
         AuthGuard, // AuthGuard service must be after BackendService
         NonAuthGuard, // NonAuthGuard service must be after BackendService
         NotificationService, // NotificationService must be after BackendService
+        StorageService,
         BlockUIService,
         ModalService,
         CurrentParamsService,

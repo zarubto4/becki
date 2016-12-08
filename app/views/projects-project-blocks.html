@@ -31,7 +31,7 @@
                 <tbody>
                 <tr *ngFor="let group of groups">
                     <td class="no-wrap bold"><a (click)="onGroupClick(group)">{{group.name}}</a></td>
-                    <td>{{group.general_description}}</td>
+                    <td>{{group.description}}</td>
                     <td class="no-wrap">
                         <button title="Group properties" class="btn btn-icon-only green" [disabled]="!group.edit_permission" (click)="onGroupEditClick(group)">
                             <i class="fa fa-cog"></i>

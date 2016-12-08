@@ -11,7 +11,7 @@ import {
 } from "../services/NotificationService";
 import {ModalsRemovalModel} from "../modals/removal";
 import {ModalsProjectPropertiesModel} from "../modals/project-properties";
-import {IProject, IProductsAllApplicable, IProductDetail} from "../backend/TyrionAPI";
+import {IProject, IApplicableProduct} from "../backend/TyrionAPI";
 
 
 @Component({
@@ -26,7 +26,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
 
     projects: IProject[];
 
-    products: IProductDetail[];
+    products: IApplicableProduct[];
 
     ngOnInit(): void {
         this.refresh();
@@ -35,9 +35,9 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
     refresh(): void {
         this.blockUI();
         Promise.all<any>([this.backendService.getAllProjects(), this.backendService.getAllProductUserApplicables()])
-            .then((values:[IProject[], IProductsAllApplicable]) => {
+            .then((values:[IProject[], IApplicableProduct[]]) => {
                 this.projects = values[0];
-                this.products = values[1].list;
+                this.products = values[1];
                 this.unblockUI();
             })
             .catch((reason) => {

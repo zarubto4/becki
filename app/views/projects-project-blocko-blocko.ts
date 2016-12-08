@@ -10,7 +10,6 @@ import {
     IProject,
     IBProgram,
     ITypeOfBlock,
-    IBlockoBlockShortVersion,
     IBlockoBlockVersion,
     IBoardsForBlocko,
     IHardwareGroup,
@@ -21,7 +20,7 @@ import {
     IBPair,
     IMProject,
     IMProgramSnapShot,
-    IMProjectSnapShot
+    IMProjectSnapShot, IBlockoBlockVersionShortDetail, ICProgramShortDetail
 } from "../backend/TyrionAPI";
 import {BlockoView} from "../components/BlockoView";
 import {DraggableEventParams} from "../components/Draggable";
@@ -60,7 +59,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     blockGroups: ITypeOfBlock[] = null;
     blockGroupsOpenToggle: {[id: string]: boolean} = {};
 
-    blocksLastVersions: {[id: string]: IBlockoBlockShortVersion} = {};
+    blocksLastVersions: {[id: string]: IBlockoBlockVersionShortDetail} = {};
     blocksColors: {[id: string]: string} = {};
     blocksIcons: {[id: string]: string} = {};
 
@@ -293,7 +292,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         return (Object.keys(obj).length === 0);
     }
 
-    getCProgramsForBoardType(boardTypeId: string): ICProgram[] {
+    getCProgramsForBoardType(boardTypeId: string): ICProgramShortDetail[] {
         if (!this.allBoardsDetails || !this.allBoardsDetails.c_programs) return [];
         return this.allBoardsDetails.c_programs.filter((cp) => (cp.type_of_board_id == boardTypeId));
     }

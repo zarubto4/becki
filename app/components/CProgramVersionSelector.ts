@@ -23,7 +23,7 @@ import {ICProgram} from "../backend/TyrionAPI";
         </select>
         <select *ngIf="selectedProgram" class="form-control" [ngModel]="selectedProgramVersionId" (ngModelChange)="onSelectedProgramVersionIdChange($event)">
             <option [value]="null" disabled>Select version</option>
-            <option *ngFor="let cProgramVersion of selectedProgram.program_versions" [value]="cProgramVersion.version_object.id">{{cProgramVersion.version_object.version_name}}</option>
+            <option *ngFor="let cProgramVersion of selectedProgram.program_versions" [value]="cProgramVersion.version_id">{{cProgramVersion.version_name}}</option>
         </select>
     </div>
     <div class="clearfix"></div>
@@ -56,7 +56,7 @@ export class CProgramVersionSelector implements OnInit {
 
                     var isThis = false;
                     cp.program_versions.forEach((pv) => {
-                        if (pv.version_object.id == this.value) {
+                        if (pv.version_id == this.value) {
                             isThis = true;
                         }
                     });

@@ -115,13 +115,13 @@
                         </thead>
                         <tbody>
                         <tr *ngFor="let version of gridProgramVersions">
-                            <td class="no-wrap" [class.bold]="selectedProgramVersion == version">
+                            <td class="no-wrap" [class.bold]="isSelected(version)">
                                 <a (click)="onProgramVersionClick(version)">
-                                    {{version.version_object.version_name}}
+                                    {{version.version_name}}
                                 </a>
                             </td>
                             <td>
-                                {{version.version_object.version_description}}
+                                {{version.version_description}}
                             </td>
                         </tr>
                         </tbody>

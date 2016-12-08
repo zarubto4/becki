@@ -14,10 +14,12 @@ import {
     NotificationService, FlashMessage, FlashMessageInfo,
     FlashMessageSuccess, FlashMessageWarning, FlashMessageError
 } from "../services/NotificationService";
+import {StorageService} from "../services/StorageService";
 
 export abstract class BaseMainComponent {
 
     protected backendService: BackendService = null;
+    protected storageService: StorageService = null;
     protected router: Router = null;
     protected activatedRoute: ActivatedRoute = null;
     protected modalService: ModalService = null;
@@ -30,6 +32,7 @@ export abstract class BaseMainComponent {
         console.log("BaseMainComponent init");
         if (injector) {
             this.backendService = injector.get(BackendService);
+            this.storageService = injector.get(StorageService);
             this.router = injector.get(Router);
             this.activatedRoute = injector.get(ActivatedRoute);
             this.modalService = injector.get(ModalService);
