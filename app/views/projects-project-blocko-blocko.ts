@@ -19,7 +19,8 @@ import {
     IMProject,
     IMProgramSnapShot,
     IMProjectSnapShot, IBlockoBlockVersionShortDetail, ICProgramShortDetail, IBoardShortDetail, IMProjectShortDetail,
-    IBProgramVersionShortDetail
+    IBProgramVersionShortDetail, ISwaggerCProgramShortDetailForBlocko, ISwaggerCProgramVersionsShortDetailForBlocko,
+    ISwaggerMProjectShortDetailForBlocko
 } from "../backend/TyrionAPI";
 import {BlockoView} from "../components/BlockoView";
 import {DraggableEventParams} from "../components/Draggable";
@@ -75,7 +76,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     // grid:
 
-    allGridProjects: IMProjectShortDetail[] = null;
+    allGridProjects: ISwaggerMProjectShortDetailForBlocko[] = null;
 
     selectedGridProgramVersions: { [projectId: string]: { [programId: string]: string }} = {};
 
@@ -291,9 +292,9 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         return (Object.keys(obj).length === 0);
     }
 
-    getCProgramsForBoardType(boardTypeId: string): ICProgramShortDetail[] {
+    getCProgramsForBoardType(boardTypeId: string): ISwaggerCProgramShortDetailForBlocko[] {
         if (!this.allBoardsDetails || !this.allBoardsDetails.c_programs) return [];
-        return this.allBoardsDetails.c_programs.filter((cp) => (cp.type_of_board_id == boardTypeId));
+        return this.allBoardsDetails.c_programs;//TODO: !!! .filter((cp) => (cp.type_of_board_id == boardTypeId));
     }
 
     hwCProgramVersionChanged(hwObj: IBPair, cProgramVersion: string) {
@@ -462,15 +463,15 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     }
 
-    getCProgramVersionById(programVersionId: string): ICProgramVersion {
-        let ret: ICProgramVersion = null;
+    getCProgramVersionById(programVersionId: string): ISwaggerCProgramVersionsShortDetailForBlocko {
+        let ret: ISwaggerCProgramVersionsShortDetailForBlocko = null;
 
         if (this.allBoardsDetails && this.allBoardsDetails.c_programs) {
 
             this.allBoardsDetails.c_programs.forEach((cp) => {
-                if (cp.program_versions) {
-                    cp.program_versions.forEach((pv) => {
-                        if (pv.version_object.id == programVersionId) {
+                if (cp.versions) {
+                    cp.versions.forEach((pv) => {
+                        if (pv.id == programVersionId) {
                             ret = pv;
                         }
                     })
@@ -676,7 +677,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     }
 
     onProgramVersionIdClick(programVersionId: string): void {
-        let programVersion = this.blockoProgramVersions.find((pv) => pv.version_object.id == programVersionId);
+        let programVersion = this.blockoProgramVersions.find((pv) => pv.version_id == programVersionId);
         if (programVersion) {
             this.selectProgramVersion(programVersion);
         } else {
@@ -904,7 +905,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 let typeOfBlocks:ITypeOfBlock[] = values[0];
                 let blockoDetails:IBoardsForBlocko = values[1];
 
-                let projects:IMProjectShortDetail[] = blockoDetails.m_projects;
+                let projects:ISwaggerMProjectShortDetailForBlocko[] = blockoDetails.m_projects;
 
                 // TODO: make this better viz. TYRION-374
                 this.blocksLastVersions = {};
