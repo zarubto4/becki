@@ -1,0 +1,16 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title">{{modalModel.edit?"Edit widgets group properties":"Add widgets group"}}</h4>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="form">
+            <becki-form-input [control]="form.controls.name" label="Widgets group name"></becki-form-input>
+            <becki-form-input [control]="form.controls.description" label="Widgets group description"></becki-form-input>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{modalModel.edit?"Save":"Add"}}</button>
+        <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
+    </div>
+</div>

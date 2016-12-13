@@ -29,7 +29,8 @@
             "the-grid": "./node_modules/the-grid",
             "underscore": "./node_modules/underscore",
             "crypto-js": "./node_modules/crypto-js",
-            "moment": "./node_modules/moment"
+            "moment": "./node_modules/moment",
+            "watchjs": "./node_modules/watchjs/src/watch"
         },
         packages: {
             "ace": {main: "ace"},

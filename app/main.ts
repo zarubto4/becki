@@ -77,6 +77,7 @@ import {ModalsBlocksTypePropertiesComponent} from "./modals/blocks-type-properti
 import {ModalsBlocksBlockPropertiesComponent} from "./modals/blocks-block-properties";
 import {ModalsHighImportanceNotificationComponent} from "./modals/high-importance-notification";
 import {ModalsDeviceEditDescriptionComponent} from "./modals/device-edit-description";
+import {ModalsWidgetsTypePropertiesComponent} from "./modals/widgets-type-properties";
 import {BlockUIService} from "./services/BlockUIService";
 import {BlockUIComponent} from "./components/BlockUIComponent";
 import {ProjectsProjectBlocksBlocksComponent} from "./views/projects-project-blocks-blocks";
@@ -85,7 +86,7 @@ import {ProjectsProjectGridGridsGridComponent} from "./views/projects-project-gr
 import {FinancialComponent} from "./views/financial";
 import {NotificationsOverlayComponent} from "./components/NotificationsOverlayComponent";
 import {NotificationsListComponent} from "./components/NotificationsListComponent";
-import { ModalsBlockoVersionSelectComponent } from './modals/blocko-version-select';
+import {ModalsBlockoVersionSelectComponent } from './modals/blocko-version-select';
 import {FinancialProductComponent} from "./views/financial-product";
 import {ProjectsProjectInstancesComponent} from "./views/projects-project-instances";
 import {ProjectsProjectInstancesInstanceComponent} from "./views/projects-project-instances-instance";
@@ -99,6 +100,10 @@ import {FinancialProductInvoicesInvoiceComponent} from "./views/financial-produc
 import {FinancialProductBillingComponent} from "./views/financial-product-billing";
 import {StringReplacer} from "./pipes/StringReplacer";
 import {StorageService} from "./services/StorageService";
+import {ProjectsProjectWidgetsComponent } from './views/projects-project-widgets';
+import {ProjectsProjectWidgetsWidgetsComponent } from './views/projects-project-widgets-widgets';
+import {ModalsWidgetsWidgetPropertiesComponent} from "./modals/widgets-widget-properties";
+import {ProjectsProjectWidgetsWidgetsWidgetComponent} from './views/projects-project-widgets-widgets-widget';
 
 //@formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -143,12 +148,18 @@ let routes: Routes = [
     {path: "projects/:project/blocks", data: {breadName: "Custom blocks"}, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard]},
     {path: "projects/:project/blocks/:blocks", data: {breadName: ":blocks"}, component: ProjectsProjectBlocksBlocksComponent, canActivate: [AuthGuard]},
     {path: "projects/:project/blocks/:blocks/:block", data: {breadName: ":block"}, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard]},
+    
     {path: "projects/:project/grid", data: {breadName: "Grid programs"}, component: ProjectsProjectGridComponent, canActivate: [AuthGuard]},
     {path: "projects/:project/grid/:grids", data: {breadName: ":grids"}, component: ProjectsProjectGridGridsComponent, canActivate: [AuthGuard]},
     {path: "projects/:project/grid/:grids/:grid", data: {breadName: ":grid"}, component: ProjectsProjectGridGridsGridComponent, canActivate: [AuthGuard]},
     {path: "projects/:project/instances", data: {breadName: "Cloud instances"}, component: ProjectsProjectInstancesComponent, canActivate: [AuthGuard]},
     {path: "projects/:project/instances/:instance", data: {breadName: ":instance"}, component: ProjectsProjectInstancesInstanceComponent, canActivate: [AuthGuard]},
     {path: "projects/:project/members", data: {breadName: "Members"}, component: ProjectsProjectMembersComponent, canActivate: [AuthGuard]},
+
+    {path: "projects/:project/widgets", data: {breadName: "Custom blocks"}, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/widgets/:widgets", data: {breadName: ":blocks"}, component: ProjectsProjectWidgetsWidgetsComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/widgets/:widgets/:widget", data: {breadName: ":block"}, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard]},
+    
 
     {path: "**", component: Error404Component},
 ];
@@ -279,6 +290,8 @@ let tabMenus = {
         HardwareComponent,
         HardwareHardwareTypeComponent,
         ProjectsProjectMembersComponent,
+        ProjectsProjectWidgetsComponent,
+        ProjectsProjectWidgetsWidgetsWidgetComponent,
         // Modals components
         ModalsProjectPropertiesComponent,
         ModalsRemovalComponent,
@@ -301,8 +314,9 @@ let tabMenus = {
         ModalsDeviceEditDescriptionComponent,
         ModalsBlockoVersionSelectComponent,
         ModalsMembersAddComponent,
-
-
+        ModalsWidgetsTypePropertiesComponent,
+        ModalsWidgetsWidgetPropertiesComponent,
+        ProjectsProjectWidgetsWidgetsComponent
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

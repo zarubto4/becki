@@ -166,4 +166,8 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
 
     }
 
+    onTestWidgetClick(e: MouseEvent):void {
+        this.gridView.requestCreateWidget("button",e);
+    }
+
 }
