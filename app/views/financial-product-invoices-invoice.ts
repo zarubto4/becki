@@ -59,6 +59,7 @@ export class FinancialProductInvoicesInvoiceComponent extends BaseMainComponent 
 
         this.backendService.getInvoice(this.invoiceId).then(invoice =>{
             this.fullIvoice = invoice;
+            console.log(invoice);
             this.unblockUI();
         }).catch(error =>{
 

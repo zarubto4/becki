@@ -24,7 +24,7 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
 
     product: IProduct = null;
 
-    mocinvoice: IInvoice[] =[{date_of_create: "11.5.2016", id: 445, invoice_number: "dkiodifj45", payment_method: "bank", payment_status: "pay", pdf_link: "www.google.com", require_payment: true},{date_of_create: "11.5.2016", id: 445, invoice_number: "dkiodifj45", payment_method: "credit", payment_status: "pay", pdf_link: "www.google.com", require_payment: true},{date_of_create: "11.5.2016", id: 445, invoice_number: "dkiodifj45", payment_method: "bank", payment_status: "pay", pdf_link: "www.google.com", require_payment: false}];
+    invoices: IInvoice[] = null;
 
 
     constructor(injector: Injector) {
@@ -77,11 +77,11 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
     refresh():void{
         this.blockUI();
         this.backendService.getAllProducts().then(products =>{
-            this.product = products.find(product => product.id == this.id );
+            this.product = products.find(product => product.id == this.id);
             console.log(this.product);
+            this.invoices=this.product.invoices;
             this.unblockUI();
         }).catch(error =>{
-
             this.unblockUI();
         })
 
