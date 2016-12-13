@@ -7,11 +7,11 @@ import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 import {BackendService} from "../services/BackendService";
 import {ModalModel} from "../services/ModalService";
 import {BeckiFormSelectOption} from "../components/BeckiFormSelect";
-import {IBoard} from "../backend/TyrionAPI";
+import {IBoard, IBoardShortDetail} from "../backend/TyrionAPI";
 
 
 export class ModalsBlockoAddHardwareModel extends ModalModel {
-    constructor(public boards: IBoard[], public selectedBoard: IBoard = null) {
+    constructor(public boards: IBoardShortDetail[], public selectedBoard: IBoardShortDetail = null) {
         super();
     }
 }
