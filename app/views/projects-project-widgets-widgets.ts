@@ -83,7 +83,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
                 this.backendService.editWidget(widget.id, {
                     name: model.name,
                     description: model.description,
-                    type_of_widget_id: widget.type_of_widget_id // tohle je trochu divný ne?
+                    type_of_widget_id: widget.type_of_widget_id // tohle je trochu divný ne? ... možná kdyby jsi chtěl přesunout widget mezi groupama? [DU]
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The widget has been edited."));

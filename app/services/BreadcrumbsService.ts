@@ -46,6 +46,12 @@ export class BreadcrumbsService {
         this.currentParamsService.currentBlockName.subscribe(() => {
             this.refresh();
         });
+        this.currentParamsService.currentWidgetsGroupName.subscribe(() => {
+            this.refresh();
+        });
+        this.currentParamsService.currentWidgetName.subscribe(() => {
+            this.refresh();
+        });
         this.currentParamsService.currentGridProjectName.subscribe(() => {
             this.refresh();
         });
@@ -76,6 +82,10 @@ export class BreadcrumbsService {
                 return this.currentParamsService.currentBlocksGroupNameSnapshot;
             case ":block":
                 return this.currentParamsService.currentBlockNameSnapshot;
+            case ":widgets":
+                return this.currentParamsService.currentWidgetsGroupNameSnapshot;
+            case ":widget":
+                return this.currentParamsService.currentWidgetNameSnapshot;
             case ":grids":
                 return this.currentParamsService.currentGridProjectNameSnapshot;
             case ":grid":

@@ -39,6 +39,14 @@ export class CurrentParamsService {
     protected currentBlockNameSubject: Subject<string> = null;
     public currentBlockNameSnapshot: string = null;
 
+    public currentWidgetsGroupName: Observable<string> = null;
+    protected currentWidgetsGroupNameSubject: Subject<string> = null;
+    public currentWidgetsGroupNameSnapshot: string = null;
+
+    public currentWidgetName: Observable<string> = null;
+    protected currentWidgetNameSubject: Subject<string> = null;
+    public currentWidgetNameSnapshot: string = null;
+
     public currentGridProjectName: Observable<string> = null;
     protected currentGridProjectNameSubject: Subject<string> = null;
     public currentGridProjectNameSnapshot: string = null;
@@ -61,6 +69,8 @@ export class CurrentParamsService {
         this.currentCodeName = this.currentCodeNameSubject = new Subject<string>();
         this.currentBlocksGroupName = this.currentBlocksGroupNameSubject = new Subject<string>();
         this.currentBlockName = this.currentBlockNameSubject = new Subject<string>();
+        this.currentWidgetsGroupName = this.currentWidgetsGroupNameSubject = new Subject<string>();
+        this.currentWidgetName = this.currentWidgetNameSubject = new Subject<string>();
         this.currentGridProjectName = this.currentGridProjectNameSubject = new Subject<string>();
         this.currentGridName = this.currentGridNameSubject = new Subject<string>();
         this.currentInstanceId = this.currentInstanceIdSubject = new Subject<string>();
@@ -164,6 +174,34 @@ export class CurrentParamsService {
                 this.backendService.getBlockoBlock(params["block"]).then((block) => {
                     this.currentBlockNameSnapshot = block.name;
                     this.currentBlockNameSubject.next(this.currentBlockNameSnapshot);
+                });
+            }
+
+        }
+
+        if (this.currentParamsSnapshot["widgets"] != params["widgets"]) {
+
+            if (!params["widgets"]) {
+                this.currentWidgetsGroupNameSnapshot = null;
+                this.currentWidgetsGroupNameSubject.next(this.currentWidgetsGroupNameSnapshot);
+            } else {
+                this.backendService.getTypeOfWidget(params["widgets"]).then((widgets) => {
+                    this.currentWidgetsGroupNameSnapshot = widgets.name;
+                    this.currentWidgetsGroupNameSubject.next(this.currentWidgetsGroupNameSnapshot);
+                });
+            }
+
+        }
+
+        if (this.currentParamsSnapshot["widget"] != params["widget"]) {
+
+            if (!params["widget"]) {
+                this.currentWidgetNameSnapshot = null;
+                this.currentWidgetNameSubject.next(this.currentWidgetNameSnapshot);
+            } else {
+                this.backendService.getWidget(params["widget"]).then((widget) => {
+                    this.currentWidgetNameSnapshot = widget.name;
+                    this.currentWidgetNameSubject.next(this.currentWidgetNameSnapshot);
                 });
             }
 

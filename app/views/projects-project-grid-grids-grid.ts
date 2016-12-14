@@ -6,7 +6,7 @@ import {Component, OnInit, Injector, OnDestroy, ViewChild} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationService";
 import {Subscription} from "rxjs/Rx";
-import {IProject, IMProgram, IMProgramVersion, IMProject, IMProgramVersionShortDetail} from "../backend/TyrionAPI";
+import {IGridWidget, IProject, IMProgram, IMProgramVersion, IMProject, IMProgramVersionShortDetail, ITypeOfWidgetShortDetail, ITypeOfWidget } from '../backend/TyrionAPI';
 import {GridView} from "../components/GridView";
 import {ModalsVersionDialogModel} from "../modals/version-dialog";
 
@@ -36,6 +36,13 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
 
     gridDeviceProfile:string = "mobile";
 
+    projectSubscription: Subscription;
+    project: IProject = null;
+
+    widgetGroups: ITypeOfWidget[];
+
+    widgetGroupsOpenToggle: {[id: string]: boolean} = {};
+
     @ViewChild(GridView)
     gridView: GridView;
 
@@ -62,6 +69,17 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
 
     refresh(): void {
         this.blockUI();
+
+        this.backendService.getAllTypeOfWidgets()
+            .then((typesOfWidgets) => {
+                this.widgetGroups = typesOfWidgets;
+                this.unblockUI();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(`The widgets cannot be loaded.`, reason));
+                this.unblockUI();
+            });
+
         this.backendService.getMProject(this.gridsId)
             .then((gridProject) => {
                 console.log(gridProject);
@@ -75,12 +93,6 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
 
                 this.gridProgramVersions = this.gridProgram.program_versions || [];
 
-                /*this.gridProgramVersions.sort((a, b)=> {
-                    if (a.version_object.date_of_create == b.version_object.date_of_create) return 0;
-                    if (a.version_object.date_of_create > b.version_object.date_of_create) return -1;
-                    return 1;
-                });*/
-
                 if (this.gridProgramVersions.length) {
                     this.selectProgramVersion(this.gridProgramVersions[0]);
                 }
@@ -91,8 +103,6 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                 this.addFlashMessage(new FlashMessageError(`The grid cannot be loaded.`, reason));
                 this.unblockUI();
             });
-
-
     }
 
     onAddPageClick(): void {
@@ -162,12 +172,32 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                     });
             }
         });
-
-
     }
 
-    onTestWidgetClick(e: MouseEvent):void {
-        this.gridView.requestCreateWidget("button",e);
+    onToggleGroup(groupId: string) {
+        this.widgetGroupsOpenToggle[groupId] = !this.widgetGroupsOpenToggle[groupId];
+    }
+
+    onWidgetDown(e: MouseEvent, widget: IGridWidget):void {
+        this.gridView.requestCreateWidget({
+            name: widget.name,
+            id: widget.id,
+            version_id: widget.versions[0].id
+        },e);
+    }
+
+    onWidgetRequestingSource(event: any) {
+        console.log(event);
+        this.backendService.getWidgetVersion(event.type.version_id)
+        .then((widgetVersion) => {
+            //TODO add cache
+            event.resolve(widgetVersion.logic_json);
+            this.unblockUI();
+        })
+        .catch((err) => {
+            this.unblockUI();
+            this.addFlashMessage(new FlashMessageError("Cannot load widget version", err));
+        });
     }
 
 }

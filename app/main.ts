@@ -156,9 +156,9 @@ let routes: Routes = [
     {path: "projects/:project/instances/:instance", data: {breadName: ":instance"}, component: ProjectsProjectInstancesInstanceComponent, canActivate: [AuthGuard]},
     {path: "projects/:project/members", data: {breadName: "Members"}, component: ProjectsProjectMembersComponent, canActivate: [AuthGuard]},
 
-    {path: "projects/:project/widgets", data: {breadName: "Custom blocks"}, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard]},
-    {path: "projects/:project/widgets/:widgets", data: {breadName: ":blocks"}, component: ProjectsProjectWidgetsWidgetsComponent, canActivate: [AuthGuard]},
-    {path: "projects/:project/widgets/:widgets/:widget", data: {breadName: ":block"}, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/widgets", data: {breadName: "Custom widgets"}, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/widgets/:widgets", data: {breadName: ":widgets"}, component: ProjectsProjectWidgetsWidgetsComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/widgets/:widgets/:widget", data: {breadName: ":widget"}, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard]},
     
 
     {path: "**", component: Error404Component},
