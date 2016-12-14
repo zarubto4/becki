@@ -7,11 +7,11 @@ import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 import {BackendService} from "../services/BackendService";
 import {ModalModel} from "../services/ModalService";
 import {BeckiFormSelectOption} from "../components/BeckiFormSelect";
-import {IMProject} from "../backend/TyrionAPI";
+import {IMProject, IMProjectShortDetail} from "../backend/TyrionAPI";
 
 
 export class ModalsBlockoAddGridModel extends ModalModel {
-    constructor(public gridProjects: IMProject[], public selectedGridProject: IMProject = null) {
+    constructor(public gridProjects: IMProjectShortDetail[], public selectedGridProject: IMProjectShortDetail = null) {
         super();
     }
 }

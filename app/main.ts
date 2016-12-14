@@ -292,6 +292,7 @@ let tabMenus = {
         ProjectsProjectMembersComponent,
         ProjectsProjectWidgetsComponent,
         ProjectsProjectWidgetsWidgetsWidgetComponent,
+        ProjectsProjectWidgetsWidgetsComponent,
         // Modals components
         ModalsProjectPropertiesComponent,
         ModalsRemovalComponent,
@@ -315,8 +316,7 @@ let tabMenus = {
         ModalsBlockoVersionSelectComponent,
         ModalsMembersAddComponent,
         ModalsWidgetsTypePropertiesComponent,
-        ModalsWidgetsWidgetPropertiesComponent,
-        ProjectsProjectWidgetsWidgetsComponent
+        ModalsWidgetsWidgetPropertiesComponent
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]
