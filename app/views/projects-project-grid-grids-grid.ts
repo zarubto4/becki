@@ -6,13 +6,17 @@ import {Component, OnInit, Injector, OnDestroy, ViewChild} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationService";
 import {Subscription} from "rxjs/Rx";
-import {IProject, IMProgram, IMProgramVersion, IMProject} from "../backend/TyrionAPI";
+import {
+    IGridWidget, IProject, IMProgram, IMProgramVersion, IMProject, IMProgramVersionShortDetail,
+    ITypeOfWidgetShortDetail, ITypeOfWidget, IMProjectShortDetail
+} from '../backend/TyrionAPI';
 import {GridView} from "../components/GridView";
 import {ModalsVersionDialogModel} from "../modals/version-dialog";
 
 declare var $: JQueryStatic;
 import moment = require("moment/moment");
 import {ModalsConfirmModel} from "../modals/confirm";
+import {NullSafe} from "../helpers/NullSafe";
 
 
 @Component({
@@ -28,12 +32,19 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
     routeParamsSubscription: Subscription;
 
     //project: IProject = null;
-    gridProject: IMProject = null;
+    gridProject: IMProjectShortDetail = null;
     gridProgram: IMProgram = null;
-    gridProgramVersions: IMProgramVersion[] = [];
+    gridProgramVersions: IMProgramVersionShortDetail[] = [];
     selectedProgramVersion: IMProgramVersion = null;
 
     gridDeviceProfile:string = "mobile";
+
+    projectSubscription: Subscription;
+    //project: IProject = null;
+
+    widgetGroups: ITypeOfWidget[];
+
+    widgetGroupsOpenToggle: {[id: string]: boolean} = {};
 
     @ViewChild(GridView)
     gridView: GridView;
@@ -47,12 +58,16 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
             this.projectId = params["project"];
             this.gridsId = params["grids"];
             this.gridId = params["grid"];
+            this.projectSubscription = this.storageService.project(this.projectId).subscribe((project) => {
+                this.gridProject = project.m_projects.find((mp) => mp.id == this.gridsId);
+            });
             this.refresh();
         });
     }
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
+        if (this.projectSubscription) this.projectSubscription.unsubscribe();
     }
 
     onGridProjectClick(gridProjectId:string) {
@@ -61,24 +76,20 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
 
     refresh(): void {
         this.blockUI();
-        this.backendService.getMProject(this.gridsId)
-            .then((gridProject) => {
-                console.log(gridProject);
-                this.gridProject = gridProject;
-                return this.backendService.getMProgram(this.gridId)
-            })
-            .then((gridProgram) => {
-                console.log(gridProgram);
+
+        Promise.all<any>([
+            this.backendService.getAllTypeOfWidgets(),
+            this.backendService.getMProgram(this.gridId)
+        ])
+            .then((values:[ITypeOfWidget[], IMProgram]) => {
+                let typesOfWidgets: ITypeOfWidget[] = values[0];
+                let gridProgram: IMProgram = values[1];
+
+                this.widgetGroups = typesOfWidgets;
 
                 this.gridProgram = gridProgram;
 
                 this.gridProgramVersions = this.gridProgram.program_versions || [];
-
-                this.gridProgramVersions.sort((a, b)=> {
-                    if (a.version_object.date_of_create == b.version_object.date_of_create) return 0;
-                    if (a.version_object.date_of_create > b.version_object.date_of_create) return -1;
-                    return 1;
-                });
 
                 if (this.gridProgramVersions.length) {
                     this.selectProgramVersion(this.gridProgramVersions[0]);
@@ -90,33 +101,39 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                 this.addFlashMessage(new FlashMessageError(`The grid cannot be loaded.`, reason));
                 this.unblockUI();
             });
-
-
     }
 
     onAddPageClick(): void {
         this.gridView.addPage();
     }
 
-    onProgramVersionClick(programVersion: IMProgramVersion): void {
+    onProgramVersionClick(programVersion: IMProgramVersionShortDetail): void {
         this.selectProgramVersion(programVersion);
     }
 
-    selectProgramVersion(programVersion: IMProgramVersion): void {
-
+    selectProgramVersion(programVersion: IMProgramVersionShortDetail): void {
         if (!this.gridProgramVersions) return;
         if (this.gridProgramVersions.indexOf(programVersion) == -1) return;
 
-        this.selectedProgramVersion = programVersion;
-        this.gridView.setDataJson(this.selectedProgramVersion.m_code);
-        this.gridDeviceProfile = this.gridView.getDeviceProfile();
+        this.blockUI();
+        this.backendService.getMProgramVersion(programVersion.version_id)
+            .then((programVersionFull) => {
+                this.unblockUI();
+                this.selectedProgramVersion = programVersionFull;
+                this.gridView.setDataJson(this.selectedProgramVersion.m_code);
+                this.gridDeviceProfile = this.gridView.getDeviceProfile();
+            })
+            .catch((err) => {
+                this.unblockUI();
+                this.fmError(`Cannot load version <b>${programVersion.version_name}</b>`, err);
+            });
 
     }
 
     onChangeGridDeviceProfile(newValue:string): void {
-        var oldValue = this.gridDeviceProfile;
+        let oldValue = this.gridDeviceProfile;
         this.gridDeviceProfile = newValue;
-        var m = new ModalsConfirmModel("Grid size class change","Changing grid size class <strong>delete all your pages</strong>, are you sure?");
+        let m = new ModalsConfirmModel("Grid size class change","Changing grid size class <strong>delete all your pages</strong>, are you sure?");
         this.modalService.showModal(m)
             .then((success) => {
                 if (success) {
@@ -127,9 +144,13 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
             })
     }
 
+    isSelected(version:IMProgramVersionShortDetail):boolean {
+        return NullSafe(()=>this.selectedProgramVersion.version_object.id) == version.version_id;
+    }
+
     onSaveClick(): void {
 
-        var m = new ModalsVersionDialogModel(moment().format("YYYY-MM-DD HH:mm:ss"));
+        let m = new ModalsVersionDialogModel(moment().format("YYYY-MM-DD HH:mm:ss"));
         this.modalService.showModal(m).then((success) => {
             if (success) {
                 this.blockUI();
@@ -149,8 +170,32 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                     });
             }
         });
+    }
 
+    onToggleGroup(groupId: string) {
+        this.widgetGroupsOpenToggle[groupId] = !this.widgetGroupsOpenToggle[groupId];
+    }
 
+    onWidgetDown(e: MouseEvent, widget: IGridWidget):void {
+        this.gridView.requestCreateWidget({
+            name: widget.name,
+            id: widget.id,
+            version_id: widget.versions[0].id
+        },e);
+    }
+
+    onWidgetRequestingSource(event: any) {
+        console.log(event);
+        this.backendService.getWidgetVersion(event.type.version_id)
+        .then((widgetVersion) => {
+            //TODO add cache
+            event.resolve(widgetVersion.logic_json);
+            this.unblockUI();
+        })
+        .catch((err) => {
+            this.unblockUI();
+            this.addFlashMessage(new FlashMessageError("Cannot load widget version", err));
+        });
     }
 
 }

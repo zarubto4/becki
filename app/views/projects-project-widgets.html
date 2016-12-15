@@ -10,12 +10,12 @@
             <div class="becki-caption">
                 <span class="font-blue-dark uppercase">
                     <i class="fa fa-fw fa-fw fa-cubes"></i>
-                    Custom blocks - all groups
+                    Custom widgets - all groups
                 </span>
             </div>
             <div class="becki-actions">
                 <button class="btn blue" (click)="onGroupAddClick()">
-                    <i class="fa fa-plus-circle"></i> Add blocks group
+                    <i class="fa fa-plus-circle"></i> Add widgets group
                 </button>
             </div>
         </div>
@@ -45,7 +45,7 @@
             </table>
         </div>
         <h3 *ngIf="!groups" class="text-center">Loading...</h3>
-        <h3 *ngIf="groups && groups.length == 0" class="text-center">No blocks group in this project</h3>
+        <h3 *ngIf="groups && groups.length == 0" class="text-center">No widgets group in this project</h3>
 
     </div>
 

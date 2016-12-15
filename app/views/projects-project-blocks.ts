@@ -8,9 +8,8 @@ import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationService";
 import {Subscription} from "rxjs/Rx";
 import {ModalsRemovalModel} from "../modals/removal";
-import {IProject, ITypeOfBlock, IBlockoBlock} from "../backend/TyrionAPI";
+import {IProject, ITypeOfBlock, ITypeOfBlockShortDetail} from "../backend/TyrionAPI";
 import {ModalsBlocksTypePropertiesModel} from "../modals/blocks-type-properties";
-import {ModalsBlocksBlockPropertiesModel} from "../modals/blocks-block-properties";
 
 @Component({
     selector: "view-projects-project-blocks",
@@ -21,10 +20,11 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
     id: string;
 
     routeParamsSubscription: Subscription;
+    projectSubscription: Subscription;
 
     project: IProject = null;
 
-    groups: ITypeOfBlock[] = [];
+    groups: ITypeOfBlockShortDetail[] = [];
 
     constructor(injector: Injector) {
         super(injector)
@@ -33,70 +33,73 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.id = params["project"];
-            this.refresh();
+            this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
+                this.project = project;
+                this.groups = this.project.type_of_blocks;
+            });
         });
     }
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
+        if (this.projectSubscription) this.projectSubscription.unsubscribe();
     }
 
     onGroupAddClick(): void {
-        var model = new ModalsBlocksTypePropertiesModel();
+        let model = new ModalsBlocksTypePropertiesModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.backendService.createTypeOfBlock({
                     project_id: this.id,
                     name: model.name,
-                    general_description: model.description
+                    description: model.description
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The blocks group has been added."));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The blocks group cannot be added.", reason));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
         });
     }
 
     onGroupEditClick(group: ITypeOfBlock): void {
-        var model = new ModalsBlocksTypePropertiesModel(group.name, group.general_description, true, group.name);
+        let model = new ModalsBlocksTypePropertiesModel(group.name, group.description, true, group.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.backendService.editTypeOfBlock(group.id, {
                     name: model.name,
-                    general_description: model.description
+                    description: model.description
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The blocks group has been edited."));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The blocks group cannot be edited.", reason));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
         });
     }
 
     onGroupDeleteClick(group: ITypeOfBlock): void {
-
         this.modalService.showModal(new ModalsRemovalModel(group.name)).then((success) => {
             if (success) {
                 this.blockUI();
                 this.backendService.deleteTypeOfBlock(group.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The blocks group has been removed."));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The blocks group cannot be removed.", reason));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
         });
@@ -105,29 +108,6 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
 
     onGroupClick(group: ITypeOfBlock): void {
         this.navigate(["/projects", this.currentParamsService.get("project"), "blocks", group.id]);
-    }
-
-    refresh(): void {
-        this.blockUI();
-        this.backendService.getProject(this.id)
-            .then((project) => {
-                this.project = project;
-                console.log(this.project);
-
-                return Promise.all<ITypeOfBlock>(project.type_of_blocks_id.map((typeOfBlockId) => {
-                    return this.backendService.getTypeOfBlock(typeOfBlockId);
-                }));
-            })
-            .then((typeOfBlocks) => {
-                console.log(typeOfBlocks);
-                this.groups = typeOfBlocks;
-                this.unblockUI();
-            })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(`The project ${this.id} cannot be loaded.`, reason));
-                this.unblockUI();
-            });
-
     }
 
 }

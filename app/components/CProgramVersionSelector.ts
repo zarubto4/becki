@@ -3,7 +3,7 @@
  */
 
 import {Component, Input, Output, EventEmitter, OnInit} from "@angular/core";
-import {ICProgram} from "../backend/TyrionAPI";
+import {ICProgram, ISwaggerCProgramShortDetailForBlocko} from "../backend/TyrionAPI";
 
 @Component({
     selector: "c-program-version-selector",
@@ -23,7 +23,7 @@ import {ICProgram} from "../backend/TyrionAPI";
         </select>
         <select *ngIf="selectedProgram" class="form-control" [ngModel]="selectedProgramVersionId" (ngModelChange)="onSelectedProgramVersionIdChange($event)">
             <option [value]="null" disabled>Select version</option>
-            <option *ngFor="let cProgramVersion of selectedProgram.program_versions" [value]="cProgramVersion.version_object.id">{{cProgramVersion.version_object.version_name}}</option>
+            <option *ngFor="let cProgramVersion of selectedProgram.versions" [value]="cProgramVersion.id">{{cProgramVersion.version_name}}</option>
         </select>
     </div>
     <div class="clearfix"></div>
@@ -33,7 +33,7 @@ import {ICProgram} from "../backend/TyrionAPI";
 export class CProgramVersionSelector implements OnInit {
 
     @Input()
-    cPrograms: ICProgram[] = null;
+    cPrograms: ISwaggerCProgramShortDetailForBlocko[] = null;
 
     @Input()
     value: string = null;
@@ -41,7 +41,7 @@ export class CProgramVersionSelector implements OnInit {
     @Output()
     valueChanged: EventEmitter<string> = new EventEmitter<string>();
 
-    selectedProgram: ICProgram = null;
+    selectedProgram: ISwaggerCProgramShortDetailForBlocko = null;
     selectedProgramId: string = null;
     selectedProgramVersionId: string = null;
 
@@ -55,8 +55,8 @@ export class CProgramVersionSelector implements OnInit {
                 this.cPrograms.forEach((cp) => {
 
                     var isThis = false;
-                    cp.program_versions.forEach((pv) => {
-                        if (pv.version_object.id == this.value) {
+                    cp.versions.forEach((pv) => {
+                        if (pv.id == this.value) {
                             isThis = true;
                         }
                     });

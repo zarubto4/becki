@@ -9,10 +9,11 @@ import {Subscription} from "rxjs/Rx";
 import {CodeFile} from "../components/CodeIDE";
 import {ModalsConfirmModel} from "../modals/confirm";
 import {ModalsVersionDialogModel} from "../modals/version-dialog";
-import {IProject, ICProgram, ICProgramVersion, IUserFiles} from "../backend/TyrionAPI";
+import {IProject, ICProgram, ICProgramVersion, IUserFiles, ICProgramVersionShortDetail} from "../backend/TyrionAPI";
 import {ICodeCompileErrorMessage, CodeCompileError} from "../backend/BeckiBackend";
 
 import moment = require("moment/moment");
+import {NullSafe} from "../helpers/NullSafe";
 
 
 @Component({
@@ -29,7 +30,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
     //project: IProject = null;
 
     codeProgram: ICProgram = null;
-    codeProgramVersions: ICProgramVersion[] = null;
+    codeProgramVersions: ICProgramVersionShortDetail[] = null;
 
     selectedProgramVersion: ICProgramVersion = null;
     selectedCodeFiles: CodeFile[] = null;
@@ -42,7 +43,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
     };
 
     ngOnInit(): void {
-        var main = new CodeFile("main.cpp", "#include \"byzance.h\"\n\nint main() {\n    while (true) {\n        // your code here\n    }\n}\n");
+        var main = new CodeFile("main.cpp", "");
         main.fixedPath = true;
         this.selectedCodeFiles = [main];
 
@@ -67,11 +68,11 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
                 this.codeProgramVersions = this.codeProgram.program_versions || [];
 
-                this.codeProgramVersions.sort((a, b)=> {
+                /*this.codeProgramVersions.sort((a, b)=> {
                     if (a.version_object.date_of_create == b.version_object.date_of_create) return 0;
                     if (a.version_object.date_of_create > b.version_object.date_of_create) return -1;
                     return 1;
-                });
+                });*/
 
                 if (this.codeProgramVersions.length > 0) {
                     this.selectProgramVersion(this.codeProgramVersions[0]);
@@ -80,6 +81,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 this.unblockUI();
             })
             .catch(reason => {
+                this.unblockUI();
                 this.addFlashMessage(new FlashMessageError(`The code types cannot be loaded.`, reason));
             });
 
@@ -89,45 +91,56 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         this.navigate(["/hardware", boardTypeId]);
     }
 
-    selectProgramVersion(programVersion: ICProgramVersion) {
+    selectProgramVersion(programVersion: ICProgramVersionShortDetail) {
         if (!this.codeProgramVersions) return;
         if (this.codeProgramVersions.indexOf(programVersion) == -1) return;
 
-        this.selectedProgramVersion = programVersion;
+        this.blockUI();
+        this.backendService.getCProgramVersion(programVersion.version_id)
+            .then((programVersionFull) => {
+                this.unblockUI();
 
-        var codeFiles: CodeFile[] = [];
-        if (Array.isArray(programVersion.user_files)) {
-            codeFiles = (<IUserFiles[]>programVersion.user_files).map((uf) => { //TODO: remove after fix swagger
-                return new CodeFile(uf.file_name, uf.code);
+                this.selectedProgramVersion = programVersionFull;
+
+                let codeFiles: CodeFile[] = [];
+                if (Array.isArray(programVersionFull.user_files)) {
+                    codeFiles = (programVersionFull.user_files).map((uf) => {
+                        return new CodeFile(uf.file_name, uf.code);
+                    });
+                }
+
+                let main = new CodeFile("main.cpp", programVersionFull.main);
+                main.fixedPath = true;
+                codeFiles.push(main);
+
+                this.selectedCodeFiles = codeFiles;
+
+                this.buildErrors = null;
+
+            })
+            .catch((err) => {
+                this.unblockUI();
+                this.fmError(`Cannot load version <b>${programVersion.version_name}</b>`, err);
             });
-        }
-
-        var main = new CodeFile("main.cpp", <string>programVersion.main);  //TODO: remove after fix swagger
-        main.fixedPath = true;
-        codeFiles.push(main);
-
-        this.selectedCodeFiles = codeFiles;
-
-        this.buildErrors = null;
 
     }
 
-    onProgramVersionClick(programVersion: ICProgramVersion) {
+    onProgramVersionClick(programVersion: ICProgramVersionShortDetail) {
 
         if (this.selectedProgramVersion) {
 
-            var changedFiles: string[] = this.changesInSelectedVersion();
+            let changedFiles: string[] = this.changesInSelectedVersion();
 
             if (changedFiles.length) {
 
-                var text = "";
-                if (this.selectedProgramVersion == programVersion) {
+                let text = "";
+                if (this.selectedProgramVersion.version_object.id == programVersion.version_id) {
                     text = "You have <b>unsaved changes</b> in version <b>" + this.selectedProgramVersion.version_object.version_name + "</b>, do you really want reload this version?";
                 } else {
-                    text = "You have <b>unsaved changes</b> in version <b>" + this.selectedProgramVersion.version_object.version_name + "</b>, do you really want switch to version <b>" + programVersion.version_object.version_name + "</b>?";
+                    text = "You have <b>unsaved changes</b> in version <b>" + this.selectedProgramVersion.version_object.version_name + "</b>, do you really want switch to version <b>" + programVersion.version_name + "</b>?";
                 }
 
-                var confirm = new ModalsConfirmModel(
+                let confirm = new ModalsConfirmModel(
                     text,
                     "<h5>Changed files:</h5>" + changedFiles.join("<br>")
                 );
@@ -139,7 +152,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 })
 
             } else {
-                if (this.selectedProgramVersion != programVersion) {
+                if (this.selectedProgramVersion.version_object.id != programVersion.version_id) {
                     this.selectProgramVersion(programVersion);
                 }
             }
@@ -161,15 +174,19 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         return changedFiles;
     }
 
+    isSelected(version:ICProgramVersionShortDetail):boolean {
+        return NullSafe(()=>this.selectedProgramVersion.version_object.id) == version.version_id;
+    }
+
     onSaveClick() {
         if (this.changesInSelectedVersion().length == 0) return;
 
-        var m = new ModalsVersionDialogModel(moment().format("YYYY-MM-DD HH:mm:ss"));
+        let m = new ModalsVersionDialogModel(moment().format("YYYY-MM-DD HH:mm:ss"));
         this.modalService.showModal(m).then((success) => {
             if (success) {
-                var main = "";
+                let main = "";
 
-                var userFiles: IUserFiles[] = [];
+                let userFiles: IUserFiles[] = [];
 
                 this.selectedCodeFiles.forEach((file) => {
                     if (file.objectFullPath == "main.cpp") {
@@ -182,7 +199,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     }
                 });
 
-
+                this.blockUI();
                 this.backendService.createCProgramVersion(this.codeId, {
                     version_name: m.name,
                     version_description: m.description,
@@ -190,11 +207,12 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     user_files: userFiles
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess("Version <b>" + m.name + "</b> saved successfully."));
+                        this.fmSuccess("Version <b>" + m.name + "</b> saved successfully.");
                         this.refresh();
                     })
                     .catch((err) => {
-                        this.addFlashMessage(new FlashMessageError("Failed saving version <b>" + m.name + "</b>", err));
+                        this.fmError("Failed saving version <b>" + m.name + "</b>", err);
+                        this.unblockUI();
                     });
             }
         });

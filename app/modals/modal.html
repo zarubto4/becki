@@ -64,6 +64,12 @@
             <template [ngSwitchCase]="'ModalsMembersAddModel'">
                 <modals-members-add [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-members-add>
             </template>
+            <template [ngSwitchCase]="'ModalsWidgetsTypePropertiesModel'">
+                <modals-widgets-type-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-widgets-type-properties>
+            </template>
+            <template [ngSwitchCase]="'ModalsWidgetsWidgetPropertiesModel'">
+                <modals-widgets-widget-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-widgets-widget-properties>
+            </template>
         </div>
     </div>
 </div>

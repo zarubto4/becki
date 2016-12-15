@@ -6,8 +6,8 @@ import {Component, OnInit, Injector, OnDestroy, ViewChild} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {Subscription} from "rxjs/Rx";
 import {
-    IProject, IBlockoBlock, IBlockoBlockVersion, IBlockoBlockShortVersion,
-    ITypeOfBlock
+    IBlockoBlock, IBlockoBlockVersion,
+    ITypeOfBlock, IBlockoBlockVersionShortDetail, ITypeOfBlockShortDetail
 } from "../backend/TyrionAPI";
 import {BlockoView} from "../components/BlockoView";
 import {Blocks, Core} from "blocko";
@@ -29,14 +29,15 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
     blocksId: string;
 
     routeParamsSubscription: Subscription;
+    projectSubscription: Subscription;
 
     //project: IProject = null;
 
-    group: ITypeOfBlock = null;
+    group: ITypeOfBlockShortDetail = null;
 
     blockoBlock: IBlockoBlock = null;
 
-    blockoBlockVersions: IBlockoBlockShortVersion[] = [];
+    blockoBlockVersions: IBlockoBlockVersionShortDetail[] = [];
     selectedBlockoBlockVersion: IBlockoBlockVersion = null;
 
 
@@ -73,12 +74,16 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
             this.projectId = params["project"];
             this.blockId = params["block"];
             this.blocksId = params["blocks"];
+            this.projectSubscription = this.storageService.project(this.projectId).subscribe((project) => {
+                this.group = project.type_of_blocks.find((tb) => tb.id == this.blocksId);
+            });
             this.refresh();
         });
     }
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
+        if (this.projectSubscription) this.projectSubscription.unsubscribe();
     }
 
     onBlocksGroupClick(groupId:string) {
@@ -93,11 +98,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
     refresh(): void {
 
         this.blockUI();
-        this.backendService.getTypeOfBlock(this.blocksId)
-            .then((typeOfBlock) => {
-                this.group = typeOfBlock;
-                return this.backendService.getBlockoBlock(this.blockId);
-            })
+        this.backendService.getBlockoBlock(this.blockId)
             .then((blockoBlock) => {
                 console.log(blockoBlock);
 
@@ -124,11 +125,11 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
 
     }
 
-    onBlockoBlockVersionClick(version: IBlockoBlockShortVersion) {
+    onBlockoBlockVersionClick(version: IBlockoBlockVersionShortDetail) {
         this.selectBlockVersion(version);
     }
 
-    selectBlockVersion(version: IBlockoBlockShortVersion) {
+    selectBlockVersion(version: IBlockoBlockVersionShortDetail) {
         this.blockUI();
         this.backendService.getBlockoBlockVersion(version.id)
             .then((blockoBlockVersion) => {
@@ -141,7 +142,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
 
                 this.blockCode = this.selectedBlockoBlockVersion.logic_json;
 
-                var designJson = JSON.parse(this.selectedBlockoBlockVersion.design_json);
+                let designJson = JSON.parse(this.selectedBlockoBlockVersion.design_json);
 
                 if (designJson.backgroundColor) this.blockForm.controls["color"].setValue(designJson.backgroundColor);
                 if (designJson.displayName) this.blockForm.controls["icon"].setValue(designJson.displayName);
@@ -182,15 +183,15 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
     }
 
     onAnalogInputChange(event: Event, connector: Core.Connector): void {
-        var f = parseFloat((<HTMLInputElement>event.target).value);
+        let f = parseFloat((<HTMLInputElement>event.target).value);
         connector._inputSetValue(!isNaN(f) ? f : 0);
     }
 
     onMessageInputSendClick(connector: Core.Connector): void {
-        var values: any[] = [];
+        let values: any[] = [];
 
         connector.argTypes.forEach((argType, index)=> {
-            var val = this.messageInputsValueCache[connector.name + argType];
+            let val = this.messageInputsValueCache[connector.name + argType];
             if (argType == Core.ArgType.ByzanceBool) {
                 if (!val) {
                     val = false;
@@ -220,7 +221,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
             values.push(val)
         });
 
-        var m = new Core.Message(connector.argTypes, values);
+        let m = new Core.Message(connector.argTypes, values);
         connector._inputSetValue(m);
 
     }
@@ -234,10 +235,10 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
             }
         } catch (e) {
 
-            var name = e.name || "Error";
+            let name = e.name || "Error";
             name = name.replace(/([A-Z])/g, ' $1').trim();
 
-            var msg: string = e.message || e.toString();
+            let msg: string = e.message || e.toString();
 
             if (e instanceof Blocks.JSBlockError) {
                 name = "JS Block Error";
@@ -245,17 +246,17 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
             }
 
             if (msg.indexOf("is not defined") > -1) {
-                var index = msg.indexOf("is not defined");
+                let index = msg.indexOf("is not defined");
                 msg = "<b>" + msg.substr(0, index) + "</b>" + msg.substr(index);
             }
 
             if (msg.indexOf("is not a function") > -1) {
-                var index = msg.indexOf("is not a function");
+                let index = msg.indexOf("is not a function");
                 msg = "<b>" + msg.substr(0, index) + "</b>" + msg.substr(index);
             }
 
             if (msg.indexOf("Unexpected token") == 0) {
-                var len = "Unexpected token".length;
+                let len = "Unexpected token".length;
                 msg = msg.substr(0, len) + "<b>" + msg.substr(len) + "</b>";
             }
 
@@ -287,7 +288,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
 
 
             try {
-                var designJson = JSON.stringify({
+                let designJson = JSON.stringify({
                     backgroundColor: this.blockForm.controls["color"].value,
                     displayName: this.blockForm.controls["icon"].value,
                     description: this.blockForm.controls["description"].value
@@ -321,11 +322,11 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
     onSaveClick(): void {
         if (!this.successfullyTested) return;
 
-        var m = new ModalsVersionDialogModel(moment().format("YYYY-MM-DD HH:mm:ss"));
+        let m = new ModalsVersionDialogModel(moment().format("YYYY-MM-DD HH:mm:ss"));
         this.modalService.showModal(m).then((success) => {
             if (success) {
 
-                var designJson = JSON.stringify({
+                let designJson = JSON.stringify({
                     backgroundColor: this.blockForm.controls["color"].value,
                     displayName: this.blockForm.controls["icon"].value,
                     description: this.blockForm.controls["description"].value

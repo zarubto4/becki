@@ -33,7 +33,7 @@
                 <tr *ngFor="let member of project.participants">
                     <td class="no-wrap bold">{{member.user_email}}</td>
                     <td class="no-wrap">{{member.full_name}}</td>
-                    <td>{{member.state}}</td>
+                    <td>{{readableState(member.state)}}</td>
                     <td class="no-wrap">
                         <button title="Remove member" class="btn btn-icon-only red" [disabled]="member.id == selfId" (click)="onMemberDeleteClick(member)">
                             <i class="fa fa-trash"></i>

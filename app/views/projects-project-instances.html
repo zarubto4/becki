@@ -30,18 +30,17 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let instance of instances">
-                    <td class="no-wrap bold"><a (click)="onInstanceClick(instance)">{{instance.blocko_instance_name}}</a></td>
+                    <td class="no-wrap bold"><a (click)="onInstanceClick(instance)">{{instance.id}}</a></td>
                     <td class="no-wrap">
-                        <span class="font-grey-mint" *ngIf="instance.actual_summary.server_name">
-                            {{instance.actual_summary.server_name}}
-                            (<span *ngIf="instance.actual_summary.server_is_online" class="font-green-jungle">Online</span><span *ngIf="!instance.actual_summary.server_is_online" class="font-red">Offline</span>)
+                        <span class="font-grey-mint" *ngIf="instance.server_name">
+                            {{instance.server_name}}
+                            (<span *ngIf="instance.server_is_online" class="font-green-jungle">Online</span><span *ngIf="!instance.server_is_online" class="font-red">Offline</span>)
                         </span>
-                        <span class="font-grey-salsa" *ngIf="!instance.actual_summary.server_name">None</span>
+                        <span class="font-grey-salsa" *ngIf="!instance.server_name">None</span>
                     </td>
                     <td class="no-wrap">
-                        <span *ngIf="false" class="font-green-jungle">Online</span>
-                        <span *ngIf="false" class="font-red">Offline</span>
-                        <span class="font-red bg-yellow-lemon">TODO</span>
+                        <span *ngIf="instance.instance_is_online" class="font-green-jungle">Online</span>
+                        <span *ngIf="!instance.instance_is_online" class="font-red">Offline</span>
                     </td>
                     <td class="no-wrap"><a (click)="onBlockoProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></td>
                     <td>{{instance.b_program_description}}</td>

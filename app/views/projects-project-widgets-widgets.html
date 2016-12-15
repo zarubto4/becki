@@ -10,12 +10,12 @@
             <div class="becki-caption">
                 <span class="font-blue-dark uppercase">
                     <i class="fa fa-fw fa-fw fa-cube"></i>
-                    Custom blocks - group <strong>{{group?group.name:""}}</strong>
+                    Custom widgets - group <strong>{{group?group.name:""}}</strong>
                 </span>
             </div>
             <div class="becki-actions">
-                <button class="btn blue" [disabled]="!group || !group.update_permission" (click)="onBlockAddClick(group)">
-                    <i class="fa fa-plus-circle"></i> Add block
+                <button class="btn blue" [disabled]="!group || !group.update_permission" (click)="onWidgetAddClick(group)">
+                    <i class="fa fa-plus-circle"></i> Add widget
                 </button>
             </div>
         </div>
@@ -23,7 +23,7 @@
             Name: <strong>{{group?group.name:""}}</strong><br>
             Description: <strong>{{group?group.description:""}}</strong>
         </div>
-        <div *ngIf="(group && group.blocko_blocks && group.blocko_blocks.length)" class="table-scrollable">
+        <div *ngIf="(group && group.grid_widgets && group.grid_widgets.length)" class="table-scrollable">
             <table class="table table-hover">
                 <thead>
                 <tr>
@@ -33,14 +33,14 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let block of group.blocko_blocks">
-                    <td class="no-wrap bold"><a (click)="onBlockClick(block)">{{block.name}}</a></td>
-                    <td>{{block.description}}</td>
+                <tr *ngFor="let widget of group.grid_widgets">
+                    <td class="no-wrap bold"><a (click)="onWidgetClick(widget)">{{widget.name}}</a></td>
+                    <td>{{widget.description}}</td>
                     <td class="no-wrap">
-                        <button title="Block properties" class="btn btn-icon-only green" [disabled]="!block.edit_permission" (click)="onBlockEditClick(block)">
+                        <button title="Widget properties" class="btn btn-icon-only green" [disabled]="!widget.edit_permission" (click)="onWidgetEditClick(widget)">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="Remove block" class="btn btn-icon-only red" [disabled]="!block.delete_permission" (click)="onBlockDeleteClick(block)">
+                        <button title="Remove widget" class="btn btn-icon-only red" [disabled]="!widget.delete_permission" (click)="onWidgetDeleteClick(widget)">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>
@@ -49,7 +49,7 @@
             </table>
         </div>
         <h3 *ngIf="!group" class="text-center">Loading...</h3>
-        <h3 *ngIf="group && !(group.blocko_blocks && group.blocko_blocks.length)" class="text-center">No blocks in this group</h3>
+        <h3 *ngIf="group && !(group.grid_widgets && group.grid_widgets.length)" class="text-center">No widgets in this group</h3>
     </div>
 
 </layout-main>

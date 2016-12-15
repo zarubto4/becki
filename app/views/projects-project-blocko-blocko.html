@@ -102,14 +102,14 @@
 
                                     <div class="col-md-12" *ngFor="let program of gridProject.m_programs">
                                         <h3 class="small-h3">{{program.name}} <span *ngIf="program.description" class="hx-description">{{program.description}}</span></h3>
-                                        <div *ngIf="program.program_versions && program.program_versions.length" class="form-group" [class.has-error]="!selectedGridProgramVersions[gridProject.id][program.id]">
+                                        <div *ngIf="program.versions && program.versions.length" class="form-group" [class.has-error]="!selectedGridProgramVersions[gridProject.id][program.id]">
                                             <label>Program version</label>
                                             <select class="form-control" [ngModel]="selectedGridProgramVersions[gridProject.id][program.id]" (ngModelChange)="gridSelectedProgramVersionIdChange(gridProject.id, program.id, $event)">
                                                 <option value="undefined" disabled>Select version</option>
-                                                <option *ngFor="let programVersion of program.program_versions" [value]="programVersion.version_object.id">{{programVersion.version_object.version_name}}</option>
+                                                <option *ngFor="let programVersion of program.versions" [value]="programVersion.id">{{programVersion.version_name}}</option>
                                             </select>
                                         </div>
-                                        <div *ngIf="!(program.program_versions && program.program_versions.length)" class="form-group">
+                                        <div *ngIf="!(program.versions && program.versions.length)" class="form-group">
                                             <label>Program version</label>
                                             <select class="form-control" disabled>
                                                 <option [value]="null" disabled>No program versions</option>
@@ -324,14 +324,14 @@
                         </thead>
                         <tbody>
                         <tr *ngFor="let version of blockoProgramVersions">
-                            <td class="no-wrap" [class.bold]="selectedProgramVersion == version">
+                            <td class="no-wrap" [class.bold]="selectedProgramVersion && selectedProgramVersion.version_object.id == version.version_id">
                                 <a (click)="onProgramVersionClick(version)">
-                                    {{version.version_object.version_name}}
+                                    {{version.version_name}}
                                 </a>
                             </td>
                             <th class="text-center"><i class="fa fa-cloud fa-fw font-green-jungle" [class.font-red]="!versionRunning(version)"></i></th>
                             <td>
-                                {{version.version_object.version_description}}
+                                {{version.version_description}}
                             </td>
                             <td class="no-wrap">
 

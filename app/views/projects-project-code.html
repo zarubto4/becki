@@ -32,7 +32,7 @@
                 <tbody>
                 <tr *ngFor="let code of codePrograms">
                     <td class="no-wrap bold"><a (click)="onCodeClick(code)">{{code.name}}</a></td>
-                    <td class="no-wrap"><a (click)="onBoardTypeClick(code.type_of_board_id)">{{getBoardType(code.type_of_board_id)}}</a></td>
+                    <td class="no-wrap"><a (click)="onBoardTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
                     <td>{{code.description}}</td>
                     <td class="no-wrap">
                         <button title="Code program properties" class="btn btn-icon-only green" [disabled]="!code.edit_permission" (click)="onEditClick(code)">

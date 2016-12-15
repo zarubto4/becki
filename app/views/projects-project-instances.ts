@@ -8,7 +8,7 @@
 import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {Subscription} from "rxjs/Rx";
-import {IHomerInstance} from "../backend/TyrionAPI";
+import {IHomerInstance, IInstanceShortDetail} from "../backend/TyrionAPI";
 
 @Component({
     selector: "view-projects-project-instances",
@@ -19,8 +19,9 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
     id: string;
 
     routeParamsSubscription: Subscription;
+    projectSubscription: Subscription;
 
-    instances: IHomerInstance[] = null;
+    instances: IInstanceShortDetail[] = null;
 
     constructor(injector: Injector) {
         super(injector)
@@ -29,30 +30,19 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.id = params["project"];
-            this.refresh();
+            this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
+                this.instances = project.instancies;
+            });
         });
     }
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
+        if (this.projectSubscription) this.projectSubscription.unsubscribe();
     }
 
-    refresh(): void {
-        this.blockUI();
-        this.backendService.getAllInstancesForProject(this.id)
-            .then((instances) => {
-                console.log(instances);
-                this.instances = instances;
-                this.unblockUI();
-            })
-            .catch(reason => {
-                this.fmError(`Instances ${this.id} cannot be loaded.`, reason);
-                this.unblockUI();
-            });
-    }
-
-    onInstanceClick(instance:IHomerInstance) {
-        this.navigate(["/projects", this.currentParamsService.get("project"), "instances", instance.blocko_instance_name]);
+    onInstanceClick(instance:IInstanceShortDetail) {
+        this.navigate(["/projects", this.currentParamsService.get("project"), "instances", instance.id]);
     }
 
     onBlockoProgramClick(bProgramId:string) {

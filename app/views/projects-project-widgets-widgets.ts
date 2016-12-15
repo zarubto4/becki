@@ -1,5 +1,5 @@
 /**
- * Created by davidhradek on 18.10.16.
+ * Created by davidhradek on 01.11.16.
  */
 
 import {Component, OnInit, Injector, OnDestroy} from "@angular/core";
@@ -7,23 +7,24 @@ import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationService";
 import {Subscription} from "rxjs/Rx";
 import {ModalsRemovalModel} from "../modals/removal";
-import {IProject, IMProject, IMProjectShortDetail} from "../backend/TyrionAPI";
-import {ModalsGridProjectPropertiesModel} from "../modals/grid-project-properties";
+import {IProject, ITypeOfWidget, IGridWidget, ITypeOfWidgetShortDetail, IGridWidgetLight} from '../backend/TyrionAPI';
+import {ModalsWidgetsWidgetPropertiesModel} from "../modals/widgets-widget-properties";
 
 @Component({
-    selector: "view-projects-project-grid",
-    templateUrl: "app/views/projects-project-grid.html",
+    selector: "view-projects-project-widgets-widgets",
+    templateUrl: "app/views/projects-project-widgets-widgets.html",
 })
-export class ProjectsProjectGridComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     id: string;
+    widgetsId: string;
 
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
 
-    project: IProject = null;
+    //project: IProject = null;
 
-    gridProjects: IMProjectShortDetail[] = null;
+    group: ITypeOfWidgetShortDetail = null;
 
     constructor(injector: Injector) {
         super(injector)
@@ -32,9 +33,9 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.id = params["project"];
+            this.widgetsId = params["widgets"];
             this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
-                this.project = project;
-                this.gridProjects = project.m_projects;
+                this.group = project.type_of_widgets.find((tw) => tw.id == this.widgetsId);
             });
         });
     }
@@ -44,64 +45,70 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
         if (this.projectSubscription) this.projectSubscription.unsubscribe();
     }
 
-    onProjectClick(project: IMProjectShortDetail): void {
-        this.navigate(["/projects", this.currentParamsService.get("project"), "grid", project.id]);
+    onWidgetClick(widget: IGridWidgetLight): void {
+        this.navigate(["/projects", this.currentParamsService.get("project"), "widgets", this.widgetsId, widget.id]);
     }
 
-    onProjectAddClick(): void {
-        let model = new ModalsGridProjectPropertiesModel();
+    onWidgetAddClick(group: ITypeOfWidgetShortDetail): void {
+
+        let model = new ModalsWidgetsWidgetPropertiesModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.createMProject(this.id, {
+                this.backendService.createWidget({
+                    type_of_widget_id: group.id,
                     name: model.name,
                     description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess("The grid project has been added."));
+                        this.addFlashMessage(new FlashMessageSuccess("The widget has been added."));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError("The grid project cannot be added.", reason));
+                        this.addFlashMessage(new FlashMessageError("The widget cannot be added.", reason));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
         });
+
     }
 
-    onProjectEditClick(project: IMProjectShortDetail): void {
-        let model = new ModalsGridProjectPropertiesModel(project.name, project.description, true, project.name);
+    onWidgetEditClick(widget: IGridWidgetLight): void {
+
+        let model = new ModalsWidgetsWidgetPropertiesModel(widget.name, widget.description, true, widget.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                console.log(model);
                 this.blockUI();
-                this.backendService.editMProject(project.id, {
+                this.backendService.editWidget(widget.id, {
                     name: model.name,
-                    description: model.description
+                    description: model.description,
+                    type_of_widget_id: this.widgetsId // tohle je trochu divný ne? ... možná kdyby jsi chtěl přesunout widget mezi groupama? [DU]
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess("The grid project has been edited."));
+                        this.addFlashMessage(new FlashMessageSuccess("The widget has been edited."));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError("The grid project cannot be edited.", reason));
+                        this.addFlashMessage(new FlashMessageError("The widget cannot be edited.", reason));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
         });
+
     }
 
-    onProjectDeleteClick(project: IMProjectShortDetail): void {
-        this.modalService.showModal(new ModalsRemovalModel(project.name)).then((success) => {
+    onWidgetDeleteClick(widget: IGridWidgetLight): void {
+
+        this.modalService.showModal(new ModalsRemovalModel(widget.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteMProject(project.id)
+                this.backendService.deleteWidget(widget.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess("The grid project has been removed."));
+                        this.addFlashMessage(new FlashMessageSuccess("The widget has been removed."));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError("The grid project cannot be removed.", reason));
+                        this.addFlashMessage(new FlashMessageError("The widget cannot be removed.", reason));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }

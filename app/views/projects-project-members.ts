@@ -26,6 +26,7 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
     id: string;
 
     routeParamsSubscription: Subscription;
+    projectSubscription: Subscription;
 
     project: IProject = null;
 
@@ -38,27 +39,16 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.id = params["project"];
-            this.refresh();
+            this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
+                this.project = project;
+            });
         });
         this.selfId = this.backendService.personInfoSnapshot.id;
     }
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
-    }
-
-    refresh(): void {
-        this.blockUI();
-        this.backendService.getProject(this.id)
-            .then((project) => {
-                this.project = project;
-                console.log(project);
-                this.unblockUI();
-            })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(`The project ${this.id} cannot be loaded.`, reason));
-                this.unblockUI();
-            });
+        if (this.projectSubscription) this.projectSubscription.unsubscribe();
     }
 
     onMembersAddClick() {
@@ -69,7 +59,7 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
                     this.blockUI();
                     this.backendService.shareProject(this.id, {persons_mail:m.emails})
                         .then(() => {
-                            this.refresh();
+                            this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                         })
                         .catch((err) => {
                             this.unblockUI();
@@ -86,12 +76,22 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
         this.blockUI();
         this.backendService.unshareProject(this.id, {persons_mail:[member.user_email]})
             .then(() => {
-                this.refresh();
+                this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
             })
             .catch((err) => {
                 this.unblockUI();
                 this.fmError("Cannot delete member.", err);
             });
+    }
+
+    readableState(state:("owner"|"admin"|"member"|"invited")) {
+        switch (state) {
+            case "owner": return "Project owner";
+            case "admin": return "Project admin";
+            case "member": return "Project member";
+            case "invited": return "Invitation sent";
+        }
+        return "Unknown";
     }
 
 }

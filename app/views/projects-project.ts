@@ -17,6 +17,7 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
     id: string;
 
     routeParamsSubscription: Subscription;
+    projectSubscription: Subscription;
 
     project: IProject = null;
 
@@ -27,15 +28,21 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.id = params["project"];
+            this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
+                this.project = project;
+            });
             this.refresh();
         });
     }
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
+        if (this.projectSubscription) this.projectSubscription.unsubscribe();
     }
 
     refresh(): void {
+        //TODO: this.storageService.projectRefresh(this.id);
+        /*
         this.blockUI();
         this.backendService.getProject(this.id)
             .then(project => {
@@ -45,6 +52,6 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
             .catch(reason => {
                 this.addFlashMessage(new FlashMessageError(`The project ${this.id} cannot be loaded.`, reason));
                 this.unblockUI();
-            });
+            });*/
     }
 }

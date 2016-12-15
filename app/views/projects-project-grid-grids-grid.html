@@ -58,7 +58,7 @@
                 </div>
 
                 <div style="margin: 10px 0; overflow-x: auto;">
-                    <grid-view [widgets]="widgets"></grid-view>
+                    <grid-view (onRequestWidgetSource)="onWidgetRequestingSource($event)"></grid-view>
                 </div>
 
                 <div>
@@ -86,9 +86,25 @@
                 </div>
 
                 <div class="portlet-body">
+                    <div class="panel-group accordion blocko-blocks-group-list">
+                        <div *ngFor="let group of widgetGroups" class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle collapsed" (click)="onToggleGroup(group.id)">
+                                        <i class="fa fa-pull-right fa-minus-square-o" [class.fa-minus-square-o]="widgetGroupsOpenToggle[group.id]" [class.fa-plus-square-o]="!widgetGroupsOpenToggle[group.id]"></i>
+                                        {{group.name}} ({{group.grid_widgets.length}})
+                                    </a>
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse" [class.in]="widgetGroupsOpenToggle[group.id]">
+                                <div class="panel-body">
+                                    <div *ngIf="group.grid_widgets.length == 0" style="color: gray; text-align: center;">No widgets in this group</div>
 
-                <div #widgets></div>
-
+                                    <a *ngFor="let widget of group.grid_widgets" (mousedown)="onWidgetDown($event,widget)" style="margin:5px; float:left; overflow:hidden; display:block; width:80px; height:80px; background:seagreen; color:white; font-size:18px; line-height: 80px; text-align: center; user-select: none;">{{widget.name}}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -115,13 +131,13 @@
                         </thead>
                         <tbody>
                         <tr *ngFor="let version of gridProgramVersions">
-                            <td class="no-wrap" [class.bold]="selectedProgramVersion == version">
+                            <td class="no-wrap" [class.bold]="isSelected(version)">
                                 <a (click)="onProgramVersionClick(version)">
-                                    {{version.version_object.version_name}}
+                                    {{version.version_name}}
                                 </a>
                             </td>
                             <td>
-                                {{version.version_object.version_description}}
+                                {{version.version_description}}
                             </td>
                         </tr>
                         </tbody>

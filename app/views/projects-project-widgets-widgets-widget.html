@@ -1,0 +1,100 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-fw fa-cube"></i>
+                            Custom widgets - widget <strong>{{widget?widget.name:""}}</strong>
+                        </span>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div>
+                    Name: <strong>{{widget?widget.name:""}}</strong><br>
+                    Description: <strong>{{widget?widget.description:""}}</strong><br>
+                    Group: <strong><a (click)="onWidgetsGroupClick(group.id)">{{group?group.name:""}}</a></strong>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="portlet light bordered padding-20">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-file-code-o"></i>
+                            Code
+                        </span>
+                    </div>
+                    <div *ngIf="selectedProgramVersion" class="becki-caption version">
+                        <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="true" class="changes"></span> {{selectedProgramVersion.version_object.version_name}}</span>
+                    </div>
+                </div>
+
+                <!--<becki-form-color-picker label="Widget color" [control]="widgetForm.controls.color" [waitForTouch]="false"></becki-form-color-picker>
+                <becki-form-fa-icon-select label="Widget icon" [control]="widgetForm.controls.icon" [waitForTouch]="false"></becki-form-fa-icon-select>
+                <becki-form-input label="Widget description" [control]="wifgrtForm.controls.description" [waitForTouch]="false"></becki-form-input>-->
+
+                <div class="form-group">
+                    <label>Widget code</label>
+                    <ace-editor [code]="widgetCode" (codeChange)="newWidgetCode($event)" mode="ace/mode/javascript" ></ace-editor>
+                </div>
+
+
+                <div>
+                    <div class="pull-right">
+                        <button type="button" class="btn default green-haze" (click)="onSaveClick()">
+                            <i class="fa fa-floppy-o"></i> Save
+                        </button>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-code-fork"></i>
+                            Saved versions
+                        </span>
+                    </div>
+                </div>
+                <div *ngIf="widgetVersions && widgetVersions.length">
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th class="full-width">Description</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let version of widgetVersions">
+                            <td class="no-wrap" [class.bold]="selectedWidgetVersion && (selectedWidgetVersion.id == version.id)">
+                                <a (click)="onWidgetVersionClick(version)">
+                                    {{version.name}}
+                                </a>
+                            </td>
+                            <td>
+                                {{version.description}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</layout-main>

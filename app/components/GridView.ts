@@ -7,7 +7,7 @@
  */
 
 import {Core, Widgets, DeviceProfiles, EditorRenderer} from "the-grid";
-import {Component, AfterViewInit, OnChanges, Input, ViewChild, ElementRef, SimpleChanges} from "@angular/core";
+import { Component, AfterViewInit, OnChanges, Input, Output, ViewChild, ElementRef, SimpleChanges, EventEmitter } from '@angular/core';
 import {ModalService} from "../services/ModalService";
 import {ModalsGridConfigPropertiesModel} from "../modals/grid-config-properties";
 
@@ -19,11 +19,11 @@ import {ModalsGridConfigPropertiesModel} from "../modals/grid-config-properties"
 })
 export class GridView implements AfterViewInit, OnChanges {
 
-    @Input()
-    widgets: HTMLElement;
-
     @ViewChild("screens")
     screens: ElementRef;
+
+    @Output()
+    onRequestWidgetSource = new EventEmitter<{type: any, resolve: (name: string) => void}>();
 
     protected gridController: Core.Controller;
 
@@ -32,20 +32,27 @@ export class GridView implements AfterViewInit, OnChanges {
     constructor(protected modalService: ModalService) {
 
         this.gridController = new Core.Controller();
+
+        this.gridController.registerRequestWidgetSourceCallback((type, resolve) => {
+            this.onRequestWidgetSource.emit({
+                type: type, 
+                resolve: resolve
+            });
+        });
+
         /*this.gridController.registerDataChangedCallback(() => {
          //this.modal.closeModal(false);
-         console.log("CHANGED");
+            console.log("CHANGED");
          //this.modelChange.emit(this.controller.getDataJson());
          });*/
-        this.gridController.registerWidget(Widgets.TimeWidget);
-        this.gridController.registerWidget(Widgets.LabelWidget);
-        this.gridController.registerWidget(Widgets.WeatherWidget);
-        this.gridController.registerWidget(Widgets.ButtonWidget);
-        this.gridController.registerWidget(Widgets.FAButtonWidget);
-        this.gridController.registerWidget(Widgets.KnobWidget);
+
         this.gridController.registerWidgetService(Widgets.TimeService);
         Core.Controller.cleanWidgetIONameCounter();
 
+    }
+
+    requestCreateWidget(type: any, event?: MouseEvent):EditorRenderer.WidgetDragHandler {
+        return (<EditorRenderer.ControllerRenderer>this.gridController.renderer).requestCreateWidget(type, event);
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -56,7 +63,7 @@ export class GridView implements AfterViewInit, OnChanges {
             //this.gridController.deviceProfile = new DeviceProfiles.iPhone6();
         //}
 
-        this.gridRenderer = new EditorRenderer.ControllerRenderer(this.gridController, this.widgets, this.screens.nativeElement);
+        this.gridRenderer = new EditorRenderer.ControllerRenderer(this.gridController, this.screens.nativeElement);
         this.gridRenderer.registerOpenConfigCallback(widget => {
             var m = new ModalsGridConfigPropertiesModel(widget);
             this.modalService.showModal(m);
@@ -73,7 +80,7 @@ export class GridView implements AfterViewInit, OnChanges {
     }
 
     setDataJson(data: string): void {
-        this.gridController.setDataJson(data);
+        //this.gridController.setDataJson(data);
     }
 
     setDeviceProfile(deviceProfile: string): void {
