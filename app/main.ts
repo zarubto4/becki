@@ -104,6 +104,7 @@ import {ProjectsProjectWidgetsComponent } from './views/projects-project-widgets
 import {ProjectsProjectWidgetsWidgetsComponent } from './views/projects-project-widgets-widgets';
 import {ModalsWidgetsWidgetPropertiesComponent} from "./modals/widgets-widget-properties";
 import {ProjectsProjectWidgetsWidgetsWidgetComponent} from './views/projects-project-widgets-widgets-widget';
+import {MonacoEditor} from "./components/MonacoEditor";
 
 //@formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -242,6 +243,7 @@ let tabMenus = {
         StringReplacer,
         // Components
         AceEditor,
+        MonacoEditor,
         BeckiFormColorPicker,
         BeckiFormFAIconSelect,
         BeckiFormInput,

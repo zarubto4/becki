@@ -46,7 +46,7 @@
 
                 <div class="form-group">
                     <label>Block code</label>
-                    <ace-editor [code]="blockCode" (codeChange)="newBlockCode($event)" mode="ace/mode/javascript" ></ace-editor>
+                    <monaco-editor [code]="blockCode" (codeChange)="newBlockCode($event)" ></monaco-editor>
                 </div>
 
                 <div *ngIf="jsError" class="mt-element-ribbon bg-grey-steel">
