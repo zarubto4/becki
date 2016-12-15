@@ -12,7 +12,10 @@ import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationService";
 import {Subscription} from "rxjs/Rx";
 import {ModalsRemovalModel} from "../modals/removal";
-import {IProject, ITypeOfBlock, IBlockoBlock} from "../backend/TyrionAPI";
+import {
+    IProject, ITypeOfBlock, IBlockoBlock, ITypeOfBlockShortDetail,
+    IBlockoBlockShortDetail
+} from "../backend/TyrionAPI";
 import {ModalsBlocksTypePropertiesModel} from "../modals/blocks-type-properties";
 import {ModalsBlocksBlockPropertiesModel} from "../modals/blocks-block-properties";
 
@@ -26,10 +29,11 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
     blocksId: string;
 
     routeParamsSubscription: Subscription;
+    projectSubscription: Subscription;
 
     //project: IProject = null;
 
-    group: ITypeOfBlock = null;
+    group: ITypeOfBlockShortDetail = null;
 
     constructor(injector: Injector) {
         super(injector)
@@ -39,21 +43,24 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.id = params["project"];
             this.blocksId = params["blocks"];
-            this.refresh();
+            this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
+                this.group = project.type_of_blocks.find((tb) => tb.id == this.blocksId);
+            });
         });
     }
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
+        if (this.projectSubscription) this.projectSubscription.unsubscribe();
     }
 
-    onBlockClick(block: IBlockoBlock): void {
+    onBlockClick(block: IBlockoBlockShortDetail): void {
         this.navigate(["/projects", this.currentParamsService.get("project"), "blocks", this.blocksId, block.id]);
     }
 
-    onBlockAddClick(group: ITypeOfBlock): void {
+    onBlockAddClick(group: ITypeOfBlockShortDetail): void {
 
-        var model = new ModalsBlocksBlockPropertiesModel();
+        let model = new ModalsBlocksBlockPropertiesModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
@@ -64,42 +71,42 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The block has been added."));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The block cannot be added.", reason));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
         });
 
     }
 
-    onBlockEditClick(block: IBlockoBlock): void {
+    onBlockEditClick(block: IBlockoBlockShortDetail): void {
 
-        var model = new ModalsBlocksBlockPropertiesModel(block.name, block.description, true, block.name);
+        let model = new ModalsBlocksBlockPropertiesModel(block.name, block.description, true, block.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
                 this.backendService.editBlockoBlock(block.id, {
                     name: model.name,
                     general_description: model.description,
-                    type_of_block_id: block.type_of_block_id // tohle je trochu divný ne?
+                    type_of_block_id: this.blocksId // tohle je trochu divný ne?
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The block has been edited."));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The block cannot be edited.", reason));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
         });
 
     }
 
-    onBlockDeleteClick(block: IBlockoBlock): void {
+    onBlockDeleteClick(block: IBlockoBlockShortDetail): void {
 
         this.modalService.showModal(new ModalsRemovalModel(block.name)).then((success) => {
             if (success) {
@@ -107,29 +114,14 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
                 this.backendService.deleteBlockoBlock(block.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess("The block has been removed."));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError("The block cannot be removed.", reason));
-                        this.refresh(); // also unblockUI
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
         });
-
-    }
-
-
-    refresh(): void {
-        this.blockUI();
-        this.backendService.getTypeOfBlock(this.blocksId)
-            .then((typeOfBlock) => {
-                this.group = typeOfBlock;
-                this.unblockUI();
-            })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(`The project ${this.id} cannot be loaded.`, reason));
-                this.unblockUI();
-            });
 
     }
 

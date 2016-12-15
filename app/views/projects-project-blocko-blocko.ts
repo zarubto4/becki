@@ -12,15 +12,13 @@ import {
     ITypeOfBlock,
     IBlockoBlockVersion,
     IBoardsForBlocko,
-    IHardwareGroup,
-    ICProgramVersion,
     IBProgramVersion,
     IBPair,
     IMProject,
     IMProgramSnapShot,
-    IMProjectSnapShot, IBlockoBlockVersionShortDetail, ICProgramShortDetail, IBoardShortDetail, IMProjectShortDetail,
+    IMProjectSnapShot, IBlockoBlockVersionShortDetail, IBoardShortDetail,
     IBProgramVersionShortDetail, ISwaggerCProgramShortDetailForBlocko, ISwaggerCProgramVersionsShortDetailForBlocko,
-    ISwaggerMProjectShortDetailForBlocko
+    ISwaggerMProjectShortDetailForBlocko, IHardwareGroupIN
 } from "../backend/TyrionAPI";
 import {BlockoView} from "../components/BlockoView";
 import {DraggableEventParams} from "../components/Draggable";
@@ -72,7 +70,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     boardById: { [id: string]: IBoardShortDetail } = {};
 
-    selectedHardware: IHardwareGroup[] = [];
+    selectedHardware: IHardwareGroupIN[] = [];
 
     // grid:
 
@@ -294,7 +292,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     getCProgramsForBoardType(boardTypeId: string): ISwaggerCProgramShortDetailForBlocko[] {
         if (!this.allBoardsDetails || !this.allBoardsDetails.c_programs) return [];
-        return this.allBoardsDetails.c_programs;//TODO: !!! .filter((cp) => (cp.type_of_board_id == boardTypeId));
+        return this.allBoardsDetails.c_programs.filter((cp) => (cp.type_of_board_id == boardTypeId));
     }
 
     hwCProgramVersionChanged(hwObj: IBPair, cProgramVersion: string) {
@@ -557,9 +555,9 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 if (gp.m_programs) {
                     gp.m_programs.forEach((p) => {
 
-                        if (p.program_versions && this.selectedGridProgramVersions[gp.id] && (this.selectedGridProgramVersions[gp.id][p.id])) {
+                        if (p.versions && this.selectedGridProgramVersions[gp.id] && (this.selectedGridProgramVersions[gp.id][p.id])) {
 
-                            let programVersion = p.program_versions.find((pv)=> (pv.version_object.id == this.selectedGridProgramVersions[gp.id][p.id]));
+                            let programVersion = p.versions.find((pv)=> (pv.id == this.selectedGridProgramVersions[gp.id][p.id]));
 
                             if (programVersion) {
 
@@ -650,7 +648,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         this.navigate(["/projects", this.currentParamsService.get("project"), "instances", instanceId]);
     }
 
-    onProgramVersionClick(programVersion: IBProgramVersion): void {
+    onProgramVersionClick(programVersion: IBProgramVersionShortDetail): void {
         this.selectProgramVersion(programVersion);
     }
 
@@ -761,7 +759,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             if (this.selectedGridProgramVersions[gp.id]) {
                 if (gp.m_programs) {
                     gp.m_programs.forEach((mp) => {
-                        if (mp.program_versions && mp.program_versions.length) {
+                        if (mp.versions && mp.versions.length) {
                             if (!this.selectedGridProgramVersions[gp.id][mp.id]) {
                                 validGrid = false;
                             }
@@ -837,7 +835,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 this.unblockUI();
 
                 this.selectedProgramVersion = programVersionFull;
-                this.selectedHardware = this.hardwareGroupCopy(this.selectedProgramVersion.hardware_group) || [];
+                this.selectedHardware = this.hardwareGroupCopy(<IHardwareGroupIN[]>this.selectedProgramVersion.hardware_group) || []; // here is save re-cast it to IHardwareGroupIN because its only object with more properties
 
                 this.selectedGridProgramVersions = {};
                 programVersionFull.m_project_program_snapshots.forEach((pps) => {
@@ -862,11 +860,11 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     }
 
-    hardwareGroupCopy(hwGroup: IHardwareGroup[]): IHardwareGroup[] {
+    hardwareGroupCopy(hwGroup: IHardwareGroupIN[]): IHardwareGroupIN[] {
         if (!hwGroup) return null;
-        let out: IHardwareGroup[] = [];
+        let out: IHardwareGroupIN[] = [];
         hwGroup.forEach((hg)=> {
-            let hgCopy: IHardwareGroup = {
+            let hgCopy: IHardwareGroupIN = {
                 main_board_pair: {
                     board_id: hg.main_board_pair.board_id,
                     c_program_version_id: hg.main_board_pair.c_program_version_id

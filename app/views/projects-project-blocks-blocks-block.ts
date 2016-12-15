@@ -7,7 +7,7 @@ import {BaseMainComponent} from "./BaseMainComponent";
 import {Subscription} from "rxjs/Rx";
 import {
     IBlockoBlock, IBlockoBlockVersion,
-    ITypeOfBlock, IBlockoBlockVersionShortDetail
+    ITypeOfBlock, IBlockoBlockVersionShortDetail, ITypeOfBlockShortDetail
 } from "../backend/TyrionAPI";
 import {BlockoView} from "../components/BlockoView";
 import {Blocks, Core} from "blocko";
@@ -29,10 +29,11 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
     blocksId: string;
 
     routeParamsSubscription: Subscription;
+    projectSubscription: Subscription;
 
     //project: IProject = null;
 
-    group: ITypeOfBlock = null;
+    group: ITypeOfBlockShortDetail = null;
 
     blockoBlock: IBlockoBlock = null;
 
@@ -73,12 +74,16 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
             this.projectId = params["project"];
             this.blockId = params["block"];
             this.blocksId = params["blocks"];
+            this.projectSubscription = this.storageService.project(this.projectId).subscribe((project) => {
+                this.group = project.type_of_blocks.find((tb) => tb.id == this.blocksId);
+            });
             this.refresh();
         });
     }
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
+        if (this.projectSubscription) this.projectSubscription.unsubscribe();
     }
 
     onBlocksGroupClick(groupId:string) {
@@ -93,11 +98,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
     refresh(): void {
 
         this.blockUI();
-        this.backendService.getTypeOfBlock(this.blocksId)
-            .then((typeOfBlock) => {
-                this.group = typeOfBlock;
-                return this.backendService.getBlockoBlock(this.blockId);
-            })
+        this.backendService.getBlockoBlock(this.blockId)
             .then((blockoBlock) => {
                 console.log(blockoBlock);
 

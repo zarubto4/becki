@@ -23,7 +23,7 @@
             Name: <strong>{{gridProject?gridProject.name:""}}</strong><br>
             Description: <strong>{{gridProject?gridProject.description:""}}</strong>
         </div>
-        <div *ngIf="gridProject && gridProject.m_programs && gridProject.m_programs.length" class="table-scrollable">
+        <div *ngIf="gridProject && gridProject.programs && gridProject.programs.length" class="table-scrollable">
             <table class="table table-hover">
                 <thead>
                 <tr>
@@ -33,7 +33,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let program of gridProject.m_programs">
+                <tr *ngFor="let program of gridProject.programs">
                     <td class="no-wrap bold"><a (click)="onProgramClick(program)">{{program.name}}</a></td>
                     <td>{{program.description}}</td>
                     <td class="no-wrap">
@@ -49,7 +49,7 @@
             </table>
         </div>
         <h3 *ngIf="!gridProject" class="text-center">Loading...</h3>
-        <h3 *ngIf="gridProject && !(gridProject.m_programs && gridProject.m_programs.length)" class="text-center">No grid programs in this grid project</h3>
+        <h3 *ngIf="gridProject && !(gridProject.programs && gridProject.programs.length)" class="text-center">No grid programs in this grid project</h3>
     </div>
 
 </layout-main>

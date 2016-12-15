@@ -6,7 +6,10 @@ import {Component, OnInit, Injector, OnDestroy, ViewChild} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationService";
 import {Subscription} from "rxjs/Rx";
-import {IGridWidget, IProject, IMProgram, IMProgramVersion, IMProject, IMProgramVersionShortDetail, ITypeOfWidgetShortDetail, ITypeOfWidget } from '../backend/TyrionAPI';
+import {
+    IGridWidget, IProject, IMProgram, IMProgramVersion, IMProject, IMProgramVersionShortDetail,
+    ITypeOfWidgetShortDetail, ITypeOfWidget, IMProjectShortDetail
+} from '../backend/TyrionAPI';
 import {GridView} from "../components/GridView";
 import {ModalsVersionDialogModel} from "../modals/version-dialog";
 
@@ -29,7 +32,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
     routeParamsSubscription: Subscription;
 
     //project: IProject = null;
-    gridProject: IMProject = null;
+    gridProject: IMProjectShortDetail = null;
     gridProgram: IMProgram = null;
     gridProgramVersions: IMProgramVersionShortDetail[] = [];
     selectedProgramVersion: IMProgramVersion = null;
@@ -37,7 +40,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
     gridDeviceProfile:string = "mobile";
 
     projectSubscription: Subscription;
-    project: IProject = null;
+    //project: IProject = null;
 
     widgetGroups: ITypeOfWidget[];
 
@@ -55,12 +58,16 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
             this.projectId = params["project"];
             this.gridsId = params["grids"];
             this.gridId = params["grid"];
+            this.projectSubscription = this.storageService.project(this.projectId).subscribe((project) => {
+                this.gridProject = project.m_projects.find((mp) => mp.id == this.gridsId);
+            });
             this.refresh();
         });
     }
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
+        if (this.projectSubscription) this.projectSubscription.unsubscribe();
     }
 
     onGridProjectClick(gridProjectId:string) {
@@ -70,24 +77,15 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
     refresh(): void {
         this.blockUI();
 
-        this.backendService.getAllTypeOfWidgets()
-            .then((typesOfWidgets) => {
-                this.widgetGroups = typesOfWidgets;
-                this.unblockUI();
-            })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(`The widgets cannot be loaded.`, reason));
-                this.unblockUI();
-            });
+        Promise.all<any>([
+            this.backendService.getAllTypeOfWidgets(),
+            this.backendService.getMProgram(this.gridId)
+        ])
+            .then((values:[ITypeOfWidget[], IMProgram]) => {
+                let typesOfWidgets: ITypeOfWidget[] = values[0];
+                let gridProgram: IMProgram = values[1];
 
-        this.backendService.getMProject(this.gridsId)
-            .then((gridProject) => {
-                console.log(gridProject);
-                this.gridProject = gridProject;
-                return this.backendService.getMProgram(this.gridId)
-            })
-            .then((gridProgram) => {
-                console.log(gridProgram);
+                this.widgetGroups = typesOfWidgets;
 
                 this.gridProgram = gridProgram;
 

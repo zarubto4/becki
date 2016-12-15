@@ -7,7 +7,7 @@ import {BaseMainComponent} from "./BaseMainComponent";
 import {Subscription} from "rxjs/Rx";
 import {
     IGridWidget, IGridWidgetVersion,
-    ITypeOfWidget, IGridWidgetVersionShort
+    ITypeOfWidget, IGridWidgetVersionShortDetail, ITypeOfWidgetShortDetail
 } from "../backend/TyrionAPI";
 import {BlockoView} from "../components/BlockoView";
 import {Blocks, Core} from "blocko";
@@ -28,11 +28,12 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     widgetsId: string;
 
     routeParamsSubscription: Subscription;
+    projectSubscription: Subscription;
 
-    group: ITypeOfWidget = null;
+    group: ITypeOfWidgetShortDetail = null;
     widget: IGridWidget = null;
 
-    widgetVersions: IGridWidgetVersionShort[] = [];
+    widgetVersions: IGridWidgetVersionShortDetail[] = [];
     selectedWidgetVersion: IGridWidgetVersion = null;
     widgetCode: string = "";
 
@@ -49,12 +50,16 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
             this.projectId = params["project"];
             this.widgetId = params["widget"];
             this.widgetsId = params["widgets"];
+            this.projectSubscription = this.storageService.project(this.projectId).subscribe((project) => {
+                this.group = project.type_of_widgets.find((tw) => tw.id == this.widgetsId);
+            });
             this.refresh();
         });
     }
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
+        if (this.projectSubscription) this.projectSubscription.unsubscribe();
     }
 
     onWidgetsGroupClick(groupId:string) {
@@ -68,11 +73,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     refresh(): void {
 
         this.blockUI();
-        this.backendService.getTypeOfWidget(this.widgetsId)
-            .then((typeOfWidget) => {
-                this.group = typeOfWidget;
-                return this.backendService.getWidget(this.widgetId);
-            })
+        this.backendService.getWidget(this.widgetId)
             .then((widget) => {
                 this.widget = widget;
 
@@ -99,11 +100,11 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
 
     }
 
-    onWidgetVersionClick(version: IGridWidgetVersionShort) {
+    onWidgetVersionClick(version: IGridWidgetVersionShortDetail) {
         this.selectWidgetVersion(version);
     }
 
-    selectWidgetVersion(version: IGridWidgetVersionShort) {
+    selectWidgetVersion(version: IGridWidgetVersionShortDetail) {
         this.blockUI();
         this.backendService.getWidgetVersion(version.id)
             .then((widgetVersion) => {
