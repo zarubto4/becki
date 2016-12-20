@@ -46,7 +46,7 @@
 
                 <div class="form-group">
                     <label>Block code</label>
-                    <monaco-editor [code]="blockCode" (codeChange)="newBlockCode($event)" ></monaco-editor>
+                    <monaco-editor [code]="blockCode" (codeChange)="newBlockCode($event)" [typings]="['Blocko', 'ES5']"></monaco-editor>
                 </div>
 
                 <div *ngIf="jsError" class="mt-element-ribbon bg-grey-steel">

@@ -15,6 +15,7 @@ import {
     FlashMessageSuccess, FlashMessageWarning, FlashMessageError
 } from "../services/NotificationService";
 import {StorageService} from "../services/StorageService";
+import {MonacoEditorLoaderService} from "../services/MonacoEditorLoaderService";
 
 export abstract class BaseMainComponent {
 
@@ -40,6 +41,7 @@ export abstract class BaseMainComponent {
             this.formBuilder = injector.get(FormBuilder);
             this.currentParamsService = injector.get(CurrentParamsService);
             this.blockUIService = injector.get(BlockUIService);
+            injector.get(MonacoEditorLoaderService); // only for preload monaco scripts
         } else {
             throw "Injector is not defined! ... Don't you forget to add \"constructor(injector:Injector) {super(injector)};\" in inherited class?"
         }

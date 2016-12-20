@@ -105,6 +105,7 @@ import {ProjectsProjectWidgetsWidgetsComponent } from './views/projects-project-
 import {ModalsWidgetsWidgetPropertiesComponent} from "./modals/widgets-widget-properties";
 import {ProjectsProjectWidgetsWidgetsWidgetComponent} from './views/projects-project-widgets-widgets-widget';
 import {MonacoEditor} from "./components/MonacoEditor";
+import {MonacoEditorLoaderService} from "./services/MonacoEditorLoaderService";
 
 //@formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -225,6 +226,7 @@ let tabMenus = {
         CurrentParamsService,
         BreadcrumbsService,
         TabMenuService,
+        MonacoEditorLoaderService,
         {provide: "routes", useValue: routes},
         {provide: "navigation", useValue: navigation},
         {provide: "tabMenus", useValue: tabMenus},
