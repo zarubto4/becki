@@ -1,4 +1,9 @@
 /**
+  ~ © 2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+*/
+
+/**
  * Created by dominik krisztof on 22/09/16.
  */
 
@@ -34,6 +39,10 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
     selectedExtensions: IGeneralTariffExtensions[] = [];
 
     selectedTariff:IGeneralTariff;
+
+    userCompany:boolean = false;
+
+    inEu:boolean = false;
 
     countryList: BeckiFormSelectOption[] = StaticOptionLists.countryList;
 
@@ -149,7 +158,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
         }
 
-        if (this.selectedTariff.company_details_required) {
+        if (this.selectedTariff.company_details_required || this.userCompany) {
 
             input["company_authorized_email"] = ["", [Validators.required, Validators.minLength(4),BeckiValidators.email]]; //company only
 
@@ -161,9 +170,9 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
             input["company_web"] = ["", [Validators.minLength(4)]]; //company only
 
-            input["registration_no"] = ["",[BeckiValidators.condition(()=>!this.inEu(), Validators.required)] ];
+            input["registration_no"] = ["",[BeckiValidators.condition(()=>!this.inEu, Validators.required)]];
 
-            input["vat_number"] = ["", [BeckiValidators.condition(()=>this.inEu(), Validators.required)], BeckiAsyncValidators.condition(()=>this.inEu(), BeckiAsyncValidators.validateEntity(this.backendService, "vat_number"))]; //GB365684514 např.
+            input["vat_number"] = ["", [BeckiValidators.condition(()=>this.inEu, Validators.required)], BeckiAsyncValidators.condition(()=>this.inEu, BeckiAsyncValidators.validateEntity(this.backendService, "vat_number"))]; //GB365684514 např.
 
         }
         this.form=null;
@@ -180,9 +189,10 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
     }
     }
 
-    inEu():boolean{
+    checkInEu():void{
         var country =  this.countryList.find(country => this.form && country.value == this.form.controls["country"].value);
-        return  country?country.data:null;
+        console.log(country?country.data:null);
+        this.inEu = country?country.data:null;
         }
 
     onSubmitClick(): void {
@@ -219,7 +229,7 @@ this.blockUI();
             tariffData=Object.assign(tariffData,payModeTariffData);
         }
 
-        if(this.inEu()){
+        if(this.inEu){
             var companyTariffData: any = {
                 vat_number:this.form.controls["vat_number"].value
             }
@@ -254,7 +264,7 @@ this.blockUI();
             .then(tarif => {
                 this.unblockUI();
                 this.serverResponse = tarif;
-                if ((<any>tarif).gw_url) {
+                if ((<any>tarif).gw_url) { //TODO podle čísla HTTP hlavičky se vrací 3 typy
                     this.addFlashMessage(new FlashMessageWarning("Product was created but payment is required, click", "<a href={{(IGoPayUrl)response.gw_url}}>here</a>"));
                     this.router.navigate(["/financial"]);
                 } else {

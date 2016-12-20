@@ -35,21 +35,18 @@
                     <td>{{product.subscription_id}}</td>
                     <td>{{product.payment_mode|StringReplacer}}</td>
                     <td class="no-wrap text-right">
-                        <button title="Bank transfer" class="btn btn-icon-only white" [class.font-green-jungle]="product.payment_method=='bank_transfer'"> <!-- TODO zjistit jaké barvičky mají být a podle čeho se mají rosvicet -->
+                        <button title="Bank transfer" class="btn class.font-green-jungle btn-icon-only white" *ngIf="product.payment_method=='bank_transfer'"> <!-- TODO zjistit jaké barvičky mají být a podle čeho se mají rosvicet -->
                             <i class="fa fa-bank fa-2x"> </i>
                         </button>
-                        <button title="Credits" class="btn btn-icon-only white" [class.font-green-jungle]="product.payment_method=='credit'">
+                        <button title="Credits" class="btn class.font-green-jungle btn-icon-only white" *ngIf="product.payment_method=='credit'">
                             <i class=" fa fa-money fa-2x" ></i>
                         </button>
-                        <button title="Credit Card" class="btn btn-icon-only white" [class.font-green-jungle]="product.payment_method=='credit_card'">
+                        <button title="Credit Card" class="btn class.font-green-jungle btn-icon-only white" *ngIf="product.payment_method=='credit_card'">
                             <i class=" fa fa-credit-card fa-2x"></i>
                         </button>
-                        <button title="delete" (click)="onRemoveClick(product)" class="btn btn-icon-only white">
-                            <i class=" font-red fa fa-trash red fa-2x"></i>
-                        </button>
-                        <button title="Settings" class="btn btn-icon-only white">
+                       <!-- <button title="Settings" class="btn btn-icon-only white">
                         <i class=" fa fa-gears fa-2x"></i>
-                    </button>
+                    </button> -->
 
                     </td>
                 </tr>

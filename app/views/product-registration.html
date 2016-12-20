@@ -1,4 +1,4 @@
-<layout-main [title]="'Product registration'">
+<layout-main [title]="'Product registration'" xmlns="http://www.w3.org/1999/html">
 
 
     <div class="row">
@@ -61,6 +61,7 @@
             <div class="portlet-body">
                 <div class="pricing-content-1">
                     <div class="row">
+                        <h3 class="center-align"><input type="checkbox"  [ngModelOptions]="{standalone: true}" [(ngModel)]="userCompany" >I have a company</h3>
                         <div *ngFor="let tariff of tariffForRegistration" class="col-md-3">
                             <div class="price-column-container border-active">
                                 <div class="price-table-head bg-{{tariff.color| lowercase}}">
@@ -109,30 +110,29 @@
                 </div>
                 <div class="row portlet-body">
                     <div class="pricing-content-1">
-                        <div [class.col-md-6]="selectedTariff.company_details_required">
+                        <div [class.col-md-6]="selectedTariff.company_details_required || userCompany">
                             <becki-form-input [control]="form.controls.city" label="City"></becki-form-input>
-                            <becki-form-select [control]="form.controls.country" label="Country"
+                            <becki-form-select (change)="checkInEu()" [control]="form.controls.country" label="Country"
                                                [options]="countryList"></becki-form-select>
                             <becki-form-select [control]="form.controls.currency_type" label="Currency type" [options]="currency_type"></becki-form-select>
                             <becki-form-select *ngIf="selectedTariff.required_payment_method" [control]="form.controls.payment_method" label="Payment method" [options]="payment_method"></becki-form-select>
                             <becki-form-select *ngIf="selectedTariff.required_payment_mode" [control]="form.controls.payment_mode" label="Payment mode" [options]="payment_mode"></becki-form-select>
                             <becki-form-input [control]="form.controls.product_individual_name" label="Product name (Your unique name for this tarrif)"></becki-form-input>
-                            <!-- uloží z prokliku? -->
                             <becki-form-input [control]="form.controls.street" label="Street"></becki-form-input>
                             <becki-form-input [control]="form.controls.street_number" label="Street number"></becki-form-input>
-                            <!--     <becki-form-input [control]="form.controls.tariff_type" label="tariff type"></becki-form-input>   uloží z prokliku -->
                             <becki-form-input [control]="form.controls.zip_code" label="Zip code"></becki-form-input>
                         </div>
 
-                        <div *ngIf="selectedTariff.company_details_required" class="col-md-6">
+
+                        <div *ngIf="selectedTariff.company_details_required || userCompany" class="col-md-6">
                             <p>
                             <h2>Company info</h2>
-                            <becki-form-input *ngIf="!inEu()" [control]="form.controls.registration_no" label="Registration no"></becki-form-input>
-                            <becki-form-input *ngIf="inEu()" [control]="form.controls.vat_number" label="Vat number"></becki-form-input> <!--TODO předělat if na Model-Change -->
-                            <becki-form-input  [control]="form.controls.company_authorized_email" [type]="email" label="Company authorized email"></becki-form-input>
-                            <becki-form-input  [control]="form.controls.company_authorized_phone" [type]="number" label="Company authorized phone"></becki-form-input>
-                            <becki-form-input  [control]="form.controls.company_invoice_email" [type]="email" label="Company invoice email"></becki-form-input>
                             <becki-form-input  [control]="form.controls.company_name" label="Company name"></becki-form-input>
+                            <becki-form-input *ngIf="!inEu" [control]="form.controls.registration_no" label="Registration no."></becki-form-input>
+                            <becki-form-input *ngIf="inEu" [control]="form.controls.vat_number" label="VAT number (In EU used it with country code  AU21… IT3413.. etc)"></becki-form-input> <!--TODO předělat if na Model-Change -->
+                            <becki-form-input  [control]="form.controls.company_authorized_email" [type]="email" label="Company authorised email (Only for emergency situation)"></becki-form-input>
+                            <becki-form-input  [control]="form.controls.company_authorized_phone" [type]="number" label="Company authorised phone (Only for emergency situation)"></becki-form-input>
+                            <becki-form-input  [control]="form.controls.company_invoice_email" [type]="email" label="Company invoice email"></becki-form-input>
                             <becki-form-input  [control]="form.controls.company_web" label="Company web"></becki-form-input>
 
                         </div>
@@ -140,8 +140,8 @@
 
                         <div class="form-actions">
                             <div class="row">
-                                <div class=" col-md-9">
-                                    <button type="button" class="btn green btn-outline"
+                                <div class=" col-md-12">
+                                    <button type="button" class="btn center-align btn-lg green btn-outline m-grid-col-middle"
                                             [disabled]="!form || !form.valid"
                                             (click)="stepClick(3,false)">Continue
                                     </button>
@@ -277,11 +277,11 @@
                                     <td> {{form.controls["zip_code"].value}} </td>
                                 </tr>
                                 <tr *ngIf="form.controls['company_authorized_email']">
-                                    <td> Company authorized email: </td>
+                                    <td> Company authorised email: </td>
                                     <td> {{form.controls["company_authorized_email"].value}} </td>
                                 </tr>
                                 <tr *ngIf="form.controls['company_authorized_phone']">
-                                    <td> Company authorized phone: </td>
+                                    <td> Company authorised phone: </td>
                                     <td> {{form.controls["company_authorized_phone"].value}} </td>
                                 </tr>
                                 <tr *ngIf="form.controls['company_invoice_email']">
@@ -296,12 +296,12 @@
                                     <td> Company web: </td>
                                     <td> {{form.controls["company_web"].value}} </td>
                                 </tr>
-                                <tr  *ngIf="form.controls['registration_no']&&!inEu()">
+                                <tr  *ngIf="form.controls['registration_no']&&!inEu">
                                     <td> Registration no.: </td>
                                     <td> {{form.controls["registration_no"].value}} </td>
                                 </tr>
-                                <tr *ngIf="form.controls['vat_number']&&inEu()">
-                                    <td> Vat number: </td>
+                                <tr *ngIf="form.controls['vat_number']&&inEu">
+                                    <td> VAT number: </td>
                                     <td> {{form.controls["vat_number"].value}} </td>
                                 </tr>
                                 </tbody>
