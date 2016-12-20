@@ -35,7 +35,7 @@
                 <tr *ngFor="let invoice of invoices">
                     <td class="no-wrap"><a (click)="onInvoiceClick(invoice)">{{invoice.invoice_number}}</a></td>
                     <td>{{invoice.id}}</td>
-                    <td><span class="font-red bg-yellow-lemon">TODO</span> <=> <span class="font-red bg-yellow-lemon">TODO</span> </td>
+                    <td><span class="font-red bg-yellow-lemon">TODO</span> - <span class="font-red bg-yellow-lemon">TODO</span> </td>
                     <td><span *ngIf="!invoice.require_payment"><i class=" font-green-jungle fa fa-check fa-2x"></i></span><span *ngIf="invoice.require_payment"><a (click)="onPayClick()">PAY</a></span></td>
                     <td class="no-wrap text-right">
                         <button (click)="onDownloadPDFClick()" title="Download as PDF" class="btn btn-icon-only white">
