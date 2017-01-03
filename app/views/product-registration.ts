@@ -120,7 +120,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         /*    label: method.user_description,
             value: method.json_identificator
         })); */
-        console.log(tariff.extensionses);
+        console.log(tariff.extensions);
 
 
         this.currency_type= [{label: "CZK", value: "CZK"}, {label: "EUR", value: "EUR"}];//TODO pak smazat až bude měna dodávána

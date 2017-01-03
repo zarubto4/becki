@@ -2,7 +2,7 @@
  * Created by davidhradek on 08.09.16.
  */
 
-import {TyrionAPI, INotification, IPerson, ILoginResult, IWebSocketToken} from "./TyrionAPI";
+import { TyrionAPI, INotification, IPerson, ILoginResult, IWebSocketToken, ILogin } from './TyrionAPI';
 import * as _ from "underscore";
 import * as Rx from "rxjs";
 import * as uuid from "node-uuid";
@@ -328,7 +328,7 @@ export abstract class BeckiBackend extends TyrionAPI {
             throw "email and password required";
         }
 
-        return this.__login({
+        return this.createLogin({
             mail: mail,
             password: password
         })
@@ -358,7 +358,7 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     public logout(): Promise<any> {
         return new Promise<any>((resolve, reject)=> {
-            this.__logout()
+            this.logout()
                 .then((body) => {
                     this.unsetToken();
                     resolve(body);

@@ -8,6 +8,7 @@ import {BeckiValidators} from "../helpers/BeckiValidators";
 import {FlashMessageSuccess, FlashMessageError, NotificationService} from "../services/NotificationService";
 import {BackendService} from "../services/BackendService";
 import {Router} from "@angular/router";
+import { IPersonPasswordRecoveryEmail } from '../backend/TyrionAPI';
 
 
 @Component({
@@ -35,7 +36,7 @@ export class ForgotPasswordComponent implements OnInit {
     }
 
     sendRecovery(): void {
-        this.backendService.recoveryMailPersonPassword({mail: this.forgotPasswordForm.controls["email"].value})
+        this.backendService.recoveryPersonPasswordMail({mail: this.forgotPasswordForm.controls["email"].value})
             .then(() => {
                 this.notificationService.addFlashMessage(new FlashMessageSuccess("email with instructions was sent"));
                 //this.router.navigate(["/"]);

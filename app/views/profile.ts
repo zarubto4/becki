@@ -134,7 +134,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
 
     uploadProfilePicture(): void {
         //API requires 'multipart/form-data' Content-Type, name of the property is 'file'.
-        this.backEndService.putPersonUploadPicture() //todo udělat něco co 1. nahraje obrázek 2. zkontroluje obrázek jestli je ve stavu jakém chceme 3. upravit ho 4. poslat ho
+        this.backEndService.uploadPersonPicture(); //todo udělat něco co 1. nahraje obrázek 2. zkontroluje obrázek jestli je ve stavu jakém chceme 3. upravit ho 4. poslat ho
     }
 }
 
