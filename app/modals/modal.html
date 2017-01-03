@@ -25,8 +25,8 @@
             <template [ngSwitchCase]="'ModalsVersionDialogModel'">
                 <modals-version-dialog [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-version-dialog>
             </template>
-            <template [ngSwitchCase]="'ModalsBlockoJsEditorModel'">
-                <modals-blocko-js-editor [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-blocko-js-editor>
+            <template [ngSwitchCase]="'ModalsBlockoBlockCodeEditorModel'">
+                <modals-blocko-block-code-editor [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-blocko-block-code-editor>
             </template>
             <template [ngSwitchCase]="'ModalsBlockoConfigPropertiesModel'">
                 <modals-blocko-config-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></modals-blocko-config-properties>

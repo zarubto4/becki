@@ -62,7 +62,8 @@ gulp.task('copy-modules', ['copy-assets'], function() {
         'node_modules/jquery-knob/dist/**/*',
         'node_modules/autolayout/dist/**/*',
         'node_modules/blocko/examples/angular2/js/**/*',
-        'node_modules/monaco-editor/min/vs/**/*'
+        'node_modules/monaco-editor/min/vs/**/*',
+        'node_modules/typescript/lib/**/*'
     ], { base : './' })
         .pipe(gulp.dest('dist'))
 });

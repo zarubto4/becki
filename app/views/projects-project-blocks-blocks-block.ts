@@ -47,13 +47,13 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
     blockForm: FormGroup = null;
     blockCode: string = "";// "block.addDigitalInput(\"din1\", \"Digital input 1\");\nblock.addAnalogInput(\"anIn\", \"Analog input\");\nblock.addMessageInput(\"msgInTest\", \"Test message\", [ByzanceBool, ByzanceInt, ByzanceFloat, ByzanceString]);\n\nblock.addMessageOutput(\"msgOut\", \"Message output\", [ByzanceBool, ByzanceString]);\nblock.addAnalogOutput(\"aout\", \"Analog output\");\nblock.addDigitalOutput(\"digitalOut\", \"Digital output\");\n\nblock.addConfigProperty(ConfigPropertyType.Float, \"confOffset\", \"Analog offset\", 44.6);\n\nblock.init = block.configChanged = function () { // when init and config changed\n    block.aout(block.anIn() + block.confOffset());  \n}\n\nblock.onAnIn = function (val) { // when change value of anIn analog input\n    block.aout(val + block.confOffset());  \n};\n\nblock.onMsgInTest = function (msg) { // when new message on msgInTest message input\n    block.msgOut(msg[0],\"S:\"+msg[3]+\" N:\"+(msg[1]+msg[2]));\n};\n\nblock.inputsChanged = function () { // when change any analog or digital input\n    block.digitalOut(block.din1());\n};";
 
-    jsError: { name: string, message: string };
+    tsError: { name: string, message: string };
 
     // Properties for test view:
     @ViewChild(BlockoView)
     blockoView: BlockoView;
-    jsBlock: Blocks.JSBlock;
-    jsBlockHeight: number = 0;
+    tsBlock: Blocks.TSBlock;
+    tsBlockHeight: number = 0;
     testInputConnectors: Core.Connector[];
     messageInputsValueCache: { [key: string]: boolean|number|string } = {};
     testEventLog: {timestamp: string, connector: Core.Connector, eventType: Core.ConnectorEventType, value: (boolean|number|Core.Message), readableValue: string}[] = [];
@@ -228,10 +228,10 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
 
     validate() {
         try {
-            if (Blocks.JSBlock.validateJsCode(this.blockCode)) {
-                this.jsError = null;
+            if (Blocks.TSBlock.validateCode(this.blockCode)) {
+                this.tsError = null;
             } else {
-                this.jsError = {name: "Error", message: "Unknown error"};
+                this.tsError = {name: "Error", message: "Unknown error"};
             }
         } catch (e) {
 
@@ -240,8 +240,8 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
 
             let msg: string = e.message || e.toString();
 
-            if (e instanceof Blocks.JSBlockError) {
-                name = "JS Block Error";
+            if (e instanceof Blocks.TSBlockError) {
+                name = "TS Block Error";
                 msg = e.htmlMessage;
             }
 
@@ -261,17 +261,17 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
             }
 
 
-            this.jsError = {name: name, message: msg};
+            this.tsError = {name: name, message: msg};
         }
     }
 
     cleanTestView(): void {
         this.blockoView.removeAllBlocksWithoutReadonlyCheck();
-        this.jsBlock = null;
+        this.tsBlock = null;
         this.successfullyTested = false;
         this.testEventLog = [];
         this.testInputConnectors = [];
-        this.jsBlockHeight = 0;
+        this.tsBlockHeight = 0;
         this.messageInputsValueCache = {};
     }
 
@@ -279,12 +279,12 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
         this.cleanTestView();
 
         if (!this.blockCode) {
-            this.jsError = {name: "Block Error", message: "Block code cannot be empty"};
+            this.tsError = {name: "Block Error", message: "Block code cannot be empty"};
             return;
         }
 
         this.validate();
-        if (!this.jsError) {
+        if (!this.tsError) {
 
 
             try {
@@ -293,11 +293,11 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                     displayName: this.blockForm.controls["icon"].value,
                     description: this.blockForm.controls["description"].value
                 });
-                this.jsBlock = this.blockoView.addJsBlockWithoutReadonlyCheck("", designJson, 20, 10);
+                this.tsBlock = this.blockoView.addTsBlockWithoutReadonlyCheck("", designJson, 20, 10);
             } catch (e) {
             }
 
-            this.jsBlock.registerOutputEventCallback((connector: Core.Connector, eventType: Core.ConnectorEventType, value: (boolean|number|Core.Message)) => {
+            this.tsBlock.registerOutputEventCallback((connector: Core.Connector, eventType: Core.ConnectorEventType, value: (boolean|number|Core.Message)) => {
                 this.testEventLog.unshift({
                     timestamp: moment().format("HH:mm:ss.SSS"),
                     connector: connector,
@@ -307,11 +307,11 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                 });
             });
 
-            this.jsBlock.setJsCode(this.blockCode);
+            this.tsBlock.setCode(this.blockCode);
 
-            this.testInputConnectors = this.jsBlock.getInputConnectors();
+            this.testInputConnectors = this.tsBlock.getInputConnectors();
 
-            this.jsBlockHeight = this.jsBlock.rendererGetBlockSize().height + 20; // for borders
+            this.tsBlockHeight = this.tsBlock.rendererGetBlockSize().height + 20; // for borders
 
             this.successfullyTested = true;
 

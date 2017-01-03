@@ -26,14 +26,14 @@ declare interface Block {
       * @param inputId Input ID used to address input
       * @param inputName Input name showed on block
       */
-    addDigitalInput: (inputId:string, inputName:string)=>void;
+    addDigitalInput(inputId:string, inputName:string):void;
     
     /**
       * Adds analog input to block
       * @param inputId Input ID used to address input
       * @param inputName Input name showed on block
       */
-    addAnalogInput: (inputId:string, inputName:string)=>void;
+    addAnalogInput(inputId:string, inputName:string):void;
     
     /**
       * Adds message input to block
@@ -41,21 +41,21 @@ declare interface Block {
       * @param inputName Input name showed on block
       * @param argumentTypes Array of message ArgTypes in order you want
       */
-    addMessageInput: (inputId:string, inputName:string, argumentTypes:ArgTypes[])=>void;
+    addMessageInput(inputId:string, inputName:string, argumentTypes:ArgTypes[]):void;
     
     /**
       * Adds digital output to block
       * @param outputId Input ID used to address input
       * @param outputName Input name showed on block
       */
-    addDigitalOutput: (outputId:string, outputName:string)=>void;
+    addDigitalOutput(outputId:string, outputName:string):void;
     
     /**
       * Adds analog output to block
       * @param outputId Input ID used to address input
       * @param outputName Input name showed on block
       */
-    addAnalogOutput: (outputId:string, outputName:string)=>void;
+    addAnalogOutput(outputId:string, outputName:string):void;
     
     /**
       * Adds message output to block
@@ -63,7 +63,80 @@ declare interface Block {
       * @param outputName Input name showed on block
       * @param argumentTypes Array of message ArgTypes in order you want
       */
-    addMessageOutput: (outputId:string, outputName:string, argumentTypes:ArgTypes[])=>void;
+    addMessageOutput(outputId:string, outputName:string, argumentTypes:ArgTypes[]):void;
+    
+    /**
+      * Adds config property to block
+      * @param type Integer property type
+      * @param configPropertyId Property ID used to address config property
+      * @param displayName Property display name showed on config
+      * @param defaultValue Default value
+      * @param config Config params for property
+      */
+    addConfigProperty(type: "integer", configPropertyId:string, displayName:string, defaultValue:number, config?:{
+        /**
+          * Min possible number
+          */
+        min?: number;
+        /**
+          * Max possible number
+          */
+        max?: number;
+        /**
+          * Step for number input
+          */
+        step?: number;
+        /**
+          * Use range (slider) instead of number input
+          */
+        range?: boolean;
+    }):void;
+    
+    /**
+      * Adds config property to block
+      * @param type Float property type 
+      * @param configPropertyId Property ID used to address config property
+      * @param displayName Property display name showed on config
+      * @param defaultValue Default value
+      * @param config Config params for property
+      */
+    addConfigProperty(type: "float", configPropertyId:string, displayName:string, defaultValue:number, config?:{
+        /**
+          * Min possible number
+          */
+        min?: number;
+        /**
+          * Max possible number
+          */
+        max?: number;
+        /**
+          * Step for number input
+          */
+        step?: number;
+        /**
+          * Use range (slider) instead of number input
+          */
+        range?: boolean;
+    }):void;
+    
+    /**
+      * Adds config property to block
+      * @param type String property type 
+      * @param configPropertyId Property ID used to address config property
+      * @param displayName Property display name showed on config
+      * @param defaultValue Default value
+      */
+    addConfigProperty(type: "string", configPropertyId:string, displayName:string, defaultValue:string):void;
+    
+    /**
+      * Adds config property to block
+      * @param type Boolean property type 
+      * @param configPropertyId Property ID used to address config property
+      * @param displayName Property display name showed on config
+      * @param defaultValue Default value
+      */
+    addConfigProperty(type: "boolean", configPropertyId:string, displayName:string, defaultValue:boolean):void;
+    
 }
 /**
   * Main blocko object

@@ -66,7 +66,6 @@ import {ModalsCodePropertiesComponent} from "./modals/code-properties";
 import {ModalsCodeFileDialogComponent} from "./modals/code-file-dialog";
 import {ModalsConfirmComponent} from "./modals/confirm";
 import {ModalsVersionDialogComponent} from "./modals/version-dialog";
-import {ModalsBlockoJsEditorComponent} from "./modals/blocko-js-editor";
 import {ModalsBlockoConfigPropertiesComponent} from "./modals/blocko-config-properties";
 import {ModalsBlockoAddHardwareComponent} from "./modals/blocko-add-hardware";
 import {ModalsGridConfigPropertiesComponent} from "./modals/grid-config-properties";
@@ -106,6 +105,7 @@ import {ModalsWidgetsWidgetPropertiesComponent} from "./modals/widgets-widget-pr
 import {ProjectsProjectWidgetsWidgetsWidgetComponent} from './views/projects-project-widgets-widgets-widget';
 import {MonacoEditor} from "./components/MonacoEditor";
 import {MonacoEditorLoaderService} from "./services/MonacoEditorLoaderService";
+import {ModalsBlockoBlockCodeEditorComponent} from "./modals/blocko-block-code-editor";
 
 //@formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -306,7 +306,7 @@ let tabMenus = {
         ModalsCodeFileDialogComponent,
         ModalsConfirmComponent,
         ModalsVersionDialogComponent,
-        ModalsBlockoJsEditorComponent,
+        ModalsBlockoBlockCodeEditorComponent,
         ModalsBlockoConfigPropertiesComponent,
         ModalsBlockoAddHardwareComponent,
         ModalsGridConfigPropertiesComponent,

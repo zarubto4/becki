@@ -82,6 +82,8 @@ export class MonacoEditor implements AfterViewInit, OnChanges, OnDestroy {
                 language: this.language,
                 readOnly: this.readonly,
                 theme: "vs-dark",
+                automaticLayout: true,
+                autoClosingBrackets: false
             });
             this.editor.getModel().onDidChangeContent(() => {
                 this.code = this.editor.getModel().getValue();
