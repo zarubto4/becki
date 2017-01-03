@@ -106,6 +106,7 @@ export class BugFoundError extends Error {
 
     constructor(adminMessage: string, userMessage?: string) {
         super(BugFoundError.composeMessage(adminMessage));
+        this.name = "BugFoundError";
         // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133
         this.message = BugFoundError.composeMessage(adminMessage);
         this.adminMessage = adminMessage;
@@ -138,6 +139,7 @@ export class CodeError extends Error {
 
     constructor(msg: string) {
         super(msg);
+        this.name = "CodeError";
         this.message = msg;
     }
 
@@ -160,6 +162,7 @@ export class CodeCompileError extends Error {
 
     constructor(msg: string) {
         super(msg);
+        this.name = "CodeCompileError";
         this.message = msg;
     }
 
@@ -183,6 +186,7 @@ export class UnauthorizedError extends Error {
 
     constructor(userMessage: string, message = "authorized authentication token required") {
         super(message);
+        this.name = "UnauthorizedError";
         // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133
         this.message = message;
         this.userMessage = userMessage;
@@ -203,6 +207,7 @@ export class PermissionMissingError extends UnauthorizedError {
 
     constructor(userMessage: string) {
         super(PermissionMissingError.MESSAGE);
+        this.name = "PermissionMissingError";
         // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133
         this.message = PermissionMissingError.MESSAGE;
         this.userMessage = userMessage;
@@ -328,7 +333,7 @@ export abstract class BeckiBackend extends TyrionAPI {
             throw "email and password required";
         }
 
-        return this.createLogin({
+        return this.__login({
             mail: mail,
             password: password
         })

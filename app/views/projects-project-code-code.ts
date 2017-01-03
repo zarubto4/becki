@@ -10,7 +10,7 @@ import {CodeFile} from "../components/CodeIDE";
 import {ModalsConfirmModel} from "../modals/confirm";
 import {ModalsVersionDialogModel} from "../modals/version-dialog";
 import {IProject, ICProgram, ICProgramVersion, IUserFiles, ICProgramVersionShortDetail} from "../backend/TyrionAPI";
-import {ICodeCompileErrorMessage, CodeCompileError} from "../backend/BeckiBackend";
+import {ICodeCompileErrorMessage, CodeCompileError, CodeError} from "../backend/BeckiBackend";
 
 import moment = require("moment/moment");
 import {NullSafe} from "../helpers/NullSafe";
@@ -240,7 +240,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         });
 
         this.buildInProgress = true;
-        this.backendService.createCProgramVersionCompile({
+        this.backendService.compileCProgram({
             main: main,
             user_files: userFiles,
             type_of_board_id: this.codeProgram.type_of_board_id
@@ -252,8 +252,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             })
             .catch((error) => {
                 this.buildInProgress = false;
-                console.log(error);
-                if (error instanceof CodeCompileError) {
+                if (error.name == "CodeCompileError") {
                     this.buildErrors = error.errors;
 
                     // TODO: move to method
