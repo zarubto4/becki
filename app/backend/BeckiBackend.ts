@@ -189,6 +189,7 @@ export class UserNotValidatedError extends Error {
     constructor(userMessage: string) { 
         super(UserNotValidatedError.MESSAGE); 
         // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133 
+        this.name = "UserNotValidatedError";
         this.message = UserNotValidatedError.MESSAGE; 
         this.userMessage = userMessage; 
     } 

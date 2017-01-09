@@ -62,9 +62,9 @@ export class LoginComponent {
             })
             .catch(reason => {
                 this.blockUIService.unblockUI();
-                if (reason instanceof PermissionMissingError) {
+                if (reason.name = PermissionMissingError) {
                     this.loginError = (<PermissionMissingError>reason).userMessage;
-                } if(reason instanceof UserNotValidatedError){ 
+                } if(reason.name = UserNotValidatedError){ 
                     this.loginError=(<UserNotValidatedError>reason).userMessage +"\n press resend button to send vertifiaction Email again"; 
                     this.resendVertification=true; 
                 } else {
@@ -82,7 +82,7 @@ export class LoginComponent {
             })
             .catch(reason => {
                 this.blockUIService.unblockUI();
-                if (reason instanceof PermissionMissingError) {
+                if (reason.name = PermissionMissingError) {
                     this.loginError = (<PermissionMissingError>reason).userMessage;
                 } else {
                     this.loginError = "The user cannot be logged in.\n" + reason;
@@ -99,7 +99,7 @@ export class LoginComponent {
             })
             .catch(reason => {
                 this.blockUIService.unblockUI();
-                if (reason instanceof PermissionMissingError) {
+                if (reason.name = PermissionMissingError) {
                     this.loginError = (<PermissionMissingError>reason).userMessage;
                 } else {
                     this.loginError = "The user cannot be logged in.\n" + reason;
