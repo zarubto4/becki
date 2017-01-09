@@ -14,6 +14,7 @@
         <becki-form-input [control]="loginForm.controls.password" [label]="'Password'" [type]="'password'"></becki-form-input>
         <div class="form-actions">
             <button type="submit" class="btn green uppercase" (click)="onLoginClick($event)" [disabled]="!loginForm.valid">Login</button>
+            <button type="button" [disabled]="!resendVertification && !loginForm.valid" *ngIf="resendVertification" class="btn green uppercase" (click)="onResendClick()">Resend</button> 
             <a [routerLink]="['/forgotPassword']" class="forget-password">Forgot Password?</a>
         </div>
         <div class="login-options">

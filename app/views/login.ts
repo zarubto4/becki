@@ -7,8 +7,10 @@ import {Router} from "@angular/router";
 import {FormGroup, Validators, FormBuilder} from "@angular/forms";
 import {BackendService} from "../services/BackendService";
 import {BeckiValidators} from "../helpers/BeckiValidators";
-import {PermissionMissingError} from "../backend/BeckiBackend";
+import {PermissionMissingError,UserNotValidatedError} from "../backend/BeckiBackend";
 import {BlockUIService} from "../services/BlockUIService";
+import {IPersonAuthentication} from "../backend/TyrionAPI"; 
+
 
 const REDIRECT_URL = `${window.location.pathname}`;
 
@@ -21,6 +23,8 @@ export class LoginComponent {
     loginForm: FormGroup;
 
     loginError: string = null;
+
+    resendVertification:boolean=false; 
 
     constructor(private backendService: BackendService, private formBuilder: FormBuilder, private router: Router, private blockUIService: BlockUIService) {
 
@@ -35,6 +39,20 @@ export class LoginComponent {
         location.href = url;
     }
 
+    onResendClick():void{ 
+        this.blockUIService.blockUI(); 
+         
+        this.backendService.createPersonAuthenticationEmail({mail:this.loginForm.controls["email"].value}) 
+        .then(()=>{  
+            this.blockUIService.unblockUI(); 
+            this.resendVertification=false; 
+            this.loginError = "Email with vertifiaction was sent"; 
+        }).catch(reason => { 
+            this.blockUIService.unblockUI(); 
+            this.loginError=reason; 
+        }) 
+    } 
+
     onLoginClick(): void {
         this.blockUIService.blockUI();
         this.backendService.login(this.loginForm.controls["email"].value, this.loginForm.controls["password"].value)
@@ -46,6 +64,9 @@ export class LoginComponent {
                 this.blockUIService.unblockUI();
                 if (reason instanceof PermissionMissingError) {
                     this.loginError = (<PermissionMissingError>reason).userMessage;
+                } if(reason instanceof UserNotValidatedError){ 
+                    this.loginError=(<UserNotValidatedError>reason).userMessage +"\n press resend button to send vertifiaction Email again"; 
+                    this.resendVertification=true; 
                 } else {
                     this.loginError = "The user cannot be logged in.\n" + reason;
                 }

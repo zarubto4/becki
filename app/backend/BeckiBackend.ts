@@ -178,6 +178,26 @@ export class CodeCompileError extends Error {
 
 }
 
+export class UserNotValidatedError extends Error { 
+ 
+    static MESSAGE = "Validation required"; 
+ 
+    name = "User not validated error"; 
+ 
+    userMessage: string; 
+ 
+    constructor(userMessage: string) { 
+        super(UserNotValidatedError.MESSAGE); 
+        // TODO: https://github.com/Microsoft/TypeScript/issues/1168#issuecomment-107756133 
+        this.message = UserNotValidatedError.MESSAGE; 
+        this.userMessage = userMessage; 
+    } 
+ 
+    static fromRestResponse(response: RestResponse): UserNotValidatedError { 
+        return new UserNotValidatedError((<{message: string}>response.body).message); 
+    } 
+} 
+
 export class UnauthorizedError extends Error {
 
     name = "request unauthorized error";
@@ -297,6 +317,8 @@ export abstract class BeckiBackend extends TyrionAPI {
                         throw CodeError.fromRestResponse(response);
                     case 478:
                         throw CodeError.fromRestResponse(response);
+                    case 705: 
+                        throw UserNotValidatedError.fromRestResponse(response); 
                     default:
                         throw BugFoundError.fromRestResponse(response);
                 }
