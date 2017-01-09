@@ -50,6 +50,9 @@
 
                 <div>
                     <div class="pull-right">
+                        <button type="button" class="btn default yellow-gold" (click)="onTestClick()" >
+                            <i class="fa fa-play"></i> Test
+                        </button>
                         <button type="button" class="btn default green-haze" (click)="onSaveClick()">
                             <i class="fa fa-floppy-o"></i> Save
                         </button>
@@ -60,6 +63,21 @@
             </div>
         </div>
 
+        <div class="col-md-12">
+            <div class="portlet light bordered padding-20">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-terminal"></i>
+                            Test
+                        </span>
+                    </div>
+                </div>
+                <div class="portlet-content">
+                    <div #widgetTestScreen></div>
+                </div>
+            </div>
+        </div>
 
         <div class="col-md-12">
             <div class="portlet portlet light bordered">

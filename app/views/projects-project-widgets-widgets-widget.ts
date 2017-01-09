@@ -2,20 +2,19 @@
  * Created by davidhradek on 22.09.16.
  */
 
-import {Component, OnInit, Injector, OnDestroy, ViewChild} from "@angular/core";
+import {Component, OnInit, Injector, OnDestroy, ViewChild, ElementRef} from "@angular/core";
 import {BaseMainComponent} from "./BaseMainComponent";
 import {Subscription} from "rxjs/Rx";
 import {
     IGridWidget, IGridWidgetVersion,
     ITypeOfWidget, IGridWidgetVersionShortDetail, ITypeOfWidgetShortDetail
 } from "../backend/TyrionAPI";
-import {BlockoView} from "../components/BlockoView";
-import {Blocks, Core} from "blocko";
 import {FormGroup, Validators} from "@angular/forms";
 import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationService";
 import {ModalsVersionDialogModel} from "../modals/version-dialog";
 import { GridView } from '../components/GridView';
 import moment = require("moment/moment");
+import {Core, TestRenderer, Widgets} from "the-grid";
 
 @Component({
     selector: "view-projects-project-widgets-widgets-widget",
@@ -37,9 +36,11 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     selectedWidgetVersion: IGridWidgetVersion = null;
     widgetCode: string = "";
 
+    protected _widgetTesterRenderer: TestRenderer.ControllerRenderer;
+
     // Properties for test view:
-    @ViewChild(GridView)
-    gridView: GridView;
+    @ViewChild("widgetTestScreen")
+    widgetTestScreen: ElementRef;
 
     constructor(injector: Injector) {
         super(injector);
@@ -55,6 +56,10 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
             });
             this.refresh();
         });
+
+        var widgetTesterController = new Core.Controller();
+        this._widgetTesterRenderer = new TestRenderer.ControllerRenderer(widgetTesterController, this.widgetTestScreen.nativeElement);
+
     }
 
     ngOnDestroy(): void {
@@ -78,14 +83,6 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 this.widget = widget;
 
                 this.widgetVersions = this.widget.versions || [];
-
-                /*
-                TODO ... I need detail, because there is no create date in version structure
-                this.blockoBlockVersions.sort((a, b)=> {
-                    if (a.date_of_create == b.date_of_create) return 0;
-                    if (a.date_of_create > b.date_of_create) return -1;
-                    return 1;
-                });*/
 
                 if (this.widgetVersions.length) {
                     this.selectWidgetVersion(this.widgetVersions[0]); // also unblockUI
@@ -113,16 +110,6 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
 
                 this.selectedWidgetVersion = widgetVersion;
                 this.widgetCode = this.selectedWidgetVersion.logic_json;
-    
-
-                /*
-                TODO Iam not sure, but I dont need this for widget
-                let designJson = JSON.parse(this.selectedWidgetVersion.design_json);
-
-                if (designJson.backgroundColor) this.blockForm.controls["color"].setValue(designJson.backgroundColor);
-                if (designJson.displayName) this.blockForm.controls["icon"].setValue(designJson.displayName);
-                if (designJson.description) this.blockForm.controls["description"].setValue(designJson.description);
-                */
 
                 this.unblockUI();
             })
@@ -141,6 +128,46 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     }
 
     onTestClick(): void {
+        this._widgetTesterRenderer.runCode(this.widgetCode, true, (e) => {
+            if (e.position) {
+                //parse positions
+                var positions = e.position.split("-");
+                var start = positions[0].split(":");
+                var end = positions[1].split(":");
+
+                start = {
+                    line: parseInt(start[0]),
+                    column: parseInt(start[1]),
+                }
+
+                end = {
+                    line: parseInt(end[0]),
+                    column: parseInt(end[1]),
+                }
+            }
+            /*
+            ////////TEST of getting lines of code, where was the error////////////////////////////
+            let widget = this._widgetTesterRenderer.widget;
+            if (e.position) {
+                var src = widget.machine["sourceCode"];
+                var srcLines = src.split('\n');
+                var pp = e.position.split("-");
+                var a = parseInt(pp[0]);
+                var b = parseInt(pp[1]);
+
+                var lineA = Math.max(0, (src.substr(0, a)).split('\n').length - 1 - 1);
+                var lineB = Math.min(srcLines.length - 1, (src.substr(0, b)).split('\n').length + 2);
+
+                var showSrc = [];
+                for(let i = lineA; i<lineB; i++) {
+                    showSrc.push(srcLines[i]);
+                }
+
+                console.log(showSrc.join("\n"));
+            }
+            ////////////////////////////////////////////////////////////////////////////////////////*/
+            console.log("widget error",e,e.position);
+        });
     }
 
     onSaveClick(): void {
