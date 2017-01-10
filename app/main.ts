@@ -50,7 +50,7 @@ import {ProjectsProjectBlockoBlockoComponent} from "./views/projects-project-blo
 import {ProjectsProjectCodeCodeComponent} from "./views/projects-project-code-code";
 import {NotificationsComponent} from "./views/notifications";
 import {ProfileComponent} from "./views/profile";
-import {ForgotPasswordComponent} from "./views/forgot-password";
+import {ForgotPasswordComponent} from "./views/login-forgot-password";
 import {PasswordRestartComponent} from "./views/password-restart";
 import {ProjectsProjectBlocksComponent} from "./views/projects-project-blocks";
 import {ProjectsProjectBlocksBlocksBlockComponent} from "./views/projects-project-blocks-blocks-block";
@@ -169,11 +169,10 @@ let navigation = [
     new LabeledLink("Dashboard", ["/dashboard"], "tachometer"),
     new LabeledLink("Projects", ["/projects"], "tasks"),
     new LabeledLink("Financial", ["/financial"],"bank"),
-    new LabeledLink("Hardware types", ["/hardware"], "microchip")
-    /*new LabeledLink("Applications", ["/user/applications"], "mobile"),
-    new LabeledLink("Interactions", ["/user/interactions"], "link"),
-    new LabeledLink("Devices", ["/user/devices"], "rocket"),
+    new LabeledLink("Hardware types", ["/hardware"], "microchip"),
+    /*new LabeledLink("Devices", ["/user/devices"], "rocket"),
     new LabeledLink("System", ["/system"], "globe"),*/
+    new LabeledLink("Log out",["/logout"],"sign-out")
 ];
 
 let tabMenus = {

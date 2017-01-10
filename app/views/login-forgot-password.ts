@@ -35,10 +35,10 @@ export class ForgotPasswordComponent implements OnInit {
     }
 
     sendRecovery(): void {
-        this.backendService.recoveryMailPersonPassword({mail: this.forgotPasswordForm.controls["email"].value})
+        this.backendService.recoveryPersonPasswordMail({mail: this.forgotPasswordForm.controls["email"].value})
             .then(() => {
                 this.notificationService.addFlashMessage(new FlashMessageSuccess("email with instructions was sent"));
-                //this.router.navigate(["/"]);
+                this.router.navigate(["/"]);
 
             })
             .catch(reason => {
