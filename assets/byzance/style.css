@@ -534,21 +534,21 @@ span.changes {
 
 
 
-.block-tester {
+.block-tester, .widget-tester {
     line-height: 26px;
 }
 
-.block-tester .block-tester-message-input-label {
+.block-tester .block-tester-message-input-label, .widget-tester .widget-tester-message-input-label {
     width: 100px;
     display: inline-block;
     text-align: right;
 }
 
-.block-tester .block-tester-message-input-btn {
+.block-tester .block-tester-message-input-btn, .widget-tester .widget-tester-message-input-btn {
     margin-left: 104px;
 }
 
-.block-tester .form-control {
+.block-tester .form-control, .widget-tester .form-control {
     width: 140px;
     height: 24px;
     margin: 0;
@@ -558,35 +558,35 @@ span.changes {
 }
 
 
-.block-tester .bg-color {
+.block-tester .bg-color, .widget-tester .bg-color {
     background-color: #e1e5ec;
 }
-.block-tester .bg-color.odd {
+.block-tester .bg-color.odd, .widget-tester .bg-color.odd {
     background-color: #caced4;
 }
 
-.block-tester .bg-din {
+.block-tester .bg-din, .widget-tester .bg-din {
     background-color: #3598dc;
 }
-.block-tester .bg-din.odd {
+.block-tester .bg-din.odd, .widget-tester .bg-din.odd {
     background-color: #2f88c6;
 }
 
-.block-tester .bg-ain {
+.block-tester .bg-ain, .widget-tester .bg-ain {
     background-color: #26C281;
 }
-.block-tester .bg-ain.odd {
+.block-tester .bg-ain.odd, .widget-tester .bg-ain.odd {
     background-color: #22ae74;
 }
 
-.block-tester .bg-min {
+.block-tester .bg-min, .widget-tester .bg-min {
     background-color: #f2784b;
 }
-.block-tester .bg-min.odd {
+.block-tester .bg-min.odd, .widget-tester .bg-min.odd {
     background-color: #d96c43;
 }
 
-.block-log-table-wrapper {
+.block-log-table-wrapper, .widget-log-table-wrapper {
     position: relative;
     height: 400px;
     overflow-x: hidden;
@@ -597,20 +597,20 @@ span.changes {
     table-layout: fixed;
 }
 
-.block-log-table-header {
+.block-log-table-header, .widget-log-table-header {
     margin-bottom: 0;
 }
 
-.block-log-table-fixed-header div {
+.block-log-table-fixed-header div, .widget-log-table-fixed-header div {
     display: inline-block;
 }
 
-.block-log-timestamp, .block-log-name {
+.block-log-timestamp, .block-log-name, .widget-log-timestamp, .widget-log-name {
     width: 25%;
     word-wrap: break-word;
 }
 
-.block-log-value {
+.block-log-value, .widget-log-value {
     width: 50%;
     word-wrap: break-word;
 }
@@ -1001,6 +1001,11 @@ span.changes {
     background-color: #ccc;
     position: relative;
     vertical-align: top;
+}
+
+.grid-widget-config-button {
+    margin-left: 20px;
+    margin-bottom: 20px;
 }
 
 .hx-description {

@@ -15,12 +15,15 @@ import {ModalsVersionDialogModel} from "../modals/version-dialog";
 import { GridView } from '../components/GridView';
 import moment = require("moment/moment");
 import {Core, TestRenderer, Widgets} from "the-grid";
+import {ModalService} from "../services/ModalService";
+import {ModalsGridConfigPropertiesModel} from "../modals/grid-config-properties";
 
 @Component({
     selector: "view-projects-project-widgets-widgets-widget",
     templateUrl: "app/views/projects-project-widgets-widgets-widget.html",
 })
 export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainComponent implements OnInit, OnDestroy {
+    widgetInstance: Core.Widget;
 
     projectId: string;
     widgetId: string;
@@ -35,6 +38,13 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     widgetVersions: IGridWidgetVersionShortDetail[] = [];
     selectedWidgetVersion: IGridWidgetVersion = null;
     widgetCode: string = "";
+    testInputConnectors: Core.Connector[];
+
+    connectorTypes = Core.ConnectorType;
+    argTypes = Core.ArgType;
+
+    messageInputsValueCache: { [key: string]: boolean|number|string } = {};
+    testEventLog: {timestamp: string, connector: Core.Connector, eventType: string, value: (boolean|number|Core.Message), readableValue: string}[] = [];
 
     protected _widgetTesterRenderer: TestRenderer.ControllerRenderer;
 
@@ -44,6 +54,9 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
 
     constructor(injector: Injector) {
         super(injector);
+
+        this.testInputConnectors = [];
+        this.messageInputsValueCache = {};
     };
 
     ngOnInit(): void {
@@ -125,49 +138,131 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     }
 
     cleanTestView(): void {
+        this.testInputConnectors = [];
+        this.messageInputsValueCache = {};
+        this.widgetInstance = null;
+        this.testEventLog = [];
+    }
+
+    onWidgetConfigClick(): void {
+        var m = new ModalsGridConfigPropertiesModel(this._widgetTesterRenderer.widget);
+        this.modalService.showModal(m);
     }
 
     onTestClick(): void {
+        this.cleanTestView();
         this._widgetTesterRenderer.runCode(this.widgetCode, true, (e) => {
             if (e.position) {
-                //parse positions
-                var positions = e.position.split("-");
-                var start = positions[0].split(":");
-                var end = positions[1].split(":");
-
-                start = {
-                    line: parseInt(start[0]),
-                    column: parseInt(start[1]),
-                }
-
-                end = {
-                    line: parseInt(end[0]),
-                    column: parseInt(end[1]),
-                }
+                console.log("widget error",e,e.position);
+            } else {
+                console.log("widget error",e);
             }
-            /*
-            ////////TEST of getting lines of code, where was the error////////////////////////////
-            let widget = this._widgetTesterRenderer.widget;
-            if (e.position) {
-                var src = widget.machine["sourceCode"];
-                var srcLines = src.split('\n');
-                var pp = e.position.split("-");
-                var a = parseInt(pp[0]);
-                var b = parseInt(pp[1]);
-
-                var lineA = Math.max(0, (src.substr(0, a)).split('\n').length - 1 - 1);
-                var lineB = Math.min(srcLines.length - 1, (src.substr(0, b)).split('\n').length + 2);
-
-                var showSrc = [];
-                for(let i = lineA; i<lineB; i++) {
-                    showSrc.push(srcLines[i]);
-                }
-
-                console.log(showSrc.join("\n"));
-            }
-            ////////////////////////////////////////////////////////////////////////////////////////*/
-            console.log("widget error",e,e.position);
         });
+
+        this.widgetInstance = this._widgetTesterRenderer.widget;
+
+        const widgetInterface = this.widgetInstance.getInterface();
+        for(let n in widgetInterface.digitalInputs) {
+            this.testInputConnectors.push(widgetInterface.digitalInputs[n]);
+        }
+
+        for(let n in widgetInterface.analogInputs) {
+            this.testInputConnectors.push(widgetInterface.analogInputs[n]);
+        }
+
+        for(let n in widgetInterface.messageInputs) {
+            this.testInputConnectors.push(widgetInterface.messageInputs[n]);
+        }
+
+        this.widgetInstance.eventsEmitter.listenEvent("valueChanged",(e: Core.IOEvent) => {
+            if (e.connector.isInput()) return;
+            this.testEventLog.unshift({
+                timestamp: moment().format("HH:mm:ss.SSS"),
+                connector: e.connector,
+                eventType: e.type,
+                value: e.connector.value,
+                readableValue: this.toReadableValue(e.connector.value)
+            });
+        });
+
+        this.widgetInstance.eventsEmitter.listenEvent("recieveMessage",(e: Core.IOMessageEvent) => {
+            if (e.connector.isInput()) return;
+            this.testEventLog.unshift({
+                timestamp: moment().format("HH:mm:ss.SSS"),
+                connector: e.connector,
+                eventType: e.type,
+                value: e.message,
+                readableValue: this.toReadableValue(e.message)
+            });
+        });
+    }
+
+    toReadableValue(value: any): string {
+        if (typeof value == "boolean") {
+            if (value) {
+                return "<span class='bold font-red'>true</span>"
+            } else {
+                return "<span class='bold font-blue'>false</span>"
+            }
+        }
+        if (typeof value == "number") {
+            return "<span class='bold font-green-jungle'>" + value + "</span>"
+        }
+        if (typeof value == "string") {
+            return "<span class='bold font-yellow-casablanca'>\"" + value + "\"</span>"
+        }
+        if (value.values && Array.isArray(value.values)) {
+            return "[" + value.values.map((val: any)=>this.toReadableValue(val)).join(", ") + "]"
+        }
+        return JSON.stringify(value);
+    }
+
+    onDigitalInputClick(connector: Core.Connector): void {
+        connector._inputSetValue(!connector.value);
+    }
+
+    onAnalogInputChange(event: Event, connector: Core.Connector): void {
+        let f = parseFloat((<HTMLInputElement>event.target).value);
+        connector._inputSetValue(!isNaN(f) ? f : 0);
+    }
+
+    onMessageInputSendClick(connector: Core.Connector): void {
+        let values: any[] = [];
+
+        connector.argTypes.forEach((argType, index)=> {
+            let val = this.messageInputsValueCache[connector.name + argType];
+            if (argType == Core.ArgType.ByzanceBool) {
+                if (!val) {
+                    val = false;
+                } else {
+                    val = !!val;
+                }
+
+            }
+            if (argType == Core.ArgType.ByzanceFloat) {
+                if (!val) {
+                    val = 0;
+                } else {
+                    val = parseFloat(<string>val);
+                }
+            }
+            if (argType == Core.ArgType.ByzanceInt) {
+                if (!val) {
+                    val = 0;
+                } else {
+                    val = parseInt(<string>val);
+                }
+            }
+            if (argType == Core.ArgType.ByzanceString && !val) {
+                val = "";
+            }
+
+            values.push(val)
+        });
+
+        let m = new Core.Message(connector.argTypes, values);
+        connector._inputSetValue(m);
+
     }
 
     onSaveClick(): void {

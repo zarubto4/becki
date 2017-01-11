@@ -37,7 +37,9 @@
             "esutils": "./node_modules/esutils",
             "optionator": "./node_modules/optionator",
             "source-map": "./node_modules/source-map",
-            "escodegen": "./node_modules/escodegen"
+            "escodegen": "./node_modules/escodegen",
+            "script-engine": "./node_modules/script-engine",
+            "typescript": "./node_modules/typescript"
         },
         packages: {
             "ace": {main: "ace"},
@@ -60,7 +62,9 @@
             "escodegen": {
                 main: "escodegen", 
                 map: {"./package.json": "./../../assets/fake-package.js"} // kokoti jsou to
-            }
+            },
+            "script-engine": {main: "build/index"},
+            "typescript": {main: "lib/typescriptServices"}
         }
     });
 })(this);

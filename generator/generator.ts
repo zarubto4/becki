@@ -56,8 +56,8 @@ var CONFIG = {
         // normal replaces
         "post:/compilation/c_program/version/compile": "compileCProgram",
         "put:/compilation/c_program/version/compile/{version_id}": "compileCProgramVersion",
-        "post:/coreClient/person/permission/login": "__login",
-        "post:/coreClient/person/permission/logout": "__logout",
+        "post:/login": "__login",
+        "post:/logout": "__logout",
         "get:/file/listOfFiles/{version_id}": "getLibraryGroupVersionLibraries",
         "get:/grid/m_program/app/m_programs": "getAllMPrograms",
         "get:/grid/m_project/person": "getAllMProjects",

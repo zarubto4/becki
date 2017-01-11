@@ -74,7 +74,114 @@
                     </div>
                 </div>
                 <div class="portlet-content">
+                    <button type="button" class="btn default yellow-gold grid-widget-config-button" (click)="onWidgetConfigClick()" >
+                        <i class="fa fa-cog"></i> Configuration
+                    </button>
                     <div #widgetTestScreen></div>
+
+                    <div>
+                        <div class="col-md-4" style="display: inline-block; width: calc(50% - 20px)">
+
+                            <h4 class="text-center">Inputs simulator</h4>
+                            <div class="widget-tester no-select">
+
+                                <div *ngFor="let connector of testInputConnectors; let iCon = index" class="row bg-color" [class.odd]="iCon%2">
+
+                                    <template [ngIf]="connector.type == connectorTypes.DigitalInput">
+                                        <div class="col-md-4 bg-din bold" [class.odd]="iCon%2">{{connector.name}}</div>
+                                        <div class="col-md-8">
+                                            <div class="widget-tester-message-input-label"><strong>Value</strong>:</div>
+                                            <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="connector.value" [class.fa-toggle-off]="!connector.value" (click)="onDigitalInputClick(connector)"></i>
+                                        </div>
+                                    </template>
+
+                                    <template [ngIf]="connector.type == connectorTypes.AnalogInput">
+                                        <div class="col-md-4 bg-ain bold" [class.odd]="iCon%2">{{connector.name}}</div>
+                                        <div class="col-md-8">
+                                            <div class="widget-tester-message-input-label"><strong>Value</strong>:</div>
+                                            <input type="number" class="form-control" step="0.1" [value]="connector.value" (input)="onAnalogInputChange($event, connector)">
+                                        </div>
+                                    </template>
+
+                                    <template [ngIf]="connector.type == connectorTypes.MessageInput">
+                                        <div class="col-md-4 bg-min bold" [class.odd]="iCon%2">{{connector.name}}</div>
+                                        <div *ngFor="let argType of connector.argTypes; let index = index">
+
+                                            <div *ngIf="index" class="col-md-4"></div>
+
+                                            <template [ngIf]="argType == argTypes.ByzanceBool">
+                                                <div class="col-md-8">
+                                                    <div class="widget-tester-message-input-label">Bool <strong>Arg #{{index}}</strong>:</div>
+                                                    <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="messageInputsValueCache[connector.name+argType]" [class.fa-toggle-off]="!messageInputsValueCache[connector.name+argType]" (click)="messageInputsValueCache[connector.name+argType] = !messageInputsValueCache[connector.name+argType]"></i>
+                                                </div>
+                                            </template>
+                                            <template [ngIf]="argType == argTypes.ByzanceFloat">
+                                                <div class="col-md-8">
+                                                    <div class="widget-tester-message-input-label">Float <strong>Arg #{{index}}</strong>:</div>
+                                                    <input type="number" class="form-control" step="0.1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                                </div>
+                                            </template>
+                                            <template [ngIf]="argType == argTypes.ByzanceInt">
+                                                <div class="col-md-8">
+                                                    <div class="widget-tester-message-input-label">Int <strong>Arg #{{index}}</strong>:</div>
+                                                    <input type="number" class="form-control" step="1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                                </div>
+                                            </template>
+                                            <template [ngIf]="argType == argTypes.ByzanceString">
+                                                <div class="col-md-8">
+                                                    <div class="widget-tester-message-input-label">String <strong>Arg #{{index}}</strong>:</div>
+                                                    <input type="text" class="form-control" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                                </div>
+                                            </template>
+
+                                        </div>
+
+                                        <div class="col-md-4"></div>
+                                        <div class="col-md-8">
+                                            <button class="btn btn-sm default green widget-tester-message-input-btn" type="button" (click)="onMessageInputSendClick(connector)">
+                                                <i class="fa fa-paper-plane"></i> Send
+                                            </button>
+                                        </div>
+
+                                    </template>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-4" style="display: inline-block; width: calc(50% - 20px)">
+
+                            <h4 class="text-center">Outputs log</h4>
+
+                            <div class="row">
+                                <table class="table table-fixed table-hover table-light widget-log-table-header">
+                                    <thead>
+                                        <tr class="uppercase">
+                                            <th class="widget-log-timestamp"> Time </th>
+                                            <th class="widget-log-name"> Output </th>
+                                            <th class="widget-log-value"> Value </th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div class="row widget-log-table-wrapper">
+
+                                <table class="table table-fixed table-hover table-light">
+                                    <tbody>
+                                        <tr *ngFor="let log of testEventLog;">
+                                            <td class="widget-log-timestamp">
+                                                {{log.timestamp}}
+                                            </td>
+                                            <td class="widget-log-name"> <strong>{{log.connector.name}}</strong> </td>
+                                            <td class="widget-log-value" [innerHTML]="log.readableValue"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
                 </div>
             </div>
         </div>
