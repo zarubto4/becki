@@ -6,10 +6,10 @@
  * directory of this distribution.
  */
 
-import {OnInit, Component, Injector, OnDestroy} from "@angular/core";
-import {BaseMainComponent} from "./BaseMainComponent";
-import {IProduct, IInvoice} from "../backend/TyrionAPI";
-import {Subscription} from "rxjs";
+import { OnInit, Component, Injector, OnDestroy } from "@angular/core";
+import { BaseMainComponent } from "./BaseMainComponent";
+import { IProduct, IInvoice } from "../backend/TyrionAPI";
+import { Subscription } from "rxjs";
 
 
 @Component({
@@ -31,28 +31,32 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
         super(injector)
     };
 
-    onAddCreditsClick():void{
+    onAddCreditsClick(): void {
 
     }
 
-    onInvoiceClick(invoice:IInvoice):void{
-        this.router.navigate(["financial",this.id,"invoices",invoice.id]); //todo špatně routuje
+    onInvoiceClick(invoice: IInvoice): void {
+        this.router.navigate(["financial", this.id, "invoices", invoice.id]); //TODO špatně routuje
     }
 
-    onPayClick(invoice:IInvoice):void{
+    onPayClick(invoice: IInvoice): void {
 
     }
 
-    onDownloadPDFClick():void{
+    onDownloadPDFClick(id: number): void {
+
+        this.backendService.getInvoicePdf(id).then(invoice => {  //TODO někde se zde bere % navíc, a nemám tucha proč
+        this.fmSuccess(invoice); //TODO bude se fracet link, bylo by dobré hned z něj vytáhnout file
+    })
+            .catch(error => console.log(error))
+    }
+    onSendClick(): void {
 
     }
-    onSendClick():void{
+    onPrintClick(): void {
 
     }
-    onPrintClick():void{
-
-    }
-    onSettingsClick():void{
+    onSettingsClick(): void {
 
     }
 
@@ -74,14 +78,14 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
 
 
 
-    refresh():void{
+    refresh(): void {
         this.blockUI();
-        this.backendService.getAllProducts().then(products =>{
+        this.backendService.getAllProducts().then(products => {
             this.product = products.find(product => product.id == this.id);
             console.log(this.product);
-            this.invoices=this.product.invoices;
+            this.invoices = this.product.invoices;
             this.unblockUI();
-        }).catch(error =>{
+        }).catch(error => {
             this.unblockUI();
         })
 

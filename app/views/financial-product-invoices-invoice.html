@@ -37,7 +37,7 @@
                         </div>
                         <br>
                         <div class="row">
-                            <div class="col-sm-6">Currency: {{fullIvoice.invoice.payment_status}}</div>
+                            <div class="col-sm-6">Status: {{fullIvoice.invoice.payment_status}}</div>
                             <div class="col-sm-6">Paid in: {{fullIvoice.invoice.date_of_create|unixTimeToDate}}</div>
                         </div>
                         <br>
@@ -57,9 +57,9 @@
                                     <tr *ngFor="let item of fullIvoice.invoice_items">
                                         <td>{{item.name}}</td>
                                         <td>{{item.unit_name}}</td>
-                                        <td>{{item.quantity}}</td>
-                                        <td>{{item.vat_rate}}</td>
-                                        <td>{{item.unit_price}}</td>
+                                        <td>{{item.quantity}}x</td>
+                                        <td>{{item.vat_rate}} {{item.currency}}</td>
+                                        <td>{{item.unit_price}} {{item.currency}}</td>
 
                                     </tr>
 
@@ -69,7 +69,7 @@
                                         <td></td>
                                         <td></td>
                                         <td><strong>Total</strong></td>
-                                        <td>{{getWholePrice()}}</td>
+                                        <td>{{getWholePrice()}} {{currency}}</td>
                                     </tr>
                                     </tbody>
                                 </table>

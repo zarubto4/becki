@@ -18,8 +18,8 @@
                 <i class="icon-bubbles font-dark hide"></i>
                 <span class="caption-subject font-dark bold uppercase">Tariff:</span>
             </div>
-            <div *ngIf="product.payment_mode=='credit_card'" class="becki-actions">
-                <button class="btn blue" (click)="onAddCreditsClick()">
+            <div class="becki-actions">
+                <button *ngIf="product.payment_mode == 'per_credit'"  class="btn blue" (click)="onAddCreditsClick()">
                     <i class="fa fa-plus-circle"></i> Add credit
                 </button>
             </div>
