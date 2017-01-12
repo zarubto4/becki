@@ -6,7 +6,12 @@
 
 import {Injectable} from "@angular/core";
 import {ReplaySubject, Observable} from "rxjs";
-import {MonacoEditorTypings} from "../helpers/MonacoEditorTypings";
+import {ES5Lib, BlockoLib} from "../helpers/MonacoEditorTypings";
+
+interface LibraryTypings {
+    libName: string;
+    libTypings: string;
+}
 
 @Injectable()
 export class MonacoEditorLoaderService {
@@ -14,6 +19,9 @@ export class MonacoEditorLoaderService {
     protected monacoLoadedSubject: ReplaySubject<any> = null;
     public monacoLoaded: Observable<any> = null;
 
+    protected typingsLibraries: { [name:string]:string } = {};
+
+    protected wantedTypings: string[] = [];
     protected loadedTypings: { [name:string]:monaco.IDisposable } = {};
 
     constructor() {
@@ -41,25 +49,36 @@ export class MonacoEditorLoaderService {
         });
         document.body.appendChild(loaderScript);
 
+        // register default libs
+        this.registerTypings([ES5Lib, BlockoLib]); // TODO: remove BlockoLib later
     }
 
+    registerTypings(library:LibraryTypings|LibraryTypings[]) {
+        if (!Array.isArray(library)) {
+            library = [library]
+        }
+        library.forEach((l) => {
+            if (!this.typingsLibraries.hasOwnProperty(l.libName)) {
+                this.typingsLibraries[l.libName] = l.libTypings;
+            }
+        });
+        this.reloadTypings();
+    }
 
-    setTypescriptTypings(typings:string[]) {
-
+    protected reloadTypings() {
         let toDelete = Object.keys(this.loadedTypings);
 
-        typings.forEach((t) => {
+        this.wantedTypings.forEach((t) => {
             if (this.loadedTypings[t]) {
                 let i = toDelete.indexOf(t);
                 if (i > -1) {
                     toDelete.splice(i, 1);
                 }
             } else {
-                let lib = MonacoEditorTypings.getTyping(t);
-                if (lib) {
-                    this.loadedTypings[t] = monaco.languages.typescript.typescriptDefaults.addExtraLib(lib, t);
+                if (this.typingsLibraries.hasOwnProperty(t)) {
+                    this.loadedTypings[t] = monaco.languages.typescript.typescriptDefaults.addExtraLib(this.typingsLibraries[t], t);
                 } else {
-                    throw new Error("Unknown typings named \""+t+"\".");
+                    console.error("MonacoEditor :: Unknown typings named \""+t+"\".");
                 }
             }
 
@@ -69,6 +88,10 @@ export class MonacoEditorLoaderService {
             this.loadedTypings[k].dispose();
             delete this.loadedTypings[k];
         });
+    }
 
+    setTypescriptTypings(typings:string[]) {
+        this.wantedTypings = typings;
+        this.reloadTypings();
     }
 }

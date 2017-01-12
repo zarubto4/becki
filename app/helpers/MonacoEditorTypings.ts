@@ -2,17 +2,9 @@
  * Created by davidhradek on 20.12.16.
  */
 
-export class MonacoEditorTypings {
-
-    public static getTyping(name:string) {
-        switch (name) {
-            case "Blocko": return MonacoEditorTypings.Blocko;
-            case "ES5": return MonacoEditorTypings.ES5;
-        }
-        return null;
-    }
-
-    public static Blocko = `
+export const BlockoLib = {
+    libName: "Blocko",
+    libTypings: `
 declare enum ArgTypes {
     ByzanceString,
     ByzanceInt,
@@ -142,9 +134,12 @@ declare interface Block {
   * Main blocko object
   */
 declare var block:Block;
-`;
+`
+};
 
-    public static ES5 = `
+export const ES5Lib = {
+    libName: "ES5",
+    libTypings: `
 /////////////////////////////
 /// ECMAScript APIs
 /////////////////////////////
@@ -4320,5 +4315,5 @@ interface Date {
       */
     toLocaleTimeString(locales?: string | string[], options?: Intl.DateTimeFormatOptions): string;
 }
-`;
-}
+`
+};
