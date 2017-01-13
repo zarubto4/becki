@@ -240,7 +240,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         });
 
         this.buildInProgress = true;
-        this.backendService.compileCProgram({
+        this.backendService.createCProgramVersionCompile({
             main: main,
             user_files: userFiles,
             type_of_board_id: this.codeProgram.type_of_board_id
@@ -253,7 +253,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             .catch((error) => {
                 this.buildInProgress = false;
                 console.log(error);
-                if (error instanceof CodeCompileError) {
+                //if (error instanceof CodeCompileError) {
                     this.buildErrors = error.errors;
 
                     // TODO: move to method
@@ -276,9 +276,9 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                         }
                     });
 
-                } else {
-                    this.addFlashMessage(new FlashMessageError(error.toString()));
-                }
+                //} else {
+                  //  this.addFlashMessage(new FlashMessageError(error.toString()));
+                //}
             });
     }
 

@@ -11,6 +11,7 @@ import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
 import {FormGroup} from "@angular/forms";
 import {ModalModel} from "../services/ModalService";
 import {Core} from "the-grid";
+import {Types} from "common-lib";
 
 
 export class ModalsGridConfigPropertiesModel extends ModalModel {
@@ -40,13 +41,13 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
     formModel: {[key: string]: any} = {};
 
     configPropertyType = {
-        "Boolean": Core.ConfigPropertyType.Boolean,
-        "Float": Core.ConfigPropertyType.Float,
-        "Integer": Core.ConfigPropertyType.Integer,
-        "String": Core.ConfigPropertyType.String,
-        "Color": Core.ConfigPropertyType.Color,
-        "FAIcon": Core.ConfigPropertyType.FAIcon,
-        "IOName": Core.ConfigPropertyType.IOName,
+        "Boolean": Types.ConfigPropertyType.Boolean,
+        "Float": Types.ConfigPropertyType.Float,
+        "Integer": Types.ConfigPropertyType.Integer,
+        "String": Types.ConfigPropertyType.String,
+        "Color": Types.ConfigPropertyType.Color,
+        "FAIcon": Types.ConfigPropertyType.FAIcon,
+        "IOName": Types.ConfigPropertyType.IOName,
     };
 
     constructor() {
@@ -106,13 +107,13 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
         console.log(this.formModel);
 
         this.configProperties.forEach((configProperty) => {
-            if (configProperty.type == Core.ConfigPropertyType.Integer) {
+            if (configProperty.type == Types.ConfigPropertyType.Integer) {
                 var num = parseInt(this.formModel[configProperty.id], 10);
                 configProperty.value = isNaN(num) ? 0 : num;
-            } else if (configProperty.type == Core.ConfigPropertyType.Float) {
+            } else if (configProperty.type == Types.ConfigPropertyType.Float) {
                 var num = parseFloat(this.formModel[configProperty.id]);
                 configProperty.value = isNaN(num) ? 0 : num;
-            } else if (configProperty.type == Core.ConfigPropertyType.Boolean) {
+            } else if (configProperty.type == Types.ConfigPropertyType.Boolean) {
                 configProperty.value = !!this.formModel[configProperty.id];
             } else {
                 configProperty.value = this.formModel[configProperty.id];

@@ -33,7 +33,7 @@
     "rxjs": "5.0.0-beta.12",
     "source-map": "^0.5.6",
     "systemjs": "0.19.40",
-    "the-grid": "git+ssh://git@git.byzance.cz:js-components/the-grid.git#v0.1.52",
+    "the-grid": "git+ssh://git@git.byzance.cz:js-components/the-grid.git#v0.1.71",
     "typescript": "^2.1.4",
     "underscore": "^1.8.0",
     "watchjs": "0.0.0",

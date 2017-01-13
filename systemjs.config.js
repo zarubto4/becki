@@ -39,7 +39,8 @@
             "source-map": "./node_modules/source-map",
             "escodegen": "./node_modules/escodegen",
             "script-engine": "./node_modules/script-engine",
-            "typescript": "./node_modules/typescript"
+            "typescript": "./node_modules/typescript",
+            "common-lib": "./node_modules/common-lib"
         },
         packages: {
             "ace": {main: "ace"},
@@ -64,7 +65,8 @@
                 map: {"./package.json": "./../../assets/fake-package.js"} // kokoti jsou to
             },
             "script-engine": {main: "build/index"},
-            "typescript": {main: "lib/typescriptServices"}
+            "typescript": {main: "lib/typescriptServices"},
+            "common-lib": {main: "build/index"}
         }
     });
 })(this);

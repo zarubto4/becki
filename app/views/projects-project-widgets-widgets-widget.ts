@@ -17,6 +17,9 @@ import moment = require("moment/moment");
 import {Core, TestRenderer, Widgets} from "the-grid";
 import {ModalService} from "../services/ModalService";
 import {ModalsGridConfigPropertiesModel} from "../modals/grid-config-properties";
+import {Types, Libs} from "common-lib";
+import {UtilsLib} from "script-engine";
+import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService';
 
 @Component({
     selector: "view-projects-project-widgets-widgets-widget",
@@ -40,13 +43,16 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     widgetCode: string = "";
     testInputConnectors: Core.Connector[];
 
-    connectorTypes = Core.ConnectorType;
-    argTypes = Core.ArgType;
+    connectorTypes = Types.ConnectorType;
+    argTypes = Types.Type;
 
     messageInputsValueCache: { [key: string]: boolean|number|string } = {};
     testEventLog: {timestamp: string, connector: Core.Connector, eventType: string, value: (boolean|number|Core.Message), readableValue: string}[] = [];
 
     protected _widgetTesterRenderer: TestRenderer.ControllerRenderer;
+    protected monacoEditorLoaderService:MonacoEditorLoaderService;
+    protected buildErrors: any[] = null;
+    protected runtimeErrors: any[] = null;
 
     // Properties for test view:
     @ViewChild("widgetTestScreen")
@@ -54,6 +60,8 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
 
     constructor(injector: Injector) {
         super(injector);
+
+        this.monacoEditorLoaderService = injector.get(MonacoEditorLoaderService);
 
         this.testInputConnectors = [];
         this.messageInputsValueCache = {};
@@ -73,6 +81,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         var widgetTesterController = new Core.Controller();
         this._widgetTesterRenderer = new TestRenderer.ControllerRenderer(widgetTesterController, this.widgetTestScreen.nativeElement);
 
+        this.monacoEditorLoaderService.registerTypings([Libs.TypesLib, Widgets.ContextLib, UtilsLib]);
     }
 
     ngOnDestroy(): void {
@@ -142,6 +151,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         this.messageInputsValueCache = {};
         this.widgetInstance = null;
         this.testEventLog = [];
+        this.runtimeErrors = null;
     }
 
     onWidgetConfigClick(): void {
@@ -149,11 +159,44 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         this.modalService.showModal(m);
     }
 
+
+
+
+
     onTestClick(): void {
         this.cleanTestView();
+        this.buildErrors = null;
+
+        let buildFailed = false;
         this._widgetTesterRenderer.runCode(this.widgetCode, true, (e) => {
             if (e.position) {
+                if (!this.runtimeErrors) {
+                    this.runtimeErrors = [];
+                }
+
+                this.runtimeErrors.unshift({
+                    type: "error",
+                    line: e.position.lineA,
+                    text: e.message,
+                    timestamp: moment().format("HH:mm:ss.SSS")
+                });
+
                 console.log("widget error",e,e.position);
+
+
+            } else if (e.diagnostics) {
+                console.log("build error", e, e.diagnostics);
+                this.buildErrors = [];
+                for(let n in e.diagnostics) {
+                    const diagnosticsMessage = e.diagnostics[n];
+                    this.buildErrors.push({
+                        type: "error",
+                        line: this.widgetCode.substr(0,Math.min(diagnosticsMessage.start,this.widgetCode.length)).split("\n").length,
+                        text: diagnosticsMessage.messageText
+                    });
+                }
+                buildFailed = true;
+                this.cleanTestView();
             } else {
                 console.log("widget error",e);
             }
@@ -195,6 +238,10 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 readableValue: this.toReadableValue(e.message)
             });
         });
+
+        if (buildFailed) {
+            this.cleanTestView();
+        }
     }
 
     toReadableValue(value: any): string {
@@ -229,9 +276,9 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     onMessageInputSendClick(connector: Core.Connector): void {
         let values: any[] = [];
 
-        connector.argTypes.forEach((argType, index)=> {
+        connector.messageTypes.forEach((argType, index)=> {
             let val = this.messageInputsValueCache[connector.name + argType];
-            if (argType == Core.ArgType.ByzanceBool) {
+            if (Types.StringToTypeTable[argType] == Types.Type.Boolean) {
                 if (!val) {
                     val = false;
                 } else {
@@ -239,28 +286,31 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 }
 
             }
-            if (argType == Core.ArgType.ByzanceFloat) {
+            if (Types.StringToTypeTable[argType] == Types.Type.Float) {
                 if (!val) {
                     val = 0;
                 } else {
                     val = parseFloat(<string>val);
                 }
             }
-            if (argType == Core.ArgType.ByzanceInt) {
+            if (Types.StringToTypeTable[argType] == Types.Type.Integer) {
                 if (!val) {
                     val = 0;
                 } else {
                     val = parseInt(<string>val);
                 }
             }
-            if (argType == Core.ArgType.ByzanceString && !val) {
+            if (Types.StringToTypeTable[argType] == Types.Type.String && !val) {
                 val = "";
             }
 
             values.push(val)
         });
 
-        let m = new Core.Message(connector.argTypes, values);
+        let m = {
+            types:connector.messageTypes, 
+            values: values
+        }
         connector._inputSetValue(m);
 
     }

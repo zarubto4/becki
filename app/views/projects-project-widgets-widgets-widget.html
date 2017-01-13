@@ -44,9 +44,28 @@
 
                 <div class="form-group">
                     <label>Widget code</label>
-                    <ace-editor [code]="widgetCode" (codeChange)="newWidgetCode($event)" mode="ace/mode/javascript" ></ace-editor>
+                    <monaco-editor [code]="widgetCode" (codeChange)="newWidgetCode($event)" [typings]="['ES5', 'TypesLib', 'ContextLib', 'UtilsLib']"></monaco-editor>
                 </div>
 
+                <div *ngIf="buildErrors" class="spacer30"></div>
+                <div *ngIf="buildErrors" class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-play font-red"></i>
+                            <span class="caption-subject bold uppercase font-red">Build errors</span>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div *ngFor="let buildError of buildErrors" class="mt-element-ribbon bg-grey-steel">
+                            <div class="ribbon ribbon-shadow uppercase" [class.ribbon-color-danger]="buildError.type=='error'" [class.ribbon-color-warning]="buildError.type=='warning'" >{{buildError.type}}</div>
+                            <p class="ribbon-content">
+                                Line: <b>{{buildError.line}}</b>
+                                <br>
+                                <b>{{buildError.text}}</b>
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
                 <div>
                     <div class="pull-right">
@@ -63,7 +82,7 @@
             </div>
         </div>
 
-        <div class="col-md-12">
+        <div [hidden]="!widgetInstance" class="col-md-12">
             <div class="portlet light bordered padding-20">
                 <div class="portlet-title">
                     <div class="becki-caption">
@@ -87,7 +106,7 @@
 
                                 <div *ngFor="let connector of testInputConnectors; let iCon = index" class="row bg-color" [class.odd]="iCon%2">
 
-                                    <template [ngIf]="connector.type == connectorTypes.DigitalInput">
+                                    <template [ngIf]="connector.isDigital() && connector.isInput()">
                                         <div class="col-md-4 bg-din bold" [class.odd]="iCon%2">{{connector.name}}</div>
                                         <div class="col-md-8">
                                             <div class="widget-tester-message-input-label"><strong>Value</strong>:</div>
@@ -95,7 +114,7 @@
                                         </div>
                                     </template>
 
-                                    <template [ngIf]="connector.type == connectorTypes.AnalogInput">
+                                    <template [ngIf]="connector.isAnalog() && connector.isInput()">
                                         <div class="col-md-4 bg-ain bold" [class.odd]="iCon%2">{{connector.name}}</div>
                                         <div class="col-md-8">
                                             <div class="widget-tester-message-input-label"><strong>Value</strong>:</div>
@@ -103,31 +122,31 @@
                                         </div>
                                     </template>
 
-                                    <template [ngIf]="connector.type == connectorTypes.MessageInput">
+                                    <template [ngIf]="connector.isMessage() && connector.isInput()">
                                         <div class="col-md-4 bg-min bold" [class.odd]="iCon%2">{{connector.name}}</div>
-                                        <div *ngFor="let argType of connector.argTypes; let index = index">
+                                        <div *ngFor="let argType of connector.messageTypes; let index = index">
 
                                             <div *ngIf="index" class="col-md-4"></div>
 
-                                            <template [ngIf]="argType == argTypes.ByzanceBool">
+                                            <template [ngIf]="argType == 'boolean'">
                                                 <div class="col-md-8">
                                                     <div class="widget-tester-message-input-label">Bool <strong>Arg #{{index}}</strong>:</div>
                                                     <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="messageInputsValueCache[connector.name+argType]" [class.fa-toggle-off]="!messageInputsValueCache[connector.name+argType]" (click)="messageInputsValueCache[connector.name+argType] = !messageInputsValueCache[connector.name+argType]"></i>
                                                 </div>
                                             </template>
-                                            <template [ngIf]="argType == argTypes.ByzanceFloat">
+                                            <template [ngIf]="argType == 'float' ">
                                                 <div class="col-md-8">
                                                     <div class="widget-tester-message-input-label">Float <strong>Arg #{{index}}</strong>:</div>
                                                     <input type="number" class="form-control" step="0.1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
                                                 </div>
                                             </template>
-                                            <template [ngIf]="argType == argTypes.ByzanceInt">
+                                            <template [ngIf]="argType == 'integer'">
                                                 <div class="col-md-8">
                                                     <div class="widget-tester-message-input-label">Int <strong>Arg #{{index}}</strong>:</div>
                                                     <input type="number" class="form-control" step="1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
                                                 </div>
                                             </template>
-                                            <template [ngIf]="argType == argTypes.ByzanceString">
+                                            <template [ngIf]="argType == 'string'">
                                                 <div class="col-md-8">
                                                     <div class="widget-tester-message-input-label">String <strong>Arg #{{index}}</strong>:</div>
                                                     <input type="text" class="form-control" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
@@ -181,6 +200,27 @@
                             </div>
                         </div>
                         <div class="clearfix"></div>
+                    </div>
+                    <div *ngIf="runtimeErrors">
+                        <div class="spacer30"></div>
+                        <div class="portlet light bordered">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <i class="fa fa-play font-red"></i>
+                                    <span class="caption-subject bold uppercase font-red">Runtime errors</span>
+                                </div>
+                            </div>
+                            <div class="portlet-body">
+                                <div *ngFor="let runtimeError of runtimeErrors" class="mt-element-ribbon bg-grey-steel">
+                                    <div class="ribbon ribbon-shadow uppercase" [class.ribbon-color-danger]="runtimeError.type=='error'" [class.ribbon-color-warning]="runtimeError.type=='warning'" >{{runtimeError.type}}</div>
+                                    <p class="ribbon-content">
+                                        Line: <b>{{runtimeError.line}}</b>
+                                        <br>
+                                        <b>{{runtimeError.text}}</b>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
