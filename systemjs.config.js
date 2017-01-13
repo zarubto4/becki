@@ -30,7 +30,17 @@
             "underscore": "./node_modules/underscore",
             "crypto-js": "./node_modules/crypto-js",
             "moment": "./node_modules/moment",
-            "watchjs": "./node_modules/watchjs/src/watch"
+            "watchjs": "./node_modules/watchjs",
+            "acorn": "./node_modules/acorn",
+            "estraverse": "./node_modules/estraverse",
+            "esprima": "./node_modules/esprima",
+            "esutils": "./node_modules/esutils",
+            "optionator": "./node_modules/optionator",
+            "source-map": "./node_modules/source-map",
+            "escodegen": "./node_modules/escodegen",
+            "script-engine": "./node_modules/script-engine",
+            "typescript": "./node_modules/typescript",
+            "common-lib": "./node_modules/common-lib"
         },
         packages: {
             "ace": {main: "ace"},
@@ -42,7 +52,21 @@
             "the-grid": {main: "js/index"},
             "underscore": {main: "underscore"},
             "crypto-js": {main: 'index'},
-            "moment": {main: 'moment'}
+            "moment": {main: 'moment'},
+            "watchjs": {main: "src/watch"},
+            "acorn": {main: "dist/acorn"},
+            "estraverse": {main: "estraverse"},
+            "esprima": {main: "esprima"},
+            "esutils": {main: "lib/utils"},
+            "optionator": {main: "lib/index"},
+            "source-map": {main: "source-map"},
+            "escodegen": {
+                main: "escodegen", 
+                map: {"./package.json": "./../../assets/fake-package.js"} // kokoti jsou to
+            },
+            "script-engine": {main: "build/index"},
+            "typescript": {main: "lib/typescriptServices"},
+            "common-lib": {main: "build/index"}
         }
     });
 })(this);

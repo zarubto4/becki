@@ -5,6 +5,21 @@
     </div>
     <div class="modal-body">
         <form #form="ngForm">
+            <h4>Inputs</h4>
+            <div *ngFor="let input of inputs;">
+                <div>
+                    <label>{{input.displayName}}</label>
+                    <input [name]="input.name" class="form-control" type="text" [(ngModel)]="formModel[input.name]">
+                </div>
+            </div>
+            <h4>Outputs</h4>
+            <div *ngFor="let output of outputs;">
+                <div>
+                    <label>{{output.displayName}}</label>
+                    <input [name]="output.name" class="form-control" type="text" [(ngModel)]="formModel[output.name]">
+                </div>
+            </div>
+            <h4>Configuration</h4>
             <div *ngFor="let configProperty of configProperties;">
 
                 <div *ngIf="configProperty.type == configPropertyType['Float']" class="form-group">

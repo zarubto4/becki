@@ -6,34 +6,35 @@
  * directory of this distribution.
  */
 
-import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
+import {Input, Output, EventEmitter, Component, OnInit, ViewChild} from "@angular/core";
 import {FormGroup, Validators, FormBuilder} from "@angular/forms";
 import {ModalModel} from "../services/ModalService";
 import {Blocks} from "blocko";
+import {MonacoEditor} from "../components/MonacoEditor";
 
 
-export class ModalsBlockoJsEditorModel extends ModalModel {
-    constructor(public jsBlock: Blocks.JSBlock) {
+export class ModalsBlockoBlockCodeEditorModel extends ModalModel {
+    constructor(public block: Blocks.JSBlock|Blocks.TSBlock) {
         super();
         this.modalWide = true;
     }
 }
 
 @Component({
-    selector: "modals-blocko-js-editor",
-    templateUrl: "app/modals/blocko-js-editor.html"
+    selector: "modals-blocko-block-code-editor",
+    templateUrl: "app/modals/blocko-block-code-editor.html"
 })
-export class ModalsBlockoJsEditorComponent implements OnInit {
+export class ModalsBlockoBlockCodeEditorComponent implements OnInit {
 
     @Input()
-    modalModel: ModalsBlockoJsEditorModel;
+    modalModel: ModalsBlockoBlockCodeEditorModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
 
-    jsCode: string;
+    code: string;
 
-    jsError: { name: string, message: string };
+    error: { name: string, message: string };
 
     blockForm: FormGroup = null;
 
@@ -47,10 +48,18 @@ export class ModalsBlockoJsEditorComponent implements OnInit {
 
     validate() {
         try {
-            if (Blocks.JSBlock.validateJsCode(this.jsCode)) {
-                this.jsError = null;
-            } else {
-                this.jsError = {name: "Error", message: "Unknown error"};
+            if (this.modalModel.block instanceof Blocks.JSBlock) {
+                if (Blocks.JSBlock.validateCode(this.code)) {
+                    this.error = null;
+                } else {
+                    this.error = {name: "Error", message: "Unknown error"};
+                }
+            } else if (this.modalModel.block instanceof Blocks.TSBlock) {
+                if (Blocks.TSBlock.validateCode(this.code)) {
+                    this.error = null;
+                } else {
+                    this.error = {name: "Error", message: "Unknown error"};
+                }
             }
         } catch (e) {
 
@@ -61,6 +70,9 @@ export class ModalsBlockoJsEditorComponent implements OnInit {
 
             if (e instanceof Blocks.JSBlockError) {
                 name = "JS Block Error";
+                msg = e.htmlMessage;
+            } else if (e instanceof Blocks.TSBlockError) {
+                name = "TS Block Error";
                 msg = e.htmlMessage;
             }
 
@@ -80,33 +92,33 @@ export class ModalsBlockoJsEditorComponent implements OnInit {
             }
 
 
-            this.jsError = {name: name, message: msg};
+            this.error = {name: name, message: msg};
         }
     }
 
     ngOnInit() {
-        this.jsCode = this.modalModel.jsBlock.jsCode;
-        var data = JSON.parse(this.modalModel.jsBlock.designJson);
+        this.code = this.modalModel.block.code;
+        var data = JSON.parse(this.modalModel.block.designJson);
         this.blockForm.controls["color"].setValue(data["backgroundColor"]);
         this.blockForm.controls["icon"].setValue(data["displayName"]);
         this.blockForm.controls["description"].setValue(data["description"]);
     }
 
-    newJsCode(code: string) {
-        this.jsCode = code;
+    newCode(code: string) {
+        this.code = code;
     }
 
     onSubmitClick(): void {
         this.validate();
-        if (!this.jsError) {
+        if (!this.error) {
             var designJson = JSON.stringify({
                 backgroundColor: this.blockForm.controls["color"].value,
                 displayName: this.blockForm.controls["icon"].value,
                 description: this.blockForm.controls["description"].value
             });
-            this.modalModel.jsBlock.setDesignJson(designJson);
-            this.modalModel.jsBlock.setJsCode(this.jsCode);
-            if (this.modalModel.jsBlock.controller) this.modalModel.jsBlock.controller._emitDataChanged();
+            this.modalModel.block.setDesignJson(designJson);
+            this.modalModel.block.setCode(this.code);
+            if (this.modalModel.block.controller) this.modalModel.block.controller._emitDataChanged();
             this.modalClose.emit(true);
         }
     }

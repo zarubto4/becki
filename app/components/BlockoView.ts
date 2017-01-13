@@ -18,8 +18,8 @@ import {
     SimpleChanges
 } from "@angular/core";
 import {ModalService} from "../services/ModalService";
-import {ModalsBlockoJsEditorModel} from "../modals/blocko-js-editor";
 import {ModalsBlockoConfigPropertiesModel} from "../modals/blocko-config-properties";
+import {ModalsBlockoBlockCodeEditorModel} from "../modals/blocko-block-code-editor";
 
 @Component({
     selector: "blocko-view",
@@ -48,8 +48,8 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
         this.blockoRenderer.registerOpenConfigCallback((block) => {
             this.modalService.showModal(new ModalsBlockoConfigPropertiesModel(block));
         });
-        this.blockoRenderer.registerOpenJsEditCallback((block) => {
-            this.modalService.showModal(new ModalsBlockoJsEditorModel(block));
+        this.blockoRenderer.registerOpenCodeEditCallback((block) => {
+            this.modalService.showModal(new ModalsBlockoBlockCodeEditorModel(block));
         });
 
         this.blockoRenderer.canConfigInReadonly = true;
@@ -136,6 +136,21 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
 
     addJsBlockWithoutReadonlyCheck(jsCode: string, designJson: string, x: number = 0, y: number = 0): BlockoBasicBlocks.JSBlock {
         var b = new BlockoBasicBlocks.JSBlock(this.blockoController.getFreeBlockId(), jsCode, designJson);
+        b.x = Math.round(x / 10) * 10; //TODO: move this to blocko
+        b.y = Math.round(y / 10) * 10;
+        this.blockoController.addBlock(b);
+        return b;
+    }
+
+    addTsBlock(tsCode: string, designJson: string, x: number = 0, y: number = 0): BlockoBasicBlocks.TSBlock {
+        if (this.readonly) {
+            throw new Error("read only");
+        }
+        return this.addTsBlockWithoutReadonlyCheck(tsCode, designJson, x, y);
+    }
+
+    addTsBlockWithoutReadonlyCheck(tsCode: string, designJson: string, x: number = 0, y: number = 0): BlockoBasicBlocks.TSBlock {
+        var b = new BlockoBasicBlocks.TSBlock(this.blockoController.getFreeBlockId(), tsCode, designJson);
         b.x = Math.round(x / 10) * 10; //TODO: move this to blocko
         b.y = Math.round(y / 10) * 10;
         this.blockoController.addBlock(b);

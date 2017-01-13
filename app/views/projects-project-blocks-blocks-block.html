@@ -46,12 +46,12 @@
 
                 <div class="form-group">
                     <label>Block code</label>
-                    <ace-editor [code]="blockCode" (codeChange)="newBlockCode($event)" mode="ace/mode/javascript" ></ace-editor>
+                    <monaco-editor [code]="blockCode" (codeChange)="newBlockCode($event)" [typings]="['Blocko', 'ES5']"></monaco-editor>
                 </div>
 
-                <div *ngIf="jsError" class="mt-element-ribbon bg-grey-steel">
-                    <div class="ribbon ribbon-shadow ribbon-color-danger">{{jsError.name}}</div>
-                    <p class="ribbon-content" [innerHTML]="jsError.message"></p>
+                <div *ngIf="tsError" class="mt-element-ribbon bg-grey-steel">
+                    <div class="ribbon ribbon-shadow ribbon-color-danger">{{tsError.name}}</div>
+                    <p class="ribbon-content" [innerHTML]="tsError.message"></p>
                 </div>
 
                 <div>
@@ -80,11 +80,11 @@
                         </span>
                     </div>
 
-                    <h3 *ngIf="!jsBlock" class="pull-right" style="margin: 0; margin-right: 95px;">For test press button here <i class="fa fa-chevron-up"></i></h3>
+                    <h3 *ngIf="!tsBlock" class="pull-right" style="margin: 0; margin-right: 95px;">For test press button here <i class="fa fa-chevron-up"></i></h3>
 
                 </div>
                 <div class="portlet-content">
-                    <div *ngIf="jsBlock" class="col-md-4" style="display: inline-block; width: calc(50% - 61px)">
+                    <div *ngIf="tsBlock" class="col-md-4" style="display: inline-block; width: calc(50% - 61px)">
 
                         <h4 class="text-center">Inputs simulator</h4>
 
@@ -157,11 +157,11 @@
                         </div>
 
                     </div>
-                    <div class="col-md-4" style="display: inline-block; width: 121px;" [style.height]="(jsBlockHeight)+'px'">
-                        <h4 *ngIf="jsBlock" class="text-center">Block</h4>
+                    <div class="col-md-4" style="display: inline-block; width: 121px;" [style.height]="(tsBlockHeight)+'px'">
+                        <h4 *ngIf="tsBlock" class="text-center">Block</h4>
                         <blocko-view readonly="true" class="blocko-overflow-visible blocko-no-borders-and-bg"></blocko-view>
                     </div>
-                    <div *ngIf="jsBlock" class="col-md-4" style="display: inline-block; width: calc(50% - 61px)">
+                    <div *ngIf="tsBlock" class="col-md-4" style="display: inline-block; width: calc(50% - 61px)">
 
                         <h4 class="text-center">Outputs log</h4>
 

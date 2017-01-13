@@ -44,12 +44,34 @@
 
                 <div class="form-group">
                     <label>Widget code</label>
-                    <ace-editor [code]="widgetCode" (codeChange)="newWidgetCode($event)" mode="ace/mode/javascript" ></ace-editor>
+                    <monaco-editor [code]="widgetCode" (codeChange)="newWidgetCode($event)" [typings]="['ES5', 'TypesLib', 'ContextLib', 'UtilsLib']"></monaco-editor>
                 </div>
 
+                <div *ngIf="buildErrors" class="spacer30"></div>
+                <div *ngIf="buildErrors" class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-play font-red"></i>
+                            <span class="caption-subject bold uppercase font-red">Build errors</span>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div *ngFor="let buildError of buildErrors" class="mt-element-ribbon bg-grey-steel">
+                            <div class="ribbon ribbon-shadow uppercase" [class.ribbon-color-danger]="buildError.type=='error'" [class.ribbon-color-warning]="buildError.type=='warning'" >{{buildError.type}}</div>
+                            <p class="ribbon-content">
+                                Line: <b>{{buildError.line}}</b>
+                                <br>
+                                <b>{{buildError.text}}</b>
+                            </p>
+                        </div>
+                    </div>
+                </div>
 
                 <div>
                     <div class="pull-right">
+                        <button type="button" class="btn default yellow-gold" (click)="onTestClick()" >
+                            <i class="fa fa-play"></i> Test
+                        </button>
                         <button type="button" class="btn default green-haze" (click)="onSaveClick()">
                             <i class="fa fa-floppy-o"></i> Save
                         </button>
@@ -60,6 +82,149 @@
             </div>
         </div>
 
+        <div [hidden]="!widgetInstance" class="col-md-12">
+            <div class="portlet light bordered padding-20">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-terminal"></i>
+                            Test
+                        </span>
+                    </div>
+                </div>
+                <div class="portlet-content">
+                    <button type="button" class="btn default yellow-gold grid-widget-config-button" (click)="onWidgetConfigClick()" >
+                        <i class="fa fa-cog"></i> Configuration
+                    </button>
+                    <div #widgetTestScreen></div>
+
+                    <div>
+                        <div class="col-md-4" style="display: inline-block; width: calc(50% - 20px)">
+
+                            <h4 class="text-center">Inputs simulator</h4>
+                            <div class="widget-tester no-select">
+
+                                <div *ngFor="let connector of testInputConnectors; let iCon = index" class="row bg-color" [class.odd]="iCon%2">
+
+                                    <template [ngIf]="connector.isDigital() && connector.isInput()">
+                                        <div class="col-md-4 bg-din bold" [class.odd]="iCon%2">{{connector.name}}</div>
+                                        <div class="col-md-8">
+                                            <div class="widget-tester-message-input-label"><strong>Value</strong>:</div>
+                                            <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="connector.value" [class.fa-toggle-off]="!connector.value" (click)="onDigitalInputClick(connector)"></i>
+                                        </div>
+                                    </template>
+
+                                    <template [ngIf]="connector.isAnalog() && connector.isInput()">
+                                        <div class="col-md-4 bg-ain bold" [class.odd]="iCon%2">{{connector.name}}</div>
+                                        <div class="col-md-8">
+                                            <div class="widget-tester-message-input-label"><strong>Value</strong>:</div>
+                                            <input type="number" class="form-control" step="0.1" [value]="connector.value" (input)="onAnalogInputChange($event, connector)">
+                                        </div>
+                                    </template>
+
+                                    <template [ngIf]="connector.isMessage() && connector.isInput()">
+                                        <div class="col-md-4 bg-min bold" [class.odd]="iCon%2">{{connector.name}}</div>
+                                        <div *ngFor="let argType of connector.messageTypes; let index = index">
+
+                                            <div *ngIf="index" class="col-md-4"></div>
+
+                                            <template [ngIf]="argType == 'boolean'">
+                                                <div class="col-md-8">
+                                                    <div class="widget-tester-message-input-label">Bool <strong>Arg #{{index}}</strong>:</div>
+                                                    <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="messageInputsValueCache[connector.name+argType]" [class.fa-toggle-off]="!messageInputsValueCache[connector.name+argType]" (click)="messageInputsValueCache[connector.name+argType] = !messageInputsValueCache[connector.name+argType]"></i>
+                                                </div>
+                                            </template>
+                                            <template [ngIf]="argType == 'float' ">
+                                                <div class="col-md-8">
+                                                    <div class="widget-tester-message-input-label">Float <strong>Arg #{{index}}</strong>:</div>
+                                                    <input type="number" class="form-control" step="0.1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                                </div>
+                                            </template>
+                                            <template [ngIf]="argType == 'integer'">
+                                                <div class="col-md-8">
+                                                    <div class="widget-tester-message-input-label">Int <strong>Arg #{{index}}</strong>:</div>
+                                                    <input type="number" class="form-control" step="1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                                </div>
+                                            </template>
+                                            <template [ngIf]="argType == 'string'">
+                                                <div class="col-md-8">
+                                                    <div class="widget-tester-message-input-label">String <strong>Arg #{{index}}</strong>:</div>
+                                                    <input type="text" class="form-control" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                                </div>
+                                            </template>
+
+                                        </div>
+
+                                        <div class="col-md-4"></div>
+                                        <div class="col-md-8">
+                                            <button class="btn btn-sm default green widget-tester-message-input-btn" type="button" (click)="onMessageInputSendClick(connector)">
+                                                <i class="fa fa-paper-plane"></i> Send
+                                            </button>
+                                        </div>
+
+                                    </template>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-4" style="display: inline-block; width: calc(50% - 20px)">
+
+                            <h4 class="text-center">Outputs log</h4>
+
+                            <div class="row">
+                                <table class="table table-fixed table-hover table-light widget-log-table-header">
+                                    <thead>
+                                        <tr class="uppercase">
+                                            <th class="widget-log-timestamp"> Time </th>
+                                            <th class="widget-log-name"> Output </th>
+                                            <th class="widget-log-value"> Value </th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div class="row widget-log-table-wrapper">
+
+                                <table class="table table-fixed table-hover table-light">
+                                    <tbody>
+                                        <tr *ngFor="let log of testEventLog;">
+                                            <td class="widget-log-timestamp">
+                                                {{log.timestamp}}
+                                            </td>
+                                            <td class="widget-log-name"> <strong>{{log.connector.name}}</strong> </td>
+                                            <td class="widget-log-value" [innerHTML]="log.readableValue"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div *ngIf="runtimeErrors">
+                        <div class="spacer30"></div>
+                        <div class="portlet light bordered">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <i class="fa fa-play font-red"></i>
+                                    <span class="caption-subject bold uppercase font-red">Runtime errors</span>
+                                </div>
+                            </div>
+                            <div class="portlet-body">
+                                <div *ngFor="let runtimeError of runtimeErrors" class="mt-element-ribbon bg-grey-steel">
+                                    <div class="ribbon ribbon-shadow uppercase" [class.ribbon-color-danger]="runtimeError.type=='error'" [class.ribbon-color-warning]="runtimeError.type=='warning'" >{{runtimeError.type}}</div>
+                                    <p class="ribbon-content">
+                                        Line: <b>{{runtimeError.line}}</b>
+                                        <br>
+                                        <b>{{runtimeError.text}}</b>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="col-md-12">
             <div class="portlet portlet light bordered">

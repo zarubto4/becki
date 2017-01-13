@@ -5,11 +5,10 @@
  * © 2016 Becki Authors. See the AUTHORS file found in the top-level
  * directory of this distribution.
  */
-
-import { OnInit, Component, Injector, OnDestroy } from "@angular/core";
-import { BaseMainComponent } from "./BaseMainComponent";
-import { IProduct, IInvoice } from "../backend/TyrionAPI";
-import { Subscription } from "rxjs";
+import {OnInit, Component, Injector, OnDestroy} from "@angular/core";
+import {BaseMainComponent} from "./BaseMainComponent";
+import {IProduct, IInvoice} from "../backend/TyrionAPI";
+import {Subscription} from "rxjs";
 
 
 @Component({
@@ -45,17 +44,22 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
 
     onDownloadPDFClick(id: number): void {
 
-        this.backendService.getInvoicePdf(id).then(invoice => {  //TODO někde se zde bere % navíc, a nemám tucha proč
-        this.fmSuccess(invoice); //TODO bude se fracet link, bylo by dobré hned z něj vytáhnout file
-    })
+        this.backendService.getInvoicePdf(id)
+            .then(invoice => {  //TODO někde se zde bere % navíc, a nemám tucha proč
+                this.fmSuccess(invoice.toString()); //TODO bude se fracet link, bylo by dobré hned z něj vytáhnout file
+                //TODO .. co to je? - David #1
+            })
             .catch(error => console.log(error))
     }
+
     onSendClick(): void {
 
     }
+
     onPrintClick(): void {
 
     }
+
     onSettingsClick(): void {
 
     }
@@ -71,11 +75,9 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
     }
 
 
-
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
     }
-
 
 
     refresh(): void {

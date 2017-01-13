@@ -80,7 +80,7 @@ export class GridView implements AfterViewInit, OnChanges {
     }
 
     setDataJson(data: string): void {
-        //this.gridController.setDataJson(data);
+        this.gridController.setDataJson(data);
     }
 
     setDeviceProfile(deviceProfile: string): void {
