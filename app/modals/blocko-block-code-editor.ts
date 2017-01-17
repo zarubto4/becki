@@ -14,7 +14,7 @@ import {MonacoEditor} from "../components/MonacoEditor";
 
 
 export class ModalsBlockoBlockCodeEditorModel extends ModalModel {
-    constructor(public block: Blocks.JSBlock|Blocks.TSBlock) {
+    constructor(public block: Blocks.TSBlock) {
         super();
         this.modalWide = true;
     }
@@ -47,53 +47,28 @@ export class ModalsBlockoBlockCodeEditorComponent implements OnInit {
     }
 
     validate() {
-        try {
-            if (this.modalModel.block instanceof Blocks.JSBlock) {
-                if (Blocks.JSBlock.validateCode(this.code)) {
-                    this.error = null;
-                } else {
-                    this.error = {name: "Error", message: "Unknown error"};
-                }
-            } else if (this.modalModel.block instanceof Blocks.TSBlock) {
-                if (Blocks.TSBlock.validateCode(this.code)) {
-                    this.error = null;
-                } else {
-                    this.error = {name: "Error", message: "Unknown error"};
-                }
-            }
-        } catch (e) {
 
-            var name = e.name || "Error";
-            name = name.replace(/([A-Z])/g, ' $1').trim();
+        /*
 
-            var msg: string = e.message || e.toString();
+         if (msg.indexOf("is not defined") > -1) {
+         var index = msg.indexOf("is not defined");
+         msg = "<b>" + msg.substr(0, index) + "</b>" + msg.substr(index);
+         }
 
-            if (e instanceof Blocks.JSBlockError) {
-                name = "JS Block Error";
-                msg = e.htmlMessage;
-            } else if (e instanceof Blocks.TSBlockError) {
-                name = "TS Block Error";
-                msg = e.htmlMessage;
-            }
+         if (msg.indexOf("is not a function") > -1) {
+         var index = msg.indexOf("is not a function");
+         msg = "<b>" + msg.substr(0, index) + "</b>" + msg.substr(index);
+         }
 
-            if (msg.indexOf("is not defined") > -1) {
-                var index = msg.indexOf("is not defined");
-                msg = "<b>" + msg.substr(0, index) + "</b>" + msg.substr(index);
-            }
-
-            if (msg.indexOf("is not a function") > -1) {
-                var index = msg.indexOf("is not a function");
-                msg = "<b>" + msg.substr(0, index) + "</b>" + msg.substr(index);
-            }
-
-            if (msg.indexOf("Unexpected token") == 0) {
-                var len = "Unexpected token".length;
-                msg = msg.substr(0, len) + "<b>" + msg.substr(len) + "</b>";
-            }
+         if (msg.indexOf("Unexpected token") == 0) {
+         var len = "Unexpected token".length;
+         msg = msg.substr(0, len) + "<b>" + msg.substr(len) + "</b>";
+         }
 
 
-            this.error = {name: name, message: msg};
-        }
+         this.error = {name: name, message: msg};
+
+         */
     }
 
     ngOnInit() {

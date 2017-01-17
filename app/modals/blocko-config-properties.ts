@@ -11,6 +11,7 @@ import {Input, Output, EventEmitter, Component, OnInit} from "@angular/core";
 import {FormGroup} from "@angular/forms";
 import {ModalModel} from "../services/ModalService";
 import {Core} from "blocko";
+import {Types} from "common-lib";
 
 
 export class ModalsBlockoConfigPropertiesModel extends ModalModel {
@@ -37,13 +38,6 @@ export class ModalsBlockoConfigPropertiesComponent implements OnInit {
 
     formModel: {[key: string]: any} = {};
 
-    configPropertyType = {
-        "Boolean": Core.ConfigPropertyType.Boolean,
-        "Float": Core.ConfigPropertyType.Float,
-        "Integer": Core.ConfigPropertyType.Integer,
-        "String": Core.ConfigPropertyType.String,
-    };
-
     constructor() {
 
     }
@@ -61,18 +55,18 @@ export class ModalsBlockoConfigPropertiesComponent implements OnInit {
 
         this.configProperties.forEach((configProperty) => {
 
-            if (configProperty.type == Core.ConfigPropertyType.Integer) {
+            if (configProperty.type == Types.ConfigPropertyType.Integer) {
                 var num = parseInt(this.formModel[configProperty.name], 10);
                 configProperty.value = isNaN(num) ? 0 : num;
             }
-            if (configProperty.type == Core.ConfigPropertyType.Float) {
+            if (configProperty.type == Types.ConfigPropertyType.Float) {
                 var num = parseFloat(this.formModel[configProperty.name]);
                 configProperty.value = isNaN(num) ? 0 : num;
             }
-            if (configProperty.type == Core.ConfigPropertyType.String) {
+            if (configProperty.type == Types.ConfigPropertyType.String) {
                 configProperty.value = this.formModel[configProperty.name];
             }
-            if (configProperty.type == Core.ConfigPropertyType.Boolean) {
+            if (configProperty.type == Types.ConfigPropertyType.Boolean) {
                 configProperty.value = !!this.formModel[configProperty.name];
             }
 

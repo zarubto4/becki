@@ -615,6 +615,62 @@ span.changes {
     word-wrap: break-word;
 }
 
+
+.console-log-table-wrapper {
+    border: 1px solid #ccc;
+    position: relative;
+    max-height: 400px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.console-log-table-wrapper table {
+    margin-bottom: 0;
+}
+
+.console-log-table-wrapper .table tbody > tr > td {
+    padding: 2px;
+    font-size: 12px;
+    border-bottom: 1px solid #ccc;
+}
+
+.console-log-timestamp {
+    color: #8896a0;
+    font-style: italic;
+}
+
+.console-log-icon {
+    position: absolute;
+    right: 3px;
+    top: 2px;
+}
+
+.console-log-head {
+    width: 95px;
+    position: absolute;
+}
+
+.console-log-message {
+    color: black;
+    padding-left: 95px;
+}
+
+.console-log-tr.log-error td {
+    background-color: #fcedee;
+}
+
+.console-log-tr.log-info td {
+    background-color: #eaf4fb;
+}
+
+.console-log-tr.log-warn td {
+    background-color: #fdfaeb;
+}
+
+.console-log-tr.log-output td {
+    background-color: #e9f8f2;
+}
+
 .no-select {
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none;   /* Chrome/Safari/Opera */
