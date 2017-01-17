@@ -92,7 +92,82 @@ export class GridView implements AfterViewInit, OnChanges {
     }
 
     getInterfaceJson(): string {
-        return JSON.stringify(this.gridController.getInterface());
+        const gridInterface = this.gridController.getInterface();
+
+        let out: any = {
+            analogInputs: {},
+            digitalInputs: {},
+            messageInputs: {},
+            analogOutputs: {},
+            digitalOutputs: {},
+            messageOutputs: {},
+        };
+
+        if (gridInterface.analogInputs) {
+            for (var k in gridInterface.analogInputs) {
+                if (!gridInterface.analogInputs.hasOwnProperty(k)) continue;
+                let name = gridInterface.analogInputs[k].externalName;
+                if (!out.analogInputs[name]) {
+                    out.analogInputs[name] = {};
+                }
+            }
+        }
+
+        if (gridInterface.digitalInputs) {
+            for (var k in gridInterface.digitalInputs) {
+                if (!gridInterface.digitalInputs.hasOwnProperty(k)) continue;
+                let name = gridInterface.digitalInputs[k].externalName;
+                if (!out.digitalInputs[name]) {
+                    out.digitalInputs[name] = {};
+                }
+            }
+        }
+
+        if (gridInterface.messageInputs) {
+            for (var k in gridInterface.messageInputs) {
+                if (!gridInterface.messageInputs.hasOwnProperty(k)) continue;
+                let name = gridInterface.messageInputs[k].externalName;
+                if (!out.messageInputs[name]) {
+                    out.messageInputs[name] = {
+                        messageTypes: gridInterface.messageInputs[k].messageTypes
+                    };
+                }
+            }
+        }
+
+        if (gridInterface.analogOutputs) {
+            for (var k in gridInterface.analogOutputs) {
+                if (!gridInterface.analogOutputs.hasOwnProperty(k)) continue;
+                let name = gridInterface.analogOutputs[k].externalName;
+                if (!out.analogOutputs[name]) {
+                    out.analogOutputs[name] = {};
+                }
+            }
+        }
+
+        if (gridInterface.digitalOutputs) {
+            for (var k in gridInterface.digitalOutputs) {
+                if (!gridInterface.digitalOutputs.hasOwnProperty(k)) continue;
+                let name = gridInterface.digitalOutputs[k].externalName;
+                if (!out.digitalOutputs[name]) {
+                    out.digitalOutputs[name] = {};
+                }
+            }
+        }
+
+        if (gridInterface.messageOutputs) {
+            for (var k in gridInterface.messageOutputs) {
+                if (!gridInterface.messageOutputs.hasOwnProperty(k)) continue;
+                let name = gridInterface.messageOutputs[k].externalName;
+                if (!out.messageOutputs[name]) {
+                    out.messageOutputs[name] = {
+                        messageTypes: gridInterface.messageOutputs[k].messageTypes
+                    };
+                }
+            }
+        }
+
+        return JSON.stringify(out);
     }
 
 }

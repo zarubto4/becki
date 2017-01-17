@@ -92,7 +92,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                 this.gridProgramVersions = this.gridProgram.program_versions || [];
 
                 if (this.gridProgramVersions.length) {
-                    this.selectProgramVersion(this.gridProgramVersions[0]);
+                    this.selectProgramVersion(this.gridProgramVersions[this.gridProgramVersions.length - 1]);
                 }
 
                 this.unblockUI();
@@ -188,11 +188,13 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
         console.log(event);
         this.backendService.getWidgetVersion(event.type.version_id)
         .then((widgetVersion) => {
+            console.log(widgetVersion);
             //TODO add cache
             event.resolve(widgetVersion.logic_json);
             this.unblockUI();
         })
         .catch((err) => {
+            console.log(err);
             this.unblockUI();
             this.addFlashMessage(new FlashMessageError("Cannot load widget version", err));
         });

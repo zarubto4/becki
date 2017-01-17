@@ -37,18 +37,10 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
     outputs: Core.Connector[];
 
     form: FormGroup;
-
     formModel: {[key: string]: any} = {};
 
-    configPropertyType = {
-        "Boolean": Types.ConfigPropertyType.Boolean,
-        "Float": Types.ConfigPropertyType.Float,
-        "Integer": Types.ConfigPropertyType.Integer,
-        "String": Types.ConfigPropertyType.String,
-        "Color": Types.ConfigPropertyType.Color,
-        "FAIcon": Types.ConfigPropertyType.FAIcon,
-        "IOName": Types.ConfigPropertyType.IOName,
-    };
+    StringToConfigPropertyTypeTable = Types.StringToConfigPropertyTypeTable;
+    ConfigPropertyType = Types.ConfigPropertyType;
 
     constructor() {
     }
@@ -85,9 +77,6 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
             this.outputs.push(widgetInterface.messageOutputs[n]);
         }
 
-        console.log(this.inputs, this.outputs);
-    
-        
 
         this.configProperties.forEach((cp) => {
             this.formModel[cp.id] = cp.value;
@@ -104,16 +93,14 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
 
     onSubmitClick(): void {
 
-        console.log(this.formModel);
-
         this.configProperties.forEach((configProperty) => {
-            if (configProperty.type == Types.ConfigPropertyType.Integer) {
+            if (Types.StringToTypeTable[configProperty.type] == Types.Type.Integer) {
                 var num = parseInt(this.formModel[configProperty.id], 10);
                 configProperty.value = isNaN(num) ? 0 : num;
-            } else if (configProperty.type == Types.ConfigPropertyType.Float) {
+            } else if (Types.StringToTypeTable[configProperty.type] == Types.Type.Float) {
                 var num = parseFloat(this.formModel[configProperty.id]);
                 configProperty.value = isNaN(num) ? 0 : num;
-            } else if (configProperty.type == Types.ConfigPropertyType.Boolean) {
+            } else if (Types.StringToTypeTable[configProperty.type] == Types.Type.Boolean) {
                 configProperty.value = !!this.formModel[configProperty.id];
             } else {
                 configProperty.value = this.formModel[configProperty.id];
