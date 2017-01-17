@@ -61,6 +61,12 @@ export class BreadcrumbsService {
         this.currentParamsService.currentInstanceId.subscribe(() => {
             this.refresh();
         });
+        this.currentParamsService.currentProductName.subscribe(() => {
+            this.refresh();
+        });
+        this.currentParamsService.currentInvoiceId.subscribe(() => {
+            this.refresh();
+        });
     }
 
     protected findRouteByPath(path: string): Route {
@@ -74,6 +80,10 @@ export class BreadcrumbsService {
         switch (breadName) {
             case ":project":
                 return this.currentParamsService.currentProjectNameSnapshot;
+            case ":product":
+                return this.currentParamsService.currentProductNameSnapshot;
+            case ":invoice":
+                return this.currentParamsService.currentInvoiceIdSnapshot;
             case ":blocko":
                 return this.currentParamsService.currentBlockoNameSnapshot;
             case ":code":

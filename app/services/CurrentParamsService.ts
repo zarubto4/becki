@@ -51,6 +51,14 @@ export class CurrentParamsService {
     protected currentGridProjectNameSubject: Subject<string> = null;
     public currentGridProjectNameSnapshot: string = null;
 
+    public currentProductName: Observable<string> = null;
+    protected currentProductNameSubject: Subject<string> = null;
+    public currentProductNameSnapshot: string = null;
+
+    public currentInvoiceId: Observable<string> = null;
+    protected currentInvoiceIdSubject: Subject<string> = null;
+    public currentInvoiceIdSnapshot: string = null;
+
     public currentGridName: Observable<string> = null;
     protected currentGridNameSubject: Subject<string> = null;
     public currentGridNameSnapshot: string = null;
@@ -74,6 +82,8 @@ export class CurrentParamsService {
         this.currentGridProjectName = this.currentGridProjectNameSubject = new Subject<string>();
         this.currentGridName = this.currentGridNameSubject = new Subject<string>();
         this.currentInstanceId = this.currentInstanceIdSubject = new Subject<string>();
+        this.currentProductName = this.currentProductNameSubject = new Subject<string>();
+        this.currentInvoiceId = this.currentInvoiceIdSubject = new Subject<string>();
 
         router.events.subscribe(event => {
             if (event instanceof RoutesRecognized) {
@@ -122,6 +132,37 @@ export class CurrentParamsService {
             }
 
         }
+
+        if (this.currentParamsSnapshot["product"] != params["product"]) {
+
+            if (!params["product"]) {
+                this.currentProductNameSnapshot = null;
+                this.currentProductNameSubject.next(this.currentProductNameSnapshot);
+            } else {
+                this.backendService.getAllProducts().then((products) => {
+                    this.currentProductNameSnapshot = products.find(product => params["product"] == product.id).product_individual_name;
+                    this.currentProductNameSubject.next(this.currentProductNameSnapshot);
+                });
+            }
+
+        }
+
+        if (this.currentParamsSnapshot["invoice"] != params["invoice"]) {
+
+            if (!params["invoice"]) {
+                this.currentInstanceIdSnapshot = null;
+                this.currentInstanceIdSubject.next(this.currentInstanceIdSnapshot);
+            } else {
+                this.backendService.getInvoice(params["invoice"]).then((invoice) => {
+                    this.currentInstanceIdSnapshot = invoice.invoice.date_of_create;
+                    this.currentInstanceIdSubject.next(this.currentInstanceIdSnapshot);
+                });
+            }
+
+        }
+
+
+
 
         if (this.currentParamsSnapshot["blocko"] != params["blocko"]) {
 
