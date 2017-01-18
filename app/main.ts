@@ -51,13 +51,13 @@ import {ProjectsProjectCodeCodeComponent} from "./views/projects-project-code-co
 import {NotificationsComponent} from "./views/notifications";
 import {ProfileComponent} from "./views/profile";
 import {ForgotPasswordComponent} from "./views/login-forgot-password";
-import {PasswordRestartComponent} from "./views/password-restart";
+import {PasswordRestartComponent} from "./views/login-password-restart";
 import {ProjectsProjectBlocksComponent} from "./views/projects-project-blocks";
 import {ProjectsProjectBlocksBlocksBlockComponent} from "./views/projects-project-blocks-blocks-block";
 import {CreateUserComponent} from "./views/create-user";
 import {ProjectsProjectGridComponent} from "./views/projects-project-grid";
 import {RedirectOkComponent} from "./views/redirect-ok";
-import {ProductRegistrationComponent} from "./views/product-registration";
+import {ProductRegistrationComponent} from "./views/financial-product-registration";
 import {ModalsProjectPropertiesComponent} from "./modals/project-properties";
 import {ModalsRemovalComponent} from "./modals/removal";
 import {ModalsAddHardwareComponent} from "./modals/add-hardware";
