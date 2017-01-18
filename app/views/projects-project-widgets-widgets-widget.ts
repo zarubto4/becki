@@ -18,7 +18,6 @@ import {Core, TestRenderer, Widgets} from "the-grid";
 import {ModalService} from "../services/ModalService";
 import {ModalsGridConfigPropertiesModel} from "../modals/grid-config-properties";
 import {Types, Libs} from "common-lib";
-import {UtilsLib} from "script-engine";
 import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService';
 
 @Component({
@@ -81,7 +80,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         var widgetTesterController = new Core.Controller();
         this._widgetTesterRenderer = new TestRenderer.ControllerRenderer(widgetTesterController, this.widgetTestScreen.nativeElement);
 
-        this.monacoEditorLoaderService.registerTypings([Libs.TypesLib, Widgets.ContextLib, UtilsLib]);
+        this.monacoEditorLoaderService.registerTypings([Widgets.ContextLib, Libs.UtilsLib]);
     }
 
     ngOnDestroy(): void {

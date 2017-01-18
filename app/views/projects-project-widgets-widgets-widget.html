@@ -44,7 +44,7 @@
 
                 <div class="form-group">
                     <label>Widget code</label>
-                    <monaco-editor [code]="widgetCode" (codeChange)="newWidgetCode($event)" [typings]="['ES5', 'TypesLib', 'ContextLib', 'UtilsLib']"></monaco-editor>
+                    <monaco-editor [code]="widgetCode" (codeChange)="newWidgetCode($event)" [typings]="['ES5', 'ContextLib', 'UtilsLib']"></monaco-editor>
                 </div>
 
                 <div *ngIf="buildErrors" class="spacer30"></div>

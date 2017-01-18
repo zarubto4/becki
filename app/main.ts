@@ -106,6 +106,7 @@ import {ProjectsProjectWidgetsWidgetsWidgetComponent} from './views/projects-pro
 import {MonacoEditor} from "./components/MonacoEditor";
 import {MonacoEditorLoaderService} from "./services/MonacoEditorLoaderService";
 import {ModalsBlockoBlockCodeEditorComponent} from "./modals/blocko-block-code-editor";
+import {ConsoleLog} from "./components/ConsoleLog";
 
 //@formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -257,6 +258,7 @@ let tabMenus = {
         GridView,
         NotificationsOverlayComponent,
         NotificationsListComponent,
+        ConsoleLog,
         // Views components
         Error404Component,
         LoginComponent,

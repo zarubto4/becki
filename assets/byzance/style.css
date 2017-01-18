@@ -619,7 +619,6 @@ span.changes {
 .console-log-table-wrapper {
     border: 1px solid #ccc;
     position: relative;
-    max-height: 400px;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -669,6 +668,10 @@ span.changes {
 
 .console-log-tr.log-output td {
     background-color: #e9f8f2;
+}
+
+.console-log-source {
+    color: #8896a0;
 }
 
 .no-select {

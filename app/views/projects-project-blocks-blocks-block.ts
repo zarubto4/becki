@@ -15,10 +15,11 @@ import {FormGroup, Validators} from "@angular/forms";
 import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationService";
 import {ModalsVersionDialogModel} from "../modals/version-dialog";
 import {Types, Libs} from "common-lib";
-import {TypescriptBuildError, SafeMachineError, UtilsLib} from "script-engine";
+import {TypescriptBuildError, SafeMachineError} from "script-engine";
 
 import moment = require("moment/moment");
 import {MonacoEditorLoaderService} from "../services/MonacoEditorLoaderService";
+import {ConsoleLog, ConsoleLogType} from "../components/ConsoleLog";
 
 @Component({
     selector: "view-projects-project-blocks-blocks-block",
@@ -59,7 +60,9 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
     testInputConnectors: Core.Connector[];
     messageInputsValueCache: { [key: string]: boolean|number|string } = {};
     successfullyTested: boolean = false;
-    consoleLog: {timestamp: string, type: string, message: string}[] = [];
+
+    @ViewChild(ConsoleLog)
+    consoleLog: ConsoleLog;
 
     private monacoEditorLoaderService:MonacoEditorLoaderService = null;
 
@@ -85,7 +88,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
             });
             this.refresh();
         });
-        this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib, Libs.ConsoleLib, UtilsLib]);
+        this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib, Libs.ConsoleLib, Libs.UtilsLib]);
 
     }
 
@@ -258,18 +261,14 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
         this.blockoView.removeAllBlocksWithoutReadonlyCheck();
         this.tsBlock = null;
         this.successfullyTested = false;
-        this.consoleLog = [];
+        if (this.consoleLog) this.consoleLog.clear();
         this.testInputConnectors = [];
         this.tsBlockHeight = 0;
         this.messageInputsValueCache = {};
     }
 
     onBlockoLog(bl:{block:Core.Block, type: string, message: string}): void {
-        this.consoleLog.unshift({
-            timestamp: moment().format("HH:mm:ss.SSS"),
-            type: bl.type,
-            message: bl.message
-        });
+        if (this.consoleLog) this.consoleLog.add(<ConsoleLogType>bl.type, bl.message);
     }
 
     onBlockoError(be:{block:Core.Block, error: any}): void {
@@ -293,39 +292,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                 }
                 this.cleanTestView();
             } else {
-                if (be.error instanceof SafeMachineError) {
-
-                    let msg = "<strong>" + be.error.message + "</strong>";
-                    if (typeof be.error.original == "object" && be.error.original instanceof Error) {
-                        msg = "<strong>" + (<Error>be.error.original).name + "</strong>: " + (<Error>be.error.original).message;
-                    }
-
-                    let posInfo = "";
-                    if (be.error.position) {
-                        if (be.error.position.lineA == be.error.position.lineB) {
-                            posInfo = "<br><strong>Position:</strong> line <strong>" + be.error.position.lineA + "</strong> column <strong>" + be.error.position.columnA + "</strong> - <strong>" + be.error.position.columnB + "</strong>";
-                        } else {
-                            posInfo = "<br><strong>Position:</strong> line <strong>" + be.error.position.lineA + "</strong> column <strong>" + be.error.position.columnA + "</strong> - line <strong>" + be.error.position.lineB + "</strong> column <strong>" + be.error.position.columnB + "</strong>";
-                        }
-                    }
-
-                    /*let stackInfo = "";
-                    if (be.error.safeMachineStack) {
-                        console.log(be.error.safeMachineStack);
-                        stackInfo = "<br><strong>Stack:</strong> ";
-                        be.error.safeMachineStack.forEach((sms) => {
-                            stackInfo += "<br>&nbsp;&nbsp;&nbsp;&nbsp;" + sms.deepDir + " " + sms.lineA + ":" + sms.columnA + " - " + sms.lineB + ":" + sms.columnB;
-                        });
-                    }*/
-
-                    this.consoleLog.unshift({
-                        timestamp: moment().format("HH:mm:ss.SSS"),
-                        type: "error",
-                        message: msg + posInfo
-                    });
-                } else {
-
-                }
+                if (this.consoleLog) this.consoleLog.addFromError(be.error);
             }
 
         }
@@ -355,11 +322,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
             }
 
             this.tsBlock.registerOutputEventCallback((connector: Core.Connector, eventType: Core.ConnectorEventType, value: (boolean|number|Core.Message)) => {
-                this.consoleLog.unshift({
-                    timestamp: moment().format("HH:mm:ss.SSS"),
-                    type: "output",
-                    message: "Output <strong>"+connector.name+"</strong> = "+ this.toReadableValue(value)
-                });
+                if (this.consoleLog) this.consoleLog.add("output", "Output <strong>"+connector.name+"</strong> = "+ this.toReadableValue(value));
             });
 
             this.tsBlock.setCode(this.blockCode);
