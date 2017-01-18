@@ -20,7 +20,7 @@ import { BeckiAsyncValidators } from "../helpers/BeckiAsyncValidators";
 
 @Component({
     selector: "product-registration",
-    templateUrl: "app/views/product-registration.html"
+    templateUrl: "app/views/financial-product-registration.html"
 })
 export class ProductRegistrationComponent extends BaseMainComponent implements OnInit {
 

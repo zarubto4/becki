@@ -19,6 +19,7 @@ import {ModalService} from "../services/ModalService";
 import {ModalsGridConfigPropertiesModel} from "../modals/grid-config-properties";
 import {Types, Libs} from "common-lib";
 import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService';
+import {ConsoleLog, ConsoleLogType} from "../components/ConsoleLog";
 
 @Component({
     selector: "view-projects-project-widgets-widgets-widget",
@@ -46,16 +47,17 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     argTypes = Types.Type;
 
     messageInputsValueCache: { [key: string]: boolean|number|string } = {};
-    testEventLog: {timestamp: string, connector: Core.Connector, eventType: string, value: (boolean|number|Core.MessageValue), readableValue: string}[] = [];
 
     protected _widgetTesterRenderer: TestRenderer.ControllerRenderer;
     protected monacoEditorLoaderService:MonacoEditorLoaderService;
     protected buildErrors: any[] = null;
-    protected runtimeErrors: any[] = null;
 
     // Properties for test view:
     @ViewChild("widgetTestScreen")
     widgetTestScreen: ElementRef;
+
+    @ViewChild(ConsoleLog)
+    consoleLog: ConsoleLog;
 
     constructor(injector: Injector) {
         super(injector);
@@ -149,18 +151,13 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         this.testInputConnectors = [];
         this.messageInputsValueCache = {};
         this.widgetInstance = null;
-        this.testEventLog = [];
-        this.runtimeErrors = null;
+        if (this.consoleLog) this.consoleLog.clear();
     }
 
     onWidgetConfigClick(): void {
         var m = new ModalsGridConfigPropertiesModel(this._widgetTesterRenderer.widget);
         this.modalService.showModal(m);
     }
-
-
-
-
 
     onTestClick(): void {
         this.cleanTestView();
@@ -169,20 +166,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         let buildFailed = false;
         this._widgetTesterRenderer.runCode(this.widgetCode, true, (e) => {
             if (e.position) {
-                if (!this.runtimeErrors) {
-                    this.runtimeErrors = [];
-                }
-
-                this.runtimeErrors.unshift({
-                    type: "error",
-                    line: e.position.lineA,
-                    text: e.message,
-                    timestamp: moment().format("HH:mm:ss.SSS")
-                });
-
-                console.log("widget error",e,e.position);
-
-
+                if (this.consoleLog) this.consoleLog.addFromError(e,null,moment().format("HH:mm:ss.SSS"));
             } else if (e.diagnostics) {
                 console.log("build error", e, e.diagnostics);
                 this.buildErrors = [];
@@ -200,7 +184,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 console.log("widget error",e);
             }
         }, (type:string, message:string) => {
-            
+            if (this.consoleLog) this.consoleLog.add(<ConsoleLogType>type, message);
         });
 
         this.widgetInstance = this._widgetTesterRenderer.widget;
@@ -225,24 +209,12 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
 
         this.widgetInstance.eventsEmitter.listenEvent("valueChanged",(e: Core.IOEvent) => {
             if (e.connector.isInput()) return;
-            this.testEventLog.unshift({
-                timestamp: moment().format("HH:mm:ss.SSS"),
-                connector: e.connector,
-                eventType: e.type,
-                value: e.connector.value,
-                readableValue: this.toReadableValue(e.connector.value)
-            });
+            if (this.consoleLog) this.consoleLog.add("output", "Output <strong>"+e.connector.name+"</strong> = "+ this.toReadableValue(e.connector.value));
         });
 
         this.widgetInstance.eventsEmitter.listenEvent("recieveMessage",(e: Core.IOMessageEvent) => {
             if (e.connector.isInput()) return;
-            this.testEventLog.unshift({
-                timestamp: moment().format("HH:mm:ss.SSS"),
-                connector: e.connector,
-                eventType: e.type,
-                value: e.message,
-                readableValue: this.toReadableValue(e.message)
-            });
+            if (this.consoleLog) this.consoleLog.add("output", "Output <strong>"+e.connector.name+"</strong> = "+ this.toReadableValue(e.message));
         });
 
         if (buildFailed) {
@@ -281,7 +253,6 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
 
     onMessageInputSendClick(connector: Core.Connector): void {
         let values: any[] = [];
-
         connector.messageTypes.forEach((argType, index)=> {
             let val = this.messageInputsValueCache[connector.name + argType];
             if (Types.StringToTypeTable[argType] == Types.Type.Boolean) {
@@ -314,11 +285,11 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         });
 
         let m = {
-            types:connector.messageTypes, 
+            types: connector.messageTypes, 
             values: values
         }
-        connector._inputSetValue(m);
 
+        connector._inputSetValue(m);
     }
 
     onSaveClick(): void {

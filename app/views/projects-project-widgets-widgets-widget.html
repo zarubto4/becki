@@ -170,57 +170,10 @@
 
                         </div>
                         <div class="col-md-4" style="display: inline-block; width: calc(50% - 20px)">
-
-                            <h4 class="text-center">Outputs log</h4>
-
-                            <div class="row">
-                                <table class="table table-fixed table-hover table-light widget-log-table-header">
-                                    <thead>
-                                        <tr class="uppercase">
-                                            <th class="widget-log-timestamp"> Time </th>
-                                            <th class="widget-log-name"> Output </th>
-                                            <th class="widget-log-value"> Value </th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                            <div class="row widget-log-table-wrapper">
-
-                                <table class="table table-fixed table-hover table-light">
-                                    <tbody>
-                                        <tr *ngFor="let log of testEventLog;">
-                                            <td class="widget-log-timestamp">
-                                                {{log.timestamp}}
-                                            </td>
-                                            <td class="widget-log-name"> <strong>{{log.connector.name}}</strong> </td>
-                                            <td class="widget-log-value" [innerHTML]="log.readableValue"></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                            <h4 class="text-center">Console</h4>
+                            <console-log maxHeight="400px"></console-log>
                         </div>
                         <div class="clearfix"></div>
-                    </div>
-                    <div *ngIf="runtimeErrors">
-                        <div class="spacer30"></div>
-                        <div class="portlet light bordered">
-                            <div class="portlet-title">
-                                <div class="caption">
-                                    <i class="fa fa-play font-red"></i>
-                                    <span class="caption-subject bold uppercase font-red">Runtime errors</span>
-                                </div>
-                            </div>
-                            <div class="portlet-body">
-                                <div *ngFor="let runtimeError of runtimeErrors" class="mt-element-ribbon bg-grey-steel">
-                                    <div class="ribbon ribbon-shadow uppercase" [class.ribbon-color-danger]="runtimeError.type=='error'" [class.ribbon-color-warning]="runtimeError.type=='warning'" >{{runtimeError.type}}</div>
-                                    <p class="ribbon-content">
-                                        Line: <b>{{runtimeError.line}}</b>
-                                        <br>
-                                        <b>{{runtimeError.text}}</b>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
