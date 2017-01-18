@@ -37,8 +37,10 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
     outputs: Core.Connector[];
 
     form: FormGroup;
-
     formModel: {[key: string]: any} = {};
+
+    StringToConfigPropertyTypeTable = Types.StringToConfigPropertyTypeTable;
+    ConfigPropertyType = Types.ConfigPropertyType;
 
     constructor() {
     }
@@ -75,9 +77,6 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
             this.outputs.push(widgetInterface.messageOutputs[n]);
         }
 
-        console.log(this.inputs, this.outputs);
-    
-        
 
         this.configProperties.forEach((cp) => {
             this.formModel[cp.id] = cp.value;
@@ -93,8 +92,6 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
     }
 
     onSubmitClick(): void {
-
-        console.log(this.formModel);
 
         this.configProperties.forEach((configProperty) => {
             if (Types.StringToConfigPropertyTypeTable[configProperty.type] == Types.ConfigPropertyType.Integer) {

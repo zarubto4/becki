@@ -18,7 +18,6 @@ import {Core, TestRenderer, Widgets} from "the-grid";
 import {ModalService} from "../services/ModalService";
 import {ModalsGridConfigPropertiesModel} from "../modals/grid-config-properties";
 import {Types, Libs} from "common-lib";
-import {UtilsLib} from "script-engine";
 import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService';
 
 @Component({
@@ -47,7 +46,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     argTypes = Types.Type;
 
     messageInputsValueCache: { [key: string]: boolean|number|string } = {};
-    testEventLog: {timestamp: string, connector: Core.Connector, eventType: string, value: (boolean|number|Core.Message), readableValue: string}[] = [];
+    testEventLog: {timestamp: string, connector: Core.Connector, eventType: string, value: (boolean|number|Core.MessageValue), readableValue: string}[] = [];
 
     protected _widgetTesterRenderer: TestRenderer.ControllerRenderer;
     protected monacoEditorLoaderService:MonacoEditorLoaderService;
@@ -81,7 +80,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         var widgetTesterController = new Core.Controller();
         this._widgetTesterRenderer = new TestRenderer.ControllerRenderer(widgetTesterController, this.widgetTestScreen.nativeElement);
 
-        this.monacoEditorLoaderService.registerTypings([Libs.TypesLib, Widgets.ContextLib, UtilsLib]);
+        this.monacoEditorLoaderService.registerTypings([Libs.ConsoleLib, Widgets.ContextLib, Libs.UtilsLib, Widgets.WKLib]);
     }
 
     ngOnDestroy(): void {
@@ -200,9 +199,16 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
             } else {
                 console.log("widget error",e);
             }
+        }, (type:string, message:string) => {
+            
         });
 
         this.widgetInstance = this._widgetTesterRenderer.widget;
+
+        if (!this.widgetInstance) {
+            this.cleanTestView();
+            return;
+        }
 
         const widgetInterface = this.widgetInstance.getInterface();
         for(let n in widgetInterface.digitalInputs) {
