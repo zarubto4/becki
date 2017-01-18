@@ -46,12 +46,15 @@
 
                 <div class="form-group">
                     <label>Block code</label>
-                    <monaco-editor [code]="blockCode" (codeChange)="newBlockCode($event)" [typings]="['Blocko', 'ES5']"></monaco-editor>
+                    <monaco-editor [code]="blockCode" (codeChange)="newBlockCode($event)" [typings]="['TSBlockLib', 'ConsoleLib', 'UtilsLib', 'ES5']"></monaco-editor>
                 </div>
 
-                <div *ngIf="tsError" class="mt-element-ribbon bg-grey-steel">
+                <div *ngFor="let tsError of tsErrors;" class="mt-element-ribbon bg-grey-steel">
                     <div class="ribbon ribbon-shadow ribbon-color-danger">{{tsError.name}}</div>
-                    <p class="ribbon-content" [innerHTML]="tsError.message"></p>
+                    <div class="ribbon-content">
+                        <div *ngIf="tsError.line"><strong>Line: </strong>{{tsError.line}}</div>
+                        <span [innerHTML]="tsError.message"></span>
+                    </div>
                 </div>
 
                 <div>
@@ -157,41 +160,15 @@
                         </div>
 
                     </div>
-                    <div class="col-md-4" style="display: inline-block; width: 121px;" [style.height]="(tsBlockHeight)+'px'">
+                    <div class="col-md-4" style="display: inline-block; width: 121px;" [style.height]="(tsBlockHeight+30)+'px'">
                         <h4 *ngIf="tsBlock" class="text-center">Block</h4>
-                        <blocko-view readonly="true" class="blocko-overflow-visible blocko-no-borders-and-bg"></blocko-view>
+                        <blocko-view readonly="true" safeRun="true" (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)" class="blocko-overflow-visible blocko-no-borders-and-bg"></blocko-view>
                     </div>
-                    <div *ngIf="tsBlock" class="col-md-4" style="display: inline-block; width: calc(50% - 61px)">
-
-                        <h4 class="text-center">Outputs log</h4>
-
+                    <div class="col-md-4" style="width: calc(50% - 61px)" [style.display]="tsBlock?'inline-block':'none'">
+                        <h4 class="text-center">Console</h4>
                         <div class="row">
-                            <table class="table table-fixed table-hover table-light block-log-table-header">
-                                <thead>
-                                    <tr class="uppercase">
-                                        <th class="block-log-timestamp"> Time </th>
-                                        <th class="block-log-name"> Output </th>
-                                        <th class="block-log-value"> Value </th>
-                                    </tr>
-                                </thead>
-                            </table>
+                            <console-log maxHeight="400px"></console-log>
                         </div>
-                        <div class="row block-log-table-wrapper">
-
-                            <table class="table table-fixed table-hover table-light">
-                                <tbody>
-                                    <tr *ngFor="let log of testEventLog;">
-                                        <td class="block-log-timestamp">
-                                            {{log.timestamp}}
-                                        </td>
-                                        <td class="block-log-name"> <strong>{{log.connector.name}}</strong> </td>
-                                        <td class="block-log-value" [innerHTML]="log.readableValue"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-
                     </div>
                     <div class="clearfix"></div>
                 </div>

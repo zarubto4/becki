@@ -232,7 +232,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
                 if (this.blocksCache[wantedVersionName]) {
 
-                    this.blockoView.addJsBlock(this.blocksCache[wantedVersionName].logic_json, this.blocksCache[wantedVersionName].design_json, x, y);
+                    this.blockoView.addTsBlock(this.blocksCache[wantedVersionName].logic_json, this.blocksCache[wantedVersionName].design_json, x, y);
 
                 } else {
 
@@ -240,7 +240,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     this.backendService.getBlockoBlockVersion(wantedVersion.id)
                         .then((bbv) => {
                             this.blocksCache[wantedVersionName] = bbv;
-                            this.blockoView.addJsBlock(this.blocksCache[wantedVersionName].logic_json, this.blocksCache[wantedVersionName].design_json, x, y);
+                            this.blockoView.addTsBlock(this.blocksCache[wantedVersionName].logic_json, this.blocksCache[wantedVersionName].design_json, x, y);
                         })
                         .catch(reason => {
                             this.addFlashMessage(new FlashMessageError(`The blocko block version cannot be loaded.`, reason));
@@ -252,10 +252,6 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             } else if (params.data && params.data.blockoName) {
 
                 this.blockoView.addStaticBlock(params.data.blockoName, x, y);
-
-            } else if (params.data && params.data.blockoJsCode) {
-
-                this.blockoView.addJsBlock(params.data.blockoJsCode, params.data.blockoDesignJson, x, y);
 
             } else if (params.data && params.data.blockoTsCode) {
 

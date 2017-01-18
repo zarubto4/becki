@@ -15,7 +15,7 @@ import {
     Input,
     ViewChild,
     ElementRef,
-    SimpleChanges
+    SimpleChanges, Output, EventEmitter
 } from "@angular/core";
 import {ModalService} from "../services/ModalService";
 import {ModalsBlockoConfigPropertiesModel} from "../modals/blocko-config-properties";
@@ -34,7 +34,16 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
     simpleMode: boolean = false;
 
     @Input()
+    safeRun: boolean = false;
+
+    @Input()
     spy: string;
+
+    @Output()
+    onError:EventEmitter<{block:BlockoCore.Block, error:any}> = new EventEmitter<{block:BlockoCore.Block, error:any}>();
+
+    @Output()
+    onLog:EventEmitter<{block:BlockoCore.Block, type:string, message:string}> = new EventEmitter<{block:BlockoCore.Block, type:string, message:string}>();
 
     protected blockoController: BlockoCore.Controller;
 
@@ -55,11 +64,18 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
         this.blockoRenderer.canConfigInReadonly = true;
 
         this.blockoController = new BlockoCore.Controller();
+        this.blockoController.safeRun = this.safeRun;
         this.blockoController.rendererFactory = this.blockoRenderer;
         this.blockoController.registerDataChangedCallback(() => {
             //TODO: why? modalComponent.closeModal(false);
-            console.log("CHANGED!!!!!!");
+            //console.log("CHANGED!!!!!!");
             //this.dataChange.emit(this.blockoController.getDataJson());
+        });
+        this.blockoController.registerErrorCallback((block:BlockoCore.Block, error:any) => {
+            this.onError.emit({block: block, error: error});
+        });
+        this.blockoController.registerLogCallback((block:BlockoCore.Block, type:string, message:string) => {
+            this.onLog.emit({block: block, type:type, message:message});
         });
         this.blockoController.registerBlocks(BlockoBasicBlocks.Manager.getAllBlocks());
     }
@@ -77,6 +93,11 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
         let simpleMode = changes["simpleMode"];
         if (simpleMode) {
             this.blockoRenderer.simpleMode = simpleMode.currentValue;
+        }
+
+        let safeRun = changes["safeRun"];
+        if (safeRun) {
+            this.blockoController.safeRun = safeRun.currentValue;
         }
         //TODO:
         /*let spy = changes["spy"];
@@ -121,21 +142,6 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
         if (!bc) throw new Error("block " + blockName + " not found");
 
         var b: BlockoCore.Block = new bc(this.blockoController.getFreeBlockId());
-        b.x = Math.round(x / 10) * 10; //TODO: move this to blocko
-        b.y = Math.round(y / 10) * 10;
-        this.blockoController.addBlock(b);
-        return b;
-    }
-
-    addJsBlock(jsCode: string, designJson: string, x: number = 0, y: number = 0): BlockoBasicBlocks.JSBlock {
-        if (this.readonly) {
-            throw new Error("read only");
-        }
-        return this.addJsBlockWithoutReadonlyCheck(jsCode, designJson, x, y);
-    }
-
-    addJsBlockWithoutReadonlyCheck(jsCode: string, designJson: string, x: number = 0, y: number = 0): BlockoBasicBlocks.JSBlock {
-        var b = new BlockoBasicBlocks.JSBlock(this.blockoController.getFreeBlockId(), jsCode, designJson);
         b.x = Math.round(x / 10) * 10; //TODO: move this to blocko
         b.y = Math.round(y / 10) * 10;
         this.blockoController.addBlock(b);
