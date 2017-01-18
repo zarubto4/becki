@@ -204,6 +204,11 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
 
         this.widgetInstance = this._widgetTesterRenderer.widget;
 
+        if (!this.widgetInstance) {
+            this.cleanTestView();
+            return;
+        }
+
         const widgetInterface = this.widgetInstance.getInterface();
         for(let n in widgetInterface.digitalInputs) {
             this.testInputConnectors.push(widgetInterface.digitalInputs[n]);
