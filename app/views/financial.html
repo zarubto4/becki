@@ -24,6 +24,7 @@
                 <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Type</th>
                     <th>ID Subscription</th>
                     <th>Payment mode</th>
                     <th class="text-right">Actions</th>
@@ -31,27 +32,26 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let product of products">
-                    <td class="no-wrap"><a (click)="onProductClick(product)">{{product.product_individual_name}}</a></td>
+                    <td class="no-wrap"><a (click)="onProductClick(product)"><b>{{product.product_individual_name}}</b></a></td>
+                      <td class="no-wrap ">
+                        <span title="Bank transfer" class=" green-jungle  " *ngIf="product.payment_method=='bank_transfer'"> <!-- TODO zjistit jaké barvičky mají být a podle čeho se mají rosvicet --> 
+                            <i class="green-jungle fa fa-bank "> </i> Bank transfer
+                        </span>
+                        <span title="Credits" class=" green-jungle  " *ngIf="product.payment_method=='credit'"> 
+                            <i class="green-jungle fa fa-money " > </i>Credits
+                        </span>
+                        <span title="Credit Card" class=" green-jungle  " *ngIf="product.payment_method=='credit_card'"> 
+                            <i class="green-jungle fa fa-credit-card "></i> Credit Card
+                        </span>
+                        <span title="Free" class=" font-green-jungle " *ngIf="product.payment_method=='free'"> 
+                            <i class="green-jungle fa fa-suitcase "></i> Free <!--TODO je třeba najít lepší ikonku --> 
+                        </span> 
+                    </td>
                     <td>{{product.subscription_id}}</td>
                     <td>{{product.payment_mode|StringReplacer}}</td>
-                    <td class="no-wrap text-right">
-                        <button title="Bank transfer" class="btn font-green-jungle btn-icon-only white" *ngIf="product.payment_method=='bank_transfer'"> <!-- TODO zjistit jaké barvičky mají být a podle čeho se mají rosvicet --> 
-                            <i class="fa fa-bank fa-2x"> </i>
-                        </button>
-                        <button title="Credits" class="btn font-green-jungle btn-icon-only white" *ngIf="product.payment_method=='credit'"> 
-                            <i class=" fa fa-money fa-2x" ></i>
-                        </button>
-                        <button title="Credit Card" class="btn font-green-jungle btn-icon-only white" *ngIf="product.payment_method=='credit_card'"> 
-                            <i class=" fa fa-credit-card fa-2x"></i>
-                        </button>
-                        <button title="Free" class="btn font-green-jungle btn-icon-only white" *ngIf="product.payment_method=='free'"> 
-                            <i class=" fa fa-suitcase fa-2x"></i> <!--TODO je třeba najít lepší ikonku --> 
-                        </button> 
-                       <!-- <button title="Settings" class="btn btn-icon-only white">
-                        <i class=" fa fa-gears fa-2x"></i>
-                    </button> -->
-
-                    </td>
+                  <td class="text-right"><button title="Settings" class="btn green-jungle btn-icon-only white">
+                        <i class=" fa fa-gears "></i>
+                    </button> </td>
                 </tr>
                 </tbody>
             </table>
