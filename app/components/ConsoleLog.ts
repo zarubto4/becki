@@ -3,7 +3,7 @@
  */
 
 import {Component, Input} from "@angular/core";
-import {SafeMachineError} from "script-engine"
+import { SafeMachineError, SafeMachineMessage, MachineMessage } from 'script-engine';
 import {AbstractControl} from "@angular/forms";
 import {ValidatorErrorsService} from "../services/ValidatorErrorsService";
 
@@ -71,6 +71,30 @@ export class ConsoleLog {
             message: message,
             source: source
         })
+    }
+
+    addFromMessage(message: MachineMessage, source?: string, timestamp?: string) {
+        if (!timestamp) {
+            timestamp = moment().format("HH:mm:ss.SSS");
+        }
+
+        let msg = "<strong>" + message.message + "</strong>";
+        let posInfo = "";
+        if (message instanceof SafeMachineMessage) {
+            if (message.position && message.position.lineA != null) {
+                if (message.position.lineA == message.position.lineB) {
+                    posInfo = "<br><strong>Position:</strong> line <strong>" + message.position.lineA + "</strong> column <strong>" + message.position.columnA + "</strong> - <strong>" + message.position.columnB + "</strong>";
+                } else {
+                    posInfo = "<br><strong>Position:</strong> line <strong>" + message.position.lineA + "</strong> column <strong>" + message.position.columnA + "</strong> - line <strong>" + message.position.lineB + "</strong> column <strong>" + message.position.columnB + "</strong>";
+                }
+            }
+        }
+
+        this.items.unshift({
+            timestamp: timestamp,
+            type: "warn",
+            message: msg + posInfo
+        });
     }
 
     addFromError(error: Error, source?: string, timestamp?: string) {

@@ -20,6 +20,7 @@ import {ModalsGridConfigPropertiesModel} from "../modals/grid-config-properties"
 import {Types, Libs} from "common-lib";
 import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService';
 import {ConsoleLog, ConsoleLogType} from "../components/ConsoleLog";
+import {MachineMessage, SafeMachineMessage} from 'script-engine';
 
 @Component({
     selector: "view-projects-project-widgets-widgets-widget",
@@ -165,10 +166,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
 
         let buildFailed = false;
         this._widgetTesterRenderer.runCode(this.widgetCode, true, (e) => {
-            if (e.position) {
-                if (this.consoleLog) this.consoleLog.addFromError(e,null,moment().format("HH:mm:ss.SSS"));
-            } else if (e.diagnostics) {
-                console.log("build error", e, e.diagnostics);
+            if (e.diagnostics) {
                 this.buildErrors = [];
                 for(let n in e.diagnostics) {
                     const diagnosticsMessage = e.diagnostics[n];
@@ -181,8 +179,10 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 buildFailed = true;
                 this.cleanTestView();
             } else {
-                console.log("widget error",e);
+                if (this.consoleLog) this.consoleLog.addFromError(e,null,moment().format("HH:mm:ss.SSS"));
             }
+        }, (message: MachineMessage) => {
+            if (this.consoleLog) this.consoleLog.addFromMessage(message, null, moment().format("HH:mm:ss.SSS"));
         }, (type:string, message:string) => {
             if (this.consoleLog) this.consoleLog.add(<ConsoleLogType>type, message);
         });
