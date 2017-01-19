@@ -3,9 +3,7 @@
  */
 
 import {Component, Input} from "@angular/core";
-import { SafeMachineError, SafeMachineMessage, MachineMessage } from 'script-engine';
-import {AbstractControl} from "@angular/forms";
-import {ValidatorErrorsService} from "../services/ValidatorErrorsService";
+import {SafeMachineError, TypescriptBuildError, MachineMessage, SafeMachineMessage} from "script-engine";
 
 import moment = require("moment/moment");
 
@@ -130,18 +128,38 @@ export class ConsoleLog {
                 type: "error",
                 message: msg + posInfo
             });
+        } else if (error instanceof TypescriptBuildError) {
+            if (!error.diagnostics) {
+                this.items.unshift({
+                    timestamp: timestamp,
+                    type: "error",
+                    message: "<strong>TypeScript Error</strong>: " + (<Error>error).message,
+                    source: source
+                });
+            } else {
+                error.diagnostics.forEach((d) => {
+                    this.items.unshift({
+                        timestamp: timestamp,
+                        type: "error",
+                        message: "<strong>TypeScript Error #" + d.code + "</strong>: " + d.messageText,
+                        source: source
+                    });
+                })
+            }
         } else if (error instanceof Error) {
             let msg = "<strong>" + (<Error>error).name + "</strong>: " + (<Error>error).message;
             this.items.unshift({
                 timestamp: timestamp,
                 type: "error",
-                message: msg
+                message: msg,
+                source: source
             });
         } else {
             this.items.unshift({
                 timestamp: timestamp,
                 type: "error",
-                message: "" + error
+                message: "" + error,
+                source: source
             });
         }
     }

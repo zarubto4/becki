@@ -13,7 +13,7 @@
 
         <div class="form-group">
             <label>Block code</label>
-            <monaco-editor [code]="code" (codeChange)="newCode($event)" [typings]="['Blocko', 'ES5']"></monaco-editor>
+            <monaco-editor [code]="code" (codeChange)="newCode($event)" [typings]="['TSBlockLib', 'ConsoleLib', 'UtilsLib', 'ES5']"></monaco-editor>
         </div>
 
         <div *ngIf="error" class="mt-element-ribbon bg-grey-steel">

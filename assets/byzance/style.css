@@ -517,6 +517,7 @@ span.changes {
 
 .blocko-no-borders-and-bg .blocko-view svg {
     background-image: none !important;
+    background-color: transparent !important;
 }
 
 .becki-form-color-picker .minicolors {
@@ -539,13 +540,13 @@ span.changes {
 }
 
 .block-tester .block-tester-message-input-label, .widget-tester .widget-tester-message-input-label {
-    width: 100px;
+    width: 110px;
     display: inline-block;
     text-align: right;
 }
 
 .block-tester .block-tester-message-input-btn, .widget-tester .widget-tester-message-input-btn {
-    margin-left: 104px;
+    margin-left: 114px;
 }
 
 .block-tester .form-control, .widget-tester .form-control {

@@ -38,6 +38,8 @@ export class ModalsBlockoConfigPropertiesComponent implements OnInit {
 
     formModel: {[key: string]: any} = {};
 
+    configPropertyType = Types.ConfigPropertyType;
+
     constructor() {
 
     }

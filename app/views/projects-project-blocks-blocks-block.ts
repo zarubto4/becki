@@ -237,26 +237,6 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
 
     }
 
-    validate() {
-        /*
-         if (msg.indexOf("is not defined") > -1) {
-         let index = msg.indexOf("is not defined");
-         msg = "<b>" + msg.substr(0, index) + "</b>" + msg.substr(index);
-         }
-
-         if (msg.indexOf("is not a function") > -1) {
-         let index = msg.indexOf("is not a function");
-         msg = "<b>" + msg.substr(0, index) + "</b>" + msg.substr(index);
-         }
-
-         if (msg.indexOf("Unexpected token") == 0) {
-         let len = "Unexpected token".length;
-         msg = msg.substr(0, len) + "<b>" + msg.substr(len) + "</b>";
-         }
-         */
-
-    }
-
     cleanTestView(): void {
         this.blockoView.removeAllBlocksWithoutReadonlyCheck();
         this.tsBlock = null;
@@ -317,7 +297,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                     displayName: this.blockForm.controls["icon"].value,
                     description: this.blockForm.controls["description"].value
                 });
-                this.tsBlock = this.blockoView.addTsBlockWithoutReadonlyCheck("", designJson, 20, 10);
+                this.tsBlock = this.blockoView.addTsBlockWithoutReadonlyCheck("", designJson, 20, 15);
             } catch (e) {
             }
 
@@ -331,7 +311,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
             if (this.tsBlock) {
                 this.testInputConnectors = this.tsBlock.getInputConnectors();
 
-                this.tsBlockHeight = this.tsBlock.rendererGetBlockSize().height + 20; // for borders
+                this.tsBlockHeight = this.tsBlock.rendererGetBlockSize().height + 10; // for borders
 
                 this.successfullyTested = true;
             }

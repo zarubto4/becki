@@ -7,7 +7,7 @@ import {BaseMainComponent} from "./BaseMainComponent";
 import {FlashMessageError, FlashMessageSuccess} from "../services/NotificationService";
 import {Subscription} from "rxjs/Rx";
 import {ModalsRemovalModel} from "../modals/removal";
-import {IProject, ITypeOfWidget, IGridWidget, ITypeOfWidgetShortDetail, IGridWidgetLight} from '../backend/TyrionAPI';
+import {IProject, ITypeOfWidget, IGridWidget, ITypeOfWidgetShortDetail, IGridWidgetShortDetail} from '../backend/TyrionAPI';
 import {ModalsWidgetsWidgetPropertiesModel} from "../modals/widgets-widget-properties";
 
 @Component({
@@ -45,7 +45,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
         if (this.projectSubscription) this.projectSubscription.unsubscribe();
     }
 
-    onWidgetClick(widget: IGridWidgetLight): void {
+    onWidgetClick(widget: IGridWidgetShortDetail): void {
         this.navigate(["/projects", this.currentParamsService.get("project"), "widgets", this.widgetsId, widget.id]);
     }
 
@@ -73,7 +73,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
 
     }
 
-    onWidgetEditClick(widget: IGridWidgetLight): void {
+    onWidgetEditClick(widget: IGridWidgetShortDetail): void {
 
         let model = new ModalsWidgetsWidgetPropertiesModel(widget.name, widget.description, true, widget.name);
         this.modalService.showModal(model).then((success) => {
@@ -97,7 +97,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
 
     }
 
-    onWidgetDeleteClick(widget: IGridWidgetLight): void {
+    onWidgetDeleteClick(widget: IGridWidgetShortDetail): void {
 
         this.modalService.showModal(new ModalsRemovalModel(widget.name)).then((success) => {
             if (success) {

@@ -34,6 +34,9 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
     simpleMode: boolean = false;
 
     @Input()
+    showBlockNames: boolean = true;
+
+    @Input()
     safeRun: boolean = false;
 
     @Input()
@@ -61,6 +64,8 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
             this.modalService.showModal(new ModalsBlockoBlockCodeEditorModel(block));
         });
 
+        this.blockoRenderer.showBlockNames = this.showBlockNames;
+        this.blockoRenderer.simpleMode = this.simpleMode;
         this.blockoRenderer.canConfigInReadonly = true;
 
         this.blockoController = new BlockoCore.Controller();
@@ -93,6 +98,11 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
         let simpleMode = changes["simpleMode"];
         if (simpleMode) {
             this.blockoRenderer.simpleMode = simpleMode.currentValue;
+        }
+
+        let showBlockNames = changes["showBlockNames"];
+        if (showBlockNames) {
+            this.blockoRenderer.showBlockNames = showBlockNames.currentValue;
         }
 
         let safeRun = changes["safeRun"];
@@ -156,10 +166,11 @@ export class BlockoView implements AfterViewInit, OnChanges, OnDestroy {
     }
 
     addTsBlockWithoutReadonlyCheck(tsCode: string, designJson: string, x: number = 0, y: number = 0): BlockoBasicBlocks.TSBlock {
-        var b = new BlockoBasicBlocks.TSBlock(this.blockoController.getFreeBlockId(), tsCode, designJson);
+        var b = new BlockoBasicBlocks.TSBlock(this.blockoController.getFreeBlockId(), "", designJson);
         b.x = Math.round(x / 10) * 10; //TODO: move this to blocko
         b.y = Math.round(y / 10) * 10;
         this.blockoController.addBlock(b);
+        b.setCode(tsCode);
         return b;
     }
 

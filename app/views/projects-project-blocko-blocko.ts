@@ -24,15 +24,17 @@ import {BlockoView} from "../components/BlockoView";
 import {DraggableEventParams} from "../components/Draggable";
 import {ModalsBlockoAddHardwareModel} from "../modals/blocko-add-hardware";
 import {ModalsConfirmModel} from "../modals/confirm";
-import {BlockoTargetInterface} from "blocko";
+import {BlockoTargetInterface, Blocks, Core} from "blocko";
+import {Libs} from "common-lib";
 import {ModalsVersionDialogModel} from "../modals/version-dialog";
 import {ModalsBlockoAddGridModel} from "../modals/blocko-add-grid";
-
+import {NullSafe, NullSafeDefault} from '../helpers/NullSafe';
+import {ModalsBlockoVersionSelectModel} from '../modals/blocko-version-select';
+import {MonacoEditorLoaderService} from "../services/MonacoEditorLoaderService";
 
 declare let $: JQueryStatic;
 import moment = require("moment/moment");
-import {NullSafe, NullSafeDefault} from '../helpers/NullSafe';
-import { ModalsBlockoVersionSelectModel } from '../modals/blocko-version-select';
+import {ConsoleLog, ConsoleLogType} from "../components/ConsoleLog";
 
 @Component({
     selector: "view-projects-project-blocko-blocko",
@@ -92,6 +94,9 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         cursor: "move",
         cursorAt: {left: -5, top: -5}
     };
+
+    @ViewChild(ConsoleLog)
+    consoleLog: ConsoleLog;
 
     staticBlocks = [
         {
@@ -171,8 +176,12 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         }
     ];
 
+    private monacoEditorLoaderService:MonacoEditorLoaderService = null;
+
     constructor(injector: Injector) {
-        super(injector)
+        super(injector);
+
+        this.monacoEditorLoaderService = injector.get(MonacoEditorLoaderService);
     };
 
     ngOnInit(): void {
@@ -181,6 +190,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             this.blockoId = params["blocko"];
             this.refresh();
         });
+        this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib, Libs.ConsoleLib, Libs.UtilsLib]);
     }
 
     ngOnDestroy(): void {
@@ -192,6 +202,20 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             this.connectionsTab = "";
         } else {
             this.connectionsTab = tabName
+        }
+    }
+
+    onClearConsoleClick() {
+        if (this.consoleLog) this.consoleLog.clear();
+    }
+
+    onBlockoLog(bl:{block:Core.Block, type: string, message: string}): void {
+        if (this.consoleLog) this.consoleLog.add(<ConsoleLogType>bl.type, bl.message, "Block "+bl.block.id);
+    }
+
+    onBlockoError(be:{block:Core.Block, error: any}): void {
+        if (be && be.error) {
+            if (this.consoleLog) this.consoleLog.addFromError(be.error, "Block "+be.block.id);
         }
     }
 
@@ -851,6 +875,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 console.log(this.selectedGridProgramVersions);
 
                 this.blockoView.setDataJson(this.selectedProgramVersion.program);
+
+                if (this.consoleLog) this.consoleLog.clear();
 
             })
             .catch((err) => {
