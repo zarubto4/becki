@@ -91,7 +91,8 @@ export class ConsoleLog {
         this.items.unshift({
             timestamp: timestamp,
             type: "warn",
-            message: msg + posInfo
+            message: msg + posInfo,
+            source: source
         });
     }
 
@@ -126,7 +127,8 @@ export class ConsoleLog {
             this.items.unshift({
                 timestamp: timestamp,
                 type: "error",
-                message: msg + posInfo
+                message: msg + posInfo,
+                source: source
             });
         } else if (error instanceof TypescriptBuildError) {
             if (!error.diagnostics) {

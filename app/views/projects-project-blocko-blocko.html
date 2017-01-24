@@ -168,7 +168,7 @@
                 </div>
 
                 <div style="margin: 10px 0; overflow: hidden;">
-                    <blocko-view [simpleMode]="!advancedMode" [showBlockNames]="advancedMode" (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)"></blocko-view>
+                    <blocko-view [simpleMode]="!advancedMode" [showBlockNames]="advancedMode" [safeRun]="true" (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)"></blocko-view>
                 </div>
 
                 <div>
