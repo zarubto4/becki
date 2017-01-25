@@ -28,6 +28,7 @@ import {MachineMessage, SafeMachineMessage} from 'script-engine';
 })
 export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainComponent implements OnInit, OnDestroy {
     widgetInstance: Core.Widget;
+    widgetTestRunning: boolean;
 
     projectId: string;
     widgetId: string;
@@ -67,6 +68,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
 
         this.testInputConnectors = [];
         this.messageInputsValueCache = {};
+        this.widgetTestRunning = false;
     };
 
     ngOnInit(): void {
@@ -152,6 +154,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         this.testInputConnectors = [];
         this.messageInputsValueCache = {};
         this.widgetInstance = null;
+        this.widgetTestRunning = false;
         if (this.consoleLog) this.consoleLog.clear();
     }
 
@@ -176,6 +179,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                         text: diagnosticsMessage.messageText
                     });
                 }
+                console.log("build failed");
                 buildFailed = true;
                 this.cleanTestView();
             } else {
@@ -188,9 +192,10 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         });
 
         this.widgetInstance = this._widgetTesterRenderer.widget;
+        this.widgetTestRunning = true;
 
         if (!this.widgetInstance) {
-            this.cleanTestView();
+            this.consoleLog.add("error", "<strong>Cannot create widget:</strong> Make sure, that you specified size profiles for widget");
             return;
         }
 
