@@ -68,8 +68,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     }
 
     onDeviceClick(device:IBoardShortDetail):void {
-        //TODO
-        alert("TODO!!! Board object: " + JSON.stringify(device));
+        this.navigate(["/projects", this.id, "hardware", device.id]);
     }
 
     onBoardTypeClick(boardTypeId:string): void {

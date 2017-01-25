@@ -1,1 +1,44 @@
-<div>TODO!!!</div>
+<layout-main [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot" [lastBreadName]="device?device.id:''">
+
+    <div *ngIf="device && typeOfBoard" class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="becki-caption">
+                <span class="font-blue-dark">
+                    <i class="fa fa-fw fa-globe"></i>
+                    Hardware: {{device.id}}
+                </span>
+            </div>
+        </div>
+        <div>
+            <div>
+                Hardware ID:
+                <span class="font-grey-mint bold">{{device.id}}</span>
+            </div>
+            <div>
+                Device type:
+                <a (click)="onBoardTypeClick(device.type_of_board_id)"><span class="bold">{{device.type_of_board_name}}</span></a>
+            </div>
+            <div>
+                Producer:
+                <a (click)="onProducerClick(device)">{{typeOfBoard.producer_name}} <span class="bold"><span class="font-red bg-yellow-lemon">TODO</span></span></a>
+            </div>
+            <div *ngIf="typeOfBoard.connectible_to_internet">
+                Ethernet MAC adress:
+                <span class="font-grey-mint bold">{{device.ethernet_mac_address}}</span>
+            </div>
+            <div>
+                Personal description:
+                <span class="font-grey-mint bold">{{device.personal_description}}</span>
+            </div>
+            <div>
+                Series:
+                <span class="font-grey-mint bold">SERIES <span class="font-red bg-yellow-lemon">TODO</span></span>
+            </div>
+            <div *ngIf="typeOfBoard.connectible_to_internet">
+                Wifi MAC adress:
+                <span class="font-grey-mint bold">{{device.wifi_mac_address}}</span>
+            </div>
+        </div>
+    </div>
+
+</layout-main>

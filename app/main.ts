@@ -107,6 +107,7 @@ import {MonacoEditor} from "./components/MonacoEditor";
 import {MonacoEditorLoaderService} from "./services/MonacoEditorLoaderService";
 import {ModalsBlockoBlockCodeEditorComponent} from "./modals/blocko-block-code-editor";
 import {ConsoleLog} from "./components/ConsoleLog";
+import {ProjectsProjectHardwareHardwareComponent} from "./views/projects-project-hardware-hardware";
 
 //@formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -144,6 +145,7 @@ let routes: Routes = [
     {path: "projects", data: {breadName: "Projects"}, component: ProjectsComponent, canActivate: [AuthGuard]},
     {path: "projects/:project", data: {breadName: ":project"}, component: ProjectsProjectComponent, canActivate: [AuthGuard]},
     {path: "projects/:project/hardware", data: {breadName: "Hardware devices"}, component: ProjectsProjectHardwareComponent, canActivate: [AuthGuard]},
+    {path: "projects/:project/hardware/:hardware", data: {breadName: ":last"}, component: ProjectsProjectHardwareHardwareComponent, canActivate: [AuthGuard]},
     {path: "projects/:project/blocko", data: {breadName: "Blocko programs"}, component: ProjectsProjectBlockoComponent, canActivate: [AuthGuard]},
     {path: "projects/:project/blocko/:blocko", data: {breadName: ":blocko"}, component: ProjectsProjectBlockoBlockoComponent, canActivate: [AuthGuard]},
     {path: "projects/:project/code", data: {breadName: "Code programs"}, component: ProjectsProjectCodeComponent, canActivate: [AuthGuard]},
@@ -292,6 +294,7 @@ let tabMenus = {
         ProductRegistrationComponent,
         ProjectsProjectInstancesComponent,
         ProjectsProjectInstancesInstanceComponent,
+        ProjectsProjectHardwareHardwareComponent,
         HardwareComponent,
         HardwareHardwareTypeComponent,
         ProjectsProjectMembersComponent,
