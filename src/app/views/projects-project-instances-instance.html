@@ -1,0 +1,105 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-cloud"></i>
+                            Cloud instances - instance <strong>{{instance?instance.blocko_instance_name:""}}</strong>
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <div *ngIf="instance">
+                        <div>
+                            ID:
+                            <span class="font-grey-mint bold">{{instance.blocko_instance_name}}</span>
+                        </div>
+                        <div>
+                            Status:
+                            <span *ngIf="instance.instance_online" class="bold font-green-jungle">Online</span>
+                            <span *ngIf="!instance.instance_online" class="bold font-red">Offline</span>
+                        </div>
+                        <div>
+                            Server:
+                            <span class="font-grey-mint bold" *ngIf="instance.actual_summary.server_name">
+                                {{instance.actual_summary.server_name}}
+                                (<span *ngIf="instance.actual_summary.server_is_online" class="font-green-jungle">Online</span><span *ngIf="!instance.actual_summary.server_is_online" class="font-red">Offline</span>)
+                            </span>
+                        </div>
+                        <div>
+                            Blocko program:
+                            <span class="font-grey-mint bold"><a (click)="onBlockoProgramClick(instance.actual_summary.b_program_id)">{{instance.actual_summary.b_program_name}}</a></span>
+                        </div>
+                        <div>
+                            Blocko program version:
+                            <span class="font-grey-mint bold">{{instance.actual_summary.b_program_version_name}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                            <span class="font-blue-dark uppercase">
+                                <i class="fa fa-fw fa-microchip"></i>
+                                Hardware <span class="font-grey-salsa">({{connectionsHwCount()}})</span>
+                            </span>
+                    </div>
+                </div>
+                <div>
+                    <div *ngIf="instance">
+                        <ul class="hw-list" *ngIf="instance.actual_summary.hardware_group.length">
+                            <li *ngFor="let mainBoard of instance.actual_summary.hardware_group">
+                                <i class="fa fa-fw fa-microchip font-green-seagreen"></i> {{mainBoard.main_board_pair.board_id}} <span class="bold font-red bg-yellow-lemon">TODO</span>
+                                <ul>
+                                    <li *ngFor="let deviceBoard of mainBoard.device_board_pairs">
+                                        <i class="fa fa-fw fa-microchip font-green-seagreen"></i> {{deviceBoard.board_id}} <span class="bold font-red bg-yellow-lemon">TODO</span>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <h4 *ngIf="!instance.actual_summary.hardware_group.length">No hardware in this instance</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                            <span class="font-blue-dark uppercase">
+                                <i class="fa fa-fw fa-desktop"></i>
+                                Grid <span class="font-grey-salsa">({{connectionsGridCount()}})</span>
+                            </span>
+                    </div>
+                </div>
+                <div>
+                    <div *ngIf="instance">
+                        <ul class="grid-list"*ngIf="instance.actual_summary.m_project_program_snapshots.length">
+                            <li *ngFor="let mProject of instance.actual_summary.m_project_program_snapshots">
+                                <i class="fa fa-fw fa-desktop font-purple"></i> {{mProject.m_project_id}} <span class="bold font-red bg-yellow-lemon">TODO</span>
+                                <ul>
+                                    <li *ngFor="let mProgram of mProject.m_program_snapshots">
+                                        <i class="fa fa-fw fa-desktop font-purple"></i> {{mProgram.m_program_name}} <span class="font-grey-salsa">({{mProgram.version_object_name}})</span>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <h4 *ngIf="!instance.actual_summary.m_project_program_snapshots.length">No Grid projects in this instance</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</bk-layout-main>

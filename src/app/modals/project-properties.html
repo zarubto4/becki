@@ -1,0 +1,18 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title">{{modalModel.edit?"Edit project properties":"Add project"}}</h4>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="form">
+            <bk-form-input [control]="form.controls.name" label="Project name"></bk-form-input>
+            <bk-form-input [control]="form.controls.description" label="Project description"></bk-form-input>
+            <bk-form-select *ngIf="!modalModel.edit" [control]="form.controls.product" label="Product type" [options]="options"></bk-form-select>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{modalModel.edit?"Save":"Add"}}</button>
+        <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
+    </div>
+</div>

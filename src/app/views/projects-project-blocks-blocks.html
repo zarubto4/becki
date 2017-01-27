@@ -1,0 +1,55 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+    <div class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="becki-caption">
+                <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-fw fa-cube"></i>
+                    Custom blocks - group <strong>{{group?group.name:""}}</strong>
+                </span>
+            </div>
+            <div class="becki-actions">
+                <button class="btn blue" [disabled]="!group || !group.update_permission" (click)="onBlockAddClick(group)">
+                    <i class="fa fa-plus-circle"></i> Add block
+                </button>
+            </div>
+        </div>
+        <div>
+            Name: <strong>{{group?group.name:""}}</strong><br>
+            Description: <strong>{{group?group.description:""}}</strong>
+        </div>
+        <div *ngIf="(group && group.blocko_blocks && group.blocko_blocks.length)" class="table-scrollable">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th class="full-width">Description</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let block of group.blocko_blocks">
+                    <td class="no-wrap bold"><a (click)="onBlockClick(block)">{{block.name}}</a></td>
+                    <td>{{block.description}}</td>
+                    <td class="no-wrap">
+                        <button title="Block properties" class="btn btn-icon-only green" [disabled]="!block.edit_permission" (click)="onBlockEditClick(block)">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="Remove block" class="btn btn-icon-only red" [disabled]="!block.delete_permission" (click)="onBlockDeleteClick(block)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <h3 *ngIf="!group" class="text-center">Loading...</h3>
+        <h3 *ngIf="group && !(group.blocko_blocks && group.blocko_blocks.length)" class="text-center">No blocks in this group</h3>
+    </div>
+
+</bk-layout-main>

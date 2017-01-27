@@ -1,14 +1,22 @@
 {
   "compilerOptions": {
+    "target": "ES5",
+    "module": "commonjs",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "module": "commonjs",
-    "noImplicitAny": true,
     "sourceMap": true,
-    "target": "es5"
+    "importHelpers": true,
+    "noEmitHelpers": true,
+    "noImplicitAny": true
   },
-  "files": [
-    "app/main.ts",
-    "typings/index.d.ts"
-  ]
+  "exclude": [
+    "generator",
+    "node_modules"
+  ],
+  "compileOnSave": false,
+  "buildOnSave": false,
+  "awesomeTypescriptLoaderOptions": {
+    "forkChecker": true,
+    "useWebpackText": true
+  }
 }

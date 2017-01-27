@@ -1,0 +1,53 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+    <div class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="becki-caption">
+                <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-microchip"></i>
+                    Hardware devices - all devices
+                </span>
+            </div>
+            <div class="becki-actions">
+                <button class="btn blue" (click)="onAddClick($event)">
+                    <i class="fa fa-plus-circle"></i> Add hardware device
+                </button>
+            </div>
+        </div>
+        <div *ngIf="(devices && devices.length)" class="table-scrollable">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th class="full-width">Description</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let device of devices">
+                    <td class="no-wrap bold"><a (click)="onDeviceClick(device)">{{device.id}}</a></td>
+                    <td class="no-wrap"><a (click)="onBoardTypeClick(device.type_of_board_id)">{{device.type_of_board_name}}</a></td>
+                    <td>{{device.personal_description}}</td>
+                    <td class="no-wrap">
+                        <button title="Device properties" class="btn btn-icon-only green" [disabled]="!device.edit_permission" (click)="onEditClick(device)">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="Remove device" class="btn btn-icon-only red" [disabled]="!device.delete_permission" (click)="onRemoveClick(device)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <h3 *ngIf="!devices" class="text-center">Loading...</h3>
+        <h3 *ngIf="devices && devices.length == 0" class="text-center">No hardware in this project</h3>
+    </div>
+
+</bk-layout-main>

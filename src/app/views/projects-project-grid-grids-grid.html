@@ -1,0 +1,151 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-desktop"></i>
+                            Grid programs - program <strong>{{gridProgram?gridProgram.name:""}}</strong>
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    Name: <strong>{{gridProgram?gridProgram.name:""}}</strong><br>
+                    Description: <strong>{{gridProgram?gridProgram.description:""}}</strong><br>
+                    Grid project: <strong><a (click)="onGridProjectClick(gridProject.id)">{{gridProject?gridProject.name:""}}</a></strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-9">
+            <div class="portlet light bordered padding-20">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-th fa-rotate-90"></i>
+                            Grid
+                        </span>
+                    </div>
+                    <div *ngIf="selectedProgramVersion" class="becki-caption version">
+                        <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="true" class="changes"></span> {{selectedProgramVersion.version_object.version_name}}</span>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="pull-left">
+                        <button type="button" class="btn default green-haze" (click)="onAddPageClick()">
+                            <i class="fa fa-plus"></i> Add page
+                        </button>
+                    </div>
+                    <div class="pull-right">
+                        <label>Grid size class: </label>
+                        <select class="form-control no-full-width" [ngModel]="gridDeviceProfile" (ngModelChange)="onChangeGridDeviceProfile($event)">
+                            <option value="mobile">Mobile</option>
+                            <option value="tablet">Tablet</option>
+                            <option value="desktop">Desktop</option>
+                        </select>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div style="margin: 10px 0; overflow-x: auto;">
+                    <bk-grid-view (onRequestWidgetSource)="onWidgetRequestingSource($event)"></bk-grid-view>
+                </div>
+
+                <div>
+                    <div class="pull-right">
+                        <button type="button" class="btn default green-haze" (click)="onSaveClick()">
+                            <i class="fa fa-floppy-o"></i> Save
+                        </button>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="portlet light bordered padding-20">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-object-group"></i>
+                            Widgets
+                        </span>
+                    </div>
+                </div>
+
+                <div class="portlet-body">
+                    <div class="panel-group accordion blocko-blocks-group-list">
+                        <div *ngFor="let group of widgetGroups" class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle collapsed" (click)="onToggleGroup(group.id)">
+                                        <i class="fa fa-pull-right fa-minus-square-o" [class.fa-minus-square-o]="widgetGroupsOpenToggle[group.id]" [class.fa-plus-square-o]="!widgetGroupsOpenToggle[group.id]"></i>
+                                        {{group.name}} ({{group.grid_widgets.length}})
+                                    </a>
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse" [class.in]="widgetGroupsOpenToggle[group.id]">
+                                <div class="panel-body">
+                                    <div *ngIf="group.grid_widgets.length == 0" style="color: gray; text-align: center;">No widgets in this group</div>
+
+                                    <a *ngFor="let widget of group.grid_widgets" (mousedown)="onWidgetDown($event,widget)" style="margin:5px; float:left; overflow:hidden; display:block; width:80px; height:80px; background:seagreen; color:white; font-size:18px; line-height: 80px; text-align: center; user-select: none;">{{widget.name}}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-code-fork"></i>
+                            Saved versions
+                        </span>
+                    </div>
+                </div>
+                <div *ngIf="gridProgramVersions">
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th class="full-width">Description</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let version of gridProgramVersions">
+                            <td class="no-wrap" [class.bold]="isSelected(version)">
+                                <a (click)="onProgramVersionClick(version)">
+                                    {{version.version_name}}
+                                </a>
+                            </td>
+                            <td>
+                                {{version.version_description}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</bk-layout-main>

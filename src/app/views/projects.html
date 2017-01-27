@@ -1,0 +1,57 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<bk-layout-main [title]="'Projects'">
+    <div class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="becki-caption">
+                <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-tasks"></i>
+                    Projects
+                </span>
+            </div>
+            <div class="becki-actions pull-left">
+                <button class="btn btn-outline btn-sm white" (click)="onTest2Click()">
+                    <i class="fa fa-spinner"></i> Test flash message
+                </button>
+                <button class="btn btn-outline btn-sm white" (click)="onTestClick()">
+                    <i class="fa fa-spinner"></i> Test UI blocker
+                </button>
+            </div>
+            <div class="becki-actions">
+                <button class="btn blue" (click)="onAddClick()">
+                    <i class="fa fa-plus-circle"></i> Add project
+                </button>
+            </div>
+        </div>
+        <div  *ngIf="(projects && projects.length)" class="table-scrollable">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th class="full-width">Description</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let project of projects">
+                    <td class="no-wrap bold"><a (click)="onProjectClick(project)">{{project.name}}</a></td>
+                    <td>{{project.description}}</td>
+                    <td class="no-wrap">
+                        <button title="Project properties" class="btn btn-icon-only green" [disabled]="!project.edit_permission" (click)="onEditClick(project)">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="Remove project" class="btn btn-icon-only red" [disabled]="!project.delete_permission" (click)="onRemoveClick(project)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <h3 *ngIf="!projects" class="text-center">Loading...</h3>
+        <h3 *ngIf="projects && projects.length == 0" class="text-center">No project</h3>
+    </div>
+</bk-layout-main>

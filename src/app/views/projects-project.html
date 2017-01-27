@@ -1,0 +1,24 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+    <div class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="becki-caption">
+                <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-tachometer"></i>
+                    Dashboard
+                </span>
+            </div>
+        </div>
+        <div>
+            Name: <strong>{{project?project.name:""}}</strong><br>
+            Description: <strong>{{project?project.description:""}}</strong>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+</bk-layout-main>

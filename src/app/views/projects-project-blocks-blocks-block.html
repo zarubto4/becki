@@ -1,0 +1,216 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-fw fa-cube"></i>
+                            Custom blocks - block <strong>{{blockoBlock?blockoBlock.name:""}}</strong>
+                        </span>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div>
+                    Name: <strong>{{blockoBlock?blockoBlock.name:""}}</strong><br>
+                    Description: <strong>{{blockoBlock?blockoBlock.description:""}}</strong><br>
+                    Group: <strong><a (click)="onBlocksGroupClick(group.id)">{{group?group.name:""}}</a></strong>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="portlet light bordered padding-20">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-file-code-o"></i>
+                            Code
+                        </span>
+                    </div>
+                    <div *ngIf="selectedBlockoBlockVersion" class="becki-caption version">
+                        <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="true" class="changes"></span> {{selectedBlockoBlockVersion.version_name}}</span>
+                    </div>
+                </div>
+
+                <bk-form-color-picker label="Block color" [control]="blockForm.controls.color" [waitForTouch]="false"></bk-form-color-picker>
+
+                <bk-form-fa-icon-select label="Block icon" [control]="blockForm.controls.icon" [waitForTouch]="false"></bk-form-fa-icon-select>
+
+                <bk-form-input label="Block description" [control]="blockForm.controls.description" [waitForTouch]="false"></bk-form-input>
+
+                <div class="form-group">
+                    <label>Block code</label>
+                    <bk-monaco-editor [code]="blockCode" (codeChange)="newBlockCode($event)" [typings]="['TSBlockLib', 'ConsoleLib', 'UtilsLib', 'ES5']"></bk-monaco-editor>
+                </div>
+
+                <div *ngFor="let tsError of tsErrors;" class="mt-element-ribbon bg-grey-steel">
+                    <div class="ribbon ribbon-shadow ribbon-color-danger">{{tsError.name}}</div>
+                    <div class="ribbon-content">
+                        <div *ngIf="tsError.line"><strong>Line: </strong>{{tsError.line}}</div>
+                        <span [innerHTML]="tsError.message"></span>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="font-red text-right" style="padding-bottom: 5px; transition: opacity 0.5s;" [style.opacity]="successfullyTested?'0':'1'">Block code has been changed, you must test program first than save.</div>
+                    <div class="pull-right">
+                        <button type="button" class="btn default yellow-gold" (click)="onTestClick()" >
+                            <i class="fa fa-play"></i> Test
+                        </button>
+                        <button type="button" class="btn default green-haze" [disabled]="!successfullyTested" (click)="onSaveClick()">
+                            <i class="fa fa-floppy-o"></i> Save
+                        </button>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="portlet light bordered padding-20">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-terminal"></i>
+                            Test
+                        </span>
+                    </div>
+
+                    <h3 *ngIf="!tsBlock" class="pull-right" style="margin: 0; margin-right: 95px;">For test press button here <i class="fa fa-chevron-up"></i></h3>
+
+                </div>
+                <div class="portlet-content">
+                    <div *ngIf="tsBlock" class="col-md-4" style="display: inline-block; width: calc(50% - 65px)">
+
+                        <h4 class="text-center">Inputs simulator</h4>
+
+                        <div class="block-tester no-select">
+
+                            <div *ngFor="let connector of testInputConnectors; let iCon = index" class="row bg-color" [class.odd]="iCon%2">
+
+
+
+                                <template [ngIf]="connector.type == connectorTypes.DigitalInput">
+                                    <div class="col-md-4 bg-din bold" [class.odd]="iCon%2">{{connector.name}}</div>
+                                    <div class="col-md-8">
+                                        <div class="block-tester-message-input-label"><strong>Value</strong>:</div>
+                                        <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="connector.value" [class.fa-toggle-off]="!connector.value" (click)="onDigitalInputClick(connector)"></i>
+                                    </div>
+                                </template>
+
+                                <template [ngIf]="connector.type == connectorTypes.AnalogInput">
+                                    <div class="col-md-4 bg-ain bold" [class.odd]="iCon%2">{{connector.name}}</div>
+                                    <div class="col-md-8">
+                                        <div class="block-tester-message-input-label"><strong>Value</strong>:</div>
+                                        <input type="number" class="form-control" step="0.1" [value]="connector.value" (input)="onAnalogInputChange($event, connector)">
+                                    </div>
+                                </template>
+
+                                <template [ngIf]="connector.type == connectorTypes.MessageInput">
+                                    <div class="col-md-4 bg-min bold" [class.odd]="iCon%2">{{connector.name}}</div>
+                                    <div *ngFor="let argType of connector.argTypes; let index = index">
+
+                                        <div *ngIf="index" class="col-md-4"></div>
+
+                                        <template [ngIf]="argType == argTypes.Boolean">
+                                            <div class="col-md-8">
+                                                <div class="block-tester-message-input-label">boolean <strong>Arg #{{index}}</strong>:</div>
+                                                <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="messageInputsValueCache[connector.name+argType]" [class.fa-toggle-off]="!messageInputsValueCache[connector.name+argType]" (click)="messageInputsValueCache[connector.name+argType] = !messageInputsValueCache[connector.name+argType]"></i>
+                                            </div>
+                                        </template>
+                                        <template [ngIf]="argType == argTypes.Float">
+                                            <div class="col-md-8">
+                                                <div class="block-tester-message-input-label">float <strong>Arg #{{index}}</strong>:</div>
+                                                <input type="number" class="form-control" step="0.1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                            </div>
+                                        </template>
+                                        <template [ngIf]="argType == argTypes.Integer">
+                                            <div class="col-md-8">
+                                                <div class="block-tester-message-input-label">integer <strong>Arg #{{index}}</strong>:</div>
+                                                <input type="number" class="form-control" step="1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                            </div>
+                                        </template>
+                                        <template [ngIf]="argType == argTypes.String">
+                                            <div class="col-md-8">
+                                                <div class="block-tester-message-input-label">string <strong>Arg #{{index}}</strong>:</div>
+                                                <input type="text" class="form-control" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                            </div>
+                                        </template>
+
+                                    </div>
+
+                                    <div class="col-md-4"></div>
+                                    <div class="col-md-8">
+                                        <button class="btn btn-sm default green block-tester-message-input-btn" type="button" (click)="onMessageInputSendClick(connector)">
+                                            <i class="fa fa-paper-plane"></i> Send
+                                        </button>
+                                    </div>
+
+                                </template>
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-4" style="width: 130px; overflow: hidden;" [style.display]="tsBlock?'inline-block':'none'">
+                        <h4 *ngIf="tsBlock" class="text-center">Block</h4>
+                        <div [style.height]="(tsBlockHeight+30)+'px'" style="background-color: #333;">
+                            <bk-blocko-view readonly="true" safeRun="true" (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)" class="blocko-overflow-visible blocko-no-borders-and-bg"></bk-blocko-view>
+                        </div>
+                    </div>
+                    <div class="col-md-4" style="width: calc(50% - 65px)" [style.display]="tsBlock?'inline-block':'none'">
+                        <h4 class="text-center">Console</h4>
+                        <div class="row">
+                            <bk-console-log maxHeight="400px"></bk-console-log>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-code-fork"></i>
+                            Saved versions
+                        </span>
+                    </div>
+                </div>
+                <div *ngIf="blockoBlockVersions && blockoBlockVersions.length">
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th class="full-width">Description</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let version of blockoBlockVersions">
+                            <td class="no-wrap" [class.bold]="selectedBlockoBlockVersion && (selectedBlockoBlockVersion.id == version.id)">
+                                <a (click)="onBlockoBlockVersionClick(version)">
+                                    {{version.name}}
+                                </a>
+                            </td>
+                            <td>
+                                {{version.description}}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</bk-layout-main>

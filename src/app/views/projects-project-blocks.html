@@ -1,0 +1,52 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+    <div class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="becki-caption">
+                <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-fw fa-cubes"></i>
+                    Custom blocks - all groups
+                </span>
+            </div>
+            <div class="becki-actions">
+                <button class="btn blue" (click)="onGroupAddClick()">
+                    <i class="fa fa-plus-circle"></i> Add blocks group
+                </button>
+            </div>
+        </div>
+        <div *ngIf="(groups && groups.length)" class="table-scrollable">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th class="full-width">Description</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let group of groups">
+                    <td class="no-wrap bold"><a (click)="onGroupClick(group)">{{group.name}}</a></td>
+                    <td>{{group.description}}</td>
+                    <td class="no-wrap">
+                        <button title="Group properties" class="btn btn-icon-only green" [disabled]="!group.edit_permission" (click)="onGroupEditClick(group)">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="Remove group" class="btn btn-icon-only red" [disabled]="!group.delete_permission" (click)="onGroupDeleteClick(group)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <h3 *ngIf="!groups" class="text-center">Loading...</h3>
+        <h3 *ngIf="groups && groups.length == 0" class="text-center">No blocks group in this project</h3>
+
+    </div>
+
+</bk-layout-main>

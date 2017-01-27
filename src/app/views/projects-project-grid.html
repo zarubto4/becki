@@ -1,0 +1,51 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+    <div class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="becki-caption">
+                <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-desktop"></i>
+                    Grid programs - all grid projects
+                </span>
+            </div>
+            <div class="becki-actions">
+                <button class="btn blue" (click)="onProjectAddClick()">
+                    <i class="fa fa-plus-circle"></i> Add grid project
+                </button>
+            </div>
+        </div>
+        <div *ngIf="(gridProjects && gridProjects.length)" class="table-scrollable">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th class="full-width">Description</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let gridProject of gridProjects">
+                    <td class="no-wrap bold"><a (click)="onProjectClick(gridProject)">{{gridProject.name}}</a></td>
+                    <td>{{gridProject.description}}</td>
+                    <td class="no-wrap">
+                        <button title="Group properties" class="btn btn-icon-only green" [disabled]="!gridProject.edit_permission" (click)="onProjectEditClick(gridProject)">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="Remove group" class="btn btn-icon-only red" [disabled]="!gridProject.delete_permission" (click)="onProjectDeleteClick(gridProject)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <h3 *ngIf="!gridProjects" class="text-center">Loading...</h3>
+        <h3 *ngIf="gridProjects && gridProjects.length == 0" class="text-center">No grid projects in this project</h3>
+    </div>
+
+</bk-layout-main>

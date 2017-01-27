@@ -1,0 +1,150 @@
+<!--
+  ~ © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+  ~ of this distribution.
+  -->
+<div class="page-wrapper">
+    <div class="page-header navbar navbar-fixed-top">
+        <!-- BEGIN HEADER INNER -->
+        <div class="page-header-inner">
+            <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+            <a class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+            </a>
+            <!-- END RESPONSIVE MENU TOGGLER -->
+            <!-- BEGIN LOGO -->
+            <div class="page-logo">
+                <div class="menu-toggler sidebar-toggler pull-left" (click)="onSidebarToggleClick($event)">
+                    <span></span>
+                </div>
+                <div class="byzance-logo byzance-logo-size-top-menu"></div>
+            </div>
+            <!-- END LOGO -->
+            <!-- BEGIN TOP NAVIGATION MENU -->
+            <div class="top-menu">
+                <ul class="nav navbar-nav pull-right">
+                    <li *ngIf="backendService.tasks">
+                        <a><i class="fa fa-spinner fa-spin"></i></a>
+                    </li>
+                    <!-- BEGIN NOTIFICATION DROPDOWN -->
+                    <li class="dropdown dropdown-extended dropdown-notification">
+                        <a class="dropdown-toggle" (click)="onNotificationToggleClick($event)">
+                            <i class="icon-bell"></i>
+                            <span class="badge badge-default" *ngIf="notificationService.unreadNotificationsCount">{{notificationService.unreadNotificationsCount}}</span>
+                        </a>
+                        <ul class="dropdown-menu toolbar-notification-menu" [style.display]="showNotificationMenu?'block':'none'">
+                            <li class="external">
+                                <h3>
+                                    <span class="bold">{{notificationService.unreadNotificationsCount}} unread</span> notifications</h3>
+                                <a [routerLink]="['/notifications']">view all</a>
+                            </li>
+                            <bk-notifications-list class="dropdown-menu-list n-list-scrolling" listName="toolbarNotifications"></bk-notifications-list>
+                        </ul>
+                    </li>
+                    <!-- END NOTIFICATION DROPDOWN -->
+                    <!-- BEGIN USER LOGIN DROPDOWN -->
+                    <li class="dropdown dropdown-user">
+                        <a class="dropdown-toggle" (click)="onUserToggleClick($events)">
+                            <img alt="" class="img-circle" [attr.src]="backendService.gravatarIcon"/>
+                            <span class="username">
+                                {{backendService.personInfoSnapshot?backendService.personInfoSnapshot.full_name:""}}
+                            </span>
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu" [style.display]="showUserMenu?'block':'none'">
+                            <li>
+                                <a [routerLink]="['/profile']"><i class="icon-settings"></i> Profile</a>
+                            </li>
+                            <li class="divider">
+                            </li>
+                            <li>
+                                <a [routerLink]="['/logout']"><i class="icon-key"></i> Log out</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- END USER LOGIN DROPDOWN -->
+                </ul>
+            </div>
+            <!-- END TOP NAVIGATION MENU -->
+        </div>
+        <!-- END HEADER INNER -->
+    </div>
+    <bk-notifications-overlay></bk-notifications-overlay>
+    <!-- END HEADER -->
+    <div class="page-container">
+
+        <!-- BEGIN SIDEBAR -->
+        <div class="page-sidebar-wrapper">
+            <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+            <!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+            <div class="page-sidebar navbar-collapse collapse">
+                <!-- BEGIN SIDEBAR MENU -->
+                <ul class="page-sidebar-menu" [class.page-sidebar-menu-closed]="sidebarClosed">
+                    <li routerLinkActive="active" *ngFor="let page of navigation">
+                        <a [routerLink]="page.link">
+                            <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
+                            <span class="title">{{page.label}}</span>
+                            <span class="selected"></span>
+                        </a>
+                    </li>
+                </ul>
+                <!-- END SIDEBAR MENU -->
+            </div>
+        </div>
+        <!-- END SIDEBAR -->
+
+        <div class="page-content-wrapper">
+            <!-- BEGIN CONTENT BODY -->
+            <div class="page-content">
+                <div class="page-bar">
+                    <ul class="page-breadcrumb">
+                        <li *ngFor="let breadcrumb of breadcrumbsService.breadcrumbs; let last = last">
+                            <a *ngIf="!last" [routerLink]="breadcrumb.link">{{breadcrumb.label}}</a>
+                            <i *ngIf="!last" class="fa fa-angle-right"></i>
+                            <span *ngIf="last"><strong>{{breadcrumb.label}}</strong></span>
+                        </li>
+                    </ul>
+                </div>
+
+                <h1 *ngIf="title" class="page-title text-center">
+                    {{title}}
+                    <div *ngIf="subtitle" class="page-subtitle text-center">
+                        {{subtitle}}
+                    </div>
+                </h1>
+
+                <div [class.tabbable-line]="tabMenuItems">
+                    <ul *ngIf="tabMenuItems" class="nav nav-tabs">
+                        <li *ngFor="let tabItem of tabMenuItems; let index = index" [class.active]="isRouterLinkActive(tabItem)" [class.dropdown]="tabItem.options['items']" [class.open]="openTabMenuIndex == index">
+                            <a *ngIf="!tabItem.options['items']" [routerLink]="tabItem.link"><span *ngIf="tabItem.icon" class="fa fa-fw fa-{{tabItem.icon}}"></span> {{tabItem.label}} </a>
+                            <a *ngIf="tabItem.options['items']" (click)="toggleTabMenu(index)" class="cursor-hand"><span *ngIf="tabItem.icon" class="fa fa-fw fa-{{tabItem.icon}}"></span> {{tabItem.label}} <span class="fa fa-angle-down"></span></a>
+                            <ul *ngIf="tabItem.options['items']" class="dropdown-menu becki-tab-menu-dropdown">
+                                <li *ngFor="let subTabItem of tabItem.options['items']" [class.active]="isRouterLinkActive(subTabItem)">
+                                    <a [routerLink]="subTabItem.link"><span *ngIf="subTabItem.icon" class="fa fa-fw fa-{{subTabItem.icon}}"></span> {{subTabItem.label}} </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+
+
+                    <div [class.tab-content]="tabMenuItems">
+                        <div class="active" [class.tab-pane]="tabMenuItems">
+                            <ng-content></ng-content>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <!-- END CONTENT BODY -->
+        </div>
+
+    </div>
+
+    <!-- BEGIN FOOTER -->
+    <div class="page-footer">
+        <div class="page-footer-inner"> 2016 &copy; Becki by
+            <a target="_blank" href="http://Byzance.cz">Byzance</a>
+        </div>
+    </div>
+    <!-- END FOOTER -->
+</div>

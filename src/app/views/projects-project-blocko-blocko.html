@@ -1,0 +1,367 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-sitemap fa-rotate-90"></i>
+                            Blocko programs - program <strong>{{currentParamsService.currentBlockoNameSnapshot}}</strong>
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    Name: <strong>{{blockoProgram?blockoProgram.name:""}}</strong><br>
+                    Description: <strong>{{blockoProgram?blockoProgram.description:""}}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title tabbable-line" [class.no-opened-tab]="connectionsTab == ''">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-list-ul"></i>
+                            Connections
+                        </span>
+                    </div>
+
+                    <ul class="nav nav-tabs margin-left-15 pull-left">
+                        <li [class.active]="connectionsTab == 'hardware'">
+                            <a class="cursor-pointer" (click)="onToggleConnectionsTab('hardware')">Hardware <span class="font-grey-salsa">({{connectionsHwCount()}})</span></a>
+                        </li>
+                        <li [class.active]="connectionsTab == 'grid'">
+                            <a class="cursor-pointer" (click)="onToggleConnectionsTab('grid')">Grid <span class="font-grey-salsa">({{connectionsGridCount()}})</span></a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div [hidden]="connectionsTab != 'hardware'">
+                    <template ngIf="selectedHardware && selectedHardware.length">
+                        <div *ngFor="let hwGroup of selectedHardware;">
+                            <div *ngIf="boardById[hwGroup.main_board_pair.board_id]" class="mt-element-ribbon border-green-seagreen bg-grey-steel">
+                                <div class="ribbon ribbon-shadow bg-green-seagreen font-white no-padding-left-right"><span class="ribbon-padding">{{boardById[hwGroup.main_board_pair.board_id].type_of_board_name}}</span><span *ngIf="boardById[hwGroup.main_board_pair.board_id].personal_description" class="bg-green-jungle ribbon-padding">{{boardById[hwGroup.main_board_pair.board_id].personal_description}}</span><span class="bg-green-sharp ribbon-padding">{{hwGroup.main_board_pair.board_id}}</span></div>
+                                <button title="Remove device" type="button" class="btn default red pull-right" (click)="hwRemove(hwGroup.main_board_pair.board_id)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                                <button type="button" class="btn default blue pull-right" (click)="hwAdd(hwGroup.main_board_pair.board_id)">
+                                    <i class="fa fa-plus-circle"></i> Add slave device
+                                </button>
+                                <div class="ribbon-content no-padding-left-right no-padding-bottom padding-top-10">
+
+                                    <bk-c-program-version-selector [value]="hwGroup.main_board_pair.c_program_version_id" (valueChanged)="hwCProgramVersionChanged(hwGroup.main_board_pair, $event)" [cPrograms]="getCProgramsForBoardType(boardById[hwGroup.main_board_pair.board_id].type_of_board_id)"></bk-c-program-version-selector>
+
+                                    <template ngIf="hwGroup.device_board_pairs">
+                                        <div *ngFor="let board of hwGroup.device_board_pairs;" class="margin-left-15 margin-right-15">
+                                            <div *ngIf="boardById[board.board_id]" class="mt-element-ribbon bg-grey-salt border-green-seagreen margin-bottom-15">
+                                                <div class="ribbon ribbon-shadow bg-green-seagreen font-white no-padding-left-right"><span class="ribbon-padding">{{boardById[board.board_id].type_of_board_name}}</span><span *ngIf="boardById[board.board_id].personal_description" class="bg-green-jungle ribbon-padding">{{boardById[board.board_id].personal_description}}</span><span class="bg-green-sharp ribbon-padding">{{board.board_id}}</span></div>
+                                                <button title="Remove device" type="button" class="btn default red pull-right" (click)="hwRemove(board.board_id)">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                                <div class="ribbon-content no-padding-left-right no-padding-bottom padding-top-10">
+                                                    <bk-c-program-version-selector [value]="board.c_program_version_id" (valueChanged)="hwCProgramVersionChanged(board, $event)" [cPrograms]="getCProgramsForBoardType(boardById[board.board_id].type_of_board_id)"></bk-c-program-version-selector>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <h3 *ngIf="!(selectedHardware && selectedHardware.length)" style="margin: 20px 0;">
+                        <i class="fa fa-chevron-down"></i>
+                        No devices added in this Blocko program
+                    </h3>
+
+                    <button type="button" class="btn default blue" (click)="hwAdd()">
+                        <i class="fa fa-plus-circle"></i> Add master device
+                    </button>
+
+                    <div class="clearfix"></div>
+                </div>
+
+                <div [hidden]="connectionsTab != 'grid'">
+                    <template ngIf="selectedGrids && selectedGrids.length">
+                        <div *ngFor="let gridProject of allGridProjects;">
+                            <div *ngIf="selectedGridProgramVersions[gridProject.id]" class="mt-element-ribbon bg-grey-steel border-purple">
+                                <div class="ribbon ribbon-shadow bg-purple font-white no-padding-left-right"><span class="ribbon-padding">{{gridProject.name}}</span></div>
+                                <button title="Remove grid project" type="button" class="btn default red pull-right" (click)="gridRemove(gridProject)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                                <div class="ribbon-content no-padding-left-right padding-top-10 padding-bottom-10">
+
+                                    <div class="col-md-12" *ngFor="let program of gridProject.m_programs">
+                                        <h3 class="small-h3">{{program.name}} <span *ngIf="program.description" class="hx-description">{{program.description}}</span></h3>
+                                        <div *ngIf="program.versions && program.versions.length" class="form-group" [class.has-error]="!selectedGridProgramVersions[gridProject.id][program.id]">
+                                            <label>Program version</label>
+                                            <select class="form-control" [ngModel]="selectedGridProgramVersions[gridProject.id][program.id]" (ngModelChange)="gridSelectedProgramVersionIdChange(gridProject.id, program.id, $event)">
+                                                <option value="undefined" disabled>Select version</option>
+                                                <option *ngFor="let programVersion of program.versions" [value]="programVersion.id">{{programVersion.version_name}}</option>
+                                            </select>
+                                        </div>
+                                        <div *ngIf="!(program.versions && program.versions.length)" class="form-group">
+                                            <label>Program version</label>
+                                            <select class="form-control" disabled>
+                                                <option [value]="null" disabled>No program versions</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <h3 *ngIf="isEmptyObject(selectedGridProgramVersions)" style="margin: 20px 0;">
+                        <i class="fa fa-chevron-down"></i>
+                        No grid projects added in this Blocko program
+                    </h3>
+
+                    <button type="button" class="btn default blue" (click)="gridAdd()">
+                        <i class="fa fa-plus-circle"></i> Add grid project
+                    </button>
+
+                    <div class="clearfix"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-9">
+            <div class="portlet light bordered padding-20">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-sitemap fa-rotate-270"></i>
+                            Blocko
+                        </span>
+                    </div>
+                    <div *ngIf="selectedProgramVersion" class="becki-caption version">
+                        <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="true" class="changes"></span> {{selectedProgramVersion.version_object.version_name}}</span>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="mt-checkbox mt-checkbox-outline" style="margin-top: 6px; margin-bottom: 6px;">
+                        <input type="checkbox" [(ngModel)]="advancedMode"> Advanced mode
+                        <span></span>
+                    </label>
+
+                    <div class="pull-right">
+                        <button type="button" class="btn default red" (click)="onClearClick()">
+                            <i class="fa fa-trash-o"></i> Clear program
+                        </button>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+
+                <div style="margin: 10px 0; overflow: hidden;">
+                    <bk-blocko-view [simpleMode]="!advancedMode" [showBlockNames]="advancedMode" [safeRun]="true" (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)"></bk-blocko-view>
+                </div>
+
+                <div>
+                    <div class="pull-right">
+                        <button type="button" class="btn default green-haze" (click)="onSaveClick()">
+                            <i class="fa fa-floppy-o"></i> Save
+                        </button>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="portlet light bordered padding-20">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-terminal"></i>
+                            Console
+                        </span>
+                    </div>
+                    <div class="pull-right">
+                        <button type="button" class="btn default red" (click)="onClearConsoleClick()">
+                            <i class="fa fa-trash-o"></i> Clear console
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <bk-console-log maxHeight="400px"></bk-console-log>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+            <div class="portlet light bordered padding-20">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-cubes"></i>
+                            Blocks
+                        </span>
+                    </div>
+                </div>
+
+                <div class="portlet-body">
+                    <div class="panel-group accordion blocko-blocks-group-list">
+
+                        <div *ngFor="let staticBlocksGroup of staticBlocks;" class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle collapsed" (click)="onToggleGroup(staticBlocksGroup.id)">
+                                        <i class="fa fa-pull-right fa-minus-square-o" [class.fa-minus-square-o]="blockGroupsOpenToggle[staticBlocksGroup.id]" [class.fa-plus-square-o]="!blockGroupsOpenToggle[staticBlocksGroup.id]"></i>
+                                        {{staticBlocksGroup.name}} ({{staticBlocksGroup.blocko_blocks.length}})
+                                    </a>
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse" [class.in]="blockGroupsOpenToggle[staticBlocksGroup.id]">
+                                <div class="panel-body">
+                                    <div *ngIf="staticBlocksGroup.blocko_blocks.length == 0" style="color: gray; text-align: center;">No blocks in this group</div>
+                                    <div *ngFor="let block of staticBlocksGroup.blocko_blocks;" [bkDraggable]="draggableOptions" [bkDraggableData]="block" (bkDraggableOnStop)="onDragStop($event)" (bkDraggableOnStart)="onDragStart($event)" class="blocko-block" [style.backgroundColor]="block.backgroundColor">
+                                        {{block.name}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngFor="let blocksType of blockGroups;" class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a class="accordion-toggle collapsed" (click)="onToggleGroup(blocksType.id)">
+                                        <i class="fa fa-pull-right fa-minus-square-o" [class.fa-minus-square-o]="blockGroupsOpenToggle[blocksType.id]" [class.fa-plus-square-o]="!blockGroupsOpenToggle[blocksType.id]"></i>
+                                        {{blocksType.name}} ({{blocksType.blocko_blocks.length}})
+                                    </a>
+                                </h4>
+                            </div>
+                            <div class="panel-collapse collapse" [class.in]="blockGroupsOpenToggle[blocksType.id]">
+                                <div class="panel-body">
+                                    <div *ngIf="blocksType.blocko_blocks.length == 0" style="color: gray; text-align: center;">No blocks in this group</div>
+                                    <div *ngFor="let block of blocksType.blocko_blocks;" [style.background-color]="blocksColors[block.id]" [class.with-icon]="blocksIcons[block.id]" [bkDraggable]="draggableOptions" [bkDraggableData]="block" (bkDraggableOnStop)="onDragStop($event)" (bkDraggableOnStart)="onDragStart($event)" class="blocko-block">
+                                        <i *ngIf="blocksIcons[block.id]" class="fa {{blocksIcons[block.id]}}"></i>
+                                        <div style="color:black;">{{block.name}}</div>
+                                        <div style="font-size: 0.8em">{{blocksLastVersions[block.id]?blocksLastVersions[block.id].name:"no version"}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-cloud"></i>
+                            Instance in cloud
+                        </span>
+                    </div>
+                </div>
+                <div>
+
+                    <div *ngIf="blockoProgram && blockoProgram.instance_details">
+
+                        <div class="actions pull-right">
+                            <button *ngIf="!blockoProgram.instance_details.uploaded && blockoProgram.instance_details.version_id" class="btn green-jungle"  (click)="onTurnOnClick()">
+                                <i class="fa fa-power-off"></i> Turn on
+                            </button>
+
+                            <button *ngIf="blockoProgram.instance_details.uploaded" class="btn red" (click)="onTurnOffClick()">
+                                <i class="fa fa-power-off"></i> Turn off
+                            </button>
+
+                            <button class="btn blue-hoki" (click)="onChangeVersionClick()">
+                                <i class="fa fa-code-fork"></i> Change version
+                            </button>
+                        </div>
+
+                        <div>
+                            Instance:
+                            <a *ngIf="blockoProgram.instance_details.instance_id" (click)="onInstanceIdClick(blockoProgram.instance_details.instance_id)">{{blockoProgram.instance_details.instance_id}}</a>
+                            <span class="font-grey-salsa bold" *ngIf="!blockoProgram.instance_details.instance_id">None</span>
+                        </div>
+                        <div>
+                            Version:
+                            <a *ngIf="blockoProgram.instance_details.version_name" (click)="onProgramVersionIdClick(blockoProgram.instance_details.version_id)">{{blockoProgram.instance_details.version_name}}</a>
+                            <span class="font-grey-salsa bold" *ngIf="!blockoProgram.instance_details.version_name">None</span>
+                        </div>
+                        <div>
+                            Status:
+                            <span *ngIf="blockoProgram.instance_details.online" class="bold font-green-jungle">Online</span>
+                            <span *ngIf="!blockoProgram.instance_details.online" class="bold font-red">Offline</span>
+                        </div>
+                        <div>
+                            Server:
+                            <span class="font-grey-mint bold" *ngIf="blockoProgram.instance_details.server_name">
+                                {{blockoProgram.instance_details.server_name}}
+                                (<span *ngIf="blockoProgram.instance_details.server_online" class="font-green-jungle">Online</span><span *ngIf="!blockoProgram.instance_details.server_online" class="font-red">Offline</span>)
+                            </span>
+                            <span class="font-grey-salsa bold" *ngIf="!blockoProgram.instance_details.server_name">None</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-code-fork"></i>
+                            Saved versions
+                        </span>
+                    </div>
+                </div>
+                <div *ngIf="blockoProgramVersions">
+                    <table class="table table-condensed table-hover">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th class="text-center no-wrap">In cloud</th>
+                            <th class="full-width">Description</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let version of blockoProgramVersions">
+                            <td class="no-wrap" [class.bold]="selectedProgramVersion && selectedProgramVersion.version_object.id == version.version_id">
+                                <a (click)="onProgramVersionClick(version)">
+                                    {{version.version_name}}
+                                </a>
+                            </td>
+                            <th class="text-center"><i class="fa fa-cloud fa-fw font-green-jungle" [class.font-red]="!versionRunning(version)"></i></th>
+                            <td>
+                                {{version.version_description}}
+                            </td>
+                            <td class="no-wrap">
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</bk-layout-main>

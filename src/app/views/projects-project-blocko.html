@@ -1,0 +1,52 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+
+    <div class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="becki-caption">
+                <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-sitemap fa-rotate-90"></i>
+                    Blocko programs - all programs
+                </span>
+            </div>
+            <div class="becki-actions">
+                <button class="btn blue" (click)="onAddClick($event)">
+                    <i class="fa fa-plus-circle"></i> Add blocko program
+                </button>
+            </div>
+        </div>
+        <div *ngIf="(blockoPrograms && blockoPrograms.length)" class="table-scrollable">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th class="full-width">Description</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let blocko of blockoPrograms">
+                    <td class="no-wrap bold"><a (click)="onBlockoClick(blocko)">{{blocko.name}}</a></td>
+                    <td>{{blocko.description}}</td>
+                    <td class="no-wrap">
+                        <button title="Blocko program properties" class="btn btn-icon-only green" [disabled]="!blocko.edit_permission" (click)="onEditClick(blocko)">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="Remove blocko program" class="btn btn-icon-only red" [disabled]="!blocko.delete_permission" (click)="onRemoveClick(blocko)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <h3 *ngIf="!blockoPrograms" class="text-center">Loading...</h3>
+        <h3 *ngIf="blockoPrograms && blockoPrograms.length == 0" class="text-center">No blocko programs in this project</h3>
+
+    </div>
+
+</bk-layout-main>

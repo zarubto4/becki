@@ -1,0 +1,21 @@
+<!--
+  ~ © 2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+<bk-layout-not-logged>
+    <!-- BEGIN LOGIN FORM -->
+    <form class="login-form">
+        <h3 class="form-title font-green">Log Out</h3>
+        <div class="alert alert-danger" *ngIf="logoutError">
+            <button class="close" (click)="onCloseAlertClick($event)"></button>
+            <span [innerHTML]="logoutError | bkNl2Br"></span>
+        </div>
+        <p class="text-center" *ngIf="logoutInProgress"> <i class="fa fa-3x fa-spinner fa-spin"></i> </p>
+        <div class="create-account">
+            <p>
+                <a [routerLink]="['/login']" class="uppercase">Log In</a>
+            </p>
+        </div>
+    </form>
+    <!-- END LOGIN FORM -->
+</bk-layout-not-logged>
