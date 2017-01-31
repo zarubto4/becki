@@ -410,7 +410,7 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     public logout(): Promise<any> {
         return new Promise<any>((resolve, reject) => {
-            this.logout()
+            this.__logout()
                 .then((body) => {
                     this.unsetToken();
                     resolve(body);
