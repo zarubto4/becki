@@ -13,7 +13,9 @@
     "server": "webpack-dev-server --inline --progress --port 8080",
     "lint": "tslint --force \"src/**/*.ts\"",
     "docs": "typedoc --options typedoc.json src/app/main.ts",
-    "start": "npm run server"
+    "start": "npm run server",
+    "docker": "npm run build && docker build -t byzancedocker/becki .",
+    "docker-push": "docker push byzancedocker/becki"
   },
   "dependencies": {
     "@angular/common": "~2.4.0",
