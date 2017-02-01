@@ -72,7 +72,7 @@
                         <button type="button" class="btn default yellow-gold" (click)="onTestClick()" >
                             <i class="fa fa-play"></i> Test
                         </button>
-                        <button type="button" class="btn default green-haze" (click)="onSaveClick()">
+                        <button type="button" class="btn default green-haze" (click)="onSaveClick()" [disabled]="!widgetCode">
                             <i class="fa fa-floppy-o"></i> Save
                         </button>
                     </div>
