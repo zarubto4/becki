@@ -127,7 +127,7 @@
                         No grid projects added in this Blocko program
                     </h3>
 
-                    <button type="button" class="btn default blue" (click)="gridAdd()">
+                    <button type="button" class="btn default blue" (click)="gridAdd()" [disabled]="!allGridProjects">
                         <i class="fa fa-plus-circle"></i> Add grid project
                     </button>
 
