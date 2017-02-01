@@ -269,7 +269,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             })
             .catch((error) => {
                 this.buildInProgress = false;
-                if (error.name === 'CodeCompileError') {
+                if (error instanceof CodeCompileError) {
                     this.buildErrors = error.errors;
 
                     // TODO: move to method
