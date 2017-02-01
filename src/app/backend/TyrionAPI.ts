@@ -7771,6 +7771,27 @@ export abstract class TyrionAPI {
     protected abstract requestRestPath<T>(method:string, path:string, body:Object, success:number[]):Promise<T>;
 
     /**
+     * @name InvoiceResend
+     * @summary re-send Invoice to specific email
+     * @operationId resend_invoice
+     * @tags Price & Invoice & Tariffs
+     *
+     * @description re-send Invoice to specific email
+     *
+     * @param {string} invoice_id
+     *
+     * @returns {IResultOk} [code 200] Ok Result
+     *
+     * @throws {IBadRequest} [code 400] Something is wrong - details in message 
+     * @throws {IResultUnauthorized} [code 401] Unauthorized request
+     * @throws {IPermissionRequired} [code 403] Need required permission
+     * @throws [code 500] Server side Error
+     */
+    public InvoiceResend(invoice_id:string):Promise<IResultOk> {
+        return this.requestRestPath("POST", `/invoice/resend/${invoice_id}`, {}, [200]);
+    }
+
+    /**
      * @name __login
      * @summary login
      * @operationId login
@@ -11071,6 +11092,27 @@ export abstract class TyrionAPI {
      */
     public recoveryPersonPasswordMail(body:IPersonPasswordRecoveryEmail):Promise<IResultOk> {
         return this.requestRestPath("POST", `/person/password/recovery_mail`, body, [200]);
+    }
+
+    /**
+     * @name sendInvoiceReimbursement
+     * @summary reimbursement of an unpaid invoice
+     * @operationId pay_send_invoice
+     * @tags Price & Invoice & Tariffs
+     *
+     * @description reimbursement of an unpaid invoice - with settings from creating product before
+     *
+     * @param {string} invoice_id
+     *
+     * @returns {IGoPayUrl} [code 200] Ok Result- payment is required
+     *
+     * @throws {IBadRequest} [code 400] Something is wrong - details in message 
+     * @throws {IResultUnauthorized} [code 401] Unauthorized request
+     * @throws {IPermissionRequired} [code 403] Need required permission
+     * @throws [code 500] Server side Error
+     */
+    public sendInvoiceReimbursement(invoice_id:string):Promise<IGoPayUrl> {
+        return this.requestRestPath("POST", `/invoice/reimbursement/${invoice_id}`, {}, [200]);
     }
 
     /**

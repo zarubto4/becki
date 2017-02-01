@@ -40,6 +40,7 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
 
     onPayClick(invoice: IInvoice): void {
 
+                this.backendService.sendInvoiceReimbursement(invoice.id).then(gopay=>console.log(gopay));
     }
 
     onDownloadPDFClick(invoice: IInvoice): void {
@@ -78,7 +79,6 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
         this.blockUI();
         this.backendService.getAllProducts().then(products => {
             this.product = products.find(product => product.id === this.id);
-            // console.log(this.product);
             this.invoices = this.product.invoices;
             this.unblockUI();
         }).catch(error => {

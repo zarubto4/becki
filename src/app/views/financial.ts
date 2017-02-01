@@ -52,7 +52,7 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
                         this.refresh(); // also unblockUI
                     });
             }
-        });*/ // TODO vyřešit mazání Produktů
+        });*/ // TODO vyřešit mazání Produktů/deaktivaci
     }
 
     onEditClick(product: IProduct): void {}

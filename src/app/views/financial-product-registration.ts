@@ -9,7 +9,7 @@
 
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { IGeneralTariff, ITariffRegister, IGeneralTariffExtensions } from '../backend/TyrionAPI';
+import { IGeneralTariff, ITariffRegister, IGeneralTariffExtensions, IGoPayUrl } from '../backend/TyrionAPI';
 import { FlashMessageSuccess, FlashMessageWarning, FlashMessageError } from '../services/NotificationService';
 import { FormGroup, Validators } from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
@@ -271,11 +271,13 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
                 this.unblockUI();
                 this.serverResponse = tarif;
                 if ((<any>tarif).gw_url) { // TODO podle čísla HTTP hlavičky se vrací 3 typy
-                    this.addFlashMessage(new FlashMessageWarning('Product was created but payment is required, click', '<a href={{(IGoPayUrl)response.gw_url}}>here</a>'));
-                    this.router.navigate(['/financial']);
+                    this.addFlashMessage(new FlashMessageWarning('Product was created but payment is required, click', '<a href=>here</a>'));
+                    window.location.href = (<IGoPayUrl>tarif).gw_url;
+
+                   // this.router.navigate(['/financial']);
                 } else {
                     this.addFlashMessage(new FlashMessageSuccess('Product was created, now you can create a new project'));
-                    this.router.navigate(['/financial']);
+                   // this.router.navigate(['/financial']);
                 }
             })
             .catch(reason => {

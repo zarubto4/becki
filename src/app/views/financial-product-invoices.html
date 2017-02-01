@@ -26,7 +26,7 @@
                 <tr>
                     <th>Invoice ID</th>
                     <th>Total cost</th>
-                    <th>Time period</th>
+                    <th>Date of create</th>
                     <th>Paid</th>
                     <th class="text-right">Actions</th>
                 </tr>
@@ -35,8 +35,8 @@
                 <tr *ngFor="let invoice of invoices">
                     <td class="no-wrap"><a (click)="onInvoiceClick(invoice)">{{invoice.invoice_number}}</a></td>
                     <td>{{invoice.id}}</td>
-                    <td><span class="font-red bg-yellow-lemon">TODO</span> - <span class="font-red bg-yellow-lemon">TODO</span> </td>
-                    <td><span *ngIf="!invoice.require_payment"><i class="  font-green-jungle fa fa-check "></i></span><span *ngIf="invoice.require_payment"><a (click)="onPayClick()">PAY</a></span></td>
+                    <td> {{invoice.date_of_create|bkUnixTimeToDate}} </td>
+                    <td><span *ngIf="!invoice.require_payment"><i class="  font-green-jungle fa fa-check "></i></span><span *ngIf="invoice.require_payment"><a class="font-red-thunderbird" (click)="onPayClick(invoice)">Payment required</a></span></td>
                     <td class="no-wrap text-right">
                         <button (click)="onDownloadPDFClick(invoice)" title="Download as PDF" class="btn bg-yellow-lemon btn-icon-only white">
                             <i class=" fa fa-file-pdf-o"></i>

@@ -61,7 +61,6 @@
             <div class="portlet-body">
                 <div class="pricing-content-1">
                     <div class="row">
-                        <h3 class="center-align"><input type="checkbox"  [ngModelOptions]="{standalone: true}" [(ngModel)]="userCompany" >I have a company</h3>
                         <div *ngFor="let tariff of tariffForRegistration" class="col-md-3">
                             <div class="price-column-container border-active">
                                 <div class="price-table-head bg-{{tariff.color| lowercase}}">
@@ -221,11 +220,12 @@
 
     <div *ngIf="step===4">
 
-        <template ng-if="serverResponse">
+        <div class="module" *ngIf="serverResponse">
+            <h3>fakture</h3>
             <div *ngIf="serverResponse.gw_url">Please pay to complete your tarif registration, click
                 <a href="serverResponse.gw_url">here</a></div>
             <div *ngIf="!serverResponse.gw_url">Done!</div>
-        </template>
+        </div>
 
         <div class="row">
             <div class="col-md-6 col-sm-12">

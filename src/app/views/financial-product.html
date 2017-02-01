@@ -24,16 +24,15 @@
                 <div class="tab-content">
                     <div class="tab-pane active">
                         <div class=" row">
-                            <div class="col-sm-3 ">ID Subscription: {{product.subscription_id}}</div>
-                            <div class="col-sm-3 ">Payment mode: {{product.payment_mode|bkStringReplacer}}</div>
-                            <div class="col-sm-3 ">Country: {{product.payment_details.country}}</div>
-                            <div class="col-sm-3 ">Next pay: {{product.paid_until_the_day|bkUnixTimeToDate}}</div>
+                            <div class="col-sm-4 "><b> mode:</b> {{product.payment_mode|bkStringReplacer}}</div>
+                            <div class="col-sm-4 "><b>Country:</b> {{product.payment_details.country}}</div>
+                            <div class="col-sm-4 "><b>Device type:</b> {{product.product_type}}</div> <!-- TODO cheme ikonku?-->
+
                         </div>
                         <div class="margin-top-15 row">
-                            <div class="col-sm-3 ">Device type: {{product.product_type}}</div>
-                            <div class="col-sm-3 ">Plan: {{product.payment_method|bkStringReplacer}}</div>
-                            <div class="col-sm-3 ">Currency: {{product.currency}}</div>
-                            <div class="col-sm-3 ">Next invoice: <span class="font-red bg-yellow-lemon">TODO</span> </div>
+                            <div class="col-sm-4 "><b>ID Subscription:</b> {{product.subscription_id}}</div>
+                            <div class="col-sm-4 "><b>Plan:</b> {{product.payment_method|bkStringReplacer}}</div>
+                            <div class="col-sm-4 "><b>Remaining credit:</b> {{product.remaining_credit}}</div>
                         </div>
                     </div>
                 </div>
