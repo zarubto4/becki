@@ -20,7 +20,7 @@
             </div>
             <div>
                 Producer:
-                <a (click)="onProducerClick(device)">{{typeOfBoard.producer_name}} <span class="bold"><span class="font-red bg-yellow-lemon">TODO</span></span></a>
+                <a (click)="onProducerClick(typeOfBoard.producer_id)"><span class="bold">{{typeOfBoard.producer_name}}</span></a>
             </div>
             <div *ngIf="typeOfBoard.connectible_to_internet">
                 Ethernet MAC adress:

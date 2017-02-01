@@ -60,7 +60,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.navigate(['/hardware', boardTypeId]);
     }
 
-    onProducerClick(device: IBoard): void {
-        alert('TODO - Producer link.');
+    onProducerClick(producerId: string): void {
+        this.navigate(['/producers', producerId]);
     }
 }

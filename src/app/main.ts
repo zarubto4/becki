@@ -105,6 +105,8 @@ import { MonacoEditorLoaderService } from './services/MonacoEditorLoaderService'
 import { ModalsBlockoBlockCodeEditorComponent } from './modals/blocko-block-code-editor';
 import { ConsoleLogComponent } from './components/ConsoleLogComponent';
 import { ProjectsProjectHardwareHardwareComponent } from './views/projects-project-hardware-hardware';
+import { ProducersComponent } from './views/producers';
+import { ProducersProducerComponent } from './views/producers-producer';
 
 
 //  @formatter:off
@@ -163,6 +165,8 @@ let routes: Routes = [
     {path: 'projects/:project/widgets/:widgets', data: {breadName: ':widgets'}, component: ProjectsProjectWidgetsWidgetsComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/widgets/:widgets/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard]},
 
+    {path: 'producers', data: {breadName: 'Producers'}, component: ProducersComponent, canActivate: [AuthGuard]},
+    {path: 'producers/:producer', data: {breadName: ':last'}, component: ProducersProducerComponent, canActivate: [AuthGuard]},
 
     {path: '**', component: Error404Component},
 ];
@@ -173,6 +177,7 @@ let navigation = [
     new LabeledLink('Projects', ['/projects'], 'tasks'),
     new LabeledLink('Financial', ['/financial'],  'bank'),
     new LabeledLink('Hardware types', ['/hardware'], 'microchip'),
+    new LabeledLink('Producers',  ['/producers'] , 'industry'),
     /*new LabeledLink("Devices", ["/user/devices"], "rocket"),
     new LabeledLink("System", ["/system"], "globe"),*/
     new LabeledLink('Log out',  ['/logout'] , 'sign-out')
@@ -298,6 +303,8 @@ let tabMenus = {
         ProjectsProjectWidgetsWidgetsWidgetComponent,
         ProjectsProjectWidgetsWidgetsComponent,
         ProjectsProjectHardwareHardwareComponent,
+        ProducersComponent,
+        ProducersProducerComponent,
         // Modals components
         ModalsProjectPropertiesComponent,
         ModalsRemovalComponent,
