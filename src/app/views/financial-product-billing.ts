@@ -18,7 +18,7 @@ import { Subscription } from 'rxjs';
 })
 export class FinancialProductBillingComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
-    id: number;
+    id: string;
 
     routeParamsSubscription: Subscription;
 
@@ -50,7 +50,7 @@ export class FinancialProductBillingComponent extends BaseMainComponent implemen
     refresh(): void {
         this.blockUI();
         this.backendService.getAllProducts().then(products =>  {
-            this.product = products.find(product => product.id === this.id );
+            this.product = products.find(product => product.id === this.id);
             this.unblockUI();
         }).catch(error =>  {
 

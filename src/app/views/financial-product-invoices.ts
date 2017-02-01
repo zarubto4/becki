@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs';
 })
 export class FinancialProductInvoicesComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
-    id: number;
+    id: string;
 
     routeParamsSubscription: Subscription;
 
@@ -42,16 +42,8 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
 
     }
 
-    onDownloadPDFClick(id: number): void {
-
-        this.backendService.getInvoicePdf(id)
-            .then(invoice => {  // TODO někde se zde bere % navíc, a nemám tucha proč
-                this.fmSuccess(invoice.toString()); // TODO bude se fracet link, bylo by dobré hned z něj vytáhnout file
-                // TODO .. co to je? - David #1
-            })
-            .catch(error => {
-                console.error(error);
-            });
+    onDownloadPDFClick(invoice: IInvoice): void {
+        window.open(invoice.pdf_link, '_blank');
     }
 
     onSendClick(): void {

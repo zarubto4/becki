@@ -38,7 +38,7 @@
                     <td><span class="font-red bg-yellow-lemon">TODO</span> - <span class="font-red bg-yellow-lemon">TODO</span> </td>
                     <td><span *ngIf="!invoice.require_payment"><i class="  font-green-jungle fa fa-check "></i></span><span *ngIf="invoice.require_payment"><a (click)="onPayClick()">PAY</a></span></td>
                     <td class="no-wrap text-right">
-                        <button (click)="onDownloadPDFClick(invoice.id)" title="Download as PDF" class="btn bg-yellow-lemon btn-icon-only white">
+                        <button (click)="onDownloadPDFClick(invoice)" title="Download as PDF" class="btn bg-yellow-lemon btn-icon-only white">
                             <i class=" fa fa-file-pdf-o"></i>
                         </button>
                         <button (click)="onSendClick()" title="Send" class="btn bg-yellow-lemon btn-icon-only white">

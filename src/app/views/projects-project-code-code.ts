@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs/Rx';
 import { CodeFile } from '../components/CodeIDEComponent';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
-import { IProject, ICProgram, ICProgramVersion, IUserFiles, ICProgramVersionShortDetail } from '../backend/TyrionAPI';
+import { IProject, ICProgram, ICProgramVersion, IUserFile, ICProgramVersionShortDetail } from '../backend/TyrionAPI';
 import { ICodeCompileErrorMessage, CodeCompileError, CodeError } from '../backend/BeckiBackend';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { NullSafe } from '../helpers/NullSafe';
@@ -201,7 +201,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             if (success) {
                 let main = '';
 
-                let userFiles: IUserFiles[] = [];
+                let userFiles: IUserFile[] = [];
 
                 this.selectedCodeFiles.forEach((file) => {
                     if (file.objectFullPath === 'main.cpp') {
@@ -240,7 +240,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
         let main = '';
 
-        let userFiles: IUserFiles[] = [];
+        let userFiles: IUserFile[] = [];
 
         this.buildErrors = null;
         this.selectedCodeFiles.forEach((file) => {

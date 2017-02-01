@@ -91,7 +91,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
                 this.backendService.createProject({
                     project_name: model.name,
                     project_description: model.description,
-                    product_id: parseInt(model.product, 10)
+                    product_id: model.product
                 }) // TODO: add tarrif nebo produkt či jak se to bude jmenovat
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The project ${model.name} has been created.`));

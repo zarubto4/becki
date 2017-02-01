@@ -161,7 +161,7 @@ export class CurrentParamsService {
                 this.currentInstanceIdSubject.next(this.currentInstanceIdSnapshot);
             } else {
                 // TODO: remove parseInt after make invoice id string in Tyrion!!! [DH]
-                this.backendService.getInvoice(parseInt(params['invoice'], 10)).then((invoice) => {
+                this.backendService.getInvoice(params['invoice']).then((invoice) => {
                     this.currentInstanceIdSnapshot = invoice.invoice.date_of_create;
                     this.currentInstanceIdSubject.next(this.currentInstanceIdSnapshot);
                 });

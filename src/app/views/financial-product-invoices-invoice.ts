@@ -14,9 +14,9 @@ import { Subscription } from 'rxjs';
 })
 export class FinancialProductInvoicesInvoiceComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
-    id: number;
+    id: string;
 
-    invoiceId: number;
+    invoiceId: string;
 
     fullIvoice: IInvoiceFullDetails;
 
@@ -67,7 +67,7 @@ export class FinancialProductInvoicesInvoiceComponent extends BaseMainComponent 
         });
 
         this.backendService.getAllProducts().then(products =>  {
-            this.product = products.find(product => product.id === this.id );
+            this.product = products.find(product => product.id === this.id);
             this.unblockUI();
         }).catch(error =>  {
 
