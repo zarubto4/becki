@@ -34,6 +34,10 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
 
     state: string;
 
+    personId: string;
+
+    pictureLink: string;
+
     countryList: FormSelectComponentOption[] = StaticOptionLists.countryList;
 
     openTabName = 'personal';
@@ -71,6 +75,8 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
     ngOnInit(): void {
         let personObject = this.backEndService.personInfoSnapshot;
 
+        this.personId = personObject.id;
+
         this.editPermission = personObject.edit_permission;
 
         this.nickName = personObject.nick_name;
@@ -79,10 +85,13 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
 
         this.email = personObject.mail;
 
+        this.pictureLink = personObject.picture_link;
 
         this.infoForm.controls['fullName'].setValue(personObject.full_name);
 
         this.infoForm.controls['nickName'].setValue(personObject.nick_name);
+
+        this.infoForm.controls['state'].setValue(personObject.country);
     }
 
 
@@ -101,7 +110,15 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
         })
             .then(ok =>  {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageSuccess('Email with instructions was sent'));
+                this.backEndService.logout()
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('Email with instructions was sent.'));
+                        this.navigate(['/login']);
+                    })
+                    .catch((error) => {
+                        this.addFlashMessage(new FlashMessageError('This user cannot be log out.'));
+                    });
+                this.addFlashMessage(new FlashMessageSuccess('Email with instructions was sent.'));
             })
             .catch(error =>  {
                 this.unblockUI();
@@ -130,12 +147,28 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
                 this.addFlashMessage(new FlashMessageError('Cannot change email, ', response.message));
             }
         });
-
     }
 
     uploadProfilePicture(): void {
+        alert('update');
         // API requires 'multipart/form-data' Content-Type, name of the property is 'file'.
         this.backEndService.uploadPersonPicture(); // todo udělat něco co 1. nahraje obrázek 2. zkontroluje obrázek jestli je ve stavu jakém chceme 3. upravit ho 4. poslat ho
     }
-}
 
+    changeInfo(): void {
+        this.blockUI();
+        this.backEndService.editPerson(this.personId, {
+            nick_name: this.infoForm.controls['nickName'].value,
+            country: this.infoForm.controls['state'].value,
+            full_name: this.infoForm.controls['fullName'].value
+        })
+            .then((ok) => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageSuccess('Your information was updated.'));
+            })
+            .catch((error) => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot change information.', error));
+            });
+    }
+}

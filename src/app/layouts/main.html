@@ -43,9 +43,9 @@
                     <!-- BEGIN USER LOGIN DROPDOWN -->
                     <li class="dropdown dropdown-user">
                         <a class="dropdown-toggle" (click)="onUserToggleClick($events)">
-                            <img alt="" class="img-circle" [attr.src]="backendService.gravatarIcon"/>
+                            <img alt="" class="img-circle" [attr.src]="backendService.personInfoSnapshot.picture_link?backendService.personInfoSnapshot.picture_link:''"/>
                             <span class="username">
-                                {{backendService.personInfoSnapshot?backendService.personInfoSnapshot.full_name:""}}
+                                {{backendService.personInfoSnapshot.full_name?backendService.personInfoSnapshot.full_name:backendService.personInfoSnapshot.nick_name}}
                             </span>
                             <i class="fa fa-angle-down"></i>
                         </a>
