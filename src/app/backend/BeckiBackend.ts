@@ -292,7 +292,6 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     public tasks: number = 0;
 
-
     protected personInfoSnapshotDirty: boolean = true;
     public personInfoSnapshot: IPerson = null;
     public personInfo: Rx.Subject<IPerson> = new Rx.Subject<IPerson>();
@@ -303,7 +302,11 @@ export abstract class BeckiBackend extends TyrionAPI {
         super();
         // TODO: make better environment detection
         if (location && location.hostname) {
-            this.host = location.hostname + ':9000';
+            if (location.hostname.indexOf('portal.') === 0) {
+                this.host = location.hostname.replace('portal.', 'tyrion.');
+            } else {
+                this.host = location.hostname + ':9000';
+            }
         }
     }
 
@@ -324,8 +327,8 @@ export abstract class BeckiBackend extends TyrionAPI {
         this.tasks += 1;
         return this.requestRestGeneral(request)
             .then((response: RestResponse) => {
-                this.tasks -= 1;
                 if (success.indexOf(response.status) > -1) {
+                    this.tasks -= 1;
                     return <T>response.body;
                 }
                 switch (response.status) {
