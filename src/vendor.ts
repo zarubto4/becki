@@ -15,6 +15,11 @@ require('jquery-ui-bundle');
 w['ts'] = require('imports-loader?require=>undefined!typescript');
 require('imports-loader?this=>window,fix=>module.exports=0!snapsvg');
 
+// fix for Snap urls for Safari
+(<any>Snap).url = function (url: string) {
+    return 'url(\'' + window.location.pathname + '#' + url + '\')';
+};
+
 // Fonts
 import 'font-awesome/css/font-awesome.min.css';
 import 'font-roboto/dist/styles/roboto.min.css';
