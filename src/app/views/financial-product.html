@@ -4,9 +4,9 @@
  */
  -->
 
-<bk-layout-main tabMenu="tariffs-tarrif" [title]="'Financial'">
-    <div *ngIf="product" class="tabbable-line tabbable-full-width">
-        <h3 class="title center-block">{{product.product_individual_name}}</h3>
+<bk-layout-main *ngIf="product" tabMenu="tariffs-tarrif" [title]="product.product_individual_name">
+    <div class="tabbable-line tabbable-full-width">
+        <h3 class="title center-block">Dashboard</h3>
 
         <div class="portlet light bordered">
             <div class="portlet-title tab able-line">

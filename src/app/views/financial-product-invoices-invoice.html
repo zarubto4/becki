@@ -4,7 +4,7 @@
  */
  -->
 
-<bk-layout-main tabMenu="tariffs-tarrif" [title]="'Invoice'">
+<bk-layout-main *ngIf="product" tabMenu="tariffs-tarrif" [title]="product.product_individual_name">
     <div *ngIf="fullIvoice" class="tabbable-line tabbable-full-width">
         <h3 class="title center-block"></h3>
         <div class="portlet light bordered">
@@ -58,8 +58,8 @@
                                         <td>{{item.name}}</td>
                                         <td>{{item.unit_name}}</td>
                                         <td>{{item.quantity}}x</td>
-                                        <td>{{item.vat_rate}} {{item.currency}}</td>
-                                        <td>{{item.unit_price}} {{item.currency}}</td>
+                                        <td>{{item.vat_rate}} $ </td>
+                                        <td>{{item.unit_price}} $</td>
 
                                     </tr>
 
@@ -69,7 +69,7 @@
                                         <td></td>
                                         <td></td>
                                         <td><strong>Total</strong></td>
-                                        <td>{{getWholePrice()}} {{item.currency}}</td>
+                                        <td>{{getWholePrice()}} $</td>
                                     </tr>
                                     </tbody>
                                 </table>

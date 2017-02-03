@@ -17,6 +17,7 @@ import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { Subscription } from 'rxjs';
 import { StaticOptionLists } from '../helpers/StaticOptionLists';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
+import { ModalsGopayInline, ModalsGopayInlineComponent } from '../modals/gopay-inline';
 
 @Component({
     selector: 'bk-view-product-registration',
@@ -67,8 +68,8 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
     getWholePrice(): string {
         let price = 0;
-        price += this.selectedTariff.price.EUR;
-        this.selectedExtensions.map(pack => price += pack.price.EUR);
+        price += this.selectedTariff.price.USD;
+        this.selectedExtensions.map(pack => price += pack.price.USD);
 
         return price.toString().substring(0, price.toString().indexOf('.') + 3);
     }
@@ -121,7 +122,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         // console.log(tariff.extensions);
 
 
-        this.currency_type = [{ label: 'CZK', value: 'CZK' }, { label: 'EUR', value: 'EUR' }]; // TODO pak smazat až bude měna dodávána
+        this.currency_type = [{ label: 'USD', value: 'USD' }]; // TODO pak smazat až bude měna dodávána
 
         let input: { [key: string]: any; } = {
             'city': ['', [Validators.required, Validators.minLength(5)]],
@@ -134,11 +135,11 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
             'street_number': ['', [Validators.required, BeckiValidators.number]],
 
-            'tariff_type': [tariff.id], // TODO nemá toto být bokem? páč se jedná o hodnotu se kterou uživatel nepracuje a ani se mu nezobrazuje
+            'tariff_type': [tariff.id],
 
             'zip_code': ['', [Validators.required, Validators.minLength(5)]],
 
-            'extensions_ids': ['', ],
+            'extensions_ids': [''],
 
         };
 
@@ -193,12 +194,13 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
     }
 
     checkInEu(): void {
-        let country = this.countryList.find(fCountry => this.form && fCountry.value === this.form.controls['country'].value);
-        this.inEu = country ? country.data : null;
+        if (this.selectedTariff.company_details_required) {
+            let country = this.countryList.find(fCountry => this.form && fCountry.value === this.form.controls['country'].value);
+            this.inEu = country ? country.data : null;
 
-        this.form.controls['registration_no'].updateValueAndValidity();
-        this.form.controls['vat_number'].updateValueAndValidity();
-
+            this.form.controls['registration_no'].updateValueAndValidity();
+            this.form.controls['vat_number'].updateValueAndValidity();
+        }
     }
 
     onSubmitClick(): void {
@@ -214,8 +216,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             zip_code: this.form.controls['zip_code'].value,
             country: this.form.controls['country'].value,
             currency_type: this.form.controls['currency_type'].value,
-
-            extensions_ids: this.form.controls['extensions_ids'].value, // TODO vložit sem hodnotu z pole
+            extensions_ids: '[' + this.selectedExtensions.map(extension => {return extension.id + ','; }) + ']',
         };
 
 
@@ -263,7 +264,6 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         }
 
 
-        // console.log(tariffData);
 
 
         this.backendService.createProduct(<ITariffRegister>tariffData)
@@ -271,13 +271,20 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
                 this.unblockUI();
                 this.serverResponse = tarif;
                 if ((<any>tarif).gw_url) { // TODO podle čísla HTTP hlavičky se vrací 3 typy
-                    this.addFlashMessage(new FlashMessageWarning('Product was created but payment is required, click', '<a href=>here</a>'));
-                    window.location.href = (<IGoPayUrl>tarif).gw_url;
+                    this.addFlashMessage(new FlashMessageWarning('Product was created but payment is required, click'));
+                    let model = new ModalsGopayInline("gib monny", (<IGoPayUrl>tarif).gw_url);
+                    this.modalService.showModal(model).then((success) => {
+                        this.router.navigate(['/financial']);
+                    });
 
-                   // this.router.navigate(['/financial']);
+                    window.location.href = (<IGoPayUrl>tarif).gw_url;
+                    this.router.navigate(['/financial']);
+
                 } else {
                     this.addFlashMessage(new FlashMessageSuccess('Product was created, now you can create a new project'));
-                   // this.router.navigate(['/financial']);
+
+                    window.location.href = (<IGoPayUrl>tarif).gw_url;
+                    this.router.navigate(['/financial']);
                 }
             })
             .catch(reason => {
