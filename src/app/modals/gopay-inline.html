@@ -1,0 +1,19 @@
+<!--
+ Created by dominikKrisztof on 1.2.17.
+
+ © 2016 Becki Authors. See the AUTHORS file found in the top-level
+ directory of this distribution.
+-->
+<div>
+    <div class="modal-header">
+        <h4 class="modal-title">{{modalModel.name}}</h4>
+    </div>
+    <div class="modal-body">
+        <form action=gopayUrl method="post" id="gopay-payment-button">
+            <button name="pay" type="submit">Zaplatit</button>
+            <script type="text/javascript" src="https://gw.sandbox.gopay.com/gp-gw/js/embed.js"></script>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn green" (click)="onSubmitClick()">OK</button>
+    </div
