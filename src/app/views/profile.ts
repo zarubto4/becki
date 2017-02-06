@@ -136,6 +136,14 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
                 })
                     .then(ok =>  {
                         this.unblockUI();
+                        this.backEndService.logout()
+                            .then(() => {
+                                this.addFlashMessage(new FlashMessageSuccess('Email with instructions was sent.'));
+                                this.navigate(['/login']);
+                            })
+                            .catch((error) => {
+                                this.addFlashMessage(new FlashMessageError('This user cannot be log out.'));
+                            });
                         this.addFlashMessage(new FlashMessageSuccess('Email with instructions was sent'));
                     })
                     .catch(error =>  {
@@ -150,7 +158,6 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
     }
 
     uploadProfilePicture(): void {
-        alert('update');
         // API requires 'multipart/form-data' Content-Type, name of the property is 'file'.
         this.backEndService.uploadPersonPicture(); // todo udělat něco co 1. nahraje obrázek 2. zkontroluje obrázek jestli je ve stavu jakém chceme 3. upravit ho 4. poslat ho
     }
