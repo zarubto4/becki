@@ -10,6 +10,7 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { BackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
+import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 
 
 export class ModalsAddHardwareModel extends ModalModel {
@@ -35,7 +36,7 @@ export class ModalsAddHardwareComponent implements OnInit {
     constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
-            'id': ['', [Validators.required]]
+            'id': ['', [Validators.required], BeckiAsyncValidators.hardwareDeviceId(backendService)]
         });
     }
 

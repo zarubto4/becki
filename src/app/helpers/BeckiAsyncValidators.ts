@@ -95,6 +95,27 @@ export class BeckiAsyncValidators {
         });
     }
 
+    public static hardwareDeviceId(backEnd: BackendService): AsyncValidatorFn {
+        return AsyncValidatorDebounce.debounce((control: FormControl) => {
+            return new Promise<any>((resolve) => {
+                if (!control.value) {
+                    resolve({'hardwareDeviceId': true}); // invalid
+                    return;
+                }
+                backEnd.getBoard(control.value)
+                    .then((device) => {
+                        if (!device) {
+                            resolve({'hardwareDeviceId': true}); // invalid
+                        }
+                        resolve(null); // valid
+                    })
+                    .catch(() => {
+                        resolve({'hardwareDeviceId': true}); // invalid
+                    });
+            });
+        });
+    }
+
     public static blockoNameTaken(backEnd: BackendService, projectId: string|(() => string)): AsyncValidatorFn {
         return AsyncValidatorDebounce.debounce((control: FormControl) => {
             return new Promise<any>((resolve) => {

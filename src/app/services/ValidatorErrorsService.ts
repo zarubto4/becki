@@ -28,6 +28,9 @@ export class ValidatorErrorsService {
             if (errors['blockoNameTaken']) {
                 return 'This blocko name is already taken.';
             }
+            if (errors['hardwareDeviceId']) {
+                return 'The hardware cannot be added to project.';
+            }
             if (errors['email']) {
                 return 'Invalid email.';
             }
