@@ -216,7 +216,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             zip_code: this.form.controls['zip_code'].value,
             country: this.form.controls['country'].value,
             currency_type: this.form.controls['currency_type'].value,
-            extensions_ids: '[' + this.selectedExtensions.map(extension => {return extension.id + ','; }) + ']',
+            extensions_ids: '[' + this.selectedExtensions.forEach(extension => {return extension.id; }) + ']',
         };
 
 
@@ -271,8 +271,8 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
                 this.unblockUI();
                 this.serverResponse = tarif;
                 if ((<any>tarif).gw_url) { // TODO podle čísla HTTP hlavičky se vrací 3 typy
-                    this.addFlashMessage(new FlashMessageWarning('Product was created but payment is required, click'));
-                    let model = new ModalsGopayInline("gib monny", (<IGoPayUrl>tarif).gw_url);
+                    this.addFlashMessage(new FlashMessageWarning('Product was created but payment is required'));
+                    let model = new ModalsGopayInline('Payment', (<IGoPayUrl>tarif).gw_url);
                     this.modalService.showModal(model).then((success) => {
                         this.router.navigate(['/financial']);
                     });

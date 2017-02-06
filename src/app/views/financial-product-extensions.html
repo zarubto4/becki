@@ -15,9 +15,27 @@
                 </div>
             </div>
             <div class="portlet-body">
-                <div class="tab-content">
-                    <div class="tab-pane active">
-                        <span class="font-red bg-yellow-lemon">TODO</span>
+                <div class="pricing-content-1">
+               <div class="row" *ngIf="product.extensions" >
+                        <div *ngFor="let package of product.extensions" class="col-md-3">
+                            <div  class="price-column-container border-active">
+                                <div class="price-table-head bg-{{package.color | lowercase}}">
+                                    <h2 class="no-margin">{{package.name}}</h2>
+                                </div>
+                                <div class="arrow-down border-top-{{package.color | lowercase}}"></div>
+                                <div class="price-table-content">
+                                    <div *ngFor="let label of package.labels" class="row mobile-padding">
+                                        <div class="col-xs-4 text-right mobile-padding">
+                                            <i class="fa {{label.icon| lowercase}}"></i>
+                                        </div>
+                                        <div class="col-xs-8 text-left mobile-padding">{{label.label}}</div>
+                                        <!--(mouseenter)="" (mouseleave)=""-->
+                                    </div>
+
+                                </div>
+                                <div class="arrow-down arrow-grey"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
