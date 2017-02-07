@@ -29,7 +29,18 @@ export class ValidatorErrorsService {
                 return 'This blocko name is already taken.';
             }
             if (errors['hardwareDeviceId']) {
-                return 'The hardware cannot be added to project.';
+                switch (errors['hardwareDeviceId']) {
+                    case 'ALREADY_REGISTERED_YOUR_ACC':
+                        return 'The hardware is already registered in your ACC.';
+                    case 'ALREADY_REGISTERED':
+                        return 'The hardware is already registered.';
+                    case 'PERMANENTLY_DISABLED':
+                        return 'The hardware is permanently disabled.';
+                    case 'BROKEN_DEVICE':
+                        return 'The hardware is broken.';
+                    default:
+                        return 'The hardware doesn\'t exist.';
+                }
             }
             if (errors['email']) {
                 return 'Invalid email.';

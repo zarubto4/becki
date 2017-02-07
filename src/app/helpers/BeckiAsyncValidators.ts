@@ -98,19 +98,16 @@ export class BeckiAsyncValidators {
     public static hardwareDeviceId(backEnd: BackendService): AsyncValidatorFn {
         return AsyncValidatorDebounce.debounce((control: FormControl) => {
             return new Promise<any>((resolve) => {
-                if (!control.value) {
-                    resolve({'hardwareDeviceId': true}); // invalid
-                    return;
-                }
-                backEnd.getBoard(control.value)
-                    .then((device) => {
-                        if (!device) {
-                            resolve({'hardwareDeviceId': true}); // invalid
+                backEnd.getBoardCheck(control.value)
+                    .then((status) => {
+                        if (status.status === 'CAN_REGISTER') {
+                            resolve(null); // valid
+                        } else {
+                            resolve({'hardwareDeviceId': status.status}); // invalid
                         }
-                        resolve(null); // valid
                     })
                     .catch(() => {
-                        resolve({'hardwareDeviceId': true}); // invalid
+                        resolve({'hardwareDeviceId': true});
                     });
             });
         });
