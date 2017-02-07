@@ -30,6 +30,7 @@ export class CreateUserComponent implements OnInit {
         this.CreateUserForm = this.formBuilder.group({
             'email': ['', [Validators.required, BeckiValidators.email], BeckiAsyncValidators.validateEntity(this.backendService, 'mail')],
             'nick_name': ['', [Validators.required, Validators.minLength(8), Validators.maxLength(60)], BeckiAsyncValidators.validateEntity(this.backendService, 'nick_name')],
+            'full_name': ['', [Validators.required, Validators.minLength(8), Validators.maxLength(60)]],
             'password': ['', [Validators.required, Validators.minLength(8), Validators.maxLength(60)]],
             'passwordConfirm': ['', [BeckiValidators.passwordSame(() => this.CreateUserForm, 'password'), Validators.required, Validators.minLength(8), Validators.maxLength(60)]]
 
@@ -45,7 +46,8 @@ export class CreateUserComponent implements OnInit {
         this.backendService.createPerson( {
             nick_name: this.CreateUserForm.controls['nick_name'].value,
             mail: this.CreateUserForm.controls['email'].value,
-            password: this.CreateUserForm.controls['password'].value
+            password: this.CreateUserForm.controls['password'].value,
+            full_name: this.CreateUserForm.controls['full_name'].value
         })
             .then(() => {
                 this.notificationService.addFlashMessage(new FlashMessageSuccess('email with instructions was sent'));
