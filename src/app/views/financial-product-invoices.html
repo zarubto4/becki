@@ -38,13 +38,13 @@
                     <td> {{invoice.date_of_create|bkUnixTimeToDate}} </td>
                     <td><span *ngIf="!invoice.require_payment"><i class="  font-green-jungle fa fa-check "></i></span><span *ngIf="invoice.require_payment"><a class="font-red-thunderbird" (click)="onPayClick(invoice)">Payment required</a></span></td>
                     <td class="no-wrap text-right">
-                        <button (click)="onDownloadPDFClick(invoice)" title="Download as PDF" class="btn bg-yellow-lemon btn-icon-only white">
+                        <button (click)="onDownloadPDFClick(invoice)" title="Download as PDF" class="btn btn-icon-only white">
                             <i class=" fa fa-file-pdf-o"></i>
                         </button>
                         <button (click)="onSendClick(invoice)" title="Send" class="btn btn-icon-only white">
                             <i class=" fa fa-paper-plane-o"></i>
                         </button>
-                        <button (click)="onPrintClick()" title="Print" class="btn bg-yellow-lemon btn-icon-only white">
+                        <button (click)="onPrintClick(invoice)" title="Print" class="btn btn-icon-only white">
                             <i class=" fa fa-print "></i>
                         </button>
                    <!--     <button (click)="onSettingsClick()" title="Settings" class="btn btn-icon-only white">

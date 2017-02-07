@@ -1,0 +1,17 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title">{{modalModel.name}}</h4>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="form">
+            <input type="checkbox"  name="Specify email" (change)="differentEmail=!differentEmail">
+            <bk-form-input (disabled)="differentEmail" [control]="form.controls.email" label="specify email"></bk-form-input>
+          
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">send</button>
+        <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
+    </div>
+</div>

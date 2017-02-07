@@ -1,3 +1,4 @@
+
 /**
   ~ © 2016 Becki Authors. See the AUTHORS file found in the top-level
   ~ directory of this distribution.
@@ -7,17 +8,17 @@
  * Created by dominik krisztof on 22/09/16.
  */
 
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, OnInit, Injector } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { IGeneralTariff, ITariffRegister, IGeneralTariffExtensions, IGoPayUrl } from '../backend/TyrionAPI';
-import { FlashMessageSuccess, FlashMessageWarning, FlashMessageError } from '../services/NotificationService';
+import { IGeneralTariff, IGeneralTariffExtensions, ITariffRegister, IGoPayUrl } from '../backend/TyrionAPI';
+import { FlashMessageError, FlashMessageWarning, FlashMessageSuccess } from '../services/NotificationService';
 import { FormGroup, Validators } from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { Subscription } from 'rxjs';
 import { StaticOptionLists } from '../helpers/StaticOptionLists';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
-import { ModalsGopayInline, ModalsGopayInlineComponent } from '../modals/gopay-inline';
+import { ModalsGopayInlineModel, ModalsGopayInlineComponent } from '../modals/gopay-inline';
 
 @Component({
     selector: 'bk-view-product-registration',
@@ -216,7 +217,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             zip_code: this.form.controls['zip_code'].value,
             country: this.form.controls['country'].value,
             currency_type: this.form.controls['currency_type'].value,
-            extensions_ids: '[' + this.selectedExtensions.forEach(extension => {return extension.id; }) + ']',
+            extensions_ids: '[' + this.selectedExtensions.forEach(extension => { return extension.id; }) + ']',
         };
 
 
@@ -260,7 +261,6 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
                 company_invoice_email: this.form.controls['company_invoice_email'].value,
             };
             tariffData = Object.assign(tariffData, companyTariffData);
-
         }
 
 
@@ -272,7 +272,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
                 this.serverResponse = tarif;
                 if ((<any>tarif).gw_url) { // TODO podle čísla HTTP hlavičky se vrací 3 typy
                     this.addFlashMessage(new FlashMessageWarning('Product was created but payment is required'));
-                    let model = new ModalsGopayInline('Payment', (<IGoPayUrl>tarif).gw_url);
+                    let model = new ModalsGopayInlineModel('Payment', (<IGoPayUrl>tarif).gw_url);
                     this.modalService.showModal(model).then((success) => {
                         this.router.navigate(['/financial']);
                     });

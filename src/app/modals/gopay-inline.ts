@@ -11,7 +11,7 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { ModalModel } from '../services/ModalService';
 
 
-export class ModalsGopayInline extends ModalModel {
+export class ModalsGopayInlineModel extends ModalModel {
     constructor(public name: string = '', public gopayUrl: string = '') {
         super();
     }
@@ -24,7 +24,7 @@ export class ModalsGopayInline extends ModalModel {
 export class ModalsGopayInlineComponent implements OnInit {
 
     @Input()
-    modalModel: ModalsGopayInline;
+    modalModel: ModalsGopayInlineModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
