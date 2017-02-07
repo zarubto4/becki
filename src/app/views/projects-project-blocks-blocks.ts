@@ -60,7 +60,7 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
     }
 
     onBlockClick(block: IBlockoBlockShortDetail): void {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', this.blocksId, block.id]);
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', this.blocksId, block.blocko_block_id]);
     }
 
     onBlockAddClick(group: ITypeOfBlockShortDetail): void {
@@ -89,11 +89,11 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
 
     onBlockEditClick(block: IBlockoBlockShortDetail): void {
 
-        let model = new ModalsBlocksBlockPropertiesModel(block.name, block.description, true, block.name);
+        let model = new ModalsBlocksBlockPropertiesModel(block.blocko_block_name, block.blocko_block_description, true, block.blocko_block_name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editBlockoBlock(block.id, {
+                this.backendService.editBlockoBlock(block.blocko_block_id, {
                     name: model.name,
                     general_description: model.description,
                     type_of_block_id: this.blocksId // tohle je trochu divný ne?
@@ -113,10 +113,10 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
 
     onBlockDeleteClick(block: IBlockoBlockShortDetail): void {
 
-        this.modalService.showModal(new ModalsRemovalModel(block.id)).then((success) => {
+        this.modalService.showModal(new ModalsRemovalModel(block.blocko_block_id)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteBlockoBlock(block.id)
+                this.backendService.deleteBlockoBlock(block.blocko_block_id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess('The block has been removed.'));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
