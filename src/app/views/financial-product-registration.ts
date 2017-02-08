@@ -32,8 +32,6 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
     tariffForRegistration: IGeneralTariff[];
 
-    serverResponse: any;
-
     step: number;
 
     activeClass: { [key: string]: boolean } = {};
@@ -41,8 +39,6 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
     selectedExtensions: IGeneralTariffExtensions[] = [];
 
     selectedTariff: IGeneralTariff;
-
-    userCompany: boolean = false;
 
     inEu: boolean = false;
 
@@ -158,7 +154,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
         }
 
-        if (this.selectedTariff.company_details_required || this.userCompany) {
+        if (this.selectedTariff.company_details_required) {
 
             input['company_authorized_email'] = ['', [Validators.required, Validators.minLength(4), BeckiValidators.email]]; // company only
 
@@ -217,7 +213,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             zip_code: this.form.controls['zip_code'].value,
             country: this.form.controls['country'].value,
             currency_type: this.form.controls['currency_type'].value,
-            extensions_ids: '[' + this.selectedExtensions.forEach(extension => { return extension.id; }) + ']',
+            extensions_ids: this.selectedExtensions.toString,
         };
 
 
@@ -269,9 +265,8 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
         this.backendService.createProduct(<ITariffRegister>tariffData)
             .then(tarif => {
-                this.unblockUI();
-                this.serverResponse = tarif;
-                if ((<any>tarif).gw_url) { // TODO podle čísla HTTP hlavičky se vrací 3 typy
+
+                if ((<any>tarif).gw_url) {
                     this.addFlashMessage(new FlashMessageWarning('Product was created but payment is required'));
                     let model = new ModalsGopayInlineModel('Payment', (<IGoPayUrl>tarif).gw_url);
                     this.modalService.showModal(model).then((success) => {
@@ -279,13 +274,11 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
                     });
 
                     window.location.href = (<IGoPayUrl>tarif).gw_url;
-                    this.router.navigate(['/financial']);
 
                 } else {
                     this.addFlashMessage(new FlashMessageSuccess('Product was created, now you can create a new project'));
 
                     window.location.href = (<IGoPayUrl>tarif).gw_url;
-                    this.router.navigate(['/financial']);
                 }
             })
             .catch(reason => {

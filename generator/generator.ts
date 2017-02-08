@@ -87,7 +87,7 @@ var CONFIG = {
         "get:/instance/project/{project_id}": "getAllInstancesForProject",
     },
     methodsIgnoreParts: ["coreClient", "compilation", "grid", "get", "filter", "list", "deactivateBoard", "create", "edit", "upload", "update", "all", "validate", "recovery", "connect", "disconnect"],
-    methodsOkCodes: [200, 201],
+    methodsOkCodes: [200, 201, 202],
 };
 
 var throwError = (msg) => {
