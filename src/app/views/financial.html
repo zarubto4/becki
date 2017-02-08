@@ -34,17 +34,17 @@
                 <tr *ngFor="let product of products">
                     <td class="no-wrap"><a (click)="onProductClick(product)"><b>{{product.product_individual_name}}</b></a></td>
                       <td class="no-wrap ">
-                        <span title="Bank transfer" class=" green-jungle  " *ngIf="product.payment_method=='bank_transfer'"> <!-- TODO zjistit jaké barvičky mají být a podle čeho se mají rosvicet -->
+                        <span title="Bank transfer" *ngIf="product.payment_method=='bank_transfer'"> <!-- TODO zjistit jaké barvičky mají být a podle čeho se mají rosvicet -->
                             <i class="green-jungle fa fa-bank "> </i> Bank transfer
                         </span>
-                        <span title="Credits" class=" green-jungle  " *ngIf="product.payment_method=='credit'">
+                        <span title="Credits"  *ngIf="product.payment_method=='credit'">
                             <i class="green-jungle fa fa-money " > </i>Credits
                         </span>
-                        <span title="Credit Card" class=" green-jungle  " *ngIf="product.payment_method=='credit_card'">
+                        <span title="Credit Card" *ngIf="product.payment_method=='credit_card'">
                             <i class="green-jungle fa fa-credit-card "></i> Credit Card
                         </span>
-                        <span title="Free" class=" font-green-jungle " *ngIf="product.payment_method=='free'">
-                            <i class="green-jungle fa fa-suitcase "></i> Free <!--TODO je třeba najít lepší ikonku -->
+                        <span title="Free" *ngIf="product.payment_method=='Not set yet'">
+                            <i class="green-jungle fa fa-suitcase "></i> Not set <!--TODO je třeba najít lepší ikonku -->
                         </span>
                     </td>
                     <td>{{product.subscription_id}}</td>
