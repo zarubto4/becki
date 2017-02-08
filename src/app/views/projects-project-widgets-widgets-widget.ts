@@ -237,7 +237,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
             }
         });
 
-        this.widgetInstance.eventsEmitter.listenEvent('recieveMessage', (e: Core.IOMessageEvent) => {
+        this.widgetInstance.eventsEmitter.listenEvent('messageReceived', (e: Core.IOMessageEvent) => {
             if (e.connector.isInput()) {
                 return;
             }

@@ -98,7 +98,6 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
     }
 
     onSubmitClick(): void {
-
         this.configProperties.forEach((configProperty) => {
             if (Types.StringToConfigPropertyTypeTable[configProperty.type] === Types.ConfigPropertyType.Integer) {
                 let num = parseInt(this.formModel[configProperty.id], 10);
