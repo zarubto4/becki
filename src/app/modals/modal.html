@@ -70,6 +70,12 @@
             <template [ngSwitchCase]="'ModalsWidgetsWidgetPropertiesModel'">
                 <bk-modals-widgets-widget-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-widgets-widget-properties>
             </template>
+            <template [ngSwitchCase]="'ModalsSendInvoiceModel'">
+                <bk-modals-send-invoice [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-send-invoice>
+            </template>
+            <template [ngSwitchCase]="'ModalsGopayInlineModel'">
+                <bk-modals-gopay-inline [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-gopay-inline>
+            </template>
         </div>
     </div>
 </div>

@@ -1,3 +1,4 @@
+
 /*
  * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
  * directory of this distribution.
@@ -107,6 +108,8 @@ import { ConsoleLogComponent } from './components/ConsoleLogComponent';
 import { ProjectsProjectHardwareHardwareComponent } from './views/projects-project-hardware-hardware';
 import { ProducersComponent } from './views/producers';
 import { ProducersProducerComponent } from './views/producers-producer';
+import { ModalsGopayInlineComponent } from './modals/gopay-inline';
+import { ModalsSendInvoiceComponent } from './modals/financial-send-invoice';
 
 
 //  @formatter:off
@@ -328,7 +331,9 @@ let tabMenus = {
         ModalsBlockoVersionSelectComponent,
         ModalsMembersAddComponent,
         ModalsWidgetsTypePropertiesComponent,
-        ModalsWidgetsWidgetPropertiesComponent
+        ModalsWidgetsWidgetPropertiesComponent,
+        ModalsGopayInlineComponent,
+        ModalsSendInvoiceComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

@@ -1,4 +1,4 @@
-/**
+/*
  * Created by dominik.krisztof on 01.12.16.
  */
 /*
@@ -9,7 +9,14 @@ import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { IProduct, IInvoice } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
-
+import { ModalsGopayInlineComponent } from '../modals/gopay-inline';
+import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { ModalsSendInvoiceModel } from './../modals/financial-send-invoice';
+import { ModalsGopayInlineModel } from './../modals/gopay-inline';
+import { ModalsRemovalModel } from './../modals/removal';
+import { IApplicableProduct } from './../backend/TyrionAPI';
+import { ModalsProjectPropertiesModel } from './../modals/project-properties';
+import { ModalsGridProjectPropertiesComponent } from './../modals/grid-project-properties';
 
 @Component({
     selector: 'bk-view-financial-product-invoices',
@@ -35,19 +42,33 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
     }
 
     onInvoiceClick(invoice: IInvoice): void {
-        this.router.navigate(['financial', this.id, 'invoices', invoice.id]); // TODO špatně routuje
+        this.router.navigate(['financial', this.id, 'invoices', invoice.id]);
     }
 
     onPayClick(invoice: IInvoice): void {
-
+        this.backendService.sendInvoiceReimbursement(invoice.id).then(gopay => {
+            let model = new ModalsGopayInlineModel('Payment', (gopay.gw_url));
+            this.modalService.showModal(model).then((success) => {
+                this.router.navigate(['/financial']);
+            });
+        });
     }
 
     onDownloadPDFClick(invoice: IInvoice): void {
-        window.open(invoice.pdf_link, '_blank');
+        window.open(invoice.pdf_link, 'download');
     }
 
-    onSendClick(): void {
-
+    onSendClick(invoice: IInvoice): void {
+        let model = new ModalsSendInvoiceModel('Send invoice', 'ulti56521' /*invoice.id*/, 'peniston' /*this.product.payment_details.company_invoice_email*/);
+        this.modalService.showModal(model).then((success) => {
+            this.backendService.InvoiceResend('peniston').then(response => {
+                // this.unblockUI();
+                this.addFlashMessage(new FlashMessageSuccess('The invoice has been resended on general invoice email.'));
+            }).catch(() => {
+                // this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('The invoice can not been resend'));
+            });
+        });
     }
 
     onPrintClick(): void {
@@ -78,7 +99,6 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
         this.blockUI();
         this.backendService.getAllProducts().then(products => {
             this.product = products.find(product => product.id === this.id);
-            // console.log(this.product);
             this.invoices = this.product.invoices;
             this.unblockUI();
         }).catch(error => {

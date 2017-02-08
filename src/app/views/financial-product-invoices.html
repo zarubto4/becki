@@ -3,7 +3,7 @@
  * directory of this distribution.
  */
  -->
-<bk-layout-main tabMenu="tariffs-tarrif" [title]="'Financial'">
+<bk-layout-main *ngIf="product" tabMenu="tariffs-tarrif" [title]="product.product_individual_name">
     <div class="tabbable-line tabbable-full-width">
         <h3 class="title center-block"></h3>
         <div class="portlet light bordered">
@@ -26,7 +26,7 @@
                 <tr>
                     <th>Invoice ID</th>
                     <th>Total cost</th>
-                    <th>Time period</th>
+                    <th>Date of create</th>
                     <th>Paid</th>
                     <th class="text-right">Actions</th>
                 </tr>
@@ -35,16 +35,16 @@
                 <tr *ngFor="let invoice of invoices">
                     <td class="no-wrap"><a (click)="onInvoiceClick(invoice)">{{invoice.invoice_number}}</a></td>
                     <td>{{invoice.id}}</td>
-                    <td><span class="font-red bg-yellow-lemon">TODO</span> - <span class="font-red bg-yellow-lemon">TODO</span> </td>
-                    <td><span *ngIf="!invoice.require_payment"><i class="  font-green-jungle fa fa-check "></i></span><span *ngIf="invoice.require_payment"><a (click)="onPayClick()">PAY</a></span></td>
+                    <td> {{invoice.date_of_create|bkUnixTimeToDate}} </td>
+                    <td><span *ngIf="!invoice.require_payment"><i class="  font-green-jungle fa fa-check "></i></span><span *ngIf="invoice.require_payment"><a class="font-red-thunderbird" (click)="onPayClick(invoice)">Payment required</a></span></td>
                     <td class="no-wrap text-right">
-                        <button (click)="onDownloadPDFClick(invoice)" title="Download as PDF" class="btn bg-yellow-lemon btn-icon-only white">
+                        <button (click)="onDownloadPDFClick(invoice)" title="Download as PDF" class="btn btn-icon-only white">
                             <i class=" fa fa-file-pdf-o"></i>
                         </button>
-                        <button (click)="onSendClick()" title="Send" class="btn bg-yellow-lemon btn-icon-only white">
+                        <button (click)="onSendClick(invoice)" title="Send" class="btn btn-icon-only white">
                             <i class=" fa fa-paper-plane-o"></i>
                         </button>
-                        <button (click)="onPrintClick()" title="Print" class="btn bg-yellow-lemon btn-icon-only white">
+                        <button (click)="onPrintClick(invoice)" title="Print" class="btn btn-icon-only white">
                             <i class=" fa fa-print "></i>
                         </button>
                    <!--     <button (click)="onSettingsClick()" title="Settings" class="btn btn-icon-only white">

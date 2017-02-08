@@ -82,10 +82,12 @@ var CONFIG = {
         "put:/product/activate/{product_id}": "productActivate",
         "put:/product/deactivate/{product_id}": "productDeactivate",
         "put:/invoice/send_remainder/{invoice_id}": "sendInvoiceRemainder",
+        "post:/invoice/reimbursement/{invoice_id}": "sendInvoiceReimbursement",
+        "post:/invoice/resend/{invoice_id}": "InvoiceResend",
         "get:/instance/project/{project_id}": "getAllInstancesForProject",
     },
     methodsIgnoreParts: ["coreClient", "compilation", "grid", "get", "filter", "list", "deactivateBoard", "create", "edit", "upload", "update", "all", "validate", "recovery", "connect", "disconnect"],
-    methodsOkCodes: [200, 201],
+    methodsOkCodes: [200, 201, 202],
 };
 
 var throwError = (msg) => {

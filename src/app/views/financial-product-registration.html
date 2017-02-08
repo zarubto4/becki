@@ -61,7 +61,6 @@
             <div class="portlet-body">
                 <div class="pricing-content-1">
                     <div class="row">
-                        <h3 class="center-align"><input type="checkbox"  [ngModelOptions]="{standalone: true}" [(ngModel)]="userCompany" >I have a company</h3>
                         <div *ngFor="let tariff of tariffForRegistration" class="col-md-3">
                             <div class="price-column-container border-active">
                                 <div class="price-table-head bg-{{tariff.color| lowercase}}">
@@ -70,10 +69,8 @@
                                 <div class="arrow-down border-top-{{tariff.color| lowercase}}"></div>
 
                                 <div class="price-table-pricing">
-                                    <h4 style="margin: 0 10px; color: gray;" class="pull-right">{{tariff.price.USD}}<span class="becki-payment-secondary price-sign" >$</span></h4>
-                                    <h4 style="margin: 0 10px;color: gray;" class="pull-left">{{tariff.price.CZK}}<span class="becki-payment-secondary price-sign">CZK</span></h4>
-                                    <h3 style="clear: both;padding-top: 10px;"><span class="price-sign">€</span>{{tariff.price.EUR}}</h3> <!-- TODO price selector-->
-                                    <p>per month</p>
+                                    <h3 style="clear: both;padding-top: 10px;" [style.font-size]="tariff.price.USD.toString().length>=3?'30px':'50px'">{{tariff.price.USD}}$</h3> <!-- TODO price selector-->
+                                    <p>Average monthly cost</p>
                                 </div>
                                 <div class="price-table-content">
                                     <div *ngFor="let label of tariff.labels" class="row mobile-padding">
@@ -110,10 +107,9 @@
                 </div>
                 <div class="row portlet-body">
                     <div class="pricing-content-1">
-                        <div [class.col-md-6]="selectedTariff.company_details_required || userCompany">
+                        <div [class.col-md-6]="selectedTariff.company_details_required" [class.col-md-12]="!selectedTariff.company_details_required"> <!--TODO předělat na else podmínku -->
                             <bk-form-input [control]="form.controls.city" label="City"></bk-form-input>
-                            <bk-form-select (change)="checkInEu()" [control]="form.controls.country" label="Country"
-                                               [options]="countryList"></bk-form-select>
+                            <bk-form-select (change)="checkInEu()" [control]="form.controls.country" label="Country" [options]="countryList"></bk-form-select>
                             <bk-form-select [control]="form.controls.currency_type" label="Currency type" [options]="currency_type"></bk-form-select>
                             <bk-form-select *ngIf="selectedTariff.required_payment_method" [control]="form.controls.payment_method" label="Payment method" [options]="payment_method"></bk-form-select>
                             <bk-form-select *ngIf="selectedTariff.required_payment_mode" [control]="form.controls.payment_mode" label="Payment mode" [options]="payment_mode"></bk-form-select>
@@ -124,7 +120,7 @@
                         </div>
 
 
-                        <div *ngIf="selectedTariff.company_details_required || userCompany" class="col-md-6">
+                        <div *ngIf="selectedTariff.company_details_required" class="col-md-6">
                             <p>
                             <h2>Company info</h2>
                             <bk-form-input  [control]="form.controls.company_name" label="Company name"></bk-form-input>
@@ -166,13 +162,40 @@
             </div>
             <div class="portlet-body">
                 <div class="pricing-content-1">
-                    <div *ngIf="selectedTariff.extensionses">
-                        <div *ngIf="selectedTariff.extensionses.length==0">
+                    <div *ngIf="selectedTariff.extensions_included || selectedTariff.extensions_optional">
+                        <div *ngIf="selectedTariff.extensions_included.length==0 || selectedTariff.extensions_optional.length==0">
                             <h3 class="text-center">There is no additional packages, click continue</h3>
                         </div>
                     </div>
-                    <div class="row">
-                        <div *ngFor="let package of selectedTariff.extensionses" class="col-md-3">
+                    <div class="row" *ngIf="selectedTariff.extensions_included">
+                        <div *ngFor="let package of selectedTariff.extensions_included" class="col-md-3">
+                            <div [class.border-red-mint]="selectedExtensions.indexOf(package) > -1"
+                                 class="price-column-container border-active">
+                                <div class="price-table-head bg-{{package.color | lowercase}}">
+                                    <h2 class="no-margin">{{package.name}}</h2>
+                                </div>
+                                <div class="arrow-down border-top-{{package.color | lowercase}}"></div>
+                                <div class="price-table-content">
+                                    <div *ngFor="let label of package.labels" class="row mobile-padding">
+                                        <div class="col-xs-3 text-right mobile-padding">
+                                            <i class="fa {{label.icon| lowercase}}"></i>
+                                        </div>
+                                        <div class="col-xs-9 text-left mobile-padding">{{label.label}}</div>
+                                        <!--(mouseenter)="" (mouseleave)=""-->
+                                    </div>
+
+                                </div>
+                                <div class="arrow-down arrow-grey"></div>
+                                <div class="price-table-footer col-md-12">
+                                    <button type="button" disabled="true"
+                                            class="btn grey-salsa btn-outline bold uppercase price-button">Included
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="selectedTariff.extensions_optional" >
+                        <div *ngFor="let package of selectedTariff.extensions_optional" class="col-md-3">
                             <div [class.border-red-mint]="selectedExtensions.indexOf(package) > -1"
                                  class="price-column-container border-active">
                                 <div class="price-table-head bg-{{package.color | lowercase}}">
@@ -180,11 +203,9 @@
                                 </div>
                                 <div class="arrow-down border-top-{{package.color | lowercase}}"></div>
                                 <div class="price-table-pricing">
-                                    <h4 style="margin: 0 10px; color: gray;" class="pull-right">{{package.price.USD}}<span class="becki-payment-secondary price-sign" >$</span></h4>
-                                    <h4 style="margin: 0 10px;color: gray;" class="pull-left">{{package.price.CZK}}<span class="becki-payment-secondary price-sign">CZK</span></h4>
-                                    <h3 style="clear: both;padding-top: 10px;"><span class="price-sign">€</span>{{package.price.EUR}}</h3> <!-- TODO price selector--> <!-- TODO price selector-->
+                                    <h3 style="clear: both;padding-top: 10px;"><span class="price-sign">€</span>{{package.price.USD}}$</h3> <!-- TODO price selector--> <!-- TODO price selector-->
                                     <!-- TODO ceny se budou měnit dle jazykové mutace-->
-                                    <p>per month</p>
+                                    <p>Average monthly cost</p>
                                 </div>
                                 <div class="price-table-content">
                                     <div *ngFor="let label of package.labels" class="row mobile-padding">
@@ -204,29 +225,22 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-actions">
+                    </div>
+                     <div class="form-actions">
                             <div class="row">
                                 <div class=" col-md-12">
-                                    <button type="button" class="btn green btn-outline center-block" (click)="stepClick(4,false)">
+                                    <button type="button" class="btn lg green btn-outline center-block" (click)="stepClick(4,false)">
                                         Continue
                                     </button>
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <div *ngIf="step===4">
-
-        <template ng-if="serverResponse">
-            <div *ngIf="serverResponse.gw_url">Please pay to complete your tarif registration, click
-                <a href="serverResponse.gw_url">here</a></div>
-            <div *ngIf="!serverResponse.gw_url">Done!</div>
-        </template>
-
         <div class="row">
             <div class="col-md-6 col-sm-12">
                 <div class="portlet yellow-crusta box">
@@ -335,7 +349,7 @@
                                 <tr>
                                     <td> {{selectedTariff.tariff_name}} </td>
                                     <td> {{selectedTariff.tariff_description}}  </td>
-                                    <td> {{selectedTariff.price.EUR}}</td>
+                                    <td> {{selectedTariff.price.USD}} $</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -352,7 +366,7 @@
                                  <i class="fa fa-globe"></i> Aditional features </div>
                            </div>
                            <div class="portlet-body">
-                               <table *ngIf="selectedExtensions&&selectedExtensions.length>0" class="table table-hover">
+                               <table *ngIf="selectedExtensions && selectedExtensions.length>0" class="table table-hover">
                                    <thead>
                                    <tr>
                                        <th> Package </th>
@@ -365,12 +379,12 @@
                                    <tr>
                                        <td>{{package.name}}</td>
                                        <td>{{package.description}}</td>
-                                       <td>{{package.price.EUR}}</td>
+                                       <td>{{package.price.USD}} $</td>
                                        <td> <i (click)="addExtension(package)" class="font-red fa fa-trash fa-2x"></i></td>
                                    </tr>
                                    </tbody>
                                </table>
-                               <h3 class="center-block" *ngIf="selectedExtensions&&selectedExtensions.length==0">You dont choose any Aditional features.</h3>
+                               <h3 class="center-block" *ngIf="selectedExtensions && selectedExtensions.length==0">You dont choose any Aditional features.</h3>
                         </div>
                     </div>
                 </div>
@@ -396,19 +410,19 @@
                     <tbody>
                     <tr>
                         <td> {{selectedTariff.tariff_name}} </td>
-                        <td> {{selectedTariff.price.EUR}}  </td> <!-- TODO price selector-->
+                        <td> {{selectedTariff.price.USD}} $</td> <!-- TODO price selector-->
                     </tr>
                     </tbody>
                     <tbody *ngFor="let package of selectedExtensions">
                     <tr>
                         <td> {{package.name}} </td>
-                        <td> {{package.price.EUR}}  </td> <!-- TODO price selector-->
+                        <td> {{package.price.USD}} $</td> <!-- TODO price selector-->
                     </tr>
                     </tbody>
                     <thead>
                     <tr>
                         <th> Cost: </th>
-                        <th> {{getWholePrice()}} </th> <!-- TODO vymyslet lépe? udělat si promněnou na celkový součet? -->
+                        <th> {{getWholePrice()}} $</th> <!-- TODO vymyslet lépe? udělat si promněnou na celkový součet? -->
                     </tr>
                     </thead>
                 </table>
