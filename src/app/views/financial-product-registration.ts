@@ -1,3 +1,4 @@
+import { Response } from '@angular/http';
 
 /**
   ~ © 2016 Becki Authors. See the AUTHORS file found in the top-level
@@ -213,9 +214,9 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             zip_code: this.form.controls['zip_code'].value,
             country: this.form.controls['country'].value,
             currency_type: this.form.controls['currency_type'].value,
-            extensions_ids: this.selectedExtensions.toString,
+            extensions_ids: '[' + this.selectedExtensions.forEach(extension => { return extension.id + ', '; }) + ']',
+            // TODO vylepšit extensions_ids, co udělat pokud je pole prázdné? jak udělat aby poslední objekt nepřidával čárku?
         };
-
 
         if (this.selectedTariff.required_payment_method) {
             let payMethodTariffData: any = {
@@ -264,25 +265,22 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
 
         this.backendService.createProduct(<ITariffRegister>tariffData)
-            .then(tarif => {
+            .then(Response => {
+                console.log(Response);
 
-                if ((<any>tarif).gw_url) {
+                if ((<any>Response)._code_ === 200) {
                     this.addFlashMessage(new FlashMessageWarning('Product was created but payment is required'));
-                    let model = new ModalsGopayInlineModel('Payment', (<IGoPayUrl>tarif).gw_url);
+                // modální okno ModalsGopayInlineModel bude potřebovat vylepšit
+                    let model = new ModalsGopayInlineModel('Payment', (<IGoPayUrl>Response).gw_url); //není jisté jestli gopayurl vrací to co má 
                     this.modalService.showModal(model).then((success) => {
                         this.router.navigate(['/financial']);
                     });
-
-                    window.location.href = (<IGoPayUrl>tarif).gw_url;
-
-                } else {
+                } else if ((<any>Response)._code_ === 201) {
                     this.addFlashMessage(new FlashMessageSuccess('Product was created, now you can create a new project'));
-
-                    window.location.href = (<IGoPayUrl>tarif).gw_url;
+                    this.router.navigate(['/financial']);
                 }
             })
             .catch(reason => {
-                this.unblockUI();
                 this.addFlashMessage(new FlashMessageError(`The product cannot be bought.`, reason));
             });
     }
