@@ -146,4 +146,8 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
             }
         });
     }
+
+    onRedirectClick(): void {
+        this.navigate(['productRegistration']);
+    }
 }
