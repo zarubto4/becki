@@ -1640,3 +1640,44 @@ ul.hw-list li ul li, ul.grid-list li ul li {
 .full-width {
     width: 100%;
 }
+
+.profile-pic-wrapper {
+
+
+
+    h4 {
+        width: 552px;
+        text-align: center;
+    }
+
+    .preview {
+        margin-left: 212px;
+    }
+
+    .file-select {
+        background-color: silver;
+        width: 552px;
+        padding: 20px;
+        padding-top: 10px;
+        margin-top: 20px;
+
+        div {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        input[type=file] {
+            width: 552px;
+        }
+
+    }
+
+    canvas {
+        background-color: gray;
+        border: 20px rgba(0,0,0,0.6) solid;
+    }
+
+
+
+}

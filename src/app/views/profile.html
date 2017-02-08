@@ -45,32 +45,23 @@
                 <!-- END PERSONAL TAB -->
                 <!-- AVATAR TAB -->
                 <div class="tab-pane" [class.active]="openTabName == 'avatar'">
-                    <h1>TODO!</h1>
-                    <p> you can change your avatar icon here <strong>maximal size of your avatar is
-                        2Mb!</strong></p>
                     <form>
-                        <div class="form-group">
-                            <div class="fileinput fileinput-new" data-provides="fileinput">
-                                <div class="fileinput-new thumbnail"
-                                     style="width: 200px; height: 150px;">
-                                    <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image"
-                                         alt=""></div>
-                                <div class="fileinput-preview fileinput-exists thumbnail"
-                                     style="max-width: 200px; max-height: 150px;"></div>
-                                <div>
-                                                        <span class="btn default btn-file">
-                                                            <span *ngIf="!pictureLink" class="fileinput-new"> Select image </span>
-                                                            <span *ngIf="pictureLink" class="fileinput-exists"> Change image </span>
-                                                            <input type="file" name="..."></span>
-                                    <a *ngIf="pictureLink" href="javascript:;" class="btn default fileinput-exists"
-                                       data-dismiss="fileinput"> Remove </a>
-                                </div>
+                        <div class="form-group profile-pic-wrapper">
+
+                            <h4>Avatar<span *ngIf="cropperLoaded" class="font-red"> (Unsaved)</span></h4>
+
+                            <img class="preview img-circle" [src]="cropperLoaded?cropperData.image:backendService.personInfoSnapshot.picture_link" width="128" height="128">
+
+                            <div class="file-select">
+                                <div>Select another avatar</div>
+                                <input type="file" (change)="cropperFileChangeListener($event)" accept="image/*">
                             </div>
-                            <div class="clearfix margin-top-10">
-                            </div>
+                            <img-cropper #cropper [image]="cropperData" [settings]="cropperSettings" [style.display]="cropperLoaded?'block':'none'"></img-cropper>
+
+                            <div class="clearfix margin-top-10"></div>
                         </div>
                         <div class="margin-top-10">
-                            <button class="btn green">Save</button>
+                            <button (click)="saveProfilePicture()" class="btn green" [disabled]="!cropperLoaded">Save</button>
                         </div>
                     </form>
                 </div>

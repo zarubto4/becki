@@ -110,6 +110,7 @@ import { ProducersComponent } from './views/producers';
 import { ProducersProducerComponent } from './views/producers-producer';
 import { ModalsGopayInlineComponent } from './modals/gopay-inline';
 import { ModalsSendInvoiceComponent } from './modals/financial-send-invoice';
+import { ImageCropperComponent } from 'ng2-img-cropper';
 
 
 //  @formatter:off
@@ -247,6 +248,8 @@ let tabMenus = {
         // Layouts components
         LayoutMainComponent,
         LayoutNotLoggedComponent,
+        // Other components
+        ImageCropperComponent,
         // Pipes
         Nl2BrPipe,
         UnixTimeFormatPipe,
