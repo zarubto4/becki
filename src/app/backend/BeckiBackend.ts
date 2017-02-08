@@ -329,7 +329,13 @@ export abstract class BeckiBackend extends TyrionAPI {
             .then((response: RestResponse) => {
                 if (success.indexOf(response.status) > -1) {
                     this.tasks -= 1;
-                    return <T>response.body;
+                    let res = response.body;
+                    Object.defineProperty(res, '_code_', {
+                        value: response.status,
+                        enumerable: false,
+                        writable: false
+                    });
+                    return <T>res;
                 }
                 switch (response.status) {
                     case 401:
