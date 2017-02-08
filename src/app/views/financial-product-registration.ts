@@ -237,29 +237,30 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             tariffData = Object.assign(tariffData, payModeTariffData);
         }
 
-        if (this.inEu) {
-            let companyTariffData: any = {
-                vat_number: this.form.controls['vat_number'].value
-            };
-            tariffData = Object.assign(tariffData, companyTariffData);
-        } else {
-            let companyTariffData: any = {
-
-                registration_no: this.form.controls['registration_no'].value
-            };
-            tariffData = Object.assign(tariffData, companyTariffData);
-
-        }
 
         if (this.selectedTariff.company_details_required) {
-            let companyTariffData: any = {
+            let companyTariffData;
+            if (this.inEu) {
+                companyTariffData = {
 
-                company_name: this.form.controls['company_name'].value,
-                company_authorized_email: this.form.controls['company_authorized_email'].value,
-                company_authorized_phone: this.form.controls['company_authorized_phone'].value,
-                company_web: this.form.controls['company_web'].value,
-                company_invoice_email: this.form.controls['company_invoice_email'].value,
-            };
+                    company_name: this.form.controls['company_name'].value,
+                    company_authorized_email: this.form.controls['company_authorized_email'].value,
+                    company_authorized_phone: this.form.controls['company_authorized_phone'].value,
+                    company_web: this.form.controls['company_web'].value,
+                    company_invoice_email: this.form.controls['company_invoice_email'].value,
+                    vat_number: this.form.controls['vat_number'].value,
+                };
+            } else {
+                companyTariffData = {
+
+                    company_name: this.form.controls['company_name'].value,
+                    company_authorized_email: this.form.controls['company_authorized_email'].value,
+                    company_authorized_phone: this.form.controls['company_authorized_phone'].value,
+                    company_web: this.form.controls['company_web'].value,
+                    company_invoice_email: this.form.controls['company_invoice_email'].value,
+                    registration_no: this.form.controls['registration_no'].value,
+                };
+            }
             tariffData = Object.assign(tariffData, companyTariffData);
         }
 
