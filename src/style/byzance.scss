@@ -1680,4 +1680,19 @@ ul.hw-list li ul li, ul.grid-list li ul li {
 
 
 
+
+}
+
+.empty-avatar {
+    background-image: url(./assets/pages/img/avatars/empty.png);
+    float: left;
+    margin-top: -5px;
+    margin-right: 5px;
+    height: 29px;
+    display: inline-block;
+    border-radius: 50% !important;
+    vertical-align: middle;
+    line-height: 20px;
+    width: 30px;
+    background-size: cover;
 }
