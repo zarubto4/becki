@@ -35,7 +35,7 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
     }
 
     onAddProductClick(): void {
-        this.router.navigate(['/productRegistration']);
+        this.router.navigate(['/financial/product-registration']);
     }
 
     onRemoveClick(product: IProduct): void {
@@ -62,7 +62,6 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
         this.backendService.getAllProducts()
             .then(products =>  {
                 this.products = products;
-                console.log(products);
                 this.unblockUI();
             })
             .catch(reason =>  {

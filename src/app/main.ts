@@ -123,9 +123,9 @@ let routes: Routes = [
     {path: 'create-user', component: CreateUserComponent, canActivate: [NonAuthGuard]},
     {path: 'create-user/:email', component: CreateUserComponent, canActivate: [NonAuthGuard]},
 
-    {path: 'forgotPassword', component: ForgotPasswordComponent, canActivate: [NonAuthGuard]},
-    {path: 'passwordRestart/:token', component: PasswordRestartComponent, canActivate: [NonAuthGuard]},
-    {path: 'redirectOk', component: RedirectOkComponent, canActivate: [NonAuthGuard]},
+    {path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [NonAuthGuard]},
+    {path: 'password-restart/:token', component: PasswordRestartComponent, canActivate: [NonAuthGuard]},
+    {path: 'redirect-ok', component: RedirectOkComponent, canActivate: [NonAuthGuard]},
 
     {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
 
@@ -136,18 +136,17 @@ let routes: Routes = [
     {path: 'profile', data: {breadName: 'Profile'}, component: ProfileComponent, canActivate: [AuthGuard]},
 
     {path: 'financial', data: {breadName: 'Financial'}, component: FinancialComponent, canActivate: [AuthGuard]},
+
+    {path: 'financial/product-registration', data: {breadName: 'Product registration'}, component: ProductRegistrationComponent, canActivate: [AuthGuard]},
+
     {path: 'financial/:product', data: {breadName: ':product'}, component: FinancialProductComponent, canActivate: [AuthGuard]},
     {path: 'financial/:product/extensions', data: {breadName: 'extensions'}, component: FinancialProductExtensionsComponent, canActivate: [AuthGuard]},
     {path: 'financial/:product/invoices', data: {breadName: 'invoices'}, component: FinancialProductInvoicesComponent, canActivate: [AuthGuard]},
     {path: 'financial/:product/invoices/:invoice', data: {breadName: ':invoice'}, component:  FinancialProductInvoicesInvoiceComponent, canActivate: [AuthGuard]},
     {path: 'financial/:product/billing', data: {breadName: 'billing'}, component:  FinancialProductBillingComponent, canActivate: [AuthGuard]},
 
-
     {path: 'hardware', data: {breadName: 'Hardware types'}, component: HardwareComponent, canActivate: [AuthGuard]},
     {path: 'hardware/:hardware_type', data: {breadName: ':last'}, component: HardwareHardwareTypeComponent, canActivate: [AuthGuard]},
-
-    {path: 'productRegistration/:tariff', data: {breadName: 'Product registration'}, component: ProductRegistrationComponent, canActivate: [AuthGuard]},
-    {path: 'productRegistration', data: {breadName: 'Product registration'}, component: ProductRegistrationComponent, canActivate: [AuthGuard]},
 
     {path: 'projects', data: {breadName: 'Projects'}, component: ProjectsComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project', data: {breadName: ':project'}, component: ProjectsProjectComponent, canActivate: [AuthGuard]},

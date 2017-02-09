@@ -5,44 +5,42 @@
         <div class="col-md-12">
             <div class="portlet light portlet-fit bordered">
                 <div class="portlet-body">
+
                     <div class="mt-element-step">
-                        <div class="row step-thin">
-                            <div class="mt-step-desc">
-                                <div class="font-dark bold uppercase">Step by step</div>
-                                <div class="caption-desc font-grey-cascade">Confirm a product purchase</div>
-                                <br></div>
-                            <div class="col-md-3 bg-grey mt-step-col" (click)="stepClick(1,true)"
-                                 (mouseenter)="activeClass['1'] = true" (mouseleave)="activeClass['1'] = false"
-                                 [class.active]="activeClass['1']" [class.done]="step == 1">
-                                <div class="mt-step-number bg-white font-grey">1</div>
-                                <div class="mt-step-title uppercase font-grey-cascade">Choose</div>
-                                <div class="mt-step-content font-grey-cascade">Choose a right product</div>
+
+                        <div class="row step-line">
+                            <div class="col-md-3 mt-step-col first" [class.done]="step > 1" [class.active]="step == 1" (click)="stepClick(1)" [class.can-activate]="canActivateStep(1)">
+                                <div class="mt-step-number bg-white font-grey">
+                                    <i class="fa fa-bars"></i>
+                                </div>
+                                <div class="mt-step-title uppercase font-grey-cascade">Tariffs</div>
+                                <div class="mt-step-content font-grey-cascade">Select a right tariffs</div>
                             </div>
-                            <div class="col-md-3 bg-grey mt-step-col " (click)="stepClick(2,true)"
-                                 (mouseenter)="activeClass['2'] = true" (mouseleave)="activeClass['2'] = false"
-                                 [class.active]="activeClass['2']" [class.done]="step == 2">
-                                <div class="mt-step-number bg-white font-grey">2</div>
-                                <div class="mt-step-title uppercase font-grey-cascade">Register</div>
-                                <div class="mt-step-content font-grey-cascade">Fill the necessary info</div>
-                            </div>
-                            <div class="col-md-3 bg-grey mt-step-col " (click)="stepClick(3,true)"
-                                 (mouseenter)="activeClass['3'] = true" (mouseleave)="activeClass['3'] = false"
-                                 [class.active]="activeClass['3']" [class.done]="step == 3">
-                                <div class="mt-step-number bg-white font-grey">3</div>
+                            <div class="col-md-3 mt-step-col" [class.done]="step > 2" [class.active]="step == 2" (click)="stepClick(2)" [class.can-activate]="canActivateStep(2)">
+                                <div class="mt-step-number bg-white font-grey">
+                                    <i class="fa fa-archive"></i>
+                                </div>
                                 <div class="mt-step-title uppercase font-grey-cascade">Packages</div>
                                 <div class="mt-step-content font-grey-cascade">Choose an expansions</div>
                             </div>
-                            <div class="col-md-3 bg-grey mt-step-col " (click)="stepClick(4,true)"
-                                 (mouseenter)="activeClass['4'] = true" (mouseleave)="activeClass['4'] = false"
-                                 [class.active]="activeClass['4']" [class.done]="step == 4">
-                                <div class="mt-step-number bg-white font-grey">4</div>
-                                <div class="mt-step-title uppercase font-grey-cascade">Deploy</div>
-                                <div class="mt-step-content font-grey-cascade">start using a product</div>
+                            <div class="col-md-3 mt-step-col" [class.done]="step > 3" [class.active]="step == 3" (click)="stepClick(3)" [class.can-activate]="canActivateStep(3)">
+                                <div class="mt-step-number bg-white font-grey">
+                                    <i class="fa fa-pencil-square-o"></i>
+                                </div>
+                                <div class="mt-step-title uppercase font-grey-cascade">Billing info</div>
+                                <div class="mt-step-content font-grey-cascade">Fill the necessary info</div>
+                            </div>
+                            <div class="col-md-3 mt-step-col last" [class.done]="step > 4" [class.active]="step == 4" (click)="stepClick(4)" [class.can-activate]="canActivateStep(4)">
+                                <div class="mt-step-number bg-white font-grey">
+                                    <i class="fa fa-microchip"></i>
+                                </div>
+                                <div class="mt-step-title uppercase font-grey-cascade">Finish</div>
+                                <div class="mt-step-content font-grey-cascade">Start using a product</div>
                             </div>
                         </div>
-                        <br>
-                        <br>
+
                     </div>
+
                 </div>
             </div>
         </div>
@@ -53,39 +51,39 @@
 
         <div class="portlet light portlet-fit bordered">
             <div class="portlet-title">
-                <div class="caption">
-                    <i class="icon-share font-green"></i>
-                    <span class="caption-subject font-green bold uppercase">Avalible tariffs</span>
+                <div class="becki-caption">
+                <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-bars"></i>
+                    Tariffs
+                </span>
                 </div>
             </div>
             <div class="portlet-body">
                 <div class="pricing-content-1">
                     <div class="row">
-                        <div *ngFor="let tariff of tariffForRegistration" class="col-md-3">
-                            <div class="price-column-container border-active">
-                                <div class="price-table-head bg-{{tariff.color| lowercase}}">
+                        <div *ngFor="let tariff of tariffs" class="col-md-3">
+                            <div class="price-column-container border-active tariff">
+                                <div class="price-table-head bg-{{tariff.color|lowercase}}">
                                     <h2 class="no-margin">{{tariff.tariff_name}}</h2>
                                 </div>
-                                <div class="arrow-down border-top-{{tariff.color| lowercase}}"></div>
+                                <div class="arrow-down border-top-{{tariff.color|lowercase}}"></div>
 
                                 <div class="price-table-pricing">
-                                    <h3 style="clear: both;padding-top: 10px;" [style.font-size]="tariff.price.USD.toString().length>=3?'30px':'50px'">{{tariff.price.USD}}$</h3> <!-- TODO price selector-->
-                                    <p>Average monthly cost</p>
+                                    <h3 *ngIf="tariff.price.USD == 0" style="font-size: 50px; line-height: 50px;">Free</h3>
+                                    <h3 *ngIf="tariff.price.USD != 0" [style.font-size]="tariff.price.USD.toString().length>=5?'40px':'50px'" style="line-height: 50px;">{{tariff.price.USD}}$</h3> <!-- TODO price selector-->
+                                    <p class="font-grey-salt">Average monthly cost</p>
+                                    <div *ngIf="tariff == selectedTariff" class="price-ribbon">Selected</div>
                                 </div>
                                 <div class="price-table-content">
-                                    <div *ngFor="let label of tariff.labels" class="row mobile-padding">
-                                        <div class="col-xs-3 text-right mobile-padding">
-                                            <i class="fa {{label.icon| lowercase}}"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-left mobile-padding">{{label.label}}</div>
-                                        <!-- TODO zobrazit Description, metronic tooltips s data-content vyhazuje error -->
+                                    <div *ngFor="let label of tariff.labels" class="line">
+                                        <i class="fa fa-fw {{label.icon|lowercase}} font-{{tariff.color|lowercase}}"></i>
+                                        {{label.label}}
                                     </div>
-
                                 </div>
                                 <div class="arrow-down arrow-grey"></div>
                                 <div class="price-table-footer">
-                                    <button type="button" (click)="chooseTariff(tariff)"
-                                            class="btn grey-salsa btn-outline sbold uppercase price-button">Sign Up
+                                    <button type="button" (click)="chooseTariff(tariff)" class="btn uppercase price-button {{tariff.color|lowercase}}">
+                                        Select
                                     </button>
                                 </div>
                             </div>
@@ -97,12 +95,107 @@
     </div>
 
     <div *ngIf="step===2">
+        <div class="portlet light portlet-fit bordered">
+            <div class="portlet-title">
+                <div class="becki-caption">
+                <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-archive"></i>
+                    Packages
+                </span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="pricing-content-1">
+                    <div class="row">
+                        <div *ngIf="selectedTariff.extensions_included || selectedTariff.extensions_optional">
+                            <div *ngIf="selectedTariff.extensions_included.length==0 || selectedTariff.extensions_optional.length==0">
+                                <h3 class="text-center margin-bottom-15">There is no expansions packages, click Continue.</h3>
+                            </div>
+                        </div>
+
+                        <div *ngFor="let package of selectedTariff.extensions_included" class="col-md-3 margin-bottom-15">
+                            <div [class.border-red-mint]="selectedExtensions.indexOf(package) > -1" class="price-column-container border-active package">
+                                <div class="price-table-head bg-{{package.color|lowercase}}">
+                                    <h4 class="no-margin">{{package.name}}</h4>
+                                </div>
+                                <div class="arrow-down border-top-{{package.color|lowercase}}"></div>
+                                <div class="price-table-pricing">
+                                    <h3 style="font-size: 50px; line-height: 50px;">Free</h3>
+                                    <p class="font-grey-salt">Average monthly cost</p>
+                                    <div class="price-ribbon">Included</div>
+                                </div>
+                                <div class="price-table-content">
+                                    <div *ngFor="let label of package.labels" class="line">
+                                        <i class="fa fa-fw {{label.icon|lowercase}} font-{{package.color|lowercase}}"></i>
+                                        {{label.label}}
+                                    </div>
+                                </div>
+                                <div class="arrow-down arrow-grey"></div>
+                                <div class="price-table-footer">
+                                    <button type="button" class="btn grey-salsa btn-outline uppercase price-button" disabled="disabled">
+                                        Included
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngFor="let package of selectedTariff.extensions_optional" class="col-md-3 margin-bottom-15">
+                            <div class="price-column-container border-active package">
+                                <div class="price-table-head bg-{{package.color|lowercase}}">
+                                    <h4 class="no-margin">{{package.name}}</h4>
+                                </div>
+                                <div class="arrow-down border-top-{{package.color|lowercase}}"></div>
+                                <div class="price-table-pricing">
+                                    <h3 *ngIf="package.price.USD == 0" style="font-size: 50px; line-height: 50px;">Free</h3>
+                                    <h3 *ngIf="package.price.USD != 0" [style.font-size]="package.price.USD.toString().length>=5?'40px':'50px'" style="line-height: 50px;">{{package.price.USD}}$</h3>
+                                    <p class="font-grey-salt">Average monthly cost</p>
+                                    <div class="price-ribbon" *ngIf="selectedExtensions.indexOf(package) > -1">Included</div>
+                                </div>
+                                <div class="price-table-content">
+                                    <div *ngFor="let label of package.labels" class="line">
+                                        <i class="fa fa-fw {{label.icon|lowercase}} font-{{package.color|lowercase}}"></i>
+                                        {{label.label}}
+                                    </div>
+                                </div>
+                                <div class="arrow-down arrow-grey"></div>
+                                <div class="price-table-footer">
+                                    <button type="button" *ngIf="selectedExtensions.indexOf(package) == -1" class="btn green-jungle uppercase price-button" (click)="addExtension(package)">
+                                        Add
+                                    </button>
+                                    <button type="button" *ngIf="selectedExtensions.indexOf(package) > -1" class="btn red uppercase price-button" (click)="removeExtension(package)">
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <div class="btn-group btn-group-solid">
+                                <button type="button" class="btn grey-salsa btn-lg btn-outline" (click)="stepClick(1)">
+                                    Back
+                                </button>
+                                <button type="button" class="btn green-jungle btn-lg" (click)="stepClick(3)">
+                                    Continue
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="step===3">
         <form *ngIf="form" [formGroup]="form">
             <div class="portlet light portlet-fit bordered">
                 <div class="portlet-title">
-                    <div class="caption">
-                        <i class="icon-share font-green"></i>
-                        <span class="caption-subject font-green bold uppercase">fill the Tariff info</span>
+                    <div class="becki-caption">
+                <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-bars"></i>
+                    Tariffs
+                </span>
                     </div>
                 </div>
                 <div class="row portlet-body">
@@ -149,95 +242,6 @@
             </div>
         </form>
 
-    </div>
-
-
-    <div *ngIf="step===3">
-        <div class="portlet light portlet-fit bordered">
-            <div class="portlet-title">
-                <div class="caption">
-                    <i class=" icon-layers font-green"></i>
-                    <span class="caption-subject font-green bold uppercase">Choose an additional expansions</span>
-                </div>
-            </div>
-            <div class="portlet-body">
-                <div class="pricing-content-1">
-                    <div *ngIf="selectedTariff.extensions_included || selectedTariff.extensions_optional">
-                        <div *ngIf="selectedTariff.extensions_included.length==0 || selectedTariff.extensions_optional.length==0">
-                            <h3 class="text-center">There is no additional packages, click continue</h3>
-                        </div>
-                    </div>
-                    <div class="row" *ngIf="selectedTariff.extensions_included">
-                        <div *ngFor="let package of selectedTariff.extensions_included" class="col-md-3">
-                            <div [class.border-red-mint]="selectedExtensions.indexOf(package) > -1"
-                                 class="price-column-container border-active">
-                                <div class="price-table-head bg-{{package.color | lowercase}}">
-                                    <h2 class="no-margin">{{package.name}}</h2>
-                                </div>
-                                <div class="arrow-down border-top-{{package.color | lowercase}}"></div>
-                                <div class="price-table-content">
-                                    <div *ngFor="let label of package.labels" class="row mobile-padding">
-                                        <div class="col-xs-3 text-right mobile-padding">
-                                            <i class="fa {{label.icon| lowercase}}"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-left mobile-padding">{{label.label}}</div>
-                                        <!--(mouseenter)="" (mouseleave)=""-->
-                                    </div>
-
-                                </div>
-                                <div class="arrow-down arrow-grey"></div>
-                                <div class="price-table-footer col-md-12">
-                                    <button type="button" disabled="true"
-                                            class="btn grey-salsa btn-outline bold uppercase price-button">Included
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" *ngIf="selectedTariff.extensions_optional" >
-                        <div *ngFor="let package of selectedTariff.extensions_optional" class="col-md-3">
-                            <div [class.border-red-mint]="selectedExtensions.indexOf(package) > -1"
-                                 class="price-column-container border-active">
-                                <div class="price-table-head bg-{{package.color | lowercase}}">
-                                    <h2 class="no-margin">{{package.name}}</h2>
-                                </div>
-                                <div class="arrow-down border-top-{{package.color | lowercase}}"></div>
-                                <div class="price-table-pricing">
-                                    <h3 style="clear: both;padding-top: 10px;"><span class="price-sign">€</span>{{package.price.USD}}$</h3> <!-- TODO price selector--> <!-- TODO price selector-->
-                                    <!-- TODO ceny se budou měnit dle jazykové mutace-->
-                                    <p>Average monthly cost</p>
-                                </div>
-                                <div class="price-table-content">
-                                    <div *ngFor="let label of package.labels" class="row mobile-padding">
-                                        <div class="col-xs-3 text-right mobile-padding">
-                                            <i class="fa {{label.icon| lowercase}}"></i>
-                                        </div>
-                                        <div class="col-xs-9 text-left mobile-padding">{{label.label}}</div>
-                                        <!--(mouseenter)="" (mouseleave)=""-->
-                                    </div>
-
-                                </div>
-                                <div class="arrow-down arrow-grey"></div>
-                                <div class="price-table-footer col-md-12">
-                                    <button type="button" (click)="addExtension(package)"
-                                            class="btn grey-salsa btn-outline bold uppercase price-button">select
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                     <div class="form-actions">
-                            <div class="row">
-                                <div class=" col-md-12">
-                                    <button type="button" class="btn lg green btn-outline center-block" (click)="stepClick(4,false)">
-                                        Continue
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <div *ngIf="step===4">

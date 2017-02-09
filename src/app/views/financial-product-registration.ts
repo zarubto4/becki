@@ -31,15 +31,15 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
     routeParamsSubscription: Subscription;
 
-    tariffForRegistration: IGeneralTariff[];
+    step: number = 1;
 
-    step: number;
+    tariffs: IGeneralTariff[];
 
-    activeClass: { [key: string]: boolean } = {};
+    selectedTariff: IGeneralTariff;
 
     selectedExtensions: IGeneralTariffExtensions[] = [];
 
-    selectedTariff: IGeneralTariff;
+    
 
     inEu: boolean = false;
 
@@ -51,18 +51,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
     constructor(injector: Injector) {
         super(injector);
-
-        this.step = 1;
-
     };
-
-    stepClick(step: number, fromUser: boolean): void {
-        if (fromUser && step > this.step) {
-            this.addFlashMessage(new FlashMessageError('You have to choose a tariff'));
-            return;
-        }
-        this.step = step;
-    }
 
     getWholePrice(): string {
         let price = 0;
@@ -71,28 +60,85 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
         return price.toString().substring(0, price.toString().indexOf('.') + 3);
     }
+
     ngOnInit(): void {
         this.blockUI();
 
         this.backendService.getAllTarifsForRegistrations()
             .then(tariffs => {
-                this.tariffForRegistration = tariffs;
+                this.tariffs = tariffs;
                 // console.log(tariffs);
-            }).then(() => {
+                
                 this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
-                    if (params.hasOwnProperty('tariff') && this.tariffForRegistration.find(tariff => tariff.identificator === params['tariff'])) {
-                        this.step = 2;
+
+                    console.log(params);
+
+                    if (params.hasOwnProperty('tariff')) {
+                        let t = this.tariffs.find(tariff => tariff.identificator === params['tariff']);
+                        if (t) {
+                            this.chooseTariff(t);
+                        } else {
+                            this.fmError("Wanted tariff not found.");
+                            this.router.navigate(['/financial/product-registration']);
+                        }
+                    }
+
+                    if (params.hasOwnProperty('step')) {
+
+                        let step = parseInt(params['step'], 10) || 1;
+
+                        if (step == 1) {
+                            this.router.navigate(['/financial/product-registration']);
+                        } else {
+                            if (this.canActivateStep(step)) {
+                                this.step = step;
+                            } else {
+                                this.router.navigate(['/financial/product-registration', {step: 1}]);
+                            }
+                        }
+
                     } else {
                         this.step = 1;
                     }
+                    
                     this.unblockUI();
                 });
+
             }).catch(error => {
-                // console.log(error);
+                this.fmError('Cannot load tariffs.', error);
                 this.unblockUI();
             });
 
+    }
 
+    canActivateStep(step:number) {
+        if (step == 1) {
+            return true;
+        }
+
+        if (this.selectedTariff) {
+            if (step == 2) {
+                return true;
+            }
+
+            if (step == 3) {
+                return true;
+            }
+
+
+        }
+
+        return false;
+    }
+
+    stepClick(step: number): void {
+        if (this.canActivateStep(step)) {
+            if (step == 1) {
+                this.router.navigate(['/financial/product-registration']);
+            } else {
+                this.router.navigate(['/financial/product-registration', {step: step}]);
+            }
+        }
     }
 
 
@@ -178,16 +224,21 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         }
         this.form = null;
         this.form = this.formBuilder.group(input);
-        this.step = 2;
+
+        this.router.navigate(['/financial/product-registration', {step:2}]);
 
     }
 
     addExtension(selected: IGeneralTariffExtensions): void {
+        if (this.selectedExtensions.indexOf(selected) == -1) {
+            this.selectedExtensions.push(selected);
+        }
+    }
+
+    removeExtension(selected: IGeneralTariffExtensions): void {
         if (this.selectedExtensions.indexOf(selected) > -1) {
             let index = this.selectedExtensions.indexOf(selected);
-            this.selectedExtensions.splice(index, 1);              // not supported in Internet Explorer 7 and 8. but did we want users who still uses IE7/8?
-        } else {
-            this.selectedExtensions.push(selected);
+            this.selectedExtensions.splice(index, 1); // not supported in Internet Explorer 7 and 8. but did we want users who still uses IE7/8?
         }
     }
 
@@ -265,17 +316,15 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
 
         this.backendService.createProduct(<ITariffRegister>tariffData)
-            .then(Response => {
-                console.log(Response);
-
-                if ((<any>Response)._code_ === 200) {
+            .then(response => {
+                if ((<any>response)._code_ === 200) {
                     this.addFlashMessage(new FlashMessageWarning('Product was created but payment is required'));
-                // modální okno ModalsGopayInlineModel bude potřebovat vylepšit
-                    let model = new ModalsGopayInlineModel('Payment', (<IGoPayUrl>Response).gw_url); //není jisté jestli gopayurl vrací to co má 
+                    // modální okno ModalsGopayInlineModel bude potřebovat vylepšit
+                    let model = new ModalsGopayInlineModel('Payment', (<IGoPayUrl>response).gw_url); // není jisté jestli gopayurl vrací to co má
                     this.modalService.showModal(model).then((success) => {
                         this.router.navigate(['/financial']);
                     });
-                } else if ((<any>Response)._code_ === 201) {
+                } else if ((<any>response)._code_ === 201) {
                     this.addFlashMessage(new FlashMessageSuccess('Product was created, now you can create a new project'));
                     this.router.navigate(['/financial']);
                 }

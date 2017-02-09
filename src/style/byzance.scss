@@ -1696,3 +1696,144 @@ ul.hw-list li ul li, ul.grid-list li ul li {
     width: 30px;
     background-size: cover;
 }
+
+.pricing-center {
+    .col-md-3 {
+        float: none;
+        display: inline-block;
+        margin: 20px;
+    }
+}
+
+.price-column-container {
+
+    &.tariff {
+        .price-table-content {
+            height: 310px;
+        }
+    }
+
+    &.package {
+
+        .price-table-content {
+            height: 60px;
+        }
+
+        .price-ribbon {
+            top: 65px;
+        }
+
+    }
+
+    .price-table-content {
+
+        overflow-y: auto;
+        padding-bottom: 15px;
+
+        .line {
+            text-align: left;
+            padding-left: 38px;
+            padding-right: 15px;
+            position: relative;
+            padding-top: 15px;
+            font-weight: 300;
+
+            i.fa {
+                position: absolute;
+                top: 19px;
+                left: 10px;
+            }
+        }
+    }
+
+}
+
+.mt-element-step {
+    .step-line {
+        .mt-step-col.can-activate {
+
+            cursor: pointer;
+
+            .mt-step-number {
+                border-color: slategray;
+                i {
+                    color: slategray;
+                }
+            }
+
+            .mt-step-title {
+                &:before, &:after {
+                    background-color: slategray;
+                }
+            }
+
+            .mt-step-title, .mt-step-content {
+                color: slategray !important;
+            }
+
+            &:hover {
+                .mt-step-number {
+                    border-color: #32c5d2 !important;
+                    i {
+                        color: #32c5d2 !important;
+                    }
+                }
+
+                .mt-step-title {
+                    &:before, &:after {
+                        background-color: #32c5d2 !important;
+                    }
+                }
+
+                .mt-step-title, .mt-step-content {
+                    color: #32c5d2 !important;
+                }
+            }
+
+        }
+
+        .mt-step-col.active {
+
+            .mt-step-number {
+                border-color: #32c5d2;
+                i {
+                    color: #32c5d2;
+                }
+            }
+
+            .mt-step-title {
+                &:before, &:after {
+                    background-color: #32c5d2;
+                }
+            }
+
+            .mt-step-title, .mt-step-content {
+                color: #32c5d2 !important;
+            }
+
+
+        }
+
+        .mt-step-col.done {
+
+            .mt-step-number {
+                border-color: #26C281;
+                i {
+                    color: #26C281;
+                }
+            }
+
+            .mt-step-title {
+                &:before, &:after {
+                    background-color: #26C281;
+                }
+            }
+
+            .mt-step-title, .mt-step-content {
+                color: #26C281 !important;
+            }
+
+
+        }
+    }
+}
