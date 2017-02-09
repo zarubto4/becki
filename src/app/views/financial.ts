@@ -62,7 +62,6 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
         this.backendService.getAllProducts()
             .then(products =>  {
                 this.products = products;
-                console.log(products);
                 this.unblockUI();
             })
             .catch(reason =>  {
