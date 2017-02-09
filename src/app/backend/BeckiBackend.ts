@@ -435,7 +435,7 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     // PERSON INFO
 
-    protected refreshPersonInfo(): void {
+    public refreshPersonInfo(): void {
         this.personInfoSnapshotDirty = true;
         if (this.tokenExist()) {
             this.getLoggedInPerson()

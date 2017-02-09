@@ -2,7 +2,7 @@
  * Created by dominikkrisztof on 24/08/16.
  */
 
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { NotificationService } from '../services/NotificationService';
 import { BackendService } from '../services/BackendService';
@@ -11,12 +11,22 @@ import { FormGroup, Validators } from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { StaticOptionLists } from '../helpers/StaticOptionLists';
+import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
 
 @Component({
     selector: 'bk-view-profile',
     templateUrl: './profile.html'
 })
 export class ProfileComponent extends BaseMainComponent implements OnInit {
+
+    @ViewChild(ImageCropperComponent)
+    cropper: ImageCropperComponent;
+
+    cropperData: any = {};
+
+    cropperSettings: CropperSettings;
+
+    cropperLoaded = false;
 
     emailForm: FormGroup;
 
@@ -46,8 +56,20 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
 
     openTabName = 'personal';
 
-    constructor(injector: Injector, protected backEndService: BackendService, protected notificationService: NotificationService) {
+    constructor(injector: Injector, public backendService: BackendService, protected notificationService: NotificationService) {
         super(injector);
+
+        // image cropper settings
+        this.cropperSettings = new CropperSettings();
+        this.cropperSettings.noFileInput = true;
+        this.cropperSettings.width = 256;
+        this.cropperSettings.height = 256;
+        this.cropperSettings.croppedWidth = 256;
+        this.cropperSettings.croppedHeight = 256;
+        this.cropperSettings.canvasWidth = 512;
+        this.cropperSettings.canvasHeight = 512;
+        this.cropperSettings.minWidth = 50;
+        this.cropperSettings.minHeight = 50;
 
         this.emailForm = this.formBuilder.group({
             'currentEmail': ['', [Validators.required, Validators.minLength(8), BeckiValidators.email]], // TODO kontrola zda sedí s původním emailem
@@ -78,7 +100,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        let personObject = this.backEndService.personInfoSnapshot;
+        let personObject = this.backendService.personInfoSnapshot;
 
         this.personId = personObject.id;
 
@@ -111,13 +133,13 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
 
     changePassword(): void {
         this.blockUI();
-        this.backEndService.createPersonChangeProperty({
+        this.backendService.createPersonChangeProperty({
             property: 'password',
             password: this.passwordForm.controls['newPassword'].value
         })
             .then(ok =>  {
                 this.unblockUI();
-                this.backEndService.logout()
+                this.backendService.logout()
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess('Email with instructions was sent.'));
                         this.navigate(['/login']);
@@ -135,15 +157,15 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
 
     changeEmail(): void {
         this.blockUI();
-        this.backEndService.validatePersonEntity({key: 'mail', value: this.emailForm.controls['newEmail'].value}).then(response =>  {
+        this.backendService.validatePersonEntity({key: 'mail', value: this.emailForm.controls['newEmail'].value}).then(response =>  {
             if (response.valid) {
-                this.backEndService.createPersonChangeProperty({
+                this.backendService.createPersonChangeProperty({
                     property: 'email',
                     email: this.emailForm.controls['newEmail'].value
                 })
                     .then(ok =>  {
                         this.unblockUI();
-                        this.backEndService.logout()
+                        this.backendService.logout()
                             .then(() => {
                                 this.addFlashMessage(new FlashMessageSuccess('Email with instructions was sent.'));
                                 this.navigate(['/login']);
@@ -164,14 +186,48 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
         });
     }
 
-    uploadProfilePicture(): void {
-        // API requires 'multipart/form-data' Content-Type, name of the property is 'file'.
-      //  this.backEndService.uploadPersonPicture(); // todo udělat něco co 1. nahraje obrázek 2. zkontroluje obrázek jestli je ve stavu jakém chceme 3. upravit ho 4. poslat ho
+    cropperFileChangeListener($event: any) {
+        let image = new Image();
+        let file: File = $event.target.files[0];
+        if (file) {
+            let myReader: FileReader = new FileReader();
+            myReader.onloadend = (loadEvent: any) => {
+                image.src = loadEvent.target.result;
+                if (image.width < 50 || image.height < 50) {
+                    this.fmWarning('Image is too small, minimal dimensions is 50x50px.');
+                    this.cropperLoaded = false;
+                } else {
+                    this.cropper.setImage(image);
+                    this.cropperLoaded = true;
+                }
+            };
+            myReader.readAsDataURL(file);
+        } else {
+            this.cropperLoaded = false;
+        }
+    }
+
+    saveProfilePicture(): void {
+        if (!this.cropperLoaded || !this.cropperData.image) {
+            return;
+        }
+
+        this.backendService.uploadPersonPicture({
+            file: this.cropperData.image
+        })
+            .then((result) => {
+                this.fmSuccess('New avatar saved successfully.');
+                this.backendService.refreshPersonInfo();
+                this.cropperLoaded = false;
+            })
+            .catch((error) => {
+                this.fmError('Cannot save new avatar.', error);
+            });
     }
 
     changeInfo(): void {
         this.blockUI();
-        this.backEndService.editPerson(this.personId, {
+        this.backendService.editPerson(this.personId, {
             nick_name: this.infoForm.controls['nickName'].value,
             country: this.infoForm.controls['state'].value,
             full_name: this.infoForm.controls['fullName'].value,

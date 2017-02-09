@@ -133,6 +133,7 @@ module.exports = function makeWebpackConfig() {
     // tslint support
     config.module.rules.push({
       test: /\.ts$/,
+      exclude: /node_modules/,
       enforce: 'pre',
       loader: 'tslint-loader'
     });

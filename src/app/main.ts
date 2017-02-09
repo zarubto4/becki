@@ -112,6 +112,7 @@ import { ModalsGopayInlineComponent } from './modals/gopay-inline';
 import { ModalsSendInvoiceComponent } from './modals/financial-send-invoice';
 import { ExitConfirmationService } from './services/ExitConfirmationService';
 import { ExitConfirmGuard } from './services/ExitConfirmGuard';
+import { ImageCropperComponent } from 'ng2-img-cropper';
 
 
 //  @formatter:off
@@ -251,6 +252,8 @@ let tabMenus = {
         // Layouts components
         LayoutMainComponent,
         LayoutNotLoggedComponent,
+        // Other components
+        ImageCropperComponent,
         // Pipes
         Nl2BrPipe,
         UnixTimeFormatPipe,
