@@ -12,9 +12,10 @@ import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { FlashMessageSuccess, FlashMessageError, NotificationService } from '../services/NotificationService';
 import { BackendService } from '../services/BackendService';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { BlockUIService } from '../services/BlockUIService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
+import { Subscription } from 'rxjs/Rx';
 
 
 @Component({
@@ -24,9 +25,15 @@ import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 export class CreateUserComponent implements OnInit {
 
     CreateUserForm: FormGroup;
+    routeParamsSubscription: Subscription;
 
-    constructor(protected formBuilder: FormBuilder, protected router: Router, protected backendService: BackendService, protected notificationService: NotificationService) {
-
+    constructor(
+        protected formBuilder: FormBuilder, 
+        protected router: Router, 
+        protected backendService: BackendService, 
+        protected notificationService: NotificationService, 
+        protected activatedRoute: ActivatedRoute
+    ) {
         this.CreateUserForm = this.formBuilder.group({
             'email': ['', [Validators.required, BeckiValidators.email], BeckiAsyncValidators.validateEntity(this.backendService, 'mail')],
             'nick_name': ['', [Validators.required, Validators.minLength(8), Validators.maxLength(60)], BeckiAsyncValidators.validateEntity(this.backendService, 'nick_name')],
@@ -37,9 +44,16 @@ export class CreateUserComponent implements OnInit {
         });
     }
 
-
     ngOnInit(): void {
+        this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+            if (params['email']) {
+                this.CreateUserForm.controls['email'].setValue(decodeURIComponent(params['email']));
+            }
+        });
+    }
 
+    ngOnDestroy(): void {
+        this.routeParamsSubscription.unsubscribe();
     }
 
     sendCreateUser(): void {

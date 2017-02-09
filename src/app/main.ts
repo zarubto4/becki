@@ -120,7 +120,8 @@ import { ImageCropperComponent } from 'ng2-img-cropper';
 let routes: Routes = [
     {path: 'login', component: LoginComponent, canActivate: [NonAuthGuard]},
     {path: 'logout', component: LogoutComponent},
-    {path: 'createUser', component: CreateUserComponent, canActivate: [NonAuthGuard]},
+    {path: 'create-user', component: CreateUserComponent, canActivate: [NonAuthGuard]},
+    {path: 'create-user/:email', component: CreateUserComponent, canActivate: [NonAuthGuard]},
 
     {path: 'forgotPassword', component: ForgotPasswordComponent, canActivate: [NonAuthGuard]},
     {path: 'passwordRestart/:token', component: PasswordRestartComponent, canActivate: [NonAuthGuard]},
