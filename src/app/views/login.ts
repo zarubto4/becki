@@ -2,14 +2,15 @@
  * Created by davidhradek on 03.08.16.
  */
 
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { BackendService } from '../services/BackendService';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { PermissionMissingError, UserNotValidatedError } from '../backend/BeckiBackend';
 import { BlockUIService } from '../services/BlockUIService';
 import { IPersonAuthentication } from '../backend/TyrionAPI';
+import { Subscription } from 'rxjs';
 
 
 const REDIRECT_URL = `${window.location.pathname}`;
@@ -18,21 +19,42 @@ const REDIRECT_URL = `${window.location.pathname}`;
     selector: 'bk-view-login',
     templateUrl: './login.html'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit, OnDestroy {
 
     loginForm: FormGroup;
 
     loginError: string = null;
 
-    resendVertification: boolean= false;
+    resendVertification: boolean = false;
+    routeParamsSubscription: Subscription;
 
-    constructor(private backendService: BackendService, private formBuilder: FormBuilder, private router: Router, private blockUIService: BlockUIService) {
-
+    constructor(
+        private backendService: BackendService,
+        private formBuilder: FormBuilder,
+        private router: Router,
+        private blockUIService: BlockUIService,
+        protected activatedRoute: ActivatedRoute
+    ) {
         this.loginForm = this.formBuilder.group({
             'email': ['', [Validators.required, BeckiValidators.email]],
             'password': ['', [Validators.required, Validators.minLength(8)]]
         });
+    }
 
+    ngOnInit(): void {
+        this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
+            if (typeof params['failed'] !== 'undefined') {
+                if (params['failed']) {
+                    this.loginError = decodeURIComponent(params['failed']);
+                } else {
+                    this.loginError = 'Error was occurred, when trying to login';
+                }
+            }
+        });
+    }
+
+    ngOnDestroy(): void {
+        this.routeParamsSubscription.unsubscribe();
     }
 
     redirect(url: string): void {

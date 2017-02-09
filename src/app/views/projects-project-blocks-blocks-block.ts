@@ -111,7 +111,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
     }
 
     newBlockCode(code: string) {
-        if (this.blockCode != code) {
+        if (this.blockCode !== code) {
             this.unsavedChanges = true;
             this.exitConfirmationService.setConfirmationEnabled(true);
         }

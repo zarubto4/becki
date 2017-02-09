@@ -86,9 +86,8 @@ export class CurrentParamsService {
         this.currentInvoiceId = this.currentInvoiceIdSubject = new Subject<string>();
 
         router.events.subscribe(event => {
-            
             if (event instanceof NavigationCancel || event instanceof NavigationEnd) {
-                if (router.routerState && router.routerState.snapshot && router.routerState.snapshot.root) {
+                if (router.routerState && router.routerState.snapshot && router.routerState.snapshot.root) {
                     this.newParams(this.getParamsRecursive(router.routerState.snapshot.root));
                 }
             }

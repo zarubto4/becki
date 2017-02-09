@@ -110,7 +110,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     }
 
     newWidgetCode(code: string) {
-        if (this.widgetCode != code) {
+        if (this.widgetCode !== code) {
             this.unsavedChanges = true;
             this.exitConfirmationService.setConfirmationEnabled(true);
         }

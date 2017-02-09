@@ -7,7 +7,7 @@
  * Created by dominikkrisztof on 11/10/16.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { FlashMessageSuccess, FlashMessageError, NotificationService } from '../services/NotificationService';
@@ -22,16 +22,16 @@ import { Subscription } from 'rxjs/Rx';
     selector: 'bk-view-create-user',
     templateUrl: './create-user.html'
 })
-export class CreateUserComponent implements OnInit {
+export class CreateUserComponent implements OnInit, OnDestroy {
 
     CreateUserForm: FormGroup;
     routeParamsSubscription: Subscription;
 
     constructor(
-        protected formBuilder: FormBuilder, 
-        protected router: Router, 
-        protected backendService: BackendService, 
-        protected notificationService: NotificationService, 
+        protected formBuilder: FormBuilder,
+        protected router: Router,
+        protected backendService: BackendService,
+        protected notificationService: NotificationService,
         protected activatedRoute: ActivatedRoute
     ) {
         this.CreateUserForm = this.formBuilder.group({
