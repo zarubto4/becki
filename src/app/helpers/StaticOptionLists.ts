@@ -6,6 +6,18 @@ import { FormSelectComponentOption } from '../components/FormSelectComponent';
 
 
 export class StaticOptionLists {
+    public static genderList: FormSelectComponentOption[] = [ // TODO tento seznam prý neodpovídá ISO normě
+        {
+            data: false,
+            label: 'Male',
+            value: 'male'
+        },
+        {
+            data: false,
+            label: 'Female',
+            value: 'female'
+        }
+    ];
 
     public static countryList: FormSelectComponentOption[] = [ // TODO tento seznam prý neodpovídá ISO normě
         {

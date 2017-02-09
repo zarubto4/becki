@@ -30,6 +30,8 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
 
     fullName: string;
 
+    sex: string;
+
     email: string;
 
     state: string;
@@ -39,6 +41,8 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
     pictureLink: string;
 
     countryList: FormSelectComponentOption[] = StaticOptionLists.countryList;
+
+    genderList: FormSelectComponentOption[] = StaticOptionLists.genderList;
 
     openTabName = 'personal';
 
@@ -59,9 +63,10 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
 
         this.infoForm = this.formBuilder.group({
             'fullName': ['', [Validators.required, Validators.minLength(8)]],
-            'nickName': ['', [Validators.required, Validators.minLength(8)]],
+            'nickName': ['', [Validators.required, Validators.minLength(4)]],
             'interests': ['', [Validators.required, Validators.minLength(8)]],
             'state': ['', [Validators.required, Validators.minLength(4)]],
+            'gender': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(6)]],
 
             // a tak dále, je třeba se domluvit co dál se zaznamená
         });
@@ -92,6 +97,8 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
         this.infoForm.controls['nickName'].setValue(personObject.nick_name);
 
         this.infoForm.controls['state'].setValue(personObject.country);
+
+        this.infoForm.controls['gender'].setValue(personObject.gender);
     }
 
 
@@ -167,7 +174,8 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
         this.backEndService.editPerson(this.personId, {
             nick_name: this.infoForm.controls['nickName'].value,
             country: this.infoForm.controls['state'].value,
-            full_name: this.infoForm.controls['fullName'].value
+            full_name: this.infoForm.controls['fullName'].value,
+            gender: this.infoForm.controls['gender'].value
         })
             .then((ok) => {
                 this.unblockUI();

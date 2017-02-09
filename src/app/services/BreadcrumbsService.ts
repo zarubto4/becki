@@ -3,7 +3,7 @@
  */
 
 import { Injectable, Inject } from '@angular/core';
-import { Route, Routes, Router, ActivatedRouteSnapshot, NavigationEnd } from '@angular/router';
+import { Route, Routes, Router, ActivatedRouteSnapshot, NavigationEnd, NavigationCancel } from '@angular/router';
 import { BackendService } from './BackendService';
 import { LabeledLink } from '../helpers/LabeledLink';
 import { CurrentParamsService } from './CurrentParamsService';
@@ -30,6 +30,9 @@ export class BreadcrumbsService {
 
         router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
+                this.refresh();
+            }
+            if (event instanceof NavigationCancel) {
                 this.refresh();
             }
         });
@@ -154,6 +157,8 @@ export class BreadcrumbsService {
         if (!currentRoute || !currentRoute.path) {
             return;
         }
+
+
         let currentPathComponents = currentRoute.path.split('/');
 
         let componentsCount = currentPathComponents.length;

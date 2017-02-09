@@ -368,9 +368,11 @@ export abstract class BeckiBackend extends TyrionAPI {
         return window.localStorage.getItem('authToken');
     }
 
-    private setToken(token: string): void {
+    private setToken(token: string, withRefreshPersonalInfo = true): void {
         window.localStorage.setItem('authToken', token);
-        this.refreshPersonInfo();
+        if (withRefreshPersonalInfo) {
+            this.refreshPersonInfo();
+        }
     }
 
     public tokenExist(): boolean {
@@ -412,7 +414,7 @@ export abstract class BeckiBackend extends TyrionAPI {
     public loginGitHub(redirectUrl: string): Promise<string> {
         return this.__loginGitHub(redirectUrl)
             .then(body => {
-                this.setToken(body.authToken);
+                this.setToken(body.authToken, false);
                 return body.redirect_url;
             });
     }

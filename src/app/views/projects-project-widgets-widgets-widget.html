@@ -34,7 +34,7 @@
                         </span>
                     </div>
                     <div *ngIf="selectedWidgetVersion" class="becki-caption version">
-                        <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="true" class="changes"></span> {{selectedWidgetVersion.version_name}}</span>
+                        <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="unsavedChanges" class="changes"></span> {{selectedWidgetVersion.version_name}}</span>
                     </div>
                 </div>
 

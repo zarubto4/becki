@@ -110,6 +110,8 @@ import { ProducersComponent } from './views/producers';
 import { ProducersProducerComponent } from './views/producers-producer';
 import { ModalsGopayInlineComponent } from './modals/gopay-inline';
 import { ModalsSendInvoiceComponent } from './modals/financial-send-invoice';
+import { ExitConfirmationService } from './services/ExitConfirmationService';
+import { ExitConfirmGuard } from './services/ExitConfirmGuard';
 
 
 //  @formatter:off
@@ -155,7 +157,7 @@ let routes: Routes = [
     {path: 'projects/:project/code/:code', data: {breadName: ':code'}, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/blocks', data: {breadName: 'Custom blocks'}, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/blocks/:blocks', data: {breadName: ':blocks'}, component: ProjectsProjectBlocksBlocksComponent, canActivate: [AuthGuard]},
-    {path: 'projects/:project/blocks/:blocks/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard]},
+    {path: 'projects/:project/blocks/:blocks/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]},
 
     {path: 'projects/:project/grid', data: {breadName: 'Grid programs'}, component: ProjectsProjectGridComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/grid/:grids', data: {breadName: ':grids'}, component: ProjectsProjectGridGridsComponent, canActivate: [AuthGuard]},
@@ -166,7 +168,7 @@ let routes: Routes = [
 
     {path: 'projects/:project/widgets', data: {breadName: 'Custom widgets'}, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/widgets/:widgets', data: {breadName: ':widgets'}, component: ProjectsProjectWidgetsWidgetsComponent, canActivate: [AuthGuard]},
-    {path: 'projects/:project/widgets/:widgets/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard]},
+    {path: 'projects/:project/widgets/:widgets/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]},
 
     {path: 'producers', data: {breadName: 'Producers'}, component: ProducersComponent, canActivate: [AuthGuard]},
     {path: 'producers/:producer', data: {breadName: ':last'}, component: ProducersProducerComponent, canActivate: [AuthGuard]},
@@ -226,6 +228,7 @@ let tabMenus = {
         ValidatorErrorsService,
         BackendService,
         AuthGuard, // AuthGuard service must be after BackendService
+        ExitConfirmGuard,
         NonAuthGuard, // NonAuthGuard service must be after BackendService
         NotificationService, // NotificationService must be after BackendService
         StorageService,
@@ -235,6 +238,7 @@ let tabMenus = {
         BreadcrumbsService,
         TabMenuService,
         MonacoEditorLoaderService,
+        ExitConfirmationService,
         {provide: 'routes', useValue: routes},
         {provide: 'navigation', useValue: navigation},
         {provide: 'tabMenus', useValue: tabMenus},

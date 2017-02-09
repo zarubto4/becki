@@ -22,6 +22,7 @@ import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService
 import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
 import { MachineMessage, SafeMachineMessage } from 'script-engine';
 import { CurrentParamsService } from '../services/CurrentParamsService';
+import { ExitConfirmationService } from '../services/ExitConfirmationService';
 
 @Component({
     selector: 'bk-view-projects-project-widgets-widgets-widget',
@@ -52,9 +53,11 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     messageInputsValueCache: { [key: string]: boolean|number|string } = {};
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
+    unsavedChanges: boolean = false;
 
     protected _widgetTesterRenderer: TestRenderer.ControllerRenderer;
     protected monacoEditorLoaderService: MonacoEditorLoaderService;
+    protected exitConfirmationService: ExitConfirmationService;
     protected buildErrors: any[] = null;
 
     // Properties for test view:
@@ -68,13 +71,17 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         super(injector);
 
         this.monacoEditorLoaderService = injector.get(MonacoEditorLoaderService);
+        this.exitConfirmationService = injector.get(ExitConfirmationService);
 
         this.testInputConnectors = [];
         this.messageInputsValueCache = {};
         this.widgetTestRunning = false;
+
+        this.exitConfirmationService.setConfirmationEnabled(true);
     };
 
     ngOnInit(): void {
+        this.unsavedChanges = false;
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.projectId = params['project'];
             this.widgetId = params['widget'];
@@ -103,6 +110,10 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     }
 
     newWidgetCode(code: string) {
+        if (this.widgetCode != code) {
+            this.unsavedChanges = true;
+            this.exitConfirmationService.setConfirmationEnabled(true);
+        }
         this.widgetCode = code;
     }
 
@@ -338,6 +349,8 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess('Version <b>' + m.name + '</b> saved successfully.'));
                         this.refresh(); // also unblockUI
+                        this.unsavedChanges = false;
+                        this.exitConfirmationService.setConfirmationEnabled(false);
                     })
                     .catch((err) => {
                         this.addFlashMessage(new FlashMessageError('Failed saving version <b>' + m.name + '</b>', err));

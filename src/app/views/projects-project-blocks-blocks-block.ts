@@ -19,6 +19,7 @@ import { TypescriptBuildError, SafeMachineError } from 'script-engine';
 import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService';
 import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
 import { CurrentParamsService } from '../services/CurrentParamsService';
+import { ExitConfirmationService } from '../services/ExitConfirmationService';
 
 @Component({
     selector: 'bk-view-projects-project-blocks-blocks-block',
@@ -41,7 +42,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
 
     blockoBlockVersions: IBlockoBlockVersionShortDetail[] = [];
     selectedBlockoBlockVersion: IBlockoBlockVersion = null;
-
+    unsavedChanges: boolean = false;
 
     connectorTypes = Types.ConnectorType;
     argTypes = Types.Type;
@@ -63,7 +64,8 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
     @ViewChild(ConsoleLogComponent)
     consoleLog: ConsoleLogComponent;
 
-    private monacoEditorLoaderService: MonacoEditorLoaderService = null;
+    protected monacoEditorLoaderService: MonacoEditorLoaderService = null;
+    protected exitConfirmationService: ExitConfirmationService = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -71,15 +73,19 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
         super(injector);
 
         this.monacoEditorLoaderService = injector.get(MonacoEditorLoaderService);
+        this.exitConfirmationService = injector.get(ExitConfirmationService);
 
         this.blockForm = this.formBuilder.group({
             'color': ['#3baedb', [Validators.required]],
             'icon': ['fa-question', [Validators.required]],
             'description': ['']
         });
+
+        this.exitConfirmationService.setConfirmationEnabled(true);
     };
 
     ngOnInit(): void {
+        this.unsavedChanges = false;
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.projectId = params['project'];
             this.blockId = params['block'];
@@ -105,6 +111,10 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
     }
 
     newBlockCode(code: string) {
+        if (this.blockCode != code) {
+            this.unsavedChanges = true;
+            this.exitConfirmationService.setConfirmationEnabled(true);
+        }
         this.successfullyTested = false;
         this.blockCode = code;
     }
@@ -363,6 +373,8 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess('Version <b>' + m.name + '</b> saved successfully.'));
                         this.refresh(); // also unblockUI
+                        this.unsavedChanges = false;
+                        this.exitConfirmationService.setConfirmationEnabled(false);
                     })
                     .catch((err) => {
                         this.addFlashMessage(new FlashMessageError('Failed saving version <b>' + m.name + '</b>', err));

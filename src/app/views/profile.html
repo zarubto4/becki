@@ -35,6 +35,7 @@
                     <form>
                         <bk-form-input label="Full Name" type="text" [control]="infoForm.controls.fullName"></bk-form-input>
                         <bk-form-input label="Nick Name" type="text" [control]="infoForm.controls.nickName"></bk-form-input>
+                        <bk-form-select label="Gender" [options]="genderList" [control]="infoForm.controls.gender"></bk-form-select>
                         <bk-form-select label="State" [options]="countryList" [control]="infoForm.controls.state"></bk-form-select>
 
                         <div class="margin-top-10">

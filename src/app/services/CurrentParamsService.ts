@@ -3,7 +3,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Router, RoutesRecognized, ActivatedRouteSnapshot, Params } from '@angular/router';
+import { Router, RoutesRecognized, ActivatedRouteSnapshot, Params, NavigationCancel, NavigationEnd } from '@angular/router';
 import { BackendService } from './BackendService';
 import { Observable, Subject } from 'rxjs/Rx';
 import { IProject, IBProgram, ICProgram } from '../backend/TyrionAPI';
@@ -86,10 +86,10 @@ export class CurrentParamsService {
         this.currentInvoiceId = this.currentInvoiceIdSubject = new Subject<string>();
 
         router.events.subscribe(event => {
-            if (event instanceof RoutesRecognized) {
-                let e = <RoutesRecognized>event;
-                if (e.state && e.state.root) {
-                    this.newParams(this.getParamsRecursive(e.state.root));
+            
+            if (event instanceof NavigationCancel || event instanceof NavigationEnd) {
+                if (router.routerState && router.routerState.snapshot && router.routerState.snapshot.root) {
+                    this.newParams(this.getParamsRecursive(router.routerState.snapshot.root));
                 }
             }
         });
