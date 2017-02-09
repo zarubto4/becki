@@ -114,18 +114,18 @@ import { ExitConfirmationService } from './services/ExitConfirmationService';
 import { ExitConfirmGuard } from './services/ExitConfirmGuard';
 import { ImageCropperComponent } from 'ng2-img-cropper';
 
-
-//  @formatter:off
+// @formatter:off
 // DON'T USE children IN ROUTER YET!!!
+/* tslint:disable:max-line-length */
 let routes: Routes = [
     {path: 'login', component: LoginComponent, canActivate: [NonAuthGuard]},
     {path: 'logout', component: LogoutComponent},
     {path: 'create-user', component: CreateUserComponent, canActivate: [NonAuthGuard]},
     {path: 'create-user/:email', component: CreateUserComponent, canActivate: [NonAuthGuard]},
 
-    {path: 'forgotPassword', component: ForgotPasswordComponent, canActivate: [NonAuthGuard]},
-    {path: 'passwordRestart/:token', component: PasswordRestartComponent, canActivate: [NonAuthGuard]},
-    {path: 'redirectOk', component: RedirectOkComponent, canActivate: [NonAuthGuard]},
+    {path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [NonAuthGuard]},
+    {path: 'password-restart/:token', component: PasswordRestartComponent, canActivate: [NonAuthGuard]},
+    {path: 'redirect-ok', component: RedirectOkComponent, canActivate: [NonAuthGuard]},
 
     {path: '', redirectTo: '/dashboard', pathMatch: 'full'},
 
@@ -177,7 +177,8 @@ let routes: Routes = [
 
     {path: '**', component: Error404Component},
 ];
-//  @formatter:on
+// @formatter:on
+/* tslint:enable */
 
 let navigation = [
     new LabeledLink('Dashboard', ['/dashboard'], 'tachometer'),
