@@ -1641,6 +1641,10 @@ ul.hw-list li ul li, ul.grid-list li ul li {
     width: 100%;
 }
 
+.no-border-top {
+    border-top: 0 !important;
+}
+
 .profile-pic-wrapper {
 
 
@@ -1652,6 +1656,12 @@ ul.hw-list li ul li, ul.grid-list li ul li {
 
     .preview {
         margin-left: 212px;
+    }
+    .preview.empty {
+        width: 128px;
+        height: 128px;
+        background-image: url(./assets/pages/img/avatars/empty.png);
+        background-size: cover;
     }
 
     .file-select {

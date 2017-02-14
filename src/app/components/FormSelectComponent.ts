@@ -70,7 +70,7 @@ export class FormSelectComponent {
     waitForTouch: boolean = true;
 
     @Input()
-    readonly: boolean = true;
+    readonly: boolean = false;
 
     @Input()
     options: FormSelectComponentOption[] = [];
