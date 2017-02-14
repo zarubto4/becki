@@ -41,6 +41,18 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
+    versionStatusTranslate: {[key:string]:string} = {
+        'compilation_in_progress': 'Compilation is in progress',
+        'successfully_compiled_and_restored': 'Successfully compiled',
+        'server_was_offline': 'Server error (offline)',
+        'successfully_compiled_not_restored': 'Server error',
+        'compiled_with_code_errors': 'Code compilation finished with errors',
+        'file_with_code_not_found': 'Code file not found',
+        'compilation_server_error': 'Error in compilation',
+        'json_code_is_broken': 'Version is broken (empty code)',
+        'undefined': 'Status of version is not known'
+    }
+
     constructor(injector: Injector) {
         super(injector);
     };

@@ -75,3 +75,11 @@ __build__/**
 # project files should be checked into the repository, unless a significant
 # proportion of contributors will probably not be using SublimeText
 # *.sublime-project
+
+# Compiled app #
+/src/main.js
+/src/main.js.map
+/src/polyfills.js
+/src/polyfills.js.map
+/src/vendor.js
+/src/vendor.js.map

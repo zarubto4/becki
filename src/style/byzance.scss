@@ -1696,3 +1696,94 @@ ul.hw-list li ul li, ul.grid-list li ul li {
     width: 30px;
     background-size: cover;
 }
+
+
+.icon-hint-wraper {
+    position: relative;
+
+    i {
+        cursor: help;
+    }
+
+    &:hover {
+        .hint {
+            display: block;
+            z-index: 2;
+        }
+    }
+
+    &.red {
+        .hint {
+            background: #ee888f;
+
+            &::after {
+                content: "";
+                border-bottom-color: #ee888f;
+            }
+        }
+    }
+
+    &.green {
+        .hint {
+            background: #7cdab3;
+
+            &::after {
+                content: "";
+                border-bottom-color: #7cdab3;
+            }
+        }
+    }
+
+    &.orange {
+        .hint {
+            background: #f8e28b;
+
+            &::after {
+                content: "";
+                border-bottom-color: #f8e28b;
+            }
+        }
+    }
+
+    &.gray {
+        .hint {
+            background: #AAA;
+
+            &::after {
+                content: "";
+                border-bottom-color: #AAA;
+            }
+        }
+
+        i {
+            color: #000;
+        }
+    }
+}
+
+.icon-hint-wraper .hint {
+    position: absolute;
+    padding: 20px;
+    border-radius: 3px !important;
+    display: none;
+    right: -20px;
+    top: 25px;
+    max-width: 350px;
+    min-width: 200px;
+    color: #000;
+
+    &:after {
+        overflow: hidden;
+        content: "";
+        display: block;
+        position: absolute;
+        right: 17px;
+        top: -10px;
+        width: 0;
+        height: 0;
+        border: 0 solid transparent;
+        border-right-width: 10px;
+        border-left-width: 10px;
+        border-bottom: 10px solid black;
+    }
+}

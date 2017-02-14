@@ -90,7 +90,6 @@ export class FormFAIconSelectComponent implements OnInit, OnDestroy {
                 this.value = value;
             });
         }
-
     }
 
     ngOnDestroy(): void {

@@ -72,7 +72,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -92,6 +91,8 @@
                         <tr>
                             <th>Name</th>
                             <th class="full-width">Description</th>
+                            <th class="full-width">Author</th>
+                            <th class="full-width">Status</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -103,6 +104,30 @@
                             </td>
                             <td>
                                 {{version.version_description}}
+                            </td>
+                            <td>
+                                {{version.author.nick_name}}
+                            </td>
+                            <td>
+                                <span class="icon-hint-wraper red" *ngIf="version.status=='compiled_with_code_errors' || version.status=='file_with_code_not_found' || version.status=='compilation_server_error' || version.status=='json_code_is_broken'">
+                                    <i class="fa fa-exclamation-triangle font-red-mint"></i>
+                                    <span class="hint">{{versionStatusTranslate[version.status]}}</span>
+                                </span>
+
+                                <span class="icon-hint-wraper orange" *ngIf="version.status=='server_was_offline' || version.status=='successfully_compiled_not_restored'">
+                                    <i class="fa fa-question-circle font-yellow-lemon"></i>
+                                    <span class="hint">{{versionStatusTranslate[version.status]}}</span>
+                                </span>
+
+                                <span class="icon-hint-wraper gray" *ngIf="version.status=='compilation_in_progress'">
+                                    <i class="fa fa-spinner fa-spin"></i>
+                                    <span class="hint">{{versionStatusTranslate[version.status]}}</span>
+                                </span>
+
+                                <span class="icon-hint-wraper green" *ngIf="version.status=='successfully_compiled_and_restored'">
+                                    <i class="fa fa-check font-green-jungle"></i>
+                                    <span class="hint">{{versionStatusTranslate[version.status]}}</span>
+                                </span>
                             </td>
                         </tr>
                         </tbody>

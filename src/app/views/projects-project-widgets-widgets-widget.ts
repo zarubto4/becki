@@ -77,7 +77,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         this.messageInputsValueCache = {};
         this.widgetTestRunning = false;
 
-        this.exitConfirmationService.setConfirmationEnabled(true);
+        this.exitConfirmationService.setConfirmationEnabled(false);
     };
 
     ngOnInit(): void {
@@ -125,6 +125,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 this.widget = widget;
 
                 this.widgetVersions = this.widget.versions || [];
+
 
                 if (this.widgetVersions.length) {
                     this.selectWidgetVersion(this.widgetVersions[0]); // also unblockUI

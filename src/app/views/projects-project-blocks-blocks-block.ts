@@ -81,7 +81,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
             'description': ['']
         });
 
-        this.exitConfirmationService.setConfirmationEnabled(true);
+        this.exitConfirmationService.setConfirmationEnabled(false);
     };
 
     ngOnInit(): void {

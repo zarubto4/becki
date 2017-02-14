@@ -42,7 +42,7 @@
     "script-engine": "git+ssh://git@git.byzance.cz:js-components/script-engine.git#v0.0.37",
     "snapsvg": "^0.4.0",
     "systemjs": "0.19.40",
-    "the-grid": "git+ssh://git@git.byzance.cz:js-components/the-grid.git#v0.1.114",
+    "the-grid": "git+ssh://git@git.byzance.cz:js-components/the-grid.git#v0.1.116",
     "tslib": "^1.5.0",
     "typescript": "^2.1.5",
     "zone.js": "^0.7.4"
