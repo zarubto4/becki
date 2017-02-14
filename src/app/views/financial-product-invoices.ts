@@ -59,14 +59,8 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
     }
 
     onSendClick(invoice: IInvoice): void {
-        let invoiceEmail;
-        if (this.product.payment_details.company_invoice_email) {
-            invoiceEmail = this.product.payment_details.company_invoice_email;
-        } else {
-            invoiceEmail = this.backendService.personInfoSnapshot.mail;
-        }
 
-        let model = new ModalsSendInvoiceModel('Send invoice', invoice.id, invoiceEmail);
+        let model = new ModalsSendInvoiceModel('Send invoice', invoice.id, this.product.payment_details.invoice_email);
         this.modalService.showModal(model).then((success) => {
             this.backendService.InvoiceResend('peniston').then(response => {
                 // this.unblockUI();

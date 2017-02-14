@@ -35,7 +35,7 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
     }
 
     onAddProductClick(): void {
-        this.router.navigate(['/productRegistration']);
+        this.router.navigate(['/financial/product-registration']);
     }
 
     onRemoveClick(product: IProduct): void {

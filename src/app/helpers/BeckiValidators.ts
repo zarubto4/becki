@@ -6,6 +6,15 @@ import { AbstractControl, ValidatorFn, FormGroup } from '@angular/forms';
 
 export class BeckiValidators {
 
+    public static regExp(name: string, regExp: RegExp): ValidatorFn {
+        return (a: AbstractControl) => {
+            if (a.value.match(regExp)) {
+                return null; // valid
+            }
+            return {regExp: name}; // invalid
+        };
+    }
+
     public static email: ValidatorFn = (c: AbstractControl) => {
         if (c.value.match(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/)) {
             return null; // valid

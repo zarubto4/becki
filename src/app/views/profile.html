@@ -51,7 +51,8 @@
 
                             <h4>Avatar<span *ngIf="cropperLoaded" class="font-red"> (Unsaved)</span></h4>
 
-                            <img class="preview img-circle" [src]="cropperLoaded?cropperData.image:backendService.personInfoSnapshot.picture_link" width="128" height="128">
+                            <img *ngIf="cropperLoaded || backendService.personInfoSnapshot.picture_link" class="preview img-circle" [src]="cropperLoaded?cropperData.image:backendService.personInfoSnapshot.picture_link" width="128" height="128">
+                            <div *ngIf="!(cropperLoaded || backendService.personInfoSnapshot.picture_link)" class="preview empty img-circle"></div>
 
                             <div class="file-select">
                                 <div>Select another avatar</div>

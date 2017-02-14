@@ -25,7 +25,7 @@
                 <tr>
                     <th>Name</th>
                     <th>Type</th>
-                    <th>ID Subscription</th>
+                    <th>Subscription id</th>
                     <th>Payment mode</th>
                     <th class="text-right">Actions</th>
                 </tr>
@@ -33,25 +33,30 @@
                 <tbody>
                 <tr *ngFor="let product of products">
                     <td class="no-wrap"><a (click)="onProductClick(product)"><b>{{product.product_individual_name}}</b></a></td>
-                      <td class="no-wrap ">
-                        <span title="Bank transfer" *ngIf="product.payment_method=='bank_transfer'"> <!-- TODO zjistit jaké barvičky mají být a podle čeho se mají rosvicet -->
-                            <i class="green-jungle fa fa-bank "> </i> Bank transfer
+                    <td class="no-wrap ">
+                        <span title="Bank transfer" class="font-blue-chambray" *ngIf="product.payment_method=='bank_transfer'">
+                            <i class="fa fa-lg fa-fw fa-exchange"> </i> Bank transfer
                         </span>
-                        <span title="Credits"  *ngIf="product.payment_method=='credit'">
-                            <i class="green-jungle fa fa-money " > </i>Credits
+                        <span title="Credits"  class="font-blue-chambray" *ngIf="product.payment_method=='credit'">
+                            <i class="fa fa-lg fa-fw fa-money" > </i> Credits
                         </span>
-                        <span title="Credit Card" *ngIf="product.payment_method=='credit_card'">
-                            <i class="green-jungle fa fa-credit-card "></i> Credit Card
+                        <span title="Credit Card" class="font-blue-chambray" *ngIf="product.payment_method=='credit_card'">
+                            <i class="fa fa-lg fa-fw fa-credit-card"></i> Credit Card
                         </span>
-                        <span title="Free" *ngIf="product.payment_method=='Not set yet'">
-                            <i class="green-jungle fa fa-suitcase "></i> Not set <!--TODO je třeba najít lepší ikonku -->
+                        <span title="Free" class="font-blue-chambray" *ngIf="product.payment_method=='free'">
+                            <i class="fa fa-lg fa-fw fa-hand-peace-o"></i> Free
+                        </span>
+                        <span title="Free" class="font-blue-chambray" *ngIf="product.payment_method=='Not set yet'">
+                            <i class="fa fa-lg fa-fw fa-question"></i> Not set yet
                         </span>
                     </td>
                     <td>{{product.subscription_id}}</td>
                     <td>{{product.payment_mode|bkStringReplacer}}</td>
-                  <td class="text-right"><button title="Settings" class="btn green-jungle btn-icon-only white">
-                        <i class=" fa fa-gears "></i>
-                    </button> </td>
+                  <td class="text-right">
+                      <button title="Settings" class="btn green btn-icon-only white">
+                          <i class="fa fa-gear"></i>
+                      </button>
+                  </td>
                 </tr>
                 </tbody>
             </table>

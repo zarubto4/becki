@@ -60,9 +60,14 @@ export class ValidatorErrorsService {
                 } else if (errors['entityNotValid'] === 'nick_name') {
                     return 'Nick name is already taken';
                 } else if (errors['entityNotValid'] === 'vat_number') {
-                    return 'Wrong vat number (type it without spaces, dashes etc.)';
+                    return 'Wrong VAT number (type it without spaces, dashes etc.)';
                 } else {
                     return 'Entity unknown error.' + (errors['entityMessage'] ? ' (' + errors['entityMessage'] + ')' : '');
+                }
+            }
+            if (errors['regExp']) {
+                if (errors['regExp'] === 'street_number') {
+                    return 'Wrong street number format, valid is "number" or "number/number" format.';
                 }
             }
         }
