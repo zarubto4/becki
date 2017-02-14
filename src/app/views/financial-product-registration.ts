@@ -266,12 +266,11 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
         this.backendService.createProduct(<ITariffRegister>tariffData)
             .then(Response => {
-                console.log(Response);
 
                 if ((<any>Response)._code_ === 200) {
                     this.addFlashMessage(new FlashMessageWarning('Product was created but payment is required'));
-                // modální okno ModalsGopayInlineModel bude potřebovat vylepšit
-                    let model = new ModalsGopayInlineModel('Payment', (<IGoPayUrl>Response).gw_url); //není jisté jestli gopayurl vrací to co má 
+                    // modální okno ModalsGopayInlineModel bude potřebovat vylepšit
+                    let model = new ModalsGopayInlineModel('Payment', (<IGoPayUrl>Response).gw_url); // není jisté jestli gopayurl vrací to co má
                     this.modalService.showModal(model).then((success) => {
                         this.router.navigate(['/financial']);
                     });
