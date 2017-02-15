@@ -7,6 +7,7 @@ import { ISwaggerCProgramShortDetailForBlocko } from '../backend/TyrionAPI';
 
 @Component({
     selector: 'bk-c-program-version-selector',
+/* tslint:disable:max-line-length */
     template: `
 <div>
     <div class="form-group col-md-6" [class.has-error]="!selectedProgramId">
@@ -32,6 +33,7 @@ import { ISwaggerCProgramShortDetailForBlocko } from '../backend/TyrionAPI';
     <div class="clearfix"></div>
 </div>
 `
+/* tslint:enable */
 })
 
 export class CProgramVersionSelectorComponent implements OnInit {
