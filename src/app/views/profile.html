@@ -51,14 +51,15 @@
 
                             <h4>Avatar<span *ngIf="cropperLoaded" class="font-red"> (Unsaved)</span></h4>
 
-                            <img *ngIf="cropperLoaded || backendService.personInfoSnapshot.picture_link" class="preview img-circle" [src]="cropperLoaded?cropperData.image:backendService.personInfoSnapshot.picture_link" width="128" height="128">
-                            <div *ngIf="!(cropperLoaded || backendService.personInfoSnapshot.picture_link)" class="preview empty img-circle"></div>
+                            <img *ngIf="(cropperLoaded && cropperData.image) || backendService.personInfoSnapshot.picture_link" class="preview img-circle" [src]="cropperData.image?cropperData.image:backendService.personInfoSnapshot.picture_link" width="128" height="128">
+                            <div *ngIf="!((cropperLoaded && cropperData.image) || backendService.personInfoSnapshot.picture_link)" class="preview empty img-circle"></div>
 
                             <div class="file-select">
                                 <div>Select another avatar</div>
                                 <input type="file" (change)="cropperFileChangeListener($event)" accept="image/*">
                             </div>
-                            <img-cropper #cropper [image]="cropperData" [settings]="cropperSettings" [style.display]="cropperLoaded?'block':'none'"></img-cropper>
+                            <div class="loading" *ngIf="cropperLoaded && !cropperData.image"> Loading... </div>
+                            <img-cropper #cropper [image]="cropperData" [settings]="cropperSettings" [style.display]="(cropperLoaded && cropperData.image)?'block':'none'"></img-cropper>
 
                             <div class="clearfix margin-top-10"></div>
                         </div>
