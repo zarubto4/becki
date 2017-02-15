@@ -38,6 +38,9 @@
                         <button title="Remove member" class="btn btn-icon-only red" [disabled]="member.id == selfId" (click)="onMemberDeleteClick(member)">
                             <i class="fa fa-trash"></i>
                         </button>
+                        <button title="Remove member" class="btn btn-icon-only blue" [disabled]="member.id == selfId" (click)="onMemberSnedAgainClick(member)">
+                            <i class="fa fa-envelope"></i>
+                        </button>
                     </td>
                 </tr>
                 </tbody>

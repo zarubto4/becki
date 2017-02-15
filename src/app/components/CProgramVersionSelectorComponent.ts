@@ -18,10 +18,13 @@ import { ISwaggerCProgramShortDetailForBlocko } from '../backend/TyrionAPI';
     </div>
     <div class="form-group col-md-6" [class.has-error]="selectedProgramId && !selectedProgramVersionId">
         <label>Program version</label>
+        <select class="form-control" *ngIf="selectedProgram && !(selectedProgram.versions && selectedProgram.versions.length)" disabled>
+            <option [value]="null" disabled>No program versions</option>
+        </select>
         <select *ngIf="!selectedProgram" class="form-control" disabled>
             <option [value]="null" disabled>&lt; Select program first</option>
         </select>
-        <select *ngIf="selectedProgram" class="form-control" [ngModel]="selectedProgramVersionId" (ngModelChange)="onSelectedProgramVersionIdChange($event)">
+        <select *ngIf="selectedProgram && (selectedProgram.versions && selectedProgram.versions.length)" class="form-control" [ngModel]="selectedProgramVersionId" (ngModelChange)="onSelectedProgramVersionIdChange($event)">
             <option [value]="null" disabled>Select version</option>
             <option *ngFor="let cProgramVersion of selectedProgram.versions" [value]="cProgramVersion.id">{{cProgramVersion.version_name}}</option>
         </select>
@@ -30,6 +33,7 @@ import { ISwaggerCProgramShortDetailForBlocko } from '../backend/TyrionAPI';
 </div>
 `
 })
+
 export class CProgramVersionSelectorComponent implements OnInit {
 
     @Input()

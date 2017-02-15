@@ -89,6 +89,10 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
             });
     }
 
+    onMemberSnedAgainClick(member: IProjectParticipant) {
+
+    }
+
     readableState(state: ('owner'|'admin'|'member'|'invited')) {
         switch (state) {
             case 'owner': return 'Project owner';
