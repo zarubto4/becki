@@ -76,6 +76,9 @@
             <template [ngSwitchCase]="'ModalsGopayInlineModel'">
                 <bk-modals-gopay-inline [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-gopay-inline>
             </template>
+            <template [ngSwitchCase]="'ModalsSelectHardwareModel'">
+                <bk-modals-select-hardware [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-select-hardware>
+            </template>
         </div>
     </div>
 </div>

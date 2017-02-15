@@ -93,6 +93,7 @@
                             <th class="full-width">Description</th>
                             <th class="full-width">Author</th>
                             <th class="full-width">Status</th>
+                            <th class="full-width"></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -128,6 +129,9 @@
                                     <i class="fa fa-check font-green-jungle"></i>
                                     <span class="hint">{{versionStatusTranslate[version.status]}}</span>
                                 </span>
+                            </td>
+                            <td>
+                                <button  class="btn blue btn-small" (click)="onUploadClick(version)" *ngIf="device && device.connectible_to_internet && version.status=='successfully_compiled_and_restored'">Upload</button>
                             </td>
                         </tr>
                         </tbody>

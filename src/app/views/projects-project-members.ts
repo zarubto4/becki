@@ -17,6 +17,7 @@ import { IProject, IBoard, IBoardPersonalDescription, IProjectParticipant } from
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { ModalsMembersAddModel } from '../modals/members-add';
 import { CurrentParamsService } from '../services/CurrentParamsService';
+import { ModalsConfirmModel } from '../modals/confirm';
 
 @Component({
     selector: 'bk-view-projects-project-members',
@@ -90,7 +91,17 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
     }
 
     onMemberSnedAgainClick(member: IProjectParticipant) {
-
+        this.blockUI();
+        this.backendService.shareProject(this.id, {persons_mail: [member.user_email]})
+            .then(() => {
+                this.unblockUI();
+                let m = new ModalsConfirmModel('Invitation', 'Invitation email was sent to ' + member.user_email, true, null, null, ['Ok']);
+                this.modalService.showModal(m);
+            })
+            .catch((err) => {
+                this.unblockUI();
+                this.fmError('Cannot resend invitation.', err);
+            });
     }
 
     readableState(state: ('owner'|'admin'|'member'|'invited')) {

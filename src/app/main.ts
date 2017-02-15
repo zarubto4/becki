@@ -113,6 +113,7 @@ import { ModalsSendInvoiceComponent } from './modals/financial-send-invoice';
 import { ExitConfirmationService } from './services/ExitConfirmationService';
 import { ExitConfirmGuard } from './services/ExitConfirmGuard';
 import { ImageCropperComponent } from 'ng2-img-cropper';
+import { ModalsSelectHardwareComponent } from './modals/select-hardware';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -320,6 +321,7 @@ let tabMenus = {
         ModalsProjectPropertiesComponent,
         ModalsRemovalComponent,
         ModalsAddHardwareComponent,
+        ModalsSelectHardwareComponent,
         ModalsBlockoPropertiesComponent,
         ModalsCodePropertiesComponent,
         ModalsCodeFileDialogComponent,

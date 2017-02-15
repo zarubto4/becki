@@ -4,15 +4,16 @@
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageError, FlashMessageSuccess, FlashMessage } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
 import { CodeFile } from '../components/CodeIDEComponent';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
-import { IProject, ICProgram, ICProgramVersion, IUserFile, ICProgramVersionShortDetail } from '../backend/TyrionAPI';
+import { IProject, ICProgram, ICProgramVersion, IUserFile, ICProgramVersionShortDetail, ITypeOfBoard, IBoardShortDetail } from '../backend/TyrionAPI';
 import { ICodeCompileErrorMessage, CodeCompileError, CodeError } from '../backend/BeckiBackend';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { NullSafe } from '../helpers/NullSafe';
+import { ModalsSelectHardwareComponent, ModalsSelectHardwareModel } from '../modals/select-hardware';
 
 import moment = require('moment/moment');
 
@@ -40,6 +41,10 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
     buildInProgress: boolean = false;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
+    reloadInterval: any = null;
+    device: ITypeOfBoard = null;
+    allDevices: IBoardShortDetail[];
+    projectSubscription: Subscription;
 
     versionStatusTranslate: {[key: string]: string} = {
         'compilation_in_progress': 'Compilation is in progress',
@@ -66,11 +71,30 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             this.projectId = params['project'];
             this.codeId = params['code'];
             this.refresh();
+
+            if (!this.projectSubscription) {
+                this.projectSubscription = this.storageService.project(this.projectId).subscribe((project) => {
+                    this.allDevices = project.boards;
+                });
+            }
         });
+
+        this.reloadInterval = setInterval(() => {
+            this.reloadVersions();
+        }, 10000);
     }
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
+
+        if (this.reloadInterval) {
+            clearInterval(this.reloadInterval);
+            this.reloadInterval = null;
+        }
+
+        if (this.projectSubscription) {
+            this.projectSubscription.unsubscribe();
+        }
     }
 
     refresh(): void {
@@ -78,7 +102,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         this.blockUI();
         this.backendService.getCProgram(this.codeId)
             .then((codeProgram) => {
-                // console.log(codeProgram);
+
                 this.codeProgram = codeProgram;
 
                 this.codeProgramVersions = this.codeProgram.program_versions || [];
@@ -94,12 +118,27 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 }
 
                 this.unblockUI();
+
+                this.backendService.getTypeOfBoard(this.codeProgram.type_of_board_id)
+                    .then((response) => {
+                        this.device = response;
+                    });
             })
             .catch(reason => {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError(`The code types cannot be loaded.`, reason));
             });
 
+    }
+
+    reloadVersions(): void {
+        if (this.codeId) {
+            this.backendService.getCProgram(this.codeId)
+                .then((codeProgram) => {
+                    this.codeProgram = codeProgram;
+                    this.codeProgramVersions = this.codeProgram.program_versions || [];
+                });
+        }
     }
 
     onBoardTypeClick(boardTypeId: string): void {
@@ -308,6 +347,45 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
                 } else {
                     this.addFlashMessage(new FlashMessageError(error.toString()));
+                }
+            });
+    }
+
+    onUploadClick(version: ICProgramVersionShortDetail) {
+        if (!version) {
+            return;
+        }
+
+        let connectibleDevices = [];
+
+        if (this.allDevices && this.allDevices.length !== 0 && this.device) {
+            for (let i = 0; i < this.allDevices.length; i++) {
+                if (this.allDevices[i].type_of_board_id === this.device.id) {
+                    connectibleDevices.push(this.allDevices[i]);
+                }
+            }
+        }
+
+        if (!connectibleDevices || connectibleDevices.length === 0) {
+            this.modalService.showModal(new ModalsConfirmModel('Error', 'No available yoda G2 boards hardware.', true, 'OK', null));
+            return;
+        }
+
+        let m = new ModalsSelectHardwareModel(connectibleDevices);
+        this.modalService.showModal(m)
+            .then((success) => {
+                if (success && m.selectedBoard) {
+                    this.blockUI();
+                    this.backendService.uploadCProgramVersion({
+                        board_id: [m.selectedBoard.id],
+                        version_id: version.version_id
+                    }).then((result) => {
+                        this.fmSuccess(`Uploading was done successfully`);
+                        this.unblockUI();
+                    }).catch((e) => {
+                        this.fmError(`Uploading code failed`);
+                        this.unblockUI();
+                    });
                 }
             });
     }
