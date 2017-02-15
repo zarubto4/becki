@@ -14,21 +14,9 @@ import { BeckiBackend, RestRequest, RestResponse } from '../backend/BeckiBackend
 @Injectable()
 export class BackendService extends BeckiBackend {
 
-    public gravatarIcon: string = '';
-
     constructor(protected http: Http, protected router: Router) {
         super();
         console.info('BackendService init');
-        this.personInfo.subscribe(pi => {
-            if (pi) {
-                // TODO!
-                // var email = this.personInfoSnapshot.mail || '';
-                // var md5 = crypto.createHash('md5').update(email.trim().toLowerCase()).digest('hex');
-                // this.gravatarIcon = 'https://www.gravatar.com/avatar/' + md5 + '?d=retro'; //TODO Tyrion poskytuje vlastní ikonky, můžeme přejít z gravatara na ně
-            } else {
-                this.gravatarIcon = '';
-            }
-        });
         this.refreshPersonInfo();
     }
 

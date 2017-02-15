@@ -191,16 +191,28 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
         let file: File = $event.target.files[0];
         if (file) {
             let myReader: FileReader = new FileReader();
-            myReader.onloadend = (loadEvent: any) => {
-                image.src = loadEvent.target.result;
-                if (image.width < 50 || image.height < 50) {
-                    this.fmWarning('Image is too small, minimal dimensions is 50x50px.');
-                    this.cropperLoaded = false;
-                } else {
-                    this.cropper.setImage(image);
-                    this.cropperLoaded = true;
-                }
-            };
+            myReader.addEventListener('load', () => {
+
+                image.addEventListener('load', () => {
+
+                    if (image.width < 50 || image.height < 50) {
+                        this.fmWarning('Image is too small, minimal dimensions is 50x50px.');
+                        this.cropperLoaded = false;
+                    } else {
+                        this.cropperLoaded = true;
+                        this.cropper.setImage(image);
+
+                        // this hack fixes refresh bug in Safari ... think about better component for crop [DH]
+                        setTimeout(() => {
+                            this.cropper.onMouseDown(null);
+                            this.cropper.onMouseUp(null);
+                        }, 10);
+                    }
+
+                });
+                image.src = myReader.result;
+
+            }, false);
             myReader.readAsDataURL(file);
         } else {
             this.cropperLoaded = false;

@@ -1680,8 +1680,16 @@ ul.hw-list li ul li, ul.grid-list li ul li {
 
     }
 
-    canvas {
+    .loading {
+        display: block;
+        text-align: center;
+        width: 552px;
+        padding: 30px 0;
         background-color: gray;
+    }
+
+    canvas {
+        background-color: transparent;
         border: 20px rgba(0,0,0,0.6) solid;
     }
 
