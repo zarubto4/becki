@@ -1,4 +1,4 @@
-<bk-layout-main [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot" [lastBreadName]="device?device.id:''">
+<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot" [lastBreadName]="device?device.id:''">
 
     <div *ngIf="device && typeOfBoard" class="portlet portlet light bordered">
         <div class="portlet-title">
@@ -32,7 +32,7 @@
             </div>
             <div>
                 Series:
-                <span class="font-grey-mint bold">SERIES <span class="font-red bg-yellow-lemon">TODO</span></span>
+                <span class="font-grey-mint bold">SERIES {{device.generationDescription}}</span>
             </div>
             <div *ngIf="typeOfBoard.connectible_to_internet">
                 Wifi MAC adress:
@@ -40,5 +40,172 @@
             </div>
         </div>
     </div>
+    <style>
+        .becki-caption.sub-title{
+            font-size: 1em;
+        }
+        .sub-title span{
+            display: inline-block;
+            margin-right: 40px;
+        }
+        .timeline-item .timeline-icon{
+            float: left;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%!important;
+            position: relative;
+            left: 20px;
+            top: 25px;
+        }
 
+        .timeline-item .timeline-body-content{
+            margin-top: 0;
+        }
+
+        .timeline-item .timeline-body-content *{
+            margin: 4px;
+        }
+
+        .timeline-item .timeline-icon .fa{
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            line-height: 40px;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 20px;
+        }
+
+        .timeline:before{
+            top: 20px;
+            width: 1px;
+        }
+
+        .timeline-body{
+            border: 1px solid lightgray;
+            background: none;
+            padding: 8px 6px;
+            font-family: 'Open Sans', serif;
+        }
+
+        .timeline-body-content h4{
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .timeline-body-content p{
+            font-size: 14px;
+        }
+
+        .timeline-body-arrow{
+            border-color: transparent lightgray transparent transparent;
+        }
+
+        .col-sm-5 h3{
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .col-sm-2 img{
+            width: 100%;
+            margin-top: 60px;
+        }
+
+    </style>
+    <div *ngIf="device" class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="becki-caption">
+                <span class="font-blue-dark">
+                    <i class="fa fa-fw fa-globe"></i>
+                    Schema
+                </span>
+            </div>
+        </div>
+        <div class="portlet-title">
+            <div class="becki-caption sub-title">
+                <span class="font-blue-dark">
+                    <i class="fa fa-fw fa-tasks"></i>
+                    Server: {{device.status.server_name ? device.status.server_name : 'Unknown'}} (Online/Offline) <span style="background-color: red">TODO</span>
+                </span>
+                <span class="font-blue-dark">
+                    <i class="fa fa-fw fa-cloud-upload"></i>
+                    Instance: {{device.status.instance_id ? device.status.instance_id : 'Unknown'}} (Online/Offline) <span style="background-color: red">TODO</span>
+                </span>
+            </div>
+        </div>
+        <div class="portlet-body row">
+            <div class="col-sm-5">
+                <h3>Block - Program</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-icon bg-green-jungle bg-font-green-jungle">
+                            <i class="fa fa-code"></i>
+                        </div>
+                        <div class="timeline-body">
+                            <div class="timeline-body-arrow"></div>
+                            <div class="timeline-body-content">
+                                <h4>Actual - Block Program</h4>
+                                <p>Program: {{device.status.b_program_name ? device.status.b_program_name : 'Unknown'}}</p>
+                                <p>Version: {{device.status.b_program_version_name ? device.status.b_program_version_name : 'Unknown'}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon bg-green-jungle bg-font-green-jungle">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <div class="timeline-body">
+                            <div class="timeline-body-arrow"></div>
+                            <div class="timeline-body-content">
+                                <h4>Planed - Block Program</h4>
+                                <p>Program: <span style="background-color: red">TODO</span></p>
+                                <p>Version: <span style="background-color: red">TODO</span></p>
+                                <p>date <span style="background-color: red">TODO</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <img src="http://placehold.it/350x150">
+                <p class="boardstatus">{{device.status.status}}<span style="background-color: red">TODO</span></p>
+            </div>
+            <div class="col-sm-5">
+                <h3>Firmware</h3>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-icon bg-grey-salsa bg-font-grey-salsa">
+                            <i class="fa fa-code"></i>
+                        </div>
+                        <div class="timeline-body">
+                            <div class="timeline-body-arrow"></div>
+                            <div class="timeline-body-content">
+                                <h4>Actual Firmware</h4>
+                                <p>Program: {{device.status.actual_c_program_name ? device.status.actual_c_program_name : 'Unknown'}}</p>
+                                <p>Version: {{device.status.actual_c_program_version_name ? device.status.actual_c_program_version_name : 'Unknown'}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-icon bg-grey-salsa bg-font-grey-salsa">
+                            <i class="fa fa-calendar"></i>
+                        </div>
+                        <div class="timeline-body">
+                            <div class="timeline-body-arrow"></div>
+                            <div class="timeline-body-content">
+                                <h4>Planed Firmware</h4>
+                                <p>Program: {{device.status.required_c_program_name ? device.status.required_c_program_name : 'Unknown'}}</p>
+                                <p>Version: {{device.status.required_c_program_version_name ? device.status.required_c_program_version_name : 'Unknown'}}</p>
+                                <p>date <span style="background-color: red">TODO</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </bk-layout-main>
