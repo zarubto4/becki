@@ -76,10 +76,6 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
 
     }
 
-    onSettingsClick(): void {
-
-    }
-
     ngOnInit(): void {
         this.blockUI();
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {

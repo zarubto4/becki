@@ -4,7 +4,7 @@
 
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import {IBoard, ITypeOfBoard, IBoardStatus} from '../backend/TyrionAPI';
+import { IBoard, ITypeOfBoard, IBoardStatus } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 
@@ -44,7 +44,6 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             .then((board) => {
                 this.device = board;
                 this.boardStatus = board.status;
-                console.log(this.boardStatus);
                 return this.backendService.getTypeOfBoard(board.type_of_board_id);
             })
             .then((typeOfBoard) => {

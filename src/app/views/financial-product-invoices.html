@@ -47,16 +47,13 @@
                         <button (click)="onPrintClick(invoice)" title="Print" class="btn btn-icon-only white">
                             <i class=" fa fa-print "></i>
                         </button>
-                   <!--     <button (click)="onSettingsClick()" title="Settings" class="btn btn-icon-only white">
-                            <i class=" fa fa-gears fa-2x"></i>
-                        </button> -->
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
         <h3 *ngIf="!invoices" class="text-center">Loading...</h3>
-        <h3 *ngIf="invoice && invoices == 0" class="text-center">No invoice</h3>
+        <h3 *ngIf="invoices && invoices.length == 0" class="text-center">No invoice</h3>
     </div>
     </div>
 </bk-layout-main>

@@ -53,7 +53,7 @@
                     <td>{{product.subscription_id}}</td>
                     <td>{{product.payment_mode|bkStringReplacer}}</td>
                   <td class="text-right">
-                      <button title="Settings" class="btn green btn-icon-only white">
+                      <button (click)="onSettingsClick()" title="Settings" class="btn green btn-icon-only white">
                           <i class="fa fa-gear"></i>
                       </button>
                   </td>

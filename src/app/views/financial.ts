@@ -38,6 +38,11 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
         this.router.navigate(['/financial/product-registration']);
     }
 
+
+    onSettingsClick(): void {
+        alert('TODO!'); // TODO !!!
+    }
+
     onRemoveClick(product: IProduct): void {
       /*  this.modalService.showModal(new ModalsRemovalModel(product.product_individual_name)).then((success) => {
             if (success) {

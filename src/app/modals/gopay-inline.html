@@ -9,10 +9,11 @@
         <h4 class="modal-title">{{modalModel.name}}</h4>
     </div>
     <div class="modal-body">
-        <form action=gopayUrl method="post" id="gopay-payment-button">
-            <button name="pay" type="submit">Zaplatit</button>
-            <script type="text/javascript" src="https://gw.sandbox.gopay.com/gp-gw/js/embed.js"></script>
-        </form>
+<h3>Inline-gw</h3>
+
+<script type="text/javascript" src="https://gate.gopay.cz/gp-gw/js/embed.js">
+ _gopay.checkout({gatewayUrl: url, inline: true});
+</script>  
     </div>
     <div class="modal-footer">
         <button type="button" class="btn green" (click)="onSubmitClick()">OK</button>
