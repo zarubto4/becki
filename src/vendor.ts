@@ -20,6 +20,11 @@ require('imports-loader?this=>window,fix=>module.exports=0!snapsvg');
     return 'url(\'' + window.location.pathname + '#' + url + '\')';
 };
 
+// Version
+w['BECKI_VERSION'] = require('../package.json').version;
+w['BECKI_VERSION_ID'] = require('../version.json').id;
+w['BECKI_VERSION_DATE'] = require('../version.json').date;
+
 // Fonts
 import 'font-awesome/css/font-awesome.min.css';
 import 'font-roboto/dist/styles/roboto.min.css';

@@ -11,6 +11,9 @@ import { TabMenuService } from '../services/TabMenuService';
 import { LabeledLink } from '../helpers/LabeledLink';
 import { NotificationService } from '../services/NotificationService';
 
+declare const BECKI_VERSION: string;
+declare const BECKI_VERSION_ID: number;
+declare const BECKI_VERSION_DATE: string;
 
 const BODY_CLASSES = ['page-header-fixed', 'page-container-bg-solid'];
 
@@ -40,6 +43,8 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
     sidebarClosed: boolean = false;
 
     openTabMenuIndex: number = -1;
+
+    versionString = 'Version: ' + BECKI_VERSION + ' id: ' + BECKI_VERSION_ID + ' date: ' + BECKI_VERSION_DATE;
 
     private notifMouseMoveSend: boolean = false;
 
