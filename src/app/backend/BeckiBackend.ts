@@ -5,6 +5,8 @@
 import { TyrionAPI, INotification, IPerson, ILoginResult, IWebSocketToken } from './TyrionAPI';
 import * as Rx from 'rxjs';
 
+declare const BECKI_VERSION: string;
+
 // INTERFACES
 
 export interface IBProgramValues {
@@ -325,8 +327,9 @@ export abstract class BeckiBackend extends TyrionAPI {
         let request: RestRequest = new RestRequest(method, url, {}, body);
         // TODO: https://github.com/angular/angular/issues/7438
         if (this.tokenExist()) {
-            request.headers['X-AUTH-TOKEN'] = this.getToken();
+            request.headers['x-auth-token'] = this.getToken();
         }
+        // TODO: request.headers['becki-version'] = BECKI_VERSION;
         this.tasks += 1;
         return this.requestRestGeneral(request)
             .then((response: RestResponse) => {
