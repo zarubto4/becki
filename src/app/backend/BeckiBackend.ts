@@ -139,6 +139,9 @@ export class CodeError extends Error {
 
     static fromRestResponse(response: RestResponse): CodeError {
         let content = response.body;
+        if ((<any>content).message) {
+            return new CodeError((<any>content).message);
+        }
         if (response.status === 477) {
             return new CodeError(`External server is offline: ${JSON.stringify(content)}`);
         }
