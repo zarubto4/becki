@@ -85,7 +85,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         this.reloadInterval = setInterval(() => {
             this.reloadVersions();
         }, 10000);
-        
+
     }
 
     ngOnDestroy(): void {
@@ -360,41 +360,34 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             return;
         }
 
-        let connectibleDevices = [];
+        this.blockUI();
+        this.backendService.getBoardIdeHardware(this.projectId)
+            .then((boards) => {
+                let connectibleDevices = boards;
 
-        if (this.allDevices && this.allDevices.length !== 0 && this.device) {
-            for (let i = 0; i < this.allDevices.length; i++) {
-                if (this.allDevices[i].type_of_board_id === this.device.id) {
-                    connectibleDevices.push(this.allDevices[i]);
+                if (!connectibleDevices || connectibleDevices.length === 0) {
+                    this.modalService.showModal(new ModalsConfirmModel('Error', 'No available yoda G2 boards hardware.', true, 'OK', null));
+                    this.unblockUI();
+                    return;
                 }
-            }
-        }
 
-        if (!connectibleDevices || connectibleDevices.length === 0) {
-            this.modalService.showModal(new ModalsConfirmModel('Error', 'No available yoda G2 boards hardware.', true, 'OK', null));
-            return;
-        }
-
-        this.backendService.getBoardIdeHardware(this.projectId).then((boards) => {
-            connectibleDevices = boards;
-
-            let m = new ModalsSelectHardwareModel(connectibleDevices);
-            this.modalService.showModal(m)
-                .then((success) => {
-                    if (success && m.selectedBoard) {
-                        this.blockUI();
-                        this.backendService.uploadCProgramVersion({
-                            board_ids: [m.selectedBoard.id],
-                            version_id: version.version_id
-                        }).then((result) => {
-                            this.fmSuccess(`Uploading was done successfully`);
-                            this.unblockUI();
-                        }).catch((e) => {
-                            this.fmError(`Uploading code failed`);
-                            this.unblockUI();
-                        });
-                    }
-                });
-        });
+                let m = new ModalsSelectHardwareModel(connectibleDevices);
+                this.modalService.showModal(m)
+                    .then((success) => {
+                        if (success && m.selectedBoard) {
+                            this.blockUI();
+                            this.backendService.uploadCProgramVersion({
+                                board_ids: [m.selectedBoard.id],
+                                version_id: version.version_id
+                            }).then((result) => {
+                                this.fmSuccess(`Uploading was done successfully`);
+                                this.unblockUI();
+                            }).catch((e) => {
+                                this.fmError(`Uploading code failed`);
+                                this.unblockUI();
+                            });
+                        }
+                    });
+            });
     }
 }
