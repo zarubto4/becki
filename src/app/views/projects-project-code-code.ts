@@ -81,11 +81,11 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
         /*
          * TODO - this is something like DDOS attack to tyrion, it must be changed to something more sophisticated
-         *
+         */
         this.reloadInterval = setInterval(() => {
             this.reloadVersions();
         }, 10000);
-        */
+        
     }
 
     ngOnDestroy(): void {
