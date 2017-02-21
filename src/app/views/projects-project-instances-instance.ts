@@ -63,16 +63,16 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     }
 
     connectionsHwCount() {
-        let yodaCount = NullSafeDefault(() => this.instance.actual_summary.hardware_group, []).length;
+        let yodaCount = NullSafeDefault(() => this.instance.actual_instance.hardware_group, []).length;
         let padawansCount = 0;
-        NullSafeDefault(() => this.instance.actual_summary.hardware_group, []).forEach((sh) => {
+        NullSafeDefault(() => this.instance.actual_instance.hardware_group, []).forEach((sh) => {
             padawansCount += sh.device_board_pairs.length;
         });
         return yodaCount + ' + ' + padawansCount;
     }
 
     connectionsGridCount() {
-        return NullSafeDefault(() => this.instance.actual_summary.m_project_program_snapshots, []).length;
+        return NullSafeDefault(() => this.instance.actual_instance.m_project_snapshop, []).length;
     }
 
 }

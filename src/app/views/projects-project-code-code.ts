@@ -46,7 +46,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
     allDevices: IBoardShortDetail[];
     projectSubscription: Subscription;
 
-    versionStatusTranslate: {[key: string]: string} = {
+    versionStatusTranslate: { [key: string]: string } = {
         'compilation_in_progress': 'Compilation is in progress',
         'successfully_compiled_and_restored': 'Successfully compiled',
         'server_was_offline': 'Server error (offline)',
@@ -324,7 +324,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     this.buildErrors = error.errors;
 
                     // TODO: move to method
-                    let filesAnnotations: {[filename: string]: any[]} = {};
+                    let filesAnnotations: { [filename: string]: any[] } = {};
                     this.buildErrors.forEach((bError) => {
                         let filename = bError.filename.substr(1);
                         if (!filesAnnotations[filename]) {
@@ -371,23 +371,27 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             return;
         }
 
-        let m = new ModalsSelectHardwareModel(connectibleDevices);
-        this.modalService.showModal(m)
-            .then((success) => {
-                if (success && m.selectedBoard) {
-                    this.blockUI();
-                    this.backendService.uploadCProgramVersion({
-                        board_id: [m.selectedBoard.id],
-                        version_id: version.version_id
-                    }).then((result) => {
-                        this.fmSuccess(`Uploading was done successfully`);
-                        this.unblockUI();
-                    }).catch((e) => {
-                        this.fmError(`Uploading code failed`);
-                        this.unblockUI();
-                    });
-                }
-            });
-    }
+        this.backendService.getBoardIdeHardware(this.projectId).then((boards) => {
+            connectibleDevices = boards;
+            console.log(boards);
 
+            let m = new ModalsSelectHardwareModel(connectibleDevices);
+            this.modalService.showModal(m)
+                .then((success) => {
+                    if (success && m.selectedBoard) {
+                        this.blockUI();
+                        this.backendService.uploadCProgramVersion({
+                            board_ids: [m.selectedBoard.id],
+                            version_id: version.version_id
+                        }).then((result) => {
+                            this.fmSuccess(`Uploading was done successfully`);
+                            this.unblockUI();
+                        }).catch((e) => {
+                            this.fmError(`Uploading code failed`);
+                            this.unblockUI();
+                        });
+                    }
+                });
+        });
+    }
 }
