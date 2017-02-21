@@ -327,9 +327,9 @@ export abstract class BeckiBackend extends TyrionAPI {
         let request: RestRequest = new RestRequest(method, url, {}, body);
         // TODO: https://github.com/angular/angular/issues/7438
         if (this.tokenExist()) {
-            request.headers['x-auth-token'] = this.getToken();
+            request.headers['X-Auth-Token'] = this.getToken();
         }
-        // TODO: request.headers['becki-version'] = BECKI_VERSION;
+        request.headers['Becki-Version'] = BECKI_VERSION;
         this.tasks += 1;
         return this.requestRestGeneral(request)
             .then((response: RestResponse) => {
