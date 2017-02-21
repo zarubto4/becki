@@ -27,7 +27,7 @@ import { ISwaggerCProgramShortDetailForBlocko } from '../backend/TyrionAPI';
         </select>
         <select *ngIf="selectedProgram && (selectedProgram.versions && selectedProgram.versions.length)" class="form-control" [ngModel]="selectedProgramVersionId" (ngModelChange)="onSelectedProgramVersionIdChange($event)">
             <option [value]="null" disabled>Select version</option>
-            <option *ngFor="let cProgramVersion of selectedProgram.versions" [value]="cProgramVersion.id">{{cProgramVersion.version_name}}</option>
+            <option *ngFor="let cProgramVersion of selectedProgram.versions" [value]="cProgramVersion.id">{{cProgramVersion.version_name}}{{cProgramVersion.version_description?" - " + cProgramVersion.version_description:""}}</option>
         </select>
     </div>
     <div class="clearfix"></div>
