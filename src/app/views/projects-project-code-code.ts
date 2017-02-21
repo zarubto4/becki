@@ -79,9 +79,13 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             }
         });
 
+        /*
+         * TODO - this is something like DDOS attack to tyrion, it must be changed to something more sophisticated
+         *
         this.reloadInterval = setInterval(() => {
             this.reloadVersions();
         }, 10000);
+        */
     }
 
     ngOnDestroy(): void {
@@ -373,7 +377,6 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
         this.backendService.getBoardIdeHardware(this.projectId).then((boards) => {
             connectibleDevices = boards;
-            console.log(boards);
 
             let m = new ModalsSelectHardwareModel(connectibleDevices);
             this.modalService.showModal(m)
