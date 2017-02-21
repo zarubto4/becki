@@ -1,0 +1,10 @@
+#!/bin/sh
+
+FILE="version.json"
+
+VERSION=$(grep -o '"id":[ ]\{0,1\}[0-9]\{1,\},' $FILE | grep -o '[0-9]\{1,\}')
+DATE=$(date +"%Y-%m-%d %k:%M:%S")
+
+echo "{\"id\":$((VERSION+1)),\"date\":\"$DATE\"}" > $FILE
+
+git add $FILE
