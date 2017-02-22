@@ -22,9 +22,9 @@
                 Producer:
                 <a (click)="onProducerClick(typeOfBoard.producer_id)"><span class="bold">{{typeOfBoard.producer_name}}</span></a>
             </div>
-            <div *ngIf="typeOfBoard.connectible_to_internet">
+            <div *ngIf="device.mac_address">
                 Ethernet MAC adress:
-                <span class="font-grey-mint bold">{{device.ethernet_mac_address}}</span>
+                <span class="font-grey-mint bold">{{device.mac_address}}</span>
             </div>
             <div>
                 Personal description:
@@ -32,9 +32,9 @@
             </div>
             <div>
                 Series:
-                <span class="font-grey-mint bold">SERIES {{device.generationDescription}}</span>
+                <span class="font-grey-mint bold">{{device.generationDescription}}</span>
             </div>
-            <div *ngIf="typeOfBoard.connectible_to_internet">
+            <div *ngIf="device.wifi_mac_address">
                 Wifi MAC adress:
                 <span class="font-grey-mint bold">{{device.wifi_mac_address}}</span>
             </div>
@@ -44,9 +44,9 @@
         .becki-caption.sub-title{
             font-size: 1em;
         }
-        .sub-title span{
+        .sub-title p{
             display: inline-block;
-            margin-right: 40px;
+            margin: 0 40px 0 0;
         }
         .timeline-item .timeline-icon{
             float: left;
@@ -80,7 +80,7 @@
         }
 
         .timeline:before{
-            top: 20px;
+            top: 30px;
             width: 1px;
         }
 
@@ -114,9 +114,8 @@
             width: 100%;
             margin-top: 60px;
         }
-
     </style>
-    <div *ngIf="device" class="portlet portlet light bordered">
+    <div *ngIf="device && typeOfBoard" class="portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
                 <span class="font-blue-dark">
@@ -127,20 +126,24 @@
         </div>
         <div class="portlet-title">
             <div class="becki-caption sub-title">
-                <span class="font-blue-dark">
+                <p>
                     <i class="fa fa-fw fa-tasks"></i>
-                    Server: {{device.status.server_name ? device.status.server_name : 'Unknown'}} (Online/Offline) <span style="background-color: red">TODO</span>
-                </span>
-                <span class="font-blue-dark">
+                    Server: {{device.status.server_name ? device.status.server_name : 'Unknown'}} (<span class="{{device.status.server_online_status ? 'font-green' : 'font-red'}}">{{device.status.server_online_status ? 'online' : 'offline'}}</span>)
+                </p>
+                <p>
                     <i class="fa fa-fw fa-cloud-upload"></i>
-                    Instance: {{device.status.instance_id ? device.status.instance_id : 'Unknown'}} (Online/Offline) <span style="background-color: red">TODO</span>
-                </span>
+                    Instance: {{device.status.instance_id ? device.status.instance_id : 'Unknown'}} (<span class="{{device.status.instance_online_status ? 'font-green' : 'font-red'}}">{{device.status.instance_online_status ? 'online' : 'offline'}}</span>)
+                </p>
+                <p>
+                    <i class="fa fa-fw fa-microchip"></i>
+                    Device type: {{device.type_of_board_name}} (<span class="{{device.status.status == 'online' ? 'font-green' : 'font-red'}}">{{device.status.status}}</span>)
+                </p>
             </div>
         </div>
         <div class="portlet-body row">
             <div class="col-sm-5">
                 <h3>Block - Program</h3>
-                <div class="timeline">
+                <div *ngIf="device.status.b_program_id" class="timeline">
                     <div class="timeline-item">
                         <div class="timeline-icon bg-green-jungle bg-font-green-jungle">
                             <i class="fa fa-code"></i>
@@ -154,7 +157,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="timeline-item">
+                    <div class="timeline-item hidden">
                         <div class="timeline-icon bg-green-jungle bg-font-green-jungle">
                             <i class="fa fa-calendar"></i>
                         </div>
@@ -169,14 +172,16 @@
                         </div>
                     </div>
                 </div>
+                <div *ngIf="!device.status.b_program_id">
+                    <p class="text-center">No Blocko program.</p>
+                </div>
             </div>
             <div class="col-sm-2">
-                <img src="http://placehold.it/350x150">
-                <p class="boardstatus">{{device.status.status}}<span style="background-color: red">TODO</span></p>
+                <img src="{{typeOfBoard.picture_link ? typeOfBoard.picture_link : 'http://placehold.it/350x350/000/FFF?text=No+picture'}}">
             </div>
             <div class="col-sm-5">
                 <h3>Firmware</h3>
-                <div class="timeline">
+                <div *ngIf="device.status.actual_c_program_id" class="timeline">
                     <div class="timeline-item">
                         <div class="timeline-icon bg-grey-salsa bg-font-grey-salsa">
                             <i class="fa fa-code"></i>
@@ -190,7 +195,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="timeline-item">
+                    <div *ngIf="device.status.required_c_programs.length" class="timeline-item">
                         <div class="timeline-icon bg-grey-salsa bg-font-grey-salsa">
                             <i class="fa fa-calendar"></i>
                         </div>
@@ -198,12 +203,15 @@
                             <div class="timeline-body-arrow"></div>
                             <div class="timeline-body-content">
                                 <h4>Planed Firmware</h4>
-                                <p>Program: {{device.status.required_c_program_name ? device.status.required_c_program_name : 'Unknown'}}</p>
-                                <p>Version: {{device.status.required_c_program_version_name ? device.status.required_c_program_version_name : 'Unknown'}}</p>
+                                <p>Program: {{device.status.required_c_programs[0].c_program_program_name ? device.status.required_c_programs[0].c_program_program_name : 'Unknown'}}</p>
+                                <p>Version: {{device.status.required_c_programs[0].c_program_version_name ? device.status.required_c_programs[0].c_program_version_name : 'Unknown'}}</p>
                                 <p>date <span style="background-color: red">TODO</span></p>
                             </div>
                         </div>
                     </div>
+                </div>
+                <div *ngIf="!device.status.actual_c_program_id">
+                    <p class="text-center">No firmware.</p>
                 </div>
             </div>
         </div>
