@@ -6,7 +6,7 @@
 
 // Imports
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpModule, JsonpModule } from '@angular/http';
 import { Routes, RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
@@ -217,6 +217,19 @@ let tabMenus = {
     ]
 };
 
+class BeckiErrorHandler implements ErrorHandler {
+
+    handleError(error: any) {
+        // TODO: production error catch
+        if (error && error.rejection && error.rejection.originalError) {
+            console.error(error.rejection.originalError);
+        } else {
+            console.error(error);
+        }
+    }
+
+}
+
 
 @NgModule({
     imports: [
@@ -228,6 +241,7 @@ let tabMenus = {
         JsonpModule,
     ],
     providers: [
+        {provide: ErrorHandler, useClass: BeckiErrorHandler},
         ValidatorErrorsService,
         BackendService,
         AuthGuard, // AuthGuard service must be after BackendService
