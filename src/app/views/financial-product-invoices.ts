@@ -9,14 +9,9 @@ import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { IProduct, IInvoice } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
-import { ModalsGopayInlineComponent } from '../modals/gopay-inline';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsSendInvoiceModel } from './../modals/financial-send-invoice';
-import { ModalsGopayInlineModel } from './../modals/gopay-inline';
-import { ModalsRemovalModel } from './../modals/removal';
-import { IApplicableProduct } from './../backend/TyrionAPI';
-import { ModalsProjectPropertiesModel } from './../modals/project-properties';
-import { ModalsGridProjectPropertiesComponent } from './../modals/grid-project-properties';
+import { GoPayLoaderService } from '../services/GoPayLoaderService';
 
 @Component({
     selector: 'bk-view-financial-product-invoices',
@@ -32,9 +27,12 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
 
     invoices: IInvoice[] = null;
 
+    goPayLoaderService: GoPayLoaderService;
+    goPayLoaderServiceSubscription: Subscription;
 
     constructor(injector: Injector) {
         super(injector);
+        this.goPayLoaderService = injector.get(GoPayLoaderService);
     };
 
     onAddCreditsClick(): void {
@@ -47,10 +45,19 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
 
     onPayClick(invoice: IInvoice): void {
         this.backendService.sendInvoiceReimbursement(invoice.id).then(gopay => {
-            let model = new ModalsGopayInlineModel('Payment', (gopay.gw_url));
-            this.modalService.showModal(model).then((success) => {
-                this.router.navigate(['/financial']);
+
+            let gwUrl = gopay.gw_url;
+
+            this.goPayLoaderServiceSubscription = this.goPayLoaderService.goPay.subscribe((goPay) => {
+                goPay.checkout({
+                    gatewayUrl: gwUrl,
+                    inline: true
+                }, (checkoutResult) => {
+                    // TODO: console.log(checkoutResult);
+                    this.router.navigate(['/financial']);
+                });
             });
+
         });
     }
 
@@ -89,6 +96,9 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
+        if (this.goPayLoaderServiceSubscription) {
+            this.goPayLoaderServiceSubscription.unsubscribe();
+        }
     }
 
 

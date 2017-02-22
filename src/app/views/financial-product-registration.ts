@@ -7,7 +7,7 @@
  * Created by dominik krisztof on 22/09/16.
  */
 
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { IGeneralTariff, IGeneralTariffExtensions, ITariffRegister, IGoPayUrl } from '../backend/TyrionAPI';
 import { FormGroup, Validators } from '@angular/forms';
@@ -16,13 +16,13 @@ import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { Subscription } from 'rxjs';
 import { StaticOptionLists } from '../helpers/StaticOptionLists';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
-import { ModalsGopayInlineModel, ModalsGopayInlineComponent } from '../modals/gopay-inline';
+import { GoPayLoaderService } from '../services/GoPayLoaderService';
 
 @Component({
     selector: 'bk-view-product-registration',
     templateUrl: './financial-product-registration.html'
 })
-export class ProductRegistrationComponent extends BaseMainComponent implements OnInit {
+export class ProductRegistrationComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     form: FormGroup;
 
@@ -44,8 +44,12 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
     optionsPaymentMode: FormSelectComponentOption[] = [];
     // optionsCurrencyType: FormSelectComponentOption[] = [{ label: 'USD', value: 'USD' }];
 
+    goPayLoaderService: GoPayLoaderService;
+    goPayLoaderServiceSubscription: Subscription;
+
     constructor(injector: Injector) {
         super(injector);
+        this.goPayLoaderService = injector.get(GoPayLoaderService);
     };
 
     getTotalPrice(): number {
@@ -66,6 +70,12 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             return price + '$';
         } else {
             return price.toFixed(2) + '$';
+        }
+    }
+
+    ngOnDestroy(): void {
+        if (this.goPayLoaderServiceSubscription) {
+            this.goPayLoaderServiceSubscription.unsubscribe();
         }
     }
 
@@ -328,11 +338,18 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
                     this.fmWarning('Product was created but payment is required');
                     this.unblockUI();
 
-                    // modální okno ModalsGopayInlineModel bude potřebovat vylepšit
-                    let model = new ModalsGopayInlineModel('Payment', (<IGoPayUrl>response).gw_url); // není jisté jestli gopayurl vrací to co má
-                    this.modalService.showModal(model).then((success) => {
-                        this.router.navigate(['/financial']);
+                    let gwUrl = (<IGoPayUrl>response).gw_url;
+
+                    this.goPayLoaderServiceSubscription = this.goPayLoaderService.goPay.subscribe((goPay) => {
+                        goPay.checkout({
+                            gatewayUrl: gwUrl,
+                            inline: true
+                        }, (checkoutResult) => {
+                            // TODO: console.log(checkoutResult);
+                            this.router.navigate(['/financial']);
+                        });
                     });
+
                 } else if ((<any>response)._code_ === 201) {
                     this.fmSuccess('Product was created, now you can create a new project');
                     this.unblockUI();

@@ -108,12 +108,12 @@ import { ConsoleLogComponent } from './components/ConsoleLogComponent';
 import { ProjectsProjectHardwareHardwareComponent } from './views/projects-project-hardware-hardware';
 import { ProducersComponent } from './views/producers';
 import { ProducersProducerComponent } from './views/producers-producer';
-import { ModalsGopayInlineComponent } from './modals/gopay-inline';
 import { ModalsSendInvoiceComponent } from './modals/financial-send-invoice';
 import { ExitConfirmationService } from './services/ExitConfirmationService';
 import { ExitConfirmGuard } from './services/ExitConfirmGuard';
 import { ImageCropperComponent } from 'ng2-img-cropper';
 import { ModalsSelectHardwareComponent } from './modals/select-hardware';
+import { GoPayLoaderService } from './services/GoPayLoaderService';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -242,6 +242,7 @@ let tabMenus = {
         TabMenuService,
         MonacoEditorLoaderService,
         ExitConfirmationService,
+        GoPayLoaderService,
         {provide: 'routes', useValue: routes},
         {provide: 'navigation', useValue: navigation},
         {provide: 'tabMenus', useValue: tabMenus},
@@ -342,7 +343,6 @@ let tabMenus = {
         ModalsMembersAddComponent,
         ModalsWidgetsTypePropertiesComponent,
         ModalsWidgetsWidgetPropertiesComponent,
-        ModalsGopayInlineComponent,
         ModalsSendInvoiceComponent,
     ],
     exports: [AppComponent],
