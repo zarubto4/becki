@@ -569,7 +569,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     let interfaceData = JSON.parse(cpv.virtual_input_output);
                     if (interfaceData) {
                         outInterface.push({
-                            'targetType': targetName,
+                            'targetType': targetName === 'BYZANCE_YODAG2' ? 'yoda' : 'device', // TODO: make better detection for another generations [DH]
                             'targetId': hwId,
                             'displayName': board.personal_description ? board.personal_description : board.id,
                             'interface': interfaceData
