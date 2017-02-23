@@ -58,8 +58,8 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             })
             .then((typeOfBoard) => {
                 this.typeOfBoard = typeOfBoard;
-                //this.typeOfBoard.picture_link = 'https://static.pexels.com/photos/104827/cat-pet-animal-domestic-104827.jpeg';
-                //console.log(this.typeOfBoard);
+                // this.typeOfBoard.picture_link = 'https://static.pexels.com/photos/104827/cat-pet-animal-domestic-104827.jpeg';
+                // console.log(this.typeOfBoard);
                 this.unblockUI();
             })
             .catch((reason) => {

@@ -4,7 +4,7 @@
  */
  -->
 
-<bk-layout-main *ngIf="product" tabMenu="tariffs-tarrif" [title]="product.product_individual_name">
+<bk-layout-main tabMenu="tariffs-tarrif" [title]="product?product.product_individual_name:null">
     <div class="tabbable-line tabbable-full-width">
         <h3 class="title center-block"></h3>
         <div class="portlet light bordered">
@@ -14,7 +14,7 @@
                     <span class="caption-subject font-dark bold uppercase">Tariff:</span>
                 </div>
             </div>
-            <div class="portlet-body">
+            <div *ngIf="product" class="portlet-body">
                 <div class="pricing-content-1">
                <div class="row" *ngIf="product.extensions" >
                         <div *ngFor="let package of product.extensions" class="col-md-3">

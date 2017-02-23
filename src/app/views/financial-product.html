@@ -4,11 +4,11 @@
  */
  -->
 
-<bk-layout-main *ngIf="product" tabMenu="tariffs-tarrif" [title]="product.product_individual_name">
+<bk-layout-main tabMenu="tariffs-tarrif" [title]="product?product.product_individual_name:null">
     <div class="tabbable-line tabbable-full-width">
         <h3 class="title center-block">Dashboard</h3>
 
-        <div class="portlet light bordered">
+        <div *ngIf="product" class="portlet light bordered">
             <div class="portlet-title tab able-line">
                 <div class="caption">
                     <i class="icon-bubbles font-dark hide"></i>
