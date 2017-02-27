@@ -9,34 +9,36 @@
         <h3 class="title center-block"></h3>
         <div class="portlet light bordered">
             <div class="portlet-title tab able-line">
-                <div class="caption">
-                    <i class="icon-bubbles font-dark hide"></i>
-                    <span class="caption-subject font-dark bold uppercase">Tariff:</span>
+                <div class="becki-caption">
+                    <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-database"></i>
+                    Extensions
+                </span>
                 </div>
             </div>
             <div *ngIf="product" class="portlet-body">
-                <div class="pricing-content-1">
-               <div class="row" *ngIf="product.extensions" >
-                        <div *ngFor="let package of product.extensions" class="col-md-3">
-                            <div  class="price-column-container border-active">
-                                <div class="price-table-head bg-{{package.color | lowercase}}">
-                                    <h2 class="no-margin">{{package.name}}</h2>
-                                </div>
-                                <div class="arrow-down border-top-{{package.color | lowercase}}"></div>
-                                <div class="price-table-content">
-                                    <div *ngFor="let label of package.labels" class="row mobile-padding">
-                                        <div class="col-xs-4 text-right mobile-padding">
-                                            <i class="fa {{label.icon| lowercase}}"></i>
-                                        </div>
-                                        <div class="col-xs-8 text-left mobile-padding">{{label.label}}</div>
-                                        <!--(mouseenter)="" (mouseleave)=""-->
-                                    </div>
-
-                                </div>
-                                <div class="arrow-down arrow-grey"></div>
+                <div *ngIf="product.extensions" class="pricing-content-1">
+                    <div *ngFor="let package of product.extensions" class="col-md-3 margin-bottom-15; text-center">
+                        <div>
+                            <div class="price-table-head bg-{{package.color|lowercase}}">
+                                <h4 class="no-margin">{{package.name}}</h4>
                             </div>
+                            <div class="arrow-down border-top-{{package.color|lowercase}}"></div>
+                            <div class="price-table-pricing">
+                                <h3 style="font-size: 50px; line-height: 50px;">{{package.price.USD}}$</h3>
+                                <p class="font-grey-salt">Average monthly cost</p>
+                            </div>
+                            <div class="price-table-content">
+                                <div *ngFor="let label of package.labels" class="line">
+                                    <i class="fa fa-fw {{label.icon|lowercase}} font-{{package.color|lowercase}}"></i> {{label.label}}
+                                </div>
+                            </div>
+                            <div class="arrow-down arrow-grey"></div>
                         </div>
                     </div>
+                </div>
+                <div *ngIf="!product.extensions" class="pricing-content-1">
+                    <h3>No extensions</h3>
                 </div>
             </div>
         </div>

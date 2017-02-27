@@ -8,9 +8,11 @@
         <h3 class="title center-block"></h3>
         <div class="portlet light bordered">
             <div class="portlet-title tab able-line">
-                <div class="caption">
-                    <i class="icon-bubbles font-dark hide"></i>
-                    <span class="caption-subject font-dark bold uppercase">Invoices:</span>
+               <div class="becki-caption">
+                    <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-dollar"></i>
+                    Invoice
+                </span>
                 </div>
                 <div class="becki-actions">
                     <button *ngIf="product && product.payment_mode == 'per_credit'" class="btn blue" (click)="onAddCreditsClick()">

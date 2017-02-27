@@ -6,35 +6,48 @@
 
 <bk-layout-main tabMenu="tariffs-tarrif" [title]="product?product.product_individual_name:null">
     <div class="tabbable-line tabbable-full-width">
-        <h3 class="title center-block">Dashboard</h3>
-
         <div *ngIf="product" class="portlet light bordered">
             <div class="portlet-title tab able-line">
-                <div class="caption">
-                    <i class="icon-bubbles font-dark hide"></i>
-                    <span class="caption-subject font-dark bold uppercase">Tariff:</span>
-                </div>
+               <div class="becki-caption">
+                <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-tachometer"></i>
+                    Dashboard
+                </span>
+            </div>
                 <div class="becki-actions">
-                    <button *ngIf="product.payment_mode == 'per_credit'"  class="btn blue" (click)="onAddCreditsClick()">
+                    <button *ngIf="product.payment_mode == 'per_credit'" class="btn blue" (click)="onAddCreditsClick()">
                         <i class="fa fa-plus-circle"></i> Add credit
                     </button>
                 </div>
             </div>
-            <div class="portlet-body">
-                <div class="tab-content">
-                    <div class="tab-pane active">
-                        <div class=" row">
-                            <div class="col-sm-4 "><b> mode:</b> {{product.payment_mode|bkStringReplacer}}</div>
-                            <div class="col-sm-4 "><b>Country:</b> {{product.payment_details.country}}</div>
-                            <div class="col-sm-4 "><b>Device type:</b> {{product.product_type}}</div> <!-- TODO cheme ikonku?-->
 
-                        </div>
-                        <div class="margin-top-15 row">
-                            <div class="col-sm-4 "><b>ID Subscription:</b> {{product.subscription_id}}</div>
-                            <div class="col-sm-4 "><b>Plan:</b> {{product.payment_method|bkStringReplacer}}</div>
-                            <div class="col-sm-4 "><b>Remaining credit:</b> {{product.remaining_credit}}</div>
-                        </div>
+
+            <div class="portlet box blue-dark">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-fw fa-lg fa-pencil-square-o"></i>Tarrif info
                     </div>
+                </div>
+
+                <div class="portlet-body">
+                    <table class="table table-hover no-margin">
+                        <tbody>
+                            <tr>
+                                <td class="no-border-top" colspan="2"><b> mode:</b> {{product.payment_mode|bkStringReplacer}}</td>
+                                <td class="no-border-top" colspan="2"><b>ID Subscription:</b> {{product.subscription_id}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"> <b>Country:</b> {{product.payment_details.country}} </td>
+                                <td colspan="2"><b>Plan:</b> {{product.payment_method|bkStringReplacer}}</td>
+
+                            </tr>
+
+                            <tr>
+                                <td colspan="2"><b>Device type:</b> {{product.product_type}}</td>
+                                <td colspan="2"><b>Remaining credit:</b> {{product.remaining_credit}}</td>
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

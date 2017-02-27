@@ -53,7 +53,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                  this.device.status.b_program_name = 'Program s boilerem';
                  this.device.status.b_program_version_name = '1.2.3';
                  this.device.status.instance_id = '6342849583943n343kjc';*/
-                //console.log(this.device);
+                // console.log(this.device);
                 return this.backendService.getTypeOfBoard(board.type_of_board_id);
             })
             .then((typeOfBoard) => {

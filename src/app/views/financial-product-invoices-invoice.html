@@ -9,9 +9,11 @@
         <h3 class="title center-block"></h3>
         <div class="portlet light bordered">
             <div class="portlet-title tab able-line">
-                <div class="caption">
-                    <i class="icon-bubbles font-dark hide"></i>
-                    <span class="caption-subject font-dark bold uppercase">invoice:{{fullIvoice.invoice.invoice_number}}</span>
+                <div class="becki-caption">
+                    <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-dollar"></i>
+                    invoice: {{fullIvoice.invoice.invoice_number}}
+                </span>
                 </div>
                 <td class="no-wrap text-right actions">
                     <button title="Download as PDF" class="btn btn-circle btn-icon-only btn-default">
@@ -23,7 +25,7 @@
                     <button title="Print" class="btn btn-circle btn-icon-only btn-default">
                         <i class=" fa fa-print fa-2x"></i>
                     </button>
-               <!--     <button title="Settings" class="btn btn-circle btn-icon-only btn-default">
+                    <!--     <button title="Settings" class="btn btn-circle btn-icon-only btn-default">
                         <i class=" fa fa-gears fa-2x"></i>
                     </button> -->
                 </td>
@@ -42,35 +44,36 @@
                         </div>
                         <br>
                         <div>
-                            <div  *ngIf="(fullIvoice.invoice_items && fullIvoice.invoice_items.length)" class="table-scrollable">
+                            <div *ngIf="(fullIvoice.invoice_items && fullIvoice.invoice_items.length)" class="table-scrollable">
                                 <table class="table table-hover">
                                     <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>GUID</th>
-                                        <th>Billable units</th>
-                                        <th>Unite</th>
-                                        <th>Total cost</th>
-                                    </tr>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>GUID</th>
+                                            <th>Billable units</th>
+                                            <th>Unite</th>
+                                            <th>Total cost</th>
+                                        </tr>
                                     </thead>
                                     <tbody>
-                                    <tr *ngFor="let item of fullIvoice.invoice_items">
-                                        <td>{{item.name}}</td>
-                                        <td>{{item.unit_name}}</td>
-                                        <td>{{item.quantity}}x</td>
-                                        <td>{{item.vat_rate}} $ </td>
-                                        <td>{{item.unit_price}} $</td>
+                                        <tr *ngFor="let item of fullIvoice.invoice_items">
+                                            <td>{{item.name}}</td>
+                                            <td>{{item.unit_name}}</td>
+                                            <td>{{item.quantity}}x</td>
+                                            <td>{{item.vat_rate}} $ </td>
+                                            <td>{{item.unit_price}} $</td>
 
-                                    </tr>
+                                        </tr>
 
 
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td><strong>Total</strong></td>
-                                        <td>{{getWholePrice()}} $</td> <!--TODO tyrion na Invoices vrací celkovou cenu -->
-                                    </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><strong>Total</strong></td>
+                                            <td>{{getWholePrice()}} $</td>
+                                            <!--TODO tyrion na Invoices vrací celkovou cenu -->
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>

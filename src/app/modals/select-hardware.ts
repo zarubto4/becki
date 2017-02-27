@@ -43,7 +43,7 @@ export class ModalsSelectHardwareComponent implements OnInit {
         this.options = this.modalModel.boards.map((b) => {
             return {
                 value: b.id,
-                label: b.personal_description ? b.personal_description + ' (' + b.id + ')' : b.id
+                label: '(' + b.update_permission + ') ' + b.personal_description ? '(' + b.update_permission + ') ' + + b.personal_description + ' (' + b.id + ')' : b.id
             };
         });
         (<FormControl>(this.form.controls['board'])).setValue(this.modalModel.selectedBoard ? this.modalModel.selectedBoard : '');
