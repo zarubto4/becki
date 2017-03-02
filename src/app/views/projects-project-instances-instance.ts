@@ -48,7 +48,6 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
         this.blockUI();
         this.backendService.getInstance(this.instanceId)
             .then((instance) => {
-                // console.log(instance);
                 this.instance = instance;
                 this.unblockUI();
             })
