@@ -1957,3 +1957,81 @@ ul.hw-list li ul li, ul.grid-list li ul li {
 .becki-footer-version {
     opacity: 0.25;
 }
+
+.becki-caption.sub-title{
+    font-size: 14px;
+}
+.sub-title p{
+    display: inline-block;
+    margin: 0 40px 0 0;
+}
+.timeline-item .timeline-icon{
+    float: left;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%!important;
+    position: relative;
+    left: 20px;
+    top: 25px;
+}
+
+.timeline-item .timeline-body-content{
+    margin-top: 0;
+}
+
+.timeline-item .timeline-body-content *{
+    margin: 4px;
+}
+
+.timeline-item .timeline-icon .fa{
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    line-height: 40px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 20px;
+}
+
+.timeline:before{
+    top: 30px;
+    width: 1px;
+}
+
+.timeline-body{
+    background: none;
+    padding: 8px 6px;
+    font-family: 'Open Sans', serif;
+}
+
+.timeline-body-content h4{
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.timeline-body-content p{
+    font-size: 14px;
+}
+
+.timeline-body-arrow{
+    border-color: transparent lightgray transparent transparent;
+}
+
+.hw-b-program-col h3,
+.hw-c-program-col h3{
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.hw-image-col img{
+    width: 100%;
+    margin-top: 60px;
+}
+
+.timeline-item-updates{
+    width: 41.666666%;
+}

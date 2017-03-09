@@ -73,6 +73,30 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     }
 
     onProducerClick(producerId: string): void {
-        this.navigate(['/producers', producerId]);
+        if (producerId) {
+            this.navigate(['/producers', producerId]);
+        }
+    }
+
+    onServerClick(): void {
+        alert('TODO');
+    }
+
+    onInstanceClick(instanceId: string): void {
+        if (instanceId) {
+            this.navigate(['/projects', this.device.project_id, 'instances', instanceId]);
+        }
+    }
+
+    onCProgramClick(CProgramId: string): void {
+        if (CProgramId) {
+            this.navigate(['/projects', this.device.project_id, 'code', CProgramId]);
+        }
+    }
+
+    onBProgramClick(BProgramId: string): void {
+        if (BProgramId) {
+            this.navigate(['/projects', this.device.project_id, 'blocko', BProgramId]);
+        }
     }
 }
