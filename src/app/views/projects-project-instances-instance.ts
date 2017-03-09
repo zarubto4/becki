@@ -71,7 +71,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     }
 
     connectionsGridCount() {
-        return NullSafeDefault(() => this.instance.actual_instance.m_project_snapshop, []).length;
+        return NullSafeDefault(() => this.instance.actual_instance.m_project_snapshot, []).length;
     }
 
 }

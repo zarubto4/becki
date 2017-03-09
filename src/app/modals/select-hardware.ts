@@ -7,11 +7,11 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { BackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import { IBoard, IBoardShortDetail } from '../backend/TyrionAPI';
+import { IBoard, IBoardForFastUploadDetail } from '../backend/TyrionAPI';
 
 
 export class ModalsSelectHardwareModel extends ModalModel {
-    constructor(public boards: IBoardShortDetail[], public selectedBoard: IBoardShortDetail = null) {
+    constructor(public boards: IBoardForFastUploadDetail[], public selectedBoard: IBoardForFastUploadDetail = null) {
         super();
     }
 }
@@ -43,7 +43,7 @@ export class ModalsSelectHardwareComponent implements OnInit {
         this.options = this.modalModel.boards.map((b) => {
             return {
                 value: b.id,
-                label: '(' + b.update_permission + ') ' + b.personal_description ? '(' + b.update_permission + ') ' + + b.personal_description + ' (' + b.id + ')' : b.id
+                label: b.id + ' [' + b.personal_description + ']' + ( b.collision ? ' (' + b.collision + ')' : '' )
             };
         });
         (<FormControl>(this.form.controls['board'])).setValue(this.modalModel.selectedBoard ? this.modalModel.selectedBoard : '');

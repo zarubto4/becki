@@ -83,7 +83,7 @@ var CONFIG = {
         "put:/product/deactivate/{product_id}": "productDeactivate",
         "put:/invoice/send_remainder/{invoice_id}": "sendInvoiceRemainder",
         "post:/invoice/reimbursement/{invoice_id}": "sendInvoiceReimbursement",
-        "post:/invoice/resend/{invoice_id}": "InvoiceResend",
+        "post:/invoice/resend/{invoice_id}": "resendInvoice",
         "get:/instance/project/{project_id}": "getAllInstancesForProject",
         "get:/board/ide_upload_hardware/{project_id}":"getBoardIdeHardware",
     },

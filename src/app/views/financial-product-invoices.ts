@@ -69,7 +69,7 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
 
         let model = new ModalsSendInvoiceModel('Send invoice', invoice.id, this.product.payment_details.invoice_email);
         this.modalService.showModal(model).then((success) => {
-            this.backendService.InvoiceResend('peniston').then(response => {
+            this.backendService.resendInvoice(invoice.id, {}).then(response => {
                 // this.unblockUI();
                 this.addFlashMessage(new FlashMessageSuccess('The invoice has been resended on general invoice email.'));
             }).catch(() => {

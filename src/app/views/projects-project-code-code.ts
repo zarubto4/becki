@@ -363,11 +363,11 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         this.blockUI();
         this.backendService.getBoardIdeHardware(this.projectId)
             .then((boards) => {
-                let connectibleDevices = boards;
+                this.unblockUI();
 
+                let connectibleDevices = boards;
                 if (!connectibleDevices || connectibleDevices.length === 0) {
                     this.modalService.showModal(new ModalsConfirmModel('Error', 'No available yoda G2 boards hardware.', true, 'OK', null));
-                    this.unblockUI();
                     return;
                 }
 
