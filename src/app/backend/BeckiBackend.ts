@@ -313,6 +313,8 @@ export abstract class BeckiBackend extends TyrionAPI {
                 this.host = location.hostname + ':9000';
             }
         }
+
+        this.host = "192.168.65.30:9000";
     }
 
     // GENERIC REQUESTS

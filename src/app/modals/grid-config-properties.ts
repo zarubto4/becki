@@ -89,11 +89,11 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
         });
 
         this.inputs.forEach((input) => {
-            this.formModel[input.name] = input.displayName;
+            this.formModel[input.name] = input.externalName;
         });
 
         this.outputs.forEach((output) => {
-            this.formModel[output.name] = output.displayName;
+            this.formModel[output.name] = output.externalName;
         });
     }
 
