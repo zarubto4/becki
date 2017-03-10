@@ -1,4 +1,3 @@
-
 /*
  * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
  * directory of this distribution.
@@ -70,6 +69,7 @@ import { ModalsGridConfigPropertiesComponent } from './modals/grid-config-proper
 import { ModalsGridProjectPropertiesComponent } from './modals/grid-project-properties';
 import { ModalsGridProgramPropertiesComponent } from './modals/grid-program-properties';
 import { ModalsBlockoAddGridComponent } from './modals/blocko-add-grid';
+import { ModalsBlockoAddGridEmptyComponent } from './modals/blocko-add-grid-emtpy';
 import { ModalsBlocksTypePropertiesComponent } from './modals/blocks-type-properties';
 import { ModalsBlocksBlockPropertiesComponent } from './modals/blocks-block-properties';
 import { ModalsHighImportanceNotificationComponent } from './modals/high-importance-notification';
@@ -358,6 +358,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsWidgetsTypePropertiesComponent,
         ModalsWidgetsWidgetPropertiesComponent,
         ModalsSendInvoiceComponent,
+        ModalsBlockoAddGridEmptyComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

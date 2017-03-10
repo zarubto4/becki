@@ -1,3 +1,4 @@
+import { ModalsBlockoAddGridEmptyModel } from './../modals/blocko-add-grid-emtpy';
 /**
  * Created by davidhradek on 17.08.16.
  */
@@ -56,13 +57,13 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     // blocko blocks:
 
     blockGroups: ITypeOfBlock[] = null;
-    blockGroupsOpenToggle: {[id: string]: boolean} = {};
+    blockGroupsOpenToggle: { [id: string]: boolean } = {};
 
-    blocksLastVersions: {[id: string]: IBlockoBlockVersionShortDetail} = {};
-    blocksColors: {[id: string]: string} = {};
-    blocksIcons: {[id: string]: string} = {};
+    blocksLastVersions: { [id: string]: IBlockoBlockVersionShortDetail } = {};
+    blocksColors: { [id: string]: string } = {};
+    blocksIcons: { [id: string]: string } = {};
 
-    blocksCache: {[blockId_versionId: string]: IBlockoBlockVersion} = {};
+    blocksCache: { [blockId_versionId: string]: IBlockoBlockVersion } = {};
 
 
     // hw:
@@ -77,7 +78,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     allGridProjects: ISwaggerMProjectShortDetailForBlocko[] = null;
 
-    selectedGridProgramVersions: { [projectId: string]: { [programId: string]: string }} = {};
+    selectedGridProgramVersions: { [projectId: string]: { [programId: string]: string } } = {};
 
     // versions:
 
@@ -91,7 +92,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         helper: 'clone',
         containment: 'document',
         cursor: 'move',
-        cursorAt: {left: -5, top: -5}
+        cursorAt: { left: -5, top: -5 }
     };
 
     @ViewChild(ConsoleLogComponent)
@@ -214,13 +215,13 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         }
     }
 
-    onBlockoLog(bl: {block: Core.Block, type: string, message: string}): void {
+    onBlockoLog(bl: { block: Core.Block, type: string, message: string }): void {
         if (this.consoleLog) {
             this.consoleLog.add(<ConsoleLogType>bl.type, bl.message, 'Block ' + bl.block.id);
         }
     }
 
-    onBlockoError(be: {block: Core.Block, error: any}): void {
+    onBlockoError(be: { block: Core.Block, error: any }): void {
         if (be && be.error) {
             if (this.consoleLog) {
                 this.consoleLog.addFromError(be.error, 'Block ' + be.block.id);
@@ -259,7 +260,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             && (dragOffset.left >= blockoOffset.left)
             && (dragOffset.top <= (blockoOffset.top + blockoHeight))
             && (dragOffset.left <= (blockoOffset.left + blockoWidth))
-            ) {
+        ) {
             let x = dragOffset.left - blockoOffset.left;
             let y = dragOffset.top - blockoOffset.top;
 
@@ -398,7 +399,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             if (
                 NullSafe(() => this.allBoardsDetails.type_of_boards.find((tob) => tob.id === b.type_of_board_id).connectible_to_internet)
                 && used.indexOf(b.id) === -1
-                ) {
+            ) {
                 out.push(b);
             }
         });
@@ -415,7 +416,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             if (
                 !NullSafe(() => this.allBoardsDetails.type_of_boards.find((tob) => tob.id === b.type_of_board_id).connectible_to_internet)
                 && used.indexOf(b.id) === -1
-                ) {
+            ) {
                 out.push(b);
             }
         });
@@ -430,7 +431,15 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         let projects = this.allGridProjects.filter((gp) => !this.selectedGridProgramVersions[gp.id]);
 
         if (!projects.length) {
-            return; // TODO: inform or disable button
+            let m = new ModalsBlockoAddGridEmptyModel();
+            this.modalService.showModal(m)
+                .then((success) => {
+                    if (success) {
+                        this.navigate(['/projects', this.currentParamsService.get('project'), 'grid']);
+                        return;
+                    }
+                });
+            return;
         }
 
         let m = new ModalsBlockoAddGridModel(projects);
@@ -501,7 +510,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
                         let parentObj = this.selectedHardware.find((sh) =>
                             (sh.main_board_pair && sh.main_board_pair.board_id && sh.main_board_pair.board_id === parentHwId)
-                            );
+                        );
 
                         if (!parentObj.device_board_pairs) {
                             parentObj.device_board_pairs = [];

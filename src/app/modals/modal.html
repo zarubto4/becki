@@ -46,6 +46,9 @@
             <template [ngSwitchCase]="'ModalsBlockoAddGridModel'">
                 <bk-modals-blocko-add-grid [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-blocko-add-grid>
             </template>
+             <template [ngSwitchCase]="'ModalsBlockoAddGridEmptyModel'">
+                <bk-modals-blocko-add-grid-empty [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-blocko-add-grid-empty>
+            </template>
             <template [ngSwitchCase]="'ModalsBlocksTypePropertiesModel'">
                 <bk-modals-blocks-type-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-blocks-type-properties>
             </template>
