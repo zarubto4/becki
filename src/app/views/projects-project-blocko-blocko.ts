@@ -984,7 +984,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     }
 
     versionRunning(v: IBProgramVersion): boolean {
-        let vId = NullSafe(() => v.version_object.id);
+        let vId = NullSafe(() => v.version_id);
         let cId = NullSafe(() => this.blockoProgram.instance_details.version_id);
         return (vId && cId && vId === cId);
     }
