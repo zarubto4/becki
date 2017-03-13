@@ -114,6 +114,10 @@ import { ExitConfirmGuard } from './services/ExitConfirmGuard';
 import { ImageCropperComponent } from 'ng2-img-cropper';
 import { ModalsSelectHardwareComponent } from './modals/select-hardware';
 import { GoPayLoaderService } from './services/GoPayLoaderService';
+import { TranslationService } from './services/TranslationService';
+import { TranslateTablePipe } from './pipes/TranslationTablePipe';
+import { TranslatePipe } from './pipes/TranslationPipe';
+
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -257,6 +261,7 @@ class BeckiErrorHandler implements ErrorHandler {
         MonacoEditorLoaderService,
         ExitConfirmationService,
         GoPayLoaderService,
+        TranslationService,
         {provide: 'routes', useValue: routes},
         {provide: 'navigation', useValue: navigation},
         {provide: 'tabMenus', useValue: tabMenus},
@@ -275,6 +280,8 @@ class BeckiErrorHandler implements ErrorHandler {
         Nl2BrPipe,
         UnixTimeFormatPipe,
         StringReplacerPipe,
+        TranslatePipe,
+        TranslateTablePipe,
         // Components
         MonacoEditorComponent,
         FormColorPickerComponent,

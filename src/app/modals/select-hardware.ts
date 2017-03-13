@@ -1,3 +1,4 @@
+import { TranslationService } from './../services/TranslationService';
 /**
  * Created by davidhradek on 20.09.16.
  */
@@ -32,7 +33,7 @@ export class ModalsSelectHardwareComponent implements OnInit {
 
     form: FormGroup;
 
-    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
+    constructor(private backendService: BackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
 
         this.form = this.formBuilder.group({
             'board': ['', [Validators.required]]
@@ -41,9 +42,10 @@ export class ModalsSelectHardwareComponent implements OnInit {
 
     ngOnInit() {
         this.options = this.modalModel.boards.map((b) => {
+            let collisionTranslated = this.translationService.translateTable(b.collision, 'board_state', 'en');
             return {
                 value: b.id,
-                label: b.id + ' [' + b.personal_description + ']' + ( b.collision ? ' (' + b.collision + ')' : '' )
+                label: b.id + ' [' + b.personal_description + ']' + (b.collision ? ' (' + collisionTranslated + ')' : '')
             };
         });
         (<FormControl>(this.form.controls['board'])).setValue(this.modalModel.selectedBoard ? this.modalModel.selectedBoard : '');
