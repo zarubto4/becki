@@ -21,5 +21,4 @@ export class TranslateTablePipe implements PipeTransform {
         return translated;
     }
     // how to call multiple arguments: {{ myData | TranslatePipe:table:lang }}
-
 }
