@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 import { BackendService } from './BackendService';
 import { INotification, INotificationElement, INotificationButton } from '../backend/TyrionAPI';
 import { NullSafe } from '../helpers/NullSafe';
+import { Router } from '@angular/router';
 
 export abstract class Notification {
 
@@ -28,6 +29,8 @@ export abstract class Notification {
     confirmed: boolean = false;
 
     buttons: INotificationButton[] = null;
+
+
 
     public static fromINotification(n: INotification): Notification {
 
@@ -66,7 +69,7 @@ export abstract class Notification {
         return out;
     }
 
-    constructor(public id: string, public type: string, public icon: string, body: string|INotificationElement[], public time: number, reason?: Object) {
+    constructor(public id: string, public type: string, public icon: string, body: string | INotificationElement[], public time: number, reason?: Object) {
         if (typeof body === 'string') {
             this.htmlBody = body;
             let userMessage = NullSafe(() => <string>(<any>reason).userMessage);
@@ -230,7 +233,7 @@ export class NotificationService {
 
     protected highImportanceOverlayTimeout: any = null;
 
-    constructor(protected backendService: BackendService) {
+    constructor(protected backendService: BackendService, protected router: Router) {
         console.info('NotificationService init');
 
         // tick for overlay notifs
@@ -409,7 +412,7 @@ export class NotificationService {
         }
         // console.log('MARK READ: ', ids);
         this.unreadNotificationsCount -= ids.length;
-        this.backendService.markNotificationRead({notification_id: ids}); // TODO: možná něco udělat s chybou :-)
+        this.backendService.markNotificationRead({ notification_id: ids }); // TODO: možná něco udělat s chybou :-)
     }
 
     mouseMove(): void {
@@ -417,8 +420,33 @@ export class NotificationService {
     }
 
     onObjectClick(n: Notification, e: INotificationElement) {
-        console.error(e);
-        // TODO: open objects in Becki
+
+        switch (e.name) {
+            case 'Project':
+                this.router.navigate(['projects', e.id]);
+                break;
+            case 'Model_Person': console.error('not implemented yet');
+                this.router.navigate(['persons', e.id]);
+                break;
+            case 'B_Program_Version':
+                this.router.navigate(['projects', e.project_id, 'blocko', e.program_id, { version: e.project_id }]);
+                break;
+            case 'C_Program_Version':
+                this.router.navigate(['projects', e.project_id, 'code', e.program_id, { version: e.project_id }]);
+                break;
+            case 'BProgram':
+                this.router.navigate(['projects', e.project_id, 'blocko', e.id]);
+                break;
+            case 'Board':
+                this.router.navigate(['projects', e.project_id, 'hardware', e.id]);
+                break;
+            case 'CProgram':
+                this.router.navigate(['projects', e.project_id, 'code', e.id]);
+                break;
+            case 'Homer_Instance':
+                this.router.navigate(['projects', e.project_id, 'instances', e.id]);
+                break;
+        }
     }
 
     onButtonClick(n: Notification, b: INotificationButton) {
@@ -440,7 +468,7 @@ export class NotificationService {
 
     private removeNotificationById(id: string): Notification {
 
-        let  notif = this.notifications.find((n) => n.id === id);
+        let notif = this.notifications.find((n) => n.id === id);
 
         let overlayIndex = this.overlayNotifications.findIndex((n) => n.id === id);
         if (overlayIndex > -1) {
