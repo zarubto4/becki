@@ -1,3 +1,4 @@
+import { IBProgram, IInstanceShortDetail } from './../backend/TyrionAPI';
 /**
  * Created by davidhradek on 01.12.16.
  */
@@ -72,6 +73,12 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     connectionsGridCount() {
         return NullSafeDefault(() => this.instance.actual_instance.m_project_snapshot, []).length;
+    }
+
+    onBlockoProgramVersionClick(instance: IHomerInstance) {
+        console.log(instance);
+        this.router.navigate(['/projects', this.id, 'blocko', instance.b_program_id , {version: instance.actual_instance.b_program_version_id}]);
+
     }
 
 }

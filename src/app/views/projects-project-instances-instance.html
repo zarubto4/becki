@@ -29,19 +29,19 @@
                         </div>
                         <div>
                             Server:
-                            <span class="font-grey-mint bold" *ngIf="instance.actual_instance.server_name">
+                            <span class="font-grey-mint bold" *ngIf="instance.server_name">
                                  {{instance.actual_instance.server_name}} 
-                                (<span *ngIf="instance.actual_instance.server_is_online" class="font-green-jungle">Online</span><span
-                                *ngIf="!instance.actual_instance.server_is_online" class="font-red">Offline</span>)
+                                (<span *ngIf="instance.server_is_online" class="font-green-jungle">Online</span><span
+                                *ngIf="!instance.server_is_online" class="font-red">Offline</span>)
                             </span>
                         </div>
                         <div>
                             Blocko program:
-                            <span class="font-grey-mint bold"><a (click)="onBlockoProgramClick(instance.actual_instance.b_program_id)">{{instance.actual_instance.b_program_name}}</a></span>
+                            <span class="font-grey-mint bold"><a (click)="onBlockoProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></span>
                         </div>
                         <div>
                             Blocko program version:
-                            <span class="font-grey-mint bold">{{instance.actual_instance.b_program_version_name}}</span>
+                            <span class="font-grey-mint bold"><a (click)="onBlockoProgramVersionClick(instance)">{{instance.actual_instance.b_program_version_name}}</a></span>
                         </div>
                     </div>
                 </div>

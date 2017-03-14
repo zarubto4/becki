@@ -180,6 +180,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     private monacoEditorLoaderService: MonacoEditorLoaderService = null;
 
+    protected afterLoadSelectedVersionId: string = null;
+
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
     constructor(injector: Injector) {
@@ -192,9 +194,28 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.projectId = params['project'];
             this.blockoId = params['blocko'];
-            this.refresh();
+            if (params['version']) {
+                this.router.navigate(['/projects', this.projectId, 'blocko', this.blockoId]);
+                this.selectVersionByVersionId(params['version']);
+            }
         });
+        this.refresh();
         this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib, Libs.ConsoleLib, Libs.UtilsLib]);
+    }
+
+    selectVersionByVersionId(versionId: string) {
+        if (this.blockoProgramVersions) {
+            let version = null;
+            if (versionId) {
+                version = this.blockoProgramVersions.find((bpv) => bpv.version_id === versionId);
+            }
+
+            if (version) {
+                this.selectProgramVersion(version);
+            }
+        } else {
+            this.afterLoadSelectedVersionId = versionId;
+        }
     }
 
     ngOnDestroy(): void {
@@ -1064,10 +1085,16 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     return 1;
                 });*/
 
-                if (this.blockoProgramVersions.length) {
-                    this.selectProgramVersion(this.blockoProgramVersions[0]);
+                let version = null;
+                if (this.afterLoadSelectedVersionId) {
+                    version = this.blockoProgramVersions.find((bpv) => bpv.version_id === this.afterLoadSelectedVersionId);
                 }
 
+                if (version) {
+                    this.selectProgramVersion(version);
+                } else if (this.blockoProgramVersions.length) {
+                    this.selectProgramVersion(this.blockoProgramVersions[0]);
+                }
                 this.unblockUI();
             })
             .catch(reason => {
