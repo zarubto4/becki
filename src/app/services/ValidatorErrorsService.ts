@@ -30,7 +30,7 @@ export class ValidatorErrorsService {
             }
             if (errors['hardwareDeviceId']) {
                 switch (errors['hardwareDeviceId']) {
-                    case 'ALREADY_REGISTERED_YOUR_ACC':
+                    case 'ALREADY_REGISTERED_IN_YOUR_ACCOUNT':
                         return 'The hardware is already registered in your ACC.';
                     case 'ALREADY_REGISTERED':
                         return 'The hardware is already registered.';
@@ -38,8 +38,10 @@ export class ValidatorErrorsService {
                         return 'The hardware is permanently disabled.';
                     case 'BROKEN_DEVICE':
                         return 'The hardware is broken.';
-                    default:
+                    case 'NOT_EXIST':
                         return 'The hardware doesn\'t exist.';
+                    default:
+                        return 'The hardware throws a unexepted state';
                 }
             }
             if (errors['email']) {
