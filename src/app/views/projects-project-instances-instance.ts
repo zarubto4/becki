@@ -76,7 +76,6 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     }
 
     onBlockoProgramVersionClick(instance: IHomerInstance) {
-        console.log(instance);
         this.router.navigate(['/projects', this.id, 'blocko', instance.b_program_id , {version: instance.actual_instance.b_program_version_id}]);
 
     }

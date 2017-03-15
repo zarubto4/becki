@@ -43,8 +43,12 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
     reloadInterval: any = null;
     device: ITypeOfBoard = null;
+
     allDevices: IBoardShortDetail[];
     projectSubscription: Subscription;
+
+    protected afterLoadSelectedVersionId: string = null;
+
 
     versionStatusTranslate: { [key: string]: string } = {
         'compilation_in_progress': 'Compilation is in progress',
@@ -77,6 +81,10 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     this.allDevices = project.boards;
                 });
             }
+            if (params['version']) {
+                this.router.navigate(['/projects', this.projectId, 'code', this.codeId]);
+                this.selectVersionByVersionId(params['version']);
+            }
         });
 
         /*
@@ -101,6 +109,21 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         }
     }
 
+    selectVersionByVersionId(versionId: string) {
+        if (this.codeProgramVersions && !(this.codeProgramVersions.length === 0)) {
+            let version = null;
+            if (versionId) {
+                version = this.codeProgramVersions.find((bpv) => bpv.version_id === versionId);
+            }
+
+            if (version) {
+                this.selectProgramVersion(version);
+            }
+        } else {
+            this.afterLoadSelectedVersionId = versionId;
+        }
+    }
+
     refresh(): void {
 
         this.blockUI();
@@ -117,7 +140,14 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     return 1;
                 });*/
 
-                if (this.codeProgramVersions.length > 0) {
+                let version = null;
+                if (this.afterLoadSelectedVersionId) {
+                    version = this.codeProgramVersions.find((bpv) => bpv.version_id === this.afterLoadSelectedVersionId);
+                }
+
+                if (version) {
+                    this.selectProgramVersion(version);
+                } else if (this.codeProgramVersions.length > 0) {
                     this.selectProgramVersion(this.codeProgramVersions[0]);
                 }
 

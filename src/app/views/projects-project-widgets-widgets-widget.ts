@@ -50,7 +50,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     connectorTypes = Types.ConnectorType;
     argTypes = Types.Type;
 
-    messageInputsValueCache: { [key: string]: boolean|number|string } = {};
+    messageInputsValueCache: { [key: string]: boolean | number | string } = {};
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
     unsavedChanges: boolean = false;
@@ -58,7 +58,9 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     protected _widgetTesterRenderer: TestRenderer.ControllerRenderer;
     protected monacoEditorLoaderService: MonacoEditorLoaderService;
     protected exitConfirmationService: ExitConfirmationService;
+
     protected buildErrors: any[] = null;
+    protected afterLoadSelectedVersionId: string = null;
 
     // Properties for test view:
     @ViewChild('widgetTestScreen')
@@ -89,6 +91,10 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
             this.projectSubscription = this.storageService.project(this.projectId).subscribe((project) => {
                 this.group = project.type_of_widgets.find((tw) => tw.id === this.widgetsId);
             });
+            if (params['version']) {
+                this.router.navigate(['/projects', this.projectId, 'widgets', this.widgetsId, this.widgetId]);
+                this.selectVersionByVersionId(params['version']);
+            }
             this.refresh();
         });
 
@@ -102,6 +108,21 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         this.routeParamsSubscription.unsubscribe();
         if (this.projectSubscription) {
             this.projectSubscription.unsubscribe();
+        }
+    }
+
+    selectVersionByVersionId(versionId: string) {
+        if (this.widgetVersions && !(this.widgetVersions.length === 0)) {
+            let version = null;
+            if (versionId) {
+                version = this.widgetVersions.find((bpv) => bpv.id === versionId);
+            }
+
+            if (version) {
+                this.selectWidgetVersion(version);
+            }
+        } else {
+            this.afterLoadSelectedVersionId = versionId;
         }
     }
 
@@ -126,8 +147,14 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
 
                 this.widgetVersions = this.widget.versions || [];
 
+                let version = null;
+                if (this.afterLoadSelectedVersionId) {
+                    version = this.widgetVersions.find((bpv) => bpv.id === this.afterLoadSelectedVersionId);
+                }
 
-                if (this.widgetVersions.length) {
+                if (version) {
+                    this.selectWidgetVersion(version);
+                } else if (this.widgetVersions.length) {
                     this.selectWidgetVersion(this.widgetVersions[0]); // also unblockUI
                 } else {
                     this.unblockUI();

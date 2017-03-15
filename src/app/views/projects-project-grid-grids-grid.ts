@@ -45,12 +45,14 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
 
     widgetGroups: ITypeOfWidget[];
 
-    widgetGroupsOpenToggle: {[id: string]: boolean} = {};
+    widgetGroupsOpenToggle: { [id: string]: boolean } = {};
 
     @ViewChild(GridViewComponent)
     gridView: GridViewComponent;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
+    protected afterLoadSelectedVersionId: string = null;
+
 
     constructor(injector: Injector) {
         super(injector);
@@ -64,6 +66,11 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
             this.projectSubscription = this.storageService.project(this.projectId).subscribe((project) => {
                 this.gridProject = project.m_projects.find((mp) => mp.id === this.gridsId);
             });
+            if (params['version']) {
+
+                this.router.navigate(['/projects', this.projectId, 'grid', this.gridsId, this.gridId]);
+                this.selectVersionByVersionId(params['version']);
+            }
             this.refresh();
         });
     }
@@ -74,6 +81,23 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
             this.projectSubscription.unsubscribe();
         }
     }
+
+    selectVersionByVersionId(versionId: string) {
+        if (this.gridProgramVersions && !(this.gridProgramVersions.length === 0)) {
+            let version = null;
+            if (versionId) {
+                version = this.gridProgramVersions.find((bpv) => bpv.version_id === versionId);
+            }
+
+            if (version) {
+                this.selectProgramVersion(version);
+            }
+        } else {
+            this.afterLoadSelectedVersionId = versionId;
+        }
+    }
+
+
 
     onGridProjectClick(gridProjectId: string) {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', gridProjectId]);
@@ -96,9 +120,17 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
 
                 this.gridProgramVersions = this.gridProgram.program_versions || [];
 
-                if (this.gridProgramVersions.length) {
+                let version = null;
+                if (this.afterLoadSelectedVersionId) {
+                    version = this.gridProgramVersions.find((bpv) => bpv.version_id === this.afterLoadSelectedVersionId);
+                }
+
+                if (version) {
+                    this.selectProgramVersion(version);
+                } else if (this.gridProgramVersions.length) {
                     this.selectProgramVersion(this.gridProgramVersions[this.gridProgramVersions.length - 1]);
                 }
+                // console.log(this.gridProgramVersions);
 
                 this.unblockUI();
             })

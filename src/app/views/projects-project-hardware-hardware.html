@@ -79,7 +79,7 @@
                                 <div class="timeline-body-content">
                                     <h4>Actual Blocko Program</h4>
                                     <p>Program: <a (click)="onBProgramClick(device.status.b_program_id)">{{device.status.b_program_name ? device.status.b_program_name : 'Unknown'}}</a></p>
-                                    <p>Version: {{device.status.b_program_version_name ? device.status.b_program_version_name : 'Unknown'}}</p>
+                                    <p>Version: <a (click)="onBProgramVersionClick(device.status.b_program_id,device.status.b_program_version_id)">{{device.status.b_program_version_name ? device.status.b_program_version_name : 'Unknown'}}</a></p>
                                 </div>
                             </div>
                         </div>

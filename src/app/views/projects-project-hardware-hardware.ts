@@ -99,4 +99,11 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             this.navigate(['/projects', this.device.project_id, 'blocko', BProgramId]);
         }
     }
+
+    onBProgramVersionClick(BProgramId: string, BProgramVersionId: string) {
+        if (BProgramId && BProgramVersionId) {
+            this.router.navigate(['projects', this.device.project_id, 'blocko', BProgramId, { version: BProgramVersionId }]);
+
+        }
+    }
 }

@@ -58,7 +58,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
     tsBlock: Blocks.TSBlock;
     tsBlockHeight: number = 0;
     testInputConnectors: Core.Connector[];
-    messageInputsValueCache: { [key: string]: boolean|number|string } = {};
+    messageInputsValueCache: { [key: string]: boolean | number | string } = {};
     successfullyTested: boolean = false;
 
     @ViewChild(ConsoleLogComponent)
@@ -66,6 +66,8 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
 
     protected monacoEditorLoaderService: MonacoEditorLoaderService = null;
     protected exitConfirmationService: ExitConfirmationService = null;
+    protected afterLoadSelectedVersionId: string = null;
+
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -90,6 +92,10 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
             this.projectId = params['project'];
             this.blockId = params['block'];
             this.blocksId = params['blocks'];
+            if (params['version']) {
+                this.router.navigate(['/projects', this.projectId, 'blocks', this.blocksId, this.blockId]);
+                this.selectVersionByVersionId(params['version']);
+            }
             this.projectSubscription = this.storageService.project(this.projectId).subscribe((project) => {
                 this.group = project.type_of_blocks.find((tb) => tb.id === this.blocksId);
             });
@@ -119,12 +125,26 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
         this.blockCode = code;
     }
 
+    selectVersionByVersionId(versionId: string) {
+        if (this.blockoBlockVersions && !(this.blockoBlockVersions.length === 0)) {
+            let version = null;
+            if (versionId) {
+                version = this.blockoBlockVersions.find((bpv) => bpv.id === versionId);
+            }
+
+            if (version) {
+                this.selectBlockVersion(version);
+            }
+        } else {
+            this.afterLoadSelectedVersionId = versionId;
+        }
+    }
+
     refresh(): void {
 
         this.blockUI();
         this.backendService.getBlockoBlock(this.blockId)
             .then((blockoBlock) => {
-                // console.log(blockoBlock);
 
                 this.blockoBlock = blockoBlock;
 
@@ -136,8 +156,16 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                     return 1;
                 });
 
-                if (this.blockoBlockVersions.length) {
+                let version = null;
+                if (this.afterLoadSelectedVersionId) {
+                    version = this.blockoBlockVersions.find((bpv) => bpv.id === this.afterLoadSelectedVersionId);
+                }
+                if (version) {
+                    this.selectBlockVersion(version);
+
+                } else if (this.blockoBlockVersions.length) {
                     this.selectBlockVersion(this.blockoBlockVersions[0]); // also unblockUI
+
                 } else {
                     this.unblockUI();
                 }
@@ -269,20 +297,20 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
         this.messageInputsValueCache = {};
     }
 
-    onBlockoLog(bl: {block: Core.Block, type: string, message: string}): void {
+    onBlockoLog(bl: { block: Core.Block, type: string, message: string }): void {
         if (this.consoleLog) {
             this.consoleLog.add(<ConsoleLogType>bl.type, bl.message);
         }
     }
 
-    onBlockoError(be: {block: Core.Block, error: any}): void {
+    onBlockoError(be: { block: Core.Block, error: any }): void {
 
         if (be && be.error) {
 
             if (be.error instanceof TypescriptBuildError) {
 
                 if (!be.error.diagnostics) {
-                    this.tsErrors.push({name: 'TypeScript Error', message: be.error.message});
+                    this.tsErrors.push({ name: 'TypeScript Error', message: be.error.message });
                 } else {
 
                     be.error.diagnostics.forEach((d) => {
@@ -310,7 +338,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
         this.tsErrors = [];
 
         if (!this.blockCode) {
-            this.tsErrors.push({name: 'Block Error', message: 'Block code cannot be empty'});
+            this.tsErrors.push({ name: 'Block Error', message: 'Block code cannot be empty' });
             return;
         }
 
@@ -327,7 +355,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
             } catch (e) { // TODO: promyslet jestli othle je ok [DH]
             }
 
-            this.tsBlock.registerOutputEventCallback((connector: Core.Connector, eventType: Core.ConnectorEventType, value: (boolean|number|Core.Message)) => {
+            this.tsBlock.registerOutputEventCallback((connector: Core.Connector, eventType: Core.ConnectorEventType, value: (boolean | number | Core.Message)) => {
                 if (this.consoleLog) {
                     this.consoleLog.add('output', 'Output <strong>' + connector.name + '</strong> = ' + this.toReadableValue(value));
                 }
