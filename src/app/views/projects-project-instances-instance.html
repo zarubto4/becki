@@ -104,6 +104,20 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-md-12" *ngIf="instance && instance.instance_online">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-cloud"></i>
+                            Blocko LiveView
+                        </span>
+                    </div>
+                </div>
+                <bk-blocko-view [canConfig]="false" [readonly]="true" [simpleMode]="false" [showBlockNames]="true"></bk-blocko-view>
+            </div>
+        </div>
     </div>
 
 </bk-layout-main>

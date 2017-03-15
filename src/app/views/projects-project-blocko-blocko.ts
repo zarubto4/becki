@@ -712,8 +712,6 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         // console.log(JSON.stringify(outInterface));
 
         this.blockoView.setInterfaces(outInterface);
-
-
     }
 
     onInstanceIdClick(instanceId: string): void {
@@ -1039,21 +1037,12 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     this.boardById[board.id] = board;
                 });
 
-
                 return this.backendService.getBProgram(this.blockoId);
             })
             .then((blockoProgram) => {
-                // console.log(blockoProgram);
-
                 this.blockoProgram = blockoProgram;
 
                 this.blockoProgramVersions = this.blockoProgram.program_versions || [];
-
-                /*this.blockoProgramVersions.sort((a, b)=> {
-                    if (a.version_object.date_of_create == b.version_object.date_of_create) return 0;
-                    if (a.version_object.date_of_create > b.version_object.date_of_create) return -1;
-                    return 1;
-                });*/
 
                 if (this.blockoProgramVersions.length) {
                     this.selectProgramVersion(this.blockoProgramVersions[0]);

@@ -85,7 +85,6 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         this.backendService.getAllTarifsForRegistrations()
             .then(tariffs => {
                 this.tariffs = tariffs;
-                // console.log(tariffs);
 
                 this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
 
@@ -124,7 +123,6 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
                 this.fmError('Cannot load tariffs.', error);
                 this.unblockUI();
             });
-
     }
 
     canActivateStep(step: number) {

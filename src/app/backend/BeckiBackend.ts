@@ -314,7 +314,8 @@ export abstract class BeckiBackend extends TyrionAPI {
             }
         }
 
-        this.host = "192.168.65.30:9000";
+        // David 1 IP
+        // this.host = "192.168.65.30:9000";
     }
 
     // GENERIC REQUESTS
@@ -531,8 +532,6 @@ export abstract class BeckiBackend extends TyrionAPI {
 
         this.getWebsocketAccessToken()
             .then((webSocketToken: IWebSocketToken) => {
-
-                // console.log('connectWebSocket() :: webSocketToken = ' + webSocketToken.websocket_token);
 
                 this.webSocket = new WebSocket(`${BeckiBackend.WS_SCHEME}://${this.host}/websocket/becki/${webSocketToken.websocket_token}`);
                 this.webSocket.addEventListener('close', this.reconnectWebSocketAfterTimeout);
