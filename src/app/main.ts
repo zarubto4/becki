@@ -24,6 +24,7 @@ import { BreadcrumbsService } from './services/BreadcrumbsService';
 import { ValidatorErrorsService } from './services/ValidatorErrorsService';
 import { CurrentParamsService } from './services/CurrentParamsService';
 import { NotificationService } from './services/NotificationService';
+import { HomerService } from './services/HomerService';
 import { FormColorPickerComponent } from './components/FormColorPickerComponent';
 import { FormFAIconSelectComponent } from './components/FormFAIconSelectComponent';
 import { FormInputComponent } from './components/FormInputComponent';
@@ -262,6 +263,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ExitConfirmationService,
         GoPayLoaderService,
         TranslationService,
+        HomerService,
         {provide: 'routes', useValue: routes},
         {provide: 'navigation', useValue: navigation},
         {provide: 'tabMenus', useValue: tabMenus},

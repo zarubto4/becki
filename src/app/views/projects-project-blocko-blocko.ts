@@ -742,8 +742,6 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         // console.log(JSON.stringify(outInterface));
 
         this.blockoView.setInterfaces(outInterface);
-
-
     }
 
     onInstanceIdClick(instanceId: string): void {
@@ -1069,12 +1067,9 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     this.boardById[board.id] = board;
                 });
 
-
                 return this.backendService.getBProgram(this.blockoId);
             })
             .then((blockoProgram) => {
-                // console.log(blockoProgram);
-
                 this.blockoProgram = blockoProgram;
 
                 this.blockoProgramVersions = this.blockoProgram.program_versions || [];

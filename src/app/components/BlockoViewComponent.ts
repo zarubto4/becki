@@ -31,6 +31,9 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     readonly: boolean = false;
 
     @Input()
+    canConfig: boolean = true;
+
+    @Input()
     simpleMode: boolean = false;
 
     @Input()
@@ -101,6 +104,14 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             this.blockoRenderer.simpleMode = simpleMode.currentValue;
         }
 
+        let canConfig = changes['canConfig'];
+        if (canConfig) {
+            if (!canConfig.isFirstChange()) {
+                throw new Error('Configuration enabled cannot be changed.');
+            }
+            this.blockoRenderer.canConfigInReadonly = canConfig.currentValue;
+        }
+
         let showBlockNames = changes['showBlockNames'];
         if (showBlockNames) {
             this.blockoRenderer.showBlockNames = showBlockNames.currentValue;
@@ -126,9 +137,9 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     ngAfterViewInit(): void {
         // TODO:
-        // if (!this.readonly) {
-        new BlockoBasicBlocks.ExecutionController(this.blockoController);
-        // }
+        if (!this.readonly) {
+            new BlockoBasicBlocks.ExecutionController(this.blockoController);
+        }
         // TODO:
         /*
         if (this.spy) {
@@ -181,7 +192,6 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         return b;
     }
 
-
     addBlock(cls: BlockoCore.BlockClass): BlockoCore.Block {
         if (this.readonly) {
             throw new Error('read only');
@@ -212,5 +222,9 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     setInterfaces(ifaces: BlockoTargetInterface[]): void {
         this.blockoController.setInterfaces(ifaces);
+    }
+
+    getBlockoController(): BlockoCore.Controller {
+        return this.blockoController;
     }
 }

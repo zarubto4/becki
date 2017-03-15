@@ -18,7 +18,7 @@ import moment = require('moment/moment');
 import { ModalsConfirmModel } from '../modals/confirm';
 import { NullSafe } from '../helpers/NullSafe';
 import { CurrentParamsService } from '../services/CurrentParamsService';
-
+import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
 
 @Component({
     selector: 'bk-view-projects-project-grid-grids-grid',
@@ -49,6 +49,9 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
 
     @ViewChild(GridViewComponent)
     gridView: GridViewComponent;
+
+    @ViewChild(ConsoleLogComponent)
+    consoleLog: ConsoleLogComponent;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
     protected afterLoadSelectedVersionId: string = null;
@@ -190,7 +193,6 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
     }
 
     onSaveClick(): void {
-
         let m = new ModalsVersionDialogModel(moment().format('YYYY-MM-DD HH:mm:ss'));
         this.modalService.showModal(m).then((success) => {
             if (success) {
@@ -239,6 +241,12 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError('Cannot load widget version', err));
             });
+    }
+
+    onClearConsoleClick() {
+        if (this.consoleLog) {
+            this.consoleLog.clear();
+        }
     }
 
 }
