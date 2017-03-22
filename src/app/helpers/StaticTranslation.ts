@@ -16,9 +16,9 @@ export class StaticTranslation {
         'en': {
             'board_state': {
                 'UNKNOWN': 'unknown',
-                'NO_COLLISION': 'ok',
-                'ALREADY_IN_INSTANCE': 'already inside',
-                'PLANNED_UPDATE': 'planned update',
+                'NO_COLLISION': 'We are not found any collisions',
+                'ALREADY_IN_INSTANCE': 'the code is already in instance',
+                'PLANNED_UPDATE': 'the update is planned',
             },
             'foo': {
                 'bar': 'a',
@@ -28,8 +28,8 @@ export class StaticTranslation {
         'cz': {
             'board_state': {
                 'UNKNOWN': 'neznámé',
-                'NO_COLLISION': 'ok',
-                'ALREADY_IN_INSTANCE': 'již v instaci',
+                'NO_COLLISION': 'Nenašli jsme žádné konflikty',
+                'ALREADY_IN_INSTANCE': 'cod je již v instanci',
                 'PLANNED_UPDATE': 'naplánovaná aktualizace',
             }
         }
