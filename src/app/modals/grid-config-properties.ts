@@ -118,7 +118,13 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
         let ret: {[key: string]: Core.Connector} = {};
         const widgetInterface = widget.getInterface();
 
-        const interfaceArrayNames = [].concat(Object.keys(widgetInterface.analogInputs)).concat(Object.keys(widgetInterface.analogOutputs)).concat(Object.keys(widgetInterface.digitalInputs)).concat(Object.keys(widgetInterface.digitalOutputs)).concat(Object.keys(widgetInterface.messageInputs)).concat(Object.keys(widgetInterface.messageOutputs));
+        let interfaceArrayNames: string[] = [];
+        interfaceArrayNames = interfaceArrayNames.concat(Object.keys(widgetInterface.analogInputs));
+        interfaceArrayNames = interfaceArrayNames.concat(Object.keys(widgetInterface.analogOutputs));
+        interfaceArrayNames = interfaceArrayNames.concat(Object.keys(widgetInterface.digitalInputs));
+        interfaceArrayNames = interfaceArrayNames.concat(Object.keys(widgetInterface.digitalOutputs));
+        interfaceArrayNames = interfaceArrayNames.concat(Object.keys(widgetInterface.messageInputs));
+        interfaceArrayNames = interfaceArrayNames.concat(Object.keys(widgetInterface.messageOutputs));
 
         let oldConnectors: {[key: string]: any} = {};
         for (let i = 0; i < interfaceArrayNames.length; i++) {
@@ -173,14 +179,14 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
 
         //  do the magic ... update widget version :)
         if (this.modalModel.gridController.renderer instanceof EditorRenderer.ControllerRenderer) {
-            if (this.modalModel.widget.type.version_id != this.formModelVersion) {
+            if (this.modalModel.widget.type.version_id !== this.formModelVersion) {
                 const renderer = <EditorRenderer.ControllerRenderer>(<any>this.modalModel.gridController.renderer);
 
                 this.modalModel.widget.type.version_id = this.formModelVersion;
 
                 renderer.requestSourceCode(this.modalModel.widget.type, (src: string, safe: boolean) => {
                     const jsWidget = <Widgets.JSWidget>this.modalModel.widget;
-    
+
                     //  extract config properties and widget interface
                     const oldInterface = this.mergeWidgetInterface(jsWidget);
                     let oldConnectors: {[key: string]: any} = {};
@@ -190,7 +196,7 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
                                 type: oldInterface[i].type,
                                 name: oldInterface[i].name,
                                 externalName: oldInterface[i].externalName
-                            }
+                            };
                         }
                     }
 
@@ -200,7 +206,7 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
                         oldProperties[configProperty.id] = {
                             type: configProperty.type,
                             value: configProperty.value
-                        }
+                        };
                     }
 
 
@@ -213,7 +219,7 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
                     for (let i in newInterface) {
                         if (newInterface.hasOwnProperty(i)) {
                             if (oldConnectors.hasOwnProperty(i)) {
-                                if (newInterface[i].type == oldConnectors[i].type && newInterface[i].name == oldConnectors[i].name) {
+                                if (newInterface[i].type === oldConnectors[i].type && newInterface[i].name === oldConnectors[i].name) {
                                     newInterface[i].externalName = oldConnectors[i].externalName;
                                 }
                             }
@@ -223,7 +229,7 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
                     for (let i = 0; i < jsWidget.configProperties.length; i++) {
                         const configProperty = jsWidget.configProperties[i];
                         if (oldProperties.hasOwnProperty(configProperty.id)) {
-                            if (configProperty.type == oldProperties[configProperty.id].type) {
+                            if (configProperty.type === oldProperties[configProperty.id].type) {
                                 configProperty.value = oldProperties[configProperty.id].value;
                             }
                         }

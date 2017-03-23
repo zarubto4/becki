@@ -165,7 +165,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
             }
 
             for (let targetType in m.externalConnector) {
-    
+
                 if (!m.externalConnector.hasOwnProperty(targetType)) {
                     continue;
                 }

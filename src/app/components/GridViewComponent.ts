@@ -71,7 +71,7 @@ export class GridViewComponent implements AfterViewInit {
                     const group = this.widgetsGroups[i];
                     for (let j = 0; j < group.grid_widgets.length; j++) {
                         const widgetDef: IGridWidget = group.grid_widgets[j];
-                        if (widgetDef.id == widget.type.id) {
+                        if (widgetDef.id === widget.type.id) {
                             versions = widgetDef.versions;
                         }
                     }

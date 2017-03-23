@@ -160,9 +160,8 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
             .then((programVersionFull) => {
                 this.unblockUI();
                 this.selectedProgramVersion = programVersionFull;
-                console.log("selected grid program",JSON.parse(this.selectedProgramVersion.m_code));
 
-                //TODO run update fo grid widgets version, then setDataJson ...
+                // TODO run update fo grid widgets version, then setDataJson ...
                 this.gridView.setDataJson(this.selectedProgramVersion.m_code);
 
                 this.gridDeviceProfile = this.gridView.getDeviceProfile();
