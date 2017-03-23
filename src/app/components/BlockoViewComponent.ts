@@ -137,7 +137,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     ngAfterViewInit(): void {
         // TODO:
-        if (!this.readonly) {
+        if (this.canConfig) {
             new BlockoBasicBlocks.ExecutionController(this.blockoController);
         }
         // TODO:

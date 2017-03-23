@@ -135,6 +135,14 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
             controller.setOutputConnectorValue(m.blockId, m.connectorName, m.value);
         }
 
+        if (m.messageType === 'newExternalInputConnectorValue') {
+            controller.setInputExternalConnectorValue(m.targetType, m.targetId, m.connectorName, m.value);
+        }
+
+        if (m.messageType === 'newExternalOutputConnectorValue') {
+            controller.setOutputExternalConnectorValue(m.targetType, m.targetId, m.connectorName, m.value);
+        }
+
         if (m.messageType === 'getValues') {
             for (let block in m.connector) {
                 if (!m.connector.hasOwnProperty(block)) {
@@ -157,6 +165,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
             }
 
             for (let targetType in m.externalConnector) {
+    
                 if (!m.externalConnector.hasOwnProperty(targetType)) {
                     continue;
                 }

@@ -7,9 +7,10 @@
  */
 
 import { Core, Widgets, EditorRenderer } from 'the-grid';
-import { Component, AfterViewInit, Output, ViewChild, ElementRef, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, Output, Input, ViewChild, ElementRef, EventEmitter } from '@angular/core';
 import { ModalService } from '../services/ModalService';
 import { ModalsGridConfigPropertiesModel } from '../modals/grid-config-properties';
+import { ITypeOfWidget, IGridWidget } from '../backend/TyrionAPI';
 
 @Component({
     selector: 'bk-grid-view',
@@ -24,6 +25,9 @@ export class GridViewComponent implements AfterViewInit {
 
     @Output()
     onRequestWidgetSource = new EventEmitter<{type: any, resolve: (name: string) => void}>();
+
+    @Input()
+    widgetsGroups: ITypeOfWidget[] = null;
 
     protected gridController: Core.Controller;
 
@@ -60,7 +64,21 @@ export class GridViewComponent implements AfterViewInit {
     ngAfterViewInit(): void {
         this.gridRenderer = new EditorRenderer.ControllerRenderer(this.gridController, this.screens.nativeElement);
         this.gridRenderer.registerOpenConfigCallback(widget => {
-            let m = new ModalsGridConfigPropertiesModel(widget);
+            let versions = null;
+
+            if (this.widgetsGroups) {
+                for (let i = 0; i < this.widgetsGroups.length; i++) {
+                    const group = this.widgetsGroups[i];
+                    for (let j = 0; j < group.grid_widgets.length; j++) {
+                        const widgetDef: IGridWidget = group.grid_widgets[j];
+                        if (widgetDef.id == widget.type.id) {
+                            versions = widgetDef.versions;
+                        }
+                    }
+                }
+            }
+
+            let m = new ModalsGridConfigPropertiesModel(widget, this.gridController, versions);
             this.modalService.showModal(m);
         });
         this.gridController.setRenderer(this.gridRenderer);

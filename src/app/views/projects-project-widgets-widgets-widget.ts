@@ -205,7 +205,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     }
 
     onWidgetConfigClick(): void {
-        let m = new ModalsGridConfigPropertiesModel(this._widgetTesterRenderer.widget);
+        let m = new ModalsGridConfigPropertiesModel(this._widgetTesterRenderer.widget, this._widgetTesterRenderer.controller);
         this.modalService.showModal(m);
     }
 

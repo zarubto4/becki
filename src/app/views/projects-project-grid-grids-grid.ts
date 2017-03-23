@@ -56,7 +56,6 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
     protected afterLoadSelectedVersionId: string = null;
 
-
     constructor(injector: Injector) {
         super(injector);
     };
@@ -100,8 +99,6 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
         }
     }
 
-
-
     onGridProjectClick(gridProjectId: string) {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', gridProjectId]);
     }
@@ -133,7 +130,6 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                 } else if (this.gridProgramVersions.length) {
                     this.selectProgramVersion(this.gridProgramVersions[this.gridProgramVersions.length - 1]);
                 }
-                // console.log(this.gridProgramVersions);
 
                 this.unblockUI();
             })
@@ -164,14 +160,17 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
             .then((programVersionFull) => {
                 this.unblockUI();
                 this.selectedProgramVersion = programVersionFull;
+                console.log("selected grid program",JSON.parse(this.selectedProgramVersion.m_code));
+
+                //TODO run update fo grid widgets version, then setDataJson ...
                 this.gridView.setDataJson(this.selectedProgramVersion.m_code);
+
                 this.gridDeviceProfile = this.gridView.getDeviceProfile();
             })
             .catch((err) => {
                 this.unblockUI();
                 this.fmError(`Cannot load version <b>${programVersion.version_name}</b>`, err);
             });
-
     }
 
     onChangeGridDeviceProfile(newValue: string): void {

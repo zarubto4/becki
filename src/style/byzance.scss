@@ -845,7 +845,7 @@ span.changes {
     background-color: red;
 }
 
-.the-grid__widget_resize-handle {
+.the-grid__widget_resize-handle-br {
     bottom: 0;
     right: 0;
     width: 20px;
@@ -855,6 +855,42 @@ span.changes {
     border-style: solid;
     border-width: 0 0 20px 20px;
     border-color: transparent transparent rgba(255,255,255,1) transparent;
+}
+
+.the-grid__widget_resize-handle-bl {
+    bottom: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    cursor: nwse-resize;
+    border-style: solid;
+    border-width: 0 20px 20px 0;
+    border-color: transparent transparent rgba(255,255,255,1) transparent;
+}
+
+.the-grid__widget_resize-handle-tl {
+    bottom: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    cursor: nwse-resize;
+    border-style: solid;
+    border-width: 20px 20px 0 0;
+    border-color: rgba(255,255,255,1) transparent transparent transparent;
+}
+
+.the-grid__widget_resize-handle-tr {
+    bottom: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    cursor: nwse-resize;
+    border-style: solid;
+    border-width: 20px 0 0 20px;
+    border-color: rgba(255,255,255,1) transparent transparent transparent;
 }
 
 .the-grid__widget-test_resize-handle {
