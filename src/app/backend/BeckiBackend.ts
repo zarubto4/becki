@@ -268,14 +268,13 @@ export class RequestError extends Error {
 
 export abstract class BeckiBackend extends TyrionAPI {
 
-
-    public static WS_SCHEME = 'ws';
-
     public static WS_CHANNEL = 'becki';
 
     public host = '127.0.0.1:9000';
 
     public protocol = 'http';
+
+    public wsProtocol = 'ws';
 
     private webSocket: WebSocket = null;
 
@@ -318,6 +317,7 @@ export abstract class BeckiBackend extends TyrionAPI {
         if (location && location.protocol) {
             if (location.protocol === 'https:') {
                 this.protocol = 'https';
+                this.wsProtocol = 'wss';
             }
         }
 
@@ -541,7 +541,7 @@ export abstract class BeckiBackend extends TyrionAPI {
         this.getWebsocketAccessToken()
             .then((webSocketToken: IWebSocketToken) => {
 
-                this.webSocket = new WebSocket(`${BeckiBackend.WS_SCHEME}://${this.host}/websocket/becki/${webSocketToken.websocket_token}`);
+                this.webSocket = new WebSocket(`${this.wsProtocol}://${this.host}/websocket/becki/${webSocketToken.websocket_token}`);
                 this.webSocket.addEventListener('close', this.reconnectWebSocketAfterTimeout);
 
                 let opened = Rx.Observable
