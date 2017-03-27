@@ -253,7 +253,7 @@ module.exports = function makeWebpackConfig() {
    */
   config.devServer = {
     host: '0.0.0.0',
-    port: '8080',
+    port: 8080,
     contentBase: './src/public',
     historyApiFallback: true,
     quiet: true,
