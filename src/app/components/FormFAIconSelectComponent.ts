@@ -13,7 +13,7 @@ import { Subscription } from 'rxjs';
     template: `
 <div class="form-group icon-select-group" [class.has-success]="control && (!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid))" [class.has-error]="control && (!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid))" [class.has-warning]="control && (!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending))">
     <label>{{label}}</label>
-    <div class="form-control cursor-hand" (click)="onIconSelectClick()">
+    <div class="form-control cursor-hand select-input" (click)="onIconSelectClick()">
         <span *ngIf="value" class="fa icon-select-icon {{value}}"></span>
         {{value?value:(placeholder?placeholder:label)}}
         <span class="fa icon-select-down-icon fa-angle-down fa-pull-right"></span>

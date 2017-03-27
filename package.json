@@ -39,11 +39,12 @@
     "monaco-editor": "^0.8.0",
     "ng2-img-cropper": "^0.7.7",
     "open-sans-fontface": "^1.4.0",
+    "parse-color": "^1.0.0",
     "rxjs": "5.0.1",
     "script-engine": "git+ssh://git@git.byzance.cz:js-components/script-engine.git#v0.0.38",
     "snapsvg": "^0.4.0",
     "systemjs": "0.19.40",
-    "the-grid": "git+ssh://git@git.byzance.cz:js-components/the-grid.git#v0.1.133",
+    "the-grid": "git+ssh://git@git.byzance.cz:js-components/the-grid.git#v0.1.136",
     "tslib": "^1.5.0",
     "typescript": "^2.1.5",
     "zone.js": "^0.7.4"

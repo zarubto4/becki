@@ -47,6 +47,8 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
 
     widgetGroupsOpenToggle: { [id: string]: boolean } = {};
 
+    widgetSourceCache: { [versionId: string]: string } = {};
+
     @ViewChild(GridViewComponent)
     gridView: GridViewComponent;
 
@@ -226,16 +228,19 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
     }
 
     onWidgetRequestingSource(event: any) {
-        // console.log(event);
+        if (this.widgetSourceCache[event.type.version_id]) {
+            event.resolve(this.widgetSourceCache[event.type.version_id]);
+            this.unblockUI();
+            return;
+        }
+
         this.backendService.getWidgetVersion(event.type.version_id)
             .then((widgetVersion) => {
-                // console.log(widgetVersion);
-                // TODO add cache
+                this.widgetSourceCache[event.type.version_id] = widgetVersion.logic_json;
                 event.resolve(widgetVersion.logic_json);
                 this.unblockUI();
             })
             .catch((err) => {
-                // console.log(err);
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError('Cannot load widget version', err));
             });

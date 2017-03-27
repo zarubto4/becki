@@ -391,6 +391,9 @@ span.changes {
     background-color: transparent !important;
 }
 
+.becki-form-color-picker {
+    position: relative;
+}
 .becki-form-color-picker .minicolors {
     border: 1px solid #c2cad8;
 }
@@ -402,6 +405,37 @@ span.changes {
 }
 .becki-form-color-picker.has-success .minicolors {
     border-color: #27a4b0;
+}
+
+.becki-form-color-picker input.color-input {
+    float: none !important;
+    width: 100% !important;
+    border: none !important;
+    padding-left: 40px;
+    height: 30px;
+}
+
+.becki-form-color-picker .opacity-input {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    height: 28px;
+}
+.becki-form-color-picker .opacity-input label{
+    height: 28px;
+    line-height: 28px;
+    float: left;
+    margin-right: 5px;
+}
+.becki-form-color-picker .opacity-input input{
+    height: 28px;
+    width: 50px !important;
+    float: left;
+}
+
+.becki-form-color-picker .minicolors-swatch {
+    top: 1px !important;
+    left: 1px !important;
 }
 
 
@@ -2070,4 +2104,38 @@ ul.hw-list li ul li, ul.grid-list li ul li {
 
 .timeline-item-updates{
     width: 41.666666%;
+}
+
+.modal-body.widget-config {
+    h4 {
+        font-weight: bold;
+    }
+
+    h3 {
+        font-size: 16px;
+        font-weight: 400;
+        margin-top: 0;
+    }
+
+    .input-row {
+        height: 30px;
+        clear: both;
+        margin-bottom: 15px;
+
+        label {
+            float: left;
+            line-height: 30px;
+            display: block;
+            width: 30%;
+        }
+
+        input, select, .minicolors, .icon-select-group .select-input  {
+            float: right;
+            width: 70%;
+        }
+
+        .icon-select-table {
+            margin-top: 30px;
+        }
+    }
 }
