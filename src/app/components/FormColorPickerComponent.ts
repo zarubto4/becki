@@ -29,7 +29,7 @@ const parseColor = require('parse-color');
     <input class="form-control color-input" #colorSelector type="text">
     <div *ngIf="rgbaOutput" class="opacity-input">
         <label>Opacity:</label>
-        <input class="form-control" #opacitySelector type="text" [(ngModel)]="opacity" (change)="onOpacityChange()">
+        <input class="form-control" #opacitySelector type="number" [attr.step]="0.1" [attr.min]="0" [attr.max]="1" [(ngModel)]="opacity" (change)="onOpacityChange()">
     </div>
     <span class="help-block" *ngIf="control && (!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid))">{{validatorErrorsService.getMessageForErrors(control.errors)}}</span>
 </div>

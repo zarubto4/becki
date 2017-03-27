@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 try {
-    require('child_process').execSync(__dirname+"/../node_modules/typescript/bin/tsc "+__dirname+"/generator.ts");
+    require('child_process').execSync(__dirname+"/../node_modules/typescript/bin/tsc "+__dirname+"/generator.ts --skipLibCheck");
 } catch (e) {
     console.log("TypeScript compilation error:");
     console.log(e.stdout.toString());

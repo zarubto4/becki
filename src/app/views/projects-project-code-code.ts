@@ -407,8 +407,10 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                         if (success && m.selectedBoard) {
                             this.blockUI();
                             this.backendService.uploadCProgramVersion({
-                                board_ids: [m.selectedBoard.id],
-                                version_id: version.version_id
+                                board_pairs: [{
+                                    board_id: m.selectedBoard.id,
+                                    c_program_version_id: version.version_id
+                                }]
                             }).then((result) => {
                                 this.fmSuccess(`Uploading was done successfully`);
                                 this.unblockUI();
