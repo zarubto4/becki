@@ -268,13 +268,14 @@ export class RequestError extends Error {
 
 export abstract class BeckiBackend extends TyrionAPI {
 
-    public static REST_SCHEME = 'http';
 
     public static WS_SCHEME = 'ws';
 
     public static WS_CHANNEL = 'becki';
 
     public host = '127.0.0.1:9000';
+
+    public protocol = 'http';
 
     private webSocket: WebSocket = null;
 
@@ -314,9 +315,15 @@ export abstract class BeckiBackend extends TyrionAPI {
             }
         }
 
+        if (location && location.protocol) {
+            if (location.protocol === 'https:') {
+                this.protocol = 'https';
+            }
+        }
+
         // David 1 IP
         // this.host = "192.168.65.30:9000";
-        //this.host = "192.168.65.137:9000";
+        // this.host = "192.168.65.137:9000";
     }
 
     // GENERIC REQUESTS
@@ -324,7 +331,7 @@ export abstract class BeckiBackend extends TyrionAPI {
     protected abstract requestRestGeneral(request: RestRequest): Promise<RestResponse>;
 
     public requestRestPath<T>(method: string, path: string, body: Object, success: number[]): Promise<T> {
-        return this.requestRest(method, `${BeckiBackend.REST_SCHEME}://${this.host}${path}`, body, success);
+        return this.requestRest(method, `${this.protocol}://${this.host}${path}`, body, success);
     }
 
     public requestRest<T>(method: string, url: string, body: Object, success: number[]): Promise<T> {
