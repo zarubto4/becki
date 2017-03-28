@@ -12,112 +12,291 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark uppercase">
                             <i class="fa fa-fw fa-cloud"></i>
-                            Cloud instances - instance <strong>{{instance?instance.blocko_instance_name:""}}</strong>
+                            Instance <strong>{{instance?instance.blocko_instance_name:""}}</strong>
                         </span>
                     </div>
+                    <span class="pull-right">
+                              <button title="Device properties" class="btn btn-icon-only green" (click)="onEditClick(device)">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="Remove device" class="btn btn-icon-only red"  (click)="onRemoveClick(device)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                        </span>
                 </div>
                 <div>
                     <div *ngIf="instance">
-                        <div>
-                            ID:
-                            <span class="font-grey-mint bold">{{instance.blocko_instance_name}}</span>
+                        <div class="row">
+                            <div class="col-md-4">
+                                Blocko program:
+                                <span class="font-grey-mint bold"><a (click)="onBlockoProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></span>
+                            </div>
+
+                            <div class="col-md-8">
+                                Description:
+                                <span class="font-grey-mint bold">{{instance.b_program_description}}</span>
+                                <span *ngIf="!instance.b_program_description" class="font-grey-mint bold">No description</span>
+                            </div>
                         </div>
-                        <div>
-                            Status:
-                            <span *ngIf="instance.instance_online" class="bold font-green-jungle">Online</span>
-                            <span *ngIf="!instance.instance_online" class="bold font-red">Offline</span>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                version:
+                                <span class="font-grey-mint bold"><a (click)="onBlockoProgramVersionClick(instance)">{{instance.actual_instance.b_program_version_name}}</a></span>
+                            </div>
+
+                            <div class="col-md-8">
+                                Description:
+                                <span class="font-grey-mint bold">{{instance.actual_instance.b_program_version_description}}</span>
+                                <span *ngIf="!instance.actual_instance.b_program_version_description" class="font-grey-mint bold">No description</span>
+
+                            </div>
                         </div>
-                        <div>
-                            Server:
-                            <span class="font-grey-mint bold" *ngIf="instance.server_name">
-                                 {{instance.actual_instance.server_name}} 
-                                (<span *ngIf="instance.server_is_online" class="font-green-jungle">Online</span><span
-                                *ngIf="!instance.server_is_online" class="font-red">Offline</span>)
-                            </span>
-                        </div>
-                        <div>
-                            Blocko program:
-                            <span class="font-grey-mint bold"><a (click)="onBlockoProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></span>
-                        </div>
-                        <div>
-                            Blocko program version:
-                            <span class="font-grey-mint bold"><a (click)="onBlockoProgramVersionClick(instance)">{{instance.actual_instance.b_program_version_name}}</a></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="portlet portlet light bordered">
-                <div class="portlet-title">
-                    <div class="becki-caption">
-                        <span class="font-blue-dark uppercase">
-                                <i class="fa fa-fw fa-microchip"></i>
-                                Hardware <span class="font-grey-salsa">({{connectionsHwCount()}})</span>
-                        </span>
-                    </div>
-                </div>
-                <div>
-                    <div *ngIf="instance">
-                        <ul class="hw-list" *ngIf="instance.actual_instance.hardware_group && instance.actual_instance.hardware_group.length">
-                            <li *ngFor="let mainBoard of instance.actual_instance.hardware_group">
-                                <i class="fa fa-fw fa-microchip font-green-seagreen"></i> {{mainBoard.main_board_pair.board_id}}
-                                <span class="bold font-red bg-yellow-lemon">TODO</span>
-                                <ul>
-                                    <li *ngFor="let deviceBoard of mainBoard.device_board_pairs">
-                                        <i class="fa fa-fw fa-microchip font-green-seagreen"></i> {{deviceBoard.board_id}}
-                                        <span class="bold font-red bg-yellow-lemon">TODO</span>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <h4 *ngIf="instance.actual_instance.hardware_group && !instance.actual_instance.hardware_group.length">No hardware in this instance</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="portlet portlet light bordered">
-                <div class="portlet-title">
-                    <div class="becki-caption">
-                        <span class="font-blue-dark uppercase">
-                                <i class="fa fa-fw fa-desktop"></i>
-                                Grid <span class="font-grey-salsa">({{connectionsGridCount()}})</span>
-                        </span>
-                    </div>
-                </div>
-                <div>
-                    <div *ngIf="instance">
-                        <ul class="grid-list" *ngIf="instance.actual_instance.m_project_snapshot && instance.actual_instance.m_project_snapshot.length">
-                            <li *ngFor="let mProject of instance.actual_instance.m_project_snapshot">
-                                <i class="fa fa-fw fa-desktop font-purple"></i> {{mProject.m_project_id}} <span class="bold font-red bg-yellow-lemon">TODO</span>
-                                <ul>
-                                    <li *ngFor="let mProgram of mProject.m_program_snapshot">
-                                        <i class="fa fa-fw fa-desktop font-purple"></i> {{mProgram.m_program_name}} <span
-                                            class="font-grey-salsa">({{mProgram.version_object_name}})</span>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                        <h4 *ngIf="instance.actual_instance.m_project_snapshot && !instance.actual_instance.m_project_snapshot.length">No Grid projects in this instance</h4>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-12" *ngIf="instance && instance.instance_online">
-            <div class="portlet portlet light bordered">
-                <div class="portlet-title">
+
+
+        <div class="col-md-12">
+            <div *ngIf="instance" class="portlet portlet light bordered">
+                <div class="portlet-title tabbable-line">
                     <div class="becki-caption">
                         <span class="font-blue-dark uppercase">
-                            <i class="fa fa-fw fa-cloud"></i>
-                            Blocko LiveView
+                            <i class="fa fa-fw fa-list-ul"></i>
+                            Info
                         </span>
                     </div>
+                    <ul class="nav nav-tabs margin-left-15 pull-left">
+                        <li [class.active]="instanceTab == 'schema'">
+                            <a class="cursor-pointer" (click)="onToggleinstanceTab('schema')">Schema </a>
+                        </li>
+                        <li [class.active]="instanceTab == 'history'">
+                            <a class="cursor-pointer" (click)="onToggleinstanceTab('history')">History </a>
+                        </li>
+                        <li [class.active]="instanceTab == 'update'">
+                            <a class="cursor-pointer" (click)="onToggleinstanceTab('update')">Update progres </a>
+                        </li>
+                        <li [class.active]="instanceTab == 'view'">
+                            <a class="cursor-pointer" (click)="onToggleinstanceTab('view')">Real-time View </a>
+                        </li>
+                        <li [class.active]="instanceTab == 'logs'">
+                            <a class="cursor-pointer" (click)="onToggleinstanceTab('logs')">Logs </a>
+                        </li>
+                        <li [class.active]="instanceTab == 'debug'">
+                            <a class="cursor-pointer" (click)="onToggleinstanceTab('debug')">Debug tools </a>
+                        </li>
+                    </ul>
                 </div>
-                <bk-blocko-view [canConfig]="false" [readonly]="true" [simpleMode]="false" [showBlockNames]="true"></bk-blocko-view>
+
+                <div *ngIf="instanceTab == 'schema'">
+                    <br>
+                    <div class="row">
+                        <div class="row col-md-6"><i class="fa fa-globe fa-5x red"></i>
+
+                            <div class="row">
+                                <div class="col-md-6"><i class="fa fa-2x fa-database"></i></div>
+                                {{instance.server_name}}<span class=" font-green-jungle" style="font-size: 11px">({{instance.server_is_online?'online':'offline'}})</span>
+                            </div>
+
+                            <div class="row">
+                                {{instance.blocko_instance_name}}<span class=" font-green-jungle" style="font-size: 11px">({{instance.instance_online?'online':'offline'}})</span>
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <strong class="bg-yellow-casablanca">Grids - TODO</strong>
+                            <div *ngFor="let grid of null" class="row"></div>
+
+                        </div>
+                        <div class="col-sm-6">
+                            <h5>Hardware</h5>
+                            <div *ngFor="let hardware of instance.actual_instance.hardware_group">
+                                <strong>{{hardware.main_board_pair.type_of_board_id}}:</strong>{{hardware.main_board_pair.board_id}}
+                                <br><span class="font-sm">Program: {{hardware.main_board_pair.c_program_name}}  Version: {{hardware.main_board_pair.c_program_version_name}}</span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div *ngIf="instance && instance.instance_history" class="cd-horizontal-timeline mt-timeline-horizontal loaded">
+                        <div class="timeline">
+                            <div class="events-wrapper">
+                                <div class="events" style="transition: left 0.6s linear; " [style.width]="1800+'px'" [style.left]="timelinePosition+'px'">
+                                    <ol *ngFor="let instanced of instance.instance_history; let i = index">
+
+                                        <li>
+                                            <a href="#0" class="border-after-red bg-after-red selected" [style.left]="(i*200)+'px'">{{instanced.date_of_created|bkUnixTimeToDate}}</a>
+                                        </li>
+                                    </ol>
+                                    <span class="filling-line bg-red" aria-hidden="true" style="transform: scaleX(0.8);"></span>
+                                </div>
+                                <!-- .events -->
+                            </div>
+                            <!-- .events-wrapper -->
+                            <ul class="cd-timeline-navigation mt-ht-nav-icon">
+                                <li>
+                                    <a (click)=timelineMove(100); class="prev btn btn-outline red md-skip">
+                                        <i class="fa fa-chevron-left"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a (click)=timelineMove(-100); class="next btn btn-outline red md-skip inactive">
+                                        <i class="fa fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- .cd-timeline-navigation -->
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
+                <div *ngIf="instanceTab == 'history'">
+                    <div *ngIf="instance && instance.instance_history" class="cd-horizontal-timeline mt-timeline-horizontal loaded">
+                        <div class="timeline">
+                            <div class="events-wrapper">
+                                <div class="events" style="transition: left 0.6s linear; " [style.width]="1800+'px'" [style.left]="timelinePosition+'px'">
+                                    <ol *ngFor="let instanced of instance.instance_history; let i = index">
+                                        <li>
+                                            <a class="border-after-red bg-after-red selected" [style.left]="(i*200)+'px'">{{instanced.date_of_created|bkUnixTimeToDate}}</a>
+                                        </li>
+                                    </ol>
+                                    <span class="filling-line bg-red" aria-hidden="true" style="transform: scaleX(1);"></span>
+                                </div>
+                                <!-- .events -->
+                            </div>
+                            <!-- .events-wrapper -->
+                            <ul class="cd-timeline-navigation mt-ht-nav-icon">
+                                <li>
+                                    <a (click)=timelineMove(100); class="prev btn btn-outline red md-skip">
+                                        <i class="fa fa-chevron-left"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a (click)=timelineMove(-100); class="next btn btn-outline red md-skip inactive">
+                                        <i class="fa fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- .cd-timeline-navigation -->
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <div class="portlet-title">
+                                <div class="becki-caption">
+                                    <span class="font-blue-dark uppercase">
+                                <i class="fa fa-fw fa-desktop"></i> Grid <span class="font-grey-salsa">({{connectionsGridCount()}})</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div *ngIf="instance">
+                                <ul class="grid-list" *ngIf="instance.actual_instance.m_project_snapshot && instance.actual_instance.m_project_snapshot.length">
+                                    <li *ngFor="let mProject of instance.actual_instance.m_project_snapshot">
+                                        <i class="fa fa-fw fa-desktop font-purple"></i> {{mProject.m_project_id}} <span class="bold font-red bg-yellow-lemon">TODO</span>
+                                        <ul>
+                                            <li *ngFor="let mProgram of mProject.m_program_snapshot">
+                                                <i class="fa fa-fw fa-desktop font-purple"></i> {{mProgram.m_program_name}}
+                                                <span class="font-grey-salsa">({{mProgram.version_object_name}})</span>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <h4 *ngIf="instance.actual_instance.m_project_snapshot && !instance.actual_instance.m_project_snapshot.length">No Grid projects in this instance</h4>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-md-6">
+                            <div class="portlet-title">
+                                <div class="becki-caption">
+                                    <span class="font-blue-dark uppercase">
+                                <i class="fa fa-fw fa-microchip"></i> Hardware <span class="font-grey-salsa">({{connectionsHwCount()}})</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <div *ngIf="instance">
+                                    <ul class="hw-list" *ngIf="instance.actual_instance.hardware_group && instance.actual_instance.hardware_group.length">
+                                        <li *ngFor="let mainBoard of instance.actual_instance.hardware_group">
+                                            <i class="fa fa-fw fa-microchip font-green-seagreen"></i> {{mainBoard.main_board_pair.board_id}}
+                                            <span class="bold font-red bg-yellow-lemon">TODO</span>
+                                            <ul>
+                                                <li *ngFor="let deviceBoard of mainBoard.device_board_pairs">
+                                                    <i class="fa fa-fw fa-microchip font-green-seagreen"></i> {{deviceBoard.board_id}}
+                                                    <span class="bold font-red bg-yellow-lemon">TODO</span>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                    <h4 *ngIf="instance.actual_instance.hardware_group && !instance.actual_instance.hardware_group.length">No hardware in this instance</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="instanceTab == 'update'">
+                    <div class="table-scrollable">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Type of Device</th>
+                                    <th>Board ID</th>
+                                    <th>Actual Program</th>
+                                    <th>Required program</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let update of instance.actual_instance.procedures">
+                                    <td class="font-red-flamingo yellow-casablanca"> ?? </td>
+                                    <td>{{update.id}}</td>
+                                    <td class="font-red-flamingo yellow-casablanca"> ?? </td>
+                                    <td class="font-red-flamingo yellow-casablanca"> ?? </td>
+                                    <td>{{update.state}} </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                </div>
+
+                <div *ngIf="instanceTab == 'view' && instance && instance.instance_online">
+                    <bk-blocko-view [canConfig]="false" [readonly]="true" [simpleMode]="false" [showBlockNames]="true"></bk-blocko-view>
+
+                </div>
+
+                <div *ngIf="instanceTab == 'logs'">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th> </th>
+                                <th> </th>
+                                <th> </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
+                <div *ngIf="instanceTab == 'debug'">
+
+                </div>
+
             </div>
         </div>
     </div>
+
+
 
 </bk-layout-main>

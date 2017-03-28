@@ -24,10 +24,11 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     id: string;
     instanceId: string;
-
     routeParamsSubscription: Subscription;
 
     instance: IHomerInstance = null;
+
+    timelinePosition: number = 0;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -35,6 +36,8 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     blockoView: BlockoViewComponent;
 
     homerDao: HomerDao;
+
+    instanceTab: string = 'schema';
 
     private homerService: HomerService = null;
 
@@ -62,6 +65,8 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     refresh(): void {
         this.blockUI();
+        // this.instance.actual_instance.procedures.forEach(proc => proc.updates.forEach(update => update.));
+
         this.backendService.getInstance(this.instanceId)
             .then((instance) => {
                 this.instance = instance;
@@ -72,6 +77,10 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                 this.fmError(`Instances ${this.id} cannot be loaded.`, reason);
                 this.unblockUI();
             });
+    }
+
+    onToggleinstanceTab(tab: string) {
+        this.instanceTab = tab;
     }
 
     onBlockoProgramClick(bProgramId: string) {
@@ -85,14 +94,34 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
             padawansCount += sh.device_board_pairs.length;
         });
         return yodaCount + ' + ' + padawansCount;
+
+    }
+
+    timelineMove(position: number) {
+        this.timelinePosition += position;
+
+        // TODO kontrola, aby hodnoty nepřekročily velikost pole. vše je obráceně tzn. -1200 je doleva (chceme aby to tam jezdilo)
+        if (this.timelinePosition > 0 || this.timelinePosition < (-this.instance.instance_history.length * 200)) {
+            this.timelinePosition = 0;
+        }
     }
 
     connectionsGridCount() {
         return NullSafeDefault(() => this.instance.actual_instance.m_project_snapshot, []).length;
     }
 
+    onEditClick() {
+
+    }
+
+    onRemoveClick() {
+
+    }
+    onBlockoClick() {
+
+    }
     onBlockoProgramVersionClick(instance: IHomerInstance) {
-        this.router.navigate(['/projects', this.id, 'blocko', instance.b_program_id , {version: instance.actual_instance.b_program_version_id}]);
+        this.router.navigate(['/projects', this.id, 'blocko', instance.b_program_id, { version: instance.actual_instance.b_program_version_id }]);
 
     }
 
