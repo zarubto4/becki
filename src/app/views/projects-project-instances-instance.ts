@@ -72,6 +72,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                 this.instance = instance;
                 this.loadBlockoLiveView();
                 this.unblockUI();
+                console.log(this.instance);
             })
             .catch(reason => {
                 this.fmError(`Instances ${this.id} cannot be loaded.`, reason);

@@ -92,67 +92,76 @@
 
                 <div *ngIf="instanceTab == 'schema'">
                     <br>
-                    <div class="row">
-                        <div class="row col-md-6"><i class="fa fa-globe fa-5x red"></i>
-
-                            <div class="row">
-                                <div class="col-md-6"><i class="fa fa-2x fa-database"></i></div>
-                                {{instance.server_name}}<span class=" font-green-jungle" style="font-size: 11px">({{instance.server_is_online?'online':'offline'}})</span>
-                            </div>
-
-                            <div class="row">
-                                {{instance.blocko_instance_name}}<span class=" font-green-jungle" style="font-size: 11px">({{instance.instance_online?'online':'offline'}})</span>
-                            </div>
-
-
-                        </div>
+                    <div class="col-6">
+                        <strong>Server name: </strong>{{instance.server_name}}<span class=" font-green-jungle" style="font-size: 11px">({{instance.server_is_online?'online':'offline'}})</span>
+                    </div>
+                    <div class="col-6">
+                      <strong>Instance name: </strong>{{instance.blocko_instance_name}}<span class=" font-green-jungle" style="font-size: 11px">({{instance.instance_online?'online':'offline'}})</span>
                     </div>
                     <div class="row">
-                        <div class="col-sm-6">
-                            <strong class="bg-yellow-casablanca">Grids - TODO</strong>
-                            <div *ngFor="let grid of null" class="row"></div>
-
+                        <div class="col-6">
+                            <div *ngIf="instance.actual_instance.m_project_snapshot" class="col-sm-6">
+                                <h5>Grids</h5>
+                                <div *ngFor="let grid of instance.actual_instance.m_project_snapshot">
+                                    <strong>Grid project: </strong>{{grid.m_project_name}} <br>
+                                    <strong>Grid description: </strong>{{grid.m_project_description}}<br>
+                                    <br>
+                                    <div style="margin-left: 10px" *ngFor="let gridProgram of grid.m_program_snapshots">
+                                        <strong>Grid program: </strong>{{gridProgram.m_program_name}} <br>
+                                        <strong>Grid program: </strong>{{gridProgram.m_program_description}} <br>
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-sm-6">
                             <h5>Hardware</h5>
                             <div *ngFor="let hardware of instance.actual_instance.hardware_group">
-                                <strong>{{hardware.main_board_pair.type_of_board_id}}:</strong>{{hardware.main_board_pair.board_id}}
-                                <br><span class="font-sm">Program: {{hardware.main_board_pair.c_program_name}}  Version: {{hardware.main_board_pair.c_program_version_name}}</span>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div *ngIf="instance && instance.instance_history" class="cd-horizontal-timeline mt-timeline-horizontal loaded">
-                        <div class="timeline">
-                            <div class="events-wrapper">
-                                <div class="events" style="transition: left 0.6s linear; " [style.width]="1800+'px'" [style.left]="timelinePosition+'px'">
-                                    <ol *ngFor="let instanced of instance.instance_history; let i = index">
-
-                                        <li>
-                                            <a href="#0" class="border-after-red bg-after-red selected" [style.left]="(i*200)+'px'">{{instanced.date_of_created|bkUnixTimeToDate}}</a>
-                                        </li>
-                                    </ol>
-                                    <span class="filling-line bg-red" aria-hidden="true" style="transform: scaleX(0.8);"></span>
+                                <strong>{{hardware.main_board_pair.type_of_board_id}}:</strong> {{hardware.main_board_pair.board_id}}<br>
+                                <strong>Program:</strong> {{hardware.main_board_pair.c_program_name}}<br>
+                                <strong>Version: </strong>{{hardware.main_board_pair.c_program_version_name}}<br>
+                                <br>
+                                <div style="margin-left: 10px" *ngFor="let slave of hardware.device_board_pairs">
+                                    <strong>{{slave.board_id}}</strong> {{slave.c_program_name}}<br>
+                                    <strong>Program: </strong>{{slave.c_program_version_name}}<br>
+                                    <br>
                                 </div>
-                                <!-- .events -->
                             </div>
-                            <!-- .events-wrapper -->
-                            <ul class="cd-timeline-navigation mt-ht-nav-icon">
-                                <li>
-                                    <a (click)=timelineMove(100); class="prev btn btn-outline red md-skip">
-                                        <i class="fa fa-chevron-left"></i>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a (click)=timelineMove(-100); class="next btn btn-outline red md-skip inactive">
-                                        <i class="fa fa-chevron-right"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                            <!-- .cd-timeline-navigation -->
+
                         </div>
                     </div>
+                </div>
 
+                <div *ngIf="instance && instance.instance_history" class="cd-horizontal-timeline mt-timeline-horizontal loaded">
+                    <div class="timeline">
+                        <div class="events-wrapper">
+                            <div class="events" style="transition: left 0.6s linear; " [style.width]="1800+'px'" [style.left]="timelinePosition+'px'">
+                                <ol *ngFor="let instanced of instance.instance_history; let i = index">
+
+                                    <li>
+                                        <a class="border-after-red bg-after-red selected" [style.left]="(i*200)+'px'">{{instanced.b_program_version_name}} <br> <span style="font-size: 70%" class="font-grey-salsa">{{instanced.date_of_created|bkUnixTimeToDate}}</span> </a>
+                                       
+                                    </li>
+                                </ol>
+                                <span class="filling-line bg-red" aria-hidden="true" style="transform: scaleX(1);"></span>
+                            </div>
+                            <!-- .events -->
+                        </div>
+                        <!-- .events-wrapper -->
+                        <ul class="cd-timeline-navigation mt-ht-nav-icon">
+                            <li>
+                                <a (click)=timelineMove(100); class="prev btn btn-outline red md-skip">
+                                    <i class="fa fa-chevron-left"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a (click)=timelineMove(-100); class="next btn btn-outline red md-skip inactive">
+                                    <i class="fa fa-chevron-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- .cd-timeline-navigation -->
+                    </div>
                 </div>
 
 
