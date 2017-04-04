@@ -119,14 +119,14 @@
                         <div class="col-sm-6">
                             <h3>Hardware</h3>
                             <div *ngFor="let hardware of instance.actual_instance.hardware_group">
-                               <!--div class=" col-sm-2">
+                                <!--div class=" col-sm-2">
                                 <i class="fa fa-5x fa-hdd-o font-grey-steel" aria-hidden="true"></i> 
                                </div>
                               <div class=" col-sm-10"-->
                                 <strong>{{hardware.main_board_pair.type_of_board_id}}:</strong> {{hardware.main_board_pair.board_id}}<br>
                                 <strong>Program:</strong> {{hardware.main_board_pair.c_program_name}}<br>
                                 <strong>Version: </strong>{{hardware.main_board_pair.c_program_version_name}}<br>
-                              <!--/div-->
+                                <!--/div-->
                                 <br>
                                 <div style="margin-left: 10px" *ngFor="let slave of hardware.device_board_pairs">
                                     <strong>{{slave.board_id}}: </strong>{{slave.c_program_name}}<br>
@@ -179,16 +179,17 @@
 
 
                 <div *ngIf="instanceTab == 'history'">
-
+                    <br>
                     <div *ngIf="instance && instance.instance_history" class="cd-horizontal-timeline mt-timeline-horizontal loaded">
                         <div class="timeline">
                             <div class="events-wrapper">
-                                <div class="events" style="transition: left 0.6s linear; " [style.width]="1800+'px'" [style.left]="timelinePosition+'px'">
-                                    <ol *ngFor="let instanced of instance.instance_history; let i = index">
+                                <div class="events" style="transition: left 0.6s linear; " [style.width]="800+(instance.instance_history.length * 200) +'px'"
+                                    [style.left]="timelinePosition+'px'">
+                                    <ol *ngFor="let instanced of instance.instance_history.slice().reverse(); let i = index">
 
                                         <li>
-                                            <a (click)="onClickHistoryInstance(instanced)" class="border-after-red bg-after-red selected" [style.left]="(i*200)+'px'">{{instanced.b_program_version_name}} + {{i}} <br> <span style="font-size: 70%" class="font-grey-salsa">{{instanced.date_of_created|bkUnixTimeToDate}}</span> </a>
-
+                                            <a (click)="onClickHistoryInstance(instanced)" class="border-after-red bg-after-red selected" [class.selected]="currentHistoricInstance == instanced"
+                                                [style.left]="(i*200)+'px'"><span style="text-overflow: ellipsis; display:inline-block; overflow: hidden;white-space: nowrap;  width: 170px">{{instanced.b_program_version_name}}</span> <br> <span style="font-size: 70%" class="font-grey-salsa">{{instanced.date_of_created|bkUnixTimeToDate}}</span> </a>
                                         </li>
                                     </ol>
                                     <span class="filling-line bg-red" aria-hidden="true" style="transform: scaleX(1);"></span>
@@ -212,65 +213,52 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        {{currentHistoricInstance.b_program_version_name}}
+                    <div class="becki-caption row">
+                        <span class="font-blue-dark uppercase">
+                            <h3> <i class="fa fa-fw fa-hdd-o"></i> {{currentHistoricInstance.b_program_version_name}} </h3>
+                        </span>
                     </div>
-
-
+                    <br>
                     <div class="row">
-
-                        <div class="col-md-6">
-                            <div class="portlet-title">
-                                <div class="becki-caption">
-                                    <span class="font-blue-dark uppercase">
-                                <i class="fa fa-fw fa-desktop"></i> Grid <span class="font-grey-salsa">({{connectionsGridCount()}})</span>
-                                    </span>
+                        <div class="col-sm-12">
+                        <div class="col-6">
+                            <div *ngIf="currentHistoricInstance" class="col-sm-6">
+                                <h3>Grids</h3>
+                                <div *ngFor="let grid of currentHistoricInstance.m_project_snapshot">
+                                    <strong>Grid project: </strong>{{grid.m_project_name}} <br>
+                                    <strong>Grid description: </strong>{{grid.m_project_description}}<br>
+                                    <br>
+                                    <div style="margin-left: 10px" *ngFor="let gridProgram of grid.m_program_snapshots">
+                                        <strong>Grid program: </strong>{{gridProgram.m_program_name}} <br>
+                                        <strong>Grid program: </strong>{{gridProgram.m_program_description}} <br>
+                                        <br>
+                                    </div>
                                 </div>
-                            </div>
-                            <div *ngIf="instance">
-                                <ul class="grid-list" *ngIf="instance.actual_instance.m_project_snapshot && instance.actual_instance.m_project_snapshot.length">
-                                    <li *ngFor="let mProject of instance.actual_instance.m_project_snapshot">
-                                        <i class="fa fa-fw fa-desktop font-purple"></i> {{mProject.m_project_id}} <span class="bold font-red bg-yellow-lemon">TODO</span>
-                                        <ul>
-                                            <li *ngFor="let mProgram of mProject.m_program_snapshot">
-                                                <i class="fa fa-fw fa-desktop font-purple"></i> {{mProgram.m_program_name}}
-                                                <span class="font-grey-salsa">({{mProgram.version_object_name}})</span>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                                <h4 *ngIf="instance.actual_instance.m_project_snapshot && !instance.actual_instance.m_project_snapshot.length">No Grid projects in this instance</h4>
+                                <h4 *ngIf="currentHistoricInstance.m_project_snapshot && !currentHistoricInstance.m_project_snapshot.length">No Grid projects in this instance</h4>
                             </div>
                         </div>
-
-
-
-                        <div class="col-md-6">
-                            <div class="portlet-title">
-                                <div class="becki-caption">
-                                    <span class="font-blue-dark uppercase">
-                                <i class="fa fa-fw fa-microchip"></i> Hardware <span class="font-grey-salsa">({{connectionsHwCount()}})</span>
-                                    </span>
+                        <div class="col-sm-6">
+                            <h3>Hardware</h3>
+                            <div *ngFor="let hardware of currentHistoricInstance.hardware_group">
+                                <!--div class=" col-sm-2">
+                                <i class="fa fa-5x fa-hdd-o font-grey-steel" aria-hidden="true"></i> 
+                               </div>
+                              <div class=" col-sm-10"-->
+                                <strong>{{hardware.main_board_pair.type_of_board_id}}:</strong> {{hardware.main_board_pair.board_id}}<br>
+                                <strong>Program:</strong> {{hardware.main_board_pair.c_program_name}}<br>
+                                <strong>Version: </strong>{{hardware.main_board_pair.c_program_version_name}}<br>
+                                <!--/div-->
+                                <br>
+                                <div style="margin-left: 10px" *ngFor="let slave of hardware.device_board_pairs">
+                                    <strong>{{slave.board_id}}: </strong>{{slave.c_program_name}}<br>
+                                    <strong>Program: </strong>{{slave.c_program_version_name}}<br>
+                                    <br>
                                 </div>
                             </div>
-                            <div>
-                                <div *ngIf="instance">
-                                    <ul class="hw-list" *ngIf="instance.actual_instance.hardware_group && instance.actual_instance.hardware_group.length">
-                                        <li *ngFor="let mainBoard of instance.actual_instance.hardware_group">
-                                            <i class="fa fa-fw fa-microchip font-green-seagreen"></i> {{mainBoard.main_board_pair.board_id}}
-                                            <span class="bold font-red bg-yellow-lemon">TODO</span>
-                                            <ul>
-                                                <li *ngFor="let deviceBoard of mainBoard.device_board_pairs">
-                                                    <i class="fa fa-fw fa-microchip font-green-seagreen"></i> {{deviceBoard.board_id}}
-                                                    <span class="bold font-red bg-yellow-lemon">TODO</span>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
-                                    <h4 *ngIf="instance.actual_instance.hardware_group && !instance.actual_instance.hardware_group.length">No hardware in this instance</h4>
-                                </div>
-                            </div>
+                            <h4 *ngIf="currentHistoricInstance.hardware_group && !currentHistoricInstance.hardware_group.length">No Hardware projects in this instance</h4>
+
                         </div>
+                    </div>
                     </div>
                 </div>
 

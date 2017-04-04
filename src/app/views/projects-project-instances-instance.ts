@@ -86,7 +86,8 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     onClickHistoryInstance(instance: IHomerInstanceRecord) {
         this.currentHistoricInstance = instance;    //TODO probrat zda nechceme zde jenom posílat aktuální pozici objektu v pozici
-    }
+        console.log(instance);
+}
 
     onToggleinstanceTab(tab: string) {
         this.instanceTab = tab;
@@ -107,13 +108,16 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     }
 
     timelineMove(position: number) {
+
         this.timelinePosition += position;
 
         // TODO kontrola, aby hodnoty nepřekročily velikost pole. vše je obráceně tzn. -1200 je doleva (chceme aby to tam jezdilo)
-        if (this.timelinePosition > 0 || this.timelinePosition < (-this.instance.instance_history.length * 200)+800) {
+        if (this.timelinePosition > 0 || this.timelinePosition < (-this.instance.instance_history.length * 200) + 800) {
             this.timelinePosition = 0;
         }
     }
+
+
 
     connectionsGridCount() {
         return NullSafeDefault(() => this.instance.actual_instance.m_project_snapshot, []).length;
