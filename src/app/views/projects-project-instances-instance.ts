@@ -1,4 +1,4 @@
-import { IBProgram, IInstanceShortDetail } from './../backend/TyrionAPI';
+import { IBProgram, IInstanceShortDetail, IHomerInstanceRecord } from './../backend/TyrionAPI';
 /**
  * Created by davidhradek on 01.12.16.
  */
@@ -29,6 +29,8 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     instance: IHomerInstance = null;
 
     timelinePosition: number = 0;
+
+    currentHistoricInstance: IHomerInstanceRecord;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -71,6 +73,8 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
             .then((instance) => {
                 this.instance = instance;
                 this.loadBlockoLiveView();
+                this.timelinePosition = (this.instance.instance_history.length * -200) + 800;
+                this.currentHistoricInstance = this.instance.instance_history.pop();
                 this.unblockUI();
                 console.log(this.instance);
             })
@@ -78,6 +82,10 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                 this.fmError(`Instances ${this.id} cannot be loaded.`, reason);
                 this.unblockUI();
             });
+    }
+
+    onClickHistoryInstance(instance: IHomerInstanceRecord) {
+        this.currentHistoricInstance = instance;    //TODO probrat zda nechceme zde jenom posílat aktuální pozici objektu v pozici
     }
 
     onToggleinstanceTab(tab: string) {
@@ -102,7 +110,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
         this.timelinePosition += position;
 
         // TODO kontrola, aby hodnoty nepřekročily velikost pole. vše je obráceně tzn. -1200 je doleva (chceme aby to tam jezdilo)
-        if (this.timelinePosition > 0 || this.timelinePosition < (-this.instance.instance_history.length * 200)) {
+        if (this.timelinePosition > 0 || this.timelinePosition < (-this.instance.instance_history.length * 200)+800) {
             this.timelinePosition = 0;
         }
     }
