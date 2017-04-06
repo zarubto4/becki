@@ -6,7 +6,7 @@
  * directory of this distribution.
  */
 
-import { BlockoCore, BlockoSnapRenderer, BlockoBasicBlocks, BlockoTargetInterface } from 'blocko';
+import { BlockoCore, BlockoPaperRenderer, BlockoBasicBlocks, BlockoTargetInterface } from 'blocko';
 import {
     Component,
     AfterViewInit,
@@ -53,13 +53,13 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     protected blockoController: BlockoCore.Controller;
 
-    protected blockoRenderer: BlockoSnapRenderer.RendererController;
+    protected blockoRenderer: BlockoPaperRenderer.RendererController;
 
     @ViewChild('field')
     field: ElementRef;
 
     constructor(protected modalService: ModalService) {
-        this.blockoRenderer = new BlockoSnapRenderer.RendererController();
+        this.blockoRenderer = new BlockoPaperRenderer.RendererController();
         this.blockoRenderer.registerOpenConfigCallback((block) => {
             this.modalService.showModal(new ModalsBlockoConfigPropertiesModel(block));
         });
@@ -74,12 +74,12 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         this.blockoController = new BlockoCore.Controller();
         this.blockoController.safeRun = this.safeRun;
         this.blockoController.rendererFactory = this.blockoRenderer;
-        this.blockoController.registerDataChangedCallback(() => {
+        /*this.blockoController.registerDataChangedCallback(() => {
             // TODO: why? [DH]
             // modalComponent.closeModal(false);
             // console.log("CHANGED!!!!!!");
             // this.dataChange.emit(this.blockoController.getDataJson());
-        });
+        });*/
         this.blockoController.registerErrorCallback((block: BlockoCore.Block, error: any) => {
             this.onError.emit({block: block, error: error});
         });
@@ -185,8 +185,8 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     addTsBlockWithoutReadonlyCheck(tsCode: string, designJson: string, x: number = 0, y: number = 0): BlockoBasicBlocks.TSBlock {
         let b = new BlockoBasicBlocks.TSBlock(this.blockoController.getFreeBlockId(), '', designJson);
-        b.x = Math.round(x / 10) * 10; // TODO: move this to blocko
-        b.y = Math.round(y / 10) * 10;
+        b.x = Math.round(x / 15) * 15; // TODO: move this to blocko
+        b.y = Math.round(y / 15) * 15;
         this.blockoController.addBlock(b);
         b.setCode(tsCode);
         return b;
