@@ -93,9 +93,9 @@ export class ModalsBlockoBlockCodeEditorComponent implements OnInit {
             });
             this.modalModel.block.setDesignJson(designJson);
             this.modalModel.block.setCode(this.code);
-            if (this.modalModel.block.controller) {
+            /*if (this.modalModel.block.controller) {
                 this.modalModel.block.controller._emitDataChanged();
-            }
+            }*/
             this.modalClose.emit(true);
         }
     }
