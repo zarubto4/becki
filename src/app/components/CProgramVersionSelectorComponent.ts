@@ -3,7 +3,7 @@
  */
 
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { ISwaggerCProgramShortDetailForBlocko } from '../backend/TyrionAPI';
+import { ICProgramShortDetailForBlocko } from '../backend/TyrionAPI';
 
 @Component({
     selector: 'bk-c-program-version-selector',
@@ -39,7 +39,7 @@ import { ISwaggerCProgramShortDetailForBlocko } from '../backend/TyrionAPI';
 export class CProgramVersionSelectorComponent implements OnInit {
 
     @Input()
-    cPrograms: ISwaggerCProgramShortDetailForBlocko[] = null;
+    cPrograms: ICProgramShortDetailForBlocko[] = null;
 
     @Input()
     value: string = null;
@@ -47,7 +47,7 @@ export class CProgramVersionSelectorComponent implements OnInit {
     @Output()
     valueChanged: EventEmitter<string> = new EventEmitter<string>();
 
-    selectedProgram: ISwaggerCProgramShortDetailForBlocko = null;
+    selectedProgram: ICProgramShortDetailForBlocko = null;
     selectedProgramId: string = null;
     selectedProgramVersionId: string = null;
 

@@ -19,8 +19,8 @@ import {
     IMProject,
     IMProgramSnapShot,
     IMProjectSnapShot, IBlockoBlockVersionShortDetail, IBoardShortDetail,
-    IBProgramVersionShortDetail, ISwaggerCProgramShortDetailForBlocko, ISwaggerCProgramVersionsShortDetailForBlocko,
-    ISwaggerMProjectShortDetailForBlocko, IHardwareGroupIN
+    IBProgramVersionShortDetail, ICProgramShortDetailForBlocko, ICProgramVersionsShortDetailForBlocko,
+    IMProjectShortDetailForBlocko, IHardwareGroupIN
 } from '../backend/TyrionAPI';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { DraggableEventParams } from '../components/DraggableDirective';
@@ -76,7 +76,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     // grid:
 
-    allGridProjects: ISwaggerMProjectShortDetailForBlocko[] = null;
+    allGridProjects: IMProjectShortDetailForBlocko[] = null;
 
     selectedGridProgramVersions: { [projectId: string]: { [programId: string]: string } } = {};
 
@@ -350,7 +350,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         return (Object.keys(obj).length === 0);
     }
 
-    getCProgramsForBoardType(boardTypeId: string): ISwaggerCProgramShortDetailForBlocko[] {
+    getCProgramsForBoardType(boardTypeId: string): ICProgramShortDetailForBlocko[] {
         if (!this.allBoardsDetails || !this.allBoardsDetails.c_programs) {
             return [];
         }
@@ -549,8 +549,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     }
 
-    getCProgramVersionById(programVersionId: string): ISwaggerCProgramVersionsShortDetailForBlocko {
-        let ret: ISwaggerCProgramVersionsShortDetailForBlocko = null;
+    getCProgramVersionById(programVersionId: string): ICProgramVersionsShortDetailForBlocko {
+        let ret: ICProgramVersionsShortDetailForBlocko = null;
 
         if (this.allBoardsDetails && this.allBoardsDetails.c_programs) {
 
@@ -1020,7 +1020,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 let typeOfBlocks: ITypeOfBlock[] = values[0];
                 let blockoDetails: IBoardsForBlocko = values[1];
 
-                let projects: ISwaggerMProjectShortDetailForBlocko[] = blockoDetails.m_projects;
+                let projects: IMProjectShortDetailForBlocko[] = blockoDetails.m_projects;
 
                 // TODO: make this better viz. TYRION-374
                 this.blocksLastVersions = {};
