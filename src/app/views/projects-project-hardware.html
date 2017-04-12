@@ -14,6 +14,10 @@
                 </span>
             </div>
             <div class="becki-actions">
+
+                <button *ngIf ="bootloaderRequred" class="btn red" (click)="onUpdateListBootloaderClick($event)">
+                    <i class="fa fa-plus-circle"></i> Update Bootloader(List)
+                </button>
                 <button class="btn blue" (click)="onAddClick($event)">
                     <i class="fa fa-plus-circle"></i> Add hardware device
                 </button>
@@ -25,7 +29,9 @@
                 <tr>
                     <th>ID</th>
                     <th>Type</th>
-                    <th class="full-width">Description</th>
+                    <th>Personal Description</th>
+                    <th>Alerts</th>
+                    <th>Stats</th>
                     <th class="text-center">Actions</th>
                 </tr>
                 </thead>
@@ -34,6 +40,8 @@
                     <td class="no-wrap bold"><a (click)="onDeviceClick(device)">{{device.id}}</a></td>
                     <td class="no-wrap"><a (click)="onBoardTypeClick(device.type_of_board_id)">{{device.type_of_board_name}}</a></td>
                     <td>{{device.personal_description}}</td>
+                    <td><span *ngIf="device.update_boot_loader_required" ><a (click)="onUpdateBootloaderClick(device)" class="font-red-intense"> Bootloader Update Required </a></span></td>
+                    <td><span *ngIf="device.board_online_status" class="font-green-jungle">Online</span> <span *ngIf="!device.board_online_status" class="font-red-flamingo">Offline</span></td>
                     <td class="no-wrap">
                         <button title="Device properties" class="btn btn-icon-only green" [disabled]="!device.edit_permission" (click)="onEditClick(device)">
                             <i class="fa fa-cog"></i>
