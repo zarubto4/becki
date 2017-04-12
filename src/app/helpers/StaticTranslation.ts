@@ -17,19 +17,15 @@ export class StaticTranslation {
             'board_state': {
                 'UNKNOWN': 'unknown',
                 'NO_COLLISION': 'We are not found any collisions',
-                'ALREADY_IN_INSTANCE': 'the code is already in instance',
+                'ALREADY_IN_INSTANCE': 'Attention! Hardware is already running in the Instance',
                 'PLANNED_UPDATE': 'the update is planned',
-            },
-            'foo': {
-                'bar': 'a',
-                'foo': 'b',
             }
         },
         'cz': {
             'board_state': {
                 'UNKNOWN': 'neznámé',
                 'NO_COLLISION': 'Nenašli jsme žádné konflikty',
-                'ALREADY_IN_INSTANCE': 'cod je již v instanci',
+                'ALREADY_IN_INSTANCE': 'Pozor! Daný hardware je již v instanci',
                 'PLANNED_UPDATE': 'naplánovaná aktualizace',
             }
         }

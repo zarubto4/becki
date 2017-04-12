@@ -19,8 +19,8 @@ import {
     IMProject,
     IMProgramSnapShot,
     IMProjectSnapShot, IBlockoBlockVersionShortDetail, IBoardShortDetail,
-    IBProgramVersionShortDetail, ICProgramShortDetailForBlocko, ICProgramVersionsShortDetailForBlocko,
-    IMProjectShortDetailForBlocko, IHardwareGroupIN
+    IBProgramVersionShortDetail, IHardwareGroupIN, IMProjectShortDetailForBlocko, ICProgramVersionsShortDetailForBlocko,
+    ICProgramShortDetailForBlocko
 } from '../backend/TyrionAPI';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { DraggableEventParams } from '../components/DraggableDirective';

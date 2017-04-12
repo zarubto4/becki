@@ -21,29 +21,31 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
+
                     <th>ID</th>
-                    <th class="no-wrap">Server</th>
-                    <th class="no-wrap">Status</th>
                     <th class="no-wrap">Blocko program</th>
-                    <th class="full-width">Description</th>
+                    <th class="no-wrap">Version</th>
+                    <th class="no-wrap">Status</th>
+                    <th class="text-right">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let instance of instances">
                     <td class="no-wrap bold"><a (click)="onInstanceClick(instance)">{{instance.id}}</a></td>
-                    <td class="no-wrap">
-                        <span class="font-grey-mint" *ngIf="instance.server_name">
-                            {{instance.server_name}}
-                            (<span *ngIf="instance.server_is_online" class="font-green-jungle">Online</span><span *ngIf="!instance.server_is_online" class="font-red">Offline</span>)
-                        </span>
-                        <span class="font-grey-salsa" *ngIf="!instance.server_name">None</span>
-                    </td>
+                    <td class="no-wrap"><a (click)="onBlockoProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></td>
+                    <td class="no-wrap"><a (click)="onBlockoVersionProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></td>
                     <td class="no-wrap">
                         <span *ngIf="instance.instance_is_online" class="font-green-jungle">Online</span>
                         <span *ngIf="!instance.instance_is_online" class="font-red">Offline</span>
                     </td>
-                    <td class="no-wrap"><a (click)="onBlockoProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></td>
-                    <td>{{instance.b_program_description}}</td>
+                    <td class="no-wrap text-right">
+                        <button title="shutdown" class="btn btn-icon-only red-flamingo" (click)="onInstanceShutdownClick(instance)"> <!-- TODO PERMISIONS -->
+                            <i class="fa fa-power-off"></i>
+                        </button>
+                        <button title="edit instence" class="btn btn-icon-only grey" (click)="onInstanceEditClick(instance)"> <!-- TODO PERMISIONS -->
+                            <i class="fa fa-cogs"></i>
+                        </button>
+                    </td>
                 </tr>
                 </tbody>
             </table>

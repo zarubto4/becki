@@ -1,4 +1,4 @@
-import { IBProgram, IInstanceShortDetail } from './../backend/TyrionAPI';
+
 /**
  * Created by davidhradek on 01.12.16.
  */
@@ -7,11 +7,12 @@ import { IBProgram, IInstanceShortDetail } from './../backend/TyrionAPI';
  * © 2016 Becki Authors. See the AUTHORS file found in the top-level
  * directory of this distribution.
  */
+import { IHomerInstanceRecord } from './../backend/TyrionAPI';
 import { Component, OnInit, Injector, OnDestroy, ViewChild } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
 import { IHomerInstance } from '../backend/TyrionAPI';
-import { NullSafe, NullSafeDefault } from '../helpers/NullSafe';
+import { NullSafeDefault } from '../helpers/NullSafe';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { HomerService, HomerDao } from '../services/HomerService';
@@ -24,10 +25,13 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     id: string;
     instanceId: string;
-
     routeParamsSubscription: Subscription;
 
     instance: IHomerInstance = null;
+
+    timelinePosition: number = 0;
+
+    currentHistoricInstance: IHomerInstanceRecord;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -35,6 +39,8 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     blockoView: BlockoViewComponent;
 
     homerDao: HomerDao;
+
+    instanceTab: string = 'schema';
 
     private homerService: HomerService = null;
 
@@ -62,16 +68,28 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     refresh(): void {
         this.blockUI();
+        // this.instance.actual_instance.procedures.forEach(proc => proc.updates.forEach(update => update.));
+
         this.backendService.getInstance(this.instanceId)
             .then((instance) => {
                 this.instance = instance;
                 this.loadBlockoLiveView();
+                this.timelinePosition = (this.instance.instance_history.length * -200) + 800;
+                this.currentHistoricInstance = this.instance.instance_history.pop();
                 this.unblockUI();
             })
             .catch(reason => {
                 this.fmError(`Instances ${this.id} cannot be loaded.`, reason);
                 this.unblockUI();
             });
+    }
+
+    onClickHistoryInstance(instance: IHomerInstanceRecord) {
+        this.currentHistoricInstance = instance;    // TODO probrat zda nechceme zde jenom posílat aktuální pozici objektu v pozici
+    }
+
+    onToggleinstanceTab(tab: string) {
+        this.instanceTab = tab;
     }
 
     onBlockoProgramClick(bProgramId: string) {
@@ -85,15 +103,59 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
             padawansCount += sh.device_board_pairs.length;
         });
         return yodaCount + ' + ' + padawansCount;
+
     }
+
+    timelineMove(position: number) {
+
+        this.timelinePosition += position;
+
+        // TODO kontrola, aby hodnoty nepřekročily velikost pole. vše je obráceně tzn. -1200 je doleva (chceme aby to tam jezdilo)
+        if (this.timelinePosition > 0 || this.timelinePosition < (-this.instance.instance_history.length * 200) + 800) {
+            this.timelinePosition = 0;
+        }
+    }
+
 
     connectionsGridCount() {
         return NullSafeDefault(() => this.instance.actual_instance.m_project_snapshot, []).length;
     }
 
-    onBlockoProgramVersionClick(instance: IHomerInstance) {
-        this.router.navigate(['/projects', this.id, 'blocko', instance.b_program_id , {version: instance.actual_instance.b_program_version_id}]);
+    onEditClick() {
 
+    }
+
+    onRemoveClick() {
+
+    }
+
+    onBlockoClick() {
+
+    }
+
+    onBlockoProgramVersionClick(instance: IHomerInstance) {
+        this.router.navigate(['/projects', this.id, 'blocko', instance.b_program_id, {version: instance.actual_instance.b_program_version_id}]);
+
+    }
+
+    onGridProjectClick(projectId: string) {
+        this.router.navigate(['projects', this.id, 'grid', projectId]);
+    }
+
+    onGridProgramClick(projectId: string, programId: string) {
+        this.router.navigate(['projects', this.id, 'grid', projectId, programId]);
+    }
+
+    onHardwareClick(hardwareId: string) {
+        this.router.navigate(['projects', this.id, 'hardware', hardwareId]);
+    }
+
+    onCProgramClick(projectId: string) {
+        this.backendService.getCProgramVersion(projectId).then(Cprogram => this.router.navigate(['projects', this.id, 'code']));
+    }
+
+    onCProgramVersionClick(projectId: string, programId: string) {
+        this.router.navigate(['projects', this.id, 'code', projectId, programId]);
     }
 
 
