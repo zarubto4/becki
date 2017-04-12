@@ -95,21 +95,17 @@
                     <div class="col-6">
                         <strong>Server name: </strong>{{instance.server_name}}<span class=" font-green-jungle" style="font-size: 11px">({{instance.server_is_online?'online':'offline'}})</span>
                     </div>
-                    <div class="col-6">
-                        <strong>Instance name: </strong>{{instance.blocko_instance_name}}<span class=" font-green-jungle"
-                            style="font-size: 11px">({{instance.instance_online?'online':'offline'}})</span>
-                    </div>
                     <div class="row">
                         <div class="col-6">
                             <div *ngIf="instance.actual_instance.m_project_snapshot" class="col-sm-6">
                                 <h3>Grids</h3>
                                 <div *ngFor="let grid of instance.actual_instance.m_project_snapshot">
-                                    <strong>Grid project: </strong>{{grid.m_project_name}} <br>
+                                    <strong>Grid project: </strong> <a (click)="onGridProjectClick(grid.m_project_id)"> {{grid.m_project_name}}</a><br>
                                     <strong>Grid description: </strong>{{grid.m_project_description}}<br>
                                     <br>
                                     <div style="margin-left: 10px" *ngFor="let gridProgram of grid.m_program_snapshots">
-                                        <strong>Grid program: </strong>{{gridProgram.m_program_name}} <br>
-                                        <strong>Grid program: </strong>{{gridProgram.m_program_description}} <br>
+                                        <strong>Grid program: </strong> <a (click)="onGridProgramClick(grid.m_project_id,gridProgram.m_program_id)">{{gridProgram.m_program_name}}</a> <br>
+                                        <strong>Grid description: </strong>{{gridProgram.m_program_description}} <br>
                                         <br>
                                     </div>
                                 </div>
@@ -120,17 +116,17 @@
                             <h3>Hardware</h3>
                             <div *ngFor="let hardware of instance.actual_instance.hardware_group">
                                 <!--div class=" col-sm-2">
-                                <i class="fa fa-5x fa-hdd-o font-grey-steel" aria-hidden="true"></i> 
+                                <i class="fa fa-5x fa-hdd-o font-grey-steel" aria-hidden="true"></i>
                                </div>
                               <div class=" col-sm-10"-->
-                                <strong>{{hardware.main_board_pair.type_of_board_id}}:</strong> {{hardware.main_board_pair.board_id}}<br>
-                                <strong>Program:</strong> {{hardware.main_board_pair.c_program_name}}<br>
-                                <strong>Version: </strong>{{hardware.main_board_pair.c_program_version_name}}<br>
+                                <strong>{{hardware.main_board_pair.type_of_board_id}}:</strong> <a (click)="onHardwareClick(hardware.main_board_pair.board_id)">{{hardware.main_board_pair.board_id}}</a><br>
+                                <strong>Program:</strong> <a (click)="onCProgramClick(hardware)">{{hardware.main_board_pair.c_program_name}}</a><br>
+                                <strong>Version: </strong> <a (click)="onCProgramVersionClick(hardware)">{{hardware.main_board_pair.c_program_version_name}}</a><br>
                                 <!--/div-->
                                 <br>
                                 <div style="margin-left: 10px" *ngFor="let slave of hardware.device_board_pairs">
-                                    <strong>{{slave.board_id}}: </strong>{{slave.c_program_name}}<br>
-                                    <strong>Program: </strong>{{slave.c_program_version_name}}<br>
+                                    <strong><a (click)="onHardwareClick(hardware.slave.board_id)">{{slave.board_id}}</a>: </strong><a (click)="onCProgramClick(hardware)">{{slave.c_program_name}}</a><br>
+                                    <strong>Program: </strong><a (click)="onCProgramVersionClick(hardware)">{{slave.c_program_version_name}}</a><br>
                                     <br>
                                 </div>
                             </div>
@@ -139,7 +135,7 @@
                         </div>
                     </div>
 
-                    <div *ngIf="instance && instance.instance_history" class="cd-horizontal-timeline mt-timeline-horizontal loaded">
+                    <div *ngIf="instance && instance.instance_history && instance.instance_history.length > 1" class="cd-horizontal-timeline mt-timeline-horizontal loaded">
                         <div class="timeline">
                             <div class="events-wrapper">
                                 <div class="events" style="transition: left 0.6s linear; " [style.width]="800+(instance.instance_history.length * 200) +'px'"
@@ -180,7 +176,7 @@
 
                 <div *ngIf="instanceTab == 'history'">
                     <br>
-                    <div *ngIf="instance && instance.instance_history" class="cd-horizontal-timeline mt-timeline-horizontal loaded">
+                    <div *ngIf="instance && instance.instance_history && instance.instance_history.length > 1" class="cd-horizontal-timeline mt-timeline-horizontal loaded">
                         <div class="timeline">
                             <div class="events-wrapper">
                                 <div class="events" style="transition: left 0.6s linear; " [style.width]="800+(instance.instance_history.length * 200) +'px'"
@@ -241,7 +237,7 @@
                             <h3>Hardware</h3>
                             <div *ngFor="let hardware of currentHistoricInstance.hardware_group">
                                 <!--div class=" col-sm-2">
-                                <i class="fa fa-5x fa-hdd-o font-grey-steel" aria-hidden="true"></i> 
+                                <i class="fa fa-5x fa-hdd-o font-grey-steel" aria-hidden="true"></i>
                                </div>
                               <div class=" col-sm-10"-->
                                 <strong>{{hardware.main_board_pair.type_of_board_id}}:</strong> {{hardware.main_board_pair.board_id}}<br>
@@ -265,22 +261,30 @@
 
                 <div *ngIf="instanceTab == 'update'">
                     <div class="table-scrollable">
-                        <table class="table table-hover">
+                        <table  *ngFor="let procedure of instance.actual_instance.procedures" class="table table-hover">
                             <thead>
+                            <tr><td>Id: {{procedure.id}}</td> </tr>
+                            <tr>
+                                <td> <strong>Created: </strong> {{procedure.date_of_create|bkUnixTimeToDate}}</td>
+                                <td> <strong>Planned: </strong> {{procedure.date_of_planing|bkUnixTimeToDate}}</td>
+                                <td> <strong>Update type: </strong> {{procedure.type_of_update|bkTanslate}}</td>
+                                <td> <strong>Progress: </strong> {{procedure.state_fraction}}</td>
+                            </tr>
+                            <tr> <td> </td> </tr>
                                 <tr>
                                     <th>Type of Device</th>
-                                    <th>Board ID</th>
-                                    <th>Actual Program</th>
+                                    <th>Starting date</th>
+                                    <th>Planned date</th>
                                     <th>Required program</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let update of instance.actual_instance.procedures">
-                                    <td class="font-red-flamingo yellow-casablanca"> ?? </td>
-                                    <td>{{update.id}}</td>
-                                    <td class="font-red-flamingo yellow-casablanca"> ?? </td>
-                                    <td class="font-red-flamingo yellow-casablanca"> ?? </td>
+                                <tr *ngFor="let update of procedure.updates">
+                                    <td>{{update.board_detail.type_of_board_name}}</td>
+                                    <td>{{update.date_of_create|bkUnixTimeToDate}}</td>
+                                    <td>{{update.date_of_planing|bkUnixTimeToDate}}</td>
+                                    <td>{{update.firmware_type}}</td>
                                     <td>{{update.state}} </td>
                                 </tr>
                             </tbody>

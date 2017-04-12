@@ -1,4 +1,4 @@
-import { IBProgram, IInstanceShortDetail, IHomerInstanceRecord } from './../backend/TyrionAPI';
+
 /**
  * Created by davidhradek on 01.12.16.
  */
@@ -7,11 +7,12 @@ import { IBProgram, IInstanceShortDetail, IHomerInstanceRecord } from './../back
  * © 2016 Becki Authors. See the AUTHORS file found in the top-level
  * directory of this distribution.
  */
+import { IHomerInstanceRecord } from './../backend/TyrionAPI';
 import { Component, OnInit, Injector, OnDestroy, ViewChild } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
 import { IHomerInstance } from '../backend/TyrionAPI';
-import { NullSafe, NullSafeDefault } from '../helpers/NullSafe';
+import { NullSafeDefault } from '../helpers/NullSafe';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { HomerService, HomerDao } from '../services/HomerService';
@@ -76,7 +77,6 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                 this.timelinePosition = (this.instance.instance_history.length * -200) + 800;
                 this.currentHistoricInstance = this.instance.instance_history.pop();
                 this.unblockUI();
-                console.log(this.instance);
             })
             .catch(reason => {
                 this.fmError(`Instances ${this.id} cannot be loaded.`, reason);
@@ -85,9 +85,8 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     }
 
     onClickHistoryInstance(instance: IHomerInstanceRecord) {
-        this.currentHistoricInstance = instance;    //TODO probrat zda nechceme zde jenom posílat aktuální pozici objektu v pozici
-        console.log(instance);
-}
+        this.currentHistoricInstance = instance;    // TODO probrat zda nechceme zde jenom posílat aktuální pozici objektu v pozici
+    }
 
     onToggleinstanceTab(tab: string) {
         this.instanceTab = tab;
@@ -118,7 +117,6 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     }
 
 
-
     connectionsGridCount() {
         return NullSafeDefault(() => this.instance.actual_instance.m_project_snapshot, []).length;
     }
@@ -130,12 +128,34 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     onRemoveClick() {
 
     }
+
     onBlockoClick() {
 
     }
-    onBlockoProgramVersionClick(instance: IHomerInstance) {
-        this.router.navigate(['/projects', this.id, 'blocko', instance.b_program_id, { version: instance.actual_instance.b_program_version_id }]);
 
+    onBlockoProgramVersionClick(instance: IHomerInstance) {
+        this.router.navigate(['/projects', this.id, 'blocko', instance.b_program_id, {version: instance.actual_instance.b_program_version_id}]);
+
+    }
+
+    onGridProjectClick(projectId: string) {
+        this.router.navigate(['projects', this.id, 'grid', projectId]);
+    }
+
+    onGridProgramClick(projectId: string, programId: string) {
+        this.router.navigate(['projects', this.id, 'grid', projectId, programId]);
+    }
+
+    onHardwareClick(hardwareId: string) {
+        this.router.navigate(['projects', this.id, 'hardware', hardwareId]);
+    }
+
+    onCProgramClick(projectId: string) {
+        this.backendService.getCProgramVersion(projectId).then(Cprogram => this.router.navigate(['projects', this.id, 'code']));
+    }
+
+    onCProgramVersionClick(projectId: string, programId: string) {
+        this.router.navigate(['projects', this.id, 'code', projectId, programId]);
     }
 
 

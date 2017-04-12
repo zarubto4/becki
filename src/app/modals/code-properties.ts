@@ -51,7 +51,7 @@ export class ModalsCodePropertiesComponent implements OnInit {
         this.options = formSelectComponentOptionsMaker(this.modalModel.typeOfBoards, 'id', 'name');
 
         let input: { [key: string]: any } = {
-            'name': [this.modalModel.name, [Validators.required, Validators.minLength(4)]],
+            'name': [this.modalModel.name, [Validators.required, Validators.minLength(4), Validators.maxLength(32)]],
             'description': [this.modalModel.description]
         };
 
