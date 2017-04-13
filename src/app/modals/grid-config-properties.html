@@ -63,7 +63,7 @@
                     <div *ngIf="StringToConfigPropertyTypeTable[configProperty.type] == ConfigPropertyType.String" class="form-group input-row">
                         <label>{{configProperty.displayName}}</label>
                         <input [name]="configProperty.id" class="form-control" type="text" [(ngModel)]="formModelProperties[configProperty.id]" [readonly]="configProperty.config.options" *ngIf="!configProperty.config.multiline && !configProperty.config.options">
-                        <textarea class="form-control" rows="4" [(ngModel)]="formModel[configProperty.name]" *ngIf="configProperty.config.multiline && !configProperty.config.options"></textarea>
+                        <textarea class="form-control" rows="4" [(ngModel)]="formModelProperties[configProperty.name]" *ngIf="configProperty.config.multiline && !configProperty.config.options"></textarea>
 
                         <select [name]="configProperty.id" class="form-control" [(ngModel)]="formModelProperties[configProperty.id]" *ngIf="configProperty.config.options">
                             <option *ngFor="let option of configProperty.config.options;" [ngValue]="option">{{option}}</option>

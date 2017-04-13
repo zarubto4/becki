@@ -101,7 +101,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
             });
             this.refresh();
         });
-        this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib, Libs.ConsoleLib, Libs.UtilsLib]);
+        this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib, Libs.ConsoleLib, Libs.UtilsLib, Blocks.FetchLib, Blocks.ServiceLib, this.blockoView.serviceHandler]);
 
     }
 
@@ -351,7 +351,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                     displayName: this.blockForm.controls['icon'].value,
                     description: this.blockForm.controls['description'].value
                 });
-                this.tsBlock = this.blockoView.addTsBlockWithoutReadonlyCheck('', designJson, 20, 15);
+                this.tsBlock = this.blockoView.addTsBlockWithoutReadonlyCheck('', designJson, 22, 15);
             } catch (e) { // TODO: promyslet jestli othle je ok [DH]
             }
 

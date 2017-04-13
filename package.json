@@ -27,7 +27,7 @@
     "@angular/platform-browser": "~2.4.0",
     "@angular/platform-browser-dynamic": "~2.4.0",
     "@angular/router": "~3.4.0",
-    "blocko": "git+ssh://git@git.byzance.cz:js-components/blocko.git#v0.1.37",
+    "blocko": "git+ssh://git@git.byzance.cz:js-components/blocko.git#v0.1.40",
     "common-lib": "git+ssh://git@git.byzance.cz:js-components/common-lib.git#v0.0.24",
     "core-js": "^2.4.1",
     "font-awesome": "^4.7.0",

@@ -179,7 +179,6 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     /* tslint:enable */
 
     private monacoEditorLoaderService: MonacoEditorLoaderService = null;
-
     protected afterLoadSelectedVersionId: string = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
@@ -200,7 +199,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             }
         });
         this.refresh();
-        this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib, Libs.ConsoleLib, Libs.UtilsLib]);
+        this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib, Libs.ConsoleLib, Libs.UtilsLib, Blocks.FetchLib, Blocks.ServiceLib, this.blockoView.serviceHandler]);
     }
 
     selectVersionByVersionId(versionId: string) {

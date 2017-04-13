@@ -6,7 +6,7 @@
  * directory of this distribution.
  */
 
-import { BlockoCore, BlockoPaperRenderer, BlockoBasicBlocks, BlockoTargetInterface } from 'blocko';
+import { BlockoCore, BlockoPaperRenderer, BlockoBasicBlocks, BlockoTargetInterface, Blocks } from 'blocko';
 import {
     Component,
     AfterViewInit,
@@ -45,6 +45,9 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     @Input()
     spy: string;
 
+    @Input()
+    autosize: boolean = false;
+
     @Output()
     onError: EventEmitter<{block: BlockoCore.Block, error: any}> = new EventEmitter<{block: BlockoCore.Block, error: any}>();
 
@@ -70,8 +73,14 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         this.blockoRenderer.showBlockNames = this.showBlockNames;
         this.blockoRenderer.simpleMode = this.simpleMode;
         this.blockoRenderer.canConfigInReadonly = true;
+        this.blockoRenderer.autosize = this.autosize;
 
         this.blockoController = new BlockoCore.Controller();
+
+        this.blockoController.registerService(new Blocks.FetchService());
+        this.blockoController.registerService(new Blocks.XmlApiService());
+        this.blockoController.registerService(new Blocks.RestApiService());
+
         this.blockoController.safeRun = this.safeRun;
         this.blockoController.rendererFactory = this.blockoRenderer;
         /*this.blockoController.registerDataChangedCallback(() => {
@@ -87,6 +96,10 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             this.onLog.emit({block: block, type: type, message: message});
         });
         this.blockoController.registerBlocks(BlockoBasicBlocks.Manager.getAllBlocks());
+    }
+
+    public get serviceHandler(): Blocks.ServicesHandler {
+        return this.blockoController.servicesHandler;
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -170,8 +183,8 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         }
 
         let b: BlockoCore.Block = new bc(this.blockoController.getFreeBlockId());
-        b.x = Math.round(x / 10) * 10; // TODO: move this to blocko
-        b.y = Math.round(y / 10) * 10;
+        b.x = Math.round(x / 15) * 15; // TODO: move this to blocko
+        b.y = Math.round(y / 15) * 15;
         this.blockoController.addBlock(b);
         return b;
     }
@@ -185,8 +198,8 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     addTsBlockWithoutReadonlyCheck(tsCode: string, designJson: string, x: number = 0, y: number = 0): BlockoBasicBlocks.TSBlock {
         let b = new BlockoBasicBlocks.TSBlock(this.blockoController.getFreeBlockId(), '', designJson);
-        b.x = Math.round(x / 15) * 15; // TODO: move this to blocko
-        b.y = Math.round(y / 15) * 15;
+        b.x = Math.round(x / 22) * 22; // TODO: move this to blocko
+        b.y = Math.round(y / 22) * 22;
         this.blockoController.addBlock(b);
         b.setCode(tsCode);
         return b;

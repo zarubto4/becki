@@ -46,7 +46,7 @@
 
                 <div class="form-group">
                     <label>Block code</label>
-                    <bk-monaco-editor [code]="blockCode" (codeChange)="newBlockCode($event)" [typings]="['TSBlockLib', 'ConsoleLib', 'UtilsLib', 'ES5']"></bk-monaco-editor>
+                    <bk-monaco-editor [code]="blockCode" (codeChange)="newBlockCode($event)" [typings]="['TSBlockLib', 'ConsoleLib', 'UtilsLib', 'FetchLib', 'ServiceLib', 'BlockoServiceHandler', 'ES5' ]"></bk-monaco-editor>
                 </div>
 
                 <div *ngFor="let tsError of tsErrors;" class="mt-element-ribbon bg-grey-steel">
@@ -162,8 +162,8 @@
                     </div>
                     <div class="col-md-4" style="width: 130px; overflow: hidden;" [style.display]="tsBlock?'inline-block':'none'">
                         <h4 *ngIf="tsBlock" class="text-center">Block</h4>
-                        <div [style.height]="(tsBlockHeight+30)+'px'" style="background-color: #333;">
-                            <bk-blocko-view readonly="true" safeRun="true" (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)" class="blocko-overflow-visible blocko-no-borders-and-bg"></bk-blocko-view>
+                        <div style="background-color: #333; width: 105px;">
+                            <bk-blocko-view autosize="true" readonly="true" safeRun="true" (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)" class="blocko-overflow-visible blocko-no-borders-and-bg"></bk-blocko-view>
                         </div>
                     </div>
                     <div class="col-md-4" style="width: calc(50% - 65px)" [style.display]="tsBlock?'inline-block':'none'">
