@@ -44,7 +44,11 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
             this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
                 this.project = project;
                 this.devices = project.boards;
-                if(this.devices.find(device => device.update_boot_loader_required==true)){this.bootloaderRequred = true;}else{this.bootloaderRequred = false;};
+                if (this.devices.find(device => device.update_boot_loader_required === true)) {
+                    this.bootloaderRequred = true;
+                } else {
+                    this.bootloaderRequred = false;
+                }
                 // TODO ten `If` bude nejspíše třeba přesunout aby se to refreshovalo při editaci/mazání HW
             });
         });
@@ -57,12 +61,12 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         }
     }
 
-    onUpdateListBootloaderClick(){
-    //mass bootloader magic
+    onUpdateListBootloaderClick() {
+        // mass bootloader magic
     }
 
-    onUpdateBootloaderClick(selected:IBoardShortDetail){
-    
+    onUpdateBootloaderClick(selected: IBoardShortDetail) {
+
     }
 
     onEditClick(device: IBoardShortDetail): void {
