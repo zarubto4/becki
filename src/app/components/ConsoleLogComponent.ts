@@ -68,7 +68,7 @@ export class ConsoleLogComponent {
         this.items.unshift({
             timestamp: timestamp,
             type: type,
-            message: message,
+            message: message.replace(/\n/g, '<br>').replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;'),
             source: source
         });
     }
