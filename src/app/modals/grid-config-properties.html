@@ -4,88 +4,86 @@
         <h4 class="modal-title">Configuration of widget</h4>
     </div>
     <div class="modal-body widget-config">
-        <form #form="ngForm">
-            <template [ngIf]="widgetVersions && widgetVersions.length > 0">
-                <h4>Widget code version</h4>
-                <div>
-                    <select name="widgetVersion" class="form-control" [(ngModel)]="formModelVersion">
-                        <option *ngFor="let version of widgetVersions;" [value]="version.id" >{{version.name}}{{version.description && " - " + version.description}}</option>
+        <template [ngIf]="widgetVersions && widgetVersions.length > 0">
+            <h4>Widget code version</h4>
+            <div>
+                <select name="widgetVersion" class="form-control" [(ngModel)]="formModelVersion">
+                    <option *ngFor="let version of widgetVersions;" [value]="version.id" >{{version.name}}{{version.description && " - " + version.description}}</option>
+                </select>
+            </div>
+            <hr />
+        </template>
+        <template [ngIf]="inputs.length || outputs.length">
+            <h4>Interface</h4>
+            <h3 *ngIf="inputs.length">Inputs</h3>
+            <div *ngFor="let input of inputs;">
+                <div class="input-row">
+                    <label>{{input.displayName}}</label>
+                    <input [name]="input.name" class="form-control" type="text" [(ngModel)]="formModelInputs[input.name]">
+                </div>
+            </div>
+            <h3 *ngIf="outputs.length">Outputs</h3>
+            <div *ngFor="let output of outputs;">
+                <div class="input-row">
+                    <label>{{output.displayName}}</label>
+                    <input [name]="output.name" class="form-control" type="text" [(ngModel)]="formModelOutputs[output.name]">
+                </div>
+            </div>
+            <hr />
+        </template>
+        <template [ngIf]="configProperties.length">
+            <h4>Configuration</h4>
+            <div *ngIf="description" class="config-properties-description" [innerHTML]="description|bkMd2Html"></div>
+            <div *ngFor="let configProperty of configProperties;">
+                <div *ngIf="StringToConfigPropertyTypeTable[configProperty.type] == ConfigPropertyType.Float" class="form-group input-row">
+                    <label>{{configProperty.displayName}}</label>
+                    <input [name]="configProperty.id" class="form-control" type="number" [(ngModel)]="formModelProperties[configProperty.id]" [attr.step]="configProperty.config.step?configProperty.config.step:0.01" [attr.min]="configProperty.config.min" [attr.max]="configProperty.config.max" [readonly]="configProperty.config.range || configProperty.config.options" *ngIf="!configProperty.config.options">
+                    <input [name]="configProperty.id" class="form-control" type="range" [(ngModel)]="formModelProperties[configProperty.id]" [attr.step]="configProperty.config.step?configProperty.config.step:0.01" [attr.min]="configProperty.config.min" [attr.max]="configProperty.config.max" *ngIf="configProperty.config.range && !configProperty.config.options">
+
+                    <select [name]="configProperty.id" class="form-control" [(ngModel)]="formModelProperties[configProperty.id]" *ngIf="configProperty.config.options">
+                        <option *ngFor="let option of configProperty.config.options;" [ngValue]="option">{{option}}</option>
                     </select>
                 </div>
-                <hr />
-            </template>
-            <template [ngIf]="inputs.length || outputs.length">
-                <h4>Interface</h4>
-                <h3 *ngIf="inputs.length">Inputs</h3>
-                <div *ngFor="let input of inputs;">
+                <div *ngIf="StringToConfigPropertyTypeTable[configProperty.type] == ConfigPropertyType.Integer" class="form-group input-row">
+                    <label>{{configProperty.displayName}}</label>
+                    <input [name]="configProperty.id" class="form-control" type="number" [(ngModel)]="formModelProperties[configProperty.id]" [attr.step]="configProperty.config.step?configProperty.config.step:1" [attr.min]="configProperty.config.min" [attr.max]="configProperty.config.max" [readonly]="configProperty.config.range || configProperty.config.options" *ngIf="!configProperty.config.options">
+                    <input [name]="configProperty.id" class="form-control" type="range" [(ngModel)]="formModelProperties[configProperty.id]" [attr.step]="configProperty.config.step?configProperty.config.step:1" [attr.min]="configProperty.config.min" [attr.max]="configProperty.config.max" *ngIf="configProperty.config.range && !configProperty.config.options">
+
+                    <select [name]="configProperty.id" class="form-control" [(ngModel)]="formModelProperties[configProperty.id]" *ngIf="configProperty.config.options">
+                        <option *ngFor="let option of configProperty.config.options;" [ngValue]="option">{{option}}</option>
+                    </select>
+                </div>
+                <div *ngIf="StringToConfigPropertyTypeTable[configProperty.type] == ConfigPropertyType.Boolean" class="form-group input-row">
+                    <label class="mt-checkbox mt-checkbox-outline">
+                        {{configProperty.displayName}}
+                        <input [name]="configProperty.id" type="checkbox" [(ngModel)]="formModelProperties[configProperty.id]">
+                        <span></span>
+                    </label>
+                </div>
+                <div *ngIf="StringToConfigPropertyTypeTable[configProperty.type] == ConfigPropertyType.String" class="form-group input-row">
+                    <label>{{configProperty.displayName}}</label>
+                    <input [name]="configProperty.id" class="form-control" type="text" [(ngModel)]="formModelProperties[configProperty.id]" [readonly]="configProperty.config.options" *ngIf="!configProperty.config.multiline && !configProperty.config.options">
+                    <textarea class="form-control" rows="4" [(ngModel)]="formModelProperties[configProperty.name]" *ngIf="configProperty.config.multiline && !configProperty.config.options"></textarea>
+
+                    <select [name]="configProperty.id" class="form-control" [(ngModel)]="formModelProperties[configProperty.id]" *ngIf="configProperty.config.options">
+                        <option *ngFor="let option of configProperty.config.options;" [ngValue]="option">{{option}}</option>
+                    </select>
+                </div>
+                <template [ngIf]="StringToConfigPropertyTypeTable[configProperty.type] == ConfigPropertyType.Color">
                     <div class="input-row">
-                        <label>{{input.displayName}}</label>
-                        <input [name]="input.name" class="form-control" type="text" [(ngModel)]="formModelInputs[input.name]">
+                        <bk-form-color-picker [rgbaOutput]="true" [label]="configProperty.displayName" [(value)]="formModelProperties[configProperty.id]"></bk-form-color-picker>
                     </div>
-                </div>
-                <h3 *ngIf="outputs.length">Outputs</h3>
-                <div *ngFor="let output of outputs;">
+                </template>
+                <template [ngIf]="StringToConfigPropertyTypeTable[configProperty.type] == ConfigPropertyType.FAIcon">
                     <div class="input-row">
-                        <label>{{output.displayName}}</label>
-                        <input [name]="output.name" class="form-control" type="text" [(ngModel)]="formModelOutputs[output.name]">
+                        <bk-form-fa-icon-select [label]="configProperty.displayName" [(value)]="formModelProperties[configProperty.id]"></bk-form-fa-icon-select>
                     </div>
-                </div>
-                <hr />
-            </template>
-            <template [ngIf]="configProperties.length">
-                <h4>Configuration</h4>
-                <div *ngIf="description" class="config-properties-description" [innerHTML]="description|bkMd2Html"></div>
-                <div *ngFor="let configProperty of configProperties;">
-                    <div *ngIf="StringToConfigPropertyTypeTable[configProperty.type] == ConfigPropertyType.Float" class="form-group input-row">
-                        <label>{{configProperty.displayName}}</label>
-                        <input [name]="configProperty.id" class="form-control" type="number" [(ngModel)]="formModelProperties[configProperty.id]" [attr.step]="configProperty.config.step?configProperty.config.step:0.01" [attr.min]="configProperty.config.min" [attr.max]="configProperty.config.max" [readonly]="configProperty.config.range || configProperty.config.options" *ngIf="!configProperty.config.options">
-                        <input [name]="configProperty.id" class="form-control" type="range" [(ngModel)]="formModelProperties[configProperty.id]" [attr.step]="configProperty.config.step?configProperty.config.step:0.01" [attr.min]="configProperty.config.min" [attr.max]="configProperty.config.max" *ngIf="configProperty.config.range && !configProperty.config.options">
-
-                        <select [name]="configProperty.id" class="form-control" [(ngModel)]="formModelProperties[configProperty.id]" *ngIf="configProperty.config.options">
-                            <option *ngFor="let option of configProperty.config.options;" [ngValue]="option">{{option}}</option>
-                        </select>
-                    </div>
-                    <div *ngIf="StringToConfigPropertyTypeTable[configProperty.type] == ConfigPropertyType.Integer" class="form-group input-row">
-                        <label>{{configProperty.displayName}}</label>
-                        <input [name]="configProperty.id" class="form-control" type="number" [(ngModel)]="formModelProperties[configProperty.id]" [attr.step]="configProperty.config.step?configProperty.config.step:1" [attr.min]="configProperty.config.min" [attr.max]="configProperty.config.max" [readonly]="configProperty.config.range || configProperty.config.options" *ngIf="!configProperty.config.options">
-                        <input [name]="configProperty.id" class="form-control" type="range" [(ngModel)]="formModelProperties[configProperty.id]" [attr.step]="configProperty.config.step?configProperty.config.step:1" [attr.min]="configProperty.config.min" [attr.max]="configProperty.config.max" *ngIf="configProperty.config.range && !configProperty.config.options">
-
-                        <select [name]="configProperty.id" class="form-control" [(ngModel)]="formModelProperties[configProperty.id]" *ngIf="configProperty.config.options">
-                            <option *ngFor="let option of configProperty.config.options;" [ngValue]="option">{{option}}</option>
-                        </select>
-                    </div>
-                    <div *ngIf="StringToConfigPropertyTypeTable[configProperty.type] == ConfigPropertyType.Boolean" class="form-group input-row">
-                        <label class="mt-checkbox mt-checkbox-outline">
-                            {{configProperty.displayName}}
-                            <input [name]="configProperty.id" type="checkbox" [(ngModel)]="formModelProperties[configProperty.id]">
-                            <span></span>
-                        </label>
-                    </div>
-                    <div *ngIf="StringToConfigPropertyTypeTable[configProperty.type] == ConfigPropertyType.String" class="form-group input-row">
-                        <label>{{configProperty.displayName}}</label>
-                        <input [name]="configProperty.id" class="form-control" type="text" [(ngModel)]="formModelProperties[configProperty.id]" [readonly]="configProperty.config.options" *ngIf="!configProperty.config.multiline && !configProperty.config.options">
-                        <textarea class="form-control" rows="4" [(ngModel)]="formModelProperties[configProperty.name]" *ngIf="configProperty.config.multiline && !configProperty.config.options"></textarea>
-
-                        <select [name]="configProperty.id" class="form-control" [(ngModel)]="formModelProperties[configProperty.id]" *ngIf="configProperty.config.options">
-                            <option *ngFor="let option of configProperty.config.options;" [ngValue]="option">{{option}}</option>
-                        </select>
-                    </div>
-                    <template [ngIf]="StringToConfigPropertyTypeTable[configProperty.type] == ConfigPropertyType.Color">
-                        <div class="input-row">
-                            <bk-form-color-picker [rgbaOutput]="true" [label]="configProperty.displayName" [(value)]="formModelProperties[configProperty.id]"></bk-form-color-picker>
-                        </div>
-                    </template>
-                    <template [ngIf]="StringToConfigPropertyTypeTable[configProperty.type] == ConfigPropertyType.FAIcon">
-                        <div class="input-row">
-                            <bk-form-fa-icon-select [label]="configProperty.displayName" [(value)]="formModelProperties[configProperty.id]"></bk-form-fa-icon-select>
-                        </div>
-                    </template>
-                </div>
-            </template>
-        </form>
+                </template>
+            </div>
+        </template>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn green" (click)="onSubmitClick()" [disabled]="!form.valid">Save</button>
+        <button type="button" class="btn green" (click)="onSubmitClick()">Save</button>
         <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
     </div>
 </div>

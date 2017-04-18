@@ -4,7 +4,7 @@
 
 import { Pipe, PipeTransform } from '@angular/core';
 
-var markdown = require( "markdown" ).markdown;
+const markdown = require( 'markdown' ).markdown;
 
 @Pipe({
     name: 'bkMd2Html'

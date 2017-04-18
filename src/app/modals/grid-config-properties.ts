@@ -60,7 +60,7 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
     ngOnInit() {
 
         this.configProperties = this.modalModel.widget.configProperties;
-        //TODO: this.description = this.modalModel.widget.configPropertiesDescription;
+        this.description = this.modalModel.widget.configPropertiesDescription;
 
         this.inputs = [];
         this.outputs = [];
