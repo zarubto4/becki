@@ -106,7 +106,9 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
             this.formModelOutputs[output.name] = output.externalName;
         });
 
-        this.formModelVersion = this.modalModel.widget.type.version_id;
+        if (this.modalModel.widget.type) {
+            this.formModelVersion = this.modalModel.widget.type.version_id;
+        }
 
         if (this.modalModel.widgetVersions) {
             this.widgetVersions = this.modalModel.widgetVersions;
@@ -179,7 +181,7 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
 
         //  do the magic ... update widget version :)
         if (this.modalModel.gridController.renderer instanceof EditorRenderer.ControllerRenderer) {
-            if (this.modalModel.widget.type.version_id !== this.formModelVersion) {
+            if (this.modalModel.widget.type && this.modalModel.widget.type.version_id !== this.formModelVersion) {
                 const renderer = <EditorRenderer.ControllerRenderer>(<any>this.modalModel.gridController.renderer);
 
                 this.modalModel.widget.type.version_id = this.formModelVersion;
