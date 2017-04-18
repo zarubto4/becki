@@ -178,7 +178,6 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
                         this.homerDao.onMessageCallback = (m: any) => this.homerMessageReceived(m);
                     }
-
                 })
                 .catch((err) => {
                     this.fmError(`Cannot load version <b>${this.instance.actual_instance.b_program_version_name}</b>`, err);

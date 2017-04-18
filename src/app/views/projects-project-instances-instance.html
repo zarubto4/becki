@@ -294,9 +294,8 @@
 
                 </div>
 
-                <div *ngIf="instanceTab == 'view' && instance && instance.instance_online">
+                <div [hidden]="instanceTab == 'view' && instance && instance.instance_online">
                     <bk-blocko-view [canConfig]="false" [readonly]="true" [simpleMode]="false" [showBlockNames]="true"></bk-blocko-view>
-
                 </div>
 
                 <div *ngIf="instanceTab == 'logs'">
