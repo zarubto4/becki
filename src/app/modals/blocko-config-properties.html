@@ -4,7 +4,7 @@
         <h4 class="modal-title">Edit config for block <b>{{modalModel.block.id}}</b></h4>
     </div>
     <div class="modal-body">
-
+        <div *ngIf="description" class="config-properties-description" [innerHTML]="description|bkMd2Html"></div>
         <div *ngFor="let configProperty of configProperties;">
 
             <div *ngIf="configProperty.type == configPropertyType['Float']" class="form-group">

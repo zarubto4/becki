@@ -118,6 +118,7 @@ import { GoPayLoaderService } from './services/GoPayLoaderService';
 import { TranslationService } from './services/TranslationService';
 import { TranslateTablePipe } from './pipes/TranslationTablePipe';
 import { TranslatePipe } from './pipes/TranslationPipe';
+import { Md2HtmlPipe } from './pipes/Md2HtmlPipe';
 
 
 // @formatter:off
@@ -279,6 +280,7 @@ class BeckiErrorHandler implements ErrorHandler {
         // Other components
         ImageCropperComponent,
         // Pipes
+        Md2HtmlPipe,
         Nl2BrPipe,
         UnixTimeFormatPipe,
         StringReplacerPipe,

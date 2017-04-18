@@ -34,6 +34,7 @@
             </template>
             <template [ngIf]="configProperties.length">
                 <h4>Configuration</h4>
+                <div *ngIf="description" class="config-properties-description" [innerHTML]="description|bkMd2Html"></div>
                 <div *ngFor="let configProperty of configProperties;">
                     <div *ngIf="StringToConfigPropertyTypeTable[configProperty.type] == ConfigPropertyType.Float" class="form-group input-row">
                         <label>{{configProperty.displayName}}</label>

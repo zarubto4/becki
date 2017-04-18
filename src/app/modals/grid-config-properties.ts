@@ -48,6 +48,8 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
     StringToConfigPropertyTypeTable = Types.StringToConfigPropertyTypeTable;
     ConfigPropertyType = Types.ConfigPropertyType;
 
+    description: string = null;
+
     constructor() {
         this.formModelProperties = {};
         this.formModelInputs = {};
@@ -58,6 +60,7 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
     ngOnInit() {
 
         this.configProperties = this.modalModel.widget.configProperties;
+        //TODO: this.description = this.modalModel.widget.configPropertiesDescription;
 
         this.inputs = [];
         this.outputs = [];

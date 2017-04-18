@@ -34,6 +34,8 @@ export class ModalsBlockoConfigPropertiesComponent implements OnInit {
 
     configProperties: Core.ConfigProperty[];
 
+    description: string = null;
+
     form: FormGroup;
 
     formModel: {[key: string]: any} = {};
@@ -47,6 +49,7 @@ export class ModalsBlockoConfigPropertiesComponent implements OnInit {
     ngOnInit() {
 
         this.configProperties = this.modalModel.block.getConfigProperties();
+        this.description = this.modalModel.block.configPropertiesDescription;
 
         this.configProperties.forEach((cp) => {
             this.formModel[cp.name] = cp.value;
