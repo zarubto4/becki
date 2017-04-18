@@ -8,7 +8,7 @@
  * directory of this distribution.
  */
 import { IHomerInstanceRecord } from './../backend/TyrionAPI';
-import { Component, OnInit, Injector, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, Injector, OnDestroy, AfterContentChecked, ViewChild } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
 import { IHomerInstance } from '../backend/TyrionAPI';
@@ -21,7 +21,7 @@ import { HomerService, HomerDao } from '../services/HomerService';
     selector: 'bk-view-projects-project-instances-instance',
     templateUrl: './projects-project-instances-instance.html',
 })
-export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent implements OnInit, OnDestroy, AfterContentChecked {
 
     id: string;
     instanceId: string;
@@ -43,6 +43,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     instanceTab: string = 'schema';
 
     private homerService: HomerService = null;
+    private liveViewLoaded: boolean = false;
 
     constructor(injector: Injector) {
         super(injector);
@@ -56,6 +57,17 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
             this.instanceId = params['instance'];
             this.refresh();
         });
+    }
+
+    ngAfterContentChecked() {
+        if (this.instanceTab === 'view') {
+            if (!this.liveViewLoaded && this.blockoView) {
+                this.loadBlockoLiveView();
+                this.liveViewLoaded = true;
+            }
+        } else {
+            this.liveViewLoaded = false;
+        }
     }
 
     ngOnDestroy(): void {
@@ -158,9 +170,8 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
         this.router.navigate(['projects', this.id, 'code', projectId, programId]);
     }
 
-
     loadBlockoLiveView() {
-        if (this.instance.actual_instance && this.instance.actual_instance.b_program_version_id) {
+        if (this.blockoView && this.instance.actual_instance && this.instance.actual_instance.b_program_version_id) {
             this.backendService.getBProgramVersion(this.instance.actual_instance.b_program_version_id)
                 .then((programVersionFull) => {
                     const selectedProgramVersion = programVersionFull;
