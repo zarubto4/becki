@@ -97,7 +97,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     }
 
     onClickHistoryInstance(instance: IHomerInstanceRecord) {
-        this.currentHistoricInstance = instance;    // TODO probrat zda nechceme zde jenom posílat aktuální pozici objektu v pozici
+        this.currentHistoricInstance = instance;
     }
 
     onToggleinstanceTab(tab: string) {
@@ -122,7 +122,6 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
         this.timelinePosition += position;
 
-        // TODO kontrola, aby hodnoty nepřekročily velikost pole. vše je obráceně tzn. -1200 je doleva (chceme aby to tam jezdilo)
         if (this.timelinePosition > 0 || this.timelinePosition < (-this.instance.instance_history.length * 200) + 800) {
             this.timelinePosition = 0;
         }

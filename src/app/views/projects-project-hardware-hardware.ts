@@ -20,6 +20,8 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     hardwareId: string;
     routeParamsSubscription: Subscription;
 
+    timelinePosition: number;
+
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
     constructor(injector: Injector) {
@@ -41,26 +43,35 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.blockUI();
         this.backendService.getBoard(this.hardwareId)
             .then((board) => {
-                this.device = board;
-                /*this.device.mac_address = '21:23:43:45:34';
-                 this.device.wifi_mac_address = '11:45:ab:4c:37';
-                 this.device.personal_description = 'Muj device na stole.';
-                 this.device.status.status = 'online';
-                 this.device.status.actual_c_program_id = '32135234j2345h2343454jk524';
-                 this.device.status.actual_c_program_name = 'Program s boilerem';
-                 this.device.status.actual_c_program_version_name = '1.23.3';
-                 this.device.status.b_program_id = '32135234j2345h2343454jk524';
-                 this.device.status.b_program_name = 'Program s boilerem';
-                 this.device.status.b_program_version_name = '1.2.3';
-                 this.device.status.instance_id = '6342849583943n343kjc';*/
+                /*this.device = board;
+                this.device.mac_address = '21:23:43:45:34';
+                this.device.wifi_mac_address = '11:45:ab:4c:37';
+                this.device.personal_description = 'Muj device na stole.';
+                this.device.status.status = 'online';
+                this.device.status.actual_c_program_id = '32135234j2345h2343454k524';
+                this.device.status.actual_c_program_name = 'Program s boilerem';
+                this.device.status.actual_c_program_version_name = '1.23.3';
+                this.device.status.b_program_id = '32135234j2345h2343454jk524';
+                this.device.status.b_program_name = 'Program s boilerem';
+                this.device.status.b_program_version_name = '1.2.3';
+                this.device.status.instance_id = '6342849583943n343kjc';
+                this.device.actual_bootloader_id = '6342849583943n343kjc';
+                this.device.actual_bootloader_version_name = 'Karel';
+                this.device.avaible_bootloader_id = 'gfgfdgtrf';
+                this.device.avaible_bootloader_version_name = 'Opaleny Karel';*/
                 // console.log(this.device);
+                this.timelinePosition = (this.device.status.required_c_programs.length * -200) + 800;
+
+                // console.log(board);
                 return this.backendService.getTypeOfBoard(board.type_of_board_id);
+
             })
             .then((typeOfBoard) => {
                 this.typeOfBoard = typeOfBoard;
                 // this.typeOfBoard.picture_link = 'https://static.pexels.com/photos/104827/cat-pet-animal-domestic-104827.jpeg';
                 // console.log(this.typeOfBoard);
                 this.unblockUI();
+
             })
             .catch((reason) => {
                 this.fmError('Project cannot be loaded.', reason);
@@ -87,6 +98,23 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             this.navigate(['/projects', this.device.project_id, 'instances', instanceId]);
         }
     }
+
+    timelineMove(position: number): void {
+
+        this.timelinePosition += position;
+
+        if (this.timelinePosition > 0 || this.timelinePosition < (-this.device.status.required_c_programs.length * 200) + 800) {
+            this.timelinePosition = 0;
+        }
+    }
+
+    onUpdateBootloaderClick(): void {
+    }
+
+    onAutobackupSwitchClick(): void {
+        // TODO
+    }
+
 
     onCProgramClick(CProgramId: string): void {
         if (CProgramId) {
