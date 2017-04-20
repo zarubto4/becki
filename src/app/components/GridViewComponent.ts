@@ -51,10 +51,6 @@ export class GridViewComponent implements AfterViewInit {
             // this.modelChange.emit(this.controller.getDataJson());
         });
         */
-
-        this.gridController.registerWidgetService(Widgets.TimeService);
-        Core.Controller.cleanWidgetIONameCounter();
-
     }
 
     requestCreateWidget(type: any, event?: MouseEvent): EditorRenderer.WidgetDragHandler {
