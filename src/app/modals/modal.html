@@ -79,6 +79,9 @@
             <template [ngSwitchCase]="'ModalsSelectHardwareModel'">
                 <bk-modals-select-hardware [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-select-hardware>
             </template>
+            <template [ngSwitchCase]="'ModalsHardwareBootloaderUpdateModel'">
+                <bk-modals-hardware-bootloader-update [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-bootloader-update>
+            </template>
         </div>
     </div>
 </div>

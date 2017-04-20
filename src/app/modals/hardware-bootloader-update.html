@@ -1,0 +1,20 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title">Hardware ID:{{modalModel.hardwareName}}</h4>
+    </div>
+    <div class="modal-body">
+        <H1> Attention! </H1>
+
+        <p> We must update critical software component on your board. Program transfer takes a few seconds to Board Memory - which is safe.</p>
+        <p> But rewriting the program in Memmory lasts 0.2 seconds. And during this time the device may not be shut down,</p>
+        <p> restart or disconnected from the power supply etc. You risk damaging the device.</p>
+        <p> If all our security measures fail, you must connect the device by cable to a computer and load the program manually.</p>
+        <p> If you have any questions, please read the documentation, or visit our website at Ask.</p>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn green" (click)="onSubmitClick()">Confirm</button> <!-- mohli bychom opozdit prokliknutelnost tlačítka aby uživatel opravdu musel přečíst co se děje -->
+        <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
+    </div>
+</div>

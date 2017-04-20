@@ -119,6 +119,7 @@ import { TranslationService } from './services/TranslationService';
 import { TranslateTablePipe } from './pipes/TranslationTablePipe';
 import { TranslatePipe } from './pipes/TranslationPipe';
 import { Md2HtmlPipe } from './pipes/Md2HtmlPipe';
+import { ModalsHardwareBootloaderUpdateComponent } from './modals/hardware-bootloader-update';
 
 
 // @formatter:off
@@ -370,6 +371,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsWidgetsWidgetPropertiesComponent,
         ModalsSendInvoiceComponent,
         ModalsBlockoAddGridEmptyComponent,
+        ModalsHardwareBootloaderUpdateComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]
