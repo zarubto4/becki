@@ -40,7 +40,7 @@
                     <td class="no-wrap bold"><a (click)="onDeviceClick(device)">{{device.id}}</a></td>
                     <td class="no-wrap"><a (click)="onBoardTypeClick(device.type_of_board_id)">{{device.type_of_board_name}}</a></td>
                     <td>{{device.personal_description}}</td>
-                    <td><span *ngIf="device.update_boot_loader_required" ><a (click)="onUpdateBootloaderClick(device)" class="font-red-intense"> Bootloader Update Required </a></span></td>
+                    <td><span *ngIf="device.alert_list && device.alert_list.length > 0" ><a *ngFor="let alert of device.alert_list" (click)="onUpdateBootloaderClick(device,alert)" class="font-red-intense">{{alert}}</a> <input type="checkbox" name="mass checking for update" (change)="bootloadersCheckboxChanged(device)"> </span></td>
                     <td><span *ngIf="device.board_online_status" class="font-green-jungle">Online</span> <span *ngIf="!device.board_online_status" class="font-red-flamingo">Offline</span></td>
                     <td class="no-wrap">
                         <button title="Device properties" class="btn btn-icon-only green" [disabled]="!device.edit_permission" (click)="onEditClick(device)">

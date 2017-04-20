@@ -53,7 +53,6 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
                     gatewayUrl: gwUrl,
                     inline: true
                 }, (checkoutResult) => {
-                    // TODO: console.log(checkoutResult);
                     this.router.navigate(['/financial']);
                 });
             });

@@ -1,4 +1,6 @@
-<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot" [lastBreadName]="device?device.id:''">
+<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot"
+                [subtitle]="currentParamsService.currentProjectDescriptionSnapshot"
+                [lastBreadName]="device?device.id:''">
 
     <div *ngIf="device && typeOfBoard" class="portlet portlet light bordered">
         <div class="portlet-title">
@@ -8,6 +10,14 @@
                     Hardware: {{device.id}}
                 </span>
             </div>
+            <div class="becki-actions ">
+                <button class="btn red">
+                    <i class="fa fa-trash"></i>
+                </button>
+                <button class="btn blue">
+                    <i class="fa fa-gears"></i>
+                </button>
+            </div>
         </div>
         <div>
             <div>
@@ -16,12 +26,15 @@
             </div>
             <div>
                 Device type:
-                <a (click)="onBoardTypeClick(device.type_of_board_id)"><span class="bold">{{device.type_of_board_name}}</span></a>
+                <a (click)="onBoardTypeClick(device.type_of_board_id)"><span
+                    class="bold">{{device.type_of_board_name}}</span></a>
             </div>
             <div>
                 Producer:
-                <a (click)="onProducerClick(typeOfBoard.producer_id)"><span class="bold">{{typeOfBoard.producer_name}}</span></a>
+                <a (click)="onProducerClick(typeOfBoard.producer_id)"><span
+                    class="bold">{{typeOfBoard.producer_name}}</span></a>
             </div>
+
             <div *ngIf="device.mac_address">
                 Ethernet MAC adress:
                 <span class="font-grey-mint bold">{{device.mac_address}}</span>
@@ -31,13 +44,50 @@
                 <span class="font-grey-mint bold">{{device.personal_description}}</span>
             </div>
             <div>
-                Series:
-                <span class="font-grey-mint bold">{{device.generationDescription}}</span>
+                Series(Revision):
+                <span class="font-grey-mint bold">{{typeOfBoard.revision}}</span>
             </div>
             <div *ngIf="device.wifi_mac_address">
                 Wifi MAC adress:
                 <span class="font-grey-mint bold">{{device.wifi_mac_address}}</span>
             </div>
+
+            <div>
+                Auto Backup:
+                <span class="font-grey-mint bold">{{device.backup_mode}}</span>
+                <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;"
+                   [class.fa-toggle-on]="device.backup_mode" [class.fa-toggle-off]="!device.backup_mode"
+                   (click)="onAutobackupSwitchClick()"></i>
+
+
+            </div>
+            <div>
+                Static Backup:
+            </div>
+            <div *ngIf="device.status.actual_backup_c_program_version_name">
+                Program:
+                <span class="font-grey-mint bold">{{device.status.actual_backup_c_program_version_name}}</span>
+                <button class="btn blue">
+                    <i class="fa fa-gears"></i>
+                </button>
+            </div>
+            <div *ngIf="device.status.actual_backup_c_program_version_id">
+                Version:
+                <span class="font-grey-mint bold">{{device.status.actual_backup_c_program_version_id}}</span>
+            </div>
+
+            <div *ngIf="device.actual_bootloader_id">
+                Actual bootloader version:
+                <span class="font-grey-mint bold">{{device.actual_bootloader_id}}</span>
+            </div>
+            <div *ngIf="device.avaible_bootloader_id">
+                Avalible bootloader version:
+                <span class="font-grey-mint bold">{{device.avaible_bootloader_id}}</span>
+            </div>
+            <button *ngIf="!(device.avaible_bootloader_id === device.actual_bootloader_id)" class="btn red"
+                    (click)="onUpdateBootloaderClick($event)">
+                <i class="fa fa-plus-circle"></i>Update Required
+            </button>
         </div>
     </div>
     <div *ngIf="device && typeOfBoard" class="portlet light bordered">
@@ -53,15 +103,20 @@
             <div class="becki-caption sub-title">
                 <p>
                     <i class="fa fa-fw fa-tasks"></i>
-                    Server: <a (click)="onServerClick()">{{device.status.server_name ? device.status.server_name : 'Unknown'}}</a> (<span class="{{device.status.server_online_status ? 'font-green' : 'font-red'}}">{{device.status.server_online_status ? 'online' : 'offline'}}</span>)
+                    Server: <a (click)="onServerClick()">{{device.status.server_name ? device.status.server_name :
+                    'Unknown'}}</a> (<span class="{{device.status.server_online_status ? 'font-green' : 'font-red'}}">{{device.status.server_online_status ? 'online' : 'offline'}}</span>)
                 </p>
                 <p>
                     <i class="fa fa-fw fa-cloud-upload"></i>
-                    Instance: <a (click)="onInstanceClick(device.status.instance_id)">{{device.status.instance_id ? device.status.instance_id : 'Unknown'}}</a> (<span class="{{device.status.instance_online_status ? 'font-green' : 'font-red'}}">{{device.status.instance_online_status ? 'online' : 'offline'}}</span>)
+                    Instance: <a (click)="onInstanceClick(device.status.instance_id)">{{device.status.instance_id ?
+                    device.status.instance_id : 'Unknown'}}</a> (<span
+                    class="{{device.status.instance_online_status ? 'font-green' : 'font-red'}}">{{device.status.instance_online_status ? 'online' : 'offline'}}</span>)
                 </p>
                 <p>
                     <i class="fa fa-fw fa-microchip"></i>
-                    Device type:  <a (click)="onBoardTypeClick(device.type_of_board_id)">{{device.type_of_board_name}}</a> (<span class="{{device.status.status == 'online' ? 'font-green' : 'font-red'}}">{{device.status.status}}</span>)
+                    Device type: <a
+                    (click)="onBoardTypeClick(device.type_of_board_id)">{{device.type_of_board_name}}</a> (<span
+                    class="{{device.status.status == 'online' ? 'font-green' : 'font-red'}}">{{device.status.status}}</span>)
                 </p>
             </div>
         </div>
@@ -78,8 +133,11 @@
                                 <div class="timeline-body-arrow"></div>
                                 <div class="timeline-body-content">
                                     <h4>Actual Blocko Program</h4>
-                                    <p>Program: <a (click)="onBProgramClick(device.status.b_program_id)">{{device.status.b_program_name ? device.status.b_program_name : 'Unknown'}}</a></p>
-                                    <p>Version: <a (click)="onBProgramVersionClick(device.status.b_program_id,device.status.b_program_version_id)">{{device.status.b_program_version_name ? device.status.b_program_version_name : 'Unknown'}}</a></p>
+                                    <p>Program: <a (click)="onBProgramClick(device.status.b_program_id)">{{device.status.b_program_name
+                                        ? device.status.b_program_name : 'Unknown'}}</a></p>
+                                    <p>Version: <a
+                                        (click)="onBProgramVersionClick(device.status.b_program_id,device.status.b_program_version_id)">{{device.status.b_program_version_name
+                                        ? device.status.b_program_version_name : 'Unknown'}}</a></p>
                                 </div>
                             </div>
                         </div>
@@ -103,7 +161,8 @@
                     </div>
                 </div>
                 <div class="col-sm-2 hw-image-col">
-                    <img src="{{typeOfBoard.picture_link ? typeOfBoard.picture_link : 'http://placehold.it/350x350/000/FFF?text=No+picture'}}">
+                    <img
+                        src="{{typeOfBoard.picture_link ? typeOfBoard.picture_link : 'http://placehold.it/350x350/000/FFF?text=No+picture'}}">
                 </div>
                 <div class="col-sm-5 hw-c-program-col">
                     <h3>Firmware</h3>
@@ -116,8 +175,10 @@
                                 <div class="timeline-body-arrow"></div>
                                 <div class="timeline-body-content">
                                     <h4>Actual Firmware</h4>
-                                    <p>Program: <a (click)="onCProgramClick(device.status.actual_c_program_id)">{{device.status.actual_c_program_name ? device.status.actual_c_program_name : 'Unknown'}}</a></p>
-                                    <p>Version: {{device.status.actual_c_program_version_name ? device.status.actual_c_program_version_name : 'Unknown'}}</p>
+                                    <p>Program: <a (click)="onCProgramClick(device.status.actual_c_program_id)">{{device.status.actual_c_program_name
+                                        ? device.status.actual_c_program_name : 'Unknown'}}</a></p>
+                                    <p>Version: {{device.status.actual_c_program_version_name ?
+                                        device.status.actual_c_program_version_name : 'Unknown'}}</p>
                                 </div>
                             </div>
                         </div>
@@ -129,8 +190,12 @@
                                 <div class="timeline-body-arrow"></div>
                                 <div class="timeline-body-content">
                                     <h4>Planed Firmware</h4>
-                                    <p>Program: <a (click)="onCProgramClick(device.status.required_c_programs[0].c_program_id)">{{device.status.required_c_programs[0].c_program_program_name ? device.status.required_c_programs[0].c_program_program_name : 'Unknown'}}</a></p>
-                                    <p>Version: {{device.status.required_c_programs[0].c_program_version_name ? device.status.required_c_programs[0].c_program_version_name : 'Unknown'}}</p>
+                                    <p>Program: <a
+                                        (click)="onCProgramClick(device.status.required_c_programs[0].c_program_id)">{{device.status.required_c_programs[0].c_program_program_name
+                                        ? device.status.required_c_programs[0].c_program_program_name : 'Unknown'}}</a>
+                                    </p>
+                                    <p>Version: {{device.status.required_c_programs[0].c_program_version_name ?
+                                        device.status.required_c_programs[0].c_program_version_name : 'Unknown'}}</p>
                                     <p>date <span style="background-color: red">TODO</span></p>
                                 </div>
                             </div>
@@ -152,13 +217,55 @@
                             <div class="timeline-body-arrow"></div>
                             <div class="timeline-body-content">
                                 <p>Program: {{update.c_program_name ? update.c_program_name : 'Unknown'}}</p>
-                                <p>Version: <a (click)="onCProgramClick(update.c_program_id)">{{update.c_program_version_name ? update.c_program_version_name : 'Unknown'}}</a></p>
+                                <p>Version: <a (click)="onCProgramClick(update.c_program_id)">{{update.c_program_version_name
+                                    ? update.c_program_version_name : 'Unknown'}}</a></p>
                                 <p>date <span style="background-color: red">TODO</span></p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div
+                *ngIf="device && device.status.required_backup_c_programs && device.status.required_backup_c_programs.length > 1"
+                class="cd-horizontal-timeline mt-timeline-horizontal loaded">
+                <div class="timeline">
+                    <div class="events-wrapper">
+                        <div class="events" style="transition: left 0.6s linear; "
+                             [style.width]="800+(device.status.required_backup_c_programs.length * 200) +'px'"
+                             [style.left]="timelinePosition+'px'">
+                            <ol *ngFor="let deviced of device.status.required_backup_c_programs.slice().reverse(); let i = index">
+
+                                <li>
+                                    <a class="border-after-red bg-after-red selected"
+                                       [class.selected]="device.status.actual_c_program_id == deviced.c_program_id"
+                                       [style.left]="(i*200)+'px'"><span
+                                        style="text-overflow: ellipsis; display:inline-block; overflow: hidden;white-space: nowrap;  width: 170px">{{deviced.c_program_name}}</span>
+                                        <br> <span style="font-size: 70%" class="font-grey-salsa">{{deviced.date_of_create|bkUnixTimeToDate}}</span>
+                                    </a>
+                                </li>
+                            </ol>
+                            <span class="filling-line bg-red" aria-hidden="true" style="transform: scaleX(1);"></span>
+                        </div>
+                        <!-- .events -->
+                    </div>
+                    <!-- .events-wrapper -->
+                    <ul class="cd-timeline-navigation mt-ht-nav-icon">
+                        <li>
+                            <a (click)=timelineMove(100); class="prev btn btn-outline red md-skip">
+                                <i class="fa fa-chevron-left"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a (click)=timelineMove(-100); class="next btn btn-outline red md-skip inactive">
+                                <i class="fa fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- .cd-timeline-navigation -->
+                </div>
+            </div>
+
         </div>
     </div>
 </bk-layout-main>
