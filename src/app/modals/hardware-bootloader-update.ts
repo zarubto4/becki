@@ -24,7 +24,7 @@ export class ModalsHardwareBootloaderUpdateModel extends ModalModel {
     selector: 'bk-modals-hardware-bootloader-update',
     templateUrl: './hardware-bootloader-update.html'
 })
-export class ModalsHardwareBootloaderUpdateCompoment implements OnInit {
+export class ModalsHardwareBootloaderUpdateComponent implements OnInit {
 
     @Input()
     modalModel: ModalsHardwareBootloaderUpdateModel;

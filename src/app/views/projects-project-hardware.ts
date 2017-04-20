@@ -16,7 +16,7 @@ import { ModalsRemovalModel } from '../modals/removal';
 import { IProject, IBoardShortDetail } from '../backend/TyrionAPI';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { CurrentParamsService } from '../services/CurrentParamsService';
-import {ModalsHardwareBootloaderUpdateModel} from "../modals/hardware-bootloader-update";
+import { ModalsHardwareBootloaderUpdateModel } from '../modals/hardware-bootloader-update';
 
 @Component({
     selector: 'bk-view-projects-project-hardware',
