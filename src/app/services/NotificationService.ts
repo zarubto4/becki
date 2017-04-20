@@ -2,7 +2,7 @@
  * Created by DominikKrisztof on 22/08/16.
  */
 import moment = require('moment/moment');
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { BackendService } from './BackendService';
 import { INotification, INotificationElement, INotificationButton } from '../backend/TyrionAPI';
 import { NullSafe } from '../helpers/NullSafe';
@@ -97,6 +97,9 @@ export abstract class Notification {
         }
         if (n.buttons) {
             this.buttons = n.buttons;
+        }
+        if (n.notification_body && Array.isArray(n.notification_body)) {
+            this.elementsBody = n.notification_body;
         }
     }
 
@@ -233,22 +236,32 @@ export class NotificationService {
 
     protected highImportanceOverlayTimeout: any = null;
 
-    constructor(protected backendService: BackendService, protected router: Router) {
+    constructor(protected backendService: BackendService, protected router: Router, protected zone: NgZone) {
         console.info('NotificationService init');
 
         // tick for overlay notifs
-        setInterval(() => {
-            this.overlayNotifications.forEach((n) => {
-                n.overlayTick(100);
-            });
-        }, 100);
+        this.zone.runOutsideAngular(() => {
+            setInterval(() => {
+                this.overlayNotifications.forEach((n) => {
+                    n.overlayTick(100);
+                });
+                // trigger change detection if some notif ticked
+                if (this.overlayNotifications.length) {
+                    this.zone.run(() => {});
+                }
+            }, 100);
 
-        // tick for all notifs
-        setInterval(() => {
-            this.notifications.forEach((n) => {
-                n.tick(10000);
-            });
-        }, 10000);
+            // tick for all notifs
+            setInterval(() => {
+                this.notifications.forEach((n) => {
+                    n.tick(10000);
+                });
+                // trigger change detection if some notif ticked
+                if (this.notifications.length) {
+                    this.zone.run(() => {});
+                }
+            }, 10000);
+        });
 
         // update notifications info only when user is logged in
         if (this.backendService.personInfoSnapshot) {
@@ -276,47 +289,65 @@ export class NotificationService {
                 // console.log('(un)subscribed');
             } else {
                 // console.log(notification);
-                if (notification.state === 'created') {
-                    let notif: Notification = Notification.fromINotification(notification);
-                    switch (notification.notification_importance) {
-                        case 'low':
-                            this.addOverlayNotification(notif);
-                            break;
-                        case 'normal':
-                            if (!notif.wasRead) {
-                                this.unreadNotificationsCount++;
+                this.zone.runOutsideAngular(() => {
+                    if (notification.state === 'created') {
+                        if (notification.id && this.isNotificationExists(notification.id)) {
+                            let notif = this.notifications.find((n) => n.id === notification.id);
+                            if (notif) {
+                                let oldWasRead = notif.wasRead;
+                                notif.update(notification);
+                                // wasRead changes to true
+                                if (oldWasRead === false && notif.wasRead === true) {
+                                    this.unreadNotificationsCount--;
+                                }
                             }
-                            this.totalNotificationsCount++;
 
-                            this.addSavedNotification(notif);
-                            this.addOverlayNotification(notif);
-                            break;
-                        case 'high':
-                            if (!notif.wasRead) {
-                                this.unreadNotificationsCount++;
+                        } else {
+                            let notif: Notification = Notification.fromINotification(notification);
+                            switch (notification.notification_importance) {
+                                case 'low':
+                                    this.addOverlayNotification(notif);
+                                    break;
+                                case 'normal':
+                                    if (!notif.wasRead) {
+                                        this.unreadNotificationsCount++;
+                                    }
+                                    this.totalNotificationsCount++;
+
+                                    this.addSavedNotification(notif);
+                                    this.addOverlayNotification(notif);
+                                    break;
+                                case 'high':
+                                    if (!notif.wasRead) {
+                                        this.unreadNotificationsCount++;
+                                    }
+                                    this.totalNotificationsCount++;
+
+                                    this.addSavedNotification(notif);
+                                    this.addOverlayNotification(notif);
+                                    break;
                             }
-                            this.totalNotificationsCount++;
-
-                            this.addSavedNotification(notif);
-                            this.addOverlayNotification(notif);
-                            break;
-                    }
-                } else if ((notification.state === 'updated' || notification.state === 'confirmed') && notification.id) {
-                    let notif = this.notifications.find((n) => n.id === notification.id);
-                    if (notif) {
-                        let oldWasRead = notif.wasRead;
-                        notif.update(notification);
-                        // wasRead changes to true
-                        if (oldWasRead === false && notif.wasRead === true) {
+                        }
+                    } else if ((notification.state === 'updated' || notification.state === 'confirmed') && notification.id) {
+                        let notif = this.notifications.find((n) => n.id === notification.id);
+                        if (notif) {
+                            let oldWasRead = notif.wasRead;
+                            notif.update(notification);
+                            // wasRead changes to true
+                            if (oldWasRead === false && notif.wasRead === true) {
+                                this.unreadNotificationsCount--;
+                            }
+                        }
+                    } else if (notification.state === 'deleted' && notification.id) {
+                        let notif = this.removeNotificationById(notification.id);
+                        if (notif && notif.wasRead === false) {
                             this.unreadNotificationsCount--;
                         }
                     }
-                } else if (notification.state === 'deleted' && notification.id) {
-                    let notif = this.removeNotificationById(notification.id);
-                    if (notif && notif.wasRead === false) {
-                        this.unreadNotificationsCount--;
-                    }
-                }
+
+                    // trigger change detection after all done
+                    this.zone.run(() => {});
+                });
             }
         });
     }
@@ -410,9 +441,14 @@ export class NotificationService {
         if (!ids.length) {
             return;
         }
-        // console.log('MARK READ: ', ids);
-        this.unreadNotificationsCount -= ids.length;
-        this.backendService.markNotificationRead({ notification_id: ids }); // TODO: možná něco udělat s chybou :-)
+
+        if (ids.length) {
+            this.zone.run(() => {
+                // console.log('MARK READ: ', ids);
+                this.unreadNotificationsCount -= ids.length;
+                this.backendService.markNotificationRead({ notification_id: ids }); // TODO: možná něco udělat s chybou :-)
+            });
+        }
     }
 
     mouseMove(): void {
@@ -488,34 +524,41 @@ export class NotificationService {
     getRestApiNotifications(page = 1): Promise<Notification[]> {
         return this.backendService.listNotifications(page)
             .then(list => {
-                this.unreadNotificationsCount = list.unread_total;
-                this.totalNotificationsCount = list.total;
 
-                // console.log(list);
+                this.zone.runOutsideAngular(() => {
 
-                list.content.forEach((n) => {
-                    // TODO: maybe update it!
-                    if (!this.isNotificationExists(n.id)) {
-                        let nn = Notification.fromINotification(n);
-                        this.notifications.unshift(nn);
-                    } else {
-                        let notif = this.notifications.find((nnn) => nnn.id === n.id);
-                        if (notif) {
-                            notif.update(n);
+                    this.unreadNotificationsCount = list.unread_total;
+                    this.totalNotificationsCount = list.total;
+
+                    // console.log(list);
+
+                    list.content.forEach((n) => {
+                        // TODO: maybe update it!
+                        if (!this.isNotificationExists(n.id)) {
+                            let nn = Notification.fromINotification(n);
+                            this.notifications.unshift(nn);
+                        } else {
+                            let notif = this.notifications.find((nnn) => nnn.id === n.id);
+                            if (notif) {
+                                notif.update(n);
+                            }
                         }
-                    }
-                });
+                    });
 
-                this.notifications = this.notifications.sort((a, b) => {
-                    if (a.time > b.time) {
-                        return -1;
-                    } else if (a.time < b.time) {
-                        return 1;
-                    }
-                    return 0;
-                });
+                    this.notifications = this.notifications.sort((a, b) => {
+                        if (a.time > b.time) {
+                            return -1;
+                        } else if (a.time < b.time) {
+                            return 1;
+                        }
+                        return 0;
+                    });
 
-                this.toolbarNotifications = this.notifications.slice(0, 10);
+                    this.toolbarNotifications = this.notifications.slice(0, 10);
+
+                    // trigger change detection after all done
+                    this.zone.run(() => {});
+                });
 
                 return this.notifications;
             });

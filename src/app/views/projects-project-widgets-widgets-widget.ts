@@ -98,10 +98,12 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
             this.refresh();
         });
 
-        let widgetTesterController = new Core.Controller();
-        this._widgetTesterRenderer = new TestRenderer.ControllerRenderer(widgetTesterController, this.widgetTestScreen.nativeElement);
+        this.zone.runOutsideAngular(() => {
+            let widgetTesterController = new Core.Controller();
+            this._widgetTesterRenderer = new TestRenderer.ControllerRenderer(widgetTesterController, this.widgetTestScreen.nativeElement);
 
-        this.monacoEditorLoaderService.registerTypings([Libs.ConsoleLib, Widgets.ContextLib, Libs.UtilsLib, Widgets.WKLib]);
+            this.monacoEditorLoaderService.registerTypings([Libs.ConsoleLib, Widgets.ContextLib, Libs.UtilsLib, Widgets.WKLib]);
+        });
     }
 
     ngOnDestroy(): void {
@@ -210,37 +212,48 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     }
 
     onTestClick(): void {
+
         this.cleanTestView();
         this.buildErrors = null;
 
         let buildFailed = false;
-        this._widgetTesterRenderer.runCode(this.widgetCode, true, (e) => {
-            if (e.diagnostics) {
-                this.buildErrors = [];
-                for (let n in e.diagnostics) {
-                    if (!e.diagnostics.hasOwnProperty(n)) { continue; }
-                    const diagnosticsMessage = e.diagnostics[n];
-                    this.buildErrors.push({
-                        type: 'error',
-                        line: this.widgetCode.substr(0, Math.min(diagnosticsMessage.start, this.widgetCode.length)).split('\n').length,
-                        text: diagnosticsMessage.messageText
-                    });
-                }
-                buildFailed = true;
-                this.cleanTestView();
-            } else {
-                if (this.consoleLog) {
-                    this.consoleLog.addFromError(e, null, moment().format('HH:mm:ss.SSS'));
-                }
-            }
-        }, (message: MachineMessage) => {
-            if (this.consoleLog) {
-                this.consoleLog.addFromMessage(message, null, moment().format('HH:mm:ss.SSS'));
-            }
-        }, (type: string, message: string) => {
-            if (this.consoleLog) {
-                this.consoleLog.add(<ConsoleLogType>type, message);
-            }
+        this.zone.runOutsideAngular(() => {
+
+            this._widgetTesterRenderer.runCode(this.widgetCode, true, (e) => {
+                this.zone.run(() => {
+                    if (e.diagnostics) {
+                        this.buildErrors = [];
+                        for (let n in e.diagnostics) {
+                            if (!e.diagnostics.hasOwnProperty(n)) { continue; }
+                            const diagnosticsMessage = e.diagnostics[n];
+                            this.buildErrors.push({
+                                type: 'error',
+                                line: this.widgetCode.substr(0, Math.min(diagnosticsMessage.start, this.widgetCode.length)).split('\n').length,
+                                text: diagnosticsMessage.messageText
+                            });
+                        }
+                        buildFailed = true;
+                        this.cleanTestView();
+                    } else {
+                        if (this.consoleLog) {
+                            this.consoleLog.addFromError(e, null, moment().format('HH:mm:ss.SSS'));
+                        }
+                    }
+                });
+            }, (message: MachineMessage) => {
+                this.zone.run(() => {
+                    if (this.consoleLog) {
+                        this.consoleLog.addFromMessage(message, null, moment().format('HH:mm:ss.SSS'));
+                    }
+                });
+            }, (type: string, message: string) => {
+                this.zone.run(() => {
+                    if (this.consoleLog) {
+                        this.consoleLog.add(<ConsoleLogType>type, message);
+                    }
+                });
+            });
+
         });
 
         this.widgetInstance = this._widgetTesterRenderer.widget;
@@ -251,43 +264,51 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
             return;
         }
 
-        const widgetInterface = this.widgetInstance.getInterface();
-        for (let n in widgetInterface.digitalInputs) {
-            if (!widgetInterface.digitalInputs.hasOwnProperty(n)) { continue; }
-            this.testInputConnectors.push(widgetInterface.digitalInputs[n]);
-        }
-
-        for (let n in widgetInterface.analogInputs) {
-            if (!widgetInterface.analogInputs.hasOwnProperty(n)) { continue; }
-            this.testInputConnectors.push(widgetInterface.analogInputs[n]);
-        }
-
-        for (let n in widgetInterface.messageInputs) {
-            if (!widgetInterface.messageInputs.hasOwnProperty(n)) { continue; }
-            this.testInputConnectors.push(widgetInterface.messageInputs[n]);
-        }
-
-        this.widgetInstance.eventsEmitter.listenEvent('valueChanged', (e: Core.IOEvent) => {
-            if (e.connector.isInput()) {
-                return;
+        this.zone.runOutsideAngular(() => {
+            const widgetInterface = this.widgetInstance.getInterface();
+            for (let n in widgetInterface.digitalInputs) {
+                if (!widgetInterface.digitalInputs.hasOwnProperty(n)) { continue; }
+                this.testInputConnectors.push(widgetInterface.digitalInputs[n]);
             }
-            if (this.consoleLog) {
-                this.consoleLog.add('output', 'Output <strong>' + e.connector.name + '</strong> = ' + this.toReadableValue(e.connector.value));
-            }
-        });
 
-        this.widgetInstance.eventsEmitter.listenEvent('messageReceived', (e: Core.IOMessageEvent) => {
-            if (e.connector.isInput()) {
-                return;
+            for (let n in widgetInterface.analogInputs) {
+                if (!widgetInterface.analogInputs.hasOwnProperty(n)) { continue; }
+                this.testInputConnectors.push(widgetInterface.analogInputs[n]);
             }
-            if (this.consoleLog) {
-                this.consoleLog.add('output', 'Output <strong>' + e.connector.name + '</strong> = ' + this.toReadableValue(e.message));
+
+            for (let n in widgetInterface.messageInputs) {
+                if (!widgetInterface.messageInputs.hasOwnProperty(n)) { continue; }
+                this.testInputConnectors.push(widgetInterface.messageInputs[n]);
             }
+
+            this.widgetInstance.eventsEmitter.listenEvent('valueChanged', (e: Core.IOEvent) => {
+                if (e.connector.isInput()) {
+                    return;
+                }
+                if (this.consoleLog) {
+                    this.zone.run(() => {
+                        this.consoleLog.add('output', 'Output <strong>' + e.connector.name + '</strong> = ' + this.toReadableValue(e.connector.value));
+                    });
+                }
+            });
+
+            this.widgetInstance.eventsEmitter.listenEvent('messageReceived', (e: Core.IOMessageEvent) => {
+                if (e.connector.isInput()) {
+                    return;
+                }
+                if (this.consoleLog) {
+                    this.zone.run(() => {
+                        this.consoleLog.add('output', 'Output <strong>' + e.connector.name + '</strong> = ' + this.toReadableValue(e.message));
+                    });
+                }
+            });
+
         });
 
         if (buildFailed) {
             this.cleanTestView();
         }
+
     }
 
     toReadableValue(value: any): string {
@@ -311,12 +332,16 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     }
 
     onDigitalInputClick(connector: Core.Connector): void {
-        connector._inputSetValue(!connector.value);
+        this.zone.runOutsideAngular(() => {
+            connector._inputSetValue(!connector.value);
+        });
     }
 
     onAnalogInputChange(event: Event, connector: Core.Connector): void {
         let f = parseFloat((<HTMLInputElement>event.target).value);
-        connector._inputSetValue(!isNaN(f) ? f : 0);
+        this.zone.runOutsideAngular(() => {
+            connector._inputSetValue(!isNaN(f) ? f : 0);
+        });
     }
 
     onMessageInputSendClick(connector: Core.Connector): void {
@@ -357,7 +382,9 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
             values: values
         };
 
-        connector._inputSetValue(m);
+        this.zone.runOutsideAngular(() => {
+            connector._inputSetValue(m);
+        });
     }
 
     onSaveClick(): void {

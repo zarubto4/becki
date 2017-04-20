@@ -6,7 +6,7 @@
  * directory of this distribution.
  */
 
-import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angular/core';
+import { Input, Output, EventEmitter, Component, OnInit, ViewChild, NgZone } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { ModalModel } from '../services/ModalService';
 import { Blocks } from 'blocko';
@@ -38,37 +38,12 @@ export class ModalsBlockoBlockCodeEditorComponent implements OnInit {
 
     blockForm: FormGroup = null;
 
-    constructor(protected formBuilder: FormBuilder) {
+    constructor(protected formBuilder: FormBuilder, protected zone: NgZone) {
         this.blockForm = this.formBuilder.group({
             'color': ['', [Validators.required]],
             'icon': ['', [Validators.required]],
             'description': ['']
         });
-    }
-
-    validate() {
-
-        /*
-
-         if (msg.indexOf("is not defined") > -1) {
-         var index = msg.indexOf("is not defined");
-         msg = "<b>" + msg.substr(0, index) + "</b>" + msg.substr(index);
-         }
-
-         if (msg.indexOf("is not a function") > -1) {
-         var index = msg.indexOf("is not a function");
-         msg = "<b>" + msg.substr(0, index) + "</b>" + msg.substr(index);
-         }
-
-         if (msg.indexOf("Unexpected token") == 0) {
-         var len = "Unexpected token".length;
-         msg = msg.substr(0, len) + "<b>" + msg.substr(len) + "</b>";
-         }
-
-
-         this.error = {name: name, message: msg};
-
-         */
     }
 
     ngOnInit() {
@@ -84,8 +59,7 @@ export class ModalsBlockoBlockCodeEditorComponent implements OnInit {
     }
 
     onSubmitClick(): void {
-        this.validate();
-        if (!this.error) {
+        this.zone.runOutsideAngular(() => {
             let designJson = JSON.stringify({
                 backgroundColor: this.blockForm.controls['color'].value,
                 displayName: this.blockForm.controls['icon'].value,
@@ -96,8 +70,8 @@ export class ModalsBlockoBlockCodeEditorComponent implements OnInit {
             /*if (this.modalModel.block.controller) {
                 this.modalModel.block.controller._emitDataChanged();
             }*/
-            this.modalClose.emit(true);
-        }
+        });
+        this.modalClose.emit(true);
     }
 
     onCloseClick(): void {

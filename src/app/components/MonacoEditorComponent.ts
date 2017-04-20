@@ -14,7 +14,8 @@ import {
     ViewChild,
     Output,
     EventEmitter,
-    SimpleChanges
+    SimpleChanges,
+    NgZone
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService';
@@ -49,56 +50,64 @@ export class MonacoEditorComponent implements AfterViewInit, OnChanges, OnDestro
 
     monacoSubscription: Subscription = null;
 
-    constructor(protected monacoEditorLoaderService: MonacoEditorLoaderService) {
+    constructor(protected monacoEditorLoaderService: MonacoEditorLoaderService, protected zone: NgZone) {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        let code = changes['code'];
-        // TODO: https://github.com/angular/angular/issues/6114
-        if (code && this.editor && code.currentValue !==  this.editor.getModel().getValue()) {
-            this.editor.getModel().setValue(code.currentValue);
-        }
-        let language = changes['language'];
-        if (language && this.editor) {
-            throw new Error('Cannot change editor language after init.');
-        }
-        let readonly = changes['readonly'];
-        if (readonly && this.editor) {
-            this.editor.updateOptions({readOnly: readonly.currentValue});
-        }
-        let typings = changes['typings'];
-        if (typings && this.editor) {
-            this.monacoEditorLoaderService.setTypescriptTypings(typings.currentValue);
-        }
+        this.zone.runOutsideAngular(() => {
+            let code = changes['code'];
+            // TODO: https://github.com/angular/angular/issues/6114
+            if (code && this.editor && code.currentValue !==  this.editor.getModel().getValue()) {
+                this.editor.getModel().setValue(code.currentValue);
+            }
+            let language = changes['language'];
+            if (language && this.editor) {
+                throw new Error('Cannot change editor language after init.');
+            }
+            let readonly = changes['readonly'];
+            if (readonly && this.editor) {
+                this.editor.updateOptions({readOnly: readonly.currentValue});
+            }
+            let typings = changes['typings'];
+            if (typings && this.editor) {
+                this.monacoEditorLoaderService.setTypescriptTypings(typings.currentValue);
+            }
+        });
     }
 
     ngAfterViewInit(): void {
-        this.monacoSubscription = this.monacoEditorLoaderService.monacoLoaded.subscribe(() => {
+        this.zone.runOutsideAngular(() => {
+            this.monacoSubscription = this.monacoEditorLoaderService.monacoLoaded.subscribe(() => {
 
-            this.monacoEditorLoaderService.setTypescriptTypings(this.typings);
+                this.monacoEditorLoaderService.setTypescriptTypings(this.typings);
 
-            this.editor = monaco.editor.create(this.field.nativeElement, {
-                value: this.code,
-                language: this.language,
-                readOnly: this.readonly,
-                theme: 'vs-dark',
-                automaticLayout: true,
-                autoClosingBrackets: false
+                this.editor = monaco.editor.create(this.field.nativeElement, {
+                    value: this.code,
+                    language: this.language,
+                    readOnly: this.readonly,
+                    theme: 'vs-dark',
+                    automaticLayout: true,
+                    autoClosingBrackets: false
+                });
+                this.editor.getModel().onDidChangeContent(() => {
+                    this.code = this.editor.getModel().getValue();
+                    this.zone.run(() => {
+                        this.codeChange.emit(this.code);
+                    });
+                });
+
             });
-            this.editor.getModel().onDidChangeContent(() => {
-                this.code = this.editor.getModel().getValue();
-                this.codeChange.emit(this.code);
-            });
-
         });
     }
 
     ngOnDestroy(): void {
-        if (this.monacoSubscription) {
-            this.monacoSubscription.unsubscribe();
-        }
-        if (this.editor) {
-            this.editor.dispose();
-        }
+        this.zone.runOutsideAngular(() => {
+            if (this.monacoSubscription) {
+                this.monacoSubscription.unsubscribe();
+            }
+            if (this.editor) {
+                this.editor.dispose();
+            }
+        });
     }
 }

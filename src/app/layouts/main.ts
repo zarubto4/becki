@@ -3,7 +3,7 @@
  * directory of this distribution.
  */
 
-import { Component, OnDestroy, OnInit, Input, Inject, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input, Inject, OnChanges, SimpleChanges, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BackendService } from '../services/BackendService';
 import { BreadcrumbsService } from '../services/BreadcrumbsService';
@@ -55,7 +55,8 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
         private breadcrumbsService: BreadcrumbsService,
         private tabMenuService: TabMenuService,
         private activatedRoute: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private zone: NgZone,
     ) {
     }
 
@@ -107,20 +108,22 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
             return;
         }
 
-        let oldShowNotificationMenu = this.showNotificationMenu;
-        let oldShowUserMenu = this.showUserMenu;
-        let oldOpenTabMenuIndex = this.openTabMenuIndex;
-        setTimeout(() => {
-            if (oldShowNotificationMenu === this.showNotificationMenu) {
-                this.showNotificationMenu = false;
-            }
-            if (oldShowUserMenu === this.showUserMenu) {
-                this.showUserMenu = false;
-            }
-            if (oldOpenTabMenuIndex === this.openTabMenuIndex) {
-                this.openTabMenuIndex = -1;
-            }
-        }, 1);
+        this.zone.run(() => {
+            let oldShowNotificationMenu = this.showNotificationMenu;
+            let oldShowUserMenu = this.showUserMenu;
+            let oldOpenTabMenuIndex = this.openTabMenuIndex;
+            setTimeout(() => {
+                if (oldShowNotificationMenu === this.showNotificationMenu) {
+                    this.showNotificationMenu = false;
+                }
+                if (oldShowUserMenu === this.showUserMenu) {
+                    this.showUserMenu = false;
+                }
+                if (oldOpenTabMenuIndex === this.openTabMenuIndex) {
+                    this.openTabMenuIndex = -1;
+                }
+            }, 1);
+        });
     }
 
     mouseMoveEvent = () => {
@@ -144,14 +147,18 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
 
         this.initSidebarClosed();
         document.body.classList.add(...BODY_CLASSES);
-        document.body.addEventListener('mouseup', this.mouseUpEvent);
-        document.body.addEventListener('mousemove', this.mouseMoveEvent);
+        this.zone.runOutsideAngular(() => {
+            document.body.addEventListener('mouseup', this.mouseUpEvent);
+            document.body.addEventListener('mousemove', this.mouseMoveEvent);
+        });
     }
 
     ngOnDestroy(): void {
         document.body.classList.remove(...BODY_CLASSES);
-        document.body.removeEventListener('mouseup', this.mouseUpEvent);
-        document.body.removeEventListener('mousemove', this.mouseMoveEvent);
+        this.zone.runOutsideAngular(() => {
+            document.body.removeEventListener('mouseup', this.mouseUpEvent);
+            document.body.removeEventListener('mousemove', this.mouseMoveEvent);
+        });
     }
 
     initSidebarClosed() {

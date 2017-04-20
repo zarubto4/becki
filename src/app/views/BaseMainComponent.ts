@@ -6,7 +6,7 @@
 import { Router, ActivatedRoute } from '@angular/router';
 import { BackendService } from '../services/BackendService';
 import { ModalService } from '../services/ModalService';
-import { Injector } from '@angular/core';
+import { Injector, NgZone } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { BlockUIService } from '../services/BlockUIService';
@@ -28,8 +28,9 @@ export abstract class BaseMainComponent {
     protected formBuilder: FormBuilder = null;
     protected currentParamsService: CurrentParamsService = null;
     protected blockUIService: BlockUIService = null;
+    protected zone: NgZone = null;
 
-    constructor(injector: Injector) {
+    constructor(protected injector: Injector) {
         // console.log('BaseMainComponent init');
         if (injector) {
             this.backendService = injector.get(BackendService);
@@ -41,6 +42,7 @@ export abstract class BaseMainComponent {
             this.formBuilder = injector.get(FormBuilder);
             this.currentParamsService = injector.get(CurrentParamsService);
             this.blockUIService = injector.get(BlockUIService);
+            this.zone = injector.get(NgZone);
             injector.get(MonacoEditorLoaderService); // only for preload monaco scripts
         } else {
             throw new Error('Injector is not defined! ... Don\'t you forget to add \"constructor(injector:Injector) {super(injector)};\"" in inherited class?');

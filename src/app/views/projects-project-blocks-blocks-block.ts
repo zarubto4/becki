@@ -238,12 +238,16 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
     }
 
     onDigitalInputClick(connector: Core.Connector): void {
-        connector._inputSetValue(!connector.value);
+        this.zone.runOutsideAngular(() => {
+            connector._inputSetValue(!connector.value);
+        });
     }
 
     onAnalogInputChange(event: Event, connector: Core.Connector): void {
-        let f = parseFloat((<HTMLInputElement>event.target).value);
-        connector._inputSetValue(!isNaN(f) ? f : 0);
+        this.zone.runOutsideAngular(() => {
+            let f = parseFloat((<HTMLInputElement>event.target).value);
+            connector._inputSetValue(!isNaN(f) ? f : 0);
+        });
     }
 
     onMessageInputSendClick(connector: Core.Connector): void {
@@ -280,8 +284,10 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
             values.push(val);
         });
 
-        let m = new Core.Message(connector.argTypes, values);
-        connector._inputSetValue(m);
+        this.zone.runOutsideAngular(() => {
+            let m = new Core.Message(connector.argTypes, values);
+            connector._inputSetValue(m);
+        });
 
     }
 
@@ -344,24 +350,29 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
 
         if (this.tsErrors.length === 0) {
 
+            this.zone.runOutsideAngular(() => {
 
-            try {
-                let designJson = JSON.stringify({
-                    backgroundColor: this.blockForm.controls['color'].value,
-                    displayName: this.blockForm.controls['icon'].value,
-                    description: this.blockForm.controls['description'].value
-                });
-                this.tsBlock = this.blockoView.addTsBlockWithoutReadonlyCheck('', designJson, 22, 15);
-            } catch (e) { // TODO: promyslet jestli othle je ok [DH]
-            }
-
-            this.tsBlock.registerOutputEventCallback((connector: Core.Connector, eventType: Core.ConnectorEventType, value: (boolean | number | Core.Message)) => {
-                if (this.consoleLog) {
-                    this.consoleLog.add('output', 'Output <strong>' + connector.name + '</strong> = ' + this.toReadableValue(value));
+                try {
+                    let designJson = JSON.stringify({
+                        backgroundColor: this.blockForm.controls['color'].value,
+                        displayName: this.blockForm.controls['icon'].value,
+                        description: this.blockForm.controls['description'].value
+                    });
+                    this.tsBlock = this.blockoView.addTsBlockWithoutReadonlyCheck('', designJson, 22, 15);
+                } catch (e) { // TODO: promyslet jestli othle je ok [DH]
                 }
-            });
 
-            this.tsBlock.setCode(this.blockCode);
+                this.tsBlock.registerOutputEventCallback((connector: Core.Connector, eventType: Core.ConnectorEventType, value: (boolean | number | Core.Message)) => {
+                    this.zone.run(() => {
+                        if (this.consoleLog) {
+                            this.consoleLog.add('output', 'Output <strong>' + connector.name + '</strong> = ' + this.toReadableValue(value));
+                        }
+                    });
+                });
+
+                this.tsBlock.setCode(this.blockCode);
+
+            });
 
             // build errors can clean test view ... must check if still exist
             if (this.tsBlock) {
