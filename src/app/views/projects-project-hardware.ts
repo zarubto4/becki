@@ -16,6 +16,7 @@ import { ModalsRemovalModel } from '../modals/removal';
 import { IProject, IBoardShortDetail } from '../backend/TyrionAPI';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { CurrentParamsService } from '../services/CurrentParamsService';
+import {ModalsHardwareBootloaderUpdateModel} from "../modals/hardware-bootloader-update";
 
 @Component({
     selector: 'bk-view-projects-project-hardware',
@@ -65,7 +66,22 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     }
 
     onUpdateBootloaderClick(selected: IBoardShortDetail) {
-       // single tap on text
+        let model = new ModalsHardwareBootloaderUpdateModel(selected.id);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                /* this.blockUI();
+                  this.backendService.editBoardUserDescription(device.id, {personal_description: model.description})
+                  .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The device description was updated.'));
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The device cannot be updated.', reason));
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                    });
+            */}
+        });
+
     }
 
     onEditClick(device: IBoardShortDetail): void {
