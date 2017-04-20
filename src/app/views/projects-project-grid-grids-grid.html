@@ -123,7 +123,7 @@
                                 <div class="panel-body">
                                     <div *ngIf="group.grid_widgets.length == 0" style="color: gray; text-align: center;">No widgets in this group</div>
 
-                                    <a *ngFor="let widget of group.grid_widgets" (mousedown)="onWidgetDown($event,widget)" style="margin:5px; float:left; overflow:hidden; display:block; width:80px; height:80px; background:seagreen; color:white; font-size:18px; line-height: 80px; text-align: center; user-select: none;">{{widget.name}}</a>
+                                    <a *ngFor="let widget of group.grid_widgets" (mousedown)="onWidgetDown($event,widget)" style="cursor: move; margin:5px; float:left; overflow:hidden; display:block; width:80px; height:80px; background:seagreen; color:white; font-size:18px; line-height: 80px; text-align: center; user-select: none;">{{widget.name}}</a>
                                 </div>
                             </div>
                         </div>
