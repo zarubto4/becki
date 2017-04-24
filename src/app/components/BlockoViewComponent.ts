@@ -83,9 +83,29 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
             this.blockoController = new BlockoCore.Controller();
 
+            /*
+             *
+             * TODO !!!
+             * 
+             * Set url of proxy server
+             * Set auth token and instance id? (something like testing enviroment id...)
+             */
+            const serviceConfiguration = {
+                fetchParameters: {},
+                proxyServerUrl: ""
+            };
+
             this.blockoController.registerService(new Blocks.FetchService());
             this.blockoController.registerService(new Blocks.XmlApiService());
             this.blockoController.registerService(new Blocks.RestApiService());
+
+            /*
+             *
+             *  Sets new configuration for all services
+             * 
+             */
+            this.blockoController.servicesHandler.configuration = serviceConfiguration;
+            
 
             this.blockoController.safeRun = this.safeRun;
             this.blockoController.rendererFactory = this.blockoRenderer;
