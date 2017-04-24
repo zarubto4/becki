@@ -276,6 +276,8 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     public wsProtocol = 'ws';
 
+    public requestProxyServerUrl = 'http://127.0.0.1:3000/fetch/';
+
     private webSocket: WebSocket = null;
 
     private webSocketMessageQueue: IWebSocketMessage[] = [];
@@ -319,6 +321,11 @@ export abstract class BeckiBackend extends TyrionAPI {
                 this.protocol = 'https';
                 this.wsProtocol = 'wss';
             }
+        }
+
+        // TODO: better!!! (from Tyrion maybe) [DH]
+        if (location.hostname.indexOf('portal.stage.') === 0) {
+            this.requestProxyServerUrl = 'https://request.stage.byzance.cz/fetch/';
         }
 
         // David 1 IP
@@ -381,7 +388,7 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     // TOKEN MANIPULATIONS
 
-    private getToken(): string {
+    public getToken(): string {
         return window.localStorage.getItem('authToken');
     }
 

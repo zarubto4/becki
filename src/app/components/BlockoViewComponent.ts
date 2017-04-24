@@ -18,6 +18,7 @@ import {
     SimpleChanges, Output, EventEmitter, NgZone
 } from '@angular/core';
 import { ModalService } from '../services/ModalService';
+import { BackendService } from '../services/BackendService';
 import { ModalsBlockoConfigPropertiesModel } from '../modals/blocko-config-properties';
 import { ModalsBlockoBlockCodeEditorModel } from '../modals/blocko-block-code-editor';
 
@@ -61,7 +62,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     @ViewChild('field')
     field: ElementRef;
 
-    constructor(protected modalService: ModalService, protected zone: NgZone) {
+    constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: BackendService) {
         this.zone.runOutsideAngular(() => {
 
             this.blockoRenderer = new BlockoPaperRenderer.RendererController();
@@ -91,8 +92,10 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
              * Set auth token and instance id? (something like testing enviroment id...)
              */
             const serviceConfiguration = {
-                fetchParameters: {},
-                proxyServerUrl: ''
+                fetchParameters: {
+                    auth_token: this.backendService.getToken()
+                },
+                proxyServerUrl: this.backendService.requestProxyServerUrl
             };
 
             this.blockoController.registerService(new Blocks.FetchService());

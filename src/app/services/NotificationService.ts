@@ -66,6 +66,10 @@ export abstract class Notification {
             }
         }
 
+        if (n.notification_type === 'CHAIN_START' || n.notification_type === 'CHAIN_UPDATE' || n.notification_type === 'CHAIN_END') {
+            out.closeTime = null;
+        }
+
         return out;
     }
 
@@ -101,9 +105,15 @@ export abstract class Notification {
         if (n.notification_body && Array.isArray(n.notification_body)) {
             this.elementsBody = n.notification_body;
         }
+        if (n.notification_type === 'CHAIN_END') {
+            this.closeTime = 5000;
+        }
     }
 
     closeProgressWidth(): string {
+        if (this.closeTime === null) {
+            return '0%';
+        }
         return ((5000 - this.closeTime) / 50) + '%';
     }
 
@@ -125,6 +135,9 @@ export abstract class Notification {
             return;
         }
         if (this.highImportance) {
+            return;
+        }
+        if (this.closeTime === null) {
             return;
         }
         this.closeTime -= tickInterval;
