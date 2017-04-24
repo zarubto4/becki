@@ -43,8 +43,8 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.blockUI();
         this.backendService.getBoard(this.hardwareId)
             .then((board) => {
-                /*this.device = board;
-                this.device.mac_address = '21:23:43:45:34';
+                this.device = board;
+                /*this.device.mac_address = '21:23:43:45:34';
                 this.device.wifi_mac_address = '11:45:ab:4c:37';
                 this.device.personal_description = 'Muj device na stole.';
                 this.device.status.status = 'online';
@@ -60,7 +60,11 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 this.device.avaible_bootloader_id = 'gfgfdgtrf';
                 this.device.avaible_bootloader_version_name = 'Opaleny Karel';*/
                 // console.log(this.device);
-                this.timelinePosition = (this.device.status.required_c_programs.length * -200) + 800;
+                if (this.device && this.device.status) {
+                    this.timelinePosition = (this.device.status.required_c_programs.length * -200) + 800;
+                } else {
+                    this.timelinePosition = 0;
+                }
 
                 // console.log(board);
                 return this.backendService.getTypeOfBoard(board.type_of_board_id);

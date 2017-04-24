@@ -86,13 +86,13 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             /*
              *
              * TODO !!!
-             * 
+             *
              * Set url of proxy server
              * Set auth token and instance id? (something like testing enviroment id...)
              */
             const serviceConfiguration = {
                 fetchParameters: {},
-                proxyServerUrl: ""
+                proxyServerUrl: ''
             };
 
             this.blockoController.registerService(new Blocks.FetchService());
@@ -102,10 +102,10 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             /*
              *
              *  Sets new configuration for all services
-             * 
+             *
              */
             this.blockoController.servicesHandler.configuration = serviceConfiguration;
-            
+
 
             this.blockoController.safeRun = this.safeRun;
             this.blockoController.rendererFactory = this.blockoRenderer;

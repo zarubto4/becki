@@ -45,7 +45,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
             this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
                 this.project = project;
                 this.devices = project.boards;
-                if (this.devices.find(device => device.alert_list.length > 0)) {
+                if (this.devices.find((device, index, obj) => {return !!(device.alert_list && device.alert_list.length); })) {
                     this.bootloaderRequred = true;
                 } else {
                     this.bootloaderRequred = false;
