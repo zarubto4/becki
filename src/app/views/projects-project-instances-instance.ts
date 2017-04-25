@@ -177,7 +177,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                     this.blockoView.setDataJson(selectedProgramVersion.program);
 
                     if (this.instance.instance_remote_url) {
-                        const authToken = window.localStorage.getItem('authToken');
+                        const authToken = this.backendService.getToken();
                         this.homerDao = this.homerService.connectToHomer(this.instance.instance_remote_url, authToken);
 
                         this.homerDao.onOpenCallback = (e) => {
