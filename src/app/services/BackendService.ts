@@ -40,6 +40,7 @@ export class BackendService extends BeckiBackend {
             this.http.request(request.url, optionsArgs).toPromise()
                 .then((ngResponse: Response) => {
                     if (ngResponse.status === 401) {
+                        this.unsetToken();
                         this.router.navigate(['/login']);
                     }
                     resolve(new RestResponse(ngResponse.status, ngResponse.json()));
@@ -47,6 +48,7 @@ export class BackendService extends BeckiBackend {
                 .catch((ngResponseOrError: Response|any) => {
                     if (ngResponseOrError instanceof Response) {
                         if (ngResponseOrError.status === 401) {
+                            this.unsetToken();
                             this.router.navigate(['/login']);
                         }
                         resolve(new RestResponse(ngResponseOrError.status, ngResponseOrError.json()));

@@ -89,8 +89,8 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
             if (success) {
                 this.blockUI();
                 this.backendService.createProject({
-                    project_name: model.name,
-                    project_description: model.description,
+                    name: model.name,
+                    description: model.description,
                     product_id: model.product
                 }) // TODO: add tarrif nebo produkt či jak se to bude jmenovat
                     .then(() => {

@@ -48,6 +48,10 @@ export class ModalsSendInvoiceComponent implements OnInit {
         (<FormControl>(this.form.controls['email'])).setValue(this.modalModel.email);
     }
 
+    checkboxChanged(value: boolean) {
+        this.differentEmail = value;
+    }
+
     onSubmitClick(): void {
         this.modalModel.email = this.form.controls['email'].value;
         this.modalClose.emit(true);

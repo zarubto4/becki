@@ -4,7 +4,7 @@
  */
  -->
 
-<bk-layout-main tabMenu="tariffs-tarrif" [title]="product?product.product_individual_name:null">
+<bk-layout-main tabMenu="tariffs-tarrif" [title]="product?product.name:null">
     <div class="tabbable-line tabbable-full-width">
         <h3 class="title center-block"></h3>
         <div class="portlet light bordered">
@@ -29,9 +29,7 @@
                                 <p class="font-grey-salt">Average monthly cost</p>
                             </div>
                             <div class="price-table-content">
-                                <div *ngFor="let label of package.labels" class="line">
-                                    <i class="fa fa-fw {{label.icon|lowercase}} font-{{package.color|lowercase}}"></i> {{label.label}}
-                                </div>
+                                <p class="font-grey-salt">{{package.description}}</p>
                             </div>
                             <div class="arrow-down arrow-grey"></div>
                         </div>

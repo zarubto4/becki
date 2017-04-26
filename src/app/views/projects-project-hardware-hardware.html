@@ -80,12 +80,11 @@
                 Actual bootloader version:
                 <span class="font-grey-mint bold">{{device.actual_bootloader_id}}</span>
             </div>
-            <div *ngIf="device.avaible_bootloader_id">
-                Avalible bootloader version:
-                <span class="font-grey-mint bold">{{device.avaible_bootloader_id}}</span>
+            <div *ngIf="device.available_bootloader_id">
+                Available bootloader version:
+                <span class="font-grey-mint bold">{{device.available_bootloader_id}}</span>
             </div>
-            <button *ngIf="!(device.avaible_bootloader_id === device.actual_bootloader_id)" class="btn red"
-                    (click)="onUpdateBootloaderClick($event)">
+            <button *ngIf="!(device.available_bootloader_id === device.actual_bootloader_id)" class="btn red" (click)="onUpdateBootloaderClick($event)">
                 <i class="fa fa-plus-circle"></i>Update Required
             </button>
         </div>
@@ -216,9 +215,8 @@
                         <div class="timeline-body">
                             <div class="timeline-body-arrow"></div>
                             <div class="timeline-body-content">
-                                <p>Program: {{update.c_program_name ? update.c_program_name : 'Unknown'}}</p>
-                                <p>Version: <a (click)="onCProgramClick(update.c_program_id)">{{update.c_program_version_name
-                                    ? update.c_program_version_name : 'Unknown'}}</a></p>
+                                <p>Program: {{update.c_program_program_name ? update.c_program_program_name : 'Unknown'}}</p>
+                                <p>Version: <a (click)="onCProgramClick(update.c_program_id)">{{update.c_program_version_name ? update.c_program_version_name : 'Unknown'}}</a></p>
                                 <p>date <span style="background-color: red">TODO</span></p>
                             </div>
                         </div>
@@ -235,13 +233,11 @@
                              [style.width]="800+(device.status.required_backup_c_programs.length * 200) +'px'"
                              [style.left]="timelinePosition+'px'">
                             <ol *ngFor="let deviced of device.status.required_backup_c_programs.slice().reverse(); let i = index">
-
                                 <li>
-                                    <a class="border-after-red bg-after-red selected"
-                                       [class.selected]="device.status.actual_c_program_id == deviced.c_program_id"
-                                       [style.left]="(i*200)+'px'"><span
-                                        style="text-overflow: ellipsis; display:inline-block; overflow: hidden;white-space: nowrap;  width: 170px">{{deviced.c_program_name}}</span>
-                                        <br> <span style="font-size: 70%" class="font-grey-salsa">{{deviced.date_of_create|bkUnixTimeToDate}}</span>
+                                    <a class="border-after-red bg-after-red selected" [class.selected]="device.status.actual_c_program_id == deviced.c_program_id" [style.left]="(i*200)+'px'">
+                                        <span style="text-overflow: ellipsis; display:inline-block; overflow: hidden;white-space: nowrap;  width: 170px">{{deviced.c_program_program_name}}</span>
+                                        <br>
+                                        <span style="font-size: 70%" class="font-grey-salsa">{{deviced.date_of_create|bkUnixTimeToDate}}</span>
                                     </a>
                                 </li>
                             </ol>

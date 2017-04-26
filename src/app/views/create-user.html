@@ -8,11 +8,11 @@
         <p> Enter your e-mail address, nickname, name and password. </p>
 
         <div class="form-group">
-            <bk-form-input [control]="CreateUserForm.controls.email" [label]="'E-mail'"></bk-form-input>
-            <bk-form-input [control]="CreateUserForm.controls.nick_name" [label]="'Nick name'"></bk-form-input>
-            <bk-form-input [control]="CreateUserForm.controls.full_name" [label]="'Full name'"></bk-form-input>
-            <bk-form-input type="password" [control]="CreateUserForm.controls.password" [label]="'Password'"></bk-form-input>
-            <bk-form-input type="password" [control]="CreateUserForm.controls.passwordConfirm" [label]="'Password again'"></bk-form-input>
+            <bk-form-input [control]="CreateUserForm.controls['email']" [label]="'E-mail'"></bk-form-input>
+            <bk-form-input [control]="CreateUserForm.controls['nick_name']" [label]="'Nick name'"></bk-form-input>
+            <bk-form-input [control]="CreateUserForm.controls['full_name']" [label]="'Full name'"></bk-form-input>
+            <bk-form-input type="password" [control]="CreateUserForm.controls['password']" [label]="'Password'"></bk-form-input>
+            <bk-form-input type="password" [control]="CreateUserForm.controls['passwordConfirm']" [label]="'Password again'"></bk-form-input>
 
         </div>
         <div class="form-actions">

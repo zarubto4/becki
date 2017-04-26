@@ -9,7 +9,7 @@
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { IGeneralTariff, IGeneralTariffExtensions, ITariffRegister, IGoPayUrl } from '../backend/TyrionAPI';
+import { ITariff, IProductExtension, IProductNew, IInvoice, IProduct } from '../backend/TyrionAPI';
 import { FormGroup, Validators } from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
@@ -30,11 +30,11 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
     step: number = 1;
 
-    tariffs: IGeneralTariff[];
+    tariffs: ITariff[];
 
-    selectedTariff: IGeneralTariff;
+    selectedTariff: ITariff;
 
-    selectedExtensions: IGeneralTariffExtensions[] = [];
+    selectedExtensions: IProductExtension[] = [];
 
     inEu: boolean = false;
 
@@ -82,14 +82,14 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
     ngOnInit(): void {
         this.blockUI();
 
-        this.backendService.getAllTarifsForRegistrations()
+        this.backendService.getAllTariffs()
             .then(tariffs => {
                 this.tariffs = tariffs;
 
                 this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
 
                     if (params.hasOwnProperty('tariff')) {
-                        let t = this.tariffs.find(tariff => tariff.identificator === params['tariff']);
+                        let t = this.tariffs.find(tariff => tariff.identifier === params['tariff']);
                         if (t) {
                             this.chooseTariff(t);
                         } else {
@@ -174,7 +174,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         }
     }
 
-    chooseTariff(tariff: IGeneralTariff): void {
+    chooseTariff(tariff: ITariff): void {
 
         this.selectedTariff = tariff;
 
@@ -184,11 +184,11 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
         tariff.payment_methods.map(method => this.optionsPaymentMethod.push({
             label: method.user_description,
-            value: method.json_identificator
+            value: method.json_identifier
         }));
         tariff.payment_modes.map(mode => this.optionsPaymentMode.push({
             label: mode.user_description,
-            value: mode.json_identificator
+            value: mode.json_identifier
         }));
 
         let input: { [key: string]: any; } = {
@@ -203,14 +203,14 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             'country':                  ['', [Validators.required, Validators.minLength(4)]],
         };
 
-        if (this.selectedTariff.required_payment_method) {
+        if (this.selectedTariff.payment_method_required) {
             let value = '';
             if (this.optionsPaymentMethod.length === 1) {
                 value = this.optionsPaymentMethod[0].value;
             }
             input['payment_method'] =   [value, [Validators.required]]; // only if required_payment_method = true
         }
-        if (this.selectedTariff.required_payment_mode) {
+        if (this.selectedTariff.payment_mode_required) {
             // input['currency_type'] = ['', [Validators.required]];
             let value = '';
             if (this.optionsPaymentMode.length === 1) {
@@ -259,13 +259,13 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         return 'Unknown';
     }
 
-    addExtension(selected: IGeneralTariffExtensions): void {
+    addExtension(selected: IProductExtension): void {
         if (this.selectedExtensions.indexOf(selected) === -1) {
             this.selectedExtensions.push(selected);
         }
     }
 
-    removeExtension(selected: IGeneralTariffExtensions): void {
+    removeExtension(selected: IProductExtension): void {
         if (this.selectedExtensions.indexOf(selected) > -1) {
             let index = this.selectedExtensions.indexOf(selected);
             this.selectedExtensions.splice(index, 1); // not supported in Internet Explorer 7 and 8. but did we want users who still uses IE7/8?
@@ -290,11 +290,11 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
         this.blockUI();
 
-        let tariffData: ITariffRegister = {
+        let tariffData: IProductNew = {
             tariff_id: this.selectedTariff.id,
-            extensions_ids: this.selectedExtensions.map((se) => se.id),
+            extension_ids: this.selectedExtensions.map((se) => se.id),
 
-            product_individual_name: this.form.controls['product_individual_name'].value,
+            name: this.form.controls['product_individual_name'].value,
 
             invoice_email: this.form.controls['invoice_email'].value,
 
@@ -306,11 +306,11 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
         };
 
-        if (this.selectedTariff.required_payment_method) {
+        if (this.selectedTariff.payment_method_required) {
             tariffData['payment_method'] = this.form.controls['payment_method'].value;
         }
 
-        if (this.selectedTariff.required_payment_mode) {
+        if (this.selectedTariff.payment_mode_required) {
             tariffData['payment_mode'] = this.form.controls['payment_mode'].value;
         }
 
@@ -336,17 +336,21 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
                     this.fmWarning('Product was created but payment is required');
                     this.unblockUI();
 
-                    let gwUrl = (<IGoPayUrl>response).gw_url;
+                    if ((<IInvoice>response).gw_url) {
 
-                    this.goPayLoaderServiceSubscription = this.goPayLoaderService.goPay.subscribe((goPay) => {
-                        goPay.checkout({
-                            gatewayUrl: gwUrl,
-                            inline: true
-                        }, (checkoutResult) => {
-                            // TODO: console.log(checkoutResult);
-                            this.router.navigate(['/financial']);
+                        let gwUrl = (<IInvoice>response).gw_url;
+
+                        this.goPayLoaderServiceSubscription = this.goPayLoaderService.goPay.subscribe((goPay) => {
+                            goPay.checkout({
+                                gatewayUrl: gwUrl,
+                                inline: true
+                            }, (checkoutResult) => {
+                                // TODO: console.log(checkoutResult);
+                                this.router.navigate(['/financial']);
+                            });
                         });
-                    });
+
+                    }
 
                 } else if ((<any>response)._code_ === 201) {
                     this.fmSuccess('Product was created, now you can create a new project');

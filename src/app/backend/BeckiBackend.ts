@@ -403,7 +403,7 @@ export abstract class BeckiBackend extends TyrionAPI {
         return window.localStorage.getItem('authToken') ? true : false;
     }
 
-    private unsetToken(): void {
+    protected unsetToken(): void {
         window.localStorage.removeItem('authToken');
         this.refreshPersonInfo();
     }
