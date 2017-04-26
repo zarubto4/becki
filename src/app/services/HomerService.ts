@@ -7,8 +7,10 @@ export enum HomerCloseReason {
 
 export enum HomerOpenSource {
     CalledOpen = 0,
-    Reconnect = 1
+    Reconnect = 1,
+    External = 2
 }
+
 /*
  *
  * Class for communication between becki and homer
@@ -68,7 +70,7 @@ export class HomerDao {
      * Connect to websocket on url
      *
      */
-    protected connectWebSocket(callSource: HomerOpenSource = HomerOpenSource.CalledOpen) {
+    public connectWebSocket(callSource: HomerOpenSource = HomerOpenSource.CalledOpen) {
         if (this._closed && callSource !== HomerOpenSource.CalledOpen) {
             return;
         }
@@ -171,6 +173,15 @@ export class HomerDao {
     public set onOpenCallback(callback: ((e: any) => void)) {
         this._onOpenCallback = callback;
     }
+
+    /**
+     *
+     * Returns true, if websocket is still connected
+     *
+     */
+    public get connected(): boolean {
+        return !this._closed;
+    }
 }
 
 /**
@@ -183,14 +194,26 @@ export class HomerDao {
 @Injectable()
 export class HomerService {
 
+    protected _cache: {[url: string]: HomerDao};
+
     constructor(protected ngZone: NgZone) {
         console.info('Homer service init');
+        this._cache = {};
     }
 
     public connectToHomer(url: string, token: string): HomerDao {
         const finalUrl = url.replace('#token', token);
-        const homerDao = new HomerDao(finalUrl);
 
+        if (this._cache.hasOwnProperty(finalUrl)) {
+            if (!this._cache[finalUrl].connected) {
+                this._cache[finalUrl].connectWebSocket(HomerOpenSource.External);
+            }
+
+            return this._cache[finalUrl];
+        }
+
+        const homerDao = new HomerDao(finalUrl);
+        this._cache[finalUrl] = homerDao;
         return homerDao;
     }
 }

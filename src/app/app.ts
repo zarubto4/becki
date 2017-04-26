@@ -37,7 +37,7 @@ export class AppComponent implements DoCheck {
     }
 
     ngDoCheck() {
-        // console.log('ngDoCheck');
+       // console.log('ngDoCheck');
         this.doCheckCounter();
     }
 }
