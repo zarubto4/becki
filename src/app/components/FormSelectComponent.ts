@@ -6,7 +6,7 @@ import { Component, Input } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 
-export let formSelectComponentOptionsMaker = (objects: any[], valueFieldName: string, labelFieldName: string): FormSelectComponentOption[] => {
+export let formSelectComponentOptionsMaker = (objects: any[], valueFieldName: string, labelFieldName: string, interactive: boolean = false): FormSelectComponentOption[] => {
     // console.log('beckiFormSelectOptionsMaker called');
     if (!Array.isArray(objects)) {
         throw new Error('formSelectComponentOptionsMaker first param must be array');
@@ -20,8 +20,16 @@ export let formSelectComponentOptionsMaker = (objects: any[], valueFieldName: st
         if (typeof o[valueFieldName] === 'string' || typeof o[valueFieldName] === 'number') {
             v = '' + o[valueFieldName];
         }
-        if (typeof o[labelFieldName] === 'string' || typeof o[labelFieldName] === 'number') {
-            l = '' + o[labelFieldName];
+        if (interactive) {
+            l = labelFieldName;
+            for (let k in o) {
+                if (!o.hasOwnProperty(k)) { continue; }
+                l = l.replace(new RegExp('%' + k + '%', 'g'), o[k]);
+            }
+        } else {
+            if (typeof o[labelFieldName] === 'string' || typeof o[labelFieldName] === 'number') {
+                l = '' + o[labelFieldName];
+            }
         }
         if (v != null && l != null) {
             out.push({
