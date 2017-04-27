@@ -29,6 +29,9 @@ import { ModalsBlockoBlockCodeEditorModel } from '../modals/blocko-block-code-ed
 export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy {
 
     @Input()
+    disableExecution: boolean = false;
+
+    @Input()
     readonly: boolean = false;
 
     @Input()
@@ -79,10 +82,16 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
             this.blockoRenderer.showBlockNames = this.showBlockNames;
             this.blockoRenderer.simpleMode = this.simpleMode;
-            this.blockoRenderer.canConfigInReadonly = true;
+            this.blockoRenderer.canConfigInReadonly = this.canConfig;
             this.blockoRenderer.autosize = this.autosize;
 
             this.blockoController = new BlockoCore.Controller();
+
+            if (this.disableExecution) {
+                this.blockoController.configuration.asyncEventsEnabled = false;
+                this.blockoController.configuration.inputEnabled = false;
+                this.blockoController.configuration.outputEnabled = false;
+            }
 
             /*
              *
@@ -134,15 +143,26 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
 
     public get serviceHandler(): Blocks.ServicesHandler {
-        let sh: Blocks.ServicesHandler = null;
-        this.zone.runOutsideAngular(() => {
-            sh = this.blockoController.servicesHandler;
+        return this.zone.runOutsideAngular(() => {
+            return this.blockoController.servicesHandler;
         });
-        return sh;
     }
 
     ngOnChanges(changes: SimpleChanges): void {
         this.zone.runOutsideAngular(() => {
+
+            let disableExecution = changes['disableExecution'];
+            if (disableExecution) {
+                if (!disableExecution.isFirstChange()) {
+                    throw new Error('Execution enabled cannot be changed.');
+                }
+
+                if (disableExecution.currentValue) {
+                    this.blockoController.configuration.asyncEventsEnabled = false;
+                    this.blockoController.configuration.inputEnabled = false;
+                    this.blockoController.configuration.outputEnabled = false;
+                }
+            }
 
             let readonly = changes['readonly'];
             if (readonly) {
@@ -174,18 +194,6 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             if (safeRun) {
                 this.blockoController.safeRun = safeRun.currentValue;
             }
-            // TODO:
-            /*
-            let spy = changes["spy"];
-            if (spy && !spy.isFirstChange()) {
-                if (spy.previousValue) {
-                    this.unsubscribeSpy(spy.previousValue);
-                }
-                if (spy.currentValue) {
-                    this.subscribeSpy(spy.currentValue);
-                }
-            }
-            */
 
         });
     }

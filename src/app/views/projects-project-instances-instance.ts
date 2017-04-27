@@ -66,7 +66,13 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                 this.liveViewLoaded = true;
             }
         } else {
-            this.liveViewLoaded = false;
+            if (this.liveViewLoaded) {
+                this.liveViewLoaded = false;
+                if (this.homerDao) {
+                    this.homerDao.close();
+                    this.homerDao = null;
+                }
+            }
         }
     }
 
@@ -75,6 +81,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
         if (this.homerDao) {
             this.homerDao.close();
+            this.homerDao = null;
         }
     }
 

@@ -133,14 +133,14 @@ export class HomerDao {
     public close(reason: HomerCloseReason = HomerCloseReason.CalledClose) {
         if (this._webSocket) {
             console.info('homer_service:', 'closing_connection (', reason, '): ', this._url);
-        }
-        this._webSocket.close();
-        this._webSocket = null;
-        clearTimeout(this._webSocketReconnectTimeout);
-        this._webSocketReconnectTimeout = null;
+            this._webSocket.close();
+            this._webSocket = null;
+            clearTimeout(this._webSocketReconnectTimeout);
+            this._webSocketReconnectTimeout = null;
 
-        if (reason === HomerCloseReason.CalledClose) {
-            this._closed = true;
+            if (reason === HomerCloseReason.CalledClose) {
+                this._closed = true;
+            }
         }
     }
 
@@ -194,26 +194,12 @@ export class HomerDao {
 @Injectable()
 export class HomerService {
 
-    protected _cache: {[url: string]: HomerDao};
-
     constructor(protected ngZone: NgZone) {
         console.info('Homer service init');
-        this._cache = {};
     }
 
     public connectToHomer(url: string, token: string): HomerDao {
         const finalUrl = url.replace('#token', token);
-
-        if (this._cache.hasOwnProperty(finalUrl)) {
-            if (!this._cache[finalUrl].connected) {
-                this._cache[finalUrl].connectWebSocket(HomerOpenSource.External);
-            }
-
-            return this._cache[finalUrl];
-        }
-
-        const homerDao = new HomerDao(finalUrl);
-        this._cache[finalUrl] = homerDao;
-        return homerDao;
+        return new HomerDao(finalUrl);
     }
 }
