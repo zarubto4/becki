@@ -5,11 +5,11 @@
     </div>
     <div class="modal-body">
 
-        <bk-form-color-picker label="Block color" [control]="blockForm.controls.color" [waitForTouch]="false"></bk-form-color-picker>
+        <bk-form-color-picker label="Block color" [control]="blockForm.controls['color']" [waitForTouch]="false"></bk-form-color-picker>
 
-        <bk-form-fa-icon-select label="Block icon" [control]="blockForm.controls.icon" [waitForTouch]="false"></bk-form-fa-icon-select>
+        <bk-form-fa-icon-select label="Block icon" [control]="blockForm.controls['icon']" [waitForTouch]="false"></bk-form-fa-icon-select>
 
-        <bk-form-input label="Block description" [control]="blockForm.controls.description" [waitForTouch]="false"></bk-form-input>
+        <bk-form-input label="Block description" [control]="blockForm.controls['description']" [waitForTouch]="false"></bk-form-input>
 
         <div class="form-group">
             <label>Block code</label>

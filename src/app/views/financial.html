@@ -32,7 +32,7 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let product of products">
-                    <td class="no-wrap"><a (click)="onProductClick(product)"><b>{{product.product_individual_name}}</b></a></td>
+                    <td class="no-wrap"><a (click)="onProductClick(product)"><b>{{product.name}}</b></a></td>
                     <td class="no-wrap ">
                         <span title="Bank transfer" class="font-blue-chambray" *ngIf="product.payment_method=='bank_transfer'">
                             <i class="fa fa-lg fa-fw fa-exchange"> </i> Bank transfer

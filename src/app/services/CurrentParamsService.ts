@@ -55,9 +55,9 @@ export class CurrentParamsService {
     protected currentProductNameSubject: Subject<string> = null;
     public currentProductNameSnapshot: string = null;
 
-    public currentInvoiceId: Observable<string> = null;
-    protected currentInvoiceIdSubject: Subject<string> = null;
-    public currentInvoiceIdSnapshot: string = null;
+    public currentInvoiceNumber: Observable<string> = null;
+    protected currentInvoiceNumberSubject: Subject<string> = null;
+    public currentInvoiceNumberSnapshot: string = null;
 
     public currentGridName: Observable<string> = null;
     protected currentGridNameSubject: Subject<string> = null;
@@ -83,7 +83,7 @@ export class CurrentParamsService {
         this.currentGridName = this.currentGridNameSubject = new Subject<string>();
         this.currentInstanceId = this.currentInstanceIdSubject = new Subject<string>();
         this.currentProductName = this.currentProductNameSubject = new Subject<string>();
-        this.currentInvoiceId = this.currentInvoiceIdSubject = new Subject<string>();
+        this.currentInvoiceNumber = this.currentInvoiceNumberSubject = new Subject<string>();
 
         router.events.subscribe(event => {
             if (event instanceof NavigationCancel || event instanceof NavigationEnd) {
@@ -145,7 +145,8 @@ export class CurrentParamsService {
                 this.backendService.getAllProducts().then((products) => {
                     let p = products.find(product => params['product'] === '' + product.id); // TODO: make product id string in Tyrion!!! [DH]
                     if (p) {
-                        this.currentProductNameSnapshot = p.product_individual_name;
+                        this.currentProductNameSnapshot = p.name
+                        ;
                         this.currentProductNameSubject.next(this.currentProductNameSnapshot);
                     }
                 });
@@ -156,13 +157,13 @@ export class CurrentParamsService {
         if (this.currentParamsSnapshot['invoice'] !== params['invoice']) {
 
             if (!params['invoice']) {
-                this.currentInstanceIdSnapshot = null;
-                this.currentInstanceIdSubject.next(this.currentInstanceIdSnapshot);
+                this.currentInvoiceNumberSnapshot = null;
+                this.currentInvoiceNumberSubject.next(this.currentInvoiceNumberSnapshot);
             } else {
                 // TODO: remove parseInt after make invoice id string in Tyrion!!! [DH]
                 this.backendService.getInvoice(params['invoice']).then((invoice) => {
-                    this.currentInstanceIdSnapshot = invoice.invoice.date_of_create;
-                    this.currentInstanceIdSubject.next(this.currentInstanceIdSnapshot);
+                    this.currentInvoiceNumberSnapshot = invoice.invoice.invoice_number;
+                    this.currentInstanceIdSubject.next(this.currentInvoiceNumberSnapshot);
                 });
             }
 

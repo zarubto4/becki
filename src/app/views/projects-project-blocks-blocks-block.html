@@ -38,11 +38,11 @@
                     </div>
                 </div>
 
-                <bk-form-color-picker label="Block color" [control]="blockForm.controls.color" [waitForTouch]="false"></bk-form-color-picker>
+                <bk-form-color-picker label="Block color" [control]="blockForm.controls['color']" [waitForTouch]="false"></bk-form-color-picker>
 
-                <bk-form-fa-icon-select label="Block icon" [control]="blockForm.controls.icon" [waitForTouch]="false"></bk-form-fa-icon-select>
+                <bk-form-fa-icon-select label="Block icon" [control]="blockForm.controls['icon']" [waitForTouch]="false"></bk-form-fa-icon-select>
 
-                <bk-form-input label="Block description" [control]="blockForm.controls.description" [waitForTouch]="false"></bk-form-input>
+                <bk-form-input label="Block description" [control]="blockForm.controls['description']" [waitForTouch]="false"></bk-form-input>
 
                 <div class="form-group">
                     <label>Block code</label>
@@ -128,19 +128,19 @@
                                         <template [ngIf]="argType == argTypes.Float">
                                             <div class="col-md-8">
                                                 <div class="block-tester-message-input-label">float <strong>Arg #{{index}}</strong>:</div>
-                                                <input type="number" class="form-control" step="0.1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                                <input type="number" class="form-control" step="0.1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
                                             </div>
                                         </template>
                                         <template [ngIf]="argType == argTypes.Integer">
                                             <div class="col-md-8">
                                                 <div class="block-tester-message-input-label">integer <strong>Arg #{{index}}</strong>:</div>
-                                                <input type="number" class="form-control" step="1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                                <input type="number" class="form-control" step="1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
                                             </div>
                                         </template>
                                         <template [ngIf]="argType == argTypes.String">
                                             <div class="col-md-8">
                                                 <div class="block-tester-message-input-label">string <strong>Arg #{{index}}</strong>:</div>
-                                                <input type="text" class="form-control" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                                <input type="text" class="form-control" (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
                                             </div>
                                         </template>
 

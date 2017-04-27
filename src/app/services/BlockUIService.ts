@@ -10,8 +10,8 @@ export class BlockUIService {
     private blocked: boolean = false;
 
     protected blockUITimeout: any = null;
-    protected blockUIDisplay: boolean = false;
-    protected blockUIOpen: boolean = false;
+    public blockUIDisplay: boolean = false;
+    public blockUIOpen: boolean = false;
 
 
     constructor() {

@@ -33,10 +33,10 @@
                 <!-- PERSONAL TAB -->
                 <div class="tab-pane" [class.active]="openTabName == 'personal'">
                     <form>
-                        <bk-form-input label="Full Name" type="text" [control]="infoForm.controls.fullName"></bk-form-input>
-                        <bk-form-input label="Nick Name" type="text" [control]="infoForm.controls.nickName"></bk-form-input>
-                        <bk-form-select label="Gender" [options]="genderList" [control]="infoForm.controls.gender"></bk-form-select>
-                        <bk-form-select label="State" [options]="countryList" [control]="infoForm.controls.state"></bk-form-select>
+                        <bk-form-input label="Full Name" type="text" [control]="infoForm.controls['fullName']"></bk-form-input>
+                        <bk-form-input label="Nick Name" type="text" [control]="infoForm.controls['nickName']"></bk-form-input>
+                        <bk-form-select label="Gender" [options]="genderList" [control]="infoForm.controls['gender']"></bk-form-select>
+                        <bk-form-select label="State" [options]="countryList" [control]="infoForm.controls['state']"></bk-form-select>
 
                         <div class="margin-top-10">
                             <button (click)="changeInfo()" class="btn green">Save</button>
@@ -72,9 +72,9 @@
                 <!-- PASSWORD TAB -->
                 <div class="tab-pane" [class.active]="openTabName == 'password'">
                     <form>
-                        <bk-form-input label="Current password" type="password" [control]="passwordForm.controls.currentPassword"></bk-form-input>
-                        <bk-form-input label="New password" type="password" [control]="passwordForm.controls.newPassword"></bk-form-input>
-                        <bk-form-input label="New password again" type="password" [control]="passwordForm.controls.newPasswordConfirm"></bk-form-input>
+                        <bk-form-input label="Current password" type="password" [control]="passwordForm.controls['currentPassword']"></bk-form-input>
+                        <bk-form-input label="New password" type="password" [control]="passwordForm.controls['newPassword']"></bk-form-input>
+                        <bk-form-input label="New password again" type="password" [control]="passwordForm.controls['newPasswordConfirm']"></bk-form-input>
 
                         <div class="margin-top-10">
                             <button type="submit" (click)="changePassword()" class="btn green" [disabled]="!passwordForm.valid">Change password</button>
@@ -85,9 +85,9 @@
                 <!-- EMAIL TAB -->
                 <div class="tab-pane" [class.active]="openTabName == 'email'">
                     <form>
-                        <bk-form-input label="Current e-mail" type="email" [control]="emailForm.controls.currentEmail"></bk-form-input>
-                        <bk-form-input label="New e-mail" type="email" [control]="emailForm.controls.newEmail"></bk-form-input>
-                        <bk-form-input label="New e-mail again" type="email" [control]="emailForm.controls.newEmailConfirm"></bk-form-input>
+                        <bk-form-input label="Current e-mail" type="email" [control]="emailForm.controls['currentEmail']"></bk-form-input>
+                        <bk-form-input label="New e-mail" type="email" [control]="emailForm.controls['newEmail']"></bk-form-input>
+                        <bk-form-input label="New e-mail again" type="email" [control]="emailForm.controls['newEmailConfirm']"></bk-form-input>
 
                         <div class="margin-top-10">
                             <button type="submit" (click)="changeEmail()" class="btn green" [disabled]="!emailForm.valid">Change e-mail</button>

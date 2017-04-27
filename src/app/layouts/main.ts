@@ -48,16 +48,19 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
 
     private notifMouseMoveSend: boolean = false;
 
+    breadcrumbsService: BreadcrumbsService = null;
+
     constructor(
         public notificationService: NotificationService,
         public backendService: BackendService,
         @Inject('navigation') private navigation: LabeledLink[],
-        private breadcrumbsService: BreadcrumbsService,
+        breadcrumbsService: BreadcrumbsService,
         private tabMenuService: TabMenuService,
         private activatedRoute: ActivatedRoute,
         private router: Router,
         private zone: NgZone,
     ) {
+        this.breadcrumbsService = breadcrumbsService;
     }
 
     ngOnChanges(changes: SimpleChanges): void {

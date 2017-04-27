@@ -60,8 +60,12 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
         });
     }
 
-    onDownloadPDFClick(invoice: IInvoice): void {
-        window.open(invoice.pdf_link, 'download');
+    onDownloadInvoicePDFClick(invoice: IInvoice): void {
+        window.open(invoice.invoice_pdf_link, 'download');
+    }
+
+    onDownloadProFormaPDFClick(invoice: IInvoice): void {
+        window.open(invoice.proforma_pdf_link, 'download');
     }
 
     onSendClick(invoice: IInvoice): void {

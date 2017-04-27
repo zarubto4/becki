@@ -4,7 +4,7 @@
  */
  -->
 
-<bk-layout-main tabMenu="tariffs-tarrif" [title]="product?product.product_individual_name:null">
+<bk-layout-main tabMenu="tariffs-tarrif" [title]="product?product.name:null">
     <div *ngIf="fullIvoice" class="tabbable-line tabbable-full-width">
         <h3 class="title center-block"></h3>
         <div class="portlet light bordered">
@@ -34,7 +34,7 @@
                         <br>
                         <div class="row">
                             <div class="col-sm-6"><b>Status:</b> {{fullIvoice.invoice.payment_status}}</div>
-                            <div class="col-sm-6"><b>Paid in:</b> {{fullIvoice.invoice.date_of_create|bkUnixTimeToDate}}</div>
+                            <div class="col-sm-6"><b>Paid in:</b> {{fullIvoice.invoice.created|bkUnixTimeToDate}}</div>
                         </div>
                         <br>
                         <div>

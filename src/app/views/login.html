@@ -10,8 +10,8 @@
             <button class="close" (click)="onCloseAlertClick($event)"></button>
             <span [innerHTML]="loginError | bkNl2Br"></span>
         </div>
-        <bk-form-input [control]="loginForm.controls.email" [label]="'E-mail'"></bk-form-input>
-        <bk-form-input [control]="loginForm.controls.password" [label]="'Password'" [type]="'password'"></bk-form-input>
+        <bk-form-input [control]="loginForm.controls['email']" [label]="'E-mail'"></bk-form-input>
+        <bk-form-input [control]="loginForm.controls['password']" [label]="'Password'" [type]="'password'"></bk-form-input>
         <div class="form-actions">
             <button type="submit" class="btn green uppercase" (click)="onLoginClick($event)" [disabled]="!loginForm.valid">Login</button>
             <button type="button" [disabled]="!resendVertification && !loginForm.valid" *ngIf="resendVertification" class="btn green uppercase" (click)="onResendClick()">Resend</button>

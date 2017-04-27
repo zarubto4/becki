@@ -3,7 +3,7 @@
  * directory of this distribution.
  */
  -->
-<bk-layout-main  tabMenu="tariffs-tarrif" [title]="product?product.product_individual_name:null">
+<bk-layout-main  tabMenu="tariffs-tarrif" [title]="product?product.name:null">
     <div class="tabbable-line tabbable-full-width">
         <h3 class="title center-block"></h3>
         <div class="portlet light bordered">
@@ -37,10 +37,13 @@
                 <tr *ngFor="let invoice of invoices">
                     <td class="no-wrap"><a (click)="onInvoiceClick(invoice)">{{invoice.invoice_number}}</a></td>
                     <td>{{invoice.id}}</td>
-                    <td> {{invoice.date_of_create|bkUnixTimeToDate}} </td>
+                    <td> {{invoice.created|bkUnixTimeToDate}} </td>
                     <td><span *ngIf="!invoice.require_payment"><i class="  font-green-jungle fa fa-check "></i></span><span *ngIf="invoice.require_payment"><a class="font-red-thunderbird" (click)="onPayClick(invoice)">Payment required</a></span></td>
                     <td class="no-wrap text-right">
-                        <button (click)="onDownloadPDFClick(invoice)" title="Download as PDF" class="btn btn-icon-only white">
+                        <button *ngIf="invoice.invoice_pdf_link" (click)="onDownloadProFormaPDFClick(invoice)" title="Download pro forma invoice as PDF" class="btn btn-icon-only white">
+                            <i class=" fa fa-file-pdf-o"></i>
+                        </button>
+                        <button *ngIf="invoice.proforma_pdf_link" (click)="onDownloadInvoicePDFClick(invoice)" title="Download invoice as PDF" class="btn btn-icon-only white">
                             <i class=" fa fa-file-pdf-o"></i>
                         </button>
                         <button (click)="onSendClick(invoice)" title="Send" class="btn btn-icon-only white">

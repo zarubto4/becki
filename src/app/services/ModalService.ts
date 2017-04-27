@@ -59,7 +59,7 @@ export class ModalWrapper {
 @Injectable()
 export class ModalService {
 
-    private modalWrappers: ModalWrapper[] = [];
+    public modalWrappers: ModalWrapper[] = [];
 
     constructor(protected ngZone: NgZone) {
         console.info('ModalService init');

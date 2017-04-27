@@ -45,12 +45,11 @@
                                 <span class="font-grey-mint bold"><a (click)="onBlockoProgramVersionClick(instance)">{{instance.actual_instance.b_program_version_name}}</a></span>
                             </div>
 
-                            <div class="col-md-8">
+                            <!--div class="col-md-8">
                                 Description:
                                 <span class="font-grey-mint bold">{{instance.actual_instance.b_program_version_description}}</span>
                                 <span *ngIf="!instance.actual_instance.b_program_version_description" class="font-grey-mint bold">No description</span>
-
-                            </div>
+                            </div-->
                         </div>
                     </div>
                 </div>
@@ -125,7 +124,7 @@
                                 <!--/div-->
                                 <br>
                                 <div style="margin-left: 10px" *ngFor="let slave of hardware.device_board_pairs">
-                                    <strong><a (click)="onHardwareClick(hardware.slave.board_id)">{{slave.board_id}}</a>: </strong><a (click)="onCProgramClick(hardware)">{{slave.c_program_name}}</a><br>
+                                    <strong><a (click)="onHardwareClick(slave.board_id)">{{slave.board_id}}</a>: </strong><a (click)="onCProgramClick(hardware)">{{slave.c_program_name}}</a><br>
                                     <strong>Program: </strong><a (click)="onCProgramVersionClick(hardware)">{{slave.c_program_version_name}}</a><br>
                                     <br>
                                 </div>

@@ -64,7 +64,7 @@
                         <div *ngFor="let tariff of tariffs" class="col-md-3">
                             <div class="price-column-container border-active tariff">
                                 <div class="price-table-head bg-{{tariff.color|lowercase}}">
-                                    <h2 class="no-margin">{{tariff.tariff_name}}</h2>
+                                    <h2 class="no-margin">{{tariff.name}}</h2>
                                 </div>
                                 <div class="arrow-down border-top-{{tariff.color|lowercase}}"></div>
 
@@ -124,10 +124,7 @@
                                     <div class="price-ribbon">Included</div>
                                 </div>
                                 <div class="price-table-content">
-                                    <div *ngFor="let label of package.labels" class="line">
-                                        <i class="fa fa-fw {{label.icon|lowercase}} font-{{package.color|lowercase}}"></i>
-                                        {{label.label}}
-                                    </div>
+                                    <p class="font-grey-salt">{{package.description}}</p>
                                 </div>
                                 <div class="arrow-down arrow-grey"></div>
                                 <div class="price-table-footer">
@@ -150,10 +147,7 @@
                                     <div class="price-ribbon" *ngIf="selectedExtensions.indexOf(package) > -1">Included</div>
                                 </div>
                                 <div class="price-table-content">
-                                    <div *ngFor="let label of package.labels" class="line">
-                                        <i class="fa fa-fw {{label.icon|lowercase}} font-{{package.color|lowercase}}"></i>
-                                        {{label.label}}
-                                    </div>
+                                    <p class="font-grey-salt">{{package.description}}</p>
                                 </div>
                                 <div class="arrow-down arrow-grey"></div>
                                 <div class="price-table-footer">
@@ -208,7 +202,7 @@
                                 </div>
                             </div>
                             <div class="portlet-body">
-                                <bk-form-input [control]="form.controls.product_individual_name" label="Product name (Your unique name for this tariff order)"></bk-form-input>
+                                <bk-form-input [control]="form.controls['product_individual_name']" label="Product name (Your unique name for this tariff order)"></bk-form-input>
                             </div>
                         </div>
 
@@ -219,10 +213,10 @@
                                 </div>
                             </div>
                             <div class="portlet-body">
-                                <bk-form-input [control]="form.controls.invoice_email" type="email" label="Invoice e-mail"></bk-form-input>
+                                <bk-form-input [control]="form.controls['invoice_email']" type="email" label="Invoice e-mail"></bk-form-input>
 
-                                <bk-form-select *ngIf="form.controls.payment_method" [control]="form.controls.payment_method" label="Payment method" [options]="optionsPaymentMethod"></bk-form-select>
-                                <bk-form-select *ngIf="form.controls.payment_mode" [control]="form.controls.payment_mode" label="Payment mode" [options]="optionsPaymentMode"></bk-form-select>
+                                <bk-form-select *ngIf="form.controls['payment_method']" [control]="form.controls['payment_method']" label="Payment method" [options]="optionsPaymentMethod"></bk-form-select>
+                                <bk-form-select *ngIf="form.controls['payment_mode']" [control]="form.controls['payment_mode']" label="Payment mode" [options]="optionsPaymentMode"></bk-form-select>
                             </div>
                         </div>
 
@@ -241,21 +235,21 @@
                             </div>
                             <div class="portlet-body">
 
-                                <bk-form-input *ngIf="form.controls.full_name" [control]="form.controls.full_name" label="Full name"></bk-form-input>
-                                <bk-form-input *ngIf="form.controls.company_name" [control]="form.controls.company_name" label="Company name"></bk-form-input>
+                                <bk-form-input *ngIf="form.controls['full_name']" [control]="form.controls['full_name']" label="Full name"></bk-form-input>
+                                <bk-form-input *ngIf="form.controls['company_name']" [control]="form.controls['company_name']" label="Company name"></bk-form-input>
 
-                                <bk-form-input [control]="form.controls.street" label="Street"></bk-form-input>
-                                <bk-form-input [control]="form.controls.street_number" label="Street number"></bk-form-input>
-                                <bk-form-input [control]="form.controls.city" label="City"></bk-form-input>
-                                <bk-form-input [control]="form.controls.zip_code" label="Zip code"></bk-form-input>
-                                <bk-form-select (change)="checkInEu()" [control]="form.controls.country" label="Country" [options]="optionsCountryList"></bk-form-select>
+                                <bk-form-input [control]="form.controls['street']" label="Street"></bk-form-input>
+                                <bk-form-input [control]="form.controls['street_number']" label="Street number"></bk-form-input>
+                                <bk-form-input [control]="form.controls['city']" label="City"></bk-form-input>
+                                <bk-form-input [control]="form.controls['zip_code']" label="Zip code"></bk-form-input>
+                                <bk-form-select (change)="checkInEu()" [control]="form.controls['country']" label="Country" [options]="optionsCountryList"></bk-form-select>
 
-                                <bk-form-input *ngIf="form.controls.registration_no && !inEu" [control]="form.controls.registration_no" label="Registration number"></bk-form-input>
-                                <bk-form-input *ngIf="form.controls.vat_number && inEu" [control]="form.controls.vat_number" label="VAT number (with with country code)"></bk-form-input> <!--TODO předělat if na Model-Change -->
+                                <bk-form-input *ngIf="form.controls['registration_no'] && !inEu" [control]="form.controls['registration_no']" label="Registration number"></bk-form-input>
+                                <bk-form-input *ngIf="form.controls['vat_number'] && inEu" [control]="form.controls['vat_number']" label="VAT number (with with country code)"></bk-form-input> <!--TODO předělat if na Model-Change -->
 
-                                <bk-form-input *ngIf="form.controls.company_web" [control]="form.controls.company_web" type="url" label="Company web"></bk-form-input>
-                                <bk-form-input *ngIf="form.controls.company_authorized_email" [control]="form.controls.company_authorized_email" type="email" label="Company authorized contact e-mail"></bk-form-input>
-                                <bk-form-input *ngIf="form.controls.company_authorized_phone" [control]="form.controls.company_authorized_phone" type="tel" label="Company authorized contact phone"></bk-form-input>
+                                <bk-form-input *ngIf="form.controls['company_web']" [control]="form.controls['company_web']" type="url" label="Company web"></bk-form-input>
+                                <bk-form-input *ngIf="form.controls['company_authorized_email']" [control]="form.controls['company_authorized_email']" type="email" label="Company authorized contact e-mail"></bk-form-input>
+                                <bk-form-input *ngIf="form.controls['company_authorized_phone']" [control]="form.controls['company_authorized_phone']" type="tel" label="Company authorized contact phone"></bk-form-input>
 
                             </div>
                         </div>
@@ -327,10 +321,10 @@
                                     <tr>
                                         <td> Invoice e-mail: </td><td> {{form.controls["invoice_email"].value}} </td>
                                     </tr>
-                                    <tr *ngIf="form.controls.payment_method">
+                                    <tr *ngIf="form.controls['payment_method']">
                                         <td> Payment method: </td><td> {{translatePaymentMethod(form.controls["payment_method"].value)}} </td>
                                     </tr>
-                                    <tr *ngIf="form.controls.payment_mode">
+                                    <tr *ngIf="form.controls['payment_mode']">
                                         <td> Payment mode: </td><td> {{translatePaymentMode(form.controls["payment_mode"].value)}} </td>
                                     </tr>
 
@@ -341,10 +335,10 @@
                                         <td colspan="2"><strong> Company info </strong></td>
                                     </tr>
 
-                                    <tr *ngIf="form.controls.full_name">
+                                    <tr *ngIf="form.controls['full_name']">
                                         <td> Full name: </td><td> {{form.controls["full_name"].value}} </td>
                                     </tr>
-                                    <tr *ngIf="form.controls.company_name">
+                                    <tr *ngIf="form.controls['company_name']">
                                         <td> Company name: </td><td> {{form.controls["company_name"].value}} </td>
                                     </tr>
 
@@ -364,20 +358,20 @@
                                         <td> Country: </td><td> {{form.controls["country"].value}} </td>
                                     </tr>
 
-                                    <tr *ngIf="form.controls.registration_no && !inEu">
+                                    <tr *ngIf="form.controls['registration_no'] && !inEu">
                                         <td> Registration number: </td><td> {{form.controls["registration_no"].value}} </td>
                                     </tr>
-                                    <tr *ngIf="form.controls.vat_number && inEu">
+                                    <tr *ngIf="form.controls['vat_number'] && inEu">
                                         <td> VAT number: </td><td> {{form.controls["vat_number"].value}} </td>
                                     </tr>
 
-                                    <tr *ngIf="form.controls.company_web">
+                                    <tr *ngIf="form.controls['company_web']">
                                         <td> Company web: </td><td> {{form.controls["company_web"].value}} </td>
                                     </tr>
-                                    <tr *ngIf="form.controls.company_authorized_email">
+                                    <tr *ngIf="form.controls['company_authorized_email']">
                                         <td> Company authorized contact e-mail: </td><td> {{form.controls["company_authorized_email"].value}} </td>
                                     </tr>
-                                    <tr *ngIf="form.controls.company_authorized_phone">
+                                    <tr *ngIf="form.controls['company_authorized_phone']">
                                         <td> Company authorized contact phone: </td><td> {{form.controls["company_authorized_phone"].value}} </td>
                                     </tr>
                                 </tbody>
@@ -409,8 +403,8 @@
                                     </tr>
 
                                     <tr>
-                                        <td> {{selectedTariff.tariff_name}} </td>
-                                        <td> {{selectedTariff.tariff_description}} </td>
+                                        <td> {{selectedTariff.name}} </td>
+                                        <td> {{selectedTariff.description}} </td>
                                         <td class="text-center"> {{makePrice(selectedTariff.price.USD)}} </td>
                                     </tr>
 

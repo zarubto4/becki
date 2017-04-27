@@ -53,7 +53,7 @@ export class ModalsProjectPropertiesComponent implements OnInit {
 
     ngOnInit() {
         // TODO vypsat do závorky o který product type se jedná? něco jako  product_individual_name+(product_type)?
-        this.options = formSelectComponentOptionsMaker(this.modalModel.products, 'product_id', 'product_individual_name');
+        this.options = formSelectComponentOptionsMaker(this.modalModel.products, 'id', '%name% (%tariff%)', true);
         (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
         (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
         (<FormControl>(this.form.controls['product'])).setValue(this.modalModel.product);

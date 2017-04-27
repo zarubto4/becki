@@ -137,19 +137,19 @@
                                             <template [ngIf]="argType == 'float' ">
                                                 <div class="col-md-8">
                                                     <div class="widget-tester-message-input-label">Float <strong>Arg #{{index}}</strong>:</div>
-                                                    <input type="number" class="form-control" step="0.1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                                    <input type="number" class="form-control" step="0.1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
                                                 </div>
                                             </template>
                                             <template [ngIf]="argType == 'integer'">
                                                 <div class="col-md-8">
                                                     <div class="widget-tester-message-input-label">Int <strong>Arg #{{index}}</strong>:</div>
-                                                    <input type="number" class="form-control" step="1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                                    <input type="number" class="form-control" step="1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
                                                 </div>
                                             </template>
                                             <template [ngIf]="argType == 'string'">
                                                 <div class="col-md-8">
                                                     <div class="widget-tester-message-input-label">String <strong>Arg #{{index}}</strong>:</div>
-                                                    <input type="text" class="form-control" (input)="messageInputsValueCache[connector.name+argType] = $event.target.value">
+                                                    <input type="text" class="form-control" (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
                                                 </div>
                                             </template>
 

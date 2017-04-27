@@ -12,7 +12,7 @@ import { CurrentParamsService } from './CurrentParamsService';
 @Injectable()
 export class BreadcrumbsService {
 
-    protected breadcrumbs: LabeledLink[] = [];
+    breadcrumbs: LabeledLink[] = [];
 
     protected lastBreadName: string = '';
 
@@ -72,7 +72,7 @@ export class BreadcrumbsService {
         this.currentParamsService.currentProductName.subscribe(() => {
             this.refresh();
         });
-        this.currentParamsService.currentInvoiceId.subscribe(() => {
+        this.currentParamsService.currentInvoiceNumber.subscribe(() => {
             this.refresh();
         });
     }
@@ -93,7 +93,7 @@ export class BreadcrumbsService {
             case ':product':
                 return this.currentParamsService.currentProductNameSnapshot;
             case ':invoice':
-                return this.currentParamsService.currentInvoiceIdSnapshot;
+                return this.currentParamsService.currentInvoiceNumberSnapshot;
             case ':blocko':
                 return this.currentParamsService.currentBlockoNameSnapshot;
             case ':code':
