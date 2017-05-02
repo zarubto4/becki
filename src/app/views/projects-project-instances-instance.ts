@@ -16,6 +16,7 @@ import { NullSafeDefault } from '../helpers/NullSafe';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { HomerService, HomerDao } from '../services/HomerService';
+import { ModalsConfirmModel } from '../modals/confirm';
 
 @Component({
     selector: 'bk-view-projects-project-instances-instance',
@@ -96,9 +97,14 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                 this.timelinePosition = (this.instance.instance_history.length * -200) + 800;
                 this.currentHistoricInstance = this.instance.instance_history.pop();
                 this.unblockUI();
+
+                if (!this.instance.actual_instance) {
+                    this.router.navigate(['/', 'projects', this.id, 'instances']);
+                }
             })
             .catch(reason => {
                 this.fmError(`Instances ${this.id} cannot be loaded.`, reason);
+                this.router.navigate(['/', 'projects', this.id, 'instances']);
                 this.unblockUI();
             });
     }
@@ -144,7 +150,23 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     }
 
     onRemoveClick() {
-
+        let m = new ModalsConfirmModel('Shutdown instance', 'Do you want to shutdown running instance?');
+        this.modalService.showModal(m)
+            .then((success) => {
+                if (success) {
+                    this.blockUI();
+                    this.backendService.cloudInstanceShutDown(this.instance.blocko_instance_name)
+                        .then(() => {
+                            this.storageService.projectRefresh(this.id);
+                            this.refresh();
+                            this.unblockUI();
+                        })
+                        .catch((err) => {
+                            this.unblockUI();
+                            this.fmError('Cannot turn instance off.', err);
+                        });
+                }
+            });
     }
 
     onBlockoClick() {

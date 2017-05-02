@@ -756,6 +756,20 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             this.fmWarning('Must create some version first.');
             return;
         }
+        if (this.blockoProgram && this.blockoProgram.instance_details && this.blockoProgram.instance_details.instance_online) {
+            let mConfirm = new ModalsConfirmModel('Change instance version', 'Do you want to change running instance version?');
+            this.modalService.showModal(mConfirm)
+                .then((success) => {
+                    if (success) {
+                        this.changeVersionAction();
+                    }
+                });
+        } else {
+            this.changeVersionAction();
+        }
+    }
+
+    changeVersionAction() {
         let m = new ModalsBlockoVersionSelectModel(this.blockoProgramVersions, NullSafe(() => this.blockoProgram.instance_details.version_id));
         this.modalService.showModal(m)
             .then((success) => {
@@ -763,6 +777,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     this.blockUI();
                     this.backendService.cloudInstanceUpload(m.programVersion, {})
                         .then(() => {
+                            this.storageService.projectRefresh(this.blockoProgram.project_id);
                             this.refresh();
                         })
                         .catch((err) => {
@@ -787,6 +802,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             this.blockUI();
             this.backendService.cloudInstanceUpload(this.blockoProgram.instance_details.version_id, {})
                 .then(() => {
+                    this.storageService.projectRefresh(this.blockoProgram.project_id);
                     this.refresh();
                 })
                 .catch((err) => {
@@ -801,16 +817,22 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     onTurnOffClick(): void {
         if (NullSafe(() => this.blockoProgram.instance_details.instance_id)) {
-            this.blockUI();
-            this.backendService.cloudInstanceShutDown(this.blockoProgram.instance_details.instance_id)
-                .then(() => {
-                    this.refresh();
-                })
-                .catch((err) => {
-                    this.unblockUI();
-                    this.fmError('Cannot turn instance off.', err);
-                });
 
+            let m = new ModalsConfirmModel('Shutdown instance', 'Do you want to shutdown running instance?');
+            this.modalService.showModal(m)
+                .then((success) => {
+                    if (success) {
+                        this.blockUI();
+                        this.backendService.cloudInstanceShutDown(this.blockoProgram.instance_details.instance_id)
+                            .then(() => {
+                                this.refresh();
+                            })
+                            .catch((err) => {
+                                this.unblockUI();
+                                this.fmError('Cannot turn instance off.', err);
+                            });
+                    }
+                });
         } else {
             this.fmWarning('Cannot turn instance off.');
         }

@@ -10,6 +10,7 @@ import { BaseMainComponent } from './BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
 import { IHomerInstance, IInstanceShortDetail } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
+import { ModalsConfirmModel } from '../modals/confirm';
 
 @Component({
     selector: 'bk-view-projects-project-instances',
@@ -59,6 +60,22 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
     }
 
     onInstanceShutdownClick(instance: IInstanceShortDetail) {
+        let m = new ModalsConfirmModel('Shutdown instance', 'Do you want to shutdown running instance?');
+        this.modalService.showModal(m)
+            .then((success) => {
+                if (success) {
+                    this.blockUI();
+                    this.backendService.cloudInstanceShutDown(instance.id)
+                        .then(() => {
+                            this.storageService.projectRefresh(this.id);
+                            this.unblockUI();
+                        })
+                        .catch((err) => {
+                            this.unblockUI();
+                            this.fmError('Cannot turn instance off.', err);
+                        });
+                }
+            });
     }
 
     onInstanceEditClick(instance: IInstanceShortDetail) {
