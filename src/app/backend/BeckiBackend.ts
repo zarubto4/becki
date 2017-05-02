@@ -303,6 +303,8 @@ export abstract class BeckiBackend extends TyrionAPI {
     public personInfoSnapshot: IPerson = null;
     public personInfo: Rx.Subject<IPerson> = new Rx.Subject<IPerson>();
 
+    protected websocketErrorShown: boolean = false;
+
     // CONSTRUCTOR
 
     public constructor() {
@@ -539,6 +541,7 @@ export abstract class BeckiBackend extends TyrionAPI {
     }
 
     protected connectWebSocket(): void {
+        // console.log('connectWebSocket()');
         if (!this.tokenExist()) {
             // console.log('connectWebSocket() :: cannot connect now, user token doesn\'t exists.');
             return;
@@ -547,6 +550,8 @@ export abstract class BeckiBackend extends TyrionAPI {
 
         this.getWebsocketAccessToken()
             .then((webSocketToken: IWebSocketToken) => {
+
+                this.websocketErrorShown = false;
 
                 this.webSocket = new WebSocket(`${this.wsProtocol}://${this.host}/websocket/becki/${webSocketToken.websocket_token}`);
                 this.webSocket.addEventListener('close', this.reconnectWebSocketAfterTimeout);
@@ -622,7 +627,11 @@ export abstract class BeckiBackend extends TyrionAPI {
 
             })
             .catch((error) => {
-                this.webSocketErrorOccurred.next(error);
+                if (!this.websocketErrorShown) {
+                    this.websocketErrorShown = true;
+                    this.webSocketErrorOccurred.next(error);
+                }
+                this.reconnectWebSocketAfterTimeout();
             });
     }
 
