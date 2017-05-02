@@ -8,7 +8,7 @@
  * directory of this distribution.
  */
 import { IHomerInstanceRecord } from './../backend/TyrionAPI';
-import { Component, OnInit, Injector, OnDestroy, AfterContentChecked, ViewChild } from '@angular/core';
+import { Component, OnInit, Injector, OnDestroy, AfterContentChecked, ViewChild, ElementRef } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
 import { IHomerInstance } from '../backend/TyrionAPI';
@@ -17,6 +17,8 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { HomerService, HomerDao } from '../services/HomerService';
 import { ModalsConfirmModel } from '../modals/confirm';
+import { InstanceHistoryTimelineComponent } from '../components/InstanceHistoryTimelineComponent';
+
 
 @Component({
     selector: 'bk-view-projects-project-instances-instance',
@@ -30,7 +32,6 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     instance: IHomerInstance = null;
 
-    timelinePosition: number = 0;
 
     currentHistoricInstance: IHomerInstanceRecord;
 
@@ -38,6 +39,15 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     @ViewChild(BlockoViewComponent)
     blockoView: BlockoViewComponent;
+
+    @ViewChild(InstanceHistoryTimelineComponent)
+    instanceHistoryTimeline: InstanceHistoryTimelineComponent;
+
+    @ViewChild('historyEventsList')
+    historyEventsList: ElementRef;
+
+    @ViewChild('historyEvents')
+    historyEvents: ElementRef;
 
     homerDao: HomerDao;
 
@@ -94,7 +104,6 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
             .then((instance) => {
                 this.instance = instance;
                 this.loadBlockoLiveView();
-                this.timelinePosition = (this.instance.instance_history.length * -200) + 800;
                 this.currentHistoricInstance = this.instance.instance_history.pop();
                 this.unblockUI();
 
@@ -107,10 +116,6 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                 this.router.navigate(['/', 'projects', this.id, 'instances']);
                 this.unblockUI();
             });
-    }
-
-    onClickHistoryInstance(instance: IHomerInstanceRecord) {
-        this.currentHistoricInstance = instance;
     }
 
     onToggleinstanceTab(tab: string) {
@@ -131,15 +136,9 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     }
 
-    timelineMove(position: number) {
-
-        this.timelinePosition += position;
-
-        if (this.timelinePosition > 0 || this.timelinePosition < (-this.instance.instance_history.length * 200) + 800) {
-            this.timelinePosition = 0;
-        }
+    selectedHistoryItem(event: {index: number, item: IHomerInstanceRecord}) {
+        this.currentHistoricInstance = event.item;
     }
-
 
     connectionsGridCount() {
         return NullSafeDefault(() => this.instance.actual_instance.m_project_snapshot, []).length;

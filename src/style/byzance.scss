@@ -2037,6 +2037,7 @@ ul.hw-list li ul li, ul.grid-list li ul li {
     display: inline-block;
     margin: 0 40px 0 0;
 }
+
 .timeline-item .timeline-icon{
     float: left;
     width: 40px;
@@ -2151,4 +2152,127 @@ textarea.form-control {
     p {
         margin-top: 5px;
     }
+}
+
+.instance-timeline {
+    width: 100%;
+    height: 100px;
+    position: relative;
+}
+
+.instance-timeline .timeline-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 2px solid #e7505a;
+    width: 34px;
+    height: 34px;
+    border-radius: 50% !important;
+    line-height: 32px;
+    color: #e7505a;
+    text-align: center;
+    cursor: hand;
+}
+
+.instance-timeline .timeline-button:hover {
+    background: #e7505a;
+    color: #FFFFFF;
+}
+
+.instance-timeline .timeline-button i {
+    line-height: 32px;
+    position: relative;
+}
+
+.instance-timeline .timeline-button.btn-left {
+    left: 0;
+}
+
+.instance-timeline .timeline-button.btn-left i {
+    left: -1px;
+}
+
+.instance-timeline .timeline-button.btn-right {
+    right: 0;
+}
+
+.instance-timeline .timeline-button.btn-right i {
+    left: +1px;
+}
+
+.instance-timeline .timeline-container {
+    position: absolute;
+    left: 40px;
+    right: 40px;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.instance-timeline .timeline-container .center-holder {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 200px;
+    margin-left: -100px;
+}
+
+.instance-timeline .timeline-container .center-holder .slider {
+    position: absolute;
+    white-space: nowrap;
+    position: relative;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    left: 0;
+    transition: left 0.4s linear;
+    font-size: 0;
+}
+
+.instance-timeline .timeline-container .center-holder .slider a {
+    width: 200px;
+    display: inline-block;
+    text-align: center;
+    font-size: 12px;
+    color: #383838;
+    height: 50px;
+    position: relative;
+    margin: 0;
+    cursor: hand;
+    line-height: 20px;
+}
+
+.instance-timeline .timeline-container .center-holder .slider a::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    bottom: -6px;
+    height: 12px;
+    width: 12px;
+    border-radius: 50%;
+    background-color: transparent;
+    border: 2px solid;
+    border-color: #e7505a;
+    background: #e7505a;
+}
+
+.instance-timeline .timeline-container .center-holder .slider a:hover {
+    text-decoration: none;
+}
+
+.instance-timeline .timeline-container .center-holder .slider a.selected::after {
+    background: #ffffff;
+}
+
+.instance-timeline .timeline-container .line {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 0;
+    border-bottom: 2px solid #e7505a;
+    margin-top: -1px;
 }

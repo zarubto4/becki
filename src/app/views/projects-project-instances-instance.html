@@ -134,7 +134,7 @@
                         </div>
                     </div>
 
-                    <div *ngIf="instance && instance.instance_history && instance.instance_history.length > 1" class="cd-horizontal-timeline mt-timeline-horizontal loaded">
+                    <!--<div *ngIf="instance && instance.instance_history && instance.instance_history.length > 1" class="cd-horizontal-timeline mt-timeline-horizontal loaded">
                         <div class="timeline">
                             <div class="events-wrapper">
                                 <div class="events" style="transition: left 0.6s linear; " [style.width]="800+(instance.instance_history.length * 200) +'px'"
@@ -148,9 +148,7 @@
                                     </ol>
                                     <span class="filling-line bg-red" aria-hidden="true" style="transform: scaleX(1);"></span>
                                 </div>
-                                <!-- .events -->
                             </div>
-                            <!-- .events-wrapper -->
                             <ul class="cd-timeline-navigation mt-ht-nav-icon">
                                 <li>
                                     <a (click)=timelineMove(100); class="prev btn btn-outline red md-skip">
@@ -163,9 +161,8 @@
                                     </a>
                                 </li>
                             </ul>
-                            <!-- .cd-timeline-navigation -->
                         </div>
-                    </div>
+                    </div>-->
 
 
                 </div>
@@ -176,37 +173,8 @@
                 <div *ngIf="instanceTab == 'history'">
                     <br>
                     <div *ngIf="instance && instance.instance_history && instance.instance_history.length > 1" class="cd-horizontal-timeline mt-timeline-horizontal loaded">
-                    <div class="timeline">
-                        <div class="events-wrapper">
-                            <div class="events" style="transition: left 0.6s linear; " [style.width]="800+(instance.instance_history.length * 200) +'px'"
-                                 [style.left]="timelinePosition+'px'">
-                                <ol *ngFor="let instanced of instance.instance_history.slice().reverse(); let i = index">
-
-                                    <li>
-                                        <a (click)="onClickHistoryInstance(instanced)" class="border-after-red bg-after-red selected" [class.selected]="currentHistoricInstance == instanced"
-                                           [style.left]="(i*200)+'px'"><span style="text-overflow: ellipsis; display:inline-block; overflow: hidden;white-space: nowrap;  width: 170px">{{instanced.b_program_version_name}}</span> <br> <span style="font-size: 70%" class="font-grey-salsa">{{instanced.date_of_created|bkUnixTimeToDate}}</span> </a>
-                                    </li>
-                                </ol>
-                                <span class="filling-line bg-red" aria-hidden="true" style="transform: scaleX(1);"></span>
-                            </div>
-                            <!-- .events -->
-                        </div>
-                        <!-- .events-wrapper -->
-                        <ul class="cd-timeline-navigation mt-ht-nav-icon">
-                            <li>
-                                <a (click)=timelineMove(100); class="prev btn btn-outline red md-skip">
-                                    <i class="fa fa-chevron-left"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a (click)=timelineMove(-100); class="next btn btn-outline red md-skip inactive">
-                                    <i class="fa fa-chevron-right"></i>
-                                </a>
-                            </li>
-                        </ul>
-                        <!-- .cd-timeline-navigation -->
+                        <bk-instance-timeline [data]="instance.instance_history.concat().reverse()" (onSelect)="selectedHistoryItem($event)"></bk-instance-timeline>
                     </div>
-                </div>
 
                     <div class="becki-caption row">
                         <span class="font-blue-dark uppercase">
