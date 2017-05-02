@@ -343,6 +343,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
         this.buildInProgress = true;
         this.backendService.compileCProgram({
+            library_files: [],
             main: main,
             user_files: userFiles,
             type_of_board_id: this.codeProgram.type_of_board_id

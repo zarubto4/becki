@@ -40,10 +40,11 @@ if (program["debug"] == true) {
 
 var CONFIG = {
     definitionsRefPrefix: "#/definitions/",
-    ignoredDefinitions: [],
+    ignoredDefinitions: [ "EntityBean", "EntityBeanIntercept", "ValuePair" ],
     methodsReplace: {
         // "" for ignore
         "get:/test1": "",
+        "get:/test2": "",
         "get:/websocket/becki/{secure_token}": "",
         "get:/websocket/blocko_server/{identificator}": "",
         "get:/websocket/compilation_server/{identificator}": "",
@@ -51,6 +52,7 @@ var CONFIG = {
         "put:/websocket/terminal/identificator": "",
         "put:/websocket/terminal/identificator/{terminal_id}": "",
         "post:/notification/test/{mail}": "",
+        "post:/secure/rest_api_token_validation": "",
         // normal replaces
         "post:/c_program/version/compile": "compileCProgram",
         "put:/c_program/version/compile/{version_id}": "compileCProgramVersion",
