@@ -64,6 +64,9 @@ export abstract class Notification {
             if (n.buttons) {
                 out.buttons = n.buttons;
             }
+            if (n.notification_importance === 'low') {
+                out.wasRead = true;
+            }
         }
 
         if (n.notification_type === 'CHAIN_START' || n.notification_type === 'CHAIN_UPDATE' || n.notification_type === 'CHAIN_END') {
@@ -315,6 +318,16 @@ export class NotificationService {
                                 }
                             }
 
+                        } else if (notification.id && this.overlayNotifications.find((n) => n.id === notification.id)) {
+                            let notif = this.overlayNotifications.find((n) => n.id === notification.id);
+                            if (notif) {
+                                let oldWasRead = notif.wasRead;
+                                notif.update(notification);
+                                // wasRead changes to true
+                                if (oldWasRead === false && notif.wasRead === true) {
+                                    this.unreadNotificationsCount--;
+                                }
+                            }
                         } else {
                             let notif: Notification = Notification.fromINotification(notification);
                             switch (notification.notification_importance) {
