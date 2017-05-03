@@ -5,61 +5,51 @@
     <div *ngIf="device && typeOfBoard" class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
-                <span class="font-blue-dark">
-                    <i class="fa fa-fw fa-globe"></i>
-                    Hardware: {{device.id}}
+                <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-microchip"></i>
+                    Hardware devices - device <strong>{{device.personal_description?device.personal_description:device.id}}</strong>
                 </span>
-            </div>
-            <div class="becki-actions ">
-                <button class="btn red">
-                    <i class="fa fa-trash"></i>
-                </button>
-                <button class="btn blue">
-                    <i class="fa fa-gears"></i>
-                </button>
             </div>
         </div>
         <div>
+            <div>
+                Name:
+                <span class="font-grey-mint bold">{{device.personal_description}}</span>
+            </div>
             <div>
                 Hardware ID:
                 <span class="font-grey-mint bold">{{device.id}}</span>
             </div>
             <div>
-                Device type:
-                <a (click)="onBoardTypeClick(device.type_of_board_id)"><span
-                    class="bold">{{device.type_of_board_name}}</span></a>
+                Hardware revision:
+                <span class="font-grey-mint bold">{{typeOfBoard.revision}}</span>
+            </div>
+            <div>
+                Type:
+                <a (click)="onBoardTypeClick(device.type_of_board_id)"><span class="bold">{{device.type_of_board_name}}</span></a>
             </div>
             <div>
                 Producer:
-                <a (click)="onProducerClick(typeOfBoard.producer_id)"><span
-                    class="bold">{{typeOfBoard.producer_name}}</span></a>
+                <a (click)="onProducerClick(typeOfBoard.producer_id)"><span class="bold">{{typeOfBoard.producer_name}}</span></a>
             </div>
-
+            <div>
+                Hardware revision:
+                <span class="font-grey-mint bold">{{typeOfBoard.revision}}</span>
+            </div>
             <div *ngIf="device.mac_address">
                 Ethernet MAC adress:
                 <span class="font-grey-mint bold">{{device.mac_address}}</span>
             </div>
-            <div>
-                Personal description:
-                <span class="font-grey-mint bold">{{device.personal_description}}</span>
-            </div>
-            <div>
-                Series(Revision):
-                <span class="font-grey-mint bold">{{typeOfBoard.revision}}</span>
-            </div>
             <div *ngIf="device.wifi_mac_address">
-                Wifi MAC adress:
+                Wi-Fi MAC adress:
                 <span class="font-grey-mint bold">{{device.wifi_mac_address}}</span>
             </div>
+
 
             <div>
                 Auto Backup:
                 <span class="font-grey-mint bold">{{device.backup_mode}}</span>
-                <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;"
-                   [class.fa-toggle-on]="device.backup_mode" [class.fa-toggle-off]="!device.backup_mode"
-                   (click)="onAutobackupSwitchClick()"></i>
-
-
+                <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="device.backup_mode" [class.fa-toggle-off]="!device.backup_mode" (click)="onAutobackupSwitchClick()"></i>
             </div>
             <div>
                 Static Backup:
@@ -87,6 +77,7 @@
             <button *ngIf="!(device.available_bootloader_id === device.actual_bootloader_id)" class="btn red" (click)="onUpdateBootloaderClick($event)">
                 <i class="fa fa-plus-circle"></i>Update Required
             </button>
+
         </div>
     </div>
     <div *ngIf="device && typeOfBoard" class="portlet light bordered">

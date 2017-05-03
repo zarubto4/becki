@@ -27,21 +27,32 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
+                    <th class="full-width">Name</th>
                     <th>ID</th>
                     <th>Type</th>
-                    <th>Personal Description</th>
-                    <th>Alerts</th>
-                    <th>Stats</th>
+                    <th>Status</th>
                     <th class="text-center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let device of devices">
-                    <td class="no-wrap bold"><a (click)="onDeviceClick(device)">{{device.id}}</a></td>
+                    <td>
+                        <a (click)="onDeviceClick(device)"><strong>{{device.personal_description?device.personal_description:device.id}}</strong></a>
+                        <span class="icon-hint-wraper red" *ngIf="device.alert_list && device.alert_list.length > 0">
+                            <i class="fa fa-exclamation-triangle font-red-flamingo"></i>
+                            <div class="hint-fixed">
+                                <span class="hint right">
+                                    <div *ngFor="let alert of device.alert_list" class="no-wrap">{{alert|bkTanslateTable:'device_alerts'}}</div>
+                                </span>
+                            </div>
+                        </span>
+                    </td>
+                    <td class="no-wrap">{{device.id}}</td>
                     <td class="no-wrap"><a (click)="onBoardTypeClick(device.type_of_board_id)">{{device.type_of_board_name}}</a></td>
-                    <td>{{device.personal_description}}</td>
-                    <td><span *ngIf="device.alert_list && device.alert_list.length > 0" ><a *ngFor="let alert of device.alert_list" (click)="onUpdateBootloaderClick(device,alert)" class="font-red-intense">{{alert}}</a> <input type="checkbox" name="mass checking for update" (change)="bootloadersCheckboxChanged(device)"> </span></td>
-                    <td><span *ngIf="device.board_online_status" class="font-green-jungle">Online</span> <span *ngIf="!device.board_online_status" class="font-red-flamingo">Offline</span></td>
+                    <td class="no-wrap">
+                        <span *ngIf="device.board_online_status" class="font-green-jungle">online</span>
+                        <span *ngIf="!device.board_online_status" class="font-red-flamingo">offline</span>
+                    </td>
                     <td class="no-wrap">
                         <button title="Device properties" class="btn btn-icon-only green" [disabled]="!device.edit_permission" (click)="onEditClick(device)">
                             <i class="fa fa-cog"></i>
@@ -55,7 +66,7 @@
             </table>
         </div>
         <h3 *ngIf="!devices" class="text-center">Loading...</h3>
-        <h3 *ngIf="devices && devices.length == 0" class="text-center">No hardware in this project</h3>
+        <h3 *ngIf="devices && devices.length == 0" class="text-center">No devices in this project</h3>
     </div>
 
 </bk-layout-main>

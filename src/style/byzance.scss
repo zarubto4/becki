@@ -1848,6 +1848,10 @@ ul.hw-list li ul li, ul.grid-list li ul li {
     }
 }
 
+.icon-hint-wraper .hint-fixed {
+    position: fixed;
+}
+
 .icon-hint-wraper .hint {
     position: absolute;
     padding: 20px;
@@ -1872,6 +1876,17 @@ ul.hw-list li ul li, ul.grid-list li ul li {
         border-right-width: 10px;
         border-left-width: 10px;
         border-bottom: 10px solid black;
+    }
+
+    &.right {
+        left: -19px;
+        right: initial;
+        top: 12px;
+
+        &:after {
+            left: 17px;
+            right: initial;
+        }
     }
 }
 

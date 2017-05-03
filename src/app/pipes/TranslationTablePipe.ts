@@ -11,14 +11,12 @@ import { TranslationService } from './../services/TranslationService';
 export class TranslateTablePipe implements PipeTransform {
     constructor(public translationService: TranslationService) { }
 
-    transform(input: string, key: string, table: string, lang: string = 'en'): string {
-        // input = key
-
+    transform(input: string, table: string, lang: string = 'en'): string {
         let translated = this.translationService.translateTable(input, table, lang);
         if (!translated) {
             return '!!!' + input;
         }
         return translated;
     }
-    // how to call multiple arguments: {{ myData | TranslatePipe:table:lang }}
+    // how to call multiple arguments: {{ myData | bkTanslateTable:table:lang }}
 }

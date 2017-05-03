@@ -19,6 +19,9 @@ export class StaticTranslation {
                 'NO_COLLISION': 'We are not found any collisions',
                 'ALREADY_IN_INSTANCE': 'Attention! Hardware is already running in the Instance',
                 'PLANNED_UPDATE': 'the update is planned',
+            },
+            'device_alerts': {
+                'BOOTLOADER_REQUIRED': 'Bootloader update required'
             }
         },
         'cz': {
