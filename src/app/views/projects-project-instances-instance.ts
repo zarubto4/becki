@@ -18,6 +18,7 @@ import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { HomerService, HomerDao } from '../services/HomerService';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { InstanceHistoryTimelineComponent } from '../components/InstanceHistoryTimelineComponent';
+import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
 
 
 @Component({
@@ -48,6 +49,9 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     @ViewChild('historyEvents')
     historyEvents: ElementRef;
+
+    @ViewChild(ConsoleLogComponent)
+    consoleLog: ConsoleLogComponent;
 
     homerDao: HomerDao;
 
@@ -84,6 +88,10 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                     this.homerDao = null;
                 }
             }
+        }
+
+        if (this.instanceTab !== 'history') {
+            this.currentHistoricInstance = null;
         }
     }
 
@@ -172,6 +180,10 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     }
 
+    onBoardTypeClick(boardTypeId: string): void {
+        this.navigate(['/hardware', boardTypeId]);
+    }
+
     onBlockoProgramVersionClick(instance: IHomerInstance) {
         this.router.navigate(['/projects', this.id, 'blocko', instance.b_program_id, {version: instance.actual_instance.b_program_version_id}]);
 
@@ -185,16 +197,20 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
         this.router.navigate(['projects', this.id, 'grid', projectId, programId]);
     }
 
+    onGridProgramVersionClick(projectId: string, programId: string, versionId: string) {
+        this.router.navigate(['projects', this.id, 'grid', projectId, programId, {version: versionId}]);
+    }
+
     onHardwareClick(hardwareId: string) {
         this.router.navigate(['projects', this.id, 'hardware', hardwareId]);
     }
 
-    onCProgramClick(projectId: string) {
-        this.backendService.getCProgramVersion(projectId).then(Cprogram => this.router.navigate(['projects', this.id, 'code']));
+    onCProgramClick(programId: string) {
+        this.router.navigate(['projects', this.id, 'code', programId]);
     }
 
-    onCProgramVersionClick(projectId: string, programId: string) {
-        this.router.navigate(['projects', this.id, 'code', projectId, programId]);
+    onCProgramVersionClick(programId: string, versionId: string) {
+        this.router.navigate(['projects', this.id, 'code', programId, {version: versionId}]);
     }
 
     loadBlockoLiveView() {
@@ -212,6 +228,10 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                             this.homerDao.onOpenCallback = (e) => {
                                 this.homerDao.sendMessage({
                                     messageType: 'getValues'
+                                });
+
+                                this.homerDao.sendMessage({
+                                    messageType: 'getLogs'
                                 });
                             };
 
@@ -245,6 +265,19 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
             if (m.messageType === 'newExternalOutputConnectorValue') {
                 controller.setOutputExternalConnectorValue(m.targetType, m.targetId, m.connectorName, m.value);
+            }
+
+            if (m.messageType === 'newConsoleEvent') {
+                this.zone.run(() => {
+                    this.consoleLog.add(m.consoleMessageType, m.consoleMessage);
+                });
+            }
+
+            if (m.messageType === 'newErrorEvent') {
+                controller.setError(m.blockId, true);
+                this.zone.run(() => {
+                    this.consoleLog.add('error', m.errorMessage);
+                });
             }
 
             if (m.messageType === 'getValues') {
@@ -294,6 +327,25 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                         }
                     }
                 }
+            }
+
+            if (m.messageType === 'getLogs') {
+                this.zone.run(() => {
+                    if (m.logs) {
+                        for (let i = 0; i < m.logs.length; i++) {
+                            const log = m.logs[i];
+                            this.consoleLog.add(log.type, log.message, log.time);
+                        }
+                    }
+
+                    if (m.errors) {
+                        for (let i in m.errors) {
+                            if (m.errors.hasOwnProperty(i)) {
+                                controller.setError(i, true);
+                            }
+                        }
+                    }
+                });
             }
         });
     }

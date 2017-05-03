@@ -21,8 +21,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-
-                    <th>ID</th>
+                    <th class="full-width">ID</th>
                     <th class="no-wrap">Blocko program</th>
                     <th class="no-wrap">Version</th>
                     <th class="no-wrap">Status</th>
@@ -39,7 +38,7 @@
                         <span *ngIf="!instance.instance_is_online" class="font-red">Offline</span>
                     </td>
                     <td class="no-wrap text-right">
-                        <button title="shutdown" class="btn btn-icon-only red-flamingo" (click)="onInstanceShutdownClick(instance)"> <!-- TODO PERMISIONS -->
+                        <button title="shutdown" class="btn btn-icon-only red" (click)="onInstanceShutdownClick(instance)"> <!-- TODO PERMISIONS -->
                             <i class="fa fa-power-off"></i>
                         </button>
                         <!--<button title="edit instence" class="btn btn-icon-only grey" (click)="onInstanceEditClick(instance)"> - TODO PERMISIONS -
