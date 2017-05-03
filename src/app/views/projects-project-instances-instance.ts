@@ -270,6 +270,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
             }
 
             if (m.messageType === 'newErrorEvent') {
+                controller.setError(m.blockId, true);
                 this.zone.run(() => {
                     if (m.errorName) {
                         this.consoleLog.add('error', m.errorName + ': ' + m.errorMessage);
