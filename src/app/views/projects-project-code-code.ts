@@ -82,7 +82,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 });
             }
             if (params['version']) {
-                this.router.navigate(['/projects', this.projectId, 'code', this.codeId]);
+                this.router.navigate(['/projects', this.projectId, 'code', this.codeId], {replaceUrl: true});
                 this.selectVersionByVersionId(params['version']);
             }
         });
