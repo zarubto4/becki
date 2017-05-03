@@ -14,8 +14,8 @@ if [ "$HOSTNAME" == "portal-stage-byzance" ] ; then
   git checkout .
   git checkout tags/stage
   echo "== install npm dependencies =="
-  npm prune --production
-  npm install --production
+  npm prune
+  npm install
   echo "== build =="
   npm run build
 else
