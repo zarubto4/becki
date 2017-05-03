@@ -271,7 +271,11 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
             if (m.messageType === 'newErrorEvent') {
                 this.zone.run(() => {
-                    this.consoleLog.add('error', m.errorName + ': ' + m.errorMessage);
+                    if (m.errorName) {
+                        this.consoleLog.add('error', m.errorName + ': ' + m.errorMessage);
+                    } else {
+                        this.consoleLog.add('error', m.errorMessage);
+                    }
                 });
             }
 
