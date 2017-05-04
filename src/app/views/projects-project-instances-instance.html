@@ -37,7 +37,7 @@
                             </div>
 
                             <div>
-                                version:
+                                Version:
                                 <span class="font-grey-mint bold"><a (click)="onBlockoProgramVersionClick(instance)">{{instance.actual_instance.b_program_version_name}}</a></span>
                             </div>
 
@@ -66,7 +66,7 @@
 
 
         <div class="col-md-12">
-            <div *ngIf="instance" class="portlet portlet light bordered">
+            <div *ngIf="instance" class="portlet portlet light bordered" style="min-height:290px">
                 <div class="portlet-title tabbable-line">
                     <div class="becki-caption">
                         <span class="font-blue-dark uppercase">
@@ -183,20 +183,23 @@
 
 
                 <div *ngIf="instanceTab == 'history'">
-                    <br>
-                    <div *ngIf="instance && instance.instance_history && instance.instance_history.length > 1" class="cd-horizontal-timeline mt-timeline-horizontal loaded">
-                        <bk-instance-timeline [data]="instance.instance_history.concat().reverse()" (onSelect)="selectedHistoryItem($event)"></bk-instance-timeline>
+                    <div *ngIf="instance && instance.instance_history && instance.instance_history.length > 1">
+                        <div class="cd-horizontal-timeline mt-timeline-horizontal loaded">
+                            <bk-instance-timeline [data]="instance.instance_history.concat().reverse()" (onSelect)="selectedHistoryItem($event)"></bk-instance-timeline>
+                        </div>
+                        <div *ngIf="!currentHistoricInstance" style="text-align: center;">
+                            <div><i class="fa fa-chevron-up"></i></div>
+                            <h3 style="margin-top: 10px">Select version for see details</h3>
+                        </div>
+                        <div class="becki-caption row" *ngIf="currentHistoricInstance">
+                            <span class="font-blue-dark uppercase">
+                                <h3> <i class="fa fa-fw fa-hdd-o"></i> {{currentHistoricInstance.b_program_version_name}} </h3>
+                            </span>
+                        </div>
                     </div>
-                    <div *ngIf="!currentHistoricInstance" style="text-align: center;">
-                        <div><i class="fa fa-chevron-up"></i></div>
-                        <h3 style="margin-top: 10px">Select version for see details</h3>
+                    <div *ngIf="!(instance && instance.instance_history && instance.instance_history.length > 1)">
+                        <h3 style="text-align: center; margin: 80px;">There is no history for this instance</h3>
                     </div>
-                    <div class="becki-caption row" *ngIf="currentHistoricInstance">
-                        <span class="font-blue-dark uppercase">
-                            <h3> <i class="fa fa-fw fa-hdd-o"></i> {{currentHistoricInstance.b_program_version_name}} </h3>
-                        </span>
-                    </div>
-                    <br>
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="col-6" *ngIf="currentHistoricInstance" >
@@ -294,7 +297,14 @@
                             <h3 style="margin-bottom:10px;">{{procedure.type_of_update|bkTanslate}}</h3>
                             <!--<div>Created: <strong> {{procedure.date_of_create|bkUnixTimeToDate}}</strong></div>-->
                             <div>Planned: <strong> {{procedure.date_of_planing|bkUnixTimeToDate}}</strong></div>
-                            <div>Progress: <strong>{{procedure.state_fraction}}</strong></div>
+                            <div *ngIf="procedure.procedure_size_all">
+                                <span>Progress:</span>
+                                <strong>{{procedure.procedure_size_complete}}/{{procedure.procedure_size_all}}</strong>
+                                <!--<div style="position: relative; height: 32px;">
+                                    <div style="width: 100%;position: absolute;top: 50%;left: 0;height: 0;border-bottom: 2px solid #e7505a;margin-top: -1px;"></div>
+                                    <div *ngFor="let i of [0,1...,30]" [style.left]="((i/30)*100) + '%'" style="position: absolute; transform: translateX(-50%) translateY(-50%);top: 50%;height: 12px;width: 12px;border-radius: 50%;border: 2px solid;border-color: #e7505a;background: #e7505a;"></div>
+                                </div>-->
+                            </div>
                             <div class="table-scrollable" *ngIf="procedure.updates.length">
                                 <table class="table table-hover">
                                     <thead>
