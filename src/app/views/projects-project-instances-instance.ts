@@ -269,14 +269,14 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
             if (m.messageType === 'newConsoleEvent') {
                 this.zone.run(() => {
-                    this.consoleLog.add(m.consoleMessageType, m.consoleMessage);
+                    this.consoleLog.add(m.consoleMessageType, m.consoleMessage, m.consoleMessageTime);
                 });
             }
 
             if (m.messageType === 'newErrorEvent') {
                 controller.setError(m.blockId, true);
                 this.zone.run(() => {
-                    this.consoleLog.add('error', m.errorMessage);
+                    this.consoleLog.add('error', m.errorMessage, m.errorTime);
                 });
             }
 
