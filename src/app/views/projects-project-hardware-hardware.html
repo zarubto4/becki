@@ -16,14 +16,7 @@
                 Name:
                 <span class="font-grey-mint bold">{{device.personal_description}}</span>
             </div>
-            <div>
-                Hardware ID:
-                <span class="font-grey-mint bold">{{device.id}}</span>
-            </div>
-            <div>
-                Hardware revision:
-                <span class="font-grey-mint bold">{{typeOfBoard.revision}}</span>
-            </div>
+
             <div>
                 Type:
                 <a (click)="onBoardTypeClick(device.type_of_board_id)"><span class="bold">{{device.type_of_board_name}}</span></a>
@@ -33,9 +26,16 @@
                 <a (click)="onProducerClick(typeOfBoard.producer_id)"><span class="bold">{{typeOfBoard.producer_name}}</span></a>
             </div>
             <div>
+                Hardware ID:
+                <span class="font-grey-mint bold">{{device.id}}</span>
+            </div>
+            <div>
                 Hardware revision:
                 <span class="font-grey-mint bold">{{typeOfBoard.revision}}</span>
             </div>
+
+            <hr>
+
             <div *ngIf="device.mac_address">
                 Ethernet MAC adress:
                 <span class="font-grey-mint bold">{{device.mac_address}}</span>
@@ -44,15 +44,10 @@
                 Wi-Fi MAC adress:
                 <span class="font-grey-mint bold">{{device.wifi_mac_address}}</span>
             </div>
-
-
             <div>
                 Auto Backup:
                 <span class="font-grey-mint bold">{{device.backup_mode}}</span>
                 <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="device.backup_mode" [class.fa-toggle-off]="!device.backup_mode" (click)="onAutobackupSwitchClick()"></i>
-            </div>
-            <div>
-                Static Backup:
             </div>
             <div *ngIf="device.status.actual_backup_c_program_version_name">
                 Program:
@@ -85,32 +80,37 @@
             <div class="becki-caption">
                 <span class="font-blue-dark">
                     <i class="fa fa-fw fa-globe"></i>
-                    Schema
+                    State
                 </span>
             </div>
         </div>
-        <div class="portlet-title">
-            <div class="becki-caption sub-title">
-                <p>
-                    <i class="fa fa-fw fa-tasks"></i>
-                    Server: <a (click)="onServerClick()">{{device.status.server_name ? device.status.server_name :
-                    'Unknown'}}</a> (<span class="{{device.status.server_online_status ? 'font-green' : 'font-red'}}">{{device.status.server_online_status ? 'online' : 'offline'}}</span>)
-                </p>
-                <p>
-                    <i class="fa fa-fw fa-cloud-upload"></i>
-                    Instance: <a (click)="onInstanceClick(device.status.instance_id)">{{device.status.instance_id ?
-                    device.status.instance_id : 'Unknown'}}</a> (<span
-                    class="{{device.status.instance_online_status ? 'font-green' : 'font-red'}}">{{device.status.instance_online_status ? 'online' : 'offline'}}</span>)
-                </p>
-                <p>
-                    <i class="fa fa-fw fa-microchip"></i>
-                    Device type: <a
-                    (click)="onBoardTypeClick(device.type_of_board_id)">{{device.type_of_board_name}}</a> (<span
-                    class="{{device.status.status == 'online' ? 'font-green' : 'font-red'}}">{{device.status.status}}</span>)
-                </p>
+        <div class="portlet-body">
+
+            <div class="row">
+                <div class="col-sm-4 text-center">
+                    <i class="fa fa-fw fa-lg fa-microchip"></i>
+                    Device:
+                    <span *ngIf="device.status.status == 'online'" class="bold font-green-jungle">online</span>
+                    <span *ngIf="device.status.status != 'online'" class="bold font-red">offline</span>
+                </div>
+                <div class="col-sm-4 text-center">
+                    <i class="fa fa-fw fa-lg fa-tasks"></i>
+                    Server:
+                    <span *ngIf="device.status.server_name" class="bold">{{device.status.server_name}}</span>
+                    <span *ngIf="!device.status.server_name" class="bold">none</span>
+                    <span *ngIf="device.status.server_online_status" class="bold font-green-jungle">(online)</span>
+                    <span *ngIf="!device.status.server_online_status" class="bold font-red">(offline)</span>
+                </div>
+                <div class="col-sm-4 text-center">
+                    <i class="fa fa-fw fa-lg fa-cloud-upload"></i>
+                    Instance:
+                    <a *ngIf="device.status.instance_id" (click)="onInstanceClick(device.status.instance_id)" class="bold">{{device.status.instance_id}}</a>
+                    <span *ngIf="!device.status.instance_id" class="bold">none</span>
+                    <span *ngIf="device.status.instance_online_status" class="font-green-jungle">(online)</span>
+                    <span *ngIf="!device.status.instance_online_status" class="font-red">(offline)</span>
+                </div>
             </div>
-        </div>
-        <div class="portlet-body row">
+
             <div class="row">
                 <div class="col-sm-5 hw-b-program-col">
                     <h3>Blocko Program</h3>

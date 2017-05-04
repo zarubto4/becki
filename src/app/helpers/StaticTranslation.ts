@@ -21,7 +21,8 @@ export class StaticTranslation {
                 'PLANNED_UPDATE': 'the update is planned',
             },
             'device_alerts': {
-                'BOOTLOADER_REQUIRED': 'Bootloader update required'
+                'BOOTLOADER_REQUIRED': 'Bootloader update is required',
+                'RESTART_REQUIRED': 'Device restart is required'
             }
         },
         'cz': {
