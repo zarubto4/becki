@@ -20,13 +20,13 @@
         <div *ngIf="(instances && instances.length)" class="table-scrollable">
             <table class="table table-hover">
                 <thead>
-                <tr>
-                    <th class="full-width">ID</th>
-                    <th class="no-wrap">Blocko program</th>
-                    <th class="no-wrap">Version</th>
-                    <th class="no-wrap">Status</th>
-                    <th class="text-right">Actions</th>
-                </tr>
+                    <tr>
+                        <th class="full-width">ID</th>
+                        <th class="no-wrap">Blocko program</th>
+                        <th class="no-wrap">Version</th>
+                        <th class="no-wrap">Status</th>
+                        <th class="text-right">Actions</th>
+                    </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let instance of instances">
@@ -34,8 +34,8 @@
                     <td class="no-wrap"><a (click)="onBlockoProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></td>
                     <td class="no-wrap"><a (click)="onBlockoVersionProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></td>
                     <td class="no-wrap">
-                        <span *ngIf="instance.instance_is_online" class="font-green-jungle">Online</span>
-                        <span *ngIf="!instance.instance_is_online" class="font-red">Offline</span>
+                        <span *ngIf="instance.instance_is_online" class="font-green-jungle">online</span>
+                        <span *ngIf="!instance.instance_is_online" class="font-red">offline</span>
                     </td>
                     <td class="no-wrap text-right">
                         <button title="shutdown" class="btn btn-icon-only red" (click)="onInstanceShutdownClick(instance)"> <!-- TODO PERMISIONS -->
