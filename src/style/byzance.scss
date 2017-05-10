@@ -552,13 +552,16 @@ span.changes {
 }
 
 .console-log-head {
-    width: 95px;
-    position: absolute;
+    min-width: 95px;
+    position: relative;
+    white-space: nowrap;
+    float: left;
+    padding-right: 25px;
 }
 
 .console-log-message {
     color: black;
-    padding-left: 95px;
+    float: left;
 }
 
 .console-log-tr.log-error td {

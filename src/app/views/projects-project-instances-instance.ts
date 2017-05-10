@@ -269,14 +269,14 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
             if (m.messageType === 'newConsoleEvent') {
                 this.zone.run(() => {
-                    this.consoleLog.add(m.consoleMessageType, m.consoleMessage, m.consoleMessageTime);
+                    this.consoleLog.add(m.consoleMessageType, m.consoleMessage, 'Block ' + m.blockId, new Date(m.consoleMessageTime).toLocaleString());
                 });
             }
 
             if (m.messageType === 'newErrorEvent') {
                 controller.setError(m.blockId, true);
                 this.zone.run(() => {
-                    this.consoleLog.add('error', m.errorMessage, m.errorTime);
+                    this.consoleLog.add('error', m.errorMessage, 'Block ' + m.blockId, new Date(m.errorTime).toLocaleString());
                 });
             }
 
@@ -334,7 +334,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                     if (m.logs) {
                         for (let i = 0; i < m.logs.length; i++) {
                             const log = m.logs[i];
-                            this.consoleLog.add(log.type, log.message, log.time);
+                            this.consoleLog.add(log.type, log.message, 'Block ' + log.blockId, new Date(log.time).toLocaleString());
                         }
                     }
 

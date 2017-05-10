@@ -47,9 +47,8 @@ export class ModalsBlockoVersionSelectComponent implements OnInit {
 
     ngOnInit() {
         this.options = this.modalModel.programVersions.map((pv) => {
-            pv.version_description
             return {
-                label: pv.version_name + (pv.version_description?' - ' + pv.version_description:''),
+                label: pv.version_name + (pv.version_description ? ' - ' + pv.version_description : ''),
                 value: pv.version_id
             };
         });
