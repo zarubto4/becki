@@ -159,24 +159,24 @@ let routes: Routes = [
 
     {path: 'projects', data: {breadName: 'Projects'}, component: ProjectsComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project', data: {breadName: ':project'}, component: ProjectsProjectComponent, canActivate: [AuthGuard]},
-    {path: 'projects/:project/hardware', data: {breadName: 'Hardware devices'}, component: ProjectsProjectHardwareComponent, canActivate: [AuthGuard]},
+    {path: 'projects/:project/hardware', data: {breadName: 'HARDWARE devices'}, component: ProjectsProjectHardwareComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/hardware/:hardware', data: {breadName: ':last'}, component: ProjectsProjectHardwareHardwareComponent, canActivate: [AuthGuard]},
-    {path: 'projects/:project/blocko', data: {breadName: 'Blocko programs'}, component: ProjectsProjectBlockoComponent, canActivate: [AuthGuard]},
+    {path: 'projects/:project/blocko', data: {breadName: 'BLOCKO programs'}, component: ProjectsProjectBlockoComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/blocko/:blocko', data: {breadName: ':blocko'}, component: ProjectsProjectBlockoBlockoComponent, canActivate: [AuthGuard]},
-    {path: 'projects/:project/code', data: {breadName: 'Code programs'}, component: ProjectsProjectCodeComponent, canActivate: [AuthGuard]},
+    {path: 'projects/:project/code', data: {breadName: 'CODE programs'}, component: ProjectsProjectCodeComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/code/:code', data: {breadName: ':code'}, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard]},
-    {path: 'projects/:project/blocks', data: {breadName: 'Custom blocks'}, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard]},
+    {path: 'projects/:project/blocks', data: {breadName: 'BLOCKO blocks'}, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/blocks/:blocks', data: {breadName: ':blocks'}, component: ProjectsProjectBlocksBlocksComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/blocks/:blocks/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]},
 
-    {path: 'projects/:project/grid', data: {breadName: 'Grid programs'}, component: ProjectsProjectGridComponent, canActivate: [AuthGuard]},
+    {path: 'projects/:project/grid', data: {breadName: 'GRID programs'}, component: ProjectsProjectGridComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/grid/:grids', data: {breadName: ':grids'}, component: ProjectsProjectGridGridsComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/grid/:grids/:grid', data: {breadName: ':grid'}, component: ProjectsProjectGridGridsGridComponent, canActivate: [AuthGuard]},
-    {path: 'projects/:project/instances', data: {breadName: 'Cloud instances'}, component: ProjectsProjectInstancesComponent, canActivate: [AuthGuard]},
+    {path: 'projects/:project/instances', data: {breadName: 'CLOUD instances'}, component: ProjectsProjectInstancesComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/instances/:instance', data: {breadName: ':instance'}, component: ProjectsProjectInstancesInstanceComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/members', data: {breadName: 'Members'}, component: ProjectsProjectMembersComponent, canActivate: [AuthGuard]},
 
-    {path: 'projects/:project/widgets', data: {breadName: 'Custom widgets'}, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard]},
+    {path: 'projects/:project/widgets', data: {breadName: 'GRID widgets'}, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/widgets/:widgets', data: {breadName: ':widgets'}, component: ProjectsProjectWidgetsWidgetsComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/widgets/:widgets/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]},
 
@@ -201,21 +201,23 @@ let navigation = [
 
 let tabMenus = {
     'projects-project': [
-        new LabeledLink('Dashboard', ['/', 'projects', ':project'], 'tachometer', {linkActiveExact: true}),
-        new LabeledLink('Code', null, 'code', {items:  [
-            new LabeledLink('Code programs', ['/', 'projects', ':project', 'code'], 'code'),
-            new LabeledLink('Hardware devices', ['/', 'projects', ':project', 'hardware'], 'microchip'),
+        new LabeledLink('Dashboard', ['/', 'projects', ':project'], null, {linkActiveExact: true}),
+        new LabeledLink('Members', ['/', 'projects', ':project', 'members'], null),
+        new LabeledLink(null, null),
+        new LabeledLink('<strong class="font-color-hardware">HARDWARE</strong>', ['/', 'projects', ':project', 'hardware'], null, {styleClass: 'color-hardware'}),
+        new LabeledLink('<strong class="font-color-code">CODE</strong>', null, null, {styleClass: 'color-code', items:  [
+            new LabeledLink('<strong class="font-color-code">CODE</strong> programs', ['/', 'projects', ':project', 'code'], null),
+            new LabeledLink('<strong class="font-color-code">CODE</strong> libraries', ['/', 'projects', ':project', 'libraries'], null, {disabled: true}),
         ]}),
-        new LabeledLink('Blocko', null, 'sitemap fa-rotate-90', {items:  [
-            new LabeledLink('Blocko programs', ['/', 'projects', ':project', 'blocko'], 'sitemap fa-rotate-90'),
-            new LabeledLink('Custom blocks', ['/', 'projects', ':project', 'blocks'], 'cubes'),
-            new LabeledLink('Cloud instances', ['/', 'projects', ':project', 'instances'], 'cloud'),
+        new LabeledLink('<strong class="font-color-grid">GRID</strong>', null, null, {styleClass: 'color-grid font-color-grid-dark', items:  [
+            new LabeledLink('<strong class="font-color-grid">GRID</strong> programs', ['/', 'projects', ':project', 'grid'], null),
+            new LabeledLink('<strong class="font-color-grid">GRID</strong> widgets', ['/', 'projects', ':project', 'widgets'], null),
         ]}),
-        new LabeledLink('Grid', null, 'desktop', {items:  [
-            new LabeledLink('Grid programs', ['/', 'projects', ':project', 'grid'], 'desktop'),
-            new LabeledLink('Custom widgets', ['/', 'projects', ':project', 'widgets'], 'object-group'),
+        new LabeledLink('<strong class="font-color-blocko">BLOCKO</strong>', null, null, {styleClass: 'color-blocko', items:  [
+            new LabeledLink('<strong class="font-color-blocko">BLOCKO</strong> programs', ['/', 'projects', ':project', 'blocko'], null),
+            new LabeledLink('<strong class="font-color-blocko">BLOCKO</strong> blocks', ['/', 'projects', ':project', 'blocks'], null),
         ]}),
-        new LabeledLink('Members', ['/', 'projects', ':project', 'members'], 'users'),
+        new LabeledLink('<strong class="font-color-cloud">CLOUD</strong>', ['/', 'projects', ':project', 'instances'], null, {styleClass: 'color-cloud font-color-cloud-dark'}),
     ],
     'tariffs-tarrif':  [
         new LabeledLink('Dashboard', ['/', 'financial', ':product'], 'tachometer', {linkActiveExact: true}),

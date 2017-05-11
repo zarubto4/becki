@@ -5,9 +5,9 @@
     <div *ngIf="device && typeOfBoard" class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
-                <span class="font-blue-dark uppercase">
+                <span class="font-blue-dark">
                     <i class="fa fa-fw fa-microchip"></i>
-                    Hardware devices - device <strong>{{device.personal_description?device.personal_description:device.id}}</strong>
+                    Byzance<strong class="font-color-hardware">HARDWARE</strong> - device <strong>{{device.personal_description?device.personal_description:device.id}}</strong>
                 </span>
             </div>
         </div>
@@ -34,8 +34,6 @@
                 <span class="font-grey-mint bold">{{typeOfBoard.revision}}</span>
             </div>
 
-            <hr>
-
             <div *ngIf="device.mac_address">
                 Ethernet MAC adress:
                 <span class="font-grey-mint bold">{{device.mac_address}}</span>
@@ -44,34 +42,16 @@
                 Wi-Fi MAC adress:
                 <span class="font-grey-mint bold">{{device.wifi_mac_address}}</span>
             </div>
+
+            <hr>
+
             <div>
-                Auto Backup:
-                <span class="font-grey-mint bold">{{device.backup_mode}}</span>
-                <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="device.backup_mode" [class.fa-toggle-off]="!device.backup_mode" (click)="onAutobackupSwitchClick()"></i>
-            </div>
-            <div *ngIf="device.status.actual_backup_c_program_version_name">
-                Program:
-                <span class="font-grey-mint bold">{{device.status.actual_backup_c_program_version_name}}</span>
-                <button class="btn blue">
-                    <i class="fa fa-gears"></i>
+                Bootloader version:
+                <span class="font-grey-mint bold">{{device.actual_bootloader_version_name?device.actual_bootloader_version_name:'none'}}</span>
+                <button *ngIf="device.available_bootloader_id !== device.actual_bootloader_id" class="btn red" (click)="onUpdateBootloaderClick($event)">
+                    <i class="fa fa-refresh"></i>Update bootloader ({{device.available_bootloader_version_name}})
                 </button>
             </div>
-            <div *ngIf="device.status.actual_backup_c_program_version_id">
-                Version:
-                <span class="font-grey-mint bold">{{device.status.actual_backup_c_program_version_id}}</span>
-            </div>
-
-            <div *ngIf="device.actual_bootloader_id">
-                Actual bootloader version:
-                <span class="font-grey-mint bold">{{device.actual_bootloader_id}}</span>
-            </div>
-            <div *ngIf="device.available_bootloader_id">
-                Available bootloader version:
-                <span class="font-grey-mint bold">{{device.available_bootloader_id}}</span>
-            </div>
-            <button *ngIf="!(device.available_bootloader_id === device.actual_bootloader_id)" class="btn red" (click)="onUpdateBootloaderClick($event)">
-                <i class="fa fa-plus-circle"></i>Update Required
-            </button>
 
         </div>
     </div>
@@ -98,21 +78,61 @@
                     Server:
                     <span *ngIf="device.status.server_name" class="bold">{{device.status.server_name}}</span>
                     <span *ngIf="!device.status.server_name" class="bold">none</span>
-                    <span *ngIf="device.status.server_online_status" class="bold font-green-jungle">(online)</span>
-                    <span *ngIf="!device.status.server_online_status" class="bold font-red">(offline)</span>
+                    <span *ngIf="device.status.server_name && device.status.server_online_status" class="bold font-green-jungle">(online)</span>
+                    <span *ngIf="device.status.server_name && !device.status.server_online_status" class="bold font-red">(offline)</span>
                 </div>
                 <div class="col-sm-4 text-center">
                     <i class="fa fa-fw fa-lg fa-cloud-upload"></i>
                     Instance:
                     <a *ngIf="device.status.instance_id" (click)="onInstanceClick(device.status.instance_id)" class="bold">{{device.status.instance_id}}</a>
                     <span *ngIf="!device.status.instance_id" class="bold">none</span>
-                    <span *ngIf="device.status.instance_online_status" class="font-green-jungle">(online)</span>
-                    <span *ngIf="!device.status.instance_online_status" class="font-red">(offline)</span>
+                    <span *ngIf="device.status.instance_id && device.status.instance_online_status" class="bold font-green-jungle">(online)</span>
+                    <span *ngIf="device.status.instance_id && !device.status.instance_online_status" class="bold font-red">(offline)</span>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-sm-5 hw-b-program-col">
+                <div class="col-sm-4">
+
+                    <h3>Byzance<strong class="font-color-code">CODE</strong></h3>
+
+                    <div>
+                        Program name:
+                        <span class="font-grey-mint bold">{{device.status.actual_c_program_name?device.status.actual_c_program_name:'none'}}</span>
+                    </div>
+                    <div>
+                        Program version:
+                        <span class="font-grey-mint bold">{{device.status.actual_c_program_version_name?device.status.actual_c_program_version_name:'none'}}</span>
+                    </div>
+                    <div>
+                        Program backup mode:
+                        <span *ngIf="device.backup_mode" class="font-grey-mint bold">auto</span>
+                        <span *ngIf="!device.backup_mode" class="font-grey-mint bold">static</span>
+                    </div>
+
+                </div>
+                <div class="col-sm-4 hw-image-col">
+                    <img *ngIf="typeOfBoard.picture_link" [attr.src]="typeOfBoard.picture_link">
+                    <i *ngIf="!typeOfBoard.picture_link" class="fa fa-fw fa-microchip text-center"></i>
+                </div>
+                <div class="col-sm-4">
+
+                    <h3>Byzance<strong class="font-color-blocko">BLOCKO</strong></h3>
+
+                    <div>
+                        Program name:
+                        <span class="font-grey-mint bold">{{device.status.b_program_name?device.status.b_program_name:'none'}}</span>
+                    </div>
+                    <div>
+                        Program version:
+                        <span class="font-grey-mint bold">{{device.status.b_program_version_name?device.status.b_program_version_name:'none'}}</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- TODO: ALLL !!! div class="row">
+                <div class="col-sm-5">
                     <h3>Blocko Program</h3>
                     <div *ngIf="device.status.b_program_id" class="timeline">
                         <div class="timeline-item">
@@ -234,9 +254,7 @@
                             </ol>
                             <span class="filling-line bg-red" aria-hidden="true" style="transform: scaleX(1);"></span>
                         </div>
-                        <!-- .events -->
                     </div>
-                    <!-- .events-wrapper -->
                     <ul class="cd-timeline-navigation mt-ht-nav-icon">
                         <li>
                             <a (click)=timelineMove(100); class="prev btn btn-outline red md-skip">
@@ -249,9 +267,8 @@
                             </a>
                         </li>
                     </ul>
-                    <!-- .cd-timeline-navigation -->
                 </div>
-            </div>
+            </div-->
 
         </div>
     </div>

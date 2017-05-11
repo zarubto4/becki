@@ -113,13 +113,13 @@
                 </h1>
 
                 <div [class.tabbable-line]="tabMenuItems">
-                    <ul *ngIf="tabMenuItems" class="nav nav-tabs">
-                        <li *ngFor="let tabItem of tabMenuItems; let index = index" [class.active]="isRouterLinkActive(tabItem)" [class.dropdown]="tabItem.options['items']" [class.open]="openTabMenuIndex == index">
-                            <a *ngIf="!tabItem.options['items']" [routerLink]="tabItem.link"><span *ngIf="tabItem.icon" class="fa fa-fw fa-{{tabItem.icon}}"></span> {{tabItem.label}} </a>
-                            <a *ngIf="tabItem.options['items']" (click)="toggleTabMenu(index)" class="cursor-hand"><span *ngIf="tabItem.icon" class="fa fa-fw fa-{{tabItem.icon}}"></span> {{tabItem.label}} <span class="fa fa-angle-down"></span></a>
+                    <ul *ngIf="tabMenuItems" class="nav nav-tabs becki-tab-menu">
+                        <li *ngFor="let tabItem of tabMenuItems; let index = index" class="{{tabItem.options['styleClass']}}" [class.spacer]="!tabItem.options['items'] && !tabItem.link" [class.active]="isRouterLinkActive(tabItem)" [class.dropdown]="tabItem.options['items']" [class.open]="openTabMenuIndex == index">
+                            <a *ngIf="!tabItem.options['items'] && tabItem.link" [routerLink]="tabItem.link" [class.disabled]="tabItem.options['disabled']"><span *ngIf="tabItem.icon" class="fa fa-fw fa-{{tabItem.icon}}"></span> <span [innerHTML]="tabItem.label"></span> </a>
+                            <a *ngIf="tabItem.options['items']" (click)="toggleTabMenu(index)" class="cursor-hand"><span *ngIf="tabItem.icon" class="fa fa-fw fa-{{tabItem.icon}}"></span> <span [innerHTML]="tabItem.label"></span> <span class="dropdown-icon fa fa-angle-down"></span></a>
                             <ul *ngIf="tabItem.options['items']" class="dropdown-menu becki-tab-menu-dropdown">
                                 <li *ngFor="let subTabItem of tabItem.options['items']" [class.active]="isRouterLinkActive(subTabItem)">
-                                    <a [routerLink]="subTabItem.link"><span *ngIf="subTabItem.icon" class="fa fa-fw fa-{{subTabItem.icon}}"></span> {{subTabItem.label}} </a>
+                                    <a [routerLink]="subTabItem.link" [class.disabled]="subTabItem.options['disabled']"><span *ngIf="subTabItem.icon" class="fa fa-fw fa-{{subTabItem.icon}}"></span> <span [innerHTML]="subTabItem.label"></span> </a>
                                 </li>
                             </ul>
                         </li>

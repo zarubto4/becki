@@ -78,7 +78,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
             })
             .catch((reason) => {
-                this.fmError('Project cannot be loaded.', reason);
+                this.fmError('Device cannot be loaded.', reason);
                 this.unblockUI();
             });
     }
@@ -116,7 +116,22 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     }
 
     onAutobackupSwitchClick(): void {
-        // TODO
+        if (!this.device) {
+            return;
+        }
+        this.blockUI();
+        this.backendService.editBoardBackup({
+            board_backup_pair_list: [
+                {board_id: this.device.id, backup_mode: !this.device.backup_mode}
+                ]
+        })
+            .then(() => {
+                this.refresh();
+            })
+            .catch((reason) => {
+                this.fmError('Device backup mode cannot be saved.', reason);
+                this.unblockUI();
+            });
     }
 
 

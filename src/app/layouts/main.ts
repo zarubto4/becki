@@ -78,8 +78,10 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
                 }
             });
             return isActive;
-        } else {
+        } else if (ll.link) {
             return this.router.isActive(ll.link.join('/'), ll.options['linkActiveExact']);
+        } else {
+            return false;
         }
     }
 
