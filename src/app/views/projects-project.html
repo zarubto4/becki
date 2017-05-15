@@ -14,11 +14,104 @@
                 </span>
             </div>
         </div>
-        <div>
-            Name: <strong>{{project?project.name:""}}</strong><br>
-            Description: <strong>{{project?project.description:""}}</strong>
+        <div *ngIf="project">
+            Name: <strong>{{project.name}}</strong><br>
+            Description: <strong>{{project.description}}</strong><br>
+            Product: <strong>{{project.product_name}} ({{project.tier_name}})</strong>
         </div>
         <div class="clearfix"></div>
+    </div>
+
+    <div class="row" *ngIf="project">
+
+        <div class="col-md-4">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark">
+                            <i class="fa fa-fw fa-microchip"></i>
+                            Byzance<strong class="font-color-hardware">HARDWARE</strong>
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    Devices count: <strong>{{project.boards.length}}</strong><br>
+                    Status: <strong>{{count("devices_online")}}</strong> <span class="font-green-jungle">online</span> / <strong>{{count("devices_offline")}}</strong> <span class="font-red-flamingo">offline</span>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark">
+                            <i class="fa fa-fw fa-cloud"></i>
+                            Byzance<strong class="font-color-cloud">CLOUD</strong>
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    Instances count: <strong>{{project.instancies.length}}</strong><br>
+                    Status: <strong>{{count("instances_online")}}</strong> <span class="font-green-jungle">online</span> / <strong>{{count("instances_offline")}}</strong> <span class="font-red-flamingo">offline</span>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark">
+                            <i class="fa fa-fw fa-code"></i>
+                            Byzance<strong class="font-color-code">CODE</strong>
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    Programs count: <strong>{{project.c_programs.length}}</strong><br>
+                    <span style="color: silver; text-decoration: line-through;">Libraries count: <strong>0</strong></span>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark">
+                            <i class="fa fa-fw fa-sitemap fa-rotate-90"></i>
+                            Byzance<strong class="font-color-blocko">BLOCKO</strong>
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    Programs count: <strong>{{project.b_programs.length}}</strong><br>
+                    Blocks count: <strong>{{count("blocko_blocks")}}</strong> in <strong>{{project.type_of_blocks.length}}</strong> group
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark">
+                            <i class="fa fa-fw fa-desktop"></i>
+                            Byzance<strong class="font-color-grid">GRID</strong>
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    Programs count: <strong>{{count("grid_programs")}}</strong> in <strong>{{project.m_projects.length}}</strong> project<br>
+                    Widgets count: <strong>{{count("grid_widgets")}}</strong> in <strong>{{project.type_of_widgets.length}}</strong> group
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+
     </div>
 
 </bk-layout-main>

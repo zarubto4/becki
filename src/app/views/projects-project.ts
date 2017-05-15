@@ -45,8 +45,60 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
         }
     }
 
+    count(status: 'grid_widgets'|'grid_programs'|'blocko_blocks'|'devices_online'|'devices_offline'|'instances_online'|'instances_offline'): number {
+        if (!this.project) {
+            return 0;
+        }
+        let count = 0;
+        if (status === 'devices_online' && this.project.boards) {
+            this.project.boards.forEach((b) => {
+                if (b.board_online_status) {
+                    count++;
+                }
+            });
+        }
+        if (status === 'devices_offline' && this.project.boards) {
+            this.project.boards.forEach((b) => {
+                if (!b.board_online_status) {
+                    count++;
+                }
+            });
+        }
+        if (status === 'instances_online' && this.project.boards) {
+            this.project.instancies.forEach((i) => {
+                if (i.instance_is_online) {
+                    count++;
+                }
+            });
+        }
+        if (status === 'instances_offline' && this.project.boards) {
+            this.project.instancies.forEach((i) => {
+                if (!i.instance_is_online) {
+                    count++;
+                }
+            });
+        }
+        if (status === 'grid_widgets' && this.project.type_of_widgets) {
+            this.project.type_of_widgets.forEach((tw) => {
+                count += tw.grid_widgets.length;
+            });
+        }
+        if (status === 'grid_programs' && this.project.m_projects) {
+            this.project.m_projects.forEach((mp) => {
+                count += mp.programs.length;
+            });
+        }
+        if (status === 'blocko_blocks' && this.project.type_of_blocks) {
+            this.project.type_of_blocks.forEach((tb) => {
+                count += tb.blocko_blocks.length;
+            });
+        }
+        return count;
+    }
+
+
     refresh(): void {
-        // TODO: this.storageService.projectRefresh(this.id);
+        this.storageService.projectRefresh(this.id);
         /*
         this.blockUI();
         this.backendService.getProject(this.id)

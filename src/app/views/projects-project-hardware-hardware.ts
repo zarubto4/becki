@@ -123,7 +123,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.backendService.editBoardBackup({
             board_backup_pair_list: [
                     {board_id: this.device.id, backup_mode: !this.device.backup_mode}
-                ]
+            ]
         })
             .then(() => {
                 this.refresh();
