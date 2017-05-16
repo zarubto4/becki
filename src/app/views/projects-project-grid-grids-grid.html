@@ -119,11 +119,14 @@
                                     </a>
                                 </h4>
                             </div>
-                            <div class="panel-collapse collapse" [class.in]="widgetGroupsOpenToggle[group.id]">
-                                <div class="panel-body">
+                            <div class="panel-collapse collapse no-select" [class.in]="widgetGroupsOpenToggle[group.id]">
+                                <div class="panel-body no-select" style="padding: 5px;">
                                     <div *ngIf="group.grid_widgets.length == 0" style="color: gray; text-align: center;">No widgets in this group</div>
 
-                                    <a *ngFor="let widget of group.grid_widgets" (mousedown)="onWidgetDown($event,widget)" style="cursor: move; margin:5px; float:left; overflow:hidden; display:block; width:80px; height:80px; background:seagreen; color:white; font-size:18px; line-height: 80px; text-align: center; user-select: none;">{{widget.name}}</a>
+                                    <a *ngFor="let widget of group.grid_widgets" class="the-grid__widget-drag-handler no-select" [bkDraggable]="draggableOptions" (bkDraggableOnDrag)="onWidgetDrag($event)" (mousedown)="onWidgetDown($event,widget)">
+                                        <i class="fa fa-fw fa-object-group" style="position: absolute; right: -25px; bottom: 0px; font-size: 65px; transform: rotate(45deg); opacity: 0.2;"></i>
+                                        {{widget.name}}
+                                    </a>
                                 </div>
                             </div>
                         </div>

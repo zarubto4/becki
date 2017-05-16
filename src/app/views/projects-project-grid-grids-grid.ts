@@ -19,6 +19,7 @@ import { ModalsConfirmModel } from '../modals/confirm';
 import { NullSafe } from '../helpers/NullSafe';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
+import { Core, EditorRenderer } from 'the-grid';
 
 @Component({
     selector: 'bk-view-projects-project-grid-grids-grid',
@@ -54,6 +55,16 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
 
     @ViewChild(ConsoleLogComponent)
     consoleLog: ConsoleLogComponent;
+
+    widgetDragHandler: EditorRenderer.WidgetDragHandler = null;
+    widgetDragStatus: Core.WidgetDragHandlerStatus = null;
+
+    draggableOptions: JQueryUI.DraggableOptions = {
+        helper: 'clone',
+        containment: 'document',
+        cursor: 'move',
+        cursorAt: { left: 35, top: 35 }
+    };
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
     protected afterLoadSelectedVersionId: string = null;
@@ -220,11 +231,17 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
     }
 
     onWidgetDown(e: MouseEvent, widget: IGridWidget): void {
-        this.gridView.requestCreateWidget({
+        this.widgetDragHandler = this.gridView.requestCreateWidget({
             name: widget.name,
             id: widget.id,
             version_id: widget.versions[0].id
         }, e);
+
+        this.widgetDragHandler.addCallback(this.dragWidgetStatusCallback);
+    }
+
+    dragWidgetStatusCallback = (status: Core.WidgetDragHandlerStatus) => {
+        this.widgetDragStatus = status;
     }
 
     onWidgetRequestingSource(event: any) {
@@ -249,6 +266,16 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
     onClearConsoleClick() {
         if (this.consoleLog) {
             this.consoleLog.clear();
+        }
+    }
+
+    onWidgetDrag = (e: any) => {
+        if (this.widgetDragStatus === Core.WidgetDragHandlerStatus.OnScreen) {
+            (<HTMLElement>e.ui.helper[0]).style.transform = 'scale(0)';
+            (<HTMLElement>e.ui.helper[0]).style.opacity = '0';
+        } else {
+            (<HTMLElement>e.ui.helper[0]).style.transform = 'scale(1)';
+            (<HTMLElement>e.ui.helper[0]).style.opacity = '0.7';
         }
     }
 

@@ -1037,6 +1037,30 @@ span.changes {
     margin-bottom: 20px;
 }
 
+.the-grid__widget-drag-handler {
+    position: relative;
+    border-radius: 5px !important;
+    cursor: move !important; 
+    margin:5px;
+    float:left; 
+    overflow:hidden;
+    display:block;
+    width:70px;
+    height:70px;
+    background:#2274ff;
+    color:white;
+    font-size:18px;
+    line-height: 70px;
+    text-align: center;
+    user-select: none;
+    transition: transform 0.4s cubic-bezier(0.090, 0.650, 0.430, 1.000), opacity 0.3s cubic-bezier(0.090, 0.650, 0.430, 1.000);
+
+    &:hover {
+        color: #fff;
+        text-decoration: none;
+    }
+}
+
 .hx-description {
     font-size: 0.6em;
     color: gray;
