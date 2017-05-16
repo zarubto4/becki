@@ -2257,7 +2257,7 @@ ul.hw-list li ul li, ul.grid-list li ul li {
     width: 41.666666%;
 }
 
-.modal-body.widget-config {
+.modal-body.widget-config, .modal-body.block-config {
     h4 {
         font-weight: bold;
     }
@@ -2277,12 +2277,12 @@ ul.hw-list li ul li, ul.grid-list li ul li {
             float: left;
             line-height: 30px;
             display: block;
-            width: 30%;
+            width: 35%;
         }
 
         input, select, .minicolors, .icon-select-group .select-input  {
             float: right;
-            width: 70%;
+            width: 65%;
         }
 
         .icon-select-table {

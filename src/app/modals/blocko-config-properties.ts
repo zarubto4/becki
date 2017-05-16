@@ -10,12 +10,12 @@
 import { Input, Output, EventEmitter, Component, OnInit, NgZone } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ModalModel } from '../services/ModalService';
-import { Core } from 'blocko';
+import { Core, Blocks } from 'blocko';
 import { Types } from 'common-lib';
-
+import { IBlockoBlockVersionShortDetail } from '../backend/TyrionAPI';
 
 export class ModalsBlockoConfigPropertiesModel extends ModalModel {
-    constructor(public block: Core.Block) {
+    constructor(public block: Core.Block, public blockVersions?: IBlockoBlockVersionShortDetail[], public changeVersionCallback?:((block: Blocks.TSBlock, versionId: string) => void)) {
         super();
     }
 }
@@ -39,8 +39,10 @@ export class ModalsBlockoConfigPropertiesComponent implements OnInit {
     form: FormGroup;
 
     formModel: {[key: string]: any} = {};
+    formModelVersion: string = null;
 
     configPropertyType = Types.ConfigPropertyType;
+    blockVersions: IBlockoBlockVersionShortDetail[] = [];
 
     constructor(protected zone: NgZone) {
 
@@ -54,6 +56,14 @@ export class ModalsBlockoConfigPropertiesComponent implements OnInit {
         this.configProperties.forEach((cp) => {
             this.formModel[cp.name] = cp.value;
         });
+
+        if (this.modalModel.blockVersions) {
+            this.blockVersions = this.modalModel.blockVersions;
+        }
+
+        if (this.modalModel.block.blockVersion) {
+            this.formModelVersion = this.modalModel.block.blockVersion;
+        }
     }
 
     onSubmitClick(): void {
@@ -80,6 +90,15 @@ export class ModalsBlockoConfigPropertiesComponent implements OnInit {
 
             this.modalModel.block.emitConfigChanged();
         });
+
+        if (this.modalModel.block instanceof Blocks.TSBlock) {
+            const tsBlock = <Blocks.TSBlock>this.modalModel.block;
+            if (tsBlock.blockVersion != this.formModelVersion) {
+                if (this.formModelVersion && this.modalModel.changeVersionCallback) {
+                    this.modalModel.changeVersionCallback(tsBlock, this.formModelVersion);
+                }
+            }
+        }
 
         this.modalClose.emit(true);
     }

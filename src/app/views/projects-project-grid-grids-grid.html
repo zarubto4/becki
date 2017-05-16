@@ -58,7 +58,7 @@
                 </div>
 
                 <div style="margin: 10px 0; overflow-x: auto;">
-                    <bk-grid-view [widgetsGroups]="widgetGroups" (onRequestWidgetSource)="onWidgetRequestingSource($event)"></bk-grid-view>
+                    <bk-grid-view [widgetsGroups]="widgetGroups" (onRequestWidgetSource)="onWidgetRequestingSource($event)" (onWidgetLog)="onWidgetLog($event)" (onWidgetMessage)="onWidgetMessage($event)" (onWidgetError)="onWidgetError($event)"></bk-grid-view>
                 </div>
 
                 <div>

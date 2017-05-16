@@ -63,7 +63,9 @@ export class ModalsBlockoBlockCodeEditorComponent implements OnInit {
             let designJson = JSON.stringify({
                 backgroundColor: this.blockForm.controls['color'].value,
                 displayName: this.blockForm.controls['icon'].value,
-                description: this.blockForm.controls['description'].value
+                description: this.blockForm.controls['description'].value,
+                type_of_block: this.modalModel.block.typeOfBlock,
+                blockVersion: null
             });
             this.modalModel.block.setDesignJson(designJson);
             this.modalModel.block.setCode(this.code);

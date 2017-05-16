@@ -96,7 +96,6 @@ export class ModalsGridConfigPropertiesComponent implements OnInit {
             this.outputs.push(widgetInterface.messageOutputs[n]);
         }
 
-
         this.configProperties.forEach((cp) => {
             this.formModelProperties[cp.id] = cp.value;
         });

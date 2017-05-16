@@ -26,6 +26,15 @@ export class GridViewComponent implements AfterViewInit, OnDestroy {
     @Output()
     onRequestWidgetSource = new EventEmitter<{type: any, resolve: (name: string) => void}>();
 
+    @Output()
+    onWidgetLog = new EventEmitter<{id: number, type: string, message: string}>();
+
+    @Output()
+    onWidgetMessage = new EventEmitter<{id: number, message: any}>();
+
+    @Output()
+    onWidgetError = new EventEmitter<{id: number, error: any}>();
+
     @Input()
     widgetsGroups: ITypeOfWidget[] = null;
 
@@ -65,7 +74,7 @@ export class GridViewComponent implements AfterViewInit, OnDestroy {
 
     ngAfterViewInit(): void {
         this.zone.runOutsideAngular(() => {
-            this.gridRenderer = new EditorRenderer.ControllerRenderer(this.gridController, this.screens.nativeElement);
+            this.gridRenderer = new EditorRenderer.ControllerRenderer(this.gridController, this.screens.nativeElement, false, this.handleOnWidgetError, this.handleOnWidgetMessage, this.handleOnWidgetLog);
             this.gridRenderer.registerOpenConfigCallback(widget => {
                 let versions: IGridWidgetVersionShortDetail[] = null;
 
@@ -98,6 +107,28 @@ export class GridViewComponent implements AfterViewInit, OnDestroy {
     addPage(): void {
         this.zone.runOutsideAngular(() => {
             this.gridController.addPage();
+        });
+    }
+
+    handleOnWidgetError = (id: number, error: any) => {
+        this.onWidgetError.emit({
+            id: id,
+            error: error
+        });
+    }
+
+    handleOnWidgetMessage = (id: number, message: any) => {
+        this.onWidgetMessage.emit({
+            id: id,
+            message: message
+        });
+    }
+
+    handleOnWidgetLog = (id: number, type: string, message: string) => {
+        this.onWidgetLog.emit({
+            id: id,
+            type: type,
+            message: message
         });
     }
 

@@ -279,4 +279,22 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
         }
     }
 
+    onWidgetLog(e: any) {
+        this.zone.run(() => {
+            this.consoleLog.add(<ConsoleLogType>e.type, e.message, 'W-' + e.id);
+        });
+    }
+
+    onWidgetMessage(e: any) {
+        this.zone.run(() => {
+            this.consoleLog.addFromMessage(e.message, 'W-' + e.id, moment().format('HH:mm:ss.SSS'));
+        });
+    }
+
+    onWidgetError(e: any) {
+        this.zone.run(() => {
+            this.consoleLog.addFromError(e.error, 'W-' + e.id, moment().format('HH:mm:ss.SSS'));
+        });
+    }
+
 }

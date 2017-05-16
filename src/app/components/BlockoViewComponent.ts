@@ -21,6 +21,8 @@ import { ModalService } from '../services/ModalService';
 import { BackendService } from '../services/BackendService';
 import { ModalsBlockoConfigPropertiesModel } from '../modals/blocko-config-properties';
 import { ModalsBlockoBlockCodeEditorModel } from '../modals/blocko-block-code-editor';
+import { ITypeOfBlock, IBlockoBlockVersionShortDetail, IBlockoBlock } from '../backend/TyrionAPI';
+
 
 @Component({
     selector: 'bk-blocko-view',
@@ -52,6 +54,9 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     @Input()
     autosize: boolean = false;
 
+    @Input()
+    blocksGroups: ITypeOfBlock[] = null;
+
     @Output()
     onError: EventEmitter<{block: BlockoCore.Block, error: any}> = new EventEmitter<{block: BlockoCore.Block, error: any}>();
 
@@ -70,8 +75,22 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
             this.blockoRenderer = new BlockoPaperRenderer.RendererController();
             this.blockoRenderer.registerOpenConfigCallback((block) => {
+                let versions: IBlockoBlockVersionShortDetail[] = null;
+
+                if (this.blocksGroups) {
+                    for (let i = 0; i < this.blocksGroups.length; i++) {
+                        const group = this.blocksGroups[i];
+                        for (let j = 0; j < group.blocko_blocks.length; j++) {
+                            const blockDef: IBlockoBlock = group.blocko_blocks[j];
+                            if (blockDef.type_of_block_id === block.typeOfBlock) {
+                                versions = blockDef.versions;
+                            }
+                        }
+                    }
+                }
+
                 this.zone.run(() => {
-                    this.modalService.showModal(new ModalsBlockoConfigPropertiesModel(block));
+                    this.modalService.showModal(new ModalsBlockoConfigPropertiesModel(block, versions, this.blockChangeVersion));
                 });
             });
             this.blockoRenderer.registerOpenCodeEditCallback((block) => {
@@ -247,16 +266,28 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         return b;
     }
 
-    addTsBlock(tsCode: string, designJson: string, x: number = 0, y: number = 0): BlockoBasicBlocks.TSBlock {
+    addTsBlock(tsCode: string, designJson: string, x: number = 0, y: number = 0, typeOfBlock: string = null, version: string = null): BlockoBasicBlocks.TSBlock {
         if (this.readonly) {
             throw new Error('read only');
         }
-        return this.addTsBlockWithoutReadonlyCheck(tsCode, designJson, x, y);
+        return this.addTsBlockWithoutReadonlyCheck(tsCode, designJson, x, y, typeOfBlock, version);
     }
 
-    addTsBlockWithoutReadonlyCheck(tsCode: string, designJson: string, x: number = 0, y: number = 0): BlockoBasicBlocks.TSBlock {
+    addTsBlockWithoutReadonlyCheck(tsCode: string, designJson: string, x: number = 0, y: number = 0, typeOfBlock: string = null, version: string = null): BlockoBasicBlocks.TSBlock {
         let b: BlockoBasicBlocks.TSBlock = null;
         this.zone.runOutsideAngular(() => {
+
+            if (typeOfBlock) {
+                const json = JSON.parse(designJson);
+                json['type_of_block'] = typeOfBlock
+
+                if (version) {
+                    json['block_version'] = version;
+                }
+
+                designJson = JSON.stringify(json);
+            }
+    
             b = new BlockoBasicBlocks.TSBlock(this.blockoController.getFreeBlockId(), '', designJson);
             b.x = Math.round(x / 22) * 22; // TODO: move this to blocko
             b.y = Math.round(y / 22) * 22;
@@ -318,4 +349,15 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     getBlockoController(): BlockoCore.Controller {
         return this.blockoController;
     }
+
+    blockChangeVersion = ( block: Blocks.TSBlock, version: string) => {
+        this.backendService.getBlockoBlockVersion(version)
+            .then((versionObject) => {
+                block.blockVersion = version;
+                block.setCode(versionObject.logic_json);
+            })
+            /*.catch((reason) => {
+                console.log("fail loading blocko version", reason);
+            });*/
+    }    
 }
