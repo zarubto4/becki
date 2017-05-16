@@ -279,7 +279,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
             if (typeOfBlock) {
                 const json = JSON.parse(designJson);
-                json['type_of_block'] = typeOfBlock
+                json['type_of_block'] = typeOfBlock;
 
                 if (version) {
                     json['block_version'] = version;
@@ -287,7 +287,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
                 designJson = JSON.stringify(json);
             }
-    
+
             b = new BlockoBasicBlocks.TSBlock(this.blockoController.getFreeBlockId(), '', designJson);
             b.x = Math.round(x / 22) * 22; // TODO: move this to blocko
             b.y = Math.round(y / 22) * 22;
@@ -355,9 +355,9 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             .then((versionObject) => {
                 block.blockVersion = version;
                 block.setCode(versionObject.logic_json);
-            })
+            });
             /*.catch((reason) => {
                 console.log("fail loading blocko version", reason);
             });*/
-    }    
+    }
 }

@@ -15,7 +15,7 @@ import { Types } from 'common-lib';
 import { IBlockoBlockVersionShortDetail } from '../backend/TyrionAPI';
 
 export class ModalsBlockoConfigPropertiesModel extends ModalModel {
-    constructor(public block: Core.Block, public blockVersions?: IBlockoBlockVersionShortDetail[], public changeVersionCallback?:((block: Blocks.TSBlock, versionId: string) => void)) {
+    constructor(public block: Core.Block, public blockVersions?: IBlockoBlockVersionShortDetail[], public changeVersionCallback?: ((block: Blocks.TSBlock, versionId: string) => void)) {
         super();
     }
 }
@@ -93,7 +93,7 @@ export class ModalsBlockoConfigPropertiesComponent implements OnInit {
 
         if (this.modalModel.block instanceof Blocks.TSBlock) {
             const tsBlock = <Blocks.TSBlock>this.modalModel.block;
-            if (tsBlock.blockVersion != this.formModelVersion) {
+            if (tsBlock.blockVersion !== this.formModelVersion) {
                 if (this.formModelVersion && this.modalModel.changeVersionCallback) {
                     this.modalModel.changeVersionCallback(tsBlock, this.formModelVersion);
                 }

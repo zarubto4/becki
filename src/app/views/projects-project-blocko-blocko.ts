@@ -290,9 +290,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 let wantedVersionName = params.data.id + '_' + wantedVersion.id;
 
                 if (this.blocksCache[wantedVersionName]) {
-
                     this.blockoView.addTsBlock(this.blocksCache[wantedVersionName].logic_json, this.blocksCache[wantedVersionName].design_json, x, y, params.data.type_of_block_id, wantedVersion.id);
-
                 } else {
 
                     // TODO: make only one request
