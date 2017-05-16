@@ -9,32 +9,43 @@
                 </span>
             </div>
         </div>
-        <div>
-            <div>
-                Name:
-                <span class="font-grey-mint bold">{{device.name}}</span>
+        <div class="row">
+            <div class="col-md-8">
+                <div>
+                    Name:
+                    <span class="font-grey-mint bold">{{device.name}}</span>
+                </div>
+                <div>
+                    Description:
+                    <span class="font-grey-mint bold">{{device.description}}</span>
+                </div>
+                <div>
+                    Producer:
+                    <a [routerLink]="['/producers', device.producer_id]" class="font-grey-mint bold">{{device.producer_name}}</a>
+                </div>
+                <div>
+                    Processor:
+                    <span class="font-grey-mint bold">{{device.processor_name}}</span>
+                </div>
+                <div>
+                    Target name:
+                    <span class="font-grey-mint bold">{{device.target_name}}</span>
+                </div>
+                <div>
+                    Abilities:<br>
+                    <div *ngIf="device.target_name == 'BYZANCE_YODAG2'">
+                        &nbsp;<i class="fa fa-fw fa-plug" title="Ethernet"></i> Ethernet<br>
+                        &nbsp;<i class="fa fa-fw fa-wifi" title="Wi-Fi"></i> Wi-Fi<br>
+                    </div>
+                    <div *ngIf="device.target_name == 'BYZANCE_YODAG3E'">
+                        &nbsp;<i class="fa fa-fw fa-plug" title="Ethernet"></i> Ethernet with PoE<br>
+                    </div>
+                    <span class="font-grey-salsa bold" *ngIf="!device.connectible_to_internet">None <span class="bold font-red bg-yellow-lemon">TODO</span></span>
+                </div>
             </div>
-            <div>
-                Description:
-                <span class="font-grey-mint bold">{{device.description}}</span>
-            </div>
-            <div>
-                Producer:
-                <span class="font-grey-mint bold">{{device.producer_name}}</span>
-            </div>
-            <div>
-                Processor:
-                <span class="font-grey-mint bold">{{device.processor_name}}</span>
-            </div>
-            <div>
-                Target name:
-                <span class="font-grey-mint bold">{{device.target_name}}</span>
-            </div>
-            <div>
-                Abilities:
-                <i class="fa fa-fw fa-plug" title="Ethernet" *ngIf="device.connectible_to_internet"></i>
-                <i class="fa fa-fw fa-wifi" title="Wi-Fi" *ngIf="device.connectible_to_internet"></i>
-                <span class="font-grey-salsa bold" *ngIf="!device.connectible_to_internet">None <span class="bold font-red bg-yellow-lemon">TODO</span></span>
+            <div class="col-md-4 hw-image-col">
+                <img *ngIf="device.picture_link" [attr.src]="device.picture_link">
+                <i *ngIf="!device.picture_link" class="fa fa-fw fa-microchip text-center"></i>
             </div>
         </div>
     </div>

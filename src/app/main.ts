@@ -193,10 +193,10 @@ let navigation = [
     new LabeledLink('Projects', ['/projects'], 'tasks'),
     new LabeledLink('Financial', ['/financial'],  'bank'),
     new LabeledLink('Hardware types', ['/hardware'], 'microchip'),
-    new LabeledLink('Producers',  ['/producers'] , 'industry'),
+    // new LabeledLink('Producers',  ['/producers'] , 'industry'),
     /*new LabeledLink("Devices", ["/user/devices"], "rocket"),
     new LabeledLink("System", ["/system"], "globe"),*/
-    new LabeledLink('Log out',  ['/logout'] , 'sign-out')
+    // new LabeledLink('Log out',  ['/logout'] , 'sign-out')
 ];
 
 let tabMenus = {
