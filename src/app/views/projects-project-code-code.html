@@ -27,7 +27,7 @@
             <div class="portlet light bordered padding-20">
                 <div class="portlet-title">
                     <div class="becki-caption">
-                        <span class="font-blue-dark uppercase">
+                        <span class="font-blue-dark">
                             <i class="fa fa-fw fa-file-code-o"></i>
                             IDE
                         </span>
@@ -36,7 +36,7 @@
                         <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="changesInSelectedVersion().length > 0" class="changes"></span> {{selectedProgramVersion.version_object.version_name}}</span>
                     </div>
                 </div>
-                <bk-code-ide [files]="selectedCodeFiles" defaultOpenFilename="main.cpp"></bk-code-ide>
+                <bk-code-ide [files]="selectedCodeFiles" defaultOpenFilename="main.cpp" (fileContentChange)="onFileContentChange($event)"></bk-code-ide>
                 <div>
                     <div class="pull-right">
                         <button type="button" class="btn default yellow-gold" (click)="onBuildClick()" [disabled]="buildInProgress">
@@ -79,7 +79,22 @@
             <div class="portlet portlet light bordered">
                 <div class="portlet-title">
                     <div class="becki-caption">
-                        <span class="font-blue-dark uppercase">
+                        <span class="font-blue-dark">
+                            <i class="fa fa-fw fa-sitemap fa-rotate-90"></i>
+                            Byzance<strong class="font-color-blocko">BLOCKO</strong> interface preview
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <bk-blocko-view [disableExecution]="true" [canConfig]="false" [readonly]="true" [simpleMode]="false" [autosize]="true" class="blocko-overflow-visible blocko-no-borders-and-bg blocko-code-view"></bk-blocko-view>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark">
                             <i class="fa fa-fw fa-code-fork"></i>
                             Saved versions
                         </span>

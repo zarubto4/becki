@@ -2,7 +2,7 @@
  * Created by davidhradek on 17.08.16.
  */
 
-import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
+import { Component, OnInit, Injector, OnDestroy, ViewChild } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess, FlashMessage } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
@@ -14,6 +14,8 @@ import { ICodeCompileErrorMessage, CodeCompileError, CodeError } from '../backen
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { NullSafe } from '../helpers/NullSafe';
 import { ModalsSelectHardwareComponent, ModalsSelectHardwareModel } from '../modals/select-hardware';
+import { getAllInputOutputs, getInputsOutputs } from '../helpers/CodeInterfaceHelpers';
+import { BlockoViewComponent } from '../components/BlockoViewComponent';
 
 import moment = require('moment/moment');
 
@@ -47,8 +49,12 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
     allDevices: IBoardShortDetail[];
     projectSubscription: Subscription;
 
+    @ViewChild(BlockoViewComponent)
+    blockoView: BlockoViewComponent;
+
     protected afterLoadSelectedVersionId: string = null;
 
+    fileChangeTimeout: any = null;
 
     versionStatusTranslate: { [key: string]: string } = {
         'compilation_in_progress': 'Compilation is in progress',
@@ -70,6 +76,8 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         let main = new CodeFile('main.cpp', '');
         main.fixedPath = true;
         this.selectedCodeFiles = [main];
+
+        this.refreshInterface();
 
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.projectId = params['project'];
@@ -165,6 +173,45 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     }
 
+    onFileContentChange(e: {fileFullPath: string, content: string}) {
+        if (this.fileChangeTimeout) {
+            clearTimeout(this.fileChangeTimeout);
+        }
+        this.fileChangeTimeout = setTimeout(() => this.onFileContentChangeDebounced(), 500);
+    }
+
+    onFileContentChangeDebounced() {
+        this.refreshInterface();
+    }
+
+    refreshInterface() {
+
+        if (!this.codeProgram) {
+            return;
+        }
+
+        let main = '';
+
+        let userFiles: { [file: string]: string } = {};
+
+        this.selectedCodeFiles.forEach((file) => {
+            if (file.objectFullPath === 'main.cpp') {
+                main = file.content;
+            } else {
+                userFiles[file.objectFullPath] = file.content;
+            }
+        });
+
+        let ios = getAllInputOutputs(main, userFiles);
+
+        this.blockoView.setInterfaces([{
+            'targetType': 'yoda', // TODO - change this in homer [DH]
+            'targetId': 'dummy_id',
+            'displayName': 'Program ' + this.codeProgram.name,
+            'interface': ios
+        }]);
+    }
+
     reloadVersions(): void {
         if (this.codeId) {
             this.backendService.getCProgram(this.codeId)
@@ -206,6 +253,8 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 codeFiles.push(main);
 
                 this.selectedCodeFiles = codeFiles;
+
+                this.refreshInterface();
 
                 this.buildErrors = null;
 

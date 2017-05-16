@@ -39,7 +39,7 @@
                 </ul>
                 <div class="tab-content">
                     <li *ngFor="let file of openFiles; let i = index" class="tab-pane" [class.active]="i == openFilesTabIndex">
-                        <bk-monaco-editor [(code)]="file.content" language="cpp"></bk-monaco-editor>
+                        <bk-monaco-editor [code]="file.content" (codeChange)="onCodeChange($event, file)" language="cpp"></bk-monaco-editor>
                     </li>
                     <li *ngIf="openFiles.length == 0" class="tab-pane active">
                         <h3 style="margin: 10px 0;">

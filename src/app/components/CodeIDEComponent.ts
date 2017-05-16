@@ -2,11 +2,7 @@
  * Created by davidhradek on 25.08.16.
  */
 
-/**
- * Created by davidhradek on 23.08.16.
- */
-
-import { Component, OnChanges, Input, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, Input, Output, SimpleChanges, EventEmitter } from '@angular/core';
 import { FileTreeObject, FileTreeObjectInterface } from './FileTreeComponent';
 import { ModalsCodeFileDialogModel, ModalsCodeFileDialogType } from '../modals/code-file-dialog';
 import { ModalService } from '../services/ModalService';
@@ -130,6 +126,9 @@ export class CodeIDEComponent implements OnChanges {
     @Input()
     defaultOpenFilename: string = null;
 
+    @Output()
+    fileContentChange = new EventEmitter<{fileFullPath: string, content: string}>();
+
     directories: CodeDirectory[] = [];
 
     openFilesTabIndex: number = 0;
@@ -172,6 +171,14 @@ export class CodeIDEComponent implements OnChanges {
 
     showModalError(title: string, text: string) {
         this.modalService.showModal(new ModalsConfirmModel(title, text, true, 'OK', null));
+    }
+
+    onCodeChange(code: string, fileObj: CodeFile) {
+        fileObj.content = code;
+        this.fileContentChange.emit({
+            fileFullPath: fileObj.objectFullPath,
+            content: code
+        });
     }
 
     generateDirectoriesFromFiles() {
