@@ -173,6 +173,13 @@ export class CodeIDEComponent implements OnChanges {
         this.modalService.showModal(new ModalsConfirmModel(title, text, true, 'OK', null));
     }
 
+    langFromFilename(fileObj: CodeFile) {
+        if (fileObj.extension.toLowerCase() === 'md') {
+            return 'markdown';
+        }
+        return 'cpp';
+    }
+
     onCodeChange(code: string, fileObj: CodeFile) {
         fileObj.content = code;
         this.fileContentChange.emit({

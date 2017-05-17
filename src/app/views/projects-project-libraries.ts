@@ -7,15 +7,15 @@ import { BaseMainComponent } from './BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
 import { ModalsRemovalModel } from '../modals/removal';
-import { ModalsCodePropertiesModel } from '../modals/code-properties';
-import { IProject, ITypeOfBoard, ICProgramShortDetail } from '../backend/TyrionAPI';
+import { ModalsLibraryPropertiesModel } from '../modals/library-properties';
+import { IProject, ILibraryShortDetail } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 
 @Component({
-    selector: 'bk-view-projects-project-code',
-    templateUrl: './projects-project-code.html',
+    selector: 'bk-view-projects-project-libraries',
+    templateUrl: './projects-project-libraries.html',
 })
-export class ProjectsProjectCodeComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class ProjectsProjectLibrariesComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     id: string;
 
@@ -25,9 +25,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
 
     project: IProject = null;
 
-    codePrograms: ICProgramShortDetail[] = null;
-
-    typeOfBoards: ITypeOfBoard[] = null;
+    libraries: ILibraryShortDetail[] = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -40,10 +38,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
             this.id = params['project'];
             this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
                 this.project = project;
-                this.codePrograms = project.c_programs;
-            });
-            this.typeOfBoardsSubscription = this.storageService.typeOfBoards().subscribe((typeOfBoards) => {
-                this.typeOfBoards = typeOfBoards;
+                this.libraries = project.c_private_libraries;
             });
         });
     }
@@ -53,30 +48,23 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         if (this.projectSubscription) {
             this.projectSubscription.unsubscribe();
         }
-        if (this.typeOfBoardsSubscription) {
-            this.typeOfBoardsSubscription.unsubscribe();
-        }
     }
 
-    onCodeClick(code: ICProgramShortDetail): void {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'code', code.id]);
+    onLibraryClick(library: ILibraryShortDetail): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'libraries', library.id]);
     }
 
-    onBoardTypeClick(boardTypeId: string): void {
-        this.navigate(['/hardware', boardTypeId]);
-    }
-
-    onRemoveClick(code: ICProgramShortDetail): void {
-        this.modalService.showModal(new ModalsRemovalModel(code.name)).then((success) => {
+    onRemoveClick(library: ILibraryShortDetail): void {
+        this.modalService.showModal(new ModalsRemovalModel(library.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteCProgram(code.id)
+                this.backendService.deleteLibrary(library.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The code has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess('The code library has been removed.'));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The code cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError('The code library cannot be removed.', reason));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -84,52 +72,43 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
     }
 
     onAddClick(): void {
-        if (!this.typeOfBoards) {
-            this.fmError(`The code cannot be added to project.`);
-        }
-        let model = new ModalsCodePropertiesModel(this.typeOfBoards);
+        let model = new ModalsLibraryPropertiesModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.createCProgram({
+                this.backendService.createLibrary({
                     project_id: this.id,
                     name: model.name,
-                    description: model.description,
-                    type_of_board_id: model.deviceType
+                    description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(`The code ${model.name} has been added to project.`));
+                        this.addFlashMessage(new FlashMessageSuccess(`The code library ${model.name} has been added to project.`));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(`The code ${model.name} cannot be added to project.`, reason));
+                        this.addFlashMessage(new FlashMessageError(`The code library ${model.name} cannot be added to project.`, reason));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
         });
     }
 
-    onEditClick(code: ICProgramShortDetail): void {
-        if (!this.typeOfBoards) {
-            this.fmError(`The code cannot be added to project.`);
-        }
-
-        let model = new ModalsCodePropertiesModel(this.typeOfBoards, code.name, code.description, '', true, code.name);
+    onEditClick(library: ILibraryShortDetail): void {
+        let model = new ModalsLibraryPropertiesModel(library.name, library.description, true, library.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editCProgram(code.id, {
+                this.backendService.editLibrary(library.id, {
                     project_id: this.id,
                     name: model.name,
-                    description: model.description,
-                    type_of_board_id: code.type_of_board_id
+                    description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The code has been updated.'));
+                        this.addFlashMessage(new FlashMessageSuccess('The code library has been updated.'));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The code cannot be updated.', reason));
+                        this.addFlashMessage(new FlashMessageError('The code library cannot be updated.', reason));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }

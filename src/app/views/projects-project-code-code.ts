@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs/Rx';
 import { CodeFile } from '../components/CodeIDEComponent';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
-import { IProject, ICProgram, ICProgramVersion, IUserFile, ICProgramVersionShortDetail, ITypeOfBoard, IBoardShortDetail } from '../backend/TyrionAPI';
+import { IProject, ICProgram, ICProgramVersion, ILibraryRecord, ICProgramVersionShortDetail, ITypeOfBoard, IBoardShortDetail } from '../backend/TyrionAPI';
 import { ICodeCompileErrorMessage, CodeCompileError, CodeError } from '../backend/BeckiBackend';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { NullSafe } from '../helpers/NullSafe';
@@ -242,9 +242,9 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 this.selectedProgramVersion = programVersionFull;
 
                 let codeFiles: CodeFile[] = [];
-                if (Array.isArray(programVersionFull.user_files)) {
-                    codeFiles = (programVersionFull.user_files).map((uf) => {
-                        return new CodeFile(uf.file_name, uf.code);
+                if (Array.isArray(programVersionFull.files)) {
+                    codeFiles = (programVersionFull.files).map((uf) => {
+                        return new CodeFile(uf.file_name, uf.content);
                     });
                 }
 
@@ -335,7 +335,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             if (success) {
                 let main = '';
 
-                let userFiles: IUserFile[] = [];
+                let userFiles: ILibraryRecord[] = [];
 
                 this.selectedCodeFiles.forEach((file) => {
                     if (file.objectFullPath === 'main.cpp') {
@@ -343,7 +343,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     } else {
                         userFiles.push({
                             file_name: file.objectFullPath,
-                            code: file.content
+                            content: file.content
                         });
                     }
                 });
@@ -353,7 +353,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     version_name: m.name,
                     version_description: m.description,
                     main: main,
-                    user_files: userFiles
+                    files: userFiles
                 })
                     .then(() => {
                         this.fmSuccess('Version <b>' + m.name + '</b> saved successfully.');
@@ -374,7 +374,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
         let main = '';
 
-        let userFiles: IUserFile[] = [];
+        let userFiles: ILibraryRecord[] = [];
 
         this.buildErrors = null;
         this.selectedCodeFiles.forEach((file) => {
@@ -385,16 +385,16 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             } else {
                 userFiles.push({
                     file_name: file.objectFullPath,
-                    code: file.content
+                    content: file.content
                 });
             }
         });
 
         this.buildInProgress = true;
         this.backendService.compileCProgram({
-            library_files: [],
+            imported_libraries: [],
             main: main,
-            user_files: userFiles,
+            files: userFiles,
             type_of_board_id: this.codeProgram.type_of_board_id
         })
             .then((success) => {

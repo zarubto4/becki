@@ -16,6 +16,9 @@
             <template [ngSwitchCase]="'ModalsCodePropertiesModel'">
                 <bk-modals-code-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-code-properties>
             </template>
+            <template [ngSwitchCase]="'ModalsLibraryPropertiesModel'">
+                <bk-modals-library-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-library-properties>
+            </template>
             <template [ngSwitchCase]="'ModalsCodeFileDialogModel'">
                 <bk-modals-code-file-dialog [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-code-file-dialog>
             </template>

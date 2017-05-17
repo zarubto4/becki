@@ -121,6 +121,9 @@ import { TranslatePipe } from './pipes/TranslationPipe';
 import { Md2HtmlPipe } from './pipes/Md2HtmlPipe';
 import { ModalsHardwareBootloaderUpdateComponent } from './modals/hardware-bootloader-update';
 import { InstanceHistoryTimelineComponent } from './components/InstanceHistoryTimelineComponent';
+import { ProjectsProjectLibrariesComponent } from './views/projects-project-libraries';
+import { ModalsLibraryPropertiesComponent } from './modals/library-properties';
+import { ProjectsProjectLibrariesLibraryComponent } from './views/projects-project-libraries-library';
 
 
 // @formatter:off
@@ -168,6 +171,8 @@ let routes: Routes = [
     {path: 'projects/:project/blocks', data: {breadName: 'BLOCKO blocks'}, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/blocks/:blocks', data: {breadName: ':blocks'}, component: ProjectsProjectBlocksBlocksComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/blocks/:blocks/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]},
+    {path: 'projects/:project/libraries', data: {breadName: 'CODE libraries'}, component: ProjectsProjectLibrariesComponent, canActivate: [AuthGuard]},
+    {path: 'projects/:project/libraries/:library', data: {breadName: ':library'}, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard]},
 
     {path: 'projects/:project/grid', data: {breadName: 'GRID programs'}, component: ProjectsProjectGridComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/grid/:grids', data: {breadName: ':grids'}, component: ProjectsProjectGridGridsComponent, canActivate: [AuthGuard]},
@@ -194,8 +199,8 @@ let navigation = [
     new LabeledLink('Financial', ['/financial'],  'bank'),
     new LabeledLink('Hardware types', ['/hardware'], 'microchip'),
     // new LabeledLink('Producers',  ['/producers'] , 'industry'),
-    /*new LabeledLink("Devices", ["/user/devices"], "rocket"),
-    new LabeledLink("System", ["/system"], "globe"),*/
+    /* new LabeledLink("Devices", ["/user/devices"], "rocket"),
+    new LabeledLink("System", ["/system"], "globe"), */
     // new LabeledLink('Log out',  ['/logout'] , 'sign-out')
 ];
 
@@ -207,7 +212,7 @@ let tabMenus = {
         new LabeledLink('<strong class="font-color-hardware">HARDWARE</strong>', ['/', 'projects', ':project', 'hardware'], null, {styleClass: 'color-hardware'}),
         new LabeledLink('<strong class="font-color-code">CODE</strong>', null, null, {styleClass: 'color-code', items:  [
             new LabeledLink('<strong class="font-color-code">CODE</strong> programs', ['/', 'projects', ':project', 'code'], null),
-            new LabeledLink('<strong class="font-color-code">CODE</strong> libraries', ['/', 'projects', ':project', 'libraries'], null, {disabled: true}),
+            new LabeledLink('<strong class="font-color-code">CODE</strong> libraries', ['/', 'projects', ':project', 'libraries'], null),
         ]}),
         new LabeledLink('<strong class="font-color-grid">GRID</strong>', null, null, {styleClass: 'color-grid font-color-grid-dark', items:  [
             new LabeledLink('<strong class="font-color-grid">GRID</strong> programs', ['/', 'projects', ':project', 'grid'], null),
@@ -305,6 +310,7 @@ class BeckiErrorHandler implements ErrorHandler {
         NotificationsOverlayComponent,
         NotificationsListComponent,
         ConsoleLogComponent,
+        InstanceHistoryTimelineComponent,
         // Views components
         Error404Component,
         LoginComponent,
@@ -347,6 +353,8 @@ class BeckiErrorHandler implements ErrorHandler {
         ProjectsProjectHardwareHardwareComponent,
         ProducersComponent,
         ProducersProducerComponent,
+        ProjectsProjectLibrariesComponent,
+        ProjectsProjectLibrariesLibraryComponent,
         // Modals components
         ModalsProjectPropertiesComponent,
         ModalsRemovalComponent,
@@ -375,7 +383,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsSendInvoiceComponent,
         ModalsBlockoAddGridEmptyComponent,
         ModalsHardwareBootloaderUpdateComponent,
-        InstanceHistoryTimelineComponent,
+        ModalsLibraryPropertiesComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]
