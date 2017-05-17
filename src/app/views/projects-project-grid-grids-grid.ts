@@ -53,7 +53,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
 
     widgetSourceCache: { [versionId: string]: string } = {};
 
-    trashPosition: {x: number, y: number} | null = null;
+    trashPosition: {x: number, y: number, visible: boolean} = {x: 0, y: 0, visible: false};
 
     @ViewChild(GridViewComponent)
     gridView: GridViewComponent;
@@ -105,9 +105,9 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
     onWidgetDragMoveEvent = (e: any) => {
         if (e.outside && e.e) {
             const bound = (<HTMLElement>this.editorElement.nativeElement).getBoundingClientRect();
-            this.trashPosition = {x: e.e.x - bound.left, y: e.e.y - bound.top};
+            this.trashPosition = {x: e.e.x - bound.left, y: e.e.y - bound.top, visible: true};
         } else {
-            this.trashPosition = null;
+            this.trashPosition.visible = false;
         }
     }
 
