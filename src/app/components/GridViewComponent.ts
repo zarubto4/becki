@@ -35,6 +35,9 @@ export class GridViewComponent implements AfterViewInit, OnDestroy {
     @Output()
     onWidgetError = new EventEmitter<{id: number, error: any}>();
 
+    @Output()
+    onWidgetDrag = new EventEmitter<{e: any, outside: boolean}>();
+
     @Input()
     widgetsGroups: ITypeOfWidget[] = null;
 
@@ -95,6 +98,16 @@ export class GridViewComponent implements AfterViewInit, OnDestroy {
                 });
             });
             this.gridController.setRenderer(this.gridRenderer);
+            this.gridRenderer.widgetDraggingCallback = this.onWidgetDragMoveEvent;
+        });
+    }
+
+    onWidgetDragMoveEvent = (e: any, outside: boolean) => {
+        this.zone.run(() => {
+            this.onWidgetDrag.emit({
+                e: e,
+                outside: outside
+            });
         });
     }
 

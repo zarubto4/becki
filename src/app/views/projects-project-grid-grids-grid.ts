@@ -2,7 +2,7 @@
  * Created by davidhradek on 10.10.16.
  */
 
-import { Component, OnInit, Injector, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, Injector, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
@@ -27,6 +27,9 @@ import { Core, EditorRenderer } from 'the-grid';
 })
 export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
+    @ViewChild('editor')
+    editorElement: ElementRef;
+
     projectId: string;
     gridId: string;
     gridsId: string;
@@ -49,6 +52,8 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
     widgetGroupsOpenToggle: { [id: string]: boolean } = {};
 
     widgetSourceCache: { [versionId: string]: string } = {};
+
+    trashPosition: {x: number, y: number} | null = null;
 
     @ViewChild(GridViewComponent)
     gridView: GridViewComponent;
@@ -94,6 +99,15 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
         this.routeParamsSubscription.unsubscribe();
         if (this.projectSubscription) {
             this.projectSubscription.unsubscribe();
+        }
+    }
+
+    onWidgetDragMoveEvent = (e: any) => {
+        if (e.outside && e.e) {
+            const bound = (<HTMLElement>this.editorElement.nativeElement).getBoundingClientRect();
+            this.trashPosition = {x: e.e.x - bound.left, y: e.e.y - bound.top};
+        } else {
+            this.trashPosition = null;
         }
     }
 

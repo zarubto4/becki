@@ -57,8 +57,11 @@
                     <div class="clearfix"></div>
                 </div>
 
-                <div style="margin: 10px 0; overflow-x: auto;">
-                    <bk-grid-view [widgetsGroups]="widgetGroups" (onRequestWidgetSource)="onWidgetRequestingSource($event)" (onWidgetLog)="onWidgetLog($event)" (onWidgetMessage)="onWidgetMessage($event)" (onWidgetError)="onWidgetError($event)"></bk-grid-view>
+                <div #editor style="margin: 10px 0; overflow-x: auto; position: relative;">
+                    <div class="grid-trash-helper" [class.visible]="trashPosition" [style.left]="trashPosition?(trashPosition.x + 'px'):0" [style.top]="trashPosition?(trashPosition.y + 'px'):0">
+                        <i class="fa fa-trash" style="opacity: 0.5; font-size: 42px; color: red;"></i>
+                    </div>
+                    <bk-grid-view [widgetsGroups]="widgetGroups" (onWidgetDrag)="onWidgetDragMoveEvent($event)" (onRequestWidgetSource)="onWidgetRequestingSource($event)" (onWidgetLog)="onWidgetLog($event)" (onWidgetMessage)="onWidgetMessage($event)" (onWidgetError)="onWidgetError($event)"></bk-grid-view>
                 </div>
 
                 <div>

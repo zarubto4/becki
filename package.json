@@ -44,7 +44,7 @@
     "rxjs": "5.0.1",
     "script-engine": "git+ssh://git@git.byzance.cz:js-components/script-engine.git#v0.0.38",
     "systemjs": "0.19.40",
-    "the-grid": "git+ssh://git@git.byzance.cz:js-components/the-grid.git#v0.1.153",
+    "the-grid": "git+ssh://git@git.byzance.cz:js-components/the-grid.git#v0.1.154",
     "tslib": "^1.5.0",
     "typescript": "^2.1.5",
     "zone.js": "^0.7.4"
