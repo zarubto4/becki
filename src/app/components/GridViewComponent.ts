@@ -10,7 +10,7 @@ import { Core, Widgets, EditorRenderer } from 'the-grid';
 import { Component, AfterViewInit, Output, Input, ViewChild, ElementRef, EventEmitter, NgZone, OnDestroy } from '@angular/core';
 import { ModalService } from '../services/ModalService';
 import { ModalsGridConfigPropertiesModel } from '../modals/grid-config-properties';
-import { ITypeOfWidget, IGridWidget, IGridWidgetVersionShortDetail } from '../backend/TyrionAPI';
+import { ITypeOfWidget, IGridWidget, IGridWidgetVersionShortDetail, IGridWidgetShortDetail } from '../backend/TyrionAPI';
 
 @Component({
     selector: 'bk-grid-view',
@@ -84,8 +84,8 @@ export class GridViewComponent implements AfterViewInit, OnDestroy {
                 if (this.widgetsGroups) {
                     for (let i = 0; i < this.widgetsGroups.length; i++) {
                         const group = this.widgetsGroups[i];
-                        for (let j = 0; j < group.grid_widgets.length; j++) {
-                            const widgetDef: IGridWidget = group.grid_widgets[j];
+                        for (let j = 0; j < group.widgets.length; j++) {
+                            const widgetDef: IGridWidgetShortDetail = group.widgets[j];
                             if (widgetDef.id === widget.type.id) {
                                 versions = widgetDef.versions;
                             }

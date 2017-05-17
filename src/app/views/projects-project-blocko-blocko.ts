@@ -103,7 +103,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         {
             id: 'logic_blocks',
             name: 'Logic Blocks',
-            blocko_blocks: [
+            blocks: [
                 {
                     name: 'NOT',
                     blockoName: 'not',
@@ -129,7 +129,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         {
             id: 'debug_blocks',
             name: 'Debug Blocks',
-            blocko_blocks: [
+            blocks: [
                 {
                     name: 'Switch',
                     blockoName: 'switch',
@@ -160,7 +160,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         {
             id: 'ts_blocks',
             name: 'TypeScript Blocks',
-            blocko_blocks: [
+            blocks: [
                 {
                     name: 'All in one example',
                     blockoDesignJson: '{\"displayName\":\"fa-font\",\"backgroundColor\":\"#32C5D2\",\"description\":\"All in one\"}',
@@ -290,14 +290,14 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 let wantedVersionName = params.data.id + '_' + wantedVersion.id;
 
                 if (this.blocksCache[wantedVersionName]) {
-                    this.blockoView.addTsBlock(this.blocksCache[wantedVersionName].logic_json, this.blocksCache[wantedVersionName].design_json, x, y, params.data.type_of_block_id, wantedVersion.id);
+                    this.blockoView.addTsBlock(this.blocksCache[wantedVersionName].logic_json, this.blocksCache[wantedVersionName].design_json, x, y, params.data.id, wantedVersion.id);
                 } else {
 
                     // TODO: make only one request
                     this.backendService.getBlockoBlockVersion(wantedVersion.id)
                         .then((bbv) => {
                             this.blocksCache[wantedVersionName] = bbv;
-                            this.blockoView.addTsBlock(this.blocksCache[wantedVersionName].logic_json, this.blocksCache[wantedVersionName].design_json, x, y, params.data.type_of_block_id, wantedVersion.id);
+                            this.blockoView.addTsBlock(this.blocksCache[wantedVersionName].logic_json, this.blocksCache[wantedVersionName].design_json, x, y, params.data.id, wantedVersion.id);
                         })
                         .catch(reason => {
                             this.addFlashMessage(new FlashMessageError(`The blocko block version cannot be loaded.`, reason));
@@ -1047,12 +1047,12 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 this.blocksIcons = {};
 
                 typeOfBlocks.forEach((tob) => {
-                    tob.blocko_blocks.forEach((bb) => {
+                    tob.blocks.forEach((bb) => {
                         let sortedVersion = bb.versions.sort((a, b) => {
                             return parseInt(b.id, 10) - parseInt(a.id, 10);
                         });
                         if (sortedVersion.length) {
-                            this.blocksLastVersions[bb.id] = sortedVersion[0];
+                            this.blocksLastVersions[bb.id] = sortedVersion[sortedVersion.length - 1];
                             if (this.blocksLastVersions[bb.id]) {
                                 let version = this.blocksLastVersions[bb.id];
                                 try {
@@ -1072,14 +1072,10 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 });
 
                 this.blockGroups = typeOfBlocks;
-                // console.log(typeOfBlocks);
-
-                // console.log(projects);
                 this.allGridProjects = projects;
 
                 this.allBoardsDetails = blockoDetails;
 
-                // console.log(blockoDetails);
 
                 this.boardById = {};
                 this.allBoardsDetails.boards.forEach((board) => {

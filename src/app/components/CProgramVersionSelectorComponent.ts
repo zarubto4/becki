@@ -76,12 +76,16 @@ export class CProgramVersionSelectorComponent implements OnInit {
                 if (this.selectedProgram) {
                     this.selectedProgramVersionId = this.value;
                 } else {
-                    this.value = null;
-                    this.valueChanged.emit(this.value);
+                    setTimeout(() => {
+                        this.value = null;
+                        this.valueChanged.emit(this.value);
+                    }, 0); // Think about better solution [DH]
                 }
             } else {
-                this.value = null;
-                this.valueChanged.emit(this.value);
+                setTimeout(() => {
+                    this.value = null;
+                    this.valueChanged.emit(this.value);
+                }, 0); // Think about better solution [DH]
             }
 
         }

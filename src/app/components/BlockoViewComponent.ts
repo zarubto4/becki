@@ -21,7 +21,7 @@ import { ModalService } from '../services/ModalService';
 import { BackendService } from '../services/BackendService';
 import { ModalsBlockoConfigPropertiesModel } from '../modals/blocko-config-properties';
 import { ModalsBlockoBlockCodeEditorModel } from '../modals/blocko-block-code-editor';
-import { ITypeOfBlock, IBlockoBlockVersionShortDetail, IBlockoBlock } from '../backend/TyrionAPI';
+import { ITypeOfBlock, IBlockoBlockVersionShortDetail, IBlockoBlock, IBlockoBlockShortDetail } from '../backend/TyrionAPI';
 
 
 @Component({
@@ -80,9 +80,9 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                 if (this.blocksGroups) {
                     for (let i = 0; i < this.blocksGroups.length; i++) {
                         const group = this.blocksGroups[i];
-                        for (let j = 0; j < group.blocko_blocks.length; j++) {
-                            const blockDef: IBlockoBlock = group.blocko_blocks[j];
-                            if (blockDef.type_of_block_id === block.typeOfBlock) {
+                        for (let j = 0; j < group.blocks.length; j++) {
+                            const blockDef: IBlockoBlockShortDetail = group.blocks[j];
+                            if (blockDef.id === block.typeOfBlock) {
                                 versions = blockDef.versions;
                             }
                         }

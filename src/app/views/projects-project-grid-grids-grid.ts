@@ -272,6 +272,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                 this.unblockUI();
             })
             .catch((err) => {
+                event.resolve(null);
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError('Cannot load widget version', err));
             });
