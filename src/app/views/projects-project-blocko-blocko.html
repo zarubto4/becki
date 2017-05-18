@@ -231,7 +231,9 @@
                                 <div class="panel-body">
                                     <div *ngIf="staticBlocksGroup.blocks.length == 0" style="color: gray; text-align: center;">No blocks in this group</div>
                                     <div *ngFor="let block of staticBlocksGroup.blocks;" [bkDraggable]="draggableOptions" [bkDraggableData]="block" (bkDraggableOnStop)="onDragStop($event)" (bkDraggableOnStart)="onDragStart($event)" class="blocko-block" [style.backgroundColor]="block.backgroundColor">
-                                        {{block.name}}
+                                        <div class="blocko-block-mask"></div>
+                                        <i class="fa fa-fw fa-cubes" style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
+                                        <span>{{block.name}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -250,8 +252,10 @@
                                 <div class="panel-body">
                                     <div *ngIf="blocksType.blocks.length == 0" style="color: gray; text-align: center;">No blocks in this group</div>
                                     <div *ngFor="let block of blocksType.blocks;" [style.background-color]="blocksColors[block.id]" [class.with-icon]="blocksIcons[block.id]" [bkDraggable]="draggableOptions" [bkDraggableData]="block" (bkDraggableOnStop)="onDragStop($event)" (bkDraggableOnStart)="onDragStart($event)" class="blocko-block">
+                                        <div class="blocko-block-mask"></div>
+                                        <i class="fa fa-fw fa-cubes" style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
                                         <i *ngIf="blocksIcons[block.id]" class="fa {{blocksIcons[block.id]}}"></i>
-                                        <div style="color:black;">{{block.name}}</div>
+                                        <span>{{block.name}}</span>
                                         <div style="font-size: 0.8em">{{blocksLastVersions[block.id]?blocksLastVersions[block.id].name:"no version"}}</div>
                                     </div>
                                 </div>
