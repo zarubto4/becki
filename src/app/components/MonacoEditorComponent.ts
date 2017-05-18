@@ -22,7 +22,10 @@ import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService
 
 @Component({
     selector: 'bk-monaco-editor',
-    template: `<div data-ref-field class="form-control" style="position: relative; height: 60vh; padding: 0;"></div>`
+    template: `<div class="monaco-editor form-control" [class.monaco-full-screen]="fullScreen">
+        <div class="monaco-container" data-ref-field></div>
+        <a class="monaco-toggle-fullscreen" (click)="onFullscreenClick()"></a>
+    </div>`
 })
 export class MonacoEditorComponent implements AfterViewInit, OnChanges, OnDestroy {
 
@@ -44,6 +47,8 @@ export class MonacoEditorComponent implements AfterViewInit, OnChanges, OnDestro
     // TODO: annotations
 
     editor: monaco.editor.IStandaloneCodeEditor;
+
+    fullScreen: boolean = false;
 
     @Output('codeChange')
     codeChange = new EventEmitter<string>();
@@ -109,5 +114,56 @@ export class MonacoEditorComponent implements AfterViewInit, OnChanges, OnDestro
                 this.editor.dispose();
             }
         });
+
+        this.enableScroll();
+    }
+
+    onFullscreenClick(): void {
+        this.fullScreen = !this.fullScreen;
+        if (this.fullScreen) {
+            this.disableScroll();
+        } else {
+            this.enableScroll();
+        }
+    }
+
+
+    // left: 37, up: 38, right: 39, down: 40,
+    // spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
+    protected preventDefault(e: any) {
+        e = e || window.event;
+        if (e.preventDefault) {
+            e.preventDefault();
+        }
+        e.returnValue = false;
+    }
+
+    protected preventDefaultForScrollKeys(e: any) {
+        const keys = [37, 38, 39, 40];
+
+        if (keys.indexOf(e.keyCode) !== -1) {
+            this.preventDefault(e);
+            return false;
+        }
+    }
+
+    protected disableScroll() {
+        if (window.addEventListener) {
+            window.addEventListener('DOMMouseScroll', this.preventDefault, false);
+        }
+        window.onwheel = this.preventDefault; // modern standard
+        window.onmousewheel = document.onmousewheel = this.preventDefault; // older browsers, IE
+        window.ontouchmove  = this.preventDefault; // mobile
+        document.onkeydown  = this.preventDefaultForScrollKeys;
+    }
+
+    protected enableScroll() {
+        if (window.removeEventListener) {
+            window.removeEventListener('DOMMouseScroll', this.preventDefault, false);
+        }
+        window.onmousewheel = document.onmousewheel = null;
+        window.onwheel = null;
+        window.ontouchmove = null;
+        document.onkeydown = null;
     }
 }

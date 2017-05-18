@@ -2499,3 +2499,51 @@ textarea.form-control {
     margin-left: auto;
     margin-right: auto;
 }
+
+.monaco-editor {
+    height: 60vh;
+    padding: 0;
+
+    .monaco-container {
+        position: relative;
+        height: 60vh;
+        padding: 0;
+    }
+
+    .monaco-toggle-fullscreen {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        display: block;
+        font: normal normal normal 14px/1 FontAwesome;
+        opacity: 0.7;
+
+        &:before {
+            font-size: 24px;
+            color: #fff;
+            content: "\f065";
+        }
+    }
+
+    &.monaco-full-screen {
+        position: fixed;
+        height: auto;
+        width: auto;
+        left: 0;
+        top: 50px;
+        bottom: 0;
+        right: 0;
+        z-index: 999;
+
+        .monaco-container {
+            height: 100%;
+            width: 100%;
+        }
+
+        .monaco-toggle-fullscreen {
+            &:before {
+                content: "\f066";
+            }
+        }
+    }
+}
