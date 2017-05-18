@@ -7,6 +7,7 @@ import { BaseMainComponent } from './BaseMainComponent';
 import { IBoard, ITypeOfBoard } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { CurrentParamsService } from '../services/CurrentParamsService';
+import { ModalsHardwareBootloaderUpdateModel } from '../modals/hardware-bootloader-update';
 
 @Component({
     selector: 'bk-view-projects-project-hardware-hardware',
@@ -61,16 +62,23 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         if (!this.device) {
             return;
         }
-        this.blockUI();
-        this.backendService.updateBootloader({
-            device_ids: [this.device.id]
-        })
-            .then(() => {
-                this.refresh();
-            })
-            .catch((reason) => {
-                this.fmError('Cannot update bootloader now.', reason);
-                this.unblockUI();
+
+        let mConfirm = new ModalsHardwareBootloaderUpdateModel(this.device.personal_description ? this.device.personal_description : this.device.id);
+        this.modalService.showModal(mConfirm)
+            .then((success) => {
+                if (success) {
+                    this.blockUI();
+                    this.backendService.updateBootloader({
+                        device_ids: [this.device.id]
+                    })
+                        .then(() => {
+                            this.refresh();
+                        })
+                        .catch((reason) => {
+                            this.fmError('Cannot update bootloader now.', reason);
+                            this.unblockUI();
+                        });
+                }
             });
     }
 
