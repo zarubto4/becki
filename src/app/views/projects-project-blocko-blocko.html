@@ -256,7 +256,7 @@
                                         <i class="fa fa-fw fa-cubes" style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
                                         <i *ngIf="blocksIcons[block.id]" class="fa {{blocksIcons[block.id]}}"></i>
                                         <span>{{block.name}}</span>
-                                        <div style="font-size: 0.8em">{{blocksLastVersions[block.id]?blocksLastVersions[block.id].name:"no version"}}</div>
+                                        <span style="font-size: 0.8em">{{blocksLastVersions[block.id]?blocksLastVersions[block.id].name:"no version"}}</span>
                                     </div>
                                 </div>
                             </div>
