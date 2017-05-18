@@ -49,7 +49,15 @@
             </table>
         </div>
         <h3 *ngIf="!group" class="text-center">Loading...</h3>
-        <h3 *ngIf="group && !(group.grid_widgets && group.grid_widgets.length)" class="text-center">No widgets in this group</h3>
+        <div *ngIf="group && !(group.grid_widgets && group.grid_widgets.length)" class="list-no-items">
+            <p class="list-no-items__main-label">There is not any widget library in this group</p>
+            <p class="list-no-items__sub-label">You can create it by click on button bellow.</p>
+            <p>
+                <button class="btn blue" [disabled]="!group || !group.update_permission" (click)="onWidgetAddClick(group)">
+                    <i class="fa fa-plus-circle"></i> Add widget
+                </button>
+            </p>
+        </div>
     </div>
 
 </bk-layout-main>

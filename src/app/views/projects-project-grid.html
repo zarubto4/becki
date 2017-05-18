@@ -45,7 +45,15 @@
             </table>
         </div>
         <h3 *ngIf="!gridProjects" class="text-center">Loading...</h3>
-        <h3 *ngIf="gridProjects && gridProjects.length == 0" class="text-center">No grid projects in this project</h3>
+        <div *ngIf="gridProjects && gridProjects.length == 0" class="list-no-items">
+            <p class="list-no-items__main-label">There is not any grid project</p>
+            <p class="list-no-items__sub-label">You can create it by click on button bellow.</p>
+            <p>
+                <button class="btn blue" (click)="onProjectAddClick()">
+                    <i class="fa fa-plus-circle"></i> Add grid project
+                </button>
+            </p>
+        </div>
     </div>
 
 </bk-layout-main>

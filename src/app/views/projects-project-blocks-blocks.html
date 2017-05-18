@@ -49,7 +49,15 @@
             </table>
         </div>
         <h3 *ngIf="!group" class="text-center">Loading...</h3>
-        <h3 *ngIf="group && !(group.blocko_blocks && group.blocko_blocks.length)" class="text-center">No blocks in this group</h3>
+        <div *ngIf="group && !(group.blocko_blocks && group.blocko_blocks.length)" class="list-no-items">
+            <p class="list-no-items__main-label">There is not any blocks in this group</p>
+            <p class="list-no-items__sub-label">You can create it by click on button bellow.</p>
+            <p>
+                <button class="btn blue" [disabled]="!group || !group.update_permission" (click)="onBlockAddClick(group)">
+                    <i class="fa fa-plus-circle"></i> Add block
+                </button>
+            </p>
+        </div>
     </div>
 
 </bk-layout-main>

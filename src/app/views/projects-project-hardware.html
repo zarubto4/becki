@@ -62,7 +62,15 @@
             </table>
         </div>
         <h3 *ngIf="!devices" class="text-center">Loading...</h3>
-        <h3 *ngIf="devices && devices.length == 0" class="text-center">No devices in this project</h3>
+        <div *ngIf="devices && devices.length == 0" class="list-no-items">
+            <p class="list-no-items__main-label">There is not any device in this project</p>
+            <p class="list-no-items__sub-label">You can add it by click on button bellow.</p>
+            <p>
+                <button class="btn blue" (click)="onAddClick($event)">
+                    <i class="fa fa-plus-circle"></i> Add hardware device
+                </button>
+            </p>
+        </div>
     </div>
 
 </bk-layout-main>

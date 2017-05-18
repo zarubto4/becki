@@ -49,7 +49,15 @@
             </table>
         </div>
         <h3 *ngIf="!gridProject" class="text-center">Loading...</h3>
-        <h3 *ngIf="gridProject && !(gridProject.programs && gridProject.programs.length)" class="text-center">No grid programs in this grid project</h3>
+        <div *ngIf="gridProject && !(gridProject.programs && gridProject.programs.length)" class="list-no-items">
+            <p class="list-no-items__main-label">There is not any grid program</p>
+            <p class="list-no-items__sub-label">You can create it by click on button bellow.</p>
+            <p>
+                <button class="btn blue" [disabled]="!gridProject || !gridProject.update_permission" (click)="onProgramAddClick(gridProject)">
+                    <i class="fa fa-plus-circle"></i> Add grid program
+                </button>
+            </p>
+        </div>
     </div>
 
 </bk-layout-main>

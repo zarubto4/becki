@@ -52,10 +52,24 @@
             </table>
         </div>
         <h4 *ngIf="!products && !projects" class="text-center">Loading...</h4>
-        <h4 *ngIf="products && products.length && projects && projects.length == 0" class="text-center">No projects</h4>
-        <div *ngIf="products && !products.length">
-            <h4 class="text-center">If you want to add project, you will have to <span class="bold">add product</span>. For add product click the link below.</h4>
-            <h4 class="text-center bold"><a (click)="onRedirectClick()">Add product</a></h4>
+        <div *ngIf="projects && !projects.length" class="list-no-items">
+            <p class="list-no-items__main-label">There is not any projects</p>
+            <template [ngIf]="products && !products.length">
+                <p class="list-no-items__sub-label">if you want to add project, you must have any <span class="bold">product</span>. For add product click the link below.</p>
+                <p> 
+                    <button class="btn blue" (click)="onRedirectClick()">
+                        <i class="fa fa-plus-circle"></i> Add product
+                    </button>
+                </p>
+            </template>
+            <template [ngIf]="products && products.length">
+                <p class="list-no-items__sub-label">You can create it by click on button bellow.<p>
+                <p>
+                    <button class="btn blue" (click)="onAddClick()" [disabled]="products && !products.length">
+                        <i class="fa fa-plus-circle"></i> Add project
+                    </button>
+                </p>
+            </template>
         </div>
     </div>
 </bk-layout-main>

@@ -45,7 +45,15 @@
             </table>
         </div>
         <h3 *ngIf="!libraries" class="text-center">Loading...</h3>
-        <h3 *ngIf="libraries && libraries.length == 0" class="text-center">No code libraries in this project</h3>
+        <div *ngIf="libraries && libraries.length == 0" class="list-no-items">
+            <p class="list-no-items__main-label">There is not any code library in this project</p>
+            <p class="list-no-items__sub-label">You can create it by click on button bellow.</p>
+            <p>
+                <button class="btn blue" (click)="onAddClick()">
+                    <i class="fa fa-plus-circle"></i> Add code library
+                </button>
+            </p>
+        </div>
     </div>
 
 </bk-layout-main>

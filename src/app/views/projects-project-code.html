@@ -47,7 +47,16 @@
             </table>
         </div>
         <h3 *ngIf="!codePrograms" class="text-center">Loading...</h3>
-        <h3 *ngIf="codePrograms && codePrograms.length == 0" class="text-center">No code programs in this project</h3>
+        <div *ngIf="codePrograms && codePrograms.length == 0" class="list-no-items">
+            <p class="list-no-items__main-label">There is not any code program</p>
+            <p class="list-no-items__sub-label">You can create it by click on button bellow.</p>
+            <p>
+                <button class="btn blue" (click)="onAddClick()">
+                    <i class="fa fa-plus-circle"></i> Add code program
+                </button>
+            </p>
+        </div>
+
     </div>
 
 </bk-layout-main>

@@ -2547,3 +2547,19 @@ textarea.form-control {
         }
     }
 }
+
+.list-no-items {
+    text-align: center;
+
+    &__main-label {
+        margin: 0;
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    &__sub-label {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 100;
+    }
+}
