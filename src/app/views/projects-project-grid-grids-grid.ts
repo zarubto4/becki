@@ -248,7 +248,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
         this.widgetDragHandler = this.gridView.requestCreateWidget({
             name: widget.name,
             id: widget.id,
-            version_id: widget.versions[0].id
+            version_id: widget.versions[widget.versions.length - 1].id
         }, e);
 
         this.widgetDragHandler.addCallback(this.dragWidgetStatusCallback);

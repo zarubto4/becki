@@ -157,7 +157,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 if (version) {
                     this.selectWidgetVersion(version);
                 } else if (this.widgetVersions.length) {
-                    this.selectWidgetVersion(this.widgetVersions[0]); // also unblockUI
+                    this.selectWidgetVersion(this.widgetVersions[this.widgetVersions.length - 1]); // also unblockUI
                 } else {
                     this.unblockUI();
                 }
