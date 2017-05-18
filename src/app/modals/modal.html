@@ -85,6 +85,12 @@
             <template [ngSwitchCase]="'ModalsHardwareBootloaderUpdateModel'">
                 <bk-modals-hardware-bootloader-update [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-bootloader-update>
             </template>
+            <template [ngSwitchCase]="'ModalsCodeAddLibraryModel'">
+                <bk-modals-code-add-library [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-code-add-library>
+            </template>
+            <template [ngSwitchCase]="'ModalsCodeLibraryVersionModel'">
+                <bk-modals-code-library-version [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-code-library-version>
+            </template>
         </div>
     </div>
 </div>

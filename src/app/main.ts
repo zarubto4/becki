@@ -124,6 +124,8 @@ import { InstanceHistoryTimelineComponent } from './components/InstanceHistoryTi
 import { ProjectsProjectLibrariesComponent } from './views/projects-project-libraries';
 import { ModalsLibraryPropertiesComponent } from './modals/library-properties';
 import { ProjectsProjectLibrariesLibraryComponent } from './views/projects-project-libraries-library';
+import { ModalsCodeAddLibraryComponent } from './modals/code-add-library';
+import { ModalsCodeLibraryVersionComponent } from './modals/code-library-version';
 
 
 // @formatter:off
@@ -384,6 +386,8 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsBlockoAddGridEmptyComponent,
         ModalsHardwareBootloaderUpdateComponent,
         ModalsLibraryPropertiesComponent,
+        ModalsCodeAddLibraryComponent,
+        ModalsCodeLibraryVersionComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

@@ -67,6 +67,10 @@ export class CurrentParamsService {
     protected currentInstanceIdSubject: Subject<string> = null;
     public currentInstanceIdSnapshot: string = null;
 
+    public currentLibraryName: Observable<string> = null;
+    protected currentLibraryNameSubject: Subject<string> = null;
+    public currentLibraryNameSnapshot: string = null;
+
     constructor(protected router: Router, protected backendService: BackendService) {
         console.info('BreadcrumbsService init');
 
@@ -84,6 +88,7 @@ export class CurrentParamsService {
         this.currentInstanceId = this.currentInstanceIdSubject = new Subject<string>();
         this.currentProductName = this.currentProductNameSubject = new Subject<string>();
         this.currentInvoiceNumber = this.currentInvoiceNumberSubject = new Subject<string>();
+        this.currentLibraryName = this.currentLibraryNameSubject = new Subject<string>();
 
         router.events.subscribe(event => {
             if (event instanceof NavigationCancel || event instanceof NavigationEnd) {
@@ -292,6 +297,20 @@ export class CurrentParamsService {
             } else {
                 this.currentInstanceIdSnapshot = params['instance'];
                 this.currentInstanceIdSubject.next(this.currentInstanceIdSnapshot);
+            }
+
+        }
+
+        if (this.currentParamsSnapshot['library'] !== params['library']) {
+
+            if (!params['library']) {
+                this.currentLibraryNameSnapshot = null;
+                this.currentLibraryNameSubject.next(this.currentLibraryNameSnapshot);
+            } else {
+                this.backendService.getLibrary(params['library']).then((library) => {
+                    this.currentLibraryNameSnapshot = library.name;
+                    this.currentLibraryNameSubject.next(this.currentLibraryNameSnapshot);
+                });
             }
 
         }

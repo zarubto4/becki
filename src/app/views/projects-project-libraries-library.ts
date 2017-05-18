@@ -57,8 +57,6 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
 
     /* TODO:
     *   - udělat nemožnost dát tam main.cpp
-    *   - udělat breadcrumb subrscription
-    *   - udělat to do CODE
     * */
 
 

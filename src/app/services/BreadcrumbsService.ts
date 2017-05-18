@@ -75,6 +75,9 @@ export class BreadcrumbsService {
         this.currentParamsService.currentInvoiceNumber.subscribe(() => {
             this.refresh();
         });
+        this.currentParamsService.currentLibraryName.subscribe(() => {
+            this.refresh();
+        });
     }
 
     protected findRouteByPath(path: string): Route {
@@ -112,6 +115,8 @@ export class BreadcrumbsService {
                 return this.currentParamsService.currentGridNameSnapshot;
             case ':instance':
                 return this.currentParamsService.currentInstanceIdSnapshot;
+            case ':library':
+                return this.currentParamsService.currentLibraryNameSnapshot;
             case ':last':
                 return this.lastBreadName;
             default:

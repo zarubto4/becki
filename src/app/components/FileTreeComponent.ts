@@ -7,6 +7,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 export interface FileTreeObjectInterface {
     color: string;
+    icon?: string;
     open: boolean;
     bold: boolean;
     changes: boolean;
@@ -29,6 +30,9 @@ export class FileTreeObject<T extends FileTreeObjectInterface> {
     }
 
     get icon(): string {
+        if (this.data && this.data.icon) {
+            return this.data.icon;
+        }
         if (this._icon) {
             return this._icon;
         }

@@ -57,11 +57,20 @@ export class CodeFile extends CodeFileSystemObject {
 
     fixedPath: boolean = false;
 
+    library: boolean = false;
+
+    readonly: boolean = false;
+
+
+    libraryName: string = null;
+    libraryId: string = null;
+    libraryVersionId: string = null;
+
     annotations: any[];
 
     constructor(objectFullPath: string, content: string = null) {
         super(objectFullPath);
-        if (!content) {
+        if (content === null) {
             this.originalObjectFullPath = '';
             this.contentOriginal = '';
             this.content = '';
@@ -80,6 +89,9 @@ export class CodeFile extends CodeFileSystemObject {
     }
 
     get color(): string {
+        if (this.library) {
+            return '#9A12B3';
+        }
         let ext = this.extension.toLowerCase();
         if (ext === 'cpp') {
             return '#067084';
@@ -89,6 +101,13 @@ export class CodeFile extends CodeFileSystemObject {
             return '#013284';
         }
         return 'silver';
+    }
+
+    get icon(): string {
+        if (this.library) {
+            return 'briefcase';
+        }
+        return 'file-text';
     }
 
 
@@ -126,8 +145,17 @@ export class CodeIDEComponent implements OnChanges {
     @Input()
     defaultOpenFilename: string = null;
 
+    @Input()
+    enableLibraryButtons: boolean = false;
+
     @Output()
     fileContentChange = new EventEmitter<{fileFullPath: string, content: string}>();
+
+    @Output()
+    onAddLibraryClick = new EventEmitter<any>();
+
+    @Output()
+    onChangeLibraryVersionClick = new EventEmitter<CodeFile>();
 
     directories: CodeDirectory[] = [];
 
@@ -177,7 +205,37 @@ export class CodeIDEComponent implements OnChanges {
         if (fileObj.extension.toLowerCase() === 'md') {
             return 'markdown';
         }
+        if (fileObj.library) {
+            return 'markdown';
+        }
         return 'cpp';
+    }
+
+    toolbarAddLibraryClick(e: any) {
+        this.onAddLibraryClick.emit(e);
+    }
+
+    toolbarLibraryChangeVersionClick(e: any) {
+
+        let err = 'Not selected <b>library</b> in file tree.';
+
+        if (!this.selectedFto) {
+            this.showModalError('Error', err);
+            return;
+        }
+        if (!this.selectedFto.data) {
+            this.showModalError('Error', err);
+            return;
+        }
+        let selData = this.selectedFto.data;
+        if (selData instanceof CodeFile) {
+            if (selData.library) {
+                this.onChangeLibraryVersionClick.emit(selData);
+                return;
+            }
+        }
+
+        this.showModalError('Error', err);
     }
 
     onCodeChange(code: string, fileObj: CodeFile) {
@@ -370,6 +428,18 @@ export class CodeIDEComponent implements OnChanges {
         return exist;
     }
 
+    exetrnalAddFile(cf: CodeFile) {
+        if (this.isFileExist(cf.objectFullPath)) {
+            this.showModalError('Error', 'Cannot add, file at path <b>/' + cf.objectFullPath + '</b> already exist.');
+        } else {
+            this.files.push(cf);
+            this.refreshRootFileTree(cf);
+        }
+    }
+
+    externalRefresh() {
+        this.refreshRootFileTree();
+    }
 
     toolbarAddFileClick() {
         let selectedDir: CodeDirectory = null;
@@ -429,7 +499,7 @@ export class CodeIDEComponent implements OnChanges {
         if (selData instanceof CodeFile) {
 
             if (selData.fixedPath) {
-                this.showModalError('Error', 'Cannot move <b>/' + selData.objectFullPath + '</b> file.');
+                this.showModalError('Error', 'Cannot move <b>/' + selData.objectFullPath + (selData.library ? '</b> library.' : '</b> file.'));
                 return;
             }
 
@@ -511,7 +581,7 @@ export class CodeIDEComponent implements OnChanges {
         if (selData instanceof CodeFile) {
 
             if (selData.fixedPath) {
-                this.showModalError('Error', 'Cannot rename <b>/' + selData.objectFullPath + '</b> file.');
+                this.showModalError('Error', 'Cannot rename <b>/' + selData.objectFullPath + (selData.library ? '</b> library.' : '</b> file.'));
                 return;
             }
 
@@ -592,7 +662,7 @@ export class CodeIDEComponent implements OnChanges {
         if (selData instanceof CodeFile) {
 
 
-            if (selData.fixedPath) {
+            if (selData.fixedPath && !selData.library) {
                 this.showModalError('Error', 'Cannot remove <b>/' + selData.objectFullPath + '</b> file.');
                 return;
             }

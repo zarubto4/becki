@@ -24,6 +24,7 @@ export enum ModalsCodeFileDialogType {
     RenameFile,
     RenameDirectory,
     RemoveFile,
+    RemoveFileLibrary,
     RemoveDirectory,
 }
 
@@ -114,6 +115,13 @@ export class ModalsCodeFileDialogComponent implements OnInit {
                 this.neededName = false;
                 this.neededDirectory = false;
                 this.textTitle = 'Really want remove file <b>' + this.modalModel.objectFullName + '</b> ?';
+                this.textSubmit = 'Yes';
+                this.textCancel = 'No';
+                break;
+            case ModalsCodeFileDialogType.RemoveFileLibrary:
+                this.neededName = false;
+                this.neededDirectory = false;
+                this.textTitle = 'Really want remove library <b>' + this.modalModel.objectFullName + '</b> ?';
                 this.textSubmit = 'Yes';
                 this.textCancel = 'No';
                 break;
