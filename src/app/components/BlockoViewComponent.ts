@@ -61,6 +61,9 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     onError: EventEmitter<{block: BlockoCore.Block, error: any}> = new EventEmitter<{block: BlockoCore.Block, error: any}>();
 
     @Output()
+    onChange: EventEmitter<{}> = new EventEmitter<{}>();
+
+    @Output()
     onLog: EventEmitter<{block: BlockoCore.Block, type: string, message: string}> = new EventEmitter<{block: BlockoCore.Block, type: string, message: string}>();
 
     protected blockoController: BlockoCore.Controller;
@@ -98,6 +101,9 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                     this.modalService.showModal(new ModalsBlockoBlockCodeEditorModel(block));
                 });
             });
+            this.blockoRenderer.anyChangeCallback = () => {
+                this.onChange.emit({});
+            };
 
             this.blockoRenderer.showBlockNames = this.showBlockNames;
             this.blockoRenderer.simpleMode = this.simpleMode;
@@ -294,6 +300,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             this.blockoController.addBlock(b);
             b.setCode(tsCode);
         });
+        this.onChange.emit({});
         return b;
     }
 

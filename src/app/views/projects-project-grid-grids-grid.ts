@@ -20,6 +20,7 @@ import { NullSafe } from '../helpers/NullSafe';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
 import { Core, EditorRenderer } from 'the-grid';
+import { ExitConfirmationService } from '../services/ExitConfirmationService';
 
 @Component({
     selector: 'bk-view-projects-project-grid-grids-grid',
@@ -64,6 +65,8 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
     widgetDragHandler: EditorRenderer.WidgetDragHandler = null;
     widgetDragStatus: Core.WidgetDragHandlerStatus = null;
 
+    unsavedChanges: boolean = false;
+
     draggableOptions: JQueryUI.DraggableOptions = {
         helper: 'clone',
         containment: 'document',
@@ -73,9 +76,14 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
     protected afterLoadSelectedVersionId: string = null;
+    protected exitConfirmationService: ExitConfirmationService = null;
 
     constructor(injector: Injector) {
         super(injector);
+
+        this.exitConfirmationService = injector.get(ExitConfirmationService);
+        this.unsavedChanges = false;
+        this.exitConfirmationService.setConfirmationEnabled(false);
     };
 
     ngOnInit(): void {
@@ -155,7 +163,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                 if (version) {
                     this.selectProgramVersion(version);
                 } else if (this.gridProgramVersions.length) {
-                    this.selectProgramVersion(this.gridProgramVersions[this.gridProgramVersions.length - 1]);
+                    this.selectProgramVersion(this.gridProgramVersions[0]);
                 }
 
                 this.unblockUI();
@@ -192,6 +200,9 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                 this.gridView.setDataJson(this.selectedProgramVersion.m_code);
 
                 this.gridDeviceProfile = this.gridView.getDeviceProfile();
+
+                this.unsavedChanges = false;
+                this.exitConfirmationService.setConfirmationEnabled(false);
             })
             .catch((err) => {
                 this.unblockUI();
@@ -231,6 +242,9 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess('Version <b>' + m.name + '</b> saved successfully.'));
                         this.refresh(); // also unblockUI
+
+                        this.unsavedChanges = false;
+                        this.exitConfirmationService.setConfirmationEnabled(false);
                     })
                     .catch((err) => {
                         this.addFlashMessage(new FlashMessageError('Failed saving version <b>' + m.name + '</b>', err));
@@ -248,7 +262,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
         this.widgetDragHandler = this.gridView.requestCreateWidget({
             name: widget.name,
             id: widget.id,
-            version_id: widget.versions[widget.versions.length - 1].id
+            version_id: widget.versions[0].id
         }, e);
 
         this.widgetDragHandler.addCallback(this.dragWidgetStatusCallback);
@@ -256,6 +270,8 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
 
     dragWidgetStatusCallback = (status: Core.WidgetDragHandlerStatus) => {
         this.widgetDragStatus = status;
+        this.unsavedChanges = true;
+        this.exitConfirmationService.setConfirmationEnabled(true);
     }
 
     onWidgetRequestingSource(event: any) {
@@ -310,6 +326,11 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
         this.zone.run(() => {
             this.consoleLog.addFromError(e.error, 'W-' + e.id, moment().format('HH:mm:ss.SSS'));
         });
+    }
+
+    onAnyChange() {
+        this.unsavedChanges = true;
+        this.exitConfirmationService.setConfirmationEnabled(true);
     }
 
 }

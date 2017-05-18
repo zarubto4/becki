@@ -150,7 +150,7 @@
                         </span>
                     </div>
                     <div *ngIf="selectedProgramVersion" class="becki-caption version">
-                        <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="true" class="changes"></span> {{selectedProgramVersion.version_object.version_name}}</span>
+                        <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="unsavedChanges" class="changes"></span> {{selectedProgramVersion.version_object.version_name}}</span>
                     </div>
                 </div>
 
@@ -169,7 +169,7 @@
                 </div>
 
                 <div style="margin: 10px 0; overflow: hidden;">
-                    <bk-blocko-view [blocksGroups]="blockGroups" [simpleMode]="!advancedMode" [showBlockNames]="advancedMode" [safeRun]="true" (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)"></bk-blocko-view>
+                    <bk-blocko-view [blocksGroups]="blockGroups" [simpleMode]="!advancedMode" [showBlockNames]="advancedMode" [safeRun]="true" (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)" (onChange)="onSomethingChanged()"></bk-blocko-view>
                 </div>
 
                 <div>

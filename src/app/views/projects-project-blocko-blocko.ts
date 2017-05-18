@@ -35,12 +35,15 @@ import { ModalsBlockoVersionSelectModel } from '../modals/blocko-version-select'
 import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService';
 import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
 import { CurrentParamsService } from '../services/CurrentParamsService';
+import { ExitConfirmationService } from '../services/ExitConfirmationService';
 
 @Component({
     selector: 'bk-view-projects-project-blocko-blocko',
     templateUrl: './projects-project-blocko-blocko.html',
 })
 export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent implements OnInit, OnDestroy {
+
+    unsavedChanges: boolean = false;
 
     projectId: string;
     blockoId: string;
@@ -97,6 +100,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     @ViewChild(ConsoleLogComponent)
     consoleLog: ConsoleLogComponent;
+
+    protected exitConfirmationService: ExitConfirmationService;
 
     /* tslint:disable:max-line-length */
     staticBlocks = [
@@ -187,9 +192,13 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         super(injector);
 
         this.monacoEditorLoaderService = injector.get(MonacoEditorLoaderService);
+        this.exitConfirmationService = injector.get(ExitConfirmationService);
+
+        this.exitConfirmationService.setConfirmationEnabled(false);
     };
 
     ngOnInit(): void {
+        this.unsavedChanges = false;
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.projectId = params['project'];
             this.blockoId = params['blocko'];
@@ -305,7 +314,6 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
                 }
 
-
             } else if (params.data && params.data.blockoName) {
 
                 this.blockoView.addStaticBlock(params.data.blockoName, x, y);
@@ -337,7 +345,6 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                         this.addFlashMessage(new FlashMessageError(`The blocko block version cannot be loaded.`, reason));
                     });
             }
-
 
         }
 
@@ -938,6 +945,9 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess('Version <b>' + m.name + '</b> saved successfully.'));
                         this.refresh(); // also unblockUI
+
+                        this.unsavedChanges = false;
+                        this.exitConfirmationService.setConfirmationEnabled(false);
                     })
                     .catch((err) => {
                         this.addFlashMessage(new FlashMessageError('Failed saving version <b>' + m.name + '</b>', err));
@@ -962,6 +972,9 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         this.backendService.getBProgramVersion(programVersion.version_id)
             .then((programVersionFull) => {
                 this.unblockUI();
+
+                this.unsavedChanges = false;
+                this.exitConfirmationService.setConfirmationEnabled(false);
 
                 this.selectedProgramVersion = programVersionFull;
                 // here is save re-cast it to IHardwareGroupIN because its only object with more properties
@@ -1052,7 +1065,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                             return parseInt(b.id, 10) - parseInt(a.id, 10);
                         });
                         if (sortedVersion.length) {
-                            this.blocksLastVersions[bb.id] = sortedVersion[sortedVersion.length - 1];
+                            this.blocksLastVersions[bb.id] = sortedVersion[0];
                             if (this.blocksLastVersions[bb.id]) {
                                 let version = this.blocksLastVersions[bb.id];
                                 try {
@@ -1112,5 +1125,10 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 this.unblockUI();
             });
 
+    }
+
+    onSomethingChanged() {
+        this.unsavedChanges = true;
+        this.exitConfirmationService.setConfirmationEnabled(true);
     }
 }

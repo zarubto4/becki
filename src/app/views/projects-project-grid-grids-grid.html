@@ -36,7 +36,7 @@
                         </span>
                     </div>
                     <div *ngIf="selectedProgramVersion" class="becki-caption version">
-                        <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="true" class="changes"></span> {{selectedProgramVersion.version_object.version_name}}</span>
+                        <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="unsavedChanges" class="changes"></span> {{selectedProgramVersion.version_object.version_name}}</span>
                     </div>
                 </div>
 
@@ -61,7 +61,7 @@
                     <div class="grid-trash-helper" [class.visible]="trashPosition.visible" [style.left]="trashPosition.x + 'px'" [style.top]="trashPosition.y + 'px'">
                         <i class="fa fa-trash" style="opacity: 0.5; font-size: 42px; color: red;"></i>
                     </div>
-                    <bk-grid-view [widgetsGroups]="widgetGroups" (onWidgetDrag)="onWidgetDragMoveEvent($event)" (onRequestWidgetSource)="onWidgetRequestingSource($event)" (onWidgetLog)="onWidgetLog($event)" (onWidgetMessage)="onWidgetMessage($event)" (onWidgetError)="onWidgetError($event)"></bk-grid-view>
+                    <bk-grid-view [widgetsGroups]="widgetGroups" (onChange)="onAnyChange()" (onWidgetDrag)="onWidgetDragMoveEvent($event)" (onRequestWidgetSource)="onWidgetRequestingSource($event)" (onWidgetLog)="onWidgetLog($event)" (onWidgetMessage)="onWidgetMessage($event)" (onWidgetError)="onWidgetError($event)"></bk-grid-view>
                 </div>
 
                 <div>

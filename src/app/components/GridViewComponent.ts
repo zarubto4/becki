@@ -41,6 +41,9 @@ export class GridViewComponent implements AfterViewInit, OnDestroy {
     @Input()
     widgetsGroups: ITypeOfWidget[] = null;
 
+    @Output()
+    onChange: EventEmitter<{}> = new EventEmitter<{}>();
+
     protected gridController: Core.Controller;
 
     protected gridRenderer: EditorRenderer.ControllerRenderer;
@@ -95,8 +98,12 @@ export class GridViewComponent implements AfterViewInit, OnDestroy {
                 this.zone.run(() => {
                     let m = new ModalsGridConfigPropertiesModel(widget, this.gridController, versions);
                     this.modalService.showModal(m);
+                    this.onChange.emit({});
                 });
             });
+            this.gridRenderer.anyChangeCallback = () => {
+                this.onChange.emit({});
+            };
             this.gridController.setRenderer(this.gridRenderer);
             this.gridRenderer.widgetDraggingCallback = this.onWidgetDragMoveEvent;
         });
