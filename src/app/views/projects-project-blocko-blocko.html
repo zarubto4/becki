@@ -155,10 +155,12 @@
                 </div>
 
                 <div>
-                    <label class="mt-checkbox mt-checkbox-outline" style="margin-top: 6px; margin-bottom: 6px;">
+                    <label class="mt-checkbox mt-checkbox-outline" style="margin-top: 6px; margin-bottom: 6px; float: left;">
                         <input type="checkbox" [(ngModel)]="advancedMode"> Advanced mode
                         <span></span>
                     </label>
+
+                    <input class="form-control" type="range" style="float: left; width: 100px; margin: 0 20px;" [value]="1" (input)="blockoZoomOnChange($event)" (change)="blockoZoomOnChange($event)" [attr.step]="0.1" [attr.min]="0.3" [attr.max]="1.2"/>
 
                     <div class="pull-right">
                         <button type="button" class="btn default red" (click)="onClearClick()">
@@ -169,7 +171,7 @@
                 </div>
 
                 <div style="margin: 10px 0; overflow: hidden;">
-                    <bk-blocko-view [blocksGroups]="blockGroups" [simpleMode]="!advancedMode" [showBlockNames]="advancedMode" [safeRun]="true" (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)" (onChange)="onSomethingChanged()"></bk-blocko-view>
+                    <bk-blocko-view [scale]="blockoZoom" [blocksGroups]="blockGroups" [simpleMode]="!advancedMode" [showBlockNames]="advancedMode" [safeRun]="true" (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)" (onChange)="onSomethingChanged()"></bk-blocko-view>
                 </div>
 
                 <div>

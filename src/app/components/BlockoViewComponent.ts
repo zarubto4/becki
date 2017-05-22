@@ -57,6 +57,9 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     @Input()
     blocksGroups: ITypeOfBlock[] = null;
 
+    @Input()
+    scale: number = 1;
+
     @Output()
     onError: EventEmitter<{block: BlockoCore.Block, error: any}> = new EventEmitter<{block: BlockoCore.Block, error: any}>();
 
@@ -218,6 +221,11 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             let safeRun = changes['safeRun'];
             if (safeRun) {
                 this.blockoController.safeRun = safeRun.currentValue;
+            }
+
+            let scale = changes['scale'];
+            if (scale) {
+                this.blockoRenderer.scale = scale.currentValue;
             }
 
         });

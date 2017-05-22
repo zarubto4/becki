@@ -103,6 +103,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     protected exitConfirmationService: ExitConfirmationService;
 
+    blockoZoom: number = 1;
+
     /* tslint:disable:max-line-length */
     staticBlocks = [
         {
@@ -1130,5 +1132,9 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     onSomethingChanged() {
         this.unsavedChanges = true;
         this.exitConfirmationService.setConfirmationEnabled(true);
+    }
+
+    blockoZoomOnChange(e: any) {
+        this.blockoZoom = e.target.value * e.target.value;
     }
 }
