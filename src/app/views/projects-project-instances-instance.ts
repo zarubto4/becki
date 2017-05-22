@@ -19,7 +19,7 @@ import { HomerService, HomerDao } from '../services/HomerService';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { InstanceHistoryTimelineComponent } from '../components/InstanceHistoryTimelineComponent';
 import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
-
+import { QRCodeComponent } from '../components/QRCodeComponent';
 
 @Component({
     selector: 'bk-view-projects-project-instances-instance',
@@ -32,6 +32,8 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     routeParamsSubscription: Subscription;
 
     instance: IHomerInstance = null;
+
+    gridUrl: string = 'http://192.168.65.39:8888/program/';
 
 
     currentHistoricInstance: IHomerInstanceRecord;

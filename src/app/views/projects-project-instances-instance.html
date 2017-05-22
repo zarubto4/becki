@@ -169,6 +169,10 @@
                                                 <span>&nbsp;-&nbsp;{{gridProgram.version_object_description}}</span>
                                             </template>
                                         </div>
+                                        <div style="margin-top: 10px">
+                                            <bk-qr-code [data]="gridUrl + gridProgram.m_program_id + '/t'"></bk-qr-code>
+                                        </div>
+                                        <a target="_blank" href="{{gridUrl + gridProgram.m_program_id + '/t'}}">{{gridUrl + gridProgram.m_program_id + '/t'}}</a>
                                     </div>
                                 </div>
                                 <h4 *ngIf="instance.actual_instance.m_project_snapshot && !instance.actual_instance.m_project_snapshot.length">No Grid projects in this instance</h4>

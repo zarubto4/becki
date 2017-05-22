@@ -121,10 +121,10 @@ import { TranslatePipe } from './pipes/TranslationPipe';
 import { Md2HtmlPipe } from './pipes/Md2HtmlPipe';
 import { ModalsHardwareBootloaderUpdateComponent } from './modals/hardware-bootloader-update';
 import { InstanceHistoryTimelineComponent } from './components/InstanceHistoryTimelineComponent';
+import { QRCodeComponent } from './components/QRCodeComponent';
 import { ProjectsProjectLibrariesComponent } from './views/projects-project-libraries';
 import { ModalsLibraryPropertiesComponent } from './modals/library-properties';
 import { ProjectsProjectLibrariesLibraryComponent } from './views/projects-project-libraries-library';
-
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -311,6 +311,7 @@ class BeckiErrorHandler implements ErrorHandler {
         NotificationsListComponent,
         ConsoleLogComponent,
         InstanceHistoryTimelineComponent,
+        QRCodeComponent,
         // Views components
         Error404Component,
         LoginComponent,
