@@ -1,0 +1,26 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title">CODE library version</h4>
+    </div>
+    <div class="modal-body">
+        <h4 class="text-center" *ngIf="loading">
+            Loading...
+        </h4>
+        <template [ngIf]="library">
+            <h4 class="text-center" *ngIf="!(library.versions && library.versions.length)">
+                No versions in library <strong>{{library.name}}</strong>
+            </h4>
+            <template [ngIf]="library.versions && library.versions.length">
+                <div *ngFor="let libraryVersion of library.versions" class="cursor-pointer" [class.bg-grey-steel]="libraryVersion != selectedLibraryVersion" [class.bg-green-turquoise]="libraryVersion == selectedLibraryVersion" style="padding: 2px 10px;margin-bottom: 10px;" (click)="onLibraryVersionClick(libraryVersion)">
+                    <h4><strong>{{libraryVersion.version_name}}</strong></h4>
+                    <h5>{{libraryVersion.version_description}}</h5>
+                </div>
+            </template>
+        </template>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn green" [disabled]="!selectedLibraryVersion" (click)="onSubmitClick()">Select library version</button>
+        <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
+    </div>
+</div>

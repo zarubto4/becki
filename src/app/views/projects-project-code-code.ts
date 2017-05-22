@@ -2,11 +2,11 @@
  * Created by davidhradek on 17.08.16.
  */
 
-import { Component, OnInit, Injector, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, Injector, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess, FlashMessage } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
-import { CodeFile } from '../components/CodeIDEComponent';
+import { CodeFile, CodeIDEComponent } from '../components/CodeIDEComponent';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
 import { IProject, ICProgram, ICProgramVersion, ILibraryRecord, ICProgramVersionShortDetail, ITypeOfBoard, IBoardShortDetail } from '../backend/TyrionAPI';
@@ -16,15 +16,17 @@ import { NullSafe } from '../helpers/NullSafe';
 import { ModalsSelectHardwareComponent, ModalsSelectHardwareModel } from '../modals/select-hardware';
 import { getAllInputOutputs, getInputsOutputs } from '../helpers/CodeInterfaceHelpers';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
+import { ModalsCodeAddLibraryModel } from '../modals/code-add-library';
 
 import moment = require('moment/moment');
+import { ModalsCodeLibraryVersionModel } from '../modals/code-library-version';
 
 
 @Component({
     selector: 'bk-view-projects-project-code-code',
     templateUrl: './projects-project-code-code.html'
 })
-export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implements OnInit, OnDestroy {
+export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implements OnInit, OnDestroy, AfterViewInit {
 
     projectId: string;
     codeId: string;
@@ -51,6 +53,9 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     @ViewChild(BlockoViewComponent)
     blockoView: BlockoViewComponent;
+
+    @ViewChild(CodeIDEComponent)
+    codeIDE: CodeIDEComponent;
 
     protected afterLoadSelectedVersionId: string = null;
 
@@ -102,6 +107,10 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             this.reloadVersions();
         }, 10000);
 
+    }
+
+    ngAfterViewInit(): void {
+        this.refreshInterface();
     }
 
     ngOnDestroy(): void {
@@ -173,6 +182,73 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     }
 
+    onAddLibraryClick() {
+        let m = new ModalsCodeAddLibraryModel(this.projectId);
+        let mm: ModalsCodeLibraryVersionModel = null;
+        this.modalService.showModal(m)
+            .then((success) => {
+                if (success) {
+                    mm = new ModalsCodeLibraryVersionModel(m.library.id);
+                    return this.modalService.showModal(mm);
+                }
+                return null;
+            })
+            .then((success) => {
+                if (success && mm && mm.libraryVersion) {
+
+                    let cf = new CodeFile(`${m.library.name} (${mm.libraryVersion.version_name})`, `# Library ${m.library.name}\n\nVersion: ${mm.libraryVersion.version_name}\n\nLooks like this library doesn't have README.md file.`);
+                    cf.fixedPath = true;
+                    cf.library = true;
+                    cf.readonly = true;
+
+                    cf.originalObjectFullPath = '';
+
+                    cf.libraryId = m.library.id;
+                    cf.libraryName = m.library.name;
+                    cf.libraryVersionId = mm.libraryVersion.version_id;
+
+                    this.codeIDE.exetrnalAddFile(cf);
+
+                    this.backendService.getLibraryVersion(mm.libraryVersion.version_id)
+                        .then((lv) => {
+                            if (lv && lv.files) {
+                                lv.files.forEach((f) => {
+                                    if (f.file_name.toLowerCase() === 'readme.md') {
+                                        cf.content = cf.contentOriginal = f.content;
+                                    }
+                                });
+                            }
+                        });
+                }
+            });
+    }
+
+    onChangeLibraryVersionClick(cf: CodeFile) {
+
+        let mm = new ModalsCodeLibraryVersionModel(cf.libraryId, cf.libraryVersionId);
+        this.modalService.showModal(mm)
+            .then((success) => {
+
+                cf.objectFullPath = `${cf.libraryName} (${mm.libraryVersion.version_name})`;
+                cf.content = cf.contentOriginal = `# Library ${cf.libraryName}\n\nVersion: ${mm.libraryVersion.version_name}\n\nLooks like this library doesn't have README.md file.`;
+                cf.libraryVersionId = mm.libraryVersion.version_id;
+
+                this.codeIDE.externalRefresh();
+
+                this.backendService.getLibraryVersion(mm.libraryVersion.version_id)
+                    .then((lv) => {
+                        if (lv && lv.files) {
+                            lv.files.forEach((f) => {
+                                if (f.file_name.toLowerCase() === 'readme.md') {
+                                    cf.content = cf.contentOriginal = f.content;
+                                }
+                            });
+                        }
+                    });
+
+            });
+    }
+
     onFileContentChange(e: {fileFullPath: string, content: string}) {
         if (this.fileChangeTimeout) {
             clearTimeout(this.fileChangeTimeout);
@@ -197,7 +273,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         this.selectedCodeFiles.forEach((file) => {
             if (file.objectFullPath === 'main.cpp') {
                 main = file.content;
-            } else {
+            } else if (!file.library) {
                 userFiles[file.objectFullPath] = file.content;
             }
         });
@@ -251,6 +327,36 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 let main = new CodeFile('main.cpp', programVersionFull.main);
                 main.fixedPath = true;
                 codeFiles.push(main);
+
+                if (Array.isArray(programVersionFull.imported_libraries)) {
+                    programVersionFull.imported_libraries.forEach((uf) => {
+
+                        let cf = new CodeFile(
+                            `${uf.library_short_detail.name} (${uf.library_version_short_detail.version_name})`,
+                            `# Library ${uf.library_short_detail.name}\n\nVersion: ${uf.library_version_short_detail.version_name}\n\nLooks like this library doesn't have README.md file.`
+                        );
+                        cf.fixedPath = true;
+                        cf.library = true;
+                        cf.readonly = true;
+
+                        cf.libraryId = uf.library_short_detail.id;
+                        cf.libraryName = uf.library_short_detail.name;
+                        cf.libraryVersionId = uf.library_version_short_detail.version_id;
+
+                        this.backendService.getLibraryVersion(uf.library_version_short_detail.version_id)
+                            .then((lv) => {
+                                if (lv && lv.files) {
+                                    lv.files.forEach((f) => {
+                                        if (f.file_name.toLowerCase() === 'readme.md') {
+                                            cf.content = cf.contentOriginal = f.content;
+                                        }
+                                    });
+                                }
+                            });
+
+                        codeFiles.push(cf);
+                    });
+                }
 
                 this.selectedCodeFiles = codeFiles;
 
@@ -337,9 +443,13 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
                 let userFiles: ILibraryRecord[] = [];
 
+                let libs: string[] = [];
+
                 this.selectedCodeFiles.forEach((file) => {
                     if (file.objectFullPath === 'main.cpp') {
                         main = file.content;
+                    } else if (file.library) {
+                        libs.push(file.libraryVersionId);
                     } else {
                         userFiles.push({
                             file_name: file.objectFullPath,
@@ -350,6 +460,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
                 this.blockUI();
                 this.backendService.createCProgramVersion(this.codeId, {
+                    imported_libraries: libs,
                     version_name: m.name,
                     version_description: m.description,
                     main: main,
@@ -376,12 +487,16 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
         let userFiles: ILibraryRecord[] = [];
 
+        let libs: string[] = [];
+
         this.buildErrors = null;
         this.selectedCodeFiles.forEach((file) => {
             file.annotations = [];
 
             if (file.objectFullPath === 'main.cpp') {
                 main = file.content;
+            }  else if (file.library) {
+                libs.push(file.libraryVersionId);
             } else {
                 userFiles.push({
                     file_name: file.objectFullPath,
@@ -392,7 +507,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
         this.buildInProgress = true;
         this.backendService.compileCProgram({
-            imported_libraries: [],
+            imported_libraries: libs,
             main: main,
             files: userFiles,
             type_of_board_id: this.codeProgram.type_of_board_id
