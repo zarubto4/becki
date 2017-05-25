@@ -13,7 +13,7 @@ import { IPersonAuthentication } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 
 
-const REDIRECT_URL = `${window.location.pathname}`;
+const REDIRECT_URL = `${window.location.href}`;
 
 @Component({
     selector: 'bk-view-login',
