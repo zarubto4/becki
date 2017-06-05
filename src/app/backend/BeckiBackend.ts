@@ -508,7 +508,7 @@ export abstract class BeckiBackend extends TyrionAPI {
                     this.webSocket.send(JSON.stringify(message));
                     let i = this.webSocketMessageQueue.indexOf(message);
                     if (i > -1) {
-                        this.webSocketMessageQueue.splice(i);
+                        this.webSocketMessageQueue.splice(i, 1);
                     }
                 } catch (err) {
                     console.error('ERR', err);
