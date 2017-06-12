@@ -58,7 +58,7 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.createMProject(this.id, {
+                this.backendService.createMProject(this.id, {  // TODO [permission]: M_Project.read_permission, M_Project.createPermission
                     name: model.name,
                     description: model.description
                 })

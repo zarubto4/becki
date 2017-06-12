@@ -782,7 +782,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             .then((success) => {
                 if (success) {
                     this.blockUI();
-                    this.backendService.cloudInstanceUpload(m.programVersion, {})
+                    this.backendService.cloudInstanceUpload(m.programVersion, {}) // TODO [permission]: B_program.update_permission
                         .then(() => {
                             this.storageService.projectRefresh(this.blockoProgram.project_id);
                             this.refresh();
@@ -807,7 +807,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     onTurnOnClick(): void {
         if (NullSafe(() => this.blockoProgram.instance_details.version_id)) {
             this.blockUI();
-            this.backendService.cloudInstanceUpload(this.blockoProgram.instance_details.version_id, {})
+            this.backendService.cloudInstanceUpload(this.blockoProgram.instance_details.version_id, {}) // TODO [permission]: B_program.update_permission
                 .then(() => {
                     this.storageService.projectRefresh(this.blockoProgram.project_id);
                     this.refresh();
@@ -937,7 +937,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 // console.log(mProjectSnapshots);
 
                 this.blockUI();
-                this.backendService.createBProgramVersion(this.blockoId, {
+                this.backendService.createBProgramVersion(this.blockoId, { // TODO [permission]: B_program.update_permission
                     version_name: m.name,
                     version_description: m.description,
                     hardware_group: this.selectedHardware,
@@ -971,7 +971,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         }
 
         this.blockUI();
-        this.backendService.getBProgramVersion(programVersion.version_id)
+        this.backendService.getBProgramVersion(programVersion.version_id) // TODO [permission]: B_program.read_permission
             .then((programVersionFull) => {
                 this.unblockUI();
 
@@ -1048,7 +1048,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
         Promise.all<any>([
             this.backendService.getAllTypeOfBlocks(),
-            this.backendService.getAllBlockoDetails(this.projectId)
+            this.backendService.getAllBlockoDetails(this.projectId) // TODO [permission]: project.read_permission
         ])
             .then((values: [ITypeOfBlock[], IBoardsForBlocko]) => {
                 let typeOfBlocks: ITypeOfBlock[] = values[0];
@@ -1097,7 +1097,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     this.boardById[board.id] = board;
                 });
 
-                return this.backendService.getBProgram(this.blockoId);
+                return this.backendService.getBProgram(this.blockoId); // TODO [permission]: Project.read_permission
             })
             .then((blockoProgram) => {
                 this.blockoProgram = blockoProgram;

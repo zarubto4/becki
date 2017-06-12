@@ -1,0 +1,44 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title">Select CODE program version</h4>
+    </div>
+    <div class="modal-body">
+        <h4 class="text-center" style="position: relative;">
+            <span *ngIf="!selectedProgram">Select program</span>
+            <a *ngIf="selectedProgram" style="position: absolute; left: 0; top: 0;" (click)="onBackClick()"><i class="fa fa-angle-left"></i> Back</a>
+            <span *ngIf="selectedProgram">Program <strong>{{selectedProgram.name}}</strong></span>
+        </h4>
+        <hr>
+        <h4 class="text-center" *ngIf="loading">
+            Loading...
+        </h4>
+        <template [ngIf]="!loading && codePrograms && !programVersions">
+            <h4 class="text-center" *ngIf="!(codePrograms && codePrograms.length)">
+                No CODE programs
+            </h4>
+            <template [ngIf]="codePrograms && codePrograms.length">
+                <div *ngFor="let codeProgram of codePrograms" class="cursor-pointer bg-grey-steel" style="padding: 2px 10px;margin-bottom: 10px;" (click)="onProgramClick(codeProgram)">
+                    <h4><strong>{{codeProgram.name}}</strong></h4>
+                    <h5>{{codeProgram.description}}</h5>
+                </div>
+            </template>
+        </template>
+        <template [ngIf]="!loading && programVersions">
+            <h4 class="text-center" *ngIf="!(programVersions && programVersions.length)">
+                No versions
+            </h4>
+            <template [ngIf]="programVersions && programVersions.length">
+                <div *ngFor="let programVersion of programVersions" [class.cursor-pointer]="programVersion.status === 'successfully_compiled_and_restored'" [class.font-grey-cascade]="programVersion.status !== 'successfully_compiled_and_restored'" [class.bg-grey-steel]="programVersion != selectedProgramVersion" [class.bg-green-turquoise]="programVersion == selectedProgramVersion" style="position: relative; padding: 2px 10px;margin-bottom: 10px;" (click)="onProgramVersionClick(programVersion)">
+                    <h4><strong>{{programVersion.version_name}}</strong></h4>
+                    <h5>{{programVersion.version_description}}</h5>
+                    <h5 *ngIf="programVersion.status !== 'successfully_compiled_and_restored'" style="position: absolute; top: 4px; right: 12px;"><i class="fa fa-exclamation-triangle"></i> Not successfully compiled</h5>
+                </div>
+            </template>
+        </template>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn green" [disabled]="!selectedProgramVersion" (click)="onSubmitClick()">Select program version</button>
+        <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
+    </div>
+</div>

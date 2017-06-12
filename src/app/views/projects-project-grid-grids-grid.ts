@@ -143,7 +143,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
 
         Promise.all<any>([
             this.backendService.getAllTypeOfWidgets(),
-            this.backendService.getMProgram(this.gridId)
+            this.backendService.getMProgram(this.gridId)// TODO [permission]: M_Program.read_permission
         ])
             .then((values: [ITypeOfWidget[], IMProgram]) => {
                 let typesOfWidgets: ITypeOfWidget[] = values[0];
@@ -182,7 +182,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
         this.selectProgramVersion(programVersion);
     }
 
-    selectProgramVersion(programVersion: IMProgramVersionShortDetail): void {
+    selectProgramVersion(programVersion: IMProgramVersionShortDetail): void { // TODO [permission]: M_Program.read_permission
         if (!this.gridProgramVersions) {
             return;
         }
@@ -233,7 +233,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
         this.modalService.showModal(m).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.createMProgramVersion(this.gridId, {
+                this.backendService.createMProgramVersion(this.gridId, { // TODO [permission]: M_Program.create_permission
                     version_name: m.name,
                     version_description: m.description,
                     m_code: this.gridView.getDataJson(),
@@ -281,7 +281,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
             return;
         }
 
-        this.backendService.getWidgetVersion(event.type.version_id)
+        this.backendService.getWidgetVersion(event.type.version_id) // TODO [permission]: GridWidgetVersion_read_permission
             .then((widgetVersion) => {
                 this.widgetSourceCache[event.type.version_id] = widgetVersion.logic_json;
                 event.resolve(widgetVersion.logic_json);

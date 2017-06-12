@@ -143,7 +143,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     refresh(): void {
 
         this.blockUI();
-        this.backendService.getWidget(this.widgetId)
+        this.backendService.getWidget(this.widgetId) // TODO [permission]: GridWidget_read_permission
             .then((widget) => {
                 this.widget = widget;
 
@@ -175,7 +175,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
 
     selectWidgetVersion(version: IGridWidgetVersionShortDetail) {
         this.blockUI();
-        this.backendService.getWidgetVersion(version.id)
+        this.backendService.getWidgetVersion(version.id) // TODO [permission]: GridWidgetVersion_read_permission
             .then((widgetVersion) => {
 
                 this.cleanTestView();
@@ -398,7 +398,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 let designJson = JSON.stringify({});
 
                 this.blockUI();
-                this.backendService.createWidgetVersion(this.widgetId, {
+                this.backendService.createWidgetVersion(this.widgetId, { // TODO [permission]: GridWidgetVersion_create_permission" : "create: If user have GridWidget.update_permission = true,
                     version_name: m.name,
                     version_description: m.description,
                     logic_json: this.widgetCode,

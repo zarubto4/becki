@@ -54,7 +54,7 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.createTypeOfWidget({
+                this.backendService.createTypeOfWidget({ // TODO [permission]: TypeOfWidget_create_permission
                     project_id: this.id,
                     name: model.name,
                     description: model.description
