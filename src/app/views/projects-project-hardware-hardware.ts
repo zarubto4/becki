@@ -8,6 +8,7 @@ import { IBoard, ITypeOfBoard } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsHardwareBootloaderUpdateModel } from '../modals/hardware-bootloader-update';
+import { ModalsHardwareCodeProgramVersionSelectModel } from '../modals/hardware-code-program-version-select';
 
 @Component({
     selector: 'bk-view-projects-project-hardware-hardware',
@@ -18,6 +19,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     device: IBoard = null;
     typeOfBoard: ITypeOfBoard = null;
 
+    projectId: string;
     hardwareId: string;
     routeParamsSubscription: Subscription;
 
@@ -30,6 +32,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.hardwareId = params['hardware'];
+            this.projectId = params['project'];
             this.refresh();
         });
     }
@@ -86,18 +89,45 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         if (!this.device) {
             return;
         }
-        this.blockUI();
-        this.backendService.editBoardBackup({ // TODO [permission]: Board.edit_permission
-            board_backup_pair_list: [
-                {board_id: this.device.id, backup_mode: !this.device.backup_mode}
-            ]
-        })
-            .then(() => {
-                this.refresh();
+        let newMode = !this.device.backup_mode;
+        if (newMode === false) {
+            let m = new ModalsHardwareCodeProgramVersionSelectModel(this.projectId, this.device.type_of_board_id);
+            this.modalService.showModal(m)
+                .then((success) => {
+                    if (success) {
+                        this.blockUI();
+                        this.backendService.editBoardBackup({ // TODO [permission]: Board.edit_permission
+                            board_backup_pair_list: [
+                                {
+                                    board_id: this.device.id,
+                                    backup_mode: newMode,
+                                    c_program_version_id: m.selectedProgramVersion.version_id
+                                }
+                            ]
+                        })
+                            .then(() => {
+                                this.refresh();
+                            })
+                            .catch((reason) => {
+                                this.fmError('Device backup mode cannot be saved.', reason);
+                                this.unblockUI();
+                            });
+                    }
+                });
+        } else {
+            this.blockUI();
+            this.backendService.editBoardBackup({ // TODO [permission]: Board.edit_permission
+                board_backup_pair_list: [
+                    {board_id: this.device.id, backup_mode: !this.device.backup_mode}
+                ]
             })
-            .catch((reason) => {
-                this.fmError('Device backup mode cannot be saved.', reason);
-                this.unblockUI();
-            });
+                .then(() => {
+                    this.refresh();
+                })
+                .catch((reason) => {
+                    this.fmError('Device backup mode cannot be saved.', reason);
+                    this.unblockUI();
+                });
+        }
     }
 }

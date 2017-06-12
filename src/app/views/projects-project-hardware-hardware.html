@@ -102,6 +102,16 @@
                         <span *ngIf="!device.backup_mode" class="font-grey-mint bold">static</span>
                         <a (click)="onAutobackupSwitchClick()">(switch to <strong *ngIf="!device.backup_mode">auto</strong><strong *ngIf="device.backup_mode">static</strong>)</a>
                     </div>
+                    <div *ngIf="!device.backup_mode">
+                        Backup program name:
+                        <a *ngIf="device.status.actual_backup_c_program_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.status.actual_backup_c_program_id]">{{device.status.actual_backup_c_program_name}}</a>
+                        <span *ngIf="!device.status.actual_backup_c_program_name" class="font-grey-mint bold">node</span>
+                    </div>
+                    <div *ngIf="!device.backup_mode">
+                        Backup program version:
+                        <a *ngIf="device.status.actual_backup_c_program_version_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.status.actual_backup_c_program_id, { version: device.status.actual_backup_c_program_version_id }]">{{device.status.actual_backup_c_program_version_name}}</a>
+                        <span *ngIf="!device.status.actual_backup_c_program_version_name" class="font-grey-mint bold">node</span>
+                    </div>
                 </div>
                 <div class="clearfix"></div>
             </div>

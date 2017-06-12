@@ -127,6 +127,7 @@ import { ModalsLibraryPropertiesComponent } from './modals/library-properties';
 import { ProjectsProjectLibrariesLibraryComponent } from './views/projects-project-libraries-library';
 import { ModalsCodeAddLibraryComponent } from './modals/code-add-library';
 import { ModalsCodeLibraryVersionComponent } from './modals/code-library-version';
+import { ModalsHardwareCodeProgramVersionSelectComponent } from './modals/hardware-code-program-version-select';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -389,6 +390,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsLibraryPropertiesComponent,
         ModalsCodeAddLibraryComponent,
         ModalsCodeLibraryVersionComponent,
+        ModalsHardwareCodeProgramVersionSelectComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]
