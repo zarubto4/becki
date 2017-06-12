@@ -2,7 +2,7 @@
  * Created by davidhradek on 08.09.16.
  */
 
-import { TyrionAPI, INotification, IPerson, ILoginResult, IWebSocketToken } from './TyrionAPI';
+import { TyrionAPI, INotification, IPerson, ILoginResult, IWebSocketToken, ISocialNetworkLogin } from './TyrionAPI';
 import * as Rx from 'rxjs';
 
 declare const BECKI_VERSION: string;
@@ -430,7 +430,9 @@ export abstract class BeckiBackend extends TyrionAPI {
     }
 
     public loginFacebook(redirectUrl: string): Promise<string> {
-        return this.__loginFacebook(redirectUrl)
+        return this.createFacebook(<ISocialNetworkLogin>{
+            redirect_url: redirectUrl
+        })
             .then(body => {
                 this.setToken(body.authToken);
                 return body.redirect_url;
@@ -438,7 +440,9 @@ export abstract class BeckiBackend extends TyrionAPI {
     }
 
     public loginGitHub(redirectUrl: string): Promise<string> {
-        return this.__loginGitHub(redirectUrl)
+        return this.createGithub(<ISocialNetworkLogin>{
+            redirect_url: redirectUrl
+        })
             .then(body => {
                 this.setToken(body.authToken, false);
                 return body.redirect_url;

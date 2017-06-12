@@ -13,7 +13,7 @@ import { IPersonAuthentication } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 
 
-const REDIRECT_URL = `${window.location.href}`;
+const REDIRECT_URL = `${window.location.protocol}//${window.location.host}/login;state=[_status_]`;
 
 @Component({
     selector: 'bk-view-login',
@@ -43,12 +43,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
-            if (typeof params['failed'] !== 'undefined') {
-                if (params['failed']) {
-                    this.loginError = decodeURIComponent(params['failed']);
-                } else {
-                    this.loginError = 'Error was occurred, when trying to login';
-                }
+            if (typeof params['state'] !== 'undefined' && params['state'] !== 'success') {
+                this.loginError = 'Error was occurred, when trying to login.';
             }
         });
     }
