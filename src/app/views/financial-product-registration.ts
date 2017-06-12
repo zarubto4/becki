@@ -186,10 +186,10 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             label: method.user_description,
             value: method.json_identifier
         }));
-        tariff.payment_modes.map(mode => this.optionsPaymentMode.push({
+        /*tariff.payment_modes.map(mode => this.optionsPaymentMode.push({
             label: mode.user_description,
             value: mode.json_identifier
-        }));
+        }));*/
 
         let input: { [key: string]: any; } = {
             'product_individual_name':  ['', [Validators.required, Validators.minLength(4)]],
@@ -210,14 +210,14 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             }
             input['payment_method'] =   [value, [Validators.required]]; // only if required_payment_method = true
         }
-        if (this.selectedTariff.payment_mode_required) {
+        /*if (this.selectedTariff.payment_mode_required) {
             // input['currency_type'] = ['', [Validators.required]];
             let value = '';
             if (this.optionsPaymentMode.length === 1) {
                 value = this.optionsPaymentMode[0].value;
             }
             input['payment_mode'] =     [value, [Validators.required]]; // only if required_payment_mode = true
-        }
+        }*/
 
         if (this.selectedTariff.company_details_required) {
 
@@ -310,9 +310,11 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             tariffData['payment_method'] = this.form.controls['payment_method'].value;
         }
 
+        /*
         if (this.selectedTariff.payment_mode_required) {
             tariffData['payment_mode'] = this.form.controls['payment_mode'].value;
         }
+        */
 
         if (this.selectedTariff.company_details_required) {
             tariffData['company_name'] = this.form.controls['company_name'].value;
@@ -336,6 +338,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
                     this.fmWarning('Product was created but payment is required');
                     this.unblockUI();
 
+                    // TODO [DU] - I dont know, what to do, because i will receive IProduct, not invoice...
                     if ((<IInvoice>response).gw_url) {
 
                         let gwUrl = (<IInvoice>response).gw_url;

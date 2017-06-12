@@ -216,7 +216,7 @@
                                 <bk-form-input [control]="form.controls['invoice_email']" type="email" label="Invoice e-mail"></bk-form-input>
 
                                 <bk-form-select *ngIf="form.controls['payment_method']" [control]="form.controls['payment_method']" label="Payment method" [options]="optionsPaymentMethod"></bk-form-select>
-                                <bk-form-select *ngIf="form.controls['payment_mode']" [control]="form.controls['payment_mode']" label="Payment mode" [options]="optionsPaymentMode"></bk-form-select>
+                                <!--<bk-form-select *ngIf="form.controls['payment_mode']" [control]="form.controls['payment_mode']" label="Payment mode" [options]="optionsPaymentMode"></bk-form-select>-->
                             </div>
                         </div>
 
@@ -324,9 +324,9 @@
                                     <tr *ngIf="form.controls['payment_method']">
                                         <td> Payment method: </td><td> {{translatePaymentMethod(form.controls["payment_method"].value)}} </td>
                                     </tr>
-                                    <tr *ngIf="form.controls['payment_mode']">
+                                    <!--<tr *ngIf="form.controls['payment_mode']">
                                         <td> Payment mode: </td><td> {{translatePaymentMode(form.controls["payment_mode"].value)}} </td>
-                                    </tr>
+                                    </tr>-->
 
                                     <tr *ngIf="!selectedTariff.company_details_required">
                                         <td colspan="2"><strong> Personal info </strong></td>
