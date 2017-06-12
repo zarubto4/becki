@@ -143,7 +143,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
     refresh(): void {
 
         this.blockUI();
-        this.backendService.getBlockoBlock(this.blockId)
+        this.backendService.getBlockoBlock(this.blockId) // TODO [permission]: BlockoBlock_read_permission
             .then((blockoBlock) => {
 
                 this.blockoBlock = blockoBlock;
@@ -403,7 +403,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                 });
 
                 this.blockUI();
-                this.backendService.createBlockoBlockVersion(this.blockId, {
+                this.backendService.createBlockoBlockVersion(this.blockId, {// TODO [permission]: BlockoBlockVersion_create_permission
                     version_name: m.name,
                     version_description: m.description,
                     logic_json: this.blockCode,

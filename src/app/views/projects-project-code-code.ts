@@ -144,7 +144,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
     refresh(): void {
 
         this.blockUI();
-        this.backendService.getCProgram(this.codeId)
+        this.backendService.getCProgram(this.codeId) // TODO [permission]: C_program.read_permission(Project.read_permission)
             .then((codeProgram) => {
 
                 this.codeProgram = codeProgram;
@@ -290,7 +290,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     reloadVersions(): void {
         if (this.codeId) {
-            this.backendService.getCProgram(this.codeId)
+            this.backendService.getCProgram(this.codeId) // TODO [permission]: C_program.read_permission(Project.read_permission)
                 .then((codeProgram) => {
                     this.codeProgram = codeProgram;
                     this.codeProgramVersions = this.codeProgram.program_versions || [];
@@ -311,7 +311,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         }
 
         this.blockUI();
-        this.backendService.getCProgramVersion(programVersion.version_id)
+        this.backendService.getCProgramVersion(programVersion.version_id) // TODO [permission]: C_program.Version.read_permission
             .then((programVersionFull) => {
                 this.unblockUI();
 
@@ -459,7 +459,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 });
 
                 this.blockUI();
-                this.backendService.createCProgramVersion(this.codeId, {
+                this.backendService.createCProgramVersion(this.codeId, { // TODO [permission]: "C_Program.update_permission" : "true",
                     imported_libraries: libs,
                     version_name: m.name,
                     version_description: m.description,
@@ -556,7 +556,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         }
 
         this.blockUI();
-        this.backendService.getBoardIdeHardware(this.projectId)
+        this.backendService.getBoardIdeHardware(this.projectId) // TODO [permission]: Board.edit_permission
             .then((boards) => {
                 this.unblockUI();
 
@@ -571,7 +571,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     .then((success) => {
                         if (success && m.selectedBoard) {
                             this.blockUI();
-                            this.backendService.uploadCProgramVersion({
+                            this.backendService.uploadCProgramVersion({ // TODO [permission]: Board.update_permission, Project.read_permission
                                 board_pairs: [{
                                     board_id: m.selectedBoard.id,
                                     c_program_version_id: version.version_id

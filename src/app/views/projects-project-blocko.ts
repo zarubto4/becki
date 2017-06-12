@@ -78,7 +78,7 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.createBProgram(this.id, {name: model.name, description: model.description})
+                this.backendService.createBProgram(this.id, {name: model.name, description: model.description}) // TODO [permission]: "Project.update_permission"
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The blocko ${model.name} has been added to project.`));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());

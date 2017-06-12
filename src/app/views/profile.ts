@@ -239,7 +239,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
 
     changeInfo(): void {
         this.blockUI();
-        this.backendService.editPerson(this.personId, {
+        this.backendService.editPerson(this.personId, { // TODO [permission]: Person.edit_permission
             nick_name: this.infoForm.controls['nickName'].value,
             country: this.infoForm.controls['state'].value,
             full_name: this.infoForm.controls['fullName'].value,

@@ -40,7 +40,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     refresh(): void {
         this.blockUI();
-        this.backendService.getBoard(this.hardwareId)
+        this.backendService.getBoard(this.hardwareId) // TODO [permission]: Project.read_permission
             .then((board) => {
                 this.device = board;
                 // console.log(board);
@@ -87,7 +87,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             return;
         }
         this.blockUI();
-        this.backendService.editBoardBackup({
+        this.backendService.editBoardBackup({ // TODO [permission]: Board.edit_permission
             board_backup_pair_list: [
                 {board_id: this.device.id, backup_mode: !this.device.backup_mode}
             ]

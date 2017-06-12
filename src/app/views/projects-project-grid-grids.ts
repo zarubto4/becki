@@ -60,7 +60,7 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.createMProgram(project.id, {
+                this.backendService.createMProgram(project.id, { // TODO [permission]: M_Program.create_permission
                     name: model.name,
                     description: model.description
                 })

@@ -98,7 +98,7 @@ export class BeckiAsyncValidators {
     public static hardwareDeviceId(backEnd: BackendService): AsyncValidatorFn {
         return AsyncValidatorDebounce.debounce((control: FormControl) => {
             return new Promise<any>((resolve) => {
-                backEnd.getBoardCheck(control.value)
+                backEnd.getBoardCheck(control.value) // TODO [permission]: Project.read_permission
                     .then((status) => {
                         if (status.status === 'CAN_REGISTER') {
                             resolve(null); // valid
@@ -130,7 +130,7 @@ export class BeckiAsyncValidators {
                 backEnd.getProject(projId)
                     .then((project) => {
                         Promise.all<IBProgram>(project.b_programs.map((b_program) => {
-                            return backEnd.getBProgram(b_program.id);
+                            return backEnd.getBProgram(b_program.id); // TODO [permission]: Project.read_permission
                         }))
                             .then((blockoPrograms: IBProgram[]) => {
                                 if (blockoPrograms.find((blockoProgram: IBProgram) => blockoProgram.name === control.value)) {

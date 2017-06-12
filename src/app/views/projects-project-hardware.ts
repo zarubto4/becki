@@ -119,7 +119,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         this.modalService.showModal(new ModalsRemovalModel(device.id)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.disconnectBoard(device.id)
+                this.backendService.disconnectBoard(device.id) // TODO [permission]: Project.update_permission (probably implemented as device.delete_permission)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess('The hardware has been removed.'));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
@@ -137,7 +137,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.connectBoard(model.id, this.id)
+                this.backendService.connectBoard(model.id, this.id) // TODO [permission]: Board.first_connect_permission, Project.update_permission
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(`The hardware ${model.id} has been added to project.`));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());

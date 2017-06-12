@@ -183,7 +183,7 @@ export class CurrentParamsService {
                 this.currentBlockoNameSnapshot = null;
                 this.currentBlockoNameSubject.next(this.currentBlockoNameSnapshot);
             } else {
-                this.backendService.getBProgram(params['blocko']).then((blocko) => {
+                this.backendService.getBProgram(params['blocko']).then((blocko) => { // TODO [permission]: Project.read_permission
                     this.currentBlockoNameSnapshot = blocko.name;
                     this.currentBlockoNameSubject.next(this.currentBlockoNameSnapshot);
                 });
@@ -197,7 +197,7 @@ export class CurrentParamsService {
                 this.currentCodeNameSnapshot = null;
                 this.currentCodeNameSubject.next(this.currentCodeNameSnapshot);
             } else {
-                this.backendService.getCProgram(params['code']).then((code) => {
+                this.backendService.getCProgram(params['code']).then((code) => { // TODO [permission]: C_program.read_permission(Project.read_permission)
                     this.currentCodeNameSnapshot = code.name;
                     this.currentCodeNameSubject.next(this.currentCodeNameSnapshot);
                 });
@@ -225,7 +225,7 @@ export class CurrentParamsService {
                 this.currentBlockNameSnapshot = null;
                 this.currentBlockNameSubject.next(this.currentBlockNameSnapshot);
             } else {
-                this.backendService.getBlockoBlock(params['block']).then((block) => {
+                this.backendService.getBlockoBlock(params['block']).then((block) => {// TODO [permission]: BlockoBlock_read_permission
                     this.currentBlockNameSnapshot = block.name;
                     this.currentBlockNameSubject.next(this.currentBlockNameSnapshot);
                 });
@@ -239,7 +239,7 @@ export class CurrentParamsService {
                 this.currentWidgetsGroupNameSnapshot = null;
                 this.currentWidgetsGroupNameSubject.next(this.currentWidgetsGroupNameSnapshot);
             } else {
-                this.backendService.getTypeOfWidget(params['widgets']).then((widgets) => {
+                this.backendService.getTypeOfWidget(params['widgets']).then((widgets) => { // TODO [permission]: TypeOfWidget_read_permission
                     this.currentWidgetsGroupNameSnapshot = widgets.name;
                     this.currentWidgetsGroupNameSubject.next(this.currentWidgetsGroupNameSnapshot);
                 });
@@ -253,7 +253,7 @@ export class CurrentParamsService {
                 this.currentWidgetNameSnapshot = null;
                 this.currentWidgetNameSubject.next(this.currentWidgetNameSnapshot);
             } else {
-                this.backendService.getWidget(params['widget']).then((widget) => {
+                this.backendService.getWidget(params['widget']).then((widget) => { // TODO [permission]: GridWidget_read_permission
                     this.currentWidgetNameSnapshot = widget.name;
                     this.currentWidgetNameSubject.next(this.currentWidgetNameSnapshot);
                 });
@@ -267,7 +267,7 @@ export class CurrentParamsService {
                 this.currentGridProjectNameSnapshot = null;
                 this.currentGridProjectNameSubject.next(this.currentGridProjectNameSnapshot);
             } else {
-                this.backendService.getMProject(params['grids']).then((gridProject) => {
+                this.backendService.getMProject(params['grids']).then((gridProject) => {// TODO [permission]: M_Project.read_permission
                     this.currentGridProjectNameSnapshot = gridProject.name;
                     this.currentGridProjectNameSubject.next(this.currentGridProjectNameSnapshot);
                 });
@@ -281,7 +281,7 @@ export class CurrentParamsService {
                 this.currentGridNameSnapshot = null;
                 this.currentGridNameSubject.next(this.currentGridNameSnapshot);
             } else {
-                this.backendService.getMProgram(params['grid']).then((gridProgram) => {
+                this.backendService.getMProgram(params['grid']).then((gridProgram) => { // TODO [permission]: M_Program.read_permission
                     this.currentGridNameSnapshot = gridProgram.name;
                     this.currentGridNameSubject.next(this.currentGridNameSnapshot);
                 });
