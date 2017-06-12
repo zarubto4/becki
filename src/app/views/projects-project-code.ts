@@ -118,7 +118,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editCProgram(code.id, { 
+                this.backendService.editCProgram(code.id, {
                     project_id: this.id,
                     name: model.name,
                     description: model.description,

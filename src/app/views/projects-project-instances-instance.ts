@@ -33,8 +33,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     instance: IHomerInstance = null;
 
-    gridUrl: string = 'http://192.168.65.39:8888/program/';
-
+    gridUrl: string = '';
 
     currentHistoricInstance: IHomerInstanceRecord;
 
@@ -74,6 +73,12 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
             this.instanceId = params['instance'];
             this.refresh();
         });
+
+        if (location.hostname.indexOf('portal.stage.') === 0) {
+            this.gridUrl = 'https://app.stage.byzance.cz/program/';
+        } else {
+            this.gridUrl = 'http://localhost:8888/program/';
+        }
     }
 
     ngAfterContentChecked() {
@@ -109,11 +114,10 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     refresh(): void {
         this.blockUI();
         // this.instance.actual_instance.procedures.forEach(proc => proc.updates.forEach(update => update.));
-
-        this.backendService.getInstance(this.instanceId)// TODO [permission]: "B_program.update_permission"
-
+        this.backendService.getInstance(this.instanceId) // TODO [permission]: "B_program.update_permission"
             .then((instance) => {
                 this.instance = instance;
+                // console.log(this.instance);
                 this.loadBlockoLiveView();
                 this.currentHistoricInstance = this.instance.instance_history.pop();
                 this.unblockUI();
@@ -219,7 +223,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     loadBlockoLiveView() {
         this.zone.runOutsideAngular(() => {
             if (this.blockoView && this.instance.actual_instance && this.instance.actual_instance.b_program_version_id) {
-                this.backendService.getBProgramVersion(this.instance.actual_instance.b_program_version_id)// TODO [permission]: B_program.read_permission
+                this.backendService.getBProgramVersion(this.instance.actual_instance.b_program_version_id) // TODO [permission]: B_program.read_permission
                     .then((programVersionFull) => {
                         const selectedProgramVersion = programVersionFull;
                         this.blockoView.setDataJson(selectedProgramVersion.program);

@@ -80,7 +80,7 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
             if (success) {
                 // console.log(model);
                 this.blockUI();
-                this.backendService.editMProject(project.id, { 
+                this.backendService.editMProject(project.id, {
                     name: model.name,
                     description: model.description
                 })
