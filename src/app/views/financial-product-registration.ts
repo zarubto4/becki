@@ -85,7 +85,6 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         this.backendService.getAllTariffs()
             .then(tariffs => {
                 this.tariffs = tariffs;
-
                 this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
 
                     if (params.hasOwnProperty('tariff')) {
@@ -335,26 +334,8 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         this.backendService.createProduct(tariffData)
             .then(response => {
                 if ((<any>response)._code_ === 200) {
-                    this.fmWarning('Product was created but payment is required');
+                    this.fmWarning('Product was created, you are now on pre-paid credit');
                     this.unblockUI();
-
-                    // TODO [DU] - I dont know, what to do, because i will receive IProduct, not invoice...
-                    if ((<IInvoice>response).gw_url) {
-
-                        let gwUrl = (<IInvoice>response).gw_url;
-
-                        this.goPayLoaderServiceSubscription = this.goPayLoaderService.goPay.subscribe((goPay) => {
-                            goPay.checkout({
-                                gatewayUrl: gwUrl,
-                                inline: true
-                            }, (checkoutResult) => {
-                                // TODO: console.log(checkoutResult);
-                                this.router.navigate(['/financial']);
-                            });
-                        });
-
-                    }
-
                 } else if ((<any>response)._code_ === 201) {
                     this.fmSuccess('Product was created, now you can create a new project');
                     this.unblockUI();
