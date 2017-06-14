@@ -11,7 +11,7 @@ import { IHomerInstanceRecord, IInstanceGridAppSettings } from './../backend/Tyr
 import { Component, OnInit, Injector, OnDestroy, AfterContentChecked, ViewChild, ElementRef } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
-import { IHomerInstance } from '../backend/TyrionAPI';
+import { IHomerInstance, IModelMProgramInstanceParameter } from '../backend/TyrionAPI';
 import { NullSafeDefault } from '../helpers/NullSafe';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
@@ -140,11 +140,19 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
         this.navigate(['/projects', this.currentParamsService.get('project'), 'blocko', bProgramId]);
     }
 
-    onGridProgramPublishClick(e: MouseEvent, id: string) {
-        this.backendService.putInstanceApp(<IInstanceGridAppSettings>{
-            m_program_parameter_id: id,
-            snapshot_settings: (<HTMLInputElement>e.target).checked && 'absolutely_public' || 'only_for_project_members'
-        });
+    onGridProgramPublishClick(gridProgram: IModelMProgramInstanceParameter) {
+        this.blockUI();
+        this.backendService.putInstanceApp({
+            m_program_parameter_id: gridProgram.id,
+            snapshot_settings: gridProgram.snapshot_settings === 'absolutely_public' ? 'only_for_project_members' : 'absolutely_public'
+        })
+            .then(() => {
+                this.refresh();
+            })
+            .catch((reason) => {
+                this.fmError(`Cannot change program publicity.`, reason);
+                this.unblockUI();
+            });
     }
 
     connectionsHwCount() {

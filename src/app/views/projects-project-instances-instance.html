@@ -143,43 +143,47 @@
                         <div class="col-6">
                             <div *ngIf="instance.actual_instance.m_project_snapshot" class="col-sm-6">
                                 <h3>Grid</h3>
-                                <div *ngFor="let grid of instance.actual_instance.m_project_snapshot" style="margin-bottom: 20px;background: #EEE;padding: 10px;border: 1px solid #8E44AD !important;">
-                                    <div>
-                                        <a (click)="onGridProjectClick(grid.m_project_id)" class="font-grey-mint">
-                                            <strong><span style="font-size:1.2em;">{{grid.m_project_name}}</span></strong>
-                                        </a>
-                                    </div>
-                                    <template [ngIf]="grid.m_project_description && grid.m_project_description.length">
-                                        <div style="font-size:0.9em; color:#888;">{{grid.m_project_description}}</div>
-                                    </template> 
-                                    <hr style="margin: 0;border-bottom: 1px solid #DDD;margin-top: 10px;">
-                                    <div style="margin-left: 10px; margin-top: 10px;" *ngFor="let gridProgram of grid.m_program_snapshots">
+                                <div *ngFor="let grid of instance.actual_instance.m_project_snapshot" style="margin-bottom: 20px;background: #EEE;padding: 0;border: 1px solid #8E44AD !important;">
+                                    <div style="margin: 10px;">
                                         <div>
-                                            <a class="font-grey-mint" (click)="onGridProgramClick(grid.m_project_id,gridProgram.m_program_id)" class="font-grey-mint">
-                                                <strong><span style="font-size:1.0em;">{{gridProgram.m_program_name}}</span></strong>
+                                            <a (click)="onGridProjectClick(grid.m_project_id)" class="font-grey-mint">
+                                                <strong><span style="font-size:1.2em;">{{grid.m_project_name}}</span></strong>
                                             </a>
                                         </div>
-                                        <template [ngIf]="gridProgram.m_program_description && gridProgram.m_program_description.length">
-                                            <div style="font-size:0.9em; color:#888;">{{gridProgram.m_program_description}}</div>
-                                        </template> 
-                                        <div>
-                                            Version: <strong><a class="font-grey-mint" (click)="onGridProgramVersionClick(grid.m_project_id, gridProgram.m_program_id, gridProgram.version_object_id)">{{gridProgram.version_object_name}}</a></strong>
-                                            <template [ngIf]="gridProgram.version_object_description && gridProgram.version_object_description.length">
-                                                <span>&nbsp;-&nbsp;{{gridProgram.version_object_description}}</span>
+                                        <template [ngIf]="grid.m_project_description && grid.m_project_description.length">
+                                            <div style="font-size:0.9em; color:#555;">{{grid.m_project_description}}</div>
+                                        </template>
+                                    </div>
+                                    <hr style="margin: 0 10px;border-bottom: 1px solid #DDD;margin-top: 10px;">
+                                    <div style="margin-top: 10px;" *ngFor="let gridProgram of grid.m_program_snapshots">
+
+                                        <div style="padding: 10px; padding-left: 20px; position: relative;" [class.bg-yellow-saffron]="gridProgram.snapshot_settings == 'absolutely_public'" [class.bg-green-meadow]="gridProgram.snapshot_settings != 'absolutely_public'">
+                                            <div>
+                                                <a class="font-grey-mint" (click)="onGridProgramClick(grid.m_project_id,gridProgram.m_program_id)" class="font-grey-mint">
+                                                    <strong><span style="font-size:1.0em;">{{gridProgram.m_program_name}}</span></strong>
+                                                </a>
+                                            </div>
+                                            <template [ngIf]="gridProgram.m_program_description && gridProgram.m_program_description.length">
+                                                <div style="font-size:0.9em; color:#555;">{{gridProgram.m_program_description}}</div>
                                             </template>
+                                            <div>
+                                                Version: <strong><a class="font-grey-mint" (click)="onGridProgramVersionClick(grid.m_project_id, gridProgram.m_program_id, gridProgram.version_object_id)">{{gridProgram.version_object_name}}</a></strong>
+                                                <template [ngIf]="gridProgram.version_object_description && gridProgram.version_object_description.length">
+                                                    <span>&nbsp;-&nbsp;{{gridProgram.version_object_description}}</span>
+                                                </template>
+                                            </div>
+
+                                            <div style="position: absolute; right: 10px; top: 10px;">
+                                                <span [class.font-blue-dark]="gridProgram.snapshot_settings == 'absolutely_public'">Private</span>
+                                                <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="gridProgram.snapshot_settings == 'absolutely_public'" [class.fa-toggle-off]="gridProgram.snapshot_settings != 'absolutely_public'" (click)="onGridProgramPublishClick(gridProgram)"></i>
+                                                <span [class.font-blue-dark]="gridProgram.snapshot_settings != 'absolutely_public'">Public</span>
+                                            </div>
                                         </div>
-                                        <div style="margin-top: 10px">
-                                            <label class="mt-checkbox mt-checkbox-outline">
-                                                Public
-                                                <input type="checkbox" (change)="onGridProgramPublishClick($event, gridProgram.id)" [checked]="gridProgram.snapshot_settings == 'absolutely_public'"/>
-                                                <span></span>
-                                            </label>
-                                        </div>
-                                        <div style="margin-top: 2px">
+                                        <div style="margin-top: 10px; margin-left: 20px; margin-right: 20px;">
                                             <a target="_blank" href="{{gridProgram.grid_app_url}}"><bk-qr-code style="float: left;" [data]="gridProgram.grid_app_url"></bk-qr-code></a>
                                             <div style="clear:both;"></div>
                                         </div>
-                                        <div style="margin-top: 10px">
+                                        <div style="margin-top: 10px; margin-left: 20px; margin-right: 20px; margin-bottom: 10px;">
                                             <input onClick="this.setSelectionRange(0, this.value.length)" type="text" style="width: 100%;" value="{{gridProgram.grid_app_url}}" readonly="true">
                                         </div>
                                     </div>
