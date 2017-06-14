@@ -7,7 +7,7 @@
  * © 2016 Becki Authors. See the AUTHORS file found in the top-level
  * directory of this distribution.
  */
-import { IHomerInstanceRecord } from './../backend/TyrionAPI';
+import { IHomerInstanceRecord, IInstanceGridAppSettings } from './../backend/TyrionAPI';
 import { Component, OnInit, Injector, OnDestroy, AfterContentChecked, ViewChild, ElementRef } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
@@ -117,7 +117,6 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
         this.backendService.getInstance(this.instanceId) // TODO [permission]: "B_program.update_permission"
             .then((instance) => {
                 this.instance = instance;
-                // console.log(this.instance);
                 this.loadBlockoLiveView();
                 this.currentHistoricInstance = this.instance.instance_history.pop();
                 this.unblockUI();
@@ -139,6 +138,13 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     onBlockoProgramClick(bProgramId: string) {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'blocko', bProgramId]);
+    }
+
+    onGridProgramPublishClick(e: MouseEvent, id: string) {
+        this.backendService.putInstanceApp(<IInstanceGridAppSettings>{
+            m_program_parameter_id: id,
+            snapshot_settings: (<HTMLInputElement>e.target).checked && 'absolutely_public' || 'only_for_project_members'
+        });
     }
 
     connectionsHwCount() {

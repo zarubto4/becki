@@ -162,7 +162,6 @@
                                         <template [ngIf]="gridProgram.m_program_description && gridProgram.m_program_description.length">
                                             <div style="font-size:0.9em; color:#888;">{{gridProgram.m_program_description}}</div>
                                         </template> 
-
                                         <div>
                                             Version: <strong><a class="font-grey-mint" (click)="onGridProgramVersionClick(grid.m_project_id, gridProgram.m_program_id, gridProgram.version_object_id)">{{gridProgram.version_object_name}}</a></strong>
                                             <template [ngIf]="gridProgram.version_object_description && gridProgram.version_object_description.length">
@@ -170,9 +169,19 @@
                                             </template>
                                         </div>
                                         <div style="margin-top: 10px">
-                                            <bk-qr-code [data]="gridUrl + gridProgram.m_program_id + '/' + backendService.getToken()"></bk-qr-code>
+                                            <label class="mt-checkbox mt-checkbox-outline">
+                                                Public
+                                                <input type="checkbox" (change)="onGridProgramPublishClick($event, gridProgram.id)" [checked]="gridProgram.snapshot_settings == 'absolutely_public'"/>
+                                                <span></span>
+                                            </label>
                                         </div>
-                                        <a target="_blank" href="{{gridUrl + gridProgram.m_program_id + '/' + backendService.getToken()}}">{{gridUrl + gridProgram.m_program_id + '/' + backendService.getToken()}}</a>
+                                        <div style="margin-top: 2px">
+                                            <a target="_blank" href="{{gridProgram.grid_app_url}}"><bk-qr-code style="float: left;" [data]="gridProgram.grid_app_url"></bk-qr-code></a>
+                                            <div style="clear:both;"></div>
+                                        </div>
+                                        <div style="margin-top: 10px">
+                                            <input onClick="this.setSelectionRange(0, this.value.length)" type="text" style="width: 100%;" value="{{gridProgram.grid_app_url}}" readonly="true">
+                                        </div>
                                     </div>
                                 </div>
                                 <h4 *ngIf="instance.actual_instance.m_project_snapshot && !instance.actual_instance.m_project_snapshot.length">No Grid projects in this instance</h4>
