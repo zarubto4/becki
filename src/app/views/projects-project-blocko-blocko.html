@@ -56,11 +56,7 @@
                                     <i class="fa fa-plus-circle"></i> Add slave device
                                 </button>
                                 <div class="ribbon-content no-padding-left-right no-padding-bottom padding-top-10">
-
-                                    {{hwGroup.main_board_pair.c_program_version_id}}
-
                                     <bk-c-program-version-selector [value]="hwGroup.main_board_pair.c_program_version_id" (valueChanged)="hwCProgramVersionChanged(hwGroup.main_board_pair, $event)" [cPrograms]="getCProgramsForBoardType(boardById[hwGroup.main_board_pair.board_id].type_of_board_id)"></bk-c-program-version-selector>
-
                                     <template ngIf="hwGroup.device_board_pairs">
                                         <div *ngFor="let board of hwGroup.device_board_pairs;" class="margin-left-15 margin-right-15">
                                             <div *ngIf="boardById[board.board_id]" class="mt-element-ribbon bg-grey-salt border-green-seagreen margin-bottom-15">

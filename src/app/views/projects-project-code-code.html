@@ -130,7 +130,7 @@
                                     <span class="hint">{{versionStatusTranslate[version.status]}}</span>
                                 </span>
 
-                                <span class="icon-hint-wraper orange" *ngIf="version.status=='server_was_offline' || version.status=='successfully_compiled_not_restored'">
+                                <span class="icon-hint-wraper orange" *ngIf="version.status=='server_was_offline' || version.status=='successfully_compiled_not_restored' || 'hardware_unstable' || 'undefined'">
                                     <i class="fa fa-question-circle font-yellow-lemon"></i>
                                     <span class="hint">{{versionStatusTranslate[version.status]}}</span>
                                 </span>
