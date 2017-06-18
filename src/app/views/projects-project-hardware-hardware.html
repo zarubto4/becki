@@ -85,6 +85,7 @@
                         </span>
                     </div>
                 </div>
+
                 <div>
                     <div>
                         Program name:
@@ -96,21 +97,35 @@
                         <a *ngIf="device.status.actual_c_program_version_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.status.actual_c_program_id, { version: device.status.actual_c_program_version_id }]">{{device.status.actual_c_program_version_name}}</a>
                         <span *ngIf="!device.status.actual_c_program_version_name" class="font-grey-mint bold">node</span>
                     </div>
+                 </div>
+                <br>
+                 <div>
                     <div>
-                        Program backup mode:
-                        <span *ngIf="device.backup_mode" class="font-grey-mint bold">auto</span>
-                        <span *ngIf="!device.backup_mode" class="font-grey-mint bold">static</span>
-                        <a (click)="onAutobackupSwitchClick()">(switch to <strong *ngIf="!device.backup_mode">auto</strong><strong *ngIf="device.backup_mode">static</strong>)</a>
+                        <div *ngIf="device.backup_mode=='AUTO_BACKUP'">
+                            Program backup mode:
+                            <span class="font-grey-mint bold">Automatic Backup</span> <br>
+                            A version running for more than 5 minutes is marked as secure and backed up on the device automatically
+                            <a (click)="onAutobackupSwitchClick('STATIC_BACKUP')">(switch to <strong>Static</strong>)</a>
+                        </div>
+                        <div *ngIf="device.backup_mode=='STATIC_BACKUP'">
+                            Program backup mode:
+                            <span class="font-grey-mint bold"> Static Backup (Set)</span>
+                            The selected static backup is uploaded to your device and helps you in emergency situations
+                            <a (click)="onAutobackupSwitchClick('AUTO_BACKUP')">(switch to <strong>Dynamic</strong>)</a>
+                        </div>
+
                     </div>
-                    <div *ngIf="!device.backup_mode">
-                        Backup program name:
-                        <a *ngIf="device.status.actual_backup_c_program_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.status.actual_backup_c_program_id]">{{device.status.actual_backup_c_program_name}}</a>
-                        <span *ngIf="!device.status.actual_backup_c_program_name" class="font-grey-mint bold">node</span>
-                    </div>
-                    <div *ngIf="!device.backup_mode">
-                        Backup program version:
-                        <a *ngIf="device.status.actual_backup_c_program_version_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.status.actual_backup_c_program_id, { version: device.status.actual_backup_c_program_version_id }]">{{device.status.actual_backup_c_program_version_name}}</a>
-                        <span *ngIf="!device.status.actual_backup_c_program_version_name" class="font-grey-mint bold">node</span>
+                    <div>
+                        <div>
+                            Actual Backup program name:
+                            <a *ngIf="device.status.actual_backup_c_program_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.status.actual_backup_c_program_id]">{{device.status.actual_backup_c_program_name}}</a>
+                            <span *ngIf="!device.status.actual_backup_c_program_name" class="font-grey-mint bold">none</span>
+                        </div>
+                        <div>
+                            Actual Backup program version:
+                            <a *ngIf="device.status.actual_backup_c_program_version_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.status.actual_backup_c_program_id, { version: device.status.actual_backup_c_program_version_id }]">{{device.status.actual_backup_c_program_version_name}}</a>
+                            <span *ngIf="!device.status.actual_backup_c_program_version_name" class="font-grey-mint bold">none</span>
+                        </div>
                     </div>
                 </div>
                 <div class="clearfix"></div>

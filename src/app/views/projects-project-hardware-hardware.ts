@@ -85,12 +85,12 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             });
     }
 
-    onAutobackupSwitchClick(): void {
+    onAutobackupSwitchClick(backup_mode: string): void {
         if (!this.device) {
             return;
         }
-        let newMode = !this.device.backup_mode;
-        if (newMode === false) {
+
+        if (backup_mode === 'STATIC_BACKUP') {
             let m = new ModalsHardwareCodeProgramVersionSelectModel(this.projectId, this.device.type_of_board_id);
             this.modalService.showModal(m)
                 .then((success) => {
@@ -100,7 +100,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                             board_backup_pair_list: [
                                 {
                                     board_id: this.device.id,
-                                    backup_mode: newMode,
+                                    backup_mode: false,
                                     c_program_version_id: m.selectedProgramVersion.version_id
                                 }
                             ]
@@ -118,7 +118,10 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             this.blockUI();
             this.backendService.editBoardBackup({ // TODO [permission]: Board.edit_permission
                 board_backup_pair_list: [
-                    {board_id: this.device.id, backup_mode: !this.device.backup_mode}
+                    {
+                        board_id: this.device.id,
+                        backup_mode: true
+                    }
                 ]
             })
                 .then(() => {
