@@ -46,7 +46,7 @@
                             <a class="cursor-pointer" (click)="onToggleHardwareTab('history')">Firmware History </a>
                         </li>
                         <li [class.active]="hardwareTab == 'instance_history'">
-                            <a class="cursor-pointer" (click)="onToggleHardwareTab('instance_history')">Instance history </a>
+                            <a class="cursor-pointer" (click)="onToggleHardwareTab('instance_history')">Instance History </a>
                         </li>
                         <li [class.active]="hardwareTab == 'debug'">
                             <a class="cursor-pointer" (click)="onToggleHardwareTab('command_center')">Advance Command center</a>
@@ -236,9 +236,8 @@
                    </div>
                </div>
 
-
-               <div *ngIf="hardwareTab == 'update'">
-                   <div *ngIf="device && typeOfBoard" class="row margin-left-15 margin-top-40">
+                <div *ngIf="hardwareTab == 'update'">
+                   <div *ngIf="device && typeOfBoard" class="row margin-left-15 margin-top-20 margin-right-15">
                        <div class="col-md-12">
                            <div *ngIf="device.updates">
                                <div class="table-scrollable" *ngIf="device.updates.length">
@@ -317,17 +316,18 @@
                    </div>
                </div>
 
-               <div *ngIf="hardwareTab == 'history'">
 
-               </div>
+                <div *ngIf="hardwareTab == 'history'">
 
-               <div *ngIf="hardwareTab == 'instance_history'">
+                </div>
 
-               </div>
+                <div *ngIf="hardwareTab == 'instance_history'">
 
-               <div *ngIf="hardwareTab == 'command_center'">
+                </div>
 
-               </div>
+                <div *ngIf="hardwareTab == 'command_center'">
+
+                </div>
 
            </div>
        </div>

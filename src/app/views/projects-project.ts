@@ -49,7 +49,7 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
 
     onEditClick(): void {
 
-        let model = new ModalsProjectPropertiesModel(null, this.project.name, this.project.description, null, true, null);
+        let model = new ModalsProjectPropertiesModel(null, this.project.name, this.project.description, this.project.product_id, true, this.project.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
@@ -59,11 +59,13 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess('The project has been updated.'));
-                        this.refresh(); // also unblockUI
+                        this.refresh();
+                        this.unblockUI();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError('The project cannot be updated.', reason));
-                        this.refresh(); // also unblockUI
+                        this.refresh();
+                        this.unblockUI();
                     });
             }
         });
@@ -80,7 +82,8 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError('The project cannot be removed.', reason));
-                        this.refresh(); // also unblockUI
+                        this.refresh();
+                        this.unblockUI();
                     });
             }
         });

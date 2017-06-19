@@ -14,12 +14,12 @@ import { IApplicableProduct } from '../backend/TyrionAPI';
 
 export class ModalsProjectPropertiesModel extends ModalModel {
     constructor(
-        public products: IApplicableProduct[],  // List of Producst for Project registration (can be null)
+        public products: IApplicableProduct[],  // List of Product for Project registration (can be null)
         public name: string = '',               // Project name
         public description: string = '',        // Project description
         public product: string = '',            // duplicated values (can be null)
         public edit: boolean = false,           // true - its only for project edit. False is project Creation
-        public exceptName: string = null        // ?????
+        public exceptName: string = null        // user cannot save another project with same name - so we use this value for save control of same project
     ) {
         super();
     }

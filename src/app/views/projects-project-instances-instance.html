@@ -312,7 +312,9 @@
                     <div *ngIf="instance && instance.actual_instance && instance.actual_instance.procedures && instance.actual_instance.procedures.length">
 
                         <div *ngFor="let procedure of instance.actual_instance.procedures">
-                            <h3 style="margin-bottom:10px;">{{procedure.type_of_update|bkTanslate}}</h3>
+                            <h3 style="margin-bottom:10px;">
+                                {{procedure.type_of_update|bkTanslate}}
+                            </h3>
                             <!--<div>Created: <strong> {{procedure.date_of_create|bkUnixTimeToDate}}</strong></div>-->
                             <div>Planned: <strong> {{procedure.date_of_planing|bkUnixTimeToDate}}</strong></div>
                             <div *ngIf="procedure.procedure_size_all">
