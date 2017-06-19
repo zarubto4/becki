@@ -14,12 +14,12 @@ import { IApplicableProduct } from '../backend/TyrionAPI';
 
 export class ModalsProjectPropertiesModel extends ModalModel {
     constructor(
-        public products: IApplicableProduct[],
-        public name: string = '',
-        public description: string = '',
-        public product: string = '',
-        public edit: boolean = false,
-        public exceptName: string = null
+        public products: IApplicableProduct[],  // List of Producst for Project registration (can be null)
+        public name: string = '',               // Project name
+        public description: string = '',        // Project description
+        public product: string = '',            // duplicated values (can be null)
+        public edit: boolean = false,           // true - its only for project edit. False is project Creation
+        public exceptName: string = null        // ?????
     ) {
         super();
     }
@@ -52,7 +52,9 @@ export class ModalsProjectPropertiesComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.options = formSelectComponentOptionsMaker(this.modalModel.products, 'id', '%name% ', true);
+        if (!this.modalModel.edit) {
+            this.options = formSelectComponentOptionsMaker(this.modalModel.products, 'id', '%name% ', true);
+        }
         (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
         (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
         (<FormControl>(this.form.controls['product'])).setValue(this.modalModel.product);

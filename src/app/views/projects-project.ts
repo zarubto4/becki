@@ -4,10 +4,12 @@
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { FlashMessageError } from '../services/NotificationService';
+import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
 import { IProject } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
+import { ModalsProjectPropertiesModel } from '../modals/project-properties';
+import { ModalsRemovalModel } from '../modals/removal';
 
 @Component({
     selector: 'bk-view-projects-project',
@@ -15,7 +17,7 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 })
 export class ProjectsProjectComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
-    id: string;
+    id: string; // Project ID
 
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
@@ -44,6 +46,46 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
             this.projectSubscription.unsubscribe();
         }
     }
+
+    onEditClick(): void {
+
+        let model = new ModalsProjectPropertiesModel(null, this.project.name, this.project.description, null, true, null);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.editProject(this.id, {
+                    project_name: model.name,
+                    project_description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The project has been updated.'));
+                        this.refresh(); // also unblockUI
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The project cannot be updated.', reason));
+                        this.refresh(); // also unblockUI
+                    });
+            }
+        });
+    }
+
+    onRemoveClick(): void {
+        this.modalService.showModal(new ModalsRemovalModel(this.project.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.deleteProject(this.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The project has been removed.'));
+                        this.router.navigate(['/projects']);
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The project cannot be removed.', reason));
+                        this.refresh(); // also unblockUI
+                    });
+            }
+        });
+    }
+
 
     count(status: 'grid_widgets'|'grid_programs'|'blocko_blocks'|'devices_online'|'devices_offline'|'instances_online'|'instances_offline'): number {
         if (!this.project) {

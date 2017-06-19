@@ -13,11 +13,20 @@
                     Project dashboard
                 </span>
             </div>
+            <div *ngIf="project" class="becki-actions">
+                <button title="Project properties" class="btn btn-icon-only green" [disabled]="!project.edit_permission" (click)="onEditClick()">
+                    <i class="fa fa-cog"></i>
+                </button>
+                <button title="Remove project" class="btn btn-icon-only red" [disabled]="!project.delete_permission" (click)="onRemoveClick()">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+
         </div>
         <div *ngIf="project">
             Name: <strong>{{project.name}}</strong><br>
             Description: <strong>{{project.description}}</strong><br>
-            Product: <strong>{{project.product_name}} ({{project.tier_name}})</strong>
+            Product: <strong>{{project.product_name}}</strong>
         </div>
         <div class="clearfix"></div>
     </div>

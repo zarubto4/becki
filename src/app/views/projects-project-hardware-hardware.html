@@ -1,397 +1,555 @@
+<!--
+  ~ © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
+  ~ directory of this distribution.
+  -->
+
+
 <bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot"
                 [subtitle]="currentParamsService.currentProjectDescriptionSnapshot"
                 [lastBreadName]="device?device.id:''">
 
-    <div *ngIf="device && typeOfBoard" class="portlet portlet light bordered">
-        <div class="portlet-title">
-            <div class="becki-caption">
-                <span class="font-blue-dark">
-                    <i class="fa fa-fw fa-microchip"></i>
-                    Byzance<strong class="font-color-hardware">HARDWARE</strong> - device <strong>{{device.personal_description?device.personal_description:device.id}}</strong>
-                </span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-8">
-                <div>
-                    Name:
-                    <span class="font-grey-mint bold">{{device.personal_description}}</span>
+    <div class="row">
+
+        <div class="col-md-12">
+            <div *ngIf="device" class="portlet portlet light bordered" style="min-height:290px">
+
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark">
+                            <i class="fa fa-fw fa-microchip"></i>
+                            Byzance<strong class="font-color-hardware">HARDWARE</strong> - device <strong>{{device.personal_description?device.personal_description:device.id}}</strong>
+                        </span>
+                    </div>
+                    <div class="becki-actions">
+
+                        <button title="Device properties" class="btn btn-icon-only green" [disabled]="!device.edit_permission" (click)="onEditClick(device)">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="Remove device" class="btn btn-icon-only red" [disabled]="!device.delete_permission" (click)="onRemoveClick(device)">
+                            <i class="fa fa-trash"></i>
+                        </button>
+
+                    </div>
                 </div>
 
-                <div>
-                    Type:
-                    <a [routerLink]="['/hardware', device.type_of_board_id]" class="bold">{{device.type_of_board_name}}</a>
-                </div>
-                <div>
-                    Producer:
-                    <a [routerLink]="['/producers', device.producer_id]" class="bold">{{typeOfBoard.producer_name}}</a>
-                </div>
-                <div>
-                    Hardware ID:
-                    <span class="font-grey-mint bold">{{device.id}}</span>
-                </div>
-                <div>
-                    Hardware revision:
-                    <span class="font-grey-mint bold">{{typeOfBoard.revision}}</span>
-                </div>
+                <div class="portlet-title tabbable-line">
 
-                <div *ngIf="device.mac_address">
-                    Ethernet MAC adress:
-                    <span class="font-grey-mint bold">{{device.mac_address}}</span>
-                </div>
-                <div *ngIf="device.wifi_mac_address">
-                    Wi-Fi MAC adress:
-                    <span class="font-grey-mint bold">{{device.wifi_mac_address}}</span>
-                </div>
-
-                <hr>
-
-                <div>
-                    Device status:
-                    <span *ngIf="device.status.status == 'online'" class="bold font-green-jungle">online</span>
-                    <span *ngIf="device.status.status != 'online'" class="bold font-red">offline</span>
-                </div>
-                <div>
-                    Bootloader version:
-                    <span class="font-grey-mint bold">{{device.actual_bootloader_version_name?device.actual_bootloader_version_name:'none'}}</span>
-                    <button *ngIf="device.available_bootloader_id !== device.actual_bootloader_id" class="btn red btn-sm" style="margin-top: -2px;" (click)="onUpdateBootloaderClick()">
-                        <i class="fa fa-refresh"></i> Update to <strong>{{device.available_bootloader_version_name}}</strong>
-                    </button>
-                </div>
-
-                <div *ngIf="device.alert_list && device.alert_list.length" style="background-color: pink; padding: 1px 8px; margin-top: 20px;">
-                    <h5 class="font-red-flamingo"><i class="fa fa-fw fa-exclamation-triangle font-red-flamingo"></i> Alerts</h5>
-                    <ul style="padding-left: 23px;">
-                        <li *ngFor="let alert of device.alert_list" class="bold no-wrap">{{alert|bkTanslateTable:'device_alerts'}}</li>
+                    <!--ul class="nav nav-tabs margin-left-15 pull-left"-->
+                    <ul class="nav nav-tabs pull-left">
+                        <li [class.active]="hardwareTab == 'overview'">
+                            <a class="cursor-pointer" (click)="onToggleHardwareTab('overview')">Overview </a>
+                        </li>
+                        <li [class.active]="hardwareTab == 'update'">
+                            <a class="cursor-pointer" (click)="onToggleHardwareTab('update')">Update progress </a>
+                        </li>
+                        <li [class.active]="hardwareTab == 'history'">
+                            <a class="cursor-pointer" (click)="onToggleHardwareTab('history')">Firmware History </a>
+                        </li>
+                        <li [class.active]="hardwareTab == 'instance_history'">
+                            <a class="cursor-pointer" (click)="onToggleHardwareTab('instance_history')">Instance history </a>
+                        </li>
+                        <li [class.active]="hardwareTab == 'debug'">
+                            <a class="cursor-pointer" (click)="onToggleHardwareTab('command_center')">Advance Command center</a>
+                        </li>
                     </ul>
                 </div>
 
+                <div *ngIf="hardwareTab == 'overview'">
+                    <div *ngIf="device && typeOfBoard" class="row margin-left-15 margin-top-40">
 
-            </div>
-            <div class="col-md-4 hw-image-col">
-                <img *ngIf="typeOfBoard.picture_link" [attr.src]="typeOfBoard.picture_link">
-                <i *ngIf="!typeOfBoard.picture_link" class="fa fa-fw fa-microchip text-center"></i>
-            </div>
-        </div>
-    </div>
-    <div *ngIf="device && typeOfBoard" class="row">
-        <div class="col-md-6">
-            <div class="portlet portlet light bordered">
-                <div class="portlet-title">
-                    <div class="becki-caption">
-                        <span class="font-blue-dark">
-                            <i class="fa fa-fw fa-microchip"></i>
-                            Byzance<strong class="font-color-code">CODE</strong>
-                        </span>
-                    </div>
-                </div>
+                            <!-- Main Overview -->
 
-                <div>
-                    <div>
-                        Program name:
-                        <a *ngIf="device.status.actual_c_program_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.status.actual_c_program_id]">{{device.status.actual_c_program_name}}</a>
-                        <span *ngIf="!device.status.actual_c_program_name" class="font-grey-mint bold">node</span>
-                    </div>
-                    <div>
-                        Program version:
-                        <a *ngIf="device.status.actual_c_program_version_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.status.actual_c_program_id, { version: device.status.actual_c_program_version_id }]">{{device.status.actual_c_program_version_name}}</a>
-                        <span *ngIf="!device.status.actual_c_program_version_name" class="font-grey-mint bold">node</span>
-                    </div>
-                 </div>
-                <br>
-                 <div>
-                    <div>
-                        <div *ngIf="device.backup_mode=='AUTO_BACKUP'">
-                            Program backup mode:
-                            <span class="font-grey-mint bold">Automatic Backup</span> <br>
-                            A version running for more than 5 minutes is marked as secure and backed up on the device automatically
-                            <a (click)="onAutobackupSwitchClick('STATIC_BACKUP')">(switch to <strong>Static</strong>)</a>
-                        </div>
-                        <div *ngIf="device.backup_mode=='STATIC_BACKUP'">
-                            Program backup mode:
-                            <span class="font-grey-mint bold"> Static Backup (Set)</span>
-                            The selected static backup is uploaded to your device and helps you in emergency situations
-                            <a (click)="onAutobackupSwitchClick('AUTO_BACKUP')">(switch to <strong>Dynamic</strong>)</a>
-                        </div>
+                            <div class="col-md-8">
 
-                    </div>
-                    <div>
-                        <div>
-                            Actual Backup program name:
-                            <a *ngIf="device.status.actual_backup_c_program_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.status.actual_backup_c_program_id]">{{device.status.actual_backup_c_program_name}}</a>
-                            <span *ngIf="!device.status.actual_backup_c_program_name" class="font-grey-mint bold">none</span>
-                        </div>
-                        <div>
-                            Actual Backup program version:
-                            <a *ngIf="device.status.actual_backup_c_program_version_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.status.actual_backup_c_program_id, { version: device.status.actual_backup_c_program_version_id }]">{{device.status.actual_backup_c_program_version_name}}</a>
-                            <span *ngIf="!device.status.actual_backup_c_program_version_name" class="font-grey-mint bold">none</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="portlet portlet light bordered">
-                <div class="portlet-title">
-                    <div class="becki-caption">
-                        <span class="font-blue-dark">
-                            <i class="fa fa-fw fa-microchip"></i>
-                            Byzance<strong class="font-color-cloud">CLOUD</strong>
-                        </span>
-                    </div>
-                </div>
-                <div>
-                    <div>
-                        Instance:
-                        <a *ngIf="device.status.instance_id" [routerLink]="['/projects', device.project_id, 'instances', device.status.instance_id]" class="font-grey-mint bold">{{device.status.instance_id}}</a>
-                        <span *ngIf="!device.status.instance_id" class="font-grey-mint bold">none</span>
-                        <span *ngIf="device.status.instance_id && device.status.instance_online_status" class="font-green-jungle">(online)</span>
-                        <span *ngIf="device.status.instance_id && !device.status.instance_online_status" class="font-red">(offline)</span>
-                    </div>
-                    <div>
-                        Server:
-                        <span *ngIf="device.status.server_name" class="font-grey-mint bold">{{device.status.server_name}}</span>
-                        <span *ngIf="!device.status.server_name" class="font-grey-mint bold">none</span>
-                        <span *ngIf="device.status.server_name && device.status.server_online_status" class="font-green-jungle">(online)</span>
-                        <span *ngIf="device.status.server_name && !device.status.server_online_status" class="font-red">(offline)</span>
-                    </div>
-
-                    <div>
-                        <strong class="font-color-blocko">BLOCKO</strong> program name:
-                        <a *ngIf="device.status.b_program_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'blocko', device.status.b_program_id]">{{device.status.b_program_name}}</a>
-                        <span *ngIf="!device.status.b_program_name" class="font-grey-mint bold">node</span>
-                    </div>
-                    <div>
-                        <strong class="font-color-blocko">BLOCKO</strong> program version:
-                        <a *ngIf="device.status.b_program_version_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'blocko', device.status.b_program_id, { version: device.status.b_program_version_id }]">{{device.status.b_program_version_name}}</a>
-                        <span *ngIf="!device.status.b_program_version_name" class="font-grey-mint bold">node</span>
-                    </div>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-        </div>
-
-    </div>
-
-
-    <!-- div *ngIf="device && typeOfBoard" class="portlet light bordered">
-        <div class="portlet-title">
-            <div class="becki-caption">
-                <span class="font-blue-dark">
-                    <i class="fa fa-fw fa-globe"></i>
-                    State
-                </span>
-            </div>
-        </div>
-        <div class="portlet-body">
-
-            <div class="row">
-                <div class="col-sm-4 text-center">
-                    <i class="fa fa-fw fa-lg fa-microchip"></i>
-                    Device:
-                    <span *ngIf="device.status.status == 'online'" class="bold font-green-jungle">online</span>
-                    <span *ngIf="device.status.status != 'online'" class="bold font-red">offline</span>
-                </div>
-                <div class="col-sm-4 text-center">
-                    <i class="fa fa-fw fa-lg fa-tasks"></i>
-                    Server:
-                    <span *ngIf="device.status.server_name" class="bold">{{device.status.server_name}}</span>
-                    <span *ngIf="!device.status.server_name" class="bold">none</span>
-                    <span *ngIf="device.status.server_name && device.status.server_online_status" class="bold font-green-jungle">(online)</span>
-                    <span *ngIf="device.status.server_name && !device.status.server_online_status" class="bold font-red">(offline)</span>
-                </div>
-                <div class="col-sm-4 text-center">
-                    <i class="fa fa-fw fa-lg fa-cloud-upload"></i>
-                    Instance:
-                    <a *ngIf="device.status.instance_id" (click)="onInstanceClick(device.status.instance_id)" class="bold">{{device.status.instance_id}}</a>
-                    <span *ngIf="!device.status.instance_id" class="bold">none</span>
-                    <span *ngIf="device.status.instance_id && device.status.instance_online_status" class="bold font-green-jungle">(online)</span>
-                    <span *ngIf="device.status.instance_id && !device.status.instance_online_status" class="bold font-red">(offline)</span>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-4">
-
-                    <h3>Byzance<strong class="font-color-code">CODE</strong></h3>
-
-                    <div>
-                        Program name:
-                        <span class="font-grey-mint bold">{{device.status.actual_c_program_name?device.status.actual_c_program_name:'none'}}</span>
-                    </div>
-                    <div>
-                        Program version:
-                        <span class="font-grey-mint bold">{{device.status.actual_c_program_version_name?device.status.actual_c_program_version_name:'none'}}</span>
-                    </div>
-                    <div>
-                        Program backup mode:
-                        <span *ngIf="device.backup_mode" class="font-grey-mint bold">auto</span>
-                        <span *ngIf="!device.backup_mode" class="font-grey-mint bold">static</span>
-                    </div>
-
-                </div>
-                <div class="col-sm-4 hw-image-col">
-                    <img *ngIf="typeOfBoard.picture_link" [attr.src]="typeOfBoard.picture_link">
-                    <i *ngIf="!typeOfBoard.picture_link" class="fa fa-fw fa-microchip text-center"></i>
-                </div>
-                <div class="col-sm-4">
-
-                    <h3>Byzance<strong class="font-color-blocko">BLOCKO</strong></h3>
-
-                    <div>
-                        Program name:
-                        <span class="font-grey-mint bold">{{device.status.b_program_name?device.status.b_program_name:'none'}}</span>
-                    </div>
-                    <div>
-                        Program version:
-                        <span class="font-grey-mint bold">{{device.status.b_program_version_name?device.status.b_program_version_name:'none'}}</span>
-                    </div>
-
-                </div>
-            </div>
-
-            < TODO: ALLL !!! div class="row">
-                <div class="col-sm-5">
-                    <h3>Blocko Program</h3>
-                    <div *ngIf="device.status.b_program_id" class="timeline">
-                        <div class="timeline-item">
-                            <div class="timeline-icon bg-green-jungle bg-font-green-jungle">
-                                <i class="fa fa-code"></i>
-                            </div>
-                            <div class="timeline-body">
-                                <div class="timeline-body-arrow"></div>
-                                <div class="timeline-body-content">
-                                    <h4>Actual Blocko Program</h4>
-                                    <p>Program: <a (click)="onBProgramClick(device.status.b_program_id)">{{device.status.b_program_name
-                                        ? device.status.b_program_name : 'Unknown'}}</a></p>
-                                    <p>Version: <a
-                                        (click)="onBProgramVersionClick(device.status.b_program_id,device.status.b_program_version_id)">{{device.status.b_program_version_name
-                                        ? device.status.b_program_version_name : 'Unknown'}}</a></p>
+                                <div>
+                                    Name:
+                                    <span class="font-grey-mint bold">{{device.personal_description}}</span>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="timeline-item hidden">
-                            <div class="timeline-icon bg-green-jungle bg-font-green-jungle">
-                                <i class="fa fa-calendar"></i>
-                            </div>
-                            <div class="timeline-body">
-                                <div class="timeline-body-arrow"></div>
-                                <div class="timeline-body-content">
-                                    <h4>Planed - Block Program</h4>
-                                    <p>Program: <span style="background-color: red">TODO</span></p>
-                                    <p>Version: <span style="background-color: red">TODO</span></p>
-                                    <p>date <span style="background-color: red">TODO</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="!device.status.b_program_id">
-                        <p class="text-center">No Blocko program.</p>
-                    </div>
-                </div>
-                <div class="col-sm-2 hw-image-col">
-                    <img
-                        src="{{typeOfBoard.picture_link ? typeOfBoard.picture_link : 'http://placehold.it/350x350/000/FFF?text=No+picture'}}">
-                </div>
-                <div class="col-sm-5 hw-c-program-col">
-                    <h3>Firmware</h3>
-                    <div *ngIf="device.status.actual_c_program_id" class="timeline">
-                        <div class="timeline-item">
-                            <div class="timeline-icon bg-grey-salsa bg-font-grey-salsa">
-                                <i class="fa fa-code"></i>
-                            </div>
-                            <div class="timeline-body">
-                                <div class="timeline-body-arrow"></div>
-                                <div class="timeline-body-content">
-                                    <h4>Actual Firmware</h4>
-                                    <p>Program: <a (click)="onCProgramClick(device.status.actual_c_program_id)">{{device.status.actual_c_program_name
-                                        ? device.status.actual_c_program_name : 'Unknown'}}</a></p>
-                                    <p>Version: {{device.status.actual_c_program_version_name ?
-                                        device.status.actual_c_program_version_name : 'Unknown'}}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div *ngIf="device.status.required_c_programs.length" class="timeline-item">
-                            <div class="timeline-icon bg-grey-salsa bg-font-grey-salsa">
-                                <i class="fa fa-calendar"></i>
-                            </div>
-                            <div class="timeline-body">
-                                <div class="timeline-body-arrow"></div>
-                                <div class="timeline-body-content">
-                                    <h4>Planed Firmware</h4>
-                                    <p>Program: <a
-                                        (click)="onCProgramClick(device.status.required_c_programs[0].c_program_id)">{{device.status.required_c_programs[0].c_program_program_name
-                                        ? device.status.required_c_programs[0].c_program_program_name : 'Unknown'}}</a>
-                                    </p>
-                                    <p>Version: {{device.status.required_c_programs[0].c_program_version_name ?
-                                        device.status.required_c_programs[0].c_program_version_name : 'Unknown'}}</p>
-                                    <p>date <span style="background-color: red">TODO</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div *ngIf="!device.status.actual_c_program_id">
-                        <p class="text-center">No firmware.</p>
-                    </div>
-                </div>
-            </div>
-            <div *ngIf="device && device.updates.length">
-                <h3>Upadates</h3>
-                <div class="timeline">
-                    <div *ngFor="let update of device.updates" class="timeline-item timeline-item-updates">
-                        <div class="timeline-icon bg-green-jungle bg-font-green-jungle">
-                            <i class="fa fa-code"></i>
-                        </div>
-                        <div class="timeline-body">
-                            <div class="timeline-body-arrow"></div>
-                            <div class="timeline-body-content">
-                                <p>Program: {{update.c_program_program_name ? update.c_program_program_name : 'Unknown'}}</p>
-                                <p>Version: <a (click)="onCProgramClick(update.c_program_id)">{{update.c_program_version_name ? update.c_program_version_name : 'Unknown'}}</a></p>
-                                <p>date <span style="background-color: red">TODO</span></p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div
-                *ngIf="device && device.status.required_backup_c_programs && device.status.required_backup_c_programs.length > 1"
-                class="cd-horizontal-timeline mt-timeline-horizontal loaded">
-                <div class="timeline">
-                    <div class="events-wrapper">
-                        <div class="events" style="transition: left 0.6s linear; "
-                             [style.width]="800+(device.status.required_backup_c_programs.length * 200) +'px'"
-                             [style.left]="timelinePosition+'px'">
-                            <ol *ngFor="let deviced of device.status.required_backup_c_programs.slice().reverse(); let i = index">
-                                <li>
-                                    <a class="border-after-red bg-after-red selected" [class.selected]="device.status.actual_c_program_id == deviced.c_program_id" [style.left]="(i*200)+'px'">
-                                        <span style="text-overflow: ellipsis; display:inline-block; overflow: hidden;white-space: nowrap;  width: 170px">{{deviced.c_program_program_name}}</span>
+                                <br>
+
+                                <div>
+                                    Type:
+                                    <a [routerLink]="['/hardware', device.type_of_board_id]" class="bold">{{device.type_of_board_name}}</a>
+                                </div>
+                                <div>
+                                    Producer:
+                                    <a [routerLink]="['/producers', device.producer_id]" class="bold">{{typeOfBoard.producer_name}}</a>
+                                </div>
+                                <div>
+                                    Hardware ID:
+                                    <span class="font-grey-mint bold">{{device.id}}</span>
+                                </div>
+                                <div>
+                                    Hardware revision:
+                                    <span class="font-grey-mint bold">{{typeOfBoard.revision}}</span>
+                                </div>
+
+                                <hr>
+
+                                <div *ngIf="device.mac_address">
+                                    Ethernet MAC adress:
+                                    <span class="font-grey-mint bold">{{device.mac_address}}</span>
+                                </div>
+                                <div *ngIf="device.wifi_mac_address">
+                                    Wi-Fi MAC adress:
+                                    <span class="font-grey-mint bold">{{device.wifi_mac_address}}</span>
+                                    <hr>
+                                </div>
+
+                                <div>
+                                    Device status:
+                                    <span *ngIf="device.status.status == 'online'" class="bold font-green-jungle">online</span>
+                                    <span *ngIf="device.status.status != 'online'" class="bold font-red">offline</span> (Latest online in 10:42 am yesterday)
+                                </div>
+
+                                <hr>
+
+                                <div>
+                                    <strong class="font-color-code">Bootloader</strong>
+                                    <br>
+                                    Bootloader version:
+                                    <span class="font-grey-mint bold">{{device.actual_bootloader_version_name?device.actual_bootloader_version_name:'none'}}</span>
+                                    <button *ngIf="device.available_bootloader_id !== device.actual_bootloader_id" class="btn red btn-sm" style="margin-top: -2px;" (click)="onUpdateBootloaderClick()">
+                                        <i class="fa fa-refresh"></i> Update to <strong>{{device.available_bootloader_version_name}}</strong>
+                                    </button>
+                                </div>
+
+                                <div *ngIf="device.alert_list && device.alert_list.length" style="background-color: pink; padding: 1px 8px; margin-top: 20px;">
+
+                                    <h5 class="font-red-flamingo"><i class="fa fa-fw fa-exclamation-triangle font-red-flamingo"></i> Alerts</h5>
+                                    <ul style="padding-left: 23px;">
+                                        <li *ngFor="let alert of device.alert_list" class="bold no-wrap">{{alert|bkTanslateTable:'device_alerts'}}</li>
+                                    </ul>
+                                </div>
+
+
+                            </div>
+
+                            <div class="col-md-4 hw-image-col">
+                                <img *ngIf="typeOfBoard.picture_link" [attr.src]="typeOfBoard.picture_link">
+                                <i *ngIf="!typeOfBoard.picture_link" class="fa fa-fw fa-microchip text-center"></i>
+                            </div>
+
+                            <!-- Firmware Overview -->
+                            <div *ngIf="device && typeOfBoard" class="row">
+                                <div class="col-md-6">
+                                    <div class="portlet portlet light bordered">
+                                        <div class="portlet-title">
+                                            <div class="becki-caption">
+                                <span class="font-blue-dark">
+                                    <i class="fa fa-fw fa-microchip"></i>
+                                    Byzance<strong class="font-color-code">CODE</strong>
+                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div>
+                                                <strong class="font-color-code">CODE</strong> Actual program name:
+                                                <a *ngIf="device.status.actual_c_program_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.status.actual_c_program_id]">{{device.status.actual_c_program_name}}</a>
+                                                <span *ngIf="!device.status.actual_c_program_name" class="font-grey-mint bold">node</span>
+                                            </div>
+                                            <div>
+                                                <strong class="font-color-code">CODE</strong> Actual Program version:
+                                                <a *ngIf="device.status.actual_c_program_version_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.status.actual_c_program_id, { version: device.status.actual_c_program_version_id }]">{{device.status.actual_c_program_version_name}}</a>
+                                                <span *ngIf="!device.status.actual_c_program_version_name" class="font-grey-mint bold">node</span>
+                                            </div>
+                                        </div>
                                         <br>
-                                        <span style="font-size: 70%" class="font-grey-salsa">{{deviced.date_of_create|bkUnixTimeToDate}}</span>
-                                    </a>
-                                </li>
-                            </ol>
-                            <span class="filling-line bg-red" aria-hidden="true" style="transform: scaleX(1);"></span>
-                        </div>
-                    </div>
-                    <ul class="cd-timeline-navigation mt-ht-nav-icon">
-                        <li>
-                            <a (click)=timelineMove(100); class="prev btn btn-outline red md-skip">
-                                <i class="fa fa-chevron-left"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a (click)=timelineMove(-100); class="next btn btn-outline red md-skip inactive">
-                                <i class="fa fa-chevron-right"></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+                                        <div>
+                                            <div>
 
-        </div>
-    </div -->
+                                                <div *ngIf="device.backup_mode=='AUTO_BACKUP'">
+                                                    Backup mode: <span class="font-grey-mint bold">Automatic Backup</span>
+                                                    <!--A version running for more than 5 minutes is marked as secure and backed up on the device automatically -->
+                                                    <a (click)="onAutobackupSwitchClick('STATIC_BACKUP')">(switch to <strong>Static</strong>)</a>
+                                                </div>
+                                                <div *ngIf="device.backup_mode=='STATIC_BACKUP'">
+                                                    Backup mode: <span class="font-grey-mint bold"> Static Backup</span>
+                                                    <!-- The selected static backup is uploaded to your device and helps you in emergency situations-->
+                                                   <a (click)="onAutobackupSwitchClick('AUTO_BACKUP')">(switch to <strong>Automatic</strong>)</a>
+                                               </div>
+
+                                           </div>
+                                           <div>
+                                               <div>
+                                                   <strong class="font-color-code">CODE</strong>  Actual Backup program name:
+                                                   <a *ngIf="device.status.actual_backup_c_program_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.status.actual_backup_c_program_id]">{{device.status.actual_backup_c_program_name}}</a>
+                                                   <span *ngIf="!device.status.actual_backup_c_program_name" class="font-grey-mint bold">none</span>
+                                               </div>
+                                               <div>
+                                                   <strong class="font-color-code">CODE</strong>  Actual Backup program version:
+                                                   <a *ngIf="device.status.actual_backup_c_program_version_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.status.actual_backup_c_program_id, { version: device.status.actual_backup_c_program_version_id }]">{{device.status.actual_backup_c_program_version_name}}</a>
+                                                   <span *ngIf="!device.status.actual_backup_c_program_version_name" class="font-grey-mint bold">none</span>
+                                               </div>
+                                           </div>
+                                       </div>
+                                       <div class="clearfix"></div>
+                                   </div>
+                               </div>
+                               <div class="col-md-6">
+                                   <div class="portlet portlet light bordered">
+                                       <div class="portlet-title">
+                                           <div class="becki-caption">
+                               <span class="font-blue-dark">
+                                   <i class="fa fa-fw fa-cloud"></i>
+                                   Byzance<strong class="font-color-cloud">CLOUD</strong>
+                               </span>
+                                           </div>
+                                       </div>
+                                       <div>
+
+                                           <div>
+                                               Main Server:
+                                               <span *ngIf="device.status.server_name" class="font-grey-mint bold">{{device.status.server_name}}</span>
+                                               <span *ngIf="!device.status.server_name" class="font-grey-mint bold">none</span>
+                                               <span *ngIf="device.status.server_name && device.status.server_online_status" class="font-green-jungle">(online)</span>
+                                               <span *ngIf="device.status.server_name && !device.status.server_online_status" class="font-red">(offline)</span>
+                                           </div>
+
+                                           <br>
+
+                                           <div>
+                                               Instance:
+                                               <a *ngIf="device.status.instance_id" [routerLink]="['/projects', device.project_id, 'instances', device.status.instance_id]" class="font-grey-mint bold">{{device.status.instance_id}}</a>
+                                               <span *ngIf="!device.status.instance_id" class="font-grey-mint bold">(Device is not connected to an instance)</span>
+                                               <span *ngIf="device.status.instance_id && device.status.instance_online_status" class="font-green-jungle">(online)</span>
+                                               <span *ngIf="device.status.instance_id && !device.status.instance_online_status" class="font-red">(offline)</span>
+                                           </div>
+
+                                           <div>
+                                               <strong class="font-color-blocko">BLOCKO</strong> program name:
+                                               <a *ngIf="device.status.b_program_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'blocko', device.status.b_program_id]">{{device.status.b_program_name}}</a>
+                                               <span *ngIf="!device.status.b_program_name" class="font-grey-mint bold">none</span>
+                                           </div>
+                                           <div>
+                                               <strong class="font-color-blocko">BLOCKO</strong> program version:
+                                               <a *ngIf="device.status.b_program_version_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'blocko', device.status.b_program_id, { version: device.status.b_program_version_id }]">{{device.status.b_program_version_name}}</a>
+                                               <span *ngIf="!device.status.b_program_version_name" class="font-grey-mint bold">none</span>
+                                           </div>
+                                       </div>
+                                       <div class="clearfix"></div>
+                                   </div>
+                               </div>
+                           </div>
+                   </div>
+               </div>
+
+
+               <div *ngIf="hardwareTab == 'update'">
+                   <div *ngIf="device && typeOfBoard" class="row margin-left-15 margin-top-40">
+                       <div class="col-md-12">
+                           <div *ngIf="device.updates">
+                               <div class="table-scrollable" *ngIf="device.updates.length">
+                                   <table class="table table-hover">
+                                       <thead>
+                                       <tr>
+
+                                           <th>Id</th>
+                                           <th>Started</th>
+                                           <th>Finished</th>
+                                           <th>Type</th>
+                                           <th>Program</th>
+                                           <th>Version</th>
+                                           <th>Status</th>
+
+                                       </tr>
+                                       </thead>
+                                       <tbody>
+                                       <tr *ngFor="let update of device.updates">
+                                           <td class="font-grey-mint">{{update.id}}</td>
+                                           <td class="font-grey-mint">{{update.date_of_create|bkUnixTimeToDate}}</td>
+                                           <td class="font-grey-mint">{{update.date_of_finish|bkUnixTimeToDate}}</td>
+
+                                           <td class="font-grey-mint">
+                                               <span *ngIf="update.firmware_type == 'FIRMWARE'"   class="bold font-color-grid">Firmware</span>
+                                               <span *ngIf="update.firmware_type == 'BACKUP'"     class="bold font-color-grid-dark">Backup</span>
+                                               <span *ngIf="update.firmware_type == 'BOOTLOADER'" class="bold font-blue">Bootloader</span>
+                                           </td>
+
+                                           <!-- Firmware -->
+                                           <td *ngIf="update.firmware_type == 'FIRMWARE' || update.firmware_type == 'BACKUP'"  class="font-grey-mint">
+                                               <a *ngIf="update.c_program_program_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', update.c_program_id]">{{update.c_program_program_name}}</a>
+                                               <span *ngIf="!update.c_program_program_name" class="font-grey-mint bold">none</span>
+                                           </td>
+                                           <td *ngIf="update.firmware_type == 'BOOTLOADER'"  class="font-grey-mint">
+                                               <span *ngIf="update.bootloader_name" class="font-grey-mint bold"> {{update.bootloader_name}}</span>
+                                               <span *ngIf="!update.bootloader_name" class="font-grey-mint bold">none</span>
+                                           </td>
+
+
+                                           <!-- Version - Only in FIRWARE or BACKUP, BACKUP is EMPTY -->
+                                           <td *ngIf="update.firmware_type == 'FIRMWARE' || update.firmware_type == 'BACKUP'"  class="font-grey-mint">
+                                               <a *ngIf="update.c_program_version_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', update.c_program_id]">{{update.c_program_version_name}}</a>
+                                               <span *ngIf="!update.c_program_version_name" class="font-grey-mint bold">none</span>
+                                           </td>
+
+                                           <td *ngIf="update.firmware_type == 'BOOTLOADER'"  class="font-grey-mint">
+                                           </td>
+
+
+                                           <!-- Update State -->
+                                           <td>
+
+                                               <span *ngIf="update.state == 'complete'"                 class="bold font-green-jungle">Complete</span>
+                                               <span *ngIf="update.state == 'canceled'"                 class="bold font-green-jungle">Canceled</span>
+
+                                               <span *ngIf="update.state == 'not_start_yet'"            class="bold font-yellow-casablanca">Waiting in Update Que (In Progress) </span>
+                                               <span *ngIf="update.state == 'in_progress'"              class="bold font-yellow-casablanca">Update is in progress </span>
+                                               <span *ngIf="update.state == 'overwritten'"              class="bold font-green-jungle">Overwritten by newer update </span>
+                                               <span *ngIf="update.state == 'not_updated'"              class="bold font-yellow-casablanca">Not updated to right version </span>
+                                               <span *ngIf="update.state == 'waiting_for_device'"       class="bold font-yellow-casablanca">Waiting for Device Reconnection </span>
+
+                                               <span *ngIf="update.state == 'bin_file_not_found'"       class="bold font-red-flamingo">Bin File not Found </span>
+                                               <span *ngIf="update.state == 'critical_error'"           class="bold font-red-flamingo">Critical Error </span>
+                                               <span *ngIf="update.state == 'homer_server_is_offline'"  class="bold font-red-flamingo">Server is (was) Offline</span>
+                                               <span *ngIf="update.state == 'instance_inaccessible'"    class="bold font-red-flamingo">Instance is (was) not accessible </span>
+
+                                           </td>
+
+                                       </tr>
+                                       </tbody>
+                                   </table>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+
+               <div *ngIf="hardwareTab == 'history'">
+
+               </div>
+
+               <div *ngIf="hardwareTab == 'instance_history'">
+
+               </div>
+
+               <div *ngIf="hardwareTab == 'command_center'">
+
+               </div>
+
+           </div>
+       </div>
+
+   </div>
+   <!-- div *ngIf="device && typeOfBoard" class="portlet light bordered">
+       <div class="portlet-title">
+           <div class="becki-caption">
+               <span class="font-blue-dark">
+                   <i class="fa fa-fw fa-globe"></i>
+                   State
+               </span>
+           </div>
+       </div>
+       <div class="portlet-body">
+
+           <div class="row">
+               <div class="col-sm-4 text-center">
+                   <i class="fa fa-fw fa-lg fa-microchip"></i>
+                   Device:
+                   <span *ngIf="device.status.status == 'online'" class="bold font-green-jungle">online</span>
+                   <span *ngIf="device.status.status != 'online'" class="bold font-red">offline</span>
+               </div>
+               <div class="col-sm-4 text-center">
+                   <i class="fa fa-fw fa-lg fa-tasks"></i>
+                   Server:
+                   <span *ngIf="device.status.server_name" class="bold">{{device.status.server_name}}</span>
+                   <span *ngIf="!device.status.server_name" class="bold">none</span>
+                   <span *ngIf="device.status.server_name && device.status.server_online_status" class="bold font-green-jungle">(online)</span>
+                   <span *ngIf="device.status.server_name && !device.status.server_online_status" class="bold font-red">(offline)</span>
+               </div>
+               <div class="col-sm-4 text-center">
+                   <i class="fa fa-fw fa-lg fa-cloud-upload"></i>
+                   Instance:
+                   <a *ngIf="device.status.instance_id" (click)="onInstanceClick(device.status.instance_id)" class="bold">{{device.status.instance_id}}</a>
+                   <span *ngIf="!device.status.instance_id" class="bold">none</span>
+                   <span *ngIf="device.status.instance_id && device.status.instance_online_status" class="bold font-green-jungle">(online)</span>
+                   <span *ngIf="device.status.instance_id && !device.status.instance_online_status" class="bold font-red">(offline)</span>
+               </div>
+           </div>
+
+           <div class="row">
+               <div class="col-sm-4">
+
+                   <h3>Byzance<strong class="font-color-code">CODE</strong></h3>
+
+                   <div>
+                       Program name:
+                       <span class="font-grey-mint bold">{{device.status.actual_c_program_name?device.status.actual_c_program_name:'none'}}</span>
+                   </div>
+                   <div>
+                       Program version:
+                       <span class="font-grey-mint bold">{{device.status.actual_c_program_version_name?device.status.actual_c_program_version_name:'none'}}</span>
+                   </div>
+                   <div>
+                       Program backup mode:
+                       <span *ngIf="device.backup_mode" class="font-grey-mint bold">auto</span>
+                       <span *ngIf="!device.backup_mode" class="font-grey-mint bold">static</span>
+                   </div>
+
+               </div>
+               <div class="col-sm-4 hw-image-col">
+                   <img *ngIf="typeOfBoard.picture_link" [attr.src]="typeOfBoard.picture_link">
+                   <i *ngIf="!typeOfBoard.picture_link" class="fa fa-fw fa-microchip text-center"></i>
+               </div>
+               <div class="col-sm-4">
+
+                   <h3>Byzance<strong class="font-color-blocko">BLOCKO</strong></h3>
+
+                   <div>
+                       Program name:
+                       <span class="font-grey-mint bold">{{device.status.b_program_name?device.status.b_program_name:'none'}}</span>
+                   </div>
+                   <div>
+                       Program version:
+                       <span class="font-grey-mint bold">{{device.status.b_program_version_name?device.status.b_program_version_name:'none'}}</span>
+                   </div>
+
+               </div>
+           </div>
+
+           < TODO: ALLL !!! div class="row">
+               <div class="col-sm-5">
+                   <h3>Blocko Program</h3>
+                   <div *ngIf="device.status.b_program_id" class="timeline">
+                       <div class="timeline-item">
+                           <div class="timeline-icon bg-green-jungle bg-font-green-jungle">
+                               <i class="fa fa-code"></i>
+                           </div>
+                           <div class="timeline-body">
+                               <div class="timeline-body-arrow"></div>
+                               <div class="timeline-body-content">
+                                   <h4>Actual Blocko Program</h4>
+                                   <p>Program: <a (click)="onBProgramClick(device.status.b_program_id)">{{device.status.b_program_name
+                                       ? device.status.b_program_name : 'Unknown'}}</a></p>
+                                   <p>Version: <a
+                                       (click)="onBProgramVersionClick(device.status.b_program_id,device.status.b_program_version_id)">{{device.status.b_program_version_name
+                                       ? device.status.b_program_version_name : 'Unknown'}}</a></p>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="timeline-item hidden">
+                           <div class="timeline-icon bg-green-jungle bg-font-green-jungle">
+                               <i class="fa fa-calendar"></i>
+                           </div>
+                           <div class="timeline-body">
+                               <div class="timeline-body-arrow"></div>
+                               <div class="timeline-body-content">
+                                   <h4>Planed - Block Program</h4>
+                                   <p>Program: <span style="background-color: red">TODO</span></p>
+                                   <p>Version: <span style="background-color: red">TODO</span></p>
+                                   <p>date <span style="background-color: red">TODO</span></p>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <div *ngIf="!device.status.b_program_id">
+                       <p class="text-center">No Blocko program.</p>
+                   </div>
+               </div>
+               <div class="col-sm-2 hw-image-col">
+                   <img
+                       src="{{typeOfBoard.picture_link ? typeOfBoard.picture_link : 'http://placehold.it/350x350/000/FFF?text=No+picture'}}">
+               </div>
+               <div class="col-sm-5 hw-c-program-col">
+                   <h3>Firmware</h3>
+                   <div *ngIf="device.status.actual_c_program_id" class="timeline">
+                       <div class="timeline-item">
+                           <div class="timeline-icon bg-grey-salsa bg-font-grey-salsa">
+                               <i class="fa fa-code"></i>
+                           </div>
+                           <div class="timeline-body">
+                               <div class="timeline-body-arrow"></div>
+                               <div class="timeline-body-content">
+                                   <h4>Actual Firmware</h4>
+                                   <p>Program: <a (click)="onCProgramClick(device.status.actual_c_program_id)">{{device.status.actual_c_program_name
+                                       ? device.status.actual_c_program_name : 'Unknown'}}</a></p>
+                                   <p>Version: {{device.status.actual_c_program_version_name ?
+                                       device.status.actual_c_program_version_name : 'Unknown'}}</p>
+                               </div>
+                           </div>
+                       </div>
+                       <div *ngIf="device.status.required_c_programs.length" class="timeline-item">
+                           <div class="timeline-icon bg-grey-salsa bg-font-grey-salsa">
+                               <i class="fa fa-calendar"></i>
+                           </div>
+                           <div class="timeline-body">
+                               <div class="timeline-body-arrow"></div>
+                               <div class="timeline-body-content">
+                                   <h4>Planed Firmware</h4>
+                                   <p>Program: <a
+                                       (click)="onCProgramClick(device.status.required_c_programs[0].c_program_id)">{{device.status.required_c_programs[0].c_program_program_name
+                                       ? device.status.required_c_programs[0].c_program_program_name : 'Unknown'}}</a>
+                                   </p>
+                                   <p>Version: {{device.status.required_c_programs[0].c_program_version_name ?
+                                       device.status.required_c_programs[0].c_program_version_name : 'Unknown'}}</p>
+                                   <p>date <span style="background-color: red">TODO</span></p>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <div *ngIf="!device.status.actual_c_program_id">
+                       <p class="text-center">No firmware.</p>
+                   </div>
+               </div>
+           </div>
+           <div *ngIf="device && device.updates.length">
+               <h3>Upadates</h3>
+               <div class="timeline">
+                   <div *ngFor="let update of device.updates" class="timeline-item timeline-item-updates">
+                       <div class="timeline-icon bg-green-jungle bg-font-green-jungle">
+                           <i class="fa fa-code"></i>
+                       </div>
+                       <div class="timeline-body">
+                           <div class="timeline-body-arrow"></div>
+                           <div class="timeline-body-content">
+                               <p>Program: {{update.c_program_program_name ? update.c_program_program_name : 'Unknown'}}</p>
+                               <p>Version: <a (click)="onCProgramClick(update.c_program_id)">{{update.c_program_version_name ? update.c_program_version_name : 'Unknown'}}</a></p>
+                               <p>date <span style="background-color: red">TODO</span></p>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+
+           <div
+               *ngIf="device && device.status.required_backup_c_programs && device.status.required_backup_c_programs.length > 1"
+               class="cd-horizontal-timeline mt-timeline-horizontal loaded">
+               <div class="timeline">
+                   <div class="events-wrapper">
+                       <div class="events" style="transition: left 0.6s linear; "
+                            [style.width]="800+(device.status.required_backup_c_programs.length * 200) +'px'"
+                            [style.left]="timelinePosition+'px'">
+                           <ol *ngFor="let deviced of device.status.required_backup_c_programs.slice().reverse(); let i = index">
+                               <li>
+                                   <a class="border-after-red bg-after-red selected" [class.selected]="device.status.actual_c_program_id == deviced.c_program_id" [style.left]="(i*200)+'px'">
+                                       <span style="text-overflow: ellipsis; display:inline-block; overflow: hidden;white-space: nowrap;  width: 170px">{{deviced.c_program_program_name}}</span>
+                                       <br>
+                                       <span style="font-size: 70%" class="font-grey-salsa">{{deviced.date_of_create|bkUnixTimeToDate}}</span>
+                                   </a>
+                               </li>
+                           </ol>
+                           <span class="filling-line bg-red" aria-hidden="true" style="transform: scaleX(1);"></span>
+                       </div>
+                   </div>
+                   <ul class="cd-timeline-navigation mt-ht-nav-icon">
+                       <li>
+                           <a (click)=timelineMove(100); class="prev btn btn-outline red md-skip">
+                               <i class="fa fa-chevron-left"></i>
+                           </a>
+                       </li>
+                       <li>
+                           <a (click)=timelineMove(-100); class="next btn btn-outline red md-skip inactive">
+                               <i class="fa fa-chevron-right"></i>
+                           </a>
+                       </li>
+                   </ul>
+               </div>
+           </div>
+
+       </div>
+   </div -->
 
 
 </bk-layout-main>
