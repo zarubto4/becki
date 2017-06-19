@@ -3,14 +3,14 @@
     <div class="col-md-12 page-404">
         <div class="number font-blue"> 404 </div>
         <div class="details">
-            <h3>Oops! You're lost.</h3>
+            <h3>{{'title'|bkTranslate:this}}</h3>
             <p>
-                We can not find the page you're looking for.
+                {{'info_text'|bkTranslate:this}}
             </p>
             <p>
-                <a [routerLink]="['/']" class="btn blue btn-outline"> Return home </a>
+                <a [routerLink]="['/']" class="btn blue btn-outline"> {{'btn_return'|bkTranslate:this}} </a>
                 or
-                <a (click)="onBackClick($event)" class="btn blue btn-outline"> Go back </a>
+                <a (click)="onBackClick($event)" class="btn blue btn-outline"> {{'btn_back'|bkTranslate:this}} </a>
 
             </p>
         </div>

@@ -5,14 +5,12 @@
             <div class="becki-caption">
                 <span class="font-blue-dark">
                     <i class="fa fa-fw fa-microchip"></i>
-                    Welcome to Byzance<strong style="color: #36c6d3;">PORTAL</strong>
+                    {{'title_welcome_dashboard'|bkTranslate:this}}<strong style="color: #36c6d3;"> {{'portal'|bkTranslate:this}}</strong>
                 </span>
             </div>
         </div>
         <div style="font-size: 14px; font-weight: 200;">
-            We are Byzance – a technological laboratory of advanced automatization developing a toolkit for design, development and managing the ‘Internet of Things’ (IoT) for industrial uses. We do not create smart washing machines, nor smart city furniture. We develop everything for our customers to let them do it themselves, easily and without any problems.
-
-            <!-- <br><br><b>TODO: DELETE ME! -></b> {{'hello_world'|bkTranslate:this:'Becki':55}} -->
+            {{'dashboard_info_text'|bkTranslate:this}}
         </div>
         <div class="clearfix"></div>
     </div>
@@ -22,15 +20,15 @@
             <div class="becki-caption">
                 <span class="font-blue-dark">
                     <i class="fa fa-fw fa-flag"></i>
-                    First steps
+                    {{'title_first_steps'|bkTranslate:this}}
                 </span>
             </div>
         </div>
         <div class="font-blue-dark" style="font-size: 20px; font-weight: 200; line-height: 1.8em;">
-            <div><strong class="font-grey" style="font-size: 1.5em;">1.</strong> Select best matching <strong>tariff</strong> for you and create your <strong>product</strong> in <a [routerLink]="['/financial']">Financial section</a></div>
-            <div><strong class="font-grey" style="font-size: 1.5em;">2.</strong> Create your first <strong>project</strong> in <a [routerLink]="['/projects']">Projects section</a></div>
-            <div><strong class="font-grey" style="font-size: 1.5em;">3.</strong> Create your own Byzance<strong class="font-color-code">CODE</strong>, Byzance<strong class="font-color-grid">GRID</strong> and Byzance<strong class="font-color-blocko">BLOCKO</strong> programs</div>
-            <div><strong class="font-grey" style="font-size: 1.5em;">4.</strong> Run it on Byzance<strong class="font-color-hardware">HARDWARE</strong> and in Byzance<strong class="font-color-cloud">CLOUD</strong>.</div>
+            <div> <span [innerHTML]="'step_one'|bkTranslate:this"></span> </div>
+            <div> <span [innerHTML]="'step_two'|bkTranslate:this"></span> </div>
+            <div> <span [innerHTML]="'step_three'|bkTranslate:this"></span> </div>
+            <div> <span [innerHTML]="'step_four'|bkTranslate:this"></span> </div>
         </div>
         <div class="clearfix"></div>
     </div>
