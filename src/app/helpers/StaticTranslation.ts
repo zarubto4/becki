@@ -3,16 +3,21 @@
 */
 
 export class StaticTranslation {
-    public static translate: { [lang: string]: { [key: string]: string } } = {
+    public static translate: { [lang: string]: { [keyOrEnv: string]: ( string | { [key: string]: string } ) } } = {
         'en': {
-            'hello_world': 'Hello world!'
+            'DashboardComponent': {
+                'hello_world': 'Welcome {0}!',
+                'btn_save': 'Save it!',
+            },
+            'btn_save': 'Save',
+            'hello_world': 'Hello {0}! {1}?',
         },
         'cz': {
-            'hello_world': 'Ahoj světe!'
+            'hello_world': 'Ahoj {0}! {1}?',
         }
     };
 
-    public static translateTables: { [lang: string]: { [key: string]: { [key: string]: string } } } = {
+    public static translateTables: { [lang: string]: { [tableOrEnv: string]: { [keyOrTable: string]: ( string |  { [key: string]: string } ) } } } = {
         'en': {
             'board_state': {
                 'UNKNOWN': 'unknown',
