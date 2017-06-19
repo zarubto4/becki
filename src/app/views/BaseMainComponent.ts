@@ -16,6 +16,7 @@ import {
 } from '../services/NotificationService';
 import { StorageService } from '../services/StorageService';
 import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService';
+import { TranslationService } from '../services/TranslationService';
 
 export abstract class BaseMainComponent {
 
@@ -28,6 +29,7 @@ export abstract class BaseMainComponent {
     protected formBuilder: FormBuilder = null;
     protected currentParamsService: CurrentParamsService = null;
     protected blockUIService: BlockUIService = null;
+    protected translationService: TranslationService = null;
     protected zone: NgZone = null;
 
     constructor(protected injector: Injector) {
@@ -42,6 +44,7 @@ export abstract class BaseMainComponent {
             this.formBuilder = injector.get(FormBuilder);
             this.currentParamsService = injector.get(CurrentParamsService);
             this.blockUIService = injector.get(BlockUIService);
+            this.translationService = injector.get(TranslationService);
             this.zone = injector.get(NgZone);
             injector.get(MonacoEditorLoaderService); // only for preload monaco scripts
         } else {
@@ -63,6 +66,14 @@ export abstract class BaseMainComponent {
 
     protected unblockUI(): void {
         this.blockUIService.unblockUI();
+    }
+
+    protected translate(key: string, ...args: any[]): string {
+        return this.translationService.translate(key, this, null, args);
+    }
+
+    protected translateTable(key: string, table: string, ...args: any[]): string {
+        return this.translationService.translateTable(key, this, table, null, args);
     }
 
     protected fmInfo(msg: string, reason?: Object): FlashMessage {

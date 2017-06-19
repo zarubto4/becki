@@ -42,7 +42,7 @@ export class ModalsSelectHardwareComponent implements OnInit {
 
     ngOnInit() {
         this.options = this.modalModel.boards.map((b) => {
-            let collisionTranslated = this.translationService.translateTable(b.collision, 'board_state', 'en');
+            let collisionTranslated = this.translationService.translateTable(b.collision, this, 'board_state');
             return {
                 value: b.id,
                 label: b.id + ' [' + b.personal_description + ']' + (b.collision ? ' (' + collisionTranslated + ')' : '')

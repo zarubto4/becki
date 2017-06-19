@@ -6,20 +6,20 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { TranslationService } from './../services/TranslationService';
 
 @Pipe({
-    name: 'bkTanslate'
+    name: 'bkTranslate'
 })
 export class TranslatePipe implements PipeTransform {
     constructor(public translationService: TranslationService) {}
 
-    transform(input: string, lang: string = 'en'): string {
+    transform(input: string, environment: any, ...args: string[]) {
         // input = key
 
-        let translated = this.translationService.translate(input, lang);
+        let translated = this.translationService.translate(input, environment, null, args);
         if (!translated) {
             return '!!!' + input;
         }
         return translated;
     }
-    // how to call multiple arguments: {{ myData | TranslatePipe:lang }}
+    // how to call multiple arguments: {{ myData | bkTranslate:this:"arg1":"arg2" }}
 
 }
