@@ -42,7 +42,7 @@
                         <button type="button" class="btn default yellow-gold" (click)="onBuildClick()" [disabled]="buildInProgress">
                             <i class="fa fa-play" *ngIf="!buildInProgress"></i> <i class="fa fa-spinner fa-spin" *ngIf="buildInProgress"></i> Build
                         </button>
-                        <button type="button" class="btn default green-haze" (click)="onSaveClick()" [disabled]="changesInSelectedVersion().length == 0">
+                        <button type="button" class="btn default green-haze" (click)="onSaveClick()">
                             <i class="fa fa-floppy-o"></i> Save
                         </button>
                     </div>

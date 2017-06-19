@@ -95,7 +95,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 });
             }
             if (params['version']) {
-                this.router.navigate(['/projects', this.projectId, 'code', this.codeId], {replaceUrl: true});
+                this.router.navigate(['/projects', this.projectId, 'code', this.codeId], { replaceUrl: true });
                 this.selectVersionByVersionId(params['version']);
             }
         });
@@ -249,7 +249,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             });
     }
 
-    onFileContentChange(e: {fileFullPath: string, content: string}) {
+    onFileContentChange(e: { fileFullPath: string, content: string }) {
         if (this.fileChangeTimeout) {
             clearTimeout(this.fileChangeTimeout);
         }
@@ -431,11 +431,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         return NullSafe(() => this.selectedProgramVersion.version_object.id) === version.version_id;
     }
 
-    onSaveClick() {
-        if (this.changesInSelectedVersion().length === 0) {
-            return;
-        }
-
+    saveCode() {
         let m = new ModalsVersionDialogModel(moment().format('YYYY-MM-DD HH:mm:ss'));
         this.modalService.showModal(m).then((success) => {
             if (success) {
@@ -476,6 +472,22 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     });
             }
         });
+
+    }
+
+    onSaveClick() {
+        if (this.changesInSelectedVersion().length === 0) {
+            let con = new ModalsConfirmModel('Save same code?', 'No changes have been made, are you sure you want to save this code?', false, 'yes', 'no', null);
+            this.modalService.showModal(con).then((success) => {
+                if (!success) {
+                    return;
+                } else {
+                    this.saveCode();
+                }
+            });
+        } else {
+            this.saveCode();
+        }
     }
 
     onBuildClick() {
@@ -495,7 +507,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
             if (file.objectFullPath === 'main.cpp') {
                 main = file.content;
-            }  else if (file.library) {
+            } else if (file.library) {
                 libs.push(file.libraryVersionId);
             } else {
                 userFiles.push({
