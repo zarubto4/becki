@@ -338,8 +338,8 @@
                     <table class="table table-condensed table-hover">
                         <thead>
                         <tr>
-                            <th>Name</th>
-                            <th class="text-center no-wrap">In cloud</th>
+                            <th class="col col-lg-2">Name</th>
+                            <th class="text-center col col-lg-2">In cloud</th>
                             <th class="full-width">Description</th>
                             <th class="text-center">Actions</th>
                         </tr>
@@ -351,12 +351,21 @@
                                     {{version.version_name}}
                                 </a>
                             </td>
-                            <th class="text-center"><i class="fa fa-cloud fa-fw font-green-jungle" [class.font-red]="!versionRunning(version)"></i></th>
+
+                            <th *ngIf="versionRunning(version)" class="text-center"><i class="fa fa-cloud fa-fw font-green-jungle"></i></th>
+                            <th *ngIf="!versionRunning(version)" class="text-center"></th>
+
                             <td>
                                 {{version.version_description}}
                             </td>
-                            <td class="no-wrap">
 
+                            <td class="no-wrap">
+                                <button title="Device properties" class="btn btn-icon-only green" [disabled]="!version.update_permission" (click)="onEditVersionClick(version)">
+                                    <i class="fa fa-cog"></i>
+                                </button>
+                                <button title="Remove device" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
                             </td>
                         </tr>
                         </tbody>

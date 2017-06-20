@@ -804,6 +804,14 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         }
     }
 
+    onRemoveVersionClick(version: IBProgramVersionShortDetail): void {
+
+    }
+
+    onEditVersionClick(version: IBProgramVersionShortDetail): void {
+
+    }
+
     onTurnOnClick(): void {
         if (NullSafe(() => this.blockoProgram.instance_details.version_id)) {
             this.blockUI();

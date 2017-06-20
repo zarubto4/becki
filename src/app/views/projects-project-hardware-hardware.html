@@ -42,12 +42,6 @@
                         <li [class.active]="hardwareTab == 'update'">
                             <a class="cursor-pointer" (click)="onToggleHardwareTab('update')">Update progress </a>
                         </li>
-                        <li [class.active]="hardwareTab == 'history'">
-                            <a class="cursor-pointer" (click)="onToggleHardwareTab('history')">Firmware History </a>
-                        </li>
-                        <li [class.active]="hardwareTab == 'instance_history'">
-                            <a class="cursor-pointer" (click)="onToggleHardwareTab('instance_history')">Instance History </a>
-                        </li>
                         <li [class.active]="hardwareTab == 'debug'">
                             <a class="cursor-pointer" (click)="onToggleHardwareTab('command_center')">Advance Command center</a>
                         </li>
@@ -77,12 +71,15 @@
                                     <a [routerLink]="['/producers', device.producer_id]" class="bold">{{typeOfBoard.producer_name}}</a>
                                 </div>
                                 <div>
-                                    Hardware ID:
-                                    <span class="font-grey-mint bold">{{device.id}}</span>
-                                </div>
-                                <div>
-                                    Hardware revision:
+                                    Revision:
                                     <span class="font-grey-mint bold">{{typeOfBoard.revision}}</span>
+                                </div>
+
+                                <br>
+
+                                <div>
+                                    ID:
+                                    <span class="font-grey-mint bold">{{device.id}}</span>
                                 </div>
 
                                 <hr>
@@ -106,7 +103,7 @@
                                 <hr>
 
                                 <div>
-                                    <strong class="font-color-code">Bootloader</strong>
+                                    <strong>Bootloader</strong>
                                     <br>
                                     Bootloader version:
                                     <span class="font-grey-mint bold">{{device.actual_bootloader_version_name?device.actual_bootloader_version_name:'none'}}</span>
@@ -201,7 +198,7 @@
                                        <div>
 
                                            <div>
-                                               Main Server:
+                                               <strong class="font-color-cloud">CLOUD</strong> Main Server:
                                                <span *ngIf="device.status.server_name" class="font-grey-mint bold">{{device.status.server_name}}</span>
                                                <span *ngIf="!device.status.server_name" class="font-grey-mint bold">none</span>
                                                <span *ngIf="device.status.server_name && device.status.server_online_status" class="font-green-jungle">(online)</span>
@@ -211,12 +208,14 @@
                                            <br>
 
                                            <div>
-                                               Instance:
+                                               <strong class="font-color-cloud">CLOUD</strong> Instance:
                                                <a *ngIf="device.status.instance_id" [routerLink]="['/projects', device.project_id, 'instances', device.status.instance_id]" class="font-grey-mint bold">{{device.status.instance_id}}</a>
                                                <span *ngIf="!device.status.instance_id" class="font-grey-mint bold">(Device is not connected to an instance)</span>
                                                <span *ngIf="device.status.instance_id && device.status.instance_online_status" class="font-green-jungle">(online)</span>
                                                <span *ngIf="device.status.instance_id && !device.status.instance_online_status" class="font-red">(offline)</span>
                                            </div>
+
+                                           <br>
 
                                            <div>
                                                <strong class="font-color-blocko">BLOCKO</strong> program name:
@@ -245,21 +244,24 @@
                                        <thead>
                                        <tr>
 
-                                           <th>Id</th>
+                                           <th>ID</th>
                                            <th>Started</th>
                                            <th>Finished</th>
                                            <th>Type</th>
-                                           <th>Program</th>
-                                           <th>Version</th>
+                                           <th><strong class="font-color-code">CODE</strong> Program</th>
+                                           <th><strong class="font-color-code">CODE</strong> Version</th>
                                            <th>Status</th>
 
                                        </tr>
                                        </thead>
                                        <tbody>
                                        <tr *ngFor="let update of device.updates">
+
                                            <td class="font-grey-mint">{{update.id}}</td>
                                            <td class="font-grey-mint">{{update.date_of_create|bkUnixTimeToDate}}</td>
-                                           <td class="font-grey-mint">{{update.date_of_finish|bkUnixTimeToDate}}</td>
+
+                                           <td  *ngIf="update.date_of_finish">{{update.date_of_finish|bkUnixTimeToDate}}</td>
+                                           <td  *ngIf="!update.date_of_finish" class="font-yellow-casablanca" >Not yet (Unknown)</td>
 
                                            <td class="font-grey-mint">
                                                <span *ngIf="update.firmware_type == 'FIRMWARE'"   class="bold font-color-grid">Firmware</span>
@@ -315,15 +317,6 @@
                        </div>
                    </div>
                </div>
-
-
-                <div *ngIf="hardwareTab == 'history'">
-
-                </div>
-
-                <div *ngIf="hardwareTab == 'instance_history'">
-
-                </div>
 
                 <div *ngIf="hardwareTab == 'command_center'">
 
