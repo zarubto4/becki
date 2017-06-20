@@ -12,7 +12,7 @@
                 <div class="becki-caption">
                     <span class="font-blue-dark uppercase">
                     <i class="fa fa-fw fa-database"></i>
-                    Extensions
+                    {{'title'|bkTranslate:this}}
                 </span>
                 </div>
             </div>
@@ -26,7 +26,7 @@
                             <div class="arrow-down border-top-{{package.color|lowercase}}"></div>
                             <div class="price-table-pricing">
                                 <h3 style="font-size: 50px; line-height: 50px;">{{package.price.USD}}$</h3>
-                                <p class="font-grey-salt">Average monthly cost</p>
+                                <p class="font-grey-salt">{{'average_monthly_cost|bkTranslate:true'}}</p>
                             </div>
                             <div class="price-table-content">
                                 <p class="font-grey-salt">{{package.description}}</p>
@@ -36,7 +36,7 @@
                     </div>
                 </div>
                 <div *ngIf="!product.extensions" class="pricing-content-1">
-                    <h3>No extensions</h3>
+                    <h3>{{'no_extensions'|bkTranslate:this}}</h3>
                 </div>
             </div>
         </div>

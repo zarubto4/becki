@@ -12,7 +12,7 @@
                 <div class="becki-caption">
                     <span class="font-blue-dark uppercase">
                     <i class="fa fa-fw fa-dollar"></i>
-                    invoice: {{fullIvoice.invoice.invoice_number}}
+                    {{'title'|bkTranslate:this:fullIvoice.invoice.invoice_number}}
                 </span>
                 </div>
                 <td class="no-wrap text-right actions">
@@ -28,13 +28,13 @@
                 <div class="tab-content">
                     <div class="tab-pane active">
                         <div class="row">
-                            <div class="col-sm-6"><b>ID Subscription:</b> {{fullIvoice.invoice.id}}</div>
-                            <div class="col-sm-6"><b>Payment Mode:</b> {{fullIvoice.invoice.payment_method}}</div>
+                            <div class="col-sm-6"><b>{{'label_id_subscription'|bkTranslate:this}}:</b> {{fullIvoice.invoice.id}}</div>
+                            <div class="col-sm-6"><b>{{'label_payment_mode'|bkTranslate:this}}:</b> {{fullIvoice.invoice.payment_method}}</div>
                         </div>
                         <br>
                         <div class="row">
-                            <div class="col-sm-6"><b>Status:</b> {{fullIvoice.invoice.payment_status}}</div>
-                            <div class="col-sm-6"><b>Paid in:</b> {{fullIvoice.invoice.created|bkUnixTimeToDate}}</div>
+                            <div class="col-sm-6"><b>{{'label_status'|bkTranslate:this}}:</b> {{fullIvoice.invoice.payment_status}}</div>
+                            <div class="col-sm-6"><b>{{'label_paid_in'|bkTranslate:this}}:</b> {{fullIvoice.invoice.created|bkUnixTimeToDate}}</div>
                         </div>
                         <br>
                         <div>
@@ -42,11 +42,11 @@
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>GUID</th>
-                                            <th>Billable units</th>
-                                            <th>Unite</th>
-                                            <th>Total cost</th>
+                                            <th>{{'table_name'|bkTranslate:this}}</th>
+                                            <th>{{'table_guid'|bkTranslate:this}}</th>
+                                            <th>{{'table_billable_units'|bkTranslate:this}}</th>
+                                            <th>{{'table_unite'|bkTranslate:this}}</th>
+                                            <th>{{'table_total_cost'|bkTranslate:this}}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -64,7 +64,7 @@
                                             <td></td>
                                             <td></td>
                                             <td></td>
-                                            <td><strong>Total</strong></td>
+                                            <td><strong>{{'label_total'|bkTranslate:this}}</strong></td>
                                             <td>{{getWholePrice()}} $</td>
                                             <!--TODO tyrion na Invoices vrací celkovou cenu -->
                                         </tr>
