@@ -37,6 +37,12 @@
                     <td class="no-wrap bold"><a (click)="onProgramClick(program)">{{program.name}}</a></td>
                     <td>{{program.description}}</td>
                     <td class="no-wrap">
+
+                        <style type="text/css">
+                            table tr button { opacity:0.05;}
+                            table tr:hover button { opacity:1 }
+                        </style>
+
                         <button title="Program properties" class="btn btn-icon-only green" [disabled]="!program.edit_permission" (click)="onProgramEditClick(program)">
                             <i class="fa fa-cog"></i>
                         </button>

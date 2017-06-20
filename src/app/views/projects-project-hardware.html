@@ -23,10 +23,10 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>ID</th>
-                    <th>Type</th>
-                    <th  class="full-width">Status</th>
+                    <th class="col col-lg-2">Name</th>
+                    <th class="col col-lg-2">ID</th>
+                    <th class="col col-lg-2"><strong class="font-color-hardware">Hardware</strong> Type</th>
+                    <th class="full-width">Status</th>
                     <th class="text-center">Actions</th>
                 </tr>
                 </thead>
@@ -50,6 +50,12 @@
                         <span *ngIf="!device.board_online_status" class="font-red-flamingo">offline</span>
                     </td>
                     <td class="no-wrap">
+
+                        <style type="text/css">
+                            table tr button { opacity:0.05;}
+                            table tr:hover button { opacity:1 }
+                        </style>
+
                         <button title="Device properties" class="btn btn-icon-only green" [disabled]="!device.edit_permission" (click)="onEditClick(device)">
                             <i class="fa fa-cog"></i>
                         </button>

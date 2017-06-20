@@ -4,11 +4,14 @@
 
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { IBoard, ITypeOfBoard } from '../backend/TyrionAPI';
+import { IBoard, IBoardShortDetail, ITypeOfBoard } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsHardwareBootloaderUpdateModel } from '../modals/hardware-bootloader-update';
 import { ModalsHardwareCodeProgramVersionSelectModel } from '../modals/hardware-code-program-version-select';
+import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
+import { ModalsRemovalModel } from '../modals/removal';
 
 @Component({
     selector: 'bk-view-projects-project-hardware-hardware',
@@ -24,6 +27,8 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     routeParamsSubscription: Subscription;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
+
+    hardwareTab: string = 'overview';
 
     constructor(injector: Injector) {
         super(injector);
@@ -41,6 +46,10 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.routeParamsSubscription.unsubscribe();
     }
 
+    onToggleHardwareTab(tab: string) {
+        this.hardwareTab = tab;
+    }
+
     refresh(): void {
         this.blockUI();
         this.backendService.getBoard(this.hardwareId) // TODO [permission]: Project.read_permission
@@ -51,14 +60,48 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             })
             .then((typeOfBoard) => {
                 this.typeOfBoard = typeOfBoard;
-                // this.typeOfBoard.picture_link = 'https://static.pexels.com/photos/104827/cat-pet-animal-domestic-104827.jpeg';
-                // console.log(this.typeOfBoard);
                 this.unblockUI();
             })
             .catch((reason) => {
                 this.fmError('Device cannot be loaded.', reason);
                 this.unblockUI();
             });
+    }
+
+    onEditClick(device: IBoardShortDetail): void {
+        let model = new ModalsDeviceEditDescriptionModel(device.id, device.personal_description);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.editBoardUserDescription(device.id, {personal_description: model.description})
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The device description was updated.'));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The device cannot be updated.', reason));
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+    onRemoveClick(device: IBoardShortDetail): void {
+        this.modalService.showModal(new ModalsRemovalModel(device.id)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.disconnectBoard(device.id) // TODO [permission]: Project.update_permission (probably implemented as device.delete_permission)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The hardware has been removed.'));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.router.navigate(['/projects/' + this.projectId + '/hardware']);
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The hardware cannot be removed.', reason));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                    });
+            }
+        });
     }
 
     onUpdateBootloaderClick(): void {
