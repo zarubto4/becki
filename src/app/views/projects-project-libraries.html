@@ -23,16 +23,22 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th class="full-width">Description</th>
-                    <th class="text-center">Actions</th>
+                    <th class="col col-lg-2">Name</th>
+                    <th class="col col-lg-9">Description</th>
+                    <th class="col col-lg-1 center">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let library of libraries">
-                    <td class="no-wrap bold"><a (click)="onLibraryClick(library)">{{library.name}}</a></td>
+                    <td class="bold"><a (click)="onLibraryClick(library)">{{library.name}}</a></td>
                     <td>{{library.description}}</td>
-                    <td class="no-wrap">
+                    <td>
+
+                        <style type="text/css">
+                            table tr button { opacity:0.05;}
+                            table tr:hover button { opacity:1 }
+                        </style>
+
                         <button title="Code program properties" class="btn btn-icon-only green" [disabled]="!library.edit_permission" (click)="onEditClick(library)">
                             <i class="fa fa-cog"></i>
                         </button>

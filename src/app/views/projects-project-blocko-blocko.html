@@ -358,11 +358,13 @@
                             <td>
                                 {{version.version_description}}
                             </td>
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
+
                             <td class="no-wrap">
+
+                                <style type="text/css">
+                                    table tr button { opacity:0.05;}
+                                    table tr:hover button { opacity:1 }
+                                </style>
 
                                 <button title="Device properties" class="btn btn-icon-only green" [disabled]="!version.update_permission" (click)="onEditVersionClick(version)">
                                     <i class="fa fa-cog"></i>

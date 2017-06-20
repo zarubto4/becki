@@ -116,27 +116,21 @@
                         <tbody>
 
                         <tr *ngFor="let version of codeProgramVersions">
-
-
                             <!-- NAME -->
-                            <td class="no-wrap" [class.bold]="isSelected(version)">
+                            <td class="bold" [class.bold]="isSelected(version)">
                                 <a (click)="onProgramVersionClick(version)">
                                     {{version.version_name}}
                                 </a>
                             </td>
-
                             <!-- Description -->
                             <td>
                                 {{version.version_description}}
                             </td>
-
                             <!-- Author -->
                             <td>
                                 {{version.author.nick_name}}
                             </td>
-
                             <!-- STATUS -->
-
                             <td>
                                  <span class="icon-hint-wraper red" *ngIf="version.status=='hardware_unstable'">
                                     <i class="fa fa-exclamation-triangle font-red-mint"></i>
@@ -166,18 +160,14 @@
                                     <span class="hint">{{versionStatusTranslate[version.status]}}</span>
                                 </span>
                             </td>
-
                             <!-- UPLOAD -->
                             <td>
                                 <button title="Device properties" class="btn blue" (click)="onUploadClick(version)" *ngIf="device && device.connectible_to_internet && version.status=='successfully_compiled_and_restored'">
                                     Upload
                                 </button>
                             </td>
-
                             <!-- ACTIONS -->
-
                             <td>
-
                                 <style type="text/css">
                                     table tr button { opacity:0.05;}
                                     table tr:hover button { opacity:1 }
@@ -190,11 +180,7 @@
                                 <button title="Remove device" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
                                     <i class="fa fa-trash"></i>
                                 </button>
-
                             </td>
-
-
-
                         </tr>
                         </tbody>
                     </table>

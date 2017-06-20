@@ -60,13 +60,14 @@
                     <table class="table table-condensed table-hover">
                         <thead>
                         <tr>
-                            <th>Name</th>
-                            <th class="full-width">Description</th>
+                            <th class="col col-lg-1">Name</th>
+                            <th class="col col-lg-9">Description</th>
+                            <th class="col col-lg-1 text-center">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr *ngFor="let version of libraryVersions">
-                            <td class="no-wrap" [class.bold]="isSelected(version)">
+                            <td class="bold" [class.bold]="isSelected(version)">
                                 <a (click)="onLibraryVersionClick(version)">
                                     {{version.version_name}}
                                 </a>
@@ -74,6 +75,21 @@
                             <td>
                                 {{version.version_description}}
                             </td>
+
+                            <td>
+                                <style type="text/css">
+                                    table tr button { opacity:0.05;}
+                                    table tr:hover button { opacity:1 }
+                                </style>
+
+                                <button title="Device properties" class="btn btn-icon-only green" [disabled]="!version.update_permission" (click)="onEditVersionClick(version)">
+                                    <i class="fa fa-cog"></i>
+                                </button>
+                                <button title="Remove device" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+
                         </tr>
                         </tbody>
                     </table>
