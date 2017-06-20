@@ -97,7 +97,17 @@
                                 <div>
                                     Device status:
                                     <span *ngIf="device.status.status == 'online'" class="bold font-green-jungle">online</span>
-                                    <span *ngIf="device.status.status != 'online'" class="bold font-red">offline</span> (Latest online in 10:42 am yesterday)
+                                    <span *ngIf="device.status.status != 'online'">
+                                        <strong class="bold font-red">offline </strong><br>
+
+                                        Last seen:
+                                        <span *ngIf="device.status.last_online" class="font-grey-mint bold">
+                                             {{device.status.last_online|bkUnixTimeToDate}}
+                                        </span>
+                                        <span *ngIf="!device.status.last_online"  class="font-grey-mint bold">
+                                             (Unknown)
+                                        </span>
+                                    </span>
                                 </div>
 
                                 <hr>
