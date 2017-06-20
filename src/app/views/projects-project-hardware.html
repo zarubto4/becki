@@ -50,6 +50,12 @@
                         <span *ngIf="!device.board_online_status" class="font-red-flamingo">offline</span>
                     </td>
                     <td class="no-wrap">
+
+                        <style type="text/css">
+                            table tr button { opacity:0.05;}
+                            table tr:hover button { opacity:1 }
+                        </style>
+                        
                         <button title="Device properties" class="btn btn-icon-only green" [disabled]="!device.edit_permission" (click)="onEditClick(device)">
                             <i class="fa fa-cog"></i>
                         </button>

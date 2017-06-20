@@ -33,12 +33,19 @@
                     <td class="no-wrap bold"><a (click)="onProjectClick(gridProject)">{{gridProject.name}}</a></td>
                     <td>{{gridProject.description}}</td>
                     <td class="no-wrap">
+
+                        <style type="text/css">
+                            table tr button { opacity:0.05;}
+                            table tr:hover button { opacity:1 }
+                        </style>
+
                         <button title="Group properties" class="btn btn-icon-only green" [disabled]="!gridProject.edit_permission" (click)="onProjectEditClick(gridProject)">
                             <i class="fa fa-cog"></i>
                         </button>
                         <button title="Remove group" class="btn btn-icon-only red" [disabled]="!gridProject.delete_permission" (click)="onProjectDeleteClick(gridProject)">
                             <i class="fa fa-trash"></i>
                         </button>
+
                     </td>
                 </tr>
                 </tbody>

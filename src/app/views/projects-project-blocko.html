@@ -33,6 +33,13 @@
                     <td class="no-wrap bold"><a (click)="onBlockoClick(blocko)">{{blocko.name}}</a></td>
                     <td>{{blocko.description}}</td>
                     <td class="no-wrap">
+
+                        <style type="text/css">
+                            table tr button { opacity:0.05;}
+                            table tr:hover button { opacity:1 }
+                        </style>
+
+
                         <button title="Blocko program properties" class="btn btn-icon-only green" [disabled]="!blocko.edit_permission" (click)="onEditClick(blocko)">
                             <i class="fa fa-cog"></i>
                         </button>

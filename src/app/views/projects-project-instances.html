@@ -36,6 +36,12 @@
                         <span *ngIf="!instance.instance_is_online" class="font-red">offline</span>
                     </td>
                     <td class="no-wrap text-right">
+
+                        <style type="text/css">
+                            table tr button { opacity:0.05;}
+                            table tr:hover button { opacity:1 }
+                        </style>
+
                         <button title="shutdown" class="btn btn-icon-only red" (click)="onInstanceShutdownClick(instance)"> <!-- TODO PERMISIONS -->
                             <i class="fa fa-power-off"></i>
                         </button>

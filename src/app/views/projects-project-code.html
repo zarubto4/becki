@@ -35,6 +35,12 @@
                     <td class="no-wrap"><a (click)="onBoardTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
                     <td>{{code.description}}</td>
                     <td class="no-wrap">
+
+                        <style type="text/css">
+                            table tr button { opacity:0.05;}
+                            table tr:hover button { opacity:1 }
+                        </style>
+
                         <button title="Code program properties" class="btn btn-icon-only green" [disabled]="!code.edit_permission" (click)="onEditClick(code)">
                             <i class="fa fa-cog"></i>
                         </button>

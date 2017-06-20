@@ -64,12 +64,15 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
     versionStatusTranslate: { [key: string]: string } = {
         'compilation_in_progress': 'Compilation is in progress',
         'successfully_compiled_and_restored': 'Successfully compiled',
-        'server_was_offline': 'Server error (offline)',
-        'successfully_compiled_not_restored': 'Server error',
-        'compiled_with_code_errors': 'Code compilation finished with errors',
-        'file_with_code_not_found': 'Code file not found',
-        'compilation_server_error': 'Error in compilation',
-        'json_code_is_broken': 'Version is broken (empty code)',
+        'server_was_offline': 'Server error (offline) The server can fix bugs after a while. We know about this error immediately and we\'re working on it. Please be patient.',
+        'successfully_compiled_not_restored': 'Compilation server error. But the server can fix bugs after a while. We know about this error immediately and we\'re working on it. Please be patient.',
+        'compiled_with_code_errors': 'Code compilation finished with errors.',
+        'file_with_code_not_found': 'Code file not found. But the server can fix bugs after a while. We know about this error immediately and we\'re working on it. Please be patient.',
+        'compilation_server_error': 'Compilation server error. But the server can fix bugs after a while. We know about this error immediately and we\'re working on it. Please be patient.',
+        'json_code_is_broken': 'Json Code is Broken. Please Try it again.',
+        'hardware_unstable': 'Some of your devices with this version of the program had a critical error and had to be' +
+                             ' restored from a backup. This version is not recommended to use in production until you' +
+                             ' have solved the reason for the fall.',
         'undefined': 'Status of version is not known'
     };
 
