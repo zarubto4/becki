@@ -48,8 +48,9 @@ export class ModalsCodePropertiesComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.options = formSelectComponentOptionsMaker(this.modalModel.typeOfBoards, 'id', 'name');
-
+        if (!this.modalModel.edit) {
+            this.options = formSelectComponentOptionsMaker(this.modalModel.typeOfBoards, 'id', 'name');
+        }
         let input: { [key: string]: any } = {
             'name': [this.modalModel.name, [Validators.required, Validators.minLength(4), Validators.maxLength(32)]],
             'description': [this.modalModel.description]

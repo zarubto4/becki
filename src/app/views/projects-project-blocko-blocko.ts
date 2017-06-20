@@ -36,6 +36,8 @@ import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService
 import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ExitConfirmationService } from '../services/ExitConfirmationService';
+import { ModalsRemovalModel } from '../modals/removal';
+import { ModalsBlockoPropertiesModel } from '../modals/blocko-properties';
 
 @Component({
     selector: 'bk-view-projects-project-blocko-blocko',
@@ -198,6 +200,44 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
         this.exitConfirmationService.setConfirmationEnabled(false);
     };
+
+
+    onRemoveClick(): void {
+        this.modalService.showModal(new ModalsRemovalModel(this.blockoProgram.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.deleteBProgram(this.blockoProgram.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The blocko has been removed.'));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.router.navigate(['/projects/' + this.projectId + '/blocko']);
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The blocko cannot be removed.', reason));
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+    onEditClick(): void {
+        let model = new ModalsBlockoPropertiesModel(this.projectId, this.blockoProgram.name, this.blockoProgram.description, true, this.blockoProgram.name);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.editBProgram(this.blockoProgram.id, {name: model.name, description: model.description})
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The blocko has been updated.'));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The blocko cannot be updated.', reason));
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
 
     ngOnInit(): void {
         this.unsavedChanges = false;

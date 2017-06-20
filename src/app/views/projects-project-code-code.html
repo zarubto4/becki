@@ -15,11 +15,21 @@
                              Byzance<strong class="font-color-code">CODE</strong> - program <strong>{{currentParamsService.currentCodeNameSnapshot}}</strong>
                         </span>
                     </div>
+                    <div *ngIf="codeProgram" class="becki-actions">
+
+                        <button title="Device properties" class="btn btn-icon-only green" [disabled]="!codeProgram.edit_permission" (click)="onEditClick()">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="Remove device" class="btn btn-icon-only red" [disabled]="!codeProgram.delete_permission" (click)="onRemoveClick()">
+                            <i class="fa fa-trash"></i>
+                        </button>
+
+                    </div>
                 </div>
                 <div>
-                    Name: <strong>{{codeProgram?codeProgram.name:""}}</strong><br>
-                    Description: <strong>{{codeProgram?codeProgram.description:""}}</strong><br>
-                    Device type: <strong><a (click)="onBoardTypeClick(codeProgram.type_of_board_id)">{{codeProgram?codeProgram.type_of_board_name:""}}</a></strong>
+                    <strong class="font-color-code">CODE</strong> Name: <strong>{{codeProgram?codeProgram.name:""}}</strong><br>
+                    <strong class="font-color-code">CODE</strong> Description: <strong>{{codeProgram?codeProgram.description:""}}</strong><br>
+                    <strong class="font-color-hardware">Hardware</strong> Type: <strong><a (click)="onBoardTypeClick(codeProgram.type_of_board_id)">{{codeProgram?codeProgram.type_of_board_name:""}}</a></strong>
                 </div>
             </div>
         </div>

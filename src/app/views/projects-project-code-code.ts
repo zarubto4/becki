@@ -20,6 +20,8 @@ import { ModalsCodeAddLibraryModel } from '../modals/code-add-library';
 
 import moment = require('moment/moment');
 import { ModalsCodeLibraryVersionModel } from '../modals/code-library-version';
+import { ModalsRemovalModel } from '../modals/removal';
+import { ModalsCodePropertiesModel } from '../modals/code-properties';
 
 
 @Component({
@@ -127,6 +129,48 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         if (this.projectSubscription) {
             this.projectSubscription.unsubscribe();
         }
+    }
+
+    onRemoveClick(): void {
+        this.modalService.showModal(new ModalsRemovalModel(this.codeProgram.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.deleteCProgram(this.codeProgram.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The code has been removed.'));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.router.navigate(['/projects/' + this.projectId + '/code']);
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The code cannot be removed.', reason));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                    });
+            }
+        });
+    }
+
+
+    onEditClick(): void {
+        let model = new ModalsCodePropertiesModel(null, this.codeProgram.name, this.codeProgram.description, '', true, this.codeProgram.name);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.editCProgram(this.codeProgram.id, {
+                    project_id: this.projectId,
+                    name: model.name,
+                    description: model.description,
+                    type_of_board_id: this.codeProgram.type_of_board_id
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The code has been updated.'));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The code cannot be updated.', reason));
+                        this.refresh();
+                    });
+            }
+        });
     }
 
     selectVersionByVersionId(versionId: string) {

@@ -15,10 +15,20 @@
                             Byzance<strong class="font-color-blocko">BLOCKO</strong> - program <strong>{{currentParamsService.currentBlockoNameSnapshot}}</strong>
                         </span>
                     </div>
+                    <div *ngIf="blockoProgram" class="becki-actions">
+
+                        <button title="Program properties" class="btn btn-icon-only green" [disabled]="!blockoProgram.edit_permission" (click)="onEditClick()">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="Remove program" class="btn btn-icon-only red" [disabled]="!blockoProgram.delete_permission" (click)="onRemoveClick()">
+                            <i class="fa fa-trash"></i>
+                        </button>
+
+                    </div>
                 </div>
                 <div>
-                    Name: <strong>{{blockoProgram?blockoProgram.name:""}}</strong><br>
-                    Description: <strong>{{blockoProgram?blockoProgram.description:""}}</strong>
+                    <strong class="font-color-blocko">BLOCKO</strong> Name: <strong>{{blockoProgram?blockoProgram.name:""}}</strong><br>
+                    <strong class="font-color-blocko">BLOCKO</strong> Description: <strong>{{blockoProgram?blockoProgram.description:""}}</strong>
                 </div>
             </div>
         </div>
