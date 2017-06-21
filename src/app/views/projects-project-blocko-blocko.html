@@ -293,40 +293,46 @@
 
                         <div class="actions pull-right">
                             <button *ngIf="!blockoProgram.instance_details.uploaded && blockoProgram.instance_details.version_id" class="btn green-jungle"  (click)="onTurnOnClick()">
-                                <i class="fa fa-power-off"></i> Turn on
+                                <i class="fa fa-power-off"></i> Upload program to Cloud
                             </button>
 
                             <button *ngIf="blockoProgram.instance_details.uploaded" class="btn red" (click)="onTurnOffClick()">
-                                <i class="fa fa-power-off"></i> Turn off
+                                <i class="fa fa-power-off"></i> Turn off Instance
                             </button>
 
                             <button class="btn blue-hoki" (click)="onChangeVersionClick()">
-                                <i class="fa fa-code-fork"></i> Change version
+                                <i class="fa fa-code-fork"></i> Change version in Cloud
                             </button>
                         </div>
 
                         <div>
-                            Instance:
-                            <a *ngIf="blockoProgram.instance_details.instance_id" (click)="onInstanceIdClick(blockoProgram.instance_details.instance_id)">{{blockoProgram.instance_details.instance_id}}</a>
-                            <span class="font-grey-salsa bold" *ngIf="!blockoProgram.instance_details.instance_id">None</span>
-                        </div>
-                        <div>
-                            Version:
-                            <a *ngIf="blockoProgram.instance_details.version_name" (click)="onProgramVersionIdClick(blockoProgram.instance_details.version_id)">{{blockoProgram.instance_details.version_name}}</a>
-                            <span class="font-grey-salsa bold" *ngIf="!blockoProgram.instance_details.version_name">None</span>
-                        </div>
-                        <div>
-                            Status:
-                            <span *ngIf="blockoProgram.instance_details.instance_online" class="bold font-green-jungle">Online</span>
-                            <span *ngIf="!blockoProgram.instance_details.instance_online" class="bold font-red">Offline</span>
-                        </div>
-                        <div>
-                            Server:
+                            <strong class="font-color-cloud">CLOUD</strong> Server:
                             <span class="font-grey-mint bold" *ngIf="blockoProgram.instance_details.server_name">
                                 {{blockoProgram.instance_details.server_name}}
                                 (<span *ngIf="blockoProgram.instance_details.server_online" class="font-green-jungle">Online</span><span *ngIf="!blockoProgram.instance_details.server_online" class="font-red">Offline</span>)
                             </span>
                             <span class="font-grey-salsa bold" *ngIf="!blockoProgram.instance_details.server_name">None</span>
+                        </div>
+
+                        <br>
+
+                        <div>
+                            <strong class="font-color-cloud">CLOUD</strong> Instance:
+                            <a *ngIf="blockoProgram.instance_details.instance_id" (click)="onInstanceIdClick(blockoProgram.instance_details.instance_id)">{{blockoProgram.instance_details.instance_id}}</a>
+                            <span class="font-grey-salsa bold" *ngIf="!blockoProgram.instance_details.instance_id">None</span>
+                        </div>
+                        <div>
+                            <strong class="font-color-cloud">CLOUD</strong> Status:
+                            <span *ngIf="blockoProgram.instance_details.instance_online" class="bold font-green-jungle">Online</span>
+                            <span *ngIf="!blockoProgram.instance_details.instance_online" class="bold font-red">Offline</span>
+                        </div>
+
+                        <br>
+
+                        <div>
+                            <strong class="font-color-blocko">BLOCKO</strong> Version:
+                            <a *ngIf="blockoProgram.instance_details.version_name" (click)="onProgramVersionIdClick(blockoProgram.instance_details.version_id)">{{blockoProgram.instance_details.version_name}}</a>
+                            <span class="font-grey-salsa bold" *ngIf="!blockoProgram.instance_details.version_name">None</span>
                         </div>
 
                     </div>

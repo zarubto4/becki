@@ -73,7 +73,7 @@ var CONFIG = {
         "delete:/overflow/hashTag/{post_id}/{hashTag}": "unsetOverflowHashTag",
         "put:/overflow/likeMinus/{post_id}": "touchOverflowLikeMinus",
         "put:/overflow/likePlus/{post_id}": "touchOverflowLikePlus",
-        "put:/b_program/version/{b_program_id}": "createBProgramVersion",
+        "post:/b_program/version/{b_program_id}": "createBProgramVersion",
         "put:/instance/uploadToCloud/{version_id}": "cloudInstanceUpload",
         "put:/instance/shut_down/{instance_name}": "cloudInstanceShutDown",
         "put:/b_program/uploadToHomer/{b_program_id}/{version_id}/{homer_id}": "uploadBProgramToHomer",

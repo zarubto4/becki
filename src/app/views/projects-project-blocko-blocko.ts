@@ -845,11 +845,43 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     }
 
     onRemoveVersionClick(version: IBProgramVersionShortDetail): void {
-
+        this.modalService.showModal(new ModalsRemovalModel(version.version_id)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.deleteBProgramVersion(version.version_id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The code has been removed.'));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The code cannot be removed.', reason));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.refresh();
+                    });
+            }
+        });
     }
 
     onEditVersionClick(version: IBProgramVersionShortDetail): void {
-
+        let model = new ModalsVersionDialogModel(version.version_name, version.version_description, true);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.editBProgramVersion(version.version_id, { // TODO [permission]: version.update_permission (Project.update_permission)
+                    version_name: model.name,
+                    version_description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(`The code ${model.name} has been added to project.`));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(`The code ${model.name} cannot be added to project.`, reason));
+                        this.refresh();
+                    });
+            }
+        });
     }
 
     onTurnOnClick(): void {

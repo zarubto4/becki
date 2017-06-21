@@ -19,8 +19,10 @@ import { NullSafe } from '../helpers/NullSafe';
 import { ModalsSelectHardwareComponent, ModalsSelectHardwareModel } from '../modals/select-hardware';
 import { getAllInputOutputs, getInputsOutputs } from '../helpers/CodeInterfaceHelpers';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
+import { ModalsRemovalModel } from '../modals/removal';
 
 import moment = require('moment/moment');
+
 
 
 @Component({
@@ -108,6 +110,46 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
         } else {
             this.afterLoadSelectedVersionId = versionId;
         }
+    }
+
+    onRemoveVersionClick(version: ILibraryVersionShortDetail): void {
+        this.modalService.showModal(new ModalsRemovalModel(version.version_id)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.deleteLibraryVersion(version.version_id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The version has been changed.'));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The version cannot be changed.', reason));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+    onEditVersionClick(version: ILibraryVersionShortDetail): void {
+        let model = new ModalsVersionDialogModel(version.version_name, version.version_description, true);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.editLibraryVersion(version.version_id, { // TODO [permission]: version.update_permission
+                    version_name: model.name,
+                    version_description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(`The version ${model.name} has been changed.`));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(`The version ${model.name} cannot be changed.`, reason));
+                        this.refresh();
+                    });
+            }
+        });
     }
 
     refresh(): void {

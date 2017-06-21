@@ -22,7 +22,7 @@
                     <label>{{configProperty.displayName}}</label>
                     <input class="form-control" type="number" [(ngModel)]="formModel[configProperty.name]" [attr.step]="configProperty.config.step?configProperty.config.step:0.01" [attr.min]="configProperty.config.min" [attr.max]="configProperty.config.max" [readonly]="configProperty.config.range || configProperty.config.options" *ngIf="!configProperty.config.options">
                     <input class="form-control" type="range" [(ngModel)]="formModel[configProperty.name]" [attr.step]="configProperty.config.step?configProperty.config.step:0.01" [attr.min]="configProperty.config.min" [attr.max]="configProperty.config.max" *ngIf="configProperty.config.range && !configProperty.config.options">
-                
+
                     <select class="form-control" [(ngModel)]="formModel[configProperty.name]" *ngIf="configProperty.config.options">
                         <option *ngFor="let option of configProperty.config.options;" [ngValue]="option">{{option}}</option>
                     </select>
@@ -31,7 +31,7 @@
                     <label>{{configProperty.displayName}}</label>
                     <input class="form-control" type="number" [(ngModel)]="formModel[configProperty.name]" [attr.step]="configProperty.config.step?configProperty.config.step:1" [attr.min]="configProperty.config.min" [attr.max]="configProperty.config.max" [readonly]="configProperty.config.range || configProperty.config.options" *ngIf="!configProperty.config.options">
                     <input class="form-control" type="range" [(ngModel)]="formModel[configProperty.name]" [attr.step]="configProperty.config.step?configProperty.config.step:1" [attr.min]="configProperty.config.min" [attr.max]="configProperty.config.max" *ngIf="configProperty.config.range && !configProperty.config.options">
-                
+
                     <select class="form-control" [(ngModel)]="formModel[configProperty.name]" *ngIf="configProperty.config.options">
                         <option *ngFor="let option of configProperty.config.options;" [ngValue]="option">{{option}}</option>
                     </select>
@@ -57,7 +57,7 @@
         </template>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn green" (click)="onSubmitClick()">Save</button>
         <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
+        <button type="button" class="btn green" (click)="onSubmitClick()">Save</button>
     </div>
 </div>

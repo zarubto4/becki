@@ -48,7 +48,7 @@ export class ForgotPasswordComponent implements OnInit {
     }
 
     clickButtonBack(): void {
-        // this.router.navigate(['/']);
+        this.router.navigate(['/']);
     }
 
 }

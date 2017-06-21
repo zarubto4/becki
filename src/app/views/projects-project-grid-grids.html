@@ -14,14 +14,20 @@
                 </span>
             </div>
             <div class="becki-actions">
+                <button title="Device properties" class="btn btn-icon-only green" [disabled]="!gridProject.update_permission" (click)="onProjectEditClick()">
+                    <i class="fa fa-cog"></i>
+                </button>
+                <button title="Remove device" class="btn btn-icon-only red" [disabled]="!gridProject.delete_permission" (click)="onProjectDeleteClick()">
+                    <i class="fa fa-trash"></i>
+                </button>
                 <button class="btn blue" [disabled]="!gridProject || !gridProject.update_permission" (click)="onProgramAddClick(gridProject)">
                     <i class="fa fa-plus-circle"></i> Add grid program
                 </button>
             </div>
         </div>
         <div>
-            Name: <strong>{{gridProject?gridProject.name:""}}</strong><br>
-            Description: <strong>{{gridProject?gridProject.description:""}}</strong>
+            <strong class="font-color-grid">GRID</strong> Project Name: <strong>{{gridProject?gridProject.name:""}}</strong><br>
+            <strong class="font-color-grid">GRID</strong> Description: <strong>{{gridProject?gridProject.description:""}}</strong>
         </div>
         <div *ngIf="gridProject && gridProject.programs && gridProject.programs.length" class="table-scrollable">
             <table class="table table-hover">

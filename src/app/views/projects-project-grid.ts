@@ -49,8 +49,8 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
         }
     }
 
-    onProjectClick(project: IMProjectShortDetail): void {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', project.id]);
+    onProjectClick(m_project: IMProjectShortDetail): void {
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', m_project.id]);
     }
 
     onProjectAddClick(): void {

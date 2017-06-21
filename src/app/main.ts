@@ -177,7 +177,7 @@ let routes: Routes = [
     {path: 'projects/:project/libraries', data: {breadName: 'CODE libraries'}, component: ProjectsProjectLibrariesComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/libraries/:library', data: {breadName: ':library'}, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard]},
 
-    {path: 'projects/:project/grid', data: {breadName: 'GRID programs'}, component: ProjectsProjectGridComponent, canActivate: [AuthGuard]},
+    {path: 'projects/:project/grid', data: {breadName: 'GRID projects'}, component: ProjectsProjectGridComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/grid/:grids', data: {breadName: ':grids'}, component: ProjectsProjectGridGridsComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/grid/:grids/:grid', data: {breadName: ':grid'}, component: ProjectsProjectGridGridsGridComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/instances', data: {breadName: 'CLOUD instances'}, component: ProjectsProjectInstancesComponent, canActivate: [AuthGuard]},

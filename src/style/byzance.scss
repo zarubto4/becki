@@ -142,6 +142,15 @@
     background-size: contain;
     background-image: url(./assets/byzance/logo_white.svg);
 }
+.byzance-color-logo {
+    width: 210px;
+    height: 60px;
+    display: inline-block;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: contain;
+    background-image: url(./assets/byzance/logo_color.svg);
+}
 
 .byzance-logo-size-top-menu {
     height: 35px;
@@ -1251,7 +1260,8 @@ body.block-ui-blur .page-container, body.block-ui-blur .page-footer {
     margin:0 -40px -30px;
     padding:15px 0 17px;
     text-align:center;
-    background-color: #428d27;
+    color: white;
+    background-color: #00ABE9;
     -webkit-border-radius:0 0 7px 7px;
     -moz-border-radius:0 0 7px 7px;
     -ms-border-radius:0 0 7px 7px;
@@ -1395,6 +1405,15 @@ body.block-ui-blur .page-container, body.block-ui-blur .page-footer {
     }
 
 }
+
+.font-color-byzance-blue {
+    color: #00ABE9;
+
+    &-dark {
+        color: #037391;
+    }
+}
+
 
 .font-color-hardware {
     color: #0b85db;

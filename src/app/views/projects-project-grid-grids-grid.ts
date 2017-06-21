@@ -21,6 +21,7 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
 import { Core, EditorRenderer } from 'the-grid';
 import { ExitConfirmationService } from '../services/ExitConfirmationService';
+import { ModalsRemovalModel } from '../modals/removal';
 
 @Component({
     selector: 'bk-view-projects-project-grid-grids-grid',
@@ -138,6 +139,46 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
         this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', gridProjectId]);
     }
 
+    onRemoveVersionClick(version: IMProgramVersionShortDetail): void {
+        this.modalService.showModal(new ModalsRemovalModel(version.version_name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.deleteMProgramVersion(version.version_id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The version has been removed.'));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The version cannot be removed.', reason));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+    onEditVersionClick(version: IMProgramVersionShortDetail): void {
+        let model = new ModalsVersionDialogModel(version.version_name, version.version_description, true);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.editMProgramVersion(version.version_id, { // TODO [permission]: version.update_permission
+                    version_name: model.name,
+                    version_description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(`The version ${model.name} has been changed.`));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(`The version ${model.name} cannot be changed.`, reason));
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
     refresh(): void {
         this.blockUI();
 
@@ -179,7 +220,8 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
     }
 
     onProgramVersionClick(programVersion: IMProgramVersionShortDetail): void {
-        this.selectProgramVersion(programVersion);
+        this.router.navigate(['/projects', this.currentParamsService.get('project'), 'grid', this.gridsId, 'grids', programVersion.version_id]);
+        // this.selectProgramVersion(programVersion);
     }
 
     selectProgramVersion(programVersion: IMProgramVersionShortDetail): void { // TODO [permission]: M_Program.read_permission

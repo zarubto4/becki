@@ -10,6 +10,7 @@ import { ModalsRemovalModel } from '../modals/removal';
 import { IProject, IMProgram, IMProject, IMProjectShortDetail, ISwaggerMProgramShortDetail } from '../backend/TyrionAPI';
 import { ModalsGridProgramPropertiesModel } from '../modals/grid-program-properties';
 import { CurrentParamsService } from '../services/CurrentParamsService';
+import { ModalsGridProjectPropertiesModel } from '../modals/grid-project-properties';
 
 @Component({
     selector: 'bk-view-projects-project-grid-grids',
@@ -17,13 +18,11 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 })
 export class ProjectsProjectGridGridsComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
-    id: string;
-    gridsId: string;
+    id: string; // Project ID
+    gridsId: string; // M Project ID
 
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
-
-    // project: IProject = null;
 
     gridProject: IMProjectShortDetail = null;
 
@@ -51,7 +50,7 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
     }
 
     onProgramClick(grid: ISwaggerMProgramShortDetail): void {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', this.gridsId, grid.id]);
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', this.gridsId]);
     }
 
     onProgramAddClick(project: IMProjectShortDetail): void {
@@ -76,6 +75,52 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
         });
     }
 
+    refresh(): void {
+        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', this.gridsId]);
+    }
+
+    onProjectEditClick(): void {
+        let model = new ModalsGridProjectPropertiesModel(this.gridProject.name, this.gridProject.description, true, this.gridProject.name);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.editMProject(this.gridProject.id, {
+                    name: model.name,
+                    description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The grid project has been edited.'));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The grid project cannot be edited.', reason));
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+
+    onProjectDeleteClick(): void {
+        this.modalService.showModal(new ModalsRemovalModel(this.gridProject.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.deleteMProject(this.gridProject.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The grid project has been removed.'));
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.router.navigate(['/projects/' + this.id + '/grid']);
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The grid project cannot be removed.', reason));
+                        this.refresh();
+                    });
+            }
+        });
+
+    }
+
     onProgramEditClick(program: IMProjectShortDetail): void {
         let model = new ModalsGridProgramPropertiesModel(program.name, program.description, true);
 
@@ -88,11 +133,11 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess('The grid program has been edited.'));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.refresh();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError('The grid program cannot be edited.', reason));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.refresh();
                     });
             }
         });
@@ -106,11 +151,11 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
                 this.backendService.deleteMProgram(program.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess('The grid program has been removed.'));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.refresh();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError('The grid program cannot be removed.', reason));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.refresh();
                     });
             }
         });

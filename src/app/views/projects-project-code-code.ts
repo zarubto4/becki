@@ -149,7 +149,6 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         });
     }
 
-
     onEditClick(): void {
         let model = new ModalsCodePropertiesModel(null, this.codeProgram.name, this.codeProgram.description, '', true, this.codeProgram.name);
         this.modalService.showModal(model).then((success) => {
@@ -167,6 +166,46 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError('The code cannot be updated.', reason));
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+    onRemoveVersionClick(version: ICProgramVersionShortDetail): void {
+        this.modalService.showModal(new ModalsRemovalModel(version.version_name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.deleteCProgramVersion(version.version_id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The version has been removed.'));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The version cannot be removed.', reason));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+    onEditVersionClick(version: ICProgramVersionShortDetail): void {
+        let model = new ModalsVersionDialogModel(version.version_name, version.version_description, true);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.editCProgramVersion(version.version_id, { // TODO [permission]: version.update_permission
+                    version_name: model.name,
+                    version_description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(`The version ${model.name} has been changed.`));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(`The version ${model.name} cannot be changed.`, reason));
                         this.refresh();
                     });
             }
