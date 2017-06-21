@@ -11,12 +11,12 @@
                <div class="becki-caption">
                     <span class="font-blue-dark uppercase">
                     <i class="fa fa-fw fa-dollar"></i>
-                    Invoice
+                    {{'title'|bkTranslate:this}}
                 </span>
                 </div>
                 <div class="becki-actions">
                     <button *ngIf="product && product.payment_mode == 'per_credit'" class="btn blue" (click)="onAddCreditsClick()">
-                        <i class="fa fa-plus-circle"></i> Add credits
+                        <i class="fa fa-plus-circle"></i> {{'btn_add_credits'|bkTranslate:this}}
                     </button>
                 </div>
             </div>
@@ -26,11 +26,11 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>Invoice ID</th>
-                    <th>Total cost</th>
-                    <th>Date of create</th>
-                    <th>Paid</th>
-                    <th class="text-right">Actions</th>
+                    <th>{{'table_invoice_id'|bkTranslate:this}}</th>
+                    <th>{{'table_total_cost'|bkTranslate:this}}</th>
+                    <th>{{'table_date_of_create'|bkTranslate:this}}</th>
+                    <th>{{'table_paid'|bkTranslate:this}}</th>
+                    <th class="text-right">{{'table_actions'|bkTranslate:this}}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -38,7 +38,7 @@
                     <td class="no-wrap"><a (click)="onInvoiceClick(invoice)">{{invoice.invoice_number}}</a></td>
                     <td>{{invoice.id}}</td>
                     <td> {{invoice.created|bkUnixTimeToDate}} </td>
-                    <td><span *ngIf="!invoice.require_payment"><i class="  font-green-jungle fa fa-check "></i></span><span *ngIf="invoice.require_payment"><a class="font-red-thunderbird" (click)="onPayClick(invoice)">Payment required</a></span></td>
+                    <td><span *ngIf="!invoice.require_payment"><i class="  font-green-jungle fa fa-check "></i></span><span *ngIf="invoice.require_payment"><a class="font-red-thunderbird" (click)="onPayClick(invoice)">{{'payment_required|bkTranslate:this'}}</a></span></td>
                     <td class="no-wrap text-right">
                         <button *ngIf="invoice.invoice_pdf_link" (click)="onDownloadProFormaPDFClick(invoice)" title="Download pro forma invoice as PDF" class="btn btn-icon-only white">
                             <i class=" fa fa-file-pdf-o"></i>
@@ -54,8 +54,8 @@
                 </tbody>
             </table>
         </div>
-        <h3 *ngIf="!invoices" class="text-center">Loading...</h3>
-        <h3 *ngIf="invoices && invoices.length == 0" class="text-center">No invoice</h3>
+        <h3 *ngIf="!invoices" class="text-center">{{'loading'|bkTranslate:this}}</h3>
+        <h3 *ngIf="invoices && invoices.length == 0" class="text-center">{{'no_invoice'|bkTranslate:this}}</h3>
     </div>
     </div>
 </bk-layout-main>
