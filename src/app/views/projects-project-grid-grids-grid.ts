@@ -296,6 +296,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                 this.backendService.deleteMProgram(this.gridProgram.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess('The grid program has been removed.'));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', this.gridsId]);
                     })
                     .catch(reason => {

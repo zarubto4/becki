@@ -6,7 +6,7 @@
 <bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
     <div class="portlet portlet light bordered">
-        <div class="portlet-title">
+        <div *ngIf="group" class="portlet-title">
             <div class="becki-caption">
                 <span class="font-blue-dark">
                     <i class="fa fa-fw fa-fw fa-sliders"></i>
@@ -14,14 +14,21 @@
                 </span>
             </div>
             <div class="becki-actions">
+                <button title="Library properties" class="btn btn-icon-only green" [disabled]="!group.edit_permission" (click)="onGroupEditClick()">
+                    <i class="fa fa-cog"></i>
+                </button>
+                <button title="Delete Library" class="btn btn-icon-only red" [disabled]="!group.delete_permission" (click)="onGroupDeleteClick()">
+                    <i class="fa fa-trash"></i>
+                </button>
                 <button class="btn blue" [disabled]="!group || !group.update_permission" (click)="onWidgetAddClick(group)">
                     <i class="fa fa-plus-circle"></i> Add widget
                 </button>
             </div>
         </div>
         <div>
-            Name: <strong>{{group?group.name:""}}</strong><br>
-            Description: <strong>{{group?group.description:""}}</strong>
+            <strong class="font-color-grid">GRID</strong> Widget Collection Name: <strong>{{group?group.name:""}}</strong><br>
+            <strong class="font-color-grid">GRID</strong> Description: <strong>{{group?group.description:""}}</strong>
+            <br>
         </div>
         <div *ngIf="(group && group.grid_widgets && group.grid_widgets.length)" class="table-scrollable">
             <table class="table table-hover">
@@ -37,6 +44,12 @@
                     <td class="no-wrap bold"><a (click)="onWidgetClick(widget)">{{widget.name}}</a></td>
                     <td>{{widget.description}}</td>
                     <td class="no-wrap">
+
+                        <style type="text/css">
+                            table tr button { opacity:0.05;}
+                            table tr:hover button { opacity:1 }
+                        </style>
+
                         <button title="Widget properties" class="btn btn-icon-only green" [disabled]="!widget.edit_permission" (click)="onWidgetEditClick(widget)">
                             <i class="fa fa-cog"></i>
                         </button>

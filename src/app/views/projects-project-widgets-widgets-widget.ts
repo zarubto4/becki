@@ -23,6 +23,8 @@ import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogCom
 import { MachineMessage, SafeMachineMessage } from 'script-engine';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ExitConfirmationService } from '../services/ExitConfirmationService';
+import { ModalsWidgetsWidgetPropertiesModel } from '../modals/widgets-widget-properties';
+import { ModalsRemovalModel } from '../modals/removal';
 
 @Component({
     selector: 'bk-view-projects-project-widgets-widgets-widget',
@@ -111,6 +113,89 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         if (this.projectSubscription) {
             this.projectSubscription.unsubscribe();
         }
+    }
+
+    onWidgetEditClick(): void {
+
+        let model = new ModalsWidgetsWidgetPropertiesModel(this.widget.name, this.widget.description, true, this.widget.name);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.editWidget(this.widget.id, {
+                    name: model.name,
+                    description: model.description,
+                    type_of_widget_id: this.widgetsId // tohle je trochu divný ne? ... možná kdyby jsi chtěl přesunout widget mezi groupama? [DU]
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The widget has been edited.'));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The widget cannot be edited.', reason));
+                    });
+            }
+        });
+    }
+
+    onWidgetDeleteClick(): void {
+
+        this.modalService.showModal(new ModalsRemovalModel(this.widget.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.deleteWidget(this.widget.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The widget has been removed.'));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.navigate(['/projects', this.currentParamsService.get('project'), 'widgets', this.group.id]);
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The widget cannot be removed.', reason));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                    });
+            }
+        });
+
+    }
+
+    onRemoveVersionClick(version: IGridWidgetVersionShortDetail): void {
+        this.modalService.showModal(new ModalsRemovalModel(version.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.deleteWidgetVersion(version.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The version has been removed.'));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The version cannot be removed.', reason));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+    onEditVersionClick(version: IGridWidgetVersionShortDetail): void {
+        let model = new ModalsVersionDialogModel(version.name, version.description, true);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.editWidgetVersion(version.id, { // TODO [permission]: version.update_permission
+                    version_name: model.name,
+                    version_description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(`The version ${model.name} has been changed.`));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(`The version ${model.name} cannot be changed.`, reason));
+                        this.refresh();
+                    });
+            }
+        });
     }
 
     selectVersionByVersionId(versionId: string) {

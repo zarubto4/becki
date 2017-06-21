@@ -13,7 +13,7 @@
                     Byzance<strong class="font-color-grid">GRID</strong> - project <strong>{{gridProject?gridProject.name:""}}</strong>
                 </span>
             </div>
-            <div class="becki-actions">
+            <div *ngIf="gridProject" class="becki-actions">
                 <button title="Device properties" class="btn btn-icon-only green" [disabled]="!gridProject.update_permission" (click)="onProjectEditClick()">
                     <i class="fa fa-cog"></i>
                 </button>

@@ -238,7 +238,6 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         });
     }
 
-
     ngOnInit(): void {
         this.unsavedChanges = false;
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
@@ -850,12 +849,12 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 this.blockUI();
                 this.backendService.deleteBProgramVersion(version.version_id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The code has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess('The version has been removed.'));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The code cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError('The version cannot be removed.', reason));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     });
@@ -873,11 +872,11 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     version_description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(`The code ${model.name} has been added to project.`));
+                        this.addFlashMessage(new FlashMessageSuccess(`The version ${model.name} has been changed.`));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(`The code ${model.name} cannot be added to project.`, reason));
+                        this.addFlashMessage(new FlashMessageError(`The version ${model.name} cannot be changed.`, reason));
                         this.refresh();
                     });
             }

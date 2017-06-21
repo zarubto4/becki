@@ -8,19 +8,28 @@
     <div class="row">
         <div class="col-md-12">
             <div class="portlet portlet light bordered">
-                <div class="portlet-title">
+                <div *ngIf="widget"  class="portlet-title">
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-fw fa-sliders"></i>
                             Byzance<strong class="font-color-grid">GRID</strong> - widget <strong>{{widget?widget.name:""}}</strong>
                         </span>
                     </div>
+                    <div class="becki-actions">
+                        <button title="Library properties" class="btn btn-icon-only green" [disabled]="!widget.edit_permission" (click)="onWidgetEditClick()">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="Delete Library" class="btn btn-icon-only red" [disabled]="!widget.delete_permission" (click)="onWidgetDeleteClick()">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="clearfix"></div>
                 <div>
-                    Name: <strong>{{widget?widget.name:""}}</strong><br>
-                    Description: <strong>{{widget?widget.description:""}}</strong><br>
-                    Group: <strong><a (click)="onWidgetsGroupClick(group.id)">{{group?group.name:""}}</a></strong>
+                    <strong class="font-color-grid">GRID</strong> Name: <strong>{{widget?widget.name:""}}</strong><br>
+                    <strong class="font-color-grid">GRID</strong> Description: <strong>{{widget?widget.description:"0_o"}}</strong><br>
+                    <br>
+                    <strong class="font-color-grid">GRID</strong> Widget Collection: <strong><a (click)="onWidgetsGroupClick(group.id)">{{group?group.name:""}}</a></strong>
                 </div>
             </div>
         </div>
@@ -193,10 +202,10 @@
                     <table class="table table-condensed table-hover">
                         <thead>
                         <tr>
-                            <th>Name</th>
-                            <th class="full-width">Description</th>
-                            <th class="full-width">Author</th>
-                        </tr>
+                            <th class="col col-lg-2">Name</th>
+                            <th class="col col-lg-8">Description</th>
+                            <th class="col col-lg-1">Author</th>
+                            <th class="col col-lg-1">Actions</th>
                         </thead>
                         <tbody>
                         <tr *ngFor="let version of widgetVersions">
@@ -211,6 +220,22 @@
                             <td>
                                 {{version.author.nick_name}}
                             </td>
+                            <td>
+
+                                <style type="text/css">
+                                    table tr button { opacity:0.05;}
+                                    table tr:hover button { opacity:1 }
+                                </style>
+
+                                <button title="Device properties" class="btn btn-icon-only green" [disabled]="!version.edit_permission" (click)="onEditVersionClick(version)">
+                                    <i class="fa fa-cog"></i>
+                                </button>
+                                <button title="Remove device" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+
+                            </td>
+
                         </tr>
                         </tbody>
                     </table>

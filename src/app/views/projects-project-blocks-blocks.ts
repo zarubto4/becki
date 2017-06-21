@@ -59,6 +59,45 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
         }
     }
 
+    onGroupEditClick(): void {
+        let model = new ModalsBlocksTypePropertiesModel(this.group.name, this.group.description, true, this.group.name);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.editTypeOfBlock(this.group.id, {
+                    name: model.name,
+                    description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The blocks group has been edited.'));
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The blocks group cannot be edited.', reason));
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                    });
+            }
+        });
+    }
+
+    onGroupDeleteClick(): void {
+        this.modalService.showModal(new ModalsRemovalModel(this.group.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.deleteTypeOfBlock(this.group.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The blocks group has been removed.'));
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The blocks group cannot be removed.', reason));
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                    });
+            }
+        });
+
+    }
+
     onBlockClick(block: IBlockoBlockShortDetail): void {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', this.blocksId, block.id]);
     }

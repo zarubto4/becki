@@ -355,9 +355,10 @@
                         <thead>
                         <tr>
                             <th class="col col-lg-2">Name</th>
-                            <th class="text-center col col-lg-2">In cloud</th>
-                            <th class="full-width">Description</th>
-                            <th class="text-center">Actions</th>
+                            <th class="text-center col col-lg-1">In cloud</th>
+                            <th class="col col-lg-6">Description</th>
+                            <th class="col col-lg-2">Author</th>
+                            <th class="text-center col col-lg-1">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -374,8 +375,10 @@
                             <td>
                                 {{version.version_description}}
                             </td>
-
-                            <td class="no-wrap">
+                            <td>
+                                {{version.author.nick_name}}
+                            </td>
+                            <td>
 
                                 <style type="text/css">
                                     table tr button { opacity:0.05;}

@@ -15,6 +15,14 @@
                             Byzance<strong class="font-color-blocko">BLOCKO</strong> - block <strong>{{blockoBlock?blockoBlock.name:""}}</strong>
                         </span>
                     </div>
+                    <div *ngIf="blockoBlock" class="becki-actions">
+                        <button title="Group properties" class="btn btn-icon-only green" [disabled]="!blockoBlock.edit_permission" (click)="onBlockEditClick()">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="Remove Group" class="btn btn-icon-only red" [disabled]="!blockoBlock.delete_permission" (click)="onBlockDeleteClick()">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="clearfix"></div>
                 <div>
@@ -190,9 +198,10 @@
                     <table class="table table-condensed table-hover">
                         <thead>
                         <tr>
-                            <th>Name</th>
-                            <th class="full-width">Description</th>
-                            <th class="full-width">Author</th>
+                            <th class="col col-lg-2">Version Name</th>
+                            <th class="col col-lg-7">Description</th>
+                            <th class="col col-lg-2">Author</th>
+                            <th class="col col-lg-1">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -207,6 +216,21 @@
                             </td>
                             <td>
                                 {{version.author.nick_name}}
+                            </td>
+                            <td>
+                                <style type="text/css">
+                                    table tr button { opacity:0.05;}
+                                    table tr:hover button { opacity:1 }
+                                </style>
+
+                                <button title="Device properties" class="btn btn-icon-only green" [disabled]="!version.edit_permission" (click)="onEditVersionClick(version)">
+                                    <i class="fa fa-cog"></i>
+                                </button>
+
+                                <button title="Remove device" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+
                             </td>
                         </tr>
                         </tbody>

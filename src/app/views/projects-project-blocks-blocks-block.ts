@@ -20,6 +20,8 @@ import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService
 import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ExitConfirmationService } from '../services/ExitConfirmationService';
+import {ModalsBlocksBlockPropertiesModel} from "../modals/blocks-block-properties";
+import {ModalsRemovalModel} from "../modals/removal";
 
 @Component({
     selector: 'bk-view-projects-project-blocks-blocks-block',
@@ -175,6 +177,93 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                 this.unblockUI();
             });
 
+    }
+
+    onBlockEditClick(): void {
+
+        let model = new ModalsBlocksBlockPropertiesModel(this.blockoBlock.name, this.blockoBlock.description, true, this.blockoBlock.name);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.editBlockoBlock(this.blockoBlock.id, {
+                    name: model.name,
+                    general_description: model.description,
+                    type_of_block_id: this.blocksId // tohle je trochu divný ne?
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The block has been edited.'));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The block cannot be edited.', reason));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.refresh();
+                    });
+            }
+        });
+
+    }
+
+    onBlockDeleteClick(): void {
+
+        this.modalService.showModal(new ModalsRemovalModel(this.blockoBlock.id)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.deleteBlockoBlock(this.blockoBlock.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The block has been removed.'));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', this.blocksId]);
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The block cannot be removed.', reason));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.refresh();
+                    });
+            }
+        });
+
+    }
+
+    onRemoveVersionClick(version: IBlockoBlockVersionShortDetail): void {
+        this.modalService.showModal(new ModalsRemovalModel(version.id)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.deleteBlockoBlockVersion(version.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The version has been removed.'));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The version cannot be removed.', reason));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+    onEditVersionClick(version: IBlockoBlockVersionShortDetail): void {
+        let model = new ModalsVersionDialogModel(version.name, version.description, true);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.editBlockoBlockVersion(version.id, { // TODO [permission]: version.update_permission
+                    version_name: model.name,
+                    version_description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(`The version ${model.name} has been changed.`));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(`The version ${model.name} cannot be changed.`, reason));
+                        this.refresh();
+                    });
+            }
+        });
     }
 
     onBlockoBlockVersionClick(version: IBlockoBlockVersionShortDetail) {

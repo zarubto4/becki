@@ -10,18 +10,24 @@
             <div class="becki-caption">
                 <span class="font-blue-dark">
                     <i class="fa fa-fw fa-fw fa-cube"></i>
-                    Byzance<strong class="font-color-blocko">BLOCKO</strong> - blocks group <strong>{{group?group.name:""}}</strong>
+                    Byzance<strong class="font-color-blocko">BLOCKO</strong> - blocks group: <strong>{{group?group.name:""}}</strong>
                 </span>
             </div>
-            <div class="becki-actions">
+            <div *ngIf="group" class="becki-actions">
+                <button title="Group properties" class="btn btn-icon-only green" [disabled]="!group.edit_permission" (click)="onGroupEditClick()">
+                    <i class="fa fa-cog"></i>
+                </button>
+                <button title="Remove Group" class="btn btn-icon-only red" [disabled]="!group.delete_permission" (click)="onGroupDeleteClick()">
+                    <i class="fa fa-trash"></i>
+                </button>
                 <button class="btn blue" [disabled]="!group || !group.update_permission" (click)="onBlockAddClick(group)">
                     <i class="fa fa-plus-circle"></i> Add block
                 </button>
             </div>
         </div>
         <div>
-            Name: <strong>{{group?group.name:""}}</strong><br>
-            Description: <strong>{{group?group.description:""}}</strong>
+            <strong class="font-color-blocko">BLOCKO</strong> Name: <strong>{{group?group.name:""}}</strong><br>
+            <strong class="font-color-blocko">BLOCKO</strong> Description: <strong>{{group?group.description:""}}</strong>
         </div>
         <div *ngIf="(group && group.blocko_blocks && group.blocko_blocks.length)" class="table-scrollable">
             <table class="table table-hover">
@@ -37,6 +43,12 @@
                     <td class="no-wrap bold"><a (click)="onBlockClick(block)">{{block.name}}</a></td>
                     <td>{{block.description}}</td>
                     <td class="no-wrap">
+
+                        <style type="text/css">
+                            table tr button { opacity:0.05;}
+                            table tr:hover button { opacity:1 }
+                        </style>
+
                         <button title="Block properties" class="btn btn-icon-only green" [disabled]="!block.edit_permission" (click)="onBlockEditClick(block)">
                             <i class="fa fa-cog"></i>
                         </button>

@@ -10,6 +10,7 @@ import { ModalsRemovalModel } from '../modals/removal';
 import { IProject, ITypeOfWidget, IGridWidget, ITypeOfWidgetShortDetail, IGridWidgetShortDetail } from '../backend/TyrionAPI';
 import { ModalsWidgetsWidgetPropertiesModel } from '../modals/widgets-widget-properties';
 import { CurrentParamsService } from '../services/CurrentParamsService';
+import { ModalsWidgetsTypePropertiesModel } from '../modals/widgets-type-properties';
 
 @Component({
     selector: 'bk-view-projects-project-widgets-widgets',
@@ -50,6 +51,45 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
 
     onWidgetClick(widget: IGridWidgetShortDetail): void {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'widgets', this.widgetsId, widget.id]);
+    }
+
+    onGroupEditClick(): void {
+        let model = new ModalsWidgetsTypePropertiesModel(this.group.name, this.group.description, true, this.group.name);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.editTypeOfWidget(this.group.id, {
+                    name: model.name,
+                    description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The widgets group has been edited.'));
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The widgets group cannot be edited.', reason));
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                    });
+            }
+        });
+    }
+
+    onGroupDeleteClick(): void {
+        this.modalService.showModal(new ModalsRemovalModel(this.group.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.deleteTypeOfWidget(this.group.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The widgets group has been removed.'));
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The widgets group cannot be removed.', reason));
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                    });
+            }
+        });
+
     }
 
     onWidgetAddClick(group: ITypeOfWidgetShortDetail): void {

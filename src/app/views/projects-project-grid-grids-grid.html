@@ -163,8 +163,9 @@
                     <table class="table table-condensed table-hover">
                         <thead>
                         <tr>
-                            <th class="col col-lg-2">Program Name</th>
-                            <th class="col col-lg-9">Description</th>
+                            <th class="col col-lg-2">Version Name</th>
+                            <th class="col col-lg-7">Description</th>
+                            <th class="col col-lg-2">Author</th>
                             <th class="col col-lg-1">Actions</th>
                         </tr>
                         </thead>
@@ -176,7 +177,9 @@
                             <td>
                                 {{version.version_description}}
                             </td>
-
+                            <td>
+                                {{version.author.nick_name}}
+                            </td>
                             <td>
 
                                 <style type="text/css">
