@@ -20,8 +20,8 @@ import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService
 import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ExitConfirmationService } from '../services/ExitConfirmationService';
-import {ModalsBlocksBlockPropertiesModel} from "../modals/blocks-block-properties";
-import {ModalsRemovalModel} from "../modals/removal";
+import { ModalsBlocksBlockPropertiesModel } from '../modals/blocks-block-properties';
+import { ModalsRemovalModel } from '../modals/removal';
 
 @Component({
     selector: 'bk-view-projects-project-blocks-blocks-block',
