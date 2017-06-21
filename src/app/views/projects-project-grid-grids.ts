@@ -50,7 +50,7 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
     }
 
     onProgramClick(grid: ISwaggerMProgramShortDetail): void {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', this.gridsId]);
+        this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', this.gridsId, grid.id]);
     }
 
     onProgramAddClick(project: IMProjectShortDetail): void {

@@ -7,19 +7,28 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="portlet portlet light bordered">
-                <div class="portlet-title">
+            <div *ngIf="gridProgram" class="portlet portlet light bordered">
+                <div  class="portlet-title">
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-desktop"></i>
                             Byzance<strong class="font-color-grid">GRID</strong> - program <strong>{{gridProgram?gridProgram.name:""}}</strong>
                         </span>
                     </div>
+                    <div class="becki-actions">
+                        <button title="Program properties" class="btn btn-icon-only green" [disabled]="!gridProgram.edit_permission" (click)="onProgramEditClick()">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="Delete Program" class="btn btn-icon-only red" [disabled]="!gridProgram.delete_permission" (click)="onProgramDeleteClick()">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
                 </div>
                 <div>
-                    Name: <strong>{{gridProgram?gridProgram.name:""}}</strong><br>
-                    Description: <strong>{{gridProgram?gridProgram.description:""}}</strong><br>
-                    Grid project: <strong><a (click)="onGridProjectClick(gridProject.id)">{{gridProject?gridProject.name:""}}</a></strong>
+                    <strong class="font-color-grid">GRID</strong> Program Name: <strong>{{gridProgram?gridProgram.name:""}}</strong><br>
+                    <strong class="font-color-grid">GRID</strong> Description: <strong>{{gridProgram?gridProgram.description:""}}</strong><br>
+                    <br>
+                    <strong class="font-color-grid">GRID</strong> Grid project: <strong><a (click)="onGridProjectClick(gridProject.id)">{{gridProject?gridProject.name:""}}</a></strong>
                 </div>
             </div>
         </div>
@@ -175,7 +184,7 @@
                                     table tr:hover button { opacity:1 }
                                 </style>
 
-                                <button title="Device properties" class="btn btn-icon-only green" [disabled]="!version.update_permission" (click)="onEditVersionClick(version)">
+                                <button title="Device properties" class="btn btn-icon-only green" [disabled]="!version.edit_permission" (click)="onEditVersionClick(version)">
                                     <i class="fa fa-cog"></i>
                                 </button>
 

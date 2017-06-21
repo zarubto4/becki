@@ -8,17 +8,25 @@
     <div class="row">
         <div class="col-md-12">
             <div class="portlet portlet light bordered">
-                <div class="portlet-title">
+                <div *ngIf="library" class="portlet-title">
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-code"></i>
                              Byzance<strong class="font-color-code">CODE</strong> - library <strong>{{currentParamsService.currentLibraryNameSnapshot}}</strong>
                         </span>
                     </div>
+                    <div class="becki-actions">
+                        <button title="Library properties" class="btn btn-icon-only green" [disabled]="!library.edit_permission" (click)="onEditClick()">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="Delete Library" class="btn btn-icon-only red" [disabled]="!library.delete_permission" (click)="onRemoveClick()">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
                 </div>
                 <div>
-                    Name: <strong>{{library?library.name:""}}</strong><br>
-                    Description: <strong>{{library?library.description:""}}</strong>
+                    <strong class="font-color-code">CODE</strong> Library name: <strong>{{library?library.name:""}}</strong><br>
+                    <strong class="font-color-code">CODE</strong> Description: <strong>{{library?library.description:""}}</strong>
                 </div>
             </div>
         </div>
@@ -60,7 +68,7 @@
                     <table class="table table-condensed table-hover">
                         <thead>
                         <tr>
-                            <th class="col col-lg-1">Name</th>
+                            <th class="col col-lg-2">Name</th>
                             <th class="col col-lg-9">Description</th>
                             <th class="col col-lg-1 text-center">Actions</th>
                         </tr>

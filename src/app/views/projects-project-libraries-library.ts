@@ -20,8 +20,8 @@ import { ModalsSelectHardwareComponent, ModalsSelectHardwareModel } from '../mod
 import { getAllInputOutputs, getInputsOutputs } from '../helpers/CodeInterfaceHelpers';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { ModalsRemovalModel } from '../modals/removal';
-
 import moment = require('moment/moment');
+import { ModalsLibraryPropertiesModel } from '../modals/library-properties';
 
 
 
@@ -82,6 +82,48 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
             }
         });
 
+    }
+
+    onRemoveClick(): void {
+        this.modalService.showModal(new ModalsRemovalModel(this.library.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.deleteLibrary(this.library.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The code library has been removed.'));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.navigate(['/projects', this.currentParamsService.get('project'), 'libraries']);
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The code library cannot be removed.', reason));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                    });
+            }
+        });
+    }
+
+    onEditClick(): void {
+        let model = new ModalsLibraryPropertiesModel(this.library.name, this.library.description, true, this.library.name);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.editLibrary(this.library.id, {
+                    project_id: this.projectId,
+                    name: model.name,
+                    description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The code library has been updated.'));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The code library cannot be updated.', reason));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        this.refresh();
+                    });
+            }
+        });
     }
 
     ngOnDestroy(): void {

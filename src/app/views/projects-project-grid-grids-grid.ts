@@ -22,6 +22,7 @@ import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogCom
 import { Core, EditorRenderer } from 'the-grid';
 import { ExitConfirmationService } from '../services/ExitConfirmationService';
 import { ModalsRemovalModel } from '../modals/removal';
+import { ModalsGridProgramPropertiesModel } from '../modals/grid-program-properties';
 
 @Component({
     selector: 'bk-view-projects-project-grid-grids-grid',
@@ -220,8 +221,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
     }
 
     onProgramVersionClick(programVersion: IMProgramVersionShortDetail): void {
-        this.router.navigate(['/projects', this.currentParamsService.get('project'), 'grid', this.gridsId, 'grids', programVersion.version_id]);
-        // this.selectProgramVersion(programVersion);
+        this.selectProgramVersion(programVersion);
     }
 
     selectProgramVersion(programVersion: IMProgramVersionShortDetail): void { // TODO [permission]: M_Program.read_permission
@@ -264,6 +264,47 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                     this.gridDeviceProfile = oldValue;
                 }
             });
+    }
+
+    onProgramEditClick(): void {
+        let model = new ModalsGridProgramPropertiesModel(this.gridProgram.name, this.gridProgram.description, true);
+
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.editMProgram(this.gridProgram.id, {
+                    name: model.name,
+                    description: model.description,
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The grid program has been edited.'));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The grid program cannot be edited.', reason));
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+    onProgramDeleteClick(): void {
+
+        this.modalService.showModal(new ModalsRemovalModel(this.gridProgram.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.deleteMProgram(this.gridProgram.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The grid program has been removed.'));
+                        this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', this.gridsId]);
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The grid program cannot be removed.', reason));
+                        this.refresh();
+                    });
+            }
+        });
+
     }
 
     isSelected(version: IMProgramVersionShortDetail): boolean {
