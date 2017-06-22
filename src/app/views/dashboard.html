@@ -1,11 +1,11 @@
-<bk-layout-main [title]="'Dashboard'">
+<bk-layout-main [title]="'main_title'|bkTranslate:this">
 
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
                 <span class="font-blue-dark">
                     <i class="fa fa-fw fa-microchip"></i>
-                    {{'title_welcome_dashboard'|bkTranslate:this}}<strong class="font-color-byzance-blue"> {{'portal'|bkTranslate:this}}</strong>
+                    <span [innerHTML]="'title'|bkTranslate:this"></span>
                 </span>
             </div>
         </div>

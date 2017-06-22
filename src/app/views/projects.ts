@@ -30,7 +30,6 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
 
     ngOnInit(): void {
         this.refresh();
-        // TODO: delete me! -> alert(this.translate('hello_world', 'Pepa', 66))
     }
 
     refresh(): void {

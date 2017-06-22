@@ -11,6 +11,7 @@ import { PermissionMissingError, UserNotValidatedError } from '../backend/BeckiB
 import { BlockUIService } from '../services/BlockUIService';
 import { IPersonAuthentication } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
+import { TranslationService } from '../services/TranslationService';
 
 
 const REDIRECT_URL = `${window.location.protocol}//${window.location.host}/login;state=[_status_]`;
@@ -33,6 +34,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private formBuilder: FormBuilder,
         private router: Router,
         private blockUIService: BlockUIService,
+        private translationService: TranslationService,
         protected activatedRoute: ActivatedRoute
     ) {
         this.loginForm = this.formBuilder.group({
@@ -44,7 +46,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             if (typeof params['state'] !== 'undefined' && params['state'] !== 'success') {
-                this.loginError = 'Error was occurred, when trying to login.';
+                this.loginError = this.translationService.translate('msg_login_error', this);
             }
         });
     }
@@ -60,11 +62,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     onResendClick(): void {
         this.blockUIService.blockUI();
 
-        this.backendService.createPersonAuthenticationEmail({mail: this.loginForm.controls['email'].value})
+        this.backendService.createPersonAuthenticationEmail({ mail: this.loginForm.controls['email'].value })
             .then(() => {
                 this.blockUIService.unblockUI();
                 this.resendVertification = false;
-                this.loginError = 'Email with vertifiaction was sent';
+                this.loginError = this.translationService.translate('msg_login_error', this);
             })
             .catch(reason => {
                 this.blockUIService.unblockUI();
@@ -84,13 +86,13 @@ export class LoginComponent implements OnInit, OnDestroy {
                 if (reason instanceof PermissionMissingError) {
                     this.loginError = (<PermissionMissingError>reason).userMessage;
                 } else if (reason instanceof UserNotValidatedError) {
-                    this.loginError = (<UserNotValidatedError>reason).userMessage + '\n press resend button to send vertifiaction Email again';
+                    this.loginError = this.translationService.translate('flash_password_change_fail', this, null, [(<UserNotValidatedError>reason).userMessage]);
                     this.resendVertification = true;
                 } else {
                     if (reason.userMessage) {
-                        this.loginError = 'The user cannot be logged in.\n' + reason.userMessage;
+                        this.loginError = this.translationService.translate('msg_login_user_cant_login', this, null, reason.userMessage);
                     } else {
-                        this.loginError = 'The user cannot be logged in.\n' + reason;
+                        this.loginError = this.translationService.translate('msg_login_user_cant_login', this, null, reason);
                     }
                 }
             });
@@ -109,9 +111,9 @@ export class LoginComponent implements OnInit, OnDestroy {
                     this.loginError = (<PermissionMissingError>reason).userMessage;
                 } else {
                     if (reason.userMessage) {
-                        this.loginError = 'The user cannot be logged in.\n' + reason.userMessage;
+                        this.loginError = this.translationService.translate('msg_login_user_cant_login', this, null, reason.userMessage);
                     } else {
-                        this.loginError = 'The user cannot be logged in.\n' + reason;
+                        this.loginError = this.translationService.translate('msg_login_user_cant_login', this, null, reason);
                     }
                 }
             });
@@ -130,9 +132,9 @@ export class LoginComponent implements OnInit, OnDestroy {
                     this.loginError = (<PermissionMissingError>reason).userMessage;
                 } else {
                     if (reason.userMessage) {
-                        this.loginError = 'The user cannot be logged in.\n' + reason.userMessage;
+                        this.loginError = this.translationService.translate('msg_login_user_cant_login', this, null, reason.userMessage);
                     } else {
-                        this.loginError = 'The user cannot be logged in.\n' + reason;
+                        this.loginError = this.translationService.translate('msg_login_user_cant_login', this, null, reason);
                     }
                 }
             });

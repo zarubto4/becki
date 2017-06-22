@@ -13,6 +13,8 @@ import { Subscription } from 'rxjs';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NotificationService, FlashMessageSuccess, FlashMessageError } from '../services/NotificationService';
 import { BackendService } from '../services/BackendService';
+import { TranslationService } from '../services/TranslationService';
+
 
 @Component({
     selector: 'bk-view-password-restart',
@@ -31,7 +33,8 @@ export class PasswordRestartComponent implements OnInit, OnDestroy {
         protected router: Router,
         protected formBuilder: FormBuilder,
         protected backEndService: BackendService,
-        protected notificationService: NotificationService
+        protected notificationService: NotificationService,
+        protected translationService: TranslationService,
     ) {
 
         this.passwordRestartForm = this.formBuilder.group({
@@ -48,11 +51,11 @@ export class PasswordRestartComponent implements OnInit, OnDestroy {
             password: this.passwordRestartForm.controls['password'].value
         })
             .then(() => {
-                this.notificationService.addFlashMessage(new FlashMessageSuccess('password was successfully changed'));
+                this.notificationService.addFlashMessage(new FlashMessageSuccess(this.translationService.translate('flash_password_change_success', this)));
                 this.router.navigate(['/']);
             })
             .catch(reason => {
-                this.notificationService.addFlashMessage(new FlashMessageError('password cannot be changed, ' + reason));
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_password_change_fail', this, null, reason)));
             });
     }
 

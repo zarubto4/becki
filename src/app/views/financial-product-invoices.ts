@@ -74,10 +74,10 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
         this.modalService.showModal(model).then((success) => {
             this.backendService.resendInvoice(invoice.id, {}).then(response => {
                 // this.unblockUI();
-                this.addFlashMessage(new FlashMessageSuccess('The invoice has been resended on general invoice email.'));
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_invoice_been_resend')));
             }).catch(() => {
                 // this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('The invoice can not been resend'));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_invoice_cant_be_resend')));
             });
         });
     }

@@ -7,22 +7,22 @@
     <form class="login-form" [formGroup]="loginForm">
 
 
-        <h3><span class="font-color-byzance-blue">Log In</span></h3>
+        <h3><span class="font-color-byzance-blue">{{'label_log_in'|bkTranslate:this}}</span></h3>
 
 
         <div class="alert alert-danger" *ngIf="loginError">
             <button class="close" (click)="onCloseAlertClick($event)"></button>
             <span [innerHTML]="loginError | bkNl2Br"></span>
         </div>
-        <bk-form-input [control]="loginForm.controls['email']" [label]="'E-mail'"></bk-form-input>
-        <bk-form-input [control]="loginForm.controls['password']" [label]="'Password'" [type]="'password'"></bk-form-input>
+        <bk-form-input [control]="loginForm.controls['email']" [label]="'label_email'|bkTranslate:this"></bk-form-input>
+        <bk-form-input [control]="loginForm.controls['password']" [label]="'label_password'|bkTranslate:this" [type]="'password'"></bk-form-input>
         <div class="form-actions">
-            <button type="submit" class="btn blue uppercase" (click)="onLoginClick($event)" [disabled]="!loginForm.valid">Login</button>
-            <button type="button" [disabled]="!resendVertification && !loginForm.valid" *ngIf="resendVertification" class="btn green uppercase" (click)="onResendClick()">Resend</button>
-            <a [routerLink]="['/forgot-password']" class="forget-password">Forgot Password?</a>
+            <button type="submit" class="btn blue uppercase" (click)="onLoginClick($event)" [disabled]="!loginForm.valid">{{'btn_login'|bkTranslate:this}}</button>
+            <button type="button" [disabled]="!resendVertification && !loginForm.valid" *ngIf="resendVertification" class="btn green uppercase" (click)="onResendClick()">{{'btn_resend'|bkTranslate:this}}</button>
+            <a [routerLink]="['/forgot-password']" class="forget-password">{{'label_forget_password'|bkTranslate:this}}?</a>
         </div>
         <div class="login-options">
-            <h4>Login or sign up with</h4>
+            <h4>{{'label_login_social'|bkTranslate:this}}</h4>
             <ul class="social-icons">
                 <li>
                     <a class="social-icon-color facebook" data-original-title="Facebook" (click)="onFacebookLoginInClick($event)"></a>
@@ -35,7 +35,7 @@
         <div class="becki-create-account">
             <p class="font-grey-mint">
                 <a [routerLink]="['/create-user']" id="register-btn" class="uppercase">
-                    <span class="bg-font-grey-salt">Create an account</span>
+                    <span class="bg-font-grey-salt">{{'btn_create_account'|bkTranslate:this}}</span>
                 </a>
             </p>
         </div>

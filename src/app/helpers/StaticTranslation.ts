@@ -5,14 +5,18 @@
 export class StaticTranslation {
     /* tslint:disable:max-line-length */
     /* <!-- <br><br><b>TODO: DELETE ME! -></b> {{'hello_world'|bkTranslate:this:'Becki':55}} -->*/
+    // TODO: delete me! -> alert(this.translate('hello_world', 'Pepa', 66))
+
     public static translate: { [lang: string]: { [keyOrEnv: string]: (string | { [key: string]: string }) } } = {
         'en': {
             'DashboardComponent': {
+
                 'hello_world': 'Welcome {0}!',
+
                 'btn_save': 'Save it!',
                 'title_first_steps': 'First steps',
-                'title_welcome_dashboard': 'Welcome to Byzance',
-                'portal': 'PORTAL',
+                'main_title': 'Dashboard',
+                'title': 'Welcome to Byzance <strong style="color: #36c6d3;"> PORTAL </strong> ',
                 'dashboard_info_text': 'We are Byzance – a technological laboratory of advanced automatization developing a toolkit for design, development and managing the ‘Internet of Things’ (IoT) for industrial uses. We do not create smart washing machines, nor smart city furniture. We develop everything for our customers to let them do it themselves, easily and without any problems.',
                 'step_one': '<strong class="font-grey" style="font-size: 1.5em;">1.</strong> Select best matching <strong>tariff</strong> for you and create your <strong>product</strong> in <a [routerLink]="[\'/financial\']\">Financial section</a>',
                 'step_two': '<strong class="font-grey" style="font-size: 1.5em;">2.</strong> Create your first <strong>project</strong> in <a [routerLink]="[\'/projects\']">Projects section</a>',
@@ -21,24 +25,27 @@ export class StaticTranslation {
 
             }, 'CreateUserComponent': {
                 'title': 'Create new user',
-                'email': 'E-mail',
                 'info_text': 'Enter your e-mail address, nickname, name and password.',
-                'nick_name': 'Nick name',
-                'full_name': 'Full name',
-                'password': 'Password',
-                'password_again': 'Password again',
+                'label_nick_name': 'Nick name',
+                'label_full_name': 'Full name',
+                'label_password_again': 'Password again',
+                'flash_email_was_send': 'email with instructions was sent',
+                'flash_email_cant_be_sent': 'email cannot be sent, {0}',
 
             }, 'Error404Component': {
                 'title': 'Oops! You\'re lost.',
                 'info_text': 'We can not find the page you\'re looking for.',
                 'btn_return': 'Return home',
                 'btn_back': 'Go back',
+
             }, 'FinancialProductBillingComponent': {
                 'title': 'Billings',
+
             }, 'FinancialProductExtensionsComponent': {
                 'title': 'Extensions',
-                'average_monthly_cost': 'Average monthly cost',
-                'no_extensions': 'No extensions',
+                'label_average_monthly_cost': 'Average monthly cost',
+                'label_no_extensions': 'No extensions',
+
             }, 'FinancialProductInvoicesInvoiceComponent': {
                 'title': 'Invoice {0}',
                 'label_id_subscription': 'ID Subscription',
@@ -51,6 +58,7 @@ export class StaticTranslation {
                 'table_billable_units': 'Billable units',
                 'table_unite': 'Unite',
                 'table_total_cost': 'Total cost',
+
             }, 'FinancialProductInvoicesComponent': {
                 'title': 'Invoice',
                 'btn_add_credits': 'Add credits',
@@ -60,8 +68,12 @@ export class StaticTranslation {
                 'table_paid': 'Paid',
                 'table_actions': 'Actions',
                 'payment_required': 'Payment required',
-                'no_invoice': 'No invoice'
+                'no_invoice': 'No invoice',
+                'flash_invoice_been_resend': 'The invoice has been resended on general invoice email.',
+                'flash_invoice_cant_be_resend': 'The invoice can not been resend',
+
             }, 'ProductRegistrationComponent': {
+                'main_title': 'product registration',
                 'nav_step_one_title': 'Tariffs',
                 'nav_step_one_text': 'Select a right tariffs',
                 'nav_step_two_title': 'Packages',
@@ -110,16 +122,105 @@ export class StaticTranslation {
                 'table_packages': 'Packages',
                 'table_total': 'Total',
 
+
+                'text_unknown': 'Unknown',
                 'label_free': 'Free',
                 'average_monthly_cost': 'Average monthly cost',
                 'btn_select': 'Select',
                 'btn_confirm': 'Confirm',
                 'btn_included': 'Included',
                 'ribbon_selected': 'Selected',
+                'flash_product_created_prepaid': 'Product was created, you are now on pre-paid credit',
+                'flash_product_created': 'Product was created, now you can create a new project',
+
+            }, 'FinancialProductComponent': {
+                'main_title': 'Financial',
+                'title': 'Dashboard',
+                'btn_add_credit': 'Add credit',
+                'label_core_details': 'Core details',
+                'label_id_subscription': 'ID Subscription',
+                'label_country': 'Country',
+                'label_plan': 'Plan',
+                'label_status': 'Status',
+                'option_active': 'active',
+                'option_hibernation': 'hibernation',
+                'label_financial_status': 'Financial status',
+                'label_created': 'Created',
+                'label_remaining_credit': 'Remaining credit',
+                'label_other_details':'Other details',
+                'label_contacts_details':'Contacts details',
+                
+
+            }, 'FinancialComponent': {
+                'main_title': 'Hardware types',
+                'title': 'Products',
+                'btn_add_product': 'Add product',
+                'table_name': 'Name',
+                'table_type': 'Type',
+                'table_subscription_id': 'Subscription id',
+                'label_bank_transfer': 'Bank transfer',
+                'label_credits': 'Credits',
+                'label_credit_card': 'Credit Card',
+                'label_free': 'Free',
+                'label_not_set_yet': 'Not set yet',
+                'label_no_product': 'No product',
+                'flash_products_cant_load': 'Products cannot be loaded {0}'
+
+            }, 'HardwareHardwareTypeComponent': {
+                'main_title': 'Hardware types',
+                'label_name': 'Name',
+                'label_description': 'Description',
+                'label_producer': 'Producer',
+                'label_processor': 'Processor',
+                'label_target_name': 'Target name',
+                'label_abilities': 'Abilities',
+                'label_ethernet': 'Ethernet',
+                'label_wifi': 'Wi-Fi',
+                'text_ethernet_with_poe': 'Ethernet with PoE',
+                'label_bootloader': 'Bootlader',
+                'label_bootloader_name': 'Name',
+                'label_bootloader_description': 'Description',
+                'label_bootlaoder_date': 'Date',
+                'flash_project_cant_load': 'Projects cannot be loaded {0}'
+
+            }, 'HardwareComponent': {
+                'main_title': 'Hardware types',
+                'flash_project_cant_load': 'Projects cannot be loaded {0} '
+
+            }, 'ForgotPasswordComponent': {
+                'title': 'Forget Password ?',
+                'info_text': 'Enter your e-mail address below to reset your password.',
+                'flash_email_sent': 'email with instructions was sent',
+                'flash_email_not_sent': 'email cannot be sent, {0}',
+
+            }, 'PasswordRestartComponent': {
+                'title': 'Restart password',
+                'info_text': 'Enter your e-mail address and new password',
+                'label_confirm_password': 'confirm password',
+
+                'flash_password_change_fail': 'password cannot be changed, {0}',
+                'flash_password_change_success': 'password was successfully changed',
+
+            }, 'LoginComponent': {
+                'label_log_in': 'Log In',
+                'label_forget_password': 'Forgot Password?',
+                'label_login_social': 'Login or sign up with',
+                'btn_create_account': 'Create an account',
+                'btn_login': 'Login',
+                'btn_resend': 'Resend',
+                'msg_login_user_cant_login': 'The user cannot be logged in.\n {0}',
+                'msg_login_resend_vertification': '{0} \n press resend button to send vertifiaction Email again',
+                'msg_login_error': 'Error was occurred, when trying to login.',
+                'msg_login_email_sent': 'Email with vertifiaction was sent',
+
             },
+            'label_email': 'E-mail',
+            'label_password': 'Password',
+
             'btn_save': 'Save',
             'btn_back': 'Back',
             'btn_send': 'Send',
+            'btn_submit': 'Submit',
             'btn_add': 'Add',
             'btn_edit': 'Back',
             'btn_remove': 'Remove',

@@ -8,6 +8,7 @@ import { BeckiValidators } from '../helpers/BeckiValidators';
 import { FlashMessageSuccess, FlashMessageError, NotificationService } from '../services/NotificationService';
 import { BackendService } from '../services/BackendService';
 import { Router } from '@angular/router';
+import { TranslationService } from '../services/TranslationService';
 
 
 @Component({
@@ -22,7 +23,7 @@ export class ForgotPasswordComponent implements OnInit {
     showFailed: boolean;
     failedReason: string;
 
-    constructor(protected formBuilder: FormBuilder, protected router: Router, protected backendService: BackendService, protected notificationService: NotificationService) {
+    constructor(protected formBuilder: FormBuilder, protected router: Router, protected backendService: BackendService, protected notificationService: NotificationService, protected translationService: TranslationService) {
 
         this.forgotPasswordForm = this.formBuilder.group({
             'email': ['', [Validators.required, BeckiValidators.email]]
@@ -35,14 +36,14 @@ export class ForgotPasswordComponent implements OnInit {
     }
 
     sendRecovery(): void {
-        this.backendService.recoveryPersonPasswordMail({mail: this.forgotPasswordForm.controls['email'].value})
+        this.backendService.recoveryPersonPasswordMail({ mail: this.forgotPasswordForm.controls['email'].value })
             .then(() => {
-                this.notificationService.addFlashMessage(new FlashMessageSuccess('email with instructions was sent'));
+                this.notificationService.addFlashMessage(new FlashMessageSuccess(this.translationService.translate('flash_email_sent', this)));
                 this.router.navigate(['/']);
 
             })
             .catch(reason => {
-                this.notificationService.addFlashMessage(new FlashMessageError('email cannot be sent, ' + reason));
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translationService.translate('flash_email_not_sent', this, null, reason)));
                 console.error('err send recovery' + reason);
             });
     }

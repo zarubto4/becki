@@ -16,6 +16,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { BlockUIService } from '../services/BlockUIService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { Subscription } from 'rxjs/Rx';
+import { TranslationService } from '../services/TranslationService';
 
 
 @Component({
@@ -32,7 +33,9 @@ export class CreateUserComponent implements OnInit, OnDestroy {
         protected router: Router,
         protected backendService: BackendService,
         protected notificationService: NotificationService,
-        protected activatedRoute: ActivatedRoute
+        protected activatedRoute: ActivatedRoute,
+        protected translateService: TranslationService,
+
     ) {
         this.CreateUserForm = this.formBuilder.group({
             'email': ['', [Validators.required, BeckiValidators.email], BeckiAsyncValidators.validateEntity(this.backendService, 'mail')],
@@ -57,18 +60,18 @@ export class CreateUserComponent implements OnInit, OnDestroy {
     }
 
     sendCreateUser(): void {
-        this.backendService.createPerson( {
+        this.backendService.createPerson({
             nick_name: this.CreateUserForm.controls['nick_name'].value,
             mail: this.CreateUserForm.controls['email'].value,
             password: this.CreateUserForm.controls['password'].value,
             full_name: this.CreateUserForm.controls['full_name'].value
         })
             .then(() => {
-                this.notificationService.addFlashMessage(new FlashMessageSuccess('email with instructions was sent'));
+                this.notificationService.addFlashMessage(new FlashMessageSuccess(this.translateService.translate('flash_email_was_send', this)));
                 this.router.navigate(['/']);
             })
             .catch(reason => {
-                this.notificationService.addFlashMessage(new FlashMessageError('email cannot be sent, ' + reason));
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translateService.translate('flash_email_cant_be_sent', this, null, reason)));
                 console.error('err ' + reason);
             });
     }

@@ -42,7 +42,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
                 this.unblockUI();
             })
             .catch((reason) => {
-                this.fmError('Projects cannot be loaded.', reason);
+                this.fmError(this.translate('flash_project_cant_load', reason));
                 this.unblockUI();
             });
     }

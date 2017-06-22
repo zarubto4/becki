@@ -234,7 +234,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             ];
 
         } else {
-            input['full_name'] =                    [this.backendService.personInfoSnapshot.full_name || '',  [Validators.required, Validators.minLength(3)]];
+            input['full_name'] = [this.backendService.personInfoSnapshot.full_name || '',  [Validators.required, Validators.minLength(3)]];
         }
 
         this.form = this.formBuilder.group(input);
@@ -247,7 +247,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         if (fpm) {
             return fpm.label;
         }
-        return 'Unknown';
+        return this.translate('text_unknown');
     }
 
     translatePaymentMethod(value: string): string {
@@ -255,7 +255,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         if (fpm) {
             return fpm.label;
         }
-        return 'Unknown';
+        return this.translate('text_unknown');
     }
 
     addExtension(selected: IProductExtension): void {
@@ -334,10 +334,10 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         this.backendService.createProduct(tariffData)
             .then(response => {
                 if ((<any>response)._code_ === 200) {
-                    this.fmWarning('Product was created, you are now on pre-paid credit');
+                    this.fmWarning(this.translate('flash_product_created_prepaid'));
                     this.unblockUI();
                 } else if ((<any>response)._code_ === 201) {
-                    this.fmSuccess('Product was created, now you can create a new project');
+                    this.fmSuccess(this.translate('flash_product_created'));
                     this.unblockUI();
                     this.router.navigate(['/financial']);
                 }
