@@ -21,6 +21,13 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
 
     products: IProduct[];
 
+    // TODO in future here will be not boolean, but new ENUM acording new Tyrion API
+    productStatusTranslate: { [key: string]: string } = {
+        'false': 'All activities such as running instances in cloud or hardware data services are temporarily suspended. ' +
+                 'During the inactivity, no fees are charged. This product can not be removed by user. Only by technical support. After six months of inactivity, it will be archived.',
+        'true':  'The financial product is activated. '
+    };
+
     constructor(injector: Injector) {
         super(injector);
     };
@@ -36,23 +43,6 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
 
     onAddProductClick(): void {
         this.router.navigate(['/financial/product-registration']);
-    }
-
-    onRemoveClick(product: IProduct): void {
-      /*  this.modalService.showModal(new ModalsRemovalModel(product.product_individual_name)).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.backendService.deleteProduct(product.id)
-                    .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The project has been removed.'));
-                        this.refresh(); // also unblockUI
-                    })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The project cannot be removed.', reason));
-                        this.refresh(); // also unblockUI
-                    });
-            }
-        });*/ // TODO vyřešit mazání Produktů/deaktivaci
     }
 
     onEditClick(product: IProduct): void {}

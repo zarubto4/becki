@@ -128,6 +128,7 @@ import { ProjectsProjectLibrariesLibraryComponent } from './views/projects-proje
 import { ModalsCodeAddLibraryComponent } from './modals/code-add-library';
 import { ModalsCodeLibraryVersionComponent } from './modals/code-library-version';
 import { ModalsHardwareCodeProgramVersionSelectComponent } from './modals/hardware-code-program-version-select';
+import { ModalsDeactivateComponent } from './modals/deactivate';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -218,7 +219,7 @@ let tabMenus = {
             new LabeledLink('<strong class="font-color-code">CODE</strong> libraries', ['/', 'projects', ':project', 'libraries'], null),
         ]}),
         new LabeledLink('<strong class="font-color-grid">GRID</strong>', null, null, {styleClass: 'color-grid font-color-grid-dark', items:  [
-            new LabeledLink('<strong class="font-color-grid">GRID</strong> programs', ['/', 'projects', ':project', 'grid'], null),
+            new LabeledLink('<strong class="font-color-grid">GRID</strong> projects', ['/', 'projects', ':project', 'grid'], null),
             new LabeledLink('<strong class="font-color-grid">GRID</strong> widgets', ['/', 'projects', ':project', 'widgets'], null),
         ]}),
         new LabeledLink('<strong class="font-color-blocko">BLOCKO</strong>', null, null, {styleClass: 'color-blocko', items:  [
@@ -362,6 +363,7 @@ class BeckiErrorHandler implements ErrorHandler {
         // Modals components
         ModalsProjectPropertiesComponent,
         ModalsRemovalComponent,
+        ModalsDeactivateComponent,
         ModalsAddHardwareComponent,
         ModalsSelectHardwareComponent,
         ModalsBlockoPropertiesComponent,

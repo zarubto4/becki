@@ -4,6 +4,9 @@
             <template [ngSwitchCase]="'ModalsRemovalModel'">
                 <bk-modals-removal [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-removal>
             </template>
+            <template [ngSwitchCase]="'ModalsDeactivateModel'">
+                <bk-modals-deactivate [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-deactivate>
+            </template>
             <template [ngSwitchCase]="'ModalsProjectPropertiesModel'">
                 <bk-modals-project-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-project-properties>
             </template>

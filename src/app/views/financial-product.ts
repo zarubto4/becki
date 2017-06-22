@@ -11,13 +11,12 @@ import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { IProduct } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
-
-
+import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { ModalsDeactivateModel } from '../modals/deactivate';
 
 @Component({
     selector: 'bk-view-financial-product',
-    templateUrl: './financial-product.html',
-
+    templateUrl: './financial-product.html'
 })
 export class FinancialProductComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
@@ -26,6 +25,13 @@ export class FinancialProductComponent extends BaseMainComponent implements OnIn
     routeParamsSubscription: Subscription;
 
     product: IProduct = null;
+
+    // TODO in future here will be not boolean, but new ENUM acording new Tyrion API
+    productStatusTranslate: { [key: string]: string } = {
+        'false': 'All activities such as running instances in cloud or hardware data services are temporarily suspended. ' +
+        'During the inactivity, no fees are charged. This product can not be removed by user. Only by technical support. After six months of inactivity, it will be archived.',
+        'true':  'The financial product is activated. '
+    };
 
     constructor(injector: Injector) {
         super(injector);
@@ -46,10 +52,51 @@ export class FinancialProductComponent extends BaseMainComponent implements OnIn
         alert('TODO!'); // TODO !!!
     }
 
+    onEditClick(): void {
+        alert('TODO!'); // TODO !!!
+    }
+
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
     }
 
+    deactivateProduct(): void {
+        // TODO: remove it after translate t
+        // tslint:disable
+        this.modalService.showModal(new ModalsDeactivateModel(this.product.name, false, 'By deactivating, you disable instances in the cloud and disconnect hardware from our servers. Remote administration will stop working. But All data and settings will be saved and you can reactivate the product at any time.')).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.productDeactivate(this.product.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The product has been deactivated.'));
+                        this.router.navigate(['/financial']);
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The product cannot be deactivated.', reason));
+                        this.refresh(); // also unblockUI
+                    });
+            }
+        });
+        // TODO: remove it after translate t
+        // tslint:enable
+    }
+
+    activateProduct(): void {
+        this.modalService.showModal(new ModalsDeactivateModel(this.product.name, true, null)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.productActivate(this.product.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The product has been activated.'));
+                        this.refresh(); // also unblockUI
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The product cannot be activated.', reason));
+                        this.refresh(); // also unblockUI
+                    });
+            }
+        });
+    }
 
 
     refresh(): void {

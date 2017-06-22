@@ -30,7 +30,19 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let product of products">
-                    <td class="no-wrap"><a (click)="onProductClick(product)"><b>{{product.name}}</b></a></td>
+                    <td class="no-wrap">
+                        <a (click)="onProductClick(product)"><b>{{product.name}}</b></a>
+                        <span *ngIf="product.active==true" class="font-green-jungle">(active)</span>
+                        <span *ngIf="product.active==false" class="font-red">(hibernation)</span>
+
+                        <!-- Add independent Icon with status -->
+                        <span *ngIf="product.active==false" class="icon-hint-wraper red">
+                              <i class="fa fa-exclamation-triangle font-red-mint"></i>
+                              <span class="hint">{{productStatusTranslate[product.active.toString()]}}</span>
+                        </span>
+
+                    </td>
+
                     <td class="no-wrap ">
                         <span title="Bank transfer" class="font-blue-chambray" *ngIf="product.payment_method=='bank_transfer'">
                             <i class="fa fa-lg fa-fw fa-exchange"> </i> Bank transfer
