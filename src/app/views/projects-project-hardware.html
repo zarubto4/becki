@@ -23,11 +23,12 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th class="col col-lg-2">Name</th>
-                    <th class="col col-lg-2">ID</th>
-                    <th class="col col-lg-2"><strong class="font-color-hardware">Hardware</strong> Type</th>
-                    <th class="full-width">Status</th>
-                    <th class="text-center">Actions</th>
+                    <th>Name</th>
+                    <th>ID</th>
+                    <th class="col col-lg-5">Personal description</th>
+                    <th><strong class="font-color-hardware">Hardware</strong> Type</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -41,9 +42,10 @@
                                 </span>
                             </div>
                         </span>
-                        <a (click)="onDeviceClick(device)" class="no-wrap"><strong>{{device.personal_description?device.personal_description:device.id}}</strong></a>
+                        <a (click)="onDeviceClick(device)" class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
                     </td>
                     <td class="no-wrap">{{device.id}}</td>
+                    <td class="no-wrap">{{device.description}}</td>
                     <td class="no-wrap"><a (click)="onBoardTypeClick(device.type_of_board_id)">{{device.type_of_board_name}}</a></td>
                     <td class="no-wrap">
                         <span *ngIf="device.board_online_status" class="font-green-jungle">online</span>

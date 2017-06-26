@@ -69,11 +69,14 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     }
 
     onEditClick(device: IBoardShortDetail): void {
-        let model = new ModalsDeviceEditDescriptionModel(device.id, device.personal_description);
+        let model = new ModalsDeviceEditDescriptionModel(device.id, device.name, device.description);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editBoardUserDescription(device.id, {personal_description: model.description})
+                this.backendService.editBoardUserDescription(device.id, {
+                    name: model.name,
+                    description: model.description
+                })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess('The device description was updated.'));
                         this.refresh();
@@ -109,12 +112,12 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             return;
         }
 
-        let mConfirm = new ModalsHardwareBootloaderUpdateModel(this.device.personal_description ? this.device.personal_description : this.device.id);
+        let mConfirm = new ModalsHardwareBootloaderUpdateModel(this.device.name ? this.device.name : this.device.id);
         this.modalService.showModal(mConfirm)
             .then((success) => {
                 if (success) {
                     this.blockUI();
-                    this.backendService.updateBootloader({
+                    this.backendService.bootloaderUpdateList({
                         device_ids: [this.device.id]
                     })
                         .then(() => {

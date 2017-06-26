@@ -646,7 +646,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                         outInterface.push({
                             'targetType': targetName === 'BYZANCE_YODAG2' ? 'yoda' : 'device', // TODO: make better detection for another generations [DH]
                             'targetId': hwId,
-                            'displayName': board.personal_description ? board.personal_description : board.id,
+                            'displayName': board.name ? board.name : board.id,
                             'interface': interfaceData
                         });
                     }
@@ -909,7 +909,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 .then((success) => {
                     if (success) {
                         this.blockUI();
-                        this.backendService.cloudInstanceShutDown(this.blockoProgram.instance_details.instance_id)
+                        this.backendService.startOrShutDownInstance(this.blockoProgram.instance_details.instance_id)
                             .then(() => {
                                 this.refresh();
                             })

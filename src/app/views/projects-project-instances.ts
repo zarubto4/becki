@@ -11,6 +11,12 @@ import { Subscription } from 'rxjs/Rx';
 import { IHomerInstance, IInstanceShortDetail } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsConfirmModel } from '../modals/confirm';
+import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
+import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import {
+    ModalsInstanceEditDescriptionComponent,
+    ModalsInstanceEditDescriptionModel
+} from '../modals/instance-edit-description';
 
 @Component({
     selector: 'bk-view-projects-project-instances',
@@ -55,17 +61,38 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
         this.navigate(['/projects', this.currentParamsService.get('project'), 'blocko', bProgramId]);
     }
 
-    onBlockoVersionProgramClick(bProgramId: string) {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocko', bProgramId]);
+    onInstanceEditClick(instance: IInstanceShortDetail) {
+        let model = new ModalsInstanceEditDescriptionModel (instance.id, instance.name, instance.description);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.editInstance(instance.id, {name: model.name, description: model.description})
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The Instance description was updated.'));
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The Instance cannot be updated.', reason));
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                    });
+            }
+        });
     }
 
-    onInstanceShutdownClick(instance: IInstanceShortDetail) {
-        let m = new ModalsConfirmModel('Shutdown instance', 'Do you want to shutdown running instance?');
+    onInstanceStartOrShutdownClick(instance: IInstanceShortDetail, start: boolean) { // start (True) for Start or (False) for Shutdown
+        let m = null;
+
+        if (start) {
+            m = new ModalsConfirmModel('Shutdown instance', 'Do you want to shutdown running instance?');
+        } else {
+            m = new ModalsConfirmModel('Upload and run into cloud', 'Do you want to upload Blocko and running instance in Cloud?');
+        }
+
         this.modalService.showModal(m)
             .then((success) => {
                 if (success) {
                     this.blockUI();
-                    this.backendService.cloudInstanceShutDown(instance.id)
+                    this.backendService.startOrShutDownInstance(instance.id)
                         .then(() => {
                             this.storageService.projectRefresh(this.id);
                             this.unblockUI();
@@ -78,7 +105,5 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
             });
     }
 
-    onInstanceEditClick(instance: IInstanceShortDetail) {
 
-    }
 }

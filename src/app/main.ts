@@ -75,6 +75,7 @@ import { ModalsBlocksTypePropertiesComponent } from './modals/blocks-type-proper
 import { ModalsBlocksBlockPropertiesComponent } from './modals/blocks-block-properties';
 import { ModalsHighImportanceNotificationComponent } from './modals/high-importance-notification';
 import { ModalsDeviceEditDescriptionComponent } from './modals/device-edit-description';
+import { ModalsInstanceEditDescriptionComponent } from './modals/instance-edit-description';
 import { ModalsWidgetsTypePropertiesComponent } from './modals/widgets-type-properties';
 import { BlockUIService } from './services/BlockUIService';
 import { BlockUIComponent } from './components/BlockUIComponent';
@@ -382,6 +383,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsBlocksBlockPropertiesComponent,
         ModalsHighImportanceNotificationComponent,
         ModalsDeviceEditDescriptionComponent,
+        ModalsInstanceEditDescriptionComponent,
         ModalsBlockoVersionSelectComponent,
         ModalsMembersAddComponent,
         ModalsWidgetsTypePropertiesComponent,

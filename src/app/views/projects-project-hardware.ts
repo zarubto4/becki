@@ -70,7 +70,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 /* this.blockUI();
-                  this.backendService.editBoardUserDescription(device.id, {personal_description: model.description})
+                  this.backendService.editBoardUserDescription(device.id, {name: model.description})
                   .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess('The device description was updated.'));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
@@ -85,11 +85,11 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     }
 
     onEditClick(device: IBoardShortDetail): void {
-        let model = new ModalsDeviceEditDescriptionModel(device.id, device.personal_description);
+        let model = new ModalsDeviceEditDescriptionModel(device.id, device.name, device.description);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editBoardUserDescription(device.id, {personal_description: model.description})
+                this.backendService.editBoardUserDescription(device.id, {name: model.name, description: model.description})
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess('The device description was updated.'));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
@@ -101,11 +101,6 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
             }
         });
     }
-
-    bootloadersCheckboxChanged(device: IBoardShortDetail): void {
-        // mass editing
-    }
-
 
     onDeviceClick(device: IBoardShortDetail): void {
         this.navigate(['/projects', this.id, 'hardware', device.id]);

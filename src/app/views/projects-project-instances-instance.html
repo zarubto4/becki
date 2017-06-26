@@ -12,42 +12,60 @@
             <div class="portlet portlet light bordered">
                 <div class="portlet-title">
                     <div class="becki-caption">
-                        <span class="font-blue-dark">
+                        <span *ngIf="instance" class="font-blue-dark">
                             <i class="fa fa-fw fa-cloud"></i>
-                            Byzance<strong class="font-color-cloud">CLOUD</strong> - instance <strong>{{instance?instance.blocko_instance_name:""}}</strong>
+                            Byzance<strong class="font-color-cloud">CLOUD</strong> - instance <strong>{{instance.name?instance.name:instance.id}}</strong>
                         </span>
                     </div>
-                    <span class="pull-right">
+                    <div *ngIf="instance" class="becki-actions">
 
-                        <button *ngIf="instance && instance.server_is_online" title="Remove device" class="btn btn-icon-only red"  (click)="onRemoveClick(device)">
+
+                        <button title="Instance properties" class="btn btn-icon-only green" [disabled]="!instance.edit_permission" (click)="onInstanceEditClick()">
+                            <i class="fa fa-cog"></i>
+                        </button>
+
+                        <button class="btn blue-hoki" [disabled]="!instance.update_permission"  (click)="onChangeVersionClick()">
+                            <i class="fa fa-code-fork"></i> Change version in Cloud
+                        </button>
+
+                        <!--button *ngIf="!instance.actual_instance" class="btn green-jungle"  (click)="onTurnOnClick()">
+                            <i class="fa fa-power-off"></i> Upload program to Cloud
+                        </button>
+
+                        <button *ngIf="instance.actual_instance" class="btn red" (click)="onTurnOffClick()">
+                            <i class="fa fa-power-off"></i> Turn off Instance
+                        </button-->
+
+                        <button *ngIf="instance && instance.server_is_online" title="Remove device" class="btn btn-icon-only red"  (click)="onInstanceStartOrShutdownClick(true)">
                             <i class="fa fa-power-off"></i>
                         </button>
 
-                    </span>
+                    </div>
+
                 </div>
                 <div>
                     <div *ngIf="instance">
                         <div>
-                            <div>
-                                <strong class="font-color-blocko">BLOCKO</strong> Program:
-                                <span class="font-grey-mint bold"><a (click)="onBlockoProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></span>
-                            </div>
-
-                            <div *ngIf="instance.b_program_description && instance.b_program_description.length">
-                                Description:
-                                <span class="font-grey-mint bold">{{instance.b_program_description}}</span>
-                            </div>
 
                             <div>
-                                <strong class="font-color-blocko">BLOCKO</strong> Version:
-                                <span class="font-grey-mint bold"><a (click)="onBlockoProgramVersionClick(instance)">{{instance.actual_instance.b_program_version_name}}</a></span>
+                                <strong class="font-color-cloud">CLOUD</strong> Instance name: <strong>{{instance.name?instance.name:instance.id}}</strong>
+                            </div>
+                            <div>
+                                <strong class="font-color-cloud">CLOUD</strong> Instance Description: <strong>{{instance.description}}</strong>
+                            </div>
+                            <div>
+                                <strong class="font-color-cloud">CLOUD</strong> Instance Id: <strong>{{instance.id}}</strong>
                             </div>
 
                             <br>
+
                             <div>
                                 <strong class="font-color-cloud">CLOUD</strong> Server name:
                                 <span class="font-grey-mint bold">{{instance.server_name}}</span><span [class.font-green-jungle]="instance.server_is_online" [class.font-red]="!instance.server_is_online" style="font-size: 1em">&nbsp;(<strong>{{instance.server_is_online?'online':'offline'}}</strong>)</span>
                             </div>
+
+                            <br>
+
                         </div>
                     </div>
                 </div>
@@ -67,8 +85,15 @@
                         </span>
                     </div>
                     <ul class="nav nav-tabs margin-left-15 pull-left">
-                        <li [class.active]="instanceTab == 'schema'">
-                            <a class="cursor-pointer" (click)="onToggleinstanceTab('schema')">Schema </a>
+
+                        <li [class.active]="instanceTab == 'overview'">
+                            <a class="cursor-pointer" (click)="onToggleinstanceTab('overview')">Overview </a>
+                        </li>
+                        <li [class.active]="instanceTab == 'hardware'">
+                            <a class="cursor-pointer" (click)="onToggleinstanceTab('hardware')">Integrated Hardware </a>
+                        </li>
+                        <li [class.active]="instanceTab == 'grid'">
+                            <a class="cursor-pointer" (click)="onToggleinstanceTab('grid')">Integrated Apps </a>
                         </li>
                         <li [class.active]="instanceTab == 'history'">
                             <a class="cursor-pointer" (click)="onToggleinstanceTab('history')">History </a>
@@ -88,56 +113,63 @@
                     </ul>
                 </div>
 
-                <div *ngIf="instanceTab == 'schema'">
+
+                <div *ngIf="instanceTab == 'overview'">
                     <div class="row">
                         <div class="col-sm-6">
-                            <h3 class="font-color-hardware"><strong>Hardware</strong></h3>
-                            <div *ngFor="let hardware of instance.actual_instance.hardware_group" style="margin-bottom: 20px;background: #EEE;padding: 10px;border: 1px solid #1BA39C !important;">
-                                <div>
-                                    <a (click)="onHardwareClick(hardware.main_board_pair.board_id)" style="margin-bottom: 3px;display: block !important;" class="font-color-hardware">
-                                        <strong><span style="font-size:1.2em;">{{hardware.main_board_pair.board_personal_description?(hardware.main_board_pair.board_personal_description+' '):('')}}</span></strong>
-                                        <span style="font-size:0.9em;">({{hardware.main_board_pair.board_id}})</span>
-                                    </a>
-                                </div>
-                                <div><strong class="font-color-hardware">HARDWARE</strong> Device type: <strong><a class="font-grey-mint" (click)="onBoardTypeClick(hardware.main_board_pair.type_of_board_id)">{{hardware.main_board_pair.type_of_board_name}}</a></strong></div>
-                                <br>
-                                <div>
-                                    <strong class="font-color-code">CODE</strong> Program: <strong><a class="font-grey-mint" (click)="onCProgramClick(hardware.main_board_pair.c_program_id)">{{hardware.main_board_pair.c_program_name}}</a></strong>
-                                    <template [ngIf]="hardware.main_board_pair.c_program_description && hardware.main_board_pair.c_program_description.length">
-                                        <span>&nbsp;-&nbsp;{{hardware.main_board_pair.c_program_description}}</span>
-                                    </template>
-                                </div>
-                                <div>
-                                    <strong class="font-color-code">CODE</strong> Version: <strong><a class="font-grey-mint" (click)="onCProgramVersionClick(hardware.main_board_pair.c_program_id, hardware.main_board_pair.c_program_version_id)">{{hardware.main_board_pair.c_program_version_name}}</a></strong>
-                                    <template [ngIf]="hardware.main_board_pair.c_program_version_description && hardware.main_board_pair.c_program_version_description.length">
-                                        <span>&nbsp;-&nbsp;{{hardware.main_board_pair.c_program_version_description}}</span>
-                                    </template>
-                                </div>
-                                <div style="margin-left: 10px; margin-top: 10px;" *ngFor="let slave of hardware.device_board_pairs">
-                                    <div>
-                                        <a (click)="onHardwareClick(slave.board_id)" class="font-grey-mint" style="margin-bottom: 3px;display: block !important;margin-top: 20px;">
-                                            <strong><span style="font-size:1.2em;">{{slave.board_personal_description?(slave.board_personal_description+' '):('')}}</span></strong>
-                                            <span style="font-size:0.9em;">({{slave.board_id}})</span>
-                                        </a>
-                                    </div>
-                                    <div><strong class="font-color-hardware">HARDWARE</strong> Device type: <strong><a class="font-grey-mint" (click)="onBoardTypeClick(slave.type_of_board_id)">{{slave.type_of_board_name}}</a></strong></div>
-                                    <br>
-                                    <div>
-                                        <strong class="font-color-code">CODE</strong> Program: <strong><a class="font-grey-mint" (click)="onCProgramClick(slave.c_program_id)">{{slave.c_program_name}}</a></strong>
-                                        <template [ngIf]="slave.c_program_description && slave.c_program_description.length">
-                                            <span>&nbsp;-&nbsp;{{slave.c_program_description}}</span>
-                                        </template>
-                                    </div>
-                                    <div>
-                                        <strong class="font-color-code">CODE</strong> Version: <strong><a class="font-grey-mint" (click)="onCProgramVersionClick(slave.c_program_id, slave.c_program_version_id)">{{slave.c_program_version_name}}</a></strong>
-                                        <template [ngIf]="slave.c_program_version_description && slave.c_program_version_description.length">
-                                            <span>&nbsp;-&nbsp;{{slave.c_program_version_description}}</span>
-                                        </template>
-                                    </div>
-                                </div>
+
+                            <h3 class="font-color-blocko"><strong>BLOCKO</strong></h3>
+
+                            <div>
+                                <strong class="font-color-blocko">BLOCKO</strong> Program:
+                                <span class="font-grey-mint bold"><a (click)="onBlockoProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></span>
                             </div>
-                            <h4 *ngIf="instance.actual_instance.hardware_group && !instance.actual_instance.hardware_group.length">No Hardware projects in this instance</h4>
+
+                            <div *ngIf="instance.b_program_description && instance.b_program_description.length">
+                                <strong class="font-color-blocko">BLOCKO</strong> Program Description:
+                                <span class="font-grey-mint bold">{{instance.b_program_description}}</span>
+                            </div>
+                            <br>
+                            <div>
+                                <strong class="font-color-blocko">BLOCKO</strong> Version:
+                                <span class="font-grey-mint bold"><a (click)="onBlockoProgramVersionClick(instance.actual_instance.b_program_id, instance.actual_instance.b_program_version_id)">{{instance.actual_instance.b_program_version_name}}</a></span>
+                            </div>
+                            <div>
+                                <strong class="font-color-blocko">BLOCKO</strong> Version Description:
+                                <span class="font-grey-mint bold">{{instance.actual_instance.b_program_version_description}}</span>
+                            </div>
+
                         </div>
+                        <div class="col-sm-6">
+
+                            <h3 class="font-color-cloud"><strong>CLOUD</strong></h3>
+
+                            <div>
+                                Instance type:
+                                <span class="font-grey-mint bold">{{instance.instance_type}}</span>  <!--//TODO ENUM Transtale -->
+                            </div>
+
+                            <br>
+
+                            <div>
+                                Created:
+                                <span class="font-grey-mint bold">{{instance.actual_instance.date_of_created|bkUnixTimeToDate}}</span>
+                            </div>
+                            <div>
+                                Running From:
+                                <span class="font-grey-mint bold">{{instance.actual_instance.running_from|bkUnixTimeToDate}}</span>
+                            </div>
+                            <div>
+                                Running Status:
+                                <span class="font-grey-mint bold">{{instance.actual_instance.status}}</span>  <!--//TODO ENUM Transtale -->
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="instanceTab == 'grid'">
+                    <div class="row">
                         <div class="col-6">
                             <div *ngIf="instance.actual_instance.m_project_snapshot" class="col-sm-6">
                                 <h3 class="font-color-grid"><strong>Grid</strong></h3>
@@ -189,9 +221,68 @@
                                 <h4 *ngIf="instance.actual_instance.m_project_snapshot && !instance.actual_instance.m_project_snapshot.length">No Grid projects in this instance</h4>
                             </div>
                         </div>
+                        <div class="col-sm-6">
+                        </div>
                     </div>
                 </div>
 
+                <div *ngIf="instanceTab == 'hardware'">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <h3 class="font-color-hardware"><strong>Hardware</strong></h3> <h5 class="font-color-hardware"><strong> (Actual in Instance)</strong></h5>
+                            <div *ngFor="let hardware of instance.actual_instance.hardware_group" style="margin-bottom: 20px;background: #EEE;padding: 10px;border: 1px solid #1BA39C !important;">
+                                <div>
+                                    <a (click)="onHardwareClick(hardware.main_board_pair.board_id)" style="margin-bottom: 3px;display: block !important;" class="font-color-hardware">
+                                        <strong><span style="font-size:1.2em;">{{hardware.main_board_pair.board_name?(hardware.main_board_pair.board_name+' '):('')}}</span></strong>
+                                        <span style="font-size:0.9em;">({{hardware.main_board_pair.board_id}})</span>
+                                    </a>
+                                </div>
+                                <template [ngIf]="hardware.main_board_pair.board_description && hardware.main_board_pair.board_description.length">
+                                    <div style="font-size:0.9em; color:#888;">{{hardware.main_board_pair.board_description}}</div>
+                                </template>
+                                <div><strong class="font-color-hardware">HARDWARE</strong> Device type: <strong><a (click)="onBoardTypeClick(hardware.main_board_pair.type_of_board_id)">{{hardware.main_board_pair.type_of_board_name}}</a></strong></div>
+                                <br>
+                                <div>
+                                    <strong class="font-color-code">CODE</strong> Program: <strong><a (click)="onCProgramClick(hardware.main_board_pair.c_program_id)">{{hardware.main_board_pair.c_program_name}}</a></strong>
+                                    <template [ngIf]="hardware.main_board_pair.c_program_description && hardware.main_board_pair.c_program_description.length">
+                                        <span>{{hardware.main_board_pair.c_program_description}}</span>
+                                    </template>
+                                </div>
+                                <div>
+                                    <strong class="font-color-code">CODE</strong> Version: <strong><a (click)="onCProgramVersionClick(hardware.main_board_pair.c_program_id, hardware.main_board_pair.c_program_version_id)">{{hardware.main_board_pair.c_program_version_name}}</a></strong>
+                                    <template [ngIf]="hardware.main_board_pair.c_program_version_description && hardware.main_board_pair.c_program_version_description.length">
+                                        <span>&nbsp;-&nbsp;{{hardware.main_board_pair.c_program_version_description}}</span>
+                                    </template>
+                                </div>
+                                <div style="margin-left: 10px; margin-top: 10px;" *ngFor="let slave of hardware.device_board_pairs">
+                                    <div>
+                                        <a (click)="onHardwareClick(slave.board_id)" style="margin-bottom: 3px;display: block !important;margin-top: 20px;">
+                                            <strong><span style="font-size:1.2em;">{{slave.board_name?(slave.board_name+' '):('')}}</span></strong>
+                                            <span style="font-size:0.9em;">({{slave.board_id}})</span>
+                                        </a>
+                                    </div>
+                                    <div><strong class="font-color-hardware">HARDWARE</strong> Device type: <strong><a (click)="onBoardTypeClick(slave.type_of_board_id)">{{slave.type_of_board_name}}</a></strong></div>
+                                    <br>
+                                    <div>
+                                        <strong class="font-color-code">CODE</strong> Program: <strong><a (click)="onCProgramClick(slave.c_program_id)">{{slave.c_program_name}}</a></strong>
+                                        <template [ngIf]="slave.c_program_description && slave.c_program_description.length">
+                                            <span>{{slave.c_program_description}}</span>
+                                        </template>
+                                    </div>
+                                    <div>
+                                        <strong class="font-color-code">CODE</strong> Version: <strong><a (click)="onCProgramVersionClick(slave.c_program_id, slave.c_program_version_id)">{{slave.c_program_version_name}}</a></strong>
+                                        <template [ngIf]="slave.c_program_version_description && slave.c_program_version_description.length">
+                                            <span>{{slave.c_program_version_description}}</span>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                            <h4 *ngIf="instance.actual_instance.hardware_group && !instance.actual_instance.hardware_group.length">No Hardware projects in this instance</h4>
+                        </div>
+                        <div class="col-6">
+                        </div>
+                    </div>
+                </div>
 
                 <div *ngIf="instanceTab == 'history'">
                     <div *ngIf="instance && instance.instance_history && instance.instance_history.length > 1">
@@ -202,15 +293,66 @@
                             <div><i class="fa fa-chevron-up"></i></div>
                             <h3 style="margin-top: 10px">Select version for see details</h3>
                         </div>
-                        <div class="becki-caption row" *ngIf="currentHistoricInstance">
+                        <!--div class="becki-caption row" *ngIf="currentHistoricInstance">
                             <span class="font-blue-dark uppercase">
                                 <h3> <i class="fa fa-fw fa-hdd-o"></i> {{currentHistoricInstance.b_program_version_name}} </h3>
                             </span>
-                        </div>
+                        </div-->
                     </div>
                     <div *ngIf="!(instance && instance.instance_history && instance.instance_history.length > 1)">
                         <h3 style="text-align: center; margin: 80px;">There is no history for this instance</h3>
                     </div>
+                    <div class="row" *ngIf="currentHistoricInstance">
+                        <div class="col-sm-12">
+                            <div class="col-sm-6">
+
+                                <h3 class="font-color-blocko"><strong>BLOCKO</strong></h3>
+
+                                <div>
+                                    <strong class="font-color-blocko">BLOCKO</strong> Program:
+                                    <span class="font-grey-mint bold"><a (click)="onBlockoProgramClick(currentHistoricInstance.b_program_id)">{{currentHistoricInstance.b_program_name}}</a></span>
+                                </div>
+                                <div>
+                                    <strong class="font-color-blocko">BLOCKO</strong> Program Description:
+                                    <span class="font-grey-mint bold">{{currentHistoricInstance.b_program_description}}</span>
+                                </div>
+                                <br>
+                                <div>
+                                    <strong class="font-color-blocko">BLOCKO</strong> Version:
+                                    <span class="font-grey-mint bold"><a (click)="onBlockoProgramVersionClick(currentHistoricInstance.b_program_id, currentHistoricInstance.b_program_version_id)">{{instance.actual_instance.b_program_version_name}}</a></span>
+                                </div>
+                                <div>
+                                    <strong class="font-color-blocko">BLOCKO</strong> Version Description:
+                                    <span class="font-grey-mint bold">{{currentHistoricInstance.b_program_version_description}}</span>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-6">
+
+                                <h3 class="font-color-cloud"><strong>CLOUD</strong></h3>
+
+                                <div>
+                                    Created:
+                                    <span class="font-grey-mint bold">{{currentHistoricInstance.date_of_created|bkUnixTimeToDate}}</span>
+                                </div>
+                                <div>
+                                    Running From:
+                                    <span class="font-grey-mint bold">{{currentHistoricInstance.running_from|bkUnixTimeToDate}}</span>
+                                </div>
+                                <div>
+                                    Running To:
+                                    <span class="font-grey-mint bold">{{currentHistoricInstance.running_to|bkUnixTimeToDate}}</span>
+                                </div>
+                                <div>
+                                    Running Status:
+                                    <span class="font-grey-mint bold">{{currentHistoricInstance.status}}</span>  <!--//TODO ENUM Transtale -->
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <br>
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="col-6" *ngIf="currentHistoricInstance" >
@@ -219,20 +361,23 @@
                                     <div *ngFor="let hardware of currentHistoricInstance.hardware_group" style="margin-bottom: 20px;background: #EEE;padding: 10px;border: 1px solid #1BA39C !important;">
                                         <div>
                                             <a (click)="onHardwareClick(hardware.main_board_pair.board_id)" style="margin-bottom: 3px;display: block !important;" class="font-color-hardware">
-                                                <strong><span style="font-size:1.2em;">{{hardware.main_board_pair.board_personal_description?(hardware.main_board_pair.board_personal_description+' '):('')}}</span></strong>
+                                                <strong><span style="font-size:1.2em;">{{hardware.main_board_pair.board_name?(hardware.main_board_pair.board_name+' '):('')}}</span></strong>
                                                 <span style="font-size:0.9em;">({{hardware.main_board_pair.board_id}})</span>
                                             </a>
                                         </div>
+                                        <template [ngIf]="hardware.main_board_pair.board_description && hardware.main_board_pair.board_description.length">
+                                            <div style="font-size:0.9em; color:#888;">{{hardware.main_board_pair.board_description}}</div>
+                                        </template>
                                         <div><strong class="font-color-hardware">HARDWARE</strong> Device type: <strong><a class="font-grey-mint" (click)="onBoardTypeClick(hardware.main_board_pair.type_of_board_id)">{{hardware.main_board_pair.type_of_board_name}}</a></strong></div>
                                         <br>
                                         <div>
-                                            <strong class="font-color-code">CODE</strong> Program: <strong><a class="font-grey-mint" (click)="onCProgramClick(hardware.main_board_pair.c_program_id)">{{hardware.main_board_pair.c_program_name}}</a></strong>
+                                            <strong class="font-color-code">CODE</strong> Program: <strong><a (click)="onCProgramClick(hardware.main_board_pair.c_program_id)">{{hardware.main_board_pair.c_program_name}}</a></strong>
                                             <template [ngIf]="hardware.main_board_pair.c_program_description && hardware.main_board_pair.c_program_description.length">
                                                 <span>&nbsp;-&nbsp;{{hardware.main_board_pair.c_program_description}}</span>
                                             </template>
                                         </div>
                                         <div>
-                                            <strong class="font-color-code">CODE</strong> Version: <strong><a class="font-grey-mint" (click)="onCProgramVersionClick(hardware.main_board_pair.c_program_id, hardware.main_board_pair.c_program_version_id)">{{hardware.main_board_pair.c_program_version_name}}</a></strong>
+                                            <strong class="font-color-code">CODE</strong> Version: <strong><a (click)="onCProgramVersionClick(hardware.main_board_pair.c_program_id, hardware.main_board_pair.c_program_version_id)">{{hardware.main_board_pair.c_program_version_name}}</a></strong>
                                             <template [ngIf]="hardware.main_board_pair.c_program_version_description && hardware.main_board_pair.c_program_version_description.length">
                                                 <span>&nbsp;-&nbsp;{{hardware.main_board_pair.c_program_version_description}}</span>
                                             </template>
@@ -240,20 +385,20 @@
                                         <div style="margin-left: 10px; margin-top: 10px;" *ngFor="let slave of hardware.device_board_pairs">
                                             <div>
                                                 <a (click)="onHardwareClick(slave.board_id)" class="font-color-hardware" style="margin-bottom: 3px;display: block !important;margin-top: 20px;">
-                                                    <strong><span style="font-size:1.2em;">{{slave.board_personal_description?(slave.board_personal_description+' '):('')}}</span></strong>
+                                                    <strong><span style="font-size:1.2em;">{{slave.board_name?(slave.board_name+' '):('')}}</span></strong>
                                                     <span style="font-size:0.9em;">({{slave.board_id}})</span>
                                                 </a>
                                             </div>
-                                           <div><strong class="font-color-hardware">HARDWARE</strong> Device type: <strong><a class="font-grey-mint" (click)="onBoardTypeClick(slave.type_of_board_id)">{{slave.type_of_board_name}}</a></strong></div>
+                                           <div><strong class="font-color-hardware">HARDWARE</strong> Device type: <strong><a (click)="onBoardTypeClick(slave.type_of_board_id)">{{slave.type_of_board_name}}</a></strong></div>
                                             <br>
                                             <div>
-                                                <strong class="font-color-code">CODE</strong> Program: <strong><a class="font-grey-mint" (click)="onCProgramClick(slave.c_program_id)">{{slave.c_program_name}}</a></strong>
+                                                <strong class="font-color-code">CODE</strong> Program: <strong><a (click)="onCProgramClick(slave.c_program_id)">{{slave.c_program_name}}</a></strong>
                                                 <template [ngIf]="slave.c_program_description && slave.c_program_description.length">
                                                     <span>&nbsp;-&nbsp;{{slave.c_program_description}}</span>
                                                 </template>
                                             </div>
                                             <div>
-                                                <strong class="font-color-code">CODE</strong> Version: <strong><a class="font-grey-mint" (click)="onCProgramVersionClick(slave.c_program_id, slave.c_program_version_id)">{{slave.c_program_version_name}}</a></strong>
+                                                <strong class="font-color-code">CODE</strong> Version: <strong><a (click)="onCProgramVersionClick(slave.c_program_id, slave.c_program_version_id)">{{slave.c_program_version_name}}</a></strong>
                                                 <template [ngIf]="slave.c_program_version_description && slave.c_program_version_description.length">
                                                     <span>&nbsp;-&nbsp;{{slave.c_program_version_description}}</span>
                                                 </template>
@@ -266,7 +411,7 @@
                                     <h3 class="font-color-grid"><strong>Grid</strong></h3>
                                     <div *ngFor="let grid of currentHistoricInstance.m_project_snapshot" style="margin-bottom: 20px;background: #EEE;padding: 10px;border: 1px solid #8E44AD !important;">
                                         <div>
-                                            <strong class="font-color-grid">GRID</strong> Project: <a (click)="onGridProjectClick(grid.m_project_id)" class="font-grey-mint">
+                                            <strong class="font-color-grid">GRID</strong> Project: <a (click)="onGridProjectClick(grid.m_project_id)" >
                                                  <strong><span style="font-size:1.2em;">{{grid.m_project_name}}</span></strong>
                                             </a>
                                         </div>
@@ -276,7 +421,7 @@
                                         <hr style="margin: 0;border-bottom: 1px solid #DDD;margin-top: 10px;">
                                         <div style="margin-left: 10px; margin-top: 10px;" *ngFor="let gridProgram of grid.m_program_snapshots">
                                             <div>
-                                                <strong class="font-color-grid">GRID</strong> Program: <a class="font-grey-mint" (click)="onGridProgramClick(grid.m_project_id,gridProgram.m_program_id)" class="font-grey-mint">
+                                                <strong class="font-color-grid">GRID</strong> Program: <a (click)="onGridProgramClick(grid.m_project_id,gridProgram.m_program_id)">
                                                     <strong><span style="font-size:1.0em;">{{gridProgram.m_program_name}}</span></strong>
                                                 </a>
                                             </div>
@@ -285,7 +430,7 @@
                                             </template>
 
                                             <div>
-                                                <strong class="font-color-grid">GRID</strong> Version: <strong><a class="font-grey-mint" (click)="onGridProgramVersionClick(grid.m_project_id, gridProgram.m_program_id, gridProgram.version_object_id)">{{gridProgram.version_object_name}}</a></strong>
+                                                <strong class="font-color-grid">GRID</strong> Version: <strong><a (click)="onGridProgramVersionClick(grid.m_project_id, gridProgram.m_program_id, gridProgram.version_object_id)">{{gridProgram.version_object_name}}</a></strong>
                                                 <template [ngIf]="gridProgram.version_object_description && gridProgram.version_object_description.length">
                                                     <span>&nbsp;-&nbsp;{{gridProgram.version_object_description}}</span>
                                                 </template>
@@ -340,7 +485,7 @@
 
                                         <tr *ngFor="let update of procedure.updates">
 
-                                            <td class="font-grey-mint"><a (click)="onHardwareClick(update.board_detail.board_id)">{{update.board_detail.personal_description}}</a></td>
+                                            <td class="font-grey-mint"><a (click)="onHardwareClick(update.board_detail.board_id)">{{update.board_detail.name}}</a></td>
                                             <td class="font-grey-mint"><a (click)="onHardwareClick(update.board_detail.board_id)">{{update.board_detail.board_id}}</a></td>
                                             <td class="font-grey-mint"><a style="white-space:nowrap" (click)="onBoardTypeClick(update.board_detail.type_of_board_id)">{{update.board_detail.type_of_board_name}}</a></td>
 

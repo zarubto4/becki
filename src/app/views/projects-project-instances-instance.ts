@@ -11,8 +11,8 @@ import { IHomerInstanceRecord, IInstanceGridAppSettings } from './../backend/Tyr
 import { Component, OnInit, Injector, OnDestroy, AfterContentChecked, ViewChild, ElementRef } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
-import { IHomerInstance, IModelMProgramInstanceParameter } from '../backend/TyrionAPI';
-import { NullSafeDefault } from '../helpers/NullSafe';
+import { IBProgram, IHomerInstance, IModelMProgramInstanceParameter } from '../backend/TyrionAPI';
+import { NullSafe, NullSafeDefault } from '../helpers/NullSafe';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { HomerService, HomerDao } from '../services/HomerService';
@@ -20,6 +20,10 @@ import { ModalsConfirmModel } from '../modals/confirm';
 import { InstanceHistoryTimelineComponent } from '../components/InstanceHistoryTimelineComponent';
 import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
 import { QRCodeComponent } from '../components/QRCodeComponent';
+import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
+import { ModalsBlockoVersionSelectModel } from '../modals/blocko-version-select';
+import { ProjectsProjectBlockoBlockoComponent } from './projects-project-blocko-blocko';
 
 @Component({
     selector: 'bk-view-projects-project-instances-instance',
@@ -36,6 +40,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     gridUrl: string = '';
 
     currentHistoricInstance: IHomerInstanceRecord;
+    currentBlockoProgram: IBProgram = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -56,7 +61,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     homerDao: HomerDao;
 
-    instanceTab: string = 'schema';
+    instanceTab: string = 'overview';
 
     private homerService: HomerService = null;
     private liveViewLoaded: boolean = false;
@@ -66,6 +71,25 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
         this.homerService = injector.get(HomerService);
     };
+
+    onInstanceEditClick() {
+        let model = new ModalsInstanceEditDescriptionModel (this.instance.id, this.instance.name, this.instance.description);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.editInstance(this.instance.id, {name: model.name, description: model.description})
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess('The Instance description was updated.'));
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError('The Instance cannot be updated.', reason));
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                    });
+            }
+        });
+    }
 
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
@@ -140,6 +164,10 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
         this.navigate(['/projects', this.currentParamsService.get('project'), 'blocko', bProgramId]);
     }
 
+    onBlockoProgramVersionClick(bProgramId: string, bProgramVersionId: string) {
+        this.router.navigate(['/projects', this.id, 'blocko', bProgramId, bProgramVersionId]);
+    }
+
     onGridProgramPublishClick(gridProgram: IModelMProgramInstanceParameter) {
         this.blockUI();
         this.backendService.putInstanceApp({
@@ -165,6 +193,46 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     }
 
+    onChangeVersionClick(): void {
+        /**if (!this. || !this.blockoProgramVersions.length) {
+            this.fmWarning('Must create some version first.');  // TODO domimplementovat
+            return;
+        }*/
+        if (this.instance.instance_online) {
+            let mConfirm = new ModalsConfirmModel('Change instance version', 'Do you want to change running instance version?');
+            this.modalService.showModal(mConfirm)
+                .then((success) => {
+                    if (success) {
+                        this.changeVersionAction();
+                    }
+                });
+        } else {
+            this.changeVersionAction();
+        }
+    }
+
+    changeVersionAction() {
+
+        this.backendService.getBProgram(this.instance.actual_instance.b_program_id).then((blocko) => {
+            let m = new ModalsBlockoVersionSelectModel( blocko.program_versions , NullSafe(() => this.instance.actual_instance.b_program_version_id));
+            this.modalService.showModal(m)
+                .then((success) => {
+                    if (success) {
+                        this.blockUI();
+                        this.backendService.cloudInstanceUpload(m.programVersion, {}) // TODO [permission]: B_program.update_permission
+                            .then(() => {
+                                this.storageService.projectRefresh(this.id);
+                                this.refresh();
+                            })
+                            .catch((err) => {
+                                this.unblockUI();
+                                this.fmError('Cannot change version.', err);
+                            });
+                    }
+                });
+        });
+    }
+
     selectedHistoryItem(event: {index: number, item: IHomerInstanceRecord}) {
         this.currentHistoricInstance = event.item;
     }
@@ -177,21 +245,28 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     }
 
-    onRemoveClick() {
-        let m = new ModalsConfirmModel('Shutdown instance', 'Do you want to shutdown running instance?');
+
+    onInstanceStartOrShutdownClick(start: boolean) { // start (True) for Start or (False) for Shutdown
+        let m = null;
+
+        if (start) {
+            m = new ModalsConfirmModel('Shutdown instance', 'Do you want to shutdown running instance?');
+        } else {
+            m = new ModalsConfirmModel('Upload and run into cloud in latest running version', 'Do you want to upload Blocko and running instance in Cloud?');
+        }
+
         this.modalService.showModal(m)
             .then((success) => {
                 if (success) {
                     this.blockUI();
-                    this.backendService.cloudInstanceShutDown(this.instance.blocko_instance_name)
+                    this.backendService.startOrShutDownInstance(this.instanceId)
                         .then(() => {
                             this.storageService.projectRefresh(this.id);
-                            this.refresh();
                             this.unblockUI();
                         })
                         .catch((err) => {
                             this.unblockUI();
-                            this.fmError('Cannot turn instance off.', err);
+                            this.fmError('Can not execute the command.', err);
                         });
                 }
             });
@@ -205,10 +280,6 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
         this.navigate(['/hardware', boardTypeId]);
     }
 
-    onBlockoProgramVersionClick(instance: IHomerInstance) {
-        this.router.navigate(['/projects', this.id, 'blocko', instance.b_program_id, {version: instance.actual_instance.b_program_version_id}]);
-
-    }
 
     onGridProjectClick(projectId: string) {
         this.router.navigate(['projects', this.id, 'grid', projectId]);

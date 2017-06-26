@@ -15,7 +15,7 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-microchip"></i>
-                            Byzance<strong class="font-color-hardware">HARDWARE</strong> - device <strong>{{device.personal_description?device.personal_description:device.id}}</strong>
+                            Byzance<strong class="font-color-hardware">HARDWARE</strong> - device <strong>{{device.name?device.name:device.id}}</strong>
                         </span>
                     </div>
                     <div class="becki-actions">
@@ -56,8 +56,14 @@
 
                                     <div>
                                         Name:
-                                        <span class="font-grey-mint bold">{{device.personal_description}}</span>
+                                        <span class="font-grey-mint bold">{{device.name}}</span>
                                     </div>
+                                    <div>
+                                        Description:
+                                        <span class="font-grey-mint bold">{{device.description}}</span>
+                                    </div>
+
+
 
                                     <br>
 

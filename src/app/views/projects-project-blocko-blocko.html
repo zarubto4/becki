@@ -58,7 +58,7 @@
                     <template ngIf="selectedHardware && selectedHardware.length">
                         <div *ngFor="let hwGroup of selectedHardware;">
                             <div *ngIf="boardById[hwGroup.main_board_pair.board_id]" class="mt-element-ribbon border-green-seagreen bg-grey-steel">
-                                <div class="ribbon ribbon-shadow bg-green-seagreen font-white no-padding-left-right"><span class="ribbon-padding">{{boardById[hwGroup.main_board_pair.board_id].type_of_board_name}}</span><span *ngIf="boardById[hwGroup.main_board_pair.board_id].personal_description" class="bg-green-jungle ribbon-padding">{{boardById[hwGroup.main_board_pair.board_id].personal_description}}</span><span class="bg-green-sharp ribbon-padding">{{hwGroup.main_board_pair.board_id}}</span></div>
+                                <div class="ribbon ribbon-shadow bg-green-seagreen font-white no-padding-left-right"><span class="ribbon-padding">{{boardById[hwGroup.main_board_pair.board_id].type_of_board_name}}</span><span *ngIf="boardById[hwGroup.main_board_pair.board_id].name" class="bg-green-jungle ribbon-padding">{{boardById[hwGroup.main_board_pair.board_id].name}}</span><span class="bg-green-sharp ribbon-padding">{{hwGroup.main_board_pair.board_id}}</span></div>
                                 <button title="Remove device" type="button" class="btn default red pull-right" (click)="hwRemove(hwGroup.main_board_pair.board_id)">
                                     <i class="fa fa-trash"></i>
                                 </button>
@@ -70,7 +70,7 @@
                                     <template ngIf="hwGroup.device_board_pairs">
                                         <div *ngFor="let board of hwGroup.device_board_pairs;" class="margin-left-15 margin-right-15">
                                             <div *ngIf="boardById[board.board_id]" class="mt-element-ribbon bg-grey-salt border-green-seagreen margin-bottom-15">
-                                                <div class="ribbon ribbon-shadow bg-green-seagreen font-white no-padding-left-right"><span class="ribbon-padding">{{boardById[board.board_id].type_of_board_name}}</span><span *ngIf="boardById[board.board_id].personal_description" class="bg-green-jungle ribbon-padding">{{boardById[board.board_id].personal_description}}</span><span class="bg-green-sharp ribbon-padding">{{board.board_id}}</span></div>
+                                                <div class="ribbon ribbon-shadow bg-green-seagreen font-white no-padding-left-right"><span class="ribbon-padding">{{boardById[board.board_id].type_of_board_name}}</span><span *ngIf="boardById[board.board_id].name" class="bg-green-jungle ribbon-padding">{{boardById[board.board_id].name}}</span><span class="bg-green-sharp ribbon-padding">{{board.board_id}}</span></div>
                                                 <button title="Remove device" type="button" class="btn default red pull-right" (click)="hwRemove(board.board_id)">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
@@ -286,24 +286,25 @@
                             Instance in cloud
                         </span>
                     </div>
+                    <div *ngIf="blockoProgram" class="becki-actions">
+
+                        <button *ngIf="!blockoProgram.instance_details.uploaded && blockoProgram.instance_details.version_id" class="btn green-jungle"  (click)="onTurnOnClick()">
+                            <i class="fa fa-power-off"></i> Upload program to Cloud
+                        </button>
+
+                        <button *ngIf="blockoProgram.instance_details.uploaded" class="btn red" (click)="onTurnOffClick()">
+                            <i class="fa fa-power-off"></i> Turn off Instance
+                        </button>
+
+                        <button class="btn blue-hoki" (click)="onChangeVersionClick()">
+                            <i class="fa fa-code-fork"></i> Change version in Cloud
+                        </button>
+
+                    </div>
+
                 </div>
                 <div>
-
                     <div *ngIf="blockoProgram && blockoProgram.instance_details">
-
-                        <div class="actions pull-right">
-                            <button *ngIf="!blockoProgram.instance_details.uploaded && blockoProgram.instance_details.version_id" class="btn green-jungle"  (click)="onTurnOnClick()">
-                                <i class="fa fa-power-off"></i> Upload program to Cloud
-                            </button>
-
-                            <button *ngIf="blockoProgram.instance_details.uploaded" class="btn red" (click)="onTurnOffClick()">
-                                <i class="fa fa-power-off"></i> Turn off Instance
-                            </button>
-
-                            <button class="btn blue-hoki" (click)="onChangeVersionClick()">
-                                <i class="fa fa-code-fork"></i> Change version in Cloud
-                            </button>
-                        </div>
 
                         <div>
                             <strong class="font-color-cloud">CLOUD</strong> Server:

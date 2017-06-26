@@ -1,6 +1,3 @@
-/**
- * Created by DominikKrisztof on 26.10.16.
- */
 /*
  * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
  * directory of this distribution.
@@ -11,20 +8,20 @@ import { BackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 
 
-export class ModalsDeviceEditDescriptionModel extends ModalModel {
+export class ModalsInstanceEditDescriptionModel extends ModalModel {
     constructor(public id: string = '',  public name: string = '', public description: string = '') {
         super();
     }
 }
 
 @Component({
-    selector: 'bk-modals-device-edit-description',
-    templateUrl: './device-edit-description.html'
+    selector: 'bk-modals-instance-edit-description',
+    templateUrl: './instance-edit-description.html'
 })
-export class ModalsDeviceEditDescriptionComponent implements OnInit {
+export class ModalsInstanceEditDescriptionComponent implements OnInit {
 
     @Input()
-    modalModel: ModalsDeviceEditDescriptionModel;
+    modalModel: ModalsInstanceEditDescriptionModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();

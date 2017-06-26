@@ -45,7 +45,7 @@ export class ModalsSelectHardwareComponent implements OnInit {
             let collisionTranslated = this.translationService.translateTable(b.collision, this, 'board_state');
             return {
                 value: b.id,
-                label: b.id + ' [' + b.personal_description + ']' + (b.collision ? ' (' + collisionTranslated + ')' : '')
+                label: b.id + ' [' + b.name + ']' + (b.collision ? ' (' + collisionTranslated + ')' : '')
             };
         });
         (<FormControl>(this.form.controls['board'])).setValue(this.modalModel.selectedBoard ? this.modalModel.selectedBoard : '');
