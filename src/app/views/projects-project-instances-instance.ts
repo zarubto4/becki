@@ -40,7 +40,6 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     gridUrl: string = '';
 
     currentHistoricInstance: IHomerInstanceRecord;
-    currentBlockoProgram: IBProgram = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -48,7 +47,6 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     blockoView: BlockoViewComponent;
 
     @ViewChild(InstanceHistoryTimelineComponent)
-    instanceHistoryTimeline: InstanceHistoryTimelineComponent;
 
     @ViewChild('historyEventsList')
     historyEventsList: ElementRef;
