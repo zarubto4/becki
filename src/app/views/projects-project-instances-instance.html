@@ -64,7 +64,10 @@
                                 <span class="font-grey-mint bold">{{instance.server_name}}</span><span [class.font-green-jungle]="instance.server_is_online" [class.font-red]="!instance.server_is_online" style="font-size: 1em">&nbsp;(<strong>{{instance.server_is_online?'online':'offline'}}</strong>)</span>
                             </div>
 
-                            <br>
+                            <div>
+                                <strong class="font-color-cloud">CLOUD</strong> Instance Status:
+                                <span [class.font-green-jungle]="instance.instance_online" [class.font-red]="!instance.instance_online" style="font-size: 1em">&nbsp;(<strong>{{instance.instance_online?'online':'offline'}}</strong>)</span>
+                            </div>
 
                         </div>
                     </div>
