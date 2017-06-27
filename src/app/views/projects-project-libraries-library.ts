@@ -90,12 +90,12 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                 this.blockUI();
                 this.backendService.deleteLibrary(this.library.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The code library has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_save_success')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.navigate(['/projects', this.currentParamsService.get('project'), 'libraries']);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The code library cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_removed_fail', reason)));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     });
             }
@@ -113,12 +113,12 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                     description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The code library has been updated.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_edit_success')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The code library cannot be updated.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_edit_fail', reason)));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     });
@@ -160,12 +160,12 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                 this.blockUI();
                 this.backendService.deleteLibraryVersion(version.version_id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The version has been changed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_removed_success')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The version cannot be changed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_version_removed_fail', reason)));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     });
@@ -183,11 +183,11 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                     version_description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(`The version ${model.name} has been changed.`));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_edit_success', model.name)));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(`The version ${model.name} cannot be changed.`, reason));
+                        this.addFlashMessage(new FlashMessageError( this.translate('flash_version_edit_fail', model.name , reason)));
                         this.refresh();
                     });
             }
@@ -225,7 +225,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
             })
             .catch(reason => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError(`The code types cannot be loaded.`, reason));
+                this.addFlashMessage(new FlashMessageError( this.translate('flash_cannot_load_library', reason)));
             });
 
     }

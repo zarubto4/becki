@@ -8,15 +8,11 @@
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
-import { IHomerInstance, IInstanceShortDetail } from '../backend/TyrionAPI';
+import { IInstanceShortDetail } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsConfirmModel } from '../modals/confirm';
-import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-import {
-    ModalsInstanceEditDescriptionComponent,
-    ModalsInstanceEditDescriptionModel
-} from '../modals/instance-edit-description';
+import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
 
 @Component({
     selector: 'bk-view-projects-project-instances',
@@ -68,11 +64,11 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
                 this.blockUI();
                 this.backendService.editInstance(instance.id, {name: model.name, description: model.description})
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The Instance description was updated.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_instance_edit_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The Instance cannot be updated.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_edit_fail', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -83,9 +79,9 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
         let m = null;
 
         if (start) {
-            m = new ModalsConfirmModel('Shutdown instance', 'Do you want to shutdown running instance?');
+            m = new ModalsConfirmModel(this.translate('label_shut_down_instance_modal'), this.translate('label_shut_down_instance_modal_comment'));
         } else {
-            m = new ModalsConfirmModel('Upload and run into cloud', 'Do you want to upload Blocko and running instance in Cloud?');
+            m = new ModalsConfirmModel(this.translate('label_upload_instance_modal'), this.translate('label_upload_instance_modal_comment'));
         }
 
         this.modalService.showModal(m)
@@ -99,7 +95,7 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
                         })
                         .catch((err) => {
                             this.unblockUI();
-                            this.fmError('Cannot turn instance off.', err);
+                            this.fmError(this.translate('label_upload_error', err));
                         });
                 }
             });

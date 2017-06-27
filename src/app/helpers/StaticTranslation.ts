@@ -327,8 +327,8 @@ export class StaticTranslation {
                 'label_online': 'Online',
                 'label_offline': 'Offline',
                 'label_none': 'None',
-                'label_program_version':'Program version',
-                'label_console':'Console',
+                'label_program_version': 'Program version',
+                'label_console': 'Console',
 
                 'flash_cant_load_version': 'Cannot load version <b>{0}</b>`, {1}',
                 'flash_cant_save_version': 'Failed saving version <b> {0} </b>, {1}',
@@ -350,13 +350,257 @@ export class StaticTranslation {
                 'flash_cant_turn_instance_on': 'Cannot turn instance on. {0}',
                 'flash_cant_turn_instance_off': 'Cannot turn instance off. {0}',
 
+            }, 'ProjectsProjectInstancesComponent': {
 
+                'title': 'Byzance<strong class="font-color-cloud">CLOUD</strong> - all instances',
+
+                'table_name': 'Instance name',
+                'table_id': 'Instance Id',
+                'table_description': 'Description',
+                'table_blocko_program': 'Program',
+                'table_status': 'Status',
+                'table_actions': 'Actions',
+
+                'flash_instance_edit_success' : 'The Instance description was updated.',
+                'flash_instance_edit_fail' : 'The Instance cannot be updated. {0}',
+
+                'label_shut_down_instance_modal': 'Shutdown instance',
+                'label_shut_down_instance_modal_comment': 'Do you want to shutdown running instance?',
+                'label_upload_instance_modal': 'Upload and run into cloud',
+                'label_upload_instance_modal_comment': 'There is not any instance in cloud.',
+                'label_upload_error': 'Cannot turn instance off. {0}',
+                'label_no_item': 'There is not any instance in cloud.',
+                'label_you_can_create': 'Do you want to upload Blocko and running instance in Cloud?',
+
+            }, 'ProjectsProjectInstancesInstanceComponent': {
+
+                'title': 'Byzance<strong class="font-color-cloud">CLOUD</strong> - instance <strong>{0}</strong>',
+
+                'tab_name_overview': 'Overview',
+                'tab_name_hardware': 'Integrated Hardware',
+                'tab_name_grid': 'Integrated Apps',
+                'tab_name_history': 'History',
+                'tab_name_update_progress': 'Update Progress',
+                'tab_name_update_view': 'Realtime View',
+
+                'table_name': 'Name',
+                'table_id': 'Id',
+                'table_hardware_type': 'Device Type',
+                'table_description': 'Description',
+                'table_actions': 'Actions',
+
+                'btn_change_version_in_cloud' : 'Change version in Cloud',
+                'label_instance_name': 'Instance Name',
+                'label_instance_description': 'Instance Description',
+                'label_instance_id': 'Instance Id',
+                'label_server_name': 'Server Name',
+                'label_instance_status': 'Instance Status',
+                'label_status': 'Status:',
+                'label_info': 'Info',
+                'label_instance_info_is_offline': 'This instance is offline',
+                'label_instance_type': 'Instance Type',
+                'label_created': 'Created',
+                'label_running_from': 'Running from',
+                'label_running_to': 'Running to',
+                'label_running_status': 'Running status',
+                'label_planned': 'Planned',
+                'label_progress': 'Progress',
+                'label_project': 'Project',
+                'label_program': 'Program',
+                'label_finished': 'Finished',
+                'label_firmware_type': 'Firmware Type',
+                'label_version': 'Version',
+                'label_description': 'Description',
+                'label_no_history_in_instance': 'There is no history for this instance',
+                'label_hardware_actual_in_instance': 'Actual in Instance',
+                'label_hardware_no_hardware_in_instance': 'No Hardware projects in this instance',
+                'label_grid_no_grid_in_instance': 'No Grid projects in this instance',
+
+                'label_modal_shutdown_instance': 'Shutdown instance',
+                'label_modal_confirm_shutdown_instance': 'Do you want to shutdown running instance?',
+                'label_modal_run_latest_version': 'Upload and run into cloud in latest running version',
+                'label_modal_confirm_run_latest_version': 'Do you want to upload Blocko and running instance in Cloud?',
+                'label_cannot_execute': 'Can not execute the command. {0}',
+                'label_cannot_change_version': 'Cannot change version. {0}',
+                'label_cannot_change_program_publicity': 'Cannot change program publicity. {0}',
+                'label_modal_change_instance_version': 'Change instance version',
+                'label_modal_change_running_instance_version': 'Do you want to change running instance version?',
+
+                'flash_instance_edit_success' : 'The Instance description was updated.',
+                'flash_instance_edit_fail' : 'The Instance cannot be updated. {0}',
+
+                'enum_FUTURE': 'Scheduled',
+                'enum_NOW': 'Running now',
+                'enum_HISTORY': 'Ran in Cloud',
+                'enum_VIRTUAL': 'Virtual Instance only for ',
+                'enum_INDIVIDUAL': 'Individual set Instance',
+                'enum_absolutely_public': 'Public',
+                'enum_private': 'Private',
+                'enum_MANUALLY_BY_USER_INDIVIDUAL': 'Manually (Individual Update) by User',
+                'enum_MANUALLY_BY_USER_BLOCKO_GROUP': 'Manually according Blocko by User',
+                'enum_MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME': 'Scheduled according Blocko by User',
+                'enum_AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE': 'System update by user setting - Always up to date',
+                'enum_AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE': 'System update by central server - Critical patch',
+
+                'enum_complete': 'Complete',
+                'enum_canceled': 'Canceled',
+                'enum_not_start_yet': 'Waiting in Update Que (In Progress)',
+                'enum_in_progress': 'Update is in progress',
+                'enum_overwritten': 'Overwritten by newer update',
+                'enum_not_updated': 'Not updated to right version',
+                'enum_waiting_for_device': 'Waiting for Device Reconnection',
+                'enum_bin_file_not_found': 'Bin File not Found' ,
+                'enum_critical_error': 'Critical Error',
+                'enum_homer_server_is_offline': 'Server is (was) Offline',
+                'enum_instance_inaccessible': 'Instance is (was) not accessible',
+
+            }, 'ProjectsProjectLibrariesComponent': {
+
+                'title': 'Byzance<strong class="font-color-code">CODE</strong> - all libraries',
+
+                'btn_add_library' : 'Add <strong class="font-color-grid">CODE</strong> Library',
+
+                'flash_library_add_success' : 'The Code Library has been created.',
+                'flash_library_add_fail' : 'The Code Library {0} cannot be created. {0}',
+                'flash_library_edit_success' : 'The Library has been updated.',
+                'flash_library_edit_fail' : 'The Library cannot be updated. {0}',
+                'flash_library_removed_success' : 'The Library has been removed.',
+                'flash_library_removed_fail' : 'The Library cannot be removed. {0}',
+
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_actions': 'Actions',
+
+            }, 'ProjectsProjectLibrariesLibraryComponent': {
+
+                'title': 'Byzance<strong class="font-color-code">CODE</strong> - library <strong>{0}</strong>',
+
+                'flash_library_edit_success' : 'The Library has been updated.',
+                'flash_library_edit_fail' : 'The Library cannot be updated. {0}',
+                'flash_library_removed_success' : 'The Library has been removed.',
+                'flash_library_removed_fail' : 'The Library cannot be removed. {0}',
+                'flash_version_save_success' : 'The version <b> {0} </b> saved successfully.',
+                'flash_version_save_fail' : 'Failed saving version <b> {0} </b>. {1}',
+                'flash_version_edit_success' : 'The version <b> {0} </b> saved successfully.',
+                'flash_version_edit_fail' : 'Failed saving version <b> {0} </b>. {1}',
+                'flash_version_removed_success' : 'The version has been removed.',
+                'flash_version_removed_fail' : 'The version cannot be removed. {0}',
+                'flash_cannot_load_library' : 'The Library cannot be loaded.',
+
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_actions': 'Actions',
+
+                'label_name': 'Library Name',
+                'label_description': 'Description',
+                'label_version': 'Version',
+
+            }, 'ProjectsProjectMembersComponent': {
+
+                'project_members_title': 'Project members',
+
+                'btn_add_members': 'Add members',
+
+                'table_name': 'Name',
+                'table_state': 'Description',
+                'table_actions': 'Actions',
+
+                'no_persons_in_this_projects': 'No members in this project',
+
+                'label_cannot_remove_yourself': 'Cannot remove yourself from project.',
+                'label_cannot_add_member': 'Cannot add members. {0}',
+                'label_cannot_delete_person': 'Cannot delete member. {0}',
+                'label_cannot_resend_invitation': 'Cannot resend invitation. {0}',
+                'label_invitation_sent': 'Invitation sent',
+
+            },  'ProjectsProjectWidgetsComponent': {
+
+                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - all widgets groups',
+
+                'btn_add_widget_group' : 'Add widgets group',
+
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_actions': 'Actions',
+
+                'flash_grid_group_add_success' : 'The version has been successfully created.',
+                'flash_grid_group_add_fail' : 'The version cannot be created. {0}',
+                'flash_grid_group_edit_success' : 'The version has been changed.',
+                'flash_grid_group_edit_fail' : 'The version cannot be changed. {0}',
+                'flash_grid_group_remove_success' : 'The version has been removed.',
+                'flash_grid_group_remove_fail' : 'The version cannot be removed. {0}',
+
+                'label_no_item': 'There is not any widgets group in this project',
+                'label_you_can_create': 'You can create it by click on button bellow.',
+
+            }, 'ProjectsProjectWidgetsWidgetsComponent': {
+
+                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - widgets group <strong>{0}</strong>',
+
+                'btn_add_widget' : 'Add widget',
+                'widget_group_name' : 'Widget Collection Name',
+                'widget_group_description' : 'Description',
+
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_actions': 'Actions',
+
+                'flash_grid_group_add_fail' : 'The version cannot be created. {0}',
+                'flash_grid_group_edit_success' : 'The version has been changed.',
+                'flash_grid_group_edit_fail' : 'The version cannot be changed. {0}',
+                'flash_grid_group_remove_success' : 'The version has been removed.',
+                'flash_grid_group_remove_fail' : 'The version cannot be removed. {0}',
+                'flash_widget_add_success' : 'The version has been successfully created.',
+                'flash_widget_add_fail' : 'The version cannot be created. {0}',
+                'flash_widget_removed_success' : 'The widget has been removed.',
+                'flash_widget_removed_fail' : 'The widget cannot be removed. {0}',
+                'flash_widget_edit_success' : 'The widget has been edited.',
+                'flash_widget_edit_fail' : 'The widget cannot be edited. {0}',
+
+                'label_no_item': 'There is not any widget in this group',
+                'label_you_can_create': 'You can create it by click on button bellow.',
+
+            }, 'ProjectsProjectWidgetsWidgetsWidgetComponent': {
+
+                'flash_version_save_success' : 'The version <b> {0} </b> saved successfully.',
+                'flash_version_save_fail' : 'Failed saving version <b> {0} </b>. {1}',
+                'flash_version_removed_success' : 'The version has been removed.',
+                'flash_version_removed_fail' : 'The version cannot be removed. {0}',
+                'flash_version_changed_success' : 'The version {0} has been changed.',
+                'flash_version_changed_fail' : 'The version {0} cannot be changed. {1}',
+                'flash_version_load_fail' : 'The version {0} cannot be loaded. {1}',
+                'flash_widget_removed_success' : 'The widget has been removed.',
+                'flash_widget_removed_fail' : 'The widget cannot be removed. {}',
+                'flash_widget_edit_success' : 'The widget has been edited.',
+                'flash_widget_edit_fail' : 'The widget cannot be edited. {0}',
+
+                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - widget <strong>{0}</strong>',
+
+                'label_widget_code': 'Widget Code',
+                'label_name': 'Name',
+                'label_description': 'Description',
+                'label_grid_group_name': 'Widget Collection',
+                'label_version': 'Version:',
+                'label_code': 'Code',
+                'label_build_errors': 'Build Errors',
+
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_author': 'Author',
+                'table_actions': 'Actions',
             },
 
+            'label_online' : 'Online',
+            'label_offline' : 'Offline',
+            'label_project_owner': 'Project owner',
+            'label_project_admin': 'Project admin',
+            'label_project_member': 'Project member',
             'label_email': 'E-mail',
             'label_password': 'Password',
-
+            'label_console' : 'Console',
+            'label_configuration': 'Configuration',
             'btn_save': 'Save',
+            'btn_test': 'Test',
             'btn_back': 'Back',
             'btn_send': 'Send',
             'btn_submit': 'Submit',
@@ -370,7 +614,7 @@ export class StaticTranslation {
             'hello_world': 'Hello {0}! {1}?',
         },
         'cz': {
-            'hello_world': 'Ahoj {0}! {1}?',
+            // TODO
         }
     };
 
@@ -388,12 +632,7 @@ export class StaticTranslation {
             }
         },
         'cz': {
-            'board_state': {
-                'UNKNOWN': 'neznámé',
-                'NO_COLLISION': 'Nenašli jsme žádné konflikty',
-                'ALREADY_IN_INSTANCE': 'Pozor! Daný hardware je již v instanci',
-                'PLANNED_UPDATE': 'naplánovaná aktualizace',
-            }
+            // TODO
         }
     };
 }

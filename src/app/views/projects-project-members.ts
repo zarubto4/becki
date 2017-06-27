@@ -69,7 +69,7 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
                         })
                         .catch((err) => {
                             this.unblockUI();
-                            this.fmError('Cannot add members.', err);
+                            this.fmError(this.translate('label_cannot_delete_person', err));
                         });
                 }
             });
@@ -77,7 +77,7 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
 
     onMemberDeleteClick(member: IProjectParticipant) {
         if ((this.backendService.personInfoSnapshot.mail === member.user_email) || (this.backendService.personInfoSnapshot.id === member.id)) {
-            this.fmError('Cannot remove yourself from project.');
+            this.fmError(this.translate('label_cannot_remove_yourself'));
         }
         this.blockUI();
         this.backendService.unshareProject(this.id, {persons_mail: [member.user_email]})
@@ -86,7 +86,7 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
             })
             .catch((err) => {
                 this.unblockUI();
-                this.fmError('Cannot delete member.', err);
+                this.fmError(this.translate('label_cannot_delete_person', err));
             });
     }
 
@@ -100,16 +100,16 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
             })
             .catch((err) => {
                 this.unblockUI();
-                this.fmError('Cannot resend invitation.', err);
+                this.fmError(this.translate('label_cannot_resend_invitation', err) );
             });
     }
 
     readableState(state: ('owner'|'admin'|'member'|'invited')) {
         switch (state) {
-            case 'owner': return 'Project owner';
-            case 'admin': return 'Project admin';
-            case 'member': return 'Project member';
-            case 'invited': return 'Invitation sent';
+            case 'owner': return this.translate('label_project_owner');
+            case 'admin': return this.translate('label_project_admin');
+            case 'member': return this.translate('label_project_member');
+            case 'invited': return this.translate('label_invitation_sent');
         }
         return 'Unknown';
     }

@@ -60,11 +60,11 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
                 this.blockUI();
                 this.backendService.deleteLibrary(library.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The code library has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_removed_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The code library cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_removed_fail', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -82,11 +82,11 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
                     description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(`The code library ${model.name} has been added to project.`));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_add_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(`The code library ${model.name} cannot be added to project.`, reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_add_fail', model.name, reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -104,11 +104,11 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
                     description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The code library has been updated.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_edit_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The code library cannot be updated.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_edit_fail', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }

@@ -12,7 +12,7 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-fw fa-sliders"></i>
-                            Byzance<strong class="font-color-grid">GRID</strong> - widget <strong>{{widget?widget.name:""}}</strong>
+                           <span [innerHTML]="'title'|bkTranslate:this:widget?widget.name:''"></span>
                         </span>
                     </div>
                     <div class="becki-actions">
@@ -26,10 +26,10 @@
                 </div>
                 <div class="clearfix"></div>
                 <div>
-                    <strong class="font-color-grid">GRID</strong> Name: <strong>{{widget?widget.name:""}}</strong><br>
-                    <strong class="font-color-grid">GRID</strong> Description: <strong>{{widget?widget.description:"0_o"}}</strong><br>
+                    <strong class="font-color-grid">GRID</strong><span [innerHTML]="'label_name'|bkTranslate:this"></span>: <strong>{{widget?widget.name:""}}</strong><br>
+                    <strong class="font-color-grid">GRID</strong><span [innerHTML]="'label_description'|bkTranslate:this"></span>: <strong>{{widget?widget.description:"0_o"}}</strong><br>
                     <br>
-                    <strong class="font-color-grid">GRID</strong> Widget Collection: <strong><a (click)="onWidgetsGroupClick(group.id)">{{group?group.name:""}}</a></strong>
+                    <strong class="font-color-grid">GRID</strong><span [innerHTML]="'label_grid_group_name'|bkTranslate:this"></span>: <strong><a (click)="onWidgetsGroupClick(group.id)">{{group?group.name:""}}</a></strong>
                 </div>
             </div>
         </div>
@@ -39,11 +39,11 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark uppercase">
                             <i class="fa fa-fw fa-file-code-o"></i>
-                            Code
+                            <span>{{'label_code'|bkTranslate:this}}</span>
                         </span>
                     </div>
                     <div *ngIf="selectedWidgetVersion" class="becki-caption version">
-                        <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="unsavedChanges" class="changes"></span> {{selectedWidgetVersion.version_name}}</span>
+                        <span class="caption-subject font-gray"><strong>{{'label_version'|bkTranslate:this}}:</strong> <span *ngIf="unsavedChanges" class="changes"></span> {{selectedWidgetVersion.version_name}}</span>
                     </div>
                 </div>
 
@@ -52,7 +52,7 @@
                 <bk-form-input label="Widget description" [control]="wifgrtForm.controls.description" [waitForTouch]="false"></bk-form-input>-->
 
                 <div class="form-group">
-                    <label>Widget code</label>
+                    <label>{{'label_widget_code'|bkTranslate:this}}</label>
                     <bk-monaco-editor [code]="widgetCode" (codeChange)="newWidgetCode($event)" [typings]="['ES5', 'ConsoleLib', 'ContextLib', 'UtilsLib', 'WKLib']"></bk-monaco-editor>
                 </div>
 
@@ -61,7 +61,7 @@
                     <div class="portlet-title">
                         <div class="caption">
                             <i class="fa fa-play font-red"></i>
-                            <span class="caption-subject bold uppercase font-red">Build errors</span>
+                            <span class="caption-subject bold uppercase font-red">{{'label_build_errors'|bkTranslate:this}}></span>
                         </div>
                     </div>
                     <div class="portlet-body">
@@ -79,10 +79,10 @@
                 <div>
                     <div class="pull-right">
                         <button type="button" class="btn default yellow-gold" (click)="onTestClick()" >
-                            <i class="fa fa-play"></i> Test
+                            <i class="fa fa-play"></i>{{'btn_test'|bkTranslate:this}}
                         </button>
                         <button type="button" class="btn default green-haze" (click)="onSaveClick()" [disabled]="!widgetCode">
-                            <i class="fa fa-floppy-o"></i> Save
+                            <i class="fa fa-floppy-o"></i>{{'btn_save'|bkTranslate:this}}
                         </button>
                     </div>
                     <div class="clearfix"></div>
@@ -97,13 +97,13 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark uppercase">
                             <i class="fa fa-fw fa-terminal"></i>
-                            Test
+                            {{'btn_test'|bkTranslate:this}}
                         </span>
                     </div>
                 </div>
                 <div class="portlet-content">
                     <button type="button" class="btn default yellow-gold grid-widget-config-button" (click)="onWidgetConfigClick()" >
-                        <i class="fa fa-cog"></i> Configuration
+                        <i class="fa fa-cog"></i> {{'label_configuration'|bkTranslate:this}}
                     </button>
                     <div #widgetTestScreen></div>
 
@@ -179,7 +179,7 @@
 
                         </div>
                         <div class="col-md-4" style="display: inline-block; width: calc(50% - 20px)">
-                            <h4 class="text-center">Console</h4>
+                            <h4 class="text-center">{{'label_console'|bkTranslate:this}}</h4>
                             <bk-console-log maxHeight="400px"></bk-console-log>
                         </div>
                         <div class="clearfix"></div>
@@ -194,7 +194,7 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark uppercase">
                             <i class="fa fa-fw fa-code-fork"></i>
-                            Saved versions
+                           {{'btn_save'|bkTranslate:this}}
                         </span>
                     </div>
                 </div>
@@ -202,10 +202,10 @@
                     <table class="table table-condensed table-hover">
                         <thead>
                         <tr>
-                            <th class="col col-lg-2">Name</th>
-                            <th class="col col-lg-8">Description</th>
-                            <th class="col col-lg-1">Author</th>
-                            <th class="col col-lg-1">Actions</th>
+                            <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                            <th class="col col-lg-8">{{'table_description'|bkTranslate:this}}</th>
+                            <th class="col col-lg-1">{{'table_author'|bkTranslate:this}}</th>
+                            <th class="col col-lg-1">{{'table_actions'|bkTranslate:this}}</th>
                         </thead>
                         <tbody>
                         <tr *ngFor="let version of widgetVersions">

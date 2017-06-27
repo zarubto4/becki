@@ -10,7 +10,7 @@
             <div class="becki-caption">
                 <span class="font-blue-dark">
                     <i class="fa fa-fw fa-fw fa-sliders"></i>
-                    Byzance<strong class="font-color-grid">GRID</strong> - widgets group <strong>{{group?group.name:""}}</strong>
+                         <span [innerHTML]="'title'|bkTranslate:this:group?group.name:''"></span>
                 </span>
             </div>
             <div class="becki-actions">
@@ -21,22 +21,22 @@
                     <i class="fa fa-trash"></i>
                 </button>
                 <button class="btn blue" [disabled]="!group || !group.update_permission" (click)="onWidgetAddClick(group)">
-                    <i class="fa fa-plus-circle"></i> Add widget
+                    <i class="fa fa-plus-circle"></i>{{'btn_add_widget'|bkTranslate:this}}
                 </button>
             </div>
         </div>
         <div>
-            <strong class="font-color-grid">GRID</strong> Widget Collection Name: <strong>{{group?group.name:""}}</strong><br>
-            <strong class="font-color-grid">GRID</strong> Description: <strong>{{group?group.description:""}}</strong>
+            <strong class="font-color-grid">GRID</strong>{{'widget_group_name'|bkTranslate:this}}: <strong>{{group?group.name:""}}</strong><br>
+            <strong class="font-color-grid">GRID</strong>{{'widget_group_description'|bkTranslate:this}}: <strong>{{group?group.description:""}}</strong>
             <br>
         </div>
         <div *ngIf="(group && group.grid_widgets && group.grid_widgets.length)" class="table-scrollable">
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th class="full-width">Description</th>
-                    <th class="text-center">Actions</th>
+                    <th>{{'table_name'|bkTranslate:this}}</th>
+                    <th class="full-width">{{'table_description'|bkTranslate:this}}</th>
+                    <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -63,11 +63,11 @@
         </div>
         <h3 *ngIf="!group" class="text-center">Loading...</h3>
         <div *ngIf="group && !(group.grid_widgets && group.grid_widgets.length)" class="list-no-items">
-            <p class="list-no-items__main-label">There is not any widget library in this group</p>
-            <p class="list-no-items__sub-label">You can create it by click on button bellow.</p>
+            <p class="list-no-items__main-label">{{'label_no_item'|bkTranslate:this}}</p>
+            <p class="list-no-items__sub-label">{{'label_you_can_create'|bkTranslate:this}}</p>
             <p>
                 <button class="btn blue" [disabled]="!group || !group.update_permission" (click)="onWidgetAddClick(group)">
-                    <i class="fa fa-plus-circle"></i> Add widget
+                    <i class="fa fa-plus-circle"></i> {{'btn_add_widget'|bkTranslate:this}}
                 </button>
             </p>
         </div>

@@ -77,12 +77,12 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                 this.blockUI();
                 this.backendService.editInstance(this.instance.id, {name: model.name, description: model.description})
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The Instance description was updated.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_instance_edit_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The Instance cannot be updated.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_edit_fail', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -96,11 +96,13 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
             this.refresh();
         });
 
-        if (location.hostname.indexOf('portal.stage.') === 0) {
-            this.gridUrl = 'https://app.stage.byzance.cz/program/';
-        } else {
-            this.gridUrl = 'http://localhost:8888/program/';
-        }
+        /** Supported by Tyrion
+            if (location.hostname.indexOf('portal.stage.') === 0) {
+                this.gridUrl = 'https://app.stage.byzance.cz/program/';
+            } else {
+                this.gridUrl = 'http://localhost:8888/program/';
+            }
+        */
     }
 
     ngAfterContentChecked() {
@@ -176,7 +178,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                 this.refresh();
             })
             .catch((reason) => {
-                this.fmError(`Cannot change program publicity.`, reason);
+                this.fmError(this.translate('label_cannot_change_version', reason));
                 this.unblockUI();
             });
     }
@@ -197,7 +199,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
             return;
         }*/
         if (this.instance.instance_online) {
-            let mConfirm = new ModalsConfirmModel('Change instance version', 'Do you want to change running instance version?');
+            let mConfirm = new ModalsConfirmModel(this.translate('label_modal_change_instance_version'), this.translate('label_modal_change_running_instance_version'));
             this.modalService.showModal(mConfirm)
                 .then((success) => {
                     if (success) {
@@ -224,7 +226,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                             })
                             .catch((err) => {
                                 this.unblockUI();
-                                this.fmError('Cannot change version.', err);
+                                this.fmError(this.translate('label_cannot_change_version', err));
                             });
                     }
                 });
@@ -248,9 +250,9 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
         let m = null;
 
         if (start) {
-            m = new ModalsConfirmModel('Shutdown instance', 'Do you want to shutdown running instance?');
+            m = new ModalsConfirmModel(this.translate('label_modal_shutdown_instance'), this.translate('label_modal_confirm_shutdown_instance'));
         } else {
-            m = new ModalsConfirmModel('Upload and run into cloud in latest running version', 'Do you want to upload Blocko and running instance in Cloud?');
+            m = new ModalsConfirmModel(this.translate('label_modal_shutdown_instance'), this.translate('label_modal_confirm_run_latest_version'));
         }
 
         this.modalService.showModal(m)
@@ -264,7 +266,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                         })
                         .catch((err) => {
                             this.unblockUI();
-                            this.fmError('Can not execute the command.', err);
+                            this.fmError(this.translate('label_cannot_execute', err));
                         });
                 }
             });

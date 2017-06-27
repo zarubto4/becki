@@ -127,12 +127,12 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                     type_of_widget_id: this.widgetsId // tohle je trochu divný ne? ... možná kdyby jsi chtěl přesunout widget mezi groupama? [DU]
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The widget has been edited.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_edit_success')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The widget cannot be edited.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_edit_fail', reason)));
                     });
             }
         });
@@ -145,12 +145,12 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 this.blockUI();
                 this.backendService.deleteWidget(this.widget.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The widget has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_removed_success')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.navigate(['/projects', this.currentParamsService.get('project'), 'widgets', this.group.id]);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The widget cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_removed_fail', reason)));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     });
             }
@@ -164,12 +164,12 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 this.blockUI();
                 this.backendService.deleteWidgetVersion(version.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The version has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_removed_success')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The version cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError( this.translate('flash_version_removed_fail', reason)));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     });
@@ -187,11 +187,11 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                     version_description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(`The version ${model.name} has been changed.`));
+                        this.addFlashMessage(new FlashMessageSuccess( this.translate('flash_version_changed_success', model.name)));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(`The version ${model.name} cannot be changed.`, reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_version_changed_success', model.name, reason)));
                         this.refresh();
                     });
             }
@@ -248,7 +248,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 }
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(`The widget cannot be loaded.`, reason));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_version_load_fail', reason)));
                 this.unblockUI();
             });
 
@@ -276,7 +276,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
             .catch(reason => {
                 this.selectedWidgetVersion = null;
                 // console.log(this.widgetCode);
-                this.addFlashMessage(new FlashMessageError(`The widget version cannot be loaded.`, reason));
+                this.addFlashMessage(new FlashMessageError((this.translate('flash_version_load_fail', version.name, reason))));
                 this.unblockUI();
             });
     }
@@ -490,13 +490,13 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                     design_json: designJson
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('Version <b>' + m.name + '</b> saved successfully.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_save_success')));
                         this.refresh(); // also unblockUI
                         this.unsavedChanges = false;
                         this.exitConfirmationService.setConfirmationEnabled(false);
                     })
                     .catch((err) => {
-                        this.addFlashMessage(new FlashMessageError('Failed saving version <b>' + m.name + '</b>', err));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_version_save_fail', m.name , err)));
                         this.unblockUI();
                     });
             }

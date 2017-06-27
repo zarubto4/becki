@@ -10,12 +10,12 @@
             <div class="becki-caption">
                 <span class="font-blue-dark">
                     <i class="fa fa-fw fa-code"></i>
-                    Byzance<strong class="font-color-code">CODE</strong> - all libraries
+                         <span [innerHTML]="'title'|bkTranslate:this"></span>
                 </span>
             </div>
             <div class="becki-actions">
                 <button class="btn blue" (click)="onAddClick()">
-                    <i class="fa fa-plus-circle"></i> Add code library
+                    <i class="fa fa-plus-circle"></i>{{'btn_add_library'|bkTranslate:this}}
                 </button>
             </div>
         </div>
@@ -23,9 +23,9 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th class="col col-lg-2">Name</th>
-                    <th class="col col-lg-9">Description</th>
-                    <th class="col col-lg-1 center">Actions</th>
+                    <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                    <th class="col col-lg-9">{{'table_description'|bkTranslate:this}}</th>
+                    <th class="col col-lg-1 center">{{'table_actions'|bkTranslate:this}}</th>
                 </tr>
                 </thead>
                 <tbody>

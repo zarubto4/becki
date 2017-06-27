@@ -12,7 +12,7 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-code"></i>
-                             Byzance<strong class="font-color-code">CODE</strong> - library <strong>{{currentParamsService.currentLibraryNameSnapshot}}</strong>
+                                <span [innerHTML]="'title'|bkTranslate:this:currentParamsService.currentLibraryNameSnapshot"></span>
                         </span>
                     </div>
                     <div class="becki-actions">
@@ -25,8 +25,8 @@
                     </div>
                 </div>
                 <div>
-                    <strong class="font-color-code">CODE</strong> Library name: <strong>{{library?library.name:""}}</strong><br>
-                    <strong class="font-color-code">CODE</strong> Description: <strong>{{library?library.description:""}}</strong>
+                    <strong class="font-color-code">CODE</strong>{{'label_name'|bkTranslate:this}}:<strong>{{library?library.name:""}}</strong><br>
+                    <strong class="font-color-code">CODE</strong>{{'label_description'|bkTranslate:this}}: <strong>{{library?library.description:""}}</strong>
                 </div>
             </div>
         </div>
@@ -40,14 +40,14 @@
                         </span>
                     </div>
                     <div *ngIf="selectedLibraryVersion" class="becki-caption version">
-                        <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="changesInSelectedVersion().length > 0" class="changes"></span> {{selectedLibraryVersion.version_name}}</span>
+                        <span class="caption-subject font-gray"><strong>{{'label_version'|bkTranslate:this}}:</strong> <span *ngIf="changesInSelectedVersion().length > 0" class="changes"></span> {{selectedLibraryVersion.version_name}}</span>
                     </div>
                 </div>
                 <bk-code-ide [files]="selectedCodeFiles" defaultOpenFilename="README.md"></bk-code-ide>
                 <div>
                     <div class="pull-right">
                         <button type="button" class="btn default green-haze" (click)="onSaveClick()" [disabled]="changesInSelectedVersion().length == 0">
-                            <i class="fa fa-floppy-o"></i> Save
+                            <i class="fa fa-floppy-o"></i>{{'btn_save'|bkTranslate:this}}
                         </button>
                     </div>
                     <div class="clearfix"></div>
@@ -60,7 +60,7 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-code-fork"></i>
-                            Saved versions
+                            {{'btn_save'|bkTranslate:this}}
                         </span>
                     </div>
                 </div>
@@ -68,9 +68,9 @@
                     <table class="table table-condensed table-hover">
                         <thead>
                         <tr>
-                            <th class="col col-lg-2">Name</th>
-                            <th class="col col-lg-9">Description</th>
-                            <th class="col col-lg-1 text-center">Actions</th>
+                            <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                            <th class="col col-lg-9">{{'table_description'|bkTranslate:this}}</th>
+                            <th class="col col-lg-1 text-center">{{'table_actions'|bkTranslate:this}}</th>
                         </tr>
                         </thead>
                         <tbody>

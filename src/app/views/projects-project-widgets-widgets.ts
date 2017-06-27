@@ -63,11 +63,11 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
                     description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The widgets group has been edited.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_group_edit_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The widgets group cannot be edited.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_edit_fail', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -80,11 +80,11 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
                 this.blockUI();
                 this.backendService.deleteTypeOfWidget(this.group.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The widgets group has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_group_remove_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The widgets group cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_remove_fail', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -104,11 +104,11 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
                     description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The widget has been added.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_add_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The widget cannot be added.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_add_fail', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -128,11 +128,11 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
                     type_of_widget_id: this.widgetsId // tohle je trochu divný ne? ... možná kdyby jsi chtěl přesunout widget mezi groupama? [DU]
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The widget has been edited.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_edit_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The widget cannot be edited.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_edit_fail', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -147,11 +147,11 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
                 this.blockUI();
                 this.backendService.deleteWidget(widget.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The widget has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_removed_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The widget cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_removed_fail', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
