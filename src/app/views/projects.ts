@@ -50,6 +50,10 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
         this.navigate(['/projects', project.id]);
     }
 
+    onProductClick(product_id: string): void {
+        this.router.navigate(['/financial', product_id]);
+    }
+
     onTestClick(): void {
         this.blockUIService.blockUI();
 

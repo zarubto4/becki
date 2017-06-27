@@ -30,7 +30,7 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>Name</th>
+                    <th lass="full-width">Name</th>
                     <th class="full-width">Description</th>
                     <th class="text-center">Actions</th>
                 </tr>
@@ -38,8 +38,14 @@
                 <tbody>
                 <tr *ngFor="let project of projects">
 
-                    <td *ngIf="project.active" class="no-wrap bold"><a (click)="onProjectClick(project)">{{project.name}}</a></td>
-                    <td *ngIf="!project.active" class="no-wrap bold">{{project.name}} <span class="font-red-flamingo">(Deactivated - under {{project.product_name}})</span></td>
+                    <td class="no-wrap" *ngIf="project.active" class="no-wrap bold"><a (click)="onProjectClick(project)">{{project.name}}</a></td>
+                    <td class="no-wrap" *ngIf="!project.active">
+                        <strong>{{project.name}}</strong>
+                        <br>
+                        <span class="font-red-flamingo">(Deactivated under <a (click)="onProductClick(project.product_id)"><span class="font-red-flamingo bold">{{project.product_name}}</span></a>) </span>
+                    </td>
+
+
                     <td>{{project.description}}</td>
                     <td class="no-wrap">
                         <button title="Project properties" class="btn btn-icon-only green" [disabled]="!project.edit_permission || !project.active" (click)="onEditClick(project)">

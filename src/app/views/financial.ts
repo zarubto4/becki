@@ -37,7 +37,6 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
     }
 
     onProductClick(product: IProduct): void {
-        // console.log(product);
         this.router.navigate(['/financial', product.id]);
     }
 
