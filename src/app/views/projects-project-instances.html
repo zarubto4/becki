@@ -23,7 +23,7 @@
                     <tr>
                         <th class="col col-lg-1">Instance name</th>
                         <th class="col col-lg-1">Instance Id</th>
-                        <th class="col col-lg-5">Description</th>
+                        <th class="col col-lg-7">Description</th>
                         <th class="col col-lg-1"><strong class="font-color-blocko">BLOCKO</strong> Program</th>
                         <th class="col col-lg-1" >Status</th>
                         <th class="col col-lg-1">Actions</th>
@@ -33,7 +33,7 @@
                 <tr *ngFor="let instance of instances">
 
                     <td class="no-wrap bold">
-                        <a (click)="onInstanceClick(instance)" class="no-wrap"><strong>{{instance.name?instance.name:instance.id}}</strong></a>
+                        <a (click)="onInstanceClick(instance)" class="no-wrap"><strong>{{instance.name?instance.name:'Instance'}}</strong></a>
                     </td>
                     <td class="no-wrap">{{instance.id}}</td>
                     <td class="no-wrap">{{instance.description}}</td>

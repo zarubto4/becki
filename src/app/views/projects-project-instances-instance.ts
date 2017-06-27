@@ -144,12 +144,12 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                 this.unblockUI();
 
                 if (!this.instance.actual_instance) {
-                    this.router.navigate(['/', 'projects', this.id, 'instances']);
+                    this.router.navigate(['/', 'projects', this.id, 'instances', this.instanceId]);
                 }
             })
             .catch(reason => {
                 this.fmError(`Instances ${this.id} cannot be loaded.`, reason);
-                this.router.navigate(['/', 'projects', this.id, 'instances']);
+                this.router.navigate(['/', 'projects', this.id, 'instances', this.instanceId]);
                 this.unblockUI();
             });
     }
