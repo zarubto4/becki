@@ -141,17 +141,17 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
                 this.unblockUI();
                 this.backendService.logout()
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('Email with instructions was sent.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_email_was_send')));
                         this.navigate(['/login']);
                     })
                     .catch((error) => {
-                        this.addFlashMessage(new FlashMessageError('This user cannot be log out.'));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_user_cant_log_out')));
                     });
-                this.addFlashMessage(new FlashMessageSuccess('Email with instructions was sent.'));
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_email_was_send')));
             })
             .catch(error =>  {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot change password', error));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_password', error)));
             });
     }
 
@@ -167,21 +167,21 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
                         this.unblockUI();
                         this.backendService.logout()
                             .then(() => {
-                                this.addFlashMessage(new FlashMessageSuccess('Email with instructions was sent.'));
+                                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_email_was_send')));
                                 this.navigate(['/login']);
                             })
                             .catch((error) => {
-                                this.addFlashMessage(new FlashMessageError('This user cannot be log out.'));
+                                this.addFlashMessage(new FlashMessageError(this.translate('flash_user_cant_log_out',error)));
                             });
-                        this.addFlashMessage(new FlashMessageSuccess('Email with instructions was sent'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_email_was_send')));
                     })
                     .catch(error =>  {
                         this.unblockUI();
-                        this.addFlashMessage(new FlashMessageError('Cannot change email', error));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_email', error)));
                     });
             }else {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot change email, ', response.message));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_email, ', response.message)));
             }
         });
     }
@@ -196,7 +196,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
                 image.addEventListener('load', () => {
 
                     if (image.width < 50 || image.height < 50) {
-                        this.fmWarning('Image is too small, minimal dimensions is 50x50px.');
+                        this.fmWarning(this.translate('flash_image_too_small'));
                         this.cropperLoaded = false;
                     } else {
                         this.cropperLoaded = true;
@@ -228,12 +228,12 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
             file: this.cropperData.image
         })
             .then((result) => {
-                this.fmSuccess('New avatar saved successfully.');
+                this.fmSuccess(this.translate('flash_new_avatar_saved'));
                 this.backendService.refreshPersonInfo();
                 this.cropperLoaded = false;
             })
             .catch((error) => {
-                this.fmError('Cannot save new avatar.', error);
+                this.fmError(this.translate('flash_cant_save_avatar', error));
             });
     }
 
@@ -247,11 +247,11 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
         })
             .then((ok) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageSuccess('Your information was updated.'));
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_information_updated')));
             })
             .catch((error) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot change information.', error));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_information', error)));
             });
     }
 }

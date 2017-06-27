@@ -41,7 +41,7 @@ export class ProducersComponent extends BaseMainComponent implements OnInit, OnD
                 this.producers = producers;
             })
             .catch((reason) => {
-                this.fmError('Project cannot be loaded.', reason);
+                this.fmError(this.translate('flash_project_cant_load', reason));
                 this.unblockUI();
             });
         this.unblockUI();

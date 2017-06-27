@@ -1,10 +1,11 @@
-<bk-layout-main [title]="'Producers'" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot" [lastBreadName]="producer?producer.name:''">
+<bk-layout-main [title]="'main_title'|bkTranslate:this" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot"
+    [lastBreadName]="producer?producer.name:''">
     <div *ngIf="producer" class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
                 <span class="font-blue-dark">
                     <i class="fa fa-fw fa-industry"></i>
-                    Producer <strong>{{producer.name}}</strong>
+                    {{'title'|bkTranslate:this}} <strong>{{producer.name}}</strong>
                 </span>
             </div>
         </div>
@@ -19,7 +20,7 @@
             <div class="becki-caption">
                 <span class="font-blue-dark">
                     <i class="fa fa-fw fa-microchip"></i>
-                    Available devices
+                    {{'label_available_devices'|bkTranslate:this}}
                 </span>
             </div>
         </div>
@@ -62,13 +63,13 @@
             <div class="becki-caption">
                 <span class="font-blue-dark">
                     <i class="fa fa-fw fa-microchip"></i>
-                    Available devices
+                    {{'label_available_devices'|bkTranslate:this}}
                 </span>
             </div>
         </div>
         <div class="mt-element-card mt-element-overlay">
-            <h3 *ngIf="!devices" class="text-center">Loading...</h3>
-            <h3 *ngIf="devices && devices.length==0" class="text-center">No device is available.</h3>
+            <h3 *ngIf="!devices" class="text-center">{{'loading'|bkTranslate:this}}</h3>
+            <h3 *ngIf="devices && devices.length==0" class="text-center">{{'label_no_device'|bkTranslate:this}}</h3>
         </div>
     </div>
 </bk-layout-main>

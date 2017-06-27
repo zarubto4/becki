@@ -33,7 +33,7 @@ export class NotificationsComponent extends BaseMainComponent implements OnInit 
                 this.loading = false;
             })
             .catch((err) => {
-                this.notificationService.addFlashMessage(new FlashMessageError('Cannot load notifications', err));
+                this.notificationService.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load'), err));
                 this.loading = false;
             });
     }
@@ -56,7 +56,7 @@ export class NotificationsComponent extends BaseMainComponent implements OnInit 
                     this.loading = false;
                 })
                 .catch((err) => {
-                    this.notificationService.addFlashMessage(new FlashMessageError('Cannot load notifications', err));
+                    this.notificationService.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load'), err));
                     this.loading = false;
                 });
         }

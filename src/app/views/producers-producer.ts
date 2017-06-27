@@ -54,7 +54,7 @@ export class ProducersProducerComponent extends BaseMainComponent implements OnI
                 this.devices = devices;
             })
             .catch((reason) => {
-                this.fmError('Project cannot be loaded.', reason);
+                this.fmError(this.translate('flash_project_cant_load', reason));
                 this.unblockUI();
             });
         this.unblockUI();

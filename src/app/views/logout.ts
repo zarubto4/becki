@@ -5,6 +5,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { BackendService } from '../services/BackendService';
+import { TranslationService } from '../services/TranslationService';
 
 @Component({
     selector: 'bk-view-logout',
@@ -16,7 +17,7 @@ export class LogoutComponent {
 
     logoutInProgress: boolean = false;
 
-    constructor(private backendService: BackendService, private router: Router) {
+    constructor(private backendService: BackendService, private router: Router, private translationService: TranslationService) {
 
         this.logout();
 
@@ -32,9 +33,9 @@ export class LogoutComponent {
             .catch(reason => {
                 this.logoutInProgress = false;
                 if (reason.userMessage) {
-                    this.logoutError = 'Current user cannot be logged out.\n' + reason.userMessage;
+                    this.logoutError = this.translationService.translate('msg_logout_cant_log_out', this, null, reason.userMessage);
                 } else {
-                    this.logoutError = 'Current user cannot be logged out.\n' + reason;
+                    this.logoutError = this.translationService.translate('msg_logout_cant_log_out', this, null, reason);
                 }
             });
     }

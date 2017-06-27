@@ -1,10 +1,10 @@
-<bk-layout-main [title]="'Producers'" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+<bk-layout-main [title]="'main_title'|bkTranslate:this" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
                 <span class="font-blue-dark uppercase">
                     <i class="fa fa-fw fa-industry"></i>
-                    Producers
+                    {{'title'|bkTranslate:this}}
                 </span>
             </div>
         </div>
@@ -12,8 +12,8 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th class="full-width">Description</th>
+                    <th>{{'table_name'|bkTranslate:this}}</th>
+                    <th class="full-width">{{'table_description'|bkTranslate:this}}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -24,7 +24,7 @@
                 </tbody>
             </table>
         </div>
-        <h3 *ngIf="!producers" class="text-center">Loading...</h3>
-        <h3 *ngIf="producers && producers.length == 0" class="text-center">No producer is available.</h3>
+        <h3 *ngIf="!producers" class="text-center">{{'loading'|bkTranslate:this}}</h3>
+        <h3 *ngIf="producers && producers.length == 0" class="text-center">{{'label_no_producer'|bkTranslate:this}}</h3>
     </div>
 </bk-layout-main>

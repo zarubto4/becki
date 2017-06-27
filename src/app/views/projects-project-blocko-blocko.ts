@@ -208,12 +208,12 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 this.blockUI();
                 this.backendService.deleteBProgram(this.blockoProgram.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The blocko has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_removed')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.router.navigate(['/projects/' + this.projectId + '/blocko']);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The blocko cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_blocko', reason)));
                         this.refresh();
                     });
             }
@@ -225,13 +225,13 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editBProgram(this.blockoProgram.id, {name: model.name, description: model.description})
+                this.backendService.editBProgram(this.blockoProgram.id, { name: model.name, description: model.description })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The blocko has been updated.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_updated')));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The blocko cannot be updated.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_blocko', reason)));
                         this.refresh();
                     });
             }
@@ -350,7 +350,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                             this.blockoView.addTsBlock(this.blocksCache[wantedVersionName].logic_json, this.blocksCache[wantedVersionName].design_json, x, y, params.data.id, wantedVersion.id);
                         })
                         .catch(reason => {
-                            this.addFlashMessage(new FlashMessageError(`The blocko block version cannot be loaded.`, reason));
+                            this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_blocko_version', reason)));
                         });
 
                 }
@@ -364,7 +364,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 this.blockoView.addTsBlock(params.data.blockoTsCode, params.data.blockoDesignJson, x, y);
 
             } else {
-                this.addFlashMessage(new FlashMessageError(`The blocko block cannot be added.`));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_blocko_block')));
             }
 
         }
@@ -383,7 +383,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                         this.blocksCache[wantedVersionName] = bbv;
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(`The blocko block version cannot be loaded.`, reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_blocko_block', reason)));
                     });
             }
 
@@ -539,7 +539,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             let mainBoards = this.getAllFreeMainBoards();
 
             if (!mainBoards || mainBoards.length === 0) {
-                this.modalService.showModal(new ModalsConfirmModel('Error', 'No available main boards hardware.', true, 'OK', null));
+                this.modalService.showModal(new ModalsConfirmModel(this.translate('label_modal_error'), this.translate('label_modal_no_main_boards'), true, this.translate('label_modal_ok'), null));
                 return;
             }
 
@@ -565,7 +565,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             let subBoards = this.getAllFreeSubBoards();
 
             if (!subBoards || subBoards.length === 0) {
-                this.modalService.showModal(new ModalsConfirmModel('Error', 'No available padavan boards hardware.', true, 'OK', null));
+                this.modalService.showModal(new ModalsConfirmModel(this.translate('label_modal_error'), 'No available padavan boards hardware.', true, this.translate('label_modal_ok'), null));
                 return;
             }
 
@@ -803,7 +803,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             return;
         }
         if (this.blockoProgram && this.blockoProgram.instance_details && this.blockoProgram.instance_details.instance_online) {
-            let mConfirm = new ModalsConfirmModel('Change instance version', 'Do you want to change running instance version?');
+            let mConfirm = new ModalsConfirmModel(this.translate('label_modal_change_instance_version'), this.translate('label_modal_change_running_instance_version'));
             this.modalService.showModal(mConfirm)
                 .then((success) => {
                     if (success) {
@@ -828,7 +828,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                         })
                         .catch((err) => {
                             this.unblockUI();
-                            this.fmError('Cannot change version.', err);
+                            this.fmError(this.translate('flash_cant_change_version', err));
                         });
                 }
             });
@@ -839,7 +839,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         if (programVersion) {
             this.selectProgramVersion(programVersion);
         } else {
-            this.fmError('Program version not found');
+            this.fmError(this.translate('flash_cant_find_program_version'));
         }
     }
 
@@ -849,12 +849,12 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 this.blockUI();
                 this.backendService.deleteBProgramVersion(version.version_id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The version has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_removed')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The version cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_version', reason)));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     });
@@ -872,11 +872,11 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     version_description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(`The version ${model.name} has been changed.`));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_version_been_changed', model.name)));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(`The version ${model.name} cannot be changed.`, reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_cant_change_version', model.name, reason)));
                         this.refresh();
                     });
             }
@@ -893,18 +893,18 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 })
                 .catch((err) => {
                     this.unblockUI();
-                    this.fmError('Cannot turn instance on.', err);
+                    this.fmError(this.translate('flash_cant_turn_instance_on', err));
                 });
 
         } else {
-            this.fmWarning('Cannot turn instance on.');
+            this.fmWarning(this.translate('flash_cant_turn_instance_on', ' ')); //pozn. jedná se o stejný text
         }
     }
 
     onTurnOffClick(): void {
         if (NullSafe(() => this.blockoProgram.instance_details.instance_id)) {
 
-            let m = new ModalsConfirmModel('Shutdown instance', 'Do you want to shutdown running instance?');
+            let m = new ModalsConfirmModel(this.translate('label_modal_shutdown_instance'), this.translate('label_modal_confirm_shutdown_instance'));
             this.modalService.showModal(m)
                 .then((success) => {
                     if (success) {
@@ -915,17 +915,17 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                             })
                             .catch((err) => {
                                 this.unblockUI();
-                                this.fmError('Cannot turn instance off.', err);
+                                this.fmError(this.translate('flash_cant_turn_instance_off', err));
                             });
                     }
                 });
         } else {
-            this.fmWarning('Cannot turn instance off.');
+            this.fmWarning(this.translate('flash_cant_turn_instance_off', ' '));
         }
     }
 
     onClearClick(): void {
-        let m = new ModalsConfirmModel('Clear program', 'Really want clear Blocko program?');
+        let m = new ModalsConfirmModel(this.translate('label_modal_clear_program'), this.translate('label_modal_confirm_clear_blocko_program'));
         this.modalService.showModal(m)
             .then((success) => {
                 if (success) {
@@ -955,7 +955,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         });
 
         if (!validHw) {
-            let m = new ModalsConfirmModel('Error', 'Cannot save blocko now, you have <b>hardware devices</b>, without program <b>version selected</b>.', true, 'OK', null);
+            let m = new ModalsConfirmModel(this.translate('label_modal_error'), this.translate('label_modal_cant_save_blocko_hw_without_version'), true, this.translate('label_modal_ok'), null);
             this.modalService.showModal(m);
             return;
         }
@@ -978,7 +978,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         });
 
         if (!validGrid) {
-            let m = new ModalsConfirmModel('Error', 'Cannot save blocko now, you have <b>grid programs</b>, without program <b>version selected</b>.', true, 'OK', null);
+            let m = new ModalsConfirmModel(this.translate('label_modal_error'), this.translate('label_modal_cant_save_grid_hw_without_version'), true, this.translate('label_modal_ok'), null);
             this.modalService.showModal(m);
             return;
         }
@@ -1024,14 +1024,14 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     program: this.blockoView.getDataJson()
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('Version <b>' + m.name + '</b> saved successfully.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_saved',  m.name )));
                         this.refresh(); // also unblockUI
 
                         this.unsavedChanges = false;
                         this.exitConfirmationService.setConfirmationEnabled(false);
                     })
                     .catch((err) => {
-                        this.addFlashMessage(new FlashMessageError('Failed saving version <b>' + m.name + '</b>', err));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_save_version', m.name , err)));
                         this.unblockUI();
                     });
             }
@@ -1083,7 +1083,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             })
             .catch((err) => {
                 this.unblockUI();
-                this.fmError(`Cannot load version <b>${programVersion.version_name}</b>`, err);
+                this.fmError(this.translate('flash_cant_load_version', programVersion.version_name, err));
             });
 
     }

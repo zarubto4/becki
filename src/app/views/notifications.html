@@ -3,26 +3,26 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main [title]="'Notifications'">
+<bk-layout-main [title]="'main_title'|bkTranslate:this">
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
                 <span class="font-blue-dark uppercase">
                     <i class="fa fa-fw fa-bell-o"></i>
-                    Notifications
+                    {{'title'|bkTranslate:this}}
                 </span>
             </div>
         </div>
         <div class="portlet-body">
             <h4>
-                Displaying <b>{{notificationService.notifications.length}}</b> of total <b>{{notificationService.totalNotificationsCount}}</b> notifications
-                <span *ngIf="notificationService.unreadNotificationsCount">(<b>{{notificationService.unreadNotificationsCount}}</b> unread)</span>
+                <span [innerHTML]="'label_displaying_notif'|bkTranslate:this:notificationService.notifications.length: notificationService.unreadNotificationsCount"></span>
+                <span *ngIf="notificationService.unreadNotificationsCount" [innerHTML]="'label_notif_undead'|bkTranslate:this:notificationService.unreadNotificationsCount"></span>
             </h4>
             <bk-notifications-list class="no-margin"></bk-notifications-list>
             <div>
                 <button class="btn blue-oleo btn-block notification-load-more-btn" (click)="onLoadOlderClick()" [disabled]="loading || !canLoadMore()">
-                    <span *ngIf="loading">Loading...</span>
-                    <span *ngIf="!loading">Load older notifications</span>
+                    <span *ngIf="loading">{{'loading'|bkTranslate:this}}</span>
+                    <span *ngIf="!loading">{{'label_load_older'|bkTranslate:this}}</span>
                 </button>
             </div>
         </div>
