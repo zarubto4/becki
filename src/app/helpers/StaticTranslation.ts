@@ -429,31 +429,6 @@ export class StaticTranslation {
                 'flash_instance_edit_success' : 'The Instance description was updated.',
                 'flash_instance_edit_fail' : 'The Instance cannot be updated. {0}',
 
-                'enum_FUTURE': 'Scheduled',
-                'enum_NOW': 'Running now',
-                'enum_HISTORY': 'Ran in Cloud',
-                'enum_VIRTUAL': 'Virtual Instance only for ',
-                'enum_INDIVIDUAL': 'Individual set Instance',
-                'enum_absolutely_public': 'Public',
-                'enum_private': 'Private',
-                'enum_MANUALLY_BY_USER_INDIVIDUAL': 'Manually (Individual Update) by User',
-                'enum_MANUALLY_BY_USER_BLOCKO_GROUP': 'Manually according Blocko by User',
-                'enum_MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME': 'Scheduled according Blocko by User',
-                'enum_AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE': 'System update by user setting - Always up to date',
-                'enum_AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE': 'System update by central server - Critical patch',
-
-                'enum_complete': 'Complete',
-                'enum_canceled': 'Canceled',
-                'enum_not_start_yet': 'Waiting in Update Que (In Progress)',
-                'enum_in_progress': 'Update is in progress',
-                'enum_overwritten': 'Overwritten by newer update',
-                'enum_not_updated': 'Not updated to right version',
-                'enum_waiting_for_device': 'Waiting for Device Reconnection',
-                'enum_bin_file_not_found': 'Bin File not Found' ,
-                'enum_critical_error': 'Critical Error',
-                'enum_homer_server_is_offline': 'Server is (was) Offline',
-                'enum_instance_inaccessible': 'Instance is (was) not accessible',
-
             }, 'ProjectsProjectLibrariesComponent': {
 
                 'title': 'Byzance<strong class="font-color-code">CODE</strong> - all libraries',
@@ -624,11 +599,44 @@ export class StaticTranslation {
                 'UNKNOWN': 'unknown',
                 'NO_COLLISION': 'We are not found any collisions',
                 'ALREADY_IN_INSTANCE': 'Attention! Hardware is already running in the Instance',
-                'PLANNED_UPDATE': 'the update is planned',
+                'PLANNED_UPDATE': 'There is scheduled update in future',
             },
             'device_alerts': {
                 'BOOTLOADER_REQUIRED': 'Bootloader update is required',
                 'RESTART_REQUIRED': 'Device restart is required'
+            },
+            'instance_type': {
+                'VIRTUAL': 'Virtual Instance only for ',
+                'INDIVIDUAL': 'Individual set Instance'
+            },
+            'instance_status': {
+                'FUTURE': 'Scheduled',
+                'NOW': 'Running now',
+                'HISTORY': 'Ran in Cloud'
+            },
+            'snapshot_settings': {
+                'absolutely_public': 'Public',
+                'private': 'Private',
+            },
+            'type_of_update': {
+                'MANUALLY_BY_USER_INDIVIDUAL': 'Manually (Individual Update) by User',
+                'MANUALLY_BY_USER_BLOCKO_GROUP': 'Manually according Blocko by User',
+                'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME': 'Scheduled according Blocko by User',
+                'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE': 'System update by user setting - Always up to date',
+                'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE': 'System update by central server - Critical patch',
+            },
+            'update_state': {
+                'complete': 'Complete',
+                'canceled': 'Canceled',
+                'not_start_yet': 'Waiting in Update Que (In Progress)',
+                'in_progress': 'Update is in progress',
+                'overwritten': 'Overwritten by newer update',
+                'not_updated': 'Not updated to right version',
+                'waiting_for_device': 'Waiting for Device Reconnection',
+                'bin_file_not_found': 'Bin File not Found' ,
+                'critical_error': 'Critical Error',
+                'homer_server_is_offline': 'Server is (was) Offline',
+                'instance_inaccessible': 'Instance is (was) not accessible',
             }
         },
         'cz': {
