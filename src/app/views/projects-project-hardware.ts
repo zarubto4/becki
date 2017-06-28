@@ -91,11 +91,11 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
                 this.blockUI();
                 this.backendService.editBoardUserDescription(device.id, {name: model.name, description: model.description})
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The device description was updated.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The device cannot be updated.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -116,11 +116,11 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
                 this.blockUI();
                 this.backendService.disconnectBoard(device.id) // TODO [permission]: Project.update_permission (probably implemented as device.delete_permission)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The hardware has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_remove_device_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The hardware cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -134,11 +134,11 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
                 this.blockUI();
                 this.backendService.connectBoard(model.id, this.id) // TODO [permission]: Board.first_connect_permission, Project.update_permission
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(`The hardware ${model.id} has been added to project.`));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_add_device_success', model.id)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(`The hardware ${model.id} cannot be added to project.`, reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_add_device_fail', model.id, reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }

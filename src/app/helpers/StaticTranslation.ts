@@ -354,7 +354,7 @@ export class StaticTranslation {
                 'title': 'Notifications',
                 'label_load_older': 'Load older notifications',
                 'label_displaying_notif': 'Displaying <b>{0}</b> of total <b>{1}</b> notifications',
-                'label_notif_undead': '(<b>{{0}}</b> unread)',
+                'label_notif_undead': '(<b>{0}</b> unread)',
                 'flash_cant_load': 'Cannot load notifications',
 
             }, 'ProducersProducerComponent': {
@@ -480,6 +480,85 @@ export class StaticTranslation {
                 'flash_edit_cant_change_version': 'The version {0} cannot be changed. {1}',
                 'flash_cant_turn_instance_on': 'Cannot turn instance on. {0}',
                 'flash_cant_turn_instance_off': 'Cannot turn instance off. {0}',
+
+            }, 'ProjectsProjectHardwareComponent': {
+
+                'title': 'Byzance<strong class="font-color-hardware">HARDWARE</strong> - all devices',
+                'label_name': 'Name',
+                'label_id': 'ID',
+                'label_description': 'Description',
+                'label_type': 'Type',
+                'label_status': 'Status',
+                'label_actions': 'Actions',
+                'btn_add_hardware': ' Add hardware device',
+                'label_online': 'online',
+                'label_offline': 'offline',
+                'label_no_hardware': 'There is no history for this instance',
+                'label_no_hardware_comment': 'You can add it by click on button bellow.',
+
+                'flash_add_device_success': 'The hardware {0} has been added to project.',
+                'flash_add_device_fail': 'The hardware {0} cannot be added to project, {1}',
+                'flash_edit_device_success': 'The device description was updated.',
+                'flash_edit_device_fail': 'The device cannot be updated. {0}',
+                'flash_remove_device_success': 'The hardware has been removed.',
+                'flash_remove_device_fail': 'The hardware cannot be removed. {0}',
+
+            }, 'ProjectsProjectHardwareHardwareComponent': {
+
+                'title': 'Byzance<strong class="font-color-hardware">HARDWARE</strong> - device <strong>{0}</strong>',
+
+                'tab_overview': 'Overview',
+                'tab_update': 'Update progress',
+
+                'label_name': 'Name',
+                'label_version': 'Version',
+                'label_description': 'Description',
+                'label_type': 'Type',
+                'label_producer': 'Producer',
+                'label_revision': 'Revision',
+                'label_id': 'ID',
+                'label_ethernet_address': 'Ethernet MAC address',
+                'label_wifi_address': 'Wi-Fi MAC address',
+                'label_device_status': 'Device status',
+                'label_device_last_seen': 'Last seen',
+                'label_bootloader_version': 'Bootloader version',
+                'label_unknow': '(Unknown)',
+                'label_update_to': 'Update to',
+                'label_alerts': 'Alerts',
+                'label_main_server': 'Main Server',
+                'label_instance': 'Instance',
+                'label_not_in_instance': 'Device is not connected to an instance',
+                'label_online': 'online',
+                'label_offline': 'offline',
+                'label_none': 'none',
+
+                'label_actual_program_name': 'Actual program name',
+                'label_actual_program_version': 'Actual Program version',
+                'label_actual_backup_program_name': 'Actual Backup program name',
+                'label_actual_backup_program_version': 'Actual Backup program version',
+                'label_backup_mode': 'Backup mode',
+                'label_backup_static': 'Static Backup',
+                'label_backup_automatic': 'Automatic Backup',
+                'label_switch_to_automatic': 'switch to <strong>Automatic</strong>',
+                'label_switch_to_static': 'switch to <strong>Static</strong>',
+                'label_time_missing_in_json': 'Not yet (Unknown)',
+                'label_not_set_none': 'none',
+
+                'table_id': 'ID',
+                'table_finished': 'Finished',
+                'table_started': 'Started',
+                'table_program': 'Program',
+                'table_version': 'Version',
+                'table_status': 'Status',
+                'table_type': 'Type',
+
+
+                'flash_edit_device_success': 'The device description was updated.',
+                'flash_edit_device_fail': 'The device cannot be updated. {0}',
+                'flash_remove_device_success': 'The hardware has been removed.',
+                'flash_remove_device_fail': 'The hardware cannot be removed. {0}',
+                'flash_cant_update_bootloader': 'Cannot update Bootloader now. {0}',
+                'flash_cant_edit_backup_mode': 'Device backup mode cannot be saved. {0}',
 
             }, 'ProjectsProjectInstancesComponent': {
 

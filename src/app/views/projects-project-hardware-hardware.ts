@@ -78,11 +78,11 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                     description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The device description was updated.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The device cannot be updated.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail', reason)));
                         this.refresh();
                     });
             }
@@ -95,12 +95,12 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 this.blockUI();
                 this.backendService.disconnectBoard(device.id) // TODO [permission]: Project.update_permission (probably implemented as device.delete_permission)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The hardware has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.router.navigate(['/projects/' + this.projectId + '/hardware']);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The hardware cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail', reason)));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     });
             }
@@ -124,7 +124,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                             this.refresh();
                         })
                         .catch((reason) => {
-                            this.fmError('Cannot update bootloader now.', reason);
+                            this.fmError(this.translate('flash_cant_update_bootloader', reason));
                             this.unblockUI();
                         });
                 }
@@ -155,7 +155,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                                 this.refresh();
                             })
                             .catch((reason) => {
-                                this.fmError('Device backup mode cannot be saved.', reason);
+                                this.fmError(this.translate('flash_cant_edit_backup_mode', reason));
                                 this.unblockUI();
                             });
                     }
@@ -174,7 +174,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                     this.refresh();
                 })
                 .catch((reason) => {
-                    this.fmError('Device backup mode cannot be saved.', reason);
+                    this.fmError(this.translate('flash_cant_edit_backup_mode', reason));
                     this.unblockUI();
                 });
         }
