@@ -1,18 +1,18 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">Edit JS code for block <b>{{modalModel.block.id}}</b></h4>
+        <h4 class="modal-title">{{'title'|bkTranslate:this}} <b>{{modalModel.block.id}}</b></h4>
     </div>
     <div class="modal-body">
 
-        <bk-form-color-picker label="Block color" [control]="blockForm.controls['color']" [waitForTouch]="false"></bk-form-color-picker>
+        <bk-form-color-picker label="{{'label_block_color'|bkTranslate:this}}" [control]="blockForm.controls['color']" [waitForTouch]="false"></bk-form-color-picker>
 
-        <bk-form-fa-icon-select label="Block icon" [control]="blockForm.controls['icon']" [waitForTouch]="false"></bk-form-fa-icon-select>
+        <bk-form-fa-icon-select label="{{'label_block_icon'|bkTranslate:this}}" [control]="blockForm.controls['icon']" [waitForTouch]="false"></bk-form-fa-icon-select>
 
-        <bk-form-input label="Block description" [control]="blockForm.controls['description']" [waitForTouch]="false"></bk-form-input>
+        <bk-form-input label="{{'label_block_description'|bkTranslate:this}}" [control]="blockForm.controls['description']" [waitForTouch]="false"></bk-form-input>
 
         <div class="form-group">
-            <label>Block code</label>
+            <label>{{'label_block_code'|bkTranslate:this}}</label>
             <bk-monaco-editor [code]="code" (codeChange)="newCode($event)" [typings]="['TSBlockLib', 'ConsoleLib', 'UtilsLib', 'FetchLib', 'ServiceLib', 'BlockoServiceHandler', 'ES5']"></bk-monaco-editor>
         </div>
 
@@ -22,7 +22,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
-        <button type="button" class="btn green" (click)="onSubmitClick()">Save</button>
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" (click)="onSubmitClick()">{{'btn_save'|bkTranslate:this}}</button>
     </div>
 </div>

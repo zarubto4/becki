@@ -1,15 +1,15 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">Add grid project</h4>
+        <h4 class="modal-title">{{'title'|bkTranslate:this}}</h4>
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-select [control]="form.controls.grid" label="Grid project" placeholder="Select grid project" [options]="options"></bk-form-select>
+            <bk-form-select [control]="form.controls.grid" label="{{'label_grid_project'|bkTranslate:this}}" placeholder="{{'placeholder_grid_project'|bkTranslate:this}}" [options]="options"></bk-form-select>
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
-        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">Add</button>
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{'btn_add'|bkTranslate:this}}</button>
     </div>
 </div>

@@ -8,7 +8,7 @@
             <bk-form-input [control]="form.controls.objectName" [label]="textLabel"></bk-form-input>
         </form>
         <div *ngIf="neededDirectory">
-            <label>Into directory</label>
+            <label>{{'label_into_directory'|bkTranslate:this}}</label>
             <div class="jstree jstree-default portlet light bordered" style="overflow-x: auto;">
                 <ul class="jstree-container-ul jstree-children">
                     <bk-file-tree [fileTreeObject]="rootFileTreeObject" (newSelected)="selectFto($event)" [privateOpen]="true" [onlyDirectiories]="true"></bk-file-tree>

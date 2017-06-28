@@ -1,15 +1,15 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">Change Blocko program version in cloud</h4>
+        <h4 class="modal-title"> {{'title'|bkTranslate:this}} </h4>
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-select [control]="form.controls.programVersion" label="Program version" [options]="options"></bk-form-select>
+            <bk-form-select [control]="form.controls.programVersion" label="{{'label_program_version'|bkTranslate:this}}" [options]="options"></bk-form-select>
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
-        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">Change</button>
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{'btn_change'|bkTranslate:this}}</button>
     </div>
 </div>

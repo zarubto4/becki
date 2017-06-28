@@ -1,28 +1,28 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">Configuration of widget</h4>
+        <h4 class="modal-title">{{'title'|bkTranslate:this}}</h4>
     </div>
     <div class="modal-body widget-config">
         <template [ngIf]="widgetVersions && widgetVersions.length > 0">
-            <h4>Widget code version</h4>
+            <h4>{{'label_widget_code_versionc'|bkTranslate:this}}</h4>
             <div>
-                <select name="widgetVersion" class="form-control" [(ngModel)]="formModelVersion">
+                <select name="{{'label_select_widget_version'|bkTranslate:this}}" class="form-control" [(ngModel)]="formModelVersion">
                     <option *ngFor="let version of widgetVersions;" [value]="version.id" >{{version.name}}{{version.description && " - " + version.description}}</option>
                 </select>
             </div>
             <hr />
         </template>
         <template [ngIf]="inputs.length || outputs.length">
-            <h4>Interface</h4>
-            <h3 *ngIf="inputs.length">Inputs</h3>
+            <h4>{{'label_interface'|bkTranslate}}</h4>
+            <h3 *ngIf="inputs.length">{{'label_inputs'|bkTranslate}}</h3>
             <div *ngFor="let input of inputs;">
                 <div class="input-row">
                     <label>{{input.displayName}}</label>
                     <input [name]="input.name" class="form-control" type="text" [(ngModel)]="formModelInputs[input.name]">
                 </div>
             </div>
-            <h3 *ngIf="outputs.length">Outputs</h3>
+            <h3 *ngIf="outputs.length">{{'label_output'|bkTranslate}}</h3>
             <div *ngFor="let output of outputs;">
                 <div class="input-row">
                     <label>{{output.displayName}}</label>
@@ -32,7 +32,7 @@
             <hr />
         </template>
         <template [ngIf]="configProperties.length">
-            <h4>Configuration</h4>
+            <h4>{{'label_configuration'|bkTranslate}}</h4>
             <div *ngIf="description" class="config-properties-description" [innerHTML]="description|bkMd2Html"></div>
             <div *ngFor="let configProperty of configProperties;">
                 <div *ngIf="StringToConfigPropertyTypeTable[configProperty.type] == ConfigPropertyType.Float" class="form-group input-row">
@@ -83,7 +83,7 @@
         </template>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
-        <button type="button" class="btn green" (click)="onSubmitClick()">Save</button>
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate}}</button>
+        <button type="button" class="btn green" (click)="onSubmitClick()">{{'btn_save'|bkTranslate}}</button>
     </div>
 </div>

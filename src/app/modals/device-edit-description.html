@@ -8,16 +8,16 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">Edit hardware device properties</h4>
+        <h4 class="modal-title">{{'title'|bkTranslate:this}}</h4>
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-input [control]="form.controls.name" label="Hardware device name (Your private Tag name)"></bk-form-input>
-            <bk-form-input [control]="form.controls.description" label="Device description (Your private description)" aria-valuetext="Hardware description"></bk-form-input>
+            <bk-form-input [control]="form.controls.name"       label="{{'label_hardware_device'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input [control]="form.controls.description" label="{{'label_device_description'|bkTranslate:this}}" aria-valuetext="Hardware description"></bk-form-input>
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
-        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">Update</button>
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{'btn_update'|bkTranslate:this}}</button>
     </div>
 </div>

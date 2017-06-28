@@ -1,13 +1,13 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">Cannot add grid project</h4>
+        <h4 class="modal-title">{{'title'|bkTranslate:this}}</h4>
     </div>
     <div class="modal-body">
-        <h2>There is not grid program yet, let`s create it!</h2>
+        <h2>{{'body_text'|bkTranslate:this}}</h2>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
-        <button type="button" class="btn green" (click)="onSubmitClick()">Redirect me to create a Grid</button>
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" (click)="onSubmitClick()">{{'btn_redirect'|bkTranslate:this}}</button>
     </div>
 </div>

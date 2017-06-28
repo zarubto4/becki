@@ -5,13 +5,13 @@
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <input type="checkbox"  name="Specify email" (change)="checkboxChanged($event.target['value'])">
-            <bk-form-input (disabled)="differentEmail" [control]="form.controls.email" label="specify email"></bk-form-input>
+            <input type="checkbox"  name="{{'checkbox_email'|bkTranslate:this}}" (change)="checkboxChanged($event.target['value'])">
+            <bk-form-input (disabled)="differentEmail" [control]="form.controls.email" label="{{'label_email'|bkTranslate:this}}"></bk-form-input>
 
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
-        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">send</button>
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{'btn_send'|bkTranslate:this}}</button>
     </div>
 </div>

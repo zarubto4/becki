@@ -9,10 +9,145 @@ export class StaticTranslation {
 
     public static translate: { [lang: string]: { [keyOrEnv: string]: (string | { [key: string]: string }) } } = {
         'en': {
+            'ModalsAddHardwareComponent': {
+                'title': 'Add hardware device',
+                'label_device_id': 'Hardware device ID',
+
+            }, 'ModalsBlockoAddGridEmptyModel': {
+                'title': 'Cannot add grid project',
+                'body_text': 'There is not grid program yet, let`s create it!',
+                'btn_redirect': 'Redirect me to create a Grid',
+
+            }, 'ModalsBlockoAddGridModel': {
+                'title': 'Add grid project',
+                'label_grid_project': 'Grid project',
+                'placeholder_grid_project': 'Select grid project',
+
+            }, 'ModalsBlockoAddHardwareModel': {
+                'title': 'Add hardware',
+                'label_hardware': 'Hardware',
+                'placeholder_select_hardware': 'Select hardware',
+
+            }, 'ModalsBlockoBlockCodeEditorModel': {
+                'title': 'Edit JS code for block',
+                'label_block_color': 'Block color',
+                'label_block_icon': 'Block icon',
+                'label_block_description': 'Block description',
+                'label_block_code': 'Block code',
+
+            }, 'ModalsBlockoConfigPropertiesModel': {
+                'title': 'Edit config for block',
+                'label_configuration': 'Configuration',
+
+            }, 'ModalsBlockoPropertiesComponent': {
+                'title_edit': 'Edit blocko program properties',
+                'title_add': 'Add blocko program',
+                'label_blocko_program_name': 'Blocko program name',
+                'label_blocko_program_description': 'Blocko program description',
+
+            }, 'ModalsBlockoVersionSelectModel': {
+                'title': 'Change Blocko program version in cloud',
+                'label_program_version': 'Program version',
+
+            }, 'ModalsBlocksBlockPropertiesModel': {
+                'title_edit': 'Edit block properties',
+                'title_add': 'Add block',
+                'label_block_name': 'Block name',
+                'label_block_description': 'Block description',
+
+            }, 'ModalsBlocksTypePropertiesModel': {
+                'title_edit': 'Edit blocks group properties',
+                'title_add': 'Add blocks group',
+                'label_blocks_group_name': 'Blocks group name',
+                'Block group description': 'Block group description',
+
+            }, 'ModalsCodeAddLibraryModel': {
+                'title': 'Add CODE library',
+                'body_text': 'Displaying <b>{}0</b> of total <b>{1}</b> libraries',
+                'label_load_more': 'Load more libraries',
+                'label_no_more': 'No more libraries',
+                'btn_select_library': '',
+
+            }, 'ModalsCodeFileDialogComponent': {
+                'label_into_directory': 'Into directory',
+
+                'text_add_file': 'Add file',
+                'btn_add_directory': 'Add directory',
+                'btn_move': 'Move',
+                'btn_yes': 'Yes',
+                'btn_no': 'No',
+
+                'text_add_file_name': 'File name',
+                'text_directory_name': 'Directory name',
+                'text_move_file': 'Move file <b> {0}</b>',
+                'text_move_directory': 'Move directory <b> {0} </b>',
+                'text_rename_file': 'Rename file <b> {0}</b>',
+                'text_rename_directory': 'Rename directory <b> {0 }</b>',
+                'text_remove_file': 'Really want remove file <b> {0} </b> ?',
+                'text_remove_library': 'Really want remove library <b> {0} </b> ?',
+                'text_remove_directory': 'Really want remove directory <b> {0} </b> with all children ?',
+                'text_file_name': 'File name',
+
+            }, 'ModalsCodeLibraryVersionModel': {
+                'title': 'CODE library version',
+                'label_no_library': 'No versions in library',
+                'btn_select_library': 'Select library version',
+
+            }, 'ModalsCodePropertiesComponent': {
+                'title_edit': 'Edit code program properies',
+                'title_add': 'Add code program',
+                'label_program_name': 'Program name',
+                'label_program_description': 'Program description',
+                'label_device_type': 'Device type',
+
+            }, 'ModalsDeactivateModel': {
+                'title': 'Confirm an action',
+                'body_text': 'Do you really want to',
+                'label_deactivate': 'deactivate',
+                'label_activate': 'activate',
+                'label_attention': 'Attention',
+
+            }, 'ModalsDeviceEditDescriptionModel': {
+                'title': 'Edit hardware device properties',
+                'label_hardware_device': 'Hardware device name (Your private Tag name)',
+                'label_device_description': 'Device description (Your private description)',
+                'btn_update': 'Update'
+
+            }, 'ModalsSendInvoiceModel': {
+                'checkbox_email': 'Specify email',
+                'label_email': 'Specify email',
+
+            }, 'ModalsGridConfigPropertiesModel': {
+                'title': 'Configuration of widget',
+                'label_widget_code_version': 'Widget code version',
+                'label_select_widget_version': 'widgetVersion',
+                'label_interface': 'Interface',
+                'label_inputs': 'Inputs',
+                'label_output': 'Output',
+                'label_configuration': 'Configuration',
+
+            }, 'ModalsGridProgramPropertiesModel': {
+                'title_edit': 'Edit grid program properties',
+                'title_add': 'Add grid program',
+                'label_grid_program_name': 'Grid program name',
+                'label_grid_program_description': 'Grid program description',
+
+            }, 'ModalsGridProjectPropertiesComponent': {
+                'title_edit': 'Edit grid project properties',
+                'title_add': 'Add grid project',
+                'label_grid_name': 'Grid project name',
+                'label_grid_description': 'Grid project description',
+
+
+
+            },'ModalsHardwareBootloaderUpdateModel':{
+                
+            },
+
+
+
+
             'DashboardComponent': {
-
-                'hello_world': 'Welcome {0}!',
-
                 'btn_save': 'Save it!',
                 'title_first_steps': 'First steps',
                 'main_title': 'Dashboard',
@@ -85,8 +220,6 @@ export class StaticTranslation {
                 'step_one_title': 'Tariffs',
                 'step_two_title': 'Packages',
                 'step_two_no_expansions': 'There is no expansions packages, click Continue.',
-
-
                 'step_three_title': 'Registration info',
                 'step_three_product_info': 'Product info',
                 'step_three_billing_info': 'Billing info',
@@ -149,7 +282,6 @@ export class StaticTranslation {
                 'label_remaining_credit': 'Remaining credit',
                 'label_other_details': 'Other details',
                 'label_contacts_details': 'Contacts details',
-
 
             }, 'FinancialComponent': {
                 'main_title': 'Hardware types',
@@ -274,7 +406,6 @@ export class StaticTranslation {
                 'flash_information_updated': 'Your information was updated.',
 
             }, 'ProjectsProjectBlockoBlockoComponent': {
-
                 'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - program <strong>{0}</strong>',
 
                 'label_blocko_name': '<strong class="font-color-blocko" > BLOCKO </strong> Name: <strong>{0}</strong >',
@@ -580,11 +711,15 @@ export class StaticTranslation {
             'btn_send': 'Send',
             'btn_submit': 'Submit',
             'btn_add': 'Add',
-            'btn_edit': 'Back',
+            'btn_edit': 'Edit',
             'btn_remove': 'Remove',
             'btn_continue': 'Continue',
-
+            'btn_cancel': 'Cancel',
+            'btn_change': 'Change',
             'loading': 'Loading...',
+            'btn_done': 'Done',
+            'btn_rename': 'Rename',
+
 
             'hello_world': 'Hello {0}! {1}?',
         },

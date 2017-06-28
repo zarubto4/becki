@@ -1,7 +1,7 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">Edit config for block <b>{{modalModel.block.id}}</b></h4>
+        <h4 class="modal-title">{{'title'|bkTranslate:this}} <b>{{modalModel.block.id}}</b></h4>
     </div>
     <div class="modal-body block-config">
         <div *ngIf="description" class="config-properties-description" [innerHTML]="description|bkMd2Html"></div>
@@ -16,7 +16,7 @@
             <hr />
         </template>
         <template [ngIf]="configProperties.length">
-            <h4>Configuration</h4>
+            <h4>{{'label_configuration'|bkTranslate:this}}</h4>
             <div *ngFor="let configProperty of configProperties;">
                 <div *ngIf="configProperty.type == configPropertyType['Float']" class="input-row">
                     <label>{{configProperty.displayName}}</label>
@@ -57,7 +57,7 @@
         </template>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
-        <button type="button" class="btn green" (click)="onSubmitClick()">Save</button>
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}} </button>
+        <button type="button" class="btn green" (click)="onSubmitClick()">{{'btn_save'|bkTranslate:this}} </button>
     </div>
 </div>

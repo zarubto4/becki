@@ -14,7 +14,7 @@ import { ModalModel } from '../services/ModalService';
 import { CodeDirectory } from '../components/CodeIDEComponent';
 import { FileTreeObject } from '../components/FileTreeComponent';
 import { BeckiValidators } from '../helpers/BeckiValidators';
-
+import { TranslationService } from '../services/TranslationService';
 
 export enum ModalsCodeFileDialogType {
     AddFile = 1,
@@ -62,10 +62,10 @@ export class ModalsCodeFileDialogComponent implements OnInit {
 
     textTitle: string = '';
     textLabel: string = '';
-    textSubmit: string = 'Done';
-    textCancel: string = 'Cancel';
+    textSubmit: string = 'btn_done';
+    textCancel: string = 'btn_cancel';
 
-    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
+    constructor(private backendService: BackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
     }
 
     ngOnInit() {
@@ -74,63 +74,63 @@ export class ModalsCodeFileDialogComponent implements OnInit {
             case ModalsCodeFileDialogType.AddFile:
                 this.neededName = true;
                 this.neededDirectory = true;
-                this.textTitle = 'Add file';
-                this.textLabel = 'File name';
-                this.textSubmit = 'Add';
+                this.textTitle = this.translate('text_add_file');
+                this.textLabel = this.translate('text_add_file_name');
+                this.textSubmit =this.translate( 'btn_add');
                 break;
             case ModalsCodeFileDialogType.AddDirectory:
                 this.neededName = true;
                 this.neededDirectory = true;
-                this.textTitle = 'Add directory';
-                this.textLabel = 'Directory name';
-                this.textSubmit = 'Add';
+                this.textTitle = this.translate('btn_add_directory');
+                this.textLabel = this.translate('text_directory_name');
+                this.textSubmit =this.translate( 'btn_add');
                 break;
             case ModalsCodeFileDialogType.MoveFile:
                 this.neededName = false;
                 this.neededDirectory = true;
-                this.textTitle = 'Move file <b>' + this.modalModel.objectFullName + '</b>';
-                this.textSubmit = 'Move';
+                this.textTitle = this.translate('text_move_file', this.modalModel.objectFullName);
+                this.textSubmit = this.translate('btn_move');
                 break;
             case ModalsCodeFileDialogType.MoveDirectory:
                 this.neededName = false;
                 this.neededDirectory = true;
-                this.textTitle = 'Move directory <b>' + this.modalModel.objectFullName + '</b>';
-                this.textSubmit = 'Move';
+                this.textTitle = this.translate('text_move_directory', this.modalModel.objectFullName);
+                this.textSubmit = this.translate('btn_move');
                 break;
             case ModalsCodeFileDialogType.RenameFile:
                 this.neededName = true;
                 this.neededDirectory = false;
-                this.textTitle = 'Rename file <b>' + this.modalModel.objectFullName + '</b>';
-                this.textLabel = 'File name';
-                this.textSubmit = 'Rename';
+                this.textTitle = this.translate('text_rename_file', this.modalModel.objectFullName);
+                this.textLabel = this.translate('text_file_name');
+                this.textSubmit =this.translate( 'btn_rename');
                 break;
             case ModalsCodeFileDialogType.RenameDirectory:
                 this.neededName = true;
                 this.neededDirectory = false;
-                this.textTitle = 'Rename directory <b>' + this.modalModel.objectFullName + '</b>';
-                this.textLabel = 'Directory name';
-                this.textSubmit = 'Rename';
+                this.textTitle = this.translate('text_rename_directory', this.modalModel.objectFullName);
+                this.textLabel = this.translate('text_directory_name');
+                this.textSubmit =this.translate( 'btn_rename');
                 break;
             case ModalsCodeFileDialogType.RemoveFile:
                 this.neededName = false;
                 this.neededDirectory = false;
-                this.textTitle = 'Really want remove file <b>' + this.modalModel.objectFullName + '</b> ?';
-                this.textSubmit = 'Yes';
-                this.textCancel = 'No';
+                this.textTitle = this.translate('text_remove_file', this.modalModel.objectFullName);
+                this.textSubmit =this.translate( 'btn_yes');
+                this.textCancel =this.translate( 'btn_no');
                 break;
             case ModalsCodeFileDialogType.RemoveFileLibrary:
                 this.neededName = false;
                 this.neededDirectory = false;
-                this.textTitle = 'Really want remove library <b>' + this.modalModel.objectFullName + '</b> ?';
-                this.textSubmit = 'Yes';
-                this.textCancel = 'No';
+                this.textTitle = this.translate('text_remove_library', this.modalModel.objectFullName);
+                this.textSubmit =this.translate( 'btn_yes');
+                this.textCancel =this.translate( 'btn_no');
                 break;
             case ModalsCodeFileDialogType.RemoveDirectory:
                 this.neededName = false;
                 this.neededDirectory = false;
-                this.textTitle = 'Really want remove directory <b>' + this.modalModel.objectFullName + '</b> with all children ?';
-                this.textSubmit = 'Yes';
-                this.textCancel = 'No';
+                this.textTitle = this.translate('text_remove_directory', this.modalModel.objectFullName);
+                this.textSubmit = this.translate('btn_yes');
+                this.textCancel = this.translate('btn_no');
                 break;
         }
 
@@ -179,6 +179,10 @@ export class ModalsCodeFileDialogComponent implements OnInit {
 
     selectFto(fto: FileTreeObject<CodeDirectory>) {
         this.selectedFto = fto;
+    }
+
+    translate(key: string, ...args: any[]): string {
+        return this.translationService.translate(key, this, null, args);
     }
 
     onSubmitClick(): void {
