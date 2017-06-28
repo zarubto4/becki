@@ -1,17 +1,17 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">{{modalModel.edit?"Edit widget properties":"Add widget"}}</h4>
+        <h4 class="modal-title">{{(modalModel.edit?"title_edit":"title_add")|bkTranslate:this}}</h4>
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-input [control]="form.controls.name" label="Widget name"></bk-form-input>
-            <bk-form-input [control]="form.controls.description" label="Widget description"></bk-form-input>
+            <bk-form-input [control]="form.controls.name" label="{{'label_widget_name'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input [control]="form.controls.description" label="{{'label_widget_description'|bkTranslate:this}}"></bk-form-input>
 
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
-        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{modalModel.edit?"Save":"Add"}}</button>
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{(modalModel.edit?"btn_save":"btn_add")|bkTranslate:this}}</button>
     </div>
 </div>

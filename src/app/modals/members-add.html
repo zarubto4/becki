@@ -1,18 +1,18 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">Add members</h4>
+        <h4 class="modal-title">{{'title'|bkTranslate:this}}</h4>
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
             <div *ngFor="let name of formNames; let i = index">
-                <bk-form-input [control]="form.controls[name]" [label]="' Member e-mail #'+(i+1)" type="email"></bk-form-input>
+                <bk-form-input [control]="form.controls[name]" [label]="'label_member_email'|bkTranslate:this + (i+1)" type="email"></bk-form-input>
             </div>
-            <button type="button" class="btn grey full-width" (click)="onAddClick()">Add more members</button>
+            <button type="button" class="btn grey full-width" (click)="onAddClick()">{{'btn_add_more'|bkTranslate:this}}</button>
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
-        <button type="button" class="btn green" [disabled]="!valid()" (click)="onSubmitClick()">Add</button>
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!valid()" (click)="onSubmitClick()">{{'btn_add'|bkTranslate:this}}</button>
     </div>
 </div>

@@ -19,7 +19,7 @@ export class ModalsConfirmModel extends ModalModel {
         public title: string,
         public text: string,
         public showCloseBtn: boolean = true,
-        public btnYes: string ='Yes',
+        public btnYes: string = 'Yes',
         public btnNo: string = 'No',
         public btnOthers: string[] = null
     ) {
@@ -31,7 +31,7 @@ export class ModalsConfirmModel extends ModalModel {
     selector: 'bk-modals-confirm',
     templateUrl: './confirm.html'
 })
-export class ModalsConfirmComponent implements OnInit{
+export class ModalsConfirmComponent implements OnInit {
 
     @Input()
     modalModel: ModalsConfirmModel;
@@ -45,7 +45,7 @@ export class ModalsConfirmComponent implements OnInit{
 
     ngOnInit(): void {
         this.modalModel.btnYes = this.translate('btn_yes');
-        this.modalModel.btnNo = this.translate('btn_no');
+        this.modalModel.btnNo = this.translate ('btn_no');
     }
 
     onCloseClick(): void {
@@ -70,5 +70,5 @@ export class ModalsConfirmComponent implements OnInit{
 
     translate(key: string, ...args: any[]): string {
         return this.translationService.translate(key, this, null, args);
-    } 
+    }
 }

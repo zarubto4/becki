@@ -1,13 +1,13 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">Confirm an irreversible action</h4>
+        <h4 class="modal-title">{{'label_project_name'|bkTranslate:this}}'|bkTranslate:this}}</h4>
     </div>
     <div class="modal-body">
-        Do you really want to remove <strong>{{modalModel.name}}</strong>?
+         {{'body_text'|bkTranslate:this}}<strong>{{modalModel.name}}</strong>?
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn red" (click)="onYesClick()">Yes</button>
-        <button type="button" class="btn green" (click)="onNoClick()">No</button>
+        <button type="button" class="btn red" (click)="onYesClick()">{{'btn_yes'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" (click)="onNoClick()">{{'btn_no'|bkTranslate:this}}</button>
     </div>
 </div>

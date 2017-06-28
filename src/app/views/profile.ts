@@ -73,7 +73,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
 
         this.emailForm = this.formBuilder.group({
             'currentEmail': ['', [Validators.required, Validators.minLength(8), BeckiValidators.email]], // TODO kontrola zda sedí s původním emailem
-            'newEmail': ['', [Validators.required,  BeckiValidators.email]],
+            'newEmail': ['', [Validators.required, BeckiValidators.email]],
             'newEmailConfirm': ['', [Validators.required, BeckiValidators.email, BeckiValidators.passwordSame(() => this.emailForm, 'newEmail')]],
         });
 
@@ -137,7 +137,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
             property: 'password',
             password: this.passwordForm.controls['newPassword'].value
         })
-            .then(ok =>  {
+            .then(ok => {
                 this.unblockUI();
                 this.backendService.logout()
                     .then(() => {
@@ -149,7 +149,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
                     });
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_email_was_send')));
             })
-            .catch(error =>  {
+            .catch(error => {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_password', error)));
             });
@@ -157,13 +157,13 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
 
     changeEmail(): void {
         this.blockUI();
-        this.backendService.validatePersonEntity({key: 'mail', value: this.emailForm.controls['newEmail'].value}).then(response =>  {
+        this.backendService.validatePersonEntity({ key: 'mail', value: this.emailForm.controls['newEmail'].value }).then(response => {
             if (response.valid) {
                 this.backendService.createPersonChangeProperty({
                     property: 'email',
                     email: this.emailForm.controls['newEmail'].value
                 })
-                    .then(ok =>  {
+                    .then(ok => {
                         this.unblockUI();
                         this.backendService.logout()
                             .then(() => {
@@ -171,15 +171,15 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
                                 this.navigate(['/login']);
                             })
                             .catch((error) => {
-                                this.addFlashMessage(new FlashMessageError(this.translate('flash_user_cant_log_out',error)));
+                                this.addFlashMessage(new FlashMessageError(this.translate('flash_user_cant_log_out', error)));
                             });
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_email_was_send')));
                     })
-                    .catch(error =>  {
+                    .catch(error => {
                         this.unblockUI();
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_email', error)));
                     });
-            }else {
+            } else {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_email, ', response.message)));
             }

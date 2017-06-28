@@ -1,15 +1,15 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">Select hardware</h4>
+        <h4 class="modal-title">{{'title'|bkTranslate:this}}</h4>
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-select [control]="form.controls.board" label="Hardware" placeholder="Select hardware" [options]="options"></bk-form-select>
+            <bk-form-select [control]="form.controls.board" label="{{'label_hardware'|bkTranslate:this}}" placeholder="{{'placeholder_hardware'|bkTranslate:this}}" [options]="options"></bk-form-select>
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
-        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">Add</button>
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{'btn_add'|bkTranslate:this}}</button>
     </div>
 </div>

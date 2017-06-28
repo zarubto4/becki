@@ -1,18 +1,18 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">{{modalModel.edit?"Edit project properties":"Add project"}}</h4>
+        <h4 class="modal-title">{{(modalModel.edit?"title_edit":"title_add")|bkTranslate:this}}</h4>
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-input [control]="form.controls.name" label="Project name"></bk-form-input>
-            <bk-form-input [control]="form.controls.description" label="Project description"></bk-form-input>
-            <bk-form-select *ngIf="!modalModel.edit" [control]="form.controls.product" label="Product type" [options]="options"></bk-form-select>
+            <bk-form-input [control]="form.controls.name"        label="{{'label_project_name'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input [control]="form.controls.description" label="{{'label_project_description'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-select *ngIf="!modalModel.edit" [control]="form.controls.product" label="{{'label_product_type'|bkTranslate:this}}" [options]="options"></bk-form-select>
 
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn red" (click)="onCancelClick()">Cancel</button>
-        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{modalModel.edit?"Save":"Add"}}</button>
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{(modalModel.edit?"btn_save":"btn_add")|bkTranslate:this}}</button>
     </div>
 </div>

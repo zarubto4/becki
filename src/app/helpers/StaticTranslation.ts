@@ -13,29 +13,29 @@ export class StaticTranslation {
                 'title': 'Add hardware device',
                 'label_device_id': 'Hardware device ID',
 
-            }, 'ModalsBlockoAddGridEmptyModel': {
+            }, 'ModalsBlockoAddGridEmptyComponent': {
                 'title': 'Cannot add grid project',
                 'body_text': 'There is not grid program yet, let`s create it!',
                 'btn_redirect': 'Redirect me to create a Grid',
 
-            }, 'ModalsBlockoAddGridModel': {
+            }, 'ModalsBlockoAddGridComponent': {
                 'title': 'Add grid project',
                 'label_grid_project': 'Grid project',
                 'placeholder_grid_project': 'Select grid project',
 
-            }, 'ModalsBlockoAddHardwareModel': {
+            }, 'ModalsBlockoAddHardwareComponent': {
                 'title': 'Add hardware',
                 'label_hardware': 'Hardware',
                 'placeholder_select_hardware': 'Select hardware',
 
-            }, 'ModalsBlockoBlockCodeEditorModel': {
+            }, 'ModalsBlockoBlockCodeEditorComponent': {
                 'title': 'Edit JS code for block',
                 'label_block_color': 'Block color',
                 'label_block_icon': 'Block icon',
                 'label_block_description': 'Block description',
                 'label_block_code': 'Block code',
 
-            }, 'ModalsBlockoConfigPropertiesModel': {
+            }, 'ModalsBlockoConfigPropertieComponent': {
                 'title': 'Edit config for block',
                 'label_configuration': 'Configuration',
 
@@ -45,23 +45,23 @@ export class StaticTranslation {
                 'label_blocko_program_name': 'Blocko program name',
                 'label_blocko_program_description': 'Blocko program description',
 
-            }, 'ModalsBlockoVersionSelectModel': {
+            }, 'ModalsBlockoVersionSelectComponent': {
                 'title': 'Change Blocko program version in cloud',
                 'label_program_version': 'Program version',
 
-            }, 'ModalsBlocksBlockPropertiesModel': {
+            }, 'ModalsBlocksBlockPropertieComponent': {
                 'title_edit': 'Edit block properties',
                 'title_add': 'Add block',
                 'label_block_name': 'Block name',
                 'label_block_description': 'Block description',
 
-            }, 'ModalsBlocksTypePropertiesModel': {
+            }, 'ModalsBlocksTypePropertiesComponent': {
                 'title_edit': 'Edit blocks group properties',
                 'title_add': 'Add blocks group',
                 'label_blocks_group_name': 'Blocks group name',
                 'Block group description': 'Block group description',
 
-            }, 'ModalsCodeAddLibraryModel': {
+            }, 'ModalsCodeAddLibraryComponent': {
                 'title': 'Add CODE library',
                 'body_text': 'Displaying <b>{}0</b> of total <b>{1}</b> libraries',
                 'label_load_more': 'Load more libraries',
@@ -74,8 +74,6 @@ export class StaticTranslation {
                 'text_add_file': 'Add file',
                 'btn_add_directory': 'Add directory',
                 'btn_move': 'Move',
-                'btn_yes': 'Yes',
-                'btn_no': 'No',
 
                 'text_add_file_name': 'File name',
                 'text_directory_name': 'Directory name',
@@ -88,7 +86,7 @@ export class StaticTranslation {
                 'text_remove_directory': 'Really want remove directory <b> {0} </b> with all children ?',
                 'text_file_name': 'File name',
 
-            }, 'ModalsCodeLibraryVersionModel': {
+            }, 'ModalsCodeLibraryVersionComponent': {
                 'title': 'CODE library version',
                 'label_no_library': 'No versions in library',
                 'btn_select_library': 'Select library version',
@@ -100,24 +98,24 @@ export class StaticTranslation {
                 'label_program_description': 'Program description',
                 'label_device_type': 'Device type',
 
-            }, 'ModalsDeactivateModel': {
+            }, 'ModalsDeactivateComponent': {
                 'title': 'Confirm an action',
                 'body_text': 'Do you really want to',
                 'label_deactivate': 'deactivate',
                 'label_activate': 'activate',
                 'label_attention': 'Attention',
 
-            }, 'ModalsDeviceEditDescriptionModel': {
+
+            }, 'ModalsDeviceEditDescriptionComponent': {
                 'title': 'Edit hardware device properties',
                 'label_hardware_device': 'Hardware device name (Your private Tag name)',
                 'label_device_description': 'Device description (Your private description)',
-                'btn_update': 'Update'
 
-            }, 'ModalsSendInvoiceModel': {
+            }, 'ModalsSendInvoiceComponent': {
                 'checkbox_email': 'Specify email',
                 'label_email': 'Specify email',
 
-            }, 'ModalsGridConfigPropertiesModel': {
+            }, 'ModalsGridConfigPropertiesComponent': {
                 'title': 'Configuration of widget',
                 'label_widget_code_version': 'Widget code version',
                 'label_select_widget_version': 'widgetVersion',
@@ -126,7 +124,7 @@ export class StaticTranslation {
                 'label_output': 'Output',
                 'label_configuration': 'Configuration',
 
-            }, 'ModalsGridProgramPropertiesModel': {
+            }, 'ModalsGridProgramPropertiesComponent': {
                 'title_edit': 'Edit grid program properties',
                 'title_add': 'Add grid program',
                 'label_grid_program_name': 'Grid program name',
@@ -138,11 +136,99 @@ export class StaticTranslation {
                 'label_grid_name': 'Grid project name',
                 'label_grid_description': 'Grid project description',
 
+            }, 'ModalsHardwareBootloaderUpdateComponent': {
+                'title': 'Hardware ID',
+                'label_attention': 'Attention!',
+                'body_text': ' < p > We must update critical software component on your board.Program transfer takes a few seconds to Board Memory - which is safe.</p>< p > But rewriting the program in Memmory lasts 0.2 seconds. And during this time the device may not be shut down,</p>< p > restart or disconnected from the power supply etc. You risk damaging the device.</p>< p > If all our security measures fail, you must connect the device by cable to a computer and load the program manually.</p>< p > If you have any questions, please read the documentation, or visit our website at Ask.</p>',
 
+            }, 'ModalsHardwareCodeProgramVersionSelectComponent': {
+                'title': 'Select CODE program version',
+                'label_program': 'Program',
+                'label_no_code': 'No CODE programs',
+                'label_select_program': 'Select program',
+                'label_no_version': 'No versions',
+                'label_not_compiled': 'Not successfully compiled',
+                'btn_select_version': 'Select program version',
 
-            },'ModalsHardwareBootloaderUpdateModel':{
-                
+            }, 'ModalsHighImportanceNotificationComponent': {
+                'btn_ok': 'OK',
+
+            }, 'ModalsInstanceEditDescriptionComponent': {
+                'title': 'Edit Cloud instance properties',
+
+            }, 'ModalsLibraryPropertiesComponent': {
+                'title_edit': 'Edit code library properies',
+                'title_add': 'Add code library',
+                'label_library_name': 'Library name',
+                'label_library_description': 'Library description',
+
+            }, 'ModalsMembersAddComponent': {
+                'title': 'Add members',
+                'label_member_email': ' Member e-mail #',
+                'btn_add_more': 'Add more members',
+
+            }, 'ModalsProjectPropertiesComponent': {
+                'title_edit': 'Edit project properties',
+                'title_add': 'Add project',
+                'label_project_name': 'Project name',
+                'label_project_description ': ' Project description',
+                'label_product_type': 'Product type',
+
+            }, 'ModalsRemovalComponent': {
+                'title': 'Confirm an irreversible action',
+                'body_text': 'Do you really want to remove',
+
+            }, 'ModalsSelectHardwareComponent': {
+                'title': 'Select hardware',
+                'label_hardware': 'Hardware',
+                'placeholder_hardware': 'Select hardware',
+
+            }, 'ModalsVersionDialogComponent': {
+                'title_edit': 'Edit version',
+                'title_save': 'Save version',
+                'label_version_name': 'Version name',
+                'label_version_description': 'Version description',
+
+            }, 'ModalsWidgetsTypePropertiesComponent': {
+                'title_add': 'Add widgets group',
+                'title_edit': 'Edit widgets group properties',
+                'label_widget_group_name': 'Widgets group name ',
+                'label_widget_group_description': 'Widgets group description',
+
+            }, 'ModalsWidgetsWidgetPropertiesComponent': {
+                'title_edit': 'Edit widget properties',
+                'title_add': 'Add widget',
+                'label_widget_name': 'Widget name',
+                'label_widget_description': 'Widget description',
+
             },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -571,8 +657,8 @@ export class StaticTranslation {
                 'table_status': 'Status',
                 'table_actions': 'Actions',
 
-                'flash_instance_edit_success' : 'The Instance description was updated.',
-                'flash_instance_edit_fail' : 'The Instance cannot be updated. {0}',
+                'flash_instance_edit_success': 'The Instance description was updated.',
+                'flash_instance_edit_fail': 'The Instance cannot be updated. {0}',
 
                 'label_shut_down_instance_modal': 'Shutdown instance',
                 'label_shut_down_instance_modal_comment': 'Do you want to shutdown running instance?',
@@ -599,7 +685,7 @@ export class StaticTranslation {
                 'table_description': 'Description',
                 'table_actions': 'Actions',
 
-                'btn_change_version_in_cloud' : 'Change version in Cloud',
+                'btn_change_version_in_cloud': 'Change version in Cloud',
                 'label_instance_name': 'Instance Name',
                 'label_instance_description': 'Instance Description',
                 'label_instance_id': 'Instance Id',
@@ -636,21 +722,21 @@ export class StaticTranslation {
                 'label_modal_change_instance_version': 'Change instance version',
                 'label_modal_change_running_instance_version': 'Do you want to change running instance version?',
 
-                'flash_instance_edit_success' : 'The Instance description was updated.',
-                'flash_instance_edit_fail' : 'The Instance cannot be updated. {0}',
+                'flash_instance_edit_success': 'The Instance description was updated.',
+                'flash_instance_edit_fail': 'The Instance cannot be updated. {0}',
 
             }, 'ProjectsProjectLibrariesComponent': {
 
                 'title': 'Byzance<strong class="font-color-code">CODE</strong> - all libraries',
 
-                'btn_add_library' : 'Add <strong class="font-color-grid">CODE</strong> Library',
+                'btn_add_library': 'Add <strong class="font-color-grid">CODE</strong> Library',
 
-                'flash_library_add_success' : 'The Code Library has been created.',
-                'flash_library_add_fail' : 'The Code Library {0} cannot be created. {0}',
-                'flash_library_edit_success' : 'The Library has been updated.',
-                'flash_library_edit_fail' : 'The Library cannot be updated. {0}',
-                'flash_library_removed_success' : 'The Library has been removed.',
-                'flash_library_removed_fail' : 'The Library cannot be removed. {0}',
+                'flash_library_add_success': 'The Code Library has been created.',
+                'flash_library_add_fail': 'The Code Library {0} cannot be created. {0}',
+                'flash_library_edit_success': 'The Library has been updated.',
+                'flash_library_edit_fail': 'The Library cannot be updated. {0}',
+                'flash_library_removed_success': 'The Library has been removed.',
+                'flash_library_removed_fail': 'The Library cannot be removed. {0}',
 
                 'table_name': 'Name',
                 'table_description': 'Description',
@@ -660,17 +746,17 @@ export class StaticTranslation {
 
                 'title': 'Byzance<strong class="font-color-code">CODE</strong> - library <strong>{0}</strong>',
 
-                'flash_library_edit_success' : 'The Library has been updated.',
-                'flash_library_edit_fail' : 'The Library cannot be updated. {0}',
-                'flash_library_removed_success' : 'The Library has been removed.',
-                'flash_library_removed_fail' : 'The Library cannot be removed. {0}',
-                'flash_version_save_success' : 'The version <b> {0} </b> saved successfully.',
-                'flash_version_save_fail' : 'Failed saving version <b> {0} </b>. {1}',
-                'flash_version_edit_success' : 'The version <b> {0} </b> saved successfully.',
-                'flash_version_edit_fail' : 'Failed saving version <b> {0} </b>. {1}',
-                'flash_version_removed_success' : 'The version has been removed.',
-                'flash_version_removed_fail' : 'The version cannot be removed. {0}',
-                'flash_cannot_load_library' : 'The Library cannot be loaded.',
+                'flash_library_edit_success': 'The Library has been updated.',
+                'flash_library_edit_fail': 'The Library cannot be updated. {0}',
+                'flash_library_removed_success': 'The Library has been removed.',
+                'flash_library_removed_fail': 'The Library cannot be removed. {0}',
+                'flash_version_save_success': 'The version <b> {0} </b> saved successfully.',
+                'flash_version_save_fail': 'Failed saving version <b> {0} </b>. {1}',
+                'flash_version_edit_success': 'The version <b> {0} </b> saved successfully.',
+                'flash_version_edit_fail': 'Failed saving version <b> {0} </b>. {1}',
+                'flash_version_removed_success': 'The version has been removed.',
+                'flash_version_removed_fail': 'The version cannot be removed. {0}',
+                'flash_cannot_load_library': 'The Library cannot be loaded.',
 
                 'table_name': 'Name',
                 'table_description': 'Description',
@@ -698,22 +784,22 @@ export class StaticTranslation {
                 'label_cannot_resend_invitation': 'Cannot resend invitation. {0}',
                 'label_invitation_sent': 'Invitation sent',
 
-            },  'ProjectsProjectWidgetsComponent': {
+            }, 'ProjectsProjectWidgetsComponent': {
 
                 'title': 'Byzance<strong class="font-color-grid">GRID</strong> - all widgets groups',
 
-                'btn_add_widget_group' : 'Add widgets group',
+                'btn_add_widget_group': 'Add widgets group',
 
                 'table_name': 'Name',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
 
-                'flash_grid_group_add_success' : 'The version has been successfully created.',
-                'flash_grid_group_add_fail' : 'The version cannot be created. {0}',
-                'flash_grid_group_edit_success' : 'The version has been changed.',
-                'flash_grid_group_edit_fail' : 'The version cannot be changed. {0}',
-                'flash_grid_group_remove_success' : 'The version has been removed.',
-                'flash_grid_group_remove_fail' : 'The version cannot be removed. {0}',
+                'flash_grid_group_add_success': 'The version has been successfully created.',
+                'flash_grid_group_add_fail': 'The version cannot be created. {0}',
+                'flash_grid_group_edit_success': 'The version has been changed.',
+                'flash_grid_group_edit_fail': 'The version cannot be changed. {0}',
+                'flash_grid_group_remove_success': 'The version has been removed.',
+                'flash_grid_group_remove_fail': 'The version cannot be removed. {0}',
 
                 'label_no_item': 'There is not any widgets group in this project',
                 'label_you_can_create': 'You can create it by click on button bellow.',
@@ -722,42 +808,42 @@ export class StaticTranslation {
 
                 'title': 'Byzance<strong class="font-color-grid">GRID</strong> - widgets group <strong>{0}</strong>',
 
-                'btn_add_widget' : 'Add widget',
-                'widget_group_name' : 'Widget Collection Name',
-                'widget_group_description' : 'Description',
+                'btn_add_widget': 'Add widget',
+                'widget_group_name': 'Widget Collection Name',
+                'widget_group_description': 'Description',
 
                 'table_name': 'Name',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
 
-                'flash_grid_group_add_fail' : 'The version cannot be created. {0}',
-                'flash_grid_group_edit_success' : 'The version has been changed.',
-                'flash_grid_group_edit_fail' : 'The version cannot be changed. {0}',
-                'flash_grid_group_remove_success' : 'The version has been removed.',
-                'flash_grid_group_remove_fail' : 'The version cannot be removed. {0}',
-                'flash_widget_add_success' : 'The version has been successfully created.',
-                'flash_widget_add_fail' : 'The version cannot be created. {0}',
-                'flash_widget_removed_success' : 'The widget has been removed.',
-                'flash_widget_removed_fail' : 'The widget cannot be removed. {0}',
-                'flash_widget_edit_success' : 'The widget has been edited.',
-                'flash_widget_edit_fail' : 'The widget cannot be edited. {0}',
+                'flash_grid_group_add_fail': 'The version cannot be created. {0}',
+                'flash_grid_group_edit_success': 'The version has been changed.',
+                'flash_grid_group_edit_fail': 'The version cannot be changed. {0}',
+                'flash_grid_group_remove_success': 'The version has been removed.',
+                'flash_grid_group_remove_fail': 'The version cannot be removed. {0}',
+                'flash_widget_add_success': 'The version has been successfully created.',
+                'flash_widget_add_fail': 'The version cannot be created. {0}',
+                'flash_widget_removed_success': 'The widget has been removed.',
+                'flash_widget_removed_fail': 'The widget cannot be removed. {0}',
+                'flash_widget_edit_success': 'The widget has been edited.',
+                'flash_widget_edit_fail': 'The widget cannot be edited. {0}',
 
                 'label_no_item': 'There is not any widget in this group',
                 'label_you_can_create': 'You can create it by click on button bellow.',
 
             }, 'ProjectsProjectWidgetsWidgetsWidgetComponent': {
 
-                'flash_version_save_success' : 'The version <b> {0} </b> saved successfully.',
-                'flash_version_save_fail' : 'Failed saving version <b> {0} </b>. {1}',
-                'flash_version_removed_success' : 'The version has been removed.',
-                'flash_version_removed_fail' : 'The version cannot be removed. {0}',
-                'flash_version_changed_success' : 'The version {0} has been changed.',
-                'flash_version_changed_fail' : 'The version {0} cannot be changed. {1}',
-                'flash_version_load_fail' : 'The version {0} cannot be loaded. {1}',
-                'flash_widget_removed_success' : 'The widget has been removed.',
-                'flash_widget_removed_fail' : 'The widget cannot be removed. {}',
-                'flash_widget_edit_success' : 'The widget has been edited.',
-                'flash_widget_edit_fail' : 'The widget cannot be edited. {0}',
+                'flash_version_save_success': 'The version <b> {0} </b> saved successfully.',
+                'flash_version_save_fail': 'Failed saving version <b> {0} </b>. {1}',
+                'flash_version_removed_success': 'The version has been removed.',
+                'flash_version_removed_fail': 'The version cannot be removed. {0}',
+                'flash_version_changed_success': 'The version {0} has been changed.',
+                'flash_version_changed_fail': 'The version {0} cannot be changed. {1}',
+                'flash_version_load_fail': 'The version {0} cannot be loaded. {1}',
+                'flash_widget_removed_success': 'The widget has been removed.',
+                'flash_widget_removed_fail': 'The widget cannot be removed. {}',
+                'flash_widget_edit_success': 'The widget has been edited.',
+                'flash_widget_edit_fail': 'The widget cannot be edited. {0}',
 
                 'title': 'Byzance<strong class="font-color-grid">GRID</strong> - widget <strong>{0}</strong>',
 
@@ -775,14 +861,14 @@ export class StaticTranslation {
                 'table_actions': 'Actions',
             },
 
-            'label_online' : 'Online',
-            'label_offline' : 'Offline',
+            'label_online': 'Online',
+            'label_offline': 'Offline',
             'label_project_owner': 'Project owner',
             'label_project_admin': 'Project admin',
             'label_project_member': 'Project member',
             'label_email': 'E-mail',
             'label_password': 'Password',
-            'label_console' : 'Console',
+            'label_console': 'Console',
             'label_configuration': 'Configuration',
             'btn_save': 'Save',
             'btn_test': 'Test',
@@ -795,9 +881,13 @@ export class StaticTranslation {
             'btn_continue': 'Continue',
             'btn_cancel': 'Cancel',
             'btn_change': 'Change',
+            'btn_confirm': 'Confirm',
             'loading': 'Loading...',
             'btn_done': 'Done',
             'btn_rename': 'Rename',
+            'btn_yes': 'Yes',
+            'btn_no': 'No',
+            'btn_update': 'Update',
 
 
             'hello_world': 'Hello {0}! {1}?',
@@ -847,7 +937,7 @@ export class StaticTranslation {
                 'overwritten': 'Overwritten by newer update',
                 'not_updated': 'Not updated to right version',
                 'waiting_for_device': 'Waiting for Device Reconnection',
-                'bin_file_not_found': 'Bin File not Found' ,
+                'bin_file_not_found': 'Bin File not Found',
                 'critical_error': 'Critical Error',
                 'homer_server_is_offline': 'Server is (was) Offline',
                 'instance_inaccessible': 'Instance is (was) not accessible',

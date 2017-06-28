@@ -1024,14 +1024,14 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     program: this.blockoView.getDataJson()
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_saved',  m.name )));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_saved', m.name)));
                         this.refresh(); // also unblockUI
 
                         this.unsavedChanges = false;
                         this.exitConfirmationService.setConfirmationEnabled(false);
                     })
                     .catch((err) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_save_version', m.name , err)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_save_version', m.name, err)));
                         this.unblockUI();
                     });
             }
