@@ -897,7 +897,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 });
 
         } else {
-            this.fmWarning(this.translate('flash_cant_turn_instance_on', ' ')); //pozn. jedná se o stejný text
+            this.fmWarning(this.translate('flash_cant_turn_instance_on', ' ')); // pozn. jedná se o stejný text
         }
     }
 

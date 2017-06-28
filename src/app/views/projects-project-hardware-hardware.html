@@ -182,12 +182,12 @@
                                                 <div *ngIf="device.backup_mode=='AUTO_BACKUP'">
                                                     {{'label_backup_mode'|bkTranslate:this}}: <span class="font-grey-mint bold">{{'label_backup_automatic'|bkTranslate:this}}</span>
                                                     <!--A version running for more than 5 minutes is marked as secure and backed up on the device automatically -->
-                                                    <a (click)="onAutobackupSwitchClick('STATIC_BACKUP')">({{'label_switch_to_static'|bkTranslate:this}})</a>
+                                                    <a (click)="onAutobackupSwitchClick('STATIC_BACKUP')">(<span [innerHTML]="'label_switch_to_static'|bkTranslate:this"></span>)</a>
                                                 </div>
                                                 <div *ngIf="device.backup_mode=='STATIC_BACKUP'">
                                                     {{'label_backup_mode'|bkTranslate:this}}: <span class="font-grey-mint bold">{{'label_backup_static'|bkTranslate:this}}</span>
                                                     <!-- The selected static backup is uploaded to your device and helps you in emergency situations-->
-                                                   <a (click)="onAutobackupSwitchClick('AUTO_BACKUP')">({{'label_switch_to_automatic'|bkTranslate:this}})</a>
+                                                   <a (click)="onAutobackupSwitchClick('AUTO_BACKUP')">(<span [innerHTML]="'label_switch_to_automatic'|bkTranslate:this"></span>)</a>
                                                </div>
 
                                            </div>
