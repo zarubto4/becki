@@ -15,7 +15,7 @@ export class TranslationService {
 
     translationTables: { [lang: string]: { [tableOrEnv: string]: { [keyOrTable: string]: ( string |  { [key: string]: string } ) } } } = StaticTranslation.translateTables;
 
-    lang: string = 'cz'; // TODO TOM - Vrátit před commitem
+    lang: string = 'en'; // TODO TOM - Vrátit před commitem
 
     constructor() {
         console.info('TranslationService init');
