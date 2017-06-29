@@ -934,13 +934,26 @@ export class StaticTranslation {
                 'canceled': 'Canceled',
                 'not_start_yet': 'Waiting in Update Que (In Progress)',
                 'in_progress': 'Update is in progress',
-                'overwritten': 'Overwritten by newer update',
+                'overwritten': 'Skipped',
                 'not_updated': 'Not updated to right version',
                 'waiting_for_device': 'Waiting for Device Reconnection',
                 'bin_file_not_found': 'Bin File not Found',
                 'critical_error': 'Critical Error',
                 'homer_server_is_offline': 'Server is (was) Offline',
                 'instance_inaccessible': 'Instance is (was) not accessible',
+
+                // This description is used for Additional comment after mouseover. Information specifies a brief enum description
+                'complete_description': 'TODO', // TODO navázat na text po najetí myšky chci informační bublinu
+                'canceled_description': 'TODO',
+                'not_start_yet_description': 'TODO',
+                'in_progress_description': 'TODO',
+                'overwritten_description': 'TODO',
+                'not_updated_description': 'TODO',
+                'waiting_for_device_description': 'TODO',
+                'bin_file_not_found_description': 'TODO',
+                'critical_error_description': 'TODO',
+                'homer_server_is_offline_description': 'TODO',
+                'instance_inaccessible_description': 'TODO',
             }
         },
         'cz': {
