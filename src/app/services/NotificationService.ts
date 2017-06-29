@@ -524,6 +524,19 @@ export class NotificationService {
             });
     }
 
+    onDeleteClick(n: Notification) {
+
+        this.backendService.deleteNotification(n.id)
+            .then(() => {
+                this.removeNotificationById(n.id);
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError('The Notification cannot be removed.', reason));
+
+            });
+    }
+
+
     private isNotificationExists(id: string): boolean {
         return !!this.notifications.find((n) => n.id === id);
     }

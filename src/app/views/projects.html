@@ -48,6 +48,12 @@
 
                     <td>{{project.description}}</td>
                     <td class="no-wrap">
+
+                        <style type="text/css">
+                            table tr button { opacity:0.05;}
+                            table tr:hover button { opacity:1 }
+                        </style>
+
                         <button title="Project properties" class="btn btn-icon-only green" [disabled]="!project.edit_permission || !project.active" (click)="onEditClick(project)">
                             <i class="fa fa-cog"></i>
                         </button>

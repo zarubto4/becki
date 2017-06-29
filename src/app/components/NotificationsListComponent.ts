@@ -29,8 +29,9 @@ import { INotificationElement, INotificationButton } from '../backend/TyrionAPI'
         </span>
         
         
-        
-        <span class="n-time">{{notification.relativeTime}}</span>
+        <span class="n-time">
+            {{notification.relativeTime}} <a class="btn btn-icon-only btn-small" (click)="onDeleteClick(notification)"> <i class="icon-trash"></i></a>
+        </span>
         <div class="n-buttons" *ngIf="notification.buttons && notification.buttons.length" [class.n-unconfirmed]="!notification.confirmed">
             <button *ngFor="let button of notification.buttons" class="btn btn-sm {{button.color}}" (click)="onButtonClick(notification, button)" [disabled]="notification.confirmed" [class.n-bold]="button.bold" [class.n-italic]="button.italic" [class.n-underline]="button.underline">{{button.text}}</button>
         </div>
@@ -55,6 +56,10 @@ export class NotificationsListComponent {
 
     onObjectClick(n: Notification, e: INotificationElement) {
         this.notificationService.onObjectClick(n, e);
+    }
+
+    onDeleteClick(n: Notification) {
+        this.notificationService.onDeleteClick(n);
     }
 
     onButtonClick(n: Notification, b: INotificationButton) {

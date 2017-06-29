@@ -439,7 +439,7 @@ export class StaticTranslation {
                 'main_title': 'Notifications',
                 'title': 'Notifications',
                 'label_load_older': 'Load older notifications',
-                'label_displaying_notif': 'Displaying <b>{0}</b> of total <b>{1}</b> notifications',
+                'label_displaying_notif': 'Displaying <b>{0}</b> notification. Total Unread notifications: <b>{1}</b>',
                 'label_notif_undead': '(<b>{0}</b> unread)',
                 'flash_cant_load': 'Cannot load notifications',
 
