@@ -64,11 +64,11 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
                     description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The grid program has been added.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_program_add')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The grid program cannot be added.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_grid_program', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -90,11 +90,11 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
                     description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The grid project has been edited.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_project_edit')));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The grid project cannot be edited.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_grid_project', reason)));
                         this.refresh();
                     });
             }
@@ -108,12 +108,12 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
                 this.blockUI();
                 this.backendService.deleteMProject(this.gridProject.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The grid project has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_project_remove')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                         this.router.navigate(['/projects/' + this.id + '/grid']);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The grid project cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_grid_project', reason)));
                         this.refresh();
                     });
             }
@@ -132,11 +132,11 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
                     description: model.description,
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The grid program has been edited.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_program_edit')));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The grid program cannot be edited.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_grid_program', reason)));
                         this.refresh();
                     });
             }
@@ -150,11 +150,11 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
                 this.blockUI();
                 this.backendService.deleteMProgram(program.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The grid program has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_program_remove')));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The grid program cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_grid_program', reason)));
                         this.refresh();
                     });
             }

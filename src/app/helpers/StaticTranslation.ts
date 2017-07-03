@@ -150,9 +150,6 @@ export class StaticTranslation {
                 'label_not_compiled': 'Not successfully compiled',
                 'btn_select_version': 'Select program version',
 
-            }, 'ModalsHighImportanceNotificationComponent': {
-                'btn_ok': 'OK',
-
             }, 'ModalsInstanceEditDescriptionComponent': {
                 'title': 'Edit Cloud instance properties',
 
@@ -202,36 +199,6 @@ export class StaticTranslation {
                 'label_widget_description': 'Widget description',
 
             },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             'DashboardComponent': {
                 'btn_save': 'Save it!',
@@ -470,7 +437,8 @@ export class StaticTranslation {
                 'label_nick_name': 'Nick Name',
                 'label_gender': 'Gender',
                 'label_state': 'State',
-                'label_avatar_unsaved': '<h4>Avatar<span *ngIf="cropperLoaded" class="font-red"> (Unsaved)</span></h4>',
+                'label_avatar': 'Avatar',
+                'label_unsaved': '(Unsaved)',
                 'label_select_avatar': 'Select another avatar',
                 'label_current_password': 'Current password   ',
                 'label_new_password': 'New password',
@@ -859,6 +827,293 @@ export class StaticTranslation {
                 'table_description': 'Description',
                 'table_author': 'Author',
                 'table_actions': 'Actions',
+
+            }, 'ProjectsProjectBlockoComponent': {
+                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - all programs',
+
+                'label_blocko_remove': 'Remove blocko program',
+                'label_blocko_program_properties': 'Blocko program properties',
+                'label_no_blocko_program': 'There is not any blocko program',
+                'label_create_blocko_text': 'You can create it by click on button bellow.',
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_actions': 'Actions',
+                'btn_add_blocko_program': 'Add blocko program',
+
+                'flash_blocko_remove': 'The blocko has been removed.',
+                'flash_blocko_cant_remove': 'The blocko cannot be removed. {0}',
+                'flash_blocko_add_to_project': 'The blocko {0} has been added to project.',
+                'flash_blocko_cant_add_to_project': 'The blocko {0} cannot be added to project.`, {1}',
+                'flash_blocko_update': 'The blocko has been updated.',
+                'flash_blocko_cant_update': 'The blocko cannot be updated. {0}',
+
+            }, 'ProjectsProjectBlocksBlocksBlockComponent': {
+                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - block <strong>{0}</strong>',
+
+                'label_group_properties': 'Group properties',
+                'label_group_remove': 'Remove Group',
+                'label_code': 'Code',
+                'label_version': 'Version',
+                'label_block_color': 'Block color',
+                'label_block_icon': 'Block icon',
+                'label_block_description': 'Block description',
+                'label_block_code': 'Block code',
+                'label_test': 'Test',
+                'label_press_test_button': 'For test press button here',
+                'label_imputs_simulator': 'Inputs simulator',
+                'label_value': 'Value',
+                'label_datatype_boolean': 'boolean <strong>Arg #{0}</strong>',
+                'label_datatype_float': 'float <strong>Arg #{0}</strong>',
+                'label_datatype_integer': 'integer <strong>Arg #{0}</strong>',
+                'label_datatype_string': 'string <strong>Arg #{0}</strong>',
+                'label_block': 'block',
+                'label_console': 'Console',
+                'label_saved_versions': 'Saved versions',
+                'label_device_properties': 'Device properties',
+                'label_remove_device': 'Remove device',
+
+                'table_version_name': 'Version Name',
+                'table_description': 'Description',
+                'table_author': 'Author',
+                'table_actions': 'Actions',
+
+
+                'ts_error_typescript_error': 'TypeScript Error',
+                'ts_error_block_error': 'Block Error',
+                'ts_error_block_error_code_empty': 'Block code cannot be empty',
+
+                'bool_true': 'true',
+                'bool_false': 'false',
+                'btn_test': 'Test',
+
+
+                'flash_cant_save_version': 'Failed saving version <b> {0} </b >, {1}',
+                'flash_version_save': 'Version <b> {0} </b> saved successfully.',
+                'flash_block_code_empty': '{0}: Block Error, {1}: Block code cannot be empty',
+                'flash_cant_load_block': 'The block cannot be loaded. {0}',
+                'flash_blocko_edit': 'The block has been edited.',
+                'flash_cant_edit_block': 'The block cannot be edited. {0}',
+                'flash_block_remove': 'The block has been removed.',
+                'flash_cant_remove_block': 'The block cannot be removed. {0}',
+                'flash_version_remove': 'The version has been removed.',
+                'flash_cant_remove_version': 'The version cannot be removed. {0}',
+                'flash_version_change': 'The version {0} has been changed.',
+                'flash_cant_change_version': 'The version {0} cannot be changed. {1}',
+                'flash_cant_load_block_version': 'The block version cannot be loaded. {0}',
+
+            }, 'ProjectsProjectBlocksBlocksComponent': {
+                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - blocks group: <strong>{0}</strong>',
+                'label_group_properties': 'Group properties',
+                'label_group_remove': 'Remove Group',
+                'label_block_properties': 'Block properties',
+                'label_block_remove': 'Remove block',
+
+                'label_blocko_name': '<strong class="font-color-blocko">BLOCKO</strong> Name: <strong>{0}</strong>',
+                'label_blocko_description': '<strong class="font-color-blocko">BLOCKO</strong> Description: <strong>{0}</strong>',
+
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_actions': 'Actions',
+                'label_no_block_program': 'There is not any blocks in this group',
+                'label_create_block_text': 'You can create it by click on button bellow.',
+
+                'btn_add_block': 'Add block',
+
+                'flash_block_groups_edit': 'The blocks group has been edited.',
+                'flash_cant_edit_block_groups': 'The blocks group cannot be edited. {0}',
+                'flash_block_groups_remove': 'The blocks group has been removed.',
+                'flash_cant_remove_block_groups': 'The blocks group cannot be removed. {0}',
+                'flash_block_add': 'The block has been added.',
+                'flash_cant_add_block': 'The block cannot be added. {0}',
+                'flash_block_edit': 'The block has been edited.',
+                'flash_cant_edit_block': 'The block cannot be edited. {0}',
+                'flash_block_remove': 'The block has been removed.',
+                'flash_cant_remove_block': 'The block cannot be removed. {0}',
+
+            }, 'ProjectsProjectBlocksComponent': {
+                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - all blocks groups',
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_actions': 'Actions',
+                'label_group_properties': 'Group properties',
+                'label_group_remove': 'Remove Group',
+
+                'btn_add_blocks_group': 'Add blocks group',
+                'flash_block_group_add': 'The blocks group has been added.',
+                'flash_cant_add_block_group': 'The blocks group cannot be added. {0}',
+                'flash_block_group_edit': 'The blocks group has been edited.',
+                'flash_cant_edit_block_group': 'The blocks group cannot be edited. {0}',
+                'flash_block_group_remove': 'The blocks group has been removed.',
+                'flash_cant_remove_block_group': 'The blocks group cannot be removed. {0}',
+                'label_no_blocko_group': 'There is not any group of blocks',
+                'label_create_blocko_group_text': 'You can create it by click on button bellow.',
+
+            }, 'ProjectsProjectCodeCodeComponent': {
+
+                'title': 'Byzance<strong class="font-color-code">CODE</strong> - program <strong>{0}</strong>',
+
+                'label_device_properities': 'Device properties',
+                'label_remove_device': 'Remove device',
+                'label_code_name': '<strong class="font-color-code">CODE</strong> Name: <strong>{0}</strong>',
+                'label_code_description': '<strong class="font-color-code">CODE</strong> Description: <strong>{0}</strong>',
+                'label_hardware_type': '<strong class="font-color-hardware">Hardware</strong> Type',
+                'label_ide': 'IDE',
+                'label_version': 'Version',
+                'label_build_error': 'Build errors',
+                'label_file_and_line': 'File: <b>{0}</b> Line: <b>{1}</b>',
+                'label_blocko_interface_preview': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> interface preview',
+                'label_saved_versions': 'Saved versions',
+
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_author': 'Author',
+                'table_status': 'Status',
+                'table_actions': 'Actions',
+
+                'btn_build': 'Build',
+                'btn_upload_to_hardware': 'Upload to Hardware',
+
+                'codefile_library_version_dont_have_readme': '{0} ({1}), # Library {2}\n\nVersion: {3}\n\nLooks like this library doesn\'t have README.md file.',
+                'codefile_library_version_short_dont_have_readme': '# Library {0}\n\nVersion: {1}\n\nLooks like this library doesn\'t have README.md file.',
+                'text_unsaved_change_reload': 'You have <b> unsaved changes</b> in version <b> {0} </b>, do you really want reload this version?',
+                'text_unsaved_change_switch': 'You have <b> unsaved changes</b> in version <b> {0} </b>, do you really want switch to version <b> {1} </b>?',
+                'text_changed_files': '<h5>Changed files:</h5>',
+
+                'modal_label_save_same_code': 'Save same code?',
+                'modal_text_no_change': 'No changes have been made, are you sure you want to save this code?',
+                'modal_label_error': 'Error',
+                'modal_text_no_yoda': 'No available yoda G2 boards hardware.',
+
+                'flash_update_success': 'Uploading was done successfully',
+                'flash_cant_upload_code': 'Uploading code failed',
+                'flash_code_version_build_success': 'Build successfully.',
+                'flash_code_version_save': 'Version <b> {0} </b> saved successfully.',
+                'flash_cant_save_code_version': 'Failed saving version <b> {0} </b> {1}',
+                'flash_code_remove': 'The code has been removed.',
+                'flash_cant_remove_code': 'The code cannot be removed. {0}',
+                'flash_code_update': 'The code has been updated.',
+                'flash_cant_update_code': 'The code cannot be updated. {0}',
+                'flash_code_version_remove': 'The version has been removed.',
+                'flash_cant_remove_code_version': 'The version cannot be removed. {0}',
+                'flash_code_version_change': 'The version {0} has been changed.',
+                'flash_cant_change_code_version': 'The version {0} cannot be changed. {1}',
+                'flash_cant_load_code_types': 'The code types cannot be loaded. {0}',
+                'flash_cant_load_version': 'Cannot load version <b>{0}</b>, {1}',
+
+            }, 'ProjectsProjectCodeComponent': {
+                'title': 'Byzance<strong class="font-color-code">CODE</strong> - all programs',
+                'btn_add_code_program': 'Add code program',
+                'label_code_program_properties': 'Code program properties',
+                'label_remove_code_program': 'Remove code program',
+
+                'label_no_code': 'There is not any code program',
+                'label_create_code_text': 'You can create it by click on button bellow.',
+
+                'table_name': 'Name',
+                'table_hardware_type': '<strong class="font-color-hardware">Hardware</strong> type',
+                'table_description': 'Description',
+                'table_actions': 'Actions',
+
+                'flash_cant_update_code': 'The code cannot be updated. {0}',
+                'flash_code_update': 'The code has been updated.',
+                'flash_cant_add_code_to_project_with_reason': 'The code {0} cannot be added to project. {1}',
+                'flash_code_add_to_project': 'The code {0} has been added to project.',
+                'flash_cant_add_code_to_project': 'The code cannot be added to project.',
+                'flash_code_remove': 'The code has been removed.',
+                'flash_cant_remove_code': 'The code cannot be removed. {0}',
+
+            }, 'ProjectsProjectGridGridsGridComponent': {
+                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - program <strong>{0}</strong>',
+
+                'label_program_properties': 'Program properties',
+                'label_program_delete': 'Delete Program',
+                'label_version': 'Version',
+                'label_grid_size_class': 'Grid size class',
+                'label_console': 'Console',
+                'label_saved_versions': 'Saved versions',
+                'label_grid_program_name': '<strong class="font-color-grid" > GRID </strong> Program Name: <strong>{0}</strong>',
+                'label_grid_description': '<strong class="font-color-grid" > GRID </strong> Description: <strong>{0}</strong>',
+                'label_grid_grid_project': '<strong class="font-color-grid" > GRID </strong> Grid project',
+                'label_grid': 'Grid',
+                'label_widgets': 'Widgets',
+                'label_no_widgets': 'No widgets in this group',
+                'label_device_properties': 'Device properties',
+                'label_device_remove': 'Remove device',
+                'label_version_name': 'Version Name',
+                'label_description': 'Description',
+                'label_author': 'Author',
+                'label_actions': 'Actions',
+
+                'option_mobile': 'Mobile',
+                'option_tablet': 'Tablet',
+                'option_desktop': 'Desktop',
+
+                'btn_add_page': 'Add page',
+                'btn_clear_console': 'Clear console',
+                'modal_label_grid_size_change': 'Grid size class change',
+                'modal_text_grid_size_change': 'Changing grid size class <strong>delete all your pages</strong>, are you sure?',
+
+                'flash_cant_load_widget_version': 'Cannot load widget version, {0}',
+                'flash_cant_save_version': 'Failed saving version <b>{0}</b >, {1}',
+                'flash_version_save': 'Version <b> {0} </b> saved successfully.',
+                'flash_cant_remove_grid': 'The grid program cannot be removed. {0}',
+                'flash_grid_remove': 'The grid program has been removed.',
+                'flash_grid_edit': 'The grid program has been edited.',
+                'flash_cant_edit_grid': 'The grid program cannot be edited. {0}',
+                'flash_cant_load_version': 'Cannot load version <b>{0}</b> {1}',
+                'flash_cant_load_grid': 'The grid cannot be loaded. {0}',
+                'flash_cant_change_version': 'The version {0} cannot be changed. {1}',
+                'flash_version_change': 'The version {0} has been changed.',
+                'flash_version_remove': 'The version has been removed.',
+                'flash_cant_remove_version': 'The version cannot be removed. {0}',
+
+            }, 'ProjectsProjectGridGridsComponent': {
+                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - project <strong>{0}</strong>',
+                'label_device_properties': 'Device properties',
+                'label_device_remove': 'Remove device',
+                'label_program_properties': 'Program properties',
+                'label_program_remove': 'Remove program',
+                'label_no_grid': 'There is not any grid program',
+                'label_create_grid_text': 'You can create it by click on button bellow.',
+
+                'btn_add_grid_program': 'Add grid program',
+                'label_grid_project_name': '<strong class="font-color-grid">GRID</strong> Project Name: <strong>{0}</strong>',
+                'label_grid_project_description': '<strong class="font-color-grid">GRID</strong> Description: <strong>{0}</strong>',
+
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_actions': 'Actions',
+                'flash_grid_project_remove': 'The grid project has been removed.',
+                'flash_cant_remove_grid_project': 'The grid project cannot be removed. {0}',
+                'flash_grid_project_edit': 'The grid project has been edited.',
+                'flash_cant_edit_grid_project': 'The grid project cannot be edited. {0}',
+                'flash_grid_program_add': 'The grid program has been added.',
+                'flash_cant_add_grid_program': 'The grid program cannot be added. {0}',
+                'flash_grid_program_edit': 'The grid program has been edited.',
+                'flash_cant_edit_grid_program': 'The grid program cannot be edited. {0}',
+                'flash_grid_program_remove': 'The grid program has been removed.',
+                'flash_cant_remove_grid_program': 'The grid program cannot be removed. {0}',
+
+            }, 'ProjectsProjectGridComponent': {
+
+                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - all projects',
+                'btn_add_grid_project': 'Add grid project',
+
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_actions': 'Actions',
+
+                'label_group_properties': 'Group properties',
+                'label_group_remove': 'Remove group',
+                'label_no_grid': 'There is not any grid project',
+                'label_create_grid_text': 'You can create it by click on button bellow.',
+
+                'flash_grid_project_add': 'The grid project has been added.',
+                'flash_cant_add_grid_project': 'The grid project cannot be added. {0}',
+                'flash_grid_project_edit': 'The grid project has been edited.',
+                'flash_cant_edit_grid_project': 'The grid project cannot be edited. {0}',
+                'flash_grid_project_remove': 'The grid project has been removed.',
+                'flash_cant_remove_grid_project': 'The grid project cannot be removed. {0}',
             },
 
             'label_online': 'Online',
@@ -888,7 +1143,7 @@ export class StaticTranslation {
             'btn_yes': 'Yes',
             'btn_no': 'No',
             'btn_update': 'Update',
-
+            'btn_ok': 'OK',
 
             'hello_world': 'Hello {0}! {1}?',
         },
@@ -929,6 +1184,19 @@ export class StaticTranslation {
                 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE': 'System update by user setting - Always up to date',
                 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE': 'System update by central server - Critical patch',
             },
+            'version_status': {
+                'compilation_in_progress': 'Compilation is in progress',
+                'successfully_compiled_and_restored': 'Successfully compiled',
+                'server_was_offline': 'Server error (offline) The server can fix bugs after a while. We know about this error immediately and we\'re working on it. Please be patient.',
+                'successfully_compiled_not_restored': 'Compilation server error. But the server can fix bugs after a while. We know about this error immediately and we\'re working on it. Please be patient.',
+                'compiled_with_code_errors': 'Code compilation finished with errors.',
+                'file_with_code_not_found': 'Code file not found. But the server can fix bugs after a while. We know about this error immediately and we\'re working on it. Please be patient.',
+                'compilation_server_error': 'Compilation server error. But the server can fix bugs after a while. We know about this error immediately and we\'re working on it. Please be patient.',
+                'json_code_is_broken': 'Json Code is Broken. Please Try it again.',
+                'hardware_unstable': 'Some of your devices with this version of the program had a critical error and had to be restored from a backup. This version is not recommended to use in production until you have solved the reason for the fall.',
+                'undefined': 'Status of version is not known'
+            },
+
             'update_state': {
                 'complete': 'Complete',
                 'canceled': 'Canceled',

@@ -72,11 +72,11 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
                 this.blockUI();
                 this.backendService.deleteCProgram(code.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The code has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The code cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -85,7 +85,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
 
     onAddClick(): void {
         if (!this.typeOfBoards) {
-            this.fmError(`The code cannot be added to project.`);
+            this.fmError(this.translate('flash_cant_add_code_to_project'));
         }
         let model = new ModalsCodePropertiesModel(this.typeOfBoards);
         this.modalService.showModal(model).then((success) => {
@@ -98,11 +98,11 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
                     type_of_board_id: model.deviceType
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(`The code ${model.name} has been added to project.`));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_add_to_project', model.name)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(`The code ${model.name} cannot be added to project.`, reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_code_to_project_with_reason', model.name, reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -111,7 +111,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
 
     onEditClick(code: ICProgramShortDetail): void {
         if (!this.typeOfBoards) {
-            this.fmError(`The code cannot be added to project.`);
+            this.fmError(this.translate('flash_cant_add_code_to_project'));
         }
 
         let model = new ModalsCodePropertiesModel(this.typeOfBoards, code.name, code.description, '', true, code.name);
@@ -125,11 +125,11 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
                     type_of_board_id: code.type_of_board_id
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The code has been updated.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The code cannot be updated.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }

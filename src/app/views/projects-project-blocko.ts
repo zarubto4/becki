@@ -62,11 +62,11 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
                 this.blockUI();
                 this.backendService.deleteBProgram(blocko.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The blocko has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_removed')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The blocko cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_blocko_cant_remove', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -78,13 +78,13 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.createBProgram(this.id, {name: model.name, description: model.description}) // TODO [permission]: "Project.update_permission"
+                this.backendService.createBProgram(this.id, { name: model.name, description: model.description }) // TODO [permission]: "Project.update_permission"
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(`The blocko ${model.name} has been added to project.`));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_add_to_project', model.name)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(`The blocko ${model.name} cannot be added to project.`, reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_blocko_cant_add_to_project', model.name, reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -96,13 +96,13 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editBProgram(blocko.id, {name: model.name, description: model.description})
+                this.backendService.editBProgram(blocko.id, { name: model.name, description: model.description })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The blocko has been updated.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_update')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The blocko cannot be updated.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_blocko_cant_update', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }

@@ -12,23 +12,23 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-desktop"></i>
-                            Byzance<strong class="font-color-grid">GRID</strong> - program <strong>{{gridProgram?gridProgram.name:""}}</strong>
+                            <span [innerHTML]="'title'|bkTranslate:this:(gridProgram?gridProgram.name:'')"></span>
                         </span>
                     </div>
                     <div class="becki-actions">
-                        <button title="Program properties" class="btn btn-icon-only green" [disabled]="!gridProgram.edit_permission" (click)="onProgramEditClick()">
+                        <button title="{{'label_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!gridProgram.edit_permission" (click)="onProgramEditClick()">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="Delete Program" class="btn btn-icon-only red" [disabled]="!gridProgram.delete_permission" (click)="onProgramDeleteClick()">
+                        <button title="{{'label_program_delete'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!gridProgram.delete_permission" (click)="onProgramDeleteClick()">
                             <i class="fa fa-trash"></i>
                         </button>
                     </div>
                 </div>
                 <div>
-                    <strong class="font-color-grid">GRID</strong> Program Name: <strong>{{gridProgram?gridProgram.name:""}}</strong><br>
-                    <strong class="font-color-grid">GRID</strong> Description: <strong>{{gridProgram?gridProgram.description:""}}</strong><br>
+                    <span [innerHTML]="'label_grid_program_name'|bkTranslate:this:(gridProgram?gridProgram.name:'')"></span> <br>
+                    <span [innerHTML]="'label_grid_description'|bkTranslate:this:(gridProgram?gridProgram.description:'')"></span> <br>
                     <br>
-                    <strong class="font-color-grid">GRID</strong> Grid project: <strong><a (click)="onGridProjectClick(gridProject.id)">{{gridProject?gridProject.name:""}}</a></strong>
+                    <span [innerHTML]="'label_grid_grid_project'|bkTranslate:this"></span> <strong><a (click)="onGridProjectClick(gridProject.id)">{{gridProject?gridProject.name:""}}</a></strong>
                 </div>
             </div>
         </div>
@@ -41,26 +41,26 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark uppercase">
                             <i class="fa fa-fw fa-th fa-rotate-90"></i>
-                            Grid
+                            {{'label_grid'|bkTranslate:this}}
                         </span>
                     </div>
                     <div *ngIf="selectedProgramVersion" class="becki-caption version">
-                        <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="unsavedChanges" class="changes"></span> {{selectedProgramVersion.version_object.version_name}}</span>
+                        <span class="caption-subject font-gray"><strong>{{'label_version'|bkTranslate:this}}:</strong> <span *ngIf="unsavedChanges" class="changes"></span> {{selectedProgramVersion.version_object.version_name}}</span>
                     </div>
                 </div>
 
                 <div>
                     <div class="pull-left">
                         <button type="button" class="btn default green-haze" (click)="onAddPageClick()">
-                            <i class="fa fa-plus"></i> Add page
+                            <i class="fa fa-plus"></i> {{'btn_add_page'|bkTranslate:this}}
                         </button>
                     </div>
                     <div class="pull-right">
-                        <label>Grid size class: </label>
+                        <label>{{'label_grid_size_class'|bkTranslate:this}}: </label>
                         <select class="form-control no-full-width" [ngModel]="gridDeviceProfile" (ngModelChange)="onChangeGridDeviceProfile($event)">
-                            <option value="mobile">Mobile</option>
-                            <option value="tablet">Tablet</option>
-                            <option value="desktop">Desktop</option>
+                            <option value="mobile"> {{'option_mobile'|bkTranslate:this}}</option>
+                            <option value="tablet"> {{'option_tablet'|bkTranslate:this}}</option>
+                            <option value="desktop">{{'option_desktop'|bkTranslate:this}}</option>
                         </select>
                     </div>
                     <div class="clearfix"></div>
@@ -76,7 +76,7 @@
                 <div>
                     <div class="pull-right">
                         <button type="button" class="btn default green-haze" (click)="onSaveClick()">
-                            <i class="fa fa-floppy-o"></i> Save
+                            <i class="fa fa-floppy-o"></i> {{'btn_save'|bkTranslate:this}}
                         </button>
                     </div>
                     <div class="clearfix"></div>
@@ -93,12 +93,12 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark uppercase">
                             <i class="fa fa-fw fa-terminal"></i>
-                            Console
+                             {{'label_console'|bkTranslate:this}}
                         </span>
                     </div>
                     <div class="pull-right">
                         <button type="button" class="btn default red" (click)="onClearConsoleClick()">
-                            <i class="fa fa-trash-o"></i> Clear console
+                            <i class="fa fa-trash-o"></i> {{'btn_clear_console'|bkTranslate:this}}
                         </button>
                     </div>
                 </div>
@@ -115,7 +115,7 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark uppercase">
                             <i class="fa fa-fw fa-object-group"></i>
-                            Widgets
+                             {{'label_widgets'|bkTranslate:this}}
                         </span>
                     </div>
                 </div>
@@ -133,7 +133,7 @@
                             </div>
                             <div class="panel-collapse collapse no-select" [class.in]="widgetGroupsOpenToggle[group.id]">
                                 <div class="panel-body no-select" style="padding: 5px;">
-                                    <div *ngIf="group.widgets.length == 0" style="color: gray; text-align: center;">No widgets in this group</div>
+                                    <div *ngIf="group.widgets.length == 0" style="color: gray; text-align: center;">{{'label_no_widgets'|bkTranslate:this}}</div>
 
                                     <a *ngFor="let widget of group.widgets" class="the-grid__widget-drag-handler no-select" [bkDraggable]="draggableOptions" (bkDraggableOnDrag)="onWidgetDrag($event)" (mousedown)="onWidgetDown($event,widget)">
                                         <i class="fa fa-fw fa-object-group" style="position: absolute; right: -25px; bottom: 0px; font-size: 65px; transform: rotate(45deg); opacity: 0.2;"></i>
@@ -155,7 +155,7 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark uppercase">
                             <i class="fa fa-fw fa-code-fork"></i>
-                            Saved versions
+                             {{'label_saved_versions'|bkTranslate:this}}
                         </span>
                     </div>
                 </div>
@@ -163,10 +163,10 @@
                     <table class="table table-condensed table-hover">
                         <thead>
                         <tr>
-                            <th class="col col-lg-2">Version Name</th>
-                            <th class="col col-lg-7">Description</th>
-                            <th class="col col-lg-2">Author</th>
-                            <th class="col col-lg-1">Actions</th>
+                            <th class="col col-lg-2">{{'label_version_name'|bkTranslate:this}}</th>
+                            <th class="col col-lg-7">{{'label_description'|bkTranslate:this}}</th>
+                            <th class="col col-lg-2">{{'label_author'|bkTranslate:this}}</th>
+                            <th class="col col-lg-1">{{'label_actions'|bkTranslate:this}}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -187,11 +187,11 @@
                                     table tr:hover button { opacity:1 }
                                 </style>
 
-                                <button title="Device properties" class="btn btn-icon-only green" [disabled]="!version.edit_permission" (click)="onEditVersionClick(version)">
+                                <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.edit_permission" (click)="onEditVersionClick(version)">
                                     <i class="fa fa-cog"></i>
                                 </button>
 
-                                <button title="Remove device" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
+                                <button title="{{'label_device_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
                                     <i class="fa fa-trash"></i>
                                 </button>
 

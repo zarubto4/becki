@@ -12,25 +12,27 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-code"></i>
-                             Byzance<strong class="font-color-code">CODE</strong> - program <strong>{{currentParamsService.currentCodeNameSnapshot}}</strong>
+                             <span [innerHTML]="'title'|bkTranslate:this:currentParamsService.currentCodeNameSnapshot"></span>
                         </span>
                     </div>
                     <div *ngIf="codeProgram" class="becki-actions">
 
-                        <button title="Device properties" class="btn btn-icon-only green" [disabled]="!codeProgram.edit_permission" (click)="onEditClick()">
+                        <button title="{{'label_device_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!codeProgram.edit_permission"
+                            (click)="onEditClick()">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="Remove device" class="btn btn-icon-only red" [disabled]="!codeProgram.delete_permission" (click)="onRemoveClick()">
+                        <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!codeProgram.delete_permission"
+                            (click)="onRemoveClick()">
                             <i class="fa fa-trash"></i>
                         </button>
 
                     </div>
                 </div>
                 <div>
-                    <strong class="font-color-code">CODE</strong> Name: <strong>{{codeProgram?codeProgram.name:""}}</strong><br>
-                    <strong class="font-color-code">CODE</strong> Description: <strong>{{codeProgram?codeProgram.description:""}}</strong><br>
+                    <span [innerHTML]="'label_code_name'|bkTranslate:this:(codeProgram?codeProgram.name:'')"></span> <br>
+                    <span [innerHTML]="'label_code_description'|bkTranslate:this:(codeProgram?codeProgram.description:'')"></span>                    <br>
                     <br>
-                    <strong class="font-color-hardware">Hardware</strong> Type: <strong><a (click)="onBoardTypeClick(codeProgram.type_of_board_id)">{{codeProgram?codeProgram.type_of_board_name:""}}</a></strong>
+                     <span [innerHTML]="'label_hardware_type'|bkTranslate:this"></span>:<strong><a (click)="onBoardTypeClick(codeProgram.type_of_board_id)">{{codeProgram?codeProgram.type_of_board_name:""}}</a></strong>
                 </div>
             </div>
         </div>
@@ -40,21 +42,22 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-file-code-o"></i>
-                            IDE
+                             {{'label_ide'|bkTranslate:this}}
                         </span>
                     </div>
                     <div *ngIf="selectedProgramVersion" class="becki-caption version">
-                        <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="changesInSelectedVersion().length > 0" class="changes"></span> {{selectedProgramVersion.version_object.version_name}}</span>
+                        <span class="caption-subject font-gray"><strong>{{'label_version'|bkTranslate:this}}:</strong> <span *ngIf="changesInSelectedVersion().length > 0" class="changes"></span> {{selectedProgramVersion.version_object.version_name}}</span>
                     </div>
                 </div>
-                <bk-code-ide [files]="selectedCodeFiles" defaultOpenFilename="main.cpp" (fileContentChange)="onFileContentChange($event)" [enableLibraryButtons]="true" (onAddLibraryClick)="onAddLibraryClick()" (onChangeLibraryVersionClick)="onChangeLibraryVersionClick($event)"></bk-code-ide>
+                <bk-code-ide [files]="selectedCodeFiles" defaultOpenFilename="main.cpp" (fileContentChange)="onFileContentChange($event)"
+                    [enableLibraryButtons]="true" (onAddLibraryClick)="onAddLibraryClick()" (onChangeLibraryVersionClick)="onChangeLibraryVersionClick($event)"></bk-code-ide>
                 <div>
                     <div class="pull-right">
                         <button type="button" class="btn default yellow-gold" (click)="onBuildClick()" [disabled]="buildInProgress">
-                            <i class="fa fa-play" *ngIf="!buildInProgress"></i> <i class="fa fa-spinner fa-spin" *ngIf="buildInProgress"></i> Build
+                            <i class="fa fa-play" *ngIf="!buildInProgress"></i> <i class="fa fa-spinner fa-spin" *ngIf="buildInProgress"></i> {{'btn_build'|bkTranslate:this}}
                         </button>
                         <button type="button" class="btn default green-haze" (click)="onSaveClick()">
-                            <i class="fa fa-floppy-o"></i> Save
+                            <i class="fa fa-floppy-o"></i> {{'btn_save'|bkTranslate:this}}
                         </button>
                     </div>
                     <div class="clearfix"></div>
@@ -62,19 +65,18 @@
 
                 <div *ngIf="buildErrors">
                     <div class="spacer30"></div>
-                    <div  class="portlet light bordered">
+                    <div class="portlet light bordered">
                         <div class="portlet-title">
                             <div class="caption">
                                 <i class="fa fa-play font-red"></i>
-                                <span class="caption-subject bold uppercase font-red">Build errors</span>
+                                <span class="caption-subject bold uppercase font-red">{{'label_build_error'|bkTranslate:this}}</span>
                             </div>
                         </div>
                         <div class="portlet-body">
                             <div *ngFor="let buildError of buildErrors" class="mt-element-ribbon bg-grey-steel">
-                                <div class="ribbon ribbon-shadow uppercase" [class.ribbon-color-danger]="buildError.type=='error'" [class.ribbon-color-warning]="buildError.type=='warning'" >{{buildError.type}}</div>
+                                <div class="ribbon ribbon-shadow uppercase" [class.ribbon-color-danger]="buildError.type=='error'" [class.ribbon-color-warning]="buildError.type=='warning'">{{buildError.type}}</div>
                                 <p class="ribbon-content">
-                                    File: <b>{{buildError.filename}}</b>
-                                    Line: <b>{{buildError.line}}</b>
+                                    <span [innerHTML]="'label_file_and_line'|bkTranslate:this:buildError.filename:buildError.line"></span>
                                     <br>
                                     <b>{{buildError.text}}</b>
                                     <br>
@@ -92,7 +94,7 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-sitemap fa-rotate-90"></i>
-                            Byzance<strong class="font-color-blocko">BLOCKO</strong> interface preview
+                            <span [innerHTML]="'label_blocko_interface_preview'|bkTranslate:this"></span>
                         </span>
                     </div>
                 </div>
@@ -107,92 +109,97 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-code-fork"></i>
-                            Saved versions
+                            {{'label_saved_versions'|bkTranslate:this}}
                         </span>
                     </div>
                 </div>
                 <div *ngIf="codeProgramVersions">
                     <table class="table table-condensed table-hover">
                         <thead>
-                        <tr>
-                            <th class="col col-lg-2">Name</th>
-                            <th class="col col-lg-6">Description</th>
-                            <th class="col col-lg-1">Author</th>
-                            <th class="col col-lg-1">Status</th>
-                            <th class="col col-lg-1"></th>
-                            <th class="col col-lg-1">Actions</th>
+                            <tr>
+                                <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                                <th class="col col-lg-6">{{'table_description'|bkTranslate:this}}</th>
+                                <th class="col col-lg-1">{{'table_author'|bkTranslate:this}}</th>
+                                <th class="col col-lg-1">{{'table_status'|bkTranslate:this}}</th>
+                                <th class="col col-lg-1"></th>
+                                <th class="col col-lg-1">{{'table_actions'|bkTranslate:this}}</th>
 
-                        </tr>
+                            </tr>
                         </thead>
                         <tbody>
 
-                        <tr *ngFor="let version of codeProgramVersions">
-                            <!-- NAME -->
-                            <td class="bold" [class.bold]="isSelected(version)">
-                                <a (click)="onProgramVersionClick(version)">
+                            <tr *ngFor="let version of codeProgramVersions">
+                                <!-- NAME -->
+                                <td class="bold" [class.bold]="isSelected(version)">
+                                    <a (click)="onProgramVersionClick(version)">
                                     {{version.version_name}}
                                 </a>
-                            </td>
-                            <!-- Description -->
-                            <td>
-                                {{version.version_description}}
-                            </td>
-                            <!-- Author -->
-                            <td>
-                                {{version.author.nick_name}}
-                            </td>
-                            <!-- STATUS -->
-                            <td>
-                                 <span class="icon-hint-wraper red" *ngIf="version.status=='hardware_unstable'">
+                                </td>
+                                <!-- Description -->
+                                <td>
+                                    {{version.version_description}}
+                                </td>
+                                <!-- Author -->
+                                <td>
+                                    {{version.author.nick_name}}
+                                </td>
+                                <!-- STATUS -->
+                                <td>
+                                    <span class="icon-hint-wraper red" *ngIf="version.status=='hardware_unstable'">
                                     <i class="fa fa-exclamation-triangle font-red-mint"></i>
                                 </span>
-                                <span class="icon-hint-wraper orange" *ngIf="version.status=='compiled_with_code_errors'">
+                                    <span class="icon-hint-wraper orange" *ngIf="version.status=='compiled_with_code_errors'">
                                     <i class="fa fa-thumbs-down font-yellow"></i>
-                                    <span class="hint">{{versionStatusTranslate[version.status]}}</span>
-                                </span>
+                                    <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
+                                    </span>
 
-                                <span class="icon-hint-wraper red" *ngIf="version.status=='hardware_unstable'">
+                                    <span class="icon-hint-wraper red" *ngIf="version.status=='hardware_unstable'">
                                     <i class="fa fa-heartbeat font-red-mint"></i>
-                                    <span class="hint">{{versionStatusTranslate[version.status]}}</span>
-                                </span>
+                                    <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
+                                    </span>
 
-                                <span class="icon-hint-wraper orange" *ngIf="version.status=='server_was_offline' || version.status=='successfully_compiled_not_restored' || version.status=='undefined' || version.status=='file_with_code_not_found' || version.status=='compilation_server_error' || version.status=='json_code_is_broken'">
+                                    <span class="icon-hint-wraper orange" *ngIf="version.status=='server_was_offline' || version.status=='successfully_compiled_not_restored' || version.status=='undefined' || version.status=='file_with_code_not_found' || version.status=='compilation_server_error' || version.status=='json_code_is_broken'">
                                     <i class="fa fa-wrench font-yellow"></i>
-                                    <span class="hint">{{versionStatusTranslate[version.status]}}</span>
-                                </span>
+                                    <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
+                                    </span>
 
-                                <span class="icon-hint-wraper gray" *ngIf="version.status=='compilation_in_progress'">
+                                    <span class="icon-hint-wraper gray" *ngIf="version.status=='compilation_in_progress'">
                                     <i class="fa fa-spinner fa-spin"></i>
-                                    <span class="hint">{{versionStatusTranslate[version.status]}}</span>
-                                </span>
+                                    <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
+                                    </span>
 
-                                <span class="icon-hint-wraper green" *ngIf="version.status=='successfully_compiled_and_restored'">
+                                    <span class="icon-hint-wraper green" *ngIf="version.status=='successfully_compiled_and_restored'">
                                     <i class="fa fa-check font-green-jungle"></i>
-                                    <span class="hint">{{versionStatusTranslate[version.status]}}</span>
-                                </span>
-                            </td>
-                            <!-- UPLOAD -->
-                            <td>
-                                <button title="Device properties" class="btn blue" (click)="onUploadClick(version)" *ngIf="device && device.connectible_to_internet && version.status=='successfully_compiled_and_restored'">
-                                    Upload to Hardware
+                                    <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
+                                    </span>
+                                </td>
+                                <!-- UPLOAD -->
+                                <td>
+                                    <button title="{{'label_device_properities'|bkTranslate:this}}" class="btn blue" (click)="onUploadClick(version)" *ngIf="device && device.connectible_to_internet && version.status=='successfully_compiled_and_restored'">
+                                    {{'btn_upload_to_hardware'|bkTranslate:this}}
                                 </button>
-                            </td>
-                            <!-- ACTIONS -->
-                            <td>
-                                <style type="text/css">
-                                    table tr button { opacity:0.05;}
-                                    table tr:hover button { opacity:1 }
-                                </style>
+                                </td>
+                                <!-- ACTIONS -->
+                                <td>
+                                    <style type="text/css">
+                                        table tr button {
+                                            opacity: 0.05;
+                                        }
 
-                                <button title="Device properties" class="btn btn-icon-only green" [disabled]="!version.update_permission" (click)="onEditVersionClick(version)">
+                                        table tr:hover button {
+                                            opacity: 1
+                                        }
+                                    </style>
+
+                                    <button title="{{'label_device_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission" (click)="onEditVersionClick(version)">
                                     <i class="fa fa-cog"></i>
                                 </button>
 
-                                <button title="Remove device" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
+                                    <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
                                     <i class="fa fa-trash"></i>
                                 </button>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

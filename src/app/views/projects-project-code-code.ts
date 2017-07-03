@@ -63,21 +63,6 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     fileChangeTimeout: any = null;
 
-    versionStatusTranslate: { [key: string]: string } = {
-        'compilation_in_progress': 'Compilation is in progress',
-        'successfully_compiled_and_restored': 'Successfully compiled',
-        'server_was_offline': 'Server error (offline) The server can fix bugs after a while. We know about this error immediately and we\'re working on it. Please be patient.',
-        'successfully_compiled_not_restored': 'Compilation server error. But the server can fix bugs after a while. We know about this error immediately and we\'re working on it. Please be patient.',
-        'compiled_with_code_errors': 'Code compilation finished with errors.',
-        'file_with_code_not_found': 'Code file not found. But the server can fix bugs after a while. We know about this error immediately and we\'re working on it. Please be patient.',
-        'compilation_server_error': 'Compilation server error. But the server can fix bugs after a while. We know about this error immediately and we\'re working on it. Please be patient.',
-        'json_code_is_broken': 'Json Code is Broken. Please Try it again.',
-        'hardware_unstable': 'Some of your devices with this version of the program had a critical error and had to be' +
-                             ' restored from a backup. This version is not recommended to use in production until you' +
-                             ' have solved the reason for the fall.',
-        'undefined': 'Status of version is not known'
-    };
-
     constructor(injector: Injector) {
         super(injector);
     };
@@ -137,12 +122,12 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 this.blockUI();
                 this.backendService.deleteCProgram(this.codeProgram.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The code has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.router.navigate(['/projects/' + this.projectId + '/code']);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The code cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code', reason)));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     });
             }
@@ -161,11 +146,11 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     type_of_board_id: this.codeProgram.type_of_board_id
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The code has been updated.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The code cannot be updated.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
                         this.refresh();
                     });
             }
@@ -178,12 +163,12 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 this.blockUI();
                 this.backendService.deleteCProgramVersion(version.version_id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The version has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_remove')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The version cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code_version', reason)));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     });
@@ -201,11 +186,11 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     version_description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(`The version ${model.name} has been changed.`));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_change', model.name)));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(`The version ${model.name} cannot be changed.`, reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_code_version', model.name, reason)));
                         this.refresh();
                     });
             }
@@ -263,7 +248,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             })
             .catch(reason => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError(`The code types cannot be loaded.`, reason));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_code_types', reason)));
             });
 
     }
@@ -282,7 +267,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             .then((success) => {
                 if (success && mm && mm.libraryVersion) {
 
-                    let cf = new CodeFile(`${m.library.name} (${mm.libraryVersion.version_name})`, `# Library ${m.library.name}\n\nVersion: ${mm.libraryVersion.version_name}\n\nLooks like this library doesn't have README.md file.`);
+                    let cf = new CodeFile(this.translate('codefile_library_version_dont_have_readme', m.library.name, mm.libraryVersion.version_name, m.library.name, mm.libraryVersion.version_name));
                     cf.fixedPath = true;
                     cf.library = true;
                     cf.readonly = true;
@@ -316,7 +301,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             .then((success) => {
 
                 cf.objectFullPath = `${cf.libraryName} (${mm.libraryVersion.version_name})`;
-                cf.content = cf.contentOriginal = `# Library ${cf.libraryName}\n\nVersion: ${mm.libraryVersion.version_name}\n\nLooks like this library doesn't have README.md file.`;
+                cf.content = cf.contentOriginal = this.translate('codefile_library_version_short_dont_have_readme', cf.libraryName, mm.libraryVersion.version_name);
                 cf.libraryVersionId = mm.libraryVersion.version_id;
 
                 this.codeIDE.externalRefresh();
@@ -417,10 +402,8 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 if (Array.isArray(programVersionFull.imported_libraries)) {
                     programVersionFull.imported_libraries.forEach((uf) => {
 
-                        let cf = new CodeFile(
-                            `${uf.library_short_detail.name} (${uf.library_version_short_detail.version_name})`,
-                            `# Library ${uf.library_short_detail.name}\n\nVersion: ${uf.library_version_short_detail.version_name}\n\nLooks like this library doesn't have README.md file.`
-                        );
+                        let cf = new CodeFile(this.translate('codefile_library_version_dont_have_readme', uf.library_short_detail.name, uf.library_version_short_detail.version_name,
+                            uf.library_short_detail.name, uf.library_version_short_detail.version_name));
                         cf.fixedPath = true;
                         cf.library = true;
                         cf.readonly = true;
@@ -453,7 +436,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             })
             .catch((err) => {
                 this.unblockUI();
-                this.fmError(`Cannot load version <b>${programVersion.version_name}</b>`, err);
+                this.fmError(this.translate('flash_cant_load_version', programVersion.version_name, err));
             });
 
     }
@@ -468,20 +451,14 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
                 let text = '';
                 if (this.selectedProgramVersion.version_object.id === programVersion.version_id) {
-                    text = 'You have <b>unsaved changes</b> in version <b>'
-                        + this.selectedProgramVersion.version_object.version_name
-                        + '</b>, do you really want reload this version?';
+                    text = this.translate('text_unsaved_change_reload', this.selectedProgramVersion.version_object.version_name);
                 } else {
-                    text = 'You have <b>unsaved changes</b> in version <b>'
-                        + this.selectedProgramVersion.version_object.version_name
-                        + '</b>, do you really want switch to version <b>'
-                        + programVersion.version_name
-                        + '</b>?';
+                    text = this.translate('text_unsaved_change_switch', this.selectedProgramVersion.version_object.version_name, programVersion.version_name);
                 }
 
                 let confirm = new ModalsConfirmModel(
                     text,
-                    '<h5>Changed files:</h5>' + changedFiles.join('<br>')
+                    this.translate('text_changed_files') + changedFiles.join('<br>')
                 );
 
                 this.modalService.showModal(confirm).then((yes) => {
@@ -549,11 +526,11 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     files: userFiles
                 })
                     .then(() => {
-                        this.fmSuccess('Version <b>' + m.name + '</b> saved successfully.');
+                        this.fmSuccess(this.translate('flash_code_version_save', m.name));
                         this.refresh();
                     })
                     .catch((err) => {
-                        this.fmError('Failed saving version <b>' + m.name + '</b>', err);
+                        this.fmError(this.translate('flash_cant_save_code_version', m.name, err));
                         this.unblockUI();
                     });
             }
@@ -563,7 +540,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     onSaveClick() {
         if (this.changesInSelectedVersion().length === 0) {
-            let con = new ModalsConfirmModel('Save same code?', 'No changes have been made, are you sure you want to save this code?', false, 'yes', 'no', null);
+            let con = new ModalsConfirmModel(this.translate('modal_label_save_same_code'), this.translate('modal_text_no_change'), false, this.translate('btn_yes'), this.translate('btn_no'), null);
             this.modalService.showModal(con).then((success) => {
                 if (!success) {
                     return;
@@ -613,7 +590,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             .then((success) => {
                 this.buildInProgress = false;
                 // console.log(success);
-                this.addFlashMessage(new FlashMessageSuccess('Build successfully.'));
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_build_success')));
             })
             .catch((error) => {
                 this.buildInProgress = false;
@@ -660,7 +637,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
                 let connectibleDevices = boards;
                 if (!connectibleDevices || connectibleDevices.length === 0) {
-                    this.modalService.showModal(new ModalsConfirmModel('Error', 'No available yoda G2 boards hardware.', true, 'OK', null));
+                    this.modalService.showModal(new ModalsConfirmModel(this.translate('modal_label_error'), this.translate('modal_text_no_yoda'), true, this.translate('btn_ok'), null));
                     return;
                 }
 
@@ -675,10 +652,10 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                                     c_program_version_id: version.version_id
                                 }]
                             }).then((result) => {
-                                this.fmSuccess(`Uploading was done successfully`);
+                                this.fmSuccess(this.translate('flash_update_success'));
                                 this.unblockUI();
                             }).catch((e) => {
-                                this.fmError(`Uploading code failed`);
+                                this.fmError(this.translate('flash_cant_upload_code'));
                                 this.unblockUI();
                             });
                         }

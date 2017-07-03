@@ -12,23 +12,23 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-fw fa-cube"></i>
-                            Byzance<strong class="font-color-blocko">BLOCKO</strong> - block <strong>{{blockoBlock?blockoBlock.name:""}}</strong>
+                            <span [innerHTML]="'title'|bkTranslate:this:(blockoBlock?blockoBlock.name:'')"></span>
                         </span>
                     </div>
                     <div *ngIf="blockoBlock" class="becki-actions">
-                        <button title="Group properties" class="btn btn-icon-only green" [disabled]="!blockoBlock.edit_permission" (click)="onBlockEditClick()">
+                        <button title="{{'label_group_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!blockoBlock.edit_permission"
+                            (click)="onBlockEditClick()">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="Remove Group" class="btn btn-icon-only red" [disabled]="!blockoBlock.delete_permission" (click)="onBlockDeleteClick()">
+                        <button title="{{'label_group_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!blockoBlock.delete_permission"
+                            (click)="onBlockDeleteClick()">
                             <i class="fa fa-trash"></i>
                         </button>
                     </div>
                 </div>
                 <div class="clearfix"></div>
                 <div>
-                    Name: <strong>{{blockoBlock?blockoBlock.name:""}}</strong><br>
-                    Description: <strong>{{blockoBlock?blockoBlock.description:""}}</strong><br>
-                    Group: <strong><a (click)="onBlocksGroupClick(group.id)">{{group?group.name:""}}</a></strong>
+                    Name: <strong>{{blockoBlock?blockoBlock.name:""}}</strong><br> Description: <strong>{{blockoBlock?blockoBlock.description:""}}</strong><br>                    Group: <strong><a (click)="onBlocksGroupClick(group.id)">{{group?group.name:""}}</a></strong>
                 </div>
             </div>
         </div>
@@ -38,22 +38,22 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark uppercase">
                             <i class="fa fa-fw fa-file-code-o"></i>
-                            Code
+                             {{'label_code'|bkTranslate:this}}
                         </span>
                     </div>
                     <div *ngIf="selectedBlockoBlockVersion" class="becki-caption version">
-                        <span class="caption-subject font-gray"><strong>Version:</strong> <span *ngIf="unsavedChanges" class="changes"></span> {{selectedBlockoBlockVersion.version_name}}</span>
+                        <span class="caption-subject font-gray"><strong>{{'label_version'|bkTranslate:this}}:</strong> <span *ngIf="unsavedChanges" class="changes"></span>                        {{selectedBlockoBlockVersion.version_name}}</span>
                     </div>
                 </div>
 
-                <bk-form-color-picker label="Block color" [control]="blockForm.controls['color']" [waitForTouch]="false"></bk-form-color-picker>
+                <bk-form-color-picker label="{{'label_block_color'|bkTranslate:this}}" [control]="blockForm.controls['color']" [waitForTouch]="false"></bk-form-color-picker>
 
-                <bk-form-fa-icon-select label="Block icon" [control]="blockForm.controls['icon']" [waitForTouch]="false"></bk-form-fa-icon-select>
+                <bk-form-fa-icon-select label="{{'label_block_icon'|bkTranslate:this}}" [control]="blockForm.controls['icon']" [waitForTouch]="false"></bk-form-fa-icon-select>
 
-                <bk-form-input label="Block description" [control]="blockForm.controls['description']" [waitForTouch]="false"></bk-form-input>
+                <bk-form-input label="{{'label_block_description'|bkTranslate:this}}" [control]="blockForm.controls['description']" [waitForTouch]="false"></bk-form-input>
 
                 <div class="form-group">
-                    <label>Block code</label>
+                    <label>{{'label_block_code'|bkTranslate:this}}</label>
                     <bk-monaco-editor [code]="blockCode" (codeChange)="newBlockCode($event)" [typings]="['TSBlockLib', 'ConsoleLib', 'UtilsLib', 'FetchLib', 'ServiceLib', 'BlockoServiceHandler', 'ES5' ]"></bk-monaco-editor>
                 </div>
 
@@ -68,11 +68,11 @@
                 <div>
                     <div class="font-red text-right" style="padding-bottom: 5px; transition: opacity 0.5s;" [style.opacity]="successfullyTested?'0':'1'">Block code has been changed, you must test program first than save.</div>
                     <div class="pull-right">
-                        <button type="button" class="btn default yellow-gold" (click)="onTestClick()" >
-                            <i class="fa fa-play"></i> Test
+                        <button type="button" class="btn default yellow-gold" (click)="onTestClick()">
+                            <i class="fa fa-play"></i> {{'btn_test'|bkTranslate:this}}
                         </button>
                         <button type="button" class="btn default green-haze" [disabled]="!successfullyTested" (click)="onSaveClick()">
-                            <i class="fa fa-floppy-o"></i> Save
+                            <i class="fa fa-floppy-o"></i> {{'btn_save'|bkTranslate:this}}
                         </button>
                     </div>
                     <div class="clearfix"></div>
@@ -87,17 +87,17 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark uppercase">
                             <i class="fa fa-fw fa-terminal"></i>
-                            Test
+                             {{'label_test'|bkTranslate:this}}
                         </span>
                     </div>
 
-                    <h3 *ngIf="!tsBlock" class="pull-right" style="margin: 0; margin-right: 95px;">For test press button here <i class="fa fa-chevron-up"></i></h3>
+                    <h3 *ngIf="!tsBlock" class="pull-right" style="margin: 0; margin-right: 95px;"> {{'label_press_test_button'|bkTranslate:this}} <i class="fa fa-chevron-up"></i></h3>
 
                 </div>
                 <div class="portlet-content">
                     <div *ngIf="tsBlock" class="col-md-4" style="display: inline-block; width: calc(50% - 65px)">
 
-                        <h4 class="text-center">Inputs simulator</h4>
+                        <h4 class="text-center">{{'label_imputs_simulator'|bkTranslate:this}}</h4>
 
                         <div class="block-tester no-select">
 
@@ -108,15 +108,16 @@
                                 <template [ngIf]="connector.type == connectorTypes.DigitalInput">
                                     <div class="col-md-4 bg-din bold" [class.odd]="iCon%2">{{connector.name}}</div>
                                     <div class="col-md-8">
-                                        <div class="block-tester-message-input-label"><strong>Value</strong>:</div>
-                                        <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="connector.value" [class.fa-toggle-off]="!connector.value" (click)="onDigitalInputClick(connector)"></i>
+                                        <div class="block-tester-message-input-label"><strong>{{'label_value'|bkTranslate:this}}</strong>:</div>
+                                        <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="connector.value" [class.fa-toggle-off]="!connector.value"
+                                            (click)="onDigitalInputClick(connector)"></i>
                                     </div>
                                 </template>
 
                                 <template [ngIf]="connector.type == connectorTypes.AnalogInput">
                                     <div class="col-md-4 bg-ain bold" [class.odd]="iCon%2">{{connector.name}}</div>
                                     <div class="col-md-8">
-                                        <div class="block-tester-message-input-label"><strong>Value</strong>:</div>
+                                        <div class="block-tester-message-input-label"><strong>{{'label_value'|bkTranslate:this}}</strong>:</div>
                                         <input type="number" class="form-control" step="0.1" [value]="connector.value" (input)="onAnalogInputChange($event, connector)">
                                     </div>
                                 </template>
@@ -129,25 +130,27 @@
 
                                         <template [ngIf]="argType == argTypes.Boolean">
                                             <div class="col-md-8">
-                                                <div class="block-tester-message-input-label">boolean <strong>Arg #{{index}}</strong>:</div>
-                                                <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="messageInputsValueCache[connector.name+argType]" [class.fa-toggle-off]="!messageInputsValueCache[connector.name+argType]" (click)="messageInputsValueCache[connector.name+argType] = !messageInputsValueCache[connector.name+argType]"></i>
+                                                <div class="block-tester-message-input-label"><span [innerHTML]="'label_datatype_boolean'|bkTranslate:this:index"></span>:</div>
+                                                <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="messageInputsValueCache[connector.name+argType]"
+                                                    [class.fa-toggle-off]="!messageInputsValueCache[connector.name+argType]"
+                                                    (click)="messageInputsValueCache[connector.name+argType] = !messageInputsValueCache[connector.name+argType]"></i>
                                             </div>
                                         </template>
                                         <template [ngIf]="argType == argTypes.Float">
                                             <div class="col-md-8">
-                                                <div class="block-tester-message-input-label">float <strong>Arg #{{index}}</strong>:</div>
+                                                <div class="block-tester-message-input-label"><span [innerHTML]="'label_datatype_float'|bkTranslate:this:index"></span>:</div>
                                                 <input type="number" class="form-control" step="0.1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
                                             </div>
                                         </template>
                                         <template [ngIf]="argType == argTypes.Integer">
                                             <div class="col-md-8">
-                                                <div class="block-tester-message-input-label">integer <strong>Arg #{{index}}</strong>:</div>
+                                                <div class="block-tester-message-input-label"><span [innerHTML]="'label_datatype_integer'|bkTranslate:this:index"></span>:</div>
                                                 <input type="number" class="form-control" step="1" value="0" (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
                                             </div>
                                         </template>
                                         <template [ngIf]="argType == argTypes.String">
                                             <div class="col-md-8">
-                                                <div class="block-tester-message-input-label">string <strong>Arg #{{index}}</strong>:</div>
+                                                <div class="block-tester-message-input-label"><span [innerHTML]="'label_datatype_string'|bkTranslate:this:index"></span>:</div>
                                                 <input type="text" class="form-control" (input)="messageInputsValueCache[connector.name+argType] = $event.target['value']">
                                             </div>
                                         </template>
@@ -157,24 +160,23 @@
                                     <div class="col-md-4"></div>
                                     <div class="col-md-8">
                                         <button class="btn btn-sm default green block-tester-message-input-btn" type="button" (click)="onMessageInputSendClick(connector)">
-                                            <i class="fa fa-paper-plane"></i> Send
+                                            <i class="fa fa-paper-plane"></i> {{'btn_send'|bkTranslate:this}}
                                         </button>
                                     </div>
-
                                 </template>
-
                             </div>
                         </div>
 
                     </div>
                     <div class="col-md-4" style="width: 130px; overflow: hidden;" [style.display]="tsBlock?'inline-block':'none'">
-                        <h4 *ngIf="tsBlock" class="text-center">Block</h4>
+                        <h4 *ngIf="tsBlock" class="text-center">{{'label_block'|bkTranslate:this}}</h4>
                         <div style="background-color: #333; width: 105px;">
-                            <bk-blocko-view autosize="true" canConfig="true" readonly="true" safeRun="true" (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)" class="blocko-overflow-visible blocko-no-borders-and-bg"></bk-blocko-view>
+                            <bk-blocko-view autosize="true" canConfig="true" readonly="true" safeRun="true" (onError)="onBlockoError($event)" (onLog)="onBlockoLog($event)"
+                                class="blocko-overflow-visible blocko-no-borders-and-bg"></bk-blocko-view>
                         </div>
                     </div>
                     <div class="col-md-4" style="width: calc(50% - 65px)" [style.display]="tsBlock?'inline-block':'none'">
-                        <h4 class="text-center">Console</h4>
+                        <h4 class="text-center">{{'label_console'|bkTranslate:this}}</h4>
                         <div class="row">
                             <bk-console-log maxHeight="400px"></bk-console-log>
                         </div>
@@ -190,49 +192,54 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark uppercase">
                             <i class="fa fa-fw fa-code-fork"></i>
-                            Saved versions
+                            {{'label_saved_versions'|bkTranslate:this}}
                         </span>
                     </div>
                 </div>
                 <div *ngIf="blockoBlockVersions && blockoBlockVersions.length">
                     <table class="table table-condensed table-hover">
                         <thead>
-                        <tr>
-                            <th class="col col-lg-2">Version Name</th>
-                            <th class="col col-lg-7">Description</th>
-                            <th class="col col-lg-2">Author</th>
-                            <th class="col col-lg-1">Actions</th>
-                        </tr>
+                            <tr>
+                                <th class="col col-lg-2">{{'table_version_name'|bkTranslate:this}}</th>
+                                <th class="col col-lg-7">{{'table_description'|bkTranslate:this}}</th>
+                                <th class="col col-lg-2">{{'table_author'|bkTranslate:this}}</th>
+                                <th class="col col-lg-1">{{'table_actions'|bkTranslate:this}}</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr *ngFor="let version of blockoBlockVersions">
-                            <td class="no-wrap" [class.bold]="selectedBlockoBlockVersion && (selectedBlockoBlockVersion.id == version.id)">
-                                <a (click)="onBlockoBlockVersionClick(version)">
+                            <tr *ngFor="let version of blockoBlockVersions">
+                                <td class="no-wrap" [class.bold]="selectedBlockoBlockVersion && (selectedBlockoBlockVersion.id == version.id)">
+                                    <a (click)="onBlockoBlockVersionClick(version)">
                                     {{version.name}}
                                 </a>
-                            </td>
-                            <td>
-                                {{version.description}}
-                            </td>
-                            <td>
-                                {{version.author.nick_name}}
-                            </td>
-                            <td>
-                                <style type="text/css">
-                                    table tr button { opacity:0.05;}
-                                    table tr:hover button { opacity:1 }
-                                </style>
+                                </td>
+                                <td>
+                                    {{version.description}}
+                                </td>
+                                <td>
+                                    {{version.author.nick_name}}
+                                </td>
+                                <td>
+                                    <style type="text/css">
+                                        table tr button {
+                                            opacity: 0.05;
+                                        }
 
-                                <button title="Device properties" class="btn btn-icon-only green" [disabled]="!version.edit_permission" (click)="onEditVersionClick(version)">
+                                        table tr:hover button {
+                                            opacity: 1
+                                        }
+                                    </style>
+
+                                    <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.edit_permission" (click)="onEditVersionClick(version)">
                                     <i class="fa fa-cog"></i>
                                 </button>
 
-                                <button title="Remove device" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
+                                    <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
                                     <i class="fa fa-trash"></i>
                                 </button>
 
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

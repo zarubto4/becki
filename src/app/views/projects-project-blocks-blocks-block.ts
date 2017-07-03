@@ -173,7 +173,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                 }
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(`The block cannot be loaded.`, reason));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_block', reason)));
                 this.unblockUI();
             });
 
@@ -191,12 +191,12 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                     type_of_block_id: this.blocksId // tohle je trochu divný ne?
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The block has been edited.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_edit')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The block cannot be edited.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_block', reason)));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     });
@@ -212,12 +212,12 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                 this.blockUI();
                 this.backendService.deleteBlockoBlock(this.blockoBlock.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The block has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_remove')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', this.blocksId]);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The block cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_block', reason)));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     });
@@ -232,12 +232,12 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                 this.blockUI();
                 this.backendService.deleteBlockoBlockVersion(version.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The version has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_remove')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The version cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_version', reason)));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     });
@@ -255,11 +255,11 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                     version_description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(`The version ${model.name} has been changed.`));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_change', model.name)));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(`The version ${model.name} cannot be changed.`, reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_version', model.name, reason)));
                         this.refresh();
                     });
             }
@@ -300,7 +300,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
             .catch(reason => {
                 this.selectedBlockoBlockVersion = null;
                 // console.log(this.blockCode);
-                this.addFlashMessage(new FlashMessageError(`The block version cannot be loaded.`, reason));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_block_version', reason)));
                 this.unblockUI();
             });
     }
@@ -309,9 +309,9 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
     toReadableValue(value: any): string {
         if (typeof value === 'boolean') {
             if (value) {
-                return '<span class="bold font-red">true</span>';
+                return '<span class="bold font-red">{{"bool_true"|bkTranslate:this}}</span>';
             } else {
-                return '<span class="bold font-blue">false</span>';
+                return '<span class="bold font-blue">{{"bool_false"|bkTranslate:this}}</span>';
             }
         }
         if (typeof value === 'number') {
@@ -405,12 +405,12 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
             if (be.error instanceof TypescriptBuildError) {
 
                 if (!be.error.diagnostics) {
-                    this.tsErrors.push({ name: 'TypeScript Error', message: be.error.message });
+                    this.tsErrors.push({ name: this.translate('ts_error_typescript_error'), message: be.error.message });
                 } else {
 
                     be.error.diagnostics.forEach((d) => {
                         this.tsErrors.push({
-                            name: 'TypeScript Error #' + d.code,
+                            name: this.translate('ts_error_typescript_error') + ' #' + d.code,
                             line: this.blockCode.substr(0, Math.min(d.start, this.blockCode.length)).split('\n').length,
                             message: d.messageText
                         });
@@ -433,7 +433,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
         this.tsErrors = [];
 
         if (!this.blockCode) {
-            this.tsErrors.push({ name: 'Block Error', message: 'Block code cannot be empty' });
+            this.tsErrors.push({ name: this.translate('ts_error_block_error'), message: this.translate('ts_error_block_error_code_empty') });
             return;
         }
 
@@ -499,13 +499,13 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                     design_json: designJson
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('Version <b>' + m.name + '</b> saved successfully.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_save', m.name)));
                         this.refresh(); // also unblockUI
                         this.unsavedChanges = false;
                         this.exitConfirmationService.setConfirmationEnabled(false);
                     })
                     .catch((err) => {
-                        this.addFlashMessage(new FlashMessageError('Failed saving version <b>' + m.name + '</b>', err));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_save_version', m.name, err)));
                         this.unblockUI();
                     });
             }

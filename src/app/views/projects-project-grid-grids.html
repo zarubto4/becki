@@ -10,32 +10,31 @@
             <div class="becki-caption">
                 <span class="font-blue-dark">
                     <i class="fa fa-fw fa-desktop"></i>
-                    Byzance<strong class="font-color-grid">GRID</strong> - project <strong>{{gridProject?gridProject.name:""}}</strong>
+                    <span [innerHTML]="'title'|bkTranslate:this:(gridProject?gridProject.name:'')"> </span>
                 </span>
             </div>
             <div *ngIf="gridProject" class="becki-actions">
-                <button title="Device properties" class="btn btn-icon-only green" [disabled]="!gridProject.update_permission" (click)="onProjectEditClick()">
+                <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!gridProject.update_permission" (click)="onProjectEditClick()">
                     <i class="fa fa-cog"></i>
                 </button>
-                <button title="Remove device" class="btn btn-icon-only red" [disabled]="!gridProject.delete_permission" (click)="onProjectDeleteClick()">
+                <button title="{{'label_device_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!gridProject.delete_permission" (click)="onProjectDeleteClick()">
                     <i class="fa fa-trash"></i>
                 </button>
                 <button class="btn blue" [disabled]="!gridProject || !gridProject.update_permission" (click)="onProgramAddClick(gridProject)">
-                    <i class="fa fa-plus-circle"></i> Add grid program
+                    <i class="fa fa-plus-circle"></i> {{'btn_add_grid_program'|bkTranslate:this}}
                 </button>
             </div>
         </div>
         <div>
-            <strong class="font-color-grid">GRID</strong> Project Name: <strong>{{gridProject?gridProject.name:""}}</strong><br>
-            <strong class="font-color-grid">GRID</strong> Description: <strong>{{gridProject?gridProject.description:""}}</strong>
-        </div>
+           <span [innerHTML]="'label_grid_project_name'|bkTranslate:this:(gridProject?gridProject.name:'')"></span>       <br>
+            <span [innerHTML]="'label_grid_project_description'|bkTranslate:this:(gridProject?gridProject.description:'')"></span>
         <div *ngIf="gridProject && gridProject.programs && gridProject.programs.length" class="table-scrollable">
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th class="full-width">Description</th>
-                    <th class="text-center">Actions</th>
+                    <th>{{'table_name'|bkTranslate:this}}</th>
+                    <th class="full-width">{{'table_description'|bkTranslate:this}}</th>
+                    <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -49,10 +48,10 @@
                             table tr:hover button { opacity:1 }
                         </style>
 
-                        <button title="Program properties" class="btn btn-icon-only green" [disabled]="!program.edit_permission" (click)="onProgramEditClick(program)">
+                        <button title="{{'label_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!program.edit_permission" (click)="onProgramEditClick(program)">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="Remove program" class="btn btn-icon-only red" [disabled]="!program.delete_permission" (click)="onProgramDeleteClick(program)">
+                        <button title="{{'label_program_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!program.delete_permission" (click)="onProgramDeleteClick(program)">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>
@@ -60,16 +59,17 @@
                 </tbody>
             </table>
         </div>
-        <h3 *ngIf="!gridProject" class="text-center">Loading...</h3>
+        <h3 *ngIf="!gridProject" class="text-center">{{'loading'|bkTranslate:this}}</h3>
         <div *ngIf="gridProject && !(gridProject.programs && gridProject.programs.length)" class="list-no-items">
-            <p class="list-no-items__main-label">There is not any grid program</p>
-            <p class="list-no-items__sub-label">You can create it by click on button bellow.</p>
+            <p class="list-no-items__main-label">{{'label_no_grid'|bkTranslate:this}}</p>
+            <p class="list-no-items__sub-label">{{'label_create_grid_text'|bkTranslate:this}}</p>
             <p>
                 <button class="btn blue" [disabled]="!gridProject || !gridProject.update_permission" (click)="onProgramAddClick(gridProject)">
-                    <i class="fa fa-plus-circle"></i> Add grid program
+                    <i class="fa fa-plus-circle"></i> {{'btn_add_grid_program'|bkTranslate:this}}
                 </button>
             </p>
         </div>
+    </div>
     </div>
 
 </bk-layout-main>

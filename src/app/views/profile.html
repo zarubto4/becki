@@ -49,7 +49,7 @@
                     <form>
                         <div class="form-group profile-pic-wrapper">
 
-                            <span [innerHTML]="'label_avatar_unsaved'|bkTranslate:this" ></span>
+                            <h4>{{'label_avatar'|bkTranslate:this}}<span *ngIf="cropperLoaded" class="font-red"> {{'label_unsaved'|bkTranslate:this}}</span></h4>
 
                             <img *ngIf="(cropperLoaded && cropperData.image) || backendService.personInfoSnapshot.picture_link" class="preview img-circle"
                                 [src]="cropperData.image?cropperData.image:backendService.personInfoSnapshot.picture_link" width="128"

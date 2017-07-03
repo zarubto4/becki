@@ -69,11 +69,11 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
                     description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The blocks group has been edited.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_groups_edit')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The blocks group cannot be edited.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_block_groups', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -86,11 +86,11 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
                 this.blockUI();
                 this.backendService.deleteTypeOfBlock(this.group.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The blocks group has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_groups_remove')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The blocks group cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_block_groups.', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -114,11 +114,11 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
                     general_description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The block has been added.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_add')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The block cannot be added.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_block', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -138,11 +138,11 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
                     type_of_block_id: this.blocksId // tohle je trochu divný ne?
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The block has been edited.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_edit')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The block cannot be edited.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_block', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -157,11 +157,11 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
                 this.blockUI();
                 this.backendService.deleteBlockoBlock(block.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The block has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_remove')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The block cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_block', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }

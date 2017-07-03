@@ -61,11 +61,11 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
                     description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The blocks group has been added.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_group_add')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The blocks group cannot be added.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_block_group', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -82,11 +82,11 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
                     description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The blocks group has been edited.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_group_edit')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The blocks group cannot be edited.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_block_group', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -99,11 +99,11 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
                 this.blockUI();
                 this.backendService.deleteTypeOfBlock(group.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The blocks group has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess('flash_block_group_remove'));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The blocks group cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_block_group', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }

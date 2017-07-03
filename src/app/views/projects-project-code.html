@@ -10,12 +10,12 @@
             <div class="becki-caption">
                 <span class="font-blue-dark">
                     <i class="fa fa-fw fa-code"></i>
-                    Byzance<strong class="font-color-code">CODE</strong> - all programs
+                    {{'title'|bkTranslate:this}}
                 </span>
             </div>
             <div class="becki-actions">
                 <button class="btn blue" (click)="onAddClick()">
-                    <i class="fa fa-plus-circle"></i> Add code program
+                    <i class="fa fa-plus-circle"></i>{{'btn_add_code_program'|bkTranslate:this}}
                 </button>
             </div>
         </div>
@@ -23,10 +23,10 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th class="col col-lg-2">Name</th>
-                    <th class="col col-lg-2"><strong class="font-color-hardware">Hardware</strong> type</th>
-                    <th class="full-width">Description</th>
-                    <th class="text-center">Actions</th>
+                    <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                    <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                    <th class="full-width">{{'table_description'|bkTranslate:this}}</th>
+                    <th class="text-center">{{'table_actions'|bkTranslate:this}}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -41,10 +41,10 @@
                             table tr:hover button { opacity:1 }
                         </style>
 
-                        <button title="Code program properties" class="btn btn-icon-only green" [disabled]="!code.edit_permission" (click)="onEditClick(code)">
+                        <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!code.edit_permission" (click)="onEditClick(code)">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="Remove code program" class="btn btn-icon-only red" [disabled]="!code.delete_permission" (click)="onRemoveClick(code)">
+                        <button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!code.delete_permission" (click)="onRemoveClick(code)">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>
@@ -52,15 +52,11 @@
                 </tbody>
             </table>
         </div>
-        <h3 *ngIf="!codePrograms" class="text-center">Loading...</h3>
+        <h3 *ngIf="!codePrograms" class="text-center">{{'loading'|bkTranslate:this}}</h3>
         <div *ngIf="codePrograms && codePrograms.length == 0" class="list-no-items">
-            <p class="list-no-items__main-label">There is not any code program</p>
-            <p class="list-no-items__sub-label">You can create it by click on button bellow.</p>
-            <p>
-                <button class="btn blue" (click)="onAddClick()">
-                    <i class="fa fa-plus-circle"></i> Add code program
-                </button>
-            </p>
+            <p class="list-no-items__main-label">{{'label_no_code'|bkTranslate:this}}</p>
+            <p class="list-no-items__sub-label"> {{'label_create_code_text'|bkTranslate:this}}</p>
+            <p><button class="btn blue" (click)="onAddClick()"><i class="fa fa-plus-circle"></i>{{'btn_add_code_program'|bkTranslate:this}}</button></p>
         </div>
 
     </div>

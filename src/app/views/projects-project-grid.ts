@@ -63,11 +63,11 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
                     description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The grid project has been added.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_project_add')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The grid project cannot be added.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_grid_project', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -85,11 +85,11 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
                     description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The grid project has been edited.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_project_edit')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The grid project cannot be edited.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_grid_project', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -102,11 +102,11 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
                 this.blockUI();
                 this.backendService.deleteMProject(project.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The grid project has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_project_remove')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The grid project cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_grid_project', reason)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }

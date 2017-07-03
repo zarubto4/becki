@@ -56,7 +56,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
 
     widgetSourceCache: { [versionId: string]: string } = {};
 
-    trashPosition: {x: number, y: number, visible: boolean} = {x: 0, y: 0, visible: false};
+    trashPosition: { x: number, y: number, visible: boolean } = { x: 0, y: 0, visible: false };
 
     @ViewChild(GridViewComponent)
     gridView: GridViewComponent;
@@ -115,7 +115,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
     onWidgetDragMoveEvent = (e: any) => {
         if (e.outside && e.e) {
             const bound = (<HTMLElement>this.editorElement.nativeElement).getBoundingClientRect();
-            this.trashPosition = {x: e.e.x - bound.left, y: e.e.y - bound.top, visible: true};
+            this.trashPosition = { x: e.e.x - bound.left, y: e.e.y - bound.top, visible: true };
         } else {
             this.trashPosition.visible = false;
         }
@@ -146,12 +146,12 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                 this.blockUI();
                 this.backendService.deleteMProgramVersion(version.version_id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The version has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_remove')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The version cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_version', reason)));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     });
@@ -169,11 +169,11 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                     version_description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(`The version ${model.name} has been changed.`));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_change', model.name)));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(`The version ${model.name} cannot be changed.`, reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_version', model.name, reason)));
                         this.refresh();
                     });
             }
@@ -211,7 +211,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                 this.unblockUI();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(`The grid cannot be loaded.`, reason));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_grid', reason)));
                 this.unblockUI();
             });
     }
@@ -248,14 +248,14 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
             })
             .catch((err) => {
                 this.unblockUI();
-                this.fmError(`Cannot load version <b>${programVersion.version_name}</b>`, err);
+                this.fmError(this.translate('flash_cant_load_version', programVersion.version_name, err));
             });
     }
 
     onChangeGridDeviceProfile(newValue: string): void {
         let oldValue = this.gridDeviceProfile;
         this.gridDeviceProfile = newValue;
-        let m = new ModalsConfirmModel('Grid size class change', 'Changing grid size class <strong>delete all your pages</strong>, are you sure?');
+        let m = new ModalsConfirmModel(this.translate('modal_label_grid_size_change'), this.translate('modal_text_grid_size_change'));
         this.modalService.showModal(m)
             .then((success) => {
                 if (success) {
@@ -277,11 +277,11 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                     description: model.description,
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The grid program has been edited.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_edit')));
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The grid program cannot be edited.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_grid', reason)));
                         this.refresh();
                     });
             }
@@ -295,12 +295,12 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                 this.blockUI();
                 this.backendService.deleteMProgram(this.gridProgram.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The grid program has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_remove')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', this.gridsId]);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The grid program cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_grid', reason)));
                         this.refresh();
                     });
             }
@@ -324,14 +324,14 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                     virtual_input_output: this.gridView.getInterfaceJson()
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('Version <b>' + m.name + '</b> saved successfully.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_save', m.name)));
                         this.refresh(); // also unblockUI
 
                         this.unsavedChanges = false;
                         this.exitConfirmationService.setConfirmationEnabled(false);
                     })
                     .catch((err) => {
-                        this.addFlashMessage(new FlashMessageError('Failed saving version <b>' + m.name + '</b>', err));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_save_version', m.name , err)));
                         this.unblockUI();
                     });
             }
@@ -374,7 +374,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
             .catch((err) => {
                 event.resolve(null);
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError('Cannot load widget version', err));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_widget_version', err)));
             });
     }
 
