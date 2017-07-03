@@ -25,10 +25,10 @@
             </div>
         </div>
         <div class="font-blue-dark" style="font-size: 20px; font-weight: 200; line-height: 1.8em;">
-            <div> <span [innerHTML]="'step_one'|bkTranslate:this"></span> </div>
-            <div> <span [innerHTML]="'step_two'|bkTranslate:this"></span> </div>
-            <div> <span [innerHTML]="'step_three'|bkTranslate:this"></span> </div>
-            <div> <span [innerHTML]="'step_four'|bkTranslate:this"></span> </div>
+            <div> <span [innerHTML]="'step_one'|bkTranslate:this|bkHtmlSanitizeBypassPipe"></span> </div>
+            <div> <span [innerHTML]="'step_two'|bkTranslate:this|bkHtmlSanitizeBypassPipe"></span> </div>
+            <div> <span [innerHTML]="'step_three'|bkTranslate:this|bkHtmlSanitizeBypassPipe"></span> </div>
+            <div> <span [innerHTML]="'step_four'|bkTranslate:this|bkHtmlSanitizeBypassPipe"></span> </div>
         </div>
         <div class="clearfix"></div>
     </div>

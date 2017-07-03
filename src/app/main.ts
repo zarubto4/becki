@@ -130,6 +130,7 @@ import { ModalsCodeAddLibraryComponent } from './modals/code-add-library';
 import { ModalsCodeLibraryVersionComponent } from './modals/code-library-version';
 import { ModalsHardwareCodeProgramVersionSelectComponent } from './modals/hardware-code-program-version-select';
 import { ModalsDeactivateComponent } from './modals/deactivate';
+import { HtmlSanitizeBypassPipe } from './pipes/HtmlSanitizeBypassPipe';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -300,6 +301,7 @@ class BeckiErrorHandler implements ErrorHandler {
         StringReplacerPipe,
         TranslatePipe,
         TranslateTablePipe,
+        HtmlSanitizeBypassPipe,
         // Components
         MonacoEditorComponent,
         FormColorPickerComponent,

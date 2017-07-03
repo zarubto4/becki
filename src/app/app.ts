@@ -4,6 +4,7 @@
 
 import { Component, DoCheck, NgZone, isDevMode } from '@angular/core';
 import { CurrentParamsService } from './services/CurrentParamsService';
+import { NavigationExtras, Router } from '@angular/router';
 
 @Component({
     selector: 'bk-app',
@@ -15,9 +16,13 @@ export class AppComponent implements DoCheck {
     protected doCheckCounter = () => {};
 
     // need inject CurrentParamsService here for init first in app
-    constructor(protected currentParamsService: CurrentParamsService, protected zone: NgZone) {
+    constructor(protected currentParamsService: CurrentParamsService, protected zone: NgZone, protected router: Router) {
         if (isDevMode()) {
             this.enableDoCheckCounter();
+        }
+
+        (<any>window)["ngNavigate"] = (commands: any[], extras?: NavigationExtras) => {
+            this.router.navigate(commands, extras)
         }
     }
 
