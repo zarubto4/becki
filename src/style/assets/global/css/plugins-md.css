@@ -391,7 +391,7 @@ Color variants
 .bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-success,
 .bootstrap-switch .bootstrap-switch-handle-off.bootstrap-switch-success {
   color: #fff;
-  background: #36c6d3; }
+  background: #00ABE9; }
 
 .bootstrap-switch .bootstrap-switch-handle-on.bootstrap-switch-warning,
 .bootstrap-switch .bootstrap-switch-handle-off.bootstrap-switch-warning {
@@ -522,7 +522,7 @@ Bootstrap Wizard
       .form-wizard .steps > li > a.step > .desc > i {
         display: none; }
   .form-wizard .steps > li.active > a.step .number {
-    background-color: #36c6d3;
+    background-color: #00ABE9;
     color: #fff; }
   .form-wizard .steps > li.active > a.step .desc {
     color: #333; }
@@ -1193,7 +1193,7 @@ table.dataTable.dtr-column > tbody > tr.parent td.control:before,
 table.dataTable.dtr-column > tbody > tr.parent th.control:before,
 table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td:first-child:before,
 table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th:first-child:before {
-  background-color: #36c6d3;
+  background-color: #00ABE9;
   font-weight: 300;
   vertical-align: middle;
   border: 0; }
@@ -1431,7 +1431,7 @@ Fullcalendar
     display: inline-block; }
   .portlet.calendar.light .fc-button.fc-state-active, .portlet.calendar.light .fc-button.fc-state-hover {
     color: #333;
-    border-bottom: 2px solid #36c6d3; }
+    border-bottom: 2px solid #00ABE9; }
   .portlet.calendar.light .fc-button.fc-state-disabled {
     color: #aaa; }
 
@@ -1853,7 +1853,7 @@ Color variants
   background: #659be0; }
 
 .noUi-success .noUi-connect {
-  background: #36c6d3; }
+  background: #00ABE9; }
 
 .noUi-warning .noUi-connect {
   background: #F1C40F; }

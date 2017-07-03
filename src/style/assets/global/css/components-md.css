@@ -208,12 +208,12 @@ body {
         visibility: visible;
         left: 0;
         width: 100%;
-        background: #36c6d3; }
+        background: #00ABE9; }
     .form-group.form-md-line-input .form-control.edited:not([readonly]) ~ label, .form-group.form-md-line-input .form-control:focus:not([readonly]) ~ label {
       opacity: 1 ;
       filter: alpha(opacity=100) ; }
     .form-group.form-md-line-input .form-control.edited:not([readonly]) ~ .help-block, .form-group.form-md-line-input .form-control:focus:not([readonly]) ~ .help-block {
-      color: #36c6d3;
+      color: #00ABE9;
       opacity: 1 ;
       filter: alpha(opacity=100) ; }
     .form-group.form-md-line-input .form-control.edited:not([readonly]) ~ .help-block-error, .form-group.form-md-line-input .form-control:focus:not([readonly]) ~ .help-block-error {
@@ -484,7 +484,7 @@ body {
     left: 6px;
     width: 10px;
     height: 20px;
-    border: 2px solid #36c6d3;
+    border: 2px solid #00ABE9;
     border-top: none;
     border-left: none;
     opacity: 0;
@@ -675,7 +675,7 @@ body {
     left: 5px;
     width: 10px;
     height: 10px;
-    background: #36c6d3;
+    background: #00ABE9;
     opacity: 0;
     z-index: 6;
     border-radius: 50% !important;
@@ -1359,7 +1359,7 @@ li [class*=" icon-"].icon-large {
   color: #bac3d0; }
 
 .icon-state-success {
-  color: #36c6d3; }
+  color: #00ABE9; }
 
 .icon-state-info {
   color: #659be0; }
@@ -1511,7 +1511,7 @@ Custom Bootstrap Badges
   background-image: none; }
 
 .badge-success {
-  background-color: #36c6d3;
+  background-color: #00ABE9;
   background-image: none; }
 
 .badge-danger {
@@ -6430,7 +6430,7 @@ Input icons
     .modal .input-icon > i {
       z-index: 10055; }
     .has-success .input-icon > i {
-      color: #36c6d3; }
+      color: #00ABE9; }
     .has-warning .input-icon > i {
       color: #F1C40F; }
     .has-info .input-icon > i {
@@ -6492,7 +6492,7 @@ Customized Bootstrap Labels
     background-color: #286090; }
 
 .label-success {
-  background-color: #36c6d3; }
+  background-color: #00ABE9; }
   .label-success[href]:hover, .label-success[href]:focus {
     background-color: #27a4b0; }
 
@@ -6535,7 +6535,7 @@ Text states
   color: #337ab7; }
 
 .text-success {
-  color: #36c6d3; }
+  color: #00ABE9; }
 
 .text-info {
   color: #659be0; }
@@ -12563,7 +12563,7 @@ Custom tables
   border-left: 2px solid #337ab7; }
 
 .table-advance td.highlight div.success {
-  border-left: 2px solid #36c6d3; }
+  border-left: 2px solid #00ABE9; }
 
 .table-advance td.highlight div.info {
   border-left: 2px solid #659be0; }
@@ -12876,7 +12876,7 @@ Custom tabs
         color: #a6a6a6; }
     .tabbable-line > .nav-tabs > li.active {
       background: none;
-      border-bottom: 4px solid #36c6d3;
+      border-bottom: 4px solid #00ABE9;
       position: relative; }
       .tabbable-line > .nav-tabs > li.active > a {
         border: 0;
@@ -12885,7 +12885,7 @@ Custom tabs
           color: #404040; }
     .tabbable-line > .nav-tabs > li.open, .tabbable-line > .nav-tabs > li:hover {
       background: none;
-      border-bottom: 4px solid #9fe4ea; }
+      border-bottom: 4px solid #6cb5e9; }
       .tabbable-line > .nav-tabs > li.open > a, .tabbable-line > .nav-tabs > li:hover > a {
         border: 0;
         background: none !important;
@@ -18501,17 +18501,17 @@ Tasks Widget
           border-left-color: #659be0;
           border-right-color: #659be0; }
     .mt-element-ribbon .ribbon.ribbon-color-success {
-      background-color: #36c6d3;
+      background-color: #00ABE9;
       color: #fff; }
       .mt-element-ribbon .ribbon.ribbon-color-success:after {
         border-color: #27a4b0; }
       .mt-element-ribbon .ribbon.ribbon-color-success > .ribbon-sub {
-        background-color: #36c6d3;
+        background-color: #00ABE9;
         color: #020808; }
         .mt-element-ribbon .ribbon.ribbon-color-success > .ribbon-sub:after {
           border-color: #14565c;
-          border-left-color: #36c6d3;
-          border-right-color: #36c6d3; }
+          border-left-color: #00ABE9;
+          border-right-color: #00ABE9; }
     .mt-element-ribbon .ribbon.ribbon-color-danger {
       background-color: #ed6b75;
       color: #fff; }
@@ -18566,7 +18566,7 @@ Tasks Widget
           .mt-element-card .mt-card-item .mt-card-content .mt-card-social > ul > li > a.mt-card-btn {
             color: #fff; }
             .mt-element-card .mt-card-item .mt-card-content .mt-card-social > ul > li > a.mt-card-btn:hover {
-              color: #36c6d3; }
+              color: #00ABE9; }
           .mt-element-card .mt-card-item .mt-card-content .mt-card-social > ul > li > a:hover {
             color: #F1C40F; }
 
