@@ -5,7 +5,7 @@
     </div>
     <div class="modal-body">
         <h5>
-           <span [innerHTML]="body_text|bkTranslate:this:libraries.length:total"> </span>
+           <span [innerHTML]="'body_text'|bkTranslate:this:libraries.length:total"> </span>
         </h5>
 
         <div *ngFor="let library of libraries" class="cursor-pointer" [class.bg-grey-steel]="library != selectedLibrary" [class.bg-green-turquoise]="library == selectedLibrary" style="padding: 2px 10px;margin-bottom: 10px;" (click)="onLibraryClick(library)">

@@ -21,9 +21,9 @@ export class AppComponent implements DoCheck {
             this.enableDoCheckCounter();
         }
 
-        (<any>window)["ngNavigate"] = (commands: any[], extras?: NavigationExtras) => {
-            this.router.navigate(commands, extras)
-        }
+        (<any>window)['ngNavigate'] = (commands: any[], extras?: NavigationExtras) => {
+            this.router.navigate(commands, extras);
+        };
     }
 
     enableDoCheckCounter(treshhold = 200) {
