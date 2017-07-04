@@ -303,7 +303,7 @@ export class NotificationService {
 
         // subscribe websocket notifications
         this.backendService.notificationReceived.subscribe(notification => {
-            if (notification.messageType === 'subscribe_notification' || notification.messageType === 'unsubscribe_notification') {
+            if (notification.message_type === 'subscribe_notification' || notification.message_type === 'unsubscribe_notification') {
                 // console.log('(un)subscribed');
             } else {
                 // console.log(notification);

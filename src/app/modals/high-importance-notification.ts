@@ -12,7 +12,7 @@ import { ModalModel } from '../services/ModalService';
 
 
 export class ModalsHighImportanceNotificationModel extends ModalModel {
-    constructor(public name: string = '', public notification_body: string = '', public messageId: string = '') {
+    constructor(public name: string = '', public notification_body: string = '', public message_id: string = '') {
         super();
     }
 }

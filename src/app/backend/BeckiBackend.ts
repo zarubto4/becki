@@ -28,9 +28,9 @@ export interface IBProgramConnectorValue {
 }
 
 export interface IWebSocketMessage {
-    messageId: string;
-    messageChannel: string;
-    messageType: string;
+    message_id: string;
+    message_channel: string;
+    message_type: string;
 }
 
 export interface IWebSocketErrorMessage extends IWebSocketMessage {
@@ -127,7 +127,7 @@ export class BugFoundError extends Error {
         return `bug found in client or server: ${adminMessage}`;
     }
 
-   
+
 
     constructor(adminMessage: string, userMessage?: string) {
         super(BugFoundError.composeMessage(adminMessage));
@@ -575,7 +575,7 @@ export abstract class BeckiBackend extends TyrionAPI {
                         }
                         return null;
                     })
-                    .filter(message => (message && message.messageChannel === BeckiBackend.WS_CHANNEL));
+                    .filter(message => (message && message.message_channel === BeckiBackend.WS_CHANNEL));
                 let errorOccurred = Rx.Observable
                     .fromEvent(this.webSocket, 'error');
 
@@ -588,13 +588,13 @@ export abstract class BeckiBackend extends TyrionAPI {
                     .subscribe(this.interactionsOpened);
 
                 channelReceived
-                    .filter(message => message.messageType === 'ping')
+                    .filter(message => message.message_type === 'ping')
                     .subscribe((msg) => {
                         if (this.webSocket.readyState === WebSocket.OPEN) {
                             this.webSocket.send(JSON.stringify({
-                                messageType: 'ping',
-                                messageId: msg.messageId,
-                                messageChannel: msg.messageChannel,
+                                message_type: 'ping',
+                                message_id: msg.message_id,
+                                message_channel: msg.message_channel,
                                 status: 'success'
                             }));
                         }
@@ -605,29 +605,29 @@ export abstract class BeckiBackend extends TyrionAPI {
                     .map(message => BugFoundError.fromWsResponse(message))
                     .subscribe(this.webSocketErrorOccurred);
                 channelReceived
-                    .filter(message => message.messageType === 'subscribe_instace' && message.status === 'success')
+                    .filter(message => message.message_type === 'subscribe_instace' && message.status === 'success')
                     .subscribe(this.interactionsSchemeSubscribed);
                 channelReceived
                     .filter(message =>
-                        message.messageType === 'subscribe_notification'
-                        || message.messageType === 'unsubscribe_notification'
-                        || message.messageType === 'notification'
+                        message.message_type === 'subscribe_notification'
+                        || message.message_type === 'unsubscribe_notification'
+                        || message.message_type === 'notification'
                     )
                     .subscribe(this.notificationReceived);
                 channelReceived
-                    .filter(message => message.messageType === 'getValues' && message.status === 'success')
+                    .filter(message => message.message_type === 'getValues' && message.status === 'success')
                     .subscribe(this.BProgramValuesReceived);
                 channelReceived
-                    .filter(message => message.messageType === 'newAnalogValue')
+                    .filter(message => message.message_type === 'newAnalogValue')
                     .subscribe(this.BProgramAnalogValueReceived);
                 channelReceived
-                    .filter(message => message.messageType === 'newDigitalValue')
+                    .filter(message => message.message_type === 'newDigitalValue')
                     .subscribe(this.BProgramDigitalValueReceived);
                 channelReceived
-                    .filter(message => message.messageType === 'newInputConnectorValue')
+                    .filter(message => message.message_type === 'newInputConnectorValue')
                     .subscribe(this.BProgramInputConnectorValueReceived);
                 channelReceived
-                    .filter(message => message.messageType === 'newOutputConnectorValue')
+                    .filter(message => message.message_type === 'newOutputConnectorValue')
                     .subscribe(this.BProgramOutputConnectorValueReceived);
                 errorOccurred
                     .subscribe(this.webSocketErrorOccurred);
@@ -646,22 +646,22 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     public requestNotificationsSubscribe(): void {
         let message = {
-            messageId: this.uuid(),
-            messageChannel: BeckiBackend.WS_CHANNEL,
-            messageType: 'subscribe_notification'
+            message_id: this.uuid(),
+            message_channel: BeckiBackend.WS_CHANNEL,
+            message_type: 'subscribe_notification'
         };
-        if (!this.findEnqueuedWebSocketMessage(message, 'messageChannel', 'messageType')) {
+        if (!this.findEnqueuedWebSocketMessage(message, 'message_channel', 'message_type')) {
             this.sendWebSocketMessage(message);
         }
     }
 
     public requestNotificationsUnsubscribe(): void {
         let message = {
-            messageId: this.uuid(),
-            messageChannel: BeckiBackend.WS_CHANNEL,
-            messageType: 'unsubscribe_notification'
+            message_id: this.uuid(),
+            message_channel: BeckiBackend.WS_CHANNEL,
+            message_type: 'unsubscribe_notification'
         };
-        if (!this.findEnqueuedWebSocketMessage(message, 'messageChannel', 'messageType')) {
+        if (!this.findEnqueuedWebSocketMessage(message, 'message_channel', 'message_type')) {
             this.sendWebSocketMessage(message);
         }
     }
@@ -669,24 +669,24 @@ export abstract class BeckiBackend extends TyrionAPI {
     public requestBProgramSubscribe(version_id: string): void {
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-262
         let message = {
-            messageId: this.uuid(),
-            messageChannel: BeckiBackend.WS_CHANNEL,
-            messageType: 'subscribe_instace',
+            message_id: this.uuid(),
+            message_channel: BeckiBackend.WS_CHANNEL,
+            message_type: 'subscribe_instace',
             version_id
         };
-        if (!this.findEnqueuedWebSocketMessage(message, 'messageChannel', 'messageType', 'version_id')) {
+        if (!this.findEnqueuedWebSocketMessage(message, 'message_channel', 'message_type', 'version_id')) {
             this.sendWebSocketMessage(message);
         }
     }
 
     public requestBProgramValues(version_id: string): void {
         let message = {
-            messageId: this.uuid(),
-            messageChannel: BeckiBackend.WS_CHANNEL,
-            messageType: 'getValues',
+            message_id: this.uuid(),
+            message_channel: BeckiBackend.WS_CHANNEL,
+            message_type: 'getValues',
             version_id
         };
-        if (!this.findEnqueuedWebSocketMessage(message, 'messageChannel', 'messageType', 'version_id')) {
+        if (!this.findEnqueuedWebSocketMessage(message, 'message_channel', 'message_type', 'version_id')) {
             this.sendWebSocketMessage(message);
         }
     }

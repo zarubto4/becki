@@ -92,7 +92,7 @@ export class HomerDao {
     protected onOpen(e: any) {
         console.info('homer_service:', 'connection_opened');
         this.sendMessage({
-            messageType: 'subscribeChannel'
+            message_type: 'subscribeChannel'
         });
 
         if (this._onOpenCallback) {
@@ -151,8 +151,8 @@ export class HomerDao {
      */
     public sendMessage(message: any) {
         let messageCopy = JSON.parse(JSON.stringify(message));
-        messageCopy['messageChannel'] = 'becki';
-        messageCopy['messageId'] = HomerDao.uuid();
+        messageCopy['message_channel'] = 'becki';
+        messageCopy['message_id'] = HomerDao.uuid();
         this._webSocket.send(JSON.stringify(messageCopy));
     }
 

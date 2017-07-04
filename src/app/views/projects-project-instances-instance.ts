@@ -319,11 +319,11 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
                             this.homerDao.onOpenCallback = (e) => {
                                 this.homerDao.sendMessage({
-                                    messageType: 'getValues'
+                                    message_type: 'getValues'
                                 });
 
                                 this.homerDao.sendMessage({
-                                    messageType: 'getLogs'
+                                    message_type: 'getLogs'
                                 });
                             };
 
@@ -343,36 +343,36 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
         this.zone.runOutsideAngular(() => {
             const controller = this.blockoView.getBlockoController();
 
-            if (m.messageType === 'newInputConnectorValue') {
+            if (m.message_type === 'newInputConnectorValue') {
                 controller.setInputConnectorValue(m.blockId, m.connectorName, m.value);
             }
 
-            if (m.messageType === 'newOutputConnectorValue') {
+            if (m.message_type === 'newOutputConnectorValue') {
                 controller.setOutputConnectorValue(m.blockId, m.connectorName, m.value);
             }
 
-            if (m.messageType === 'newExternalInputConnectorValue') {
+            if (m.message_type === 'newExternalInputConnectorValue') {
                 controller.setInputExternalConnectorValue(m.targetType, m.targetId, m.connectorName, m.value);
             }
 
-            if (m.messageType === 'newExternalOutputConnectorValue') {
+            if (m.message_type === 'newExternalOutputConnectorValue') {
                 controller.setOutputExternalConnectorValue(m.targetType, m.targetId, m.connectorName, m.value);
             }
 
-            if (m.messageType === 'newConsoleEvent') {
+            if (m.message_type === 'newConsoleEvent') {
                 this.zone.run(() => {
                     this.consoleLog.add(m.consoleMessageType, m.consoleMessage, 'Block ' + m.blockId, new Date(m.consoleMessageTime).toLocaleString());
                 });
             }
 
-            if (m.messageType === 'newErrorEvent') {
+            if (m.message_type === 'newErrorEvent') {
                 controller.setError(m.blockId, true);
                 this.zone.run(() => {
                     this.consoleLog.add('error', m.errorMessage, 'Block ' + m.blockId, new Date(m.errorTime).toLocaleString());
                 });
             }
 
-            if (m.messageType === 'getValues') {
+            if (m.message_type === 'getValues') {
                 for (let block in m.connector) {
                     if (!m.connector.hasOwnProperty(block)) {
                         continue;
@@ -421,7 +421,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                 }
             }
 
-            if (m.messageType === 'getLogs') {
+            if (m.message_type === 'getLogs') {
                 this.zone.run(() => {
                     if (m.logs) {
                         for (let i = 0; i < m.logs.length; i++) {
