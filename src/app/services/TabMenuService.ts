@@ -5,13 +5,15 @@
 import { Injectable, Inject } from '@angular/core';
 import { LabeledLink } from '../helpers/LabeledLink';
 import { CurrentParamsService } from './CurrentParamsService';
+import { TranslationService } from '../services/TranslationService';
+
 
 @Injectable()
 export class TabMenuService {
 
     protected currentMenus: { [menuName: string]: LabeledLink[] } = {};
 
-    constructor(@Inject('tabMenus') protected tabMenus: { [menuName: string]: LabeledLink[] }, protected currentParamsService: CurrentParamsService) {
+    constructor( @Inject('tabMenus') protected tabMenus: { [menuName: string]: LabeledLink[] }, protected currentParamsService: CurrentParamsService, private translationService: TranslationService) {
         console.info('TabMenuService init');
         currentParamsService.currentParams.subscribe(params => {
             this.refresh();
@@ -40,8 +42,8 @@ export class TabMenuService {
         return outLink;
     }
 
-    private resolveOptions(options: {[key: string]: any}): {[key: string]: any} {
-        let outOptions: {[key: string]: any} = {};
+    private resolveOptions(options: { [key: string]: any }): { [key: string]: any } {
+        let outOptions: { [key: string]: any } = {};
         for (let key in options) {
             if (!options.hasOwnProperty(key)) {
                 continue;
@@ -79,7 +81,8 @@ export class TabMenuService {
             return null;
         }
         if (!this.tabMenus.hasOwnProperty(menuName)) {
-            throw new Error('TabMenu with name ' + menuName + ' not found in tabMenus!');
+
+            throw new Error(this.translationService.translate('label_tab_menu_not_found', this, null, [menuName]));
         }
         if (!this.currentMenus[menuName]) {
             this.currentMenus[menuName] = [];

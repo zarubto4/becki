@@ -6,6 +6,8 @@ import { Component, Input, EventEmitter, Output, OnInit, OnDestroy } from '@angu
 import { AbstractControl } from '@angular/forms';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 import { Subscription } from 'rxjs';
+import { TranslationService } from '../services/TranslationService';
+
 
 @Component({
     selector: 'bk-form-fa-icon-select',
@@ -40,7 +42,7 @@ export class FormFAIconSelectComponent implements OnInit, OnDestroy {
     valueChange: EventEmitter<string> = new EventEmitter<string>();
 
     @Input()
-    label: string = 'Unknown label';
+    label: string = this.translationService.translate('label_unknown_label', this, null);
 
     @Input()
     placeholder: string = null;
@@ -56,13 +58,12 @@ export class FormFAIconSelectComponent implements OnInit, OnDestroy {
 
     valueSubscription: Subscription = null;
 
-    constructor(public validatorErrorsService: ValidatorErrorsService) {
+    constructor(private translationService: TranslationService ,    public validatorErrorsService: ValidatorErrorsService) {
     }
 
     ngOnInit(): void {
-
         if (this.readonly) {
-            throw Error('Readonly is not support now in component FormFAIconSelectComponent!');
+            throw Error(this.translationService.translate('error_readonly_not_support', this, null));
         }
 
         this.iconSelectOptions = [];

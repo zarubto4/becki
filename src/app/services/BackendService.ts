@@ -10,11 +10,12 @@ import { Http, RequestOptionsArgs, Headers, Response } from '@angular/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { BeckiBackend, RestRequest, RestResponse } from '../backend/BeckiBackend';
+import { TranslationService } from '../services/TranslationService';
 
 @Injectable()
 export class BackendService extends BeckiBackend {
 
-    constructor(protected http: Http, protected router: Router) {
+    constructor(protected http: Http, protected router: Router, private translationService: TranslationService) {
         super();
         console.info('BackendService init');
         this.refreshPersonInfo();
@@ -32,7 +33,7 @@ export class BackendService extends BeckiBackend {
                     optionsArgs.body = JSON.stringify(request.body);
                     break;
                 default:
-                    throw new Error('content type not supported');
+                    throw new Error(this.translationService.translate('error_content_not_supported', this, null));
             }
         }
 

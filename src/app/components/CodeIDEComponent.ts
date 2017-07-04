@@ -7,6 +7,7 @@ import { FileTreeObject, FileTreeObjectInterface } from './FileTreeComponent';
 import { ModalsCodeFileDialogModel, ModalsCodeFileDialogType } from '../modals/code-file-dialog';
 import { ModalService } from '../services/ModalService';
 import { ModalsConfirmModel } from '../modals/confirm';
+import { TranslationService } from '../services/TranslationService';
 
 export abstract class CodeFileSystemObject implements FileTreeObjectInterface {
 
@@ -149,7 +150,7 @@ export class CodeIDEComponent implements OnChanges {
     enableLibraryButtons: boolean = false;
 
     @Output()
-    fileContentChange = new EventEmitter<{fileFullPath: string, content: string}>();
+    fileContentChange = new EventEmitter<{ fileFullPath: string, content: string }>();
 
     @Output()
     onAddLibraryClick = new EventEmitter<any>();
@@ -167,7 +168,7 @@ export class CodeIDEComponent implements OnChanges {
 
     selectedFto: FileTreeObject<CodeFileSystemObject>;
 
-    constructor(protected modalService: ModalService) {
+    constructor(protected modalService: ModalService, private translationService: TranslationService) {
 
         this.refreshRootFileTree();
 
@@ -197,8 +198,12 @@ export class CodeIDEComponent implements OnChanges {
         }
     }
 
+    translate(key: string, ...args: any[]): string {
+        return this.translationService.translate(key, this, null, args);
+    }
+
     showModalError(title: string, text: string) {
-        this.modalService.showModal(new ModalsConfirmModel(title, text, true, 'OK', null));
+        this.modalService.showModal(new ModalsConfirmModel(title, text, true, this.translate('btn_ok'), null));
     }
 
     langFromFilename(fileObj: CodeFile) {
@@ -217,14 +222,14 @@ export class CodeIDEComponent implements OnChanges {
 
     toolbarLibraryChangeVersionClick(e: any) {
 
-        let err = 'Not selected <b>library</b> in file tree.';
+        let err = this.translate('label_error_not_selected_library');
 
         if (!this.selectedFto) {
-            this.showModalError('Error', err);
+            this.showModalError(this.translate('modal_label_error'), err);
             return;
         }
         if (!this.selectedFto.data) {
-            this.showModalError('Error', err);
+            this.showModalError(this.translate('modal_label_error'), err);
             return;
         }
         let selData = this.selectedFto.data;
@@ -235,7 +240,7 @@ export class CodeIDEComponent implements OnChanges {
             }
         }
 
-        this.showModalError('Error', err);
+        this.showModalError(this.translate('modal_label_error'), err);
     }
 
     onCodeChange(code: string, fileObj: CodeFile) {
@@ -346,7 +351,7 @@ export class CodeIDEComponent implements OnChanges {
                 let partName = parts[i];
                 let newFto: FileTreeObject<CodeFileSystemObject> = parentFto.childByName(partName, true);
                 if (!newFto) {
-                    throw new Error('Missing folder ' + partName + ' in path ' + file.objectFullPath);
+                    throw new Error(this.translate('error_missing_folder' , partName , file.objectFullPath));
                 }
                 parentFto = newFto;
 
@@ -430,7 +435,7 @@ export class CodeIDEComponent implements OnChanges {
 
     exetrnalAddFile(cf: CodeFile) {
         if (this.isFileExist(cf.objectFullPath)) {
-            this.showModalError('Error', 'Cannot add, file at path <b>/' + cf.objectFullPath + '</b> already exist.');
+            this.showModalError(this.translate('modal_label_error'), this.translate('modal_label_cant_add_file_at_path', cf.objectFullPath));
         } else {
             this.files.push(cf);
             this.refreshRootFileTree(cf);
@@ -453,7 +458,7 @@ export class CodeIDEComponent implements OnChanges {
                 let newFullPath = (model.selectedDirectory ? model.selectedDirectory.objectFullPath + '/' : '') + model.objectName;
 
                 if (this.isFileExist(newFullPath)) {
-                    this.showModalError('Error', 'Cannot add, file at path <b>/' + newFullPath + '</b> already exist.');
+                    this.showModalError(this.translate('modal_label_error'), this.translate('modal_label_cant_add_file_at_path', newFullPath ));
                 } else {
                     let obj = new CodeFile(newFullPath);
                     this.files.push(obj);
@@ -476,7 +481,7 @@ export class CodeIDEComponent implements OnChanges {
                 let newFullPath = (model.selectedDirectory ? model.selectedDirectory.objectFullPath + '/' : '') + model.objectName;
 
                 if (this.isDirectoryExist(newFullPath)) {
-                    this.showModalError('Error', 'Cannot add, directory at path <b>/' + newFullPath + '</b> already exist.');
+                    this.showModalError(this.translate('modal_label_error'), this.translate('modal_label_cant_add_directory_at_path', newFullPath ));
                 } else {
                     let obj = new CodeDirectory(newFullPath);
                     this.directories.push(obj);
@@ -492,14 +497,14 @@ export class CodeIDEComponent implements OnChanges {
             return;
         }
         if (!this.selectedFto.data) {
-            this.showModalError('Error', 'Cannot move <b>/</b> directory.');
+            this.showModalError(this.translate('modal_label_error'), this.translate('modal_label_cant_move_base_directory'));
             return;
         }
         let selData = this.selectedFto.data;
         if (selData instanceof CodeFile) {
 
             if (selData.fixedPath) {
-                this.showModalError('Error', 'Cannot move <b>/' + selData.objectFullPath + (selData.library ? '</b> library.' : '</b> file.'));
+                this.showModalError(this.translate('modal_label_error'), this.translate('modal_label_cant_move_file', selData.objectFullPath) + (selData.library ? this.translate('label_library') : this.translate('label_file')));
                 return;
             }
 
@@ -514,7 +519,7 @@ export class CodeIDEComponent implements OnChanges {
                     }
 
                     if (this.isFileExist(newFullPath)) {
-                        this.showModalError('Error', 'Cannot move, file at path <b>/' + newFullPath + '</b> already exist.');
+                        this.showModalError(this.translate('modal_label_error'), this.translate('modal_label_cant_move_file_already_exist', newFullPath));
                     } else {
                         selData.objectFullPath = newFullPath;
                         this.refreshRootFileTree();
@@ -536,13 +541,13 @@ export class CodeIDEComponent implements OnChanges {
                     }
 
                     if (this.isDirectoryExist(newFullPath)) {
-                        this.showModalError('Error', 'Cannot move, directory at path <b>/' + newFullPath + '</b> already exist.');
+                        this.showModalError(this.translate('modal_label_error'), this.translate('modal_label_cant_move_directory_at_path' , newFullPath ));
                     } else {
                         let oldFullPathSlash = selData.objectFullPath + '/';
                         let newFullPathSlash = newFullPath + '/';
 
                         if (newFullPathSlash.indexOf(oldFullPathSlash) === 0) {
-                            this.showModalError('Error', 'Cannot move directory to it\'s <b>children</b>. ');
+                            this.showModalError(this.translate('modal_label_error'), this.translate('modal_label_cant_move_directory_to_childern'));
                             return;
                         }
 
@@ -574,14 +579,14 @@ export class CodeIDEComponent implements OnChanges {
             return;
         }
         if (!this.selectedFto.data) {
-            this.showModalError('Error', 'Cannot rename <b>/</b> directory.');
+            this.showModalError(this.translate('modal_label_error'), this.translate('modal_label_cant_rename_directory'));
             return;
         }
         let selData = this.selectedFto.data;
         if (selData instanceof CodeFile) {
 
             if (selData.fixedPath) {
-                this.showModalError('Error', 'Cannot rename <b>/' + selData.objectFullPath + (selData.library ? '</b> library.' : '</b> file.'));
+                this.showModalError(this.translate('modal_label_error'), this.translate('modal_label_cant_rename', selData.objectFullPath) + (selData.library ? this.translate('label_library') : this.translate('label_file')));
                 return;
             }
 
@@ -596,7 +601,7 @@ export class CodeIDEComponent implements OnChanges {
                     let newFullPath = (selData.objectPath !== '' ? selData.objectPath + '/' : '') + model.objectName;
 
                     if (this.isFileExist(newFullPath)) {
-                        this.showModalError('Error', 'Cannot rename, file at path <b>/' + newFullPath + '</b> already exist.');
+                        this.showModalError(this.translate('modal_label_error'), this.translate('modal_label_cant_rename_file_already_exist', newFullPath ));
                     } else {
                         selData.objectFullPath = newFullPath;
                         this.refreshRootFileTree();
@@ -621,7 +626,7 @@ export class CodeIDEComponent implements OnChanges {
                     }
 
                     if (this.isDirectoryExist(newFullPath)) {
-                        this.showModalError('Error', 'Cannot rename, directory at path <b>/' + newFullPath + '</b> already exist.');
+                        this.showModalError(this.translate('modal_label_error'), this.translate('modal_label_cant_rename_directory_already_exist', newFullPath ));
                     } else {
 
                         let oldFullPathSlash = selData.objectFullPath + '/';
@@ -655,7 +660,7 @@ export class CodeIDEComponent implements OnChanges {
             return;
         }
         if (!this.selectedFto.data) {
-            this.showModalError('Error', 'Cannot remove <b>/</b> directory.');
+            this.showModalError(this.translate('modal_label_error'), this.translate('modal_label_cant_remove_base_directory'));
             return;
         }
         let selData = this.selectedFto.data;
@@ -663,7 +668,7 @@ export class CodeIDEComponent implements OnChanges {
 
 
             if (selData.fixedPath && !selData.library) {
-                this.showModalError('Error', 'Cannot remove <b>/' + selData.objectFullPath + '</b> file.');
+                this.showModalError(this.translate('modal_label_error'), this.translate('modal_label_cant_remove_file', selData.objectFullPath));
                 return;
             }
 

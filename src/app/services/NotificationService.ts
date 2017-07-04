@@ -7,6 +7,8 @@ import { BackendService } from './BackendService';
 import { INotification, INotificationElement, INotificationButton } from '../backend/TyrionAPI';
 import { NullSafe } from '../helpers/NullSafe';
 import { Router } from '@angular/router';
+import { TranslationService } from '../services/TranslationService';
+
 
 export abstract class Notification {
 
@@ -252,7 +254,7 @@ export class NotificationService {
 
     protected highImportanceOverlayTimeout: any = null;
 
-    constructor(protected backendService: BackendService, protected router: Router, protected zone: NgZone) {
+    constructor(protected backendService: BackendService, protected router: Router, protected zone: NgZone, protected translationService: TranslationService) {
         console.info('NotificationService init');
 
         // tick for overlay notifs
@@ -263,7 +265,7 @@ export class NotificationService {
                 });
                 // trigger change detection if some notif ticked
                 if (this.overlayNotifications.length) {
-                    this.zone.run(() => {});
+                    this.zone.run(() => { });
                 }
             }, 100);
 
@@ -274,7 +276,7 @@ export class NotificationService {
                 });
                 // trigger change detection if some notif ticked
                 if (this.notifications.length) {
-                    this.zone.run(() => {});
+                    this.zone.run(() => { });
                 }
             }, 10000);
         });
@@ -297,7 +299,7 @@ export class NotificationService {
         });
 
         // register error handler for websocket error
-        this.backendService.webSocketErrorOccurred.subscribe(error => this.addFlashMessage(new FlashMessageError('Communication with the back end have failed.', error)));
+        this.backendService.webSocketErrorOccurred.subscribe(error => this.addFlashMessage(new FlashMessageError(this.translate('flash_communication_failed', error))));
 
         // subscribe websocket notifications
         this.backendService.notificationReceived.subscribe(notification => {
@@ -372,10 +374,14 @@ export class NotificationService {
                     }
 
                     // trigger change detection after all done
-                    this.zone.run(() => {});
+                    this.zone.run(() => { });
                 });
             }
         });
+    }
+
+    translate(key: string, ...args: any[]): string {
+        return this.translationService.translate(key, this, null, args);
     }
 
     // flash messages :
@@ -520,7 +526,7 @@ export class NotificationService {
         })
             .catch((e) => {
                 n.confirmed = false; // is this okay?
-                this.addFlashMessage(new FlashMessageError('Cannot confirm notification.', e));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_confirm_notification', e)));
             });
     }
 
@@ -531,7 +537,7 @@ export class NotificationService {
                 this.removeNotificationById(n.id);
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError('The Notification cannot be removed.', reason));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_notification', reason)));
 
             });
     }
@@ -596,7 +602,7 @@ export class NotificationService {
                     this.toolbarNotifications = this.notifications.slice(0, 10);
 
                     // trigger change detection after all done
-                    this.zone.run(() => {});
+                    this.zone.run(() => { });
                 });
 
                 return this.notifications;

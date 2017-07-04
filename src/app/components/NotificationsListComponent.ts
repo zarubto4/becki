@@ -37,7 +37,7 @@ import { INotificationElement, INotificationButton } from '../backend/TyrionAPI'
         </div>
         <div class="clearfix"></div>
     </li>
-    <li *ngIf="notificationService[listName].length == 0" class="no-notifications"> No notifications </li>
+    <li *ngIf="notificationService[listName].length == 0" class="no-notifications"> {{'label_no_notifications'|bkTranslate:this}} </li>
 </ul>
 `
 /* tslint:enable */

@@ -6,6 +6,8 @@ import moment = require('moment/moment');
 
 import { Component, Input } from '@angular/core';
 import { SafeMachineError, TypescriptBuildError, MachineMessage, SafeMachineMessage } from 'script-engine';
+import { TranslationService } from '../services/TranslationService';
+
 
 export interface ConsoleLogItem {
     timestamp: string;
@@ -18,7 +20,7 @@ export type ConsoleLogType = 'log' | 'error' | 'output' | 'info' | 'warn';
 
 @Component({
     selector: 'bk-console-log',
-/* tslint:disable:max-line-length */
+    /* tslint:disable:max-line-length */
     template: `
 <div class="console-log-table-wrapper" [style.max-height]="maxHeight">
     <table class="table table-fixed table-hover table-light">
@@ -38,14 +40,14 @@ export type ConsoleLogType = 'log' | 'error' | 'output' | 'info' | 'warn';
             </tr>
             <tr *ngIf="items.length == 0">
                 <td class="text-center">
-                    <i>Console is empty</i>
+                    <i>{{'label_console_is_empty'|bkTranslate:this}}</i>
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
 `
-/* tslint:enable */
+    /* tslint:enable */
 })
 export class ConsoleLogComponent {
 
@@ -54,11 +56,15 @@ export class ConsoleLogComponent {
 
     items: ConsoleLogItem[] = [];
 
-    constructor() {
+    constructor(private translationService: TranslationService) {
     }
 
     clear() {
         this.items = [];
+    }
+
+    translate(key: string, ...args: any[]): string {
+        return this.translationService.translate(key, this, null, args);
     }
 
     add(type: ConsoleLogType, message: string, source?: string, timestamp?: string) {
@@ -83,21 +89,21 @@ export class ConsoleLogComponent {
         if (message instanceof SafeMachineMessage) {
             if (message.position && message.position.lineA != null) {
                 if (message.position.lineA === message.position.lineB) {
-                    posInfo = '<br><strong>Position:</strong> line <strong>'
+                    posInfo = '<br>' + this.translate('label_position_and_line') + ' <strong>'
                         + message.position.lineA
-                        + '</strong> column <strong>'
+                        + '</strong> ' + this.translate('label_column') + ' <strong>'
                         + message.position.columnA
                         + '</strong> - <strong>'
                         + message.position.columnB
                         + '</strong>';
                 } else {
-                    posInfo = '<br><strong>Position:</strong> line <strong>'
+                    posInfo = '<br>+ ' + this.translate('label_position_and_line') + ' + <strong>'
                         + message.position.lineA
-                        + '</strong> column <strong>'
+                        + '</strong> ' + this.translate('label_column') + ' <strong>'
                         + message.position.columnA
-                        + '</strong> - line <strong>'
+                        + '</strong> - ' + this.translate('label_line') + ' <strong>'
                         + message.position.lineB
-                        + '</strong> column <strong>'
+                        + '</strong> ' + this.translate('label_column') + ' <strong>'
                         + message.position.columnB
                         + '</strong>';
                 }
@@ -125,9 +131,9 @@ export class ConsoleLogComponent {
             let posInfo = '';
             if (error.position) {
                 if (error.position.lineA === error.position.lineB) {
-                    posInfo = '<br><strong>Position:</strong> line <strong>'
+                    posInfo = '<br>' + this.translate('label_position_and_line') + ' <strong>'
                         + error.position.lineA
-                        + '</strong> column <strong>'
+                        + '</strong> ' + this.translate('label_column') + ' <strong>'
                         + error.position.columnA
                         + '</strong> - <strong>'
                         + error.position.columnB
@@ -135,11 +141,11 @@ export class ConsoleLogComponent {
                 } else {
                     posInfo = '<br><strong>Position:</strong> line <strong>'
                         + error.position.lineA
-                        + '</strong> column <strong>'
+                        + '</strong> ' + this.translate('label_column') + ' <strong>'
                         + error.position.columnA
-                        + '</strong> - line <strong>'
+                        + '</strong> - ' + this.translate('label_line') + ' <strong>'
                         + error.position.lineB
-                        + '</strong> column <strong>'
+                        + '</strong> ' + this.translate('label_column') + ' <strong>'
                         + error.position.columnB
                         + '</strong>';
                 }
@@ -167,7 +173,7 @@ export class ConsoleLogComponent {
                 this.items.unshift({
                     timestamp: timestamp,
                     type: 'error',
-                    message: '<strong>TypeScript Error</strong>: ' + (<Error>error).message,
+                    message: '<strong>' + this.translate('label_typescript_error') + '</strong>: ' + (<Error>error).message,
                     source: source
                 });
             } else {
@@ -175,7 +181,7 @@ export class ConsoleLogComponent {
                     this.items.unshift({
                         timestamp: timestamp,
                         type: 'error',
-                        message: '<strong>TypeScript Error #' + d.code + '</strong>: ' + d.messageText,
+                        message: '<strong>' + this.translate('label_typescript_error') + ' #' + d.code + '</strong>: ' + d.messageText,
                         source: source
                     });
                 });

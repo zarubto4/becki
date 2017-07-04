@@ -33,8 +33,8 @@
                         <ul class="dropdown-menu toolbar-notification-menu" [style.display]="showNotificationMenu?'block':'none'">
                             <li class="external">
                                 <h3>
-                                    <span class="bold">{{notificationService.unreadNotificationsCount}} unread</span> notifications</h3>
-                                <a [routerLink]="['/notifications']">view all</a>
+                                    <span class="bold"> {{'label_number_of_unread'|bkTranslate:this:notificationService.unreadNotificationsCount}}</span> {{'label_notifications'|bkTranslate:this}}</h3>
+                                <a [routerLink]="['/notifications']">{{'label_view_all'|bkTranslate:this}}</a>
                             </li>
                             <bk-notifications-list class="dropdown-menu-list n-list-scrolling" listName="toolbarNotifications"></bk-notifications-list>
                         </ul>
@@ -52,12 +52,12 @@
                         </a>
                         <ul class="dropdown-menu" [style.display]="showUserMenu?'block':'none'">
                             <li>
-                                <a [routerLink]="['/profile']"><i class="icon-settings"></i> Profile</a>
+                                <a [routerLink]="['/profile']"><i class="icon-settings"></i> {{'label_profile'|bkTranslate:this}}</a>
                             </li>
                             <li class="divider">
                             </li>
                             <li>
-                                <a [routerLink]="['/logout']"><i class="icon-key"></i> Log out</a>
+                                <a [routerLink]="['/logout']"><i class="icon-key"></i> {{'label_log_out'|bkTranslate:this}}</a>
                             </li>
                         </ul>
                     </li>
@@ -144,8 +144,8 @@
     <!-- BEGIN FOOTER -->
     <div class="page-footer">
         <div class="page-footer-inner">
-            2017 &copy; With Love by
-            <a target="_blank" href="http://byzance.cz">Byzance</a>
+            {{'label_with_love'|bkTranslate:this}}
+            <a target="_blank" href="http://byzance.cz">{{'label_byzance'|bkTranslate:this}}</a>
         </div>
         <span class="page-footer-inner pull-right becki-footer-version">{{versionString}}</span>
     </div>

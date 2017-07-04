@@ -22,6 +22,7 @@ import { BackendService } from '../services/BackendService';
 import { ModalsBlockoConfigPropertiesModel } from '../modals/blocko-config-properties';
 import { ModalsBlockoBlockCodeEditorModel } from '../modals/blocko-block-code-editor';
 import { ITypeOfBlock, IBlockoBlockVersionShortDetail, IBlockoBlock, IBlockoBlockShortDetail } from '../backend/TyrionAPI';
+import { TranslationService } from '../services/TranslationService';
 
 
 @Component({
@@ -61,13 +62,13 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     scale: number = 1;
 
     @Output()
-    onError: EventEmitter<{block: BlockoCore.Block, error: any}> = new EventEmitter<{block: BlockoCore.Block, error: any}>();
+    onError: EventEmitter<{ block: BlockoCore.Block, error: any }> = new EventEmitter<{ block: BlockoCore.Block, error: any }>();
 
     @Output()
     onChange: EventEmitter<{}> = new EventEmitter<{}>();
 
     @Output()
-    onLog: EventEmitter<{block: BlockoCore.Block, type: string, message: string}> = new EventEmitter<{block: BlockoCore.Block, type: string, message: string}>();
+    onLog: EventEmitter<{ block: BlockoCore.Block, type: string, message: string }> = new EventEmitter<{ block: BlockoCore.Block, type: string, message: string }>();
 
     protected blockoController: BlockoCore.Controller;
 
@@ -76,7 +77,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     @ViewChild('field')
     field: ElementRef;
 
-    constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: BackendService) {
+    constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: BackendService, private translationService: TranslationService) {
         this.zone.runOutsideAngular(() => {
 
             this.blockoRenderer = new BlockoPaperRenderer.RendererController();
@@ -157,12 +158,12 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
              });*/
             this.blockoController.registerErrorCallback((block: BlockoCore.Block, error: any) => {
                 this.zone.run(() => {
-                    this.onError.emit({block: block, error: error});
+                    this.onError.emit({ block: block, error: error });
                 });
             });
             this.blockoController.registerLogCallback((block: BlockoCore.Block, type: string, message: string) => {
                 this.zone.run(() => {
-                    this.onLog.emit({block: block, type: type, message: message});
+                    this.onLog.emit({ block: block, type: type, message: message });
                 });
             });
             this.blockoController.registerBlocks(BlockoBasicBlocks.Manager.getAllBlocks());
@@ -176,13 +177,17 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         });
     }
 
+    translate(key: string, ...args: any[]): string {
+        return this.translationService.translate(key, this, null, args);
+    }
+
     ngOnChanges(changes: SimpleChanges): void {
         this.zone.runOutsideAngular(() => {
 
             let disableExecution = changes['disableExecution'];
             if (disableExecution) {
                 if (!disableExecution.isFirstChange()) {
-                    throw new Error('Execution enabled cannot be changed.');
+                    throw new Error(this.translate('error_execution_cant_change'));
                 }
 
                 if (disableExecution.currentValue) {
@@ -195,7 +200,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             let readonly = changes['readonly'];
             if (readonly) {
                 if (!readonly.isFirstChange()) {
-                    throw new Error('The readability cannot be changed.');
+                    throw new Error(this.translate('error_cant_change_readability'));
                 }
                 this.blockoRenderer.readonly = readonly.currentValue;
             }
@@ -208,7 +213,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             let canConfig = changes['canConfig'];
             if (canConfig) {
                 if (!canConfig.isFirstChange()) {
-                    throw new Error('Configuration enabled cannot be changed.');
+                    throw new Error(this.translate('error_configuration_cant_change'));
                 }
                 this.blockoRenderer.canConfigInReadonly = canConfig.currentValue;
             }
@@ -264,12 +269,12 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         this.zone.runOutsideAngular(() => {
 
             if (this.readonly) {
-                throw new Error('read only');
+                throw new Error(this.translate('error_read_only'));
             }
 
             let bc: BlockoCore.BlockClass = this.blockoController.getBlockClassByVisutalType(blockName);
             if (!bc) {
-                throw new Error('block ' + blockName + ' not found');
+                throw new Error(this.translate('error_block_not_found', blockName ));
             }
 
             b = new bc(this.blockoController.getFreeBlockId());
@@ -282,7 +287,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
     addTsBlock(tsCode: string, designJson: string, x: number = 0, y: number = 0, typeOfBlock: string = null, version: string = null): BlockoBasicBlocks.TSBlock {
         if (this.readonly) {
-            throw new Error('read only');
+            throw new Error(this.translate('error_read_only'));
         }
         return this.addTsBlockWithoutReadonlyCheck(tsCode, designJson, x, y, typeOfBlock, version);
     }
@@ -316,7 +321,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         let b: BlockoCore.Block = null;
         this.zone.runOutsideAngular(() => {
             if (this.readonly) {
-                throw new Error('read only');
+                throw new Error(this.translate('error_read_only'));
             }
             b = new cls(this.blockoController.getFreeBlockId());
             this.blockoController.addBlock(b);
@@ -327,7 +332,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     removeAllBlocks(): void {
         this.zone.runOutsideAngular(() => {
             if (this.readonly) {
-                throw new Error('read only');
+                throw new Error(this.translate('error_read_only'));
             }
             this.removeAllBlocksWithoutReadonlyCheck();
         });
@@ -365,14 +370,14 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         return this.blockoController;
     }
 
-    blockChangeVersion = ( block: Blocks.TSBlock, version: string) => {
+    blockChangeVersion = (block: Blocks.TSBlock, version: string) => {
         this.backendService.getBlockoBlockVersion(version)
             .then((versionObject) => {
                 block.blockVersion = version;
                 block.setCode(versionObject.logic_json);
             });
-            /*.catch((reason) => {
-                console.log("fail loading blocko version", reason);
-            });*/
+        /*.catch((reason) => {
+            console.log("fail loading blocko version", reason);
+        });*/
     }
 }

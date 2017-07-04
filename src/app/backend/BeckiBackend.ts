@@ -4,15 +4,16 @@
 
 import { TyrionAPI, INotification, IPerson, ILoginResult, IWebSocketToken, ISocialNetworkLogin } from './TyrionAPI';
 import * as Rx from 'rxjs';
+import { TranslationService } from '../services/TranslationService';
 
 declare const BECKI_VERSION: string;
 
 // INTERFACES
 
 export interface IBProgramValues {
-    digital: {[hwId: string]: boolean};
-    analog: {[hwId: string]: number};
-    connector: {[id: string]: {inputs: {[name: string]: number}, outputs: {[name: string]: number}}};
+    digital: { [hwId: string]: boolean };
+    analog: { [hwId: string]: number };
+    connector: { [id: string]: { inputs: { [name: string]: number }, outputs: { [name: string]: number } } };
 }
 
 export interface IBProgramValue<T> {
@@ -38,7 +39,7 @@ export interface IWebSocketErrorMessage extends IWebSocketMessage {
 }
 
 export interface IWebSocketNotification extends INotification, IWebSocketMessage {
-    state: ('created'|'updated'|'confirmed'|'deleted');
+    state: ('created' | 'updated' | 'confirmed' | 'deleted');
 }
 
 export interface ICodeCompileErrorMessage {
@@ -63,11 +64,11 @@ export class RestRequest {
 
     url: string;
 
-    headers: {[name: string]: string};
+    headers: { [name: string]: string };
 
     body: Object;
 
-    constructor(method: string, url: string, headers: {[name: string]: string} = {}, body?: Object) {
+    constructor(method: string, url: string, headers: { [name: string]: string } = {}, body?: Object) {
         this.method = method;
         this.url = url;
         this.headers = {};
@@ -98,6 +99,7 @@ export class RestResponse {
 
 export class BugFoundError extends Error {
 
+
     name = 'bug found error';
 
     adminMessage: string;
@@ -108,10 +110,10 @@ export class BugFoundError extends Error {
         let content = response.body;
         let message: string;
         if (response.status === 400) {
-            content = (<{exception: Object}>response.body).exception;
-            message = (<{message: string}>response.body).message;
+            content = (<{ exception: Object }>response.body).exception;
+            message = (<{ message: string }>response.body).message;
             if (!message) {
-                message = (<{error: string}>response.body).error;
+                message = (<{ error: string }>response.body).error;
             }
         }
         return new BugFoundError(`response ${response.status}: ${JSON.stringify(content)}`, message);
@@ -125,6 +127,8 @@ export class BugFoundError extends Error {
         return `bug found in client or server: ${adminMessage}`;
     }
 
+   
+
     constructor(adminMessage: string, userMessage?: string) {
         super(BugFoundError.composeMessage(adminMessage));
         this.name = 'BugFoundError';
@@ -134,7 +138,6 @@ export class BugFoundError extends Error {
 
         Object.setPrototypeOf(this, BugFoundError.prototype);
     }
-
 }
 
 export class CodeError extends Error {
@@ -194,7 +197,7 @@ export class UserNotValidatedError extends Error {
     userMessage: string;
 
     static fromRestResponse(response: RestResponse): UserNotValidatedError {
-        return new UserNotValidatedError((<{message: string}>response.body).message);
+        return new UserNotValidatedError((<{ message: string }>response.body).message);
     }
 
     constructor(userMessage: string) {
@@ -215,7 +218,7 @@ export class UnauthorizedError extends Error {
     userMessage: string;
 
     static fromRestResponse(response: RestResponse): UnauthorizedError {
-        return new UnauthorizedError((<{message: string}>response.body).message);
+        return new UnauthorizedError((<{ message: string }>response.body).message);
     }
 
     constructor(userMessage: string, message = 'authorized authentication token required') {
@@ -238,7 +241,7 @@ export class PermissionMissingError extends UnauthorizedError {
     userMessage: string;
 
     static fromRestResponse(response: RestResponse): PermissionMissingError {
-        return new PermissionMissingError((<{message: string}>response.body).message);
+        return new PermissionMissingError((<{ message: string }>response.body).message);
     }
 
     constructor(userMessage: string) {
@@ -663,7 +666,7 @@ export abstract class BeckiBackend extends TyrionAPI {
         }
     }
 
-    public  requestBProgramSubscribe(version_id: string): void {
+    public requestBProgramSubscribe(version_id: string): void {
         // TODO: https://youtrack.byzance.cz/youtrack/issue/TYRION-262
         let message = {
             messageId: this.uuid(),
@@ -689,7 +692,7 @@ export abstract class BeckiBackend extends TyrionAPI {
     }
 
     public uuid(): string {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             // tslint:disable-next-line:no-bitwise
             let r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);

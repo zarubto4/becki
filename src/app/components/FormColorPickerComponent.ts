@@ -17,6 +17,8 @@ import {
 import { AbstractControl } from '@angular/forms';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 import { Subscription } from 'rxjs';
+import { TranslationService } from '../services/TranslationService';
+
 
 const parseColor = require('parse-color');
 
@@ -65,12 +67,12 @@ export class FormColorPickerComponent implements OnInit, OnDestroy, OnChanges {
     valueSubscription: Subscription = null;
     opacity: number = 1;
 
-    constructor(public validatorErrorsService: ValidatorErrorsService) {
+    constructor(public validatorErrorsService: ValidatorErrorsService, private translationService: TranslationService) {
     }
 
     ngOnInit(): void {
         if (this.readonly) {
-            throw Error('Readonly is not support now in component FormColorPickerComponent!');
+            throw Error(this.translationService.translate('error_readonly_not_support', this, null));
         }
 
         if (this.value === 'transparent') {

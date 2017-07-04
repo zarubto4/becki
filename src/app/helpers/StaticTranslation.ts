@@ -1114,7 +1114,119 @@ export class StaticTranslation {
                 'flash_cant_edit_grid_project': 'The grid project cannot be edited. {0}',
                 'flash_grid_project_remove': 'The grid project has been removed.',
                 'flash_cant_remove_grid_project': 'The grid project cannot be removed. {0}',
+
+            }, 'ValidatorErrorsService': {
+                'label_field_required': 'This field is required.',
+                'label_minimal_length': 'Minimal length of this field is {0} characters.',
+                'label_name_taken': 'This name is already taken.',
+                'label_project_name_taken': 'This project name is already taken.',
+                'label_blocko_name_taken': 'This blocko name is already taken.',
+                'label_invalid_email': 'Invalid email.',
+                'label_different_password': 'Passwords are different.',
+                'label_invalid_file_name': 'Invalid file/directory name.',
+                'label_field_only_number': 'This field only accept numbers.',
+                'label_unknown_error': 'Unknown error ( {0} ).',
+
+            }, 'TabMenuService': {
+                'label_tab_menu_not_found': 'TabMenu with name {0} not found in tabMenus!',
+
+            }, 'NotificationService': {
+                'flash_communication_failed': 'Communication with the back end have failed. {0}',
+                'flash_cant_confirm_notification': 'Cannot confirm notification. {0}',
+                'flash_cant_remove_notification': 'The Notification cannot be removed. {0}',
+
+            }, 'ModalService': {
+                'error_missing_modal': 'Missing modalModel',
+                'error_modal_already_open': 'This modalModel instanace is already open',
+
+            }, 'ExitConfirmationService': {
+                'dialog_discard_changes': 'Discard changes and exit?',
+                'confirm_discard_changes': 'Discard changes and exit?',
+
+            }, 'BackendService': {
+                'error_content_not_supported': 'content type not supported',
+
+            }, 'LayoutNotLoggedComponent': {
+                'label_becki_version': '{0} BECKI_VERSION {1} BECKI_VERSION_ID {2} BECKI_VERSION_DATE',
+                'label_byzance': 'Byzance',
             },
+
+            'LayoutMainComponent': {
+                'label_number_of_unread': '{0} unread',
+                'label_notifications': 'notifications',
+                'label_profile': 'Profile',
+                'label_log_out': 'Log out',
+                'label_view_all': 'view all',
+                'label_with_love': '2017 © With Love by',
+                'label_byzance': 'Byzance',
+
+            }, 'MonacoEditorComponent': {
+                'error_cant_change_editor_language': 'Cannot change editor language after init.',
+
+            }, 'BlockoViewComponent': {
+                'error_execution_cant_change': 'Execution enabled cannot be changed.',
+                'error_cant_change_readability': 'The readability cannot be changed.',
+                'error_configuration_cant_change': 'Configuration enabled cannot be changed.',
+                'error_read_only': 'read only',
+                'error_block_not_found': 'block {0} not found',
+
+            }, 'FormFAIconSelectComponent': {
+                'label_unknown_label': 'Unknown label',
+                'error_readonly_not_support': 'Readonly is not support now in component FormFAIconSelectComponent!',
+
+            }, 'FormColorPickerComponent': {
+                'error_readonly_not_support': 'Readonly is not support now in component FormColorPickerComponent!',
+
+            }, 'ConsoleLogComponent': {
+                'label_console_is_empty': 'Console is empty',
+                'label_position_and_line': '<strong>Position:</strong> line',
+                'label_column': 'column',
+                'label_line': 'line',
+                'label_typescript_error': 'TypeScript Error',
+            }, 'CodeIDEComponent': {
+                'label_error_not_selected_library': 'Not selected <b>library</b> in file tree.',
+                'error_missing_folder': 'Missing folder {0} in path {1}',
+                'modal_label_error': 'Error',
+                'modal_label_cant_add_file_at_path': 'Cannot add, file at path <b> /{0} </b> already exist.',
+                'modal_label_cant_move_directory_at_path': 'Cannot move, directory at path <b>/{0}</b> already exist',
+                'modal_label_cant_move_base_directory': 'Cannot move <b>/</b> directory.',
+                'modal_label_cant_move_file_already_exist': 'Cannot move, file at path <b>/{0}</b> already exist.',
+                'modal_label_cant_add_directory_at_path': 'Cannot add, directory at path <b>/{0}</b> already exist.',
+                'modal_label_cant_move_directory_to_childern': 'Cannot move directory to it\'s <b>children</b>. ',
+                'modal_label_cant_rename_directory': 'Cannot rename <b>/</b> directory.',
+                'modal_label_cant_rename': 'Cannot rename <b>/{0} </b>',
+                'modal_label_cant_remove_base_directory': 'Cannot remove <b>/</b> directory',
+                'modal_label_cant_remove_file': 'Cannot remove <b>/{0} </b> file.',
+                'modal_label_cant_rename_file_already_exist': 'Cannot rename, file at path <b>/{0} </b> already exist.',
+                'modal_label_cant_rename_directory_already_exist': 'Cannot rename, directory at path <b>/{0} </b> already exist.',
+                'modal_label_cant_move_file': 'Cannot move <b>/{0} </b>',
+
+                'label_library': ' library',
+                'label_file': ' file',
+
+                'btn_add_file': 'Add file',
+                'btn_add_directory': 'Add directory',
+                'btn_add_library': 'Add library',
+                'btn_change_library_version': 'Change library version',
+                'btn_move': 'Move',
+                'btn_rename': 'Rename',
+                'btn_remove': 'Remove',
+
+                'label_open_file_browser': 'Open file in file browser',
+
+
+
+
+
+
+
+
+
+
+
+            },
+
+
 
             'label_online': 'Online',
             'label_offline': 'Offline',
@@ -1222,10 +1334,27 @@ export class StaticTranslation {
                 'critical_error_description': 'TODO',
                 'homer_server_is_offline_description': 'TODO',
                 'instance_inaccessible_description': 'TODO',
+
+            }, 'hardware_device_id': {
+                'ALREADY_REGISTERED_IN_YOUR_ACCOUNT': 'The hardware is already registered in your account.',
+                'ALREADY_REGISTERED': 'The hardware is already registered.',
+                'PERMANENTLY_DISABLED': 'The hardware is permanently disabled.',
+                'BROKEN_DEVICE': 'The hardware is broken.',
+                'NOT_EXIST': 'The hardware doesn\'t exist.',
+                'default': 'The hardware throws a unexepted exeption',
+
+            }, 'entity_not_valid': {
+                'mail': 'Email is already taken',
+                'nick_name': 'Nick name is already taken',
+                'vat_number': 'Wrong VAT number (type it without spaces, dashes etc.)',
+                'default': 'Entity unknown error. {0}',
+
+            }, 'regexp_not_valid': {
+                'street_number': 'Wrong street number format, valid is "number" or "number/number" format.',
             }
         },
         'cz': {
             // TODO
         }
     };
-}
+};

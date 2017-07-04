@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
+import { TranslationService } from '../services/TranslationService';
 
 @Injectable()
 export class ExitConfirmationService {
 
     protected _needExitConfirm: boolean;
 
-    constructor() {
+    constructor(private translationService: TranslationService) {
         this._needExitConfirm = false;
     }
 
+
     protected confirmationFunction(e: any) {
-        const dialogText = 'Discard changes and exit?';
+        const dialogText = this.translationService.translate('dialog_discard_changes', this, null);
         e.returnValue = dialogText;
         return dialogText;
     }
@@ -18,7 +20,7 @@ export class ExitConfirmationService {
     public confirmExit(): boolean {
         if (this._needExitConfirm) {
             window.onbeforeunload = null;
-            const ret = confirm('Discard changes and exit?');
+            const ret = confirm(this.translationService.translate('confirm_discard_changes', this, null));
             if (!ret) {
                 window.onbeforeunload = this.confirmationFunction;
             }

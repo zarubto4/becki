@@ -3,6 +3,7 @@
  */
 
 import { EventEmitter, Injectable, NgZone } from '@angular/core';
+import { TranslationService } from '../services/TranslationService';
 
 export abstract class ModalModel {
     modalWide: boolean = false;
@@ -61,17 +62,23 @@ export class ModalService {
 
     public modalWrappers: ModalWrapper[] = [];
 
-    constructor(protected ngZone: NgZone) {
+    constructor(protected ngZone: NgZone, private translationService: TranslationService) {
         console.info('ModalService init');
     }
 
+
+    translate(key: string, ...args: any[]): string {
+        return this.translationService.translate(key, this, null, args);
+    }
+
+
     showModal(modalModel: ModalModel): Promise<boolean> {
         if (!modalModel) {
-            throw new Error('Missing modalModel');
+            throw new Error(this.translate('error_missing_modal'));
         }
         let wrapper = this.modalWrappers.find((mw) => mw.modalModel === modalModel);
         if (wrapper) {
-            throw new Error('This modalModel instanace is already open');
+            throw new Error(this.translate('error_modal_already_open'));
         }
         wrapper = new ModalWrapper(modalModel);
         this.modalWrappers.push(wrapper);

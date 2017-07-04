@@ -2,25 +2,25 @@
     <div class="row">
         <div class="col-md-12">
             <button type="button" class="btn default green-haze" (click)="toolbarAddFileClick()">
-                <i class="fa fa-file-text"></i> Add file
+                <i class="fa fa-file-text"></i> {{'btn_add_file'|bkTranslate:this}}
             </button>
             <button type="button" class="btn default green-haze" (click)="toolbarAddDirectoryClick()">
-                <i class="fa fa-folder"></i> Add directory
+                <i class="fa fa-folder"></i> {{'btn_add_directory'|bkTranslate:this}}
             </button>
             <button *ngIf="enableLibraryButtons" type="button" class="btn default purple-plum" (click)="toolbarAddLibraryClick($event)">
-                <i class="fa fa-briefcase"></i> Add library
+                <i class="fa fa-briefcase"></i> {{'btn_add_library'|bkTranslate:this}}
             </button>
             <button *ngIf="enableLibraryButtons" type="button" class="btn default purple-plum" (click)="toolbarLibraryChangeVersionClick($event)">
-                <i class="fa fa-code-fork"></i> Change library version
+                <i class="fa fa-code-fork"></i> {{'btn_change_library_version'|bkTranslate:this}}
             </button>
             <button type="button" class="btn default blue-steel" (click)="toolbarMoveClick()">
-                <i class="fa fa-arrow-circle-right"></i> Move
+                <i class="fa fa-arrow-circle-right"></i> {{'btn_move'|bkTranslate:this}}
             </button>
             <button type="button" class="btn default blue-steel" (click)="toolbarRenameClick()">
-                <i class="fa fa-i-cursor"></i> Rename
+                <i class="fa fa-i-cursor"></i> {{'btn_rename'|bkTranslate:this}}
             </button>
             <button type="button" class="btn default red" (click)="toolbarRemoveClick()">
-                <i class="fa fa-trash"></i> Remove
+                <i class="fa fa-trash"></i> {{'btn_remove'|bkTranslate:this}}
             </button>
         </div>
     </div>
@@ -50,7 +50,7 @@
                     <li *ngIf="openFiles.length == 0" class="tab-pane active">
                         <h3 style="margin: 10px 0;">
                             <i class="fa fa-chevron-left"></i>
-                            Open file in file browser
+                            {{'label_open_file_browser'|bkTranslate:this}}
                         </h3>
                     </li>
                 </div>

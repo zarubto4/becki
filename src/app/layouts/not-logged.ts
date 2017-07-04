@@ -7,6 +7,9 @@
  */
 
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { TranslationService } from '../services/TranslationService';
+
+
 
 const BODY_CLASSES = ['login'];
 
@@ -20,10 +23,9 @@ declare const BECKI_VERSION_DATE: string;
 })
 export class LayoutNotLoggedComponent implements OnInit, OnDestroy {
 
-    versionString = 'Version: ' + BECKI_VERSION + ' id: ' + BECKI_VERSION_ID + ' date: ' + BECKI_VERSION_DATE;
 
-    constructor() {
-
+    versionString = this.translationService.translate('label_becki_version', this, null, [BECKI_VERSION, BECKI_VERSION_ID, BECKI_VERSION_DATE]);
+    constructor(private translationService: TranslationService) {
     }
 
     ngOnInit(): void {

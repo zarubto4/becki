@@ -3,77 +3,63 @@
  */
 
 import { Injectable } from '@angular/core';
+import { TranslationService } from './TranslationService';
+
 
 @Injectable()
 export class ValidatorErrorsService {
 
-    constructor() {
+    constructor(private translationService: TranslationService) {
         console.info('ValidatorErrorsService init');
+    }
+    translate(key: string, ...args: any[]): string {
+        return this.translationService.translate(key, this, null, args);
+    }
+
+    translateTable(key: string, table: string, ...args: any[]): string {
+        return this.translationService.translateTable(key, this, table, null, args);
     }
 
     getMessageForErrors(errors: any) {
         if (errors) {
             if (errors['required']) {
-                return 'This field is required.';
+                return this.translate('label_field_required');
             }
             if (errors['minlength']) {
-                return 'Minimal length of this field is ' + errors['minlength']['requiredLength'] + ' characters.';
+                return this.translate('label_minimal_length', errors['minlength']['requiredLength']);
             }
             if (errors['nameTaken']) {
-                return 'This name is already taken.';
+                return this.translate('label_name_taken');
             }
             if (errors['projectNameTaken']) {
-                return 'This project name is already taken.';
+                return this.translate('label_project_name_taken');
             }
             if (errors['blockoNameTaken']) {
-                return 'This blocko name is already taken.';
+                return this.translate('label_blocko_name_taken');
             }
             if (errors['hardwareDeviceId']) {
-                switch (errors['hardwareDeviceId']) {
-                    case 'ALREADY_REGISTERED_IN_YOUR_ACCOUNT':
-                        return 'The hardware is already registered in your account.';
-                    case 'ALREADY_REGISTERED':
-                        return 'The hardware is already registered.';
-                    case 'PERMANENTLY_DISABLED':
-                        return 'The hardware is permanently disabled.';
-                    case 'BROKEN_DEVICE':
-                        return 'The hardware is broken.';
-                    case 'NOT_EXIST':
-                        return 'The hardware doesn\'t exist.';
-                    default:
-                        return 'The hardware throws a unexepted exeption';
-                }
+                return this.translateTable(errors['hardwareDeviceId'], 'hardware_device_id');
             }
             if (errors['email']) {
-                return 'Invalid email.';
+                return this.translate('label_invalid_email');
             }
             if (errors['passwordSame']) {
-                return 'Passwords are different.';
+                return this.translate('label_different_password');
             }
             if (errors['filename']) {
-                return 'Invalid file/directory name.';
+                return this.translate('label_invalid_file_name');
             }
             if (errors['number']) {
-                return 'This field only accept numbers.';
+                return this.translate('label_field_only_number');
             }
             if (errors['entityNotValid']) {
-                if (errors['entityNotValid'] === 'mail') {
-                    return 'Email is already taken';
-                } else if (errors['entityNotValid'] === 'nick_name') {
-                    return 'Nick name is already taken';
-                } else if (errors['entityNotValid'] === 'vat_number') {
-                    return 'Wrong VAT number (type it without spaces, dashes etc.)';
-                } else {
-                    return 'Entity unknown error.' + (errors['entityMessage'] ? ' (' + errors['entityMessage'] + ')' : '');
-                }
+                return this.translateTable(errors['entityNotValid'], 'entity_not_valid', (errors['entityMessage'] ? ' (' + errors['entityMessage'] + ')' : ''));
             }
             if (errors['regExp']) {
-                if (errors['regExp'] === 'street_number') {
-                    return 'Wrong street number format, valid is "number" or "number/number" format.';
-                }
+                return this.translateTable(errors['regExp'], 'regexp_not_valid');
             }
         }
-        return 'Unknown error (' + Object.keys(errors) + ').';
+        return this.translate('label_unknown_error');
     }
 
 }
