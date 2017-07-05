@@ -116,14 +116,14 @@
                                     <div class="col-md-12" *ngFor="let program of gridProject.m_programs">
                                         <h3 class="small-h3">{{program.name}} <span *ngIf="program.description" class="hx-description">{{program.description}}</span></h3>
                                         <div *ngIf="program.versions && program.versions.length" class="form-group" [class.has-error]="!selectedGridProgramVersions[gridProject.id][program.id]">
-                                            <label>{{'label_program_version'|bkTranslate}}</label>
+                                            <label>{{'label_program_version'|bkTranslate:this}}</label>
                                             <select class="form-control" [ngModel]="selectedGridProgramVersions[gridProject.id][program.id]" (ngModelChange)="gridSelectedProgramVersionIdChange(gridProject.id, program.id, $event)">
                                                 <option value="undefined" disabled>{{'label_select_version'|bkTranslate:this}}</option>
                                                 <option *ngFor="let programVersion of program.versions" [value]="programVersion.id">{{programVersion.version_name}}</option>
                                             </select>
                                         </div>
                                         <div *ngIf="!(program.versions && program.versions.length)" class="form-group">
-                                            <label>{{'label_program_version'|bkTranslate}}</label>
+                                            <label>{{'label_program_version'|bkTranslate:this}}</label>
                                             <select class="form-control" disabled>
                                                 <option [value]="null" disabled>{{'label_no_program_version'|bkTranslate:this}}</option>
                                             </select>

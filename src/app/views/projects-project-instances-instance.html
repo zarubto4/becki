@@ -149,7 +149,7 @@
 
                             <div>
                                 {{'label_instance_type'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{instance.instance_type|bkTranslateTable:'instance_type'}}</span>
+                                <span class="font-grey-mint bold">{{instance.instance_type|bkTranslateTable:this:'instance_type'}}</span>
                             </div>
 
                             <br>
@@ -164,7 +164,7 @@
                             </div>
                             <div>
                                 {{'label_running_status'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{instance.actual_instance.status|bkTranslateTable:'instance_status'}}</span>
+                                <span class="font-grey-mint bold">{{instance.actual_instance.status|bkTranslateTable:this:'instance_status'}}</span>
                             </div>
 
                         </div>
@@ -207,9 +207,9 @@
                                             </div>
 
                                             <div style="position: absolute; right: 10px; top: 10px;">
-                                                <span [class.font-blue-dark]="gridProgram.snapshot_settings == 'absolutely_public'">{{gridProgram.snapshot_settings|bkTranslateTable:'snapshot_settings'}}</span>
-                                                <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="gridProgram.snapshot_settings == 'absolutely_public'" [class.fa-toggle-off]="gridProgram.snapshot_settings != 'absolutely_public'" (click)="onGridProgramPublishClick(gridProgram)"></i>
-                                                <span [class.font-blue-dark]="gridProgram.snapshot_settings != 'absolutely_public'">{{gridProgram.snapshot_settings|bkTranslateTable:'snapshot_settings'}}</span>
+                                                <span [class.font-blue-dark]="gridProgram.snapshot_settings == 'only_for_project_members'">{{'only_for_project_members'|bkTranslateTable:this:'snapshot_settings'}}</span>
+                                                <i class="fa cursor-hand" style="vertical-align: middle; font-size: 1.5em;" [class.fa-toggle-on]="gridProgram.snapshot_settings != 'absolutely_public'" [class.fa-toggle-off]="gridProgram.snapshot_settings == 'absolutely_public'" (click)="onGridProgramPublishClick(gridProgram)"></i>
+                                                <span [class.font-blue-dark]="gridProgram.snapshot_settings == 'absolutely_public'">{{'absolutely_public'|bkTranslateTable:this:'snapshot_settings'}}</span>
                                             </div>
                                         </div>
                                         <div style="margin-top: 10px; margin-left: 20px; margin-right: 20px;">
@@ -348,7 +348,7 @@
                                 </div>
                                 <div>
                                     {{'label_running_status'|bkTranslate:this}}
-                                    <span class="font-grey-mint bold">{{instance.actual_instance.status|bkTranslateTable:'instance_status'}}</span>
+                                    <span class="font-grey-mint bold">{{instance.actual_instance.status|bkTranslateTable:this:'instance_status'}}</span>
                                 </div>
 
                             </div>
@@ -457,7 +457,7 @@
 
                         <div *ngFor="let procedure of instance.actual_instance.procedures">
                             <h3 style="margin-bottom:10px;">
-                                {{procedure.type_of_update|bkTranslateTable:'type_of_update'}}
+                                {{procedure.type_of_update|bkTranslateTable:this:'type_of_update'}}
                             </h3>
                             <!--<div>Created: <strong> {{procedure.date_of_create|bkUnixTimeToDate}}</strong></div>-->
                             <div>{{'label_planned'|bkTranslate:this}}: <strong> {{procedure.date_of_planing|bkUnixTimeToDate}}</strong></div>
@@ -507,19 +507,19 @@
                                             <td class="font-grey-mint"><a (click)="onCProgramClick(update.c_program_detail.c_program_id)">{{update.c_program_detail.c_program_version_id}}</a></td>
 
                                             <td>
-                                                <span *ngIf="update.state == 'complete'"                 class="bold font-green-jungle">{{update.state|bkTranslateTable:'update_state'}}</span>
-                                                <span *ngIf="update.state == 'canceled'"                 class="bold font-green-jungle">{{update.state|bkTranslateTable:'update_state'}}</span>
+                                                <span *ngIf="update.state == 'complete'"                 class="bold font-green-jungle">{{update.state|bkTranslateTable:this:'update_state'}}</span>
+                                                <span *ngIf="update.state == 'canceled'"                 class="bold font-green-jungle">{{update.state|bkTranslateTable:this:'update_state'}}</span>
 
-                                                <span *ngIf="update.state == 'not_start_yet'"            class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:'update_state'}} </span>
-                                                <span *ngIf="update.state == 'in_progress'"              class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:'update_state'}}</span>
-                                                <span *ngIf="update.state == 'overwritten'"              class="bold font-green-jungle">{{update.state|bkTranslateTable:'update_state'}}</span>
-                                                <span *ngIf="update.state == 'not_updated'"              class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:'update_state'}}</span>
-                                                <span *ngIf="update.state == 'waiting_for_device'"       class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:'update_state'}}</span>
+                                                <span *ngIf="update.state == 'not_start_yet'"            class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:this:'update_state'}} </span>
+                                                <span *ngIf="update.state == 'in_progress'"              class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:this:'update_state'}}</span>
+                                                <span *ngIf="update.state == 'overwritten'"              class="bold font-green-jungle">{{update.state|bkTranslateTable:this:'update_state'}}</span>
+                                                <span *ngIf="update.state == 'not_updated'"              class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:this:'update_state'}}</span>
+                                                <span *ngIf="update.state == 'waiting_for_device'"       class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:this:'update_state'}}</span>
 
-                                                <span *ngIf="update.state == 'bin_file_not_found'"       class="bold font-red-flamingo">{{update.state|bkTranslateTable:'update_state'}}</span>
-                                                <span *ngIf="update.state == 'critical_error'"           class="bold font-red-flamingo">{{update.state|bkTranslateTable:'update_state'}}</span>
-                                                <span *ngIf="update.state == 'homer_server_is_offline'"  class="bold font-red-flamingo">{{update.state|bkTranslateTable:'update_state'}}</span>
-                                                <span *ngIf="update.state == 'instance_inaccessible'"    class="bold font-red-flamingo">{{update.state|bkTranslateTable:'update_state'}}</span>
+                                                <span *ngIf="update.state == 'bin_file_not_found'"       class="bold font-red-flamingo">{{update.state|bkTranslateTable:this:'update_state'}}</span>
+                                                <span *ngIf="update.state == 'critical_error'"           class="bold font-red-flamingo">{{update.state|bkTranslateTable:this:'update_state'}}</span>
+                                                <span *ngIf="update.state == 'homer_server_is_offline'"  class="bold font-red-flamingo">{{update.state|bkTranslateTable:this:'update_state'}}</span>
+                                                <span *ngIf="update.state == 'instance_inaccessible'"    class="bold font-red-flamingo">{{update.state|bkTranslateTable:this:'update_state'}}</span>
                                             </td>
                                         </tr>
 

@@ -54,7 +54,7 @@ export class TranslationService {
         if (translation == null) {
             translation = NullSafe(() => <string>this.translationTables[lang][table][key]);
         }
-        if (env) {
+        if (translation == null && env) {
             translation = NullSafe(() => (<{ [key: string]: string }>this.translationTables[lang][env][table])['default']);
         }
         if (translation == null) {

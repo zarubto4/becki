@@ -14,15 +14,15 @@
             <hr />
         </template>
         <template [ngIf]="inputs.length || outputs.length">
-            <h4>{{'label_interface'|bkTranslate}}</h4>
-            <h3 *ngIf="inputs.length">{{'label_inputs'|bkTranslate}}</h3>
+            <h4>{{'label_interface'|bkTranslate:this}}</h4>
+            <h3 *ngIf="inputs.length">{{'label_inputs'|bkTranslate:this}}</h3>
             <div *ngFor="let input of inputs;">
                 <div class="input-row">
                     <label>{{input.displayName}}</label>
                     <input [name]="input.name" class="form-control" type="text" [(ngModel)]="formModelInputs[input.name]">
                 </div>
             </div>
-            <h3 *ngIf="outputs.length">{{'label_output'|bkTranslate}}</h3>
+            <h3 *ngIf="outputs.length">{{'label_output'|bkTranslate:this}}</h3>
             <div *ngFor="let output of outputs;">
                 <div class="input-row">
                     <label>{{output.displayName}}</label>
@@ -32,7 +32,7 @@
             <hr />
         </template>
         <template [ngIf]="configProperties.length">
-            <h4>{{'label_configuration'|bkTranslate}}</h4>
+            <h4>{{'label_configuration'|bkTranslate:this}}</h4>
             <div *ngIf="description" class="config-properties-description" [innerHTML]="description|bkMd2Html"></div>
             <div *ngFor="let configProperty of configProperties;">
                 <div *ngIf="StringToConfigPropertyTypeTable[configProperty.type] == ConfigPropertyType.Float" class="form-group input-row">
@@ -83,7 +83,7 @@
         </template>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate}}</button>
-        <button type="button" class="btn green" (click)="onSubmitClick()">{{'btn_save'|bkTranslate}}</button>
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" (click)="onSubmitClick()">{{'btn_save'|bkTranslate:this}}</button>
     </div>
 </div>

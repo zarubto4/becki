@@ -55,6 +55,13 @@ export class StaticTranslation {
                 'label_block_name': 'Block name',
                 'label_block_description': 'Block description',
 
+            }, 'ModalsBlocksBlockPropertiesComponent': {
+                'title_edit': 'Edit blocko',
+                'title_add': 'Add blocko',
+                'label_block_name': 'Blocko name',
+                'label_block_description': 'Blocko description',
+
+
             }, 'ModalsBlocksTypePropertiesComponent': {
                 'title_edit': 'Edit blocks group properties',
                 'title_add': 'Add blocks group',
@@ -80,7 +87,7 @@ export class StaticTranslation {
                 'text_move_file': 'Move file <b> {0}</b>',
                 'text_move_directory': 'Move directory <b> {0} </b>',
                 'text_rename_file': 'Rename file <b> {0}</b>',
-                'text_rename_directory': 'Rename directory <b> {0 }</b>',
+                'text_rename_directory': 'Rename directory <b> {0}</b>',
                 'text_remove_file': 'Really want remove file <b> {0} </b> ?',
                 'text_remove_library': 'Really want remove library <b> {0} </b> ?',
                 'text_remove_directory': 'Really want remove directory <b> {0} </b> with all children ?',
@@ -652,6 +659,8 @@ export class StaticTranslation {
                 'table_hardware_type': 'Device Type',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
+                'table_project': 'Project',
+                'table_program': 'Program',
 
                 'btn_change_version_in_cloud': 'Change version in Cloud',
                 'label_instance_name': 'Instance Name',
@@ -745,6 +754,9 @@ export class StaticTranslation {
                 'table_actions': 'Actions',
 
                 'no_persons_in_this_projects': 'No members in this project',
+
+                'modal_label_invitation': 'Invitation',
+                'modal_label_invitation_send': 'Invitation email was sent to {0}',
 
                 'label_cannot_remove_yourself': 'Cannot remove yourself from project.',
                 'label_cannot_add_member': 'Cannot add members. {0}',
@@ -1147,7 +1159,7 @@ export class StaticTranslation {
                 'error_content_not_supported': 'content type not supported',
 
             }, 'LayoutNotLoggedComponent': {
-                'label_becki_version': '{0} BECKI_VERSION {1} BECKI_VERSION_ID {2} BECKI_VERSION_DATE',
+                'label_becki_version': 'Version: {0} id: {1} date: {2}',
                 'label_byzance': 'Byzance',
             },
 
@@ -1163,7 +1175,10 @@ export class StaticTranslation {
             }, 'MonacoEditorComponent': {
                 'error_cant_change_editor_language': 'Cannot change editor language after init.',
 
-            }, 'BlockoViewComponent': {
+            }, 'NotificationsListComponent': {
+                'label_no_notifications': 'No notifications',
+            },
+            'BlockoViewComponent': {
                 'error_execution_cant_change': 'Execution enabled cannot be changed.',
                 'error_cant_change_readability': 'The readability cannot be changed.',
                 'error_configuration_cant_change': 'Configuration enabled cannot be changed.',
@@ -1286,8 +1301,10 @@ export class StaticTranslation {
                 'HISTORY': 'Ran in Cloud'
             },
             'snapshot_settings': {
+                'only_for_project_members': 'Only for project members',
                 'absolutely_public': 'Public',
                 'private': 'Private',
+                'not_in_instance': 'Not in instance',
             },
             'type_of_update': {
                 'MANUALLY_BY_USER_INDIVIDUAL': 'Manually (Individual Update) by User',

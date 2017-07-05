@@ -17,7 +17,7 @@
         </div>
         <div class="form-actions">
             <button type="button" (click)="clickButtonBack()" id="back-btn" class="btn green btn-outline">{{'btn_back'|bkTranslate:this}}</button>
-            <button type="submit" (click)="sendCreateUser()" class="btn btn-success uppercase pull-right" [disabled]="!CreateUserForm.valid">{{'btn_send'|bkTranslate}}</button>
+            <button type="submit" (click)="sendCreateUser()" class="btn btn-success uppercase pull-right" [disabled]="!CreateUserForm.valid">{{'btn_send'|bkTranslate:this}}</button>
         </div>
     </div>
 </bk-layout-not-logged>
