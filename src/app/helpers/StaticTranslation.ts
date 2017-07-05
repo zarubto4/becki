@@ -11,7 +11,7 @@ export class StaticTranslation {
         'en': {
             'ModalsAddHardwareComponent': {
                 'title': 'Add hardware device',
-                'label_device_id': 'Hardware device ID',
+                'label_device_id': 'device ID',
 
             }, 'ModalsBlockoAddGridEmptyComponent': {
                 'title': 'Cannot add grid project',
@@ -70,10 +70,10 @@ export class StaticTranslation {
 
             }, 'ModalsCodeAddLibraryComponent': {
                 'title': 'Add CODE library',
-                'body_text': 'Displaying <b>{}0</b> of total <b>{1}</b> libraries',
+                'body_text': 'Displaying <b>{0}</b> of total <b>{1}</b> libraries',
                 'label_load_more': 'Load more libraries',
                 'label_no_more': 'No more libraries',
-                'btn_select_library': '',
+                'btn_select_library': 'select library',
 
             }, 'ModalsCodeFileDialogComponent': {
                 'label_into_directory': 'Into directory',
@@ -218,6 +218,25 @@ export class StaticTranslation {
                 'step_three': '<strong class="font-grey" style="font-size: 1.5em;">3.</strong> Create your own Byzance<strong class="font-color-code">CODE</strong>, Byzance<strong class="font-color-grid">GRID</strong> and Byzance<strong class="font-color-blocko">BLOCKO</strong> programs',
                 'step_four': '<strong class="font-grey" style="font-size: 1.5em;">4.</strong> Run it on Byzance<strong class="font-color-hardware">HARDWARE</strong> and in Byzance<strong class="font-color-cloud">CLOUD</strong>.',
 
+            }, 'ProjectsComponent': {
+                'main_title': 'Projects',
+                'title': 'Projects',
+                'btn_add_project': 'Add project',
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_actions': 'Actions',
+                'label_deactivated_under': 'Deactivated under',
+                'label_project_properties': 'Project properties',
+                'label_Remove_project': 'Remove project',
+                'label_no_projects': 'There is not any projects',
+                'label_no_product': 'if you want to add project, you must have any <span class="bold">product</span>. For add product click the link below.',
+                'label_create_product_below': 'You can create it by click on button bellow.',
+
+            }, 'ProjectsProjectWidgetsComponent': {
+
+
+
+;
             }, 'CreateUserComponent': {
                 'title': 'Create new user',
                 'info_text': 'Enter your e-mail address, nickname, name and password.',
@@ -841,16 +860,16 @@ export class StaticTranslation {
                 'table_actions': 'Actions',
 
             }, 'ProjectsProjectBlockoComponent': {
-                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - all programs',
+                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - ALL PROGRAMS',
 
-                'label_blocko_remove': 'Remove blocko program',
-                'label_blocko_program_properties': 'Blocko program properties',
+                'label_blocko_remove': 'Remove BLOCKO program',
+                'label_blocko_program_properties': 'BLOCKO program properties',
                 'label_no_blocko_program': 'There is not any blocko program',
                 'label_create_blocko_text': 'You can create it by click on button bellow.',
                 'table_name': 'Name',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
-                'btn_add_blocko_program': 'Add blocko program',
+                'btn_add_blocko_program': 'Create BLOCKO program',
 
                 'flash_blocko_remove': 'The blocko has been removed.',
                 'flash_blocko_cant_remove': 'The blocko cannot be removed. {0}',

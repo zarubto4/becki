@@ -3,13 +3,13 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main [title]="'Projects'">
+<bk-layout-main [title]="'main_title'|bkTranslate:this">
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
                 <span class="font-blue-dark uppercase">
                     <i class="fa fa-fw fa-tasks"></i>
-                    Projects
+                     {{'title'|bkTranslate}}
                 </span>
             </div>
             <div class="becki-actions pull-left">
@@ -22,7 +22,7 @@
             </div>
             <div class="becki-actions">
                 <button class="btn blue" (click)="onAddClick()" [disabled]="products && !products.length">
-                    <i class="fa fa-plus-circle"></i> Add project
+                    <i class="fa fa-plus-circle"></i> {{'btn_add_project'|bkTranslate:this}}
                 </button>
             </div>
         </div>
@@ -30,34 +30,33 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th lass="full-width">Name</th>
-                    <th class="full-width">Description</th>
-                    <th class="text-center">Actions</th>
+                    <th class="text-center full-width">{{'table_name'|bkTranslate:this}}</th>
+                    <th class="text-center full-width">{{'table_description'|bkTranslate:this}}</th>
+                    <th class="text-center pull-right">{{'table_actions'|bkTranslate:this}}</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let project of projects">
 
-                    <td class="no-wrap" *ngIf="project.active" class="no-wrap bold"><a (click)="onProjectClick(project)">{{project.name}}</a></td>
-                    <td class="no-wrap" *ngIf="!project.active">
+                    <td *ngIf="project.active" class="bold"><a (click)="onProjectClick(project)">{{project.name}}</a></td>
+                    <td *ngIf="!project.active">
                         <strong>{{project.name}}</strong>
-                        <br>
-                        <span class="font-red-flamingo">(Deactivated under <a (click)="onProductClick(project.product_id)"><span class="font-red-flamingo bold">{{project.product_name}}</span></a>) </span>
+                        <span class="font-red-flamingo">({{'label_deactivated_under'|bkTranslate:this}} <a (click)="onProductClick(project.product_id)"><span class="font-red-flamingo bold">{{project.product_name}}</span></a>) </span>
                     </td>
 
 
                     <td>{{project.description}}</td>
-                    <td class="no-wrap">
+                    <td>
 
                         <style type="text/css">
                             table tr button { opacity:0.05;}
                             table tr:hover button { opacity:1 }
                         </style>
 
-                        <button title="Project properties" class="btn btn-icon-only green" [disabled]="!project.edit_permission || !project.active" (click)="onEditClick(project)">
+                        <button title="{{'label_project_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!project.edit_permission || !project.active" (click)="onEditClick(project)">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="Remove project" class="btn btn-icon-only red" [disabled]="!project.delete_permission || !project.active" (click)="onRemoveClick(project)">
+                        <button title="{{'label_Remove_project'|bkTranslate}}" class="btn btn-icon-only red" [disabled]="!project.delete_permission || !project.active" (click)="onRemoveClick(project)">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>
@@ -65,22 +64,22 @@
                 </tbody>
             </table>
         </div>
-        <h4 *ngIf="!products && !projects" class="text-center">Loading...</h4>
+        <h4 *ngIf="!products && !projects" class="text-center">{{'loading'|bkTranslate:this}}</h4>
         <div *ngIf="projects && !projects.length" class="list-no-items">
-            <p class="list-no-items__main-label">There is not any projects</p>
+            <p class="list-no-items__main-label">{{'label_no_projects'|bkTranslate:this}}</p>
             <template [ngIf]="products && !products.length">
-                <p class="list-no-items__sub-label">if you want to add project, you must have any <span class="bold">product</span>. For add product click the link below.</p>
+                <p class="list-no-items__sub-label"><span [innerHTML]="'label_no_product'|bkTranslate:this"></span></p>
                 <p>
                     <button class="btn blue" (click)="onRedirectClick()">
-                        <i class="fa fa-plus-circle"></i> Add product
+                        <i class="fa fa-plus-circle"></i> {{'btn_add_project'|bkTranslate}}
                     </button>
                 </p>
             </template>
             <template [ngIf]="products && products.length">
-                <p class="list-no-items__sub-label">You can create it by click on button bellow.<p>
+                <p class="list-no-items__sub-label">{{'label_create_product_below'|bkTranslate:this}}<p>
                 <p>
                     <button class="btn blue" (click)="onAddClick()" [disabled]="products && !products.length">
-                        <i class="fa fa-plus-circle"></i> Add project
+                        <i class="fa fa-plus-circle"></i> {{'btn_add_project'|bkTranslate:this}}
                     </button>
                 </p>
             </template>

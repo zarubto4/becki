@@ -76,61 +76,61 @@ export class ModalsCodeFileDialogComponent implements OnInit {
                 this.neededDirectory = true;
                 this.textTitle = this.translate('text_add_file');
                 this.textLabel = this.translate('text_add_file_name');
-                this.textSubmit = this.translate('btn_add');
+                this.textSubmit = 'btn_add';
                 break;
             case ModalsCodeFileDialogType.AddDirectory:
                 this.neededName = true;
                 this.neededDirectory = true;
                 this.textTitle = this.translate('btn_add_directory');
                 this.textLabel = this.translate('text_directory_name');
-                this.textSubmit = this.translate('btn_add');
+                this.textSubmit = 'btn_add';
                 break;
             case ModalsCodeFileDialogType.MoveFile:
                 this.neededName = false;
                 this.neededDirectory = true;
                 this.textTitle = this.translate('text_move_file', this.modalModel.objectFullName);
-                this.textSubmit = this.translate('btn_move');
+                this.textSubmit = 'btn_move';
                 break;
             case ModalsCodeFileDialogType.MoveDirectory:
                 this.neededName = false;
                 this.neededDirectory = true;
                 this.textTitle = this.translate('text_move_directory', this.modalModel.objectFullName);
-                this.textSubmit = this.translate('btn_move');
+                this.textSubmit = 'btn_move';
                 break;
             case ModalsCodeFileDialogType.RenameFile:
                 this.neededName = true;
                 this.neededDirectory = false;
                 this.textTitle = this.translate('text_rename_file', this.modalModel.objectFullName);
                 this.textLabel = this.translate('text_file_name');
-                this.textSubmit = this.translate('btn_rename');
+                this.textSubmit = 'btn_rename';
                 break;
             case ModalsCodeFileDialogType.RenameDirectory:
                 this.neededName = true;
                 this.neededDirectory = false;
                 this.textTitle = this.translate('text_rename_directory', this.modalModel.objectFullName);
                 this.textLabel = this.translate('text_directory_name');
-                this.textSubmit = this.translate('btn_rename');
+                this.textSubmit = 'btn_rename';
                 break;
             case ModalsCodeFileDialogType.RemoveFile:
                 this.neededName = false;
                 this.neededDirectory = false;
                 this.textTitle = this.translate('text_remove_file', this.modalModel.objectFullName);
-                this.textSubmit = this.translate('btn_yes');
-                this.textCancel = this.translate('btn_no');
+                this.textSubmit = 'btn_yes';
+                this.textCancel = 'btn_no';
                 break;
             case ModalsCodeFileDialogType.RemoveFileLibrary:
                 this.neededName = false;
                 this.neededDirectory = false;
                 this.textTitle = this.translate('text_remove_library', this.modalModel.objectFullName);
-                this.textSubmit = this.translate('btn_yes');
-                this.textCancel = this.translate('btn_no');
+                this.textSubmit = 'btn_yes';
+                this.textCancel = 'btn_no';
                 break;
             case ModalsCodeFileDialogType.RemoveDirectory:
                 this.neededName = false;
                 this.neededDirectory = false;
                 this.textTitle = this.translate('text_remove_directory', this.modalModel.objectFullName);
-                this.textSubmit = this.translate('btn_yes');
-                this.textCancel = this.translate('btn_no');
+                this.textSubmit = 'btn_yes';
+                this.textCancel = 'btn_no';
                 break;
         }
 

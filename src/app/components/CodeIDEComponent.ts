@@ -203,7 +203,7 @@ export class CodeIDEComponent implements OnChanges {
     }
 
     showModalError(title: string, text: string) {
-        this.modalService.showModal(new ModalsConfirmModel(title, text, true, this.translate('btn_ok'), null));
+        this.modalService.showModal(new ModalsConfirmModel(title, text, true, null, null, [this.translate('btn_ok')]));
     }
 
     langFromFilename(fileObj: CodeFile) {

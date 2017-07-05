@@ -17,8 +17,8 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn red" (click)="onCancelClick()">{{textCancel}}</button>
-        <button type="button" class="btn green" [disabled]="!(((neededDirectory && selectedFto) || (!neededDirectory)) && ((neededName && form.valid) || (!neededName)))" (click)="onSubmitClick()">{{textSubmit}}</button>
+        <button type="button" class="btn red" (click)="onCancelClick()">{{textCancel|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!(((neededDirectory && selectedFto) || (!neededDirectory)) && ((neededName && form.valid) || (!neededName)))" (click)="onSubmitClick()">{{textSubmit|bkTranslate:this}}</button>
 
     </div>
 </div>
