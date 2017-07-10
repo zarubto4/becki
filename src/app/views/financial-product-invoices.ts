@@ -110,6 +110,7 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
         this.backendService.getAllProducts().then(products => {
             this.product = products.find(product => product.id === this.id);
             this.invoices = this.product.invoices;
+            console.log(this.invoices);
             this.unblockUI();
         }).catch(error => {
             this.unblockUI();

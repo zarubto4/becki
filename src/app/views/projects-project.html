@@ -10,24 +10,25 @@
             <div class="becki-caption">
                 <span class="font-blue-dark">
                     <i class="fa fa-fw fa-tachometer"></i>
-                    Project dashboard
+                    {{'title'|bkTranslate:this}}
                 </span>
             </div>
             <div *ngIf="project" class="becki-actions">
-                <button title="Project properties" class="btn btn-icon-only green" [disabled]="!project.edit_permission" (click)="onEditClick()">
+                <button title="{{'label_project_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!project.edit_permission"
+                    (click)="onEditClick()">
                     <i class="fa fa-cog"></i>
                 </button>
-                <button title="Remove project" class="btn btn-icon-only red" [disabled]="!project.delete_permission" (click)="onRemoveClick()">
+                <button title="{{'label_project_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!project.delete_permission"
+                    (click)="onRemoveClick()">
                     <i class="fa fa-trash"></i>
                 </button>
             </div>
 
         </div>
         <div *ngIf="project">
-            Name: <strong>{{project.name}}</strong><br>
-            Description: <strong>{{project.description}}</strong><br>
-            <br>
-            Product: <strong>{{project.product_name}}</strong>
+            {{'label_name'|bkTranslate:this}}: <strong>{{project.name}}</strong><br> {{'label_description'|bkTranslate:this}}:
+            <strong>{{project.description}}</strong><br>
+            <br> {{'label_product'|bkTranslate:this}}: <strong>{{project.product_name}}</strong>
         </div>
         <div class="clearfix"></div>
     </div>
@@ -40,13 +41,13 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-microchip"></i>
-                            Byzance<strong class="font-color-hardware">HARDWARE</strong>
+                            <span [innerHTML]="'label_byzance_hardware'|bkTranslate:this"></span>
                         </span>
                     </div>
                 </div>
                 <div>
-                    Devices count: <strong>{{project.boards.length}}</strong><br>
-                    Status: <strong>{{count("devices_online")}}</strong> <span class="font-green-jungle">online</span> / <strong>{{count("devices_offline")}}</strong> <span class="font-red-flamingo">offline</span>
+                    {{'label_devices_count'|bkTranslate:this}}: <strong>{{project.boards.length}}</strong><br> {{'label_Status'|bkTranslate:this}}:
+                    <strong>{{count("devices_online")}}</strong> <span class="font-green-jungle">{{'label_online'|bkTranslate:this}}</span>/ <strong>{{count("devices_offline")}}</strong> <span class="font-red-flamingo">{{'label_offline'|bkTranslate:this}}</span>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -56,13 +57,13 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-cloud"></i>
-                            Byzance<strong class="font-color-cloud">CLOUD</strong>
+            <span [innerHTML]="'label_byzance_cloud'|bkTranslate:this"></span>
                         </span>
                     </div>
                 </div>
                 <div>
-                    Instances count: <strong>{{project.instancies.length}}</strong><br>
-                    Status: <strong>{{count("instances_online")}}</strong> <span class="font-green-jungle">online</span> / <strong>{{count("instances_offline")}}</strong> <span class="font-red-flamingo">offline</span>
+                    {{'label_instances_count'|bkTranslate:this}}: <strong>{{project.instancies.length}}</strong><br> {{'label_Status'|bkTranslate:this}}:
+                    <strong>{{count("instances_online")}}</strong> <span class="font-green-jungle">{{'label_online'|bkTranslate:this}}</span>/ <strong>{{count("instances_offline")}}</strong> <span class="font-red-flamingo">{{'label_offline'|bkTranslate:this}}</span>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -75,13 +76,12 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-code"></i>
-                            Byzance<strong class="font-color-code">CODE</strong>
+                            <span [innerHTML]="'label_byzance_code'|bkTranslate:this"> </span>
                         </span>
                     </div>
                 </div>
                 <div>
-                    Programs count: <strong>{{project.c_programs.length}}</strong><br>
-                    Libraries count: <strong>{{project.c_private_libraries.length}}</strong>
+                     {{'label_programs_count'|bkTranslate:this}}: <strong>{{project.c_programs.length}}</strong><br> {{'label_libraries_count'|bkTranslate:this}}: <strong>{{project.c_private_libraries.length}}</strong>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -91,13 +91,12 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-sitemap fa-rotate-90"></i>
-                            Byzance<strong class="font-color-blocko">BLOCKO</strong>
+                            <span [innerHTML]="'label_byzance_blocko'|bkTranslate:this"></span>
                         </span>
                     </div>
                 </div>
                 <div>
-                    Programs count: <strong>{{project.b_programs.length}}</strong><br>
-                    Blocks count: <strong>{{count("blocko_blocks")}}</strong> in <strong>{{project.type_of_blocks.length}}</strong> group
+                     {{'label_programs_count'|bkTranslate:this}}: <strong>{{project.b_programs.length}}</strong><br> {{'label_blocks_count'|bkTranslate:this}}: <strong>{{count("blocko_blocks")}}</strong><span [innerHTML]="'label_in_blocks_group'|bkTranslate:this:project.type_of_blocks.length"></span>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -109,13 +108,12 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-desktop"></i>
-                            Byzance<strong class="font-color-grid">GRID</strong>
+                            <span [innerHTML]="'label_byzance_grid'|bkTranslate:this"></span>
                         </span>
                     </div>
                 </div>
                 <div>
-                    Programs count: <strong>{{count("grid_programs")}}</strong> in <strong>{{project.m_projects.length}}</strong> project<br>
-                    Widgets count: <strong>{{count("grid_widgets")}}</strong> in <strong>{{project.type_of_widgets.length}}</strong> group
+                     {{'label_programs_count'|bkTranslate:this}}: <strong>{{count("grid_programs")}}</strong> <span [innerHTML]="'label_in_projects'|bkTranslate:this:project.m_projects.length"></span><br> {{'label_widgets_count'|bkTranslate:this}}: <strong>{{count("grid_widgets")}}</strong> <span [innerHTML]="'label_in_group'|bkTranslate:this:project.type_of_widgets.length"></span>
                 </div>
                 <div class="clearfix"></div>
             </div>

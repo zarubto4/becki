@@ -41,9 +41,9 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let widget of group.grid_widgets">
-                    <td class="no-wrap bold"><a (click)="onWidgetClick(widget)">{{widget.name}}</a></td>
-                    <td>{{widget.description}}</td>
-                    <td class="no-wrap">
+                    <td class="vert-align no-wrap bold"><a (click)="onWidgetClick(widget)">{{widget.name}}</a></td>
+                    <td class="vert-align">{{widget.description}}</td>
+                    <td class="vert-align no-wrap">
 
                         <style type="text/css">
                             table tr button { opacity:0.05;}

@@ -49,12 +49,6 @@ export class StaticTranslation {
                 'title': 'Change Version',
                 'label_program_version': 'Program Version',
 
-            }, 'ModalsBlocksBlockPropertieComponent': {
-                'title_edit': 'BLOCK Properties',
-                'title_add': 'New BLOCK',
-                'label_block_name': 'Name',
-                'label_block_description': 'Description',
-
             }, 'ModalsBlocksBlockPropertiesComponent': {
                 'title_edit': 'BLOCK Properties',
                 'title_add': 'Add BLOCKO',
@@ -66,7 +60,7 @@ export class StaticTranslation {
                 'title_edit': 'BLOCKs Group Properties',
                 'title_add': 'New Group',
                 'label_blocks_group_name': 'Name',
-                'Block group description': 'Description',
+                'label_block_description': 'Description',
 
             }, 'ModalsCodeAddLibraryComponent': {
                 'title': 'New CODE Library',
@@ -205,6 +199,9 @@ export class StaticTranslation {
                 'label_widget_name': 'Name',
                 'label_widget_description': 'Description',
 
+            }, 'RedirectOkComponent': {
+                'title': 'Success!',
+                'label_can_login': 'now you can login!',
             },
 
             'DashboardComponent': {
@@ -212,7 +209,7 @@ export class StaticTranslation {
                 'title_first_steps': 'First steps',
                 'main_title': 'Dashboard',
                 'title': 'Welcome to Byzance <strong style="color: #36c6d3;"> PORTAL </strong> ',
-                'dashboard_info_text': 'We are Byzance – a technological laboratory of advanced automatization developing a toolkit for design, development and managing the 'Internet of Things' (IoT) for industrial uses. We do not create smart washing machines, nor smart city furniture. We develop everything for our customers to let them do it themselves, easily and without any problems.',
+                'dashboard_info_text': 'We are Byzance – a technological laboratory of advanced automatization developing a toolkit for design, development and managing the \'Internet of Things\' (IoT) for industrial uses. We do not create smart washing machines, nor smart city furniture. We develop everything for our customers to let them do it themselves, easily and without any problems.',
                 'step_one': '<strong class="font-grey" style="font-size: 1.5em;">1.</strong> Select best matching <strong>tariff</strong> for you and create your <strong>product</strong> in <a onclick="ngNavigate([\'/financial\'])">Financial section</a>',
                 'step_two': '<strong class="font-grey" style="font-size: 1.5em;">2.</strong> Create your first <strong>project</strong> in <a onclick="ngNavigate([\'/projects\'])">Projects section</a>',
                 'step_three': '<strong class="font-grey" style="font-size: 1.5em;">3.</strong> Create your own Byzance<strong class="font-color-code">CODE</strong>, Byzance<strong class="font-color-grid">GRID</strong> and Byzance<strong class="font-color-blocko">BLOCKO</strong> programs',
@@ -232,7 +229,6 @@ export class StaticTranslation {
                 'label_no_product': 'if you want to add project, you must have any <span class="bold">product</span>. For add product click the link below.',
                 'label_create_product_below': 'You can create it by click on button bellow.',
 
-            }, 'ProjectsProjectWidgetsComponent': {
             }, 'CreateUserComponent': {
                 'title': 'Create an account',
                 'info_text': 'Enter your E-mail address, nickname, full name and password.',
@@ -269,11 +265,36 @@ export class StaticTranslation {
                 'table_unite': 'Unite',
                 'table_total_cost': 'Total cost',
 
+            }, 'ProjectsProjectComponent': {
+                'title': 'PROJECT DASHBOARD',
+                'label_project_properities': 'Project properties',
+                'label_project_remove': 'Remove project',
+                'label_name': 'Project Name',
+                'label_description': 'Project Description',
+                'label_product': 'Financial Product',
+                'label_byzance_hardware': 'Byzance<strong class="font-color-hardware">HARDWARE</strong>',
+                'label_byzance_blocko': 'Byzance<strong class="font-color-blocko">BLOCKO</strong>',
+                'label_devices_count': 'Devices count',
+                'label_Status': 'Status',
+                'label_online': 'online',
+                'label_offline': 'offline',
+                'label_byzance_cloud': 'Byzance<strong class="font-color-cloud">CLOUD</strong>',
+                'label_instances_count': 'Instances count',
+                'label_byzance_code': 'Byzance<strong class="font-color-code">CODE</strong>',
+                'label_programs_count': 'Programs count',
+                'label_libraries_count': 'Libraries count',
+                'label_blocks_count': 'Blocks count',
+                'label_in_blocks_group': ' in<strong> {0} </strong>group(s)',
+                'label_byzance_grid': 'Byzance<strong class="font-color-grid">GRID</strong>',
+                'label_in_projects': 'in <strong> {0} </strong> group(s)',
+                'label_widgets_count': 'Widgets count',
+                'label_in_group': 'in <strong> {0} </strong>group(s)'
+
             }, 'FinancialProductInvoicesComponent': {
                 'title': 'Invoice',
                 'btn_add_credits': 'Add credits',
                 'table_invoice_id': 'Invoice ID',
-                'table_total_cost': 'Total cost',
+                'table_date_of_pay':'Date of payment',
                 'table_date_of_create': 'Date of creation',
                 'table_paid': 'Paid',
                 'table_actions': 'Actions',
@@ -1317,7 +1338,7 @@ export class StaticTranslation {
             },
             'version_status': {
                 'compilation_in_progress': 'Compilation is in progress.',
-                'successfully_compiled_and_restored': 'Successfully compiled'.,
+                'successfully_compiled_and_restored': 'Successfully compiled.',
                 'server_was_offline': 'Server error (offline). The server can fix bugs in a short while. We know about this issue and we\'re working on it. Please be patient.',
                 'successfully_compiled_not_restored': 'Compilation server error. The server can fix bugs in a short while. We know about this issue and we\'re working on it. Please be patient.',
                 'compiled_with_code_errors': 'Code compilation finished with errors.',

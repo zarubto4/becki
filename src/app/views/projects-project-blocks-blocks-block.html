@@ -208,18 +208,18 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let version of blockoBlockVersions">
-                                <td class="no-wrap" [class.bold]="selectedBlockoBlockVersion && (selectedBlockoBlockVersion.id == version.id)">
+                                <td class="vert-align no-wrap" [class.bold]="selectedBlockoBlockVersion && (selectedBlockoBlockVersion.id == version.id)">
                                     <a (click)="onBlockoBlockVersionClick(version)">
                                     {{version.name}}
                                 </a>
                                 </td>
-                                <td>
+                                <td class="vert-align">
                                     {{version.description}}
                                 </td>
-                                <td>
+                                <td class="vert-align">
                                     {{version.author.nick_name}}
                                 </td>
-                                <td>
+                                <td class="vert-align no-wrap text-right">
                                     <style type="text/css">
                                         table tr button {
                                             opacity: 0.05;

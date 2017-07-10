@@ -52,7 +52,6 @@
                 <bk-form-input label="Widget description" [control]="wifgrtForm.controls.description" [waitForTouch]="false"></bk-form-input>-->
 
                 <div class="form-group">
-                    <label>{{'label_widget_code'|bkTranslate:this}}</label>
                     <bk-monaco-editor [code]="widgetCode" (codeChange)="newWidgetCode($event)" [typings]="['ES5', 'ConsoleLib', 'ContextLib', 'UtilsLib', 'WKLib']"></bk-monaco-editor>
                 </div>
 
@@ -205,22 +204,22 @@
                             <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
                             <th class="col col-lg-8">{{'table_description'|bkTranslate:this}}</th>
                             <th class="col col-lg-1">{{'table_author'|bkTranslate:this}}</th>
-                            <th class="col col-lg-1">{{'table_actions'|bkTranslate:this}}</th>
+                            <th class="col col-lg-1 text-right">{{'table_actions'|bkTranslate:this}}</th>
                         </thead>
                         <tbody>
                         <tr *ngFor="let version of widgetVersions">
-                            <td class="no-wrap" [class.bold]="selectedWidgetVersion && (selectedWidgetVersion.id == version.id)">
+                            <td class="vert-align no-wrap" [class.bold]="selectedWidgetVersion && (selectedWidgetVersion.id == version.id)">
                                 <a (click)="onWidgetVersionClick(version)">
                                     {{version.name}}
                                 </a>
                             </td>
-                            <td>
+                            <td  class="vert-align">
                                 {{version.description}}
                             </td>
-                            <td>
+                            <td  class="vert-align">
                                 {{version.author.nick_name}}
                             </td>
-                            <td>
+                            <td class="vert-align no-wrap text-right">
 
                                 <style type="text/css">
                                     table tr button { opacity:0.05;}

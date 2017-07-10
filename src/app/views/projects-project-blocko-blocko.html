@@ -368,27 +368,27 @@
                                 <th class="text-center col col-lg-1">{{'table_in_cloud'|bkTranslate:this}} </th>
                                 <th class="col col-lg-6">{{'table_description'|bkTranslate:this}} </th>
                                 <th class="col col-lg-2">{{'table_author'|bkTranslate:this}} </th>
-                                <th class="text-center col col-lg-1">{{'table_actions'|bkTranslate:this}} </th>
+                                <th class="text-right col col-lg-1">{{'table_actions'|bkTranslate:this}} </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let version of blockoProgramVersions">
-                                <td class="no-wrap" [class.bold]="selectedProgramVersion && selectedProgramVersion.version_object.id == version.version_id">
+                                <td class="vert-align no-wrap" [class.bold]="selectedProgramVersion && selectedProgramVersion.version_object.id == version.version_id">
                                     <a (click)="onProgramVersionClick(version)">
                                     {{version.version_name}}
                                 </a>
-                                </td>
+                                </td >
 
-                                <th *ngIf="versionRunning(version)" class="text-center"><i class="fa fa-cloud fa-fw font-green-jungle"></i></th>
-                                <th *ngIf="!versionRunning(version)" class="text-center"></th>
+                                <th *ngIf="versionRunning(version)" class="vert-align text-center"><i class="fa fa-cloud fa-fw font-green-jungle"></i></th>
+                                <th *ngIf="!versionRunning(version)" class="vert-align text-center"></th>
 
-                                <td>
+                                <td class="vert-align">
                                     {{version.version_description}}
                                 </td>
-                                <td>
+                                <td class="vert-align">
                                     {{version.author.nick_name}}
                                 </td>
-                                <td>
+                                <td class="vert-align no-wrap text-right">
 
                                     <style type="text/css">
                                         table tr button {

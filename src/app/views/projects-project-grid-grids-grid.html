@@ -166,21 +166,21 @@
                             <th class="col col-lg-2">{{'label_version_name'|bkTranslate:this}}</th>
                             <th class="col col-lg-7">{{'label_description'|bkTranslate:this}}</th>
                             <th class="col col-lg-2">{{'label_author'|bkTranslate:this}}</th>
-                            <th class="col col-lg-1">{{'label_actions'|bkTranslate:this}}</th>
+                            <th class="col col-lg-1 text-right">{{'label_actions'|bkTranslate:this}}</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr *ngFor="let version of gridProgramVersions">
-                            <td class="no-wrap" [class.bold]="isSelected(version)">
+                            <td class="vert-align no-wrap" [class.bold]="isSelected(version)">
                                 <a (click)="onProgramVersionClick(version)">{{version.version_name}}</a>
                             </td>
-                            <td>
+                            <td class="vert-align">
                                 {{version.version_description}}
                             </td>
-                            <td>
+                            <td class="vert-align">
                                 {{version.author.nick_name}}
                             </td>
-                            <td>
+                            <td class="vert-align no-wrap text-right">
 
                                 <style type="text/css">
                                     table tr button { opacity:0.05;}

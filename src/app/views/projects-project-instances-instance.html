@@ -487,26 +487,26 @@
 
                                         <tr *ngFor="let update of procedure.updates">
 
-                                            <td class="font-grey-mint"><a (click)="onHardwareClick(update.board_detail.board_id)">{{update.board_detail.name}}</a></td>
-                                            <td class="font-grey-mint"><a (click)="onHardwareClick(update.board_detail.board_id)">{{update.board_detail.board_id}}</a></td>
-                                            <td class="font-grey-mint"><a style="white-space:nowrap" (click)="onBoardTypeClick(update.board_detail.type_of_board_id)">{{update.board_detail.type_of_board_name}}</a></td>
+                                            <td class="vert-align font-grey-mint"><a (click)="onHardwareClick(update.board_detail.board_id)">{{update.board_detail.name}}</a></td>
+                                            <td class="vert-align font-grey-mint"><a (click)="onHardwareClick(update.board_detail.board_id)">{{update.board_detail.board_id}}</a></td>
+                                            <td class="vert-align font-grey-mint"><a style="white-space:nowrap" (click)="onBoardTypeClick(update.board_detail.type_of_board_id)">{{update.board_detail.type_of_board_name}}</a></td>
 
 
 
-                                            <td  *ngIf="update.date_of_finish">{{update.date_of_finish|bkUnixTimeToDate}}</td>
-                                            <td  *ngIf="!update.date_of_finish" class="font-yellow-casablanca" >Not yet (Unknown)</td>
+                                            <td  *ngIf="update.date_of_finish" class="vert-align">{{update.date_of_finish|bkUnixTimeToDate}}</td>
+                                            <td  *ngIf="!update.date_of_finish" class="vert-align font-yellow-casablanca" >Not yet (Unknown)</td>
 
 
-                                            <td class="font-grey-mint">
+                                            <td class="vert-align font-grey-mint">
                                                 <span *ngIf="update.firmware_type == 'FIRMWARE'"   class="bold font-color-grid">Firmware</span>
                                                 <span *ngIf="update.firmware_type == 'BACKUP'"     class="bold font-color-grid-dark">Backup</span>
                                                 <span *ngIf="update.firmware_type == 'BOOTLOADER'" class="bold font-blue">Bootloader</span>
                                             </td>
 
-                                            <td class="font-grey-mint"><a (click)="onCProgramClick(update.c_program_detail.c_program_id)">{{update.c_program_detail.c_program_program_name}}</a></td>
-                                            <td class="font-grey-mint"><a (click)="onCProgramClick(update.c_program_detail.c_program_id)">{{update.c_program_detail.c_program_version_id}}</a></td>
+                                            <td class="vert-align font-grey-mint"><a (click)="onCProgramClick(update.c_program_detail.c_program_id)">{{update.c_program_detail.c_program_program_name}}</a></td>
+                                            <td class="vert-align font-grey-mint"><a (click)="onCProgramClick(update.c_program_detail.c_program_id)">{{update.c_program_detail.c_program_version_id}}</a></td>
 
-                                            <td>
+                                            <td class="vert-align">
                                                 <span *ngIf="update.state == 'complete'"                 class="bold font-green-jungle">{{update.state|bkTranslateTable:this:'update_state'}}</span>
                                                 <span *ngIf="update.state == 'canceled'"                 class="bold font-green-jungle">{{update.state|bkTranslateTable:this:'update_state'}}</span>
 
