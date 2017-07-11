@@ -16,7 +16,7 @@
                         </span>
                     </div>
                     <div class="becki-actions">
-                        <button title="Library properties" class="btn btn-icon-only green" [disabled]="!widget.edit_permission" (click)="onWidgetEditClick()">
+                        <button title="{{'label_widget_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!widget.edit_permission" (click)="onWidgetEditClick()">
                             <i class="fa fa-cog"></i>
                         </button>
                         <button title="Delete Library" class="btn btn-icon-only red" [disabled]="!widget.delete_permission" (click)="onWidgetDeleteClick()">
@@ -26,10 +26,10 @@
                 </div>
                 <div class="clearfix"></div>
                 <div>
-                    <strong class="font-color-grid">GRID</strong><span [innerHTML]="'label_name'|bkTranslate:this"></span>: <strong>{{widget?widget.name:""}}</strong><br>
-                    <strong class="font-color-grid">GRID</strong><span [innerHTML]="'label_description'|bkTranslate:this"></span>: <strong>{{widget?widget.description:"0_o"}}</strong><br>
+                    <strong class="font-color-grid">GRID </strong><span [innerHTML]="'label_name'|bkTranslate:this"></span>: <strong>{{widget?widget.name:""}}</strong><br>
+                    <strong class="font-color-grid">GRID </strong><span [innerHTML]="'label_description'|bkTranslate:this"></span>: <strong>{{widget?widget.description:"0_o"}}</strong><br>
                     <br>
-                    <strong class="font-color-grid">GRID</strong><span [innerHTML]="'label_grid_group_name'|bkTranslate:this"></span>: <strong><a (click)="onWidgetsGroupClick(group.id)">{{group?group.name:""}}</a></strong>
+                    <strong class="font-color-grid">GRID </strong><span [innerHTML]="'label_grid_group_name'|bkTranslate:this"></span>: <strong><a (click)="onWidgetsGroupClick(group.id)">{{group?group.name:""}}</a></strong>
                 </div>
             </div>
         </div>
@@ -39,7 +39,7 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark uppercase">
                             <i class="fa fa-fw fa-file-code-o"></i>
-                            <span>{{'label_code'|bkTranslate:this}}</span>
+                            <span>{{'label_ide'|bkTranslate:this}}</span>
                         </span>
                     </div>
                     <div *ngIf="selectedWidgetVersion" class="becki-caption version">
@@ -193,7 +193,7 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark uppercase">
                             <i class="fa fa-fw fa-code-fork"></i>
-                           {{'btn_save'|bkTranslate:this}}
+                           {{'label_save'|bkTranslate:this}}
                         </span>
                     </div>
                 </div>
@@ -226,10 +226,10 @@
                                     table tr:hover button { opacity:1 }
                                 </style>
 
-                                <button title="Device properties" class="btn btn-icon-only green" [disabled]="!version.edit_permission" (click)="onEditVersionClick(version)">
+                                <button title="{{'label_version_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.edit_permission" (click)="onEditVersionClick(version)">
                                     <i class="fa fa-cog"></i>
                                 </button>
-                                <button title="Remove device" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
+                                <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
                                     <i class="fa fa-trash"></i>
                                 </button>
 

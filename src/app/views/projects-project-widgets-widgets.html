@@ -14,10 +14,10 @@
                 </span>
             </div>
             <div class="becki-actions">
-                <button title="Library properties" class="btn btn-icon-only green" [disabled]="!group.edit_permission" (click)="onGroupEditClick()">
+                <button title="{{'label_group_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!group.edit_permission" (click)="onGroupEditClick()">
                     <i class="fa fa-cog"></i>
                 </button>
-                <button title="Delete Library" class="btn btn-icon-only red" [disabled]="!group.delete_permission" (click)="onGroupDeleteClick()">
+                <button title="{{'label_remove_group'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!group.delete_permission" (click)="onGroupDeleteClick()">
                     <i class="fa fa-trash"></i>
                 </button>
                 <button class="btn blue" [disabled]="!group || !group.update_permission" (click)="onWidgetAddClick(group)">
@@ -26,8 +26,8 @@
             </div>
         </div>
         <div>
-            <strong class="font-color-grid">GRID</strong>{{'widget_group_name'|bkTranslate:this}}: <strong>{{group?group.name:""}}</strong><br>
-            <strong class="font-color-grid">GRID</strong>{{'widget_group_description'|bkTranslate:this}}: <strong>{{group?group.description:""}}</strong>
+            <strong class="font-color-grid">GRID </strong>{{'widget_group_name'|bkTranslate:this}}: <strong>{{group?group.name:""}}</strong><br>
+            <strong class="font-color-grid">GRID </strong>{{'widget_group_description'|bkTranslate:this}}: <strong>{{group?group.description:""}}</strong>
             <br>
         </div>
         <div *ngIf="(group && group.grid_widgets && group.grid_widgets.length)" class="table-scrollable">
@@ -50,10 +50,10 @@
                             table tr:hover button { opacity:1 }
                         </style>
 
-                        <button title="Widget properties" class="btn btn-icon-only green" [disabled]="!widget.edit_permission" (click)="onWidgetEditClick(widget)">
+                        <button title="{{'label_widget_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!widget.edit_permission" (click)="onWidgetEditClick(widget)">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="Remove widget" class="btn btn-icon-only red" [disabled]="!widget.delete_permission" (click)="onWidgetDeleteClick(widget)">
+                        <button title="{{'label_remove_widget'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!widget.delete_permission" (click)="onWidgetDeleteClick(widget)">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>
@@ -61,7 +61,7 @@
                 </tbody>
             </table>
         </div>
-        <h3 *ngIf="!group" class="text-center">Loading...</h3>
+        <h3 *ngIf="!group" class="text-center">{{'loading'|bkTranslate:this}}</h3>
         <div *ngIf="group && !(group.grid_widgets && group.grid_widgets.length)" class="list-no-items">
             <p class="list-no-items__main-label">{{'label_no_item'|bkTranslate:this}}</p>
             <p class="list-no-items__sub-label">{{'label_you_can_create'|bkTranslate:this}}</p>

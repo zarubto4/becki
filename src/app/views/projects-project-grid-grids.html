@@ -48,10 +48,10 @@
                             table tr:hover button { opacity:1 }
                         </style>
 
-                        <button title="{{'label_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!program.edit_permission" (click)="onProgramEditClick(program)">
+                        <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!program.edit_permission" (click)="onProgramEditClick(program)">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="{{'label_program_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!program.delete_permission" (click)="onProgramDeleteClick(program)">
+                        <button title="{{'label_version_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!program.delete_permission" (click)="onProgramDeleteClick(program)">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>

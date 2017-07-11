@@ -127,7 +127,7 @@ export class BugFoundError extends Error {
         return `bug found in client or server: ${adminMessage}`;
     }
 
-   
+
 
     constructor(adminMessage: string, userMessage?: string) {
         super(BugFoundError.composeMessage(adminMessage));

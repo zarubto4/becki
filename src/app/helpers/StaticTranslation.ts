@@ -37,7 +37,6 @@ export class StaticTranslation {
 
             }, 'ModalsBlockoConfigPropertieComponent': {
                 'title': 'Config Editor - block',
-                'label_configuration': 'Configuration',
 
             }, 'ModalsBlockoPropertiesComponent': {
                 'title_edit': 'BLOCKO Program Properties',
@@ -123,7 +122,6 @@ export class StaticTranslation {
                 'label_interface': 'Interface',
                 'label_inputs': 'Inputs',
                 'label_output': 'Output',
-                'label_configuration': 'Configuration',
 
             }, 'ModalsGridProgramPropertiesComponent': {
                 'title_edit': 'GRID Program Properties',
@@ -205,7 +203,6 @@ export class StaticTranslation {
             },
 
             'DashboardComponent': {
-                'btn_save': 'Save',
                 'title_first_steps': 'First steps',
                 'main_title': 'Dashboard',
                 'title': 'Welcome to Byzance <strong style="color: #36c6d3;"> PORTAL </strong> ',
@@ -356,7 +353,6 @@ export class StaticTranslation {
                 'label_free': 'Free',
                 'average_monthly_cost': 'Average monthly cost',
                 'btn_select': 'Select',
-                'btn_confirm': 'Confirm',
                 'btn_included': 'Included',
                 'ribbon_selected': 'Selected',
                 'flash_product_created_prepaid': 'Financial Product was created, you are using your pre-paid credit',
@@ -552,11 +548,8 @@ export class StaticTranslation {
                 'label_instance': 'Instance:',
                 'label_status': 'Status:',
                 'label_version': 'Version:',
-                'label_online': 'Online',
-                'label_offline': 'Offline',
                 'label_none': 'None',
                 'label_program_version': 'Program version',
-                'label_console': 'Console',
 
                 'flash_cant_load_version': 'Unable to load version <b>{0}</b>`, {1}.',
                 'flash_cant_save_version': 'Unable to save version <b> {0} </b>, {1}.',
@@ -745,9 +738,9 @@ export class StaticTranslation {
                 'title': 'Byzance<strong class="font-color-code">CODE</strong> - ALL LIBRARIES',
 
                 'label_program_properities': 'CODE program properties',
-                'label_remove_program': 'Remove',
+                'label_remove_program': 'Remove CODE program',
 
-                'btn_add_library': 'Create <strong>CODE</strong> Library',
+                'btn_add_library': 'New Library',
 
                 'flash_library_add_success': 'Library has been created.',
                 'flash_library_add_fail': 'Unable to create library {0}, {1}.',
@@ -783,8 +776,8 @@ export class StaticTranslation {
                 'table_description': 'Description',
                 'table_actions': 'Actions',
 
-                'label_version_properties':'Version properties',
-                'label_remove_version': 'Remove',
+                'label_version_properties': 'Version properties',
+                'label_remove_version': 'Remove version',
                 'label_save': 'SAVED VERSIONS',
                 'label_name': 'Name',
                 'label_description': 'Description',
@@ -815,9 +808,9 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectWidgetsComponent': {
 
-                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - all widget groups',
+                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - ALL WIDGET GROUPS',
 
-                'btn_add_widget_group': 'New Group',
+                'btn_add_widget_group': 'Create GRID widget group',
 
                 'table_name': 'Name',
                 'table_description': 'Description',
@@ -835,15 +828,20 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectWidgetsWidgetsComponent': {
 
-                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - widget group <strong>{0}</strong>',
+                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - WIDGET GROUP <strong>{0}</strong>',
 
-                'btn_add_widget': 'New Widget',
+                'btn_add_widget': 'Create GRID widget',
                 'widget_group_name': 'Group Name',
                 'widget_group_description': 'Description',
 
                 'table_name': 'Name',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
+
+                'label_group_properities': 'Group properties',
+                'label_remove_group': 'Remove group',
+                'label_widget_properties': 'GRID widget properties',
+                'label_remove_widget': 'Remove GRID widget',
 
                 'flash_grid_group_add_fail': 'Version cannot be created. {0}',
                 'flash_grid_group_edit_success': 'Version has been changed.',
@@ -874,15 +872,20 @@ export class StaticTranslation {
                 'flash_widget_edit_success': 'Widget has been edited.',
                 'flash_widget_edit_fail': 'Unable to edit widget, {0}.',
 
-                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - widget <strong>{0}</strong>',
+                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - WIDGET <strong>{0}</strong>',
 
+                'label_widget_properities': 'GRID widget properties',
+                'label_remove_widget': 'GRID widget properties',
                 'label_widget_code': 'Widget Code',
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_grid_group_name': 'Widget Group',
                 'label_version': 'Version',
-                'label_code': 'Code',
+                'label_ide': 'IDE',
                 'label_build_errors': 'Build Errors',
+                'label_save':'SAVED VERSIONS',
+                'label_version_properities':'Version properties',
+                'label_remove_version':'Remove version',
 
                 'table_name': 'Name',
                 'table_description': 'Description',
@@ -928,7 +931,6 @@ export class StaticTranslation {
                 'label_datatype_integer': 'integer <strong>Arg #{0}</strong>',
                 'label_datatype_string': 'string <strong>Arg #{0}</strong>',
                 'label_block': 'block',
-                'label_console': 'Console',
                 'label_saved_versions': 'Saved versions',
                 'label_device_properties': 'Device properties',
                 'label_remove_device': 'Remove device',
@@ -945,8 +947,6 @@ export class StaticTranslation {
 
                 'bool_true': 'true',
                 'bool_false': 'false',
-                'btn_test': 'Test',
-
 
                 'flash_cant_save_version': 'Unable to save version <b>{0}</b >, {1}.',
                 'flash_version_save': 'Version <b> {0} </b> saved successfully.',
@@ -1014,9 +1014,9 @@ export class StaticTranslation {
                 'title': 'Byzance<strong class="font-color-code">CODE</strong> - PROGRAM <strong>{0}</strong>',
 
                 'label_program_properities': 'CODE program properties',
-                'label_remove_program': 'Remove',
+                'label_remove_program': 'Remove CODE program',
                 'label_version_properities': 'Version properties',
-                'label_remove_version': 'Remove',
+                'label_remove_version': 'Remove CODE version',
                 'label_code_name': '<strong class="font-color-code">CODE</strong> Program Name: <strong>{0}</strong>',
                 'label_code_description': '<strong class="font-color-code">CODE</strong> Program Description: <strong>{0}</strong>',
                 'label_hardware_type': '<strong class="font-color-hardware">Hardware</strong> Device Type',
@@ -1067,7 +1067,7 @@ export class StaticTranslation {
                 'title': 'Byzance<strong class="font-color-code">CODE</strong> - ALL PROGRAMS',
                 'btn_add_code_program': 'New Program',
                 'label_code_program_properties': 'CODE program properties',
-                'label_remove_code_program': 'Remove',
+                'label_remove_code_program': 'Remove CODE program',
 
                 'label_no_code': 'No CODE program available.',
                 'label_create_code_text': 'Click on the button bellow to create a program.',
@@ -1086,23 +1086,24 @@ export class StaticTranslation {
                 'flash_cant_remove_code': 'Unable to remove program, {0}.',
 
             }, 'ProjectsProjectGridGridsGridComponent': {
-                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - program <strong>{0}</strong>',
+                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - PROGRAM <strong>{0}</strong>',
 
-                'label_program_properties': 'Program properties',
-                'label_program_delete': 'Remove',
+                'label_program_properties': 'GRID Program properties',
+                'label_program_delete': 'Remove GRID program',
+                'label_version_properties': 'Version properties',
+                'label_version_remove': 'Remove version',
                 'label_version': 'Version',
                 'label_grid_size_class': 'GRID size class',
-                'label_console': 'Console',
                 'label_saved_versions': 'Saved versions',
                 'label_grid_program_name': '<strong class="font-color-grid" > GRID </strong> Program Name: <strong>{0}</strong>',
-                'label_grid_description': '<strong class="font-color-grid" > GRID </strong> Description: <strong>{0}</strong>',
-                'label_grid_grid_project': '<strong class="font-color-grid" > GRID </strong> Project',
+                'label_grid_description': '<strong class="font-color-grid" > GRID </strong> Program Description: <strong>{0}</strong>',
+                'label_grid_grid_project': '<strong class="font-color-grid" > GRID </strong> Program Group Name',
                 'label_grid': 'GRID',
                 'label_widgets': 'Widgets',
                 'label_no_widgets': 'No widgets in this group',
                 'label_device_properties': 'Device properties',
                 'label_device_remove': 'Remove Device',
-                'label_version_name': 'Version Name',
+                'label_version_name': 'Name',
                 'label_description': 'Description',
                 'label_author': 'Author',
                 'label_actions': 'Actions',
@@ -1131,15 +1132,15 @@ export class StaticTranslation {
                 'flash_cant_remove_version': 'Unable to remove version, {0}.',
 
             }, 'ProjectsProjectGridGridsComponent': {
-                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - project <strong>{0}</strong>',
-                'label_device_properties': 'Device properties',
-                'label_device_remove': 'Remove device',
-                'label_program_properties': 'Program properties',
-                'label_program_remove': 'Remove program',
+                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - PROGRAM GROUP <strong>{0}</strong>',
+                'label_device_properties': 'GRID group properties',
+                'label_device_remove': 'Remove GRID group',
+                'label_program_properties': 'GRID program properties',
+                'label_program_remove': 'Remove GRID program',
                 'label_no_grid': 'No GRID program available.',
                 'label_create_grid_text': 'Click on the button bellow to create a program.',
 
-                'btn_add_grid_program': 'New Program',
+                'btn_add_grid_program': 'Create GRID Program',
                 'label_grid_project_name': '<strong class="font-color-grid">GRID</strong> Project Name: <strong>{0}</strong>',
                 'label_grid_project_description': '<strong class="font-color-grid">GRID</strong> Description: <strong>{0}</strong>',
 
@@ -1159,8 +1160,8 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectGridComponent': {
 
-                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - all projects',
-                'btn_add_grid_project': 'New Project',
+                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - ALL PROGRAM GROUPS',
+                'btn_add_grid_project': 'Create GRID program group',
 
                 'table_name': 'Name',
                 'table_description': 'Description',
@@ -1275,14 +1276,10 @@ export class StaticTranslation {
                 'btn_add_library': 'New Library',
                 'btn_change_library_version': 'Change Library Version',
                 'btn_move': 'Move',
-                'btn_rename': 'Rename',
-                'btn_remove': 'Remove',
 
                 'label_open_file_browser': 'Open file in file browser',
             },
 
-            'label_online': 'Online',
-            'label_offline': 'Offline',
             'label_project_owner': 'Project owner',
             'label_project_admin': 'Project admin',
             'label_project_member': 'Project member',
