@@ -51,6 +51,9 @@ var CONFIG = {
         "put:/websocket/terminal/identificator": "",
         "put:/websocket/terminal/identificator/{terminal_id}": "",
         "post:/secure/rest_api_token_validation": "",
+        "get:/cloud/homer_server/file/b_program/{b_program_version_id}": "",
+        "get:/cloud/homer_server/file/bootloader/{bootloader_version_id}": "",
+        "get:/cloud/homer_server/file/c_program/{c_program_version_id}": "",
 
         // normal replaces
         "post:/login": "__login",

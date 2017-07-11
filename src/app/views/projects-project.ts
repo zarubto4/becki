@@ -97,28 +97,28 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
         let count = 0;
         if (status === 'devices_online' && this.project.boards) {
             this.project.boards.forEach((b) => {
-                if (b.board_online_status) {
+                if (b.board_online_status === 'online') {
                     count++;
                 }
             });
         }
         if (status === 'devices_offline' && this.project.boards) {
             this.project.boards.forEach((b) => {
-                if (!b.board_online_status) {
+                if (b.board_online_status !== 'online') {
                     count++;
                 }
             });
         }
         if (status === 'instances_online' && this.project.boards) {
             this.project.instancies.forEach((i) => {
-                if (i.instance_is_online) {
+                if (i.instance_is_online === 'online') {
                     count++;
                 }
             });
         }
         if (status === 'instances_offline' && this.project.boards) {
             this.project.instancies.forEach((i) => {
-                if (!i.instance_is_online) {
+                if (i.instance_is_online !== 'online') {
                     count++;
                 }
             });
