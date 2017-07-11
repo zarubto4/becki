@@ -670,7 +670,10 @@ export class StaticTranslation {
                 'label_alerts': 'Alerts',
                 'label_main_server': 'Main Server',
                 'label_instance': 'Instance ID',
-                'label_not_in_instance': 'Device is not assigned to an instance.',
+                'label_main_server_not_found': 'Device not connected to Server yet',
+                'label_not_in_instance': 'Device is not connected to an instance',
+                'label_online': 'online',
+                'label_offline': 'offline',
                 'label_none': 'none',
                 'label_cant_load_device': 'Device cannot be loaded. {0}',
 
@@ -1424,6 +1427,13 @@ export class StaticTranslation {
                 'NO_COLLISION': 'No collisions found.',
                 'ALREADY_IN_INSTANCE': 'Warning! Device is already running in this instance.',
                 'PLANNED_UPDATE': 'Update is scheduled in the future.',
+            },
+            'online_status': {
+                'unknown_lost_connection_with_server': 'unknown',
+                'online': 'unknown',
+                'offline': 'We are not found any collisions',
+                'synchronization_in_progress': 'Attention! Hardware is already running in the Instance',
+                'not_yet_first_connected': 'There is scheduled update in future',
             },
             'device_alerts': {
                 'BOOTLOADER_REQUIRED': 'Bootloader update is required.',

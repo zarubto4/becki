@@ -198,7 +198,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
             this.fmWarning('Must create some version first.');  // TODO domimplementovat
             return;
         }*/
-        if (this.instance.instance_online) {
+        if (this.instance.instance_status) {
             let mConfirm = new ModalsConfirmModel(this.translate('label_modal_change_instance_version'), this.translate('label_modal_change_running_instance_version'));
             this.modalService.showModal(mConfirm)
                 .then((success) => {
