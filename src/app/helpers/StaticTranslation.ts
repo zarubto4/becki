@@ -67,7 +67,7 @@ export class StaticTranslation {
                 'body_text': 'Displaying <b>{}0</b> out of <b>{1}</b> Libraries',
                 'label_load_more': 'Load More Libraries',
                 'label_no_more': 'All libraries displayed.',
-                'btn_select_library': '',
+                'btn_select_library': 'Add',
 
             }, 'ModalsCodeFileDialogComponent': {
                 'label_into_directory': 'Add to Directory',
@@ -162,7 +162,7 @@ export class StaticTranslation {
 
             }, 'ModalsMembersAddComponent': {
                 'title': 'Add Members',
-                'label_member_email': 'New member E-Mail',
+                'label_member_email': 'New member E-Mail ',
                 'btn_add_more': 'Add another member',
 
             }, 'ModalsProjectPropertiesComponent': {
@@ -294,7 +294,7 @@ export class StaticTranslation {
                 'title': 'Invoice',
                 'btn_add_credits': 'Add credits',
                 'table_invoice_id': 'Invoice ID',
-                'table_date_of_pay':'Date of payment',
+                'table_date_of_pay': 'Date of payment',
                 'table_date_of_create': 'Date of creation',
                 'table_paid': 'Paid',
                 'table_actions': 'Actions',
@@ -580,7 +580,7 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectHardwareComponent': {
 
-                'title': 'Byzance<strong class="font-color-hardware">HARDWARE</strong> - all devices',
+                'title': 'all devices',
                 'label_name': 'Name',
                 'label_id': 'ID',
                 'label_description': 'Description',
@@ -602,7 +602,9 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectHardwareHardwareComponent': {
 
-                'title': 'Byzance<strong class="font-color-hardware">HARDWARE</strong> - device <strong>{0}</strong>',
+                'title': 'Byzance<strong class="font-color-hardware">HARDWARE</strong> - DEVICE <strong>{0}</strong>',
+
+                'label_byzance_code': 'Byzance<strong class="font-color-code">CODE </strong>',
 
                 'tab_overview': 'Overview',
                 'tab_update': 'Update progress',
@@ -623,7 +625,7 @@ export class StaticTranslation {
                 'label_update_to': 'Update to',
                 'label_alerts': 'Alerts',
                 'label_main_server': 'Main Server',
-                'label_instance': 'Instance',
+                'label_instance': 'Instance ID',
                 'label_not_in_instance': 'Device is not assigned to an instance.',
                 'label_online': 'online',
                 'label_offline': 'offline',
@@ -740,9 +742,12 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectLibrariesComponent': {
 
-                'title': 'Byzance<strong class="font-color-code">CODE</strong> - all libraries',
+                'title': 'Byzance<strong class="font-color-code">CODE</strong> - ALL LIBRARIES',
 
-                'btn_add_library': 'Add <strong class="font-color-grid">CODE</strong> Library',
+                'label_program_properities': 'CODE program properties',
+                'label_remove_program': 'Remove',
+
+                'btn_add_library': 'Create <strong>CODE</strong> Library',
 
                 'flash_library_add_success': 'Library has been created.',
                 'flash_library_add_fail': 'Unable to create library {0}, {1}.',
@@ -757,7 +762,10 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectLibrariesLibraryComponent': {
 
-                'title': 'Byzance<strong class="font-color-code">CODE</strong> - library <strong>{0}</strong>',
+                'title': 'Byzance<strong class="font-color-code">CODE</strong> - LIBRARY <strong>{0}</strong>',
+
+                'label_library_properties': 'CODE library properties',
+                'label_delete_library': 'Delete',
 
                 'flash_library_edit_success': 'Library has been updated.',
                 'flash_library_edit_fail': 'Unable to update library, {0}.',
@@ -775,6 +783,9 @@ export class StaticTranslation {
                 'table_description': 'Description',
                 'table_actions': 'Actions',
 
+                'label_version_properties':'Version properties',
+                'label_remove_version': 'Remove',
+                'label_save': 'SAVED VERSIONS',
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_version': 'Version',
@@ -793,6 +804,8 @@ export class StaticTranslation {
 
                 'modal_label_invitation': 'Invitation',
                 'modal_label_invitation_send': 'Invitation E-mail was sent to {0}.',
+                'modal_title_remove_member': 'Remove member',
+                'modal_text_remove_member': 'Do you really want to remove this member?',
 
                 'label_cannot_remove_yourself': 'You can`t remove yourself from your project.',
                 'label_cannot_add_member': 'Unable to add collaborators. {0}',
@@ -998,19 +1011,21 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectCodeCodeComponent': {
 
-                'title': 'Byzance<strong class="font-color-code">CODE</strong> - program <strong>{0}</strong>',
+                'title': 'Byzance<strong class="font-color-code">CODE</strong> - PROGRAM <strong>{0}</strong>',
 
-                'label_device_properities': 'Device properties',
-                'label_remove_device': 'Remove device',
-                'label_code_name': '<strong class="font-color-code">CODE</strong> Name: <strong>{0}</strong>',
-                'label_code_description': '<strong class="font-color-code">CODE</strong> Description: <strong>{0}</strong>',
-                'label_hardware_type': '<strong class="font-color-hardware">Hardware</strong> Type',
+                'label_program_properities': 'CODE program properties',
+                'label_remove_program': 'Remove',
+                'label_version_properities': 'Version properties',
+                'label_remove_version': 'Remove',
+                'label_code_name': '<strong class="font-color-code">CODE</strong> Program Name: <strong>{0}</strong>',
+                'label_code_description': '<strong class="font-color-code">CODE</strong> Program Description: <strong>{0}</strong>',
+                'label_hardware_type': '<strong class="font-color-hardware">Hardware</strong> Device Type',
                 'label_ide': 'IDE',
                 'label_version': 'Version',
                 'label_build_error': 'Build Errors',
                 'label_file_and_line': 'File: <b>{0}</b> Line: <b>{1}</b>',
-                'label_blocko_interface_preview': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> Interface Preview',
-                'label_saved_versions': 'Saved versions',
+                'label_blocko_interface_preview': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> INTERFACE PREVIEW',
+                'label_saved_versions': 'SAVED VERSIONS',
 
                 'table_name': 'Name',
                 'table_description': 'Description',
@@ -1019,7 +1034,7 @@ export class StaticTranslation {
                 'table_actions': 'Actions',
 
                 'btn_build': 'Build',
-                'btn_upload_to_hardware': 'Deploy to Hardware',
+                'btn_upload_to_hardware': 'Deploy to HARDWARE',
 
                 'codefile_library_version_dont_have_readme': '{0} ({1}), # Library {2}\n\nVersion: {3}\n\nLooks like this library doesn\'t have README.md file.',
                 'codefile_library_version_short_dont_have_readme': '# Library {0}\n\nVersion: {1}\n\nLooks like this library doesn\'t have README.md file.',
@@ -1049,7 +1064,7 @@ export class StaticTranslation {
                 'flash_cant_load_version': 'Unable to load version <b>{0}</b>, {1}.',
 
             }, 'ProjectsProjectCodeComponent': {
-                'title': 'Byzance<strong class="font-color-code">CODE</strong> - all programs',
+                'title': 'Byzance<strong class="font-color-code">CODE</strong> - ALL PROGRAMS',
                 'btn_add_code_program': 'New Program',
                 'label_code_program_properties': 'CODE program properties',
                 'label_remove_code_program': 'Remove',

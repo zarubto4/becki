@@ -155,7 +155,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
     }
 
     onRemoveVersionClick(version: ILibraryVersionShortDetail): void {
-        this.modalService.showModal(new ModalsRemovalModel(version.version_id)).then((success) => {
+        this.modalService.showModal(new ModalsRemovalModel(version.version_name)).then((success) => {
             if (success) {
                 this.blockUI();
                 this.backendService.deleteLibraryVersion(version.version_id)

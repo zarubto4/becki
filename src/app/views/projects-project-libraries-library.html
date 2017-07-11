@@ -16,17 +16,17 @@
                         </span>
                     </div>
                     <div class="becki-actions">
-                        <button title="Library properties" class="btn btn-icon-only green" [disabled]="!library.edit_permission" (click)="onEditClick()">
+                        <button title="{{'label_library_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!library.edit_permission" (click)="onEditClick()">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="Delete Library" class="btn btn-icon-only red" [disabled]="!library.delete_permission" (click)="onRemoveClick()">
+                        <button title="{{'label_delete_library'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!library.delete_permission" (click)="onRemoveClick()">
                             <i class="fa fa-trash"></i>
                         </button>
                     </div>
                 </div>
                 <div>
-                    <strong class="font-color-code">CODE</strong>{{'label_name'|bkTranslate:this}}:<strong>{{library?library.name:""}}</strong><br>
-                    <strong class="font-color-code">CODE</strong>{{'label_description'|bkTranslate:this}}: <strong>{{library?library.description:""}}</strong>
+                    <strong class="font-color-code">CODE </strong>{{'label_name'|bkTranslate:this}}:<strong>{{library?library.name:""}}</strong><br>
+                    <strong class="font-color-code">CODE </strong>{{'label_description'|bkTranslate:this}}: <strong>{{library?library.description:""}}</strong>
                 </div>
             </div>
         </div>
@@ -60,7 +60,7 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-code-fork"></i>
-                            {{'btn_save'|bkTranslate:this}}
+                            {{'label_save'|bkTranslate:this}}
                         </span>
                     </div>
                 </div>
@@ -90,10 +90,10 @@
                                     table tr:hover button { opacity:1 }
                                 </style>
 
-                                <button title="Device properties" class="btn btn-icon-only green" [disabled]="!version.update_permission" (click)="onEditVersionClick(version)">
+                                <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission" (click)="onEditVersionClick(version)">
                                     <i class="fa fa-cog"></i>
                                 </button>
-                                <button title="Remove device" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
+                                <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </td>

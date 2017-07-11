@@ -17,11 +17,11 @@
                     </div>
                     <div *ngIf="codeProgram" class="becki-actions">
 
-                        <button title="{{'label_device_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!codeProgram.edit_permission"
+                        <button title="{{'label_program_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!codeProgram.edit_permission"
                             (click)="onEditClick()">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!codeProgram.delete_permission"
+                        <button title="{{'label_remove_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!codeProgram.delete_permission"
                             (click)="onRemoveClick()">
                             <i class="fa fa-trash"></i>
                         </button>
@@ -175,7 +175,7 @@
                                 </td>
                                 <!-- UPLOAD -->
                                 <td class="vert-align">
-                                    <button title="{{'label_device_properities'|bkTranslate:this}}" class="btn blue" (click)="onUploadClick(version)" *ngIf="device && device.connectible_to_internet && version.status=='successfully_compiled_and_restored'">
+                                    <button class="btn blue" (click)="onUploadClick(version)" *ngIf="device && device.connectible_to_internet && version.status=='successfully_compiled_and_restored'">
                                     {{'btn_upload_to_hardware'|bkTranslate:this}}
                                 </button>
                                 </td>
@@ -191,11 +191,11 @@
                                         }
                                     </style>
 
-                                    <button title="{{'label_device_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission" (click)="onEditVersionClick(version)">
+                                    <button title="{{'label_version_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission" (click)="onEditVersionClick(version)">
                                     <i class="fa fa-cog"></i>
                                 </button>
 
-                                    <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
+                                    <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                                 </td>

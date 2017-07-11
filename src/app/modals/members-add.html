@@ -6,7 +6,7 @@
     <div class="modal-body">
         <form [formGroup]="form">
             <div *ngFor="let name of formNames; let i = index">
-                <bk-form-input [control]="form.controls[name]" [label]="'label_member_email'|bkTranslate:this + (i+1)" type="email"></bk-form-input>
+                <bk-form-input [control]="form.controls[name]" [label]="('label_member_email'|bkTranslate:this) + (i+1)" type="email"></bk-form-input>
             </div>
             <button type="button" class="btn grey full-width" (click)="onAddClick()">{{'btn_add_more'|bkTranslate:this}}</button>
         </form>

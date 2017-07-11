@@ -15,7 +15,7 @@
             </div>
             <div class="becki-actions">
                 <button class="btn blue" (click)="onAddClick()">
-                    <i class="fa fa-plus-circle"></i>{{'btn_add_code_program'|bkTranslate:this}}
+                    <i class="fa fa-plus-circle"></i> {{'btn_add_code_program'|bkTranslate:this}}
                 </button>
             </div>
         </div>
@@ -24,16 +24,16 @@
                 <thead>
                 <tr>
                     <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
-                    <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
                     <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
+                    <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
                     <th class="text-center text-right">{{'table_actions'|bkTranslate:this}}</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let code of codePrograms">
                     <td class="vert-align no-wrap bold"><a (click)="onCodeClick(code)">{{code.name}}</a></td>
-                    <td class="vert-align no-wrap"><a (click)="onBoardTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
                     <td class="vert-align">{{code.description}}</td>
+                    <td class="vert-align no-wrap"><a (click)="onBoardTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
                     <td class="vert-align no-wrap text-right">
 
                         <style type="text/css">

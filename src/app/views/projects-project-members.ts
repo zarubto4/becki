@@ -79,15 +79,26 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
         if ((this.backendService.personInfoSnapshot.mail === member.user_email) || (this.backendService.personInfoSnapshot.id === member.id)) {
             this.fmError(this.translate('label_cannot_remove_yourself'));
         }
-        this.blockUI();
-        this.backendService.unshareProject(this.id, { persons_mail: [member.user_email] })
-            .then(() => {
-                this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
-            })
-            .catch((err) => {
-                this.unblockUI();
-                this.fmError(this.translate('label_cannot_delete_person', err));
-            });
+
+
+
+
+        let con = new ModalsConfirmModel(this.translate('modal_title_remove_member'), this.translate('modal_text_remove_member'), false, this.translate('btn_yes'), this.translate('btn_no'), null);
+        this.modalService.showModal(con).then((success) => {
+            if (!success) {
+                return;
+            } else {
+                this.blockUI();
+                this.backendService.unshareProject(this.id, { persons_mail: [member.user_email] })
+                    .then(() => {
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                    })
+                    .catch((err) => {
+                        this.unblockUI();
+                        this.fmError(this.translate('label_cannot_delete_person', err));
+                    });
+            }
+        });
     }
 
     onMemberSnedAgainClick(member: IProjectParticipant) {
