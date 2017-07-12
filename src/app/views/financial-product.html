@@ -18,13 +18,13 @@
                             </div>
                             <div class="becki-actions">
 
-                                <button title="Financial product properties" class="btn btn-icon-only blue" (click)="onEditClick()">
+                                <button title="{{'label_financial_product_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onEditClick()">
                                     <i class="fa fa-cog"></i>
                                 </button>
-                                <button *ngIf="product.active" title="Deactivate product" class="btn btn-icon-only red" (click)="deactivateProduct()">
+                                <button *ngIf="product.active" title="{{'label_deactivate_product'|bkTraslate:this}}" class="btn btn-icon-only red" (click)="deactivateProduct()">
                                     <i class="fa fa-stop-circle"></i>
                                 </button>
-                                <button *ngIf="!product.active" title="Activate product" class="btn btn-icon-only green" (click)="activateProduct()">
+                                <button *ngIf="!product.active" title="{{'label_activate_product'|bkTranslate:this}}" class="btn btn-icon-only green" (click)="activateProduct()">
                                     <i class="fa fa-cloud-upload"></i>
                                 </button>
 

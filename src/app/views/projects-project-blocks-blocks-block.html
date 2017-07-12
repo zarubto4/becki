@@ -28,7 +28,9 @@
                 </div>
                 <div class="clearfix"></div>
                 <div>
-                    Name: <strong>{{blockoBlock?blockoBlock.name:""}}</strong><br> Description: <strong>{{blockoBlock?blockoBlock.description:""}}</strong><br>                    Group: <strong><a (click)="onBlocksGroupClick(group.id)">{{group?group.name:""}}</a></strong>
+                     {{'label_name'|bkTranslate:this}}: <strong>{{blockoBlock?blockoBlock.name:""}}</strong>
+                    <br>  {{'label_description'|bkTranslate:this}}: <strong>{{blockoBlock?blockoBlock.description:""}}</strong>
+                    <br>  {{'label_group'|bkTranslate:this}}: <strong><a (click)="onBlocksGroupClick(group.id)">{{group?group.name:""}}</a></strong>
                 </div>
             </div>
         </div>
@@ -230,11 +232,13 @@
                                         }
                                     </style>
 
-                                    <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.edit_permission" (click)="onEditVersionClick(version)">
+                                    <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.edit_permission"
+                                        (click)="onEditVersionClick(version)">
                                     <i class="fa fa-cog"></i>
                                 </button>
 
-                                    <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
+                                    <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission"
+                                        (click)="onRemoveVersionClick(version)">
                                     <i class="fa fa-trash"></i>
                                 </button>
 

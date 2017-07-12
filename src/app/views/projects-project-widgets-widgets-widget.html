@@ -26,10 +26,10 @@
                 </div>
                 <div class="clearfix"></div>
                 <div>
-                    <strong class="font-color-grid">GRID </strong><span [innerHTML]="'label_name'|bkTranslate:this"></span>: <strong>{{widget?widget.name:""}}</strong><br>
-                    <strong class="font-color-grid">GRID </strong><span [innerHTML]="'label_description'|bkTranslate:this"></span>: <strong>{{widget?widget.description:"0_o"}}</strong><br>
+                    <strong class="font-color-grid">{{'label_grid'|bkTranslate:this}} </strong><span [innerHTML]="'label_name'|bkTranslate:this"></span>: <strong>{{widget?widget.name:""}}</strong><br>
+                    <strong class="font-color-grid">{{'label_grid'|bkTranslate:this}} </strong><span [innerHTML]="'label_description'|bkTranslate:this"></span>: <strong>{{widget?widget.description:"0_o"}}</strong><br>
                     <br>
-                    <strong class="font-color-grid">GRID </strong><span [innerHTML]="'label_grid_group_name'|bkTranslate:this"></span>: <strong><a (click)="onWidgetsGroupClick(group.id)">{{group?group.name:""}}</a></strong>
+                    <strong class="font-color-grid">{{'label_grid'|bkTranslate:this}} </strong><span [innerHTML]="'label_grid_group_name'|bkTranslate:this"></span>: <strong><a (click)="onWidgetsGroupClick(group.id)">{{group?group.name:""}}</a></strong>
                 </div>
             </div>
         </div>

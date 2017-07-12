@@ -58,12 +58,12 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
                     project_description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The project has been updated.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_update')));
                         this.refresh();
                         this.unblockUI();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The project cannot be updated.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_project', reason)));
                         this.refresh();
                         this.unblockUI();
                     });
@@ -77,11 +77,11 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
                 this.blockUI();
                 this.backendService.deleteProject(this.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The project has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_remove')));
                         this.router.navigate(['/projects']);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The project cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_project', reason)));
                         this.refresh();
                         this.unblockUI();
                     });

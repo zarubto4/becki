@@ -167,7 +167,7 @@ export class StaticTranslation {
                 'title_edit': 'Project Properties',
                 'title_add': 'New Project',
                 'label_project_name': 'Name',
-                'label_project_description ': 'Description',
+                'label_project_description': 'Description',
                 'label_product_type': 'Select an existing Financial Product',
 
             }, 'ModalsRemovalComponent': {
@@ -215,7 +215,7 @@ export class StaticTranslation {
             }, 'ProjectsComponent': {
                 'main_title': 'Projects',
                 'title': 'Projects',
-                'btn_add_project': 'Add project',
+                'btn_add_project': 'New project',
                 'table_name': 'Name',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
@@ -223,8 +223,17 @@ export class StaticTranslation {
                 'label_project_properties': 'Project properties',
                 'label_Remove_project': 'Remove project',
                 'label_no_projects': 'There is not any projects',
-                'label_no_product': 'if you want to add project, you must have any <span class="bold">product</span>. For add product click the link below.',
+                'label_no_product': 'if you want to create a project, you must have any <span class="bold">product</span>. For add product click the link below.',
                 'label_create_product_below': 'You can create it by click on button bellow.',
+
+
+                'flash_project_create': 'The project {0} has been created.',
+                'flash_cant_create_project': 'The project {0} cannot be created. {1}',
+                'flash_cant_add_project': 'Cannot add project now.',
+                'flash_project_update': 'The project has been updated.',
+                'flash_cant_update_project': 'The project cannot be updated. {0}',
+                'flash_project_remove': 'The project has been removed.',
+                'flash_cant_remove_project': 'The project cannot be removed. {0}',
 
             }, 'CreateUserComponent': {
                 'title': 'Create an account',
@@ -273,8 +282,6 @@ export class StaticTranslation {
                 'label_byzance_blocko': 'Byzance<strong class="font-color-blocko">BLOCKO</strong>',
                 'label_devices_count': 'Devices count',
                 'label_Status': 'Status',
-                'label_online': 'online',
-                'label_offline': 'offline',
                 'label_byzance_cloud': 'Byzance<strong class="font-color-cloud">CLOUD</strong>',
                 'label_instances_count': 'Instances count',
                 'label_byzance_code': 'Byzance<strong class="font-color-code">CODE</strong>',
@@ -285,7 +292,12 @@ export class StaticTranslation {
                 'label_byzance_grid': 'Byzance<strong class="font-color-grid">GRID</strong>',
                 'label_in_projects': 'in <strong> {0} </strong> group(s)',
                 'label_widgets_count': 'Widgets count',
-                'label_in_group': 'in <strong> {0} </strong>group(s)'
+                'label_in_group': 'in <strong> {0} </strong>group(s)',
+
+                'flash_project_update': 'The project has been updated.',
+                'flash_cant_update_project': 'The project cannot be updated. {0}',
+                'flash_project_remove': 'The project has been removed.',
+                'flash_cant_remove_project': 'The project cannot be removed. {0}',
 
             }, 'FinancialProductInvoicesComponent': {
                 'title': 'Invoice',
@@ -334,6 +346,8 @@ export class StaticTranslation {
                 'label_company_web': 'Company website',
                 'label_company_email': 'Company authorised contact E-mail',
                 'label_company_phone': 'Company authorised contact Phone number',
+                'label_want_tariff_not_found': 'Wanted tariff not found.',
+                'label_cant_load_tarrif': 'Cannot load tariffs. {0}',
 
                 'step_four_title': 'Summary',
                 'label_registration_info': 'Registration information',
@@ -355,6 +369,7 @@ export class StaticTranslation {
                 'btn_select': 'Select',
                 'btn_included': 'Included',
                 'ribbon_selected': 'Selected',
+                'flash_cant_buy_product': 'The product cannot be bought.{0}',
                 'flash_product_created_prepaid': 'Financial Product was created, you are using your pre-paid credit',
                 'flash_product_created': 'Financial Product was created, now you can create a new project',
 
@@ -376,9 +391,23 @@ export class StaticTranslation {
                 'label_contacts_details': 'Contacts details',
 
             }, 'FinancialComponent': {
-                'main_title': 'Hardware types',
+                'main_title': 'Financial',
                 'title': 'Products',
                 'btn_add_product': 'Add product',
+                'label_product_list': 'Products list',
+                'label_title_bank_transfer': 'Bank transfer',
+                'label_title_credits': 'Credits',
+                'label_title_credit_card': 'Credit Card',
+                'label_title_free': 'Free',
+                'label_active': 'active',
+                'label_hibernation': 'hibernation',
+                'label_modal_body_text': 'By deactivating, you disable instances in the cloud and disconnect hardware from our servers. Remote administration will stop working. But All data and settings will be saved and you can reactivate the product at any time.',
+
+                'label_financial_product_properties': 'Financial product properties',
+                'label_deactivate_product': 'Deactivate product',
+                'label_activate_product': 'Activate product',
+
+
                 'table_name': 'Name',
                 'table_type': 'Type',
                 'table_subscription_id': 'Subscription id',
@@ -388,6 +417,10 @@ export class StaticTranslation {
                 'label_free': 'Free',
                 'label_not_set_yet': 'Not set yet',
                 'label_no_product': 'No product',
+                'flash_cant_deactivate_product': 'The product cannot be deactivated. {0}',
+                'flash_product_activated': 'The product has been activated.',
+                'flash_cant_activate_product': 'The product cannot be activated. {0}',
+                'flash_product_deactivated': 'The product has been deactivated.',
                 'flash_products_cant_load': 'Products cannot be loaded, {0}.'
 
             }, 'HardwareHardwareTypeComponent': {
@@ -421,6 +454,8 @@ export class StaticTranslation {
                 'info_text': 'Enter your E-mail address and new password.',
                 'label_confirm_password': 'Confirm password',
 
+                'placeholder_password': 'Password',
+                'placeholder_confirm_password': 'Confirm password',
                 'flash_password_change_fail': 'Password could not be changed, {0}.',
                 'flash_password_change_success': 'Password was successfully changed.',
 
@@ -499,11 +534,14 @@ export class StaticTranslation {
                 'flash_information_updated': 'Your information was updated.',
 
             }, 'ProjectsProjectBlockoBlockoComponent': {
-                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - program <strong>{0}</strong>',
+                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - PROGRAM <strong>{0}</strong>',
 
-                'label_blocko_name': '<strong class="font-color-blocko" > BLOCKO </strong> Name: <strong>{0}</strong >',
-                'label_blocko_description': '<strong class="font-color-blocko">BLOCKO </strong> Description: <strong>{0}</strong >',
+                'label_blocko_name': '<strong class="font-color-blocko" > BLOCKO </strong> Program Name: <strong>{0}</strong >',
+                'label_blocko_description': '<strong class="font-color-blocko">BLOCKO </strong> Program Description: <strong>{0}</strong >',
                 'label_connections': 'Connections',
+                'label_blocko_program_properities': 'BLOCKO program properties',
+                'label_remove_blocko_program': 'Remove BLOCKO program',
+                'label_modal_no_padavan': 'No available padavan boards hardware.',
                 'tab_hardware': 'Hardware',
                 'tab_grid': 'Grid',
                 'tab_blocko': 'Blocko',
@@ -516,7 +554,7 @@ export class StaticTranslation {
                 'btn_clear_program': 'Clear Program',
                 'btn_clear_console': 'Clear Console',
                 'btn_upload_on_cloud': 'Upload program to Cloud',
-                'btn_turn_off_instance': 'Shut Down',
+                'btn_turn_off_instance': 'Shutdown instance',
                 'btn_change_cloud_version': 'Change Version',
                 'label_no_devices_added': 'No devices added in this BLOCKO program.',
                 'label_select_version': 'Select Version',
@@ -526,7 +564,7 @@ export class StaticTranslation {
                 'label_modal_ok': 'OK',
                 'label_modal_error': 'ERROR',
                 'label_modal_no_main_boards': 'No available Master Devices.',
-                'label_modal_shutdown_instance': 'Shut Down',
+                'label_modal_shutdown_instance': 'Shutdown instance',
                 'label_modal_confirm_shutdown_instance': 'Are you sure to shutdown the running instance?',
                 'label_no_grid_in_blocko': 'No GRID projects added in this BLOCKO program',
                 'label_modal_cant_save_blocko_hw_without_version': 'Unable to save BLOCKO, you have <b>hardware devices</b> without program <b>versions selected</b>.',
@@ -537,20 +575,25 @@ export class StaticTranslation {
                 'label_no_blocks_in_group': 'No BLOCKs in this group',
 
                 'table_name': 'Name',
-                'table_in_cloud': 'In CLOUD',
+                'table_in_cloud': 'In Cloud',
                 'table_description': 'Description',
                 'table_author': 'Author',
                 'table_actions': 'Actions',
 
                 'label_cloud': 'CLOUD',
                 'label_blocko': 'BLOCKO',
-                'label_server': 'Server:',
-                'label_instance': 'Instance:',
+                'label_server': 'Server Name:',
+                'label_instance': 'Instance ID:',
                 'label_status': 'Status:',
                 'label_version': 'Version:',
                 'label_none': 'None',
                 'label_program_version': 'Program version',
+                'label_version_properties': 'Version properties',
+                'label_remove_version': 'Remove version',
+                'label_remove_device': 'Remove device',
+                'label_remove_grid': 'Remove grid project',
 
+                'flash_cant_load_blocko': 'The blocko cannot be loaded. {0}',
                 'flash_cant_load_version': 'Unable to load version <b>{0}</b>`, {1}.',
                 'flash_cant_save_version': 'Unable to save version <b> {0} </b>, {1}.',
                 'flash_version_saved': 'Version <b> {0} </b> saved successfully.',
@@ -581,10 +624,10 @@ export class StaticTranslation {
                 'label_status': 'Status',
                 'label_actions': 'Actions',
                 'btn_add_hardware': ' Add a Device',
-                'label_online': 'online',
-                'label_offline': 'offline',
                 'label_no_hardware': 'No history for this instance.',
                 'label_no_hardware_comment': 'Click on the button bellow to add a new device.',
+                'label_device_properties': 'Device properties',
+                'label_remove_device': 'Remove device',
 
                 'flash_add_device_success': 'Device {0} has been added to your project.',
                 'flash_add_device_fail': 'Device {0} could not be added to your project, {1}.',
@@ -620,9 +663,8 @@ export class StaticTranslation {
                 'label_main_server': 'Main Server',
                 'label_instance': 'Instance ID',
                 'label_not_in_instance': 'Device is not assigned to an instance.',
-                'label_online': 'online',
-                'label_offline': 'offline',
                 'label_none': 'none',
+                'label_cant_load_device': 'Device cannot be loaded. {0}',
 
                 'label_actual_program_name': 'Current program name',
                 'label_actual_program_version': 'Current program version',
@@ -635,6 +677,14 @@ export class StaticTranslation {
                 'label_switch_to_static': 'switch to <strong>Manual</strong>',
                 'label_time_missing_in_json': 'Not yet (Unknown)',
                 'label_not_set_none': 'none',
+                'label_firmware': 'Firmware',
+                'label_backup': 'Backup',
+                'label_bootloader': 'Bootloader',
+                'label_code': 'CODE',
+                'label_blocko': 'BLOCKO',
+                'label_cloud': 'CLOUD',
+                'label_remove_device': 'Remove device',
+                'label_device_properties': 'Device properties',
 
                 'table_id': 'ID',
                 'table_finished': 'Finished',
@@ -692,6 +742,7 @@ export class StaticTranslation {
                 'table_actions': 'Actions',
                 'table_project': 'Project',
                 'table_program': 'Program',
+                'label_instance_properities': 'instance properities',
 
                 'btn_change_version_in_cloud': 'Change version in Cloud',
                 'label_instance_name': 'Instance Name',
@@ -719,6 +770,21 @@ export class StaticTranslation {
                 'label_hardware_actual_in_instance': 'Current in this instance',
                 'label_hardware_no_hardware_in_instance': 'No devices in this instance.',
                 'label_grid_no_grid_in_instance': 'No apps in this instance.',
+                'label_remove_device': 'Remove device',
+                'label_device_type': 'Device type',
+                'label_no_running_update_on_instance': 'There is no running updates in this instance',
+
+                'label_cloud': 'CLOUD',
+                'label_blocko': 'BLOCKO',
+                'label_grid': 'GRID',
+                'label_code': 'CODE',
+                'label_hardware': 'Hardware',
+                'label_bootloader': 'Bootloader',
+                'label_backup': 'Backup',
+                'label_frimware': 'Firmware',
+                'label_unknown_date': 'Not yet (Unknown)',
+                'label_hardware_caps': 'HARDWARE',
+                'label_select_version_for_details': 'Select version for see details',
 
                 'label_modal_shutdown_instance': 'Shutdown instance',
                 'label_modal_confirm_shutdown_instance': 'Are you sure to shutdown the running instance?',
@@ -730,6 +796,7 @@ export class StaticTranslation {
                 'label_modal_change_instance_version': 'Change instance version',
                 'label_modal_change_running_instance_version': 'Are you sure to change the running instance version?',
 
+                'flash_cant_load_verion': 'Cannot load version <b>{0}</b>, {1}',
                 'flash_instance_edit_success': 'Instance information was changed.',
                 'flash_instance_edit_fail': 'Unable to change instance information, {0}.',
 
@@ -739,6 +806,8 @@ export class StaticTranslation {
 
                 'label_program_properities': 'CODE program properties',
                 'label_remove_program': 'Remove CODE program',
+                'label_list_no_item_main': 'There is not any code library in this project',
+                'label_list_no_item_sub': 'You can create it by click on button bellow.',
 
                 'btn_add_library': 'New Library',
 
@@ -760,6 +829,11 @@ export class StaticTranslation {
                 'label_library_properties': 'CODE library properties',
                 'label_delete_library': 'Delete',
 
+                'flash_version_saved': 'Version <b>{0}</b> saved successfully.',
+                'flash_cant_save_version': 'Failed saving version <b>{0}</b>. {1}',
+                'flash_unsaved_changes_version_change': 'You have <b> unsaved changes</b> in version <b> {0} </b>, do you really want switch to version <b>{1}</b>?',
+                'flash_unsaved_changes_version_reload': 'You have <b>unsaved changes</b> in version <b>{0}</b>, do you really want reload this version?',
+                'flash_cant_load_version': 'Cannot load version <b>{0}</b>`, {1}',
                 'flash_library_edit_success': 'Library has been updated.',
                 'flash_library_edit_fail': 'Unable to update library, {0}.',
                 'flash_library_removed_success': 'Library has been removed.',
@@ -776,6 +850,8 @@ export class StaticTranslation {
                 'table_description': 'Description',
                 'table_actions': 'Actions',
 
+                'label_ide': 'IDE',
+                'label_code': 'CODE',
                 'label_version_properties': 'Version properties',
                 'label_remove_version': 'Remove version',
                 'label_save': 'SAVED VERSIONS',
@@ -799,6 +875,9 @@ export class StaticTranslation {
                 'modal_label_invitation_send': 'Invitation E-mail was sent to {0}.',
                 'modal_title_remove_member': 'Remove member',
                 'modal_text_remove_member': 'Do you really want to remove this member?',
+
+                'label_remove_member': 'Remove member',
+                'label_send_invitation': 'Send invitation again',
 
                 'label_cannot_remove_yourself': 'You can`t remove yourself from your project.',
                 'label_cannot_add_member': 'Unable to add collaborators. {0}',
@@ -825,6 +904,8 @@ export class StaticTranslation {
 
                 'label_no_item': 'No widget groups in this project.',
                 'label_you_can_create': 'Click on the button bellow to create a group.',
+                'label_group_properities': 'Group properties',
+                'label_remove_group': 'Remove group',
 
             }, 'ProjectsProjectWidgetsWidgetsComponent': {
 
@@ -860,6 +941,9 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectWidgetsWidgetsWidgetComponent': {
 
+
+                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - WIDGET <strong>{0}</strong>',
+
                 'flash_version_save_success': 'Version <b>{0}</b> saved successfully.',
                 'flash_version_save_fail': 'Unable to save version <b>{0}</b>, {1}.',
                 'flash_version_removed_success': 'Version has been removed.',
@@ -872,8 +956,7 @@ export class StaticTranslation {
                 'flash_widget_edit_success': 'Widget has been edited.',
                 'flash_widget_edit_fail': 'Unable to edit widget, {0}.',
 
-                'title': 'Byzance<strong class="font-color-grid">GRID</strong> - WIDGET <strong>{0}</strong>',
-
+                'label_console_cant_crate_widget': '<strong>Cannot create widget:</strong> Make sure, that you specified size profiles for widget',
                 'label_widget_properities': 'GRID widget properties',
                 'label_remove_widget': 'GRID widget properties',
                 'label_widget_code': 'Widget Code',
@@ -883,9 +966,13 @@ export class StaticTranslation {
                 'label_version': 'Version',
                 'label_ide': 'IDE',
                 'label_build_errors': 'Build Errors',
-                'label_save':'SAVED VERSIONS',
-                'label_version_properities':'Version properties',
-                'label_remove_version':'Remove version',
+                'label_save': 'SAVED VERSIONS',
+                'label_version_properities': 'Version properties',
+                'label_remove_version': 'Remove version',
+                'label_console_output': 'Output < strong > {0} </strong> = {1}',
+                'label_console_true': '<span class="bold font-red">true</span>',
+                'label_console_false': '< span class="bold font-blue" > false </span>',
+                'label_grid': 'GRID',
 
                 'table_name': 'Name',
                 'table_description': 'Description',
@@ -893,7 +980,7 @@ export class StaticTranslation {
                 'table_actions': 'Actions',
 
             }, 'ProjectsProjectBlockoComponent': {
-                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - all programs',
+                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - ALL PROGRAMS',
 
                 'label_blocko_remove': 'Remove BLOCKO program',
                 'label_blocko_program_properties': 'BLOCKO program properties',
@@ -912,11 +999,16 @@ export class StaticTranslation {
                 'flash_blocko_cant_update': 'Unable to update program, {0}.',
 
             }, 'ProjectsProjectBlocksBlocksBlockComponent': {
-                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - block <strong>{0}</strong>',
+                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - BLOCK <strong>{0}</strong>',
 
-                'label_group_properties': 'Group properties',
-                'label_group_remove': 'Remove Group',
-                'label_code': 'Code',
+                'label_name': 'BLOCKO Block Name',
+                'label_description': 'BLOCKO Block Description',
+                'label_group': 'BLOCKO Block Group Name',
+                'label_console_output': 'Output <strong>{0}</strong> = {1}',
+
+                'label_group_properties': 'BLOCKO block properties',
+                'label_group_remove': 'Remove BLOCKO block',
+                'label_code': 'IDE',
                 'label_version': 'Version',
                 'label_block_color': 'Colour',
                 'label_block_icon': 'Icon',
@@ -939,7 +1031,8 @@ export class StaticTranslation {
                 'table_description': 'Description',
                 'table_author': 'Author',
                 'table_actions': 'Actions',
-
+                'label_version_properties': 'Version properties',
+                'label_remove_version': 'Remove version',
 
                 'ts_error_typescript_error': 'TypeScript Error',
                 'ts_error_block_error': 'Block Error',
@@ -963,11 +1056,11 @@ export class StaticTranslation {
                 'flash_cant_load_block_version': 'Unable to load block version, {0}.',
 
             }, 'ProjectsProjectBlocksBlocksComponent': {
-                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - blocks group: <strong>{0}</strong>',
+                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - BLOCK GROUP <strong>{0}</strong>',
                 'label_group_properties': 'Group properties',
-                'label_group_remove': 'Remove Group',
-                'label_block_properties': 'Block properties',
-                'label_block_remove': 'Remove block',
+                'label_group_remove': 'Remove group',
+                'label_block_properties': 'BLOCKO block properties',
+                'label_block_remove': 'Remove BLOCKO block',
 
                 'label_blocko_name': '<strong class="font-color-blocko">BLOCKO</strong> Name: <strong>{0}</strong>',
                 'label_blocko_description': '<strong class="font-color-blocko">BLOCKO</strong> Description: <strong>{0}</strong>',
@@ -992,7 +1085,7 @@ export class StaticTranslation {
                 'flash_cant_remove_block': 'Unable to remove block, {0}.',
 
             }, 'ProjectsProjectBlocksComponent': {
-                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - all block groups',
+                'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - ALL BLOCK GROUPS',
                 'table_name': 'Name',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
@@ -1287,6 +1380,8 @@ export class StaticTranslation {
             'label_password': 'Password',
             'label_console': 'Console',
             'label_configuration': 'Configuration',
+            'label_offline': 'offline',
+            'label_online': 'online',
             'btn_save': 'Save',
             'btn_test': 'Test',
             'btn_back': 'Back',
@@ -1403,7 +1498,11 @@ export class StaticTranslation {
 
             }, 'regexp_not_valid': {
                 'street_number': 'Wrong street number format. "Number" or "number/number" is the correct format.',
+            }, 'productStatusTranslate': {
+                'false': 'All activities such as running instances in cloud or hardware data services are temporarily suspended. During the inactivity, no fees are charged. This product can not be removed by user. Only by technical support. After six months of inactivity, it will be archived.',
+                'true': 'The financial product is activated. '
             }
+
         },
         'cz': {
             // TODO

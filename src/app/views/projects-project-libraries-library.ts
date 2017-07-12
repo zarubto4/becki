@@ -77,7 +77,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                 });
             }
             if (params['version']) {
-                this.router.navigate(['/projects', this.projectId, 'library', this.libraryId], {replaceUrl: true});
+                this.router.navigate(['/projects', this.projectId, 'library', this.libraryId], { replaceUrl: true });
                 this.selectVersionByVersionId(params['version']);
             }
         });
@@ -187,7 +187,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError( this.translate('flash_version_edit_fail', model.name , reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_version_edit_fail', model.name, reason)));
                         this.refresh();
                     });
             }
@@ -225,7 +225,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
             })
             .catch(reason => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError( this.translate('flash_cannot_load_library', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cannot_load_library', reason)));
             });
 
     }
@@ -266,7 +266,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
             })
             .catch((err) => {
                 this.unblockUI();
-                this.fmError(`Cannot load version <b>${libraryVersion.version_name}</b>`, err);
+                this.fmError(this.translate('flash_cant_load_version', libraryVersion.version_name, err));
             });
 
     }
@@ -281,15 +281,9 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
 
                 let text = '';
                 if (this.selectedLibraryVersion.version_id === libraryVersion.version_id) {
-                    text = 'You have <b>unsaved changes</b> in version <b>'
-                        + this.selectedLibraryVersion.version_name
-                        + '</b>, do you really want reload this version?';
+                    text = this.translate('flash_unsaved_changes_version_reload', this.selectedLibraryVersion.version_name);
                 } else {
-                    text = 'You have <b>unsaved changes</b> in version <b>'
-                        + this.selectedLibraryVersion.version_name
-                        + '</b>, do you really want switch to version <b>'
-                        + libraryVersion.version_name
-                        + '</b>?';
+                    text = this.translate('flash_unsaved_changes_version_change', this.selectedLibraryVersion.version_name, libraryVersion.version_name);
                 }
 
                 let confirm = new ModalsConfirmModel(
@@ -356,11 +350,11 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                     files: userFiles
                 })
                     .then(() => {
-                        this.fmSuccess('Version <b>' + m.name + '</b> saved successfully.');
+                        this.fmSuccess(this.translate('flash_version_saved', m.name));
                         this.refresh();
                     })
                     .catch((err) => {
-                        this.fmError('Failed saving version <b>' + m.name + '</b>', err);
+                        this.fmError(this.translate('flash_cant_save_version', m.name, err));
                         this.unblockUI();
                     });
             }

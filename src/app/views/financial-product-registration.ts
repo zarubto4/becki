@@ -92,7 +92,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
                         if (t) {
                             this.chooseTariff(t);
                         } else {
-                            this.fmError('Wanted tariff not found.');
+                            this.fmError(this.translate('label_want_tariff_not_found'));
                             this.router.navigate(['/financial/product-registration']);
                         }
                     }
@@ -119,7 +119,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
                 });
 
             }).catch(error => {
-                this.fmError('Cannot load tariffs.', error);
+                this.fmError(this.translate('label_cant_load_tarrif', error));
                 this.unblockUI();
             });
     }
@@ -343,7 +343,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
                 }
             })
             .catch(reason => {
-                this.fmError('The product cannot be bought.', reason);
+                this.fmError(this.translate('flash_cant_buy_product',reason));
                 this.unblockUI();
             });
     }

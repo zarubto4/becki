@@ -25,8 +25,8 @@
                     </div>
                 </div>
                 <div>
-                    <strong class="font-color-code">CODE </strong>{{'label_name'|bkTranslate:this}}:<strong>{{library?library.name:""}}</strong><br>
-                    <strong class="font-color-code">CODE </strong>{{'label_description'|bkTranslate:this}}: <strong>{{library?library.description:""}}</strong>
+                    <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_name'|bkTranslate:this}}:<strong>{{library?library.name:""}}</strong><br>
+                    <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_description'|bkTranslate:this}}: <strong>{{library?library.description:""}}</strong>
                 </div>
             </div>
         </div>
@@ -36,7 +36,7 @@
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-file-code-o"></i>
-                            IDE
+                             {{'label_ide'|bkTranslate:this}}
                         </span>
                     </div>
                     <div *ngIf="selectedLibraryVersion" class="becki-caption version">

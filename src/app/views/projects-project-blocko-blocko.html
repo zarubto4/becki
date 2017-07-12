@@ -17,10 +17,12 @@
                     </div>
                     <div *ngIf="blockoProgram" class="becki-actions">
 
-                        <button title="Program properties" class="btn btn-icon-only green" [disabled]="!blockoProgram.edit_permission" (click)="onEditClick()">
+                        <button title="{{'label_blocko_program_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!blockoProgram.edit_permission"
+                            (click)="onEditClick()">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="Remove program" class="btn btn-icon-only red" [disabled]="!blockoProgram.delete_permission" (click)="onRemoveClick()">
+                        <button title="{{'label_remove_blocko_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!blockoProgram.delete_permission"
+                            (click)="onRemoveClick()">
                             <i class="fa fa-trash"></i>
                         </button>
 
@@ -61,7 +63,7 @@
                                     <span *ngIf="boardById[hwGroup.main_board_pair.board_id].name" class="bg-green-jungle ribbon-padding">{{boardById[hwGroup.main_board_pair.board_id].name}}</span>
                                     <span class="bg-green-sharp ribbon-padding">{{hwGroup.main_board_pair.board_id}}</span>
                                 </div>
-                                <button title="Remove device" type="button" class="btn default red pull-right" (click)="hwRemove(hwGroup.main_board_pair.board_id)">
+                                <button title="{{'label_remove_device'|bkTranslate:this}}" type="button" class="btn default red pull-right" (click)="hwRemove(hwGroup.main_board_pair.board_id)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                                 <button type="button" class="btn default blue pull-right" (click)="hwAdd(hwGroup.main_board_pair.board_id)">
@@ -77,7 +79,7 @@
                                                     <span *ngIf="boardById[board.board_id].name" class="bg-green-jungle ribbon-padding">{{boardById[board.board_id].name}}</span>
                                                     <span class="bg-green-sharp ribbon-padding">{{board.board_id}}</span>
                                                 </div>
-                                                <button title="Remove device" type="button" class="btn default red pull-right" (click)="hwRemove(board.board_id)">
+                                                <button title="{{'label_remove_device'|bkTranslate:this}}" type="button" class="btn default red pull-right" (click)="hwRemove(board.board_id)">
                                                     <i class="fa fa-trash"></i>
                                                 </button>
                                                 <div class="ribbon-content no-padding-left-right no-padding-bottom padding-top-10">
@@ -108,7 +110,7 @@
                         <div *ngFor="let gridProject of allGridProjects;">
                             <div *ngIf="selectedGridProgramVersions[gridProject.id]" class="mt-element-ribbon bg-grey-steel border-purple">
                                 <div class="ribbon ribbon-shadow bg-purple font-white no-padding-left-right"><span class="ribbon-padding">{{gridProject.name}}</span></div>
-                                <button title="Remove grid project" type="button" class="btn default red pull-right" (click)="gridRemove(gridProject)">
+                                <button title="{{'label_remove_grid'|bkTranslate:this}}" type="button" class="btn default red pull-right" (click)="gridRemove(gridProject)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                                 <div class="ribbon-content no-padding-left-right padding-top-10 padding-bottom-10">
@@ -316,33 +318,26 @@
 
                         <div>
                             <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}}</strong> {{'label_server'|bkTranslate:this}}
-                            <span class="font-grey-mint bold" *ngIf="blockoProgram.instance_details.server_name">
-                                {{blockoProgram.instance_details.server_name}}
-                                (<span *ngIf="blockoProgram.instance_details.server_online" class="font-green-jungle">{{'label_online'|bkTranslate:this}}</span>
-                            <span *ngIf="!blockoProgram.instance_details.server_online" class="font-red">{{'label_offline'|bkTranslate:this}}</span>)
+                            <span *ngIf="blockoProgram.instance_details.server_name">
+                                <strong>{{blockoProgram.instance_details.server_name}}</strong>
+                            <span *ngIf="blockoProgram.instance_details.server_online" class="font-green-jungle">({{'label_online'|bkTranslate:this}})</span>
+                            <span *ngIf="!blockoProgram.instance_details.server_online" class="font-red">({{'label_offline'|bkTranslate:this}})</span>
                             </span>
-                            <span class="font-grey-salsa bold" *ngIf="!blockoProgram.instance_details.server_name">{{'label_none'|bkTranslate:this}}</span>
+                            <span class="bold" *ngIf="!blockoProgram.instance_details.server_name">({{'label_none'|bkTranslate:this}})</span>
                         </div>
-
                         <br>
-
                         <div>
                             <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}}</strong> {{'label_instance'|bkTranslate:this}}
-                            <a *ngIf="blockoProgram.instance_details.instance_id" (click)="onInstanceIdClick(blockoProgram.instance_details.instance_id)">{{blockoProgram.instance_details.instance_id}}</a>
-                            <span class="font-grey-salsa bold" *ngIf="!blockoProgram.instance_details.instance_id">{{'label_none'|bkTranslate:this}}</span>
+                            <a *ngIf="blockoProgram.instance_details.instance_id" (click)="onInstanceIdClick(blockoProgram.instance_details.instance_id)"><strong>{{blockoProgram.instance_details.instance_id}}</strong></a>
+                            <span *ngIf="blockoProgram.instance_details.server_online" class="font-green-jungle">({{'label_online'|bkTranslate:this}})</span>
+                            <span *ngIf="!blockoProgram.instance_details.server_online" class="font-red">({{'label_offline'|bkTranslate:this}})</span>
+                            <span class="bold" *ngIf="!blockoProgram.instance_details.instance_id">{{'label_none'|bkTranslate:this}}</span>
                         </div>
-                        <div>
-                            <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}}</strong> {{'label_status'|bkTranslate:this}}
-                            <span *ngIf="blockoProgram.instance_details.instance_online" class="bold font-green-jungle">{{'label_online'|bkTranslate:this}}</span>
-                            <span *ngIf="!blockoProgram.instance_details.instance_online" class="bold font-red">{{'label_offline'|bkTranslate:this}}</span>
-                        </div>
-
                         <br>
-
                         <div>
                             <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}}</strong> {{'label_version'|bkTranslate:this}}
-                            <a *ngIf="blockoProgram.instance_details.version_name" (click)="onProgramVersionIdClick(blockoProgram.instance_details.version_id)">{{blockoProgram.instance_details.version_name}}</a>
-                            <span class="font-grey-salsa bold" *ngIf="!blockoProgram.instance_details.version_name">{{'label_none'|bkTranslate:this}}</span>
+                            <a *ngIf="blockoProgram.instance_details.version_name" class="bold" (click)="onProgramVersionIdClick(blockoProgram.instance_details.version_id)">{{blockoProgram.instance_details.version_name}}</a>
+                            <span class="bold" *ngIf="!blockoProgram.instance_details.version_name">{{'label_none'|bkTranslate:this}}</span>
                         </div>
 
                     </div>
@@ -365,9 +360,9 @@
                         <thead>
                             <tr>
                                 <th class="col col-lg-2">{{'table_name'|bkTranslate:this}} </th>
-                                <th class="text-center col col-lg-1">{{'table_in_cloud'|bkTranslate:this}} </th>
                                 <th class="col col-lg-6">{{'table_description'|bkTranslate:this}} </th>
                                 <th class="col col-lg-2">{{'table_author'|bkTranslate:this}} </th>
+                                <th class="text-center col col-lg-1">{{'table_in_cloud'|bkTranslate:this}} </th>
                                 <th class="text-right col col-lg-1">{{'table_actions'|bkTranslate:this}} </th>
                             </tr>
                         </thead>
@@ -377,10 +372,7 @@
                                     <a (click)="onProgramVersionClick(version)">
                                     {{version.version_name}}
                                 </a>
-                                </td >
-
-                                <th *ngIf="versionRunning(version)" class="vert-align text-center"><i class="fa fa-cloud fa-fw font-green-jungle"></i></th>
-                                <th *ngIf="!versionRunning(version)" class="vert-align text-center"></th>
+                                </td>
 
                                 <td class="vert-align">
                                     {{version.version_description}}
@@ -388,6 +380,12 @@
                                 <td class="vert-align">
                                     {{version.author.nick_name}}
                                 </td>
+
+                                <th *ngIf="versionRunning(version)" class="vert-align text-center">
+                                    <i class="fa fa-cloud fa-fw font-green-jungle"></i></th>
+                                <th *ngIf="!versionRunning(version)" class="vert-align text-center"></th>
+
+
                                 <td class="vert-align no-wrap text-right">
 
                                     <style type="text/css">
@@ -400,10 +398,12 @@
                                         }
                                     </style>
 
-                                    <button title="Device properties" class="btn btn-icon-only green" [disabled]="!version.update_permission" (click)="onEditVersionClick(version)">
+                                    <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission"
+                                        (click)="onEditVersionClick(version)">
                                     <i class="fa fa-cog"></i>
                                 </button>
-                                    <button title="Remove device" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
+                                    <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission"
+                                        (click)="onRemoveVersionClick(version)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                                 </td>

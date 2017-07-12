@@ -57,11 +57,11 @@
         </div>
         <h3 *ngIf="!libraries" class="text-center">{{'loading'|bkTranslate:this}}</h3>
         <div *ngIf="libraries && libraries.length == 0" class="list-no-items">
-            <p class="list-no-items__main-label">There is not any code library in this project</p>
-            <p class="list-no-items__sub-label">You can create it by click on button bellow.</p>
+            <p class="list-no-items__main-label">{{'label_list_no_item_main'|bkTranslate:this}}</p>
+            <p class="list-no-items__sub-label">{{'label_list_no_item_sub'|bkTranslate:this}}</p>
             <p>
                 <button class="btn blue" (click)="onAddClick()">
-                    <i class="fa fa-plus-circle"></i> Add code library
+                    <i class="fa fa-plus-circle"></i> {{'btn_add_library'|bkTranslate:this}}
                 </button>
             </p>
         </div>

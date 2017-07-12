@@ -85,7 +85,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
 
     onAddClick(): void {
         if (!this.products) {
-            this.addFlashMessage(new FlashMessageError('Cannot add project now.'));
+            this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_project')));
         }
 
         let model = new ModalsProjectPropertiesModel(this.products);
@@ -98,11 +98,11 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
                     product_id: model.product
                 }) // TODO: add tarrif nebo produkt či jak se to bude jmenovat
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(`The project ${model.name} has been created.`));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_create', model.name)));
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(`The project ${model.name} cannot be created.`, reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_create_project', model.name, reason)));
                         this.refresh(); // also unblockUI
                     });
             }
@@ -111,7 +111,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
 
     onEditClick(project: IProject): void {
         if (!this.products) {
-            this.addFlashMessage(new FlashMessageError('Cannot add project now.'));
+            this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_project')));
         }
 
         let model = new ModalsProjectPropertiesModel(this.products, project.name, project.description, '' + project.product_id, true, project.name);
@@ -123,11 +123,11 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
                     project_description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The project has been updated.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_update')));
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The project cannot be updated.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_project', reason)));
                         this.refresh(); // also unblockUI
                     });
             }
@@ -140,11 +140,11 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
                 this.blockUI();
                 this.backendService.deleteProject(project.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The project has been removed.'));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_remove')));
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The project cannot be removed.', reason));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_project', reason)));
                         this.refresh(); // also unblockUI
                     });
             }

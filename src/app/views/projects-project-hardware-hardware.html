@@ -19,10 +19,12 @@
                     </div>
                     <div class="becki-actions">
 
-                        <button title="Device properties" class="btn btn-icon-only green" [disabled]="!device.edit_permission" (click)="onEditClick(device)">
+                        <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!device.edit_permission"
+                            (click)="onEditClick(device)">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="Remove device" class="btn btn-icon-only red" [disabled]="!device.delete_permission" (click)="onRemoveClick(device)">
+                        <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!device.delete_permission"
+                            (click)="onRemoveClick(device)">
                             <i class="fa fa-trash"></i>
                         </button>
 
@@ -117,7 +119,7 @@
                                 <hr>
 
                                 <div>
-                                    <strong>Bootloader</strong>
+                                    <strong>{{'label_bootloader'|bkTranslate:this}}</strong>
                                     <br> {{'label_bootloader_version'|bkTranslate:this}}:
                                     <span class="font-grey-mint bold">{{device.actual_bootloader_version_name?device.actual_bootloader_version_name:('label_not_set_none'|bkTranslate:this) }}</span>
                                     <button *ngIf="device.available_bootloader_id !== device.actual_bootloader_id" class="btn red btn-sm" style="margin-top: -2px;"
@@ -156,18 +158,18 @@
                                             <span class="font-blue-dark">
                                     <i class="fa fa-fw fa-microchip"></i>
                                     <span [innerHTML]="'label_byzance_code'|bkTranslate:this"></span>
-                                </span>
+                                            </span>
                                         </div>
                                     </div>
 
                                     <div>
                                         <div>
-                                            <strong class="font-color-code">CODE </strong>{{'label_actual_program_name'|bkTranslate:this}}:
+                                            <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_actual_program_name'|bkTranslate:this}}:
                                             <a *ngIf="device.status.actual_c_program_name" class="bold" [routerLink]="['/projects', device.project_id, 'code', device.status.actual_c_program_id]">{{device.status.actual_c_program_name}}</a>
                                             <span *ngIf="!device.status.actual_c_program_name" class="font-grey-mint bold">{{'label_alerts'|bkTranslate:this}}</span>
                                         </div>
                                         <div>
-                                            <strong class="font-color-code">CODE </strong>{{'label_actual_program_version'|bkTranslate:this}}:
+                                            <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_actual_program_version'|bkTranslate:this}}:
                                             <a *ngIf="device.status.actual_c_program_version_name" class=" bold" [routerLink]="['/projects', device.project_id, 'code', device.status.actual_c_program_id, { version: device.status.actual_c_program_version_id }]">{{device.status.actual_c_program_version_name}}</a>
                                             <span *ngIf="!device.status.actual_c_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                         </div>
@@ -190,12 +192,12 @@
                                         </div>
                                         <div>
                                             <div>
-                                                <strong class="font-color-code">CODE </strong>{{'label_actual_backup_program_name'|bkTranslate:this}}:
+                                                <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_actual_backup_program_name'|bkTranslate:this}}:
                                                 <a *ngIf="device.status.actual_backup_c_program_name" class="bold" [routerLink]="['/projects', device.project_id, 'code', device.status.actual_backup_c_program_id]">{{device.status.actual_backup_c_program_name}}</a>
                                                 <span *ngIf="!device.status.actual_backup_c_program_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                             </div>
                                             <div>
-                                                <strong class="font-color-code">CODE </strong>{{'label_actual_backup_program_version'|bkTranslate:this}}:
+                                                <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_actual_backup_program_version'|bkTranslate:this}}:
                                                 <a *ngIf="device.status.actual_backup_c_program_version_name" class=" bold" [routerLink]="['/projects', device.project_id, 'code', device.status.actual_backup_c_program_id, { version: device.status.actual_backup_c_program_version_id }]">{{device.status.actual_backup_c_program_version_name}}</a>
                                                 <span *ngIf="!device.status.actual_backup_c_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                             </div>
@@ -210,14 +212,14 @@
                                         <div class="becki-caption">
                                             <span class="font-blue-dark">
                                    <i class="fa fa-fw fa-cloud"></i>
-                                   Byzance<strong class="font-color-cloud">CLOUD </strong>
+                                   Byzance<strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}} </strong>
                                </span>
                                         </div>
                                     </div>
                                     <div>
 
                                         <div>
-                                            <strong class="font-color-cloud">CLOUD </strong>{{'label_main_server'|bkTranslate:this}}:
+                                            <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}} </strong>{{'label_main_server'|bkTranslate:this}}:
                                             <span *ngIf="device.status.server_name" class="font-grey-mint bold">{{device.status.server_name}}</span>
                                             <span *ngIf="!device.status.server_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                             <span *ngIf="device.status.server_name && device.status.server_online_status" class="font-green-jungle">(online)</span>
@@ -227,7 +229,7 @@
                                         <br>
 
                                         <div>
-                                            <strong class="font-color-cloud">CLOUD </strong>{{'label_instance'|bkTranslate:this}}:
+                                            <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}} </strong>{{'label_instance'|bkTranslate:this}}:
                                             <a *ngIf="device.status.instance_id" [routerLink]="['/projects', device.project_id, 'instances', device.status.instance_id]"
                                                 class="bold">{{device.status.instance_id}}</a>
                                             <span *ngIf="!device.status.instance_id" class="font-grey-mint bold">(Device is not connected to an instance)</span>
@@ -238,12 +240,12 @@
                                         <br>
 
                                         <div>
-                                            <strong class="font-color-blocko">BLOCKO </strong>{{'label_name'|bkTranslate:this}}:
+                                            <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}} </strong>{{'label_name'|bkTranslate:this}}:
                                             <a *ngIf="device.status.b_program_name" class="bold" [routerLink]="['/projects', device.project_id, 'blocko', device.status.b_program_id]">{{device.status.b_program_name}}</a>
                                             <span *ngIf="!device.status.b_program_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                         </div>
                                         <div>
-                                            <strong class="font-color-blocko">BLOCKO </strong>{{'label_version'|bkTranslate:this}}:
+                                            <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}} </strong>{{'label_version'|bkTranslate:this}}:
                                             <a *ngIf="device.status.b_program_version_name" class="bold" [routerLink]="['/projects', device.project_id, 'blocko', device.status.b_program_id, { version: device.status.b_program_version_id }]">{{device.status.b_program_version_name}}</a>
                                             <span *ngIf="!device.status.b_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                         </div>
@@ -268,8 +270,8 @@
                                                 <th>{{'table_started'|bkTranslate:this}}</th>
                                                 <th>{{'table_finished'|bkTranslate:this}}</th>
                                                 <th>{{'table_type'|bkTranslate:this}}</th>
-                                                <th><strong class="font-color-code">CODE </strong>{{'table_program'|bkTranslate:this}}</th>
-                                                <th><strong class="font-color-code">CODE </strong>{{'table_version'|bkTranslate:this}}</th>
+                                                <th><strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'table_program'|bkTranslate:this}}</th>
+                                                <th><strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'table_version'|bkTranslate:this}}</th>
                                                 <th>{{'table_status'|bkTranslate:this}}</th>
 
                                             </tr>
@@ -277,16 +279,16 @@
                                         <tbody>
                                             <tr *ngFor="let update of device.updates">
 
-                                                <td class="vert-align font-grey-mint">{{update.id}}</td>
-                                                <td class="vert-align font-grey-mint">{{update.date_of_create|bkUnixTimeToDate}}</td>
+                                                <td class="vert-align">{{update.id}}</td>
+                                                <td class="vert-align">{{update.date_of_create|bkUnixTimeToDate}}</td>
 
                                                 <td class="vert-align" *ngIf="update.date_of_finish">{{update.date_of_finish|bkUnixTimeToDate}}</td>
                                                 <td *ngIf="!update.date_of_finish" class="vert-align font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</td>
 
                                                 <td class="vert-align font-grey-mint">
-                                                    <span *ngIf="update.firmware_type == 'FIRMWARE'" class="bold font-color-grid">Firmware</span>
-                                                    <span *ngIf="update.firmware_type == 'BACKUP'" class="bold font-color-grid-dark">Backup</span>
-                                                    <span *ngIf="update.firmware_type == 'BOOTLOADER'" class="bold font-blue">Bootloader</span>
+                                                    <span *ngIf="update.firmware_type == 'FIRMWARE'" class="bold font-color-grid">{{'label_firmware'|bkTranslate:this}}</span>
+                                                    <span *ngIf="update.firmware_type == 'BACKUP'" class="bold font-color-grid-dark">{{'label_backup'|bkTranslate:this}}</span>
+                                                    <span *ngIf="update.firmware_type == 'BOOTLOADER'" class="bold font-blue">{{'label_bootloader'|bkTranslate:this}}</span>
                                                 </td>
 
                                                 <!-- Firmware -->
@@ -313,20 +315,12 @@
                                                 <!-- Update State -->
                                                 <td>
 
-                                                    <span *ngIf="update.state == 'complete'" class="bold font-green-jungle">{{update.state|bkTranslateTable:this:'update_state'}}</span>
-                                                    <span *ngIf="update.state == 'canceled'" class="bold font-green-jungle">{{update.state|bkTranslateTable:this:'update_state'}}</span>
+                                                    <span *ngIf="update.state == ('complete') || ('canceled') || ('overwritten')" class="bold font-green-jungle">{{update.state|bkTranslateTable:this:'update_state'}}</span>
 
-                                                    <span *ngIf="update.state == 'not_start_yet'" class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:this:'update_state'}} </span>
-                                                    <span *ngIf="update.state == 'in_progress'" class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:this:'update_state'}}</span>
-                                                    <span *ngIf="update.state == 'overwritten'" class="bold font-green-jungle">{{update.state|bkTranslateTable:this:'update_state'}}</span>
-                                                    <span *ngIf="update.state == 'not_updated'" class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:this:'update_state'}}</span>
-                                                    <span *ngIf="update.state == 'waiting_for_device'" class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:this:'update_state'}}</span>
+                                                    <span *ngIf="update.state == ('not_updated') || ('waiting_for_device') || ('in_progress') || ('not_start_yet')" class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:this:'update_state'}}</span>
 
-                                                    <span *ngIf="update.state == 'bin_file_not_found'" class="bold font-red-flamingo">{{update.state|bkTranslateTable:this:'update_state'}}</span>
-                                                    <span *ngIf="update.state == 'critical_error'" class="bold font-red-flamingo">{{update.state|bkTranslateTable:this:'update_state'}}</span>
-                                                    <span *ngIf="update.state == 'homer_server_is_offline'" class="bold font-red-flamingo">{{update.state|bkTranslateTable:this:'update_state'}}</span>
-                                                    <span *ngIf="update.state == 'instance_inaccessible'" class="bold font-red-flamingo">{{update.state|bkTranslateTable:this:'update_state'}}</span>
-
+                                                    <span *ngIf="update.state == ('bin_file_not_found') || ('critical_error') || ('homer_server_is_offline') || ('instance_inaccessible')"
+                                                        class="bold font-red-flamingo">{{update.state|bkTranslateTable:this:'update_state'}}</span>
                                                 </td>
 
                                             </tr>
