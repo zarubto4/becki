@@ -82,7 +82,7 @@ export class BeckiAsyncValidators {
             return new Promise<any>((resolve) => {
                 backEnd.getAllProjects()
                     .then((projects) => {
-                        if (projects.find(project => project.name === control.value)) {
+                        if (projects.find(project => project.project_name === control.value)) {
                             resolve({'projectNameTaken': true}); // invalid
                         } else {
                             resolve(null); // valid
@@ -113,6 +113,8 @@ export class BeckiAsyncValidators {
         });
     }
 
+    // blockoNameTaken validator is not used
+    /*
     public static blockoNameTaken(backEnd: BackendService, projectId: string|(() => string)): AsyncValidatorFn {
         return AsyncValidatorDebounce.debounce((control: FormControl) => {
             return new Promise<any>((resolve) => {
@@ -146,6 +148,7 @@ export class BeckiAsyncValidators {
             });
         });
     }
+    */
 
     public static condition(conditionCallback: (value: string) => boolean, validator: AsyncValidatorFn) {
         return (control: AbstractControl) => {
