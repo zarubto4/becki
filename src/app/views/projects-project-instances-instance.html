@@ -18,7 +18,7 @@
                     <div *ngIf="instance" class="becki-actions">
 
 
-                        <button title="{{label_instance_properities|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!instance.edit_permission"
+                        <button title="{{'label_instance_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!instance.edit_permission"
                             (click)="onInstanceEditClick()">
                             <i class="fa fa-cog"></i>
                         </button>

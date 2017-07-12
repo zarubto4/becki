@@ -265,11 +265,14 @@ export class StaticTranslation {
                 'label_status': 'Status',
                 'label_paid_in': 'Paid in',
                 'label_total': 'Total',
+                'label_download_as_pdf': 'Download as PDF',
+                'label_send': 'Send',
                 'table_name': 'Name',
                 'table_guid': 'GUID',
                 'table_billable_units': 'Billable units',
                 'table_unite': 'Unite',
                 'table_total_cost': 'Total cost',
+
 
             }, 'ProjectsProjectComponent': {
                 'title': 'PROJECT DASHBOARD',
@@ -301,6 +304,9 @@ export class StaticTranslation {
 
             }, 'FinancialProductInvoicesComponent': {
                 'title': 'Invoice',
+                'label_downoload_pro_forma_pdf': 'Download Pro forma invoice as PDF',
+                'label_download_pdf': 'Download invoice as PDF',
+                'label_send': 'Send',
                 'btn_add_credits': 'Add credits',
                 'table_invoice_id': 'Invoice ID',
                 'table_date_of_pay': 'Date of payment',
@@ -311,6 +317,7 @@ export class StaticTranslation {
                 'no_invoice': 'No Invoices found.',
                 'flash_invoice_been_resend': 'The invoice has been resent to your general invoice E-mail.',
                 'flash_invoice_cant_be_resend': 'The invoice could not be sent!',
+
 
             }, 'ProductRegistrationComponent': {
                 'main_title': 'Product Registration',
@@ -377,6 +384,7 @@ export class StaticTranslation {
                 'main_title': 'Financial',
                 'title': 'Dashboard',
                 'btn_add_credit': 'Add credit',
+                'label_instance_properities': 'instance properities',
                 'label_core_details': 'Core details',
                 'label_id_subscription': 'ID Subscription',
                 'label_country': 'Country',
@@ -742,9 +750,9 @@ export class StaticTranslation {
                 'table_actions': 'Actions',
                 'table_project': 'Project',
                 'table_program': 'Program',
-                'label_instance_properities': 'instance properities',
 
                 'btn_change_version_in_cloud': 'Change version in Cloud',
+                'label_instance_properities': 'instance properities',
                 'label_instance_name': 'Instance Name',
                 'label_instance_description': 'Instance Description',
                 'label_instance_id': 'Instance ID',

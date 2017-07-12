@@ -107,7 +107,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
                             if (this.canActivateStep(step)) {
                                 this.step = step;
                             } else {
-                                this.router.navigate(['/financial/product-registration', {step: 1}]);
+                                this.router.navigate(['/financial/product-registration', { step: 1 }]);
                             }
                         }
 
@@ -155,7 +155,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             if (step === 1) {
                 this.router.navigate(['/financial/product-registration']);
             } else {
-                this.router.navigate(['/financial/product-registration', {step: step}]);
+                this.router.navigate(['/financial/product-registration', { step: step }]);
             }
         }
     }
@@ -191,15 +191,15 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         }));*/
 
         let input: { [key: string]: any; } = {
-            'product_individual_name':  ['', [Validators.required, Validators.minLength(4)]],
+            'product_individual_name': ['', [Validators.required, Validators.minLength(4)]],
 
-            'invoice_email':            [this.backendService.personInfoSnapshot.mail || '', [Validators.required, BeckiValidators.email]],
+            'invoice_email': [this.backendService.personInfoSnapshot.mail || '', [Validators.required, BeckiValidators.email]],
 
-            'street':                   ['', [Validators.required, Validators.minLength(4)]],
-            'street_number':            ['', [BeckiValidators.regExp('street_number', /^[0-9]+([\/][0-9]+)?$/)]],
-            'city':                     ['', [Validators.required, Validators.minLength(2)]],
-            'zip_code':                 ['', [Validators.required, Validators.minLength(5)]],
-            'country':                  ['', [Validators.required, Validators.minLength(4)]],
+            'street': ['', [Validators.required, Validators.minLength(4)]],
+            'street_number': ['', [BeckiValidators.regExp('street_number', /^[0-9]+([\/][0-9]+)?$/)]],
+            'city': ['', [Validators.required, Validators.minLength(2)]],
+            'zip_code': ['', [Validators.required, Validators.minLength(5)]],
+            'country': ['', [Validators.required, Validators.minLength(4)]],
         };
 
         if (this.selectedTariff.payment_method_required) {
@@ -207,7 +207,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             if (this.optionsPaymentMethod.length === 1) {
                 value = this.optionsPaymentMethod[0].value;
             }
-            input['payment_method'] =   [value, [Validators.required]]; // only if required_payment_method = true
+            input['payment_method'] = [value, [Validators.required]]; // only if required_payment_method = true
         }
         /*if (this.selectedTariff.payment_mode_required) {
             // input['currency_type'] = ['', [Validators.required]];
@@ -220,26 +220,26 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
         if (this.selectedTariff.company_details_required) {
 
-            input['company_name'] =                 ['', [Validators.required, Validators.minLength(4)]];
+            input['company_name'] = ['', [Validators.required, Validators.minLength(4)]];
 
-            input['company_authorized_email'] =     ['', [Validators.required, BeckiValidators.email]];
-            input['company_authorized_phone'] =     ['', [Validators.required, Validators.minLength(4)]]; // TODO: libphonenumber
+            input['company_authorized_email'] = ['', [Validators.required, BeckiValidators.email]];
+            input['company_authorized_phone'] = ['', [Validators.required, Validators.minLength(4)]]; // TODO: libphonenumber
 
-            input['company_web'] =                  ['', [Validators.required, Validators.minLength(4)]];
-            input['registration_no'] =              ['', [BeckiValidators.condition(() => !this.inEu, Validators.required)]];
-            input['vat_number'] =                   [
+            input['company_web'] = ['', [Validators.required, Validators.minLength(4)]];
+            input['registration_no'] = ['', [BeckiValidators.condition(() => !this.inEu, Validators.required)]];
+            input['vat_number'] = [
                 '', // např. GB365684514
                 [BeckiValidators.condition(() => this.inEu, Validators.required)],
                 BeckiAsyncValidators.condition(() => this.inEu, BeckiAsyncValidators.validateEntity(this.backendService, 'vat_number'))
             ];
 
         } else {
-            input['full_name'] = [this.backendService.personInfoSnapshot.full_name || '',  [Validators.required, Validators.minLength(3)]];
+            input['full_name'] = [this.backendService.personInfoSnapshot.full_name || '', [Validators.required, Validators.minLength(3)]];
         }
 
         this.form = this.formBuilder.group(input);
 
-        this.router.navigate(['/financial/product-registration', {step: 2}]);
+        this.router.navigate(['/financial/product-registration', { step: 2 }]);
     }
 
     translatePaymentMode(value: string): string {
@@ -343,7 +343,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
                 }
             })
             .catch(reason => {
-                this.fmError(this.translate('flash_cant_buy_product',reason));
+                this.fmError(this.translate('flash_cant_buy_product', reason));
                 this.unblockUI();
             });
     }
