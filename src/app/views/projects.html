@@ -38,15 +38,15 @@
                 <tbody>
                 <tr *ngFor="let project of projects">
 
-                    <td class="no-wrap" *ngIf="project.active" class="no-wrap bold"><a (click)="onProjectClick(project)">{{project.name}}</a></td>
+                    <td class="no-wrap" *ngIf="project.active" class="no-wrap bold"><a (click)="onProjectClick(project)">{{project.project_name}}</a></td>
                     <td class="no-wrap" *ngIf="!project.active">
-                        <strong>{{project.name}}</strong>
+                        <strong>{{project.project_name}}</strong>
                         <br>
                         <span class="font-red-flamingo">(Deactivated under <a (click)="onProductClick(project.product_id)"><span class="font-red-flamingo bold">{{project.product_name}}</span></a>) </span>
                     </td>
 
 
-                    <td>{{project.description}}</td>
+                    <td>{{project.project_description}}</td>
                     <td class="no-wrap">
 
                         <style type="text/css">

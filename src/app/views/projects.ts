@@ -11,7 +11,7 @@ import {
 } from '../services/NotificationService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsProjectPropertiesModel } from '../modals/project-properties';
-import { IProject, IApplicableProduct } from '../backend/TyrionAPI';
+import { IProjectShortDetail, IApplicableProduct } from '../backend/TyrionAPI';
 
 
 @Component({
@@ -20,7 +20,7 @@ import { IProject, IApplicableProduct } from '../backend/TyrionAPI';
 })
 export class ProjectsComponent extends BaseMainComponent implements OnInit {
 
-    projects: IProject[];
+    projects: IProjectShortDetail[];
 
     products: IApplicableProduct[];
 
@@ -35,7 +35,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
     refresh(): void {
         this.blockUI();
         Promise.all<any>([this.backendService.getAllProjects(), this.backendService.getAllProductUserApplicables()])
-            .then((values: [IProject[], IApplicableProduct[]]) => {
+            .then((values: [IProjectShortDetail[], IApplicableProduct[]]) => {
                 this.projects = values[0];
                 this.products = values[1];
                 this.unblockUI();
@@ -46,8 +46,8 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
             });
     }
 
-    onProjectClick(project: IProject): void {
-        this.navigate(['/projects', project.id]);
+    onProjectClick(project: IProjectShortDetail): void {
+        this.navigate(['/projects', project.project_id]);
     }
 
     onProductClick(product_id: string): void {
@@ -109,16 +109,16 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
         });
     }
 
-    onEditClick(project: IProject): void {
+    onEditClick(project: IProjectShortDetail): void {
         if (!this.products) {
             this.addFlashMessage(new FlashMessageError('Cannot add project now.'));
         }
 
-        let model = new ModalsProjectPropertiesModel(this.products, project.name, project.description, '' + project.product_id, true, project.name);
+        let model = new ModalsProjectPropertiesModel(this.products, project.project_name, project.project_description, project.product_id, true, project.project_name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editProject(project.id, {
+                this.backendService.editProject(project.project_id, {
                     project_name: model.name,
                     project_description: model.description
                 })
@@ -134,11 +134,11 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
         });
     }
 
-    onRemoveClick(project: IProject): void {
-        this.modalService.showModal(new ModalsRemovalModel(project.name)).then((success) => {
+    onRemoveClick(project: IProjectShortDetail): void {
+        this.modalService.showModal(new ModalsRemovalModel(project.project_name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteProject(project.id)
+                this.backendService.deleteProject(project.project_id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess('The project has been removed.'));
                         this.refresh(); // also unblockUI
