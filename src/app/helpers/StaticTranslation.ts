@@ -1429,11 +1429,11 @@ export class StaticTranslation {
                 'PLANNED_UPDATE': 'Update is scheduled in the future.',
             },
             'online_status': {
-                'unknown_lost_connection_with_server': 'unknown',
                 'online': 'unknown',
                 'offline': 'We are not found any collisions',
-                'synchronization_in_progress': 'Attention! Hardware is already running in the Instance',
-                'not_yet_first_connected': 'There is scheduled update in future',
+                'synchronization_in_progress': 'Synchronizing',
+                'unknown_lost_connection_with_server': 'We lost contact with server. 50/50 that it\'s still running.',
+                'not_yet_first_connected': 'We have no idea - (never logged before)',
             },
             'device_alerts': {
                 'BOOTLOADER_REQUIRED': 'Bootloader update is required.',

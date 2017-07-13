@@ -103,12 +103,12 @@
 
                                     <div>
                                         {{'label_device_status'|bkTranslate:this}}:
-                                        <span *ngIf="device.online_state == 'online'" class="font-green-jungle bold">{{'online'|bkTranslateTable:'board_online_status'}}</span>
-                                        <span *ngIf="device.online_state == 'synchronization_in_progress'" class="font-grey-mint bold">{{'label_synchronizing'|bkTranslateTable:'board_online_status'}}<i class="fa fa-spinner fa-spin"></i></span>
-                                        <span *ngIf="device.online_state == 'not_yet_first_connected'"     class="font-grey-mint bold">{{'label_main_server_not_found'|bkTranslateTable:'board_online_status'}}</span>
+                                        <span *ngIf="device.online_state == 'online'" class="font-green-jungle bold">{{'online'|bkTranslateTable:'online_status'}}</span>
+                                        <span *ngIf="device.online_state == 'synchronization_in_progress'" class="font-grey-mint bold">{{'synchronizing_in_progress'|bkTranslateTable:'online_status'}}<i class="fa fa-spinner fa-spin"></i></span>
+                                        <span *ngIf="device.online_state == 'not_yet_first_connected'"     class="font-grey-mint bold">{{'not_yet_first_connected'|bkTranslateTable:'online_status'}}</span>
 
                                         <span *ngIf="device.online_state == 'offline'">
-                                            <strong class="bold font-red">{{'offline'|bkTranslateTable:'board_online_status'}}</strong><br>
+                                            <strong class="bold font-red">{{'offline'|bkTranslateTable:'online_status'}}</strong><br>
                                               {{'label_device_last_seen'|bkTranslate:this}}:
                                             <span *ngIf="device.latest_online" class="font-grey-mint bold">
                                                  {{device.latest_online|bkUnixTimeToDate}}

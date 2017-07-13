@@ -35,12 +35,14 @@
                     <td class="vert-align no-wrap bold">
                         <a (click)="onInstanceClick(instance)" class="no-wrap"><strong>{{instance.name?instance.name:'Instance'}}</strong></a>
                     </td>
-                    <td class="vert-align no-wrap">{{instance.id}}</td>
-                    <td class="vert-align no-wrap">{{instance.description}}</td>
-                    <td class="vert-align no-wrap"><a (click)="onBlockoProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></td>
-                    <td class="vert-align no-wrap">
-                        <span *ngIf="instance.instance_is_online" class="font-green-jungle">{{'label_online'|bkTranslate:this}}</span>
-                        <span *ngIf="!instance.instance_is_online" class="font-red">{{'label_offline'|bkTranslate:this}}</span>
+                    <td class="no-wrap">{{instance.id}}</td>
+                    <td class="no-wrap">{{instance.description}}</td>
+                    <td class="no-wrap"><a (click)="onBlockoProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></td>
+                    <td class="no-wrap">
+                        <span *ngIf="instance.instance_status == 'online' " class="font-green-jungle">{{'online'|bkTranslateTable:'online_status'}}</span>
+                        <span *ngIf="instance.instance_status == 'offline' " class="font-red">{{'offline'|bkTranslateTable:'online_status'}}</span>
+                        <span *ngIf="instance.instance_status == 'synchronization_in_progress' " class="font-grey-mint">{{'synchronization_in_progress'|bkTranslateTable:'online_status'}} <i class="fa fa-spinner fa-spin"></i></span>
+                        <span *ngIf="instance.instance_status == 'unknown_lost_connection_with_server' " class="font-grey-mint">{{'label_unknown_lost_connection_with_server'|bkTranslateTable:'online_status'}}</span>
                     </td>
                     <td class="vert-align no-wrap text-right">
 

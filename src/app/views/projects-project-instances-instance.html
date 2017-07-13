@@ -67,7 +67,19 @@
 
                             <div>
                                 <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}}</strong>{{'label_instance_status'|bkTranslate:this}}
-                                <span [class.font-green-jungle]="instance.instance_online" [class.font-red]="!instance.instance_online" style="font-size: 1em">&nbsp;(<strong>{{instance.instance_online?'online':'offline'}}</strong>)</span>
+
+                                <span *ngIf="instance.actual_instance==null">
+                                     <span class="font-grey-mint">Instance is not running in Cloud. (Dopřeložit do Tabulky) </span>
+                                </span>
+
+                                <span *ngIf="instance.actual_instance!=null">
+                                    <span *ngIf="instance.instance_status=='online' " class="font-green-jungle">{{'online'|bkTranslateTable:'online_status'}}</span>
+                                    <span *ngIf="instance.instance_status=='offline' " class="font-red">{{'offline'|bkTranslateTable:'online_status'}}</span>
+                                    <span *ngIf="instance.instance_status=='synchronization_in_progress' " class="font-grey-mint">{{'synchronization_in_progress'|bkTranslateTable:'online_status'}} <i class="fa fa-spinner fa-spin"></i></span>
+                                    <span *ngIf="instance.instance_status=='unknown_lost_connection_with_server' " class="font-grey-mint">{{'label_unknown_lost_connection_with_server'|bkTranslateTable:'online_status'}}</span>
+                                </span>
+
+
                             </div>
 
                         </div>
@@ -124,24 +136,48 @@
 
                             <h3 class="font-color-blocko"><strong>{{'label_blocko'|bkTranslate:this}}</strong></h3>
 
-                            <div>
-                                <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}}</strong>{{'label_program'|bkTranslate:this}}
-                                <span class="font-grey-mint bold"><a (click)="onBlockoProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></span>
-                            </div>
+                            <span *ngIf="instance.actual_instance!=null">
+                                <div>
+                                    <strong class="font-color-blocko">BLOCKO</strong>{{'label_program'|bkTranslate:this}}
+                                    <span class="font-grey-mint bold"><a (click)="onBlockoProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></span>
+                                </div>
 
-                            <div *ngIf="instance.b_program_description && instance.b_program_description.length">
-                                <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}}</strong>{{'label_description'|bkTranslate:this}}
-                                <span class="font-grey-mint bold">{{instance.b_program_description}}</span>
-                            </div>
-                            <br>
-                            <div>
-                                <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}}</strong>{{'label_version'|bkTranslate:this}}
-                                <span class="font-grey-mint bold"><a (click)="onBlockoProgramVersionClick(instance.actual_instance.b_program_id, instance.actual_instance.b_program_version_id)">{{instance.actual_instance.b_program_version_name}}</a></span>
-                            </div>
-                            <div>
-                                <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}}</strong>{{'label_description'|bkTranslate:this}}
-                                <span class="font-grey-mint bold">{{instance.actual_instance.b_program_version_description}}</span>
-                            </div>
+                                <div *ngIf="instance.actual_instance.b_program_description && instance.actual_instance.b_program_description.length">
+                                    <strong class="font-color-blocko">BLOCKO</strong>{{'label_description'|bkTranslate:this}}
+                                    <span class="font-grey-mint bold">{{instance.b_program_description}}</span>
+                                </div>
+                                <br>
+                                <div>
+                                    <strong class="font-color-blocko">BLOCKO</strong>{{'label_version'|bkTranslate:this}}
+                                    <span class="font-grey-mint bold"><a (click)="onBlockoProgramVersionClick(instance.actual_instance.b_program_id, instance.actual_instance.b_program_version_id)">{{instance.actual_instance.b_program_version_name}}</a></span>
+                                </div>
+                                <div>
+                                    <strong class="font-color-blocko">BLOCKO</strong>{{'label_description'|bkTranslate:this}}
+                                    <span class="font-grey-mint bold">{{instance.actual_instance.b_program_version_description}}</span>
+                                </div>
+                            </span>
+
+                            <span *ngIf="instance.actual_instance==null">
+
+                                <div>
+                                    <span class="font-grey-mint">Instance is not running in Cloud. (Dopřeložit do Tabulky) </span>
+                                </div>
+
+                                <br>
+
+                                <!-- Do budoucna nebude Instance vázaná na Blocko a tato část se smaže -->
+
+                                        <div>
+                                            <strong class="font-color-blocko">BLOCKO</strong>{{'label_program'|bkTranslate:this}}
+                                            <span class="font-grey-mint bold"><a (click)="onBlockoProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></span>
+                                        </div>
+
+                                        <div *ngIf="instance.b_program_description && instance.b_program_description.length">
+                                            <strong class="font-color-blocko">BLOCKO</strong>{{'label_description'|bkTranslate:this}}
+                                            <span class="font-grey-mint bold">{{instance.b_program_description}}</span>
+                                        </div>
+
+                            </span>
 
                         </div>
                         <div class="col-sm-6">
@@ -155,18 +191,32 @@
 
                             <br>
 
-                            <div>
-                                {{'label_created'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{instance.actual_instance.date_of_created|bkUnixTimeToDate}}</span>
-                            </div>
-                            <div>
-                                {{'label_running_from'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{instance.actual_instance.running_from|bkUnixTimeToDate}}</span>
-                            </div>
-                            <div>
-                                {{'label_running_status'|bkTranslate:this}}:
-                                <span class="font-grey-mint bold">{{instance.actual_instance.status|bkTranslateTable:this:'instance_status'}}</span>
-                            </div>
+                            <span *ngIf="instance.actual_instance!=null">
+
+                                <div>
+                                    {{'label_created'|bkTranslate:this}}:
+                                    <span class="font-grey-mint bold">{{instance.actual_instance.date_of_created|bkUnixTimeToDate}}</span>
+                                </div>
+                                <div>
+                                    {{'label_running_from'|bkTranslate:this}}:
+                                    <span class="font-grey-mint bold">{{instance.actual_instance.running_from|bkUnixTimeToDate}}</span>
+                                </div>
+                                <div>
+                                    {{'label_running_status'|bkTranslate:this}}:
+                                    <span class="font-grey-mint bold">{{instance.actual_instance.status|bkTranslateTable:'instance_status'}}</span>
+                                </div>
+
+                            </span>
+
+                            <span *ngIf="instance.actual_instance==null">
+
+                                <div>
+                                    <span class="font-grey-mint">Cloud not contains any running snapshot of this instance.  (Dopřeložit do Tabulky) </span>
+                                </div>
+
+                                <br>
+
+                            </span>
 
                         </div>
                     </div>
