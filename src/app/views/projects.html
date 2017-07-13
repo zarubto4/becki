@@ -30,34 +30,40 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th lass="full-width">Name</th>
-                    <th class="full-width">Description</th>
-                    <th class="text-center">Actions</th>
+                    <th class="col col-lg-3">Name</th>
+                    <th class="col col-lg-5">Description</th>
+                    <th class="col col-lg-2">Financial Product</th>
+                    <th class="col col-lg-1 text-right no-wrap">Actions &nbsp;&nbsp;</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let project of projects">
 
-                    <td class="no-wrap" *ngIf="project.active" class="no-wrap bold"><a (click)="onProjectClick(project)">{{project.project_name}}</a></td>
-                    <td class="no-wrap" *ngIf="!project.active">
+                    <td *ngIf="project.active_status" class="no-wrap bold"><a (click)="onProjectClick(project)">{{project.project_name}}</a></td>
+
+                    <td *ngIf="!project.active_status">
                         <strong>{{project.project_name}}</strong>
                         <br>
                         <span class="font-red-flamingo">(Deactivated under <a (click)="onProductClick(project.product_id)"><span class="font-red-flamingo bold">{{project.product_name}}</span></a>) </span>
                     </td>
 
-
                     <td>{{project.project_description}}</td>
-                    <td class="no-wrap">
+
+                    <td>
+                        <a (click)="onProductClick(project.product_id)">{{project.product_name}}</a>
+                    </td>
+
+                    <td class="no-wrap text-right ">
 
                         <style type="text/css">
                             table tr button { opacity:0.05;}
                             table tr:hover button { opacity:1 }
                         </style>
 
-                        <button title="Project properties" class="btn btn-icon-only green" [disabled]="!project.edit_permission || !project.active" (click)="onEditClick(project)">
+                        <button title="Project properties" class="btn btn-icon-only green" [disabled]="!project.edit_permission || !project.active_status" (click)="onEditClick(project)">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="Remove project" class="btn btn-icon-only red" [disabled]="!project.delete_permission || !project.active" (click)="onRemoveClick(project)">
+                        <button title="Remove project" class="btn btn-icon-only red" [disabled]="!project.delete_permission || !project.active_status" (click)="onRemoveClick(project)">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>
