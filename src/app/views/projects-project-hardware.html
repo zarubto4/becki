@@ -50,7 +50,7 @@
                     <td class="no-wrap">
                         <span *ngIf="device.online_state=='online'" class="font-green-jungle">{{'label_online'|bkTranslate:this}}</span>
                         <span *ngIf="device.online_state=='offline'" class="font-red-flamingo">{{'label_offline'|bkTranslate:this}}</span>
-                        <span *ngIf="device.online_state=='synchronization_in_progress'" class="font-grey-mint bold">{{'label_synchronizing'|bkTranslate:this}}<i class="fa fa-spinner fa-spin"></i></span>
+                        <span *ngIf="device.online_state=='synchronization_in_progress'" class="font-grey-mint bold">{{'label_synchronizing'|bkTranslate:this}} <i class="fa fa-spinner fa-spin"></i></span>
                     </td>
                     <td class="no-wrap">
 

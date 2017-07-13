@@ -678,7 +678,7 @@ export class StaticTranslation {
                 'label_description': 'Description',
                 'label_no_history_in_instance': 'There is no history for this instance',
                 'label_hardware_actual_in_instance': 'Actual in Instance',
-                'label_hardware_no_hardware_in_instance': 'No Hardware projects in this instance',
+                'label_hardware_no_hardware_in_instance': 'No integrated Hardware in actually running instance',
                 'label_grid_no_grid_in_instance': 'No Grid projects in this instance',
 
                 'label_modal_shutdown_instance': 'Shutdown instance',
@@ -1273,12 +1273,12 @@ export class StaticTranslation {
                 'ALREADY_IN_INSTANCE': 'Attention! Hardware is already running in the Instance',
                 'PLANNED_UPDATE': 'There is scheduled update in future',
             },
-            'board_online_status': {
-                'unknown_lost_connection_with_server': 'unknown',
+            'online_status': {
                 'online': 'unknown',
                 'offline': 'We are not found any collisions',
-                'synchronization_in_progress': 'Attention! Hardware is already running in the Instance',
-                'not_yet_first_connected': 'There is scheduled update in future',
+                'synchronization_in_progress': 'Synchronizing',
+                'unknown_lost_connection_with_server': 'We lost contact with server. 50/50 that it\'s still running.',
+                'not_yet_first_connected': 'We have no idea - (never logged before)',
             },
             'device_alerts': {
                 'BOOTLOADER_REQUIRED': 'Bootloader update is required',
