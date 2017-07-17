@@ -100,68 +100,70 @@
                                     <span  *ngIf="device.wifi_mac_address" class="font-grey-mint bold">{{device.wifi_mac_address}}</span>
                                     <span  *ngIf="!device.wifi_mac_address" class="font-grey-mint bold">{{'label_unknown_value'|bkTranslate:this}}</span>
                                 </div>
+                                <hr>
+                                <div>
+                                    {{'label_device_status'|bkTranslate:this}}:
+                                    <span *ngIf="device.online_state == 'online'"                       class="font-green-jungle bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
+                                    <span *ngIf="device.online_state == 'synchronization_in_progress'"  class="font-grey-mint bold"><i class="fa fa-spinner fa-spin"></i> {{device.online_state |bkTranslateTable:this:'online_status'}}</span>
+                                    <span *ngIf="device.online_state == 'not_yet_first_connected'"      class="font-grey-mint bold"><i class="fa fa-spinner fa-spin"></i> {{device.online_state|bkTranslateTable:this:'online_status'}}</span>
 
-                                    <div>
-                                        {{'label_device_status'|bkTranslate:this}}:
-                                        <span *ngIf="device.online_state == 'online'" class="font-green-jungle bold">{{'online'|bkTranslateTable:'online_status'}}</span>
-                                        <span *ngIf="device.online_state == 'synchronization_in_progress'" class="font-grey-mint bold">{{'synchronizing_in_progress'|bkTranslateTable:'online_status'}}<i class="fa fa-spinner fa-spin"></i></span>
-                                        <span *ngIf="device.online_state == 'not_yet_first_connected'"     class="font-grey-mint bold">{{'not_yet_first_connected'|bkTranslateTable:'online_status'}}</span>
-
-                                        <span *ngIf="device.online_state == 'offline'">
-                                            <strong class="bold font-red">{{'offline'|bkTranslateTable:this:'online_status'}}</strong><br>
+                                    <span *ngIf="device.online_state == 'offline'">
+                                            <strong
+                                                class="bold font-red">{{'offline'|bkTranslateTable:this:'online_status'}}</strong><br>
                                               {{'label_device_last_seen'|bkTranslate:this}}:
                                             <span *ngIf="device.latest_online" class="font-grey-mint bold">
                                                  {{device.latest_online|bkUnixTimeToDate}}
                                             </span>
-                                            <span *ngIf="!device.latest_online"  class="font-grey-mint bold">
+                                            <span *ngIf="!device.latest_online" class="font-grey-mint bold">
                                               ({{'label_last_seen_unknow'|bkTranslate:this}})
                                             </span>
                                         </span>
-                                    </div>
 
+                                </div>
                                 <hr>
                                 <div>
-                                    <H2>Settings</H2>
-
-                                    <div>
-                                        <span class="font-blue-dark">
-                                            <i class="fa fa-lg fa-microchip"></i><span>&nbsp;&nbsp; {{'label_bootloader'|bkTranslate:this}}</span>
-                                        </span>
-                                        <br>
-                                        <br>
-                                        <ul>
-                                            {{'label_bootloader_version'|bkTranslate:this}}:
-                                            <span class="font-grey-mint bold"> {{device.actual_bootloader_version_name?device.actual_bootloader_version_name:('label_not_set_none'|bkTranslate:this) }}</span>
-                                            <span *ngIf="device.available_bootloader_id == device.actual_bootloader_id"> &nbsp;&nbsp;
-                                                <span class="font-grey-mint">({{'label_bootloader_up_to_date'|bkTranslate:this}})</span>
-                                                &nbsp; <i class="fa fa-check font-green-jungle " style="vertical-align: middle; font-size: 1.5em;"></i>
-                                            </span>
-                                            <button *ngIf="device.available_bootloader_id !== device.actual_bootloader_id" class="btn red btn-sm" (click)="onUpdateBootloaderClick()">
-                                                    <i class="fa fa-refresh"></i>{{'label_update_to'|bkTranslate:this}} <strong>{{device.available_bootloader_version_name}}</strong>
-                                            </button>
-                                        </ul>
-                                    </div>
+                                    <H3>Settings</H3>
                                     <br>
-                                    <div>
-                                        <span class="font-blue-dark">
-                                            <i class="fa fa-lg fa-bell"></i><span> &nbsp;&nbsp; {{'label_developer_settings'|bkTranslate:this}}</span>
-                                        </span>
+                                    <ul>
+                                        <div>
+                                            <span class="font-blue-dark">
+                                                <i class="fa fa-lg fa-microchip"></i><span>&nbsp;&nbsp; {{'label_bootloader'|bkTranslate:this}}</span>
+                                            </span>
+                                            <br>
+                                            <br>
+                                            <ul>
+                                                <span class="font-grey-mint">{{'label_bootloader_version'|bkTranslate:this}}: </span>
+                                                <span class="font-grey-mint bold"> {{device.actual_bootloader_version_name?device.actual_bootloader_version_name:('label_not_set_none'|bkTranslate:this) }}</span>
+                                                <span *ngIf="device.available_bootloader_id == device.actual_bootloader_id"> &nbsp;&nbsp;
+                                                    <span class="font-grey-mint">({{'label_bootloader_up_to_date'|bkTranslate:this}})</span>
+                                                    <i class="fa fa-check font-green-jungle " style="vertical-align: middle; font-size: 1.5em;"></i>
+                                                </span>
+                                                <button *ngIf="device.available_bootloader_id !== device.actual_bootloader_id" class="btn red btn-sm" (click)="onUpdateBootloaderClick()">
+                                                        <i class="fa fa-refresh"></i>{{'label_update_to'|bkTranslate:this}} <strong>{{device.available_bootloader_version_name}}</strong>
+                                                </button>
+                                            </ul>
+                                        </div>
                                         <br>
-                                        <br>
-                                        <ul>
-                                            <li class="font-grey-mint">
-                                                <span class="font-grey-mint bold"> Analytics for Developer </span> &nbsp;&nbsp;&nbsp;
-                                                <i *ngIf="!device.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
-                                                <i *ngIf="device.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
-                                            </li>
-                                            <li class="font-grey-mint">
-                                                <span class="font-grey-mint bold"> Log Archive </span> &nbsp;&nbsp;&nbsp;
-                                                <i *ngIf="device.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
-                                                <i *ngIf="!device.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
-                                            </li>
-                                        </ul>
-                                    </div>
-
+                                        <div>
+                                            <span class="font-blue-dark">
+                                                <i class="fa fa-lg fa-bell"></i><span> &nbsp;&nbsp; {{'label_developer_settings'|bkTranslate:this}}</span>
+                                            </span>
+                                            <br>
+                                            <br>
+                                            <ul>
+                                                <li class="font-grey-mint">
+                                                    <span class="font-grey-mint"> Analytics for Developer </span> &nbsp;&nbsp;&nbsp;
+                                                    <i *ngIf="!device.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
+                                                    <i *ngIf="device.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
+                                                </li>
+                                                <li class="font-grey-mint">
+                                                    <span class="font-grey-mint"> Log Archive </span> &nbsp;&nbsp;&nbsp;
+                                                    <i *ngIf="device.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
+                                                    <i *ngIf="!device.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </ul>
 
                                 </div>
 
@@ -205,65 +207,60 @@
                                         </div>
                                     </div>
 
+                                    <div>
+                                        <div>
+                                            <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_actual_program_name'|bkTranslate:this}}:
+                                            <a *ngIf="device.actual_c_program_name" class="bold"
+                                               [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_id]">{{device.actual_c_program_name}}</a>
+                                            <span *ngIf="!device.actual_c_program_name" class="font-grey-mint bold">{{'label_alerts'|bkTranslate:this}}</span>
+                                        </div>
+                                        <div>
+                                            <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_actual_program_version'|bkTranslate:this}}:
+                                            <a *ngIf="device.actual_c_program_version_name" class=" bold"
+                                               [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_id, { version: device.actual_c_program_version_id }]">{{device.actual_c_program_version_name}}</a>
+                                            <span *ngIf="!device.actual_c_program_version_name"
+                                                  class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div>
                                         <div>
                                             <div>
                                                 <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_actual_program_name'|bkTranslate:this}}:
-                                                <a *ngIf="device.actual_c_program_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_id]">{{device.actual_c_program_name}}</a>
+                                                <a *ngIf="device.actual_c_program_name" class="font-grey-mint bold"
+                                                   [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_id]">{{device.actual_c_program_name}}</a>
                                                 <span *ngIf="!device.actual_c_program_name" class="font-grey-mint bold">{{'label_alerts'|bkTranslate:this}}</span>
                                             </div>
                                             <div>
                                                 <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_actual_program_version'|bkTranslate:this}}:
-                                                <a *ngIf="device.actual_c_program_version_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_id, { version: device.actual_c_program_version_id }]">{{device.actual_c_program_version_name}}</a>
-                                                <span *ngIf="!device.actual_c_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
+                                                <a *ngIf="device.actual_c_program_version_name"
+                                                   class="font-grey-mint bold"
+                                                   [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_id, { version: device.actual_c_program_version_id }]">{{device.actual_c_program_version_name}}</a>
+                                                <span *ngIf="!device.actual_c_program_version_name"
+                                                      class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                             </div>
                                         </div>
-                                        <br>
+                                        <hr>
                                         <div>
                                             <div>
-
-                                            <div *ngIf="device.backup_mode=='AUTO_BACKUP'">
-                                                {{'label_backup_mode'|bkTranslate:this}}: <span class="font-grey-mint bold">{{'label_backup_automatic'|bkTranslate:this}}</span>
-                                                <!--A version running for more than 5 minutes is marked as secure and backed up on the device automatically -->
-                                                <a (click)="onAutobackupSwitchClick('STATIC_BACKUP')">(<span [innerHTML]="'label_switch_to_static'|bkTranslate:this"></span>)</a>
-                                            </div>
-                                            <div *ngIf="device.backup_mode=='STATIC_BACKUP'">
-                                                {{'label_backup_mode'|bkTranslate:this}}: <span class="font-grey-mint bold">{{'label_backup_static'|bkTranslate:this}}</span>
-                                                <!-- The selected static backup is uploaded to your device and helps you in emergency situations-->
-                                                <a (click)="onAutobackupSwitchClick('AUTO_BACKUP')">(<span [innerHTML]="'label_switch_to_automatic'|bkTranslate:this"></span>)</a>
-                                            </div>
-
-                                           </div>
-                                           <div>
-                                               <div>
-                                                   <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_actual_backup_program_name'|bkTranslate:this}}:
-                                                   <a *ngIf="device.actual_c_program_backup_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_backup_id]">{{device.actual_c_program_backup_name}}</a>
-                                                   <span *ngIf="!device.actual_c_program_backup_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
-                                               </div>
-                                               <div>
-                                                   <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_actual_backup_program_version'|bkTranslate:this}}:
-                                                   <a *ngIf="device.actual_c_program_backup_version_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_backup_id, { version: device.actual_c_program_backup_version_id }]">{{device.actual_c_program_backup_version_name}}</a>
-                                                   <span *ngIf="!device.actual_c_program_backup_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
-                                               </div>
-                                           </div>
-                                       </div>
-                                       <div class="clearfix"></div>
-                                   </div>
-                               </div>
-                               <div class="col-md-6">
-                                   <div class="portlet portlet light bordered">
-                                       <div class="portlet-title">
-                                           <div class="becki-caption">
-                               <span class="font-blue-dark">
-                                   <i class="fa fa-fw fa-cloud"></i>
-                                   Byzance<strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}} </strong>
-                               </span>
-                                        </div>
-                                    </div>
-                                    <div>
+                                                <div *ngIf="device.backup_mode=='AUTO_BACKUP'">
+                                                    {{'label_backup_mode'|bkTranslate:this}}: <span
+                                                    class="font-grey-mint bold">{{'label_backup_automatic'|bkTranslate:this}}</span>
+                                                    <!--A version running for more than 5 minutes is marked as secure and backed up on the device automatically -->
+                                                    <a (click)="onAutobackupSwitchClick('STATIC_BACKUP')">(<span
+                                                        [innerHTML]="'label_switch_to_static'|bkTranslate:this"></span>)</a>
+                                                </div>
+                                                <div *ngIf="device.backup_mode=='STATIC_BACKUP'">
+                                                    {{'label_backup_mode'|bkTranslate:this}}: <span
+                                                    class="font-grey-mint bold">{{'label_backup_static'|bkTranslate:this}}</span>
+                                                    <!-- The selected static backup is uploaded to your device and helps you in emergency situations-->
+                                                    <a (click)="onAutobackupSwitchClick('AUTO_BACKUP')">(<span
+                                                        [innerHTML]="'label_switch_to_automatic'|bkTranslate:this"></span>)</a>
+                                                </div>
                                             </div>
                                             <div>
                                                 <div>
-                                                    <strong class="font-color-code">CODE</strong>{{'label_actual_backup_program_name'|bkTranslate:this}}:
+                                                    <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_actual_backup_program_name'|bkTranslate:this}}:
                                                     <a *ngIf="device.actual_c_program_backup_name"
                                                        class="font-grey-mint bold"
                                                        [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_backup_id]">{{device.actual_c_program_backup_name}}</a>
@@ -271,7 +268,7 @@
                                                           class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                                 </div>
                                                 <div>
-                                                    <strong class="font-color-code">CODE</strong>{{'label_actual_backup_program_version'|bkTranslate:this}}:
+                                                    <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_actual_backup_program_version'|bkTranslate:this}}:
                                                     <a *ngIf="device.actual_c_program_backup_version_name"
                                                        class="font-grey-mint bold"
                                                        [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_backup_id, { version: device.actual_c_program_backup_version_id }]">{{device.actual_c_program_backup_version_name}}</a>
@@ -297,7 +294,7 @@
 
 
                                     <div *ngIf="device.server!=null">
-                                        <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}} </strong>{{'label_main_server'|bkTranslate:this}}:
+                                        <strong class="font-color-cloud">CLOUD</strong>{{'label_main_server'|bkTranslate:this}}:
                                         <span *ngIf="device.server.personal_server_name" class="font-grey-mint bold">{{device.server_name}}</span>
                                         <span *ngIf="!device.server.personal_server_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                         <span *ngIf="device.server.personal_server_name && device.server.online_state"
@@ -307,7 +304,7 @@
                                     </div>
 
                                     <span *ngIf="device.server==null">
-                                        <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}} </strong> {{'label_main_server_not_found'|bkTranslate:this}}
+                                        <strong class="font-color-cloud">CLOUD</strong> {{'label_main_server_not_found'|bkTranslate:this}}
                                    </span>
 
                                     <br>
@@ -333,25 +330,8 @@
                                             class="font-grey-mint bold">({{'label_unknown_lost_connection_with_server'|bkTranslate:this}})</span>
                                     </div>
 
-                                           <br>
+                                    <br>
 
-                                           <div *ngIf="device.actual_instance!=null">
-                                               <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}} </strong>{{'label_name'|bkTranslate:this}}:
-                                               <a *ngIf="device.actual_instance.b_program_id" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'blocko', device.actual_instance.b_program_id]">{{device.actual_instance.b_program_name}}</a>
-                                               <span *ngIf="!device.actual_instance.b_program_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
-                                           </div>
-                                           <div *ngIf="device.actual_instance!=null">
-                                               <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}} </strong>{{'label_version'|bkTranslate:this}}:
-                                               <a *ngIf="device.actual_instance.b_program_version_id" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'blocko', device.actual_instance.b_program_id, { version: device.actual_instance.b_program_version_id }]">{{device.actual_instance.b_program_version_name}}</a>
-                                               <span *ngIf="!device.b_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
-                                           </div>
-                                       </div>
-                                       <div class="clearfix"></div>
-                                   </div>
-                               </div>
-                           </div>
-                   </div>
-               </div>
                                     <div *ngIf="device.actual_instance!=null">
                                         <strong class="font-color-blocko">BLOCKO</strong>{{'label_name'|bkTranslate:this}}:
                                         <a *ngIf="device.actual_instance.b_program_id" class="font-grey-mint bold"
