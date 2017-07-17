@@ -12,7 +12,6 @@
     <div *ngIf="device && typeOfBoard" class="row">
         <div class="col-md-12">
             <div class="portlet portlet light bordered">
-
                 <div class="portlet-title">
                     <div class="becki-caption">
                         <span class="font-blue-dark">
@@ -53,7 +52,7 @@
                 </div>
 
                 <div *ngIf="hardwareTab == 'overview'">
-                    <div *ngIf="device && typeOfBoard" class="row margin-left-15 margin-top-40">
+                    <div *ngIf="device && typeOfBoard" class="row margin-left-15 margin-top-40 margin-right-15">
 
                         <!-- Main Overview -->
                         <div *ngIf="device && typeOfBoard" class="row">
@@ -90,54 +89,83 @@
                                     {{'label_id'|bkTranslate:this}}:
                                     <span class="font-grey-mint bold">{{device.id}}</span>
                                 </div>
-
-                                <hr>
-
-                                <div *ngIf="device.mac_address">
+                                <br>
+                                <div>
                                     {{'label_ethernet_address'|bkTranslate:this}}:
-                                    <span class="font-grey-mint bold">{{device.mac_address}}</span>
+                                    <span  *ngIf="device.mac_address" class="font-grey-mint bold">{{device.mac_address}}</span>
+                                    <span  *ngIf="!device.mac_address" class="font-grey-mint bold">{{'label_unknown_value'|bkTranslate:this}}</span>
                                 </div>
-                                <div *ngIf="device.wifi_mac_address">
+                                <div>
                                     {{'label_wifi_address'|bkTranslate:this}}:
-                                    <span class="font-grey-mint bold">{{device.wifi_mac_address}}</span>
-                                    <hr>
+                                    <span  *ngIf="device.wifi_mac_address" class="font-grey-mint bold">{{device.wifi_mac_address}}</span>
+                                    <span  *ngIf="!device.wifi_mac_address" class="font-grey-mint bold">{{'label_unknown_value'|bkTranslate:this}}</span>
                                 </div>
-
+                                <hr>
                                 <div>
                                     {{'label_device_status'|bkTranslate:this}}:
-                                    <span *ngIf="device.online_state == 'online'" class="font-green-jungle bold">{{'online'|bkTranslateTable:'online_status'}}</span>
-                                    <span *ngIf="device.online_state == 'synchronization_in_progress'"
-                                          class="font-grey-mint bold">{{'label_synchronizing'|bkTranslateTable:'online_status'}}<i
-                                        class="fa fa-spinner fa-spin"></i></span>
-                                    <span *ngIf="device.online_state == 'not_yet_first_connected'"
-                                          class="font-grey-mint bold">{{'label_main_server_not_found'|bkTranslateTable:'online_status'}}</span>
+                                    <span *ngIf="device.online_state == 'online'"                       class="font-green-jungle bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
+                                    <span *ngIf="device.online_state == 'synchronization_in_progress'"  class="font-grey-mint bold"><i class="fa fa-spinner fa-spin"></i> {{device.online_state |bkTranslateTable:this:'online_status'}}</span>
+                                    <span *ngIf="device.online_state == 'not_yet_first_connected'"      class="font-grey-mint bold"><i class="fa fa-spinner fa-spin"></i> {{device.online_state|bkTranslateTable:this:'online_status'}}</span>
 
                                     <span *ngIf="device.online_state == 'offline'">
                                             <strong
-                                                class="bold font-red">{{'offline'|bkTranslateTable:'online_status'}}</strong><br>
+                                                class="bold font-red">{{'offline'|bkTranslateTable:this:'online_status'}}</strong><br>
                                               {{'label_device_last_seen'|bkTranslate:this}}:
                                             <span *ngIf="device.latest_online" class="font-grey-mint bold">
                                                  {{device.latest_online|bkUnixTimeToDate}}
                                             </span>
                                             <span *ngIf="!device.latest_online" class="font-grey-mint bold">
-                                              ({{'label_unknow'|bkTranslate:this}})
+                                              ({{'label_last_seen_unknow'|bkTranslate:this}})
                                             </span>
                                         </span>
 
                                 </div>
-
                                 <hr>
-
                                 <div>
-                                    <strong>{{'label_bootloader'|bkTranslate:this}}</strong>
-                                    <br> {{'label_bootloader_version'|bkTranslate:this}}:
-                                    <span class="font-grey-mint bold">{{device.actual_bootloader_version_name?device.actual_bootloader_version_name:('label_not_set_none'|bkTranslate:this) }}</span>
-                                    <button *ngIf="device.available_bootloader_id !== device.actual_bootloader_id"
-                                            class="btn red btn-sm" style="margin-top: -2px;"
-                                            (click)="onUpdateBootloaderClick()">
-                                        <i class="fa fa-refresh"></i>{{'label_update_to'|bkTranslate:this}} <strong>{{device.available_bootloader_version_name}}</strong>
-                                    </button>
+                                    <H2>Settings</H2>
+
+                                    <div>
+                                        <span class="font-blue-dark">
+                                            <i class="fa fa-lg fa-microchip"></i><span>&nbsp;&nbsp; {{'label_bootloader'|bkTranslate:this}}</span>
+                                        </span>
+                                        <br>
+                                        <br>
+                                        <ul>
+                                            {{'label_bootloader_version'|bkTranslate:this}}:
+                                            <span class="font-grey-mint bold"> {{device.actual_bootloader_version_name?device.actual_bootloader_version_name:('label_not_set_none'|bkTranslate:this) }}</span>
+                                            <span *ngIf="device.available_bootloader_id == device.actual_bootloader_id"> &nbsp;&nbsp;
+                                                <span class="font-grey-mint">({{'label_bootloader_up_to_date'|bkTranslate:this}})</span>
+                                                &nbsp; <i class="fa fa-check font-green-jungle " style="vertical-align: middle; font-size: 1.5em;"></i>
+                                            </span>
+                                            <button *ngIf="device.available_bootloader_id !== device.actual_bootloader_id" class="btn red btn-sm" (click)="onUpdateBootloaderClick()">
+                                                    <i class="fa fa-refresh"></i>{{'label_update_to'|bkTranslate:this}} <strong>{{device.available_bootloader_version_name}}</strong>
+                                            </button>
+                                        </ul>
+                                    </div>
+                                    <br>
+                                    <div>
+                                        <span class="font-blue-dark">
+                                            <i class="fa fa-lg fa-bell"></i><span> &nbsp;&nbsp; {{'label_developer_settings'|bkTranslate:this}}</span>
+                                        </span>
+                                        <br>
+                                        <br>
+                                        <ul>
+                                            <li class="font-grey-mint">
+                                                <span class="font-grey-mint bold"> Analytics for Developer </span> &nbsp;&nbsp;&nbsp;
+                                                <i *ngIf="!device.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
+                                                <i *ngIf="device.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
+                                            </li>
+                                            <li class="font-grey-mint">
+                                                <span class="font-grey-mint bold"> Log Archive </span> &nbsp;&nbsp;&nbsp;
+                                                <i *ngIf="device.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
+                                                <i *ngIf="!device.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+
                                 </div>
+
 
                                 <div *ngIf="device.alert_list && device.alert_list.length"
                                      style="background-color: pink; padding: 1px 8px; margin-top: 20px;">
@@ -166,13 +194,13 @@
                         <br>
 
                         <!-- Firmware Overview -->
-                        <div *ngIf="device && typeOfBoard" class="row margin-top-50">
+                        <div *ngIf="device && typeOfBoard" class="row">
                             <div class="col-md-6">
                                 <div class="portlet portlet light bordered">
                                     <div class="portlet-title">
                                         <div class="becki-caption">
                                             <span class="font-blue-dark">
-                                                <i class="fa fa-fw fa-microchip"></i>
+                                                <i class="fa fa-fw fa-code"></i>
                                                 <span [innerHTML]="'label_byzance_code'|bkTranslate:this"></span>
                                             </span>
                                         </div>
@@ -330,14 +358,13 @@
                 </div>
 
                 <div *ngIf="hardwareTab == 'update'">
-            <div *ngIf="device && typeOfBoard" class="row margin-left-15 margin-top-20 margin-right-15">
+            <div *ngIf="device && typeOfBoard" class="row margin-left-15 margin-top-40 margin-right-15">
                 <div class="col-md-12">
                     <div *ngIf="device.updates">
                         <div class="table-scrollable" *ngIf="device.updates.length">
                             <table class="table table-hover">
                                 <thead>
                                 <tr>
-
                                     <th>{{'table_id'|bkTranslate:this}}</th>
                                     <th>{{'table_started'|bkTranslate:this}}</th>
                                     <th>{{'table_finished'|bkTranslate:this}}</th>
@@ -347,7 +374,6 @@
                                     <th><strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'table_version'|bkTranslate:this}}
                                     </th>
                                     <th>{{'table_status'|bkTranslate:this}}</th>
-
                                 </tr>
                                 </thead>
                                 <tbody>

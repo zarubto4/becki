@@ -242,7 +242,11 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     }
 
     onEditClick() {
+        // TODO
+    }
 
+    onProcedureClick() {
+        // TODO
     }
 
 

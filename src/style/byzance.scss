@@ -2054,9 +2054,11 @@ ul.hw-list li ul li, ul.grid-list li ul li {
         }
     }
 
+
     &.gray {
         .hint {
             background: #AAA;
+            color: white;
 
             &::after {
                 content: "";
@@ -2065,7 +2067,7 @@ ul.hw-list li ul li, ul.grid-list li ul li {
         }
 
         i {
-            color: #000;
+            color: #868a84;
         }
     }
 }

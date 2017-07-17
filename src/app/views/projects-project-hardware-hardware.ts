@@ -131,6 +131,10 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             });
     }
 
+    onDeveloperKitClick(): void {
+        // TODO
+    }
+
     onAutobackupSwitchClick(backup_mode: string): void {
         if (!this.device) {
             return;

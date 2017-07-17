@@ -281,13 +281,9 @@ export class StaticTranslation {
                 'label_name': 'Project Name',
                 'label_description': 'Project Description',
                 'label_product': 'Financial Product',
-                'label_byzance_hardware': 'Byzance<strong class="font-color-hardware">HARDWARE</strong>',
-                'label_byzance_blocko': 'Byzance<strong class="font-color-blocko">BLOCKO</strong>',
                 'label_devices_count': 'Devices count',
                 'label_Status': 'Status',
-                'label_byzance_cloud': 'Byzance<strong class="font-color-cloud">CLOUD</strong>',
                 'label_instances_count': 'Instances count',
-                'label_byzance_code': 'Byzance<strong class="font-color-code">CODE</strong>',
                 'label_programs_count': 'Programs count',
                 'label_libraries_count': 'Libraries count',
                 'label_blocks_count': 'Blocks count',
@@ -626,13 +622,13 @@ export class StaticTranslation {
 
                 'title': 'all devices',
                 'label_name': 'Name',
-                'label_id': 'ID',
+                'label_id': 'Full ID',
                 'label_description': 'Description',
                 'label_type': 'Type',
                 'label_status': 'Status',
                 'label_actions': 'Actions',
                 'btn_add_hardware': ' Add a Device',
-                'label_no_hardware': 'No history for this instance.',
+                'label_no_hardware': 'No hardware in this project.',
                 'label_no_hardware_comment': 'Click on the button bellow to add a new device.',
                 'label_device_properties': 'Device properties',
                 'label_remove_device': 'Remove device',
@@ -647,8 +643,6 @@ export class StaticTranslation {
             }, 'ProjectsProjectHardwareHardwareComponent': {
 
                 'title': 'Byzance<strong class="font-color-hardware">HARDWARE</strong> - DEVICE <strong>{0}</strong>',
-
-                'label_byzance_code': 'Byzance<strong class="font-color-code">CODE </strong>',
 
                 'tab_overview': 'Overview',
                 'tab_update': 'Update progress',
@@ -665,8 +659,9 @@ export class StaticTranslation {
                 'label_device_status': 'Device status',
                 'label_device_last_seen': 'Last seen',
                 'label_bootloader_version': 'Version',
-                'label_unknow': '(Unknown)',
+                'label_last_seen_unknow': '(Unknown)',
                 'label_update_to': 'Update to',
+                'label_developer_settings' : 'Developer settings',
                 'label_alerts': 'Alerts',
                 'label_main_server': 'Main Server',
                 'label_instance': 'Instance ID',
@@ -675,6 +670,7 @@ export class StaticTranslation {
                 'label_online': 'online',
                 'label_offline': 'offline',
                 'label_none': 'none',
+                'label_unknown_value': 'none',
                 'label_cant_load_device': 'Device cannot be loaded. {0}',
 
                 'label_actual_program_name': 'Current program name',
@@ -688,6 +684,7 @@ export class StaticTranslation {
                 'label_switch_to_static': 'switch to <strong>Manual</strong>',
                 'label_time_missing_in_json': 'Not yet (Unknown)',
                 'label_not_set_none': 'none',
+                'label_bootloader_up_to_date': 'Hardware has latest version',
                 'label_firmware': 'Firmware',
                 'label_backup': 'Backup',
                 'label_bootloader': 'Bootloader',
@@ -771,6 +768,9 @@ export class StaticTranslation {
                 'label_running_status': 'Running status',
                 'label_planned': 'Planned',
                 'label_progress': 'Progress',
+                'label_update_state': 'Update state',
+                'label_no_updates_title': 'No updates',
+                'label_no_update_text': 'Set instance to cloud not required any updates of firmware on hardware',
                 'label_project': 'Project',
                 'label_program': 'Program',
                 'label_finished': 'Finished',
@@ -1384,6 +1384,10 @@ export class StaticTranslation {
                 'label_open_file_browser': 'Open file in file browser',
             },
 
+            'label_byzance_hardware': 'Byzance<strong class="font-color-hardware">HARDWARE</strong>',
+            'label_byzance_blocko': 'Byzance<strong class="font-color-blocko">BLOCKO</strong>',
+            'label_byzance_cloud': 'Byzance<strong class="font-color-cloud">CLOUD</strong>',
+            'label_byzance_code': 'Byzance<strong class="font-color-code">CODE</strong>',
             'label_project_owner': 'Project owner',
             'label_project_admin': 'Project admin',
             'label_project_member': 'Project member',
@@ -1429,11 +1433,11 @@ export class StaticTranslation {
                 'PLANNED_UPDATE': 'Update is scheduled in the future.',
             },
             'online_status': {
-                'online': 'unknown',
-                'offline': 'We are not found any collisions',
+                'online': 'online',
+                'offline': 'offline',
                 'synchronization_in_progress': 'Synchronizing',
-                'unknown_lost_connection_with_server': 'We lost contact with server. 50/50 that it\'s still running.',
                 'not_yet_first_connected': 'We have no idea - (never logged before)',
+                'unknown_lost_connection_with_server' : 'Lost connection with external server'
             },
             'device_alerts': {
                 'BOOTLOADER_REQUIRED': 'Bootloader update is required.',
@@ -1460,6 +1464,14 @@ export class StaticTranslation {
                 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME': 'Scheduled through BLOCKO',
                 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE': 'System update setting - Always up-to-date',
                 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE': 'System update by central server - Critical patch',
+            },
+            'update_status': {
+                'successful_complete': 'Successfully complete',
+                'complete': 'Complete',
+                'complete_with_error': 'Complete with error',
+                'canceled': 'Canceled',
+                'in_progress': 'In Progress',
+                'not_start_yet': 'Not start yet'
             },
             'version_status': {
                 'compilation_in_progress': 'Compilation is in progress.',
