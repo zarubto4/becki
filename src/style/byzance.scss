@@ -2445,6 +2445,10 @@ textarea.form-control {
     left: +1px;
 }
 
+.btn{
+    text-transform: uppercase;
+}
+
 .instance-timeline .timeline-container {
     position: absolute;
     left: 40px;
@@ -2592,4 +2596,9 @@ textarea.form-control {
         font-size: 18px;
         font-weight: 100;
     }
+}
+
+.table tbody>tr>td.vert-align
+{
+    vertical-align: middle;
 }

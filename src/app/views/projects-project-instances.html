@@ -32,7 +32,7 @@
                 <tbody>
                 <tr *ngFor="let instance of instances">
 
-                    <td class="no-wrap bold">
+                    <td class="vert-align no-wrap bold">
                         <a (click)="onInstanceClick(instance)" class="no-wrap"><strong>{{instance.name?instance.name:'Instance'}}</strong></a>
                     </td>
                     <td class="no-wrap">{{instance.id}}</td>
@@ -44,7 +44,7 @@
                         <span *ngIf="instance.instance_status == 'synchronization_in_progress' " class="font-grey-mint">{{'synchronization_in_progress'|bkTranslateTable:'online_status'}} <i class="fa fa-spinner fa-spin"></i></span>
                         <span *ngIf="instance.instance_status == 'unknown_lost_connection_with_server' " class="font-grey-mint">{{'label_unknown_lost_connection_with_server'|bkTranslateTable:'online_status'}}</span>
                     </td>
-                    <td class="no-wrap text-right">
+                    <td class="vert-align no-wrap text-right">
 
                         <style type="text/css">
                             table tr button { opacity:0.05;}
@@ -74,7 +74,7 @@
                 </tbody>
             </table>
         </div>
-        <h3 *ngIf="!instances" class="text-center">Loading...</h3>
+        <h3 *ngIf="!instances" class="text-center">{{'loading'|bkTranslate:this}}</h3>
         <div *ngIf="instances && instances.length == 0" class="list-no-items">
             <p class="list-no-items__main-label">{{'label_no_item'|bkTranslate:this}}</p>
             <p class="list-no-items__sub-label">{{'label_you_can_create'|bkTranslate:this}}</p>

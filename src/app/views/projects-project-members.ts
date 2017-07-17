@@ -63,7 +63,7 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
             .then((success) => {
                 if (success) {
                     this.blockUI();
-                    this.backendService.shareProject(this.id, {persons_mail: m.emails})
+                    this.backendService.shareProject(this.id, { persons_mail: m.emails })
                         .then(() => {
                             this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                         })
@@ -79,32 +79,43 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
         if ((this.backendService.personInfoSnapshot.mail === member.user_email) || (this.backendService.personInfoSnapshot.id === member.id)) {
             this.fmError(this.translate('label_cannot_remove_yourself'));
         }
-        this.blockUI();
-        this.backendService.unshareProject(this.id, {persons_mail: [member.user_email]})
-            .then(() => {
-                this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
-            })
-            .catch((err) => {
-                this.unblockUI();
-                this.fmError(this.translate('label_cannot_delete_person', err));
-            });
+
+
+
+
+        let con = new ModalsConfirmModel(this.translate('modal_title_remove_member'), this.translate('modal_text_remove_member'), false, this.translate('btn_yes'), this.translate('btn_no'), null);
+        this.modalService.showModal(con).then((success) => {
+            if (!success) {
+                return;
+            } else {
+                this.blockUI();
+                this.backendService.unshareProject(this.id, { persons_mail: [member.user_email] })
+                    .then(() => {
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                    })
+                    .catch((err) => {
+                        this.unblockUI();
+                        this.fmError(this.translate('label_cannot_delete_person', err));
+                    });
+            }
+        });
     }
 
     onMemberSnedAgainClick(member: IProjectParticipant) {
         this.blockUI();
-        this.backendService.shareProject(this.id, {persons_mail: [member.user_email]})
+        this.backendService.shareProject(this.id, { persons_mail: [member.user_email] })
             .then(() => {
                 this.unblockUI();
-                let m = new ModalsConfirmModel('Invitation', 'Invitation email was sent to ' + member.user_email, true, null, null, ['Ok']);
+                let m = new ModalsConfirmModel(this.translate('modal_label_invitation'), this.translate('modal_label_invitation_send', member.user_email), true, null, null, [this.translate('btn_ok')]);
                 this.modalService.showModal(m);
             })
             .catch((err) => {
                 this.unblockUI();
-                this.fmError(this.translate('label_cannot_resend_invitation', err) );
+                this.fmError(this.translate('label_cannot_resend_invitation', err));
             });
     }
 
-    readableState(state: ('owner'|'admin'|'member'|'invited')) {
+    readableState(state: ('owner' | 'admin' | 'member' | 'invited')) {
         switch (state) {
             case 'owner': return this.translate('label_project_owner');
             case 'admin': return this.translate('label_project_admin');

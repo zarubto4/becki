@@ -31,14 +31,14 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let member of project.participants">
-                    <td class="no-wrap bold">{{member.user_email}}</td>
-                    <td class="no-wrap">{{member.full_name}}</td>
-                    <td>{{readableState(member.state)}}</td>
-                    <td class="no-wrap">
-                        <button title="Remove member" class="btn btn-icon-only red" [disabled]="member.id == selfId" (click)="onMemberDeleteClick(member)">
+                    <td class="vert-align no-wrap bold">{{member.user_email}}</td>
+                    <td class="vert-align no-wrap">{{member.full_name}}</td>
+                    <td class="vert-align">{{readableState(member.state)}}</td>
+                    <td class="vert-align no-wrap">
+                        <button title="{{'label_remove_member'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="member.id == selfId" (click)="onMemberDeleteClick(member)">
                             <i class="fa fa-trash"></i>
                         </button>
-                        <button title="Send invitation again" class="btn btn-icon-only blue" [disabled]="member.id == selfId" (click)="onMemberSnedAgainClick(member)">
+                        <button title="{{'label_send_invitation'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="member.id == selfId" (click)="onMemberSnedAgainClick(member)">
                             <i class="fa fa-envelope"></i>
                         </button>
                     </td>

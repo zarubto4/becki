@@ -454,7 +454,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                 this.tsBlock.registerOutputEventCallback((connector: Core.Connector, eventType: Core.ConnectorEventType, value: (boolean | number | Core.Message)) => {
                     this.zone.run(() => {
                         if (this.consoleLog) {
-                            this.consoleLog.add('output', 'Output <strong>' + connector.name + '</strong> = ' + this.toReadableValue(value));
+                            this.consoleLog.add('output', this.translate('label_console_output', connector.name, this.toReadableValue(value)));
                         }
                     });
                 });

@@ -17,11 +17,11 @@
                     </div>
                     <div *ngIf="codeProgram" class="becki-actions">
 
-                        <button title="{{'label_device_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!codeProgram.edit_permission"
+                        <button title="{{'label_program_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!codeProgram.edit_permission"
                             (click)="onEditClick()">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!codeProgram.delete_permission"
+                        <button title="{{'label_remove_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!codeProgram.delete_permission"
                             (click)="onRemoveClick()">
                             <i class="fa fa-trash"></i>
                         </button>
@@ -29,7 +29,6 @@
                     </div>
                 </div>
                 <div>
-                    <span [innerHTML]="'label_code_name'|bkTranslate:this:(codeProgram?codeProgram.name:'')"></span> <br>
                     <span [innerHTML]="'label_code_description'|bkTranslate:this:(codeProgram?codeProgram.description:'')"></span>                    <br>
                     <br>
                      <span [innerHTML]="'label_hardware_type'|bkTranslate:this"></span>:<strong><a (click)="onBoardTypeClick(codeProgram.type_of_board_id)">{{codeProgram?codeProgram.type_of_board_name:""}}</a></strong>
@@ -122,7 +121,7 @@
                                 <th class="col col-lg-1">{{'table_author'|bkTranslate:this}}</th>
                                 <th class="col col-lg-1">{{'table_status'|bkTranslate:this}}</th>
                                 <th class="col col-lg-1"></th>
-                                <th class="col col-lg-1">{{'table_actions'|bkTranslate:this}}</th>
+                                <th class="col col-lg-1 text-right">{{'table_actions'|bkTranslate:this}}</th>
 
                             </tr>
                         </thead>
@@ -130,21 +129,21 @@
 
                             <tr *ngFor="let version of codeProgramVersions">
                                 <!-- NAME -->
-                                <td class="bold" [class.bold]="isSelected(version)">
+                                <td class="vert-align bold" [class.bold]="isSelected(version)">
                                     <a (click)="onProgramVersionClick(version)">
                                     {{version.version_name}}
                                 </a>
                                 </td>
                                 <!-- Description -->
-                                <td>
+                                <td  class="vert-align">
                                     {{version.version_description}}
                                 </td>
                                 <!-- Author -->
-                                <td>
+                                <td  class="vert-align">
                                     {{version.author.nick_name}}
                                 </td>
                                 <!-- STATUS -->
-                                <td>
+                                <td  class="vert-align">
                                     <span class="icon-hint-wraper red" *ngIf="version.status=='hardware_unstable'">
                                     <i class="fa fa-exclamation-triangle font-red-mint"></i>
                                 </span>
@@ -174,13 +173,13 @@
                                     </span>
                                 </td>
                                 <!-- UPLOAD -->
-                                <td>
-                                    <button title="{{'label_device_properities'|bkTranslate:this}}" class="btn blue" (click)="onUploadClick(version)" *ngIf="device && device.connectible_to_internet && version.status=='successfully_compiled_and_restored'">
+                                <td class="vert-align">
+                                    <button class="btn blue" (click)="onUploadClick(version)" *ngIf="device && device.connectible_to_internet && version.status=='successfully_compiled_and_restored'">
                                     {{'btn_upload_to_hardware'|bkTranslate:this}}
                                 </button>
                                 </td>
                                 <!-- ACTIONS -->
-                                <td>
+                                <td class="vert-align text-right no-wrap">
                                     <style type="text/css">
                                         table tr button {
                                             opacity: 0.05;
@@ -191,11 +190,11 @@
                                         }
                                     </style>
 
-                                    <button title="{{'label_device_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission" (click)="onEditVersionClick(version)">
+                                    <button title="{{'label_version_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission" (click)="onEditVersionClick(version)">
                                     <i class="fa fa-cog"></i>
                                 </button>
 
-                                    <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
+                                    <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                                 </td>

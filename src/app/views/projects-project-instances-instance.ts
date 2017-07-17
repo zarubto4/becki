@@ -71,11 +71,11 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     };
 
     onInstanceEditClick() {
-        let model = new ModalsInstanceEditDescriptionModel (this.instance.id, this.instance.name, this.instance.description);
+        let model = new ModalsInstanceEditDescriptionModel(this.instance.id, this.instance.name, this.instance.description);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editInstance(this.instance.id, {name: model.name, description: model.description})
+                this.backendService.editInstance(this.instance.id, { name: model.name, description: model.description })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_instance_edit_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
@@ -214,7 +214,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     changeVersionAction() {
 
         this.backendService.getBProgram(this.instance.actual_instance.b_program_id).then((blocko) => {
-            let m = new ModalsBlockoVersionSelectModel( blocko.program_versions , NullSafe(() => this.instance.actual_instance.b_program_version_id));
+            let m = new ModalsBlockoVersionSelectModel(blocko.program_versions, NullSafe(() => this.instance.actual_instance.b_program_version_id));
             this.modalService.showModal(m)
                 .then((success) => {
                     if (success) {
@@ -233,7 +233,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
         });
     }
 
-    selectedHistoryItem(event: {index: number, item: IHomerInstanceRecord}) {
+    selectedHistoryItem(event: { index: number, item: IHomerInstanceRecord }) {
         this.currentHistoricInstance = event.item;
     }
 
@@ -290,7 +290,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     }
 
     onGridProgramVersionClick(projectId: string, programId: string, versionId: string) {
-        this.router.navigate(['projects', this.id, 'grid', projectId, programId, {version: versionId}]);
+        this.router.navigate(['projects', this.id, 'grid', projectId, programId, { version: versionId }]);
     }
 
     onHardwareClick(hardwareId: string) {
@@ -302,7 +302,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     }
 
     onCProgramVersionClick(programId: string, versionId: string) {
-        this.router.navigate(['projects', this.id, 'code', programId, {version: versionId}]);
+        this.router.navigate(['projects', this.id, 'code', programId, { version: versionId }]);
     }
 
     loadBlockoLiveView() {
@@ -332,7 +332,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                     })
                     .catch((err) => {
                         this.zone.run(() => {
-                            this.fmError(`Cannot load version <b>${this.instance.actual_instance.b_program_version_name}</b>`, err);
+                            this.fmError(this.translate('flash_cant_load_verion', this.instance.actual_instance.b_program_version_name, err));
                         });
                     });
             }

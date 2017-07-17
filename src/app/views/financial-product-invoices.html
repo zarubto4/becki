@@ -27,7 +27,7 @@
                 <thead>
                 <tr>
                     <th>{{'table_invoice_id'|bkTranslate:this}}</th>
-                    <th>{{'table_total_cost'|bkTranslate:this}}</th>
+                    <th>{{'table_date_of_pay'|bkTranslate:this}}</th>
                     <th>{{'table_date_of_create'|bkTranslate:this}}</th>
                     <th>{{'table_paid'|bkTranslate:this}}</th>
                     <th class="text-right">{{'table_actions'|bkTranslate:this}}</th>
@@ -35,18 +35,18 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let invoice of invoices">
-                    <td class="no-wrap"><a (click)="onInvoiceClick(invoice)">{{invoice.invoice_number}}</a></td>
-                    <td>{{invoice.id}}</td>
-                    <td> {{invoice.created|bkUnixTimeToDate}} </td>
-                    <td><span *ngIf="!invoice.require_payment"><i class="  font-green-jungle fa fa-check "></i></span><span *ngIf="invoice.require_payment"><a class="font-red-thunderbird" (click)="onPayClick(invoice)">{{'payment_required|bkTranslate:this'}}</a></span></td>
-                    <td class="no-wrap text-right">
-                        <button *ngIf="invoice.invoice_pdf_link" (click)="onDownloadProFormaPDFClick(invoice)" title="Download pro forma invoice as PDF" class="btn btn-icon-only white">
+                    <td class="vert-align no-wrap"><a (click)="onInvoiceClick(invoice)">{{invoice.invoice_number}}</a></td>
+                    <td class='vert-align'>{{invoice.paid|bkUnixTimeToDate}}</td>
+                    <td class='vert-align'> {{invoice.created|bkUnixTimeToDate}} </td>
+                    <td class='vert-align'><span *ngIf="!invoice.require_payment"><i class="font-green-jungle fa fa-check "></i></span><span *ngIf="invoice.require_payment"><a class="font-red-thunderbird" (click)="onPayClick(invoice)">{{'payment_required|bkTranslate:this'}}</a></span></td>
+                    <td class="vert-align no-wrap text-right">
+                        <button *ngIf="invoice.invoice_pdf_link" (click)="onDownloadProFormaPDFClick(invoice)" title="{{'label_downoload_pro_forma_pdf'|bkTranslate:this}}" class="btn btn-icon-only white">
                             <i class=" fa fa-file-pdf-o"></i>
                         </button>
-                        <button *ngIf="invoice.proforma_pdf_link" (click)="onDownloadInvoicePDFClick(invoice)" title="Download invoice as PDF" class="btn btn-icon-only white">
+                        <button *ngIf="invoice.proforma_pdf_link" (click)="onDownloadInvoicePDFClick(invoice)" title="{{'label_download_pdf'|bkTranslate:this}}" class="btn btn-icon-only white">
                             <i class=" fa fa-file-pdf-o"></i>
                         </button>
-                        <button (click)="onSendClick(invoice)" title="Send" class="btn btn-icon-only white">
+                        <button (click)="onSendClick(invoice)" title="{{'label_send'|bkTranslate:this}}" class="btn btn-icon-only white">
                             <i class=" fa fa-paper-plane-o"></i>
                         </button>
                     </td>

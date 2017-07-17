@@ -17,8 +17,14 @@
         </div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn red" (click)="onCancelClick()">{{textCancel}}</button>
-        <button type="button" class="btn green" [disabled]="!(((neededDirectory && selectedFto) || (!neededDirectory)) && ((neededName && form.valid) || (!neededName)))" (click)="onSubmitClick()">{{textSubmit}}</button>
+        <div *ngIf="this.modalModel.type== ((7) || (8) || (9))">
+        <button type="button" class="btn red" [disabled]="!(((neededDirectory && selectedFto) || (!neededDirectory)) && ((neededName && form.valid) || (!neededName)))" (click)="onSubmitClick()">{{textSubmit|bkTranslate:this}}</button>
+        <button type="button" class="btn green" (click)="onCancelClick()">{{textCancel|bkTranslate:this}}</button>
+        </div>
 
+        <div *ngIf="this.modalModel.type != ((7) || (8) || (9))">
+        <button type="button" class="btn red" (click)="onCancelClick()">{{textCancel|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!(((neededDirectory && selectedFto) || (!neededDirectory)) && ((neededName && form.valid) || (!neededName)))" (click)="onSubmitClick()">{{textSubmit|bkTranslate:this}}</button>
+            </div>
     </div>
 </div>

@@ -44,8 +44,12 @@ export class ModalsConfirmComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.modalModel.btnYes = this.translate('btn_yes');
-        this.modalModel.btnNo = this.translate ('btn_no');
+        if (this.modalModel.btnYes) {
+            this.modalModel.btnYes = this.translate('btn_yes');
+        }
+        if (this.modalModel.btnNo) {
+            this.modalModel.btnNo = this.translate('btn_no');
+        }
     }
 
     onCloseClick(): void {

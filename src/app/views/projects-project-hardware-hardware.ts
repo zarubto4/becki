@@ -63,7 +63,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 this.unblockUI();
             })
             .catch((reason) => {
-                this.fmError('Device cannot be loaded.', reason);
+                this.fmError(this.translate('label_cant_load_device'));
                 this.unblockUI();
             });
     }

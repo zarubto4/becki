@@ -348,7 +348,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         this.widgetTestRunning = true;
 
         if (!this.widgetInstance) {
-            this.consoleLog.add('error', '<strong>Cannot create widget:</strong> Make sure, that you specified size profiles for widget');
+            this.consoleLog.add('error', this.translate('label_console_cant_crate_widget'));
             return;
         }
 
@@ -375,7 +375,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 }
                 if (this.consoleLog) {
                     this.zone.run(() => {
-                        this.consoleLog.add('output', 'Output <strong>' + e.connector.name + '</strong> = ' + this.toReadableValue(e.connector.value));
+                        this.consoleLog.add('output', this.translate('label_console_output', e.connector.name, this.toReadableValue(e.connector.value)));
                     });
                 }
             });
@@ -386,7 +386,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 }
                 if (this.consoleLog) {
                     this.zone.run(() => {
-                        this.consoleLog.add('output', 'Output <strong>' + e.connector.name + '</strong> = ' + this.toReadableValue(e.message));
+                        this.consoleLog.add('output', this.translate('label_console_output', e.connector.name, this.toReadableValue(e.message)));
                     });
                 }
             });
@@ -402,9 +402,9 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     toReadableValue(value: any): string {
         if (typeof value === 'boolean') {
             if (value) {
-                return '<span class="bold font-red">true</span>';
+                return this.translate('label_console_true');
             } else {
-                return '<span class="bold font-blue">false</span>';
+                return this.translate('label_console_false');
             }
         }
         if (typeof value === 'number') {

@@ -565,7 +565,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             let subBoards = this.getAllFreeSubBoards();
 
             if (!subBoards || subBoards.length === 0) {
-                this.modalService.showModal(new ModalsConfirmModel(this.translate('label_modal_error'), 'No available padavan boards hardware.', true, this.translate('label_modal_ok'), null));
+                this.modalService.showModal(new ModalsConfirmModel(this.translate('label_modal_error'), this.translate('label_modal_no_padavan'), true, this.translate('label_modal_ok'), null));
                 return;
             }
 
@@ -1202,7 +1202,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 this.unblockUI();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(`The blocko cannot be loaded.`, reason));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_blocko')));
                 this.unblockUI();
             });
 

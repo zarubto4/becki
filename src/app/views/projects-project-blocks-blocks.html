@@ -28,7 +28,6 @@
             </div>
         </div>
         <div>
-            <span [innerHTML]="'label_blocko_name'|bkTranslate:this:(group?group.name:'')"></span><br>
             <span [innerHTML]="'label_blocko_description'|bkTranslate:this:(group?group.description:'')"></span>
         </div>
         <div *ngIf="(group && group.blocko_blocks && group.blocko_blocks.length)" class="table-scrollable">
@@ -42,9 +41,9 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let block of group.blocko_blocks">
-                        <td class="no-wrap bold"><a (click)="onBlockClick(block)">{{block.name}}</a></td>
-                        <td>{{block.description}}</td>
-                        <td class="no-wrap">
+                        <td class="vert-align no-wrap bold"><a (click)="onBlockClick(block)">{{block.name}}</a></td>
+                        <td class="vert-align">{{block.description}}</td>
+                        <td class="vert-align no-wrap">
 
                             <style type="text/css">
                                 table tr button {

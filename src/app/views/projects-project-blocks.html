@@ -10,7 +10,7 @@
             <div class="becki-caption">
                 <span class="font-blue-dark">
                     <i class="fa fa-fw fa-fw fa-cube"></i>
-                <span [innerHTML="'title'|bkTranslate:this"]></span>
+                <span [innerHTML]="'title'|bkTranslate:this"></span>
                 </span>
             </div>
             <div class="becki-actions">
@@ -30,9 +30,9 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let group of groups">
-                    <td class="no-wrap bold"><a (click)="onGroupClick(group)">{{group.name}}</a></td>
-                    <td>{{group.description}}</td>
-                    <td class="no-wrap">
+                    <td class="vert-align no-wrap bold"><a (click)="onGroupClick(group)">{{group.name}}</a></td>
+                    <td class="vert-align">{{group.description}}</td>
+                    <td class="vert-align no-wrap">
 
                         <style type="text/css">
                             table tr button { opacity:0.05;}

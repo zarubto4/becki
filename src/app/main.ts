@@ -201,8 +201,8 @@ let routes: Routes = [
 
 let navigation = [
     new LabeledLink('Dashboard', ['/dashboard'], 'tachometer'),
-    new LabeledLink('Projects', ['/projects'], 'tasks'),
     new LabeledLink('Financial', ['/financial'],  'bank'),
+    new LabeledLink('Projects', ['/projects'], 'tasks'),
     new LabeledLink('Hardware types', ['/hardware'], 'microchip'),
     // new LabeledLink('Producers',  ['/producers'] , 'industry'),
     /* new LabeledLink("Devices", ["/user/devices"], "rocket"),

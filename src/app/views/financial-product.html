@@ -18,13 +18,13 @@
                             </div>
                             <div class="becki-actions">
 
-                                <button title="Financial product properties" class="btn btn-icon-only blue" (click)="onEditClick()">
+                                <button title="{{'label_financial_product_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onEditClick()">
                                     <i class="fa fa-cog"></i>
                                 </button>
-                                <button *ngIf="product.active" title="Deactivate product" class="btn btn-icon-only red" (click)="deactivateProduct()">
+                                <button *ngIf="product.active" title="{{'label_deactivate_product'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="deactivateProduct()">
                                     <i class="fa fa-stop-circle"></i>
                                 </button>
-                                <button *ngIf="!product.active" title="Activate product" class="btn btn-icon-only green" (click)="activateProduct()">
+                                <button *ngIf="!product.active" title="{{'label_activate_product'|bkTranslate:this}}" class="btn btn-icon-only green" (click)="activateProduct()">
                                     <i class="fa fa-cloud-upload"></i>
                                 </button>
 
@@ -58,7 +58,7 @@
                                     <span *ngIf="product.active" class="font-green-jungle">{{'option_active'|bkTranslate:this}}</span>
                                     <span *ngIf="!product.active" class="font-red">{{'option_hibernation'|bkTranslate:this}}</span>
                                     <span *ngIf="!product.active" class="icon-hint-wraper red"> <i class="fa fa-exclamation-triangle font-red-mint"></i>
-                                      <span class="hint">{{productStatusTranslate[product.active.toString()]}}</span>
+                                      <span class="hint">{{[product.active.toString()]|bkTranslate:this}}</span>
                                     </span>
                                 </div>
 
@@ -96,7 +96,7 @@
 
                                 <div>
                                     {{'label_country'|bkTranslate:this}}:
-                                    <span class="font-grey-mint bold">{{product.subscription_id}}</span>
+                                    <span class="font-grey-mint bold">{{product.payment_details.country}}</span>
                                 </div>
 
                             </div>

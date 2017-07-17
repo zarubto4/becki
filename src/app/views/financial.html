@@ -4,13 +4,12 @@
  */
  -->
 <bk-layout-main [title]="'main_title'|bkTranslate:this">
-    <h1 class="title">Financial</h1>
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
                 <span class="font-blue-dark uppercase">
                     <i class="fa fa-fw fa-tasks"></i>
-                    {{'title'|bkTranslate:this}}
+                   {{'label_product_list'|bkTranslate:this}}
                 </span>
             </div>
             <div class="becki-actions">
@@ -19,49 +18,55 @@
                 </button>
             </div>
         </div>
-        <div  *ngIf="(products && products.length)" class="table-scrollable">
+        <div *ngIf="(products && products.length)" class="table-scrollable">
             <table class="table table-hover">
                 <thead>
-                <tr>
-                    <th>{{'table_name'|bkTranslate:this}}</th>
-                    <th>{{'table_type'|bkTranslate:this}}</th>
-                    <th class="text-right">{{'table_subscription_id'|bkTranslate:this}}</th>
-                </tr>
+                    <tr>
+                        <th>{{'table_name'|bkTranslate:this}}</th>
+                        <th>{{'table_type'|bkTranslate:this}}</th>
+                        <th> Subscription id</th>
+                        <th class="text-right">Actions</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let product of products">
-                    <td class="no-wrap">
-                        <a (click)="onProductClick(product)"><b>{{product.name}}</b></a>
-                        <span *ngIf="product.active==true" class="font-green-jungle">(active)</span>
-                        <span *ngIf="product.active==false" class="font-red">(hibernation)</span>
+                    <tr *ngFor="let product of products">
+                        <td class="no-wrap">
+                            <a (click)="onProductClick(product)"><b>{{product.name}}</b></a>
+                            <span *ngIf="product.active==true" class="font-green-jungle">({{'label_active'|bkTranslate:this}})</span>
+                            <span *ngIf="product.active==false" class="font-red">({{'label_hibernation'|bkTranslate:this}})</span>
 
-                        <!-- Add independent Icon with status -->
-                        <span *ngIf="product.active==false" class="icon-hint-wraper red">
+                            <!-- Add independent Icon with status -->
+                            <span *ngIf="product.active==false" class="icon-hint-wraper red">
                               <i class="fa fa-exclamation-triangle font-red-mint"></i>
-                              <span class="hint">{{productStatusTranslate[product.active.toString()]}}</span>
-                        </span>
+                              <span class="hint">{{[product.active.toString()]|bkTranslateTable:this:'productStatusTranslate'}}</span>
+                            </span>
 
-                    </td>
+                        </td>
 
-                    <td class="no-wrap ">
-                        <span title="Bank transfer" class="font-blue-chambray" *ngIf="product.payment_method=='bank_transfer'"> <!-- title jsou schválně ponecaný eng -->
+                        <td class="no-wrap ">
+                            <span title="{{'label_title_bank_transfer'|bkTranslate:this}}" class="font-blue-chambray" *ngIf="product.payment_method=='bank_transfer'"> <!-- title jsou schválně ponecaný eng -->
                             <i class="fa fa-lg fa-fw fa-exchange"> </i> {{'label_bank_transfer'|bkTranslate:this}}
                         </span>
-                        <span title="Credits"  class="font-blue-chambray" *ngIf="product.payment_method=='credit'">
+                            <span title="{{'label_title_credits'|bkTranslate:this}}" class="font-blue-chambray" *ngIf="product.payment_method=='credit'">
                             <i class="fa fa-lg fa-fw fa-money" > </i> {{'label_credits'|bkTranslate:this}}
                         </span>
-                        <span title="Credit Card" class="font-blue-chambray" *ngIf="product.payment_method=='credit_card'">
+                            <span title="{{'label_title_credit_card'|bkTranslate:this}}" class="font-blue-chambray" *ngIf="product.payment_method=='credit_card'">
                             <i class="fa fa-lg fa-fw fa-credit-card"></i> {{'label_credit_card'|bkTranslate:this}}
                         </span>
-                        <span title="Free" class="font-blue-chambray" *ngIf="product.payment_method=='free'">
+                            <span title="{{'label_title_free'|bkTranslate:this}}" class="font-blue-chambray" *ngIf="product.payment_method=='free'">
                             <i class="fa fa-lg fa-fw fa-hand-peace-o"></i> {{'label_free'|bkTranslate:this}}
                         </span>
-                        <span title="Free" class="font-blue-chambray" *ngIf="product.payment_method=='Not set yet'">
+                            <span title="{{'label_title_free'|bkTranslate:this}}" class="font-blue-chambray" *ngIf="product.payment_method=='Not set yet'">
                             <i class="fa fa-lg fa-fw fa-question"></i> {{'label_not_set_yet'|bkTranslate:this}}
                         </span>
-                    </td>
-                    <td class="text-right">{{product.subscription_id}}</td>
-                </tr>
+                        </td>
+                        <td>{{product.subscription_id}}</td>
+                        <td class="text-right">
+                            <button (click)="onSettingsClick()" title="Settings" class="btn green btn-icon-only white"> 
+                          <i class="fa fa-gear"></i> 
+                      </button>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>

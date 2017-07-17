@@ -5,7 +5,7 @@
     </div>
     <div class="modal-body">
         <div>
-         {{'body_text'|bkTranslate:this}}
+            {{'body_text'|bkTranslate:this}}
             <span *ngIf="!modalModel.activation_or_deactivation"> {{'label_deactivate'|bkTranslate:this}} </span>
             <span *ngIf="modalModel.activation_or_deactivation">{{'label_activate'|bkTranslate:this}} </span>
             <strong>{{modalModel.name}}</strong>?
@@ -16,7 +16,11 @@
             <strong>{{'label_attention'|bkTranslate:this}}: </strong> {{modalModel.message}}
         </div>
     </div>
-    <div class="modal-footer">
+    <div *ngIf="modalModel.activation_or_deactivation" class="modal-footer">
+        <button type="button" class="btn red" (click)="onNoClick()">{{'btn_no'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" (click)="onYesClick()">{{'btn_yes'|bkTranslate:this}}</button>
+    </div>
+    <div *ngIf="!modalModel.activation_or_deactivation" class="modal-footer">
         <button type="button" class="btn red" (click)="onYesClick()">{{'btn_yes'|bkTranslate:this}}</button>
         <button type="button" class="btn green" (click)="onNoClick()">{{'btn_no'|bkTranslate:this}}</button>
     </div>
