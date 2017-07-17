@@ -750,6 +750,12 @@ export class StaticTranslation {
                 'table_actions': 'Actions',
                 'table_project': 'Project',
                 'table_program': 'Program',
+                'table_started': 'Created',
+                'table_planed': 'Planed',
+                'table_finished': 'Finished',
+                'table_type': 'Update type',
+                'table_progress': 'Progress',
+                'table_state': 'Status',
 
                 'btn_change_version_in_cloud': 'Change version in Cloud',
                 'label_instance_properities': 'instance properities',
