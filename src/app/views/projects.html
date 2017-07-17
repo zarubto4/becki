@@ -30,16 +30,16 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th class="col col-lg-1">{{'table_name'|bkTranslate:this}}</th>
+                    <th class="col col-lg-3">{{'table_name'|bkTranslate:this}}</th>
                     <th class="col col-lg-5">{{'table_description'|bkTranslate:this}}</th>
-                    <th class="col col-lg-2">{{'table_financial_product'|bkTranslate:this}}</th>
-                    <th class="col col-1 text-right">{{'table_actions'|bkTranslate:this}}&nbsp;&nbsp;</th>
+                    <th class="col col-lg-2">{{'table_product'|bkTranslate:this}}Financial Product</th>
+                    <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let project of projects">
 
-                    <td *ngIf="project.active_status" class="vert-align no-wrap bold"><a (click)="onProjectClick(project)">{{project.project_name}}</a></td>
+                    <td *ngIf="project.active_status" class="no-wrap bold"><a (click)="onProjectClick(project)">{{project.project_name}}</a></td>
 
                     <td *ngIf="!project.active_status">
                         <strong>{{project.project_name}}</strong>

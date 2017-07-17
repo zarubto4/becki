@@ -158,7 +158,7 @@
                                     </span>
 
                                     <span class="icon-hint-wraper orange" *ngIf="version.status=='server_was_offline' || version.status=='successfully_compiled_not_restored' || version.status=='undefined' || version.status=='file_with_code_not_found' || version.status=='compilation_server_error' || version.status=='json_code_is_broken'">
-                                    <i class="fa fa-wrench font-yellow"></i>
+                                    <i class="fa fa-npm wrench font-yellow"></i>
                                     <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
                                     </span>
 
