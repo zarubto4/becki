@@ -29,7 +29,6 @@
                     </div>
                 </div>
                 <div>
-                    <span [innerHTML]="'label_code_name'|bkTranslate:this:(codeProgram?codeProgram.name:'')"></span> <br>
                     <span [innerHTML]="'label_code_description'|bkTranslate:this:(codeProgram?codeProgram.description:'')"></span>                    <br>
                     <br>
                      <span [innerHTML]="'label_hardware_type'|bkTranslate:this"></span>:<strong><a (click)="onBoardTypeClick(codeProgram.type_of_board_id)">{{codeProgram?codeProgram.type_of_board_name:""}}</a></strong>

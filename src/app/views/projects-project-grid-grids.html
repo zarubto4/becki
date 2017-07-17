@@ -26,7 +26,6 @@
             </div>
         </div>
         <div>
-           <span [innerHTML]="'label_grid_project_name'|bkTranslate:this:(gridProject?gridProject.name:'')"></span>       <br>
             <span [innerHTML]="'label_grid_project_description'|bkTranslate:this:(gridProject?gridProject.description:'')"></span>
         <div *ngIf="gridProject && gridProject.programs && gridProject.programs.length" class="table-scrollable">
             <table class="table table-hover">

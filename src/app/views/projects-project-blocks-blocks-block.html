@@ -28,7 +28,6 @@
                 </div>
                 <div class="clearfix"></div>
                 <div>
-                     {{'label_name'|bkTranslate:this}}: <strong>{{blockoBlock?blockoBlock.name:""}}</strong>
                     <br>  {{'label_description'|bkTranslate:this}}: <strong>{{blockoBlock?blockoBlock.description:""}}</strong>
                     <br>  {{'label_group'|bkTranslate:this}}: <strong><a (click)="onBlocksGroupClick(group.id)">{{group?group.name:""}}</a></strong>
                 </div>
@@ -44,7 +43,7 @@
                         </span>
                     </div>
                     <div *ngIf="selectedBlockoBlockVersion" class="becki-caption version">
-                        <span class="caption-subject font-gray"><strong>{{'label_version'|bkTranslate:this}}:</strong> <span *ngIf="unsavedChanges" class="changes"></span>                        {{selectedBlockoBlockVersion.version_name}}</span>
+                        <span class="caption-subject font-gray"><strong>{{'label_version'|bkTranslate:this}}:</strong> <span *ngIf="unsavedChanges" class="changes"></span>{{selectedBlockoBlockVersion.version_name}}</span>
                     </div>
                 </div>
 
@@ -68,7 +67,7 @@
                 </div>
 
                 <div>
-                    <div class="font-red text-right" style="padding-bottom: 5px; transition: opacity 0.5s;" [style.opacity]="successfullyTested?'0':'1'">Block code has been changed, you must test program first than save.</div>
+                    <div class="font-red text-right" style="padding-bottom: 5px; transition: opacity 0.5s;" [style.opacity]="successfullyTested?'0':'1'">{{'label_block_code_change'|bkTranslate:this}}</div>
                     <div class="pull-right">
                         <button type="button" class="btn default yellow-gold" (click)="onTestClick()">
                             <i class="fa fa-play"></i> {{'btn_test'|bkTranslate:this}}
@@ -86,13 +85,6 @@
         <div class="col-md-12">
             <div class="portlet light bordered padding-20">
                 <div class="portlet-title">
-                    <div class="becki-caption">
-                        <span class="font-blue-dark uppercase">
-                            <i class="fa fa-fw fa-terminal"></i>
-                             {{'label_test'|bkTranslate:this}}
-                        </span>
-                    </div>
-
                     <h3 *ngIf="!tsBlock" class="pull-right" style="margin: 0; margin-right: 95px;"> {{'label_press_test_button'|bkTranslate:this}} <i class="fa fa-chevron-up"></i></h3>
 
                 </div>

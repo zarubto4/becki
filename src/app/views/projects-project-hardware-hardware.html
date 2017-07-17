@@ -315,11 +315,11 @@
                                                 <!-- Update State -->
                                                 <td>
 
-                                                    <span *ngIf="update.state == ('complete') || ('canceled') || ('overwritten')" class="bold font-green-jungle">{{update.state|bkTranslateTable:this:'update_state'}}</span>
+                                                    <span *ngIf="update.state == (('complete') || ('canceled') || ('overwritten'))" class="bold font-green-jungle">{{update.state|bkTranslateTable:this:'update_state'}}</span>
 
-                                                    <span *ngIf="update.state == ('not_updated') || ('waiting_for_device') || ('in_progress') || ('not_start_yet')" class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:this:'update_state'}}</span>
+                                                    <span *ngIf="update.state == (('not_updated') || ('waiting_for_device') || ('in_progress') || ('not_start_yet'))" class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:this:'update_state'}}</span>
 
-                                                    <span *ngIf="update.state == ('bin_file_not_found') || ('critical_error') || ('homer_server_is_offline') || ('instance_inaccessible')"
+                                                    <span *ngIf="update.state == (('bin_file_not_found') || ('critical_error') || ('homer_server_is_offline') || ('instance_inaccessible'))"
                                                         class="bold font-red-flamingo">{{update.state|bkTranslateTable:this:'update_state'}}</span>
                                                 </td>
 

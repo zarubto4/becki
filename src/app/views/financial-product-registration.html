@@ -107,7 +107,7 @@
                 <div class="pricing-content-1">
                     <div class="row">
                         <div *ngIf="selectedTariff.extensions_included || selectedTariff.extensions_optional">
-                            <div *ngIf="selectedTariff.extensions_included.length==0 || selectedTariff.extensions_optional.length==0">
+                            <div *ngIf="selectedTariff.extensions_included.length==0 && selectedTariff.extensions_optional.length==0">
                                 <h3 class="text-center margin-bottom-15"> {{'step_two_no_expansions'|bkTranslate:this}}</h3>
                             </div>
                         </div>
@@ -151,7 +151,7 @@
                                 </div>
                                 <div class="arrow-down arrow-grey"></div>
                                 <div class="price-table-footer">
-                                    <button type="button" *ngIf="selectedExtensions.indexOf(package) == -1" class="btn green-jungle uppercase price-button" (click)="addExtension(package)">
+                                    <button type="button" *ngIf="selectedExtensions.indexOf(package) == -1" class="btn blue uppercase price-button" (click)="addExtension(package)">
                                         {{'btn_add'|bkTranslate:this}}
                                     </button>
                                     <button type="button" *ngIf="selectedExtensions.indexOf(package) > -1" class="btn red uppercase price-button" (click)="removeExtension(package)">
@@ -168,7 +168,7 @@
                                 <button type="button" class="btn grey-salsa btn-lg btn-outline" (click)="stepClick(1)">
                                     {{'btn_back'|bkTranslate:this}}
                                 </button>
-                                <button type="button" class="btn green-jungle btn-lg" (click)="stepClick(3)">
+                                <button type="button" class="btn blue btn-lg" (click)="stepClick(3)">
                                     {{'btn_continue'|bkTranslate:this}}
                                 </button>
                             </div>
@@ -262,7 +262,7 @@
                                 <button type="button" class="btn grey-salsa btn-lg btn-outline" (click)="stepClick(2)">
                                     {{'btn_back'|bkTranslate:this}}
                                 </button>
-                                <button type="button" class="btn green-jungle btn-lg" (click)="stepClickElseTouchForm(4)">
+                                <button type="button" class="btn blue btn-lg" (click)="stepClickElseTouchForm(4)">
                                     {{'btn_continue'|bkTranslate:this}}
                                 </button>
                             </div>
@@ -294,12 +294,7 @@
                     <div class="portlet box blue-dark">
                         <div class="portlet-title">
                             <div class="caption">
-                                <i class="fa fa-fw fa-lg fa-pencil-square-o"></i>{{'label_registration_info|bkTranslate:this'}}
-                            </div>
-                            <div class="actions">
-                                <a (click)="stepClick(3)" class="btn btn-default btn-sm">
-                                    <i class="fa fa-fw fa-pencil-square-o"></i> {{'btn_edit'|bkTranslate:this}}
-                                </a>
+                                <i class="fa fa-fw fa-lg fa-pencil-square-o"></i>{{'label_registration_info'|bkTranslate:this}}
                             </div>
                         </div>
                         <div class="portlet-body">
@@ -441,7 +436,7 @@
                             <button type="button" class="btn grey-salsa btn-lg btn-outline" (click)="stepClick(3)">
                                  {{'btn_back'|bkTranslate:this}}
                             </button>
-                            <button type="button" class="btn green-jungle btn-lg" (click)="onConfirmClick()">
+                            <button type="button" class="btn blue btn-lg" (click)="onConfirmClick()">
                                 {{'btn_confirm'|bkTranslate:this}}
                             </button>
                         </div>

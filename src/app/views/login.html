@@ -19,7 +19,7 @@
         <div class="form-actions">
             <button type="submit" class="btn blue uppercase" (click)="onLoginClick($event)" [disabled]="!loginForm.valid">{{'btn_login'|bkTranslate:this}}</button>
             <button type="button" [disabled]="!resendVertification && !loginForm.valid" *ngIf="resendVertification" class="btn green uppercase" (click)="onResendClick()">{{'btn_resend'|bkTranslate:this}}</button>
-            <a [routerLink]="['/forgot-password']" class="forget-password">{{'label_forget_password'|bkTranslate:this}}?</a>
+            <a [routerLink]="['/forgot-password']" class="forget-password">{{'label_forget_password'|bkTranslate:this}}</a>
         </div>
         <div class="login-options">
             <h4>{{'label_login_social'|bkTranslate:this}}</h4>
@@ -34,9 +34,9 @@
         </div>
         <div class="becki-create-account">
             <p class="font-grey-mint">
-                <a [routerLink]="['/create-user']" id="register-btn" class="uppercase">
+              <strong>  <a [routerLink]="['/create-user']" id="register-btn" class="uppercase">
                     <span class="bg-font-grey-salt">{{'btn_create_account'|bkTranslate:this}}</span>
-                </a>
+                </a> </strong>
             </p>
         </div>
     </form>

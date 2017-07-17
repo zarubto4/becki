@@ -40,10 +40,7 @@ export class ModalsMembersAddComponent implements OnInit {
 
     constructor(private formBuilder: FormBuilder) {
         this.form = this.formBuilder.group({});
-        // add 4 inputs
-        this.onAddClick();
-        this.onAddClick();
-        this.onAddClick();
+        // add 1 inputs
         this.onAddClick();
     }
 

@@ -28,7 +28,6 @@
             </div>
         </div>
         <div>
-            <span [innerHTML]="'label_blocko_name'|bkTranslate:this:(group?group.name:'')"></span><br>
             <span [innerHTML]="'label_blocko_description'|bkTranslate:this:(group?group.description:'')"></span>
         </div>
         <div *ngIf="(group && group.blocko_blocks && group.blocko_blocks.length)" class="table-scrollable">

@@ -190,7 +190,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_version_edit_fail', model.name, reason)));
                         this.refresh();
                     });
-            }
+            } 
         });
     }
 

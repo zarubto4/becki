@@ -138,7 +138,7 @@ export class StaticTranslation {
             }, 'ModalsHardwareBootloaderUpdateComponent': {
                 'title': 'Hardware ID',
                 'label_attention': 'Warning!',
-                'body_text': '<p>We have to update a critical software component on your Hardware Device. The update transfer should last a couple of seconds.</p><p>The update process itself takes around 200 ms. If the Device is shut down, restarted or disconnected</p><p>during this procedure, the Device could be damaged!</p><p> In case that happens, you will have to repair the firmware on the Device manually by connecting it to your computer.</p><p>You can find more information about this topic in the documentation or in the “Ask” section of our website.</p>',
+                'body_text': 'We have to update a critical software component on your Hardware Device. The update transfer should last a couple of seconds. The update process itself takes around 200 ms. If the Device is shut down, restarted or disconnected during this procedure, the Device could be damaged! In case that happens, you will have to repair the firmware on the Device manually by connecting it to your computer. You can find more information about this topic in the documentation or in the “Ask” section of our website.',
 
             }, 'ModalsHardwareCodeProgramVersionSelectComponent': {
                 'title': 'Select CODE Program Version',
@@ -275,11 +275,11 @@ export class StaticTranslation {
 
 
             }, 'ProjectsProjectComponent': {
-                'title': 'PROJECT DASHBOARD',
+                'title': 'PROJECT {0} DASHBOARD',
                 'label_project_properities': 'Project properties',
                 'label_project_remove': 'Remove project',
-                'label_name': 'Project Name',
-                'label_description': 'Project Description',
+                'label_name': 'Name',
+                'label_description': 'Description',
                 'label_product': 'Financial Product',
                 'label_byzance_hardware': 'Byzance<strong class="font-color-hardware">HARDWARE</strong>',
                 'label_byzance_blocko': 'Byzance<strong class="font-color-blocko">BLOCKO</strong>',
@@ -397,6 +397,14 @@ export class StaticTranslation {
                 'label_remaining_credit': 'Remaining credit',
                 'label_other_details': 'Other details',
                 'label_contacts_details': 'Contacts details',
+                'label_financial_product_properties': 'Financial product properties',
+                'label_deactivate_product': 'Deactivate product',
+                'label_activate_product': 'Activate product',
+                'label_modal_body_text': 'By deactivating, you disable instances in the cloud and disconnect hardware from our servers. Remote administration will stop working. But All data and settings will be saved and you can reactivate the product at any time.',
+                'flash_cant_deactivate_product': 'The product cannot be deactivated. {0}',
+                'flash_product_activated': 'The product has been activated.',
+                'flash_cant_activate_product': 'The product cannot be activated. {0}',
+                'flash_product_deactivated': 'The product has been deactivated.',
 
             }, 'FinancialComponent': {
                 'main_title': 'Financial',
@@ -752,12 +760,12 @@ export class StaticTranslation {
                 'table_program': 'Program',
 
                 'btn_change_version_in_cloud': 'Change version in Cloud',
-                'label_instance_properities': 'instance properities',
-                'label_instance_name': 'Instance Name',
-                'label_instance_description': 'Instance Description',
-                'label_instance_id': 'Instance ID',
-                'label_server_name': 'Server Name',
-                'label_instance_status': 'Instance Status',
+                'label_instance_properities': 'properities',
+                'label_instance_name': 'Name',
+                'label_instance_description': 'Description',
+                'label_instance_id': 'ID',
+                'label_server_name': 'Server',
+                'label_instance_status': 'Status',
                 'label_status': 'Status:',
                 'label_info': 'Info',
                 'label_instance_info_is_offline': 'This instance is offline',
@@ -765,7 +773,7 @@ export class StaticTranslation {
                 'label_created': 'Created',
                 'label_running_from': 'Running from',
                 'label_running_to': 'Running until',
-                'label_running_status': 'Running status',
+                'label_running_status': 'Status',
                 'label_planned': 'Planned',
                 'label_progress': 'Progress',
                 'label_project': 'Project',
@@ -866,6 +874,7 @@ export class StaticTranslation {
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_version': 'Version',
+                'label_no_library_version':'There are no libraries yet.'
 
             }, 'ProjectsProjectMembersComponent': {
 
@@ -1009,9 +1018,8 @@ export class StaticTranslation {
             }, 'ProjectsProjectBlocksBlocksBlockComponent': {
                 'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - BLOCK <strong>{0}</strong>',
 
-                'label_name': 'BLOCKO Block Name',
-                'label_description': 'BLOCKO Block Description',
-                'label_group': 'BLOCKO Block Group Name',
+                'label_description': '<strong class="font-color-blocko">BLOCKO</strong> Block Description: <strong>{0}</strong>',
+                'label_group': '<strong class="font-color-blocko">BLOCKO</strong> Block Group Name',
                 'label_console_output': 'Output <strong>{0}</strong> = {1}',
 
                 'label_group_properties': 'BLOCKO block properties',
@@ -1034,6 +1042,7 @@ export class StaticTranslation {
                 'label_saved_versions': 'Saved versions',
                 'label_device_properties': 'Device properties',
                 'label_remove_device': 'Remove device',
+                'label_block_code_change': 'Block code has been changed, you must test program first than save.',
 
                 'table_version_name': 'Name',
                 'table_description': 'Description',

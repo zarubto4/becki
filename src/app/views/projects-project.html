@@ -8,9 +8,9 @@
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
-                <span class="font-blue-dark">
+                <span *ngIf="project" class="font-blue-dark">
                     <i class="fa fa-fw fa-tachometer"></i>
-                    {{'title'|bkTranslate:this}}
+                    {{'title'|bkTranslate:this:project.name}}
                 </span>
             </div>
             <div *ngIf="project" class="becki-actions">
@@ -47,7 +47,7 @@
                 </div>
                 <div>
                     {{'label_devices_count'|bkTranslate:this}}: <strong>{{project.boards.length}}</strong><br> {{'label_Status'|bkTranslate:this}}:
-                    <strong>{{count("devices_online")}}</strong> <span class="font-green-jungle">{{'label_online'|bkTranslate:this}}</span>/ <strong>{{count("devices_offline")}}</strong> <span class="font-red-flamingo">{{'label_offline'|bkTranslate:this}}</span>
+                    <strong>{{count("devices_online")}}</strong> <span class="font-green-jungle">{{'label_online'|bkTranslate:this}}</span> / <strong>{{count("devices_offline")}}</strong> <span class="font-red-flamingo">{{'label_offline'|bkTranslate:this}}</span>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -63,7 +63,7 @@
                 </div>
                 <div>
                     {{'label_instances_count'|bkTranslate:this}}: <strong>{{project.instancies.length}}</strong><br> {{'label_Status'|bkTranslate:this}}:
-                    <strong>{{count("instances_online")}}</strong> <span class="font-green-jungle">{{'label_online'|bkTranslate:this}}</span>/ <strong>{{count("instances_offline")}}</strong> <span class="font-red-flamingo">{{'label_offline'|bkTranslate:this}}</span>
+                    <strong>{{count("instances_online")}}</strong> <span class="font-green-jungle">{{'label_online'|bkTranslate:this}}</span> / <strong>{{count("instances_offline")}}</strong> <span class="font-red-flamingo">{{'label_offline'|bkTranslate:this}}</span>
                 </div>
                 <div class="clearfix"></div>
             </div>

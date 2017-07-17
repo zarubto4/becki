@@ -25,7 +25,6 @@
                     </div>
                 </div>
                 <div>
-                    <span [innerHTML]="'label_grid_program_name'|bkTranslate:this:(gridProgram?gridProgram.name:'')"></span> <br>
                     <span [innerHTML]="'label_grid_description'|bkTranslate:this:(gridProgram?gridProgram.description:'')"></span> <br>
                     <br>
                     <span [innerHTML]="'label_grid_grid_project'|bkTranslate:this"></span> <strong><a (click)="onGridProjectClick(gridProject.id)">{{gridProject?gridProject.name:""}}</a></strong>
