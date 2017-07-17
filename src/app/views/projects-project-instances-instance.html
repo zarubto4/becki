@@ -93,10 +93,10 @@
                         <a class="cursor-pointer" (click)="onToggleinstanceTab('overview')">{{'tab_name_overview'|bkTranslate:this}}</a>
                     </li>
                     <li [class.active]="instanceTab == 'hardware'">
-                        <a class="cursor-pointer" (click)="onToggleinstanceTab('hardware')">{{'tab_name_hardware'|bkTranslate:this}}</a>
+                        <a class="cursor-pointer" (click)="onToggleinstanceTab('hardware')"><span [innerHTML]="'tab_name_hardware'|bkTranslate:this"></span></a>
                     </li>
                     <li [class.active]="instanceTab == 'grid'">
-                        <a class="cursor-pointer" (click)="onToggleinstanceTab('grid')">{{'tab_name_grid'|bkTranslate:this}}</a>
+                        <a class="cursor-pointer" (click)="onToggleinstanceTab('grid')"><span [innerHTML]="'tab_name_grid'|bkTranslate:this"></span></a>
                     </li>
                     <li [class.active]="instanceTab == 'history'">
                         <a class="cursor-pointer" (click)="onToggleinstanceTab('history')">{{'tab_name_history'|bkTranslate:this}}</a>
@@ -124,17 +124,17 @@
                         <h3 class="font-color-blocko"><strong>{{'label_blocko'|bkTranslate:this}}</strong></h3>
 
                         <div>
-                            {{'label_program'|bkTranslate:this}}:
+                            {{'label_program'|bkTranslate:this}}: 
                             <span class="font-grey-mint bold"><a (click)="onBlockoProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></span>
                         </div>
 
                         <div *ngIf="instance.b_program_description && instance.b_program_description.length">
-                            {{'label_description'|bkTranslate:this}}
+                            {{'label_description'|bkTranslate:this}}: 
                             <span class="font-grey-mint bold">{{instance.b_program_description}}</span>
                         </div>
                         <br>
                         <div>
-                            {{'label_version'|bkTranslate:this}}:
+                            {{'label_version'|bkTranslate:this}}: 
                             <span class="font-grey-mint bold"><a (click)="onBlockoProgramVersionClick(instance.actual_instance.b_program_id, instance.actual_instance.b_program_version_id)">{{instance.actual_instance.b_program_version_name}}</a></span>
                         </div>
                         <div>
@@ -148,22 +148,22 @@
                         <h3 class="font-color-cloud"><strong>{{'label_cloud'|bkTranslate:this}}</strong></h3>
 
                         <div>
-                            {{'label_instance_type'|bkTranslate:this}}:
+                            {{'label_instance_type'|bkTranslate:this}}: 
                             <span class="font-grey-mint bold">{{instance.instance_type|bkTranslateTable:this:'instance_type'}}</span>
                         </div>
 
                         <br>
 
                         <div>
-                            {{'label_created'|bkTranslate:this}}:
+                            {{'label_created'|bkTranslate:this}}: 
                             <span class="font-grey-mint bold">{{instance.actual_instance.date_of_created|bkUnixTimeToDate}}</span>
                         </div>
                         <div>
-                            {{'label_running_from'|bkTranslate:this}}:
+                            {{'label_running_from'|bkTranslate:this}}: 
                             <span class="font-grey-mint bold">{{instance.actual_instance.running_from|bkUnixTimeToDate}}</span>
                         </div>
                         <div>
-                            {{'label_running_status'|bkTranslate:this}}:
+                            {{'label_running_status'|bkTranslate:this}}: 
                             <span class="font-grey-mint bold">{{instance.actual_instance.status|bkTranslateTable:this:'instance_status'}}</span>
                         </div>
 
@@ -253,18 +253,18 @@
                             <template [ngIf]="hardware.main_board_pair.board_description && hardware.main_board_pair.board_description.length">
                                 <div style="font-size:0.9em; color:#888;">{{hardware.main_board_pair.board_description}}</div>
                             </template>
-                            <div><strong class="font-color-hardware">{{'label_hardware_caps'|bkTranslate:this}}</strong>{{'table_hardware_type'|bkTranslate:this}}:
+                            <div><strong class="font-color-hardware">{{'label_hardware_caps'|bkTranslate:this}}</strong>{{'table_hardware_type'|bkTranslate:this}}: 
                                 <strong><a (click)="onBoardTypeClick(hardware.main_board_pair.type_of_board_id)">{{hardware.main_board_pair.type_of_board_name}}</a></strong></div>
                             <br>
                             <div>
-                                <strong class="font-color-code">{{'label_code'|bkTranslate:this}}</strong>{{'label_program'|bkTranslate:this}}:
+                                <strong class="font-color-code">{{'label_code'|bkTranslate:this}}</strong>{{'label_program'|bkTranslate:this}}: 
                                 <strong><a (click)="onCProgramClick(hardware.main_board_pair.c_program_id)">{{hardware.main_board_pair.c_program_name}}</a></strong>
                                 <template [ngIf]="hardware.main_board_pair.c_program_description && hardware.main_board_pair.c_program_description.length">
                                     <span>{{hardware.main_board_pair.c_program_description}}</span>
                                 </template>
                             </div>
                             <div>
-                                <strong class="font-color-code">{{'label_code'|bkTranslate:this}}</strong>{{'label_version'|bkTranslate:this}}:
+                                <strong class="font-color-code">{{'label_code'|bkTranslate:this}}</strong>{{'label_version'|bkTranslate:this}}: 
                                 <strong><a (click)="onCProgramVersionClick(hardware.main_board_pair.c_program_id, hardware.main_board_pair.c_program_version_id)">{{hardware.main_board_pair.c_program_version_name}}</a></strong>
                                 <template [ngIf]="hardware.main_board_pair.c_program_version_description && hardware.main_board_pair.c_program_version_description.length">
                                     <span>&nbsp;-&nbsp;{{hardware.main_board_pair.c_program_version_description}}</span>
@@ -281,14 +281,14 @@
                                     <strong><a (click)="onBoardTypeClick(slave.type_of_board_id)">{{slave.type_of_board_name}}</a></strong></div>
                                 <br>
                                 <div>
-                                    <strong class="font-color-code">{{'label_code'|bkTranslate:this}}</strong>{{'label_program'|bkTranslate:this}}:
+                                    <strong class="font-color-code">{{'label_code'|bkTranslate:this}}</strong>{{'label_program'|bkTranslate:this}}: 
                                     <strong><a (click)="onCProgramClick(slave.c_program_id)">{{slave.c_program_name}}</a></strong>
                                     <template [ngIf]="slave.c_program_description && slave.c_program_description.length">
                                         <span>{{slave.c_program_description}}</span>
                                     </template>
                                 </div>
                                 <div>
-                                    <strong class="font-color-code">{{'label_code'|bkTranslate:this}}</strong>{{'label_version'|bkTranslate:this}}:
+                                    <strong class="font-color-code">{{'label_code'|bkTranslate:this}}</strong>{{'label_version'|bkTranslate:this}}: 
                                     <strong><a (click)="onCProgramVersionClick(slave.c_program_id, slave.c_program_version_id)">{{slave.c_program_version_name}}</a></strong>
                                     <template [ngIf]="slave.c_program_version_description && slave.c_program_version_description.length">
                                         <span>{{slave.c_program_version_description}}</span>
@@ -351,19 +351,19 @@
                             <h3 class="font-color-cloud"><strong>{{'label_cloud'|bkTranslate:this}}</strong></h3>
 
                             <div>
-                                {{'label_created'|bkTranslate:this}}
+                                {{'label_created'|bkTranslate:this}}: 
                                 <span class="font-grey-mint bold">{{currentHistoricInstance.date_of_created|bkUnixTimeToDate}}</span>
                             </div>
                             <div>
-                                {{'label_running_from'|bkTranslate:this}}
+                                {{'label_running_from'|bkTranslate:this}}: 
                                 <span class="font-grey-mint bold">{{currentHistoricInstance.running_from|bkUnixTimeToDate}}</span>
                             </div>
                             <div>
-                                {{'label_running_to'|bkTranslate:this}}
+                                {{'label_running_to'|bkTranslate:this}}: 
                                 <span class="font-grey-mint bold">{{currentHistoricInstance.running_to|bkUnixTimeToDate}}</span>
                             </div>
                             <div>
-                                {{'label_running_status'|bkTranslate:this}}
+                                {{'label_running_status'|bkTranslate:this}}: 
                                 <span class="font-grey-mint bold">{{instance.actual_instance.status|bkTranslateTable:this:'instance_status'}}</span>
                             </div>
 
@@ -498,14 +498,14 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th><strong class="font-color-hardware">{{'label_hardware'|bkTranslate:this}}</strong>{{'table_name'|bkTranslate:this}}</th>
-                                        <th><strong class="font-color-hardware">{{'label_hardware'|bkTranslate:this}}</strong>{{'table_id'|bkTranslate:this}}</th>
-                                        <th><strong class="font-color-hardware">{{'label_hardware'|bkTranslate:this}}</strong>{{'table_hardware_type'|bkTranslate:this}}</th>
+                                        <th><strong class="font-color-hardware">{{'label_hardware'|bkTranslate:this}}</strong>{{'table_name'|bkTranslate:this}}: </th>
+                                        <th><strong class="font-color-hardware">{{'label_hardware'|bkTranslate:this}}</strong>{{'table_id'|bkTranslate:this}}: </th>
+                                        <th><strong class="font-color-hardware">{{'label_hardware'|bkTranslate:this}}</strong>{{'table_hardware_type'|bkTranslate:this}}: </th>
                                         <th>{{'label_finished'|bkTranslate:this}}</th>
                                         <th>{{'label_firmware_type'|bkTranslate:this}}</th>
-                                        <th><strong class="font-color-code">{{'label_code'|bkTranslate:this}}</strong>{{'label_program'|bkTranslate:this}}</th>
-                                        <th><strong class="font-color-code">{{'label_code'|bkTranslate:this}}</strong>{{'label_version'|bkTranslate:this}}</th>
-                                        <th>{{'label_status'|bkTranslate:this}}</th>
+                                        <th><strong class="font-color-code">{{'label_code'|bkTranslate:this}}: </strong>{{'label_program'|bkTranslate:this}}</th>
+                                        <th><strong class="font-color-code">{{'label_code'|bkTranslate:this}}: </strong>{{'label_version'|bkTranslate:this}}</th>
+                                        <th>{{'label_status'|bkTranslate:this}}:</th>
                                     </tr>
                                 </thead>
                                 <tbody>

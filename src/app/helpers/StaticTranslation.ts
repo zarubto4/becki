@@ -11,7 +11,7 @@ export class StaticTranslation {
         'en': {
             'ModalsAddHardwareComponent': {
                 'title': 'Add a Device',
-                'label_device_id': 'Hardware Device ID',
+                'label_hash_token': 'Hash Token',
 
             }, 'ModalsBlockoAddGridEmptyComponent': {
                 'title': 'Unable to add GRID project.',
@@ -745,8 +745,8 @@ export class StaticTranslation {
                 'title': 'Byzance<strong class="font-color-cloud">CLOUD</strong> - instance <strong>{0}</strong>',
 
                 'tab_name_overview': 'Overview',
-                'tab_name_hardware': 'Devices',
-                'tab_name_grid': 'GRID Apps',
+                'tab_name_hardware': '<strong class="font-color-hardware">HARDWARE</strong>',
+                'tab_name_grid': '<strong class="font-color-grid">GRID</strong> Apps',
                 'tab_name_history': 'History',
                 'tab_name_update_progress': 'Update Progress',
                 'tab_name_update_view': 'Realtime Overview',
@@ -766,7 +766,7 @@ export class StaticTranslation {
                 'label_instance_id': 'ID',
                 'label_server_name': 'Server',
                 'label_instance_status': 'Status',
-                'label_status': 'Status:',
+                'label_status': 'Status',
                 'label_info': 'Info',
                 'label_instance_info_is_offline': 'This instance is offline',
                 'label_instance_type': 'Instance Type',

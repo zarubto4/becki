@@ -38,7 +38,7 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
     }
 
     onSettingsClick(): void {
-        alert('TODO!'); // TODO !!! 
+        alert('TODO!'); // TODO !!!
     }
 
     onEditClick(product: IProduct): void { }
