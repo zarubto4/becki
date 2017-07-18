@@ -28,8 +28,8 @@
                 </div>
                 <div class="clearfix"></div>
                 <div>
-                    <br>  {{'label_description'|bkTranslate:this}}: <strong>{{blockoBlock?blockoBlock.description:""}}</strong>
-                    <br>  {{'label_group'|bkTranslate:this}}: <strong><a (click)="onBlocksGroupClick(group.id)">{{group?group.name:""}}</a></strong>
+                    <br> <span [innerHTML]="'label_description'|bkTranslate:this:(blockoBlock?blockoBlock.description:'')"></span>
+                    <br> <span [innerHTML]="'label_group'|bkTranslate:this"></span>: <strong><a (click)="onBlocksGroupClick(group.id)">{{group?group.name:""}}</a></strong>
                 </div>
             </div>
         </div>

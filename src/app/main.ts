@@ -155,7 +155,7 @@ let routes: Routes = [
 
     {path: 'financial', data: {breadName: 'Financial'}, component: FinancialComponent, canActivate: [AuthGuard]},
 
-    {path: 'financial/product-registration', data: {breadName: 'Product registration'}, component: ProductRegistrationComponent, canActivate: [AuthGuard]},
+    {path: 'financial/product-registration', data: {breadName: 'Product subscription'}, component: ProductRegistrationComponent, canActivate: [AuthGuard]},
 
     {path: 'financial/:product', data: {breadName: ':product'}, component: FinancialProductComponent, canActivate: [AuthGuard]},
     {path: 'financial/:product/extensions', data: {breadName: 'extensions'}, component: FinancialProductExtensionsComponent, canActivate: [AuthGuard]},

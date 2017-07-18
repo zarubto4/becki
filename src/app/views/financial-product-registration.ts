@@ -202,7 +202,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             'country': ['', [Validators.required, Validators.minLength(4)]],
         };
 
-        if (this.selectedTariff.payment_method_required) {
+        if (this.selectedTariff.payment_details_required) {
             let value = '';
             if (this.optionsPaymentMethod.length === 1) {
                 value = this.optionsPaymentMethod[0].value;
@@ -305,7 +305,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
         };
 
-        if (this.selectedTariff.payment_method_required) {
+        if (this.selectedTariff.payment_details_required) {
             tariffData['payment_method'] = this.form.controls['payment_method'].value;
         }
 

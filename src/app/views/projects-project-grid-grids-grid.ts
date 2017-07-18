@@ -331,7 +331,7 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                         this.exitConfirmationService.setConfirmationEnabled(false);
                     })
                     .catch((err) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_save_version', m.name , err)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_save_version', m.name, err)));
                         this.unblockUI();
                     });
             }

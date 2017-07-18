@@ -14,7 +14,7 @@
             </div>
             <div class="becki-actions">
                 <button class="btn blue" (click)="onAddProductClick()">
-                    <i class="fa fa-plus-circle"></i> {{'btn_add_product'|bkTranslate:this}}
+                    <i class="fa fa-plus-circle"></i> {{'btn_new_subscribtion'|bkTranslate:this}}
                 </button>
             </div>
         </div>
@@ -24,13 +24,13 @@
                     <tr>
                         <th>{{'table_name'|bkTranslate:this}}</th>
                         <th>{{'table_type'|bkTranslate:this}}</th>
-                        <th> Subscription id</th>
-                        <th class="text-right">Actions</th>
+                        <th> {{'label_subscription_id'|bkTranslate:this}}</th>
+                        <th class="text-right">{{'label_actions'|bkTranslate:this}}</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let product of products">
-                        <td class="no-wrap">
+                        <td class="vert-align no-wrap">
                             <a (click)="onProductClick(product)"><b>{{product.name}}</b></a>
                             <span *ngIf="product.active==true" class="font-green-jungle">({{'label_active'|bkTranslate:this}})</span>
                             <span *ngIf="product.active==false" class="font-red">({{'label_hibernation'|bkTranslate:this}})</span>
@@ -43,7 +43,7 @@
 
                         </td>
 
-                        <td class="no-wrap ">
+                        <td class="vert-align no-wrap ">
                             <span title="{{'label_title_bank_transfer'|bkTranslate:this}}" class="font-blue-chambray" *ngIf="product.payment_method=='bank_transfer'"> <!-- title jsou schválně ponecaný eng -->
                             <i class="fa fa-lg fa-fw fa-exchange"> </i> {{'label_bank_transfer'|bkTranslate:this}}
                         </span>
@@ -60,8 +60,8 @@
                             <i class="fa fa-lg fa-fw fa-question"></i> {{'label_not_set_yet'|bkTranslate:this}}
                         </span>
                         </td>
-                        <td>{{product.subscription_id}}</td>
-                        <td class="text-right">
+                        <td class="vert-align">{{product.subscription_id}}</td>
+                        <td class="vert-align text-right">
                             <button (click)="onSettingsClick()" title="Settings" class="btn green btn-icon-only white"> 
                           <i class="fa fa-gear"></i> 
                       </button>

@@ -219,6 +219,7 @@ export class StaticTranslation {
                 'table_name': 'Name',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
+                'table_product': 'Product',
                 'label_deactivated_under': 'Deactivated under',
                 'label_project_properties': 'Project properties',
                 'label_Remove_project': 'Remove project',
@@ -320,7 +321,7 @@ export class StaticTranslation {
 
 
             }, 'ProductRegistrationComponent': {
-                'main_title': 'Product Registration',
+                'main_title': 'Product subscribtion',
                 'nav_step_one_title': 'Tariff',
                 'nav_step_one_text': 'Select the right tariff for you',
                 'nav_step_two_title': 'Packages',
@@ -409,13 +410,15 @@ export class StaticTranslation {
             }, 'FinancialComponent': {
                 'main_title': 'Financial',
                 'title': 'Products',
-                'btn_add_product': 'Add product',
+                'btn_new_subscribtion': 'New Subscribtion',
                 'label_product_list': 'Products list',
                 'label_title_bank_transfer': 'Bank transfer',
                 'label_title_credits': 'Credits',
                 'label_title_credit_card': 'Credit Card',
                 'label_title_free': 'Free',
                 'label_active': 'active',
+                'label_actions': 'Actions',
+                'label_subscription_id': 'ID',
                 'label_hibernation': 'hibernation',
                 'label_modal_body_text': 'By deactivating, you disable instances in the cloud and disconnect hardware from our servers. Remote administration will stop working. But All data and settings will be saved and you can reactivate the product at any time.',
 
@@ -673,7 +676,7 @@ export class StaticTranslation {
                 'label_bootloader_version': 'Version',
                 'label_last_seen_unknow': '(Unknown)',
                 'label_update_to': 'Update to',
-                'label_developer_settings' : 'Developer settings',
+                'label_developer_settings': 'Developer settings',
                 'label_alerts': 'Alerts',
                 'label_main_server': 'Main Server',
                 'label_instance': 'Instance ID',
@@ -887,7 +890,7 @@ export class StaticTranslation {
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_version': 'Version',
-                'label_no_library_version':'There are no libraries yet.'
+                'label_no_library_version': 'There are no libraries yet.'
 
             }, 'ProjectsProjectMembersComponent': {
 
@@ -1401,6 +1404,11 @@ export class StaticTranslation {
                 'btn_move': 'Move',
 
                 'label_open_file_browser': 'Open file in file browser',
+            }, 'VersionListComponent': {
+                'table_name': 'name',
+                'table_description': 'description',
+                'table_product': 'product',
+                'table_actions': 'actions',
             },
 
             'label_byzance_hardware': 'Byzance<strong class="font-color-hardware">HARDWARE</strong>',
@@ -1456,7 +1464,7 @@ export class StaticTranslation {
                 'offline': 'offline',
                 'synchronization_in_progress': 'Synchronizing',
                 'not_yet_first_connected': 'We have no idea - (never logged before)',
-                'unknown_lost_connection_with_server' : 'Lost connection with external server'
+                'unknown_lost_connection_with_server': 'Lost connection with external server'
             },
             'device_alerts': {
                 'BOOTLOADER_REQUIRED': 'Bootloader update is required.',
