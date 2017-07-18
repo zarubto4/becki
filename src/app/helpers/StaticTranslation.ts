@@ -14,17 +14,17 @@ export class StaticTranslation {
                 'label_hash_token': 'Hash Token',
 
             }, 'ModalsBlockoAddGridEmptyComponent': {
-                'title': 'Unable to add GRID project.',
-                'body_text': 'No existing GRID program found, let\'s create one!',
+                'title': 'Unable to add <strong class="font-color-grid">GRID</strong> project.',
+                'body_text': 'No existing <strong class="font-color-grid">GRID</strong> program found, let\'s create one!',
                 'btn_redirect': 'Create GRID',
 
             }, 'ModalsBlockoAddGridComponent': {
-                'title': 'New GRID Project',
-                'label_grid_project': 'GRID Project',
+                'title': 'New <strong class="font-color-grid">GRID</strong> Project',
+                'label_grid_project': '<strong class="font-color-grid">GRID</strong> Project',
                 'placeholder_grid_project': 'Select a GRID Project',
 
             }, 'ModalsBlockoAddHardwareComponent': {
-                'title': 'Add HARDWARE',
+                'title': 'Add <strong class="font-color-hardware">HARDWARE</strong>',
                 'label_hardware': 'Hardware',
                 'placeholder_select_hardware': 'Select Hardware',
 
@@ -39,8 +39,8 @@ export class StaticTranslation {
                 'title': 'Config Editor - block',
 
             }, 'ModalsBlockoPropertiesComponent': {
-                'title_edit': 'BLOCKO Program Properties',
-                'title_add': 'New BLOCKO Program',
+                'title_edit': '<strong class="font-color-blocko">BLOCKO</strong> Program Properties',
+                'title_add': 'New <strong class="font-color-blocko">BLOCKO</strong> Program',
                 'label_blocko_program_name': 'Name',
                 'label_blocko_program_description': 'Description',
 
@@ -49,8 +49,8 @@ export class StaticTranslation {
                 'label_program_version': 'Program Version',
 
             }, 'ModalsBlocksBlockPropertiesComponent': {
-                'title_edit': 'BLOCK Properties',
-                'title_add': 'Add BLOCKO',
+                'title_edit': '<strong class="font-color-blocko">BLOCKO</strong> Properties',
+                'title_add': 'Add <strong class="font-color-blocko">BLOCKO</strong>',
                 'label_block_name': 'name',
                 'label_block_description': 'description',
 
@@ -62,7 +62,7 @@ export class StaticTranslation {
                 'label_block_description': 'Description',
 
             }, 'ModalsCodeAddLibraryComponent': {
-                'title': 'New CODE Library',
+                'title': 'New <strong class="font-color-code">CODE</strong> Library',
                 'body_text': 'Displaying <b>{}0</b> out of <b>{1}</b> Libraries',
                 'label_load_more': 'Load More Libraries',
                 'label_no_more': 'All libraries displayed.',
@@ -92,7 +92,7 @@ export class StaticTranslation {
                 'btn_select_library': 'Select',
 
             }, 'ModalsCodePropertiesComponent': {
-                'title_edit': 'CODE Program Properties',
+                'title_edit': '<strong class="font-color-code">CODE</strong> Program Properties',
                 'title_add': 'New Program',
                 'label_program_name': 'Name',
                 'label_program_description': 'Description',
@@ -124,13 +124,13 @@ export class StaticTranslation {
                 'label_output': 'Output',
 
             }, 'ModalsGridProgramPropertiesComponent': {
-                'title_edit': 'GRID Program Properties',
+                'title_edit': '<strong class="font-color-grid">GRID</strong> Program Properties',
                 'title_add': 'New Program',
                 'label_grid_program_name': 'Name',
                 'label_grid_program_description': 'Description',
 
             }, 'ModalsGridProjectPropertiesComponent': {
-                'title_edit': 'GRID Project Properties',
+                'title_edit': '<strong class="font-color-grid">GRID</strong> Project Properties',
                 'title_add': 'New Project',
                 'label_grid_name': 'Name',
                 'label_grid_description': 'Description',
@@ -141,9 +141,9 @@ export class StaticTranslation {
                 'body_text': 'We have to update a critical software component on your Hardware Device. The update transfer should last a couple of seconds. The update process itself takes around 200 ms. If the Device is shut down, restarted or disconnected during this procedure, the Device could be damaged! In case that happens, you will have to repair the firmware on the Device manually by connecting it to your computer. You can find more information about this topic in the documentation or in the “Ask” section of our website.',
 
             }, 'ModalsHardwareCodeProgramVersionSelectComponent': {
-                'title': 'Select CODE Program Version',
+                'title': 'Select <strong class="font-color-code">CODE</strong> Program Version',
                 'label_program': 'Program',
-                'label_no_code': 'No CODE programs found.',
+                'label_no_code': 'No <strong class="font-color-code">CODE</strong> programs found.',
                 'label_select_program': 'Select Program',
                 'label_no_version': 'No versions found.',
                 'label_not_compiled': 'Compilation failed',
@@ -153,7 +153,7 @@ export class StaticTranslation {
                 'title': 'CLOUD Instance Properties',
 
             }, 'ModalsLibraryPropertiesComponent': {
-                'title_edit': 'CODE Library Properties',
+                'title_edit': '<strong class="font-color-code">CODE</strong> Library Properties',
                 'title_add': 'New Library',
                 'label_library_name': 'Name',
                 'label_library_description': 'Description',
@@ -575,7 +575,7 @@ export class StaticTranslation {
                 'btn_upload_on_cloud': 'Upload program to Cloud',
                 'btn_turn_off_instance': 'Shutdown instance',
                 'btn_change_cloud_version': 'Change Version',
-                'label_no_devices_added': 'No devices added in this BLOCKO program.',
+                'label_no_devices_added': 'No devices added in this <strong class="font-color-blocko">BLOCKO</strong> program.',
                 'label_select_version': 'Select Version',
                 'label_no_program_version': 'No program versions.',
                 'label_modal_change_instance_version': 'Change Instance Version',
@@ -585,11 +585,11 @@ export class StaticTranslation {
                 'label_modal_no_main_boards': 'No available Master Devices.',
                 'label_modal_shutdown_instance': 'Shutdown instance',
                 'label_modal_confirm_shutdown_instance': 'Are you sure to shutdown the running instance?',
-                'label_no_grid_in_blocko': 'No GRID projects added in this BLOCKO program',
-                'label_modal_cant_save_blocko_hw_without_version': 'Unable to save BLOCKO, you have <b>hardware devices</b> without program <b>versions selected</b>.',
+                'label_no_grid_in_blocko': 'No <strong class="font-color-grid">GRID</strong> projects added in this <strong class="font-color-blocko">BLOCKO</strong> program',
+                'label_modal_cant_save_blocko_hw_without_version': 'Unable to save <strong class="font-color-blocko">BLOCKO</strong>, you have <b>hardware devices</b> without program <b>versions selected</b>.',
                 'label_modal_clear_program': 'Clear Program',
-                'label_modal_confirm_clear_blocko_program': 'Are you sure to clear the BLOCKO program?',
-                'label_modal_cant_save_grid_hw_without_version': 'Unable to save BLOCKO, you have <b>grid programs</b>, without program <b>versions selected</b>.',
+                'label_modal_confirm_clear_blocko_program': 'Are you sure to clear the <strong class="font-color-blocko">BLOCKO</strong> program?',
+                'label_modal_cant_save_grid_hw_without_version': 'Unable to save <strong class="font-color-blocko">BLOCKO</strong>, you have <b>grid programs</b>, without program <b>versions selected</b>.',
                 'checkbox_advanced_mode': 'Advanced Mode',
                 'label_no_blocks_in_group': 'No BLOCKs in this group',
 
@@ -745,7 +745,7 @@ export class StaticTranslation {
                 'label_upload_instance_modal_comment': 'No instance in Cloud found.',
                 'label_upload_error': 'Unable to shutdown this instance, {0}.',
                 'label_no_item': 'No instance in Cloud found.',
-                'label_you_can_create': 'Are you sure to upload BLOCKO and deploy instance to the Cloud?',
+                'label_you_can_create': 'Are you sure to upload <strong class="font-color-blocko">BLOCKO</strong> and deploy instance to the Cloud?',
 
             }, 'ProjectsProjectInstancesInstanceComponent': {
 
@@ -821,7 +821,7 @@ export class StaticTranslation {
                 'label_modal_shutdown_instance': 'Shutdown instance',
                 'label_modal_confirm_shutdown_instance': 'Are you sure to shutdown the running instance?',
                 'label_modal_run_latest_version': 'Deploy to CLOUD in the latest version',
-                'label_modal_confirm_run_latest_version': 'Are you sure to deploy BLOCKO and instance to CLOUD?',
+                'label_modal_confirm_run_latest_version': 'Are you sure to deploy <strong class="font-color-blocko">BLOCKO</strong> and instance to CLOUD?',
                 'label_cannot_execute': 'Unable to execute command, {0}.',
                 'label_cannot_change_version': 'Unable to change version, {0}.',
                 'label_cannot_change_program_publicity': 'Unable to change program privacy setting, {0}.',
@@ -1017,7 +1017,7 @@ export class StaticTranslation {
 
                 'label_blocko_remove': 'Remove BLOCKO program',
                 'label_blocko_program_properties': 'BLOCKO program properties',
-                'label_no_blocko_program': 'No BLOCKO programs available.',
+                'label_no_blocko_program': 'No <strong class="font-color-blocko">BLOCKO</strong> programs available.',
                 'label_create_blocko_text': 'Click on the button bellow to create a program.',
                 'table_name': 'Name',
                 'table_description': 'Description',
@@ -1195,7 +1195,7 @@ export class StaticTranslation {
                 'label_code_program_properties': 'CODE program properties',
                 'label_remove_code_program': 'Remove CODE program',
 
-                'label_no_code': 'No CODE program available.',
+                'label_no_code': 'No <strong class="font-color-code">CODE</strong> program available.',
                 'label_create_code_text': 'Click on the button bellow to create a program.',
 
                 'table_name': 'Name',
@@ -1240,8 +1240,8 @@ export class StaticTranslation {
 
                 'btn_add_page': 'New Page',
                 'btn_clear_console': 'Clear Console',
-                'modal_label_grid_size_change': 'Change GRID size class',
-                'modal_text_grid_size_change': 'Changing GRID size class <strong>will delete all your pages</strong>, are you sure?',
+                'modal_label_grid_size_change': 'Change <strong class="font-color-grid">GRID</strong> size class',
+                'modal_text_grid_size_change': 'Changing <strong class="font-color-grid">GRID</strong> size class <strong>will delete all your pages</strong>, are you sure?',
 
                 'flash_cant_load_widget_version': 'Unable to load widget version, {0}.',
                 'flash_cant_save_version': 'Unable to save version <b>{0}</b >, {1}.',
@@ -1249,7 +1249,7 @@ export class StaticTranslation {
                 'flash_cant_remove_grid': 'Unable to remove program, {0}.',
                 'flash_grid_remove': 'Program has been removed.',
                 'flash_grid_edit': 'Program has been edited.',
-                'flash_cant_edit_grid': 'TUnable to edit program, {0}.',
+                'flash_cant_edit_grid': 'Unable to edit program, {0}.',
                 'flash_cant_load_version': 'Unable to load version <b>{0}</b>, {1}.',
                 'flash_cant_load_grid': 'Unable to load GRID, {0}.',
                 'flash_cant_change_version': 'Unable to change version {0}, {1}',
@@ -1263,7 +1263,7 @@ export class StaticTranslation {
                 'label_device_remove': 'Remove GRID group',
                 'label_program_properties': 'GRID program properties',
                 'label_program_remove': 'Remove GRID program',
-                'label_no_grid': 'No GRID program available.',
+                'label_no_grid': 'No <strong class="font-color-grid">GRID</strong> program available.',
                 'label_create_grid_text': 'Click on the button bellow to create a program.',
 
                 'btn_add_grid_program': 'Create GRID Program',
@@ -1295,7 +1295,7 @@ export class StaticTranslation {
 
                 'label_group_properties': 'Group properties',
                 'label_group_remove': 'Remove group',
-                'label_no_grid': 'No GRID projects available.',
+                'label_no_grid': 'No <strong class="font-color-grid">GRID</strong> projects available.',
                 'label_create_grid_text': 'Click on the button bellow to create a project.',
 
                 'flash_grid_project_add': 'Project has been created.',

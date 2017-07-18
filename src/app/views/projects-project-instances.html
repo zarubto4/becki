@@ -80,8 +80,8 @@
         </div>
         <h3 *ngIf="!instances" class="text-center">{{'loading'|bkTranslate:this}}</h3>
         <div *ngIf="instances && instances.length == 0" class="list-no-items">
-            <p class="list-no-items__main-label">{{'label_no_item'|bkTranslate:this}}</p>
-            <p class="list-no-items__sub-label">{{'label_you_can_create'|bkTranslate:this}}</p>
+            <p class="list-no-items__main-label" [innerHTML]="'label_no_item'|bkTranslate:this"></p>
+            <p class="list-no-items__sub-label" [innerHTML]="'label_you_can_create'|bkTranslate:this"></p>
         </div>
     </div>
 

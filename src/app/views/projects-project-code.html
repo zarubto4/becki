@@ -54,7 +54,7 @@
         </div>
         <h3 *ngIf="!codePrograms" class="text-center">{{'loading'|bkTranslate:this}}</h3>
         <div *ngIf="codePrograms && codePrograms.length == 0" class="list-no-items">
-            <p class="list-no-items__main-label">{{'label_no_code'|bkTranslate:this}}</p>
+            <p class="list-no-items__main-label" [innerHTML]="'label_no_code'|bkTranslate:this"></p>
             <p class="list-no-items__sub-label"> {{'label_create_code_text'|bkTranslate:this}}</p>
             <p><button class="btn blue" (click)="onAddClick()"><i class="fa fa-plus-circle"></i>{{'btn_add_code_program'|bkTranslate:this}}</button></p>
         </div>

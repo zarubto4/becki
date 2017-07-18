@@ -53,7 +53,7 @@ export interface FormSelectComponentOption {
 /* tslint:disable:max-line-length */
     template: `
 <div class="form-group" [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)" [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
-    <label>{{label}}</label>
+    <label [innerHTML]="label"></label>
     <select class="form-control" [formControl]="control">
         <option value="" disabled>{{(placeholder?placeholder:label)}}</option>
         <option *ngFor="let option of options" [value]="option.value">{{option.label}}</option>

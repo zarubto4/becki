@@ -1,11 +1,11 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">{{'title'|bkTranslate:this}}</h4>
+        <h4 class="modal-title" [innerHTML]="'title'|bkTranslate:this"></h4>
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-select [control]="form.controls.grid" label="{{'label_grid_project'|bkTranslate:this}}" placeholder="{{'placeholder_grid_project'|bkTranslate:this}}" [options]="options"></bk-form-select>
+            <bk-form-select [control]="form.controls.grid" [label]="'label_grid_project'|bkTranslate:this" placeholder="{{'placeholder_grid_project'|bkTranslate:this}}" [options]="options"></bk-form-select>
         </form>
     </div>
     <div class="modal-footer">

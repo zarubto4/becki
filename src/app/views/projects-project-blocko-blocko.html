@@ -95,7 +95,7 @@
                         </div>
                     </template>
                     <h3 *ngIf="!(selectedHardware && selectedHardware.length)" style="margin: 20px 0;">
-                        <i class="fa fa-chevron-down"></i> {{'label_no_devices_added'|bkTranslate:this}}
+                        <i class="fa fa-chevron-down"></i> <span [innerHTML]="'label_no_devices_added'|bkTranslate:this"></span>
                     </h3>
 
                     <button type="button" class="btn default blue" (click)="hwAdd()">
@@ -138,7 +138,7 @@
                         </div>
                     </template>
                     <h3 *ngIf="isEmptyObject(selectedGridProgramVersions)" style="margin: 20px 0;">
-                        <i class="fa fa-chevron-down"></i> {{'label_no_grid_in_blocko'|bkTranslate:this}}
+                        <i class="fa fa-chevron-down"></i> <span [innerHTML]="'label_no_grid_in_blocko'|bkTranslate:this"></span>
                     </h3>
 
                     <button type="button" class="btn default blue" (click)="gridAdd()" [disabled]="!allGridProjects">
