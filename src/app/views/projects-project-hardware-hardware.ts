@@ -132,7 +132,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     }
 
     onDeveloperKitClick(): void {
-        // TODO
+        // TODO nedodělaná must have fičua pro Martina a viktora (Viz zeptat se Toma)
     }
 
     onAutobackupSwitchClick(backup_mode: string): void {
