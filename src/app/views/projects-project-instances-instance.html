@@ -641,7 +641,7 @@
                     </div>
                 </div>
 
-            <div *ngIf="instanceTab == 'update'">
+                <div *ngIf="instanceTab == 'update'">
 
                     <div *ngIf="!(instance && instance.actual_instance && instance.actual_instance.procedures && instance.actual_instance.procedure_short_details.length)">
                             <p class="list-no-items__main-label">{{'label_no_running_update_on_instance'|bkTranslate:this}}</p>
@@ -779,16 +779,18 @@
                 </div>
 
                 <div *ngIf="instanceTab == 'view' ">
-                    <div *ngIf="instance && instance.instance_online">
+
+                    <div *ngIf="instance && instance.instance_status == 'online'">
                         <bk-blocko-view [disableExecution]="true" [canConfig]="false" [readonly]="true"
                                         [simpleMode]="false" [showBlockNames]="true"></bk-blocko-view>
                         <div style="margin-top: 30px">
                             <bk-console-log maxHeight="400px"></bk-console-log>
                         </div>
                     </div>
-                    <div *ngIf="!instance || !instance.instance_online">
+                    <div *ngIf="!instance || instance.instance_status != 'online'">
                         <h3 style="text-align: center; margin: 80px;">{{'label_instance_info_is_offline'|bkTranslate:this}}</h3>
                     </div>
+
                 </div>
 
                 <div *ngIf="instanceTab == 'logs'">

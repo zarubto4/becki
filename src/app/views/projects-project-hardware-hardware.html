@@ -122,7 +122,7 @@
                                 </div>
                                 <hr>
                                 <div>
-                                    <H3>Settings</H3>
+                                    <H4>Settings</H4>
                                     <br>
                                     <ul>
                                         <div>
@@ -150,18 +150,32 @@
                                             </span>
                                             <br>
                                             <br>
-                                            <ul>
-                                                <li class="font-grey-mint">
-                                                    <span class="font-grey-mint"> Analytics for Developer </span> &nbsp;&nbsp;&nbsp;
-                                                    <i *ngIf="!device.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
-                                                    <i *ngIf="device.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
-                                                </li>
-                                                <li class="font-grey-mint">
-                                                    <span class="font-grey-mint"> Log Archive </span> &nbsp;&nbsp;&nbsp;
-                                                    <i *ngIf="device.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
-                                                    <i *ngIf="!device.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
-                                                </li>
-                                            </ul>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <ul>
+                                                        <table class="table table-hover table-light">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>
+                                                                        <span class="font-grey-mint"> Analytics for Developer </span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <i *ngIf="!device.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
+                                                                        <i *ngIf="device.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><span class="font-grey-mint"> Local Dev Mode </span></td>
+                                                                    <td>
+                                                                        <i *ngIf="device.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
+                                                                        <i *ngIf="!device.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
                                     </ul>
 
@@ -424,23 +438,23 @@
                                     <!-- Update State -->
                                     <td>
 
-                                        <span *ngIf="update.state == 'complete'" class="bold font-green-jungle">{{update.state|bkTranslateTable:'update_state'}}</span>
-                                        <span *ngIf="update.state == 'canceled'" class="bold font-green-jungle">{{update.state|bkTranslateTable:'update_state'}}</span>
+                                        <span *ngIf="update.state == 'complete'" class="bold font-green-jungle">{{update.state|bkTranslateTable:this:'update_state'}}</span>
+                                        <span *ngIf="update.state == 'canceled'" class="bold font-green-jungle">{{update.state|bkTranslateTable:this:'update_state'}}</span>
 
-                                        <span *ngIf="update.state == 'not_start_yet'" class="bold font-grey-mint">{{update.state|bkTranslateTable:'update_state'}} </span>
-                                        <span *ngIf="update.state == 'in_progress'" class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:'update_state'}}</span>
-                                        <span *ngIf="update.state == 'overwritten'" class="bold font-grey-mint">{{update.state|bkTranslateTable:'update_state'}}</span>
-                                        <span *ngIf="update.state == 'not_updated'" class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:'update_state'}}</span>
+                                        <span *ngIf="update.state == 'not_start_yet'" class="bold font-grey-mint">{{update.state|bkTranslateTable:this:'update_state'}} </span>
+                                        <span *ngIf="update.state == 'in_progress'" class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:this:'update_state'}}</span>
+                                        <span *ngIf="update.state == 'overwritten'" class="bold font-grey-mint">{{update.state|bkTranslateTable:this:'update_state'}}</span>
+                                        <span *ngIf="update.state == 'not_updated'" class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:this:'update_state'}}</span>
                                         <span *ngIf="update.state == 'waiting_for_device'"
-                                              class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:'update_state'}}</span>
+                                              class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:this:'update_state'}}</span>
 
                                         <span *ngIf="update.state == 'bin_file_not_found'"
                                               class="bold font-red-flamingo">{{update.state|bkTranslateTable:'update_state'}}</span>
-                                        <span *ngIf="update.state == 'critical_error'" class="bold font-red-flamingo">{{update.state|bkTranslateTable:'update_state'}}</span>
+                                        <span *ngIf="update.state == 'critical_error'" class="bold font-red-flamingo">{{update.state|bkTranslateTable:this:'update_state'}}</span>
                                         <span *ngIf="update.state == 'homer_server_is_offline'"
-                                              class="bold font-red-flamingo">{{update.state|bkTranslateTable:'update_state'}}</span>
+                                              class="bold font-red-flamingo">{{update.state|bkTranslateTable:this:'update_state'}}</span>
                                         <span *ngIf="update.state == 'instance_inaccessible'"
-                                              class="bold font-red-flamingo">{{update.state|bkTranslateTable:'update_state'}}</span>
+                                              class="bold font-red-flamingo">{{update.state|bkTranslateTable:this:'update_state'}}</span>
 
                                     </td>
 
