@@ -6,7 +6,7 @@ import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
-import { IProject } from '../backend/TyrionAPI';
+import { IProject, ICProgramShortDetail } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsProjectPropertiesModel } from '../modals/project-properties';
 import { ModalsRemovalModel } from '../modals/removal';
@@ -25,6 +25,14 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
     project: IProject = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
+
+    cProgramsPublicsGetter: any = (page: number) => {
+        return this.backendService.listCPrograms(page, {});
+    };
+
+    onProgramClick(program: ICProgramShortDetail) {
+        console.log(program);
+    }
 
     constructor(injector: Injector) {
         super(injector);

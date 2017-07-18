@@ -132,6 +132,7 @@ import { ModalsCodeLibraryVersionComponent } from './modals/code-library-version
 import { ModalsHardwareCodeProgramVersionSelectComponent } from './modals/hardware-code-program-version-select';
 import { ModalsDeactivateComponent } from './modals/deactivate';
 import { HtmlSanitizeBypassPipe } from './pipes/HtmlSanitizeBypassPipe';
+import { TableListComponent } from './components/TableListComponent';
 import { ModalsDeviceEditDeveloperParameterValueComponent } from './modals/device-edit-developer-parameter-value';
 import { AdminDashboardComponent } from './views/admin-dashboard';
 import { ModalsCreateHomerServerComponent } from './modals/homer-server-create';
@@ -179,6 +180,7 @@ import { BugsComponent } from './views/admin-bugs';
 import { BugsBugComponent } from './views/admin-bugs-bug';
 import { TimePickerComponent } from './components/timePickerComponent';
 import { DatePickerComponent } from './components/datePickerComponent';
+
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -454,6 +456,7 @@ class BeckiErrorHandler implements ErrorHandler {
         BlockoViewComponent,
         FilterPagerComponent,
         CodeIDEComponent,
+        TableListComponent,
         CProgramVersionSelectorComponent,
         DraggableDirective,
         FileTreeComponent,

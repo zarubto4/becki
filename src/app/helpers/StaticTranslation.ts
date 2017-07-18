@@ -1894,6 +1894,13 @@ export class StaticTranslation {
                 'btn_move': 'Move',
 
                 'label_open_file_browser': 'Open file in file browser',
+
+            }, 'TableListComponent': {
+                'type_of_board_name': 'Type of board',
+                'table_name': 'name',
+                'table_description': 'description',
+                'table_product': 'product',
+                'table_actions': 'actions',
             }, 'VersionListComponent': {
                 'table_name': 'Name',
                 'table_description': 'Description',
