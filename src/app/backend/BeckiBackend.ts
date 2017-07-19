@@ -2,7 +2,7 @@
  * Created by davidhradek on 08.09.16.
  */
 
-import { TyrionAPI, INotification, IPerson, ILoginResult, IWebSocketToken, ISocialNetworkLogin } from './TyrionAPI';
+import { TyrionAPI, INotification, IPerson, ILoginResult, IWebSocketToken, ISocialNetworkLogin, ICProgram } from './TyrionAPI';
 import * as Rx from 'rxjs';
 import { TranslationService } from '../services/TranslationService';
 
@@ -267,6 +267,13 @@ export class RequestError extends Error {
 
 }
 
+export interface IOnlineStatus {
+    model: ICProgram;
+    model_id: 'string';
+    online_state: ('not_yet_first_connected' | 'synchronization_in_progress' | 'offline' | 'online' | 'unknown_lost_connection_with_server');
+
+}
+
 // BECKI BACKEND
 
 export abstract class BeckiBackend extends TyrionAPI {
@@ -290,6 +297,8 @@ export abstract class BeckiBackend extends TyrionAPI {
     public notificationReceived: Rx.Subject<IWebSocketNotification> = new Rx.Subject<IWebSocketNotification>();
 
     public webSocketErrorOccurred: Rx.Subject<any> = new Rx.Subject<any>();
+
+    public onlineStatus: Rx.Subject<IOnlineStatus> = new Rx.Subject<IOnlineStatus>();
 
     public interactionsOpened: Rx.Subject<void> = new Rx.Subject<void>();
     public interactionsSchemeSubscribed: Rx.Subject<void> = new Rx.Subject<void>();
@@ -626,6 +635,9 @@ export abstract class BeckiBackend extends TyrionAPI {
                 channelReceived
                     .filter(message => message.message_type === 'newInputConnectorValue')
                     .subscribe(this.BProgramInputConnectorValueReceived);
+                channelReceived
+                    .filter(message => message.message_type === 'becki_object_update')
+                    .subscribe(this.onlineStatus);
                 channelReceived
                     .filter(message => message.message_type === 'newOutputConnectorValue')
                     .subscribe(this.BProgramOutputConnectorValueReceived);
