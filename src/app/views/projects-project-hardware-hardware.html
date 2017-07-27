@@ -61,11 +61,14 @@
 
                                 <div>
                                     {{'label_name'|bkTranslate:this}}:
-                                    <span class="font-grey-mint bold">{{device.name}}</span>
+                                    <span  *ngIf="device.name"  class="font-grey-mint bold">{{device.name}}</span>
+                                    <span  *ngIf="!device.name"  class="font-grey-mint">{{'label_you_can_set'|bkTranslate:this}}</span>
+
                                 </div>
                                 <div>
                                     {{'label_description'|bkTranslate:this}}:
-                                    <span class="font-grey-mint bold">{{device.description}}</span>
+                                    <span *ngIf="device.description"  class="font-grey-mint bold">{{device.description}}</span>
+                                    <span *ngIf="!device.description" class="font-grey-mint">{{'label_you_can_set'|bkTranslate:this}}</span>
                                 </div>
 
                                 <br>
@@ -117,8 +120,12 @@
                                             <span *ngIf="!device.latest_online" class="font-grey-mint bold">
                                               ({{'label_last_seen_unknow'|bkTranslate:this}})
                                             </span>
-                                        </span>
-
+                                    </span>
+                                </div>
+                                <div>
+                                    {{'label_server'|bkTranslate:this}}:
+                                     <span *ngIf="!device.server" class="font-grey-mint  bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
+                                     <span *ngIf="device.server"  class="font-grey-mint bold">{{device.server.personal_server_name}}</span>
                                 </div>
                                 <hr>
                                 <div>
@@ -132,9 +139,13 @@
                                             <br>
                                             <br>
                                             <ul>
-                                                <span class="font-grey-mint">{{'label_bootloader_version'|bkTranslate:this}}: </span>
-                                                <span class="font-grey-mint bold"> {{device.actual_bootloader_version_name?device.actual_bootloader_version_name:('label_not_set_none'|bkTranslate:this) }}</span>
-                                                <span *ngIf="device.available_bootloader_id == device.actual_bootloader_id"> &nbsp;&nbsp;
+
+                                                <span *ngIf="!device.actual_bootloader_id && !device.available_bootloader_id" class="font-red bold">{{'label_bootloader_not_supported'|bkTranslate:this}}</span>
+
+                                                <span *ngIf="device.actual_bootloader_id" class="font-grey-mint">{{'label_bootloader_version'|bkTranslate:this}}: </span>
+                                                <span *ngIf="device.actual_bootloader_id" class="font-grey-mint bold"> {{device.actual_bootloader_version_name?device.actual_bootloader_version_name:('label_not_set_none'|bkTranslate:this) }}</span>
+
+                                                <span *ngIf="device.actual_bootloader_id != null && device.available_bootloader_id == device.actual_bootloader_id"> &nbsp;&nbsp;
                                                     <span class="font-grey-mint">({{'label_bootloader_up_to_date'|bkTranslate:this}})</span>
                                                     <i class="fa fa-check font-green-jungle " style="vertical-align: middle; font-size: 1.5em;"></i>
                                                 </span>
@@ -146,7 +157,7 @@
                                         <br>
                                         <div>
                                             <span class="font-blue-dark">
-                                                <i class="fa fa-lg fa-bell"></i><span> &nbsp;&nbsp; {{'label_developer_settings'|bkTranslate:this}}</span>
+                                                <i class="fa fa-lg fa-bell"></i><span>&nbsp;&nbsp; {{'label_developer_settings'|bkTranslate:this}}</span>
                                             </span>
                                             <br>
                                             <br>
@@ -462,6 +473,11 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                    <div *ngIf="!device.updates || !device.updates.length">
+                        <h3 style="text-align: center; margin: 80px;">
+                            {{'label_no_running_update_on_hardware'|bkTranslate:this}}
+                        </h3>
                     </div>
                 </div>
             </div>
