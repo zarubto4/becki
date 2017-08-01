@@ -31,7 +31,7 @@
                 <div>
                     <span [innerHTML]="'label_code_description'|bkTranslate:this:(codeProgram?codeProgram.description:'')"></span><br>
                     <br>
-                     <span [innerHTML]="'label_hardware_type'|bkTranslate:this"></span>:<strong><a (click)="onBoardTypeClick(codeProgram.type_of_board_id)">{{codeProgram?codeProgram.type_of_board_name:""}}</a></strong>
+                    <span [innerHTML]="'label_hardware_type'|bkTranslate:this"></span>:<strong><a (click)="onBoardTypeClick(codeProgram.type_of_board_id)">{{codeProgram?codeProgram.type_of_board_name:""}}</a></strong>
                 </div>
             </div>
         </div>
@@ -45,7 +45,7 @@
                         </span>
                     </div>
                     <div *ngIf="selectedProgramVersion" class="becki-caption version">
-                        <span class="caption-subject font-gray"><strong>{{'label_version'|bkTranslate:this}}:</strong> <span *ngIf="changesInSelectedVersion().length > 0" class="changes"></span> {{selectedProgramVersion.version_object.version_name}}</span>
+                        <span class="caption-subject font-gray"><strong>{{'label_version'|bkTranslate:this}}:</strong> <span *ngIf="changesInSelectedVersion().length > 0" class="changes"></span>                        {{selectedProgramVersion.version_object.version_name}}</span>
                     </div>
                 </div>
                 <bk-code-ide [files]="selectedCodeFiles" defaultOpenFilename="main.cpp" (fileContentChange)="onFileContentChange($event)"
@@ -121,7 +121,7 @@
                                 <th class="col col-lg-1">{{'table_author'|bkTranslate:this}}</th>
                                 <th class="col col-lg-1">{{'table_status'|bkTranslate:this}}</th>
                                 <th class="col col-lg-1"></th>
-                                <th class="col col-lg-1 text-right">{{'table_actions'|bkTranslate:this}}</th>
+                                <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -134,15 +134,15 @@
                                 </a>
                                 </td>
                                 <!-- Description -->
-                                <td  class="vert-align">
+                                <td class="vert-align">
                                     {{version.version_description}}
                                 </td>
                                 <!-- Author -->
-                                <td  class="vert-align">
+                                <td class="vert-align">
                                     {{version.author.nick_name}}
                                 </td>
                                 <!-- STATUS -->
-                                <td  class="vert-align">
+                                <td class="vert-align">
                                     <span class="icon-hint-wraper red" *ngIf="version.status=='hardware_unstable'">
                                     <i class="fa fa-exclamation-triangle font-red-mint"></i>
                                 </span>
@@ -189,11 +189,13 @@
                                         }
                                     </style>
 
-                                    <button title="{{'label_version_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission" (click)="onEditVersionClick(version)">
+                                    <button title="{{'label_version_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission"
+                                        (click)="onEditVersionClick(version)">
                                     <i class="fa fa-cog"></i>
                                 </button>
 
-                                    <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
+                                    <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission"
+                                        (click)="onRemoveVersionClick(version)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                                 </td>

@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-md-12">
             <div *ngIf="gridProgram" class="portlet portlet light bordered">
-                <div  class="portlet-title">
+                <div class="portlet-title">
                     <div class="becki-caption">
                         <span class="font-blue-dark">
                             <i class="fa fa-fw fa-desktop"></i>
@@ -16,16 +16,18 @@
                         </span>
                     </div>
                     <div class="becki-actions">
-                        <button title="{{'label_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!gridProgram.edit_permission" (click)="onProgramEditClick()">
+                        <button title="{{'label_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!gridProgram.edit_permission"
+                            (click)="onProgramEditClick()">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="{{'label_program_delete'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!gridProgram.delete_permission" (click)="onProgramDeleteClick()">
+                        <button title="{{'label_program_delete'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!gridProgram.delete_permission"
+                            (click)="onProgramDeleteClick()">
                             <i class="fa fa-trash"></i>
                         </button>
                     </div>
                 </div>
                 <div>
-                    <span [innerHTML]="'label_grid_description'|bkTranslate:this:(gridProgram?gridProgram.description:'')"></span> <br>
+                    <span [innerHTML]="'label_grid_description'|bkTranslate:this:(gridProgram?gridProgram.description:'')"></span>                    <br>
                     <br>
                     <span [innerHTML]="'label_grid_grid_project'|bkTranslate:this"></span> <strong><a (click)="onGridProjectClick(gridProject.id)">{{gridProject?gridProject.name:""}}</a></strong>
                 </div>
@@ -44,7 +46,7 @@
                         </span>
                     </div>
                     <div *ngIf="selectedProgramVersion" class="becki-caption version">
-                        <span class="caption-subject font-gray"><strong>{{'label_version'|bkTranslate:this}}:</strong> <span *ngIf="unsavedChanges" class="changes"></span> {{selectedProgramVersion.version_object.version_name}}</span>
+                        <span class="caption-subject font-gray"><strong>{{'label_version'|bkTranslate:this}}:</strong> <span *ngIf="unsavedChanges" class="changes"></span>                        {{selectedProgramVersion.version_object.version_name}}</span>
                     </div>
                 </div>
 
@@ -69,7 +71,8 @@
                     <div class="grid-trash-helper" [class.visible]="trashPosition.visible" [style.left]="trashPosition.x + 'px'" [style.top]="trashPosition.y + 'px'">
                         <i class="fa fa-trash" style="opacity: 0.5; font-size: 42px; color: red;"></i>
                     </div>
-                    <bk-grid-view [widgetsGroups]="widgetGroups" (onChange)="onAnyChange()" (onWidgetDrag)="onWidgetDragMoveEvent($event)" (onRequestWidgetSource)="onWidgetRequestingSource($event)" (onWidgetLog)="onWidgetLog($event)" (onWidgetMessage)="onWidgetMessage($event)" (onWidgetError)="onWidgetError($event)"></bk-grid-view>
+                    <bk-grid-view [widgetsGroups]="widgetGroups" (onChange)="onAnyChange()" (onWidgetDrag)="onWidgetDragMoveEvent($event)" (onRequestWidgetSource)="onWidgetRequestingSource($event)"
+                        (onWidgetLog)="onWidgetLog($event)" (onWidgetMessage)="onWidgetMessage($event)" (onWidgetError)="onWidgetError($event)"></bk-grid-view>
                 </div>
 
                 <div>
@@ -134,7 +137,8 @@
                                 <div class="panel-body no-select" style="padding: 5px;">
                                     <div *ngIf="group.widgets.length == 0" style="color: gray; text-align: center;">{{'label_no_widgets'|bkTranslate:this}}</div>
 
-                                    <a *ngFor="let widget of group.widgets" class="the-grid__widget-drag-handler no-select" [bkDraggable]="draggableOptions" (bkDraggableOnDrag)="onWidgetDrag($event)" (mousedown)="onWidgetDown($event,widget)">
+                                    <a *ngFor="let widget of group.widgets" class="the-grid__widget-drag-handler no-select" [bkDraggable]="draggableOptions"
+                                        (bkDraggableOnDrag)="onWidgetDrag($event)" (mousedown)="onWidgetDown($event,widget)">
                                         <i class="fa fa-fw fa-object-group" style="position: absolute; right: -25px; bottom: 0px; font-size: 65px; transform: rotate(45deg); opacity: 0.2;"></i>
                                         {{widget.name}}
                                     </a>
@@ -161,41 +165,49 @@
                 <div *ngIf="gridProgramVersions">
                     <table class="table table-condensed table-hover">
                         <thead>
-                        <tr>
-                            <th class="col col-lg-2">{{'label_version_name'|bkTranslate:this}}</th>
-                            <th class="col col-lg-7">{{'label_description'|bkTranslate:this}}</th>
-                            <th class="col col-lg-2">{{'label_author'|bkTranslate:this}}</th>
-                            <th class="col col-lg-1 text-right">{{'label_actions'|bkTranslate:this}}</th>
-                        </tr>
+                            <tr>
+                                <th class="col col-lg-2">{{'label_version_name'|bkTranslate:this}}</th>
+                                <th class="col col-lg-7">{{'label_description'|bkTranslate:this}}</th>
+                                <th class="col col-lg-2">{{'label_author'|bkTranslate:this}}</th>
+                                <th class="col col-lg-1 text-right no-wrap">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr *ngFor="let version of gridProgramVersions">
-                            <td class="vert-align no-wrap" [class.bold]="isSelected(version)">
-                                <a (click)="onProgramVersionClick(version)">{{version.version_name}}</a>
-                            </td>
-                            <td class="vert-align">
-                                {{version.version_description}}
-                            </td>
-                            <td class="vert-align">
-                                {{version.author.nick_name}}
-                            </td>
-                            <td class="vert-align no-wrap text-right">
+                            <tr *ngFor="let version of gridProgramVersions">
+                                <td class="vert-align no-wrap" [class.bold]="isSelected(version)">
+                                    <a (click)="onProgramVersionClick(version)">{{version.version_name}}</a>
+                                </td>
+                                <td class="vert-align">
+                                    {{version.version_description}}
+                                </td>
+                                <td class="vert-align">
+                                    {{version.author.nick_name}}
+                                </td>
+                                <td class="vert-align no-wrap text-right">
 
-                                <style type="text/css">
-                                    table tr button { opacity:0.05;}
-                                    table tr:hover button { opacity:1 }
-                                </style>
+                                    <style type="text/css">
+                                        table tr button {
+                                            opacity: 0.05;
+                                        }
 
-                                <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.edit_permission" (click)="onEditVersionClick(version)">
+                                        table tr:hover button {
+                                            opacity: 1
+                                        }
+                                    </style>
+
+                                    <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.edit_permission"
+                                        (click)="onEditVersionClick(version)">
                                     <i class="fa fa-cog"></i>
                                 </button>
 
-                                <button title="{{'label_device_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission" (click)="onRemoveVersionClick(version)">
+                                    <button title="{{'label_device_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission"
+                                        (click)="onRemoveVersionClick(version)">
                                     <i class="fa fa-trash"></i>
                                 </button>
 
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

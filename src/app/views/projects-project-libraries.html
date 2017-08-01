@@ -25,13 +25,13 @@
                     <tr>
                         <th class="col col-1">{{'table_name'|bkTranslate:this}}</th>
                         <th class="col col-9">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="col col-1 text-right">{{'table_actions'|bkTranslate:this}}</th>
+                        <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let library of libraries">
                         <td class="vert-align no-wrap bold"><a (click)="onLibraryClick(library)">{{library.name}}</a></td>
-                        <td class="vert-align">{{library.description}}</td> <!-- TODO nechce se prostě wrapnout -->
+                        <td class="vert-align">{{library.description}}</td>
                         <td class="vert-align no-wrap text-right">
 
                             <style type="text/css">
@@ -44,10 +44,12 @@
                                 }
                             </style>
 
-                            <button title="{{'label_program_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!library.edit_permission" (click)="onEditClick(library)">
+                            <button title="{{'label_program_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!library.edit_permission"
+                                (click)="onEditClick(library)">
                             <i class="fa fa-cog"></i>
                         </button>
-                            <button title="{{'label_remove_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!library.delete_permission" (click)="onRemoveClick(library)">
+                            <button title="{{'label_remove_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!library.delete_permission"
+                                (click)="onRemoveClick(library)">
                             <i class="fa fa-trash"></i>
                         </button>
                         </td>

@@ -25,56 +25,62 @@
                         <!--th class="col col-lg-1">{{'table_id'|bkTranslate:this}}</th-->
                         <th class="col col-lg-7">{{'table_description'|bkTranslate:this}}</th>
                         <th class="col col-lg-1"><strong class="font-color-blocko">BLOCKO</strong>{{'table_blocko_program'|bkTranslate:this}}</th>
-                        <th class="col col-lg-1" >{{'table_status'|bkTranslate:this}}</th>
-                        <th class="col col-lg-1">{{'table_actions'|bkTranslate:this}}</th>
+                        <th class="col col-lg-1">{{'table_status'|bkTranslate:this}}</th>
+                        <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+
                     </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let instance of instances">
+                    <tr *ngFor="let instance of instances">
 
-                    <td class="vert-align no-wrap bold">
-                        <a (click)="onInstanceClick(instance)" class="no-wrap"><strong>{{instance.name?instance.name:instance.id}}</strong></a>
-                        <span *ngIf="!instance.name" class="icon-hint-wraper gray">
+                        <td class="vert-align no-wrap bold">
+                            <a (click)="onInstanceClick(instance)" class="no-wrap"><strong>{{instance.name?instance.name:instance.id}}</strong></a>
+                            <span *ngIf="!instance.name" class="icon-hint-wraper gray">
                                     <i class="fa fa-info-circle font-color-byzance-blue"></i>
                             <span class="hint">You can set your own name and description</span>
-                        </span>
-                     </td>
-                    <!--td class="no-wrap">{{instance.id}}</td-->
-                    <td class="no-wrap">{{instance.description}}</td>
-                    <td class="no-wrap"><a (click)="onBlockoProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></td>
-                    <td class="no-wrap">
-                        <span *ngIf="instance.instance_status == 'online' " class="font-green-jungle">{{'online'|bkTranslateTable:this:'online_status'}}</span>
-                        <span *ngIf="instance.instance_status == 'offline' " class="font-red">{{'offline'|bkTranslateTable:this:'online_status'}}</span>
-                        <span *ngIf="instance.instance_status == 'synchronization_in_progress' " class="font-grey-mint">{{'synchronization_in_progress'|bkTranslateTable:this:'online_status'}} <i class="fa fa-spinner fa-spin"></i></span>
-                        <span *ngIf="instance.instance_status == 'unknown_lost_connection_with_server' " class="font-grey-mint">{{'label_unknown_lost_connection_with_server'|bkTranslateTable:this:'online_status'}}</span>
-                    </td>
-                    <td class="vert-align no-wrap text-right">
+                            </span>
+                        </td>
+                        <!--td class="no-wrap">{{instance.id}}</td-->
+                        <td class="no-wrap">{{instance.description}}</td>
+                        <td class="no-wrap"><a (click)="onBlockoProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></td>
+                        <td class="no-wrap">
+                            <span *ngIf="instance.instance_status == 'online' " class="font-green-jungle">{{'online'|bkTranslateTable:this:'online_status'}}</span>
+                            <span *ngIf="instance.instance_status == 'offline' " class="font-red">{{'offline'|bkTranslateTable:this:'online_status'}}</span>
+                            <span *ngIf="instance.instance_status == 'synchronization_in_progress' " class="font-grey-mint">{{'synchronization_in_progress'|bkTranslateTable:this:'online_status'}} <i class="fa fa-spinner fa-spin"></i></span>
+                            <span *ngIf="instance.instance_status == 'unknown_lost_connection_with_server' " class="font-grey-mint">{{'label_unknown_lost_connection_with_server'|bkTranslateTable:this:'online_status'}}</span>
+                        </td>
+                        <td class="vert-align no-wrap text-right">
 
-                        <style type="text/css">
-                            table tr button { opacity:0.05;}
-                            table tr:hover button { opacity:1 }
-                        </style>
+                            <style type="text/css">
+                                table tr button {
+                                    opacity: 0.05;
+                                }
+
+                                table tr:hover button {
+                                    opacity: 1
+                                }
+                            </style>
 
 
-                        <button title="Instance properties" class="btn btn-icon-only green" [disabled]="!instance.edit_permission" (click)="onInstanceEditClick(instance)">
+                            <button title="Instance properties" class="btn btn-icon-only green" [disabled]="!instance.edit_permission" (click)="onInstanceEditClick(instance)">
                             <i class="fa fa-cog"></i>
                         </button>
 
-                        <span *ngIf="instance.instance_is_online" >
+                            <span *ngIf="instance.instance_is_online">
                             <button title="shutdown" class="btn btn-icon-only red" [disabled]="!instance.update_permission || !instance.server_is_online" (click)="onInstanceStartOrShutdownClick(instance, false)">
                                 <i class="fa fa-power-off"></i>
                             </button>
                         </span>
 
-                        <span *ngIf="!instance.instance_is_online" >
+                            <span *ngIf="!instance.instance_is_online">
                             <button title="start" class="btn btn-icon-only green" [disabled]="!instance.update_permission || !instance.server_is_online " (click)="onInstanceStartOrShutdownClick(instance, true)">
                                 <i class="fa fa-power-off"></i>
                             </button>
                         </span>
 
 
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
