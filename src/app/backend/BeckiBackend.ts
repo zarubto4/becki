@@ -636,7 +636,7 @@ export abstract class BeckiBackend extends TyrionAPI {
                     .filter(message => message.message_type === 'newInputConnectorValue')
                     .subscribe(this.BProgramInputConnectorValueReceived);
                 channelReceived
-                    .filter(message => message.message_type === 'becki_object_update')
+                    .filter(message => message.message_type === 'online_status_change')
                     .subscribe(this.onlineStatus);
                 channelReceived
                     .filter(message => message.message_type === 'newOutputConnectorValue')

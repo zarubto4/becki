@@ -24,6 +24,7 @@ import { FlashMessageError, FlashMessageSuccess } from '../services/Notification
 import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
 import { ModalsBlockoVersionSelectModel } from '../modals/blocko-version-select';
 import { ProjectsProjectBlockoBlockoComponent } from './projects-project-blocko-blocko';
+import { IOnlineStatus } from '../backend/BeckiBackend';
 
 @Component({
     selector: 'bk-view-projects-project-instances-instance',
@@ -61,6 +62,8 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     instanceTab: string = 'overview';
 
+    hwStatus: IOnlineStatus[] = [];
+
     private homerService: HomerService = null;
     private liveViewLoaded: boolean = false;
 
@@ -68,7 +71,17 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
         super(injector);
 
         this.homerService = injector.get(HomerService);
+        this.backendService.onlineStatus.subscribe(status => {
+            let item = this.hwStatus.find(it => it.model_id === status.model_id);
+            if (item) {
+                item = status;
+            } else {
+                this.hwStatus.push(status);
+            }
+        });
     };
+
+
 
     onInstanceEditClick() {
         let model = new ModalsInstanceEditDescriptionModel(this.instance.id, this.instance.name, this.instance.description);

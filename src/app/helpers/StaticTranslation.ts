@@ -601,8 +601,8 @@ export class StaticTranslation {
 
                 'label_cloud': 'CLOUD',
                 'label_blocko': 'BLOCKO',
-                'label_server': 'Server Name:',
-                'label_instance': 'Instance ID:',
+                'label_server': 'Server Name',
+                'label_instance': 'Instance ID',
                 'label_status': 'Status:',
                 'label_version': 'Version:',
                 'label_none': 'None',
@@ -672,7 +672,7 @@ export class StaticTranslation {
                 'label_ethernet_address': 'Ethernet MAC address',
                 'label_wifi_address': 'Wi-Fi MAC address',
                 'label_device_status': 'Device status',
-                'label_server': 'Server Name:',
+                'label_server': 'Server Name',
                 'label_device_last_seen': 'Last seen',
                 'label_bootloader_version': 'Version',
                 'label_last_seen_unknow': '(Unknown)',
@@ -701,8 +701,8 @@ export class StaticTranslation {
                 'label_switch_to_static': 'switch to <strong>Manual</strong>',
                 'label_time_missing_in_json': 'Not yet (Unknown)',
                 'label_not_set_none': 'none',
-                'label_you_can_set' : '(You can set that)',
-                'label_bootloader_not_supported' : 'Backend has not set Bootloader for this type od Board',
+                'label_you_can_set': '(You can set that)',
+                'label_bootloader_not_supported': 'Backend has not set Bootloader for this type od Board',
                 'label_bootloader_up_to_date': 'Hardware has latest version',
                 'label_firmware': 'Firmware',
                 'label_backup': 'Backup',
@@ -809,6 +809,7 @@ export class StaticTranslation {
                 'label_remove_device': 'Remove device',
                 'label_device_type': 'Device type',
                 'label_no_running_update_on_instance': 'There is no running updates in this instance',
+                'label_online_status': 'online status',
 
                 'label_cloud': 'CLOUD',
                 'label_blocko': 'BLOCKO',
@@ -831,6 +832,7 @@ export class StaticTranslation {
                 'label_cannot_change_program_publicity': 'Unable to change program privacy setting, {0}.',
                 'label_modal_change_instance_version': 'Change instance version',
                 'label_modal_change_running_instance_version': 'Are you sure to change the running instance version?',
+                'label_instance_not_running_in_cloud': 'Instance is not running in Cloud.',
 
                 'flash_cant_load_verion': 'Cannot load version <b>{0}</b>, {1}',
                 'flash_instance_edit_success': 'Instance information was changed.',
@@ -1468,7 +1470,7 @@ export class StaticTranslation {
                 'offline': 'offline',
                 'synchronization_in_progress': 'Synchronizing',
                 'not_yet_first_connected': 'We have no idea - (never logged before)',
-                'unknown_lost_connection_with_server': 'Lost connection with external server'
+                'label_unknown_lost_connection_with_server': 'Lost connection with external server'
             },
             'device_alerts': {
                 'BOOTLOADER_REQUIRED': 'Bootloader update is required.',

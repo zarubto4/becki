@@ -12,6 +12,7 @@ import { ModalsHardwareCodeProgramVersionSelectModel } from '../modals/hardware-
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { ModalsRemovalModel } from '../modals/removal';
+import { IOnlineStatus } from '../backend/BeckiBackend';
 
 @Component({
     selector: 'bk-view-projects-project-hardware-hardware',
@@ -30,8 +31,15 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     hardwareTab: string = 'overview';
 
+    hwStatus: IOnlineStatus;
     constructor(injector: Injector) {
         super(injector);
+
+        this.backendService.onlineStatus.subscribe(status => {
+            if (this.hardwareId === status.model_id) { // TODO filtrovat i dle modelu až tyrion implementuje
+                this.hwStatus = status;
+            }
+        });
     };
 
     ngOnInit(): void {
