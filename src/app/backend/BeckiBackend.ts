@@ -270,7 +270,7 @@ export class RequestError extends Error {
 export interface IOnlineStatus {
     model: ICProgram;
     model_id: 'string';
-    online_state: ('not_yet_first_connected' | 'synchronization_in_progress' | 'offline' | 'online' | 'unknown_lost_connection_with_server');
+    online_status: ('not_yet_first_connected' | 'synchronization_in_progress' | 'offline' | 'online' | 'unknown_lost_connection_with_server');
 
 }
 

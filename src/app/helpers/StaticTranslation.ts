@@ -483,7 +483,7 @@ export class StaticTranslation {
                 'label_forget_password': 'Forgot password?',
                 'label_login_social': 'Log in or Sign up with',
                 'btn_create_account': 'Create an account',
-                'btn_login': 'Log in',
+                'btn_login': 'Login',
                 'btn_resend': 'Resend',
                 'msg_login_user_cant_login': 'The user could not be logged in.\n {0}',
                 'msg_login_resend_vertification': '{0} \n Press the resend button to send verification E-mail again',

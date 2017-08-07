@@ -62,8 +62,6 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     instanceTab: string = 'overview';
 
-    hwStatus: IOnlineStatus[] = [];
-
     private homerService: HomerService = null;
     private liveViewLoaded: boolean = false;
 
@@ -72,12 +70,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
         this.homerService = injector.get(HomerService);
         this.backendService.onlineStatus.subscribe(status => {
-            let item = this.hwStatus.find(it => it.model_id === status.model_id);
-            if (item) {
-                item = status;
-            } else {
-                this.hwStatus.push(status);
-            }
+
         });
     };
 

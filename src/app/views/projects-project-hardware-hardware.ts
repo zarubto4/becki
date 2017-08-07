@@ -38,6 +38,8 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.backendService.onlineStatus.subscribe(status => {
             if (this.hardwareId === status.model_id) { // TODO filtrovat i dle modelu až tyrion implementuje
                 this.hwStatus = status;
+                let kamToChci = status.online_status;
+                this.device.online_state = status.online_status;
             }
         });
     };
