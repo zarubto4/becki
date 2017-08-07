@@ -678,6 +678,7 @@ export class StaticTranslation {
                 'label_last_seen_unknow': '(Unknown)',
                 'label_update_to': 'Update to',
                 'label_developer_settings': 'Developer settings',
+                'label_port': 'Port',
                 'label_alerts': 'Alerts',
                 'label_no_running_update_on_hardware': 'There is no updates for this device yet',
                 'label_main_server': 'Main Server',

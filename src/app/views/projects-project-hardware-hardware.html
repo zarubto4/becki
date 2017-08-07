@@ -157,12 +157,12 @@
                                         <br>
                                         <div>
                                             <span class="font-blue-dark">
-                                                <i class="fa fa-lg fa-bell"></i><span>&nbsp;&nbsp; {{'label_developer_settings'|bkTranslate:this}}</span>
+                                                <i class="fa fa-lg fa-bell"></i><span>&nbsp;&nbsp;&nbsp;{{'label_developer_settings'|bkTranslate:this}}</span>
                                             </span>
                                             <br>
                                             <br>
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-8">
                                                     <ul>
                                                         <table class="table table-hover table-light">
                                                             <tbody>
@@ -180,6 +180,15 @@
                                                                     <td>
                                                                         <i *ngIf="device.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
                                                                         <i *ngIf="!device.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><span class="font-grey-mint"> Webview for Developers </span></td>
+                                                                    <td>
+                                                                        <i *ngIf="device.web_view" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
+                                                                        <i *ngIf="!device.web_view" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
+
+                                                                        <span class="font-grey-mint">{{'label_port'|bkTranslate:this}}:</span><span *ngIf="device.web_port" class="font-grey-mint bold">{{device.web_port}}</span>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
