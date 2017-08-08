@@ -514,6 +514,9 @@ export class NotificationService {
             case 'Homer_Instance':
                 this.router.navigate(['projects', e.project_id, 'instances', e.id]);
                 break;
+            case 'ActualizationProcedure':
+                this.router.navigate(['projects', e.project_id, 'instances', e.id]);
+                break;
         }
     }
 

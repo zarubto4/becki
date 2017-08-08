@@ -519,11 +519,11 @@ export class StaticTranslation {
                 'flash_project_cant_load': 'Project could not be loaded, {0}.',
 
             }, 'ProfileComponent': {
-                'main_title': 'Profile',
+                'main_title': 'Account Settings',
                 'title': 'Your profile',
-                'nav_personal_info': 'Personal information',
-                'nav_avatar': 'Change avatar',
-                'nav_password': 'Change password',
+                'nav_personal_info': 'Personal Information',
+                'nav_avatar': 'Change Avatar',
+                'nav_password': 'Change Password',
                 'nav_email': 'Change E-mail',
 
                 'label_full_name': 'Full Name',
@@ -833,6 +833,7 @@ export class StaticTranslation {
                 'label_modal_change_instance_version': 'Change instance version',
                 'label_modal_change_running_instance_version': 'Are you sure to change the running instance version?',
                 'label_instance_not_running_in_cloud': 'Instance is not running in Cloud.',
+                'label_time_missing_in_json': 'Time is missing in Json',
 
                 'flash_cant_load_verion': 'Cannot load version <b>{0}</b>, {1}',
                 'flash_instance_edit_success': 'Instance information was changed.',
@@ -1350,7 +1351,7 @@ export class StaticTranslation {
             'LayoutMainComponent': {
                 'label_number_of_unread': '{0} unread',
                 'label_notifications': 'notifications',
-                'label_profile': 'Profile',
+                'label_profile': 'Account Settings',
                 'label_log_out': 'Log out',
                 'label_view_all': 'view all',
                 'label_with_love': '2017 © ',
