@@ -57,8 +57,10 @@
                         <!-- Main Overview -->
                         <div *ngIf="device && typeOfBoard" class="row">
 
-                            <div class="col-md-8">
+                            <div class="col-md-4">
 
+                                <H4>{{'label_overview'|bkTranslate:this}}</H4>
+                                <br>
                                 <div>
                                     {{'label_name'|bkTranslate:this}}:
                                     <span  *ngIf="device.name"  class="font-grey-mint bold">{{device.name}}</span>
@@ -128,8 +130,13 @@
                                      <span *ngIf="device.server"  class="font-grey-mint bold">{{device.server.personal_server_name}}</span>
                                 </div>
                                 <hr>
+                            </div>
+
+                            <!-- Settings-->
+                            <div class="col-md-5">
+
                                 <div>
-                                    <H4>Settings</H4>
+                                    <H4>{{'label_settings'|bkTranslate:this}}</H4>
                                     <br>
                                     <ul>
                                         <div>
@@ -162,7 +169,7 @@
                                             <br>
                                             <br>
                                             <div class="row">
-                                                <div class="col-md-8">
+                                                <div class="col-md-10">
                                                     <ul>
                                                         <table class="table table-hover table-light">
                                                             <tbody>
@@ -176,7 +183,7 @@
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td><span class="font-grey-mint"> Local Dev Mode </span></td>
+                                                                    <td><span class="font-grey-mint"> Synchronize always with database </span></td>
                                                                     <td>
                                                                         <i *ngIf="device.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
                                                                         <i *ngIf="!device.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
@@ -188,7 +195,12 @@
                                                                         <i *ngIf="device.web_view" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
                                                                         <i *ngIf="!device.web_view" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
 
-                                                                        <span class="font-grey-mint">{{'label_port'|bkTranslate:this}}:</span><span *ngIf="device.web_port" class="font-grey-mint bold">{{device.web_port}}</span>
+                                                                        <span class="font-grey-mint">{{'label_port'|bkTranslate:this}}:</span><span *ngIf="device.web_port" class="font-grey-mint bold">{{device.web_port}}</span>&nbsp;&nbsp;
+                                                                        <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green"
+                                                                                [disabled]="!device.edit_permission"
+                                                                                (click)="onEditClick(device)">
+                                                                            <i class="fa fa-cog"></i>
+                                                                        </button>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -197,30 +209,46 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <br>
+                                        <div *ngIf="!device.web_view">
+                                            <span class="font-blue-dark">
+                                                <i class="fa fa-lg fa-link"></i>&nbsp;&nbsp;&nbsp;<span class="font-grey-mint">Hardware Web view: </span><a target="_blank" href="http://{{device.w}}:{{device.web_port}}" class="bold">http://192.165.172.123:8001</a> (working only on local network)
+                                            </span>
+                                        </div>
                                     </ul>
 
                                 </div>
+                            </div>
 
+                                <!-- Immage -->
+                            <div class="col-md-3 hw-image-col">
+                                <H4>{{'label_image'|bkTranslate:this}}</H4>
+                                <br>
+                                <img *ngIf="typeOfBoard.picture_link" [attr.src]="typeOfBoard.picture_link">
+                                <i *ngIf="!typeOfBoard.picture_link" class="fa fa-fw fa-microchip text-center"></i>
+                                <p class="text-center"><a class="font-grey-mint">{{'label_set_own_picture'|bkTranslate:this}}</a></p>
+                            </div>
 
-                                <div *ngIf="device.alert_list && device.alert_list.length"
-                                     style="background-color: pink; padding: 1px 8px; margin-top: 20px;">
+                        </div>
+
+                        <!-- Allert List -->
+                        <div *ngIf="device && typeOfBoard && device.alert_list && device.alert_list.length" class="row">
+                            <hr>
+                            <div class="col-md-4">
+                                <H4>Alerts on this Hardware</H4>
+                                <br>
+                                <div style="background-color: pink; padding: 1px 8px; margin-top: 20px;">
 
                                     <h5 class="font-red-flamingo"><i
                                         class="fa fa-fw fa-exclamation-triangle font-red-flamingo"></i>{{'label_alerts'|bkTranslate:this}}
                                     </h5>
-                                    <ul style="padding-left: 23px;">
+                                    <ul style="padding-left: 25px;">
                                         <li *ngFor="let alert of device.alert_list" class="bold no-wrap">
                                             {{alert|bkTranslateTable:this:'device_alerts'}}
                                         </li>
                                     </ul>
                                 </div>
                             </div>
-
-                            <div class="col-md-4 hw-image-col">
-                                <img *ngIf="typeOfBoard.picture_link" [attr.src]="typeOfBoard.picture_link">
-                                <i *ngIf="!typeOfBoard.picture_link" class="fa fa-fw fa-microchip text-center"></i>
-                            </div>
-
                         </div>
 
                         <br>
