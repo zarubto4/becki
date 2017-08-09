@@ -98,7 +98,7 @@
                                 <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}} </strong>{{'label_instance_status'|bkTranslate:this}}:
 
                                 <span *ngIf="instance.actual_instance==null">
-                                         <span class="font-grey-mint">Instance is not running in Cloud. (Dopřeložit do Tabulky) </span>
+                                         <span class="font-grey-mint">{{'label_instance_not_running_in_cloud'|bkTranslate:this}}</span>
                                 </span>
 
                                 <span *ngIf="instance.actual_instance!=null">
@@ -235,8 +235,7 @@
     <div *ngIf="instanceTab == 'grid'">
         <div class="row">
             <div class="col-6">
-                <div *ngIf="instance.actual_instance.m_project_snapshot" class="col-sm-6">
-                    <h3 class="font-color-grid"><strong>{{'label_grid'|bkTranslate:this}}</strong></h3>
+                <div *ngIf="instance.actual_instance.m_project_snapshot">
                     <div *ngFor="let grid of instance.actual_instance.m_project_snapshot" style="margin-bottom: 20px;background: #EEE;padding: 0;border: 1px solid #8E44AD !important;">
                         <div style="margin: 10px;">
                             <div>
@@ -297,13 +296,15 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
                 <div *ngIf="instance.actual_instance.m_project_snapshot && !instance.actual_instance.m_project_snapshot.length">
                     <h3 style="text-align: center; margin: 80px;">
                         {{'label_grid_no_grid_in_instance'|bkTranslate:this}}
                     </h3>
                 </div>
-            </div>
-            <div class="col-sm-6">
             </div>
         </div>
     </div>
@@ -409,29 +410,28 @@
                     </h3>
 
                     <div>
-                        <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}}</strong>{{'label_program'|bkTranslate:this}}:
-                        <span class="font-grey-mint bold"><a
-                                        (click)="onBlockoProgramClick(currentHistoricInstance.b_program_id)">{{currentHistoricInstance.b_program_name}}</a></span>
+                        <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}}</strong> {{'label_program'|bkTranslate:this}}:
+                        <span class="font-grey-mint bold"><a (click)="onBlockoProgramClick(currentHistoricInstance.b_program_id)">{{currentHistoricInstance.b_program_name}}</a></span>
                     </div>
                     <div>
-                        <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}}</strong>{{'label_description'|bkTranslate:this}}:
+                        <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}}</strong> {{'label_description'|bkTranslate:this}}:
                         <span class="font-grey-mint bold">{{currentHistoricInstance.b_program_description}}</span>
                     </div>
                     <br>
                     <div>
-                        <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}}</strong>{{'label_version'|bkTranslate:this}}:
+                        <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}}</strong> {{'label_version'|bkTranslate:this}}:
                         <span class="font-grey-mint bold"><a
                                         (click)="onBlockoProgramVersionClick(currentHistoricInstance.b_program_id, currentHistoricInstance.b_program_version_id)">{{instance.actual_instance.b_program_version_name}}</a></span>
                     </div>
                     <div>
-                        <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}}</strong>{{'label_description'|bkTranslate:this}}:
+                        <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}}</strong> {{'label_description'|bkTranslate:this}}:
                         <span class="font-grey-mint bold">{{currentHistoricInstance.b_program_version_description}}</span>
                     </div>
 
                 </div>
                 <div class="col-sm-6">
 
-                    <h3 class="font-color-cloud"><strong>{{'label_cloud'|bkTranslate:this}}</strong>
+                    <h3 class="font-color-cloud"><strong> {{'label_cloud'|bkTranslate:this}}</strong>
                     </h3>
 
                     <div>
@@ -482,7 +482,7 @@
                             </div>
                             <br>
                             <div>
-                                <strong class="font-color-code">{{'label_code'|bkTranslate:this}}</strong>{{'label_program'|bkTranslate:this}}:
+                                <strong class="font-color-code">{{'label_code'|bkTranslate:this}}</strong> {{'label_program'|bkTranslate:this}}:
                                 <strong><a
                                                 (click)="onCProgramClick(hardware.main_board_pair.c_program_id)">{{hardware.main_board_pair.c_program_name}}</a></strong>
                                 <template [ngIf]="hardware.main_board_pair.c_program_description && hardware.main_board_pair.c_program_description.length">
@@ -490,7 +490,7 @@
                                 </template>
                             </div>
                             <div>
-                                <strong class="font-color-code">{{'label_code'|bkTranslate:this}}</strong>{{'label_version'|bkTranslate:this}}:
+                                <strong class="font-color-code">{{'label_code'|bkTranslate:this}}</strong> {{'label_version'|bkTranslate:this}}:
                                 <strong><a
                                                 (click)="onCProgramVersionClick(hardware.main_board_pair.c_program_id, hardware.main_board_pair.c_program_version_id)">{{hardware.main_board_pair.c_program_version_name}}</a></strong>
                                 <template [ngIf]="hardware.main_board_pair.c_program_version_description && hardware.main_board_pair.c_program_version_description.length">
@@ -504,19 +504,19 @@
                                                     <span style="font-size:0.9em;">({{slave.board_id}})</span>
                                                 </a>
                                 </div>
-                                <div><strong class="font-color-hardware">{{'label_hardware_caps'|bkTranslate:this}}</strong>{{'table_hardware_type'|bkTranslate:this}}:
+                                <div><strong class="font-color-hardware">{{'label_hardware_caps'|bkTranslate:this}}</strong> {{'table_hardware_type'|bkTranslate:this}}:
                                     <strong><a (click)="onBoardTypeClick(slave.type_of_board_id)">{{slave.type_of_board_name}}</a></strong>
                                 </div>
                                 <br>
                                 <div>
-                                    <strong class="font-color-code">{{'label_code'|bkTranslate:this}}</strong>{{'table_program'|bkTranslate:this}}:
+                                    <strong class="font-color-code">{{'label_code'|bkTranslate:this}}</strong> {{'table_program'|bkTranslate:this}}:
                                     <strong><a (click)="onCProgramClick(slave.c_program_id)">{{slave.c_program_name}}</a></strong>
                                     <template [ngIf]="slave.c_program_description && slave.c_program_description.length">
                                         <span>&nbsp;-&nbsp;{{slave.c_program_description}}</span>
                                     </template>
                                 </div>
                                 <div>
-                                    <strong class="font-color-code">{{'label_code'|bkTranslate:this}}</strong>{{'label_version'|bkTranslate:this}}:
+                                    <strong class="font-color-code">{{'label_code'|bkTranslate:this}}</strong> {{'label_version'|bkTranslate:this}}:
                                     <strong><a
                                                     (click)="onCProgramVersionClick(slave.c_program_id, slave.c_program_version_id)">{{slave.c_program_version_name}}</a></strong>
                                     <template [ngIf]="slave.c_program_version_description && slave.c_program_version_description.length">
@@ -534,10 +534,7 @@
                         <div *ngFor="let grid of currentHistoricInstance.m_project_snapshot" style="margin-bottom: 20px;background: #EEE;padding: 10px;border: 1px solid #8E44AD !important;">
                             <div>
                                 <strong class="font-color-grid">{{'label_grid'|bkTranslate:this}}</strong>{{'table_project'|bkTranslate:this}}:
-                                <a (click)="onGridProjectClick(grid.m_project_id)">
-                                                <strong><span
-                                                    style="font-size:1.2em;">{{grid.m_project_name}}</span></strong>
-                                            </a>
+                                <a (click)="onGridProjectClick(grid.m_project_id)"><strong><span style="font-size:1.2em;">{{grid.m_project_name}}</span></strong></a>
                             </div>
                             <template [ngIf]="grid.m_project_description && grid.m_project_description.length">
                                 <div style="font-size:0.9em; color:#888;">
@@ -547,7 +544,7 @@
                             <hr style="margin: 0;border-bottom: 1px solid #DDD;margin-top: 10px;">
                             <div style="margin-left: 10px; margin-top: 10px;" *ngFor="let gridProgram of grid.m_program_snapshots">
                                 <div>
-                                    <strong class="font-color-grid">{{'label_grid'|bkTranslate:this}}</strong>{{'table_program'|bkTranslate:this}}:
+                                    <strong class="font-color-grid">{{'label_grid'|bkTranslate:this}} </strong>{{'table_program'|bkTranslate:this}}:
                                     <a (click)="onGridProgramClick(grid.m_project_id,gridProgram.m_program_id)">
                                                     <strong><span style="font-size:1.0em;">{{gridProgram.m_program_name}}</span></strong>
                                                 </a>
@@ -559,7 +556,7 @@
                                 </template>
 
                                 <div>
-                                    <strong class="font-color-grid">{{'label_grid'|bkTranslate:this}}</strong>{{'label_version'|bkTranslate:this}}:
+                                    <strong class="font-color-grid">{{'label_grid'|bkTranslate:this}} </strong>{{'label_version'|bkTranslate:this}}:
                                     <strong><a
                                                     (click)="onGridProgramVersionClick(grid.m_project_id, gridProgram.m_program_id, gridProgram.version_object_id)">{{gridProgram.version_object_name}}</a></strong>
                                     <template [ngIf]="gridProgram.version_object_description && gridProgram.version_object_description.length">
@@ -578,7 +575,7 @@
 
     <div *ngIf="instanceTab == 'update'">
 
-        <div *ngIf="!(instance && instance.actual_instance && instance.actual_instance.procedures && instance.actual_instance.procedure_short_details.length)">
+        <div *ngIf="!(instance && instance.actual_instance && instance.actual_instance.procedure_short_details.length)">
             <p class="list-no-items__main-label">{{'label_no_running_update_on_instance'|bkTranslate:this}}</p>
         </div>
 

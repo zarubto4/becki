@@ -443,7 +443,7 @@ export class StaticTranslation {
                 'flash_products_cant_load': 'Products cannot be loaded, {0}.'
 
             }, 'HardwareHardwareTypeComponent': {
-                'main_title': 'Hardware types',
+                'main_title': 'Hardware Types',
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_producer': 'Manufacturer',
@@ -459,7 +459,7 @@ export class StaticTranslation {
                 'label_bootlaoder_date': 'Date',
 
             }, 'HardwareComponent': {
-                'main_title': 'Hardware types',
+                'main_title': 'Hardware Types',
                 'flash_project_cant_load': 'Projects could not be loaded, {0}.'
 
             }, 'ForgotPasswordComponent': {
@@ -731,7 +731,7 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectInstancesComponent': {
 
-                'title': 'Byzance<strong class="font-color-cloud">CLOUD</strong> - all instances',
+                'title': 'Byzance<strong class="font-color-cloud">CLOUD</strong> - ALL INSTANCES',
 
                 'table_name': 'Name',
                 'table_id': 'ID',
@@ -750,6 +750,10 @@ export class StaticTranslation {
                 'label_upload_error': 'Unable to shutdown this instance, {0}.',
                 'label_no_item': 'No instance in Cloud found.',
                 'label_you_can_create': 'Are you sure to upload <strong class="font-color-blocko">BLOCKO</strong> and deploy instance to the Cloud?',
+                'label_shutdown_instance': 'Shutdown instance',
+                'label_start': 'Start instance',
+                'label_instance_properties': 'Instance properties',
+                'label_own_name_and_description': 'You can set your own name and description',
 
             }, 'ProjectsProjectInstancesInstanceComponent': {
 
@@ -810,6 +814,7 @@ export class StaticTranslation {
                 'label_device_type': 'Device type',
                 'label_no_running_update_on_instance': 'There is no running updates in this instance',
                 'label_online_status': 'online status',
+                'label_instance_not_running_in_cloud':'Instance is not running in Cloud.',
 
                 'label_cloud': 'CLOUD',
                 'label_blocko': 'BLOCKO',

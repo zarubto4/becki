@@ -37,7 +37,7 @@
                             <a (click)="onInstanceClick(instance)" class="no-wrap"><strong>{{instance.name?instance.name:instance.id}}</strong></a>
                             <span *ngIf="!instance.name" class="icon-hint-wraper gray">
                                     <i class="fa fa-info-circle font-color-byzance-blue"></i>
-                            <span class="hint">You can set your own name and description</span>
+                            <span class="hint">{{'label_own_name_and_description'|bkTranslate:this}}</span>
                             </span>
                         </td>
                         <!--td class="no-wrap">{{instance.id}}</td-->
@@ -62,18 +62,18 @@
                             </style>
 
 
-                            <button title="Instance properties" class="btn btn-icon-only green" [disabled]="!instance.edit_permission" (click)="onInstanceEditClick(instance)">
+                            <button title="{{'label_instance_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!instance.edit_permission" (click)="onInstanceEditClick(instance)">
                             <i class="fa fa-cog"></i>
                         </button>
 
                             <span *ngIf="instance.instance_is_online">
-                            <button title="shutdown" class="btn btn-icon-only red" [disabled]="!instance.update_permission || !instance.server_is_online" (click)="onInstanceStartOrShutdownClick(instance, false)">
+                            <button title="{{'label_shutdown_instance'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!instance.update_permission || !instance.server_is_online" (click)="onInstanceStartOrShutdownClick(instance, false)">
                                 <i class="fa fa-power-off"></i>
                             </button>
                         </span>
 
                             <span *ngIf="!instance.instance_is_online">
-                            <button title="start" class="btn btn-icon-only green" [disabled]="!instance.update_permission || !instance.server_is_online " (click)="onInstanceStartOrShutdownClick(instance, true)">
+                            <button title="{{'label_start'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!instance.update_permission || !instance.server_is_online " (click)="onInstanceStartOrShutdownClick(instance, true)">
                                 <i class="fa fa-power-off"></i>
                             </button>
                         </span>

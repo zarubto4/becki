@@ -13,23 +13,23 @@
             <div class="col-md-8">
                 <div>
                     {{'label_name'|bkTranslate:this}}:
-                    <span class="font-grey-mint bold">{{device.name}}</span>
+                    <span class="font-color-neutral-dark bold">{{device.name}}</span>
                 </div>
                 <div>
                     {{'label_description'|bkTranslate:this}}:
-                    <span class="font-grey-mint bold">{{device.description}}</span>
+                    <span class="font-color-neutral-dark bold">{{device.description}}</span>
                 </div>
                 <div>
                     {{'label_producer'|bkTranslate:this}}:
-                    <a [routerLink]="['/producers', device.producer_id]" class="font-grey-mint bold">{{device.producer_name}}</a>
+                    <a [routerLink]="['/producers', device.producer_id]" class="bold">{{device.producer_name}}</a>
                 </div>
                 <div>
                     {{'label_processor'|bkTranslate:this}}:
-                    <span class="font-grey-mint bold">{{device.processor_name}}</span>
+                    <span class="font-color-neutral-dark bold">{{device.processor_name}}</span>
                 </div>
                 <div>
                     {{'label_target_name'|bkTranslate:this}}:
-                    <span class="font-grey-mint bold">{{device.target_name}}</span>
+                    <span class="font-color-neutral-dark bold">{{device.target_name}}</span>
                 </div>
                 <div>
                     {{'label_abilities'|bkTranslate:this}}:<br>
@@ -61,15 +61,15 @@
         <div>
             <div>
                 {{'label_bootloader_name'|bkTranslate:this}}:
-                <span class="font-grey-mint bold">{{device.main_boot_loader.name}}</span>
+                <span class="font-color-neutral-dark bold">{{device.main_boot_loader.name}}</span>
             </div>
             <div>
                 {{'label_bootloader_description'|bkTranslate:this}}:
-                <span class="font-grey-mint bold">{{device.main_boot_loader.description}}</span>
+                <span class="font-color-neutral-dark bold">{{device.main_boot_loader.description}}</span>
             </div>
             <div>
                 {{'label_bootlaoder_date'|bkTranslate:this}}:
-                <span class="font-grey-mint bold">{{device.main_boot_loader.date_of_create|bkUnixTimeToDate}}</span>
+                <span class="font-color-neutral-dark bold">{{device.main_boot_loader.date_of_create|bkUnixTimeToDate}}</span>
             </div>
         </div>
     </div>
