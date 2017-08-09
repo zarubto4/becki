@@ -62,7 +62,7 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editInstance(instance.id, {name: model.name, description: model.description})
+                this.backendService.instanceEdit(instance.id, {name: model.name, description: model.description})
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_instance_edit_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
@@ -88,7 +88,7 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
             .then((success) => {
                 if (success) {
                     this.blockUI();
-                    this.backendService.startOrShutDownInstance(instance.id)
+                    this.backendService.instanceSetStartOrShutDown(instance.id)
                         .then(() => {
                             this.storageService.projectRefresh(this.id);
                             this.unblockUI();

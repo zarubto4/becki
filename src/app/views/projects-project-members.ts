@@ -63,7 +63,7 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
             .then((success) => {
                 if (success) {
                     this.blockUI();
-                    this.backendService.shareProject(this.id, { persons_mail: m.emails })
+                    this.backendService.projectShare(this.id, { persons_mail: m.emails })
                         .then(() => {
                             this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                         })
@@ -89,7 +89,7 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
                 return;
             } else {
                 this.blockUI();
-                this.backendService.unshareProject(this.id, { persons_mail: [member.user_email] })
+                this.backendService.projectUnshare(this.id, { persons_mail: [member.user_email] })
                     .then(() => {
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
@@ -103,7 +103,7 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
 
     onMemberSnedAgainClick(member: IProjectParticipant) {
         this.blockUI();
-        this.backendService.shareProject(this.id, { persons_mail: [member.user_email] })
+        this.backendService.projectShare(this.id, { persons_mail: [member.user_email] })
             .then(() => {
                 this.unblockUI();
                 let m = new ModalsConfirmModel(this.translate('modal_label_invitation'), this.translate('modal_label_invitation_send', member.user_email), true, null, null, [this.translate('btn_ok')]);

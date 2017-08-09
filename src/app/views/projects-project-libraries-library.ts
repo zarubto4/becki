@@ -88,7 +88,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
         this.modalService.showModal(new ModalsRemovalModel(this.library.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteLibrary(this.library.id)
+                this.backendService.libraryDelete(this.library.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_save_success')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -107,7 +107,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editLibrary(this.library.id, {
+                this.backendService.libraryEdit(this.library.id, {
                     project_id: this.projectId,
                     name: model.name,
                     description: model.description
@@ -158,7 +158,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
         this.modalService.showModal(new ModalsRemovalModel(version.version_name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteLibraryVersion(version.version_id)
+                this.backendService.libraryVersionDelete(version.version_id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_removed_success')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -178,7 +178,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editLibraryVersion(version.version_id, { // TODO [permission]: version.update_permission
+                this.backendService.libraryVersionEdit(version.version_id, { // TODO [permission]: version.update_permission
                     version_name: model.name,
                     version_description: model.description
                 })
@@ -197,7 +197,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
     refresh(): void {
 
         this.blockUI();
-        this.backendService.getLibrary(this.libraryId)
+        this.backendService.libraryGet(this.libraryId)
             .then((library) => {
 
                 this.library = library;
@@ -232,7 +232,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
 
     reloadVersions(): void {
         if (this.libraryId) {
-            this.backendService.getLibrary(this.libraryId)
+            this.backendService.libraryGet(this.libraryId)
                 .then((library) => {
                     this.library = library;
                     this.libraryVersions = this.library.versions || [];
@@ -249,7 +249,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
         }
 
         this.blockUI();
-        this.backendService.getLibraryVersion(libraryVersion.version_id)
+        this.backendService.libraryVersionGet(libraryVersion.version_id)
             .then((programVersionFull) => {
                 this.unblockUI();
 
@@ -344,7 +344,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                 });
 
                 this.blockUI();
-                this.backendService.createLibraryVersion(this.libraryId, {
+                this.backendService.libraryVersionCreate(this.libraryId, {
                     version_name: m.name,
                     version_description: m.description,
                     files: userFiles

@@ -92,7 +92,7 @@ export class FinancialProductComponent extends BaseMainComponent implements OnIn
 
     refresh(): void {
         this.blockUI();
-        this.backendService.getAllProducts()
+        this.backendService.productsGetUserOwnList()
             .then(products => {
                 this.product = products.find(product => '' + product.id === this.id); // TODO: make product id string in Tyrion!!! [DH]
                 this.unblockUI();

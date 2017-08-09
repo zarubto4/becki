@@ -47,7 +47,7 @@ export class ModalsCodeLibraryVersionComponent implements OnInit {
     ngOnInit() {
         setTimeout(() => {
             this.loading = true;
-            this.backendService.getLibrary(this.modalModel.libraryId)
+            this.backendService.libraryGet(this.modalModel.libraryId)
                 .then((l) => {
                     this.loading = false;
                     this.library = l;

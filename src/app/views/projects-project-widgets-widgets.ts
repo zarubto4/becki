@@ -58,7 +58,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editTypeOfWidget(this.group.id, {
+                this.backendService.typeOfWidgetEdit(this.group.id, {
                     name: model.name,
                     description: model.description
                 })
@@ -78,7 +78,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
         this.modalService.showModal(new ModalsRemovalModel(this.group.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteTypeOfWidget(this.group.id)
+                this.backendService.typeOfWidgetDelete(this.group.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_group_remove_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
@@ -98,7 +98,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.createWidget({
+                this.backendService.gridWidgetCreate({
                     type_of_widget_id: group.id,
                     name: model.name,
                     description: model.description
@@ -122,7 +122,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editWidget(widget.id, {
+                this.backendService.gridWidgetEdit(widget.id, {
                     name: model.name,
                     description: model.description,
                     type_of_widget_id: this.widgetsId // tohle je trochu divný ne? ... možná kdyby jsi chtěl přesunout widget mezi groupama? [DU]
@@ -145,7 +145,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
         this.modalService.showModal(new ModalsRemovalModel(widget.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteWidget(widget.id)
+                this.backendService.gridWidgetDelete(widget.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_removed_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());

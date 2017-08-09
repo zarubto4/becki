@@ -121,7 +121,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editWidget(this.widget.id, {
+                this.backendService.gridWidgetEdit(this.widget.id, {
                     name: model.name,
                     description: model.description,
                     type_of_widget_id: this.widgetsId // tohle je trochu divný ne? ... možná kdyby jsi chtěl přesunout widget mezi groupama? [DU]
@@ -143,7 +143,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         this.modalService.showModal(new ModalsRemovalModel(this.widget.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteWidget(this.widget.id)
+                this.backendService.gridWidgetDelete(this.widget.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_removed_success')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -162,7 +162,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         this.modalService.showModal(new ModalsRemovalModel(version.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteWidgetVersion(version.id)
+                this.backendService.gridWidgetVersionDelete(version.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_removed_success')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -182,7 +182,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editWidgetVersion(version.id, { // TODO [permission]: version.update_permission
+                this.backendService.gridWidgetVersionEdit(version.id, { // TODO [permission]: version.update_permission
                     version_name: model.name,
                     version_description: model.description
                 })
@@ -228,7 +228,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     refresh(): void {
 
         this.blockUI();
-        this.backendService.getWidget(this.widgetId) // TODO [permission]: GridWidget_read_permission
+        this.backendService.gridWidgetGet(this.widgetId) // TODO [permission]: GridWidget_read_permission
             .then((widget) => {
                 this.widget = widget;
 
@@ -260,7 +260,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
 
     selectWidgetVersion(version: IGridWidgetVersionShortDetail) {
         this.blockUI();
-        this.backendService.getWidgetVersion(version.id) // TODO [permission]: GridWidgetVersion_read_permission
+        this.backendService.gridWidgetVersionGet(version.id) // TODO [permission]: GridWidgetVersion_read_permission
             .then((widgetVersion) => {
 
                 this.cleanTestView();
@@ -483,7 +483,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 let designJson = JSON.stringify({});
 
                 this.blockUI();
-                this.backendService.createWidgetVersion(this.widgetId, { // TODO [permission]: GridWidgetVersion_create_permission" : "create: If user have GridWidget.update_permission = true,
+                this.backendService.gridWidgetVersionCreate(this.widgetId, { // TODO [permission]: GridWidgetVersion_create_permission" : "create: If user have GridWidget.update_permission = true,
                     version_name: m.name,
                     version_description: m.description,
                     logic_json: this.widgetCode,

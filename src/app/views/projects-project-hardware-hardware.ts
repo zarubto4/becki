@@ -2,7 +2,7 @@
  * Created by Tomas Kupcek on 12.01.2017.
  */
 
-import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
+import { Component, Injector, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { IBoard, IBoardShortDetail, ITypeOfBoard } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
@@ -13,6 +13,7 @@ import { FlashMessageError, FlashMessageSuccess } from '../services/Notification
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { ModalsRemovalModel } from '../modals/removal';
 import { IOnlineStatus } from '../backend/BeckiBackend';
+import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
 
 @Component({
     selector: 'bk-view-projects-project-hardware-hardware',
@@ -22,12 +23,20 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     device: IBoard = null;
     typeOfBoard: ITypeOfBoard = null;
-
     projectId: string;
     hardwareId: string;
     routeParamsSubscription: Subscription;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
+
+
+    // Picture --
+    // TODO Dominik nebo Tom - je zde připravená metoda savePicture - jen jí správně naimplementovat
+    @ViewChild(ImageCropperComponent)
+    cropper: ImageCropperComponent;
+    cropperData: any = {};
+    cropperSettings: CropperSettings;
+    cropperLoaded = false;
 
     hardwareTab: string = 'overview';
 
@@ -60,11 +69,11 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     refresh(): void {
         this.blockUI();
-        this.backendService.getBoard(this.hardwareId) // TODO [permission]: Project.read_permission
+        this.backendService.boardGet(this.hardwareId) // TODO [permission]: Project.read_permission
             .then((board) => {
                 this.device = board;
                 // console.log(board);
-                return this.backendService.getTypeOfBoard(board.type_of_board_id);
+                return this.backendService.typeOfBoardGet(board.type_of_board_id);
             })
             .then((typeOfBoard) => {
                 this.typeOfBoard = typeOfBoard;
@@ -81,7 +90,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editBoardUserDescription(device.id, {
+                this.backendService.boardEditPersonalDescription(device.id, {
                     name: model.name,
                     description: model.description
                 })
@@ -101,7 +110,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.modalService.showModal(new ModalsRemovalModel(device.id)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.disconnectBoard(device.id) // TODO [permission]: Project.update_permission (probably implemented as device.delete_permission)
+                this.backendService.boardDisconnectFromProject(device.id) // TODO [permission]: Project.update_permission (probably implemented as device.delete_permission)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -115,6 +124,24 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         });
     }
 
+    savePicture(): void {
+        if (!this.cropperLoaded || !this.cropperData.image) {
+            return;
+        }
+
+        this.backendService.boardUploadPicture(this.device.id, {
+            file: this.cropperData.image
+        })
+            .then((result) => {
+                this.fmSuccess(this.translate('flash_new_avatar_saved'));
+                this.backendService.refreshPersonInfo();
+                this.cropperLoaded = false;
+            })
+            .catch((error) => {
+                this.fmError(this.translate('flash_cant_save_avatar', error));
+            });
+    }
+
     onUpdateBootloaderClick(): void {
         if (!this.device) {
             return;
@@ -125,7 +152,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             .then((success) => {
                 if (success) {
                     this.blockUI();
-                    this.backendService.bootloaderUpdateList({
+                    this.backendService.hardwareUpdateBootloader({
                         device_ids: [this.device.id]
                     })
                         .then(() => {
@@ -154,7 +181,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 .then((success) => {
                     if (success) {
                         this.blockUI();
-                        this.backendService.editBoardBackup({ // TODO [permission]: Board.edit_permission
+                        this.backendService.boardUpdateBackup({ // TODO [permission]: Board.edit_permission
                             board_backup_pair_list: [
                                 {
                                     board_id: this.device.id,
@@ -174,7 +201,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 });
         } else {
             this.blockUI();
-            this.backendService.editBoardBackup({ // TODO [permission]: Board.edit_permission
+            this.backendService.boardUpdateBackup({ // TODO [permission]: Board.edit_permission
                 board_backup_pair_list: [
                     {
                         board_id: this.device.id,

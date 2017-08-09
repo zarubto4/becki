@@ -54,7 +54,7 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.createTypeOfWidget({ // TODO [permission]: TypeOfWidget_create_permission
+                this.backendService.typeOfWidgetCreate({ // TODO [permission]: TypeOfWidget_create_permission
                     project_id: this.id,
                     name: model.name,
                     description: model.description
@@ -76,7 +76,7 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editTypeOfWidget(group.id, {
+                this.backendService.typeOfWidgetEdit(group.id, {
                     name: model.name,
                     description: model.description
                 })
@@ -96,7 +96,7 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
         this.modalService.showModal(new ModalsRemovalModel(group.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteTypeOfWidget(group.id)
+                this.backendService.typeOfWidgetDelete(group.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_group_edit_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());

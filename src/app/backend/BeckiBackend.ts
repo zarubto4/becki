@@ -442,7 +442,7 @@ export abstract class BeckiBackend extends TyrionAPI {
     }
 
     public loginFacebook(redirectUrl: string): Promise<string> {
-        return this.createFacebook(<ISocialNetworkLogin>{
+        return this.facebookLogin(<ISocialNetworkLogin>{
             redirect_url: redirectUrl
         })
             .then(body => {
@@ -452,7 +452,7 @@ export abstract class BeckiBackend extends TyrionAPI {
     }
 
     public loginGitHub(redirectUrl: string): Promise<string> {
-        return this.createGithub(<ISocialNetworkLogin>{
+        return this.gitHubLogin(<ISocialNetworkLogin>{
             redirect_url: redirectUrl
         })
             .then(body => {
@@ -480,7 +480,7 @@ export abstract class BeckiBackend extends TyrionAPI {
     public refreshPersonInfo(): void {
         this.personInfoSnapshotDirty = true;
         if (this.tokenExist()) {
-            this.getLoggedInPerson()
+            this.personGetByToken()
                 .then((lr: ILoginResult) => {
                     this.personInfoSnapshotDirty = false;
                     this.personInfoSnapshot = lr.person;
@@ -564,7 +564,7 @@ export abstract class BeckiBackend extends TyrionAPI {
         }
         this.disconnectWebSocket();
 
-        this.getWebsocketAccessToken()
+        this.websocketGetAccessToken()
             .then((webSocketToken: IWebSocketToken) => {
 
                 this.websocketErrorShown = false;

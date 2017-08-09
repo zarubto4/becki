@@ -55,7 +55,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.createTypeOfBlock({
+                this.backendService.typeOfBlockCreate({
                     project_id: this.id,
                     name: model.name,
                     description: model.description
@@ -77,7 +77,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editTypeOfBlock(group.id, {
+                this.backendService.typeOfBlockEdit(group.id, {
                     name: model.name,
                     description: model.description
                 })
@@ -97,7 +97,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
         this.modalService.showModal(new ModalsRemovalModel(group.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteTypeOfBlock(group.id)
+                this.backendService.typeOfBlockDelete(group.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess('flash_block_group_remove'));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());

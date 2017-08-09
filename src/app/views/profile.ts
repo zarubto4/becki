@@ -133,7 +133,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
 
     changePassword(): void {
         this.blockUI();
-        this.backendService.createPersonChangeProperty({
+        this.backendService.personEditProperty({
             property: 'password',
             password: this.passwordForm.controls['newPassword'].value
         })
@@ -157,9 +157,9 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
 
     changeEmail(): void {
         this.blockUI();
-        this.backendService.validatePersonEntity({ key: 'mail', value: this.emailForm.controls['newEmail'].value }).then(response => {
+        this.backendService.entityValidation({ key: 'mail', value: this.emailForm.controls['newEmail'].value }).then(response => {
             if (response.valid) {
-                this.backendService.createPersonChangeProperty({
+                this.backendService.personEditProperty({
                     property: 'email',
                     email: this.emailForm.controls['newEmail'].value
                 })
@@ -224,7 +224,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
             return;
         }
 
-        this.backendService.uploadPersonPicture({
+        this.backendService.personUploadPicture({
             file: this.cropperData.image
         })
             .then((result) => {
@@ -239,7 +239,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
 
     changeInfo(): void {
         this.blockUI();
-        this.backendService.editPerson(this.personId, { // TODO [permission]: Person.edit_permission
+        this.backendService.personEdit(this.personId, { // TODO [permission]: Person.edit_permission
             nick_name: this.infoForm.controls['nickName'].value,
             country: this.infoForm.controls['state'].value,
             full_name: this.infoForm.controls['fullName'].value,

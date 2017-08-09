@@ -120,7 +120,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         this.modalService.showModal(new ModalsRemovalModel(this.codeProgram.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteCProgram(this.codeProgram.id)
+                this.backendService.cProgramDelete(this.codeProgram.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -139,7 +139,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editCProgram(this.codeProgram.id, {
+                this.backendService.cProgramEdit(this.codeProgram.id, {
                     project_id: this.projectId,
                     name: model.name,
                     description: model.description,
@@ -161,7 +161,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         this.modalService.showModal(new ModalsRemovalModel(version.version_name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteCProgramVersion(version.version_id)
+                this.backendService.cProgramVersionDelete(version.version_id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_remove')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -181,7 +181,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editCProgramVersion(version.version_id, { // TODO [permission]: version.update_permission
+                this.backendService.cProgramVersionEditInformation(version.version_id, { // TODO [permission]: version.update_permission
                     version_name: model.name,
                     version_description: model.description
                 })
@@ -215,7 +215,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
     refresh(): void {
 
         this.blockUI();
-        this.backendService.getCProgram(this.codeId) // TODO [permission]: C_program.read_permission(Project.read_permission)
+        this.backendService.cProgramGet(this.codeId) // TODO [permission]: C_program.read_permission(Project.read_permission)
             .then((codeProgram) => {
 
                 this.codeProgram = codeProgram;
@@ -241,7 +241,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
                 this.unblockUI();
 
-                this.backendService.getTypeOfBoard(this.codeProgram.type_of_board_id)
+                this.backendService.typeOfBoardGet(this.codeProgram.type_of_board_id)
                     .then((response) => {
                         this.device = response;
                     });
@@ -280,7 +280,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
                     this.codeIDE.exetrnalAddFile(cf);
 
-                    this.backendService.getLibraryVersion(mm.libraryVersion.version_id)
+                    this.backendService.libraryVersionGet(mm.libraryVersion.version_id)
                         .then((lv) => {
                             if (lv && lv.files) {
                                 lv.files.forEach((f) => {
@@ -306,7 +306,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
                 this.codeIDE.externalRefresh();
 
-                this.backendService.getLibraryVersion(mm.libraryVersion.version_id)
+                this.backendService.libraryVersionGet(mm.libraryVersion.version_id)
                     .then((lv) => {
                         if (lv && lv.files) {
                             lv.files.forEach((f) => {
@@ -361,7 +361,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     reloadVersions(): void {
         if (this.codeId) {
-            this.backendService.getCProgram(this.codeId) // TODO [permission]: C_program.read_permission(Project.read_permission)
+            this.backendService.cProgramGet(this.codeId) // TODO [permission]: C_program.read_permission(Project.read_permission)
                 .then((codeProgram) => {
                     this.codeProgram = codeProgram;
                     this.codeProgramVersions = this.codeProgram.program_versions || [];
@@ -382,7 +382,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         }
 
         this.blockUI();
-        this.backendService.getCProgramVersion(programVersion.version_id) // TODO [permission]: C_program.Version.read_permission
+        this.backendService.cProgramVersionGet(programVersion.version_id) // TODO [permission]: C_program.Version.read_permission
             .then((programVersionFull) => {
                 this.unblockUI();
 
@@ -412,7 +412,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                         cf.libraryName = uf.library_short_detail.name;
                         cf.libraryVersionId = uf.library_version_short_detail.version_id;
 
-                        this.backendService.getLibraryVersion(uf.library_version_short_detail.version_id)
+                        this.backendService.libraryVersionGet(uf.library_version_short_detail.version_id)
                             .then((lv) => {
                                 if (lv && lv.files) {
                                     lv.files.forEach((f) => {
@@ -518,7 +518,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 });
 
                 this.blockUI();
-                this.backendService.createCProgramVersion(this.codeId, { // TODO [permission]: "C_Program.update_permission" : "true",
+                this.backendService.cProgramVersionCreate(this.codeId, { // TODO [permission]: "C_Program.update_permission" : "true",
                     imported_libraries: libs,
                     version_name: m.name,
                     version_description: m.description,
@@ -581,7 +581,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         });
 
         this.buildInProgress = true;
-        this.backendService.compileCProgram({
+        this.backendService.cProgramCompile({
             imported_libraries: libs,
             main: main,
             files: userFiles,
@@ -631,7 +631,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         }
 
         this.blockUI();
-        this.backendService.getBoardIdeHardware(this.projectId) // TODO [permission]: Board.edit_permission
+        this.backendService.boardsGetForIdeOperation(this.projectId) // TODO [permission]: Board.edit_permission
             .then((boards) => {
                 this.unblockUI();
 
@@ -646,7 +646,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     .then((success) => {
                         if (success && m.selectedBoard) {
                             this.blockUI();
-                            this.backendService.uploadCProgramVersion({ // TODO [permission]: Board.update_permission, Project.read_permission
+                            this.backendService.cProgramUploadIntoHardware({ // TODO [permission]: Board.update_permission, Project.read_permission
                                 board_pairs: [{
                                     board_id: m.selectedBoard.id,
                                     c_program_version_id: version.version_id

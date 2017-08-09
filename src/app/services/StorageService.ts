@@ -56,7 +56,7 @@ export class StorageService {
                 return;
             }
             this.projectsInProgress[id] = true;
-            this.backendService.getProject(id)
+            this.backendService.projectGet(id)
                 .then((proj) => {
                     this.projectsCache[id] = proj;
                     this.projectsLastTouch[id] = Date.now();
@@ -103,7 +103,7 @@ export class StorageService {
                 return;
             }
             this.typeOfBoardsInProgress = true;
-            this.backendService.getAllTypeOfBoards()
+            this.backendService.typeOfBoardsGetAll()
                 .then((typeOfBoards) => {
                     this.typeOfBoardsCache = typeOfBoards;
                     this.typeOfBoardsLastTouch = Date.now();

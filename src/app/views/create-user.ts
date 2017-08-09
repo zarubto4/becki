@@ -60,7 +60,7 @@ export class CreateUserComponent implements OnInit, OnDestroy {
     }
 
     sendCreateUser(): void {
-        this.backendService.createPerson({
+        this.backendService.personCreate({
             nick_name: this.CreateUserForm.controls['nick_name'].value,
             mail: this.CreateUserForm.controls['email'].value,
             password: this.CreateUserForm.controls['password'].value,
