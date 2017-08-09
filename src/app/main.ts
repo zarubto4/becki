@@ -131,6 +131,7 @@ import { ModalsCodeLibraryVersionComponent } from './modals/code-library-version
 import { ModalsHardwareCodeProgramVersionSelectComponent } from './modals/hardware-code-program-version-select';
 import { ModalsDeactivateComponent } from './modals/deactivate';
 import { HtmlSanitizeBypassPipe } from './pipes/HtmlSanitizeBypassPipe';
+import { FileUploadComponent } from './helpers/BeckiFileUpload';
 import { ModalsDeviceEditDeveloperParameterValueComponent } from './modals/device-edit-developer-parameter-value';
 
 // @formatter:off
@@ -320,6 +321,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ConsoleLogComponent,
         InstanceHistoryTimelineComponent,
         QRCodeComponent,
+        FileUploadComponent,
         // Views components
         Error404Component,
         LoginComponent,
