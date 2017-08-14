@@ -107,9 +107,12 @@ export class StaticTranslation {
 
 
             }, 'ModalsDeviceEditDescriptionComponent': {
-                'title': 'Hardware Device Properties',
+                'title': 'Hardware Device basic Properties',
                 'label_hardware_device': 'Name (private)',
                 'label_device_description': 'Description (private)',
+
+            }, 'ModalsDeviceEditDeveloperParameterValueComponent': {
+                'title': 'Set Developer Properties',
 
             }, 'ModalsSendInvoiceComponent': {
                 'checkbox_email': 'E-mail',
@@ -636,6 +639,7 @@ export class StaticTranslation {
             }, 'ProjectsProjectHardwareComponent': {
 
                 'title': 'all devices',
+                'label_loading': 'Loading',
                 'label_name': 'Name',
                 'label_id': 'Full ID',
                 'label_description': 'Description',
@@ -834,6 +838,7 @@ export class StaticTranslation {
                 'label_modal_confirm_run_latest_version': 'Are you sure to deploy <strong class="font-color-blocko">BLOCKO</strong> and instance to CLOUD?',
                 'label_cannot_execute': 'Unable to execute command, {0}.',
                 'label_cannot_change_version': 'Unable to change version, {0}.',
+                'label_cannot_change_developer_parameter': 'Unable to change parameter, {0}.',
                 'label_cannot_change_program_publicity': 'Unable to change program privacy setting, {0}.',
                 'label_modal_change_instance_version': 'Change instance version',
                 'label_modal_change_running_instance_version': 'Are you sure to change the running instance version?',
@@ -1475,7 +1480,7 @@ export class StaticTranslation {
                 'offline': 'offline',
                 'synchronization_in_progress': 'Synchronizing',
                 'not_yet_first_connected': 'We have no idea - (never logged before)',
-                'label_unknown_lost_connection_with_server': 'Lost connection with external server'
+                'unknown_lost_connection_with_server': 'Lost connection with external server'
             },
             'device_alerts': {
                 'BOOTLOADER_REQUIRED': 'Bootloader update is required.',

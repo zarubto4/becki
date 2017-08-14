@@ -67,6 +67,9 @@
             <template [ngSwitchCase]="'ModalsDeviceEditDescriptionModel'">
                 <bk-modals-device-edit-description [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-device-edit-description>
             </template>
+            <template [ngSwitchCase]="'ModalsDeviceEditDeveloperParameterValueModel'">
+                <bk-modals-device-edit-developer-parameter-value [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-device-edit-developer-parameter-value>
+            </template>
             <template [ngSwitchCase]="'ModalsInstanceEditDescriptionModel'">
                 <bk-modals-instance-edit-description [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-instance-edit-description>
             </template>

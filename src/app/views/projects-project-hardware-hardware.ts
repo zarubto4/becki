@@ -14,6 +14,7 @@ import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-descript
 import { ModalsRemovalModel } from '../modals/removal';
 import { IOnlineStatus } from '../backend/BeckiBackend';
 import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
+import { ModalsDeviceEditDeveloperParameterValueModel } from '../modals/device-edit-developer-parameter-value';
 
 @Component({
     selector: 'bk-view-projects-project-hardware-hardware',
@@ -142,6 +143,78 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             });
     }
 
+    onEditParameterValue_Boolean_Click(parameter_type: string, value: boolean): void {
+        this.blockUI();
+        this.backendService.boardEditDevelopersParameters( this.device.id, {
+            parameter_type: parameter_type,
+            boolean_value: value
+        })
+            .then(() => {
+                this.refresh();
+            })
+            .catch((reason) => {
+                this.fmError(this.translate('label_cannot_change_developer_parameter', reason));
+                this.unblockUI();
+            });
+    }
+
+    /**
+     * Edit onEditParameterValue_Number_Click
+     * @param parameter_user_description
+     * @param parameter_type
+     * @param value
+     */
+    onEditParameterValue_Number_Click(parameter_user_description: string,  parameter_type: string, value: number): void {
+
+        let model = new ModalsDeviceEditDeveloperParameterValueModel(this.device.id, parameter_user_description, value);
+
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.boardEditDevelopersParameters(this.device.id, {
+                    parameter_type: parameter_type,
+                    integer_value: model.value
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
+                        this.refresh();
+                    })
+                    .catch((reason) => {
+                        this.fmError(this.translate('label_cannot_change_developer_parameter', reason));
+                        this.unblockUI();
+                    });
+            }
+        });
+    }
+    /**
+     * Edit onEditParameterValue_Number_Click
+     * @param parameter_user_description
+     * @param parameter_type
+     * @param value
+     */
+    onEditParameterValue_String_Click(parameter_user_description: string,  parameter_type: string, value: string): void {
+
+        let model = new ModalsDeviceEditDeveloperParameterValueModel(this.device.id, parameter_user_description, value);
+
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.boardEditDevelopersParameters(this.device.id, {
+                    parameter_type: parameter_type,
+                    string_value: model.value
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
+                        this.refresh();
+                    })
+                    .catch((reason) => {
+                        this.fmError(this.translate('label_cannot_change_developer_parameter', reason));
+                        this.unblockUI();
+                    });
+            }
+        });
+    }
+
     onUpdateBootloaderClick(): void {
         if (!this.device) {
             return;
@@ -166,9 +239,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             });
     }
 
-    onDeveloperKitClick(): void {
-        // TODO nedodělaná must have fičua pro Martina a viktora (Viz zeptat se Toma)
-    }
+
 
     onAutobackupSwitchClick(backup_mode: string): void {
         if (!this.device) {
