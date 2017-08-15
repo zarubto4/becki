@@ -50,9 +50,9 @@
                     <td class="no-wrap">
                         <span *ngIf="device.online_state == 'online'" class="font-green-jungle bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
                         <span *ngIf="device.online_state == 'offline'" class="font-red bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
-                        <span *ngIf="device.online_state == 'synchronization_in_progress'"class="font-grey-mint bold"><i class="fa fa-spinner fa-spin"></i></span>
+                        <span *ngIf="device.online_state == 'synchronization_in_progress'" class="font-grey-mint bold"><i class="fa fa-spinner fa-spin"></i></span>
                         <span *ngIf="device.online_state == 'not_yet_first_connected'" class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
-                        <span *ngIf="device.online_state == 'unknown_lost_connection_with_server'" class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</i></span>
+                        <span *ngIf="device.online_state == 'unknown_lost_connection_with_server'" class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
                     </td>
                     <td class="vert-align no-wrap">
 
