@@ -823,7 +823,6 @@ export class StaticTranslation {
                 'label_device_type': 'Device type',
                 'label_no_running_update_on_instance': 'There is no running updates in this instance',
                 'label_online_status': 'online status',
-                'label_instance_not_running_in_cloud':'Instance is not running in Cloud.',
 
                 'label_cloud': 'CLOUD',
                 'label_blocko': 'BLOCKO',
