@@ -283,7 +283,7 @@ export class NotificationService {
 
         // update notifications info only when user is logged in
         if (this.backendService.personInfoSnapshot) {
-            this.backendService.getAllUnconfirmedNotifications();
+            this.backendService.notificationsGetUnconfirmed();
             this.getRestApiNotifications();
         }
 
@@ -291,7 +291,7 @@ export class NotificationService {
         this.backendService.personInfo.subscribe((pi) => {
             if (pi) {
                 this.notificationCleanAll();
-                this.backendService.getAllUnconfirmedNotifications();
+                this.backendService.notificationsGetUnconfirmed();
                 this.getRestApiNotifications();
             } else {
                 this.notificationCleanAll();
@@ -478,7 +478,7 @@ export class NotificationService {
             this.zone.run(() => {
                 // console.log('MARK READ: ', ids);
                 this.unreadNotificationsCount -= ids.length;
-                this.backendService.markNotificationRead({ notification_id: ids }); // TODO: možná něco udělat s chybou :-)
+                this.backendService.notificationsMarkAsRead({ notification_id: ids }); // TODO: možná něco udělat s chybou :-)
             });
         }
     }
@@ -523,7 +523,7 @@ export class NotificationService {
     onButtonClick(n: Notification, b: INotificationButton) {
         n.confirmed = true;
         n.close();
-        this.backendService.confirmNotification(n.id, {
+        this.backendService.notificationConfirm(n.id, {
             action: b.action,
             payload: b.payload
         })
@@ -535,7 +535,7 @@ export class NotificationService {
 
     onDeleteClick(n: Notification) {
 
-        this.backendService.deleteNotification(n.id)
+        this.backendService.notificationDelete(n.id)
             .then(() => {
                 this.removeNotificationById(n.id);
             })
@@ -570,7 +570,7 @@ export class NotificationService {
     }
 
     getRestApiNotifications(page = 1): Promise<Notification[]> {
-        return this.backendService.listNotifications(page)
+        return this.backendService.notificationGetLatest(page)
             .then(list => {
 
                 this.zone.runOutsideAngular(() => {

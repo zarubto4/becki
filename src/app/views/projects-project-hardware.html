@@ -48,9 +48,11 @@
                     <td class="vert-align no-wrap">{{device.description}}</td>
                     <td class="vert-align no-wrap"><a (click)="onBoardTypeClick(device.type_of_board_id)">{{device.type_of_board_name}}</a></td>
                     <td class="no-wrap">
-                        <span *ngIf="device.online_state=='online'" class="font-green-jungle">{{'label_online'|bkTranslate:this}}</span>
-                        <span *ngIf="device.online_state=='offline'" class="font-red-flamingo">{{'label_offline'|bkTranslate:this}}</span>
-                        <span *ngIf="device.online_state=='synchronization_in_progress'" class="font-grey-mint bold">{{'label_synchronizing'|bkTranslate:this}} <i class="fa fa-spinner fa-spin"></i></span>
+                        <span *ngIf="device.online_state == 'online'" class="font-green-jungle bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
+                        <span *ngIf="device.online_state == 'offline'" class="font-red bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
+                        <span *ngIf="device.online_state == 'synchronization_in_progress'" class="font-grey-mint bold"><i class="fa fa-spinner fa-spin"></i></span>
+                        <span *ngIf="device.online_state == 'not_yet_first_connected'" class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
+                        <span *ngIf="device.online_state == 'unknown_lost_connection_with_server'" class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
                     </td>
                     <td class="vert-align no-wrap">
 

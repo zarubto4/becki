@@ -45,7 +45,7 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
 
     refresh(): void {
         this.blockUI();
-        this.backendService.getAllProducts()
+        this.backendService.productsGetUserOwnList()
             .then(products => {
                 this.products = products;
                 this.unblockUI();

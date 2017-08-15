@@ -70,7 +70,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         this.modalService.showModal(new ModalsRemovalModel(code.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteCProgram(code.id)
+                this.backendService.cProgramDelete(code.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
@@ -91,7 +91,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.createCProgram({ // TODO [permission]: C_program.create_permission (Project.update_permission)
+                this.backendService.cProgramCreate({ // TODO [permission]: C_program.create_permission (Project.update_permission)
                     project_id: this.id,
                     name: model.name,
                     description: model.description,
@@ -118,7 +118,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editCProgram(code.id, {
+                this.backendService.cProgramEdit(code.id, {
                     project_id: this.id,
                     name: model.name,
                     description: model.description,

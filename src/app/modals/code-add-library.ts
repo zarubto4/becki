@@ -51,7 +51,7 @@ export class ModalsCodeAddLibraryComponent implements OnInit {
         }
 
         this.loading = true;
-        this.backendService.listLibraries(this.page, {
+        this.backendService.libraryGetShortListByFilter(this.page, {
             project_id: this.modalModel.projectId,
             inlclude_public: true
         })

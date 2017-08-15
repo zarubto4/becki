@@ -40,10 +40,10 @@ export class ProducersProducerComponent extends BaseMainComponent implements OnI
 
     refresh(): void {
         this.blockUI();
-        this.backendService.getProducer(this.producerId)
+        this.backendService.producerGet(this.producerId)
             .then((producer) => {
                 this.producer = producer;
-                return this.backendService.getAllTypeOfBoards();
+                return this.backendService.typeOfBoardsGetAll();
             })
             .then((devices) => {
                 for (let i in devices) {

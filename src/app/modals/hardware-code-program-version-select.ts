@@ -48,7 +48,7 @@ export class ModalsHardwareCodeProgramVersionSelectComponent implements OnInit {
     loadProject() {
 
         this.loading = true;
-        this.backendService.getProject(this.modalModel.projectId)
+        this.backendService.projectGet(this.modalModel.projectId)
             .then((p) => {
                 this.loading = false;
                 this.codePrograms = p.c_programs.filter((cp) => cp.type_of_board_id === this.modalModel.typeOfBoardId);
@@ -71,7 +71,7 @@ export class ModalsHardwareCodeProgramVersionSelectComponent implements OnInit {
         this.programVersions = null;
         this.selectedProgramVersion = null;
         this.loading = true;
-        this.backendService.getCProgram(program.id)
+        this.backendService.cProgramGet(program.id)
             .then((p) => {
                 this.loading = false;
                 this.programVersions = p.program_versions;

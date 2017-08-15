@@ -58,7 +58,7 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
         this.modalService.showModal(new ModalsRemovalModel(library.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteLibrary(library.id)
+                this.backendService.libraryDelete(library.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_removed_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
@@ -76,7 +76,7 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.createLibrary({
+                this.backendService.libraryCreate({
                     project_id: this.id,
                     name: model.name,
                     description: model.description
@@ -98,7 +98,7 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editLibrary(library.id, {
+                this.backendService.libraryEdit(library.id, {
                     project_id: this.id,
                     name: model.name,
                     description: model.description

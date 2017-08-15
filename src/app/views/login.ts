@@ -62,7 +62,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     onResendClick(): void {
         this.blockUIService.blockUI();
 
-        this.backendService.createPersonAuthenticationEmail({ mail: this.loginForm.controls['email'].value })
+        this.backendService.emailSendPasswordRecoveryEmail({ mail: this.loginForm.controls['email'].value })
             .then(() => {
                 this.blockUIService.unblockUI();
                 this.resendVertification = false;

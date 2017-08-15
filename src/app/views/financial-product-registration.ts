@@ -82,7 +82,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
     ngOnInit(): void {
         this.blockUI();
 
-        this.backendService.getAllTariffs()
+        this.backendService.tariffsGetAll()
             .then(tariffs => {
                 this.tariffs = tariffs;
                 this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
@@ -331,7 +331,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             tariffData['full_name'] = this.form.controls['full_name'].value;
         }
 
-        this.backendService.createProduct(tariffData)
+        this.backendService.productCreate(tariffData)
             .then(response => {
                 if ((<any>response)._code_ === 200) {
                     this.fmWarning(this.translate('flash_product_created_prepaid'));

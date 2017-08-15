@@ -64,7 +64,7 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editTypeOfBlock(this.group.id, {
+                this.backendService.typeOfBlockEdit(this.group.id, {
                     name: model.name,
                     description: model.description
                 })
@@ -84,7 +84,7 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
         this.modalService.showModal(new ModalsRemovalModel(this.group.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteTypeOfBlock(this.group.id)
+                this.backendService.typeOfBlockDelete(this.group.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_groups_remove')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
@@ -108,7 +108,7 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.createBlockoBlock({
+                this.backendService.blockoBlockCreate({
                     type_of_block_id: group.id,
                     name: model.name,
                     general_description: model.description
@@ -132,7 +132,7 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editBlockoBlock(block.id, {
+                this.backendService.blockoBlockEdit(block.id, {
                     name: model.name,
                     general_description: model.description,
                     type_of_block_id: this.blocksId // tohle je trochu divný ne?
@@ -155,7 +155,7 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
         this.modalService.showModal(new ModalsRemovalModel(block.id)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteBlockoBlock(block.id)
+                this.backendService.blockoBlockDelete(block.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_remove')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());

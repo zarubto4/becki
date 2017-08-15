@@ -81,7 +81,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editInstance(this.instance.id, { name: model.name, description: model.description })
+                this.backendService.instanceEdit(this.instance.id, { name: model.name, description: model.description })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_instance_edit_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
@@ -144,7 +144,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     refresh(): void {
         this.blockUI();
         // this.instance.actual_instance.procedures.forEach(proc => proc.updates.forEach(update => update.));
-        this.backendService.getInstance(this.instanceId) // TODO [permission]: "B_program.update_permission"
+        this.backendService.instanceGet(this.instanceId) // TODO [permission]: "B_program.update_permission"
             .then((instance) => {
                 this.instance = instance;
                 this.loadBlockoLiveView();
@@ -176,7 +176,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     onGridProgramPublishClick(gridProgram: IModelMProgramInstanceParameter) {
         this.blockUI();
-        this.backendService.putInstanceApp({
+        this.backendService.instanceUpdateGridSettings({
             m_program_parameter_id: gridProgram.id,
             snapshot_settings: gridProgram.snapshot_settings === 'absolutely_public' ? 'only_for_project_members' : 'absolutely_public'
         })
@@ -219,13 +219,13 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     changeVersionAction() {
 
-        this.backendService.getBProgram(this.instance.actual_instance.b_program_id).then((blocko) => {
+        this.backendService.bProgramGet(this.instance.actual_instance.b_program_id).then((blocko) => {
             let m = new ModalsBlockoVersionSelectModel(blocko.program_versions, NullSafe(() => this.instance.actual_instance.b_program_version_id));
             this.modalService.showModal(m)
                 .then((success) => {
                     if (success) {
                         this.blockUI();
-                        this.backendService.cloudInstanceUpload(m.programVersion, {}) // TODO [permission]: B_program.update_permission
+                        this.backendService.bProgramVersionUploadToCloud(m.programVersion, {}) // TODO [permission]: B_program.update_permission
                             .then(() => {
                                 this.storageService.projectRefresh(this.id);
                                 this.refresh();
@@ -269,7 +269,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
             .then((success) => {
                 if (success) {
                     this.blockUI();
-                    this.backendService.startOrShutDownInstance(this.instanceId)
+                    this.backendService.instanceSetStartOrShutDown(this.instanceId)
                         .then(() => {
                             this.storageService.projectRefresh(this.id);
                             this.unblockUI();
@@ -318,7 +318,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     loadBlockoLiveView() {
         this.zone.runOutsideAngular(() => {
             if (this.blockoView && this.instance.actual_instance && this.instance.actual_instance.b_program_version_id) {
-                this.backendService.getBProgramVersion(this.instance.actual_instance.b_program_version_id) // TODO [permission]: B_program.read_permission
+                this.backendService.bProgramVersionGet(this.instance.actual_instance.b_program_version_id) // TODO [permission]: B_program.read_permission
                     .then((programVersionFull) => {
                         const selectedProgramVersion = programVersionFull;
                         this.blockoView.setDataJson(selectedProgramVersion.program);

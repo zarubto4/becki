@@ -53,7 +53,7 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editProject(this.id, {
+                this.backendService.projectEdit(this.id, {
                     project_name: model.name,
                     project_description: model.description
                 })
@@ -75,7 +75,7 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
         this.modalService.showModal(new ModalsRemovalModel(this.project.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteProject(this.id)
+                this.backendService.projectDelete(this.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_project_remove')));
                         this.router.navigate(['/projects']);

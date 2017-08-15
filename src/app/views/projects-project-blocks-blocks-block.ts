@@ -145,7 +145,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
     refresh(): void {
 
         this.blockUI();
-        this.backendService.getBlockoBlock(this.blockId) // TODO [permission]: BlockoBlock_read_permission
+        this.backendService.blockoBlockGet(this.blockId) // TODO [permission]: BlockoBlock_read_permission
             .then((blockoBlock) => {
 
                 this.blockoBlock = blockoBlock;
@@ -185,7 +185,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editBlockoBlock(this.blockoBlock.id, {
+                this.backendService.blockoBlockEdit(this.blockoBlock.id, {
                     name: model.name,
                     general_description: model.description,
                     type_of_block_id: this.blocksId // tohle je trochu divný ne?
@@ -210,7 +210,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
         this.modalService.showModal(new ModalsRemovalModel(this.blockoBlock.id)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteBlockoBlock(this.blockoBlock.id)
+                this.backendService.blockoBlockDelete(this.blockoBlock.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_remove')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -230,7 +230,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
         this.modalService.showModal(new ModalsRemovalModel(version.id)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteBlockoBlockVersion(version.id)
+                this.backendService.blockoBlockVersionDelete(version.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_remove')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -250,7 +250,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editBlockoBlockVersion(version.id, { // TODO [permission]: version.update_permission
+                this.backendService.blockoBlockVersionEdit(version.id, { // TODO [permission]: version.update_permission
                     version_name: model.name,
                     version_description: model.description
                 })
@@ -272,7 +272,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
 
     selectBlockVersion(version: IBlockoBlockVersionShortDetail) {
         this.blockUI();
-        this.backendService.getBlockoBlockVersion(version.id)
+        this.backendService.blockoBlockVersionGet(version.id)
             .then((blockoBlockVersion) => {
 
                 // console.log(blockoBlockVersion);
@@ -492,7 +492,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                 });
 
                 this.blockUI();
-                this.backendService.createBlockoBlockVersion(this.blockId, {// TODO [permission]: BlockoBlockVersion_create_permission
+                this.backendService.blockoBlockVersionCreate(this.blockId, {// TODO [permission]: BlockoBlockVersion_create_permission
                     version_name: m.name,
                     version_description: m.description,
                     logic_json: this.blockCode,

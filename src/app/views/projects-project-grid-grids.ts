@@ -59,7 +59,7 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.createMProgram(project.id, { // TODO [permission]: M_Program.create_permission
+                this.backendService.mProgramCreate(project.id, { // TODO [permission]: M_Program.create_permission
                     name: model.name,
                     description: model.description
                 })
@@ -85,7 +85,7 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editMProject(this.gridProject.id, {
+                this.backendService.mProjectEdit(this.gridProject.id, {
                     name: model.name,
                     description: model.description
                 })
@@ -106,7 +106,7 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
         this.modalService.showModal(new ModalsRemovalModel(this.gridProject.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteMProject(this.gridProject.id)
+                this.backendService.mProjectDelete(this.gridProject.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_project_remove')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
@@ -127,7 +127,7 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editMProgram(program.id, {
+                this.backendService.mProgramEdit(program.id, {
                     name: model.name,
                     description: model.description,
                 })
@@ -148,7 +148,7 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
         this.modalService.showModal(new ModalsRemovalModel(program.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteMProgram(program.id)
+                this.backendService.mProgramDelete(program.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_program_remove')));
                         this.refresh();

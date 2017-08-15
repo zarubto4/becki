@@ -2,7 +2,7 @@
  * Created by Tomas Kupcek on 12.01.2017.
  */
 
-import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
+import { Component, Injector, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { IBoard, IBoardShortDetail, ITypeOfBoard } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
@@ -13,6 +13,8 @@ import { FlashMessageError, FlashMessageSuccess } from '../services/Notification
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { ModalsRemovalModel } from '../modals/removal';
 import { IOnlineStatus } from '../backend/BeckiBackend';
+import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
+import { ModalsDeviceEditDeveloperParameterValueModel } from '../modals/device-edit-developer-parameter-value';
 
 @Component({
     selector: 'bk-view-projects-project-hardware-hardware',
@@ -22,12 +24,20 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     device: IBoard = null;
     typeOfBoard: ITypeOfBoard = null;
-
     projectId: string;
     hardwareId: string;
     routeParamsSubscription: Subscription;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
+
+
+    // Picture --
+    // TODO Dominik nebo Tom - je zde připravená metoda savePicture - jen jí správně naimplementovat
+    @ViewChild(ImageCropperComponent)
+    cropper: ImageCropperComponent;
+    cropperData: any = {};
+    cropperSettings: CropperSettings;
+    cropperLoaded = false;
 
     hardwareTab: string = 'overview';
 
@@ -62,11 +72,11 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     refresh(): void {
         this.blockUI();
-        this.backendService.getBoard(this.hardwareId) // TODO [permission]: Project.read_permission
+        this.backendService.boardGet(this.hardwareId) // TODO [permission]: Project.read_permission
             .then((board) => {
                 this.device = board;
                 // console.log(board);
-                return this.backendService.getTypeOfBoard(board.type_of_board_id);
+                return this.backendService.typeOfBoardGet(board.type_of_board_id);
             })
             .then((typeOfBoard) => {
                 this.typeOfBoard = typeOfBoard;
@@ -83,7 +93,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editBoardUserDescription(device.id, {
+                this.backendService.boardEditPersonalDescription(device.id, {
                     name: model.name,
                     description: model.description
                 })
@@ -103,7 +113,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.modalService.showModal(new ModalsRemovalModel(device.id)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.disconnectBoard(device.id) // TODO [permission]: Project.update_permission (probably implemented as device.delete_permission)
+                this.backendService.boardDisconnectFromProject(device.id) // TODO [permission]: Project.update_permission (probably implemented as device.delete_permission)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -112,6 +122,96 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail', reason)));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                    });
+            }
+        });
+    }
+
+    savePicture(): void {
+        if (!this.cropperLoaded || !this.cropperData.image) {
+            return;
+        }
+
+        this.backendService.boardUploadPicture(this.device.id, {
+            file: this.cropperData.image
+        })
+            .then((result) => {
+                this.fmSuccess(this.translate('flash_new_avatar_saved'));
+                this.backendService.refreshPersonInfo();
+                this.cropperLoaded = false;
+            })
+            .catch((error) => {
+                this.fmError(this.translate('flash_cant_save_avatar', error));
+            });
+    }
+
+    onEditParameterValue_Boolean_Click(parameter_type: string, value: boolean): void {
+        this.blockUI();
+        this.backendService.boardEditDevelopersParameters( this.device.id, {
+            parameter_type: parameter_type,
+            boolean_value: value
+        })
+            .then(() => {
+                this.refresh();
+            })
+            .catch((reason) => {
+                this.fmError(this.translate('label_cannot_change_developer_parameter', reason));
+                this.unblockUI();
+            });
+    }
+
+    /**
+     * Edit onEditParameterValue_Number_Click
+     * @param parameter_user_description
+     * @param parameter_type
+     * @param value
+     */
+    onEditParameterValue_Number_Click(parameter_user_description: string,  parameter_type: string, value: number): void {
+
+        let model = new ModalsDeviceEditDeveloperParameterValueModel(this.device.id, parameter_user_description, value);
+
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.boardEditDevelopersParameters(this.device.id, {
+                    parameter_type: parameter_type,
+                    integer_value: model.value
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
+                        this.refresh();
+                    })
+                    .catch((reason) => {
+                        this.fmError(this.translate('label_cannot_change_developer_parameter', reason));
+                        this.unblockUI();
+                    });
+            }
+        });
+    }
+    /**
+     * Edit onEditParameterValue_Number_Click
+     * @param parameter_user_description
+     * @param parameter_type
+     * @param value
+     */
+    onEditParameterValue_String_Click(parameter_user_description: string,  parameter_type: string, value: string): void {
+
+        let model = new ModalsDeviceEditDeveloperParameterValueModel(this.device.id, parameter_user_description, value);
+
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.boardEditDevelopersParameters(this.device.id, {
+                    parameter_type: parameter_type,
+                    string_value: model.value
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
+                        this.refresh();
+                    })
+                    .catch((reason) => {
+                        this.fmError(this.translate('label_cannot_change_developer_parameter', reason));
+                        this.unblockUI();
                     });
             }
         });
@@ -127,7 +227,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             .then((success) => {
                 if (success) {
                     this.blockUI();
-                    this.backendService.bootloaderUpdateList({
+                    this.backendService.hardwareUpdateBootloader({
                         device_ids: [this.device.id]
                     })
                         .then(() => {
@@ -141,9 +241,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             });
     }
 
-    onDeveloperKitClick(): void {
-        // TODO nedodělaná must have fičua pro Martina a viktora (Viz zeptat se Toma)
-    }
+
 
     onAutobackupSwitchClick(backup_mode: string): void {
         if (!this.device) {
@@ -156,7 +254,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 .then((success) => {
                     if (success) {
                         this.blockUI();
-                        this.backendService.editBoardBackup({ // TODO [permission]: Board.edit_permission
+                        this.backendService.boardUpdateBackup({ // TODO [permission]: Board.edit_permission
                             board_backup_pair_list: [
                                 {
                                     board_id: this.device.id,
@@ -176,7 +274,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 });
         } else {
             this.blockUI();
-            this.backendService.editBoardBackup({ // TODO [permission]: Board.edit_permission
+            this.backendService.boardUpdateBackup({ // TODO [permission]: Board.edit_permission
                 board_backup_pair_list: [
                     {
                         board_id: this.device.id,

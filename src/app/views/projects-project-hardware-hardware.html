@@ -57,8 +57,10 @@
                         <!-- Main Overview -->
                         <div *ngIf="device && typeOfBoard" class="row">
 
-                            <div class="col-md-8">
+                            <div class="col-md-4">
 
+                                <H4>{{'label_overview'|bkTranslate:this}}</H4>
+                                <br>
                                 <div>
                                     {{'label_name'|bkTranslate:this}}:
                                     <span  *ngIf="device.name"  class="font-grey-mint bold">{{device.name}}</span>
@@ -75,11 +77,11 @@
 
                                 <div>
                                     {{'label_type'|bkTranslate:this}}:
-                                    <a [routerLink]="['/hardware', device.type_of_board_id]" class="bold">{{device.type_of_board_name}}</a>
+                                    <a [routerLink]="['/hardware', device.type_of_board_id]" class="bold">{{typeOfBoard.name}}</a>
                                 </div>
                                 <div>
                                     {{'label_producer'|bkTranslate:this}}:
-                                    <a [routerLink]="['/producers', device.producer_id]" class="bold">{{typeOfBoard.producer_name}}</a>
+                                    <a [routerLink]="['/producers', typeOfBoard.producer_id]" class="bold">{{typeOfBoard.producer_name}}</a>
                                 </div>
                                 <div>
                                     {{'label_revision'|bkTranslate:this}}:
@@ -106,14 +108,16 @@
                                 <hr>
                                 <div>
                                     {{'label_device_status'|bkTranslate:this}}:
-                                    <span *ngIf="device.online_state == 'online'"                       class="font-green-jungle bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
-                                    <span *ngIf="device.online_state == 'synchronization_in_progress'"  class="font-grey-mint bold"><i class="fa fa-spinner fa-spin"></i> {{device.online_state |bkTranslateTable:this:'online_status'}}</span>
-                                    <span *ngIf="device.online_state == 'not_yet_first_connected'"      class="font-grey-mint bold"><i class="fa fa-spinner fa-spin"></i> {{device.online_state|bkTranslateTable:this:'online_status'}}</span>
+                                    <span *ngIf="device.online_state == 'online'" class="font-green-jungle bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
+                                    <span *ngIf="device.online_state == 'offline'" class="font-red bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
 
-                                    <span *ngIf="device.online_state == 'offline'">
-                                            <strong
-                                                class="bold font-red">{{'offline'|bkTranslateTable:this:'online_status'}}</strong><br>
-                                              {{'label_device_last_seen'|bkTranslate:this}}:
+                                    <span *ngIf="device.online_state == 'synchronization_in_progress'"class="font-grey-mint bold"><i class="fa fa-spinner fa-spin"></i></span>
+                                    <span *ngIf="device.online_state == 'not_yet_first_connected'" class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
+                                    <span *ngIf="device.online_state == 'unknown_lost_connection_with_server'" class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
+                                </div>
+                                <div>
+                                      <span *ngIf="device.latest_online!=null">
+                                            {{'label_device_last_seen'|bkTranslate:this}}:
                                             <span *ngIf="device.latest_online" class="font-grey-mint bold">
                                                  {{device.latest_online|bkUnixTimeToDate}}
                                             </span>
@@ -122,14 +126,20 @@
                                             </span>
                                     </span>
                                 </div>
+
                                 <div>
                                     {{'label_server'|bkTranslate:this}}:
                                      <span *ngIf="!device.server" class="font-grey-mint  bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
                                      <span *ngIf="device.server"  class="font-grey-mint bold">{{device.server.personal_server_name}}</span>
                                 </div>
                                 <hr>
+                            </div>
+
+                            <!-- Settings-->
+                            <div class="col-md-5">
+
                                 <div>
-                                    <H4>Settings</H4>
+                                    <H4>{{'label_settings'|bkTranslate:this}}</H4>
                                     <br>
                                     <ul>
                                         <div>
@@ -157,12 +167,12 @@
                                         <br>
                                         <div>
                                             <span class="font-blue-dark">
-                                                <i class="fa fa-lg fa-bell"></i><span>&nbsp;&nbsp; {{'label_developer_settings'|bkTranslate:this}}</span>
+                                                <i class="fa fa-lg fa-bell"></i><span>&nbsp;&nbsp;&nbsp;{{'label_developer_settings'|bkTranslate:this}}</span>
                                             </span>
                                             <br>
                                             <br>
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-10">
                                                     <ul>
                                                         <table class="table table-hover table-light">
                                                             <tbody>
@@ -171,15 +181,24 @@
                                                                         <span class="font-grey-mint"> Analytics for Developer </span>
                                                                     </td>
                                                                     <td>
-                                                                        <i *ngIf="!device.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
-                                                                        <i *ngIf="device.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
+                                                                        <i *ngIf="!device.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('developer_kit',!device.developer_kit)"></i>
+                                                                        <i *ngIf="device.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('developer_kit',!device.developer_kit)"></i>
                                                                     </td>
                                                                 </tr>
                                                                 <tr>
-                                                                    <td><span class="font-grey-mint"> Local Dev Mode </span></td>
+                                                                    <td><span class="font-grey-mint"> Synchronize always with database </span></td>
                                                                     <td>
-                                                                        <i *ngIf="device.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
-                                                                        <i *ngIf="!device.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onDeveloperKitClick(device)"></i>
+                                                                        <i *ngIf="device.database_synchronize" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('database_synchronize',!device.database_synchronize)"></i>
+                                                                        <i *ngIf="!device.database_synchronize" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('database_synchronize',!device.database_synchronize)"></i>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><span class="font-grey-mint"> Web View for Developers </span></td>
+                                                                    <td>
+                                                                        <i *ngIf="device.web_view" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('web_view', !device.web_view)"></i>
+                                                                        <i *ngIf="!device.web_view" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('web_view',!device.web_view)"></i>
+                                                                        &nbsp;&nbsp;<span class="font-grey-mint">{{'label_port'|bkTranslate:this}}:</span><span *ngIf="device.web_port" class="font-grey-mint bold">{{device.web_port}}</span>&nbsp;&nbsp;
+                                                                        <i class="fa fa-cog cursor-hand" style="vertical-align: middle; font-size: 1.2em;" (click)="onEditParameterValue_Number_Click('Change Port:', 'web_port' ,device.web_port)"></i>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -188,30 +207,48 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <br>
+                                        <div *ngIf="device.web_view">
+                                            <span class="font-blue-dark">
+                                                <i class="fa fa-lg fa-link"></i>&nbsp;&nbsp;&nbsp;<span class="font-grey-mint">Hardware Web view: </span>
+                                                <span  *ngIf="!device.ip_address" class="bold"><i class="fa fa-spinner fa-spin"></i></span>
+                                                <span  *ngIf="device.ip_address"><a target="_blank" href="http://{{device.ip_address}}:{{device.web_port}}" class="bold">http://{{device.ip_address}}:{{device.web_port}}</a> (working only on local network)</span>
+                                            </span>
+                                        </div>
                                     </ul>
 
                                 </div>
+                            </div>
 
+                                <!-- Immage -->
+                            <div class="col-md-3 hw-image-col">
+                                <H4>{{'label_image'|bkTranslate:this}}</H4>
+                                <br>
+                                <img *ngIf="typeOfBoard.picture_link" [attr.src]="typeOfBoard.picture_link">
+                                <i *ngIf="!typeOfBoard.picture_link" class="fa fa-fw fa-microchip text-center"></i>
+                                <p class="text-center"><a class="font-grey-mint">{{'label_set_own_picture'|bkTranslate:this}}</a></p>
+                            </div>
 
-                                <div *ngIf="device.alert_list && device.alert_list.length"
-                                     style="background-color: pink; padding: 1px 8px; margin-top: 20px;">
+                        </div>
+
+                        <!-- Allert List -->
+                        <div *ngIf="device && typeOfBoard && device.alert_list && device.alert_list.length" class="row">
+                            <hr>
+                            <div class="col-md-4">
+                                <H4>Alerts on this Hardware</H4>
+                                <br>
+                                <div style="background-color: pink; padding: 1px 8px; margin-top: 20px;">
 
                                     <h5 class="font-red-flamingo"><i
                                         class="fa fa-fw fa-exclamation-triangle font-red-flamingo"></i>{{'label_alerts'|bkTranslate:this}}
                                     </h5>
-                                    <ul style="padding-left: 23px;">
+                                    <ul style="padding-left: 25px;">
                                         <li *ngFor="let alert of device.alert_list" class="bold no-wrap">
                                             {{alert|bkTranslateTable:this:'device_alerts'}}
                                         </li>
                                     </ul>
                                 </div>
                             </div>
-
-                            <div class="col-md-4 hw-image-col">
-                                <img *ngIf="typeOfBoard.picture_link" [attr.src]="typeOfBoard.picture_link">
-                                <i *ngIf="!typeOfBoard.picture_link" class="fa fa-fw fa-microchip text-center"></i>
-                            </div>
-
                         </div>
 
                         <br>
@@ -243,8 +280,7 @@
                                             <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_actual_program_version'|bkTranslate:this}}:
                                             <a *ngIf="device.actual_c_program_version_name" class=" bold"
                                                [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_id, { version: device.actual_c_program_version_id }]">{{device.actual_c_program_version_name}}</a>
-                                            <span *ngIf="!device.actual_c_program_version_name"
-                                                  class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
+                                            <span *ngIf="!device.actual_c_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                         </div>
                                     </div>
                                     <br>
@@ -345,8 +381,8 @@
                                             class="font-green-jungle">({{'label_online'|bkTranslate:this}})</span>
                                         <span
                                             *ngIf="device.actual_instance.id && device.actual_instance.instance_status=='synchronization_in_progress'"
-                                            class="font-grey-mint bold">({{'label_synchronization_in_progress'|bkTranslate:this}})<i
-                                            class="fa fa-spinner fa-spin"></i></span>
+                                            class="font-grey-mint bold">({{'label_synchronization_in_progress'|bkTranslate:this}})
+                                            <i class="fa fa-spinner fa-spin"></i></span>
                                         <span
                                             *ngIf="device.actual_instance.id && device.actual_instance.instance_status=='offline'"
                                             class="font-red">({{'label_offline'|bkTranslate:this}})</span>

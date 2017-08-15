@@ -55,7 +55,7 @@ export class BeckiAsyncValidators {
         return AsyncValidatorDebounce.debounce((control: FormControl) => {
             return new Promise<any>((resolve) => {
 
-                backEnd.validatePersonEntity({key: inputKey, value: control.value})
+                backEnd.entityValidation({key: inputKey, value: control.value})
                     .then(entity => {
                         // console.log(entity);
                         if (entity.valid) {
@@ -80,7 +80,7 @@ export class BeckiAsyncValidators {
     public static projectNameTaken(backEnd: BackendService): AsyncValidatorFn {
         return AsyncValidatorDebounce.debounce((control: FormControl) => {
             return new Promise<any>((resolve) => {
-                backEnd.getAllProjects()
+                backEnd.projectGetByLoggedPerson()
                     .then((projects) => {
                         if (projects.find(project => project.project_name === control.value)) {
                             resolve({'projectNameTaken': true}); // invalid
@@ -98,7 +98,7 @@ export class BeckiAsyncValidators {
     public static hardwareDeviceId(backEnd: BackendService): AsyncValidatorFn {
         return AsyncValidatorDebounce.debounce((control: FormControl) => {
             return new Promise<any>((resolve) => {
-                backEnd.getBoardCheck(control.value) // TODO [permission]: Project.read_permission
+                backEnd.boardCheckRegistrationStatus(control.value) // TODO [permission]: Project.read_permission
                     .then((status) => {
                         if (status.status === 'CAN_REGISTER') {
                             resolve(null); // valid

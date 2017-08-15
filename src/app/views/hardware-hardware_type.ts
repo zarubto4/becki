@@ -35,7 +35,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
 
     refresh(): void {
         this.blockUI();
-        this.backendService.getTypeOfBoard(this.hardwareTypeId)
+        this.backendService.typeOfBoardGet(this.hardwareTypeId)
             .then((typeOfBoard) => {
                 this.device = typeOfBoard;
                 // console.log(typeOfBoard);

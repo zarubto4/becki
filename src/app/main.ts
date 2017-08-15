@@ -131,6 +131,7 @@ import { ModalsCodeLibraryVersionComponent } from './modals/code-library-version
 import { ModalsHardwareCodeProgramVersionSelectComponent } from './modals/hardware-code-program-version-select';
 import { ModalsDeactivateComponent } from './modals/deactivate';
 import { HtmlSanitizeBypassPipe } from './pipes/HtmlSanitizeBypassPipe';
+import { ModalsDeviceEditDeveloperParameterValueComponent } from './modals/device-edit-developer-parameter-value';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -385,6 +386,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsBlocksBlockPropertiesComponent,
         ModalsHighImportanceNotificationComponent,
         ModalsDeviceEditDescriptionComponent,
+        ModalsDeviceEditDeveloperParameterValueComponent,
         ModalsInstanceEditDescriptionComponent,
         ModalsBlockoVersionSelectComponent,
         ModalsMembersAddComponent,

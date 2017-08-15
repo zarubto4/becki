@@ -206,7 +206,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         this.modalService.showModal(new ModalsRemovalModel(this.blockoProgram.name)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteBProgram(this.blockoProgram.id)
+                this.backendService.bProgramDelete(this.blockoProgram.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_removed')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -225,7 +225,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editBProgram(this.blockoProgram.id, { name: model.name, description: model.description })
+                this.backendService.bProgramEdit(this.blockoProgram.id, { name: model.name, description: model.description })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_updated')));
                         this.refresh();
@@ -344,7 +344,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 } else {
 
                     // TODO: make only one request
-                    this.backendService.getBlockoBlockVersion(wantedVersion.id)
+                    this.backendService.blockoBlockVersionGet(wantedVersion.id)
                         .then((bbv) => {
                             this.blocksCache[wantedVersionName] = bbv;
                             this.blockoView.addTsBlock(this.blocksCache[wantedVersionName].logic_json, this.blocksCache[wantedVersionName].design_json, x, y, params.data.id, wantedVersion.id);
@@ -378,7 +378,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             let wantedVersion = this.blocksLastVersions[params.data.id];
             let wantedVersionName = params.data.id + '_' + wantedVersion.id;
             if (!this.blocksCache[wantedVersionName]) {
-                this.backendService.getBlockoBlockVersion(wantedVersion.id)
+                this.backendService.blockoBlockVersionGet(wantedVersion.id)
                     .then((bbv) => {
                         this.blocksCache[wantedVersionName] = bbv;
                     })
@@ -821,7 +821,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             .then((success) => {
                 if (success) {
                     this.blockUI();
-                    this.backendService.cloudInstanceUpload(m.programVersion, {}) // TODO [permission]: B_program.update_permission
+                    this.backendService.bProgramVersionUploadToCloud(m.programVersion, {}) // TODO [permission]: B_program.update_permission
                         .then(() => {
                             this.storageService.projectRefresh(this.blockoProgram.project_id);
                             this.refresh();
@@ -847,7 +847,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         this.modalService.showModal(new ModalsRemovalModel(version.version_id)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.deleteBProgramVersion(version.version_id)
+                this.backendService.bProgramVersionDelete(version.version_id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_removed')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -867,7 +867,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editBProgramVersion(version.version_id, { // TODO [permission]: version.update_permission (Project.update_permission)
+                this.backendService.bProgramVersionEdit(version.version_id, { // TODO [permission]: version.update_permission (Project.update_permission)
                     version_name: model.name,
                     version_description: model.description
                 })
@@ -886,7 +886,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     onTurnOnClick(): void {
         if (NullSafe(() => this.blockoProgram.instance_details.version_id)) {
             this.blockUI();
-            this.backendService.cloudInstanceUpload(this.blockoProgram.instance_details.version_id, {}) // TODO [permission]: B_program.update_permission
+            this.backendService.bProgramVersionUploadToCloud(this.blockoProgram.instance_details.version_id, {}) // TODO [permission]: B_program.update_permission
                 .then(() => {
                     this.storageService.projectRefresh(this.blockoProgram.project_id);
                     this.refresh();
@@ -909,7 +909,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 .then((success) => {
                     if (success) {
                         this.blockUI();
-                        this.backendService.startOrShutDownInstance(this.blockoProgram.instance_details.instance_id)
+                        this.backendService.instanceSetStartOrShutDown(this.blockoProgram.instance_details.instance_id)
                             .then(() => {
                                 this.refresh();
                             })
@@ -1016,7 +1016,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 // console.log(mProjectSnapshots);
 
                 this.blockUI();
-                this.backendService.createBProgramVersion(this.blockoId, { // TODO [permission]: B_program.update_permission
+                this.backendService.bProgramVersionCreate(this.blockoId, { // TODO [permission]: B_program.update_permission
                     version_name: m.name,
                     version_description: m.description,
                     hardware_group: this.selectedHardware,
@@ -1050,7 +1050,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         }
 
         this.blockUI();
-        this.backendService.getBProgramVersion(programVersion.version_id) // TODO [permission]: B_program.read_permission
+        this.backendService.bProgramVersionGet(programVersion.version_id) // TODO [permission]: B_program.read_permission
             .then((programVersionFull) => {
                 this.unblockUI();
 
@@ -1126,8 +1126,11 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         this.blockUI();
 
         Promise.all<any>([
-            this.backendService.getAllTypeOfBlocks(),
-            this.backendService.getAllBlockoDetails(this.projectId) // TODO [permission]: project.read_permission
+            this.backendService.typeOfBlocksGetByFilter( 0 , {
+                private_type: true,
+                project_id: this.projectId
+            }),
+            this.backendService.bProgramGetAllDetailsForIntegration(this.projectId) // TODO [permission]: project.read_permission
         ])
             .then((values: [ITypeOfBlock[], IBoardsForBlocko]) => {
                 let typeOfBlocks: ITypeOfBlock[] = values[0];
@@ -1176,18 +1179,12 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     this.boardById[board.id] = board;
                 });
 
-                return this.backendService.getBProgram(this.blockoId); // TODO [permission]: Project.read_permission
+                return this.backendService.bProgramGet(this.blockoId); // TODO [permission]: Project.read_permission
             })
             .then((blockoProgram) => {
                 this.blockoProgram = blockoProgram;
 
                 this.blockoProgramVersions = this.blockoProgram.program_versions || [];
-
-                /*this.blockoProgramVersions.sort((a, b)=> {
-                    if (a.version_object.date_of_create == b.version_object.date_of_create) return 0;
-                    if (a.version_object.date_of_create > b.version_object.date_of_create) return -1;
-                    return 1;
-                });*/
 
                 let version = null;
                 if (this.afterLoadSelectedVersionId) {

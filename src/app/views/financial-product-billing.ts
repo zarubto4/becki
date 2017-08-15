@@ -49,7 +49,7 @@ export class FinancialProductBillingComponent extends BaseMainComponent implemen
 
     refresh(): void {
         this.blockUI();
-        this.backendService.getAllProducts().then(products =>  {
+        this.backendService.productsGetUserOwnList().then(products =>  {
             this.product = products.find(product => product.id === this.id);
             this.unblockUI();
         }).catch(error =>  {

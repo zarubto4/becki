@@ -24,7 +24,7 @@ export class HardwareComponent extends BaseMainComponent implements OnInit {
 
     refresh(): void {
         this.blockUI();
-        this.backendService.getAllTypeOfBoards()
+        this.backendService.typeOfBoardsGetAll()
             .then((typeOfBoards) => {
                 this.devices = typeOfBoards;
                 // console.log(typeOfBoards);

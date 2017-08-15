@@ -89,7 +89,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.editBoardUserDescription(device.id, {name: model.name, description: model.description})
+                this.backendService.boardEditPersonalDescription(device.id, {name: model.name, description: model.description})
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
@@ -114,7 +114,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         this.modalService.showModal(new ModalsRemovalModel(device.id)).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.disconnectBoard(device.id) // TODO [permission]: Project.update_permission (probably implemented as device.delete_permission)
+                this.backendService.boardDisconnectFromProject(device.id) // TODO [permission]: Project.update_permission (probably implemented as device.delete_permission)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_remove_device_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
@@ -132,7 +132,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.connectBoard(model.id, this.id) // TODO [permission]: Board.first_connect_permission, Project.update_permission
+                this.backendService.boardConnectWithProject(model.id, this.id) // TODO [permission]: Board.first_connect_permission, Project.update_permission
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_add_device_success', model.id)));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());

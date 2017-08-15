@@ -371,7 +371,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     }
 
     blockChangeVersion = (block: Blocks.TSBlock, version: string) => {
-        this.backendService.getBlockoBlockVersion(version)
+        this.backendService.blockoBlockVersionGet(version)
             .then((versionObject) => {
                 block.blockVersion = version;
                 block.setCode(versionObject.logic_json);
