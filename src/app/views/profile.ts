@@ -136,7 +136,6 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
     }
 
     pictureUploadNotifications(flash: FlashMessage) {
-
         this.addFlashMessage(flash);
     }
 
@@ -176,7 +175,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
             return;
         }
 
-        this.backendService.uploadPersonPicture({
+        this.backendService.personUploadPicture({
             file: picture
         })
             .then((result) => {
