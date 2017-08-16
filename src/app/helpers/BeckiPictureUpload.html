@@ -1,6 +1,6 @@
 <form>
-    <div *ngIf="isPicture" class="form-group profile-pic-wrapper">
-        <h4>{{'label_avatar'|bkTranslate:this}}<span *ngIf="cropperLoaded" class="font-red"> {{'label_unsaved'|bkTranslate:this}}</span></h4>
+    <div class="form-group profile-pic-wrapper">
+        <h4>{{'label_avatar'|bkTranslate:this}}<span *ngIf="(cropperLoaded && !saved)" class="font-red"> {{'label_unsaved'|bkTranslate:this}}</span></h4>
 
         <img *ngIf="(cropperLoaded && cropperData.image) || defaultPicture" class="preview img-circle" [src]="cropperData.image?cropperData.image:defaultPicture"
             width="128" height="128">
@@ -18,8 +18,6 @@
     <div class="margin-top-10">
         <button (click)="sendFile()" class="btn green" [disabled]="!cropperLoaded">{{'btn_save'|bkTranslate:this}}</button>
     </div>
-    <div *ngIf="!isPicture" class="form-group">
-        
-       
+    <div class="form-group">
     </div>
 </form>

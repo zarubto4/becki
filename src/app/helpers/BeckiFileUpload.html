@@ -1,0 +1,14 @@
+<form>
+    <h4> {{'label_unsaved'|bkTranslate:this}}</h4>
+
+
+    <input type="button">
+
+    <div class="margin-top-10">
+        <button (click)="sendFile()" class="btn green" [disabled]="!cropperLoaded">{{'btn_save'|bkTranslate:this}}</button>
+    </div>
+    <div class="form-group">
+
+    </div>
+
+</form>

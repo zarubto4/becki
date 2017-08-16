@@ -132,7 +132,9 @@ import { ModalsHardwareCodeProgramVersionSelectComponent } from './modals/hardwa
 import { ModalsDeactivateComponent } from './modals/deactivate';
 import { HtmlSanitizeBypassPipe } from './pipes/HtmlSanitizeBypassPipe';
 import { FileUploadComponent } from './helpers/BeckiFileUpload';
+import { PictureUploadComponent } from './helpers/BeckiPictureUpload';
 import { ModalsDeviceEditDeveloperParameterValueComponent } from './modals/device-edit-developer-parameter-value';
+
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -322,6 +324,7 @@ class BeckiErrorHandler implements ErrorHandler {
         InstanceHistoryTimelineComponent,
         QRCodeComponent,
         FileUploadComponent,
+        PictureUploadComponent,
         // Views components
         Error404Component,
         LoginComponent,

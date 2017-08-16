@@ -4,14 +4,13 @@
 
 import { Component, Injector, OnInit, ViewChild } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { NotificationService } from '../services/NotificationService';
+import { NotificationService, Notification, FlashMessage } from '../services/NotificationService';
 import { BackendService } from '../services/BackendService';
 import { FlashMessageSuccess, FlashMessageError } from '../services/NotificationService';
 import { FormGroup, Validators } from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { StaticOptionLists } from '../helpers/StaticOptionLists';
-import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
 
 @Component({
     selector: 'bk-view-profile',
@@ -19,18 +18,11 @@ import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
 })
 export class ProfileComponent extends BaseMainComponent implements OnInit {
 
-    @ViewChild(ImageCropperComponent)
-    cropper: ImageCropperComponent;
-
-    cropperData: any = {};
-
-    cropperSettings: CropperSettings;
-
-    cropperLoaded = false;
-
     emailForm: FormGroup;
 
     passwordForm: FormGroup;
+
+    savedPicture: boolean = false;
 
     infoForm: FormGroup;
 
@@ -58,18 +50,6 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
 
     constructor(injector: Injector, public backendService: BackendService, protected notificationService: NotificationService) {
         super(injector);
-
-        // image cropper settings
-        this.cropperSettings = new CropperSettings();
-        this.cropperSettings.noFileInput = true;
-        this.cropperSettings.width = 256;
-        this.cropperSettings.height = 256;
-        this.cropperSettings.croppedWidth = 256;
-        this.cropperSettings.croppedHeight = 256;
-        this.cropperSettings.canvasWidth = 512;
-        this.cropperSettings.canvasHeight = 512;
-        this.cropperSettings.minWidth = 50;
-        this.cropperSettings.minHeight = 50;
 
         this.emailForm = this.formBuilder.group({
             'currentEmail': ['', [Validators.required, Validators.minLength(8), BeckiValidators.email]], // TODO kontrola zda sedí s původním emailem
@@ -155,6 +135,11 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
             });
     }
 
+    pictureUploadNotifications(flash: FlashMessage) {
+
+        this.addFlashMessage(flash);
+    }
+
     changeEmail(): void {
         this.blockUI();
         this.backendService.entityValidation({ key: 'mail', value: this.emailForm.controls['newEmail'].value }).then(response => {
@@ -186,51 +171,18 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
         });
     }
 
-    cropperFileChangeListener($event: any) {
-        let image = new Image();
-        let file: File = $event.target.files[0];
-        if (file) {
-            let myReader: FileReader = new FileReader();
-            myReader.addEventListener('load', () => {
-
-                image.addEventListener('load', () => {
-
-                    if (image.width < 50 || image.height < 50) {
-                        this.fmWarning(this.translate('flash_image_too_small'));
-                        this.cropperLoaded = false;
-                    } else {
-                        this.cropperLoaded = true;
-                        this.cropper.setImage(image);
-
-                        // this hack fixes refresh bug in Safari ... think about better component for crop [DH]
-                        setTimeout(() => {
-                            this.cropper.onMouseDown(null);
-                            this.cropper.onMouseUp(null);
-                        }, 10);
-                    }
-
-                });
-                image.src = myReader.result;
-
-            }, false);
-            myReader.readAsDataURL(file);
-        } else {
-            this.cropperLoaded = false;
-        }
-    }
-
-    saveProfilePicture(): void {
-        if (!this.cropperLoaded || !this.cropperData.image) {
+    saveProfilePicture(picture: any): void {
+        if (!picture) {
             return;
         }
 
-        this.backendService.personUploadPicture({
-            file: this.cropperData.image
+        this.backendService.uploadPersonPicture({
+            file: picture
         })
             .then((result) => {
                 this.fmSuccess(this.translate('flash_new_avatar_saved'));
                 this.backendService.refreshPersonInfo();
-                this.cropperLoaded = false;
+                this.savedPicture = true;
             })
             .catch((error) => {
                 this.fmError(this.translate('flash_cant_save_avatar', error));
