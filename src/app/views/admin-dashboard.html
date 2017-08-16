@@ -1,0 +1,36 @@
+<bk-layout-main [title]="'main_title'|bkTranslate:this">
+
+    <div class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="becki-caption">
+                <span class="font-blue-dark">
+                    <i class="fa fa-fw fa-microchip"></i>
+                    <span [innerHTML]="'title'|bkTranslate:this"></span>
+                </span>
+            </div>
+        </div>
+        <div style="font-size: 14px; font-weight: 200;">
+            {{'dashboard_info_text'|bkTranslate:this}}
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="becki-caption">
+                <span class="font-blue-dark">
+                    <i class="fa fa-fw fa-flag"></i>
+                    {{'title_first_steps'|bkTranslate:this}}
+                </span>
+            </div>
+        </div>
+        <div class="font-blue-dark" style="font-size: 20px; font-weight: 200; line-height: 1.8em;">
+            <div> <span [innerHTML]="'step_one'|bkTranslate:this|bkHtmlSanitizeBypassPipe"></span> </div>
+            <div> <span [innerHTML]="'step_two'|bkTranslate:this|bkHtmlSanitizeBypassPipe"></span> </div>
+            <div> <span [innerHTML]="'step_three'|bkTranslate:this|bkHtmlSanitizeBypassPipe"></span> </div>
+            <div> <span [innerHTML]="'step_four'|bkTranslate:this|bkHtmlSanitizeBypassPipe"></span> </div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+</bk-layout-main>

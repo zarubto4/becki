@@ -21,7 +21,7 @@
             <!-- BEGIN TOP NAVIGATION MENU -->
             <div class="top-menu">
                 <ul class="nav navbar-nav pull-right">
-                    <li *ngIf="backendService.tasks">
+                    <li *ngIf="backendService.tassks">
                         <a><i class="fa fa-spinner fa-spin"></i></a>
                     </li>
                     <!-- BEGIN NOTIFICATION DROPDOWN -->
@@ -78,14 +78,49 @@
                 <!-- BEGIN SIDEBAR MENU -->
                 <ul class="page-sidebar-menu" [class.page-sidebar-menu-closed]="sidebarClosed">
                     <li routerLinkActive="active" *ngFor="let page of navigation">
-                        <a [routerLink]="page.link">
+                        <a *ngIf="!(page.options['adminNavigation'])" [routerLink]="page.link">
                             <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
                             <span class="title">{{page.label}}</span>
                             <span class="selected"></span>
                         </a>
                     </li>
+
+                    <!-- BEGIN SIDEBAR MENU Admin Part-->
+                    <!-- TODO Dopsat podmínku že admin se zobrazí jen když má uživatel permission - doplní tom -->
+                    <li class="heading">
+                        <h3 class="uppercase">Byzance Admin</h3>
+                    </li>
+
+                    <!-- DOC: Filter all navigations with admin parameter on option -->
+                    <li class="nav-item" *ngFor="let page of navigation">
+
+                      <!-- BEGIN SIDEBAR MENU -->
+                        <span *ngIf="page.options['adminNavigation'] && (page.options['subLinks'])">
+
+                              <a *ngIf="!(page.options['adminNavigation'])" (click)="openSubmanyItem()">
+                                <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
+                                <span class="title">{{page.label}}</span>
+                                <span class="selected"></span>
+                              </a>
+                              <ul class="sub-menu">
+                                   <li routerLinkActive="active" *ngFor="let sublink of page.options['subLinks']">
+                                          <a [routerLink]="sublink.link">
+                                            <span class="fa fa-{{sublink.icon}}" data-bind-title="sublink.label"></span>
+                                            <span class="title">{{sublink.label}}</span>
+                                            <span class="selected"></span>
+                                          </a>
+                                    </li>
+                             </ul>
+                        </span>
+
+                        <a *ngIf="page.options['adminNavigation'] && !(page.options['subLinks'])" [routerLink]="page.link">
+                            <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
+                            <span class="title">{{page.label}}</span>
+                            <span class="selected"></span>
+                        </a>
+                    </li>
+
                 </ul>
-                <!-- END SIDEBAR MENU -->
             </div>
         </div>
         <!-- END SIDEBAR -->

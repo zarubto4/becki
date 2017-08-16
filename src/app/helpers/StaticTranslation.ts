@@ -1430,6 +1430,8 @@ export class StaticTranslation {
                 'table_description': 'description',
                 'table_product': 'product',
                 'table_actions': 'actions',
+            }, 'AdminDashboardComponent': {
+                'main_title': 'Dashboard'
             },
 
             'label_byzance_hardware': 'Byzance<strong class="font-color-hardware">HARDWARE</strong>',

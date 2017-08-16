@@ -166,6 +166,10 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
         });
     }
 
+    openSubmanyItem() {
+        // TODO domink
+    }
+
     initSidebarClosed() {
         this.sidebarClosed = localStorage.getItem('sidebarClosed') === 'true';
         if (this.sidebarClosed) {

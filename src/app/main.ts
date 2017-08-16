@@ -195,6 +195,8 @@ let routes: Routes = [
     {path: 'producers', data: {breadName: 'Producers'}, component: ProducersComponent, canActivate: [AuthGuard]},
     {path: 'producers/:producer', data: {breadName: ':last'}, component: ProducersProducerComponent, canActivate: [AuthGuard]},
 
+    {path: 'admin', data: {breadName: 'Admin Site'}, component: ProducersComponent, canActivate: [AuthGuard]},
+
     {path: '**', component: Error404Component},
 ];
 // @formatter:on
@@ -206,9 +208,20 @@ let navigation = [
     new LabeledLink('Projects', ['/projects'], 'tasks'),
     new LabeledLink('Hardware types', ['/hardware'], 'microchip'),
     // new LabeledLink('Producers',  ['/producers'] , 'industry'),
-    /* new LabeledLink("Devices", ["/user/devices"], "rocket"),
-    new LabeledLink("System", ["/system"], "globe"), */
+    // new LabeledLink('Store',  ['/producers'] , 'industry'),
     // new LabeledLink('Log out',  ['/logout'] , 'sign-out')
+    new LabeledLink('Admin Dashboard', ['/admin-dashboard'], 'aria-hidden', {adminNavigation: true}),
+    new LabeledLink('Bugs', ['/admin/bugs'], 'bug', {adminNavigation: true}),
+    new LabeledLink('Platform Management', ['/admin/management'], 'sliders', {
+        adminNavigation: true,
+        subLinks: [
+            new LabeledLink('link1', ['/admin/bugs'], 'bug', {adminNavigation: true}),
+            new LabeledLink('link2', ['/admin/bugs'], 'bug', {adminNavigation: true}),
+            new LabeledLink('link3', ['/admin/bugs'], 'bug', {adminNavigation: true})
+        ]
+    }),
+    new LabeledLink('Reports', ['/admin/reports'], 'book', {adminNavigation: true}),
+    new LabeledLink('Help desk', ['/admin/help-desk'], 'ambulance', {adminNavigation: true}),
 ];
 
 let tabMenus = {
