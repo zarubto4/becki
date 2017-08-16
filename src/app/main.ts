@@ -220,6 +220,14 @@ let navigation = [
             new LabeledLink('link3', ['/admin/bugs'], 'bug', {adminNavigation: true})
         ]
     }),
+    new LabeledLink('some homoshit', ['/admin/management'], 'sliders', {
+        adminNavigation: true,
+        subLinks: [
+            new LabeledLink('link1', ['/admin/bugs'], 'bug', { adminNavigation: true }),
+            new LabeledLink('link2', ['/admin/bugs'], 'bug', { adminNavigation: true }),
+            new LabeledLink('link3', ['/admin/bugs'], 'bug', { adminNavigation: true })
+        ]
+    }),
     new LabeledLink('Reports', ['/admin/reports'], 'book', {adminNavigation: true}),
     new LabeledLink('Help desk', ['/admin/help-desk'], 'ambulance', {adminNavigation: true}),
 ];

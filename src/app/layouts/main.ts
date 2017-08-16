@@ -36,6 +36,7 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
     lastBreadName: string = '';
 
     tabMenuItems: LabeledLink[] = null;
+    tabMenuDropped: string = '';
 
     showUserMenu: boolean = false;
     showNotificationMenu: boolean = false;
@@ -166,8 +167,8 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
         });
     }
 
-    openSubmanyItem() {
-        // TODO domink
+    openSubmanyItem(label: string) {
+        this.tabMenuDropped = label;
     }
 
     initSidebarClosed() {
