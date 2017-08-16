@@ -1431,7 +1431,14 @@ export class StaticTranslation {
                 'table_product': 'product',
                 'table_actions': 'actions',
             }, 'AdminDashboardComponent': {
-                'main_title': 'Dashboard'
+                'main_title': 'Admin Dashboard',
+                'title': 'Basic Overview',
+                'dashboard_info_text' : 'fasdfsdfs sdafbk jshdfkjhasdkjhsdafhjkfasdjkbhkhjfgsdkjhgsdfkjhgfsd',
+                'label_homer_server': 'Homer servers',
+                'label_compilation_server': 'Compilation Servers',
+                'label_person_registered': 'Person registered',
+                'label_project_registered': 'Project registered',
+                'label_hardware_registered': 'Hardware registered',
             },
 
             'label_byzance_hardware': 'Byzance<strong class="font-color-hardware">HARDWARE</strong>',

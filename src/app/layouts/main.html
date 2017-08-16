@@ -97,12 +97,12 @@
                       <!-- BEGIN SIDEBAR MENU -->
                         <span *ngIf="page.options['adminNavigation'] && (page.options['subLinks'])">
 
-                              <a *ngIf="!(page.options['adminNavigation'])" (click)="openSubmanyItem()">
+                              <a *ngIf="!(page.options['adminNavigation'])" (click)="openSubmanyItem()" class="nav-link nav-toggle">
                                 <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
                                 <span class="title">{{page.label}}</span>
                                 <span class="selected"></span>
                               </a>
-                              <ul class="sub-menu">
+                              <ul class="sub-menu" style="display: block;">
                                    <li routerLinkActive="active" *ngFor="let sublink of page.options['subLinks']">
                                           <a [routerLink]="sublink.link">
                                             <span class="fa fa-{{sublink.icon}}" data-bind-title="sublink.label"></span>

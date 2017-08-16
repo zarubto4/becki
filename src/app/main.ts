@@ -132,6 +132,7 @@ import { ModalsHardwareCodeProgramVersionSelectComponent } from './modals/hardwa
 import { ModalsDeactivateComponent } from './modals/deactivate';
 import { HtmlSanitizeBypassPipe } from './pipes/HtmlSanitizeBypassPipe';
 import { ModalsDeviceEditDeveloperParameterValueComponent } from './modals/device-edit-developer-parameter-value';
+import { AdminDashboardComponent } from './views/admin-dashboard';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -195,7 +196,7 @@ let routes: Routes = [
     {path: 'producers', data: {breadName: 'Producers'}, component: ProducersComponent, canActivate: [AuthGuard]},
     {path: 'producers/:producer', data: {breadName: ':last'}, component: ProducersProducerComponent, canActivate: [AuthGuard]},
 
-    {path: 'admin', data: {breadName: 'Admin Site'}, component: ProducersComponent, canActivate: [AuthGuard]},
+    {path: 'admin-dashboard', data: {breadName: 'Admin Site'}, component: AdminDashboardComponent, canActivate: [AuthGuard]},
 
     {path: '**', component: Error404Component},
 ];
@@ -210,7 +211,9 @@ let navigation = [
     // new LabeledLink('Producers',  ['/producers'] , 'industry'),
     // new LabeledLink('Store',  ['/producers'] , 'industry'),
     // new LabeledLink('Log out',  ['/logout'] , 'sign-out')
-    new LabeledLink('Admin Dashboard', ['/admin-dashboard'], 'aria-hidden', {adminNavigation: true}),
+
+    // Admin Labes
+    new LabeledLink('Admin Dashboard', ['/admin-dashboard'], 'tachometer', {adminNavigation: true}),
     new LabeledLink('Bugs', ['/admin/bugs'], 'bug', {adminNavigation: true}),
     new LabeledLink('Platform Management', ['/admin/management'], 'sliders', {
         adminNavigation: true,
@@ -334,6 +337,7 @@ class BeckiErrorHandler implements ErrorHandler {
         InstanceHistoryTimelineComponent,
         QRCodeComponent,
         // Views components
+        AdminDashboardComponent,
         Error404Component,
         LoginComponent,
         LogoutComponent,
