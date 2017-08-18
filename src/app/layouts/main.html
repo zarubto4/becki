@@ -94,7 +94,7 @@
                     <!-- DOC: Filter all navigations with admin parameter on option -->
                     <li *ngFor="let page of navigation">
                       <!-- BEGIN SIDEBAR MENU -->
-                       
+
                               <a *ngIf="page.options['adminNavigation'] && (page.options['subLinks'])" (click)="openSubmanyItem(page.label)">
                                 <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
                                 <span class="title">{{page.label}}</span>
@@ -110,7 +110,7 @@
                                           </a>
                                     </li>
                              </ul>
-                      
+
                         <a *ngIf="page.options['adminNavigation'] && !(page.options['subLinks'])" [routerLink]="page.link">
                             <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
                             <span class="title">{{page.label}}</span>
@@ -155,8 +155,6 @@
                             </ul>
                         </li>
                     </ul>
-
-
 
                     <div [class.tab-content]="tabMenuItems">
                         <div class="active" [class.tab-pane]="tabMenuItems">

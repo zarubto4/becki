@@ -101,6 +101,7 @@ import { StringReplacerPipe } from './pipes/StringReplacerPipe';
 import { StorageService } from './services/StorageService';
 import { ProjectsProjectWidgetsComponent  } from './views/projects-project-widgets';
 import { ProjectsProjectWidgetsWidgetsComponent  } from './views/projects-project-widgets-widgets';
+import { ServerComponent } from './views/admin-server';
 import { ModalsWidgetsWidgetPropertiesComponent } from './modals/widgets-widget-properties';
 import { ProjectsProjectWidgetsWidgetsWidgetComponent } from './views/projects-project-widgets-widgets-widget';
 import { MonacoEditorComponent } from './components/MonacoEditorComponent';
@@ -132,6 +133,15 @@ import { ModalsHardwareCodeProgramVersionSelectComponent } from './modals/hardwa
 import { ModalsDeactivateComponent } from './modals/deactivate';
 import { HtmlSanitizeBypassPipe } from './pipes/HtmlSanitizeBypassPipe';
 import { ModalsDeviceEditDeveloperParameterValueComponent } from './modals/device-edit-developer-parameter-value';
+import { AdminDashboardComponent } from './views/admin-dashboard';
+import { ModalsCreateHomerServerComponent } from './modals/homer-server-create';
+import { ModalsCreateCompilationServerComponent } from './modals/compiler-server-create';
+import { ModalsCreateProducerComponent } from  './modals/create-producer';
+import { ModalsCreateProcessorComponent } from './modals/create-processor';
+import { ModalsCreateTypeOfBoardComponent } from './modals/create-type-of-board';
+import { AdminHardwareComponent } from './views/admin-hardware-type';
+import { ModalsSetAsMainComponent } from './modals/set-as-main';
+import { ModalsBootloaderPropertyComponent } from './modals/bootloader-property';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -167,6 +177,8 @@ let routes: Routes = [
     {path: 'hardware', data: {breadName: 'Hardware types'}, component: HardwareComponent, canActivate: [AuthGuard]},
     {path: 'hardware/:hardware_type', data: {breadName: ':last'}, component: HardwareHardwareTypeComponent, canActivate: [AuthGuard]},
 
+
+
     {path: 'projects', data: {breadName: 'Projects'}, component: ProjectsComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project', data: {breadName: ':project'}, component: ProjectsProjectComponent, canActivate: [AuthGuard]},
     {path: 'projects/:project/hardware', data: {breadName: 'HARDWARE devices'}, component: ProjectsProjectHardwareComponent, canActivate: [AuthGuard]},
@@ -193,9 +205,12 @@ let routes: Routes = [
     {path: 'projects/:project/widgets/:widgets/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]},
 
     {path: 'producers', data: {breadName: 'Producers'}, component: ProducersComponent, canActivate: [AuthGuard]},
-    {path: 'producers/:producer', data: {breadName: ':last'}, component: ProducersProducerComponent, canActivate: [AuthGuard]},
+    // {path: 'producers/:producer', data: {breadName: ':last'}, component: ProducersProducerComponent, canActivate: [AuthGuard]},
 
-    {path: 'admin', data: {breadName: 'Admin Site'}, component: ProducersComponent, canActivate: [AuthGuard]},
+    {path: 'server', data: {breadName: 'Servers'}, component: ServerComponent, canActivate: [AuthGuard]},
+    {path: 'admin-dashboard', data: {breadName: 'Admin Site'}, component: AdminDashboardComponent, canActivate: [AuthGuard]},
+    {path: 'admin/hardware', data: {breadName: 'Hardware'}, component: AdminHardwareComponent, canActivate: [AuthGuard]},
+
 
     {path: '**', component: Error404Component},
 ];
@@ -210,7 +225,9 @@ let navigation = [
     // new LabeledLink('Producers',  ['/producers'] , 'industry'),
     // new LabeledLink('Store',  ['/producers'] , 'industry'),
     // new LabeledLink('Log out',  ['/logout'] , 'sign-out')
-    new LabeledLink('Admin Dashboard', ['/admin-dashboard'], 'aria-hidden', {adminNavigation: true}),
+
+    // Admin Labes
+    new LabeledLink('Admin Dashboard', ['/admin-dashboard'], 'tachometer', {adminNavigation: true}),
     new LabeledLink('Bugs', ['/admin/bugs'], 'bug', {adminNavigation: true}),
     new LabeledLink('Platform Management', ['/admin/management'], 'sliders', {
         adminNavigation: true,
@@ -342,9 +359,11 @@ class BeckiErrorHandler implements ErrorHandler {
         InstanceHistoryTimelineComponent,
         QRCodeComponent,
         // Views components
+        AdminDashboardComponent,
         Error404Component,
         LoginComponent,
         LogoutComponent,
+        AdminHardwareComponent,
         DashboardComponent,
         FinancialComponent,
         FinancialProductComponent,
@@ -379,6 +398,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ProjectsProjectMembersComponent,
         ProjectsProjectWidgetsComponent,
         ProjectsProjectWidgetsWidgetsWidgetComponent,
+        ServerComponent,
         ProjectsProjectWidgetsWidgetsComponent,
         ProjectsProjectHardwareHardwareComponent,
         ProducersComponent,
@@ -387,13 +407,20 @@ class BeckiErrorHandler implements ErrorHandler {
         ProjectsProjectLibrariesLibraryComponent,
         // Modals components
         ModalsProjectPropertiesComponent,
+        ModalsCreateHomerServerComponent,
+        ModalsCreateProcessorComponent,
+        ModalsBootloaderPropertyComponent,
+        ModalsCreateCompilationServerComponent,
         ModalsRemovalComponent,
+        ModalsCreateProducerComponent,
         ModalsDeactivateComponent,
+        ModalsCreateTypeOfBoardComponent,
         ModalsAddHardwareComponent,
         ModalsSelectHardwareComponent,
         ModalsBlockoPropertiesComponent,
         ModalsCodePropertiesComponent,
         ModalsCodeFileDialogComponent,
+        ModalsSetAsMainComponent,
         ModalsConfirmComponent,
         ModalsVersionDialogComponent,
         ModalsBlockoBlockCodeEditorComponent,

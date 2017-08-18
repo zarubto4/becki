@@ -140,10 +140,8 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             if (success) {
                 this.blockUI();
                 this.backendService.cProgramEdit(this.codeProgram.id, {
-                    project_id: this.projectId,
                     name: model.name,
-                    description: model.description,
-                    type_of_board_id: this.codeProgram.type_of_board_id
+                    description: model.description
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
