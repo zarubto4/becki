@@ -11,7 +11,44 @@ export class StaticTranslation {
         'en': {
             'ModalsAddHardwareComponent': {
                 'title': 'Add a Device',
-                'label_hash_token': 'Hash Token',
+                'label_hash_token': 'Hash Token'
+            }, 'ModalsCreateCompilationServerComponent': {
+                'title': 'Create new Server',
+                'label_personal_server_name': 'Server name',
+                'label_server_url': 'Server url (without http..)'
+            }, 'ModalsCreateProducerComponent': {
+                'title': 'Create new Producer',
+                'label_name': 'Name',
+                'label_description': 'Description'
+            }, 'ModalsBootloaderPropertyComponent': {
+                'title': 'Create new Bootloader',
+                'label_name': 'Name',
+                'label_description': 'Description',
+                'label_version_identificator': 'Version Hardware Identification',
+                'label_changing_note': 'Changing Note (Markdown)'
+            }, 'ModalsCreateTypeOfBoardComponent': {
+                'title': 'Create new Board Type',
+                'label_name': 'Name',
+                'label_description': 'Description',
+                'label_processor': 'Processor',
+                'label_producer': 'Producer',
+                'label_connectible_to_internet': 'Connectible to Internet (Wifi, Ethernet)',
+                'label_compiler_target_name': 'Target name for Compiler server'
+            }, 'ModalsCreateProcessorComponent': {
+                'title': 'Create new Processor',
+                'label_name': 'Name',
+                'label_description': 'Description',
+                'label_code': 'Processor Code',
+                'label_speed': 'Hz'
+            }, 'ModalsCreateHomerServerComponent': {
+                'title': 'Create new Server',
+                'label_personal_server_name': 'Server name',
+                'label_server_url': 'Server url (without http..)',
+                'label_mqtt_username': 'Mqtt user name',
+                'label_mqtt_port': 'Mqtt port',
+                'label_mqtt_password': 'Mqtt password',
+                'label_grid_port': 'Grid port',
+                'label_web_view_port': 'Web View port',
 
             }, 'ModalsBlockoAddGridEmptyComponent': {
                 'title': 'Unable to add <strong class="font-color-grid">GRID</strong> project.',
@@ -174,8 +211,12 @@ export class StaticTranslation {
                 'label_product_type': 'Select an existing Financial Product',
 
             }, 'ModalsRemovalComponent': {
-                'title': 'Confirm',
+                'title': 'Set as ',
                 'body_text': 'Are you sure to irreversibly remove',
+
+            }, 'ModalsSetAsMainComponent': {
+                'title': 'Set as default',
+                'body_text': 'Some settings may have fatal consequences. Please reconsider what you are doing! Are you sure that you want set parameter as a default?',
 
             }, 'ModalsSelectHardwareComponent': {
                 'title': 'Select Hardware Device',
@@ -455,11 +496,39 @@ export class StaticTranslation {
                 'label_abilities': 'Abilities',
                 'label_ethernet': 'Ethernet',
                 'label_wifi': 'Wi-Fi',
+
                 'text_ethernet_with_poe': 'Ethernet with PoE',
+
                 'label_bootloader': 'Bootlader',
                 'label_bootloader_name': 'Name',
                 'label_bootloader_description': 'Description',
                 'label_bootlaoder_date': 'Date',
+                'label_bootloader_remove': 'Remove bootloader',
+                'label_bootloader_set_as_main': 'Set bootloader as main',
+                'label_type_of_board_properties': 'Change bootloader properties',
+                'label_main_bootloader': 'Main bootloader',
+                'label_bootloader_settings': 'Bootloader settings',
+                'label_set_own_picture': 'Set own picture',
+
+                'label_type_of_boards_properties': 'Edit basic description',
+                'label_type_of_boards_remove': 'Remove this Board type',
+                'label_no_bootloaders': 'No Nootloaders',
+                'label_no_bootloaders_comment': 'We didn\'t find any Bootloaders, please set new one',
+                'label_bootloader_create_description': 'Create Bootloader',
+                'label_default_c_program_setting': 'Default C Program',
+
+                'btn_create_bootloader': 'Create first Bootloader',
+                'label_c_program_version_set_as_main': 'Set this version as a main',
+                'label_no_c_program_versions': 'No version found',
+                'label_no_c_program_versions_comment': 'We didn\'t find any versions, please create new one',
+                'btn_create_c_program_version': 'Create new Version',
+
+                'table_id': 'Id',
+                'table_name': 'Name',
+                'table_identifier': 'Version Identification',
+                'table_description': 'Description',
+                'table_change_notes': 'Change notes',
+                'table_actions': 'Actions',
 
             }, 'HardwareComponent': {
                 'main_title': 'Hardware Types',
@@ -1329,6 +1398,7 @@ export class StaticTranslation {
             }, 'ValidatorErrorsService': {
                 'label_field_required': 'This field is required.',
                 'label_minimal_length': 'Minimal length of this field is {0} characters.',
+                'label_maximal_length': 'Maximal length of this field is {0} characters.',
                 'label_name_taken': 'This name is already in use.',
                 'label_project_name_taken': 'This project name is already in use.',
                 'label_blocko_name_taken': 'This program name is already in use.',
@@ -1430,16 +1500,62 @@ export class StaticTranslation {
                 'table_description': 'description',
                 'table_product': 'product',
                 'table_actions': 'actions',
+            }, 'ServerComponent': {
+                'main_title': 'Servers',
+                'title': 'List of Servers',
+                'tab_homer_server': 'Homer Servers',
+                'tab_compilation_server': 'Compilation Servers',
+                'label_server_name': 'Server Name',
+                'label_server_type': 'Server Type',
+                'label_id': 'Id',
+                'label_status': 'Status',
+                'label_actions': 'Actions',
+                'label_no_servers': 'No servers',
+                'label_no_servers_comment': 'We did not find any server that we could show you',
+                'label_loading': 'Loading',
+                'btn_create_server': 'Create server',
+
             }, 'AdminDashboardComponent': {
                 'main_title': 'Admin Dashboard',
                 'title': 'Basic Overview',
                 'dashboard_info_text' : 'fasdfsdfs sdafbk jshdfkjhasdkjhsdafhjkfasdjkbhkhjfgsdkjhgsdfkjhgfsd',
+
                 'label_homer_server': 'Homer servers',
                 'label_compilation_server': 'Compilation Servers',
                 'label_person_registered': 'Person registered',
                 'label_project_registered': 'Project registered',
+                'label_bug_registered': 'Bugs auto cached',
                 'label_hardware_registered': 'Hardware registered',
+
+            }, 'AdminHardwareComponent': {
+                'main_title': 'Admin Hardware Management',
+                'title': 'Basic Overview of comonents',
+
+                'label_name': 'Name',
+                'label_description': 'Description',
+
+                'label_target_name': 'Target',
+                'label_bootloader': 'Bootloader',
+                'label_default_firmware': 'Default Firmware',
+                'label_test_firmware': 'Test firmware',
+
+                'tab_hardware_list': 'Hardware List (Filter)',
+                'tab_hardware_type': 'Hardware Types',
+                'tab_processor': 'Processors',
+                'tab_producers': 'Producers',
+                'label_producer': 'Producer',
+                'label_processor': 'Processor',
+                'label_actions': 'Actions',
+
+                'label_no_type_of_boards': 'No Boards Types',
+                'label_no_type_of_boards_comment': 'No accessible Boards Type, create new one. You have to create Processor and Producer',
+                'label_no_producer': 'No Producers',
+                'label_no_producer_comment': 'You can create new Producer, it can by your client or you!',
+
             },
+
+
+
 
             'label_byzance_hardware': 'Byzance<strong class="font-color-hardware">HARDWARE</strong>',
             'label_byzance_blocko': 'Byzance<strong class="font-color-blocko">BLOCKO</strong>',
@@ -1473,6 +1589,9 @@ export class StaticTranslation {
             'btn_no': 'No',
             'btn_update': 'Update',
             'btn_ok': 'OK',
+            'flash_fail': 'Someting is wrong',
+            'flash_successfully_remove': 'Successfully removed',
+            'flash_cant_remove': 'Cannot removed. Reason:',
 
             'hello_world': 'Hello {0}! {1}?',
         },
@@ -1495,6 +1614,13 @@ export class StaticTranslation {
                 'synchronization_in_progress': 'Synchronizing',
                 'not_yet_first_connected': 'We have no idea - (never logged before)',
                 'unknown_lost_connection_with_server': 'Lost connection with external server'
+            },
+            'server_type': {
+                'public_server': 'Public Byzance Server',
+                'private_server': 'Private Server',
+                'backup_server': 'Backup Server',
+                'main_server': 'Main Server',
+                'test_server': 'Test Server'
             },
             'device_alerts': {
                 'BOOTLOADER_REQUIRED': 'Bootloader update is required.',

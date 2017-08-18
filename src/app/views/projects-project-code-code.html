@@ -3,7 +3,9 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+<bk-layout-main tabMenu="projects-project"
+                [title]="currentParamsService.currentProjectNameSnapshot"
+                [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
     <div class="row">
         <div class="col-md-12">
@@ -31,7 +33,7 @@
                 <div>
                     <span [innerHTML]="'label_code_description'|bkTranslate:this:(codeProgram?codeProgram.description:'')"></span><br>
                     <br>
-                    <span [innerHTML]="'label_hardware_type'|bkTranslate:this"></span>:<strong><a (click)="onBoardTypeClick(codeProgram.type_of_board_id)">{{codeProgram?codeProgram.type_of_board_name:""}}</a></strong>
+                    <span [innerHTML]="'label_hardware_type'|bkTranslate:this"></span>:<strong><a (click)="onBoardTypeClick(codeProgram.type_of_board_id)"> {{codeProgram?codeProgram.type_of_board_name:""}}</a></strong>
                 </div>
             </div>
         </div>
@@ -125,7 +127,6 @@
                             </tr>
                         </thead>
                         <tbody>
-
                             <tr *ngFor="let version of codeProgramVersions">
                                 <!-- NAME -->
                                 <td class="vert-align bold" [class.bold]="isSelected(version)">
@@ -173,7 +174,7 @@
                                 </td>
                                 <!-- UPLOAD -->
                                 <td class="vert-align">
-                                    <button class="btn blue" (click)="onUploadClick(version)" *ngIf="device && device.connectible_to_internet && version.status=='successfully_compiled_and_restored'">
+                                    <button class="btn blue" (click)="onUploadClick(version)" *ngIf="projectId && device && device.connectible_to_internet && version.status=='successfully_compiled_and_restored'">
                                     {{'btn_upload_to_hardware'|bkTranslate:this}}
                                 </button>
                                 </td>

@@ -618,7 +618,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         if (this.allBoardsDetails && this.allBoardsDetails.type_of_boards) {
             this.allBoardsDetails.type_of_boards.forEach((tob) => {
                 if (tob.id === boardTypeId) {
-                    out = tob.target_name;
+                    out = tob.compiler_target_name;
                 }
             });
         }

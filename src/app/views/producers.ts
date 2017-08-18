@@ -55,7 +55,9 @@ export class ProducersComponent extends BaseMainComponent implements OnInit, OnD
 
     }
 
-    onProducerClick(producer: IProducer): void {
-        this.navigate(['/producers', producer.id]);
+    onProducerClick(producerId: string): void {
+        this.navigate(['/producers', producerId]);
     }
+
+
 }

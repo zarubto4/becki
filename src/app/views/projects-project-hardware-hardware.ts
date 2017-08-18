@@ -127,7 +127,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         });
     }
 
-    savePicture(): void {
+    onBoardUpdatePicture(): void {
         if (!this.cropperLoaded || !this.cropperData.image) {
             return;
         }

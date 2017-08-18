@@ -1,11 +1,12 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title"> {{'title'|bkTranslate:this}} </h4>
+        <h4 class="modal-title">{{'title'|bkTranslate:this}}</h4>
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-select [control]="form.controls.programVersion" label="{{'label_program_version'|bkTranslate:this}}" [options]="options"></bk-form-select>
+            <bk-form-input [control]="form.controls.name" label="{{'label_name'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input [control]="form.controls.description"  label="{{'label_description'|bkTranslate:this}}"></bk-form-input>
         </form>
     </div>
     <div class="modal-footer">

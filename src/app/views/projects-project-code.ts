@@ -119,10 +119,8 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
             if (success) {
                 this.blockUI();
                 this.backendService.cProgramEdit(code.id, {
-                    project_id: this.id,
                     name: model.name,
-                    description: model.description,
-                    type_of_board_id: code.type_of_board_id
+                    description: model.description
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));

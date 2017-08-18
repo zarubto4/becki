@@ -66,6 +66,23 @@
             <div class="dashboard-stat2">
                 <div class="display">
                     <div class="number">
+                        <h3 class="font-red-flamingo">
+                            <span data-counter="counterup" >{{report.bugs_reported}}</span>
+                            <!--small class="font-green-sharp">$</--small-->
+                        </h3>
+                        <small>{{'label_bug_registered'|bkTranslate:this}}</small>
+                    </div>
+                    <div class="icon font-red-flamingo">
+                        <i class="fa fa-bug"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+            <div class="dashboard-stat2">
+                <div class="display">
+                    <div class="number">
                         <h3 class="font-color-byzance-blue">
                             <span data-counter="counterup" >{{report.board_registered}}</span>
                             <!--small class="font-green-sharp">$</--small-->

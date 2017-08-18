@@ -1,0 +1,28 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title">{{'title'|bkTranslate:this}}</h4>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="form">
+            <bk-form-input [control]="form.controls.name" label="{{'label_name'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input [control]="form.controls.description"  label="{{'label_description'|bkTranslate:this}}"></bk-form-input>
+
+            <label>{{'label_connectible_to_internet'|bkTranslate:this}}</label>
+            <input type="checkbox" name="compiler_target_name" (change)="checkboxChanged(!form.controls.label_connectible_to_internet)">
+
+
+            <bk-form-input [control]="form.controls.compiler_target_name" label="{{'label_compiler_target_name'|bkTranslate:this}}"></bk-form-input>
+
+            <bk-form-select [control]="form.controls.processor" label="{{'label_processor'|bkTranslate:this}}"
+                            [options]="processor_options"></bk-form-select>
+
+            <bk-form-select [control]="form.controls.producer" label="{{'label_producer'|bkTranslate:this}}"
+                            [options]="producer_options"></bk-form-select>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{'btn_save'|bkTranslate:this}}</button>
+    </div>
+</div>

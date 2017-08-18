@@ -224,9 +224,12 @@
                             <div class="col-md-3 hw-image-col">
                                 <H4>{{'label_image'|bkTranslate:this}}</H4>
                                 <br>
-                                <img *ngIf="typeOfBoard.picture_link" [attr.src]="typeOfBoard.picture_link">
-                                <i *ngIf="!typeOfBoard.picture_link" class="fa fa-fw fa-microchip text-center"></i>
-                                <p class="text-center"><a class="font-grey-mint">{{'label_set_own_picture'|bkTranslate:this}}</a></p>
+
+                                <img *ngIf="typeOfBoard.picture_link && !device.picture_link " [attr.src]="typeOfBoard.picture_link">
+                                <img *ngIf="device.picture_link " [attr.src]="device.picture_link">
+                                <i *ngIf="!typeOfBoard.picture_link && !device.picture_link " class="fa fa-fw fa-microchip text-center"></i>
+
+                                <p *ngIf="device.edit_permission" class="text-center"><a (click)="onBoardUpdatePicture()" class="font-grey-mint">{{'label_set_own_picture'|bkTranslate:this}}</a></p>
                             </div>
 
                         </div>

@@ -28,6 +28,9 @@ export class ValidatorErrorsService {
             if (errors['minlength']) {
                 return this.translate('label_minimal_length', errors['minlength']['requiredLength']);
             }
+            if (errors['maxlength']) {
+                return this.translate('label_maximal_length', errors['maxlength']['requiredLength']);
+            }
             if (errors['nameTaken']) {
                 return this.translate('label_name_taken');
             }

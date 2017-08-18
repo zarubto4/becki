@@ -1,55 +1,68 @@
-<bk-layout-main [title]="'main_title'|bkTranslate:this" [lastBreadName]="device?device.name:''">
+<bk-layout-main [title]="'main_title'|bkTranslate:this" [lastBreadName]="typeOfBoard?typeOfBoard.name:''">
 
-    <div *ngIf="device" class="portlet portlet light bordered">
+    <div *ngIf="typeOfBoard" class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
                 <span class="font-blue-dark uppercase">
                     <i class="fa fa-fw fa-microchip"></i>
-                    {{device.name}}
+                    {{typeOfBoard.name}}
                 </span>
+            </div>
+            <div *ngIf="typeOfBoard && typeOfBoard.edit_permission" class="becki-actions">
+
+                <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!typeOfBoard.edit_permission"
+                        (click)="onEditClick()">
+                    <i class="fa fa-cog"></i>
+                </button>
+                <button title="{{'label_type_of_boards_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!typeOfBoard.delete_permission"
+                        (click)="onRemoveClick()">
+                    <i class="fa fa-trash"></i>
+                </button>
             </div>
         </div>
         <div class="row">
             <div class="col-md-8">
                 <div>
                     {{'label_name'|bkTranslate:this}}:
-                    <span class="font-color-neutral-dark bold">{{device.name}}</span>
+                    <span class="font-color-neutral-dark bold">{{typeOfBoard.name}}</span>
                 </div>
                 <div>
                     {{'label_description'|bkTranslate:this}}:
-                    <span class="font-color-neutral-dark bold">{{device.description}}</span>
+                    <span class="font-color-neutral-dark bold">{{typeOfBoard.description}}</span>
                 </div>
                 <div>
                     {{'label_producer'|bkTranslate:this}}:
-                    <a [routerLink]="['/producers', device.producer_id]" class="bold">{{device.producer_name}}</a>
+                    <a [routerLink]="['/producers', typeOfBoard.producer_id]" class="bold">{{typeOfBoard.producer_name}}</a>
                 </div>
                 <div>
                     {{'label_processor'|bkTranslate:this}}:
-                    <span class="font-color-neutral-dark bold">{{device.processor_name}}</span>
+                    <span class="font-color-neutral-dark bold">{{typeOfBoard.processor_name}}</span>
                 </div>
                 <div>
                     {{'label_target_name'|bkTranslate:this}}:
-                    <span class="font-color-neutral-dark bold">{{device.target_name}}</span>
+                    <span class="font-color-neutral-dark bold">{{typeOfBoard.compiler_target_name}}</span>
                 </div>
                 <div>
                     {{'label_abilities'|bkTranslate:this}}:<br>
-                    <div *ngIf="device.target_name == 'BYZANCE_YODAG2'">
+                    <div *ngIf="typeOfBoard.target_name == 'BYZANCE_YODAG2'">
                         &nbsp;<i class="fa fa-fw fa-plug" title="Ethernet"></i> {{'label_ethernet'|bkTranslate:this}}<br>
                         &nbsp;<i class="fa fa-fw fa-wifi" title="Wi-Fi"></i> {{'label_wifi'|bkTranslate:this}}<br>
                     </div>
-                    <div *ngIf="device.target_name == 'BYZANCE_YODAG3E'">
+                    <div *ngIf="typeOfBoard.target_name == 'BYZANCE_YODAG3E'">
                         &nbsp;<i class="fa fa-fw fa-plug" title="Ethernet"></i> {{'text_ethernet_with_poe'|bkTranslate:this}}<br>
                     </div>
                 </div>
             </div>
             <div class="col-md-4 hw-image-col">
-                <img *ngIf="device.picture_link" [attr.src]="device.picture_link">
-                <i *ngIf="!device.picture_link" class="fa fa-fw fa-microchip text-center"></i>
+                <img *ngIf="typeOfBoard.picture_link" [attr.src]="typeOfBoard.picture_link">
+                <i *ngIf="!typeOfBoard.picture_link" class="fa fa-fw fa-microchip text-center"></i>
+                <p *ngIf="typeOfBoard.edit_permission" class="text-center"><a (click)="onTypeOfBoardUpdatePicture()" class="bold">{{'label_set_own_picture'|bkTranslate:this}}</a></p>
             </div>
         </div>
     </div>
 
-    <div *ngIf="device && device.main_boot_loader" class="portlet portlet light bordered">
+    <!-- Standard visible for users -->
+    <div *ngIf="typeOfBoard && typeOfBoard.main_boot_loader" class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
                 <span class="font-blue-dark uppercase">
@@ -61,17 +74,225 @@
         <div>
             <div>
                 {{'label_bootloader_name'|bkTranslate:this}}:
-                <span class="font-color-neutral-dark bold">{{device.main_boot_loader.name}}</span>
+                <span class="font-color-neutral-dark bold">{{typeOfBoard.main_boot_loader.name}}</span>
             </div>
             <div>
                 {{'label_bootloader_description'|bkTranslate:this}}:
-                <span class="font-color-neutral-dark bold">{{device.main_boot_loader.description}}</span>
+                <span class="font-color-neutral-dark bold">{{typeOfBoard.main_boot_loader.description}}</span>
             </div>
             <div>
                 {{'label_bootlaoder_date'|bkTranslate:this}}:
-                <span class="font-color-neutral-dark bold">{{device.main_boot_loader.date_of_create|bkUnixTimeToDate}}</span>
+                <span class="font-color-neutral-dark bold">{{typeOfBoard.main_boot_loader.date_of_create|bkUnixTimeToDate}}</span>
             </div>
         </div>
     </div>
+
+    <!-- Only with permission -->
+    <div *ngIf="typeOfBoard && typeOfBoard.bootloader_edit_permission" class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="becki-caption">
+                <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-code"></i>
+                      {{'label_bootloader_settings'|bkTranslate:this}}:
+                </span>
+            </div>
+            <div *ngIf="typeOfBoard && typeOfBoard.edit_permission" class="becki-actions">
+
+                <button title="{{'label_bootloader_create_description'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!typeOfBoard.edit_permission"
+                        (click)="onCreateBootloaderClick()">
+                    <i class="fa fa-plus"></i>
+                </button>
+            </div>
+        </div>
+        <div>
+            <div *ngIf="(typeOfBoard && typeOfBoard.boot_loaders.length)" class="table-scrollable">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="col col-lg-1 center-align ">{{'table_id'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2 center-align ">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2 center-align ">{{'table_identifier'|bkTranslate:this}}</th>
+                        <th class="col col-lg-3 center-align ">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="col col-lg-3 center-align ">{{'table_change_notes'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2 center-align text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let bootloader of typeOfBoard.boot_loaders">
+                        <td class="vert-align no-wrap"><strong>{{bootloader.id.substr(0,8)}}</strong> </td>
+                        <td class="vert-align no-wrap">
+                            {{bootloader.name}}
+                            <span *ngIf="bootloader.main_bootloader" class="font-green-jungle bold">{{'label_main_bootloader'|bkTranslate:this}}}</span>
+                        </td>
+                        <td class="vert-align no-wrap">{{bootloader.version_identificator}}</td>
+                        <td class="vert-align no-wrap">{{bootloader.description.substr(0, 32)}}<span *ngIf="bootloader.description.length > 32">...</span></td>
+                        <td class="vert-align no-wrap">{{bootloader.changing_note.substr(0, 32)}}<span *ngIf="bootloader.changing_note.length > 32">...</span></td>
+
+                        <td class="vert-align text-right no-wrap">
+                            <style type="text/css">
+                                table tr button { opacity:0.05;}
+                                table tr:hover button { opacity:1 }
+                            </style>
+                            <button title="{{'label_type_of_board_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!bootloader.edit_permission" (click)="onBootloaderEditClick(bootloader)">
+                                <i class="fa fa-cog"></i>
+                            </button>
+                            <button *ngIf="!bootloader.main_bootloader && bootloader.file_path" title="{{'label_bootloader_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!bootloader.update_permission" (click)="onBootloaderSetMainClick(bootloader)">
+                                <i class="fa fa-flag"></i>
+                            </button>
+                            <button *ngIf="!bootloader.file_path" title="{{'label_bootloader_upload_file'|bkTranslate:this}}" class="btn btn-icon-only orange" [disabled]="!bootloader.update_permission" (click)="onBootloaderUpdateFile(bootloader)">
+                                <i class="fa fa-file-code-o"></i>
+                            </button>
+                            <button title="{{'label_bootloader_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!bootloader.delete_permission" (click)="onBootloaderDeleteClick(bootloader)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h3 *ngIf="!typeOfBoard.boot_loaders" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
+            <div *ngIf="typeOfBoard.boot_loaders && typeOfBoard.boot_loaders.length == 0" class="list-no-items">
+                <p class="list-no-items__main-label">{{'label_no_bootloaders'|bkTranslate:this}}</p>
+                <p class="list-no-items__sub-label">{{'label_no_bootloaders_comment'|bkTranslate:this}} </p>
+                <p>
+                    <button class="btn blue" (click)="onCreateBootloaderClick()">
+                        <i class="fa fa-plus-circle"></i> {{'btn_create_bootloader'|bkTranslate:this}}
+                    </button>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Only with permission -->
+    <div *ngIf="typeOfBoard && typeOfBoard.default_c_program_edit_permission" class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="becki-caption">
+                <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-code"></i>
+                      {{'label_default_c_program_setting'|bkTranslate:this}}:
+                </span>
+            </div>
+            <div *ngIf="typeOfBoard && typeOfBoard.default_c_program_edit_permission" class="becki-actions">
+                <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!typeOfBoard.edit_permission"
+                        (click)="onCProgramEditClick(typeOfBoard.main_c_program)">
+                    <i class="fa fa-cog"></i>
+                </button>
+            </div>
+        </div>
+        <div>
+            <div>
+                {{'label_name'|bkTranslate:this}}:
+                <span class="font-color-neutral-dark bold">{{typeOfBoard.main_c_program.name}}</span>
+            </div>
+            <div>
+                {{'label_description'|bkTranslate:this}}:
+                <span class="font-color-neutral-dark bold">{{typeOfBoard.main_c_program.description}}</span>
+            </div>
+
+            <div *ngIf="(typeOfBoard && typeOfBoard.main_c_program.program_versions.length)" class="table-scrollable">
+                <br>
+                <hr>
+                <br>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="col col-lg-6">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="col col-lg-1">{{'table_author'|bkTranslate:this}}</th>
+                        <th class="col col-lg-1">{{'table_status'|bkTranslate:this}}</th>
+                        <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let version of typeOfBoard.main_c_program.program_versions">
+                        <!-- NAME -->
+                        <td class="vert-align bold">
+                            <a [routerLink]="['/projects/note_used/code/', typeOfBoard.main_c_program.id]">
+                                {{version.version_name}}
+                            </a>
+                        </td>
+                        <!-- Description -->
+                        <td class="vert-align">
+                            {{version.version_description}}
+                        </td>
+                        <!-- Author -->
+                        <td class="vert-align">
+                            {{version.author.nick_name}}
+                        </td>
+                        <!-- STATUS -->
+                        <td class="vert-align">
+
+                            <span class="icon-hint-wraper red" *ngIf="version.status=='hardware_unstable'">
+                                    <i class="fa fa-exclamation-triangle font-red-mint"></i>
+                                </span>
+                            <span class="icon-hint-wraper orange" *ngIf="version.status=='compiled_with_code_errors'">
+                                    <i class="fa fa-thumbs-down font-yellow"></i>
+                                    <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
+                            </span>
+
+                            <span class="icon-hint-wraper red" *ngIf="version.status=='hardware_unstable'">
+                                    <i class="fa fa-heartbeat font-red-mint"></i>
+                                    <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
+                            </span>
+
+                            <span class="icon-hint-wraper orange" *ngIf="version.status=='server_was_offline' || version.status=='successfully_compiled_not_restored' || version.status=='undefined' || version.status=='file_with_code_not_found' || version.status=='compilation_server_error' || version.status=='json_code_is_broken'">
+                                    <i class="fa fa-npm wrench font-yellow"></i>
+                                    <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
+                            </span>
+
+                            <span class="icon-hint-wraper gray" *ngIf="version.status=='compilation_in_progress'">
+                                    <i class="fa fa-spinner fa-spin"></i>
+                                    <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
+                            </span>
+
+                            <span class="icon-hint-wraper green" *ngIf="version.status=='successfully_compiled_and_restored'">
+                                    <i class="fa fa-check font-green-jungle"></i>
+                                    <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
+                            </span>
+                        </td>
+
+                        <!-- ACTIONS -->
+                        <td class="vert-align text-right no-wrap">
+                            <style type="text/css">
+                                table tr button {
+                                    opacity: 0.05;
+                                }
+
+                                table tr:hover button {
+                                    opacity: 1
+                                }
+                            </style>
+
+                            <button title="{{'label_version_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission"
+                                    (click)="onEditVersionClick(version)">
+                                <i class="fa fa-cog"></i>
+                            </button>
+
+                            <button *ngIf="version.status=='successfully_compiled_and_restored'" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!typeOfBoard.update_permission" (click)="onCProgramDefaultSetMainClick(version)">
+                                <i class="fa fa-flag"></i>
+                            </button>
+
+                            <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission"
+                                    (click)="onRemoveVersionClick(version)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h3 *ngIf="!typeOfBoard.main_c_program" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
+            <div *ngIf="typeOfBoard.main_c_program.program_versions && typeOfBoard.main_c_program.program_versions == 0" class="list-no-items">
+                <p class="list-no-items__main-label">{{'label_no_c_program_versions'|bkTranslate:this}}</p>
+                <p class="list-no-items__sub-label">{{'label_no_c_program_versions_comment'|bkTranslate:this}} </p>
+                <p>
+                    <button class="btn blue" [routerLink]="['/projects/note_used/code/', typeOfBoard.main_c_program.id]">
+                        <i class="fa fa-plus-circle"></i> {{'btn_create_c_program_version'|bkTranslate:this}}
+                    </button>
+                </p>
+            </div>
+        </div>
+    </div>
+
 
 </bk-layout-main>

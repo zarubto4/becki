@@ -4,6 +4,21 @@
             <template [ngSwitchCase]="'ModalsRemovalModel'">
                 <bk-modals-removal [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-removal>
             </template>
+            <template [ngSwitchCase]="'ModalsCreateProducerModel'">
+                <bk-modals-create-producer [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-create-producer>
+            </template>
+            <template [ngSwitchCase]="'ModalsCreateProcessorModel'">
+                <bk-modals-create-processor [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-create-processor>
+            </template>
+            <template [ngSwitchCase]="'ModalsBootloaderPropertyModel'">
+                <bk-modals-bootloader-property [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-bootloader-property>
+            </template>
+            <template [ngSwitchCase]="'ModalsSetAsMainModel'">
+                <bk-modals-set-as-main [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-set-as-main>
+            </template>
+            <template [ngSwitchCase]="'ModalsCreateTypeOfBoardModel'">
+                <bk-modals-create-type-of-board [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-create-type-of-board>
+            </template>
             <template [ngSwitchCase]="'ModalsDeactivateModel'">
                 <bk-modals-deactivate [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-deactivate>
             </template>
@@ -87,6 +102,12 @@
             </template>
             <template [ngSwitchCase]="'ModalsSendInvoiceModel'">
                 <bk-modals-send-invoice [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-send-invoice>
+            </template>
+            <template [ngSwitchCase]="'ModalsCreateHomerServerModel'">
+                <bk-modals-homer-create-server [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-homer-create-server>
+            </template>
+            <template [ngSwitchCase]="'ModalsCreateCompilerServerModel'">
+                <bk-modals-compiler-create-server [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-compiler-create-server>
             </template>
             <template [ngSwitchCase]="'ModalsSelectHardwareModel'">
                 <bk-modals-select-hardware [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-select-hardware>
