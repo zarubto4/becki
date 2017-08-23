@@ -76,7 +76,7 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
     }
 
     onMemberDeleteClick(member: IProjectParticipant) {
-        if ((this.backendService.personInfoSnapshot.mail === member.user_email) || (this.backendService.personInfoSnapshot.id === member.id)) {
+        if ((this.backendService.personInfoSnapshot.mail === member.mail) || (this.backendService.personInfoSnapshot.id === member.id)) {
             this.fmError(this.translate('label_cannot_remove_yourself'));
         }
 
@@ -89,7 +89,7 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
                 return;
             } else {
                 this.blockUI();
-                this.backendService.projectUnshare(this.id, { persons_mail: [member.user_email] })
+                this.backendService.projectUnshare(this.id, { persons_mail: [member.mail] })
                     .then(() => {
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
@@ -103,10 +103,10 @@ export class ProjectsProjectMembersComponent extends BaseMainComponent implement
 
     onMemberSnedAgainClick(member: IProjectParticipant) {
         this.blockUI();
-        this.backendService.projectShare(this.id, { persons_mail: [member.user_email] })
+        this.backendService.projectShare(this.id, { persons_mail: [member.mail] })
             .then(() => {
                 this.unblockUI();
-                let m = new ModalsConfirmModel(this.translate('modal_label_invitation'), this.translate('modal_label_invitation_send', member.user_email), true, null, null, [this.translate('btn_ok')]);
+                let m = new ModalsConfirmModel(this.translate('modal_label_invitation'), this.translate('modal_label_invitation_send', member.mail), true, null, null, [this.translate('btn_ok')]);
                 this.modalService.showModal(m);
             })
             .catch((err) => {

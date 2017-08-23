@@ -15,6 +15,7 @@ export class ModalsCreateCompilerServerModel extends ModalModel {
     constructor(
         public personal_server_name: string = '',
         public server_url: string = '',
+        public edit: boolean = false
     ) {
         super();
     }

@@ -1,4 +1,8 @@
-<bk-layout-main [title]="'main_title'|bkTranslate:this">
+<bk-layout-main
+
+     tabMenu="byzance-admin"
+     [title]="'main_title'|bkTranslate:this"
+     [subtitle]="'main_subtitle'|bkTranslate:this">
 
     <div *ngIf="typeOfBoards && processors && producers" class="row">
         <div class="col-md-12">
@@ -44,55 +48,55 @@
                     <div *ngIf="(typeOfBoards && typeOfBoards.length)" class="table-scrollable">
                         <table class="table table-hover">
                             <thead>
-                            <tr>
-                                <th>{{'label_name'|bkTranslate:this}}</th>
-                                <th>{{'label_target_name'|bkTranslate:this}}</th>
-                                <th>{{'label_bootloader'|bkTranslate:this}}</th>
-                                <th>{{'label_default_firmware'|bkTranslate:this}}</th>
-                                <th>{{'label_test_firmware'|bkTranslate:this}}</th>
-                                <th>{{'label_producer'|bkTranslate:this}}</th>
-                                <th>{{'label_processor'|bkTranslate:this}}</th>
-                                <th class="text-right">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                            </tr>
+                                <tr>
+                                    <th>{{'label_name'|bkTranslate:this}}</th>
+                                    <th>{{'label_target_name'|bkTranslate:this}}</th>
+                                    <th>{{'label_bootloader'|bkTranslate:this}}</th>
+                                    <th>{{'label_default_firmware'|bkTranslate:this}}</th>
+                                    <th>{{'label_test_firmware'|bkTranslate:this}}</th>
+                                    <th>{{'label_producer'|bkTranslate:this}}</th>
+                                    <th>{{'label_processor'|bkTranslate:this}}</th>
+                                    <th class="text-right">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            <tr *ngFor="let typeOfBoard of typeOfBoards">
-                                <td class="vert-align no-wrap">
-                                    <a (click)="onTypeOfBoardClick(typeOfBoard.id)" class="no-wrap"><strong>{{typeOfBoard.name}}</strong></a>
-                                </td>
-                                <td class="vert-align no-wrap">{{typeOfBoard.compiler_target_name}}</td>
-                                <td class="vert-align no-wrap">
-                                    <span *ngIf="typeOfBoard.main_boot_loader" class="font-green-jungle bold">{{typeOfBoard.main_boot_loader.name}}</span>
-                                    <span *ngIf="!typeOfBoard.main_boot_loader" class="font-red-flamingo bold">Missing!</span>
-                                </td>
-                                <td class="vert-align no-wrap">
-                                    <span *ngIf="typeOfBoard.main_c_program_version" class="font-green-jungle bold">{{typeOfBoard.main_c_program_version.version_name}}</span>
-                                    <span *ngIf="!typeOfBoard.main_c_program_version" class="font-red-flamingo bold">Missing!</span>
-                                </td>
-                                <td class="vert-align no-wrap">
-                                    <span *ngIf="typeOfBoard.main_test_c_program_version" class="font-green-jungle bold">{{typeOfBoard.main_test_c_program_version.version_name}}</span>
-                                    <span *ngIf="!typeOfBoard.main_test_c_program_version" class="font-red-flamingo bold">Missing!</span>
-                                </td>
-                                <td class="vert-align no-wrap">
-                                    <a (click)="onProducerClick(typeOfBoard.producer_id)" class="no-wrap"><strong>{{typeOfBoard.producer_name}}</strong></a>
-                                </td>
-                                <td class="vert-align text-right no-wrap">
-                                    {{typeOfBoard.processor_name}}
-                                </td>
+                                <tr *ngFor="let typeOfBoard of typeOfBoards">
+                                    <td class="vert-align no-wrap">
+                                        <a (click)="onTypeOfBoardClick(typeOfBoard.id)" class="no-wrap"><strong>{{typeOfBoard.name}}</strong></a>
+                                    </td>
+                                    <td class="vert-align no-wrap">{{typeOfBoard.compiler_target_name}}</td>
+                                    <td class="vert-align no-wrap">
+                                        <span *ngIf="typeOfBoard.main_boot_loader" class="font-green-jungle bold">{{typeOfBoard.main_boot_loader.name}}</span>
+                                        <span *ngIf="!typeOfBoard.main_boot_loader" class="font-red-flamingo bold">Missing!</span>
+                                    </td>
+                                    <td class="vert-align no-wrap">
+                                        <span *ngIf="typeOfBoard.main_c_program_version" class="font-green-jungle bold">{{typeOfBoard.main_c_program_version.version_name}}</span>
+                                        <span *ngIf="!typeOfBoard.main_c_program_version" class="font-red-flamingo bold">Missing!</span>
+                                    </td>
+                                    <td class="vert-align no-wrap">
+                                        <span *ngIf="typeOfBoard.main_test_c_program_version" class="font-green-jungle bold">{{typeOfBoard.main_test_c_program_version.version_name}}</span>
+                                        <span *ngIf="!typeOfBoard.main_test_c_program_version" class="font-red-flamingo bold">Missing!</span>
+                                    </td>
+                                    <td class="vert-align no-wrap">
+                                        <a (click)="onProducerClick(typeOfBoard.producer_id)" class="no-wrap"><strong>{{typeOfBoard.producer_name}}</strong></a>
+                                    </td>
+                                    <td class="vert-align no-wrap">
+                                        {{typeOfBoard.processor_name}}
+                                    </td>
 
-                                <td class="vert-align text-right no-wrap">
-                                    <style type="text/css">
-                                        table tr button { opacity:0.05;}
-                                        table tr:hover button { opacity:1 }
-                                    </style>
-                                    <button title="{{'label_type_of_board_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!typeOfBoard.edit_permission" (click)="onTypeOfBoardEditClick(typeOfBoard)">
-                                        <i class="fa fa-cog"></i>
-                                    </button>
-                                    <button title="{{'label_type_of_board_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!typeOfBoard.delete_permission" (click)="onTypeOfBoardDeleteClick(typeOfBoard)">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                                    <td class="vert-align text-right no-wrap">
+                                        <style type="text/css">
+                                            table tr button { opacity:0.05;}
+                                            table tr:hover button { opacity:1 }
+                                        </style>
+                                        <button title="{{'label_type_of_board_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!typeOfBoard.edit_permission" (click)="onTypeOfBoardEditClick(typeOfBoard)">
+                                            <i class="fa fa-cog"></i>
+                                        </button>
+                                        <button title="{{'label_type_of_board_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!typeOfBoard.delete_permission" (click)="onTypeOfBoardDeleteClick(typeOfBoard)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -119,7 +123,7 @@
                             <i class="fa fa-plus-circle"></i>
                         </button>
                     </div>
-                    <div *ngIf="(typeOfBoards && typeOfBoards.length)" class="table-scrollable">
+                    <div *ngIf="(producers && producers.length)" class="table-scrollable">
                         <table class="table table-hover">
                             <thead>
                             <tr>
@@ -214,8 +218,8 @@
                     </div>
                     <h3 *ngIf="!processors" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
                     <div *ngIf="processors && processors.length == 0" class="list-no-items">
-                        <p class="list-no-items__main-label">{{'label_no_procesor'|bkTranslate:this}}</p>
-                        <p class="list-no-items__sub-label">{{'label_no_procesor_comment'|bkTranslate:this}} </p>
+                        <p class="list-no-items__main-label">{{'label_no_processor'|bkTranslate:this}}</p>
+                        <p class="list-no-items__sub-label">{{'label_no_processor_comment'|bkTranslate:this}} </p>
                         <p>
                             <button class="btn blue" (click)="onCreateProcessorClick()">
                                 <i class="fa fa-plus-circle"></i> {{'btn_create'|bkTranslate:this}}

@@ -22,6 +22,7 @@ import moment = require('moment/moment');
 import { ModalsCodeLibraryVersionModel } from '../modals/code-library-version';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsCodePropertiesModel } from '../modals/code-properties';
+import { ModalsSetAsMainModel } from '../modals/set-as-main';
 
 
 @Component({
@@ -34,8 +35,6 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
     codeId: string;
 
     routeParamsSubscription: Subscription;
-
-    // project: IProject = null;
 
     codeProgram: ICProgram = null;
     codeProgramVersions: ICProgramVersionShortDetail[] = null;
@@ -75,16 +74,16 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         this.refreshInterface();
 
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
-            this.projectId = params['project'];
             this.codeId = params['code'];
+            this.projectId = params['project'];
             this.refresh();
 
-            if (!this.projectSubscription) {
+            if (this.projectId != null && !this.projectSubscription) {
                 this.projectSubscription = this.storageService.project(this.projectId).subscribe((project) => {
                     this.allDevices = project.boards;
                 });
             }
-            if (params['version']) {
+            if (this.projectId != null && params['version']) {
                 this.router.navigate(['/projects', this.projectId, 'code', this.codeId], { replaceUrl: true });
                 this.selectVersionByVersionId(params['version']);
             }
@@ -111,9 +110,26 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             this.reloadInterval = null;
         }
 
-        if (this.projectSubscription) {
+        if (this.projectId != null && this.projectSubscription) {
             this.projectSubscription.unsubscribe();
         }
+    }
+
+    /**
+     * Little bit complicated Boolean,
+     * But its only for Main Default C_PRograms for Type Of Boards and only for not already Mark && only
+     * succesfully compiled
+     * @param version
+     * @returns {boolean}
+     */
+    markupableAsMain(version: ICProgramVersionShortDetail): boolean {
+        return !version
+            && !this.projectId
+            && !this.device
+            && ( this.device.main_test_c_program  != null ||   this.device.main_c_program == null)
+            && ( this.device.main_test_c_program.id === this.codeProgram.id ||  this.device.main_c_program.id === this.codeProgram.id)
+            && version.status === 'successfully_compiled_and_restored'
+            && !version.main_mark;
     }
 
     onRemoveClick(): void {
@@ -123,7 +139,9 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 this.backendService.cProgramDelete(this.codeProgram.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        if (this.projectId != null) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }
                         this.router.navigate(['/projects/' + this.projectId + '/code']);
                     })
                     .catch(reason => {
@@ -162,12 +180,16 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 this.backendService.cProgramVersionDelete(version.version_id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_remove')));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        if (this.projectId != null) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }
                         this.refresh();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code_version', reason)));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        if (this.projectId != null) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }
                         this.refresh();
                     });
             }
@@ -219,12 +241,6 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 this.codeProgram = codeProgram;
 
                 this.codeProgramVersions = this.codeProgram.program_versions || [];
-
-                /*this.codeProgramVersions.sort((a, b)=> {
-                    if (a.version_object.date_of_create == b.version_object.date_of_create) return 0;
-                    if (a.version_object.date_of_create > b.version_object.date_of_create) return -1;
-                    return 1;
-                });*/
 
                 let version = null;
                 if (this.afterLoadSelectedVersionId) {
@@ -359,7 +375,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     reloadVersions(): void {
         if (this.codeId) {
-            this.backendService.cProgramGet(this.codeId) // TODO [permission]: C_program.read_permission(Project.read_permission)
+            this.backendService.cProgramGet(this.codeId)
                 .then((codeProgram) => {
                     this.codeProgram = codeProgram;
                     this.codeProgramVersions = this.codeProgram.program_versions || [];
@@ -369,6 +385,23 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     onBoardTypeClick(boardTypeId: string): void {
         this.navigate(['/hardware', boardTypeId]);
+    }
+
+    onCommunityPublicVersionClick(programVersion: ICProgramVersionShortDetail) {
+        this.modalService.showModal(new ModalsRemovalModel(programVersion.version_name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.cProgramVersionMakePublic(programVersion.version_id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
+                        this.unblockUI();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code', reason)));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                    });
+            }
+        });
     }
 
     selectProgramVersion(programVersion: ICProgramVersionShortDetail) {
@@ -621,6 +654,23 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     this.addFlashMessage(new FlashMessageError(error.toString()));
                 }
             });
+    }
+
+    onCProgramDefaultSetMainClick(version: ICProgramVersionShortDetail) {
+        this.modalService.showModal(new ModalsSetAsMainModel(this.translate('label_default_c_program_setting'), version.version_name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.typeofboardSetcprogramversion_as_main(version.version_id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_set_as_default')));
+                        this.refresh(); // also unblockUI
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove', reason)));
+                        this.refresh(); // also unblockUI
+                    });
+            }
+        });
     }
 
     onUploadClick(version: ICProgramVersionShortDetail) {

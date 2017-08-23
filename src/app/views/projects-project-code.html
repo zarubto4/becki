@@ -3,7 +3,10 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+<bk-layout-main
+    tabMenu="projects-project"
+    [title]="currentParamsService.currentProjectNameSnapshot"
+    [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
@@ -27,7 +30,6 @@
                         <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
                         <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
                         <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-
                     </tr>
                 </thead>
                 <tbody>

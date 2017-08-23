@@ -8,7 +8,7 @@
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { IProcessor, IProducer } from '../backend/TyrionAPI';
+import {IProcessor, IProducer, ITypeOfBoard} from '../backend/TyrionAPI';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { BackendService } from '../services/BackendService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
@@ -16,36 +16,38 @@ import { formSelectComponentOptionsMaker } from '../components/FormSelectCompone
 import { IApplicableProduct } from '../backend/TyrionAPI';
 import { ModalModel } from '../services/ModalService';
 
-export class ModalsCreateTypeOfBoardModel extends ModalModel {
+export class ModalsGarfieldModel extends ModalModel {
     constructor(
-        public processors: IProcessor[],
         public producers: IProducer[],
+        public typeOfBoards: ITypeOfBoard[],
         public name: string = '',
         public description: string = '',
-        public connectible_to_internet: boolean = false,
-        public compiler_target_name: string = '',
-        public processor: string = '',          // can be null (crate)
-        public producer: string = '',           // can be null (crate)
-        public edit: boolean = false            // true - its only for  edit. False for new Creation
+        public print_label_id_1: number = 0,
+        public print_label_id_2: number = 0,
+        public print_sticker_id: number = 0,
+        public hardware_tester_id: string = '',
+        public edit: boolean = false,
+        public producer: string = '',
+        public typeOfBoard: string = ''
     ) {
         super();
     }
 }
 
 @Component({
-    selector: 'bk-modals-create-type-of-board',
-    templateUrl: './create-type-of-board.html'
+    selector: 'bk-modals-garfield',
+    templateUrl: './garfield.html'
 })
-export class ModalsCreateTypeOfBoardComponent implements OnInit {
+export class ModalsGarfieldComponent implements OnInit {
 
     @Input()
-    modalModel: ModalsCreateTypeOfBoardModel;
+    modalModel: ModalsGarfieldModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
 
     producer_options: FormSelectComponentOption[] = null;
-    processor_options: FormSelectComponentOption[] = null;
+    typeOfBoard_options: FormSelectComponentOption[] = null;
 
     form: FormGroup;
 
@@ -61,15 +63,11 @@ export class ModalsCreateTypeOfBoardComponent implements OnInit {
         });
     }
 
-    checkboxChanged(value: boolean) {
-        (<FormControl>(this.form.controls['connectible_to_internet'])).setValue(value);
-    }
-
     ngOnInit() {
 
-        this.processor_options = this.modalModel.processors.map((pv) => {
+        this.typeOfBoard_options = this.modalModel.typeOfBoards.map((pv) => {
             return {
-                label: pv.processor_name,
+                label: pv.name,
                 value: pv.id
             };
         });
@@ -83,19 +81,23 @@ export class ModalsCreateTypeOfBoardComponent implements OnInit {
 
         (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
         (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
-        (<FormControl>(this.form.controls['connectible_to_internet'])).setValue(this.modalModel.connectible_to_internet);
-        (<FormControl>(this.form.controls['compiler_target_name'])).setValue(this.modalModel.compiler_target_name);
+        (<FormControl>(this.form.controls['print_label_id_1'])).setValue(this.modalModel.print_label_id_1);
+        (<FormControl>(this.form.controls['print_label_id_2'])).setValue(this.modalModel.print_label_id_2);
+        (<FormControl>(this.form.controls['print_sticker_id'])).setValue(this.modalModel.print_sticker_id);
+        (<FormControl>(this.form.controls['hardware_tester_id'])).setValue(this.modalModel.hardware_tester_id);
+        (<FormControl>(this.form.controls['typeOfBoard'])).setValue(this.modalModel.typeOfBoard);
         (<FormControl>(this.form.controls['producer'])).setValue(this.modalModel.producer);
-        (<FormControl>(this.form.controls['processor'])).setValue(this.modalModel.processor);
     }
 
     onSubmitClick(): void {
         this.modalModel.description = this.form.controls['description'].value;
         this.modalModel.name = this.form.controls['name'].value;
-        this.modalModel.connectible_to_internet = this.form.controls['connectible_to_internet'].value;
-        this.modalModel.compiler_target_name = this.form.controls['compiler_target_name'].value;
+        this.modalModel.print_label_id_1 = this.form.controls['print_label_id_1'].value;
+        this.modalModel.print_label_id_2 = this.form.controls['print_label_id_2'].value;
+        this.modalModel.print_sticker_id = this.form.controls['print_sticker_id'].value;
+        this.modalModel.hardware_tester_id = this.form.controls['hardware_tester_id'].value;
         this.modalModel.producer = this.form.controls['producer'].value;
-        this.modalModel.processor = this.form.controls['processor'].value;
+        this.modalModel.typeOfBoard = this.form.controls['typeOfBoard'].value;
         this.modalClose.emit(true);
     }
 

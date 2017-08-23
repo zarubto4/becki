@@ -1,4 +1,7 @@
-<bk-layout-main [title]="'main_title'|bkTranslate:this">
+<bk-layout-main
+    tabMenu="byzance-admin"
+    [title]="'main_title'|bkTranslate:this"
+    [subtitle]="'main_subtitle'|bkTranslate:this">
 
     <div *ngIf="homer_servers && compilations_servers" class="row">
         <div class="col-md-12">
@@ -46,16 +49,16 @@
                             <tbody>
                             <tr *ngFor="let homer_server of homer_servers">
                                 <td class="vert-align no-wrap">
-                                    <a (click)="onHomerServerClick(homer_server)" class="no-wrap"><strong>{{homer_server.personal_server_name?homer_server.personal_server_name:homer_server.unique_identificator}}</strong></a>
+                                    <a (click)="onHomerServerClick(homer_server)" class="no-wrap"><strong>{{homer_server.personal_server_name?homer_server.personal_server_name:homer_server.id}}</strong></a>
                                 </td>
-                                <td class="vert-align no-wrap">{{homer_server.unique_identificator}}</td>
+                                <td class="vert-align no-wrap">{{homer_server.id}}</td>
                                 <td class="vert-align no-wrap">
                                     <span *ngIf="homer_server.server_type == 'main_server'"     class="font-yellow-casablanca bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
                                     <span *ngIf="homer_server.server_type == 'backup_server'"   class="font-green-jungle bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
                                     <span *ngIf="homer_server.server_type == 'public_server'"   class="font-green-jungle bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
                                     <span *ngIf="homer_server.server_type == 'private_server'"   class="font-green-jungle bold">{{homer_server.server_type|bkTranslateTable:this:'server_type'}}</span>
                                 </td>
-                                <td class="no-wrap">
+                                <td class="vert-align no-wrap">
                                     <span *ngIf="homer_server.online_state == 'online'" class="font-green-jungle bold">{{homer_server.online_state|bkTranslateTable:this:'online_status'}}</span>
                                     <span *ngIf="homer_server.online_state == 'offline'" class="font-red bold">{{homer_server.online_state|bkTranslateTable:this:'online_status'}}</span>
                                 </td>
@@ -65,8 +68,11 @@
                                         table tr button { opacity:0.05;}
                                         table tr:hover button { opacity:1 }
                                     </style>
-                                    <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!homer_server.edit_permission" (click)="onHomerServerEditClick(homer_server)">
+                                    <button title="{{'label_server_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!homer_server.edit_permission" (click)="onHomerServerEditClick(homer_server)">
                                         <i class="fa fa-cog"></i>
+                                    </button>
+                                    <button title="{{'label_delete_server'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!homer_server.de" (click)="onHomerServerDeleteClick(homer_server)">
+                                        <i class="fa fa-trash"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -97,30 +103,38 @@
                         <table class="table table-hover">
                             <thead>
                             <tr>
-                                <th class="col col-lg-3">{{'label_server_name'|bkTranslate:this}}</th>
-                                <th class="col col-lg-5">{{'label_id'|bkTranslate:this}}</th>
+                                <th class="col col-lg-2">{{'label_server_name'|bkTranslate:this}}</th>
+                                <th class="col col-lg-2">{{'label_id'|bkTranslate:this}}</th>
                                 <th class="col col-lg-2">{{'label_status'|bkTranslate:this}}</th>
                                 <th class="col col-lg-1 text-right no-wrap">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr *ngFor="let compilations_server of compilations_servers">
+
                                 <td class="vert-align no-wrap">
-                                    <a (click)="onCompilationServerClick(compilations_server)" class="no-wrap"><strong>{{compilations_server.personal_server_name?compilations_server.personal_server_name:compilations_server.unique_identificator}}</strong></a>
+                                    <a (click)="onCompilationServerClick(compilations_server)" class="no-wrap">
+                                        <strong>{{compilations_server.personal_server_name?compilations_server.personal_server_name:compilations_server.id}}</strong>
+                                    </a>
                                 </td>
-                                <td class="vert-align no-wrap">{{compilations_server.unique_identificator}}</td>
-                                <td class="no-wrap">
+
+                                <td class="vert-align no-wrap">{{compilations_server.id}}</td>
+
+                                <td class="vert-align no-wrap">
                                     <span *ngIf="compilations_server.online_state == 'online'" class="font-green-jungle bold">{{compilations_server.online_state|bkTranslateTable:this:'online_status'}}</span>
                                     <span *ngIf="compilations_server.online_state == 'offline'" class="font-red bold">{{compilations_server.online_state|bkTranslateTable:this:'online_status'}}</span>
                                 </td>
 
-                                <td class="vert-align no-wrap">
+                                <td class="vert-align text-right no-wrap">
                                     <style type="text/css">
                                         table tr button { opacity:0.05;}
                                         table tr:hover button { opacity:1 }
                                     </style>
-                                    <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!compilations_server.edit_permission" (click)="onCompilationServerEditClick(compilations_server)">
+                                    <button title="{{'label_server_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!compilations_server.edit_permission" (click)="onCompilationServerEditClick(compilations_server)">
                                         <i class="fa fa-cog"></i>
+                                    </button>
+                                    <button title="{{'label_delete_server'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!compilations_server.delete_permission" (click)="onCompilationServerDeleteClick(compilations_server)">
+                                        <i class="fa fa-trash"></i>
                                     </button>
                                 </td>
                             </tr>

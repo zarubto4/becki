@@ -1,0 +1,83 @@
+<bk-layout-main
+
+    tabMenu="byzance-admin"
+    [title]="'main_title'|bkTranslate:this"
+    [subtitle]="'main_subtitle'|bkTranslate:this">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark">
+                            <i class="fa fa-fw fa-server"></i>
+                              {{'title'|bkTranslate:this}}
+                        </span>
+                    </div>
+                    <div class="becki-actions">
+                        <button title="{{'label_create_garfield'|bkTranslate:this}}" class="btn btn-icon-only green"
+                                [disabled]="false"
+                                (click)="onCreateGarfield()">
+                            <i class="fa fa-plus-circle"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div *ngIf="(garfield_s && garfield_s.length)" class="table-scrollable">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>{{'label_name'|bkTranslate:this}}</th>
+                            <th>{{'label_type_of_board'|bkTranslate:this}}</th>
+                            <th>{{'label_producer'|bkTranslate:this}}</th>
+                            <th>{{'label_test_kit_id'|bkTranslate:this}}</th>
+                            <th class="text-right">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let garfield of garfield_s">
+                            <td class="vert-align no-wrap">
+                                <a (click)="onGarfieldClick(garfield.id)" class="no-wrap"><strong>{{garfield.name}}</strong></a>
+                            </td>
+                            <td class="vert-align no-wrap">{{garfield.type_of_board.name}}</td>
+                            <td class="vert-align no-wrap">{{garfield.producer.name}}</td>
+
+                            <td class="vert-align no-wrap">{{garfield.hardware_tester_id}}</td>
+
+                            <td class="vert-align text-right no-wrap">
+                                <style type="text/css">
+                                    table tr button { opacity:0.05;}
+                                    table tr:hover button { opacity:1 }
+                                </style>
+                                <button title="{{'label_garfield_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!garfield.edit_permission" (click)="onEditGarfield(garfield)">
+                                    <i class="fa fa-cog"></i>
+                                </button>
+                                <button title="{{'label_garfield_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!garfield.delete_permission" (click)="onDeleteGarfield(garfield)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <h3 *ngIf="!garfield_s" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
+                <div *ngIf="garfield_s && garfield_s.length == 0" class="list-no-items">
+                    <p class="list-no-items__main-label">{{'label_no_garfield_s'|bkTranslate:this}}</p>
+                    <p class="list-no-items__sub-label">{{'label_no_garfield_s_comment'|bkTranslate:this}} </p>
+                    <p>
+                        <button class="btn blue" (click)="onCreateGarfield()">
+                            <i class="fa fa-plus-circle"></i> {{'btn_create'|bkTranslate:this}}
+                        </button>
+                    </p>
+                </div>
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+</bk-layout-main>

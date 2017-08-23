@@ -77,12 +77,23 @@
             <div class="page-sidebar navbar-collapse collapse">
                 <!-- BEGIN SIDEBAR MENU -->
                 <ul class="page-sidebar-menu" [class.page-sidebar-menu-closed]="sidebarClosed">
+
                     <li routerLinkActive="active" *ngFor="let page of navigation">
-                        <a *ngIf="!(page.options['adminNavigation'])" [routerLink]="page.link">
+
+                        <!-- For link in our platform -->
+                        <a *ngIf="!page.options['adminNavigation'] && !page.options['outsideLink']" [routerLink]="page.link">
                             <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
                             <span class="title">{{page.label}}</span>
                             <span class="selected"></span>
                         </a>
+
+                        <!-- For outcoming Links -->
+                        <a *ngIf="!page.options['adminNavigation'] && page.options['outsideLink']" target="_blank" href="{{page.link}}">
+                            <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
+                            <span class="title">{{page.label}}</span>
+                            <span class="selected"></span>
+                        </a>
+
                     </li>
 
                     <!-- BEGIN SIDEBAR MENU Admin Part-->
@@ -95,7 +106,7 @@
                     <li *ngFor="let page of navigation">
                       <!-- BEGIN SIDEBAR MENU -->
 
-                              <a *ngIf="page.options['adminNavigation'] && (page.options['subLinks'])" (click)="openSubmanyItem(page.label)">
+                              <a *ngIf="page.options['adminNavigation'] && (page.options['items'])" (click)="openSubmanyItem(page.label)">
                                 <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
                                 <span class="title">{{page.label}}</span>
                                 <span class="selected"></span>
@@ -111,11 +122,20 @@
                                     </li>
                              </ul>
 
-                        <a *ngIf="page.options['adminNavigation'] && !(page.options['subLinks'])" [routerLink]="page.link">
+                        <!-- For link in our platform -->
+                        <a *ngIf="page.options['adminNavigation'] && !page.options['items'] && !page.options['outsideLink']" [routerLink]="page.link">
                             <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
                             <span class="title">{{page.label}}</span>
                             <span class="selected"></span>
                         </a>
+
+                        <!-- For outcoming Links -->
+                        <a *ngIf="page.options['adminNavigation'] && !page.options['items'] && page.options['outsideLink']" target="_blank" href="{{page.link}}">
+                            <span class="fa fa-{{page.icon}}" data-bind-title="page.label"></span>
+                            <span class="title">{{page.label}}</span>
+                            <span class="selected"></span>
+                        </a>
+
                     </li>
 
                 </ul>

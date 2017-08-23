@@ -3,9 +3,10 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main tabMenu="projects-project"
-                [title]="currentParamsService.currentProjectNameSnapshot"
-                [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+<bk-layout-main
+     tabMenu="{{projectId == null? 'byzance-admin' : 'projects-project'}}"
+     [title]="projectId == null ? ('main_title'|bkTranslate:this) : currentParamsService.currentProjectNameSnapshot"
+     [subtitle]="projectId == null ? ('main_subtitle'|bkTranslate:this) : currentParamsService.currentProjectDescriptionSnapshot">
 
     <div class="row">
         <div class="col-md-12">
@@ -19,7 +20,7 @@
                     </div>
                     <div *ngIf="codeProgram" class="becki-actions">
 
-                        <button title="{{'label_program_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!codeProgram.edit_permission"
+                        <button title="{{'label_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!codeProgram.edit_permission"
                             (click)="onEditClick()">
                             <i class="fa fa-cog"></i>
                         </button>
@@ -119,6 +120,7 @@
                         <thead>
                             <tr>
                                 <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                                <th *ngIf="!projectId"></th>
                                 <th class="col col-lg-6">{{'table_description'|bkTranslate:this}}</th>
                                 <th class="col col-lg-1">{{'table_author'|bkTranslate:this}}</th>
                                 <th class="col col-lg-1">{{'table_status'|bkTranslate:this}}</th>
@@ -128,12 +130,21 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let version of codeProgramVersions">
+
                                 <!-- NAME -->
                                 <td class="vert-align bold" [class.bold]="isSelected(version)">
                                     <a (click)="onProgramVersionClick(version)">
                                     {{version.version_name}}
                                 </a>
+
+                                <!-- Main Mark - Only for settings for Type of Board, If C program is not for user projects -->
+                                <td *ngIf="!projectId" class="vert-align">
+                                     <span class="icon-hint-wraper green" *ngIf="version.main_mark">
+                                            <i class="fa fa-lg fa-flag font-green-jungle"></i>
+                                            <span class="hint">{{'main_version'|bkTranslateTable:this:'version_status'}}</span>
+                                    </span>
                                 </td>
+
                                 <!-- Description -->
                                 <td class="vert-align">
                                     {{version.version_description}}
@@ -190,15 +201,24 @@
                                         }
                                     </style>
 
-                                    <button title="{{'label_version_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission"
-                                        (click)="onEditVersionClick(version)">
-                                    <i class="fa fa-cog"></i>
-                                </button>
+                                    <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission"
+                                            (click)="onEditVersionClick(version)">
+                                        <i class="fa fa-cog"></i>
+                                    </button>
+
+                                    <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only blue-grey" [disabled]="!version.update_permission"
+                                            (click)="onCommunityPublicVersionClick(version)">
+                                        <i class="fa fa-heart"></i>
+                                    </button>
+
+                                    <button *ngIf="markupableAsMain(version)" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="device && !device.update_permission" (click)="onCProgramDefaultSetMainClick(version)">
+                                        <i class="fa fa-flag"></i>
+                                    </button>
 
                                     <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission"
                                         (click)="onRemoveVersionClick(version)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
+                                        <i class="fa fa-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>

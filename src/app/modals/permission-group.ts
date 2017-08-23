@@ -13,20 +13,20 @@ import { ModalModel } from '../services/ModalService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 
 
-export class ModalsCreateProducerModel extends ModalModel {
-    constructor(public description: string = '', public name: string = '', edit: boolean = false) {
+export class ModalsPermissionGroupModel extends ModalModel {
+    constructor(public name: string = '', public description: string = '', public edit: boolean= false) {
         super();
     }
 }
 
 @Component({
-    selector: 'bk-modals-create-producer',
-    templateUrl: './create-producer.html'
+    selector: 'bk-modals-permission-group',
+    templateUrl: './permission-group.html'
 })
-export class ModalsCreateProducerComponent implements OnInit {
+export class ModalsPermissionGroupComponent implements OnInit {
 
     @Input()
-    modalModel: ModalsCreateProducerModel;
+    modalModel: ModalsPermissionGroupModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
@@ -36,19 +36,19 @@ export class ModalsCreateProducerComponent implements OnInit {
     constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
-            'description': ['', [Validators.required, Validators.minLength(8)]],
-            'name': ['', [Validators.required, Validators.minLength(4)]]
+            'name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
+            'description': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(255)]]
         });
     }
 
     ngOnInit() {
-        (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
         (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
+        (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
     }
 
     onSubmitClick(): void {
-        this.modalModel.description = this.form.controls['description'].value;
         this.modalModel.name = this.form.controls['name'].value;
+        this.modalModel.description = this.form.controls['description'].value;
         this.modalClose.emit(true);
     }
 

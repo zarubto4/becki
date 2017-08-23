@@ -1,6 +1,15 @@
 <div *ngFor="let modalWrapper of modalService.modalWrappers" class="modal fade" tabindex="-1" [class.in]="modalWrapper.modalIn" [style.display]="modalWrapper.modalDisplay ? 'block' : 'none'" style="background-color: rgba(0,0,0,0.5)">
     <div class="modal-dialog" [class.modal-width-80]="modalWrapper.modalModel?modalWrapper.modalModel.modalWide:false">
         <div class="modal-content" [ngSwitch]="modalWrapper.getModalType()">
+            <template [ngSwitchCase]="'ModalsPermissionPermissionPropertyModel'">
+                <bk-modals-permission-permission-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-permission-permission-properties>
+            </template>
+            <template [ngSwitchCase]="'ModalsRolePermissionAddModel'">
+                <bk-modals-role-permission-add [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-role-permission-add>
+            </template>
+            <template [ngSwitchCase]="'ModalsPermissionGroupModel'">
+                <bk-modals-permission-group [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-permission-group>
+            </template>
             <template [ngSwitchCase]="'ModalsRemovalModel'">
                 <bk-modals-removal [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-removal>
             </template>
@@ -17,7 +26,7 @@
                 <bk-modals-set-as-main [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-set-as-main>
             </template>
             <template [ngSwitchCase]="'ModalsCreateTypeOfBoardModel'">
-                <bk-modals-create-type-of-board [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-create-type-of-board>
+                <bk-modals-type-of-board-create [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-type-of-board-create>
             </template>
             <template [ngSwitchCase]="'ModalsDeactivateModel'">
                 <bk-modals-deactivate [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-deactivate>

@@ -138,10 +138,18 @@ import { ModalsCreateHomerServerComponent } from './modals/homer-server-create';
 import { ModalsCreateCompilationServerComponent } from './modals/compiler-server-create';
 import { ModalsCreateProducerComponent } from  './modals/create-producer';
 import { ModalsCreateProcessorComponent } from './modals/create-processor';
-import { ModalsCreateTypeOfBoardComponent } from './modals/create-type-of-board';
+import { ModalsCreateTypeOfBoardComponent } from './modals/type-of-board-create';
 import { AdminHardwareComponent } from './views/admin-hardware-type';
 import { ModalsSetAsMainComponent } from './modals/set-as-main';
 import { ModalsBootloaderPropertyComponent } from './modals/bootloader-property';
+import { ModalsPermissionGroupComponent } from './modals/permission-group';
+import { RoleGroupComponent } from './views/admin-permission-group';
+import { RoleGroupGroupComponent } from './views/admin-permission-group-group';
+import { ModalsRolePermissionAddComponent } from './modals/role-permission-add';
+import { ModalsPermissionPermissionPropertyComponent } from './modals/permission-permission-properties';
+import { CommunityCProgramComponent } from './views/admin-cprograms';
+import { GarfieldComponent } from './views/garfield';
+import { ModalsGarfieldComponent } from './modals/garfield';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -207,10 +215,18 @@ let routes: Routes = [
     {path: 'producers', data: {breadName: 'Producers'}, component: ProducersComponent, canActivate: [AuthGuard]},
     // {path: 'producers/:producer', data: {breadName: ':last'}, component: ProducersProducerComponent, canActivate: [AuthGuard]},
 
-    {path: 'server', data: {breadName: 'Servers'}, component: ServerComponent, canActivate: [AuthGuard]},
+
     {path: 'admin-dashboard', data: {breadName: 'Admin Site'}, component: AdminDashboardComponent, canActivate: [AuthGuard]},
     {path: 'admin/hardware', data: {breadName: 'Hardware'}, component: AdminHardwareComponent, canActivate: [AuthGuard]},
+    {path: 'admin/hardware/code/:code', data: {breadName: ':code'}, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard]},
+    {path: 'admin/garfield', data: {breadName: 'Garfield'}, component: GarfieldComponent, canActivate: [AuthGuard]},
+    {path: 'admin/garfield/:garfield', data: {breadName: ':garfield'}, component: GarfieldComponent, canActivate: [AuthGuard]},
+    {path: 'admin/server', data: {breadName: 'Servers'}, component: ServerComponent, canActivate: [AuthGuard]},
 
+    {path: 'admin/permission-group', data: {breadName: 'Permission Group'}, component: RoleGroupComponent, canActivate: [AuthGuard]},
+    {path: 'admin/permission-group/:group', data: {breadName: ':group'}, component: RoleGroupGroupComponent, canActivate: [AuthGuard]},
+
+    {path: 'admin/c-program/c-program', data: {breadName: 'Community Management Code'}, component: CommunityCProgramComponent, canActivate: [AuthGuard]},
 
     {path: '**', component: Error404Component},
 ];
@@ -227,26 +243,12 @@ let navigation = [
     // new LabeledLink('Log out',  ['/logout'] , 'sign-out')
 
     // Admin Labes
-    new LabeledLink('Admin Dashboard', ['/admin-dashboard'], 'tachometer', {adminNavigation: true}),
-    new LabeledLink('Bugs', ['/admin/bugs'], 'bug', {adminNavigation: true}),
-    new LabeledLink('Platform Management', ['/admin/management'], 'sliders', {
-        adminNavigation: true,
-        subLinks: [
-            new LabeledLink('link1', ['/admin/bugs'], 'bug', {adminNavigation: true}),
-            new LabeledLink('link2', ['/admin/bugs'], 'bug', {adminNavigation: true}),
-            new LabeledLink('link3', ['/admin/bugs'], 'bug', {adminNavigation: true})
-        ]
-    }),
-    new LabeledLink('some homoshit', ['/admin/management'], 'sliders', {
-        adminNavigation: true,
-        subLinks: [
-            new LabeledLink('link1', ['/admin/bugs'], 'bug', { adminNavigation: true }),
-            new LabeledLink('link2', ['/admin/bugs'], 'bug', { adminNavigation: true }),
-            new LabeledLink('link3', ['/admin/bugs'], 'bug', { adminNavigation: true })
-        ]
-    }),
-    new LabeledLink('Reports', ['/admin/reports'], 'book', {adminNavigation: true}),
-    new LabeledLink('Help desk', ['/admin/help-desk'], 'ambulance', {adminNavigation: true}),
+    new LabeledLink('Platform Admin ', ['/admin-dashboard'], 'tachometer', {adminNavigation: true}),
+    new LabeledLink('Byzance Wiki', ['https://wiki.byzance.cz'], 'wikipedia-w', {adminNavigation: true, outsideLink: true}),
+    new LabeledLink('Youtrack Agile', ['https://youtrack.byzance.cz'], 'thumb-tack', {adminNavigation: true, outsideLink: true}),
+    new LabeledLink('GitHub', ['https://youtrack.byzance.cz'], 'github', {adminNavigation: true, outsideLink: true}),
+    new LabeledLink('Email', ['https://webmail.active24.com'], 'envelope', {adminNavigation: true, outsideLink: true}),
+
 ];
 
 let tabMenus = {
@@ -269,11 +271,31 @@ let tabMenus = {
         ]}),
         new LabeledLink('<strong class="font-color-cloud">CLOUD</strong>', ['/', 'projects', ':project', 'instances'], null, {styleClass: 'color-cloud font-color-cloud-dark'}),
     ],
-    'tariffs-tarrif':  [
+    'tariffs-tariff':  [
         new LabeledLink('Dashboard', ['/', 'financial', ':product'], 'tachometer', {linkActiveExact: true}),
         new LabeledLink('Extension services', ['/', 'financial', ':product',  'extensions'], 'database'),
         new LabeledLink('Invoices', ['/', 'financial', ':product',  'invoices'], 'dollar'),
         new LabeledLink('Billing Preferences', ['/', 'financial', ':product', 'billing'], 'bank'),
+    ],
+    'byzance-admin':  [
+        new LabeledLink('Dashboard', ['/admin-dashboard'], 'tachometer', {linkActiveExact: true}),
+        new LabeledLink(null, null),
+        new LabeledLink('Platform Management', null, null, {styleClass: 'color-grid font-color-grid-dark', items:  [
+            new LabeledLink('Hardware Management', ['/admin/hardware'], 'microchip', {adminNavigation: true}),
+            new LabeledLink('Servers Management', ['/admin/server'], 'server', {adminNavigation: true}),
+            new LabeledLink('Financial Management', ['/admin/financial'], 'money', {adminNavigation: true}),
+            new LabeledLink('Permission Management', ['/admin/permission-group'], 'users', {adminNavigation: true}),
+        ]}),
+        new LabeledLink('Community Management', null, null, {styleClass: 'color-hardware font-color-grid-dark', items:  [
+            new LabeledLink('Embedded Code', ['/admin/c-program/c-program'], 'code', {adminNavigation: true}),
+            new LabeledLink('Grid', ['/admin/grid'], 'desktop', {adminNavigation: true}),
+            new LabeledLink('Blocko', ['/admin/blocko'], 'random', {adminNavigation: true})
+        ]}),
+        new LabeledLink('Garfield', ['/admin/bugs'], 'fire'),
+        new LabeledLink('Bugs', ['/admin/bugs'], 'bug'),
+        new LabeledLink('Reports', ['/admin/reports'], 'book'),
+        new LabeledLink(null, null),
+        new LabeledLink('Help desk', ['/admin/help-desk'], 'ambulance'),
     ]
 };
 
@@ -365,6 +387,7 @@ class BeckiErrorHandler implements ErrorHandler {
         LogoutComponent,
         AdminHardwareComponent,
         DashboardComponent,
+        CommunityCProgramComponent,
         FinancialComponent,
         FinancialProductComponent,
         FinancialProductExtensionsComponent,
@@ -385,6 +408,9 @@ class BeckiErrorHandler implements ErrorHandler {
         ProjectsProjectBlocksComponent,
         CreateUserComponent,
         RedirectOkComponent,
+        GarfieldComponent,
+        RoleGroupComponent,
+        RoleGroupGroupComponent,
         ProjectsProjectBlocksBlocksComponent,
         ProjectsProjectBlocksBlocksBlockComponent,
         ProjectsProjectGridComponent,
@@ -422,6 +448,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsCodeFileDialogComponent,
         ModalsSetAsMainComponent,
         ModalsConfirmComponent,
+        ModalsGarfieldComponent,
         ModalsVersionDialogComponent,
         ModalsBlockoBlockCodeEditorComponent,
         ModalsBlockoConfigPropertiesComponent,
@@ -430,7 +457,10 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsGridProjectPropertiesComponent,
         ModalsGridProgramPropertiesComponent,
         ModalsBlockoAddGridComponent,
+        ModalsPermissionGroupComponent,
+        ModalsRolePermissionAddComponent,
         ModalsBlocksTypePropertiesComponent,
+        ModalsPermissionPermissionPropertyComponent,
         ModalsBlocksBlockPropertiesComponent,
         ModalsHighImportanceNotificationComponent,
         ModalsDeviceEditDescriptionComponent,

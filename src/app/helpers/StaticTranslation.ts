@@ -17,8 +17,12 @@ export class StaticTranslation {
                 'label_personal_server_name': 'Server name',
                 'label_server_url': 'Server url (without http..)'
             }, 'ModalsCreateProducerComponent': {
-                'title': 'Create new Producer',
+                'title': 'Producer',
                 'label_name': 'Name',
+                'label_description': 'Description'
+            }, 'ModalsPermissionGroupComponent': {
+                'title': 'Create new Permission Group',
+                'label_name': 'Group Name',
                 'label_description': 'Description'
             }, 'ModalsBootloaderPropertyComponent': {
                 'title': 'Create new Bootloader',
@@ -40,6 +44,17 @@ export class StaticTranslation {
                 'label_description': 'Description',
                 'label_code': 'Processor Code',
                 'label_speed': 'Hz'
+            }, 'ModalsPermissionPermissionPropertyComponent': {
+                'title': 'Edit Permission property',
+                'label_description': 'Description'
+            }, 'ModalsRolePermissionAddComponent': {
+                'title': 'Add Permissions',
+                'label_name': 'Permission Name',
+                'label_description': 'Description',
+                'label_action': 'Processor Code',
+                'label_key_remove': 'Remove key',
+                'btn_add_more': 'Add Selected Permission',
+                'label_permission': 'Permission Key',
             }, 'ModalsCreateHomerServerComponent': {
                 'title': 'Create new Server',
                 'label_personal_server_name': 'Server name',
@@ -303,6 +318,41 @@ export class StaticTranslation {
                 'label_average_monthly_cost': 'Average monthly cost',
                 'label_no_extensions': 'No Extensions found.',
 
+            }, 'RoleGroupComponent': {
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Permission Roles',
+
+                'title': 'List of Roles',
+                'label_create_role': 'Create new Role',
+                'label_name': 'Name',
+                'label_description': 'Description',
+                'label_actions': 'Action',
+                'label_role_properties': 'Editd Role properties',
+                'label_role_remove': 'Remove Role',
+                'label_no_role': 'No Roles',
+                'label_no_role_comment': 'We didn\'t find any roles. Create new one',
+
+            },  'GarfieldComponent': {
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Garfield - Test & Burn Kits',
+
+                'title': 'List of Roles',
+                'label_create_role': 'Create new Role',
+
+                'label_name': 'Name',
+                'label_description': 'Description',
+                'label_actions': 'Action',
+                'label_type_of_board': 'Device Type',
+                'label_producer': 'Producer',
+                'label_test_kit_id': 'Tester Kit ID',
+
+                'flash_cant_load': 'Cannot Load Garfields',
+                'label_garfield_properties': 'Edit Garfield',
+                'label_garfield_remove': 'Remove Garfield',
+
+                'label_no_garfield_s': 'No Garfields',
+                'label_no_garfield_s_comment': 'We didn\'t find any gafields. Create new one',
+
             }, 'FinancialProductInvoicesInvoiceComponent': {
                 'title': 'Invoice {0}',
                 'label_id_subscription': 'Subscription ID',
@@ -487,7 +537,9 @@ export class StaticTranslation {
                 'flash_products_cant_load': 'Products cannot be loaded, {0}.'
 
             }, 'HardwareHardwareTypeComponent': {
-                'main_title': 'Hardware Types',
+                'main_administration_title': 'Platform administration',
+                'main_title': 'Hardware Type',
+                'main_subtitle': 'Board Type Management',
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_producer': 'Manufacturer',
@@ -516,19 +568,26 @@ export class StaticTranslation {
                 'label_no_bootloaders_comment': 'We didn\'t find any Bootloaders, please set new one',
                 'label_bootloader_create_description': 'Create Bootloader',
                 'label_default_c_program_setting': 'Default C Program',
+                'label_default_test_c_program_setting': 'Default Test C Program',
+                'label_main_c_program_version_set_as_main': 'Set this version as Main',
 
-                'btn_create_bootloader': 'Create first Bootloader',
                 'label_c_program_version_set_as_main': 'Set this version as a main',
                 'label_no_c_program_versions': 'No version found',
                 'label_no_c_program_versions_comment': 'We didn\'t find any versions, please create new one',
-                'btn_create_c_program_version': 'Create new Version',
+
+                'flash_successfully_set_as_default': 'Succesfuly set as default',
 
                 'table_id': 'Id',
                 'table_name': 'Name',
                 'table_identifier': 'Version Identification',
                 'table_description': 'Description',
                 'table_change_notes': 'Change notes',
+                'table_author': 'Author',
+                'table_status': 'Status',
                 'table_actions': 'Actions',
+
+                'btn_create_c_program_version': 'Create new Version',
+                'btn_create_bootloader': 'Create first Bootloader',
 
             }, 'HardwareComponent': {
                 'main_title': 'Hardware Types',
@@ -1080,7 +1139,7 @@ export class StaticTranslation {
                 'flash_widget_edit_fail': 'Unable to edit widget, {0}.',
 
                 'label_console_cant_crate_widget': '<strong>Cannot create widget:</strong> Make sure, that you specified size profiles for widget',
-                'label_widget_properities': 'GRID widget properties',
+                'label_widget_properties': 'GRID widget properties',
                 'label_remove_widget': 'GRID widget properties',
                 'label_widget_code': 'Widget Code',
                 'label_name': 'Name',
@@ -1090,7 +1149,7 @@ export class StaticTranslation {
                 'label_ide': 'IDE',
                 'label_build_errors': 'Build Errors',
                 'label_save': 'SAVED VERSIONS',
-                'label_version_properities': 'Version properties',
+                'label_version_properties': 'Version properties',
                 'label_remove_version': 'Remove version',
                 'label_console_output': 'Output < strong > {0} </strong> = {1}',
                 'label_console_true': '<span class="bold font-red">true</span>',
@@ -1228,10 +1287,12 @@ export class StaticTranslation {
             }, 'ProjectsProjectCodeCodeComponent': {
 
                 'title': 'Byzance<strong class="font-color-code">CODE</strong> - PROGRAM <strong>{0}</strong>',
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Code Editor',
 
-                'label_program_properities': 'CODE program properties',
+                'label_program_properties': 'CODE program properties',
                 'label_remove_program': 'Remove CODE program',
-                'label_version_properities': 'Version properties',
+                'label_version_properties': 'Version properties',
                 'label_remove_version': 'Remove CODE version',
                 'label_code_name': '<strong class="font-color-code">CODE</strong> Program Name: <strong>{0}</strong>',
                 'label_code_description': '<strong class="font-color-code">CODE</strong> Program Description: <strong>{0}</strong>',
@@ -1262,6 +1323,8 @@ export class StaticTranslation {
                 'modal_text_no_change': 'No changes have been made, are you sure to save this code?',
                 'modal_label_error': 'Error',
                 'modal_text_no_yoda': 'No available devices.',
+
+                'label_main_c_program_version_set_as_main': 'Set this version as Main',
 
                 'flash_update_success': 'Deployed successfully',
                 'flash_cant_upload_code': 'Deployment failed.',
@@ -1430,6 +1493,32 @@ export class StaticTranslation {
             }, 'LayoutNotLoggedComponent': {
                 'label_becki_version': 'Version: {0} ID: {1} Date: {2}',
                 'label_byzance': 'Byzance',
+
+            }, 'RoleGroupGroupComponent': {
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Role Settings',
+
+                'title': 'Role settings',
+
+                'tab_permissions': 'Permissions',
+                'tab_persons': 'Users',
+
+                'label_permission': 'Permission',
+                'label_person': 'Person',
+
+                'label_no_person': 'No Users',
+                'label_no_person_comment': 'We didn\'t find any users, add new one (already remigrated)',
+                'label_no_permission': 'No Permissions',
+                'label_no_permission_comment': 'We didn\'t find any permision, add new one (already generated by system)',
+
+                'label_name': 'Name',
+                'label_email': 'Email',
+                'label_description': 'Description',
+                'label_actions': 'Actions',
+                'label_person_remove': 'Remove Person from Role',
+
+                'btn_add_person': 'Add Person',
+                'btn_add_permission': 'Add Permission',
             },
 
             'LayoutMainComponent': {
@@ -1501,7 +1590,9 @@ export class StaticTranslation {
                 'table_product': 'product',
                 'table_actions': 'actions',
             }, 'ServerComponent': {
-                'main_title': 'Servers',
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Server Management',
+
                 'title': 'List of Servers',
                 'tab_homer_server': 'Homer Servers',
                 'tab_compilation_server': 'Compilation Servers',
@@ -1516,7 +1607,9 @@ export class StaticTranslation {
                 'btn_create_server': 'Create server',
 
             }, 'AdminDashboardComponent': {
-                'main_title': 'Admin Dashboard',
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Admin Dashboard',
+
                 'title': 'Basic Overview',
                 'dashboard_info_text' : 'fasdfsdfs sdafbk jshdfkjhasdkjhsdafhjkfasdjkbhkhjfgsdkjhgsdfkjhgfsd',
 
@@ -1528,9 +1621,10 @@ export class StaticTranslation {
                 'label_hardware_registered': 'Hardware registered',
 
             }, 'AdminHardwareComponent': {
-                'main_title': 'Admin Hardware Management',
-                'title': 'Basic Overview of comonents',
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Hardware Management',
 
+                'title': 'Basic Overview of comonents',
                 'label_name': 'Name',
                 'label_description': 'Description',
 
@@ -1551,9 +1645,27 @@ export class StaticTranslation {
                 'label_no_type_of_boards_comment': 'No accessible Boards Type, create new one. You have to create Processor and Producer',
                 'label_no_producer': 'No Producers',
                 'label_no_producer_comment': 'You can create new Producer, it can by your client or you!',
+                'label_no_processor': 'No Processors',
+                'label_no_processor_comment': 'You can create new Processor',
+
+            }, 'CommunityCProgramComponent': {
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Community C# management (decision tool)',
+
+                'tab_public_c_programs': 'Public Code Program',
+                'tab_public_c_libraries': 'Public Code Libraries',
+                'tab_c_programs_for_decisions': 'Community Code Requests',
+                'tab_c_libraries_for_decisions': 'Community Libraries Requests',
+
+                'flash_code_add': 'Community Code Add. Don\'t forget set first Version and publish program',
+
+                'label_no_c_programs': 'No Programs',
+                'label_no_c_programs_comment': 'Create new Program, or change Filter property',
+
+                'label_no_c_library': 'No Libraries',
+                'label_no_c_library_comment': 'Create new Library, or change Filter property',
 
             },
-
 
 
 
@@ -1582,6 +1694,7 @@ export class StaticTranslation {
             'btn_cancel': 'Cancel',
             'btn_change': 'Change',
             'btn_confirm': 'Confirm',
+            'label_loading': 'Loading...',
             'loading': 'Loading...',
             'btn_done': 'Done',
             'btn_rename': 'Rename',
@@ -1589,8 +1702,11 @@ export class StaticTranslation {
             'btn_no': 'No',
             'btn_update': 'Update',
             'btn_ok': 'OK',
-            'flash_fail': 'Someting is wrong',
+            'btn_create' : 'Create',
+            'flash_fail': 'Something is wrong',
+            'flash_successfully_edit': 'Successfully edit',
             'flash_successfully_remove': 'Successfully removed',
+            'flash_cant_add': 'Cannot Add. Reason:',
             'flash_cant_remove': 'Cannot removed. Reason:',
 
             'hello_world': 'Hello {0}! {1}?',
@@ -1666,7 +1782,8 @@ export class StaticTranslation {
                 'compilation_server_error': 'Compilation server error. The server can fix bugs in a short while. We know about this issue and we\'re working on it. Please be patient.',
                 'json_code_is_broken': 'Json Code is Broken. Please try again later.',
                 'hardware_unstable': 'Some of your devices with this version of the program had a critical error and had to be restored from a backup. This version is not recommended to use in production until you have solved the cause for the error.',
-                'undefined': 'Version status is unknown.'
+                'undefined': 'Version status is unknown.',
+                'main_version' : 'Version is set as Main or Default'
             },
 
             'update_state': {

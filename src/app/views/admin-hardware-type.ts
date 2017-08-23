@@ -10,7 +10,7 @@ import { ModalsCreateCompilerServerModel } from '../modals/compiler-server-creat
 import { ModalsCreateHomerServerModel } from '../modals/homer-server-create';
 import { ModalsCreateProducerModel } from '../modals/create-producer';
 import { ModalsCreateProcessorModel } from '../modals/create-processor';
-import { ModalsCreateTypeOfBoardModel } from '../modals/create-type-of-board';
+import { ModalsCreateTypeOfBoardModel } from '../modals/type-of-board-create';
 import {ModalsRemovalModel} from "../modals/removal";
 
 @Component({
@@ -120,7 +120,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
     }
 
     onProcessorEditClick(processor: IProcessor): void {
-        let model = new ModalsCreateProcessorModel(processor.description, processor.processor_code, processor.processor_name, processor.speed);
+        let model = new ModalsCreateProcessorModel(processor.description, processor.processor_code, processor.processor_name, processor.speed, true);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
@@ -141,7 +141,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
     }
 
     onProducerEditClick(producer: IProducer): void {
-        let model = new ModalsCreateProducerModel(producer.description, producer.name);
+        let model = new ModalsCreateProducerModel(producer.description, producer.name, true);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
@@ -193,8 +193,8 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         });
     }
 
-    onTypeOfBoardClick(typeOfBoardId: string): void {
-        this.navigate(['hardware/', typeOfBoardId]);
+    onTypeOfBoardClick(boardTypeId: string): void {
+        this.router.navigate(['/hardware', boardTypeId]);
     }
 
     onTypeOfBoardDeleteClick(typeOfBoard: ITypeOfBoard): void {

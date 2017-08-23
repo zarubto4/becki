@@ -1,4 +1,10 @@
-<bk-layout-main [title]="'main_title'|bkTranslate:this" [lastBreadName]="typeOfBoard?typeOfBoard.name:''">
+<bk-layout-main
+
+        tabMenu="{{typeOfBoard != null ? (typeOfBoard.update_permission? 'byzance-admin' : '') : null}}"
+        [title]="typeOfBoard != null ? ( typeOfBoard.update_permission ? ('main_administration_title'|bkTranslate:this) : ('main_title'|bkTranslate:this)) : null"
+        [subtitle]="typeOfBoard != null ? ( typeOfBoard.update_permission ? ('main_subtitle'|bkTranslate:this) : ( typeOfBoard ? typeOfBoard.name: '') ) : null"
+        [lastBreadName]="typeOfBoard?typeOfBoard.name:''"
+        >
 
     <div *ngIf="typeOfBoard" class="portlet portlet light bordered">
         <div class="portlet-title">
@@ -44,11 +50,11 @@
                 </div>
                 <div>
                     {{'label_abilities'|bkTranslate:this}}:<br>
-                    <div *ngIf="typeOfBoard.target_name == 'BYZANCE_YODAG2'">
+                    <div *ngIf="typeOfBoard.compiler_target_name == 'BYZANCE_YODAG2'">
                         &nbsp;<i class="fa fa-fw fa-plug" title="Ethernet"></i> {{'label_ethernet'|bkTranslate:this}}<br>
                         &nbsp;<i class="fa fa-fw fa-wifi" title="Wi-Fi"></i> {{'label_wifi'|bkTranslate:this}}<br>
                     </div>
-                    <div *ngIf="typeOfBoard.target_name == 'BYZANCE_YODAG3E'">
+                    <div *ngIf="typeOfBoard.compiler_target_name == 'BYZANCE_YODAG3E'">
                         &nbsp;<i class="fa fa-fw fa-plug" title="Ethernet"></i> {{'text_ethernet_with_poe'|bkTranslate:this}}<br>
                     </div>
                 </div>
@@ -163,7 +169,7 @@
         </div>
     </div>
 
-    <!-- Only with permission -->
+    <!-- Only with permission Main C Program -->
     <div *ngIf="typeOfBoard && typeOfBoard.default_c_program_edit_permission" class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
@@ -190,13 +196,11 @@
             </div>
 
             <div *ngIf="(typeOfBoard && typeOfBoard.main_c_program.program_versions.length)" class="table-scrollable">
-                <br>
-                <hr>
-                <br>
                 <table class="table table-hover">
                     <thead>
                     <tr>
                         <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                        <th></th>
                         <th class="col col-lg-6">{{'table_description'|bkTranslate:this}}</th>
                         <th class="col col-lg-1">{{'table_author'|bkTranslate:this}}</th>
                         <th class="col col-lg-1">{{'table_status'|bkTranslate:this}}</th>
@@ -207,9 +211,16 @@
                         <tr *ngFor="let version of typeOfBoard.main_c_program.program_versions">
                         <!-- NAME -->
                         <td class="vert-align bold">
-                            <a [routerLink]="['/projects/note_used/code/', typeOfBoard.main_c_program.id]">
+                            <a [routerLink]="['/admin/hardware/code/', typeOfBoard.main_c_program.id]">
                                 {{version.version_name}}
                             </a>
+                        </td>
+                        <!-- Main Mark - Only for settings for Type of Board -->
+                        <td class="vert-align">
+                             <span class="icon-hint-wraper green" *ngIf="version.main_mark">
+                                    <i class="fa fa-lg fa-flag font-green-jungle"></i>
+                                    <span class="hint">{{'main_version'|bkTranslateTable:this:'version_status'}}</span>
+                            </span>
                         </td>
                         <!-- Description -->
                         <td class="vert-align">
@@ -263,12 +274,12 @@
                                 }
                             </style>
 
-                            <button title="{{'label_version_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission"
+                            <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission"
                                     (click)="onEditVersionClick(version)">
                                 <i class="fa fa-cog"></i>
                             </button>
 
-                            <button *ngIf="version.status=='successfully_compiled_and_restored'" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!typeOfBoard.update_permission" (click)="onCProgramDefaultSetMainClick(version)">
+                            <button *ngIf="version.status=='successfully_compiled_and_restored' && !version.main_mark" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!typeOfBoard.update_permission" (click)="onCProgramDefaultSetMainClick(version)">
                                 <i class="fa fa-flag"></i>
                             </button>
 
@@ -294,5 +305,141 @@
         </div>
     </div>
 
+    <!-- Only with permission Main Test C Program -->
+    <div *ngIf="typeOfBoard && typeOfBoard.test_c_program_edit_permission" class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="becki-caption">
+                <span class="font-blue-dark uppercase">
+                    <i class="fa fa-fw fa-code"></i>
+                      {{'label_default_test_c_program_setting'|bkTranslate:this}}:
+                </span>
+            </div>
+            <div *ngIf="typeOfBoard && typeOfBoard.test_c_program_edit_permission" class="becki-actions">
+                <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!typeOfBoard.edit_permission"
+                        (click)="onCProgramEditClick(typeOfBoard.main_test_c_program)">
+                    <i class="fa fa-cog"></i>
+                </button>
+            </div>
+        </div>
+        <div>
+            <div>
+                {{'label_name'|bkTranslate:this}}:
+                <span class="font-color-neutral-dark bold">{{typeOfBoard.main_test_c_program.name}}</span>
+            </div>
+            <div>
+                {{'label_description'|bkTranslate:this}}:
+                <span class="font-color-neutral-dark bold">{{typeOfBoard.main_test_c_program.description}}</span>
+            </div>
+
+            <div *ngIf="(typeOfBoard && typeOfBoard.main_test_c_program.program_versions.length)" class="table-scrollable">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                        <th></th>
+                        <th class="col col-lg-6">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="col col-lg-1">{{'table_author'|bkTranslate:this}}</th>
+                        <th class="col col-lg-1">{{'table_status'|bkTranslate:this}}</th>
+                        <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let version of typeOfBoard.main_test_c_program.program_versions">
+                        <!-- NAME -->
+                        <td class="vert-align bold">
+                            <a (click)="onCProgramClick(typeOfBoard.main_test_c_program.id)">
+                                {{version.version_name}}
+                            </a>
+                        </td>
+                        <!-- Main Mark - Only for settings for Type of Board -->
+                        <td class="vert-align">
+                             <span class="icon-hint-wraper green" *ngIf="version.main_mark">
+                                    <i class="fa fa-lg fa-flag font-green-jungle"></i>
+                                    <span class="hint">{{'main_version'|bkTranslateTable:this:'version_status'}}</span>
+                            </span>
+                        </td>
+                        <!-- Description -->
+                        <td class="vert-align">
+                            {{version.version_description}}
+                        </td>
+                        <!-- Author -->
+                        <td class="vert-align">
+                            {{version.author.nick_name}}
+                        </td>
+                        <!-- STATUS -->
+                        <td class="vert-align">
+
+                            <span class="icon-hint-wraper red" *ngIf="version.status=='hardware_unstable'">
+                                    <i class="fa fa-exclamation-triangle font-red-mint"></i>
+                                </span>
+                            <span class="icon-hint-wraper orange" *ngIf="version.status=='compiled_with_code_errors'">
+                                    <i class="fa fa-thumbs-down font-yellow"></i>
+                                    <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
+                            </span>
+
+                            <span class="icon-hint-wraper red" *ngIf="version.status=='hardware_unstable'">
+                                    <i class="fa fa-heartbeat font-red-mint"></i>
+                                    <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
+                            </span>
+
+                            <span class="icon-hint-wraper orange" *ngIf="version.status=='server_was_offline' || version.status=='successfully_compiled_not_restored' || version.status=='undefined' || version.status=='file_with_code_not_found' || version.status=='compilation_server_error' || version.status=='json_code_is_broken'">
+                                    <i class="fa fa-npm wrench font-yellow"></i>
+                                    <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
+                            </span>
+
+                            <span class="icon-hint-wraper gray" *ngIf="version.status=='compilation_in_progress'">
+                                    <i class="fa fa-spinner fa-spin"></i>
+                                    <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
+                            </span>
+
+                            <span class="icon-hint-wraper green" *ngIf="version.status=='successfully_compiled_and_restored'">
+                                    <i class="fa fa-check font-green-jungle"></i>
+                                    <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
+                            </span>
+                        </td>
+
+                        <!-- ACTIONS -->
+                        <td class="vert-align text-right no-wrap">
+                            <style type="text/css">
+                                table tr button {
+                                    opacity: 0.05;
+                                }
+
+                                table tr:hover button {
+                                    opacity: 1
+                                }
+                            </style>
+
+                            <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission"
+                                    (click)="onEditVersionClick(version)">
+                                <i class="fa fa-cog"></i>
+                            </button>
+
+                            <button *ngIf="version.status=='successfully_compiled_and_restored' && !version.main_mark" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!typeOfBoard.update_permission" (click)="onCProgramDefaultSetMainClick(version)">
+                                <i class="fa fa-flag"></i>
+                            </button>
+
+                            <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission"
+                                    (click)="onRemoveVersionClick(version)">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h3 *ngIf="!typeOfBoard.main_test_c_program" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
+            <div *ngIf="typeOfBoard.main_test_c_program.program_versions && typeOfBoard.main_test_c_program.program_versions == 0" class="list-no-items">
+                <p class="list-no-items__main-label">{{'label_no_c_program_versions'|bkTranslate:this}}</p>
+                <p class="list-no-items__sub-label">{{'label_no_c_program_versions_comment'|bkTranslate:this}} </p>
+                <p>
+                    <button class="btn blue" [routerLink]="['/admin/hardware/code/', typeOfBoard.main_test_c_program.id]">
+                        <i class="fa fa-plus-circle"></i> {{'btn_create_c_program_version'|bkTranslate:this}}
+                        <i class="fa fa-plus-circle"></i> {{'btn_create_c_program_version'|bkTranslate:this}}
+                    </button>
+                </p>
+            </div>
+        </div>
+    </div>
 
 </bk-layout-main>

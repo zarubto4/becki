@@ -18,6 +18,7 @@ export class ModalsCreateProcessorModel extends ModalModel {
         public processor_code: string = '',
         public processor_name: string = '',
         public speed: number = 0,
+        public edit: boolean = false
     ) {
         super();
     }

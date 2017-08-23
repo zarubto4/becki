@@ -4,7 +4,7 @@
  */
  -->
 
-<bk-layout-main tabMenu="tariffs-tarrif" [title]="product?product.name:null">
+<bk-layout-main tabMenu="tariffs-tariff" [title]="product?product.name:null">
     <div class="tabbable-line tabbable-full-width">
         <div class="portlet light bordered">
             <div *ngIf="product" class="row">
@@ -13,7 +13,7 @@
                         <div class="portlet-title">
                             <div class="becki-caption">
                                 <span class="font-blue-dark"><i class="fa fa-fw fa-tachometer"></i>
-                                    {{'title'|bkTranslate:this}} 
+                                    {{'title'|bkTranslate:this}}
                                 </span>
                             </div>
                             <div class="becki-actions">
@@ -29,7 +29,7 @@
                                 </button>
 
                                 <button *ngIf="product.payment_mode == 'per_credit'" class="btn blue" (click)="onAddCreditsClick()">
-                                    <i class="fa fa-plus-circle"></i> {{'btn_add_credit'|bkTranslate:this}} 
+                                    <i class="fa fa-plus-circle"></i> {{'btn_add_credit'|bkTranslate:this}}
                                 </button>
 
                             </div>

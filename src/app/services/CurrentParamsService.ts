@@ -71,6 +71,10 @@ export class CurrentParamsService {
     protected currentLibraryNameSubject: Subject<string> = null;
     public currentLibraryNameSnapshot: string = null;
 
+    public currentGroupName: Observable<string> = null;
+    protected currentGroupNameSubject: Subject<string> = null;
+    public currentGroupNameSnapshot: string = null;
+
     constructor(protected router: Router, protected backendService: BackendService) {
         console.info('BreadcrumbsService init');
 
@@ -89,6 +93,7 @@ export class CurrentParamsService {
         this.currentProductName = this.currentProductNameSubject = new Subject<string>();
         this.currentInvoiceNumber = this.currentInvoiceNumberSubject = new Subject<string>();
         this.currentLibraryName = this.currentLibraryNameSubject = new Subject<string>();
+        this.currentGroupName = this.currentGroupNameSubject = new Subject<string>();
 
         router.events.subscribe(event => {
             if (event instanceof NavigationCancel || event instanceof NavigationEnd) {
@@ -310,6 +315,20 @@ export class CurrentParamsService {
                 this.backendService.libraryGet(params['library']).then((library) => {
                     this.currentLibraryNameSnapshot = library.name;
                     this.currentLibraryNameSubject.next(this.currentLibraryNameSnapshot);
+                });
+            }
+
+        }
+
+        if (this.currentParamsSnapshot['group'] !== params['group']) {
+
+            if (!params['group']) {
+                this.currentGroupNameSnapshot = null;
+                this.currentGroupNameSubject.next(this.currentGroupNameSnapshot);
+            } else {
+                this.backendService.roleGet(params['group']).then((roleGroup) => {
+                    this.currentGroupNameSnapshot = roleGroup.name;
+                    this.currentGroupNameSubject.next(this.currentGroupNameSnapshot);
                 });
             }
 

@@ -12,9 +12,10 @@ import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsSetAsMainComponent, ModalsSetAsMainModel } from '../modals/set-as-main';
-import { ModalsCreateTypeOfBoardModel } from '../modals/create-type-of-board';
+import { ModalsCreateTypeOfBoardModel } from '../modals/type-of-board-create';
 import { ModalsBootloaderPropertyModel } from '../modals/bootloader-property';
 import { ModalsCodePropertiesModel } from '../modals/code-properties';
+import { ModalsVersionDialogModel } from '../modals/version-dialog';
 
 @Component({
     selector: 'bk-view-hardware-hardware-type',
@@ -47,7 +48,6 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         this.backendService.typeOfBoardGet(this.hardwareTypeId)
             .then((typeOfBoard) => {
                 this.typeOfBoard = typeOfBoard;
-                // console.log(typeOfBoard);
                 this.unblockUI();
             })
             .catch((reason) => {
@@ -183,6 +183,44 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         });
     }
 
+    onRemoveVersionClick(version: ICProgramVersionShortDetail): void {
+        this.modalService.showModal(new ModalsRemovalModel(version.version_name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.cProgramVersionDelete(version.version_id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_remove')));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code_version', reason)));
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+    onEditVersionClick(version: ICProgramVersionShortDetail): void {
+        let model = new ModalsVersionDialogModel(version.version_name, version.version_description, true);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.cProgramVersionEditInformation(version.version_id, { // TODO [permission]: version.update_permission
+                    version_name: model.name,
+                    version_description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_change', model.name)));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_code_version', model.name, reason)));
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
     onTypeOfBoardUpdatePicture() {
 
     }
@@ -191,13 +229,17 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
 
     }
 
+    onCProgramClick(cprogramId: string): void {
+        this.navigate(['admin/hardware/code/', cprogramId]);
+    }
+
     onCProgramDefaultSetMainClick(version: ICProgramVersionShortDetail) {
         this.modalService.showModal(new ModalsSetAsMainModel(this.translate('label_default_c_program_setting'), version.version_name)).then((success) => {
             if (success) {
                 this.blockUI();
                 this.backendService.typeofboardSetcprogramversion_as_main(version.version_id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_set_as_default')));
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {

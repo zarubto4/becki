@@ -38,7 +38,6 @@ export class FinancialProductComponent extends BaseMainComponent implements OnIn
             this.refresh();
             this.unblockUI();
         });
-
     }
 
     onAddCreditsClick(): void {

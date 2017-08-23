@@ -11,6 +11,7 @@ import {
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsCreateCompilerServerModel } from '../modals/compiler-server-create';
 import { ModalsCreateHomerServerModel } from '../modals/homer-server-create';
+import { ModalsRemovalModel } from '../modals/removal';
 
 @Component({
     selector: 'bk-view-admin-server',
@@ -35,7 +36,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
         this.blockUI();
 
         Promise.all<any>([this.backendService.homerServersGetList(), this.backendService.compilationServersGetList()])
-            .then((values: [IHomerServer[], ICompilationServer[]]) => {
+            .then((values: [IHomerServerPublicDetail[], ICompilerServerPublicDetail[]]) => {
                 this.homer_servers = values[0];
                 this.compilations_servers = values[1];
                 this.unblockUI();
@@ -93,20 +94,124 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
         });
     }
 
-    onHomerServerClick(server: IHomerServer): void {
-
+    onHomerServerClick(serverShortDetail: IHomerServerPublicDetail): void {
+        // TODO dodělat stránku server??
     }
 
-    onHomerServerEditClick(server: IHomerServer): void {
+    onHomerServerEditClick(serverShortDetail: IHomerServerPublicDetail): void {
+        // Get full detail object first
+        Promise.all<any>([this.backendService.homerServerGet(serverShortDetail.id)])
+            .then((values: [IHomerServer]) => {
 
+                let server: IHomerServer = values[0];
+
+                let model = new ModalsCreateHomerServerModel(
+                    server.personal_server_name,
+                    server.mqtt_port,
+                    server.mqtt_username,
+                    server.mqtt_password,
+                    server.grid_port,
+                    server.web_view_port,
+                    server.server_url,
+                    true
+                );
+                this.modalService.showModal(model).then((success) => {
+                    if (success) {
+                        this.blockUI();
+                        this.backendService.homerServerEdit(server.id, {
+                            personal_server_name: model.personal_server_name,
+                            web_view_port: model.web_view_port,
+                            server_url: model.server_url,
+                            mqtt_username: model.mqtt_username,
+                            mqtt_port: model.mqtt_port,
+                            mqtt_password: model.mqtt_password,
+                            grid_port: model.grid_port
+                        })
+                            .then(() => {
+                                this.refresh();
+                            }).catch(reason => {
+                                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                                this.refresh();
+                            });
+                    }
+                });
+
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.addFlashMessage(new FlashMessageError('Projects cannot be loaded.', reason));
+                this.unblockUI();
+            });
     }
 
-    onCompilationServerClick(server: ICompilationServer): void {
-
+    onHomerServerDeleteClick(serverShortDetail: IHomerServerPublicDetail): void {
+        this.modalService.showModal(new ModalsRemovalModel(serverShortDetail.personal_server_name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.homerServerDelete(serverShortDetail.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
+                        this.refresh(); // also unblockUI
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove', reason)));
+                        this.refresh(); // also unblockUI
+                    });
+            }
+        });
     }
 
-    onCompilationServerEditClick(server: ICompilationServer): void {
+    onCompilationServerClick(serverShortDetail: ICompilerServerPublicDetail): void {
+        // TODO dodělat stránku server??
+    }
 
+    onCompilationServerEditClick(serverShortDetail: ICompilerServerPublicDetail): void {
+        // Get full detail object first
+        Promise.all<any>([this.backendService.compilationServerGet(serverShortDetail.id)])
+            .then((values: [ICompilationServer]) => {
+
+                let server: ICompilationServer = values[0];
+
+                let model = new ModalsCreateCompilerServerModel(server.personal_server_name, server.server_url, true);
+                this.modalService.showModal(model).then((success) => {
+                    if (success) {
+                        this.blockUI();
+                        this.backendService.compilationServerEdit(server.id, {
+                            personal_server_name: model.personal_server_name,
+                            server_url: model.server_url
+                        })
+                            .then(() => {
+                                this.refresh();
+                            }).catch(reason => {
+                                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                                this.refresh();
+                            });
+                    }
+                });
+
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.addFlashMessage(new FlashMessageError('Projects cannot be loaded.', reason));
+                this.unblockUI();
+            });
+    }
+
+    onCompilationServerDeleteClick(server: ICompilerServerPublicDetail): void {
+        this.modalService.showModal(new ModalsRemovalModel(server.personal_server_name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.compilationServersDelete(server.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
+                        this.refresh(); // also unblockUI
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove', reason)));
+                        this.refresh(); // also unblockUI
+                    });
+            }
+        });
     }
 
 }

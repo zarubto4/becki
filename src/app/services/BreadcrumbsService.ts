@@ -117,6 +117,8 @@ export class BreadcrumbsService {
                 return this.currentParamsService.currentInstanceIdSnapshot;
             case ':library':
                 return this.currentParamsService.currentLibraryNameSnapshot;
+            case ':group':
+                return this.currentParamsService.currentGroupNameSnapshot;
             case ':last':
                 return this.lastBreadName;
             default:

@@ -22,6 +22,7 @@ export class ModalsCreateHomerServerModel extends ModalModel {
         public grid_port: number = 8052,
         public web_view_port: number = 8051,
         public server_url: string = '',
+        public edit: boolean = false,
     ) {
         super();
     }

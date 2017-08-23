@@ -11,7 +11,7 @@ import { IHomerInstanceRecord, IInstanceGridAppSettings } from './../backend/Tyr
 import { Component, OnInit, Injector, OnDestroy, AfterContentChecked, ViewChild, ElementRef } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
-import { IBProgram, IHomerInstance, IModelMProgramInstanceParameter } from '../backend/TyrionAPI';
+import {IBProgram, IHomerInstance, IMProgramInstanceParameter} from '../backend/TyrionAPI';
 import { NullSafe, NullSafeDefault } from '../helpers/NullSafe';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
@@ -32,7 +32,7 @@ import { IOnlineStatus } from '../backend/BeckiBackend';
 })
 export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent implements OnInit, OnDestroy, AfterContentChecked {
 
-    id: string;
+    projectId: string;
     instanceId: string;
     routeParamsSubscription: Subscription;
 
@@ -67,7 +67,6 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     constructor(injector: Injector) {
         super(injector);
-
         this.homerService = injector.get(HomerService);
         this.backendService.onlineStatus.subscribe(status => {
 
@@ -84,12 +83,12 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                 this.backendService.instanceEdit(this.instance.id, { name: model.name, description: model.description })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_instance_edit_success')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_edit_fail', reason)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     });
             }
         });
@@ -97,7 +96,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
-            this.id = params['project'];
+            this.projectId = params['project'];
             this.instanceId = params['instance'];
             this.refresh();
         });
@@ -152,12 +151,12 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                 this.unblockUI();
 
                 if (!this.instance.actual_instance) {
-                    this.router.navigate(['/', 'projects', this.id, 'instances', this.instanceId]);
+                    this.router.navigate(['/', 'projects', this.projectId, 'instances', this.instanceId]);
                 }
             })
             .catch(reason => {
-                this.fmError(`Instances ${this.id} cannot be loaded.`, reason);
-                this.router.navigate(['/', 'projects', this.id, 'instances', this.instanceId]);
+                this.fmError(`Instances ${this.projectId} cannot be loaded.`, reason);
+                this.router.navigate(['/', 'projects', this.projectId, 'instances', this.instanceId]);
                 this.unblockUI();
             });
     }
@@ -171,10 +170,10 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     }
 
     onBlockoProgramVersionClick(bProgramId: string, bProgramVersionId: string) {
-        this.router.navigate(['/projects', this.id, 'blocko', bProgramId, bProgramVersionId]);
+        this.router.navigate(['/projects', this.projectId, 'blocko', bProgramId, bProgramVersionId]);
     }
 
-    onGridProgramPublishClick(gridProgram: IModelMProgramInstanceParameter) {
+    onGridProgramPublishClick(gridProgram: IMProgramInstanceParameter) {
         this.blockUI();
         this.backendService.instanceUpdateGridSettings({
             m_program_parameter_id: gridProgram.id,
@@ -227,7 +226,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                         this.blockUI();
                         this.backendService.bProgramVersionUploadToCloud(m.programVersion, {}) // TODO [permission]: B_program.update_permission
                             .then(() => {
-                                this.storageService.projectRefresh(this.id);
+                                this.storageService.projectRefresh(this.projectId);
                                 this.refresh();
                             })
                             .catch((err) => {
@@ -271,7 +270,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                     this.blockUI();
                     this.backendService.instanceSetStartOrShutDown(this.instanceId)
                         .then(() => {
-                            this.storageService.projectRefresh(this.id);
+                            this.storageService.projectRefresh(this.projectId);
                             this.unblockUI();
                         })
                         .catch((err) => {
@@ -292,27 +291,27 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
 
     onGridProjectClick(projectId: string) {
-        this.router.navigate(['projects', this.id, 'grid', projectId]);
+        this.router.navigate(['projects', this.projectId, 'grid', projectId]);
     }
 
     onGridProgramClick(projectId: string, programId: string) {
-        this.router.navigate(['projects', this.id, 'grid', projectId, programId]);
+        this.router.navigate(['projects', this.projectId, 'grid', projectId, programId]);
     }
 
     onGridProgramVersionClick(projectId: string, programId: string, versionId: string) {
-        this.router.navigate(['projects', this.id, 'grid', projectId, programId, { version: versionId }]);
+        this.router.navigate(['projects', this.projectId, 'grid', projectId, programId, { version: versionId }]);
     }
 
     onHardwareClick(hardwareId: string) {
-        this.router.navigate(['projects', this.id, 'hardware', hardwareId]);
+        this.router.navigate(['projects', this.projectId, 'hardware', hardwareId]);
     }
 
     onCProgramClick(programId: string) {
-        this.router.navigate(['projects', this.id, 'code', programId]);
+        this.router.navigate(['projects', this.projectId, 'code', programId]);
     }
 
     onCProgramVersionClick(programId: string, versionId: string) {
-        this.router.navigate(['projects', this.id, 'code', programId, { version: versionId }]);
+        this.router.navigate(['projects', this.projectId, 'code', programId, { version: versionId }]);
     }
 
     loadBlockoLiveView() {

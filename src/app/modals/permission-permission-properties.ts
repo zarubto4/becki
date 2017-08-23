@@ -13,20 +13,21 @@ import { ModalModel } from '../services/ModalService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 
 
-export class ModalsCreateProducerModel extends ModalModel {
-    constructor(public description: string = '', public name: string = '', edit: boolean = false) {
+
+export class ModalsPermissionPermissionPropertyModel extends ModalModel {
+    constructor(public description: string = '') {
         super();
     }
 }
 
 @Component({
-    selector: 'bk-modals-create-producer',
-    templateUrl: './create-producer.html'
+    selector: 'bk-modals-permission-permission-properties',
+    templateUrl: './permission-permission-properties.html'
 })
-export class ModalsCreateProducerComponent implements OnInit {
+export class ModalsPermissionPermissionPropertyComponent implements OnInit {
 
     @Input()
-    modalModel: ModalsCreateProducerModel;
+    modalModel: ModalsPermissionPermissionPropertyModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();
@@ -36,19 +37,16 @@ export class ModalsCreateProducerComponent implements OnInit {
     constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
-            'description': ['', [Validators.required, Validators.minLength(8)]],
-            'name': ['', [Validators.required, Validators.minLength(4)]]
+            'description': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(255)]]
         });
     }
 
     ngOnInit() {
         (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
-        (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
     }
 
     onSubmitClick(): void {
         this.modalModel.description = this.form.controls['description'].value;
-        this.modalModel.name = this.form.controls['name'].value;
         this.modalClose.emit(true);
     }
 

@@ -1,0 +1,143 @@
+<bk-layout-main tabMenu="byzance-admin"
+                [title]="'main_title'|bkTranslate:this"
+                [subtitle]="'main_subtitle'|bkTranslate:this"
+                [lastBreadName]="securityRole?securityRole.name:''">
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                          <span *ngIf="securityRole" class="font-blue-dark"><i class="fa fa-fw fa-users"></i>
+                               {{'title'|bkTranslate:this}}
+                           </span>
+                    </div>
+                    <div *ngIf="securityRole" class="becki-actions">
+                        <button title="{{'label_edit_role'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!securityRole.update_permission"
+                                (click)="onRoleEditClick()">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button title="{{'label_remove_role'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!securityRole.delete_permission"
+                                (click)="onRoleRemoveClick()">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="portlet-title tabbable-line">
+                    <!--ul class="nav nav-tabs margin-left-15 pull-left"-->
+                    <ul class="nav nav-tabs pull-left">
+                        <li [class.active]="tab == 'permissions'">
+                            <a class="cursor-pointer" (click)="onToggleTab('permissions')">{{'tab_permissions'|bkTranslate:this}}</a>
+                        </li>
+                        <li [class.active]="tab == 'persons'">
+                            <a class="cursor-pointer" (click)="onToggleTab('persons')">{{'tab_persons'|bkTranslate:this}}</a>
+                        </li>
+                    </ul>
+                </div>
+
+
+                <div *ngIf="tab == 'persons'">
+                    <div *ngIf="(securityRole && securityRole.persons.length)"  class="becki-actions">
+                        <button title="{{'label_person_add'|bkTranslate:this}}" class="btn btn-icon-only green"
+                                [disabled]="false"
+                                (click)="onMembersAddClick()">
+                            <i class="fa fa-plus-circle"></i>
+                        </button>
+                    </div>
+                    <div *ngIf="(securityRole && securityRole.persons.length)" class="table-scrollable">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>{{'label_name'|bkTranslate:this}}</th>
+                                <th>{{'label_email'|bkTranslate:this}}</th>
+                                <th class="text-right">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let person of securityRole.persons">
+                                <td class="vert-align no-wrap">
+                                    <a (click)="onPersonClick(person.id)" class="no-wrap"><strong>{{person.full_name}}</strong> ({{person.nick_name}})</a>
+                                </td>
+                                <td class="vert-align no-wrap">{{person.mail}}</td>
+                                <td class="vert-align text-right no-wrap">
+                                    <style type="text/css">
+                                        table tr button { opacity:0.05;}
+                                        table tr:hover button { opacity:1 }
+                                    </style>
+                                    <button title="{{'label_person_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!securityRole.update_permission" (click)="onMemberDeleteClick(person)">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h3 *ngIf="!securityRole" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
+                    <div *ngIf="securityRole && securityRole.persons.length == 0" class="list-no-items">
+                        <p class="list-no-items__main-label">{{'label_no_person'|bkTranslate:this}}</p>
+                        <p class="list-no-items__sub-label">{{'label_no_person_comment'|bkTranslate:this}} </p>
+                        <p>
+                            <button class="btn blue" (click)="onMembersAddClick()">
+                                <i class="fa fa-plus-circle"></i> {{'btn_add_person'|bkTranslate:this}}
+                            </button>
+                        </p>
+                    </div>
+                </div>
+
+                <div *ngIf="tab == 'permissions'">
+                    <div *ngIf="(securityRole && securityRole.person_permissions.length)"  class="becki-actions">
+                        <button title="{{'label_persons'|bkTranslate:this}}" class="btn btn-icon-only green"
+                                [disabled]="false"
+                                (click)="onPermissionAddClick()">
+                            <i class="fa fa-plus-circle"></i>
+                        </button>
+                    </div>
+                    <div *ngIf="(securityRole && securityRole.person_permissions.length)" class="table-scrollable">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>{{'label_name'|bkTranslate:this}}</th>
+                                <th>{{'label_description'|bkTranslate:this}}</th>
+                                <th class="text-right">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let permission of securityRole.person_permissions">
+                                <td class="vert-align no-wrap"> {{permission.permission_key}}</td>
+                                <td class="vert-align no-wrap"> {{permission.description}}</td>
+                                <td class="vert-align text-right no-wrap">
+                                    <style type="text/css">
+                                        table tr button { opacity:0.05;}
+                                        table tr:hover button { opacity:1 }
+                                    </style>
+                                    <button title="{{'label_type_of_board_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!permission.edit_permission" (click)="onPermissionEditClick(permission)">
+                                        <i class="fa fa-cog"></i>
+                                    </button>
+                                    <button title="{{'label_person_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!securityRole.update_permission" (click)="onPermissionDeleteClick(permission)">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h3 *ngIf="!securityRole" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
+                    <div *ngIf="securityRole && securityRole.person_permissions.length == 0" class="list-no-items">
+                        <p class="list-no-items__main-label">{{'label_no_permission'|bkTranslate:this}}</p>
+                        <p class="list-no-items__sub-label">{{'label_no_permission_comment'|bkTranslate:this}} </p>
+                        <p>
+                            <button class="btn blue" (click)="onPermissionAddClick()">
+                                <i class="fa fa-plus-circle"></i> {{'btn_add_permission'|bkTranslate:this}}
+                            </button>
+                        </p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+</bk-layout-main>
