@@ -150,6 +150,7 @@ import { ModalsPermissionPermissionPropertyComponent } from './modals/permission
 import { CommunityCProgramComponent } from './views/admin-cprograms';
 import { GarfieldComponent } from './views/garfield';
 import { ModalsGarfieldComponent } from './modals/garfield';
+import { GarfieldGarfieldComponent } from './views/garfield-garfield';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -213,15 +214,19 @@ let routes: Routes = [
     {path: 'projects/:project/widgets/:widgets/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]},
 
     {path: 'producers', data: {breadName: 'Producers'}, component: ProducersComponent, canActivate: [AuthGuard]},
-    // {path: 'producers/:producer', data: {breadName: ':last'}, component: ProducersProducerComponent, canActivate: [AuthGuard]},
+    {path: 'producers/:producer', data: {breadName: ':producer'}, component: ProducersProducerComponent, canActivate: [AuthGuard]},
 
 
     {path: 'admin-dashboard', data: {breadName: 'Admin Site'}, component: AdminDashboardComponent, canActivate: [AuthGuard]},
+
     {path: 'admin/hardware', data: {breadName: 'Hardware'}, component: AdminHardwareComponent, canActivate: [AuthGuard]},
     {path: 'admin/hardware/code/:code', data: {breadName: ':code'}, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard]},
+
     {path: 'admin/garfield', data: {breadName: 'Garfield'}, component: GarfieldComponent, canActivate: [AuthGuard]},
-    {path: 'admin/garfield/:garfield', data: {breadName: ':garfield'}, component: GarfieldComponent, canActivate: [AuthGuard]},
+    {path: 'admin/garfield/:garfield', data: {breadName: ':garfield'}, component: GarfieldGarfieldComponent, canActivate: [AuthGuard]},
+
     {path: 'admin/server', data: {breadName: 'Servers'}, component: ServerComponent, canActivate: [AuthGuard]},
+    // {path: 'admin/server/:server', data: {breadName: 'Servers'}, component: ServerComponent, canActivate: [AuthGuard]},
 
     {path: 'admin/permission-group', data: {breadName: 'Permission Group'}, component: RoleGroupComponent, canActivate: [AuthGuard]},
     {path: 'admin/permission-group/:group', data: {breadName: ':group'}, component: RoleGroupGroupComponent, canActivate: [AuthGuard]},
@@ -291,7 +296,7 @@ let tabMenus = {
             new LabeledLink('Grid', ['/admin/grid'], 'desktop', {adminNavigation: true}),
             new LabeledLink('Blocko', ['/admin/blocko'], 'random', {adminNavigation: true})
         ]}),
-        new LabeledLink('Garfield', ['/admin/bugs'], 'fire'),
+        new LabeledLink('Garfield', ['/admin/garfield'], 'fire'),
         new LabeledLink('Bugs', ['/admin/bugs'], 'bug'),
         new LabeledLink('Reports', ['/admin/reports'], 'book'),
         new LabeledLink(null, null),
@@ -409,6 +414,7 @@ class BeckiErrorHandler implements ErrorHandler {
         CreateUserComponent,
         RedirectOkComponent,
         GarfieldComponent,
+        GarfieldGarfieldComponent,
         RoleGroupComponent,
         RoleGroupGroupComponent,
         ProjectsProjectBlocksBlocksComponent,

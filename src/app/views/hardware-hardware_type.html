@@ -178,7 +178,12 @@
                       {{'label_default_c_program_setting'|bkTranslate:this}}:
                 </span>
             </div>
-            <div *ngIf="typeOfBoard && typeOfBoard.default_c_program_edit_permission" class="becki-actions">
+            <div *ngIf="typeOfBoard && typeOfBoard.main_c_program" class="becki-actions">
+
+                <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!typeOfBoard.edit_permission"
+                        (click)="onCProgramClick(typeOfBoard.main_c_program.id)">
+                    <i class="fa fa-plus"></i>
+                </button>
                 <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!typeOfBoard.edit_permission"
                         (click)="onCProgramEditClick(typeOfBoard.main_c_program)">
                     <i class="fa fa-cog"></i>
@@ -315,6 +320,10 @@
                 </span>
             </div>
             <div *ngIf="typeOfBoard && typeOfBoard.test_c_program_edit_permission" class="becki-actions">
+                <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!typeOfBoard.edit_permission"
+                        (click)="onCProgramClick(typeOfBoard.main_test_c_program.id)">
+                    <i class="fa fa-plus"></i>
+                </button>
                 <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!typeOfBoard.edit_permission"
                         (click)="onCProgramEditClick(typeOfBoard.main_test_c_program)">
                     <i class="fa fa-cog"></i>

@@ -1,0 +1,38 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title">{{'title'|bkTranslate:this}}</h4>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="form">
+
+            <bk-form-input [control]="form.controls.name" label="{{'label_name'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input [control]="form.controls.description"  label="{{'label_description'|bkTranslate:this}}"></bk-form-input>
+
+            <br>
+
+            <h4>{{'label_printer_settings'|bkTranslate:this}}</h4>
+            <span>{{'label_printer_setting_description'|bkTranslate:this}}</span>
+            <p>
+                <bk-form-input [control]="form.controls.print_label_id_1"  label="{{'label_printer_label_12'|bkTranslate:this}}"></bk-form-input>
+                <bk-form-input [control]="form.controls.print_label_id_2"  label="{{'label_printer_label_24'|bkTranslate:this}}"></bk-form-input>
+                <bk-form-input [control]="form.controls.print_sticker_id"  label="{{'label_printer_sticker'|bkTranslate:this}}"></bk-form-input>
+            </p>
+
+            <br>
+            <bk-form-input [control]="form.controls.hardware_tester_id" label="{{'label_hardware_tester_label'|bkTranslate:this}}"></bk-form-input>
+            <br>
+
+            <bk-form-select  *ngIf="!modalModel.edit" [control]="form.controls.typeOfBoard" label="{{'label_type_of_board'|bkTranslate:this}}"
+                            [options]="typeOfBoard_options"></bk-form-select>
+
+            <bk-form-select  *ngIf="!modalModel.edit" [control]="form.controls.producer" label="{{'label_producer'|bkTranslate:this}}"
+                            [options]="producer_options"></bk-form-select>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{(!modalModel.edit?"btn_create":"btn_update")|bkTranslate:this}}</button>
+    </div>
+</div>

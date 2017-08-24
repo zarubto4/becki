@@ -48,7 +48,6 @@
 
 
     <div *ngIf="step===1">
-
         <div class="portlet light portlet-fit bordered">
             <div class="portlet-title">
                 <div class="becki-caption">
@@ -237,14 +236,14 @@
 
                                 <bk-form-input *ngIf="form.controls['full_name']" [control]="form.controls['full_name']" label="{{'label_full_name'|bkTranslate:this}}"></bk-form-input>
                                 <bk-form-input *ngIf="form.controls['company_name']" [control]="form.controls['company_name']" label=" {{'label_full_name'|bkTranslate:this}}"></bk-form-input>
-                               
+
                                 <bk-form-input [control]="form.controls['street']" label=" {{'label_street'|bkTranslate:this}}"></bk-form-input>
                                 <bk-form-input [control]="form.controls['street_number']" label=" {{'label_street_number'|bkTranslate:this}}"></bk-form-input>
                                 <bk-form-input [control]="form.controls['city']" label=" {{'label_city'|bkTranslate:this}}"></bk-form-input>
                                 <bk-form-input [control]="form.controls['zip_code']" label=" {{'label_zip_code'|bkTranslate:this}}"></bk-form-input>
-                                
+
                                 <bk-form-select (change)="checkInEu()" [control]="form.controls['country']" label=" {{'label_country'|bkTranslate:this}}" [options]="optionsCountryList"></bk-form-select>
-                               
+
                                 <bk-form-input *ngIf="form.controls['registration_no'] && !inEu" [control]="form.controls['registration_no']" label=" {{'label_registration_number'|bkTranslate:this}}"></bk-form-input>
                                 <bk-form-input *ngIf="form.controls['vat_number'] && inEu" [control]="form.controls['vat_number']" label=" {{'label_vat_number'|bkTranslate:this}}"></bk-form-input>
                                 <bk-form-input *ngIf="form.controls['company_web']" [control]="form.controls['company_web']" type="url" label="{{'label_company_web'|bkTranslate:this}}"></bk-form-input>

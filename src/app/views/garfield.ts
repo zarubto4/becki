@@ -4,7 +4,7 @@
 
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import {IGarfield, IProducer, ITypeOfBoard} from '../backend/TyrionAPI';
+import { IGarfield, IProducer, ITypeOfBoard } from '../backend/TyrionAPI';
 import { ModalsRemovalModel } from '../modals/removal';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsGarfieldModel } from '../modals/garfield';
@@ -85,7 +85,9 @@ export class GarfieldComponent extends BaseMainComponent implements OnInit {
             garfield.print_label_id_2,
             garfield.print_sticker_id,
             garfield.hardware_tester_id,
-            true
+            true,
+            garfield.producer.name,
+            garfield.type_of_board.name
         );
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -127,6 +129,14 @@ export class GarfieldComponent extends BaseMainComponent implements OnInit {
 
     onGarfieldClick(garfield: IGarfield) {
         this.navigate(['/admin/garfield', garfield.id]);
+    }
+
+    onProducerClick(producer: IProducer) {
+        this.navigate(['/producers', producer.id]);
+    }
+
+    onTypeOfBoardClick(typeOfBoard: ITypeOfBoard) {
+        this.navigate(['/hardware', typeOfBoard.id]);
     }
 
 }

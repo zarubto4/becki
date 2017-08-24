@@ -64,6 +64,18 @@ export class StaticTranslation {
                 'label_mqtt_password': 'Mqtt password',
                 'label_grid_port': 'Grid port',
                 'label_web_view_port': 'Web View port',
+            }, 'ModalsGarfieldComponent': {
+                'title': 'Garfield',
+                'label_name': 'Garfield Identification',
+                'label_description': 'Description',
+                'label_printer_settings': 'Printer Settings',
+                'label_printer_setting_description': 'Register & Get Printer IDs from www.printnode.com',
+                'label_printer_label_12': 'Label Printer 1 (12 mm)',
+                'label_printer_label_24': 'Label Printer 2 (24 mm)',
+                'label_printer_sticker': 'Package Sticker printer (65mm)',
+                'label_hardware_tester_label': 'Garfield Hardware Identification (for autodetect)',
+                'label_type_of_board': 'Tester fot Device Type',
+                'label_producer': 'Producer',
 
             }, 'ModalsBlockoAddGridEmptyComponent': {
                 'title': 'Unable to add <strong class="font-color-grid">GRID</strong> project.',
@@ -1658,6 +1670,60 @@ export class StaticTranslation {
                 'tab_c_libraries_for_decisions': 'Community Libraries Requests',
 
                 'flash_code_add': 'Community Code Add. Don\'t forget set first Version and publish program',
+
+                'label_no_c_programs': 'No Programs',
+                'label_no_c_programs_comment': 'Create new Program, or change Filter property',
+
+                'label_no_c_library': 'No Libraries',
+                'label_no_c_library_comment': 'Create new Library, or change Filter property',
+
+            }, 'GarfieldGarfieldComponent': {
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Garfield Test & Burn Utility',
+
+                'label_general_description': 'The Garfield Test Tool is designed for testing and burning the default settings. In addition, ' +
+                'for tagging the new hardware and flow for hardware registration into the system. For the successful start of the procedure, ' +
+                'it is necessary that all fields in the "prerequisite" are green.',
+
+                'label_name': 'Name',
+                'label_description': 'Description',
+                'label_hardware_type': 'Hardware type',
+                'label_producer': 'Producer',
+                'label_main_test_version': 'Test version:',
+                'label_main_version': 'Production version',
+                'label_main_bootloader': 'Main bootloader',
+                'label_printer_label_1': 'Printer Label 12mm',
+                'label_printer_label_2': 'Printer Label 22mm',
+                'label_print_sticker': 'Printer sticker 62 mm',
+                'label_hardware_tester': 'Hardware tester Kit:',
+                'label_prerequisite': 'Prerequisite',
+                'label_prerequisite_not_met': 'Prerequisite are not met',
+                'label_test_firmware': 'Test Firmware',
+                'label_default_firmware': 'Production Firmware',
+                'label_c_programs': 'Code Programs',
+                'label_printers': ' Printers',
+                'label_printers_not_valid': ' Printer is not set or connection Id is not valid!',
+                'label_garfield_hardware_tester': 'Garfield Tester',
+                'label_garfield_hardware_not_online': 'Hardware Tester kit is not connected via Google Chrome plugin! Problem can be also in wrong Hardware identification (Its required for connection).',
+                'label_burn_settings': 'Register Settings',
+
+
+                'nav_step_one_title': 'Attach Hardware',
+                'nav_step_one_text': 'Connect Tested Hardware and ',
+                'nav_step_two_title': 'File Transfer',
+                'nav_step_two_text': 'Bootloader & Test Firmware',
+                'nav_step_three_title': 'Making Test',
+                'nav_step_three_text': 'Testing procedure on tester Harware',
+                'nav_step_four_title': 'Settings',
+                'nav_step_four_text': 'Default settings',
+                'nav_step_five_title': 'File Transfer',
+                'nav_step_five_text': 'Default Firmware',
+                'nav_step_six_title': 'Connection',
+                'nav_step_six_text': 'Connection to Cloud',
+
+
+                'flash_code_add': 'Community Code Add. Don\'t forget set first Version and publish program',
+                'flash_cant_load_bootloader_file': 'Cannot load Bootloader File to Cache Memmory',
 
                 'label_no_c_programs': 'No Programs',
                 'label_no_c_programs_comment': 'Create new Program, or change Filter property',
