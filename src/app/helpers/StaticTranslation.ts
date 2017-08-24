@@ -605,7 +605,15 @@ export class StaticTranslation {
                 'main_title': 'Hardware Types',
                 'flash_project_cant_load': 'Projects could not be loaded, {0}.'
 
-            }, 'ForgotPasswordComponent': {
+            }, 'PictureUploadComponent': {
+                'flash_image_too_small': 'image too small',
+                'label_unsaved': 'unsaved',
+                'label_select_avatar': 'select avatar',
+                'label_avatar': 'avatar',
+                'flash_image_changed': 'image has been changed',
+            },
+
+            'ForgotPasswordComponent': {
                 'title': 'Forgot your password?',
                 'info_text': 'Enter your E-mail address below to reset your password.',
                 'flash_email_sent': 'E-mail with instructions for password reset was sent.',
@@ -963,6 +971,7 @@ export class StaticTranslation {
                 'label_device_type': 'Device type',
                 'label_no_running_update_on_instance': 'There is no running updates in this instance',
                 'label_online_status': 'online status',
+                'label_instance_not_running_in_cloud': 'Instance is not running in Cloud.',
 
                 'label_cloud': 'CLOUD',
                 'label_blocko': 'BLOCKO',
@@ -986,7 +995,6 @@ export class StaticTranslation {
                 'label_cannot_change_program_publicity': 'Unable to change program privacy setting, {0}.',
                 'label_modal_change_instance_version': 'Change instance version',
                 'label_modal_change_running_instance_version': 'Are you sure to change the running instance version?',
-                'label_instance_not_running_in_cloud': 'Instance is not running in Cloud.',
                 'label_time_missing_in_json': 'Time is missing in Json',
 
                 'flash_cant_load_verion': 'Cannot load version <b>{0}</b>, {1}',

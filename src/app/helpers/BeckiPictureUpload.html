@@ -1,0 +1,23 @@
+<form>
+    <div class="form-group profile-pic-wrapper">
+        <h4>{{'label_avatar'|bkTranslate:this}}<span *ngIf="(cropperLoaded && !saved)" class="font-red"> {{'label_unsaved'|bkTranslate:this}}</span></h4>
+
+        <img *ngIf="(cropperLoaded && cropperData.image) || defaultPicture" class="preview img-circle" [src]="cropperData.image?cropperData.image:defaultPicture"
+            width="128" height="128">
+        <div *ngIf="!((cropperLoaded && cropperData.image) || defaultPicture)" class="preview empty img-circle"></div>
+
+        <div class="file-select">
+            <div>{{'label_select_avatar'|bkTranslate:this}}</div>
+            <input type="file" (change)="cropperFileChangeListener($event)" accept="image/*">
+        </div>
+        <div class="loading" *ngIf="cropperLoaded && !cropperData.image"> {{'loading'|bkTranslate:this}} </div>
+        <img-cropper #cropper [image]="cropperData" [settings]="cropperSettings" [style.display]="(cropperLoaded && cropperData.image)?'block':'none'"></img-cropper>
+
+        <div class="clearfix margin-top-10"></div>
+    </div>
+    <div class="margin-top-10">
+        <button (click)="sendFile()" class="btn green" [disabled]="!cropperLoaded">{{'btn_save'|bkTranslate:this}}</button>
+    </div>
+    <div class="form-group">
+    </div>
+</form>
