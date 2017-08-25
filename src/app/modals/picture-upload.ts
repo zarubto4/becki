@@ -5,16 +5,29 @@
 
 import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angular/core';
 import { FlashMessage, FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-
+import { ModalModel } from '../services/ModalService';
 import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
 import { TranslationService } from '../services/TranslationService';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { BackendService } from '../services/BackendService';
+
+
+export class ModalsPictureUploadModel extends ModalModel {
+    // If picture is avatar (style img-circle)
+    constructor( public file: any = '', public defaultPicture: any = '', public avatar_picture: boolean = false ) {
+        super();
+    }
+}
 
 
 @Component({
-    selector: 'bk-picture-upload',
-    templateUrl: './BeckiPictureUpload.html'
+    selector: 'bk-modals-picture-upload',
+    templateUrl: './picture-upload.html'
 })
-export class PictureUploadComponent implements OnInit {
+export class ModalsPictureUploadComponent implements OnInit {
+
+    @Input()
+    modalModel: ModalsPictureUploadModel;
 
     @ViewChild(ImageCropperComponent)
     cropper: ImageCropperComponent;
@@ -29,24 +42,24 @@ export class PictureUploadComponent implements OnInit {
     cropSettings: CropperSettings = null;
 
     @Input()
-    defaultPicture: any = null;
-
-    @Input()
     saved: boolean = false;
 
     @Output()
-    pictureOutput = new EventEmitter<any>();
+    modalClose = new EventEmitter<boolean>();
 
     @Output()
-    flashMesseage = new EventEmitter<FlashMessage>();
+    flashMessage = new EventEmitter<FlashMessage>();
 
+    form: FormGroup;
 
-    constructor(private translationService: TranslationService) {
-
+    constructor(private translationService: TranslationService, private backendService: BackendService, private formBuilder: FormBuilder) {
+        this.form = this.formBuilder.group({
+            'defaultPicture': [''],
+            'avatar_picture': [''],
+        });
     }
 
     ngOnInit() {
-
 
         if (this.cropSettings) {
             this.cropperSettings = this.cropSettings;
@@ -64,6 +77,9 @@ export class PictureUploadComponent implements OnInit {
             this.cropperSettings.minHeight = 50;
         }
 
+        (<FormControl>(this.form.controls['defaultPicture'])).setValue(this.modalModel.defaultPicture);
+        (<FormControl>(this.form.controls['avatar_picture'])).setValue(this.modalModel.avatar_picture);
+
     }
 
     cropperFileChangeListener($event: any) {
@@ -74,7 +90,10 @@ export class PictureUploadComponent implements OnInit {
             myReader.addEventListener('load', () => {
                 image.addEventListener('load', () => {
                     if (image.width < 50 || image.height < 50) {
-                        this.flashMesseage.emit(new FlashMessageError(this.translationService.translate('flash_image_too_small', this)));
+
+                        // TODO - zprávu nastavit do templatu!
+                        this.flashMessage.emit(new FlashMessageError(this.translationService.translate('flash_image_too_small', this)));
+
                         this.cropperLoaded = false;
                     } else {
                         this.cropperLoaded = true;
@@ -100,10 +119,17 @@ export class PictureUploadComponent implements OnInit {
 
     sendFile(): void {
         if (this.cropperData) {
-            this.pictureOutput.emit(this.cropperData.image);
-            this.flashMesseage.emit(new FlashMessageSuccess(this.translationService.translate('flash_image_changed', this)));
-
+            this.modalModel.file = this.cropperData.image;
+            this.modalClose.emit(true);
         }
+    }
+
+    onCancelClick(): void {
+        this.modalClose.emit(false);
+    }
+
+    onCloseClick(): void {
+        this.modalClose.emit(false);
     }
 
 }

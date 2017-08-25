@@ -153,6 +153,8 @@ import { CommunityCProgramComponent } from './views/admin-cprograms';
 import { GarfieldComponent } from './views/garfield';
 import { ModalsGarfieldComponent } from './modals/garfield';
 import { GarfieldGarfieldComponent } from './views/garfield-garfield';
+import { ModalsFileUploadComponent } from './modals/file-upload';
+import { ModalsPictureUploadComponent } from './modals/picture-upload';
 
 
 // @formatter:off
@@ -454,8 +456,10 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsCreateTypeOfBoardComponent,
         ModalsAddHardwareComponent,
         ModalsSelectHardwareComponent,
+        ModalsFileUploadComponent,
         ModalsBlockoPropertiesComponent,
         ModalsCodePropertiesComponent,
+        ModalsPictureUploadComponent,
         ModalsCodeFileDialogComponent,
         ModalsSetAsMainComponent,
         ModalsConfirmComponent,

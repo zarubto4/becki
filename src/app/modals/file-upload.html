@@ -1,0 +1,22 @@
+
+
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title">{{modalModel.fileTypeTitle}}</h4>
+    </div>
+    <div class="modal-body">
+        <form>
+            <h5>{{modalModel.fileTypeDescription}} </h5><br />
+            <span *ngIf="modalModel.acceptFileType && modalModel.acceptFileType.length" class="bold">{{'label_accept_file_type'|bkTranslate:this}}: {{modalModel.acceptFileType}}</span><br />
+
+            <br><br>
+            <input type="file" (change)="fileChange($event)" placeholder="Upload file" accept="{{modalModel.acceptFileType}}">
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button (click)="sendFile()" [disabled]="!data" class="btn green">{{'btn_save'|bkTranslate:this}}</button>
+    </div>
+</div>

@@ -169,6 +169,17 @@ export class StaticTranslation {
                 'label_activate': 'activate',
                 'label_attention': 'Warning',
 
+            }, 'ModalsFileUploadComponent': {
+                'title': 'Upload File',
+                'label_file_type': 'File Type',
+                'label_file_description': 'Description',
+                'label_accept_file_type': 'Required File type',
+
+            }, 'ModalsPictureUploadComponent': {
+                'title': 'Upload Picture',
+                'label_picture': 'Picture',
+                'label_unsaved': '(not saved)',
+                'label_select_avatar': 'Select file',
 
             }, 'ModalsDeviceEditDescriptionComponent': {
                 'title': 'Hardware Device basic Properties',
@@ -573,6 +584,8 @@ export class StaticTranslation {
                 'label_main_bootloader': 'Main bootloader',
                 'label_bootloader_settings': 'Bootloader settings',
                 'label_set_own_picture': 'Set own picture',
+                'label_bootloader_comment': 'Bootloader file must be compatible with unique bootloader object identification',
+                'label_bootloader_upload_file': 'Upload Bootloader file first',
 
                 'label_type_of_boards_properties': 'Edit basic description',
                 'label_type_of_boards_remove': 'Remove this Board type',
@@ -588,6 +601,7 @@ export class StaticTranslation {
                 'label_no_c_program_versions_comment': 'We didn\'t find any versions, please create new one',
 
                 'flash_successfully_set_as_default': 'Succesfuly set as default',
+                'flash_file_uploaded': 'File successfully uploaded',
 
                 'table_id': 'Id',
                 'table_name': 'Name',
@@ -693,6 +707,7 @@ export class StaticTranslation {
 
                 'btn_change_password': 'Change password',
                 'btn_change_email': 'Change E-mail',
+                'label_set_own_picture': 'Set profile picture',
 
                 'flash_cant_change_password': 'Could not change password, {0}.',
                 'flash_email_was_send': 'E-mail with instructions was sent.',
@@ -980,7 +995,7 @@ export class StaticTranslation {
                 'label_hardware': 'Hardware',
                 'label_bootloader': 'Bootloader',
                 'label_backup': 'Backup',
-                'label_frimware': 'Firmware',
+                'label_firmware': 'Firmware',
                 'label_unknown_date': 'Not yet (Unknown)',
                 'label_hardware_caps': 'HARDWARE',
                 'label_select_version_for_details': 'Select version for see details',
@@ -991,7 +1006,9 @@ export class StaticTranslation {
                 'label_modal_confirm_run_latest_version': 'Are you sure to deploy <strong class="font-color-blocko">BLOCKO</strong> and instance to CLOUD?',
                 'label_cannot_execute': 'Unable to execute command, {0}.',
                 'label_cannot_change_version': 'Unable to change version, {0}.',
-                'label_cannot_change_developer_parameter': 'Unable to change parameter, {0}.',
+                'flash_cannot_change_developer_parameter': 'Unable to change parameter, {0}.',
+                'flash_picture_updated': 'Picture update successful.',
+                'flash_cant_picture_update': 'Cannot update picture, {0}.',
                 'label_cannot_change_program_publicity': 'Unable to change program privacy setting, {0}.',
                 'label_modal_change_instance_version': 'Change instance version',
                 'label_modal_change_running_instance_version': 'Are you sure to change the running instance version?',
@@ -1357,7 +1374,8 @@ export class StaticTranslation {
                 'flash_cant_update_code': 'Unable to update program, {0}.',
                 'flash_code_version_remove': 'Version has been removed.',
                 'flash_cant_remove_code_version': 'Unable to remove version, {0}.',
-                'flash_code_version_change': 'Version {0} has been changed.',
+                'flash_file_uploaded': 'File succesfull uploaded',
+                'flash_cant_file_upload': 'Can\'t upload file, reason {0}',
                 'flash_cant_change_code_version': 'Unable to change version {0}, {1}.',
                 'flash_cant_load_code_types': 'Unable to load code types, {0}.',
                 'flash_cant_load_version': 'Unable to load version <b>{0}</b>, {1}.',

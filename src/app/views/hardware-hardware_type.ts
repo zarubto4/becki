@@ -10,12 +10,14 @@ import {
 } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-import { ModalsSetAsMainComponent, ModalsSetAsMainModel } from '../modals/set-as-main';
+import { FlashMessageError, FlashMessageSuccess} from '../services/NotificationService';
+import { ModalsSetAsMainModel } from '../modals/set-as-main';
 import { ModalsCreateTypeOfBoardModel } from '../modals/type-of-board-create';
 import { ModalsBootloaderPropertyModel } from '../modals/bootloader-property';
 import { ModalsCodePropertiesModel } from '../modals/code-properties';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
+import {ModalsPictureUploadModel} from '../modals/picture-upload';
+import {ModalsFileUploadModel} from '../modals/file-upload';
 
 @Component({
     selector: 'bk-view-hardware-hardware-type',
@@ -27,6 +29,8 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
 
     hardwareTypeId: string;
     routeParamsSubscription: Subscription;
+
+    savedPicture: boolean = false;
 
     constructor(injector: Injector) {
         super(injector);
@@ -221,12 +225,46 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         });
     }
 
-    onTypeOfBoardUpdatePicture() {
+    updatePictureClick(): void {
+        let model = new ModalsPictureUploadModel(null, this.typeOfBoard.picture_link, false);
 
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.typeOfBoardUploadPicture(this.typeOfBoard.id, { // TODO [permission]: version.update_permission
+                    file: model.file
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_change')));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_code_version', reason)));
+                        this.refresh();
+                    });
+            }
+        });
     }
 
     onBootloaderUpdateFile(bootloader: IBootLoader) {
+        let model = new ModalsFileUploadModel('Bootloader', this.translate('label_bootloader_comment'), ['.bin', '.png']);
 
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.bootloaderUploadFile(bootloader.id, { // TODO [permission]: version.update_permission
+                    file: model.file
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_file_uploaded')));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_file_upload', reason)));
+                        this.refresh();
+                    });
+            }
+        });
     }
 
     onCProgramClick(cprogramId: string): void {

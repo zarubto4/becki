@@ -62,7 +62,8 @@
             <div class="col-md-4 hw-image-col">
                 <img *ngIf="typeOfBoard.picture_link" [attr.src]="typeOfBoard.picture_link">
                 <i *ngIf="!typeOfBoard.picture_link" class="fa fa-fw fa-microchip text-center"></i>
-                <p *ngIf="typeOfBoard.edit_permission" class="text-center"><a (click)="onTypeOfBoardUpdatePicture()" class="bold">{{'label_set_own_picture'|bkTranslate:this}}</a></p>
+
+                <p *ngIf="typeOfBoard.edit_permission" class="text-center"><a (click)="updatePictureClick()" class="bold">{{'label_set_own_picture'|bkTranslate:this}}</a></p>
             </div>
         </div>
     </div>
@@ -116,6 +117,7 @@
                     <thead>
                     <tr>
                         <th class="col col-lg-1 center-align ">{{'table_id'|bkTranslate:this}}</th>
+                        <th></th>
                         <th class="col col-lg-2 center-align ">{{'table_name'|bkTranslate:this}}</th>
                         <th class="col col-lg-2 center-align ">{{'table_identifier'|bkTranslate:this}}</th>
                         <th class="col col-lg-3 center-align ">{{'table_description'|bkTranslate:this}}</th>
@@ -126,10 +128,14 @@
                     <tbody>
                     <tr *ngFor="let bootloader of typeOfBoard.boot_loaders">
                         <td class="vert-align no-wrap"><strong>{{bootloader.id.substr(0,8)}}</strong> </td>
-                        <td class="vert-align no-wrap">
-                            {{bootloader.name}}
-                            <span *ngIf="bootloader.main_bootloader" class="font-green-jungle bold">{{'label_main_bootloader'|bkTranslate:this}}}</span>
+                        <!-- Main Mark - Only for settings for Type of Board -->
+                        <td class="vert-align">
+                             <span class="icon-hint-wraper green" *ngIf="bootloader.main_bootloader">
+                                    <i class="fa fa-lg fa-flag font-green-jungle"></i>
+                                    <span class="hint">{{'main_version'|bkTranslateTable:this:'version_status'}}</span>
+                            </span>
                         </td>
+                        <td class="vert-align no-wrap">{{bootloader.name}}</td>
                         <td class="vert-align no-wrap">{{bootloader.version_identificator}}</td>
                         <td class="vert-align no-wrap">{{bootloader.description.substr(0, 32)}}<span *ngIf="bootloader.description.length > 32">...</span></td>
                         <td class="vert-align no-wrap">{{bootloader.changing_note.substr(0, 32)}}<span *ngIf="bootloader.changing_note.length > 32">...</span></td>

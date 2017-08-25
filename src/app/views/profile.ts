@@ -11,6 +11,8 @@ import { FormGroup, Validators } from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { StaticOptionLists } from '../helpers/StaticOptionLists';
+import { ModalsPictureUploadModel } from '../modals/picture-upload';
+import { IPerson, ISecurityRole } from '../backend/TyrionAPI';
 
 @Component({
     selector: 'bk-view-profile',
@@ -19,31 +21,17 @@ import { StaticOptionLists } from '../helpers/StaticOptionLists';
 export class ProfileComponent extends BaseMainComponent implements OnInit {
 
     emailForm: FormGroup;
-
     passwordForm: FormGroup;
-
-    savedPicture: boolean = false;
-
     infoForm: FormGroup;
-
-    editPermission: boolean;
-
-    nickName: string;
-
-    fullName: string;
-
-    sex: string;
-
-    email: string;
-
-    state: string;
 
     personId: string;
 
-    pictureLink: string;
+    person: IPerson = null;
+    roles: ISecurityRole[] = null;
+
+    email: string;
 
     countryList: FormSelectComponentOption[] = StaticOptionLists.countryList;
-
     genderList: FormSelectComponentOption[] = StaticOptionLists.genderList;
 
     openTabName = 'personal';
@@ -68,9 +56,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
             'nickName': ['', [Validators.required, Validators.minLength(4)]],
             'interests': ['', [Validators.required, Validators.minLength(8)]],
             'state': ['', [Validators.required, Validators.minLength(4)]],
-            'gender': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(6)]],
-
-            // a tak dále, je třeba se domluvit co dál se zaznamená
+            'gender': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(6)]]
         });
 
     };
@@ -80,35 +66,38 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
     }
 
     ngOnInit(): void {
+
         let personObject = this.backendService.personInfoSnapshot;
 
         this.personId = personObject.id;
 
-        this.editPermission = personObject.edit_permission;
-
-        this.nickName = personObject.nick_name;
-
-        this.fullName = personObject.full_name;
-
-        this.email = personObject.mail;
-
-        this.pictureLink = personObject.picture_link;
-
-        this.infoForm.controls['fullName'].setValue(personObject.full_name);
-
-        this.infoForm.controls['nickName'].setValue(personObject.nick_name);
-
-        this.infoForm.controls['state'].setValue(personObject.country);
-
-        this.infoForm.controls['gender'].setValue(personObject.gender);
+        this.refresh();
     }
 
 
-    /*
-    *
-    * TODO neposíláme info! (info se bude posílat, až tyrion implementuje všechny věci co chceme zaznamenávat
-    *
-     */
+    refresh(): void {
+        this.blockUI();
+        this.backendService.personGetByToken() // TODO [permission]: Project.read_permission
+            .then((iLoginResult) => {
+
+                this.person = iLoginResult.person;
+                this.roles  = iLoginResult.roles;
+
+                this.infoForm.controls['fullName'].setValue(this.person.full_name);
+                this.infoForm.controls['nickName'].setValue(this.person.nick_name);
+                this.infoForm.controls['state'].setValue(this.person.country);
+                this.infoForm.controls['gender'].setValue(this.person.gender);
+
+                this.backendService.refreshPersonInfo();
+
+                this.unblockUI();
+
+            })
+            .catch((reason) => {
+                this.fmError(this.translate('label_cant_load_device'));
+                this.unblockUI();
+            });
+    }
 
 
     changePassword(): void {
@@ -135,8 +124,25 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
             });
     }
 
-    pictureUploadNotifications(flash: FlashMessage) {
-        this.addFlashMessage(flash);
+    updatePictureClick(): void {
+        let model = new ModalsPictureUploadModel(null, this.person.picture_link, true);
+
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.personUploadPicture({ // TODO [permission]: version.update_permission
+                    file: model.file
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_picture_uploaded')));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_picture_upload', reason)));
+                        this.refresh();
+                    });
+            }
+        });
     }
 
     changeEmail(): void {
@@ -170,27 +176,9 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
         });
     }
 
-    saveProfilePicture(picture: any): void {
-        if (!picture) {
-            return;
-        }
-
-        this.backendService.personUploadPicture({
-            file: picture
-        })
-            .then((result) => {
-                this.fmSuccess(this.translate('flash_new_avatar_saved'));
-                this.backendService.refreshPersonInfo();
-                this.savedPicture = true;
-            })
-            .catch((error) => {
-                this.fmError(this.translate('flash_cant_save_avatar', error));
-            });
-    }
-
     changeInfo(): void {
         this.blockUI();
-        this.backendService.personEdit(this.personId, { // TODO [permission]: Person.edit_permission
+        this.backendService.personEdit(this.personId, {
             nick_name: this.infoForm.controls['nickName'].value,
             country: this.infoForm.controls['state'].value,
             full_name: this.infoForm.controls['fullName'].value,
@@ -199,6 +187,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
             .then((ok) => {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_information_updated')));
+                this.refresh();
             })
             .catch((error) => {
                 this.unblockUI();

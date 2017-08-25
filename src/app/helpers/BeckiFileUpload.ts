@@ -1,16 +1,7 @@
-/* 
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level 
- * directory of this distribution. 
- */
 
 import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { BackendService } from '../services/BackendService';
-import { ModalModel } from '../services/ModalService';
-import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
-import { NotificationService, FlashMessageWarning, FlashMessage, FlashMessageError } from '../services/NotificationService';
-
-import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
+import { FlashMessage } from '../services/NotificationService';
+import { ImageCropperComponent } from 'ng2-img-cropper';
 
 
 
@@ -54,6 +45,7 @@ export class FileUploadComponent implements OnInit {
             headers.append('Content-Type', 'multipart/form-data');
             headers.append('Accept', 'application/json');
             this.data = formData;
+
             //TODO dodělat až to bude endpoint na testování https://stackoverflow.com/questions/40214772/file-upload-in-angular-2
 
             // let options = new RequestOptions({ headers: headers });

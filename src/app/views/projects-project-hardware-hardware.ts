@@ -15,6 +15,7 @@ import { ModalsRemovalModel } from '../modals/removal';
 import { IOnlineStatus } from '../backend/BeckiBackend';
 import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
 import { ModalsDeviceEditDeveloperParameterValueModel } from '../modals/device-edit-developer-parameter-value';
+import {ModalsPictureUploadModel} from "../modals/picture-upload";
 
 @Component({
     selector: 'bk-view-projects-project-hardware-hardware',
@@ -29,15 +30,6 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     routeParamsSubscription: Subscription;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
-
-
-    // Picture --
-    // TODO Dominik nebo Tom - je zde připravená metoda savePicture - jen jí správně naimplementovat
-    @ViewChild(ImageCropperComponent)
-    cropper: ImageCropperComponent;
-    cropperData: any = {};
-    cropperSettings: CropperSettings;
-    cropperLoaded = false;
 
     hardwareTab: string = 'overview';
 
@@ -127,22 +119,24 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         });
     }
 
-    onBoardUpdatePicture(): void {
-        if (!this.cropperLoaded || !this.cropperData.image) {
-            return;
-        }
-
-        this.backendService.boardUploadPicture(this.device.id, {
-            file: this.cropperData.image
-        })
-            .then((result) => {
-                this.fmSuccess(this.translate('flash_new_avatar_saved'));
-                this.backendService.refreshPersonInfo();
-                this.cropperLoaded = false;
-            })
-            .catch((error) => {
-                this.fmError(this.translate('flash_cant_save_avatar', error));
-            });
+    updatePictureClick(): void {
+        let model = new ModalsPictureUploadModel(null, this.device.picture_link, false);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.typeOfBoardUploadPicture(this.device.id, { // TODO [permission]: version.update_permission
+                    file: model.file
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_picture_updated')));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_picture_update', reason)));
+                        this.refresh();
+                    });
+            }
+        });
     }
 
     onEditParameterValue_Boolean_Click(parameter_type: string, value: boolean): void {
@@ -155,7 +149,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 this.refresh();
             })
             .catch((reason) => {
-                this.fmError(this.translate('label_cannot_change_developer_parameter', reason));
+                this.fmError(this.translate('flash_cannot_change_developer_parameter', reason));
                 this.unblockUI();
             });
     }
@@ -182,7 +176,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                         this.refresh();
                     })
                     .catch((reason) => {
-                        this.fmError(this.translate('label_cannot_change_developer_parameter', reason));
+                        this.fmError(this.translate('flash_cannot_change_developer_parameter', reason));
                         this.unblockUI();
                     });
             }
@@ -210,7 +204,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                         this.refresh();
                     })
                     .catch((reason) => {
-                        this.fmError(this.translate('label_cannot_change_developer_parameter', reason));
+                        this.fmError(this.translate('flash_cannot_change_developer_parameter', reason));
                         this.unblockUI();
                     });
             }
