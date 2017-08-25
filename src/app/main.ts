@@ -132,8 +132,6 @@ import { ModalsCodeLibraryVersionComponent } from './modals/code-library-version
 import { ModalsHardwareCodeProgramVersionSelectComponent } from './modals/hardware-code-program-version-select';
 import { ModalsDeactivateComponent } from './modals/deactivate';
 import { HtmlSanitizeBypassPipe } from './pipes/HtmlSanitizeBypassPipe';
-import { FileUploadComponent } from './helpers/BeckiFileUpload';
-import { PictureUploadComponent } from './helpers/BeckiPictureUpload';
 import { ModalsDeviceEditDeveloperParameterValueComponent } from './modals/device-edit-developer-parameter-value';
 import { AdminDashboardComponent } from './views/admin-dashboard';
 import { ModalsCreateHomerServerComponent } from './modals/homer-server-create';
@@ -390,8 +388,6 @@ class BeckiErrorHandler implements ErrorHandler {
         ConsoleLogComponent,
         InstanceHistoryTimelineComponent,
         QRCodeComponent,
-        FileUploadComponent,
-        PictureUploadComponent,
         // Views components
         AdminDashboardComponent,
         Error404Component,
