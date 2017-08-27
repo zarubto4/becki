@@ -4,14 +4,16 @@
 
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { ICompilationServer, IHomerServer, IProcessor, IProducer, ITypeOfBoard } from '../backend/TyrionAPI';
+import {
+    IBoardFilter, IBoardList, IBoardShortDetail, IProcessor, IProducer,
+    ITypeOfBoard
+} from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-import { ModalsCreateCompilerServerModel } from '../modals/compiler-server-create';
-import { ModalsCreateHomerServerModel } from '../modals/homer-server-create';
 import { ModalsCreateProducerModel } from '../modals/create-producer';
 import { ModalsCreateProcessorModel } from '../modals/create-processor';
 import { ModalsCreateTypeOfBoardModel } from '../modals/type-of-board-create';
-import {ModalsRemovalModel} from "../modals/removal";
+import { ModalsRemovalModel } from '../modals/removal';
+import { ModalsAdminCreateHardwareModel } from '../modals/admin-create-hardware';
 
 @Component({
     selector: 'bk-view-admin-hardware-type',
@@ -22,8 +24,9 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
     typeOfBoards: ITypeOfBoard[] = null;
     processors: IProcessor[] = null;
     producers: IProducer[] = null;
+    boardsFiler: IBoardList = null;
 
-    tab: string = 'hardware_type';
+    tab: string = 'hardware_list';
 
     constructor(injector: Injector) {
         super(injector);
@@ -31,6 +34,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
 
     ngOnInit(): void {
         this.refresh();
+        this.onFilterHardware();
     }
 
     refresh(): void {
@@ -52,6 +56,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
     onToggleTab(tab: string) {
         this.tab = tab;
     }
+
 
     onCreateTypeOfBoardClick(): void {
         let model = new ModalsCreateTypeOfBoardModel(this.processors, this.producers);
@@ -153,7 +158,6 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                         this.refresh();
                     }).catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
-                        this.refresh();
                     });
             }
         });
@@ -197,6 +201,10 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         this.router.navigate(['/hardware', boardTypeId]);
     }
 
+    onProducerClick(producer: string): void {
+        this.router.navigate(['/producers', producer]);
+    }
+
     onTypeOfBoardDeleteClick(typeOfBoard: ITypeOfBoard): void {
         this.modalService.showModal(new ModalsRemovalModel(typeOfBoard.name)).then((success) => {
             if (success) {
@@ -213,7 +221,6 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
             }
         });
     }
-
 
     onProcessorDeleteClick(processor: IProcessor): void {
         this.modalService.showModal(new ModalsRemovalModel(processor.processor_name)).then((success) => {
@@ -232,7 +239,6 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         });
     }
 
-
     onProducerDeleteClick(producer: IProducer): void {
         this.modalService.showModal(new ModalsRemovalModel(producer.name)).then((success) => {
             if (success) {
@@ -249,6 +255,45 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
             }
         });
     }
+
+    onCreateHardwareClick(): void {
+        let model = new ModalsAdminCreateHardwareModel(this.typeOfBoards);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.boardCreateManualRegistration({
+                    full_id: model.processorId,
+                    type_of_board_id: model.typeOfBoard
+                })
+                    .then(() => {
+                        this.refresh();
+                    }).catch(reason => {
+                        this.unblockUI();
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                    });
+            }
+        });
+    }
+
+    onFilterHardware(pageNumber: number = 0, boardTypes: string[] = []): void {
+
+        this.backendService.boardsGetWithFilterParameters( pageNumber, {
+            type_of_board_ids: boardTypes
+        })
+            .then((values) => {
+                this.boardsFiler = values;
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                this.unblockUI();
+            });
+    }
+
+    onDeviceClick(device: IBoardShortDetail): void {
+        this.navigate(['/device', device.id]);
+    }
+
 }
 
 

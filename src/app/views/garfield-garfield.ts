@@ -5,13 +5,15 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import {
-    IBootLoader, ICProgramVersionShortDetail, IGarfield, IPrinter, IProducer,
+    IBootLoader, ICProgramVersionShortDetail, IGarfield, IHomerServer, IPrinter, IProducer,
     ITypeOfBoard
 } from '../backend/TyrionAPI';
 import { ModalsRemovalModel } from '../modals/removal';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsGarfieldModel } from '../modals/garfield';
 import { Subscription } from 'rxjs';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormSelectComponentOption } from '../components/FormSelectComponent';
 
 @Component({
     selector: 'bk-view-garfield-garfield',
@@ -26,9 +28,17 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     firmwareTestMainVersion: ICProgramVersionShortDetail = null;    // Main Test Firmware
     firmwareMainVersion: ICProgramVersionShortDetail = null;        // Main Production Firmware
     bootLoader: IBootLoader = null;
+    mainServer: IHomerServer = null;           // Destination for Server registration
+    backupServer: IHomerServer = null;         // Destination for Server registration (backup)
 
     bootloader_file_Base64: string = null;     // Main & Test bootloader File
     test_firmware_file_Base64: string = null;  // Main Production Firmware
+
+    productionBatchForm: FormGroup; // Burn Info Batch Form TypeOfBoard.batch
+    batchOptions: FormSelectComponentOption[] = null;
+    batch: string = null;
+
+    personName: string = null; // Who testing
 
     printer_label_1: IPrinter = null; // Printer
     printer_label_2: IPrinter = null; // Printer
@@ -47,6 +57,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
 
     constructor(injector: Injector) {
         super(injector);
+
     };
 
     ngOnInit(): void {
@@ -54,6 +65,11 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             this.garfieldId = params['garfield'];
             this.refresh();
         });
+
+        this.productionBatchForm = this.formBuilder.group({
+            'batch': ['', [Validators.required]]
+        });
+
     }
 
     refresh(): void {
@@ -64,6 +80,17 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
 
                 this.typeOfBoard = garfield.type_of_board;
                 this.bootLoader = garfield.type_of_board.main_boot_loader;
+
+
+                this.batchOptions = this.typeOfBoard.batchs.map((pv) => {
+                    return {
+                        label: pv.revision + ' ' + pv.production_batch + ' (' + pv.date_of_assembly + ')',
+                        value: pv.id
+                    };
+                });
+
+                let personObject = this.backendService.personInfoSnapshot;
+                this.personName = personObject.full_name;
 
                 // Find Test firmware main test version
                 for (let key in this.garfield.type_of_board.main_test_c_program.program_versions) {
@@ -98,7 +125,6 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                         })
                         .catch((reason) => {
                             this.fmError(this.translate('flash_cant_load_bootloader_file', reason));
-                            this.unblockUI();
                         });
                 }
 
@@ -109,9 +135,47 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                         })
                         .catch((reason) => {
                             this.fmError(this.translate('flash_cant_load_bootloader_file', reason));
-                            this.unblockUI();
                         });
                 }
+
+                // Find Main and Backup Server
+                this.backendService.homerServersGetList()
+                    .then((IHomerServerPublicDetails) => {
+
+                        for (let key in IHomerServerPublicDetails) {
+
+                            if (!IHomerServerPublicDetails.hasOwnProperty(key)) {
+                                continue;
+                            }
+
+                            if (IHomerServerPublicDetails[key].server_type === 'main_server') {
+                                this.backendService.homerServerGet(IHomerServerPublicDetails[key].id)
+                                    .then((server) => {
+                                        this.mainServer = server;
+                                    })
+                                    .catch((reason) => {
+                                        this.fmError(this.translate('flash_cant_load_homer_servers_main', reason));
+                                        this.unblockUI();
+                                    });
+                            }
+
+                            if (IHomerServerPublicDetails[key].server_type === 'backup_server') {
+                                this.backendService.homerServerGet(IHomerServerPublicDetails[key].id)
+                                    .then((server) => {
+                                        this.backupServer = server;
+                                    })
+                                    .catch((reason) => {
+                                        this.fmError(this.translate('flash_cant_load_homer_servers_backup', reason));
+                                        this.unblockUI();
+                                    });
+                            }
+
+                        }
+                    })
+                    .catch((reason) => {
+                        this.fmError(this.translate('flash_cant_load_homer_servers', reason));
+                        this.unblockUI();
+                    });
 
                 this.unblockUI();
             })
@@ -208,6 +272,23 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             }
         });
     }
+
+    onRegisterHardware(processorId: string = '123456789123456789123456') {
+
+        this.backendService.boardCreateAutomaticGarfield({
+            full_id: processorId,
+            garfield_station_id: this.garfield.id,
+            type_of_board_batch_id: this.productionBatchForm.controls['batch'].value,
+            type_of_board_id: this.typeOfBoard.id
+        })
+            .then((result) => {
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_registration_device_succesfull')));
+            }).catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                this.refresh();
+            });
+    }
+
 
 
     // Testovací Tlačítka -----------------------------------------------------------------

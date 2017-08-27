@@ -1,0 +1,20 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title">{{'title'|bkTranslate:this}}</h4>
+    </div>
+    <div class="modal-body">
+        <form [formGroup]="form">
+
+            <bk-form-input [control]="form.controls.processorId" placeholder="Processor ID" label="{{'label_processor_id'|bkTranslate:this}}"></bk-form-input>
+
+            <bk-form-select [control]="form.controls.typeOfBoard" label="{{'label_type_of_board'|bkTranslate:this}}"
+                            [options]="typeOfBoardOption"></bk-form-select>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{'btn_add'|bkTranslate:this}}</button>
+    </div>
+</div>

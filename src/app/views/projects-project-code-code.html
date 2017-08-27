@@ -4,7 +4,7 @@
   -->
 
 <bk-layout-main
-     tabMenu="{{projectId == null? 'byzance-admin' : 'projects-project'}}"
+     tabMenu="{{projectId == null ? 'byzance-admin' : 'projects-project'}}"
      [title]="projectId == null ? ('main_title'|bkTranslate:this) : currentParamsService.currentProjectNameSnapshot"
      [subtitle]="projectId == null ? ('main_subtitle'|bkTranslate:this) : currentParamsService.currentProjectDescriptionSnapshot">
 

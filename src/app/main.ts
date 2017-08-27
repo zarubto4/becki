@@ -153,6 +153,8 @@ import { ModalsGarfieldComponent } from './modals/garfield';
 import { GarfieldGarfieldComponent } from './views/garfield-garfield';
 import { ModalsFileUploadComponent } from './modals/file-upload';
 import { ModalsPictureUploadComponent } from './modals/picture-upload';
+import { ModalsAdminCreateHardwareComponent } from './modals/admin-create-hardware';
+import { ModalsCreateTypeOfBoardBatchComponent } from './modals/type-of-board-batch-create';
 
 
 // @formatter:off
@@ -188,7 +190,7 @@ let routes: Routes = [
 
     {path: 'hardware', data: {breadName: 'Hardware types'}, component: HardwareComponent, canActivate: [AuthGuard]},
     {path: 'hardware/:hardware_type', data: {breadName: ':last'}, component: HardwareHardwareTypeComponent, canActivate: [AuthGuard]},
-
+    {path: 'device/:hardware', data: {breadName: ':last'}, component: ProjectsProjectHardwareHardwareComponent, canActivate: [AuthGuard]},
 
 
     {path: 'projects', data: {breadName: 'Projects'}, component: ProjectsComponent, canActivate: [AuthGuard]},
@@ -441,6 +443,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ProjectsProjectLibrariesComponent,
         ProjectsProjectLibrariesLibraryComponent,
         // Modals components
+        ModalsAdminCreateHardwareComponent,
         ModalsProjectPropertiesComponent,
         ModalsCreateHomerServerComponent,
         ModalsCreateProcessorComponent,
@@ -450,6 +453,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsCreateProducerComponent,
         ModalsDeactivateComponent,
         ModalsCreateTypeOfBoardComponent,
+        ModalsCreateTypeOfBoardBatchComponent,
         ModalsAddHardwareComponent,
         ModalsSelectHardwareComponent,
         ModalsFileUploadComponent,

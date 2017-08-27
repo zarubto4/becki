@@ -15,7 +15,7 @@ import { ModalsRemovalModel } from '../modals/removal';
 import { IOnlineStatus } from '../backend/BeckiBackend';
 import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
 import { ModalsDeviceEditDeveloperParameterValueModel } from '../modals/device-edit-developer-parameter-value';
-import {ModalsPictureUploadModel} from "../modals/picture-upload";
+import { ModalsPictureUploadModel } from '../modals/picture-upload';
 
 @Component({
     selector: 'bk-view-projects-project-hardware-hardware',
@@ -23,6 +23,9 @@ import {ModalsPictureUploadModel} from "../modals/picture-upload";
 })
 export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
+    init: boolean = false;  // Only for title and sutitle menu (for slow internet there was sometimes
+                            // issue with no project for admin view or for project view but with slow
+                            // ngOnInit method
     device: IBoard = null;
     typeOfBoard: ITypeOfBoard = null;
     projectId: string;
@@ -50,6 +53,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.hardwareId = params['hardware'];
             this.projectId = params['project'];
+            this.init = true;
             this.refresh();
         });
     }
@@ -124,7 +128,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeOfBoardUploadPicture(this.device.id, { // TODO [permission]: version.update_permission
+                this.backendService.boardUploadPicture(this.device.id, { // TODO [permission]: edit_permission
                     file: model.file
                 })
                     .then(() => {
@@ -191,7 +195,6 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     onEditParameterValue_String_Click(parameter_user_description: string,  parameter_type: string, value: string): void {
 
         let model = new ModalsDeviceEditDeveloperParameterValueModel(this.device.id, parameter_user_description, value);
-
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();

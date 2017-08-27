@@ -159,7 +159,6 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
             }
         });
     }
-    // localhost:8080/admin/hardware/code/5661957-83e0-476d-a9ec-16404bb4cc8e
 
     onCProgramPublish(cprogram: ICProgramShortDetail): void {
         // TODO

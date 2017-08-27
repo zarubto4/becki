@@ -103,7 +103,11 @@
 
                 <div class="portlet light portlet-fit bordered">
                     <div class="portlet-body">
-                        <h3 style="text-align: center">{{'label_prerequisite'|bkTranslate:this}}</h3>
+
+                        <h3 *ngIf="garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldHardwareConnected && test_firmware_file_Base64 && bootloader_file_Base64
+                                && mainServer && backupServer && mainServer.online_state == 'online' && backupServer.online_state == 'online'" class="font-green-jungle bold" style="text-align: center">{{'label_prerequisite'|bkTranslate:this}}</h3>
+                        <h3 *ngIf="!(garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldHardwareConnected && test_firmware_file_Base64 && bootloader_file_Base64
+                                && mainServer && backupServer && mainServer.online_state == 'online' && backupServer.online_state == 'online')" class="font-red-flamingo bold" style="text-align: center">{{'label_prerequisite_not_complete'|bkTranslate:this}}</h3>
                         <hr>
                         <div class="row">
 
@@ -138,6 +142,7 @@
                                     </span>
                                     <span *ngIf="bootLoader" style="margin-left: 4px">
                                         <span class="font-green-jungle bold">(Set) <i class="fa  fa-check"></i></span>
+                                          <span *ngIf="bootloader_file_Base64" class="font-green-jungle bold"> (File Cached)<i class="fa  fa-check"></i></span>
                                     </span>
                                 </div>
                             </div>
@@ -186,14 +191,56 @@
                             </div>
 
                             <div class="col col-lg-3">
-                                <H4 class="font-red-flamingo"><i class="fa fa-cog"></i> {{'label_burn_settings'|bkTranslate:this}}</H4>
+                                <H4 *ngIf="!mainServer || !backupServer || mainServer.online_state != 'online' || backupServer.online_state != 'online' " class="font-red-flamingo"><i class="fa fa-print"></i> {{'label_server_settings'|bkTranslate:this}}</H4>
+                                <H4 *ngIf="mainServer && backupServer && mainServer.online_state == 'online' && backupServer.online_state == 'online' " class="font-green-jungle"><i class="fa fa-print"></i> {{'label_server_settings'|bkTranslate:this}}</H4>
+                                <div>
+                                    <strong>{{'label_main_server'|bkTranslate:this}}</strong><br>
+                                    <span *ngIf="!mainServer" class="font-red-flamingo">({{'label_server_not_set'|bkTranslate:this}})</span>
+                                    <span *ngIf="mainServer" style="margin-left: 4px">
+                                        <span class="font-red-flamingo">{{mainServer.personal_server_name}}</span>
+                                        <span *ngIf="mainServer.online_state == 'online'" class="font-green-jungle bold">(Online) <i class="fa  fa-check"></i></span>
+                                        <span *ngIf="mainServer.online_state != 'online'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
+                                        <i  class="fa fa-server font-green-jungle cursor-hand" style="font-size: 1.2em;" [routerLink]="['/server/homer', mainServer.id]" ></i>
+                                    </span>
+                                </div>
+                                <hr>
+                                <div>
+                                    <strong>{{'label_backup_server'|bkTranslate:this}}</strong><br>
+                                    <span *ngIf="!backupServer" class="font-red-flamingo">({{'label_server_not_set'|bkTranslate:this}})</span>
+                                    <span *ngIf="backupServer" style="margin-left: 4px">
+                                        <span class="font-red-flamingo">{{backupServer.personal_server_name}}</span>
+                                        <span *ngIf="backupServer.online_state == 'online'" class="font-green-jungle bold">(Online) <i class="fa  fa-check"></i></span>
+                                        <span *ngIf="backupServer.online_state != 'online'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
+                                        <i  class="fa fa-server font-green-jungle cursor-hand" style="font-size: 1.2em;" [routerLink]="['/server/homer', backupServer.id]" ></i>
+                                    </span>
+                                </div>
                             </div>
 
                         </div>
                     </div>
                 </div>
 
-                <div *ngIf="!(garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldHardwareConnected && test_firmware_file_Base64 && bootloader_file_Base64)" class="row">
+                <div *ngIf="garfield" class="row">
+                    <div class="col-md-12">
+                        <div class="portlet light portlet-fit bordered">
+                            <div class="portlet-body">
+                                <h3 *ngIf="productionBatchForm.valid" style="text-align: center" class="font-green-jungle bold">{{'label_burn_settings'|bkTranslate:this}}</h3>
+                                <h3 *ngIf="!productionBatchForm.valid" style="text-align: center" class="font-red-flamingo bold">{{'label_burn_settings_incomplete'|bkTranslate:this}}</h3>
+                                <hr>
+                                <div class="row">
+                                    <form [formGroup]="productionBatchForm">
+                                        <bk-form-select [control]="productionBatchForm.controls.batch" label="{{'label_producer'|bkTranslate:this}}"
+                                                        [options]="batchOptions"></bk-form-select>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div *ngIf="!(garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldHardwareConnected && test_firmware_file_Base64 && bootloader_file_Base64
+                                && mainServer && backupServer && mainServer.online_state == 'online' && backupServer.online_state == 'online' && productionBatchForm.valid)" class="row">
                     <div class="col-md-12">
                         <div class="portlet light portlet-fit bordered">
                             <div class="portlet-body">
@@ -204,13 +251,13 @@
                         </div>
                     </div>
                 </div>
-                <div *ngIf="garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldHardwareConnected && test_firmware_file_Base64 && bootloader_file_Base64 " class="row">
+
+                <div *ngIf="garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldHardwareConnected && test_firmware_file_Base64 && bootloader_file_Base64
+                                && mainServer && backupServer && productionBatchForm.valid" class="row">
                     <div class="col-md-12">
                         <div class="portlet light portlet-fit bordered">
                             <div class="portlet-body">
-
                                 <div class="mt-element-step">
-
                                     <div class="row step-line">
 
                                         <div class="col-md-2 mt-step-col first" [class.done]="main_step > 1" [class.active]="main_step == 1">
@@ -281,7 +328,7 @@
                     <button type="button" class="btn btn-primary" (click)="add_one()">2. Firmware Nahrán</button>
                     <button type="button" class="btn btn-primary" (click)="add_one()">3. Pustit Test</button>
                     <br><br>
-                    <button type="button" class="btn btn-primary" (click)="add_one()">4.1 Test Dokončen úspěšně</button>
+                    <button type="button" class="btn btn-primary" (click)="onRegisterHardware()">4.1 Test Dokončen úspěšně</button>
                     <button type="button" class="btn btn-danger"  (click)="change_error()">4.2 Test Dokončen neúspěšně</button>
                     <br><br>
                     <button type="button" class="btn btn-primary" (click)="add_one()">5. Nahrát MacAddressu</button>

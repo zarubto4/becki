@@ -4,6 +4,12 @@
             <template [ngSwitchCase]="'ModalsPermissionPermissionPropertyModel'">
                 <bk-modals-permission-permission-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-permission-permission-properties>
             </template>
+            <template [ngSwitchCase]="'ModalsCreateTypeOfBoardBatchModel'">
+                <bk-modals-type-of-board-batch-create [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-type-of-board-batch-create>
+            </template>
+            <template [ngSwitchCase]="'ModalsAdminCreateHardwareModel'">
+                <bk-modals-admin-create-hardware [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-admin-create-hardware>
+            </template>
             <template [ngSwitchCase]="'ModalsFileUploadModel'">
                 <bk-modals-file-upload [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-file-upload>
             </template>

@@ -4,11 +4,13 @@
   -->
 
 
-<bk-layout-main tabMenu="projects-project"
-                [title]="currentParamsService.currentProjectNameSnapshot"
-                [subtitle]="currentParamsService.currentProjectDescriptionSnapshot"
-                [lastBreadName]="device?device.id:''">
+<bk-layout-main
 
+    tabMenu="{{init == true ? (projectId == null ? 'byzance-admin' : 'projects-project') : ''}}"
+    [title]="init == true ? (projectId == null ? ('main_administration_title'|bkTranslate:this): currentParamsService.currentProjectNameSnapshot) : '' "
+    [subtitle]="init == true ? (projectId == null ? ('main_subtitle'|bkTranslate:this) : currentParamsService.currentProjectDescriptionSnapshot) : '' "
+    [lastBreadName]="device?device.id:''"
+>
     <div *ngIf="device && typeOfBoard" class="row">
         <div class="col-md-12">
             <div class="portlet portlet light bordered">
@@ -229,7 +231,7 @@
                                 <img *ngIf="device.picture_link " [attr.src]="device.picture_link">
                                 <i *ngIf="!typeOfBoard.picture_link && !device.picture_link " class="fa fa-fw fa-microchip text-center"></i>
 
-                                <p *ngIf="device.edit_permission" class="text-center"><a (click)="updatePictureClick()" class="font-grey-mint">{{'label_set_own_picture'|bkTranslate:this}}</a></p>
+                                <p *ngIf="device.edit_permission && projectId" class="text-center"><a (click)="updatePictureClick()" class="font-grey-mint">{{'label_set_own_picture'|bkTranslate:this}}</a></p>
                             </div>
 
                         </div>

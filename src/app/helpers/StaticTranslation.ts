@@ -12,6 +12,10 @@ export class StaticTranslation {
             'ModalsAddHardwareComponent': {
                 'title': 'Add a Device',
                 'label_hash_token': 'Hash Token'
+            }, 'ModalsAdminCreateHardwareComponent': {
+                'title': 'Manual Hardware registration',
+                'label_processor_id': 'Processor Id',
+                'label_type_of_board': 'Board Type'
             }, 'ModalsCreateCompilationServerComponent': {
                 'title': 'Create new Server',
                 'label_personal_server_name': 'Server name',
@@ -30,6 +34,21 @@ export class StaticTranslation {
                 'label_description': 'Description',
                 'label_version_identificator': 'Version Hardware Identification',
                 'label_changing_note': 'Changing Note (Markdown)'
+            }, 'ModalsCreateTypeOfBoardBatchComponent': {
+                'title': 'Create new Production Batch or Revision',
+                'label_product_revision': 'Revision Code',
+                'label_product_batch': 'Production Batch',
+                'label_pcb_product_manufacture': 'PCB Producer Name',
+                'label_pcb_product_manufacture_id': 'PCB Producer ID (VAT, IČO, etc)',
+                'label_assembly_product_manufacture': 'AssembleManufacture Name',
+                'label_assembly_product_manufacture_id': 'Assemble Manufacture ID (VAT, IČO, etc)',
+                'label_mac_address_start': 'Mac Address start position (decimal numbers - 187723572641792)',
+                'label_mac_address_end': 'Mac Address End position (decimal numbers - 187723572641800)',
+                'label_ean_number': 'EAN Number (13 digits)',
+                'label_customer_product_name': 'Product name - For Label Print',
+                'label_customer_company_name': 'Producer Company name - For Label Print',
+                'label_customer_company_made_description': 'Made in Description - For Label Print',
+                'label_date_of_assembly': 'Date of Assembly'
             }, 'ModalsCreateTypeOfBoardComponent': {
                 'title': 'Create new Board Type',
                 'label_name': 'Name',
@@ -596,9 +615,18 @@ export class StaticTranslation {
                 'label_default_test_c_program_setting': 'Default Test C Program',
                 'label_main_c_program_version_set_as_main': 'Set this version as Main',
 
+                'label_revisions': 'Revisions & Production Batches',
+                'label_revision_create_description': 'Create new Revisions or Production Batch',
+                'table_revision': 'Revision',
+                'table_production_batch': 'Production Batch',
+                'table_mac_range': 'MacAddress Range',
+                'table_assembly_time': 'Assembly Date',
+
                 'label_c_program_version_set_as_main': 'Set this version as a main',
                 'label_no_c_program_versions': 'No version found',
                 'label_no_c_program_versions_comment': 'We didn\'t find any versions, please create new one',
+                'label_no_batch': 'No Revisions or Batches',
+                'label_no_batch_comment': 'We didn\'t find any revisions or production batches, please create new one',
 
                 'flash_successfully_set_as_default': 'Succesfuly set as default',
                 'flash_file_uploaded': 'File successfully uploaded',
@@ -1679,8 +1707,14 @@ export class StaticTranslation {
                 'label_processor': 'Processor',
                 'label_actions': 'Actions',
 
+                'label_table_id': 'Processor ID',
+                'label_table_type': 'Type',
+                'label_table_status': 'Online status',
+
                 'label_no_type_of_boards': 'No Boards Types',
                 'label_no_type_of_boards_comment': 'No accessible Boards Type, create new one. You have to create Processor and Producer',
+                'label_no_boards': 'There is no Hardware',
+                'label_no_boards_comment': 'Change filter parameters to find more items',
                 'label_no_producer': 'No Producers',
                 'label_no_producer_comment': 'You can create new Producer, it can by your client or you!',
                 'label_no_processor': 'No Processors',
@@ -1723,6 +1757,7 @@ export class StaticTranslation {
                 'label_print_sticker': 'Printer sticker 62 mm',
                 'label_hardware_tester': 'Hardware tester Kit:',
                 'label_prerequisite': 'Prerequisite',
+                'label_prerequisite_not_complete': 'Prerequisite (Not Complete)',
                 'label_prerequisite_not_met': 'Prerequisite are not met',
                 'label_test_firmware': 'Test Firmware',
                 'label_default_firmware': 'Production Firmware',
@@ -1731,7 +1766,23 @@ export class StaticTranslation {
                 'label_printers_not_valid': ' Printer is not set or connection Id is not valid!',
                 'label_garfield_hardware_tester': 'Garfield Tester',
                 'label_garfield_hardware_not_online': 'Hardware Tester kit is not connected via Google Chrome plugin! Problem can be also in wrong Hardware identification (Its required for connection).',
-                'label_burn_settings': 'Register Settings',
+                'label_server_settings': 'Server Settings',
+                'label_main_server': 'Main Server',
+                'label_backup_server': 'Backup Server',
+                'label_server_not_set': 'Server is not Set!',
+
+                'label_burn_settings': 'Settings for Database registration & Burn',
+                'label_burn_settings_incomplete': 'Settings for Database registration & Burn (Not Complete)',
+                'label_product_revision': 'Product Revision',
+                'label_assembly_product_manufacture': 'Assembly Manufacture Company Name',
+                'label_assembly_product_manufacture_id': 'Assembly Manufacture Identification',
+                'label_pcb_product_manufacture': 'PCB Manufacture Company Name',
+                'label_pcb_product_manufacture_id': 'PCB Manufacture Identification',
+                'label_product_name': 'Product Name (For customers)',
+                'label_company_name': 'Company Name (For customers)',
+                'label_company_made_description': 'Made Description for ex. \"Made in USA\"',
+                'label_who_testing': 'Tester Operator',
+                'label_garfield_station': 'Garfield Station',
 
 
                 'nav_step_one_title': 'Attach Hardware',

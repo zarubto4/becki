@@ -6,18 +6,19 @@ import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import {
     IBootLoader, ICProgram, ICProgramVersionShortDetail, IProcessor, IProducer,
-    ITypeOfBoard
+    ITypeOfBoard, ITypeOfBoardBatch
 } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { ModalsRemovalModel } from '../modals/removal';
-import { FlashMessageError, FlashMessageSuccess} from '../services/NotificationService';
+import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsSetAsMainModel } from '../modals/set-as-main';
 import { ModalsCreateTypeOfBoardModel } from '../modals/type-of-board-create';
 import { ModalsBootloaderPropertyModel } from '../modals/bootloader-property';
 import { ModalsCodePropertiesModel } from '../modals/code-properties';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
-import {ModalsPictureUploadModel} from '../modals/picture-upload';
-import {ModalsFileUploadModel} from '../modals/file-upload';
+import { ModalsPictureUploadModel } from '../modals/picture-upload';
+import { ModalsFileUploadModel } from '../modals/file-upload';
+import { ModalsCreateTypeOfBoardBatchModel } from '../modals/type-of-board-batch-create';
 
 @Component({
     selector: 'bk-view-hardware-hardware-type',
@@ -321,6 +322,103 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
             }
         });
     }
+
+    onCreateRevisionClick() {
+        let model = new ModalsCreateTypeOfBoardBatchModel();
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.typeOfBoardBatchCreate(this.typeOfBoard.id, {
+                    revision: model.revision,
+                    production_batch: model.production_batch,
+                    pcb_manufacture_name: model.pcb_manufacture_name,
+                    pcb_manufacture_id: model.pcb_manufacture_id,
+                    assembly_manufacture_name: model.assembly_manufacture_name,
+                    assembly_manufacture_id: model.assembly_manufacture_id,
+                    mac_address_start: model.mac_address_start,
+                    mac_address_end: model.mac_address_end,
+                    ean_number: model.ean_number,
+                    date_of_assembly: model.date_of_assembly,
+                    customer_product_name: model.customer_product_name,
+                    customer_company_name: model.customer_company_name,
+                    customer_company_made_description: model.customer_company_made_description,
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
+                        this.refresh();
+                    })
+                    .catch((reason) => {
+                        this.fmError(this.translate('flash_cannot_change_developer_parameter', reason));
+                        this.unblockUI();
+                    });
+            }
+        });
+    }
+
+    onEditRevisionClick(batch: ITypeOfBoardBatch) {
+        let model = new ModalsCreateTypeOfBoardBatchModel(
+            true,
+            batch.revision,
+            batch.production_batch,
+            batch.pcb_manufacture_name,
+            batch.pcb_manufacture_id,
+            batch.assembly_manufacture_name,
+            batch.assembly_manufacture_id,
+            batch.mac_address_start,
+            batch.mac_address_end,
+            batch.ean_number,
+            batch.date_of_assembly,
+            batch.customer_product_name,
+            batch.customer_company_name,
+            batch.customer_company_made_description,
+        );
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.typeOfBoardBatchEdit(batch.id, {
+                    revision: model.revision,
+                    production_batch: model.production_batch,
+                    pcb_manufacture_name: model.pcb_manufacture_name,
+                    pcb_manufacture_id: model.pcb_manufacture_id,
+                    assembly_manufacture_name: model.assembly_manufacture_name,
+                    assembly_manufacture_id: model.assembly_manufacture_id,
+                    mac_address_start: model.mac_address_start,
+                    mac_address_end: model.mac_address_end,
+                    ean_number: model.ean_number,
+                    date_of_assembly: model.date_of_assembly,
+                    customer_product_name: model.customer_product_name,
+                    customer_company_name: model.customer_company_name,
+                    customer_company_made_description: model.customer_company_made_description,
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
+                        this.refresh();
+                    })
+                    .catch((reason) => {
+                        this.fmError(this.translate('flash_cannot_change_developer_parameter', reason));
+                        this.unblockUI();
+                    });
+            }
+        });
+    }
+
+    onDeleteRevisionClick(batch: ITypeOfBoardBatch) {
+        this.modalService.showModal(new ModalsRemovalModel(batch.revision + ' ' + batch.production_batch)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.typeOfBoardBatchDelete(batch.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
+                        this.navigate(['admin/garfield/']);
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove', reason)));
+                        this.refresh(); // also unblockUI
+                    });
+            }
+        });
+    }
+
 }
 
 
