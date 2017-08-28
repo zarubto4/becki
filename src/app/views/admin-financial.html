@@ -1,0 +1,106 @@
+<bk-layout-main
+     tabMenu="byzance-admin"
+     [title]="'main_title'|bkTranslate:this"
+     [subtitle]="'main_subtitle'|bkTranslate:this">
+
+    <div *ngIf="tariffs" class="row">
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark">
+                            <i class="fa fa-fw fa-server"></i>
+                              {{'title'|bkTranslate:this}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="portlet-title tabbable-line">
+                    <!--ul class="nav nav-tabs margin-left-15 pull-left"-->
+                    <ul class="nav nav-tabs pull-left">
+                        <li [class.active]="tab == 'tariffs'">
+                          <a class="cursor-pointer" (click)="onToggleTab('tariffs')"><i class="fa fa-usd"></i> {{'tab_tariffs'|bkTranslate:this}}</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Tariffs-->
+
+                <div *ngIf="tab == 'tariffs'">
+
+                    <div *ngIf="(tariffs && tariffs.length > O)"  class="becki-actions">
+                        <button title="{{'label_tariff_create'|bkTranslate:this}}" class="btn btn-icon-only green"
+                                [disabled]="false"
+                                (click)="onTariffAddClick()">
+                            <i class="fa fa-plus-circle"></i>
+                        </button>
+                    </div>
+
+                    <div *ngIf="(tariffs && tariffs.length)" class="table-scrollable">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="col col-lg-1">{{'table_icon'|bkTranslate:this}}</th>
+                                    <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                                    <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
+                                    <th class="col col-lg-4 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let tariff of tariffs">
+
+                                    <td class="vert-align no-wrap bold"><i class="fa {{tariff.awesome_icon}}"></i></td>
+                                    <td class="vert-align no-wrap bold"><a (click)="onTariffClick(tariff)">{{tariff.name}}</a></td>
+                                    <td class="vert-align">{{tariff.description}}</td>
+                                    <td class="vert-align no-wrap text-right">
+
+                                        <style type="text/css">
+                                            table tr button { opacity:0.05;}
+                                            table tr:hover button { opacity:1 }
+                                        </style>
+
+                                        <button title="{{'label_tariff_edit_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!tariff.edit_permission" (click)="onTariffEditClick(tariff)">
+                                            <i class="fa fa-cog"></i>
+                                        </button>
+
+                                        <button *ngIf="true" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.edit_permission" (click)="onTariffShiftUpClick(tariff)">
+                                            <i class="fa fa-chevron-up"></i>
+                                        </button>
+
+                                        <button *ngIf="true" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.edit_permission" (click)="onTariffShiftDownClick(tariff)">
+                                            <i class="fa fa-chevron-down"></i>
+                                        </button>
+
+                                        <button title="{{'label_active_tariff'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!tariff.update_permission" (click)="onTariffActivate(tariff)">
+                                            <i class="fa power-off"></i>
+                                        </button>
+                                        <button title="{{'label_deactive_tariff'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!tariff.update_permission" (click)="onTariffDeactivate(tariff)">
+                                            <i class="fa power-off"></i>
+                                        </button>
+                                        <button title="{{'label_delete_tariff'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!tariff.update_permission" (click)="onTariffRemoveClick(tariff)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                    <h3 *ngIf="!tariffs" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
+                    <div *ngIf="tariffs && tariffs.length < 1" class="list-no-items">
+                        <p class="list-no-items__main-label">{{'label_no_tariffs'|bkTranslate:this}}</p>
+                        <p class="list-no-items__sub-label">{{'label_no_tariffs_comment'|bkTranslate:this}} </p>
+                        <p>
+                            <button class="btn blue" (click)="onTariffAddClick()">
+                                <i class="fa fa-plus-circle"></i> {{'btn_create'|bkTranslate:this}}
+                            </button>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</bk-layout-main>

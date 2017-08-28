@@ -13,6 +13,7 @@ import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { formSelectComponentOptionsMaker } from '../components/FormSelectComponent';
 import { IApplicableProduct } from '../backend/TyrionAPI';
 import { ModalModel } from '../services/ModalService';
+import {BeckiValidators} from "../helpers/BeckiValidators";
 
 export class ModalsCreateTypeOfBoardBatchModel extends ModalModel {
     constructor(
@@ -58,9 +59,9 @@ export class ModalsCreateTypeOfBoardBatchComponent implements OnInit {
             'assembly_manufacture_id': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
             'pcb_manufacture_name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
             'pcb_manufacture_id': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
-            'mac_address_start': ['', [Validators.required, Validators.minLength(15), Validators.maxLength(15)]],
-            'mac_address_end': ['', [Validators.required, Validators.minLength(15), Validators.maxLength(15)]],
-            'ean_number': ['', [Validators.required, Validators.minLength(13), Validators.maxLength(13)]],
+            'mac_address_start': ['', [Validators.required, Validators.minLength(15), Validators.maxLength(15), BeckiValidators.number]],
+            'mac_address_end': ['', [Validators.required, Validators.minLength(15), Validators.maxLength(15), BeckiValidators.number]],
+            'ean_number': ['', [Validators.required, Validators.minLength(13), Validators.maxLength(13), BeckiValidators.number]],
             'date_of_assembly': ['', [Validators.required, Validators.minLength(4)]],
             'customer_product_name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(24)]],
             'customer_company_name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],

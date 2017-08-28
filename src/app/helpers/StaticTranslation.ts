@@ -9,6 +9,17 @@ export class StaticTranslation {
 
     public static translate: { [lang: string]: { [keyOrEnv: string]: (string | { [key: string]: string }) } } = {
         'en': {
+            'ModalsTariffComponent': {
+                'title': 'Financial \"First Kick\" Tariff',
+                'label_name': 'Name',
+                'label_description': 'Description',
+                'label_identifier': 'Unique Identifier',
+                'label_color': 'Color in Template. Please used color from http://keenthemes.com/preview/metronic/theme/admin_1/ui_colors.html',
+                'label_company_details_required': 'Company details required',
+                'label_payment_details_required': 'Payment details required (Full registration)',
+                'label_payment_method_required': 'Payment mode required (User have to select a mode.)',
+                'label_credit_for_beginning': 'Pre-Paid Credit for user on beginning',
+            },
             'ModalsAddHardwareComponent': {
                 'title': 'Add a Device',
                 'label_hash_token': 'Hash Token'
@@ -410,6 +421,24 @@ export class StaticTranslation {
                 'table_unite': 'Unite',
                 'table_total_cost': 'Total cost',
 
+            }, 'AdminFinancialComponent': {
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Financial Management - Tariffs',
+                'title': 'List of All Tariffs',
+                'label_tariff_create': 'Create new Tariff',
+                'table_icon': 'Icon',
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_actions': 'Actions',
+                'label_tariff_edit_properties': 'Edit Tariff Properties',
+                'label_change_order': 'Change Order',
+                'label_active_tariff': 'Active tariff for platform',
+                'label_deactive_tariff': 'Deactivate tariff for platform',
+                'label_delete_tariff': 'Permanently remove tariff',
+                'label_no_tariffs': 'No Tariffs',
+                'label_no_tariffs_comment': 'We didn\'t find any tariffs. Create new one',
+
+                'tab_tariffs': 'All Tariffs',
 
             }, 'ProjectsProjectComponent': {
                 'title': 'PROJECT {0} DASHBOARD',
@@ -853,7 +882,8 @@ export class StaticTranslation {
             }, 'ProjectsProjectHardwareHardwareComponent': {
 
                 'title': 'Byzance<strong class="font-color-hardware">HARDWARE</strong> - DEVICE <strong>{0}</strong>',
-
+                'main_administration_title': 'Platform administration',
+                'main_subtitle': 'Embedded Hardware Settings',
                 'tab_overview': 'Overview',
                 'tab_update': 'Update progress',
 

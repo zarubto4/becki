@@ -211,7 +211,7 @@
                             <tbody>
                             <tr *ngFor="let producer of producers">
                                 <td class="vert-align no-wrap">
-                                    <strong>{{producer.name}}</strong>
+                                    <a (click)="onProducerClick(producer.id)" class="no-wrap"><strong>{{producer.name}}</strong></a>
                                 </td>
                                 <td class="vert-align no-wrap">
                                     {{producer.description}}

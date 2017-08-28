@@ -155,6 +155,8 @@ import { ModalsFileUploadComponent } from './modals/file-upload';
 import { ModalsPictureUploadComponent } from './modals/picture-upload';
 import { ModalsAdminCreateHardwareComponent } from './modals/admin-create-hardware';
 import { ModalsCreateTypeOfBoardBatchComponent } from './modals/type-of-board-batch-create';
+import { ModalsTariffComponent } from './modals/tariff';
+import { AdminFinancialComponent } from './views/admin-financial';
 
 
 // @formatter:off
@@ -229,6 +231,9 @@ let routes: Routes = [
 
     {path: 'admin/garfield', data: {breadName: 'Garfield'}, component: GarfieldComponent, canActivate: [AuthGuard]},
     {path: 'admin/garfield/:garfield', data: {breadName: ':garfield'}, component: GarfieldGarfieldComponent, canActivate: [AuthGuard]},
+
+    {path: 'admin/financial', data: {breadName: 'Tariff'}, component: AdminFinancialComponent, canActivate: [AuthGuard]},
+    {path: 'admin/financial/:tariff', data: {breadName: ':tariff'}, component: GarfieldGarfieldComponent, canActivate: [AuthGuard]},
 
     {path: 'admin/server', data: {breadName: 'Servers'}, component: ServerComponent, canActivate: [AuthGuard]},
     // {path: 'admin/server/:server', data: {breadName: 'Servers'}, component: ServerComponent, canActivate: [AuthGuard]},
@@ -396,6 +401,7 @@ class BeckiErrorHandler implements ErrorHandler {
         LoginComponent,
         LogoutComponent,
         AdminHardwareComponent,
+        AdminFinancialComponent,
         DashboardComponent,
         CommunityCProgramComponent,
         FinancialComponent,
@@ -446,6 +452,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsAdminCreateHardwareComponent,
         ModalsProjectPropertiesComponent,
         ModalsCreateHomerServerComponent,
+        ModalsTariffComponent,
         ModalsCreateProcessorComponent,
         ModalsBootloaderPropertyComponent,
         ModalsCreateCompilationServerComponent,

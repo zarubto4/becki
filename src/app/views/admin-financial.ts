@@ -1,0 +1,184 @@
+/**
+ * Created by davidhradek on 05.12.16.
+ */
+
+import { Component, Injector, OnInit } from '@angular/core';
+import { BaseMainComponent } from './BaseMainComponent';
+import { IApplicableProduct, ITariff } from '../backend/TyrionAPI';
+import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { ModalsRemovalModel } from '../modals/removal';
+import { ModalsTariffModel } from '../modals/tariff';
+
+@Component({
+    selector: 'bk-view-admin-financial',
+    templateUrl: './admin-financial.html'
+})
+export class AdminFinancialComponent extends BaseMainComponent implements OnInit {
+
+    tariffs: ITariff[] = null;
+
+    tab: string = 'tariffs';
+
+    constructor(injector: Injector) {
+        super(injector);
+    };
+
+    ngOnInit(): void {
+        this.refresh();
+    }
+
+    refresh(): void {
+        this.blockUI();
+
+        Promise.all<any>([this.backendService.tariffsGetAll()])
+            .then((values: [ITariff[]]) => {
+                this.tariffs = values[0];
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.addFlashMessage(new FlashMessageError('Products cannot be loaded.', reason));
+                this.unblockUI();
+            });
+
+    }
+
+    onToggleTab(tab: string) {
+        this.tab = tab;
+    }
+
+    onTariffRemoveClick(tariff: ITariff): void {
+        this.modalService.showModal(new ModalsRemovalModel(tariff.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.tariffDelete(tariff.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_delete_success')));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_delete_error', reason)));
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+    onTariffAddClick(): void {
+        let model = new ModalsTariffModel();
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.tariffCreate({
+                    color: model.color,
+                    company_details_required: model.company_details_required,
+                    credit_for_beginning: model.credit_for_beginning,
+                    description: model.description,
+                    identifier: model.identifier,
+                    name: model.name,
+                    payment_method_required: model.payment_method_required,
+                    payment_details_required: model.payment_details_required,
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_create_success', model.name)));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_create_error', model.name, reason)));
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+    onTariffEditClick(tariff: ITariff): void {
+        let model = new ModalsTariffModel(
+            true,
+            tariff.company_details_required,
+            tariff.color,
+            tariff.credit_for_beginning,
+            tariff.description,
+            tariff.name,
+            tariff.identifier,
+            tariff.payment_method_required,
+            tariff.payment_details_required
+        );
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.tariffEdit(tariff.id, {
+                    color: model.color,
+                    company_details_required: model.company_details_required,
+                    credit_for_beginning: model.credit_for_beginning,
+                    description: model.description,
+                    identifier: model.identifier,
+                    name: model.name,
+                    payment_method_required: model.payment_method_required,
+                    payment_details_required: model.payment_details_required,
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_edit_success', model.name)));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_edit_error', model.name, reason)));
+                        this.refresh();
+                    });
+            }
+        });
+    }
+
+
+    onTariffShiftUpClick(tariff: ITariff): void {
+        this.backendService.tariffOrderUp(tariff.id)
+            .then(() => {
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                this.refresh();
+            });
+    }
+
+    onTariffShiftDownClick(tariff: ITariff): void {
+        this.backendService.tariffOrderDown(tariff.id)
+            .then(() => {
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                this.refresh();
+            });
+    }
+
+    onTariffActivate(tariff: ITariff): void {
+        this.backendService.tariffActivate(tariff.id)
+            .then(() => {
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                this.refresh();
+            });
+    }
+
+    onTariffDeactivate(tariff: ITariff): void {
+        this.backendService.tariffDeactivate(tariff.id)
+            .then(() => {
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                this.refresh();
+            });
+    }
+
+    onTariffClick(tariff: ITariff): void {
+        this.router.navigate(['/admin/financial', tariff.id]);
+    }
+
+
+}
+
+
+
+
