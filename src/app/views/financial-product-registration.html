@@ -68,7 +68,7 @@
                                 <div class="arrow-down border-top-{{tariff.color|lowercase}}"></div>
 
                                 <div class="price-table-pricing">
-                                    <h3 style="line-height: 50px;" [style.font-size]="makePrice(tariff.price.USD).length>=7?'40px':'50px'">{{makePrice(tariff.price.USD)}}</h3>
+                                    <h3 style="line-height: 50px;" [style.font-size]="makePrice(tariff.price).length>=7?'40px':'50px'">{{makePrice(tariff.price)}}</h3>
                                     <p class="font-grey-salt">{{'average_monthly_cost'|bkTranslate:this}}</p>
                                     <div *ngIf="tariff == selectedTariff" class="price-ribbon">{{'ribbon_selected'|bkTranslate:this}}</div>
                                 </div>
@@ -141,8 +141,8 @@
                                 </div>
                                 <div class="arrow-down border-top-{{package.color|lowercase}}"></div>
                                 <div class="price-table-pricing">
-                                    <h3 style="line-height: 50px;" [style.font-size]="makePrice(package.price.USD).length>=7?'40px':'50px'">{{makePrice(package.price.USD)}}</h3>
-                                    <p class="font-grey-salt">{{'average_monthly_cost'|bkTranslate:this}}</p>
+                                    <h3 style="line-height: 50px;" [style.font-size]="makePrice(package.price).length>=7?'40px':'50px'">{{makePrice(package.price)}}</h3>
+                                    <p class="font-grey-salt">{{'label_average_monthly_cost'|bkTranslate:this}}</p>
                                     <div class="price-ribbon" *ngIf="selectedExtensions.indexOf(package) > -1">{{'label_included'|bkTranslate:this}}</div>
                                 </div>
                                 <div class="price-table-content">
@@ -399,7 +399,7 @@
                                     <tr>
                                         <td> {{selectedTariff.name}} </td>
                                         <td> {{selectedTariff.description}} </td>
-                                        <td class="text-center"> {{makePrice(selectedTariff.price.USD)}} </td>
+                                        <td class="text-center"> {{makePrice(selectedTariff.price)}} </td>
                                     </tr>
 
                                     <tr *ngIf="selectedTariff.extensions_included.length || selectedExtensions.length">
@@ -413,7 +413,7 @@
                                     <tr *ngFor="let package of selectedExtensions">
                                         <td> {{package.name}} </td>
                                         <td> {{package.description}} </td>
-                                        <td class="text-center"> {{makePrice(package.price.USD)}} </td>
+                                        <td class="text-center"> {{makePrice(package.price)}} </td>
                                     </tr>
 
                                     <tr>

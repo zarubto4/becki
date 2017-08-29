@@ -7,26 +7,31 @@
 
         <form [formGroup]="form">
             <bk-form-input label="{{'label_name'|bkTranslate:this}}" [control]="form.controls['name']"></bk-form-input>
+            <bk-form-input label="{{'label_icon'|bkTranslate:this}}" [control]="form.controls['awesome_icon']"></bk-form-input>
             <bk-form-input label="{{'label_description'|bkTranslate:this}}" [control]="form.controls['description']"></bk-form-input>
             <hr>
             <bk-form-input label="{{'label_identifier'|bkTranslate:this}}" [control]="form.controls['identifier']"></bk-form-input>
             <br>
             <hr>
-            <bk-form-input label="{{'label_color'|bkTranslate:this}}" [control]="form.controls['color']"></bk-form-input>
+            <bk-form-input label="{{'label_color'|bkTranslate:this}}" [placeholder]="" [control]="form.controls['color']"></bk-form-input>
             <br>
-            <bk-form-input label="{{'label_credit_for_beginning'|bkTranslate:this}}" [control]="form.controls['credit_for_beginning']"></bk-form-input>
+            <bk-form-input label="{{'label_credit_for_beginning'|bkTranslate:this}}" placeholder="green-dark" [control]="form.controls['credit_for_beginning']"></bk-form-input>
             <br>
-            <bk-form-input label="{{'label_company_details_required'|bkTranslate:this}}" [control]="form.controls['company_details_required']"></bk-form-input>
-            <bk-form-input label="{{'label_payment_details_required'|bkTranslate:this}}" [control]="form.controls['payment_details_required']"></bk-form-input>
-            <bk-form-input label="{{'label_payment_method_required'|bkTranslate:this}}"  [control]="form.controls['payment_method_required ']"></bk-form-input>
-
-            <label class="mt-checkbox mt-checkbox-outline">
-                {{configProperty.displayName}}
-                <input type="checkbox" [(ngModel)]="formModel[configProperty.name]">
-                <span></span>
-            </label>
-
-            <br>
+            <div>
+                <label>{{'label_company_details_required'|bkTranslate:this}}</label>
+                <i *ngIf="!modalModel.company_details_required" style="font-size: 1.8em;" class="fa fa-toggle-on font-green-jungle cursor-hand" (click)="onBoolean_Company_details(!modalModel.company_details_required)"></i>
+                <i *ngIf="modalModel.company_details_required"  style="font-size: 1.8em;" class="fa fa-toggle-off font-grey-mint cursor-hand"   (click)="onBoolean_Company_details(!modalModel.company_details_required)"></i>
+            </div>
+            <div>
+                <label>{{'label_payment_details_required'|bkTranslate:this}}</label>
+                <i *ngIf="!modalModel.payment_details_required" style="font-size: 1.8em;" class="fa fa-toggle-on font-green-jungle cursor-hand" (click)="onBoolean_Payment_details(!modalModel.payment_details_required)"></i>
+                <i *ngIf="modalModel.payment_details_required"  style="font-size: 1.8em;" class="fa fa-toggle-off font-grey-mint cursor-hand"   (click)="onBoolean_Payment_details(!modalModel.payment_details_required)"></i>
+            </div>
+            <div>
+                <label>{{'label_payment_method_required'|bkTranslate:this}}</label>
+                <i *ngIf="!modalModel.payment_method_required" style="font-size: 1.8em;" class="fa fa-toggle-on font-green-jungle cursor-hand" (click)="onBoolean_Payment_method(!modalModel.payment_method_required)"></i>
+                <i *ngIf="modalModel.payment_method_required"  style="font-size: 1.8em;" class="fa fa-toggle-off font-grey-mint cursor-hand"   (click)="onBoolean_Payment_method(!modalModel.payment_method_required)"></i>
+            </div>
         </form>
     </div>
     <div class="modal-footer">

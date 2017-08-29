@@ -4,6 +4,9 @@
             <template [ngSwitchCase]="'ModalsPermissionPermissionPropertyModel'">
                 <bk-modals-permission-permission-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-permission-permission-properties>
             </template>
+            <template [ngSwitchCase]="'ModalsExtensionModel'">
+                <bk-modals-extension [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-extension>
+            </template>
             <template [ngSwitchCase]="'ModalsTariffModel'">
                 <bk-modals-tariff [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-tariff>
             </template>

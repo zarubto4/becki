@@ -54,9 +54,9 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
     getTotalPrice(): number {
         let price = 0;
-        price += this.selectedTariff.price.USD;
+        price += this.selectedTariff.price;
         this.selectedExtensions.map((pack) => {
-            price += pack.price.USD;
+            price += pack.price;
         });
 
         return price;

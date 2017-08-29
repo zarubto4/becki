@@ -157,6 +157,10 @@ import { ModalsAdminCreateHardwareComponent } from './modals/admin-create-hardwa
 import { ModalsCreateTypeOfBoardBatchComponent } from './modals/type-of-board-batch-create';
 import { ModalsTariffComponent } from './modals/tariff';
 import { AdminFinancialComponent } from './views/admin-financial';
+import { AdminFinancialTariffComponent } from './views/admin-financial-tariff';
+import { ModalsExtensionComponent } from './modals/extension';
+import { FormTextAreaComponent } from './components/FormTextAreaComponent';
+import { FormJsonNiceTextAreaComponent } from './components/FormJsonNiceTextAreaComponent';
 
 
 // @formatter:off
@@ -233,7 +237,7 @@ let routes: Routes = [
     {path: 'admin/garfield/:garfield', data: {breadName: ':garfield'}, component: GarfieldGarfieldComponent, canActivate: [AuthGuard]},
 
     {path: 'admin/financial', data: {breadName: 'Tariff'}, component: AdminFinancialComponent, canActivate: [AuthGuard]},
-    {path: 'admin/financial/:tariff', data: {breadName: ':tariff'}, component: GarfieldGarfieldComponent, canActivate: [AuthGuard]},
+    {path: 'admin/financial/:tariff', data: {breadName: ':tariff'}, component: AdminFinancialTariffComponent, canActivate: [AuthGuard]},
 
     {path: 'admin/server', data: {breadName: 'Servers'}, component: ServerComponent, canActivate: [AuthGuard]},
     // {path: 'admin/server/:server', data: {breadName: 'Servers'}, component: ServerComponent, canActivate: [AuthGuard]},
@@ -383,7 +387,9 @@ class BeckiErrorHandler implements ErrorHandler {
         FormColorPickerComponent,
         FormFAIconSelectComponent,
         FormInputComponent,
+        FormTextAreaComponent,
         FormSelectComponent,
+        FormJsonNiceTextAreaComponent,
         BlockoViewComponent,
         CodeIDEComponent,
         CProgramVersionSelectorComponent,
@@ -402,6 +408,7 @@ class BeckiErrorHandler implements ErrorHandler {
         LogoutComponent,
         AdminHardwareComponent,
         AdminFinancialComponent,
+        AdminFinancialTariffComponent,
         DashboardComponent,
         CommunityCProgramComponent,
         FinancialComponent,
@@ -499,6 +506,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsCodeAddLibraryComponent,
         ModalsCodeLibraryVersionComponent,
         ModalsHardwareCodeProgramVersionSelectComponent,
+        ModalsExtensionComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

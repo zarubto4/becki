@@ -1,0 +1,33 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title">{{'title'|bkTranslate:this}}</h4>
+    </div>
+    <div class="modal-body">
+
+        <form [formGroup]="form">
+            <bk-form-input label="{{'label_name'|bkTranslate:this}}" [control]="form.controls['name']"></bk-form-input>
+            <bk-form-input label="{{'label_description'|bkTranslate:this}}" [control]="form.controls['description']"></bk-form-input>
+            <bk-form-input label="{{'label_color'|bkTranslate:this}}" [control]="form.controls['color']"></bk-form-input>
+
+            <div *ngIf="!modalModel.edit">
+            <bk-form-select [control]="form.controls.extension_type" label="{{'label_extension_type'|bkTranslate:this}}"
+                            [options]="extensionTypeOptions"></bk-form-select>
+            </div>
+
+            <div>
+                <bk-form-nice-json [description]="'Config Json'" [control]="form.controls['config']" [cols]="75" [content]="modalModel.config" [readonly]="false"></bk-form-nice-json>
+            </div>
+            <br>
+            <div>
+                <label>{{'label_optional_included'|bkTranslate:this}}</label>
+                <i *ngIf="!modalModel.included" style="font-size: 1.8em;" class="fa fa-toggle-on font-green-jungle cursor-hand" (click)="onBoolean_Included(!modalModel.included)"></i>
+                <i *ngIf="modalModel.included"  style="font-size: 1.8em;" class="fa fa-toggle-off font-grey-mint cursor-hand"   (click)="onBoolean_Included(!modalModel.included)"></i>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{(!modalModel.edit?"btn_create":"btn_update")|bkTranslate:this}}</button>
+    </div>
+</div>

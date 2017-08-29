@@ -49,8 +49,11 @@
                             <tbody>
                                 <tr *ngFor="let tariff of tariffs">
 
-                                    <td class="vert-align no-wrap bold"><i class="fa {{tariff.awesome_icon}}"></i></td>
-                                    <td class="vert-align no-wrap bold"><a (click)="onTariffClick(tariff)">{{tariff.name}}</a></td>
+                                    <td class="vert-align no-wrap bold"><i style="font-size: 1.8em;" class="fa {{tariff.awesome_icon}}"></i></td>
+                                    <td class="vert-align no-wrap bold"><a (click)="onTariffClick(tariff)">{{tariff.name}}</a>
+                                        <span *ngIf="tariff.active" class="font-green-jungle bold">(Active)</span>
+                                        <span *ngIf="!tariff.active" class="font-red-flamingo bold">(Deactivated)</span>
+                                    </td>
                                     <td class="vert-align">{{tariff.description}}</td>
                                     <td class="vert-align no-wrap text-right">
 
@@ -63,19 +66,19 @@
                                             <i class="fa fa-cog"></i>
                                         </button>
 
-                                        <button *ngIf="true" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.edit_permission" (click)="onTariffShiftUpClick(tariff)">
+                                        <button title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.edit_permission" (click)="onTariffShiftUpClick(tariff)">
                                             <i class="fa fa-chevron-up"></i>
                                         </button>
 
-                                        <button *ngIf="true" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.edit_permission" (click)="onTariffShiftDownClick(tariff)">
+                                        <button title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.edit_permission" (click)="onTariffShiftDownClick(tariff)">
                                             <i class="fa fa-chevron-down"></i>
                                         </button>
 
-                                        <button title="{{'label_active_tariff'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!tariff.update_permission" (click)="onTariffActivate(tariff)">
-                                            <i class="fa power-off"></i>
+                                        <button *ngIf="!tariff.active" title="{{'label_active_tariff'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!tariff.update_permission" (click)="onTariffActivate(tariff)">
+                                            <i class="fa fa-power-off"></i>
                                         </button>
-                                        <button title="{{'label_deactive_tariff'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!tariff.update_permission" (click)="onTariffDeactivate(tariff)">
-                                            <i class="fa power-off"></i>
+                                        <button  *ngIf="tariff.active" title="{{'label_deactive_tariff'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!tariff.update_permission" (click)="onTariffDeactivate(tariff)">
+                                            <i class="fa fa-power-off"></i>
                                         </button>
                                         <button title="{{'label_delete_tariff'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!tariff.update_permission" (click)="onTariffRemoveClick(tariff)">
                                             <i class="fa fa-trash"></i>

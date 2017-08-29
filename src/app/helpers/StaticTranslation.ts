@@ -18,11 +18,20 @@ export class StaticTranslation {
                 'label_company_details_required': 'Company details required',
                 'label_payment_details_required': 'Payment details required (Full registration)',
                 'label_payment_method_required': 'Payment mode required (User have to select a mode.)',
-                'label_credit_for_beginning': 'Pre-Paid Credit for user on beginning',
-            },
-            'ModalsAddHardwareComponent': {
+                'label_credit_for_beginning': 'Pre-Paid Credit for user on beginning 1USD == 1000 !!!!!',
+                'label_icon': 'FA-ICON (http://fontawesome.io/)',
+            }, 'ModalsAddHardwareComponent': {
                 'title': 'Add a Device',
                 'label_hash_token': 'Hash Token'
+            }, 'ModalsExtensionComponent': {
+                'title': 'Add a Device',
+                'label_color': 'Color in Template. Please used color from http://keenthemes.com/preview/metronic/theme/admin_1/ui_colors.html',
+                'label_name': 'Name',
+                'label_description': 'Description',
+                'label_price': 'Price  1USD == 1000 !!!!!',
+                'label_config': 'Config in JSON',
+                'label_optional_included': 'Included in Tariff (Or Optional)',
+                'label_extension_type': 'Extension type',
             }, 'ModalsAdminCreateHardwareComponent': {
                 'title': 'Manual Hardware registration',
                 'label_processor_id': 'Processor Id',
@@ -439,6 +448,39 @@ export class StaticTranslation {
                 'label_no_tariffs_comment': 'We didn\'t find any tariffs. Create new one',
 
                 'tab_tariffs': 'All Tariffs',
+
+            }, 'AdminFinancialTariffComponent': {
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Tariff Management',
+                'title': 'Tariff Settings',
+                'tab_tariffs': 'Settings',
+                'tab_extensions_optional': 'Optional Extensions',
+                'tab_extensions_include': 'Included Extensions',
+                'label_no_expansions': 'No Extensions in Tariff',
+                'label_average_monthly_cost': 'Average monthly cost',
+                'label_tariff_name': 'Tariff Name',
+                'label_tariff_description': 'Long Text description',
+                'label_tariff_identifier': 'Api identifier',
+                'label_credit_for_beginning': 'Free Credit for beginning',
+                'label_tariff_color': 'Background Color',
+                'label_tariff_no_company_details_required': 'Company Details are NOT required',
+                'label_tariff_company_details_required': 'Company Details are required',
+                'label_tariff_no_payment_details_required': 'Payment Details are NOT required',
+                'label_tariff_payment_details_required': 'Payment Details are required',
+                'label_tariff_no_payment_method_required': 'Payment Method are NOT required',
+                'label_tariff_payment_method_required': 'Payment Method are required',
+                'flash_tariff_edit_success': 'Tariff Edit was successful',
+                'ribbon_selected': 'Selected',
+                'label_included': 'Included',
+                'label_extension_price': 'Price (Average per month)',
+                'label_extension_color': 'Color',
+                'label_extension_type': 'Tyrion Extension Type',
+                'label_extension_description': 'Description',
+                'label_extension_name': 'Name',
+                'label_free': 'Free',
+                'label_change_order': 'Change order',
+                'btn_select': 'Select',
+                'btn_included': 'Include',
 
             }, 'ProjectsProjectComponent': {
                 'title': 'PROJECT {0} DASHBOARD',

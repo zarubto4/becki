@@ -36,7 +36,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
                 this.unblockUI();
             })
             .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('Products cannot be loaded.', reason));
+                this.addFlashMessage(new FlashMessageError('Tariffs cannot be loaded.', reason));
                 this.unblockUI();
             });
 
@@ -70,6 +70,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
                 this.blockUI();
                 this.backendService.tariffCreate({
                     color: model.color,
+                    awesome_icon: model.awesome_icon,
                     company_details_required: model.company_details_required,
                     credit_for_beginning: model.credit_for_beginning,
                     description: model.description,
@@ -95,6 +96,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
             true,
             tariff.company_details_required,
             tariff.color,
+            tariff.awesome_icon,
             tariff.credit_for_beginning,
             tariff.description,
             tariff.name,
@@ -107,6 +109,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
                 this.blockUI();
                 this.backendService.tariffEdit(tariff.id, {
                     color: model.color,
+                    awesome_icon: model.awesome_icon,
                     company_details_required: model.company_details_required,
                     credit_for_beginning: model.credit_for_beginning,
                     description: model.description,

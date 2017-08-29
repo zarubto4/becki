@@ -61,8 +61,8 @@ export class ModalsCreateTypeOfBoardComponent implements OnInit {
         });
     }
 
-    checkboxChanged(value: boolean) {
-        (<FormControl>(this.form.controls['connectible_to_internet'])).setValue(value);
+    onBooleanClick(value: boolean): void {
+        this.modalModel.connectible_to_internet = value;
     }
 
     ngOnInit() {

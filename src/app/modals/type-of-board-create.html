@@ -8,9 +8,11 @@
             <bk-form-input [control]="form.controls.name" label="{{'label_name'|bkTranslate:this}}"></bk-form-input>
             <bk-form-input [control]="form.controls.description"  label="{{'label_description'|bkTranslate:this}}"></bk-form-input>
 
-            <label>{{'label_connectible_to_internet'|bkTranslate:this}}</label>
-            <input type="checkbox" name="compiler_target_name" (change)="checkboxChanged(!form.controls.label_connectible_to_internet)">
-
+            <div>
+                <label>{{'label_connectible_to_internet'|bkTranslate:this}}</label>
+                <i *ngIf="!modalModel.connectible_to_internet" class="fa fa-toggle-on font-green-jungle cursor-hand" (click)="onBooleanClick(!modalModel.connectible_to_internet)"></i>
+                <i *ngIf="modalModel.connectible_to_internet"  class="fa fa-toggle-off font-grey-mint cursor-hand"   (click)="onBooleanClick(!modalModel.connectible_to_internet)"></i>
+            </div>
 
             <bk-form-input [control]="form.controls.compiler_target_name" label="{{'label_compiler_target_name'|bkTranslate:this}}"></bk-form-input>
 

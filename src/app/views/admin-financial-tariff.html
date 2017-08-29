@@ -1,0 +1,333 @@
+<bk-layout-main
+     tabMenu="byzance-admin"
+     [title]="'main_title'|bkTranslate:this"
+     [subtitle]="'main_subtitle'|bkTranslate:this">
+
+
+    <div *ngIf="tariff" class="row">
+
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark">
+                            <i class="fa fa-fw fa-server"></i>
+                              {{'title'|bkTranslate:this}}
+                        </span>
+                    </div>
+                    <div class="becki-actions">
+
+
+                        <button *ngIf="tab == 'tariffs' && !tariff.active" title="{{'label_active_tariff'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!tariff.update_permission" (click)="onTariffActivateClick(tariff)">
+                            <i class="fa fa-power-off"></i>
+                        </button>
+                        <button  *ngIf="tab == 'tariffs' &&  tariff.active" title="{{'label_deactive_tariff'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!tariff.update_permission" (click)="onTariffDeactivateClick(tariff)">
+                            <i class="fa fa-power-off"></i>
+                        </button>
+
+                        <button *ngIf="tab == 'tariffs'" title="{{'label_edit_tariff'|bkTranslate:this}}" class="btn btn-icon-only blue"
+                                [disabled]="false"
+                                (click)="onTariffEditClick(tariff)">
+                            <i class="fa fa-cog"></i>
+                        </button>
+                        <button *ngIf="tab == 'extensions'" title="{{'label_add_extension'|bkTranslate:this}}" class="btn btn-icon-only green"
+                                [disabled]="false"
+                                (click)="onExtensionCreate()">
+                            <i class="fa fa-plus-circle"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="portlet-title tabbable-line">
+                    <!--ul class="nav nav-tabs margin-left-15 pull-left"-->
+                    <ul class="nav nav-tabs pull-left">
+
+                        <li [class.active]="tab == 'tariffs'">
+                          <a class="cursor-pointer" (click)="onToggleTab('tariffs')"><i class="fa fa-usd"></i> {{'tab_tariffs'|bkTranslate:this}}</a>
+                        </li>
+
+                        <li [class.active]="tab == 'extensions_include'">
+                            <a class="cursor-pointer" (click)="onToggleTab('extensions_include')"><i class="fa fa-archive"></i> {{'tab_extensions_include'|bkTranslate:this}}</a>
+                        </li>
+                        <li [class.active]="tab == 'extensions_optional'">
+                            <a class="cursor-pointer" (click)="onToggleTab('extensions_optional')"><i class="fa fa-archive"></i> {{'tab_extensions_optional'|bkTranslate:this}}</a>
+                        </li>
+                    </ul>
+
+                </div>
+
+                <!-- Tariffs-->
+                <div *ngIf="tab == 'tariffs'">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="portlet-body">
+                                <div class="pricing-content-1">
+                                    <div class="row">
+                                        <div class="col-md-3"></div>
+                                        <div class="col-md-6">
+                                            <div class="price-column-container border-active tariff">
+                                                <div class="price-table-head bg-{{tariff.color|lowercase}}">
+                                                    <h2 class="no-margin">{{tariff.name}}</h2>
+                                                </div>
+                                                <div class="arrow-down border-top-{{tariff.color|lowercase}}"></div>
+
+                                                <div class="price-table-pricing">
+                                                    <h3 style="line-height: 50px;" [style.font-size]="makePrice(tariff.price).length>=7?'40px':'50px'">{{makePrice(tariff.price)}}</h3>
+                                                    <p class="font-grey-salt">{{'label_average_monthly_cost'|bkTranslate:this}}</p>
+                                                    <div class="price-ribbon">{{'ribbon_selected'|bkTranslate:this}}</div>
+                                                </div>
+                                                <div class="price-table-content">
+                                                    <div *ngFor="let label of tariff.labels" class="line">
+                                                        <i class="fa fa-fw {{label.icon|lowercase}} font-{{tariff.color|lowercase}}"></i>
+                                                        {{label.label}}
+                                                    </div>
+                                                </div>
+                                                <div class="arrow-down arrow-grey"></div>
+                                                <div class="price-table-footer">
+                                                    <button type="button" class="btn uppercase price-button {{tariff.color|lowercase}}">
+                                                        {{'btn_select'|bkTranslate:this}}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <br>
+                            <br>
+                            <div>
+                                {{'label_tariff_name'|bkTranslate:this}}:
+                                <span class="font-grey-mint bold">{{tariff.name}}</span>
+                                <span *ngIf="tariff.active" class="font-green-jungle bold">(Active)</span>
+                                <span *ngIf="!tariff.active" class="font-red-flamingo bold">(Deactivated)</span>
+                            </div>
+                            <div>
+                                {{'label_tariff_description'|bkTranslate:this}}:
+                                <span class="font-grey-mint ">{{tariff.description}}</span>
+                            </div>
+                            <div>
+                                {{'label_tariff_identifier'|bkTranslate:this}}:
+                                <span class="font-grey-mint ">{{tariff.identifier}}</span>
+                            </div>
+                            <hr>
+                            <div>
+                                {{'label_credit_for_beginning'|bkTranslate:this}}:
+                                <span class="font-grey-mint ">{{makePrice(tariff.credit_for_beginning)}}</span>
+                            </div>
+                            <div>
+                                {{'label_average_monthly_cost'|bkTranslate:this}}:
+                                 <span class="font-grey-mint ">{{makePrice(tariff.price)}}</span>
+                            </div>
+                            <hr>
+                            <div>
+                                <i style="font-size: 1.4em;" class="fa {{tariff.awesome_icon}}"></i> {{'label_tariff_color'|bkTranslate:this}}:
+                                <span class="font-grey-mint ">{{tariff.color}}</span>
+                            </div>
+                            <br>
+                            <div>
+                                <span *ngIf="!tariff.company_details_required" class="font-grey-mint">{{'label_tariff_company_details_required'|bkTranslate:this}}</span>
+                                <span *ngIf="tariff.company_details_required" class="font-yellow-casablanca ">{{'label_tariff_no_company_details_required'|bkTranslate:this}}</span>
+                            </div>
+                            <br>
+                            <div>
+                                <span *ngIf="!tariff.payment_details_required" class="font-grey-mint">{{'label_tariff_payment_details_required'|bkTranslate:this}}</span>
+                                <span *ngIf="tariff.payment_details_required" class="font-yellow-casablanca ">{{'label_tariff_no_payment_details_required'|bkTranslate:this}}</span>
+                            </div>
+                            <br>
+                            <div>
+                                <span *ngIf="!tariff.payment_method_required" class="font-grey-mint">{{'label_tariff_payment_method_required'|bkTranslate:this}}</span>
+                                <span *ngIf="tariff.payment_method_required" class="font-yellow-casablanca ">{{'label_tariff_no_payment_method_required'|bkTranslate:this}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="tab == 'extensions_include'">
+                    <div *ngIf="tariff.extensions_included ">
+                        <div *ngIf="tariff.extensions_included.length==0">
+                            <h3 class="text-center margin-bottom-15"> {{'label_no_expansions'|bkTranslate:this}}</h3>
+                        </div>
+                    </div>
+                    <div *ngFor="let extension of tariff.extensions_included" class="portlet-body">
+                        <div class="row">
+                            <div class="becki-actions">
+                                <button title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.edit_permission" (click)="onExtensionShiftUpClick(extension)">
+                                    <i class="fa fa-chevron-up"></i>
+                                </button>
+
+                                <button title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.edit_permission" (click)="onExtensionShiftDownClick(extension)">
+                                    <i class="fa fa-chevron-down"></i>
+                                </button>
+                                <button title="{{'label_add_extension'|bkTranslate:this}}" class="btn btn-icon-only blue margin-right-15"
+                                        [disabled]="false"
+                                        (click)="onExtensionEdit(extension)">
+                                    <i class="fa fa-cog"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="pricing-content-1">
+                                    <div class="row">
+                                        <div class="col-md-3" ></div>
+                                        <div class="col-md-6 margin-bottom-15">
+                                            <div class="price-column-container border-active package">
+                                                <div class="price-table-head bg-{{extension.color|lowercase}}">
+                                                    <h4 class="no-margin">{{extension.name}}</h4>
+                                                </div>
+                                                <div class="arrow-down border-top-{{extension.color|lowercase}}"></div>
+                                                <div class="price-table-pricing">
+                                                    <h3 style="line-height: 50px;" [style.font-size]="makePrice(extension.price).length>=7?'40px':'50px'">{{makePrice(extension.price)}}</h3>
+                                                    <p class="font-grey-salt">{{'label_average_monthly_cost'|bkTranslate:this}}</p>
+                                                    <div *ngIf="extension.include" class="price-ribbon">{{'label_included'|bkTranslate:this}}</div>
+                                                </div>
+                                                <div class="price-table-content">
+                                                    <p class="font-grey-salt">{{extension.description}}</p>
+                                                </div>
+                                                <div class="arrow-down arrow-grey"></div>
+                                                <div class="price-table-footer">
+                                                    <button *ngIf="extension.include" type="button" class="btn grey-salsa btn-outline uppercase price-button" disabled="disabled">
+                                                        {{'btn_included'|bkTranslate:this}}
+                                                    </button>
+                                                    <button *ngIf="!extension.include" type="button" class="btn grey-salsa btn-outline uppercase price-button" disabled="disabled">
+                                                        {{'btn_select'|bkTranslate:this}}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3" ></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <br>
+                                <br>
+                                <div>
+                                    {{'label_extension_name'|bkTranslate:this}}:
+                                    <span class="font-grey-mint bold">{{extension.name}}</span>
+                                    <span *ngIf="extension.include" class="font-green-jungle bold">(Include)</span>
+                                    <span *ngIf="!extension.include" class="font-red-flamingo bold">(Optional)</span>
+                                </div>
+                                <div>
+                                    {{'label_extension_description'|bkTranslate:this}}:
+                                    <span class="font-grey-mint ">{{extension.description}}</span>
+                                </div>
+                                <br>
+                                <div>
+                                    {{'label_extension_type'|bkTranslate:this}}:
+                                    <span class="font-grey-mint ">{{extension.type}}</span>
+                                </div>
+                                <div>
+                                    {{'label_extension_color'|bkTranslate:this}}:
+                                    <span class="font-grey-mint ">{{extension.color}}</span>
+                                </div>
+                                <div>
+                                    <h4> {{'label_extension_price'|bkTranslate:this}}:
+                                        <span class="font-grey-mint ">{{makePrice(extension.price)}}</span></h4>
+                                </div>
+                                <div>
+                                    <bk-form-nice-json [description]="'Config Json'" [cols]="50" [content]="extension.config" [readonly]="true"></bk-form-nice-json>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+
+                <div *ngIf="tab == 'extensions_optional'">
+                    <div *ngIf="tariff.extensions_optional">
+                        <div *ngIf=" tariff.extensions_optional.length==0">
+                            <h3 class="text-center margin-bottom-15"> {{'label_no_expansions'|bkTranslate:this}}</h3>
+                        </div>
+                    </div>
+                    <div *ngFor="let extension of tariff.extensions_optional" class="portlet-body">
+                        <div class="row">
+                            <div class="becki-actions">
+                                <button title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.edit_permission" (click)="onExtensionShiftUpClick(extension)">
+                                    <i class="fa fa-chevron-up"></i>
+                                </button>
+
+                                <button title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.edit_permission" (click)="onExtensionShiftDownClick(extension)">
+                                    <i class="fa fa-chevron-down"></i>
+                                </button>
+                                <button title="{{'label_add_extension'|bkTranslate:this}}" class="btn btn-icon-only blue margin-right-15"
+                                        [disabled]="false"
+                                        (click)="onExtensionEdit(extension)">
+                                    <i class="fa fa-cog"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="pricing-content-1">
+                                    <div class="row">
+                                        <div class="col-md-3" ></div>
+                                        <div class="col-md-6 margin-bottom-15">
+                                            <div class="price-column-container border-active package">
+                                                <div class="price-table-head bg-{{extension.color|lowercase}}">
+                                                    <h4 class="no-margin">{{extension.name}}</h4>
+                                                </div>
+                                                <div class="arrow-down border-top-{{extension.color|lowercase}}"></div>
+                                                <div class="price-table-pricing">
+                                                    <h3 style="line-height: 50px;" [style.font-size]="makePrice(extension.price).length>=7?'40px':'50px'">{{makePrice(extension.price)}}</h3>
+                                                    <p class="font-grey-salt">{{'label_average_monthly_cost'|bkTranslate:this}}</p>
+                                                    <div *ngIf="extension.include" class="price-ribbon">{{'label_included'|bkTranslate:this}}</div>
+                                                </div>
+                                                <div class="price-table-content">
+                                                    <p class="font-grey-salt">{{extension.description}}</p>
+                                                </div>
+                                                <div class="arrow-down arrow-grey"></div>
+                                                <div class="price-table-footer">
+                                                    <button *ngIf="extension.include" type="button" class="btn grey-salsa btn-outline uppercase price-button" disabled="disabled">
+                                                        {{'btn_included'|bkTranslate:this}}
+                                                    </button>
+                                                    <button *ngIf="!extension.include" type="button" class="btn grey-salsa btn-outline uppercase price-button" disabled="disabled">
+                                                        {{'btn_select'|bkTranslate:this}}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3" ></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <br>
+                                <br>
+                                <div>
+                                    {{'label_extension_name'|bkTranslate:this}}:
+                                    <span class="font-grey-mint bold">{{extension.name}}</span>
+                                    <span *ngIf="extension.include" class="font-green-jungle bold">(Include)</span>
+                                    <span *ngIf="!extension.include" class="font-red-flamingo bold">(Optional)</span>
+                                </div>
+                                <div>
+                                    {{'label_extension_description'|bkTranslate:this}}:
+                                    <span class="font-grey-mint ">{{extension.description}}</span>
+                                </div>
+                                <br>
+                                <div>
+                                    {{'label_extension_type'|bkTranslate:this}}:
+                                    <span class="font-grey-mint ">{{extension.type}}</span>
+                                </div>
+                                <div>
+                                    {{'label_extension_color'|bkTranslate:this}}:
+                                    <span class="font-grey-mint ">{{extension.color}}</span>
+                                </div>
+                                <div>
+                                    <h4> {{'label_extension_price'|bkTranslate:this}}:
+                                    <span class="font-grey-mint ">{{makePrice(extension.price)}}</span></h4>
+                                </div>
+                                <div>
+                                    <bk-form-nice-json [description]="'Config Json'" [cols]="50" [content]="extension.config" [readonly]="true"></bk-form-nice-json>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</bk-layout-main>
