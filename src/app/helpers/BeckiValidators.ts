@@ -23,10 +23,21 @@ export class BeckiValidators {
     }
 
     public static number: ValidatorFn = (c: AbstractControl) => {
-        if (c.value.match(/^[0-9]*$/)) {
-            return null; // valid
+        try {
+
+            if (c === null ) {
+                return {'number': true}; // invalid
+            }
+
+            if (c.value.match(/^[0-9]+([\/][0-9]+)?$/)) {
+                return null; // valid
+            }
+
+            return {'number': true}; // invalid
+
+        } catch (e) {
+            return {'number': true}; // invalid
         }
-        return {'number': true}; // invalid
     }
 
     public static condition(conditionCallback: (value: string) => boolean, validator: ValidatorFn): ValidatorFn {

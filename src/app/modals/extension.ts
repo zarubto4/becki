@@ -82,6 +82,7 @@ export class ModalsExtensionComponent implements OnInit {
         this.modalModel.name = this.form.controls['name'].value;
         this.modalModel.description = this.form.controls['description'].value;
         this.modalModel.extension_type = this.form.controls['extension_type'].value;
+
         this.modalModel.config = this.form.controls['config'].value;
         this.modalClose.emit(true);
     }

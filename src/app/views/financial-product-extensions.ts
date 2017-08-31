@@ -9,7 +9,7 @@
 
 import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { IProduct } from '../backend/TyrionAPI';
+import {IProduct, IProductExtension} from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 
 
@@ -46,7 +46,26 @@ export class FinancialProductExtensionsComponent extends BaseMainComponent imple
         this.routeParamsSubscription.unsubscribe();
     }
 
+    makePrice(price: number): string {
+        if (price === 0) {
+            return  this.translate('label_free');
+        }
 
+        price = price / 1000;
+
+        if (Math.floor(price) === price) {
+            return price.toFixed(2) + '$';
+        } else {
+            return price.toFixed(2) + '$';
+        }
+    }
+    editExtension(extension: IProductExtension) {
+
+    }
+
+    removeExtension(extension: IProductExtension) {
+
+    }
 
     refresh(): void {
         this.blockUI();

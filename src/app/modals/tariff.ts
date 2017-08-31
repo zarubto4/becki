@@ -11,6 +11,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { BackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiValidators } from '../helpers/BeckiValidators';
+import { ITariffLabel } from '../backend/TyrionAPI';
 
 export class ModalsTariffModel extends ModalModel {
     constructor(
@@ -24,6 +25,8 @@ export class ModalsTariffModel extends ModalModel {
         public identifier: string = '',
         public payment_method_required: boolean = false,
         public payment_details_required: boolean = false,
+        public labels: ITariffLabel[] = [],
+        public labelsInString: string = '[{\"icon":\"fa-fire\",\"description\":\"text\"}]'
     ) {
         super();
     }
@@ -52,6 +55,7 @@ export class ModalsTariffComponent implements OnInit {
             'description': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
             'name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(16)]],
             'identifier': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(16)]],
+            'labelsInString': ['', [Validators.required]],
         });
     }
 
@@ -74,6 +78,13 @@ export class ModalsTariffComponent implements OnInit {
         (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
         (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
         (<FormControl>(this.form.controls['identifier'])).setValue(this.modalModel.identifier);
+
+        if (this.modalModel.labels.length > 0) {
+            this.modalModel.labelsInString = JSON.stringify(this.modalModel.labels);
+        }
+
+        (<FormControl>(this.form.controls['labelsInString'])).setValue(this.modalModel.labelsInString);
+
     }
 
     onSubmitClick(): void {
@@ -83,6 +94,7 @@ export class ModalsTariffComponent implements OnInit {
         this.modalModel.description = this.form.controls['description'].value;
         this.modalModel.name = this.form.controls['name'].value;
         this.modalModel.identifier = this.form.controls['identifier'].value;
+        this.modalModel.labelsInString = this.form.controls['labelsInString'].value.toString();
         this.modalClose.emit(true);
     }
 

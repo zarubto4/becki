@@ -17,9 +17,64 @@
             </div>
             </div>
             <div class="portlet-body">
-                <div class="tab-content">
-                    <div class="tab-pane active">
-                        <span class="font-red bg-yellow-lemon">TODO</span>
+                <div class="row">
+                    <div *ngIf="paymentDetails" class="col-md-6">
+                        <h4>{{'label_payment_detail_owner'|bkTranslate:this}}</h4>
+
+                        <div>
+                            {{'label_company_name'|bkTranslate:this}}:
+                            <span class="font-grey-mint bold">{{paymentDetails.company_name}}</span>
+                        </div>
+                        <div>
+                            {{'label_registration_number'|bkTranslate:this}}:
+                            <span class="font-grey-mint bold">{{paymentDetails.company_registration_no}}</span>
+                        </div>
+                        <div>
+                            {{'label_vat_number'|bkTranslate:this}}:
+                            <span class="font-grey-mint bold">{{paymentDetails.company_vat_number}}</span>
+                        </div>
+                        <hr>
+                        <div>
+                            {{'label_street'|bkTranslate:this}}:
+                            <span class="font-grey-mint bold">{{paymentDetails.street}}</span>
+                        </div>
+                        <div>
+                            {{'label_street_number'|bkTranslate:this}}:
+                            <span class="font-grey-mint bold">{{paymentDetails.street_number}}</span>
+                        </div>
+                        <div>
+                            {{'label_city'|bkTranslate:this}}:
+                            <span class="font-grey-mint bold">{{paymentDetails.city}}</span>
+                        </div>
+                        <div>
+                            {{'label_zip_code'|bkTranslate:this}}:
+                            <span class="font-grey-mint bold">{{paymentDetails.zip_code}}</span>
+                        </div>
+                        <div>
+                            {{'label_country'|bkTranslate:this}}:
+                            <span class="font-grey-mint bold">{{paymentDetails.country}}</span>
+                        </div>
+                        <hr>
+                        <div>
+                            {{'label_company_web'|bkTranslate:this}}:
+                            <span class="font-grey-mint bold">{{paymentDetails.company_web}}</span>
+                        </div>
+                        <hr>
+                        <div>
+                            {{'label_company_phone'|bkTranslate:this}}:
+                            <span class="font-grey-mint bold">{{paymentDetails.company_authorized_phone}}</span>
+                        </div>
+                        <div>
+                            {{'label_company_email'|bkTranslate:this}}:
+                            <span class="font-grey-mint bold">{{paymentDetails.company_authorized_email}}</span>
+                        </div>
+
+                    </div>
+                    <div>
+                        <h4>{{'label_payment_detail_owner'|bkTranslate:this}}</h4>
+                        <p>
+                            <span>Client Billing (Not activated) What it means?</span>
+                        </p>
                     </div>
                 </div>
             </div>

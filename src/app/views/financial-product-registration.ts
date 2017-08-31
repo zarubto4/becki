@@ -10,7 +10,7 @@
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { ITariff, IProductExtension, IProductNew, IInvoice, IProduct } from '../backend/TyrionAPI';
-import { FormGroup, Validators } from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { Subscription } from 'rxjs';
@@ -29,6 +29,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
     routeParamsSubscription: Subscription;
 
     step: number = 1;
+    totalStep: number = 4;
 
     tariffs: ITariff[];
 
@@ -47,6 +48,8 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
     goPayLoaderService: GoPayLoaderService;
     goPayLoaderServiceSubscription: Subscription;
 
+    extensionTab: string = 'optional_extensions';
+
     constructor(injector: Injector) {
         super(injector);
         this.goPayLoaderService = injector.get(GoPayLoaderService);
@@ -64,13 +67,20 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
     makePrice(price: number): string {
         if (price === 0) {
-            return 'Free';
+            return  this.translate('label_free');
         }
+
+        price = price / 1000;
+
         if (Math.floor(price) === price) {
-            return price + '$';
+            return price.toFixed(2) + '$';
         } else {
             return price.toFixed(2) + '$';
         }
+    }
+
+    onExtensionToggleTab(tab: string) {
+        this.extensionTab = tab;
     }
 
     ngOnDestroy(): void {
@@ -138,7 +148,11 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
                 return true;
             }
 
-            if (step === 4) {
+            if (step === 4 && this.totalStep === 3) {
+                return true;
+            }
+
+            if (step === 4 && this.totalStep !== 3) {
                 if (this.form.valid) {
                     return true;
                 }
@@ -185,10 +199,15 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             label: method.user_description,
             value: method.json_identifier
         }));
+
         /*tariff.payment_modes.map(mode => this.optionsPaymentMode.push({
             label: mode.user_description,
             value: mode.json_identifier
         }));*/
+
+
+
+        this.extensionTab = 'optional_extensions';
 
         let input: { [key: string]: any; } = {
             'product_individual_name': ['', [Validators.required, Validators.minLength(4)]],
@@ -209,14 +228,6 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             }
             input['payment_method'] = [value, [Validators.required]]; // only if required_payment_method = true
         }
-        /*if (this.selectedTariff.payment_mode_required) {
-            // input['currency_type'] = ['', [Validators.required]];
-            let value = '';
-            if (this.optionsPaymentMode.length === 1) {
-                value = this.optionsPaymentMode[0].value;
-            }
-            input['payment_mode'] =     [value, [Validators.required]]; // only if required_payment_mode = true
-        }*/
 
         if (this.selectedTariff.company_details_required) {
 
@@ -238,6 +249,14 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         }
 
         this.form = this.formBuilder.group(input);
+
+        if (tariff.company_details_required || tariff.payment_method_required || tariff.payment_details_required) {
+            (<FormControl>(this.form.controls['product_individual_name'])).setValue('');
+            this.totalStep = 4;
+        } else {
+            (<FormControl>(this.form.controls['product_individual_name'])).setValue('My ' + this.selectedTariff.name);
+            this.totalStep = 3;
+        }
 
         this.router.navigate(['/financial/product-registration', { step: 2 }]);
     }
@@ -284,8 +303,16 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
     onConfirmClick(): void {
 
         if (!this.selectedTariff) { return; }
-        if (!this.form) { return; }
-        if (!this.form.valid) { return; }
+
+        if (this.selectedTariff.company_details_required || this.selectedTariff.payment_method_required || this.selectedTariff.payment_details_required) {
+
+            if (!this.form) {
+                return;
+            }
+            if (!this.form.valid) {
+                return;
+            }
+        }
 
         this.blockUI();
 

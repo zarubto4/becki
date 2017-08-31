@@ -16,6 +16,15 @@
                 </div>
 
                 <div class="portlet-title tabbable-line">
+
+                    <div *ngIf="tab == 'tariffs'"  class="becki-actions">
+                        <button title="{{'label_tariff_create'|bkTranslate:this}}" class="btn btn-icon-only green"
+                                [disabled]="false"
+                                (click)="onTariffAddClick()">
+                            <i class="fa fa-plus-circle"></i>
+                        </button>
+                    </div>
+
                     <!--ul class="nav nav-tabs margin-left-15 pull-left"-->
                     <ul class="nav nav-tabs pull-left">
                         <li [class.active]="tab == 'tariffs'">
@@ -25,17 +34,7 @@
                 </div>
 
                 <!-- Tariffs-->
-
                 <div *ngIf="tab == 'tariffs'">
-
-                    <div *ngIf="(tariffs && tariffs.length > O)"  class="becki-actions">
-                        <button title="{{'label_tariff_create'|bkTranslate:this}}" class="btn btn-icon-only green"
-                                [disabled]="false"
-                                (click)="onTariffAddClick()">
-                            <i class="fa fa-plus-circle"></i>
-                        </button>
-                    </div>
-
                     <div *ngIf="(tariffs && tariffs.length)" class="table-scrollable">
                         <table class="table table-hover">
                             <thead>
@@ -66,11 +65,11 @@
                                             <i class="fa fa-cog"></i>
                                         </button>
 
-                                        <button title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.edit_permission" (click)="onTariffShiftUpClick(tariff)">
+                                        <button *ngIf="!(tariff.order_position == 1 || tariff.order_position == 0)" title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.edit_permission" (click)="onTariffShiftUpClick(tariff)">
                                             <i class="fa fa-chevron-up"></i>
                                         </button>
 
-                                        <button title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.edit_permission" (click)="onTariffShiftDownClick(tariff)">
+                                        <button *ngIf="!(tariffs.length == tariff.order_position) "title="{{'label_change_order'|bkTranslate:this}}" class="btn btn-icon-only purple" [disabled]="!tariff.edit_permission" (click)="onTariffShiftDownClick(tariff)">
                                             <i class="fa fa-chevron-down"></i>
                                         </button>
 

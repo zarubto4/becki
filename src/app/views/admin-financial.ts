@@ -78,6 +78,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
                     name: model.name,
                     payment_method_required: model.payment_method_required,
                     payment_details_required: model.payment_details_required,
+                    labels: JSON.parse(model.labelsInString)
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_create_success', model.name)));
@@ -102,7 +103,8 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
             tariff.name,
             tariff.identifier,
             tariff.payment_method_required,
-            tariff.payment_details_required
+            tariff.payment_details_required,
+            tariff.labels
         );
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -117,6 +119,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
                     name: model.name,
                     payment_method_required: model.payment_method_required,
                     payment_details_required: model.payment_details_required,
+                    labels: JSON.parse(model.labelsInString)
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_edit_success', model.name)));
@@ -129,7 +132,6 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
             }
         });
     }
-
 
     onTariffShiftUpClick(tariff: ITariff): void {
         this.backendService.tariffOrderUp(tariff.id)

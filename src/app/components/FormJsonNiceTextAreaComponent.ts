@@ -2,7 +2,7 @@
  * Created by davidhradek on 04.08.16.
  */
 
-import {Component, Input, OnInit, Output} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 
@@ -59,8 +59,13 @@ export class FormJsonNiceTextAreaComponent implements OnInit {
     }
 
     ngOnInit() {
-        let obj = JSON.parse(this.content);
-        this.content = JSON.stringify(obj, null, 2);
+
+        try {
+            let obj = JSON.parse(this.content);
+            this.content = JSON.stringify(obj, null, 2);
+        }catch (e) {
+            this.content = JSON.stringify('[]', null, 2);
+        }
     }
 
 

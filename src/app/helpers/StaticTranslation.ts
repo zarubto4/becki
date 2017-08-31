@@ -23,6 +23,9 @@ export class StaticTranslation {
             }, 'ModalsAddHardwareComponent': {
                 'title': 'Add a Device',
                 'label_hash_token': 'Hash Token'
+            }, 'ModalsFinancialProductComponent': {
+                'title': 'Change Basic Product information',
+                'label_name': 'Product name'
             }, 'ModalsExtensionComponent': {
                 'title': 'Add a Device',
                 'label_color': 'Color in Template. Please used color from http://keenthemes.com/preview/metronic/theme/admin_1/ui_colors.html',
@@ -30,7 +33,7 @@ export class StaticTranslation {
                 'label_description': 'Description',
                 'label_price': 'Price  1USD == 1000 !!!!!',
                 'label_config': 'Config in JSON',
-                'label_optional_included': 'Included in Tariff (Or Optional)',
+                'label_optional_included': 'Optional in Tariff',
                 'label_extension_type': 'Extension type',
             }, 'ModalsAdminCreateHardwareComponent': {
                 'title': 'Manual Hardware registration',
@@ -374,11 +377,32 @@ export class StaticTranslation {
 
             }, 'FinancialProductBillingComponent': {
                 'title': 'Billings',
+                'label_payment_detail_owner': 'Billing Details (Who Manage this Financial Product)',
+                'label_payment_detail_invoice_target': 'Who is being invoiced',
+                'label_invoice_email': 'Invoice E-mail',
+                'label_payment_method': 'Payment method',
+                'label_personal_info': 'Personal information',
+                'label_company_info': 'Company information',
+                'label_full_name': 'Full name',
+                'label_company_name': 'Company name',
+                'label_street': 'Street name',
+                'label_street_number': 'Street number',
+                'label_city': 'City',
+                'label_zip_code': 'Zip code',
+                'label_country': 'Country',
+                'label_registration_number': 'Registration number',
+                'label_vat_number': 'VAT number (with country code)',
+                'label_company_web': 'Company website',
+                'label_company_email': 'Company authorised contact E-mail',
+                'label_company_phone': 'Company authorised contact Phone number',
 
             }, 'FinancialProductExtensionsComponent': {
                 'title': 'Extensions',
                 'label_average_monthly_cost': 'Average monthly cost',
                 'label_no_extensions': 'No Extensions found.',
+                'label_free': 'Free',
+                'no_extension': 'No Extensions',
+                'no_extension_comment': 'No extensions? No additional tuning? Let|\'s just tell us you\'re not making selfie to the instagram. Or are you Scrooge McDuck?',
 
             }, 'RoleGroupComponent': {
                 'main_title': 'Platform administration',
@@ -521,8 +545,9 @@ export class StaticTranslation {
                 'table_date_of_create': 'Date of creation',
                 'table_paid': 'Paid',
                 'table_actions': 'Actions',
+                'no_invoice': 'No invoices',
                 'payment_required': 'Payment required',
-                'no_invoice': 'No Invoices found.',
+                'no_invoice_comment': ' <p>We did not find any financial records... which means you did not even start to spend money. </p> <p> Maybe Mr.Salieri should send his regards. </p>',
                 'flash_invoice_been_resend': 'The invoice has been resent to your general invoice E-mail.',
                 'flash_invoice_cant_be_resend': 'The invoice could not be sent!',
 
@@ -537,13 +562,26 @@ export class StaticTranslation {
                 'nav_step_three_text': 'Fill additional information',
                 'nav_step_four_title': 'Summary',
                 'nav_step_four_text': 'Check your order and confirm',
+                'financial_monologue': '<p> The financial plan - or the package you can see here is only the starting state at the beginning. ' +
+                                        'You can see estimated monthly costs and recommended customer type. ' +
+                                        'Each tariff includes a group of extensions at the beginning, such as number of co-workers, storage size, technical support, etc., but you can remove or add, increase, or change extensions anytime later. ' +
+                                        'All tariffs and extensions are based on SaaS (Software as a Service) and Haas (Hardware as a Service). ' +
+                                        'You can pay by card or set up automatic email billing alerts to be notified to your account department, which will be sent by bank transfer. ' +
+                                        '<strong> For each tariff, we give you free credit that should be enough for the first month for free. </strong></p>' +
+                                        '<p>For <strong>large or individual customers</strong>, we have a special tariff by the business contract with technical support, dedicated developers in your office etc. </p>' +
+                                        '<p> For more details please visit <a href="http://byzance.cz/financial" target="_blank">Financial Site</a> </p>',
                 'step_one_title': 'Tariff',
                 'step_two_title': 'Packages',
+                'tab_extensions_optional': 'Voluntary enlargement right from the start',
+                'tab_extensions_include': 'Already in the package',
                 'step_two_no_expansions': 'There are no expansions packages, click Continue.',
                 'step_three_title': 'Information',
                 'step_three_product_info': 'Product information',
                 'step_three_billing_info': 'Billing information',
                 'step_three_label_product_name': 'Product name (your unique name for this tariff order)',
+                'label_average_monthly_cost': 'Average monthly cost',
+                'label_no_optional_extensions': 'No available optional extensions',
+                'label_no_optional_extensions_comment': 'We did not find the available extensions for this tariff. But do not be afraid -  Everything comes to him who waits... In the future there will surely be an opportunity to spend more money with us :P',
 
                 'label_invoice_email': 'Invoice E-mail',
                 'label_payment_method': 'Payment method',
@@ -562,6 +600,7 @@ export class StaticTranslation {
                 'label_company_email': 'Company authorised contact E-mail',
                 'label_company_phone': 'Company authorised contact Phone number',
                 'label_want_tariff_not_found': 'Wanted tariff not found.',
+                'label_free': 'Free',
                 'label_cant_load_tarrif': 'Cannot load tariffs. {0}',
 
                 'step_four_title': 'Summary',
@@ -575,11 +614,9 @@ export class StaticTranslation {
                 'table_description': 'Description',
                 'table_price': 'Price',
                 'table_packages': 'Packages',
-                'table_total': 'Total',
-
+                'table_total': 'Monthly estimated cost',
 
                 'text_unknown': 'Unknown',
-                'label_free': 'Free',
                 'average_monthly_cost': 'Average monthly cost',
                 'btn_select': 'Select',
                 'btn_included': 'Included',
@@ -643,6 +680,7 @@ export class StaticTranslation {
                 'label_free': 'Free',
                 'label_not_set_yet': 'Not set yet',
                 'label_no_product': 'No product',
+                'label_no_product_comment': 'First create a financial entity under which all your content will be registered. You can add hardware, run cloud applications, deploy own servers, paid invoices :P and of course go safely from prototype to mass IoT production. <br><br> We wish you much luck with the ideas that dominate the world.',
                 'flash_cant_deactivate_product': 'The product cannot be deactivated. {0}',
                 'flash_product_activated': 'The product has been activated.',
                 'flash_cant_activate_product': 'The product cannot be activated. {0}',

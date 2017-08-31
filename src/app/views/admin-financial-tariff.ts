@@ -24,7 +24,7 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
     extensionTypes: IProductExtensionType[] = null;
     tariffId: string = null;
 
-    tab: string = 'extensions';
+    tab: string = 'tariffs';
     routeParamsSubscription: Subscription;
 
     constructor(injector: Injector) {
@@ -74,37 +74,29 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
     }
 
     onTariffDeactivateClick(tariff: ITariff): void {
-        this.modalService.showModal(new ModalsRemovalModel(tariff.name)).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.backendService.tariffDeactivate(tariff.id)
-                    .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_delete_success')));
-                        this.refresh();
-                    })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_delete_error', reason)));
-                        this.refresh();
-                    });
-            }
-        });
+        this.blockUI();
+        this.backendService.tariffDeactivate(tariff.id)
+            .then(() => {
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_delete_success')));
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_delete_error', reason)));
+                this.refresh();
+            });
     }
 
     onTariffActivateClick(tariff: ITariff): void {
-        this.modalService.showModal(new ModalsRemovalModel(tariff.name)).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.backendService.tariffActivate(tariff.id)
-                    .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_delete_success')));
-                        this.refresh();
-                    })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_delete_error', reason)));
-                        this.refresh();
-                    });
-            }
-        });
+        this.blockUI();
+        this.backendService.tariffActivate(tariff.id)
+            .then(() => {
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_delete_success')));
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_delete_error', reason)));
+                this.refresh();
+            });
     }
 
     onTariffEditClick(tariff: ITariff): void {
@@ -118,7 +110,8 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
             tariff.name,
             tariff.identifier,
             tariff.payment_method_required,
-            tariff.payment_details_required
+            tariff.payment_details_required,
+            tariff.labels
         );
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -133,6 +126,7 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
                     name: model.name,
                     payment_method_required: model.payment_method_required,
                     payment_details_required: model.payment_details_required,
+                    labels: JSON.parse(model.labelsInString)
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_edit_success', model.name)));
@@ -144,39 +138,6 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
                     });
             }
         });
-    }
-
-    onLabelShiftUpClick(label: ITariffLabel): void {
-        this.backendService.tariffLabelOrderUp(label.id)
-            .then(() => {
-                this.refresh();
-            })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_label', reason)));
-                this.refresh();
-            });
-    }
-
-    onLabelShiftDownClick(label: ITariffLabel): void {
-        this.backendService.tariffLabelOrderDown(label.id)
-            .then(() => {
-                this.refresh();
-            })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_label', reason)));
-                this.refresh();
-            });
-    }
-
-    onLabelDeleteClick(label: ITariffLabel): void {
-        this.backendService.tariffLabelDelete(label.id)
-            .then(() => {
-                this.refresh();
-            })
-            .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_delete_label', reason)));
-                this.refresh();
-            });
     }
 
     onExtensionShiftUpClick(extension: IProductExtension): void {
@@ -212,7 +173,7 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
                     color: model.color,
                     extension_type: model.extension_type,
                     included: model.included,
-                    config: model.config,
+                    config: model.config.toString(),
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_edit_success', model.name)));
@@ -257,6 +218,33 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
                     });
             }
         });
+    }
+
+
+    onExtensionActivateClick(extension: IProductExtension): void {
+        this.blockUI();
+        this.backendService.tariffExtensionActive(extension.id)
+            .then(() => {
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_extension_deactivated_success')));
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
+                this.refresh();
+            });
+    }
+
+    onExtensionDeactivateClick(extension: IProductExtension): void {
+        this.blockUI();
+        this.backendService.tariffExtensionDeactivate(extension.id)
+            .then(() => {
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_extension_deactivated_success')));
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
+                this.refresh();
+            });
     }
 
 }

@@ -161,6 +161,7 @@ import { AdminFinancialTariffComponent } from './views/admin-financial-tariff';
 import { ModalsExtensionComponent } from './modals/extension';
 import { FormTextAreaComponent } from './components/FormTextAreaComponent';
 import { FormJsonNiceTextAreaComponent } from './components/FormJsonNiceTextAreaComponent';
+import { ModalsFinancialProductComponent } from './modals/financial-product';
 
 
 // @formatter:off
@@ -459,6 +460,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsAdminCreateHardwareComponent,
         ModalsProjectPropertiesComponent,
         ModalsCreateHomerServerComponent,
+        ModalsFinancialProductComponent,
         ModalsTariffComponent,
         ModalsCreateProcessorComponent,
         ModalsBootloaderPropertyComponent,

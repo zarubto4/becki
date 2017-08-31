@@ -10,6 +10,7 @@ import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { BackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
+import {BeckiValidators} from "../helpers/BeckiValidators";
 
 
 export class ModalsCreateProcessorModel extends ModalModel {
@@ -44,7 +45,7 @@ export class ModalsCreateProcessorComponent implements OnInit {
             'description': ['', [Validators.required, Validators.minLength(4)]],
             'processor_code': ['', [Validators.required, Validators.minLength(4)]],
             'processor_name': ['', [Validators.required, Validators.minLength(4)]],
-            'speed': ['', [Validators.required]]
+            'speed': [0, [Validators.required, BeckiValidators.number]]
         });
     }
 

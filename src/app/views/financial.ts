@@ -10,7 +10,8 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { IProduct } from '../backend/TyrionAPI';
-import { FlashMessageError } from '../services/NotificationService';
+import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { ModalsFinancialProductModel } from '../modals/financial-product';
 
 
 @Component({
@@ -37,11 +38,29 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
         this.router.navigate(['/financial/product-registration']);
     }
 
-    onSettingsClick(): void {
-        alert('TODO!'); // TODO !!!
-    }
 
-    onEditClick(product: IProduct): void { }
+    onEditClick(product: IProduct): void {
+        let model = new ModalsFinancialProductModel(
+            true,
+            product.name,
+        );
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.productEditDetails(product.id, {
+                    name: model.name,
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_products_edit_success', model.name)));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_products_edit_error', model.name, reason)));
+                        this.refresh();
+                    });
+            }
+        });
+    }
 
     refresh(): void {
         this.blockUI();

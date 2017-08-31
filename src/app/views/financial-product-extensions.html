@@ -18,25 +18,36 @@
             </div>
             <div *ngIf="product" class="portlet-body">
                 <div *ngIf="product.extensions" class="pricing-content-1">
-                    <div *ngFor="let package of product.extensions" class="col-md-3 margin-bottom-15; text-center">
-                        <div>
-                            <div class="price-table-head bg-{{package.color|lowercase}}">
-                                <h4 class="no-margin">{{package.name}}</h4>
+                    <div *ngFor="let extension of product.extensions" class="col-md-3 margin-bottom-15; text-center">
+                        <div class="price-column-container border-active package">
+                            <div class="price-table-head bg-{{extension.color|lowercase}}">
+                                <h4 class="no-margin">{{extension.name}}</h4>
                             </div>
-                            <div class="arrow-down border-top-{{package.color|lowercase}}"></div>
+                            <div class="arrow-down border-top-{{extension.color|lowercase}}"></div>
                             <div class="price-table-pricing">
-                                <h3 style="font-size: 50px; line-height: 50px;">{{package.price}}$</h3>
+                                <h3 style="line-height: 50px;" [style.font-size]="makePrice(extension.price).length>=7?'40px':'50px'">{{makePrice(extension.price)}}</h3>
                                 <p class="font-grey-salt">{{'label_average_monthly_cost'|bkTranslate:this}}</p>
                             </div>
                             <div class="price-table-content">
-                                <p class="font-grey-salt">{{package.description}}</p>
+                                <p class="font-grey-salt">{{extension.description}}</p>
                             </div>
                             <div class="arrow-down arrow-grey"></div>
+                            <div class="price-table-footer">
+                                <button type="button" class="btn blue uppercase price-button" (click)="editExtension(extension)">
+                                    {{'btn_edit'|bkTranslate:this}}
+                                </button>
+                                <button type="button" class="btn red uppercase price-button" (click)="removeExtension(extension)">
+                                    {{'btn_remove'|bkTranslate:this}}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div *ngIf="!product.extensions" class="pricing-content-1">
-                    <h3>{{'label_no_extensions'|bkTranslate:this}}</h3>
+
+                <h3 *ngIf="!product" class="text-center">{{'loading'|bkTranslate:this}}</h3>
+                <div *ngIf="product && product.extensions.length < 1" class="list-no-items">
+                    <p class="list-no-items__main-label">{{'no_extension'|bkTranslate:this}}</p>
+                    <p class="list-no-items__sub-label"><span [innerHTML]="'no_extension_comment'|bkTranslate:this"></span></p>
                 </div>
             </div>
         </div>

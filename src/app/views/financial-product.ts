@@ -13,6 +13,7 @@ import { IProduct } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsDeactivateModel } from '../modals/deactivate';
+import { ModalsFinancialProductModel } from '../modals/financial-product';
 
 @Component({
     selector: 'bk-view-financial-product',
@@ -45,7 +46,26 @@ export class FinancialProductComponent extends BaseMainComponent implements OnIn
     }
 
     onEditClick(): void {
-        alert('TODO!'); // TODO !!!
+        let model = new ModalsFinancialProductModel(
+            true,
+            this.product.name,
+        );
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.productEditDetails(this.product.id, {
+                    name: model.name,
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_edit_success', model.name)));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_edit_error', model.name, reason)));
+                        this.refresh();
+                    });
+            }
+        });
     }
 
     ngOnDestroy(): void {
@@ -67,8 +87,6 @@ export class FinancialProductComponent extends BaseMainComponent implements OnIn
                     });
             }
         });
-        // TODO: remove it after translate t
-        // tslint:enable
     }
 
     activateProduct(): void {
