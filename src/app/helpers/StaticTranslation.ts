@@ -23,6 +23,24 @@ export class StaticTranslation {
             }, 'ModalsAddHardwareComponent': {
                 'title': 'Add a Device',
                 'label_hash_token': 'Hash Token'
+            }, 'ModalsBillingInformationComponent': {
+                'title': 'Information details',
+                'label_invoice_email': 'Invoice E-mail',
+                'label_payment_method': 'Payment method',
+                'label_personal_info': 'Personal information',
+                'label_company_info': 'Company information',
+                'label_full_name': 'Full name',
+                'label_company_name': 'Company name',
+                'label_street': 'Street name',
+                'label_street_number': 'Street number',
+                'label_city': 'City',
+                'label_zip_code': 'Zip code',
+                'label_country': 'Country',
+                'label_registration_number': 'Registration number',
+                'label_vat_number': 'VAT number (with country code)',
+                'label_company_web': 'Company website',
+                'label_company_email': 'Company authorised contact E-mail',
+                'label_company_phone': 'Company authorised contact Phone number',
             }, 'ModalsFinancialProductComponent': {
                 'title': 'Change Basic Product information',
                 'label_name': 'Product name'
@@ -572,6 +590,7 @@ export class StaticTranslation {
                                         '<p> For more details please visit <a href="http://byzance.cz/financial" target="_blank">Financial Site</a> </p>',
                 'step_one_title': 'Tariff',
                 'step_two_title': 'Packages',
+                'label_companies': 'Which company will be the owner?',
                 'tab_extensions_optional': 'Voluntary enlargement right from the start',
                 'tab_extensions_include': 'Already in the package',
                 'step_two_no_expansions': 'There are no expansions packages, click Continue.',
@@ -1645,6 +1664,7 @@ export class StaticTranslation {
                 'label_different_password': 'Passwords do not match.',
                 'label_invalid_file_name': 'Invalid file/directory name.',
                 'label_field_only_number': 'This field only accepts numbers.',
+                'label_field_invalid_url': 'Invalid URL.',
                 'label_unknown_error': 'Unknown error, {0}.',
 
             }, 'TabMenuService': {

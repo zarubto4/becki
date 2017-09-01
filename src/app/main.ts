@@ -162,6 +162,7 @@ import { ModalsExtensionComponent } from './modals/extension';
 import { FormTextAreaComponent } from './components/FormTextAreaComponent';
 import { FormJsonNiceTextAreaComponent } from './components/FormJsonNiceTextAreaComponent';
 import { ModalsFinancialProductComponent } from './modals/financial-product';
+import { ModalsBillingInformationComponent } from './modals/billing-information';
 
 
 // @formatter:off
@@ -458,6 +459,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ProjectsProjectLibrariesLibraryComponent,
         // Modals components
         ModalsAdminCreateHardwareComponent,
+        ModalsBillingInformationComponent,
         ModalsProjectPropertiesComponent,
         ModalsCreateHomerServerComponent,
         ModalsFinancialProductComponent,

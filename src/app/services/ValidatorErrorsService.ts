@@ -55,6 +55,9 @@ export class ValidatorErrorsService {
             if (errors['number']) {
                 return this.translate('label_field_only_number');
             }
+            if (errors['url']) {
+                return this.translate('label_field_invalid_url');
+            }
             if (errors['entityNotValid']) {
                 return this.translateTable(errors['entityNotValid'], 'entity_not_valid', (errors['entityMessage'] ? ' (' + errors['entityMessage'] + ')' : ''));
             }

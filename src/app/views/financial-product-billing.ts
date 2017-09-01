@@ -8,7 +8,7 @@
 
 import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import {IPaymentDetails, IProduct} from '../backend/TyrionAPI';
+import { ICustomer, IPaymentDetails, IProduct } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 
 
@@ -24,6 +24,7 @@ export class FinancialProductBillingComponent extends BaseMainComponent implemen
 
     product: IProduct = null;
     paymentDetails: IPaymentDetails = null;
+    customer: ICustomer = null;
 
     constructor(injector: Injector) {
         super(injector);
@@ -53,6 +54,7 @@ export class FinancialProductBillingComponent extends BaseMainComponent implemen
         this.backendService.productsGetUserOwnList().then(products =>  {
             this.product = products.find(product => product.id === this.id);
             this.paymentDetails = this.product.payment_details;
+            this.customer = this.product.customer;
             this.unblockUI();
         }).catch(error =>  {
 
