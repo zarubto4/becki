@@ -17,7 +17,6 @@ import { Subscription } from 'rxjs';
 import { StaticOptionLists } from '../helpers/StaticOptionLists';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { GoPayLoaderService } from '../services/GoPayLoaderService';
-import { ModalsBillingInformationModel } from '../modals/billing-information';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 
 
@@ -28,8 +27,8 @@ import { FlashMessageError, FlashMessageSuccess } from '../services/Notification
 export class ProductRegistrationComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     formPaymentDetail: FormGroup;        // Default registration informations - IPaymentDetails
-    formCustomerDetail: FormGroup;       // Only for select in option List
-    formNewTariffProduct: FormGroup;     //
+    formCustomerSelectedCompany: FormGroup; // Only for select in option List
+    formCustomerRegistration: FormGroup; // Only for select in option List
     formCustomer: FormGroup;             // Only for select in option List
 
     routeParamsSubscription: Subscription;
@@ -37,24 +36,22 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
     step: number = -1;           // Step in creating new product
     totalStep: number = 4;      // Number of steps if type of registration not required 4 but only 3 - shorter and faster registration
 
-    tariffs: ITariff[];         // List of tarrifs for choice
+    tariffs: ITariff[];         // List of tariffs for choice
     selectedTariff: ITariff;    // Selected Tariff
-
-    selectedCustomerId: string = null; // When user select customer
 
     selectedExtensions: IProductExtension[] = [];
 
     inEu: boolean = false;
 
-    registrationType: string = null;
+    registrationType: string = 'do_it_yourself';
     companies: ICustomer[] = null;
+    selectedCompanies: ICustomer = null;
 
     optionsCountryList: FormSelectComponentOption[] = StaticOptionLists.countryList;
 
     optionsPaymentMethod: FormSelectComponentOption[] = [];
-    optionsPaymentMode: FormSelectComponentOption[] = [];
     optionsCompanies: FormSelectComponentOption[] = [];
-    // optionsCurrencyType: FormSelectComponentOption[] = [{ label: 'USD', value: 'USD' }];
+
 
     goPayLoaderService: GoPayLoaderService;
     goPayLoaderServiceSubscription: Subscription;
@@ -66,8 +63,6 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         super(injector);
         this.goPayLoaderService = injector.get(GoPayLoaderService);
     };
-
-
 
     makePrice(price: number): string {
         if (price === 0) {
@@ -96,9 +91,10 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
     ngOnInit(): void {
         this.blockUI();
 
-        this.backendService.tariffsGetAll()
-            .then(tariffs => {
-                this.tariffs = tariffs;
+        Promise.all<any>([this.backendService.tariffsGetAll(), this.backendService.companiesGetAll()])
+            .then((values: [ITariff[], ICustomer[]]) => {
+                this.tariffs = values[0];
+                this.companies = values[1];
                 this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
 
                     if (params.hasOwnProperty('tariff')) {
@@ -126,14 +122,19 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
                         }
 
                     } else {
-                        this.step = 1;
+
+                        if (this.companies.length < 1) {
+                            this.step = 1;
+                        }else {
+                            this.step = 2;
+                        }
                     }
 
                     this.unblockUI();
                 });
 
             }).catch(error => {
-                this.fmError(this.translate('label_cant_load_tarrif', error));
+                this.fmError(this.translate('label_cant_load_tariff', error));
                 this.unblockUI();
             });
 
@@ -142,19 +143,17 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             'company_id': ['', [Validators.required]]
         });
 
-        // Form for PaymentDetail
-        this.formNewTariffProduct = this.formBuilder.group({
-            'product_individual_name': ['', [Validators.required, Validators.minLength(4)]],
-        });
-
         this.setFormPaymentDetail();
         this.setFormCustomerDetail();
+        this.setFormCompanySelector();
         this.refreshCompaniesForDecision();
-
     }
 
     setFormPaymentDetail(): void {
+
         this.formPaymentDetail = this.formBuilder.group({
+            'product_individual_name': ['', [Validators.required]],
+            'payment_method': [''],
             'city': ['', [Validators.required]],
             'company_authorized_email': ['', [Validators.required, BeckiValidators.email]],
             'company_authorized_phone': ['', [Validators.required, Validators.minLength(5)]],
@@ -164,14 +163,48 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             'invoice_email': ['', [Validators.required, BeckiValidators.email]],
             'street': ['', [Validators.required]],
             'street_number': ['', [Validators.required]],
-            'registration_no': ['', [BeckiValidators.condition(() => !this.inEu, Validators.required)]],
-            'vat_number': ['', [BeckiValidators.condition(() => this.inEu, Validators.required)], BeckiAsyncValidators.condition(() => this.inEu, BeckiAsyncValidators.validateEntity(this.backendService, 'vat_number'))],
-            'zip_code': ['', [Validators.required]]
+            'company_registration_no': ['', [BeckiValidators.condition(() => !this.inEu, Validators.required)]],
+            'company_vat_number': ['', [BeckiValidators.condition(() => this.inEu, Validators.required)], BeckiAsyncValidators.condition(() => this.inEu, BeckiAsyncValidators.validateEntity(this.backendService, 'vat_number'))],
+            'zip_code': ['', [Validators.required, Validators.minLength(4)]]
         });
+
+
+        if (this.selectedCompanies != null && this.registrationType === 'do_it_yourself') {
+
+            (<FormControl>(this.formPaymentDetail.controls['company_name'])).setValue(this.selectedCompanies.payment_details.company_name);
+            (<FormControl>(this.formPaymentDetail.controls['street'])).setValue(this.selectedCompanies.payment_details.street);
+            (<FormControl>(this.formPaymentDetail.controls['street_number'])).setValue(this.selectedCompanies.payment_details.street_number);
+            (<FormControl>(this.formPaymentDetail.controls['city'])).setValue(this.selectedCompanies.payment_details.city);
+            (<FormControl>(this.formPaymentDetail.controls['zip_code'])).setValue(this.selectedCompanies.payment_details.zip_code);
+            (<FormControl>(this.formPaymentDetail.controls['country'])).setValue(this.selectedCompanies.payment_details.country);
+            (<FormControl>(this.formPaymentDetail.controls['company_registration_no'])).setValue(this.selectedCompanies.payment_details.company_registration_no);
+            (<FormControl>(this.formPaymentDetail.controls['company_vat_number'])).setValue(this.selectedCompanies.payment_details.company_vat_number);
+            (<FormControl>(this.formPaymentDetail.controls['company_web'])).setValue(this.selectedCompanies.payment_details.company_web);
+            (<FormControl>(this.formPaymentDetail.controls['company_authorized_email'])).setValue(this.selectedCompanies.payment_details.company_authorized_email);
+            (<FormControl>(this.formPaymentDetail.controls['company_authorized_phone'])).setValue(this.selectedCompanies.payment_details.company_authorized_phone);
+            (<FormControl>(this.formPaymentDetail.controls['invoice_email'])).setValue(this.selectedCompanies.payment_details.invoice_email);
+
+            return;
+        }
+
+        // Set everything to null
+        (<FormControl>(this.formPaymentDetail.controls['company_name'])).setValue('');
+        (<FormControl>(this.formPaymentDetail.controls['street'])).setValue('');
+        (<FormControl>(this.formPaymentDetail.controls['street_number'])).setValue('');
+        (<FormControl>(this.formPaymentDetail.controls['city'])).setValue('');
+        (<FormControl>(this.formPaymentDetail.controls['zip_code'])).setValue('');
+        (<FormControl>(this.formPaymentDetail.controls['country'])).setValue('');
+        (<FormControl>(this.formPaymentDetail.controls['company_registration_no'])).setValue('');
+        (<FormControl>(this.formPaymentDetail.controls['company_vat_number'])).setValue('');
+        (<FormControl>(this.formPaymentDetail.controls['company_web'])).setValue('');
+        (<FormControl>(this.formPaymentDetail.controls['company_authorized_email'])).setValue('');
+        (<FormControl>(this.formPaymentDetail.controls['company_authorized_phone'])).setValue('');
+        (<FormControl>(this.formPaymentDetail.controls['invoice_email'])).setValue('');
+
     }
 
     setFormCustomerDetail(): void {
-        this.formCustomerDetail = this.formBuilder.group({
+        this.formCustomerRegistration = this.formBuilder.group({
             'city': ['', [Validators.required]],
             'company_authorized_email': ['', [Validators.required, BeckiValidators.email]],
             'company_authorized_phone': ['', [Validators.required, Validators.minLength(5)]],
@@ -181,30 +214,57 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             'invoice_email': ['', [Validators.required, BeckiValidators.email]],
             'street': ['', [Validators.required]],
             'street_number': ['', [Validators.required]],
-            'registration_no' : ['', [BeckiValidators.condition(() => !this.inEu, Validators.required)]],
-            'vat_number' : ['', [BeckiValidators.condition(() => this.inEu, Validators.required)], BeckiAsyncValidators.condition(() => this.inEu, BeckiAsyncValidators.validateEntity(this.backendService, 'vat_number'))],
+            'company_registration_no' : ['', [BeckiValidators.condition(() => !this.inEu, Validators.required), Validators.minLength(4), Validators.maxLength(20)]],
+            'company_vat_number' : ['', [BeckiValidators.condition(() => this.inEu, Validators.required)], BeckiAsyncValidators.condition(() => this.inEu, BeckiAsyncValidators.validateEntity(this.backendService, 'vat_number'))],
             'zip_code': ['', [Validators.required]]
+        });
+
+        this.formCustomerSelectedCompany = this.formBuilder.group({
+            'city': [''],
+            'company_authorized_email': [''],
+            'company_authorized_phone': [''],
+            'company_name': [''],
+            'company_web': [''],
+            'country': [''],
+            'invoice_email': [''],
+            'street': [''],
+            'street_number': [''],
+            'company_registration_no' : [''],
+            'company_vat_number' : [''],
+            'zip_code': ['']
+        });
+    }
+
+    setFormCompanySelector(): void {
+        this.formCustomer = this.formBuilder.group({
+            'company': ['', [Validators.required]]
         });
     }
 
     checkCustomerInEu(): void {
 
-        let country = this.optionsCountryList.find(fCountry => this.formCustomerDetail && fCountry.value === this.formCustomerDetail.controls['country'].value);
+        let country = this.optionsCountryList.find(fCountry => this.formCustomerRegistration && fCountry.value === this.formCustomerRegistration.controls['country'].value);
         this.inEu = country ? country.data : null;
 
-        this.formCustomerDetail.controls['registration_no'].updateValueAndValidity();
-        this.formCustomerDetail.controls['vat_number'].updateValueAndValidity();
+        (<FormControl>(this.formCustomerRegistration.controls['company_registration_no'])).setValue('');
+        (<FormControl>(this.formCustomerRegistration.controls['company_vat_number'])).setValue('');
+
+        this.formCustomerRegistration.controls['company_registration_no'].updateValueAndValidity();
+        this.formCustomerRegistration.controls['company_vat_number'].updateValueAndValidity();
 
     }
 
     checkInEu(): void {
-        if (this.selectedTariff.company_details_required) {
-            let country = this.optionsCountryList.find(fCountry => this.formPaymentDetail && fCountry.value === this.formPaymentDetail.controls['country'].value);
-            this.inEu = country ? country.data : null;
 
-            this.formPaymentDetail.controls['registration_no'].updateValueAndValidity();
-            this.formPaymentDetail.controls['vat_number'].updateValueAndValidity();
-        }
+        let country = this.optionsCountryList.find(fCountry => this.formPaymentDetail && fCountry.value === this.formPaymentDetail.controls['country'].value);
+        this.inEu = country ? country.data : null;
+
+        (<FormControl>(this.formPaymentDetail.controls['company_registration_no'])).setValue('');
+        (<FormControl>(this.formPaymentDetail.controls['company_vat_number'])).setValue('');
+
+        this.formPaymentDetail.controls['company_registration_no'].updateValueAndValidity();
+        this.formPaymentDetail.controls['company_vat_number'].updateValueAndValidity();
+
     }
 
     canActivateStep(step: number) {
@@ -218,22 +278,26 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         }
 
         if (step === 3 ) {
-            return this.selectedTariff != null;
-        }
-
-        if (step === 4) {
-            return this.selectedTariff != null;
-        }
-
-        if (step === 5) {
-            return this.selectedTariff != null && this.totalStep === 4;
-        }
-
-        if (step === 6 && this.totalStep === 3) {
             return true;
         }
 
-        if (step === 6 && this.totalStep === 4) {
+        if (step === 4 ) {
+            return true;
+        }
+
+        if (step === 5) {
+            return this.selectedTariff != null;
+        }
+
+        if (step === 6) {
+            return this.selectedTariff != null && this.totalStep === 4;
+        }
+
+        if (step === 7 && this.totalStep === 3) {
+            return true;
+        }
+
+        if (step === 7 && this.totalStep === 4) {
             if (this.formPaymentDetail.valid) {
                 return true;
             }
@@ -246,6 +310,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         if (this.canActivateStep(step)) {
             if (step === 1) {
                 this.step = 1;
+                this.selectedCompanies = null;
                 this.router.navigate(['/financial/product-registration']);
 
             } else {
@@ -255,33 +320,27 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         }
     }
 
+    changeType(registrationType: string): void {
+
+        this.registrationType = registrationType;
+        this.setFormPaymentDetail();
+
+    }
+
     setType(registrationType: string): void {
 
         this.registrationType = registrationType;
 
         if (registrationType === 'integrator') {
-            this.step = 2;
-            return;
-        }
-
-        if (registrationType === 'do_it_yourself') {
             this.step = 3;
             return;
         }
 
-    }
-
-    stepClickElseTouchForm(step: number): void {
-        if (this.canActivateStep(step)) {
-            this.stepClick(step);
-        } else {
-            for (let key in this.formPaymentDetail.controls) {
-                if (!this.formPaymentDetail.controls.hasOwnProperty(key)) {
-                    continue;
-                }
-                this.formPaymentDetail.controls[key].markAsTouched();
-            }
+        if (registrationType === 'do_it_yourself') {
+            this.step = 4;
+            return;
         }
+
     }
 
     chooseTariff(tariff: ITariff): void {
@@ -289,13 +348,13 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         this.selectedTariff = tariff;
 
         this.optionsPaymentMethod = [];
-        this.optionsPaymentMode = [];
         this.selectedExtensions = [];
 
         tariff.payment_methods.map(method => this.optionsPaymentMethod.push({
             label: method.user_description,
             value: method.json_identifier
         }));
+
 
         // Only if user change tariff after choice -- just set for default
         this.extensionTab = 'optional_extensions';
@@ -305,23 +364,25 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             this.setFormPaymentDetail();
         }
 
-        if (tariff.company_details_required || tariff.payment_method_required || tariff.payment_details_required) {
-            (<FormControl>(this.formNewTariffProduct.controls['product_individual_name'])).setValue('');
+        if (this.registrationType === 'integrator' || this.selectedCompanies != null || tariff.company_details_required || tariff.payment_method_required || tariff.payment_details_required) {
+            (<FormControl>(this.formPaymentDetail.controls['product_individual_name'])).setValue('');
             this.totalStep = 4;
         } else {
-            (<FormControl>(this.formNewTariffProduct.controls['product_individual_name'])).setValue('My ' + this.selectedTariff.name);
+            (<FormControl>(this.formPaymentDetail.controls['product_individual_name'])).setValue('My ' + this.selectedTariff.name);
             this.totalStep = 3;
         }
 
         this.router.navigate(['/financial/product-registration', { step: 4 }]);
     }
 
-    translatePaymentMode(value: string): string {
-        let fpm = this.optionsPaymentMode.find((pm) => pm.value === value);
-        if (fpm) {
-            return fpm.label;
-        }
-        return this.translate('text_unknown');
+    getTotalPrice(): number {
+        let price = 0;
+        price += this.selectedTariff.price;
+        this.selectedExtensions.map((pack) => {
+            price += pack.price;
+        });
+
+        return price;
     }
 
     translatePaymentMethod(value: string): string {
@@ -345,29 +406,59 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         }
     }
 
-    setCustomer(): void {
-        this.selectedCustomerId = this.formPaymentDetail.controls['formCustomer'].value;
-        this.step = 1;
+    setCompanyOwner(): void {
+
+        for (let company in this.companies) {
+
+            if (!this.companies.hasOwnProperty(company)) {
+                continue;
+            }
+
+            if (this.companies[company].id === this.formCustomer.controls['company'].value) {
+                this.selectedCompanies = this.companies[company];
+                this.step = 4;
+
+                (<FormControl>(this.formCustomerSelectedCompany.controls['company_name'])).setValue(this.selectedCompanies.payment_details.company_name);
+                (<FormControl>(this.formCustomerSelectedCompany.controls['street'])).setValue(this.selectedCompanies.payment_details.street);
+                (<FormControl>(this.formCustomerSelectedCompany.controls['street_number'])).setValue(this.selectedCompanies.payment_details.street_number);
+                (<FormControl>(this.formCustomerSelectedCompany.controls['city'])).setValue(this.selectedCompanies.payment_details.city);
+                (<FormControl>(this.formCustomerSelectedCompany.controls['zip_code'])).setValue(this.selectedCompanies.payment_details.zip_code);
+                (<FormControl>(this.formCustomerSelectedCompany.controls['country'])).setValue(this.selectedCompanies.payment_details.country);
+                (<FormControl>(this.formCustomerSelectedCompany.controls['company_registration_no'])).setValue(this.selectedCompanies.payment_details.company_registration_no);
+                (<FormControl>(this.formCustomerSelectedCompany.controls['company_vat_number'])).setValue(this.selectedCompanies.payment_details.company_vat_number);
+                (<FormControl>(this.formCustomerSelectedCompany.controls['company_web'])).setValue(this.selectedCompanies.payment_details.company_web);
+                (<FormControl>(this.formCustomerSelectedCompany.controls['company_authorized_email'])).setValue(this.selectedCompanies.payment_details.company_authorized_email);
+                (<FormControl>(this.formCustomerSelectedCompany.controls['company_authorized_phone'])).setValue(this.selectedCompanies.payment_details.company_authorized_phone);
+                (<FormControl>(this.formCustomerSelectedCompany.controls['invoice_email'])).setValue(this.selectedCompanies.payment_details.invoice_email);
+
+                this.setFormPaymentDetail();
+            }
+        }
+
     }
 
     onCreateCompany(): void {
 
         this.backendService.companyCreate({
-            city: this.formCustomerDetail.controls['city'].value,
-            company_authorized_email: this.formCustomerDetail.controls['company_authorized_email'].value,
-            company_authorized_phone:this.formCustomerDetail.controls['company_authorized_phone'].value,
-            company_name: this.formCustomerDetail.controls['company_name'].value,
-            company_web: this.formCustomerDetail.controls['company_web'].value,
-            country: this.formCustomerDetail.controls['country'].value,
-            invoice_email: this.formCustomerDetail.controls['invoice_email'].value,
-            street: this.formCustomerDetail.controls['street'].value,
-            street_number: this.formCustomerDetail.controls['street_number'].value,
-            registration_no: this.formCustomerDetail.controls['registration_no'].value,
-            vat_number:  this.formCustomerDetail.controls['vat_number'].value,
-            zip_code:  this.formCustomerDetail.controls['zip_code'].value
+            city: this.formCustomerRegistration.controls['city'].value,
+            company_authorized_email: this.formCustomerRegistration.controls['company_authorized_email'].value,
+            company_authorized_phone: this.formCustomerRegistration.controls['company_authorized_phone'].value,
+            company_name: this.formCustomerRegistration.controls['company_name'].value,
+            company_web: this.formCustomerRegistration.controls['company_web'].value,
+            country: this.formCustomerRegistration.controls['country'].value,
+            invoice_email: this.formCustomerRegistration.controls['invoice_email'].value,
+            street: this.formCustomerRegistration.controls['street'].value,
+            street_number: this.formCustomerRegistration.controls['street_number'].value,
+            company_registration_no: this.formCustomerRegistration.controls['company_registration_no'].value,
+            company_vat_number:  this.formCustomerRegistration.controls['company_vat_number'].value,
+            zip_code:  this.formCustomerRegistration.controls['zip_code'].value
         })
             .then((iCustomer) => {
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_company_create_success', iCustomer.payment_details.company_name)));
+
+                this.selectedCompanies = iCustomer;
+
+                this.step = 4;
                 this.unblockUI();
                 this.refreshCompaniesForDecision();
             })
@@ -382,6 +473,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         this.blockUI();
         this.backendService.companiesGetAll()
             .then((companies) => {
+
                 this.companies = companies;
 
                 this.optionsCompanies = companies.map((pv) => {
@@ -398,7 +490,6 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             });
     }
 
-
     onConfirmClick(): void {
 
         if (!this.selectedTariff) { return; }
@@ -408,6 +499,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             if (!this.formPaymentDetail) {
                 return;
             }
+
             if (!this.formPaymentDetail.valid) {
                 return;
             }
@@ -415,49 +507,79 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
         this.blockUI();
 
-        let tariffData: IProductNew = {
-            tariff_id: this.selectedTariff.id,
-            extension_ids: this.selectedExtensions.map((se) => se.id),
+        let tariffDataForRegistration: IProductNew = null;
 
-            name: this.formPaymentDetail.controls['product_individual_name'].value,
+        // Tariff si dělá firma sama pro sebe
+        if (this.selectedCompanies && this.registrationType === 'do_it_yourself') {
 
-            invoice_email: this.formPaymentDetail.controls['invoice_email'].value,
+            tariffDataForRegistration = {
+                tariff_id: this.selectedTariff.id,
+                extension_ids: this.selectedExtensions.map((se) => se.id),
+                name: this.formPaymentDetail.controls['product_individual_name'].value, // Financial Product Name
+                customer_id: this.selectedCompanies.id,
+            };
 
-            street: this.formPaymentDetail.controls['street'].value,
-            street_number: this.formPaymentDetail.controls['street_number'].value,
-            city: this.formPaymentDetail.controls['city'].value,
-            zip_code: this.formPaymentDetail.controls['zip_code'].value,
-            country: this.formPaymentDetail.controls['country'].value,
-
-        };
-
-        if (this.selectedTariff.payment_details_required) {
-            tariffData['payment_method'] = this.formPaymentDetail.controls['payment_method'].value;
         }
 
-        /*
-        if (this.selectedTariff.payment_mode_required) {
-            tariffData['payment_mode'] = this.formPaymentDetail.controls['payment_mode'].value;
+        // Tariff firma bude spravovat ale bude mít klienta
+        if (this.selectedCompanies && this.registrationType === 'integrator') {
+
+            tariffDataForRegistration = {
+                tariff_id: this.selectedTariff.id,
+                extension_ids: this.selectedExtensions.map((se) => se.id),
+
+                name: this.formPaymentDetail.controls['product_individual_name'].value, // Financial Product Name
+
+                invoice_email: this.formPaymentDetail.controls['invoice_email'].value,
+                integrator_registration: true,
+
+                street: this.formPaymentDetail.controls['street'].value,
+                street_number: this.formPaymentDetail.controls['street_number'].value,
+                city: this.formPaymentDetail.controls['city'].value,
+                zip_code: this.formPaymentDetail.controls['zip_code'].value,
+                country: this.formPaymentDetail.controls['country'].value,
+
+                customer_id: this.selectedCompanies.id,
+
+                company_name: this.formPaymentDetail.controls['company_name'].value,
+                company_authorized_email: this.formPaymentDetail.controls['company_authorized_email'].value,
+                company_authorized_phone: this.formPaymentDetail.controls['company_authorized_phone'].value,
+                company_web: this.formPaymentDetail.controls['company_web'].value,
+                company_vat_number: this.formPaymentDetail.controls['company_vat_number'].value,
+                company_registration_no: this.formPaymentDetail.controls['company_registration_no'].value
+            };
+
         }
-        */
 
-        if (this.selectedTariff.company_details_required) {
-            tariffData['company_name'] = this.formPaymentDetail.controls['company_name'].value;
-            tariffData['company_authorized_email'] = this.formPaymentDetail.controls['company_authorized_email'].value;
-            tariffData['company_authorized_phone'] = this.formPaymentDetail.controls['company_authorized_phone'].value;
-            tariffData['company_web'] = this.formPaymentDetail.controls['company_web'].value;
+        // Jsem nový klient
+        if (this.selectedCompanies == null) {
 
-            if (this.inEu) {
-                tariffData['vat_number'] = this.formPaymentDetail.controls['vat_number'].value;
-            } else {
-                tariffData['registration_no'] = this.formPaymentDetail.controls['registration_no'].value;
-            }
+            tariffDataForRegistration = {
+                tariff_id: this.selectedTariff.id,
+                extension_ids: this.selectedExtensions.map((se) => se.id),
 
-        } else {
-            tariffData['full_name'] = this.formPaymentDetail.controls['full_name'].value;
+                name: this.formPaymentDetail.controls['product_individual_name'].value, // Financial Product Name
+
+                invoice_email: this.formPaymentDetail.controls['invoice_email'].value,
+
+                street: this.formPaymentDetail.controls['street'].value,
+                street_number: this.formPaymentDetail.controls['street_number'].value,
+                city: this.formPaymentDetail.controls['city'].value,
+                zip_code: this.formPaymentDetail.controls['zip_code'].value,
+                country: this.formPaymentDetail.controls['country'].value,
+
+                company_name: this.formPaymentDetail.controls['company_name'].value,
+                company_authorized_email: this.formPaymentDetail.controls['company_authorized_email'].value,
+                company_authorized_phone: this.formPaymentDetail.controls['company_authorized_phone'].value,
+                company_web: this.formPaymentDetail.controls['company_web'].value,
+                company_vat_number: this.formPaymentDetail.controls['company_vat_number'].value,
+                company_registration_no: this.formPaymentDetail.controls['company_registration_no'].value
+            };
+
         }
 
-        this.backendService.productCreate(tariffData)
+
+        this.backendService.productCreate(tariffDataForRegistration)
             .then(response => {
                 if ((<any>response)._code_ === 200) {
                     this.fmWarning(this.translate('flash_product_created_prepaid'));
