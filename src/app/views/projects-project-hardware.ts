@@ -18,6 +18,7 @@ import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-descript
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsHardwareBootloaderUpdateModel } from '../modals/hardware-bootloader-update';
 
+
 @Component({
     selector: 'bk-view-projects-project-hardware',
     templateUrl: './projects-project-hardware.html',
@@ -45,7 +46,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
             this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
                 this.project = project;
                 this.devices = project.boards;
-                if (this.devices.find((device, index, obj) => {return !!(device.alert_list && device.alert_list.length); })) {
+                if (this.devices.find((device, index, obj) => { return !!(device.alert_list && device.alert_list.length); })) {
                     this.bootloaderRequred = true;
                 } else {
                     this.bootloaderRequred = false;
@@ -89,7 +90,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.boardEditPersonalDescription(device.id, {name: model.name, description: model.description})
+                this.backendService.boardEditPersonalDescription(device.id, { name: model.name, description: model.description })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
@@ -126,6 +127,8 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
             }
         });
     }
+
+
 
     onAddClick(): void {
         let model = new ModalsAddHardwareModel();

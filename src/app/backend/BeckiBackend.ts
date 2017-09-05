@@ -298,6 +298,8 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     public webSocketErrorOccurred: Rx.Subject<any> = new Rx.Subject<any>();
 
+    public garfieldWebsocketRecived: Rx.Subject<any> = new Rx.Subject<any>();
+
     public onlineStatus: Rx.Subject<IOnlineStatus> = new Rx.Subject<IOnlineStatus>();
 
     public interactionsOpened: Rx.Subject<void> = new Rx.Subject<void>();
@@ -571,7 +573,6 @@ export abstract class BeckiBackend extends TyrionAPI {
 
                 this.webSocket = new WebSocket(`${this.wsProtocol}://${this.host}/websocket/becki/${webSocketToken.websocket_token}`);
                 this.webSocket.addEventListener('close', this.reconnectWebSocketAfterTimeout);
-
                 let opened = Rx.Observable
                     .fromEvent<void>(this.webSocket, 'open');
                 let channelReceived = Rx.Observable
@@ -623,6 +624,9 @@ export abstract class BeckiBackend extends TyrionAPI {
                         || message.message_type === 'notification'
                     )
                     .subscribe(this.notificationReceived);
+                channelReceived
+                    .filter(message => message.message_type === 'garfield' || message.status === 'garfield_update')
+                    .subscribe(this.garfieldWebsocketRecived);
                 channelReceived
                     .filter(message => message.message_type === 'getValues' && message.status === 'success')
                     .subscribe(this.BProgramValuesReceived);
