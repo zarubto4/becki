@@ -320,8 +320,8 @@
                             <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}}</strong> {{'label_server'|bkTranslate:this}}
                             <span *ngIf="blockoProgram.instance_details.server_name">
                                 <strong>{{blockoProgram.instance_details.server_name}}</strong>
-                                <span *ngIf="blockoProgram.instance_details.server_online_state == 'online'" class="font-green-jungle bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
-                                <span *ngIf="blockoProgram.instance_details.server_online_state == 'offline'" class="font-red bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
+                                <span *ngIf="blockoProgram.instance_details.server_online_state == 'online'" class="font-green-jungle bold">{{blockoProgram.instance_details.online_state|bkTranslateTable:this:'online_status'}}</span>
+                                <span *ngIf="blockoProgram.instance_details.server_online_state == 'offline'" class="font-red bold">{{blockoProgram.instance_details.online_state|bkTranslateTable:this:'online_status'}}</span>
                             </span>
                             <span class="bold" *ngIf="!blockoProgram.instance_details.server_name">({{'label_none'|bkTranslate:this}})</span>
                         </div>
@@ -329,8 +329,8 @@
                         <div>
                             <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}}</strong> {{'label_instance'|bkTranslate:this}}
                             <a *ngIf="blockoProgram.instance_details.instance_id" (click)="onInstanceIdClick(blockoProgram.instance_details.instance_id)"><strong>{{blockoProgram.instance_details.instance_id}}</strong></a>
-                            <span *ngIf="blockoProgram.instance_details.instance_status == 'online'" class="font-green-jungle bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
-                            <span *ngIf="blockoProgram.instance_details.instance_status == 'offline'" class="font-red bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
+                            <span *ngIf="blockoProgram.instance_details.online_state == 'online'" class="font-green-jungle bold">{{blockoProgram.instance_details.online_state|bkTranslateTable:this:'online_status'}}</span>
+                            <span *ngIf="blockoProgram.instance_details.online_state == 'offline'" class="font-red bold">{{blockoProgram.instance_details.online_state|bkTranslateTable:this:'online_status'}}</span>
                             <span class="bold" *ngIf="!blockoProgram.instance_details.instance_id">{{'label_none'|bkTranslate:this}}</span>
                         </div>
                         <br>

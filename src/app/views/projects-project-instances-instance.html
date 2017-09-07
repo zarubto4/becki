@@ -67,7 +67,7 @@
                 <div *ngIf="instanceTab == 'overview'" class="margin-left-15 margin-top-40">
 
                     <div *ngIf="instance" class="row">
-                        <h3 *ngIf="hwStatus">{{hwStatus.online_state}}</h3>
+                        <h3 *ngIf="instanceStatus">{{instanceStatus.online_status}}</h3>
                         <div class="col-md-8">
 
                             <div>
@@ -89,8 +89,8 @@
                                 <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}} </strong>{{'label_server_name'|bkTranslate:this}}:
                                 <strong><span>{{instance.server_name}}</span></strong>
 
-                                <span *ngIf="instance.instance_status=='online'" class="font-green-jungle bold">{{'online'|bkTranslateTable:this:'online_status'}}</span>
-                                <span *ngIf="instance.instance_status=='offline'" class="font-red bold"><strong>{{'offline'|bkTranslateTable:this:'online_status'}}</strong></span>
+                                <span *ngIf="instance.online_state =='online'" class="font-green-jungle bold">{{'online'|bkTranslateTable:this:'online_status'}}</span>
+                                <span *ngIf="instance.online_state=='offline'" class="font-red bold"><strong>{{'offline'|bkTranslateTable:this:'online_status'}}</strong></span>
 
                             </div>
 
@@ -102,10 +102,10 @@
                                 </span>
 
                                 <span *ngIf="instance.actual_instance!=null">
-                                        <span *ngIf="instance.instance_status=='online' " class="font-green-jungle bold">{{'online'|bkTranslateTable:this:'online_status'}}</span>
-                                <span *ngIf="instance.instance_status=='offline' " class="font-red bold">{{'offline'|bkTranslateTable:this:'online_status'}}</span>
-                                <span *ngIf="instance.instance_status=='synchronization_in_progress' " class="font-grey-mint bold">{{'synchronization_in_progress'|bkTranslateTable:this:'online_status'}} <i class="fa fa-spinner fa-spin"></i></span>
-                                <span *ngIf="instance.instance_status=='unknown_lost_connection_with_server' " class="font-grey-mint bold">{{'label_unknown_lost_connection_with_server'|bkTranslateTable:this:'online_status'}}</span>
+                                <span *ngIf="instance.online_state =='online' " class="font-green-jungle bold">{{'online'|bkTranslateTable:this:'online_status'}}</span>
+                                <span *ngIf="instance.online_state =='offline' " class="font-red bold">{{'offline'|bkTranslateTable:this:'online_status'}}</span>
+                                <span *ngIf="instance.online_state =='synchronization_in_progress' " class="font-grey-mint bold">{{'synchronization_in_progress'|bkTranslateTable:this:'online_status'}} <i class="fa fa-spinner fa-spin"></i></span>
+                                <span *ngIf="instance.online_state =='unknown_lost_connection_with_server' " class="font-grey-mint bold">{{'label_unknown_lost_connection_with_server'|bkTranslateTable:this:'online_status'}}</span>
                                 </span>
 
 
@@ -713,13 +713,13 @@
 
     <div *ngIf="instanceTab == 'view' ">
 
-        <div *ngIf="instance && instance.instance_status == 'online'">
+        <div *ngIf="instance && instance.online_state == 'online'">
             <bk-blocko-view [disableExecution]="true" [canConfig]="false" [readonly]="true" [simpleMode]="false" [showBlockNames]="true"></bk-blocko-view>
             <div style="margin-top: 30px">
                 <bk-console-log maxHeight="400px"></bk-console-log>
             </div>
         </div>
-        <div *ngIf="!instance || instance.instance_status != 'online'">
+        <div *ngIf="!instance || instance.online_state != 'online'">
             <h3 style="text-align: center; margin: 80px;">{{'label_instance_info_is_offline'|bkTranslate:this}}</h3>
         </div>
 

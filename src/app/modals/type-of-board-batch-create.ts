@@ -13,7 +13,7 @@ import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { formSelectComponentOptionsMaker } from '../components/FormSelectComponent';
 import { IApplicableProduct } from '../backend/TyrionAPI';
 import { ModalModel } from '../services/ModalService';
-import {BeckiValidators} from "../helpers/BeckiValidators";
+import { BeckiValidators } from '../helpers/BeckiValidators';
 
 export class ModalsCreateTypeOfBoardBatchModel extends ModalModel {
     constructor(

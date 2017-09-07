@@ -110,9 +110,9 @@ export class FinancialProductComponent extends BaseMainComponent implements OnIn
     refresh(): void {
         this.blockUI();
         this.backendService.productGet(this.id).then(product =>  {
-                this.product = product;
-                this.unblockUI();
-            })
+            this.product = product;
+            this.unblockUI();
+        })
             .catch(error => {
                 this.unblockUI();
             });

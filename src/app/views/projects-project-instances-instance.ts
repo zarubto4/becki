@@ -11,7 +11,7 @@ import { IHomerInstanceRecord, IInstanceGridAppSettings } from './../backend/Tyr
 import { Component, OnInit, Injector, OnDestroy, AfterContentChecked, ViewChild, ElementRef } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
-import {IBProgram, IHomerInstance, IMProgramInstanceParameter} from '../backend/TyrionAPI';
+import { IBProgram, IHomerInstance, IMProgramInstanceParameter } from '../backend/TyrionAPI';
 import { NullSafe, NullSafeDefault } from '../helpers/NullSafe';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
@@ -39,6 +39,8 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     instance: IHomerInstance = null;
 
     gridUrl: string = '';
+
+    instanceStatus: IOnlineStatus;
 
     currentHistoricInstance: IHomerInstanceRecord;
 
@@ -203,7 +205,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
             this.fmWarning('Must create some version first.');  // TODO domimplementovat
             return;
         }*/
-        if (this.instance.instance_status) {
+        if (this.instance.online_state === 'online') {
             let mConfirm = new ModalsConfirmModel(this.translate('label_modal_change_instance_version'), this.translate('label_modal_change_running_instance_version'));
             this.modalService.showModal(mConfirm)
                 .then((success) => {

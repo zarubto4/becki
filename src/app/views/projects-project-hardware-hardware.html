@@ -382,17 +382,17 @@
                                            class="font-grey-mint bold">{{device.actual_instance.name?device.actual_instance.name:device.actual_instance.id}}}</a>
                                         <span *ngIf="!device.actual_instance.id" class="font-grey-mint bold">(Device is not connected to an instance)</span>
                                         <span
-                                            *ngIf="device.actual_instance.id && device.actual_instance.instance_status=='online'"
+                                            *ngIf="device.actual_instance.id && device.actual_instance.instance_online_state=='online'"
                                             class="font-green-jungle">({{'label_online'|bkTranslate:this}})</span>
                                         <span
-                                            *ngIf="device.actual_instance.id && device.actual_instance.instance_status=='synchronization_in_progress'"
+                                            *ngIf="device.actual_instance.id && device.actual_instance.instance_online_state=='synchronization_in_progress'"
                                             class="font-grey-mint bold">({{'label_synchronization_in_progress'|bkTranslate:this}})
                                             <i class="fa fa-spinner fa-spin"></i></span>
                                         <span
-                                            *ngIf="device.actual_instance.id && device.actual_instance.instance_status=='offline'"
+                                            *ngIf="device.actual_instance.id && device.actual_instance.instance_online_state=='offline'"
                                             class="font-red">({{'label_offline'|bkTranslate:this}})</span>
                                         <span
-                                            *ngIf="device.actual_instance.id && device.actual_instance.instance_status=='unknown_lost_connection_with_server'"
+                                            *ngIf="device.actual_instance.id && device.actual_instance.instance_online_state=='unknown_lost_connection_with_server'"
                                             class="font-grey-mint bold">({{'label_unknown_lost_connection_with_server'|bkTranslate:this}})</span>
                                     </div>
 

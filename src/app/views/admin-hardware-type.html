@@ -93,10 +93,10 @@
                                         table tr:hover button { opacity:1 }
                                     </style>
 
-                                    <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!device.edit_permission" (click)="onEditClick(device)">
+                                    <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!device.edit_permission" (click)="onEditHardwareClick(device)">
                                         <i class="fa fa-cog"></i>
                                     </button>
-                                    <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!device.delete_permission" (click)="onRemoveClick(device)">
+                                    <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!device.delete_permission" (click)="onRemoveHardwareClick(device)">
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </td>

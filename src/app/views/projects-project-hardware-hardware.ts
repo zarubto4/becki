@@ -37,6 +37,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     hardwareTab: string = 'overview';
 
     hwStatus: IOnlineStatus;
+
     constructor(injector: Injector) {
         super(injector);
 

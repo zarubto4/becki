@@ -9,7 +9,7 @@
 
 import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import {IProduct, IProductExtension} from '../backend/TyrionAPI';
+import { IProduct, IProductExtension } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 
 

@@ -171,6 +171,10 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
         this.router.navigate(['/hardware', boardTypeId]);
     }
 
+    onLibraryClick(library: ILibraryShortDetail): void {
+        this.navigate(['/admin/hardware/libraries', library.id]);
+    }
+
     onLibraryEditClick(library: ILibraryShortDetail): void {
         let model = new ModalsLibraryPropertiesModel(library.name, library.description, true, library.name);
         this.modalService.showModal(model).then((success) => {

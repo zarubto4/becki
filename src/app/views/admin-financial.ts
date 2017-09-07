@@ -4,10 +4,11 @@
 
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { IApplicableProduct, ITariff } from '../backend/TyrionAPI';
+import { IApplicableProduct, IProductExtensionType, ITariff } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsTariffModel } from '../modals/tariff';
+import { ModalsExtensionModel } from '../modals/extension';
 
 @Component({
     selector: 'bk-view-admin-financial',
@@ -17,6 +18,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
 
     tariffs: ITariff[] = null;
     extensions: ITariff[] = null;
+    extensionTypes: IProductExtensionType[] = null;
 
     tab: string = 'tariffs';
 
@@ -180,6 +182,31 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
 
     onTariffClick(tariff: ITariff): void {
         this.router.navigate(['/admin/financial', tariff.id]);
+    }
+
+    onExtensionCreate(): void {
+        let model = new ModalsExtensionModel(this.extensionTypes);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.tariffExtensionCreate('TODO', {
+                    name: model.name,
+                    description: model.description,
+                    color: model.color,
+                    extension_type: model.extension_type,
+                    included: model.included,
+                    config: model.config.toString(),
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_tariff_edit_success', model.name)));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_edit_error', model.name, reason)));
+                        this.refresh();
+                    });
+            }
+        });
     }
 
 

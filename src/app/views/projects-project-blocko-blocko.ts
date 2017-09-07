@@ -802,7 +802,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             this.fmWarning('Must create some version first.');
             return;
         }
-        if (this.blockoProgram && this.blockoProgram.instance_details && this.blockoProgram.instance_details.instance_status) {
+        if (this.blockoProgram && this.blockoProgram.instance_details && this.blockoProgram.instance_details.online_state) {
             let mConfirm = new ModalsConfirmModel(this.translate('label_modal_change_instance_version'), this.translate('label_modal_change_running_instance_version'));
             this.modalService.showModal(mConfirm)
                 .then((success) => {

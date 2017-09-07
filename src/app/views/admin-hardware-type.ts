@@ -14,6 +14,7 @@ import { ModalsCreateProcessorModel } from '../modals/create-processor';
 import { ModalsCreateTypeOfBoardModel } from '../modals/type-of-board-create';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsAdminCreateHardwareModel } from '../modals/admin-create-hardware';
+import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 
 @Component({
     selector: 'bk-view-admin-hardware-type',
@@ -292,6 +293,37 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
 
     onDeviceClick(device: IBoardShortDetail): void {
         this.navigate(['/device', device.id]);
+    }
+
+    onRemoveHardwareClick(board: IBoardShortDetail): void {
+        this.modalService.showModal(new ModalsRemovalModel(board.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.boardDeactivate(board.id)
+                    .then(() => {
+                        this.refresh();
+                    }).catch(reason => {
+                        this.unblockUI();
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                    });
+            }
+        });
+    }
+
+    onEditHardwareClick(device: IBoardShortDetail): void {
+        let model = new ModalsDeviceEditDescriptionModel(device.id, device.name, device.description);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.boardEditPersonalDescription(device.id, { name: model.name, description: model.description })
+                    .then(() => {
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail', reason)));
+                    });
+            }
+        });
     }
 
 }

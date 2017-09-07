@@ -240,6 +240,7 @@ let routes: Routes = [
 
     {path: 'admin/hardware', data: {breadName: 'Hardware'}, component: AdminHardwareComponent, canActivate: [AuthGuard]},
     {path: 'admin/hardware/code/:code', data: {breadName: ':code'}, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard]},
+    {path: 'admin/hardware/libraries/:library', data: {breadName: ':library'}, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard]},
 
     {path: 'admin/garfield', data: {breadName: 'Garfield'}, component: GarfieldComponent, canActivate: [AuthGuard]},
     {path: 'admin/garfield/:garfield', data: {breadName: ':garfield'}, component: GarfieldGarfieldComponent, canActivate: [AuthGuard]},

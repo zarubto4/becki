@@ -23,8 +23,8 @@ import { ModalsRemovalModel } from '../modals/removal';
 import moment = require('moment/moment');
 import { ModalsLibraryPropertiesModel } from '../modals/library-properties';
 import { ModalsCodePropertiesModel } from '../modals/code-properties';
-import {ModalsPublicShareRequestModel} from "../modals/public-share-request";
-import {ModalsPublicShareResponseModel} from "../modals/public-share-response";
+import { ModalsPublicShareRequestModel } from '../modals/public-share-request';
+import { ModalsPublicShareResponseModel } from '../modals/public-share-response';
 
 
 
