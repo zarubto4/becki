@@ -34,16 +34,11 @@
                     </ul>
                 </div>
 
-
                 <!-- Public Programs-->
 
                 <div *ngIf="tab == 'public_c_programs'">
                     <div *ngIf="(cPrograms && cPrograms.total > O)"  class="becki-actions">
-                        <button title="{{'label_create_c_program'|bkTranslate:this}}" class="btn btn-icon-only green"
-                                [disabled]="false"
-                                (click)="onCProgramAddClick()">
-                            <i class="fa fa-plus-circle"></i>
-                        </button>
+
                     </div>
                     <!-- Filter Parameters -->
                     <div>
@@ -77,14 +72,6 @@
                                             <i class="fa fa-cog"></i>
                                         </button>
 
-                                        <button *ngIf="true" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!typeOfBoards[0].update_permission" (click)="onCProgramPublish(code)">
-                                            <i class="fa fa-flag"></i>
-                                        </button>
-
-                                        <button *ngIf="true" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!typeOfBoards[0].update_permission" (click)="onCProgramUnPublish(code)">
-                                            <i class="fa fa-ban"></i>
-                                        </button>
-
                                         <button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!code.delete_permission" (click)="onCProgramRemoveClick(code)">
                                             <i class="fa fa-trash"></i>
                                         </button>
@@ -100,28 +87,70 @@
                         <p class="list-no-items__main-label">{{'label_no_c_programs'|bkTranslate:this}}</p>
                         <p class="list-no-items__sub-label">{{'label_no_c_programs_comment'|bkTranslate:this}} </p>
                         <p>
-                            <button class="btn blue" (click)="onCProgramAddClick()">
-                                <i class="fa fa-plus-circle"></i> {{'btn_create'|bkTranslate:this}}
-                            </button>
+                            As administrator, you have to create own project with own programs and share everything as a classic users.
                         </p>
                     </div>
                 </div>
 
                 <div *ngIf="tab == 'c_programs_for_decisions'">
-                    <div *ngIf="(cPrograms && cPrograms.total > O)"  class="becki-actions">
-                        <button title="{{'label_create_c_program'|bkTranslate:this}}" class="btn btn-icon-only green"
-                                [disabled]="false"
-                                (click)="onCProgramAddClick()">
-                            <i class="fa fa-plus-circle"></i>
-                        </button>
+                    <div *ngIf="(cProgramsNotApproved && cProgramsNotApproved.total > O)"  class="becki-actions">
+
+
                     </div>
                     <!-- Filter Parameters -->
                     <div>
 
                     </div>
                     <div *ngIf="(cProgramsNotApproved && cProgramsNotApproved.content.length)" class="table-scrollable">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                                    <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
+                                    <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                                    <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let code of cProgramsNotApproved.content">
+
+                                    <td class="vert-align no-wrap bold"><a (click)="onCProgramClick(code)">{{code.name}}</a></td>
+                                    <td class="vert-align">{{code.description}}</td>
+                                    <td class="vert-align no-wrap"><a (click)="onTypeOfBoardTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
+                                    <td class="vert-align no-wrap text-right">
+
+                                        <style type="text/css">
+                                            table tr button { opacity:0.05;}
+                                            table tr:hover button { opacity:1 }
+                                        </style>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h3 *ngIf="!cProgramsNotApproved" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
+                    <div *ngIf="cProgramsNotApproved && cProgramsNotApproved.total < 1" class="list-no-items">
+                        <p class="list-no-items__main-label">{{'label_no_c_programs'|bkTranslate:this}}</p>
+                        <p class="list-no-items__sub-label">{{'label_no_c_programs_comment'|bkTranslate:this}} </p>
+                        <p>
+                            As administrator, you have to create own project with own programs and share everything as a classic users.
+                        </p>
+                    </div>
+                </div>
 
 
+                <!-- Public Libraries -->
+                <div *ngIf="tab == 'public_c_libraries'">
+                    <div *ngIf="(libraries && libraries.total > O)"  class="becki-actions">
+
+                    </div>
+                    <!-- Filter Parameters -->
+                    <div>
+
+                    </div>
+
+                    <div *ngIf="(libraries && libraries.content.length)" class="table-scrollable">
                         <table class="table table-hover">
                             <thead>
                             <tr>
@@ -132,11 +161,13 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr *ngFor="let code of cProgramsNotApproved.content">
+                            <tr *ngFor="let library of libraries.content">
 
-                                <td class="vert-align no-wrap bold"><a (click)="onCProgramClick(code)">{{code.name}}</a></td>
-                                <td class="vert-align">{{code.description}}</td>
-                                <td class="vert-align no-wrap"><a (click)="onTypeOfBoardTypeClick(code.type_of_board_id)">{{code.type_of_board_name}}</a></td>
+                                <td class="vert-align no-wrap bold"><a (click)="onCProgramClick(code)">{{library.name}}</a></td>
+                                <td class="vert-align">{{library.description}}</td>
+                                <td class="vert-align no-wrap">
+                                    <a *ngFor="let board of library.type_of_boards" (click)="onTypeOfBoardTypeClick(board.id)">{{board.name}}, </a>
+                                </td>
                                 <td class="vert-align no-wrap text-right">
 
                                     <style type="text/css">
@@ -144,19 +175,11 @@
                                         table tr:hover button { opacity:1 }
                                     </style>
 
-                                    <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!code.edit_permission" (click)="onCProgramEditClick(code)">
+                                    <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!library.edit_permission" (click)="onLibraryEditClick(library)">
                                         <i class="fa fa-cog"></i>
                                     </button>
 
-                                    <button *ngIf="true" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!typeOfBoards[0].update_permission" (click)="onCProgramPublish(code)">
-                                        <i class="fa fa-flag"></i>
-                                    </button>
-
-                                    <button *ngIf="true" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!typeOfBoards[0].update_permission" (click)="onCProgramUnPublish(code)">
-                                        <i class="fa fa-ban"></i>
-                                    </button>
-
-                                    <button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!code.delete_permission" (click)="onCProgramRemoveClick(code)">
+                                    <button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!library.delete_permission" (click)="onLibraryRemoveClick(library)">
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </td>
@@ -166,18 +189,64 @@
 
 
                     </div>
-                    <h3 *ngIf="!cProgramsNotApproved" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
-                    <div *ngIf="cProgramsNotApproved && cProgramsNotApproved.total < 1" class="list-no-items">
-                        <p class="list-no-items__main-label">{{'label_no_c_programs'|bkTranslate:this}}</p>
-                        <p class="list-no-items__sub-label">{{'label_no_c_programs_comment'|bkTranslate:this}} </p>
+                    <h3 *ngIf="!libraries" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
+                    <div *ngIf="libraries && libraries.total < 1" class="list-no-items">
+                        <p class="list-no-items__main-label">{{'label_no_c_library'|bkTranslate:this}}</p>
+                        <p class="list-no-items__sub-label">{{'label_no_c_library_comment'|bkTranslate:this}} </p>
                         <p>
-                            <button class="btn blue" (click)="onCProgramAddClick()">
-                                <i class="fa fa-plus-circle"></i> {{'btn_create'|bkTranslate:this}}
-                            </button>
+                            As administrator, you have to create own project with own programs and share everything as a classic users.
                         </p>
                     </div>
                 </div>
 
+                <div *ngIf="tab == 'c_libraries_for_decisions'">
+                    <div *ngIf="(librariesNotApproved && librariesNotApproved.total > O)"  class="becki-actions">
+
+
+                    </div>
+                    <!-- Filter Parameters -->
+                    <div>
+
+                    </div>
+                    <div *ngIf="(librariesNotApproved && librariesNotApproved.content.length)" class="table-scrollable">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
+                                <th class="col col-lg-2">{{'table_description'|bkTranslate:this}}</th>
+                                <th class="col col-lg-2"> <span [innerHTML]="'table_hardware_type'|bkTranslate:this"></span></th>
+                                <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let library of librariesNotApproved.content">
+
+                                <td class="vert-align no-wrap bold"><a (click)="onLibraryClick(library)">{{library.name}}</a></td>
+                                <td class="vert-align">{{library.description}}</td>
+                                <td class="vert-align no-wrap">
+                                    <a *ngFor="let board of library.type_of_boards" (click)="onTypeOfBoardTypeClick(board.id)">{{board.name}}, </a>
+                                </td>
+                                <td class="vert-align no-wrap text-right">
+
+                                    <style type="text/css">
+                                        table tr button { opacity:0.05;}
+                                        table tr:hover button { opacity:1 }
+                                    </style>
+
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <h3 *ngIf="!librariesNotApproved" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
+                    <div *ngIf="librariesNotApproved && librariesNotApproved.total < 1" class="list-no-items">
+                        <p class="list-no-items__main-label">{{'label_no_c_programs'|bkTranslate:this}}</p>
+                        <p class="list-no-items__sub-label">{{'label_no_c_programs_comment'|bkTranslate:this}} </p>
+                        <p>
+                            As administrator, you have to create own project with own programs and share everything as a classic users.
+                        </p>
+                    </div>
+                </div>
 
             </div>
         </div>

@@ -1,0 +1,31 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCancelClick()"></button>
+        <h4 class="modal-title">{{'label_title'|bkTranslate:this}}</h4>
+    </div>
+
+    <div class="modal-body">
+
+        <form [formGroup]="form">
+
+            <span>{{'label_program_additional_comment'|bkTranslate:this}}</span>
+            <bk-form-input label="{{'label_program_name'|bkTranslate:this}}" [control]="form.controls['program_name']"></bk-form-input>
+            <bk-form-text-area label="{{'label_program_description'|bkTranslate:this}}" [control]="form.controls['program_description']"></bk-form-text-area>
+            <hr>
+            <bk-form-input label="{{'label_version_name'|bkTranslate:this}}" [control]="form.controls['version_name']"></bk-form-input>
+            <bk-form-text-area label="{{'label_version_description'|bkTranslate:this}}" [control]="form.controls['version_description']"></bk-form-text-area>
+            <hr>
+            <div>
+                <label>{{'label_approve'|bkTranslate:this}}</label>
+                <i *ngIf="modalModel.decision" style="font-size: 1.8em;"  class="fa fa-toggle-on font-green-jungle cursor-hand" (click)="onApproveClick(!modalModel.decision)"></i>
+                <i *ngIf="!modalModel.decision"  style="font-size: 1.8em;"  class="fa fa-toggle-off font-grey-mint cursor-hand"   (click)="onApproveClick(!modalModel.decision)"></i>
+            </div>
+            <hr>
+            <bk-form-text-area label="{{'label_reason'|bkTranslate:this}}" [control]="form.controls['reason']"></bk-form-text-area>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn red" [disabled]="!form.valid" (click)="onSubmitClick()">{{'btn_decide'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" (click)="onCloseClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+    </div>
+</div>

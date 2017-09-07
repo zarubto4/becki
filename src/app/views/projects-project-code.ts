@@ -8,7 +8,7 @@ import { FlashMessageError, FlashMessageSuccess } from '../services/Notification
 import { Subscription } from 'rxjs/Rx';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsCodePropertiesModel } from '../modals/code-properties';
-import { IProject, ITypeOfBoard, ICProgramShortDetail } from '../backend/TyrionAPI';
+import { IProject, ITypeOfBoard, ICProgramShortDetail, ICProgramList } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 
 @Component({
@@ -17,7 +17,7 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 })
 export class ProjectsProjectCodeComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
-    id: string;
+    project_id: string;
 
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
@@ -26,8 +26,11 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
     project: IProject = null;
 
     codePrograms: ICProgramShortDetail[] = null;
+    publicPrograms: ICProgramList = null;
 
     typeOfBoards: ITypeOfBoard[] = null;
+
+    tab: string = 'my_programs';
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -37,8 +40,8 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
 
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
-            this.id = params['project'];
-            this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
+            this.project_id = params['project'];
+            this.projectSubscription = this.storageService.project(this.project_id).subscribe((project) => {
                 this.project = project;
                 this.codePrograms = project.c_programs;
             });
@@ -46,7 +49,17 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
                 this.typeOfBoards = typeOfBoards;
             });
         });
+
     }
+
+    onToggleTab(tab: string) {
+        this.tab = tab;
+
+        if (this.publicPrograms == null && tab === 'public_c_programs') {
+            this.onFilterPublicPrograms(null);
+        }
+    }
+
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
@@ -73,11 +86,11 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
                 this.backendService.cProgramDelete(code.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code', reason)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
                     });
             }
         });
@@ -92,18 +105,18 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
             if (success) {
                 this.blockUI();
                 this.backendService.cProgramCreate({ // TODO [permission]: C_program.create_permission (Project.update_permission)
-                    project_id: this.id,
+                    project_id: this.project_id,
                     name: model.name,
                     description: model.description,
                     type_of_board_id: model.deviceType
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_add_to_project', model.name)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_code_to_project_with_reason', model.name, reason)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
                     });
             }
         });
@@ -124,14 +137,63 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
                     });
             }
         });
+    }
+
+    onMakeClone(code: ICProgramShortDetail): void {
+        let model = new ModalsCodePropertiesModel(null, code.name, code.description, '', true, code.name, true);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.cProgramMakeClone({
+                    c_program_id: code.id,
+                    project_id: this.project_id,
+                    name: model.name,
+                    description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
+                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                        this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
+                    });
+            }
+        });
+    }
+
+    selectedFilterPagePublic(event: { index: number}) {
+        this.onFilterPublicPrograms(event.index);
+    }
+
+    onFilterPublicPrograms(page: number): void {
+
+        // Only for first page load - its not neccesery block page - user saw private programs first - soo api have time to load
+        if (page != null) {
+            this.blockUI();
+        }else {
+            page = 1;
+        }
+
+        this.backendService.cProgramGetListByFilter(page, {
+            public_programs: true,
+        })
+            .then((iCProgramList) => {
+                this.publicPrograms = iCProgramList;
+                this.unblockUI();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                this.unblockUI();
+            });
     }
 
 }

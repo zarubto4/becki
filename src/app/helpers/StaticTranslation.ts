@@ -43,7 +43,17 @@ export class StaticTranslation {
                 'label_company_phone': 'Company authorised contact Phone number',
             }, 'ModalsFinancialProductComponent': {
                 'title': 'Change Basic Product information',
-                'label_name': 'Product name'
+                'label_name': 'Product name',
+            }, 'ModalsPublicShareResponseComponent': {
+                'title': 'Publishing decisions',
+                'label_program_additional_comment': 'If the user shares a new version of the same program as before. The program (not version) will be named which has already been used since the previous approval.',
+                'label_program_name': 'Program name in the public list',
+                'label_program_description': 'Program description in the public list',
+                'label_version_name': 'Version name in the public list',
+                'label_version_description': 'Version description in the public list',
+                'label_approve': 'The program will be published',
+                'label_reason': 'If not - there is a place for comment for the author.',
+                'btn_decide': 'Make decision',
             }, 'ModalsExtensionComponent': {
                 'title': 'Add a Device',
                 'label_color': 'Color in Template. Please used color from http://keenthemes.com/preview/metronic/theme/admin_1/ui_colors.html',
@@ -217,7 +227,8 @@ export class StaticTranslation {
 
             }, 'ModalsCodePropertiesComponent': {
                 'title_edit': '<strong class="font-color-code">CODE</strong> Program Properties',
-                'title_add': 'New Program',
+                'title_add': '<strong class="font-color-code">CODE</strong>New Program',
+                'title_copy': '<strong class="font-color-code">CODE</strong> Copy Program',
                 'label_program_name': 'Name',
                 'label_program_description': 'Description',
                 'label_device_type': 'Hardware Device Type',
@@ -309,8 +320,12 @@ export class StaticTranslation {
                 'label_product_type': 'Select an existing Financial Product',
 
             }, 'ModalsRemovalComponent': {
-                'title': 'Set as ',
+                'title': 'Community publishing request',
                 'body_text': 'Are you sure to irreversibly remove',
+
+            }, 'ModalsPublicShareRequestComponent': {
+                'title': 'Set as ',
+                'body_text': '<p>Are you sure you want to publish the program? Is it properly named? It includes quality documentation?</p><p> Your request will be immediately forwarded to the administrators for review. It may take a few days. <strong>Please be patient.</strong> The code may be modified or you will be asked to make revisions.</p>',
 
             }, 'ModalsSetAsMainComponent': {
                 'title': 'Set as default',
@@ -358,6 +373,7 @@ export class StaticTranslation {
                 'main_title': 'Projects',
                 'title': 'Projects',
                 'btn_add_project': 'New project',
+                'btn_new_subscription': 'New Financial Product',
                 'table_name': 'Name',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
@@ -366,7 +382,9 @@ export class StaticTranslation {
                 'label_project_properties': 'Project properties',
                 'label_Remove_project': 'Remove project',
                 'label_no_projects': 'There is not any projects',
-                'label_no_product': 'if you want to create a project, you must have any <span class="bold">product</span>. For add product click the link below.',
+                'label_no_projects_comment': 'Create your first project, program, connect hardware and start slowly control the world. <br> Step by step.',
+                'label_no_product': 'Mr. Salieri likes things in order and leads an accounting book...',
+                'label_no_product_comment': 'If you want to create a project, you must have any <span class="bold"> financial product</span>. For add product click the link below.',
                 'label_create_product_below': 'You can create it by click on button bellow.',
 
 
@@ -395,6 +413,8 @@ export class StaticTranslation {
 
             }, 'FinancialProductBillingComponent': {
                 'title': 'Billings',
+                'label_owner': 'Product Owner',
+                'label_billing_info': 'Billing Info',
                 'label_payment_detail_owner': 'Billing Details (Who Manage this Financial Product)',
                 'label_payment_detail_invoice_target': 'Who is being invoiced',
                 'label_invoice_email': 'Invoice E-mail',
@@ -490,6 +510,9 @@ export class StaticTranslation {
                 'label_no_tariffs_comment': 'We didn\'t find any tariffs. Create new one',
 
                 'tab_tariffs': 'All Tariffs',
+                'tab_extensions': 'All Independent Extensions',
+                'flash_tariff_edit_success': 'Successfully updated',
+
 
             }, 'AdminFinancialTariffComponent': {
                 'main_title': 'Platform administration',
@@ -656,7 +679,7 @@ export class StaticTranslation {
                 'main_title': 'Financial',
                 'title': 'Dashboard',
                 'btn_add_credit': 'Add credit',
-                'label_instance_properities': 'instance properities',
+                'label_instance_properties': 'instance properties',
                 'label_core_details': 'Core details',
                 'label_id_subscription': 'ID Subscription',
                 'label_country': 'Country',
@@ -668,6 +691,7 @@ export class StaticTranslation {
                 'label_created': 'Created',
                 'label_remaining_credit': 'Remaining credit',
                 'label_other_details': 'Other details',
+                'label_billing_mode': 'Billing Mode',
                 'label_contacts_details': 'Contacts details',
                 'label_financial_product_properties': 'Financial product properties',
                 'label_deactivate_product': 'Deactivate product',
@@ -1190,12 +1214,17 @@ export class StaticTranslation {
 
                 'title': 'Byzance<strong class="font-color-code">CODE</strong> - ALL LIBRARIES',
 
-                'label_program_properities': 'CODE program properties',
+                'label_program_properties': 'CODE program properties',
                 'label_remove_program': 'Remove CODE program',
                 'label_list_no_item_main': 'There is not any code library in this project',
                 'label_list_no_item_sub': 'You can create it by click on button bellow.',
+                'label_no_public_library': 'No public Libraries ',
+                'label_create_public_library_comment': 'If you do not see your dream library, create it and share it with others.',
 
                 'btn_add_library': 'New Library',
+
+                'tab_my_libraries': 'Private Libraries',
+                'tab_public_libraries': 'Public Libraries',
 
                 'flash_library_add_success': 'Library has been created.',
                 'flash_library_add_fail': 'Unable to create library {0}, {1}.',
@@ -1206,6 +1235,7 @@ export class StaticTranslation {
 
                 'table_name': 'Name',
                 'table_description': 'Description',
+                'table_hardware_type': 'Only compatible with',
                 'table_actions': 'Actions',
 
             }, 'ProjectsProjectLibrariesLibraryComponent': {
@@ -1234,6 +1264,7 @@ export class StaticTranslation {
 
                 'table_name': 'Name',
                 'table_description': 'Description',
+                'table_author': 'Author',
                 'table_actions': 'Actions',
 
                 'label_ide': 'IDE',
@@ -1244,7 +1275,9 @@ export class StaticTranslation {
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_version': 'Version',
-                'label_no_library_version': 'There are no libraries yet.'
+                'label_no_library_version': 'There are no libraries yet.',
+                'label_library_make_copy': 'Make a copy of Library.',
+                'label_public_comment': 'This is public Library, you can only test i or make a copy.'
 
             }, 'ProjectsProjectMembersComponent': {
 
@@ -1508,6 +1541,7 @@ export class StaticTranslation {
                 'label_file_and_line': 'File: <b>{0}</b> Line: <b>{1}</b>',
                 'label_blocko_interface_preview': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> INTERFACE PREVIEW',
                 'label_saved_versions': 'SAVED VERSIONS',
+                'label_public_comment': 'This is public Program, you can only test program or make a copy.',
 
                 'table_name': 'Name',
                 'table_description': 'Description',
@@ -1530,9 +1564,13 @@ export class StaticTranslation {
                 'modal_text_no_yoda': 'No available devices.',
 
                 'label_main_c_program_version_set_as_main': 'Set this version as Main',
+                'label_publish': 'Accept publication',
+                'label_unpublish': 'Refusal to Publish',
 
                 'flash_update_success': 'Deployed successfully',
                 'flash_cant_upload_code': 'Deployment failed.',
+                'flash_code_was_publisher': 'Your Community publish request was successful!.',
+                'flash_code_publish_error': 'Deployment failed.',
                 'flash_code_version_build_success': 'Built successfully.',
                 'flash_code_version_save': 'Version <b> {0} </b> saved successfully.',
                 'flash_cant_save_code_version': 'Unable to save version <b>{0}</b>, {1}',
@@ -1557,10 +1595,16 @@ export class StaticTranslation {
                 'label_no_code': 'No <strong class="font-color-code">CODE</strong> program available.',
                 'label_create_code_text': 'Click on the button bellow to create a program.',
 
+                'label_no_public_code': 'No <strong class="font-color-code">CODE</strong> program available.',
+                'label_create_public_code_text': 'If you do not see your dream program, create it and share it with others.',
+
                 'table_name': 'Name',
                 'table_hardware_type': '<strong class="font-color-hardware">Hardware</strong> device type',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
+
+                'tab_my_programs': 'My Program',
+                'tab_public_c_programs': 'Public Programs',
 
                 'flash_cant_update_code': 'Unable to update program, {0}.',
                 'flash_code_update': 'Program has been updated.',
@@ -1864,11 +1908,17 @@ export class StaticTranslation {
             }, 'CommunityCProgramComponent': {
                 'main_title': 'Platform administration',
                 'main_subtitle': 'Community C# management (decision tool)',
+                'title': 'Community Content',
 
                 'tab_public_c_programs': 'Public Code Program',
                 'tab_public_c_libraries': 'Public Code Libraries',
                 'tab_c_programs_for_decisions': 'Community Code Requests',
                 'tab_c_libraries_for_decisions': 'Community Libraries Requests',
+
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_hardware_type': 'HardwareType',
+                'table_actions': 'Actions',
 
                 'flash_code_add': 'Community Code Add. Don\'t forget set first Version and publish program',
 
@@ -1987,6 +2037,7 @@ export class StaticTranslation {
             'btn_update': 'Update',
             'btn_ok': 'OK',
             'btn_create' : 'Create',
+            'btn_copy' : 'Copy',
             'flash_fail': 'Something is wrong',
             'flash_successfully_edit': 'Successfully edit',
             'flash_successfully_remove': 'Successfully removed',
@@ -2055,6 +2106,12 @@ export class StaticTranslation {
                 'canceled': 'Canceled',
                 'in_progress': 'In Progress',
                 'not_start_yet': 'Not start yet'
+            },
+            'publish_status': {
+                'pending': 'Your request has been submitted, <br> please wait for the administrator\'s decision.',
+                'approved': 'Your program has been approved. <br> You can find it with a slight modification in the list of public programs. <strong>Thank you!</strong>',
+                'disapproved': 'We apologize, but the administrator did not approve your program. More information was sent to you by email and notification.',
+                'edited': 'The program has been edited for another iteration. ',
             },
             'version_status': {
                 'compilation_in_progress': 'Compilation is in progress.',

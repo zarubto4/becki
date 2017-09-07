@@ -8,8 +8,9 @@ import { FlashMessageError, FlashMessageSuccess } from '../services/Notification
 import { Subscription } from 'rxjs/Rx';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsLibraryPropertiesModel } from '../modals/library-properties';
-import { IProject, ILibraryShortDetail } from '../backend/TyrionAPI';
+import { IProject, ILibraryShortDetail, ILibraryList } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
+import { ModalsCodePropertiesModel } from '../modals/code-properties';
 
 @Component({
     selector: 'bk-view-projects-project-libraries',
@@ -25,7 +26,10 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
 
     project: IProject = null;
 
+    tab: string = 'my_libraries';
+
     libraries: ILibraryShortDetail[] = null;
+    publicLibraries: ILibraryList = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -38,7 +42,7 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
             this.id = params['project'];
             this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
                 this.project = project;
-                this.libraries = project.c_private_libraries;
+                this.libraries = project.libraries;
             });
         });
     }
@@ -50,8 +54,20 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
         }
     }
 
+    onToggleTab(tab: string) {
+        this.tab = tab;
+
+        if (this.publicLibraries == null && tab === 'public_libraries') {
+            this.onFilterPublicLibraries(null);
+        }
+    }
+
     onLibraryClick(library: ILibraryShortDetail): void {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'libraries', library.id]);
+    }
+
+    onBoardTypeClick(boardTypeId: string): void {
+        this.navigate(['/hardware', boardTypeId]);
     }
 
     onRemoveClick(library: ILibraryShortDetail): void {
@@ -93,6 +109,28 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
         });
     }
 
+    onMakeClone(library: ILibraryShortDetail): void {
+        let model = new ModalsCodePropertiesModel(null, library.name, library.description, '', true, library.name, true);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.libraryMakeClone({
+                    library_id: library.id,
+                    project_id: this.id,
+                    name: model.name,
+                    description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
+                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                    });
+            }
+        });
+    }
+
     onEditClick(library: ILibraryShortDetail): void {
         let model = new ModalsLibraryPropertiesModel(library.name, library.description, true, library.name);
         this.modalService.showModal(model).then((success) => {
@@ -113,6 +151,32 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
                     });
             }
         });
+    }
+
+    selectedFilterPagePublic(event: { index: number}) {
+        this.onFilterPublicLibraries(event.index);
+    }
+
+    onFilterPublicLibraries(page: number): void {
+
+        // Only for first page load - its not necessary block page - user saw private programs first - soo api have time to load
+        if (page != null) {
+            this.blockUI();
+        }else {
+            page = 1;
+        }
+
+        this.backendService.libraryGetShortListByFilter(page, {
+            public_library: true,
+        })
+            .then((iLibraryList) => {
+                this.publicLibraries = iLibraryList;
+                this.unblockUI();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                this.unblockUI();
+            });
     }
 
 }

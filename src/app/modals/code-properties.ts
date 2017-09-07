@@ -22,7 +22,8 @@ export class ModalsCodePropertiesModel extends ModalModel {
         public description: string = '',
         public deviceType: string = '',
         public edit: boolean = false,
-        public exceptName: string = null
+        public exceptName: string = null,
+        public copy: boolean = false,
     ) {
         super();
     }

@@ -17,12 +17,14 @@ import { ModalsSelectHardwareComponent, ModalsSelectHardwareModel } from '../mod
 import { getAllInputOutputs, getInputsOutputs } from '../helpers/CodeInterfaceHelpers';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { ModalsCodeAddLibraryModel } from '../modals/code-add-library';
-
 import moment = require('moment/moment');
 import { ModalsCodeLibraryVersionModel } from '../modals/code-library-version';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsCodePropertiesModel } from '../modals/code-properties';
 import { ModalsSetAsMainModel } from '../modals/set-as-main';
+import { ModalsPublicShareRequestModel } from '../modals/public-share-request';
+import { ModalsPublicShareResponseModel } from '../modals/public-share-response';
+
 
 
 @Component({
@@ -130,6 +132,38 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             && ( this.device.main_test_c_program.id === this.codeProgram.id ||  this.device.main_c_program.id === this.codeProgram.id)
             && version.status === 'successfully_compiled_and_restored'
             && !version.main_mark;
+    }
+
+
+    onCProgramPublishResult(version: ICProgramVersionShortDetail): void {
+        let model = new ModalsPublicShareResponseModel(
+            version.version_name,
+            version.version_description,
+            this.codeProgram.name,
+            this.codeProgram.description
+        );
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.cProgramVersionEditResponsePublication({
+                    version_id: version.version_id,
+                    version_name: model.version_name,
+                    version_description: model.version_description,
+                    decision: model.decision,
+                    reason: model.reason,
+                    program_description: model.program_description,
+                    program_name: model.program_name
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                        this.refresh();
+                    });
+            }
+        });
     }
 
     onRemoveClick(): void {
@@ -345,6 +379,34 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         this.refreshInterface();
     }
 
+    onMakeClone(): void {
+        let model = new ModalsCodePropertiesModel(null, this.codeProgram.name, this.codeProgram.description, '', true, this.codeProgram.name, true);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.cProgramMakeClone({
+                    c_program_id: this.codeProgram.id,
+                    project_id: this.projectId,
+                    name: model.name,
+                    description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
+
+                        this.unblockUI();
+                        if (this.projectId != null) {
+                            this.navigate(['/project', this.projectId , 'code']);
+                        }
+
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                        this.unblockUI();
+                    });
+            }
+        });
+    }
+
     refreshInterface() {
 
         if (!this.codeProgram) {
@@ -388,16 +450,16 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
     }
 
     onCommunityPublicVersionClick(programVersion: ICProgramVersionShortDetail) {
-        this.modalService.showModal(new ModalsRemovalModel(programVersion.version_name)).then((success) => {
+        this.modalService.showModal(new ModalsPublicShareRequestModel(this.codeProgram.name, programVersion.version_name)).then((success) => {
             if (success) {
                 this.blockUI();
                 this.backendService.cProgramVersionMakePublic(programVersion.version_id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
-                        this.unblockUI();
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_was_publisher')));
+                        this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_code_publish_error', reason)));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     });
             }

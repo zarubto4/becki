@@ -16,6 +16,7 @@ import { ModalsTariffModel } from '../modals/tariff';
 export class AdminFinancialComponent extends BaseMainComponent implements OnInit {
 
     tariffs: ITariff[] = null;
+    extensions: ITariff[] = null;
 
     tab: string = 'tariffs';
 
@@ -30,7 +31,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
     refresh(): void {
         this.blockUI();
 
-        Promise.all<any>([this.backendService.tariffsGetAll()])
+        Promise.all<any>([this.backendService.tariffsGetAll(), this.backendService])
             .then((values: [ITariff[]]) => {
                 this.tariffs = values[0];
                 this.unblockUI();

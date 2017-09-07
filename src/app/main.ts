@@ -163,6 +163,10 @@ import { FormTextAreaComponent } from './components/FormTextAreaComponent';
 import { FormJsonNiceTextAreaComponent } from './components/FormJsonNiceTextAreaComponent';
 import { ModalsFinancialProductComponent } from './modals/financial-product';
 import { ModalsBillingInformationComponent } from './modals/billing-information';
+import { ModalsCompanyInformationComponent } from './modals/company-information';
+import { ModalsPublicShareRequestComponent } from './modals/public-share-request';
+import { ModalsPublicShareResponseComponent } from './modals/public-share-response';
+import { FilterPagerComponent } from './components/FilterPagerComponent';
 
 
 // @formatter:off
@@ -192,6 +196,7 @@ let routes: Routes = [
 
     {path: 'financial/:product', data: {breadName: ':product'}, component: FinancialProductComponent, canActivate: [AuthGuard]},
     {path: 'financial/:product/extensions', data: {breadName: 'extensions'}, component: FinancialProductExtensionsComponent, canActivate: [AuthGuard]},
+    {path: 'financial/:product/employees', data: {breadName: 'employees'}, component: FinancialProductExtensionsComponent, canActivate: [AuthGuard]},
     {path: 'financial/:product/invoices', data: {breadName: 'invoices'}, component: FinancialProductInvoicesComponent, canActivate: [AuthGuard]},
     {path: 'financial/:product/invoices/:invoice', data: {breadName: ':invoice'}, component:  FinancialProductInvoicesInvoiceComponent, canActivate: [AuthGuard]},
     {path: 'financial/:product/billing', data: {breadName: 'billing'}, component:  FinancialProductBillingComponent, canActivate: [AuthGuard]},
@@ -295,6 +300,7 @@ let tabMenus = {
     'tariffs-tariff':  [
         new LabeledLink('Dashboard', ['/', 'financial', ':product'], 'tachometer', {linkActiveExact: true}),
         new LabeledLink('Extension services', ['/', 'financial', ':product',  'extensions'], 'database'),
+        new LabeledLink('Employees', ['/', 'financial', ':product',  'employees'], 'users'),
         new LabeledLink('Invoices', ['/', 'financial', ':product',  'invoices'], 'dollar'),
         new LabeledLink('Billing Preferences', ['/', 'financial', ':product', 'billing'], 'bank'),
     ],
@@ -393,6 +399,7 @@ class BeckiErrorHandler implements ErrorHandler {
         FormSelectComponent,
         FormJsonNiceTextAreaComponent,
         BlockoViewComponent,
+        FilterPagerComponent,
         CodeIDEComponent,
         CProgramVersionSelectorComponent,
         DraggableDirective,
@@ -464,6 +471,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsCreateHomerServerComponent,
         ModalsFinancialProductComponent,
         ModalsTariffComponent,
+        ModalsPublicShareResponseComponent,
         ModalsCreateProcessorComponent,
         ModalsBootloaderPropertyComponent,
         ModalsCreateCompilationServerComponent,
@@ -478,6 +486,8 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsBlockoPropertiesComponent,
         ModalsCodePropertiesComponent,
         ModalsPictureUploadComponent,
+        ModalsCompanyInformationComponent,
+        ModalsPublicShareRequestComponent,
         ModalsCodeFileDialogComponent,
         ModalsSetAsMainComponent,
         ModalsConfirmComponent,

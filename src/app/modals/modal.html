@@ -4,6 +4,15 @@
             <template [ngSwitchCase]="'ModalsPermissionPermissionPropertyModel'">
                 <bk-modals-permission-permission-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-permission-permission-properties>
             </template>
+            <template [ngSwitchCase]="'ModalsPublicShareResponseModel'">
+                <bk-modals-public-share-response [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-public-share-response>
+            </template>
+            <template [ngSwitchCase]="'ModalsPublicShareRequestModel'">
+                <bk-modals-public-share-request [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-public-share-request>
+            </template>
+            <template [ngSwitchCase]="'ModalsCompanyInformationModel'">
+                <bk-modals-company-information [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-company-information>
+            </template>
             <template [ngSwitchCase]="'ModalsBillingInformationModel'">
                 <bk-modals-billing-information [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-billing-information>
             </template>

@@ -16,13 +16,17 @@
                         </span>
                     </div>
                     <div class="becki-actions">
-                        <button title="{{'label_library_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!library.edit_permission"
+                        <button title="{{'label_library_properties'|bkTranslate:this}}" class="btn btn-icon-only green" *ngIf="library.edit_permission"
                             (click)="onEditClick()">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="{{'label_delete_library'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!library.delete_permission"
+                        <button title="{{'label_delete_library'|bkTranslate:this}}" class="btn btn-icon-only red" *ngIf="library.delete_permission"
                             (click)="onRemoveClick()">
                             <i class="fa fa-trash"></i>
+                        </button>
+                        <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" *ngIf="library.publish_type == 'public_program'"
+                                (click)="onMakeClone()">
+                            <i class="fa fa-clone"></i>
                         </button>
                     </div>
                 </div>
@@ -48,10 +52,19 @@
                 </div>
                 <bk-code-ide [files]="selectedCodeFiles" defaultOpenFilename="README.md"></bk-code-ide>
                 <div>
+
+                    <span *ngIf="library && library.publish_type == 'public_program'" class="text-center" style="margin-top: 10px; margin-bottom: 20px">{{'label_public_comment'|bkTranslate:this}}</span>
+
                     <div class="pull-right">
-                        <button type="button" class="btn default green-haze" (click)="onSaveClick()" [disabled]="changesInSelectedVersion().length == 0">
+                        <button *ngIf="library && library.publish_type == 'private_program'" type="button" class="btn default green-haze" (click)="onSaveClick()" [disabled]="changesInSelectedVersion().length == 0">
                             <i class="fa fa-floppy-o"></i>{{'btn_save'|bkTranslate:this}}
                         </button>
+
+                        <button *ngIf="library && library.publish_type == 'public_program'" title="{{'label_library_make_copy'|bkTranslate:this}}" class="btn btn-icon-only blue"
+                                (click)="onMakeClone()">
+                            <i class="fa fa-clone"></i>
+                        </button>
+
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -77,6 +90,8 @@
                             <tr>
                                 <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
                                 <th class="col col-lg-9">{{'table_description'|bkTranslate:this}}</th>
+                                <th class="col col-lg-1">{{'table_author'|bkTranslate:this}}</th>
+                                <th><!-- Place for community symbols --></th>
                                 <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                             </tr>
                         </thead>
@@ -87,12 +102,43 @@
                                     {{version.version_name}}
                                 </a>
                                 </td>
+
+                                <!-- Description -->
                                 <td class="vert-align">
                                     {{version.version_description}}
                                 </td>
 
+                                <!-- Author -->
+                                <td class="vert-align">
+                                    {{version.author.nick_name}}
+                                </td>
+
+                                <!-- STATUS -->
+                                <td class="vert-align">
+
+                                    <!-- Public Status -->
+                                    <span class="icon-hint-wraper red" *ngIf="version.publish_status == 'pending'">
+                                        <i class="fa fa-heart font-red-flamingo" style="font-size: 1.6em; margin-left: 5px;" ></i>
+                                        <span class="hint" [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
+                                    </span>
+                                    <span class="icon-hint-wraper green" *ngIf="version.publish_status == 'approved'">
+                                        <i class="fa fa-heart font-green-jungle" style="font-size: 1.6em; margin-left: 5px;" ></i>
+                                        <span class="hint" [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
+                                    </span>
+                                    <span class="icon-hint-wraper gray" *ngIf="version.publish_status == 'disapproved'">
+                                        <i class="fa fa-heart" style="font-size: 1.6em; margin-left: 5px;" ></i>
+                                        <span class="hint" [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
+                                    </span>
+                                    <span class="icon-hint-wraper green" *ngIf="version.publish_status == 'edited'">
+                                        <i class="fa fa-heart font-blue" style="font-size: 1.6em; margin-left: 5px;" ></i>
+                                        <span class="hint" [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
+                                    </span>
+
+                                </td>
+
                                 <td class="vert-align no-wrap">
                                     <style type="text/css">
+
                                         table tr button {
                                             opacity: 0.05;
                                         }
@@ -100,16 +146,33 @@
                                         table tr:hover button {
                                             opacity: 1
                                         }
+
                                     </style>
 
-                                    <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission"
+
+                                    <button *ngIf="version.update_permission" title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green"
                                         (click)="onEditVersionClick(version)">
-                                    <i class="fa fa-cog"></i>
-                                </button>
-                                    <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission"
+                                            <i class="fa fa-cog"></i>
+                                    </button>
+                                    <button *ngIf="library.project_id && !version.publish_status" title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only blue-grey"
+                                            (click)="onCommunityPublicVersionClick(version)">
+                                        <i class="fa fa-heart"></i>
+                                    </button>
+                                    <button *ngIf="version.delete_permission" title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red"
                                         (click)="onRemoveVersionClick(version)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+
+
+                                    <button *ngIf="library && library.publish_type == 'public_program'" title="{{'label_library_make_copy'|bkTranslate:this}}" class="btn btn-icon-only blue"
+                                            (click)="onMakeClone()">
+                                        <i class="fa fa-clone"></i>
+                                    </button>
+
+                                    <!-- Buttons for Administrator for Community decisions  -->
+                                    <button *ngIf="version.publish_status == 'pending' && version.community_publishing_permission" title="{{'label_publish'|bkTranslate:this}}" class="btn btn-icon-only green" (click)="onLibraryResult(version)">
+                                        <i class="fa fa-heart"></i>
+                                    </button>
                                 </td>
 
                             </tr>

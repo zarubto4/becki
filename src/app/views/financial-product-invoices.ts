@@ -107,8 +107,8 @@ export class FinancialProductInvoicesComponent extends BaseMainComponent impleme
 
     refresh(): void {
         this.blockUI();
-        this.backendService.productsGetUserOwnList().then(products => {
-            this.product = products.find(product => product.id === this.id);
+        this.backendService.productGet(this.id).then(product =>  {
+            this.product = product;
             this.invoices = this.product.invoices;
             this.unblockUI();
         }).catch(error => {

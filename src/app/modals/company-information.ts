@@ -16,7 +16,7 @@ import { ModalModel } from '../services/ModalService';
 import { BeckiValidators } from '../helpers/BeckiValidators';
 import { StaticOptionLists } from '../helpers/StaticOptionLists';
 
-export class ModalsBillingInformationModel extends ModalModel {
+export class ModalsCompanyInformationModel extends ModalModel {
     constructor(
         public edit: boolean = false,
         public city: string = '',
@@ -37,13 +37,13 @@ export class ModalsBillingInformationModel extends ModalModel {
 }
 
 @Component({
-    selector: 'bk-modals-billing-information',
-    templateUrl: './billing-information.html'
+    selector: 'bk-modals-company-information',
+    templateUrl: './company-information.html'
 })
-export class ModalsBillingInformationComponent implements OnInit {
+export class ModalsCompanyInformationComponent implements OnInit {
 
     @Input()
-    modalModel: ModalsBillingInformationModel;
+    modalModel: ModalsCompanyInformationModel;
 
     @Output()
     modalClose = new EventEmitter<boolean>();

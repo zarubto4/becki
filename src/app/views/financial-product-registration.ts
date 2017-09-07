@@ -290,7 +290,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
         }
 
         if (step === 6) {
-            return this.selectedTariff != null && this.totalStep === 4;
+            return this.selectedTariff != null;
         }
 
         if (step === 7 && this.totalStep === 3) {

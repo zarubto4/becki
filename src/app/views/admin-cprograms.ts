@@ -1,17 +1,17 @@
-/**
- * Created by davidhradek on 05.12.16.
- */
+
 
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import {
-    ICProgram, ICProgramFilter, ICProgramList, ICProgramShortDetail, IRoleShortDetai,
+    ICProgram, ICProgramFilter, ICProgramList, ICProgramShortDetail, ILibraryFilter, ILibraryList, ILibraryShortDetail,
+    IRoleShortDetai,
     ITypeOfBoard
 } from '../backend/TyrionAPI';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsPermissionGroupModel } from '../modals/permission-group';
 import { ModalsCodePropertiesModel } from '../modals/code-properties';
+import { ModalsLibraryPropertiesModel } from '../modals/library-properties';
 
 @Component({
     selector: 'bk-view-admin-cprograms',
@@ -21,7 +21,12 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
 
     cPrograms: ICProgramList = null;
     cProgramsNotApproved: ICProgramList = null;
+
+    libraries: ILibraryList = null;
+    librariesNotApproved: ILibraryList = null;
+
     typeOfBoards: ITypeOfBoard[] = null;
+
 
     tab: string = 'public_c_programs';
 
@@ -47,20 +52,20 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
             });
 
         // Find first 25 objects
+        // There is place for make it faster - load only if user click on tab
         this.onShowPublicProgramByFilter();
         this.onShowForDecisionsProgramByFilter();
+        this.onShowPublicLibraryByFilter();
+        this.onShowForDecisionsLibraryByFilter();
     }
 
     onToggleTab(tab: string) {
         this.tab = tab;
     }
 
-
     onShowPublicProgramByFilter(page: number = 0): void {
         Promise.all<any>([this.backendService.cProgramGetListByFilter(page, {
-            project_id: null,
             public_programs: true,       // For public its required
-            public_states: ['approved']  //  Only Aproved
         })
         ])
             .then((values: [ICProgramList]) => {
@@ -75,9 +80,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
 
     onShowForDecisionsProgramByFilter(page: number = 0): void {
         Promise.all<any>([this.backendService.cProgramGetListByFilter(page, {
-            project_id: null,
-            public_programs: true,       // For public its required
-            public_states: ['pending']  //  Only Approved
+            pending_programs: true,       // For public its required
         })
         ])
             .then((values: [ICProgramList]) => {
@@ -90,6 +93,35 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
             });
     }
 
+    onShowPublicLibraryByFilter(page: number = 0): void {
+        Promise.all<any>([this.backendService.libraryGetShortListByFilter(page, {
+            public_library: true,       // For public its required
+        })
+        ])
+            .then((values: [ILibraryList]) => {
+                this.libraries = values[0];
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.addFlashMessage(new FlashMessageError('C Programs cannot be loaded.', reason));
+                this.unblockUI();
+            });
+    }
+
+    onShowForDecisionsLibraryByFilter(page: number = 0): void {
+        Promise.all<any>([this.backendService.libraryGetShortListByFilter(page, {
+            pending_library: true,       // For public its required
+        })
+        ])
+            .then((values: [ILibraryList]) => {
+                this.librariesNotApproved = values[0];
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.addFlashMessage(new FlashMessageError('C Programs cannot be loaded.', reason));
+                this.unblockUI();
+            });
+    }
 
     onCProgramRemoveClick(code: ICProgramShortDetail): void {
         this.modalService.showModal(new ModalsRemovalModel(code.name)).then((success) => {
@@ -98,38 +130,10 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
                 this.backendService.cProgramDelete(code.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
-                        this.refresh();
+                        this.onShowPublicProgramByFilter();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code', reason)));
-                        this.refresh();
-                    });
-            }
-        });
-    }
-
-    onCProgramAddClick(): void {
-        if (!this.typeOfBoards) {
-            this.fmError(this.translate('flash_cant_add_code'));
-        }
-        let model = new ModalsCodePropertiesModel(this.typeOfBoards);
-        this.modalService.showModal(model).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.backendService.cProgramCreate({ // TODO [permission]: C_program.create_permission (Project.update_permission)
-                    project_id: null,
-                    name: model.name,
-                    description: model.description,
-                    type_of_board_id: model.deviceType
-                })
-                    .then((program: ICProgram) => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_add', model.name)));
-                        this.router.navigate(['/admin/hardware/code/', program.id]);
-                        // this.refresh();
-                    })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_code_reason', model.name, reason)));
-                        this.refresh();
                     });
             }
         });
@@ -150,22 +154,13 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
-                        this.refresh();
+                        this.onShowPublicProgramByFilter();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
-                        this.refresh();
                     });
             }
         });
-    }
-
-    onCProgramPublish(cprogram: ICProgramShortDetail): void {
-        // TODO
-    }
-
-    onCProgramUnPublish(cprogram: ICProgramShortDetail): void {
-        // TODO
     }
 
     onCProgramClick(cProgram: ICProgramShortDetail): void {
@@ -176,7 +171,42 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
         this.router.navigate(['/hardware', boardTypeId]);
     }
 
+    onLibraryEditClick(library: ILibraryShortDetail): void {
+        let model = new ModalsLibraryPropertiesModel(library.name, library.description, true, library.name);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.libraryEdit(library.id, {
+                    project_id: null,
+                    name: model.name,
+                    description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_edit_success')));
+                        this.onShowPublicLibraryByFilter();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_edit_fail', reason)));
+                    });
+            }
+        });
+    }
 
+    onLibraryRemoveClick(library: ILibraryShortDetail): void {
+        this.modalService.showModal(new ModalsRemovalModel(library.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.libraryDelete(library.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_library_removed_success')));
+                        this.onShowPublicLibraryByFilter();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_removed_fail', reason)));
+                    });
+            }
+        });
+    }
 }
 
 

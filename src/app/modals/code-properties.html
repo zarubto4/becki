@@ -1,7 +1,9 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title" [innerHTML]="(modalModel.edit?'title_edit':'title_add')|bkTranslate:this"></h4>
+        <h4 *ngIf="modalModel.edit && !modalModel.copy"  class="modal-title" [innerHTML]="('title_edit')|bkTranslate:this"></h4>
+        <h4 *ngIf="!modalModel.edit" class="modal-title" [innerHTML]="('title_add')|bkTranslate:this"></h4>
+        <h4 *ngIf="modalModel.copy"  class="modal-title" [innerHTML]="('title_copy')|bkTranslate:this"></h4>
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
@@ -12,6 +14,9 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
-        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{(!modalModel.edit?"btn_create":"btn_update")|bkTranslate:this}}</button>
+
+        <button *ngIf="modalModel.edit && !modalModel.copy" type="button" class="btn green"  [disabled]="!form.valid" (click)="onSubmitClick()">{{("btn_update")|bkTranslate:this}}</button>
+        <button *ngIf="!modalModel.edit" type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{("btn_create")|bkTranslate:this}}</button>
+        <button *ngIf="modalModel.copy"  type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{("btn_copy")|bkTranslate:this}}</button>
     </div>
 </div>

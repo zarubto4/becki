@@ -22,6 +22,9 @@ import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { ModalsRemovalModel } from '../modals/removal';
 import moment = require('moment/moment');
 import { ModalsLibraryPropertiesModel } from '../modals/library-properties';
+import { ModalsCodePropertiesModel } from '../modals/code-properties';
+import {ModalsPublicShareRequestModel} from "../modals/public-share-request";
+import {ModalsPublicShareResponseModel} from "../modals/public-share-response";
 
 
 
@@ -60,7 +63,6 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
     /* TODO:
     *   - udělat nemožnost dát tam main.cpp
     * */
-
 
     ngOnInit(): void {
         let readme = new CodeFile('README.md', `# Library\n\nSome information about your library!`);
@@ -173,6 +175,23 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
         });
     }
 
+    onCommunityPublicVersionClick(version: ILibraryVersionShortDetail) {
+        this.modalService.showModal(new ModalsPublicShareRequestModel(this.library.name, version.version_name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.libraryVersionMakePublic(version.version_id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_was_publisher')));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_code_publish_error', reason)));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                    });
+            }
+        });
+    }
+
     onEditVersionClick(version: ILibraryVersionShortDetail): void {
         let model = new ModalsVersionDialogModel(version.version_name, version.version_description, true);
         this.modalService.showModal(model).then((success) => {
@@ -204,12 +223,6 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
 
                 this.libraryVersions = this.library.versions || [];
 
-                /*this.codeProgramVersions.sort((a, b)=> {
-                    if (a.version_object.date_of_create == b.version_object.date_of_create) return 0;
-                    if (a.version_object.date_of_create > b.version_object.date_of_create) return -1;
-                    return 1;
-                });*/
-
                 let version = null;
                 if (this.afterLoadSelectedVersionId) {
                     version = this.libraryVersions.find((lv) => lv.version_id === this.afterLoadSelectedVersionId);
@@ -228,6 +241,37 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cannot_load_library', reason)));
             });
 
+    }
+
+    onLibraryResult(version: ILibraryVersionShortDetail): void {
+        let model = new ModalsPublicShareResponseModel(
+            version.version_name,
+            version.version_description,
+            this.library.name,
+            this.library.description
+        );
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.libraryVersionEditResponsePublication({
+                    version_id: version.version_id,
+                    version_name: model.version_name,
+                    version_description: model.version_description,
+                    decision: model.decision,
+                    reason: model.reason,
+                    program_description: model.program_description,
+                    program_name: model.program_name
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                        this.refresh();
+                    });
+            }
+        });
     }
 
     reloadVersions(): void {
@@ -322,6 +366,28 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
 
     isSelected(version: ILibraryVersionShortDetail): boolean {
         return NullSafe(() => this.selectedLibraryVersion.version_id) === version.version_id;
+    }
+
+    onMakeClone(): void {
+        let model = new ModalsCodePropertiesModel(null, this.library.name, this.library.description, '', true, this.library.name, true);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.libraryMakeClone({
+                    library_id: this.library.id,
+                    project_id: this.projectId,
+                    name: model.name,
+                    description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
+                        this.navigate(['/projects', this.projectId , 'libraries']);
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                    });
+            }
+        });
     }
 
     onSaveClick() {
