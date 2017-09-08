@@ -151,6 +151,8 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
         this.tabMenuItems = this.tabMenuService.getMenu(this.tabMenu);
         this.notifMouseMoveSend = false;
 
+
+
         this.initSidebarClosed();
         document.body.classList.add(...BODY_CLASSES);
         this.zone.runOutsideAngular(() => {

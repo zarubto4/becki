@@ -315,6 +315,7 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     protected personInfoSnapshotDirty: boolean = true;
     public personInfoSnapshot: IPerson = null;
+    public personPermissions: string[] = null;
     public personInfo: Rx.Subject<IPerson> = new Rx.Subject<IPerson>();
 
     protected websocketErrorShown: boolean = false;
@@ -484,6 +485,7 @@ export abstract class BeckiBackend extends TyrionAPI {
         if (this.tokenExist()) {
             this.personGetByToken()
                 .then((lr: ILoginResult) => {
+                    this.personPermissions = lr.permissions;
                     this.personInfoSnapshotDirty = false;
                     this.personInfoSnapshot = lr.person;
                     this.personInfo.next(this.personInfoSnapshot);
