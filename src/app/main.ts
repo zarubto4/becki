@@ -256,6 +256,7 @@ let routes: Routes = [
 
     {path: 'admin/c-program/c-program', data: {breadName: 'Community Management Code'}, component: CommunityCProgramComponent, canActivate: [AuthGuard]},
 
+    {path: 'assets/', component: Error404Component},
     {path: '**', component: Error404Component},
 ];
 // @formatter:on
