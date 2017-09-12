@@ -320,8 +320,8 @@
                             <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}}</strong> {{'label_server'|bkTranslate:this}}
                             <span *ngIf="blockoProgram.instance_details.server_name">
                                 <strong>{{blockoProgram.instance_details.server_name}}</strong>
-                                <span *ngIf="blockoProgram.instance_details.server_online_state == 'online'" class="font-green-jungle bold">{{blockoProgram.instance_details.online_state|bkTranslateTable:this:'online_status'}}</span>
-                                <span *ngIf="blockoProgram.instance_details.server_online_state == 'offline'" class="font-red bold">{{blockoProgram.instance_details.online_state|bkTranslateTable:this:'online_status'}}</span>
+                                <span *ngIf="blockoProgram.instance_details.server_online_state == 'online'" class="font-green-jungle bold">{{blockoProgram.instance_details.server_online_state|bkTranslateTable:this:'online_status'}}</span>
+                                <span *ngIf="blockoProgram.instance_details.server_online_state == 'offline'" class="font-red bold">{{blockoProgram.instance_details.server_online_state|bkTranslateTable:this:'online_status'}}</span>
                             </span>
                             <span class="bold" *ngIf="!blockoProgram.instance_details.server_name">({{'label_none'|bkTranslate:this}})</span>
                         </div>
@@ -400,12 +400,12 @@
 
                                     <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.update_permission"
                                         (click)="onEditVersionClick(version)">
-                                    <i class="fa fa-cog"></i>
-                                </button>
+                                        <i class="fa fa-cog"></i>
+                                    </button>
                                     <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission"
                                         (click)="onRemoveVersionClick(version)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
+                                        <i class="fa fa-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                         </tbody>

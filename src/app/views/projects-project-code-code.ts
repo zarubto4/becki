@@ -428,7 +428,8 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         let ios = getAllInputOutputs(main, userFiles);
 
         this.blockoView.setInterfaces([{
-            'targetType': 'yoda', // TODO - change this in homer [DH]
+            // 'targetType': 'yoda', // TODO - change this in homer [DH]
+            'color': '#99ccff', // TODO change color [TZ]
             'targetId': 'dummy_id',
             'displayName': 'Program ' + this.codeProgram.name,
             'interface': ios

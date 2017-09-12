@@ -2680,7 +2680,7 @@ export interface ICProgramFilter {
     /**
      * @name pending_programs
      * @type boolean
-     * @description Designed for Administrators for publishing decisions of Community Codes - Without permission, the value is ignored. 
+     * @description Designed for Administrators for publishing decisions of Community Codes - Without permission, the value is ignored.
      */
     pending_programs?: boolean;
     /**
@@ -4043,7 +4043,7 @@ export interface IExampleShortDetail {
 
 /**
  * @name IExternalServerSideError
- * @description: Unknown Error on external server 
+ * @description: Unknown Error on external server
  */
 export interface IExternalServerSideError {
     /**
@@ -5641,7 +5641,7 @@ export interface IInstanceFilter {
     /**
      * @name page_number
      * @type number
-     * @description page_number from 1 to N 
+     * @description page_number from 1 to N
      * @format int32
      */
     page_number?: number;
@@ -6385,7 +6385,7 @@ export interface ILibraryFilter {
     /**
      * @name pending_library
      * @type boolean
-     * @description Designed for Administrators for publishing decisions of Community Codes - Without permission, the value is ignored. 
+     * @description Designed for Administrators for publishing decisions of Community Codes - Without permission, the value is ignored.
      */
     pending_library?: boolean;
     /**
@@ -6494,7 +6494,7 @@ export interface ILibraryNew {
     /**
      * @name project_id
      * @type string
-     * @description Project ID only for private libraries. For Public, permission is required. Its Required only for Creating, For update is used previous settings. 
+     * @description Project ID only for private libraries. For Public, permission is required. Its Required only for Creating, For update is used previous settings.
      * @required
      */
     project_id: string;
@@ -6777,7 +6777,7 @@ export interface ILoginResult {
     /**
      * @name permissions
      * @type string[]
-     * @description List of all person permission (private and all collections from Person Roles ("SecurityRole") 
+     * @description List of all person permission (private and all collections from Person Roles ("SecurityRole")
      * @readonly
      * @required
      */
@@ -8047,7 +8047,7 @@ export interface IPaymentDetailsNew {
     /**
      * @name company_web
      * @type string
-     * @description Required: only if company_account = trueThe company_web url must be valid 
+     * @description Required: only if company_account = trueThe company_web url must be valid
      */
     company_web?: string;
     /**
@@ -8339,7 +8339,7 @@ export interface IPersonAuthentication {
     /**
      * @name mail
      * @type string
-     * @description Required valid mail 
+     * @description Required valid mail
      * @required
      */
     mail: string;
@@ -8354,7 +8354,7 @@ export interface IPersonChangeProperty {
     /**
      * @name email
      * @type string
-     * @description Valid mail 
+     * @description Valid mail
      */
     email?: string;
     /**
@@ -8424,7 +8424,7 @@ export interface IPersonNew {
     /**
      * @name mail
      * @type string
-     * @description Required valid mail 
+     * @description Required valid mail
      * @required
      */
     mail: string;
@@ -8453,7 +8453,7 @@ export interface IPersonPasswordNew {
     /**
      * @name mail
      * @type string
-     * @description Required valid mail 
+     * @description Required valid mail
      * @required
      */
     mail: string;
@@ -8482,7 +8482,7 @@ export interface IPersonPasswordRecoveryEmail {
     /**
      * @name mail
      * @type string
-     * @description Required valid mail 
+     * @description Required valid mail
      * @required
      */
     mail: string;
@@ -9412,7 +9412,7 @@ export interface IProjectParticipantStatus {
 
 /**
  * @name IProjectShortDetail
- * @description: Json Model for specific Project DashBoard 
+ * @description: Json Model for specific Project DashBoard
  */
 export interface IProjectShortDetail {
     /**
@@ -10632,7 +10632,7 @@ export interface ITypeOfBoard {
 
 /**
  * @name ITypeOfBoardBatch
- * @description: Model of Production Batch  
+ * @description: Model of Production Batch
  */
 export interface ITypeOfBoardBatch {
     /**
@@ -11278,7 +11278,7 @@ export interface IWebSocketToken {
     /**
      * @name websocket_token
      * @type string
-     * @description Swagger_Websocket_Token - used this token for WebSocket access. The lifetime of the token is 5 seconds. It is disposable. It can not be used twice. In the event of the expiration of the life of the disabled. 
+     * @description Swagger_Websocket_Token - used this token for WebSocket access. The lifetime of the token is 5 seconds. It is disposable. It can not be used twice. In the event of the expiration of the life of the disabled.
      * @readonly
      * @required
      */
@@ -11319,7 +11319,7 @@ export abstract class TyrionAPI {
      * @operationId logout
      * @tags Access, Person, APP-Api
      *
-     * @description for logout person - that's deactivate person token 
+     * @description for logout person - that's deactivate person token
      *
      *
      * @returns {IResultOk} [code 200] Successfully logged out
@@ -11921,9 +11921,9 @@ export abstract class TyrionAPI {
      * @operationId board_check
      * @tags Board
      *
-     * @description Check Board state for new Registration. Types of responses in JSON state value[CAN_REGISTER, NOT_EXIST, ALREADY_REGISTERED_IN_YOUR_ACCOUNT, ALREADY_REGISTERED, PERMANENTLY_DISABLED, BROKEN_DEVICE]... 
-     *     PERMANENTLY_DISABLED - device was removed by Byzance. 
-     *    BROKEN_DEVICE - device exist - but its not possible to registered that. Damaged during manufacturing. 
+     * @description Check Board state for new Registration. Types of responses in JSON state value[CAN_REGISTER, NOT_EXIST, ALREADY_REGISTERED_IN_YOUR_ACCOUNT, ALREADY_REGISTERED, PERMANENTLY_DISABLED, BROKEN_DEVICE]...
+     *     PERMANENTLY_DISABLED - device was removed by Byzance.
+     *    BROKEN_DEVICE - device exist - but its not possible to registered that. Damaged during manufacturing.
      *
      * @param {string} hash_for_adding
      *
@@ -12094,7 +12094,7 @@ export abstract class TyrionAPI {
      * @operationId board_update_description
      * @tags Board
      *
-     * @description Used for add descriptions by owners. "Persons" who registred "Board" to own "Projec" 
+     * @description Used for add descriptions by owners. "Persons" who registred "Board" to own "Projec"
      *
      * @param {string} board_id
      * @param {IBoardPersonalDescription} body - Contains Json with values
@@ -13003,8 +13003,8 @@ export abstract class TyrionAPI {
      * @operationId Facebook
      * @tags Access, Social-Facebook
      *
-     * @description For login via Facebook 
-     *    
+     * @description For login via Facebook
+     *
      *     If you want login to system with social networks - you can used Facebook, GitHub, Twitter... api just ask via this Api and cloud_blocko_server responds with object where is token and redirection link. After that redirect user to this link and after returning to your success page you have to ask again (api - get Person by token ) for information about logged Person
      *
      * @param {ISocialNetworkLogin} body - Contains Json with values
@@ -13130,8 +13130,8 @@ export abstract class TyrionAPI {
      * @operationId GitHub
      * @tags Access, Social-GitHub
      *
-     * @description For login via GitHub 
-     *    
+     * @description For login via GitHub
+     *
      *     If you want login to system with social networks - you can used Facebook, GitHub, Twitter... api just ask via this Api and cloud_blocko_server responds with object where is token and redirection link. After that redirect user to this link and after returning to your success page you have to ask again (api - get Person by token ) for information about logged Person
      *
      * @param {ISocialNetworkLogin} body - Contains Json with values
@@ -13380,7 +13380,7 @@ export abstract class TyrionAPI {
 
     /**
      * @name gridWidgetVersionEditResponsePublication
-     * @summary edit Grid_Widget_Version Response publication 
+     * @summary edit Grid_Widget_Version Response publication
      * @operationId grid_widget_public_response
      * @tags Admin-Grid-Widget
      *
@@ -13527,7 +13527,7 @@ export abstract class TyrionAPI {
 
     /**
      * @name homerServerEditSetBackupServer
-     * @summary edit Homer_Server Set Backup Server 
+     * @summary edit Homer_Server Set Backup Server
      * @operationId homer_server_set_backup_server
      * @tags Admin-External-Server
      *
@@ -13547,7 +13547,7 @@ export abstract class TyrionAPI {
 
     /**
      * @name homerServerEditSetMainServer
-     * @summary edit Homer_Server Set Main Server 
+     * @summary edit Homer_Server Set Main Server
      * @operationId homer_server_set_main_server
      * @tags Admin-External-Server
      *
@@ -13842,7 +13842,7 @@ export abstract class TyrionAPI {
      *
      * @returns {IResultOk} [code 200] Ok Result
      *
-     * @throws {IBadRequest} [code 400] Something is wrong 
+     * @throws {IBadRequest} [code 400] Something is wrong
      * @throws {IUnauthorized} [code 401] Unauthorized request
      * @throws {IForbidden} [code 403] Need required permission
      * @throws {IInternalServerError} [code 500] Server side Error
@@ -13900,7 +13900,7 @@ export abstract class TyrionAPI {
      * @operationId library_create
      * @tags Library
      *
-     * @description Create Library for C programs 
+     * @description Create Library for C programs
      *
      * @param {ILibraryNew} body - Contains Json with values
      *
@@ -14524,10 +14524,10 @@ export abstract class TyrionAPI {
      * @operationId notification_getByFilter
      * @tags Notifications
      *
-     * @description Get list of latest user notifications. Server return maximum 25 latest objects. 
-     *    
-     *     For get another page (next 25 notifications) call this api with "page_number" path parameter. 
-     *    
+     * @description Get list of latest user notifications. Server return maximum 25 latest objects.
+     *
+     *     For get another page (next 25 notifications) call this api with "page_number" path parameter.
+     *
      *     May missing or you can insert Integer values from page[1,2...,n] in JsonNotification body cannot by documented through swagger. Visit wiki.byzance.cz
      *
      * @param {number} page_number - page_number is Integer. Contain  1,2...  For first call, use 1
@@ -15270,12 +15270,12 @@ export abstract class TyrionAPI {
      * @operationId product_create
      * @tags Price & Invoice & Tariffs
      *
-     * @description It is the base object. Peak of Pyramid :). This Api is used for its creation. You can get two kind of response: 
-     *    
-     *    First(201):  System create new Object - Product 
-     *    
-     *    Second(200): The product requires payment - The server creates the object, but returns an Invoice 
-     *    
+     * @description It is the base object. Peak of Pyramid :). This Api is used for its creation. You can get two kind of response:
+     *
+     *    First(201):  System create new Object - Product
+     *
+     *    Second(200): The product requires payment - The server creates the object, but returns an Invoice
+     *
      *    If the user choose credit card payment, the invoice will contain gw_url, which is a link to the payment gate, you can redirect him there. If bank transfer is chosen, server will return an Invoice, but the user will pay it independently via his bank account.
      *
      * @param {IProductNew} body - Contains Json with values
@@ -15618,7 +15618,7 @@ export abstract class TyrionAPI {
      * @operationId project_changeParticipantStatus
      * @tags Project
      *
-     * @description Changes participant status 
+     * @description Changes participant status
      *
      * @param {string} project_id - project_id String path
      * @param {IProjectParticipantStatus} body - Contains Json with values
@@ -15979,7 +15979,7 @@ export abstract class TyrionAPI {
 
     /**
      * @name roleRemovePerson
-     * @summary remove Role Person 
+     * @summary remove Role Person
      * @operationId role_remove_person
      * @tags Admin-Role, Admin-Person
      *
@@ -16439,7 +16439,7 @@ export abstract class TyrionAPI {
      * @operationId typeOfBlock_get
      * @tags Type-of-Block
      *
-     * @description get BlockoBlock 
+     * @description get BlockoBlock
      *
      * @param {string} type_of_block_id - type_of_block_id String path
      *
@@ -16590,8 +16590,8 @@ export abstract class TyrionAPI {
      * @operationId typeOfBoard_create
      * @tags Type-Of-Board
      *
-     * @description The TypeOfBoard is category for IoT. Like Raspberry2, Arduino-Uno etc. 
-     *    
+     * @description The TypeOfBoard is category for IoT. Like Raspberry2, Arduino-Uno etc.
+     *
      *    We using that for compilation, sorting libraries, filtres and more..
      *
      * @param {ITypeOfBoardNew} body - Contains Json with values
@@ -16906,7 +16906,7 @@ export abstract class TyrionAPI {
      * @operationId get_Websocket_token
      * @tags Access, WebSocket
      *
-     * @description For connection to websocket, you have to connect with temporary unique token. This Api return Tokenwith a maximum lifetime of 5 seconds. After the token is deactivated. After logging in, or the connectionlost is token deactivated also. 
+     * @description For connection to websocket, you have to connect with temporary unique token. This Api return Tokenwith a maximum lifetime of 5 seconds. After the token is deactivated. After logging in, or the connectionlost is token deactivated also.
      *
      *
      * @returns {IWebSocketToken} [code 200] Token successfully generated

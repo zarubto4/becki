@@ -10,8 +10,8 @@
 
             <div>
                 <label>{{'label_connectible_to_internet'|bkTranslate:this}}</label>
-                <i *ngIf="!modalModel.connectible_to_internet" style="font-size: 1.8em;" class="fa fa-toggle-on font-green-jungle cursor-hand" (click)="onBooleanClick(!modalModel.connectible_to_internet)"></i>
-                <i *ngIf="modalModel.connectible_to_internet" style="font-size: 1.8em;"  class="fa fa-toggle-off font-grey-mint cursor-hand"   (click)="onBooleanClick(!modalModel.connectible_to_internet)"></i>
+                <i *ngIf="modalModel.connectible_to_internet" style="font-size: 1.8em;" class="fa fa-toggle-on font-green-jungle cursor-hand" (click)="onBooleanClick(!modalModel.connectible_to_internet)"></i>
+                <i *ngIf="!modalModel.connectible_to_internet" style="font-size: 1.8em;"  class="fa fa-toggle-off font-grey-mint cursor-hand" (click)="onBooleanClick(!modalModel.connectible_to_internet)"></i>
             </div>
 
             <bk-form-input [control]="form.controls.compiler_target_name" label="{{'label_compiler_target_name'|bkTranslate:this}}"></bk-form-input>

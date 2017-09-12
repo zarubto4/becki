@@ -362,6 +362,16 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                 controller.setOutputConnectorValue(m.blockId, m.connectorName, m.value);
             }
 
+            /* tslint:disable */
+
+            console.log("homerMessageReceived:: m.message_type =  ", m.message_type);
+
+            /* tslint:enable */
+
+            /*
+
+            According Blocko-core its Deprecated????
+
             if (m.message_type === 'newExternalInputConnectorValue') {
                 controller.setInputExternalConnectorValue(m.targetType, m.targetId, m.connectorName, m.value);
             }
@@ -369,6 +379,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
             if (m.message_type === 'newExternalOutputConnectorValue') {
                 controller.setOutputExternalConnectorValue(m.targetType, m.targetId, m.connectorName, m.value);
             }
+            */
 
             if (m.message_type === 'newConsoleEvent') {
                 this.zone.run(() => {
@@ -384,6 +395,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
             }
 
             if (m.message_type === 'getValues') {
+
                 for (let block in m.connector) {
                     if (!m.connector.hasOwnProperty(block)) {
                         continue;
@@ -402,31 +414,58 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                         }
                         controller.setOutputConnectorValue(block, output, m.connector[block].outputs[output]);
                     }
-                }
 
-                for (let targetType in m.externalConnector) {
+                    /* tslint:disable */
 
-                    if (!m.externalConnector.hasOwnProperty(targetType)) {
-                        continue;
-                    }
+                    console.log("homerMessageReceived:: .message_type === 'getValues', for:   ", m);
 
-                    for (let targetId in m.externalConnector[targetType]) {
-                        if (!m.externalConnector[targetType].hasOwnProperty(targetId)) {
+                    /* tslint:enable */
+
+                    for (let targetType in m.externalConnector) {
+
+                        if (!m.externalConnector.hasOwnProperty(targetType)) {
                             continue;
                         }
 
-                        for (let input in m.externalConnector[targetType][targetId].inputs) {
-                            if (m.externalConnector[targetType][targetId].inputs.hasOwnProperty(input)) {
-                                continue;
-                            }
-                            controller.setInputExternalConnectorValue(targetType, targetId, input, m.externalConnector[targetType][targetId].inputs[input]);
-                        }
+                        /* tslint:disable */
 
-                        for (let output in m.externalConnector[targetType][targetId].outputs) {
-                            if (!m.externalConnector[targetType][targetId].outputs.hasOwnProperty(output)) {
+                        console.log("homerMessageReceived:: .message_type === 'getValues', for:   ", targetType);
+
+                        /* tslint:enable */
+
+                        for (let targetId in m.externalConnector[targetType]) {
+                            if (!m.externalConnector[targetType].hasOwnProperty(targetId)) {
                                 continue;
                             }
-                            controller.setOutputExternalConnectorValue(targetType, targetId, output, m.externalConnector[targetType][targetId].outputs[output]);
+
+
+                            /* tslint:disable */
+
+                            console.log("homerMessageReceived:: m.message_type =  ", m.message_type);
+
+                            /* tslint:enable */
+
+                            for (let input in m.externalConnector[targetType][targetId].inputs) {
+                                if (m.externalConnector[targetType][targetId].inputs.hasOwnProperty(input)) {
+                                    continue;
+                                }
+                                // controller.set
+                                // controller.setInputExternalConnectorValue(targetType, targetId, input, m.externalConnector[targetType][targetId].inputs[input]);
+
+                                /* tslint:disable */
+                                console.log("homerMessageReceived:: setInputExternalConnectorValue, for: ", targetType, targetId, input, m.externalConnector[targetType][targetId].inputs[input]);
+                                /* tslint:enable */
+                            }
+
+                            for (let output in m.externalConnector[targetType][targetId].outputs) {
+                                if (!m.externalConnector[targetType][targetId].outputs.hasOwnProperty(output)) {
+                                    continue;
+                                }
+                                /* tslint:disable */
+                                console.log("homerMessageReceived:: setOutputExternalConnectorValue, for: ", targetType, targetId, output, m.externalConnector[targetType][targetId].outputs[output]);
+                                /* tslint:enable */
+                                // controller.setOutputExternalConnectorValue(targetType, targetId, output, m.externalConnector[targetType][targetId].outputs[output]);
+                            }
                         }
                     }
                 }

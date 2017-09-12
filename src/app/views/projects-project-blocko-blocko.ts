@@ -20,7 +20,8 @@ import {
     IMProgramSnapShot,
     IMProjectSnapShot, IBlockoBlockVersionShortDetail, IBoardShortDetail,
     IBProgramVersionShortDetail, IHardwareGroupIN, IMProjectShortDetailForBlocko, ICProgramVersionsShortDetailForBlocko,
-    ICProgramShortDetailForBlocko
+    ICProgramShortDetailForBlocko, ITypeOfBlockFilter, ITypeOfBlockList, IBlockoBlockShortDetail,
+    ITypeOfBlockShortDetail
 } from '../backend/TyrionAPI';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { DraggableEventParams } from '../components/DraggableDirective';
@@ -61,7 +62,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     // blocko blocks:
 
-    blockGroups: ITypeOfBlock[] = null;
+    blockGroups: ITypeOfBlockShortDetail[] = null;
     blockGroupsOpenToggle: { [id: string]: boolean } = {};
 
     blocksLastVersions: { [id: string]: IBlockoBlockVersionShortDetail } = {};
@@ -644,7 +645,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     let interfaceData = JSON.parse(cpv.virtual_input_output);
                     if (interfaceData) {
                         outInterface.push({
-                            'targetType': targetName === 'BYZANCE_YODAG2' ? 'yoda' : 'device', // TODO: make better detection for another generations [DH]
+                            // 'targetType': targetName === 'BYZANCE_YODAG2' ? 'yoda' : 'device', // TODO: make better detection for another generations [DH] - Not supported?? [TZ]
+                            'color' : '#99ccff', // change color [TZ]
                             'targetId': hwId,
                             'displayName': board.name ? board.name : board.id,
                             'interface': interfaceData
@@ -773,7 +775,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     Object.keys(out.messageOutputs).length
                 ) {
                     outInterface.push({
-                        'targetType': 'grid_project',
+                        // 'targetType': 'grid_project',
+                        'color': '#9966ff',  // change color [TZ]
                         'targetId': gp.id,
                         'displayName': gp.name,
                         'interface': out
@@ -1132,24 +1135,21 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             }),
             this.backendService.bProgramGetAllDetailsForIntegration(this.projectId) // TODO [permission]: project.read_permission
         ])
-            .then((values: [ITypeOfBlock[], IBoardsForBlocko]) => {
-                let typeOfBlocks: ITypeOfBlock[] = values[0];
+            .then((values: [ITypeOfBlockList, IBoardsForBlocko]) => {
+                let typeOfBlocks: ITypeOfBlockList = values[0];
                 let blockoDetails: IBoardsForBlocko = values[1];
 
                 let projects: IMProjectShortDetailForBlocko[] = blockoDetails.m_projects;
 
-                // TODO: make this better viz. TYRION-374
+
                 this.blocksLastVersions = {};
                 this.blocksColors = {};
                 this.blocksIcons = {};
 
-                typeOfBlocks.forEach((tob) => {
-                    tob.blocks.forEach((bb) => {
-                        let sortedVersion = bb.versions.sort((a, b) => {
-                            return parseInt(b.id, 10) - parseInt(a.id, 10);
-                        });
-                        if (sortedVersion.length) {
-                            this.blocksLastVersions[bb.id] = sortedVersion[0];
+                typeOfBlocks.content.forEach((tob: ITypeOfBlockShortDetail) => {
+                    tob.blocko_blocks.forEach((bb: IBlockoBlockShortDetail) => {
+                        if (bb.versions.length) {
+                            this.blocksLastVersions[bb.id] = bb.versions[0];
                             if (this.blocksLastVersions[bb.id]) {
                                 let version = this.blocksLastVersions[bb.id];
                                 try {
@@ -1168,7 +1168,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     });
                 });
 
-                this.blockGroups = typeOfBlocks;
+                this.blockGroups = typeOfBlocks.content;
                 this.allGridProjects = projects;
 
                 this.allBoardsDetails = blockoDetails;
@@ -1199,7 +1199,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 this.unblockUI();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_blocko')));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_blocko', reason)));
                 this.unblockUI();
             });
 

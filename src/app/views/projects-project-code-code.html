@@ -217,10 +217,12 @@
 
                                 </td>
                                 <!-- UPLOAD -->
+
                                 <td class="vert-align">
-                                    <button class="btn blue" (click)="onUploadClick(version)" *ngIf="projectId && device && device.connectible_to_internet && version.status=='successfully_compiled_and_restored' && codeProgram && codeProgram.publish_type == 'private_program'">
-                                    {{'btn_upload_to_hardware'|bkTranslate:this}}
+                                    <button *ngIf="projectId && device && device.connectible_to_internet && version.status=='successfully_compiled_and_restored' && codeProgram && codeProgram.publish_type == 'private_program'" class="btn blue" (click)="onUploadClick(version)" >
+                                         {{'btn_upload_to_hardware'|bkTranslate:this}}
                                      </button>
+
                                 </td>
                                 <!-- ACTIONS -->
                                 <td class="vert-align text-right no-wrap">

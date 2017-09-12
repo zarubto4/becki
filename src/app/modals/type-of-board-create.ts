@@ -54,7 +54,6 @@ export class ModalsCreateTypeOfBoardComponent implements OnInit {
         this.form = this.formBuilder.group({
             'description': ['', [Validators.required, Validators.minLength(4)]],
             'name': ['', [Validators.required, Validators.minLength(4)]],
-            'connectible_to_internet': ['', [Validators.required]],
             'compiler_target_name': ['', [Validators.required, Validators.minLength(4)]],
             'producer': ['', [Validators.required]],
             'processor': ['', [Validators.required]]
@@ -83,7 +82,6 @@ export class ModalsCreateTypeOfBoardComponent implements OnInit {
 
         (<FormControl>(this.form.controls['name'])).setValue(this.modalModel.name);
         (<FormControl>(this.form.controls['description'])).setValue(this.modalModel.description);
-        (<FormControl>(this.form.controls['connectible_to_internet'])).setValue(this.modalModel.connectible_to_internet);
         (<FormControl>(this.form.controls['compiler_target_name'])).setValue(this.modalModel.compiler_target_name);
         (<FormControl>(this.form.controls['producer'])).setValue(this.modalModel.producer);
         (<FormControl>(this.form.controls['processor'])).setValue(this.modalModel.processor);
@@ -92,7 +90,6 @@ export class ModalsCreateTypeOfBoardComponent implements OnInit {
     onSubmitClick(): void {
         this.modalModel.description = this.form.controls['description'].value;
         this.modalModel.name = this.form.controls['name'].value;
-        this.modalModel.connectible_to_internet = this.form.controls['connectible_to_internet'].value;
         this.modalModel.compiler_target_name = this.form.controls['compiler_target_name'].value;
         this.modalModel.producer = this.form.controls['producer'].value;
         this.modalModel.processor = this.form.controls['processor'].value;

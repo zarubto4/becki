@@ -267,7 +267,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                     type_of_board_id: model.typeOfBoard
                 })
                     .then(() => {
-                        this.refresh();
+                        this.onFilterHardware();
                     }).catch(reason => {
                         this.unblockUI();
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
