@@ -157,7 +157,6 @@ import { ModalsAdminCreateHardwareComponent } from './modals/admin-create-hardwa
 import { ModalsCreateTypeOfBoardBatchComponent } from './modals/type-of-board-batch-create';
 import { ModalsTariffComponent } from './modals/tariff';
 import { AdminFinancialComponent } from './views/admin-financial';
-import { GarfieldService } from './services/garfieldService';
 import { AdminFinancialTariffComponent } from './views/admin-financial-tariff';
 import { ModalsExtensionComponent } from './modals/extension';
 import { FormTextAreaComponent } from './components/FormTextAreaComponent';
@@ -360,7 +359,6 @@ class BeckiErrorHandler implements ErrorHandler {
         ExitConfirmGuard,
         NonAuthGuard, // NonAuthGuard service must be after BackendService
         NotificationService, // NotificationService must be after BackendService
-        GarfieldService,
         StorageService,
         BlockUIService,
         ModalService,

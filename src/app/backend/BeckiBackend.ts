@@ -348,6 +348,7 @@ export abstract class BeckiBackend extends TyrionAPI {
         // David 1 IP
         // this.host = "192.168.65.30:9000";
         // this.host = "192.168.65.137:9000";
+
     }
 
     // GENERIC REQUESTS
@@ -627,7 +628,7 @@ export abstract class BeckiBackend extends TyrionAPI {
                     )
                     .subscribe(this.notificationReceived);
                 channelReceived
-                    .filter(message => message.message_type === 'garfield' || message.status === 'garfield_update')
+                    .filter(message => (message.message_type === 'subscribe_garfield' || message.message_type === 'garfield_update' || message.message_type === 'device_disconnect' || message.message_type === 'device_connect'))
                     .subscribe(this.garfieldWebsocketRecived);
                 channelReceived
                     .filter(message => message.message_type === 'getValues' && message.status === 'success')
