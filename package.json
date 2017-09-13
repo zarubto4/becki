@@ -49,7 +49,8 @@
     "the-grid": "git+ssh://git@github.com:ByzanceIoT/the-grid.git#v0.1.163",
     "tslib": "^1.5.0",
     "typescript": "2.2.2",
-    "zone.js": "^0.7.4"
+    "zone.js": "^0.7.4",
+    "zxing-typescript": "^0.1.2"
   },
   "devDependencies": {
     "@types/chalk": "^0.4.31",
@@ -90,6 +91,7 @@
     "typedoc": "^0.5.5",
     "url-loader": "^0.5.6",
     "webpack": "^2.2.0",
-    "webpack-dev-server": "^2.2.0"
+    "webpack-dev-server": "^2.2.0",
+    "zxing-typescript": "^0.1.2"
   }
 }
