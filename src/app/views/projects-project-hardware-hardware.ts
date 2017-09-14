@@ -12,7 +12,7 @@ import { ModalsHardwareCodeProgramVersionSelectModel } from '../modals/hardware-
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { ModalsRemovalModel } from '../modals/removal';
-import { IOnlineStatus } from '../backend/BeckiBackend';
+import { OnlineChangeStatus } from '../backend/BeckiBackend';
 import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
 import { ModalsDeviceEditDeveloperParameterValueModel } from '../modals/device-edit-developer-parameter-value';
 import { ModalsPictureUploadModel } from '../modals/picture-upload';
@@ -36,15 +36,11 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     hardwareTab: string = 'overview';
 
-    hwStatus: IOnlineStatus;
-
     constructor(injector: Injector) {
         super(injector);
 
         this.backendService.onlineStatus.subscribe(status => {
-            if (this.hardwareId === status.model_id) { // TODO filtrovat i dle modelu až tyrion implementuje
-                this.hwStatus = status;
-                let kamToChci = status.online_status;
+            if (status.model === 'Board' && this.hardwareId === status.model_id) {
                 this.device.online_state = status.online_status;
             }
         });
@@ -72,7 +68,13 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.backendService.boardGet(this.hardwareId) // TODO [permission]: Project.read_permission
             .then((board) => {
                 this.device = board;
-                // console.log(board);
+
+                this.backendService.onlineStatus.subscribe(status => {
+                    if (status.model === 'HomerServer' && this.device.server.id === status.model_id) {
+                        this.device.server.online_state = status.online_status;
+                    }
+                });
+
                 return this.backendService.typeOfBoardGet(board.type_of_board_id);
             })
             .then((typeOfBoard) => {

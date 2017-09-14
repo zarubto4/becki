@@ -1185,6 +1185,18 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             .then((blockoProgram) => {
                 this.blockoProgram = blockoProgram;
 
+                this.backendService.onlineStatus.subscribe((status) => {
+                    if (status.model === 'HomerInstance' &&  this.blockoProgram.instance_details.instance_id === status.model_id) {
+                        this.blockoProgram.instance_details.online_state = status.online_status;
+                    }
+                });
+
+                this.backendService.onlineStatus.subscribe((status) => {
+                    if (status.model === 'HomerServer' &&  this.blockoProgram.instance_details.server_id === status.model_id) {
+                        this.blockoProgram.instance_details.server_online_state = status.online_status;
+                    }
+                });
+
                 this.blockoProgramVersions = this.blockoProgram.program_versions || [];
 
                 let version = null;

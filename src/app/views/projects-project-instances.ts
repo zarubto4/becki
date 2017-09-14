@@ -37,7 +37,17 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.id = params['project'];
             this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
+
                 this.instances = project.instancies;
+
+                this.instances.forEach((instance, index, obj) => {
+                    this.backendService.onlineStatus.subscribe((status) => {
+                        if (status.model === 'HomerInstance' && instance.id === status.model_id) {
+                            instance.instance_online_state = status.online_status;
+                        }
+                    });
+                });
+
             });
         });
     }

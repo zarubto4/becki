@@ -24,7 +24,7 @@ import { FlashMessageError, FlashMessageSuccess } from '../services/Notification
 import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
 import { ModalsBlockoVersionSelectModel } from '../modals/blocko-version-select';
 import { ProjectsProjectBlockoBlockoComponent } from './projects-project-blocko-blocko';
-import { IOnlineStatus } from '../backend/BeckiBackend';
+import { OnlineChangeStatus } from '../backend/BeckiBackend';
 
 @Component({
     selector: 'bk-view-projects-project-instances-instance',
@@ -40,7 +40,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
     gridUrl: string = '';
 
-    instanceStatus: IOnlineStatus;
+    instanceStatus: OnlineChangeStatus;
 
     currentHistoricInstance: IHomerInstanceRecord;
 
@@ -70,9 +70,13 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     constructor(injector: Injector) {
         super(injector);
         this.homerService = injector.get(HomerService);
-        this.backendService.onlineStatus.subscribe(status => {
 
+        this.backendService.onlineStatus.subscribe((status) => {
+            if (status.model === 'HomerInstance' && this.instanceId === status.model_id) {
+                this.instance.online_state = status.online_status;
+            }
         });
+
     };
 
 
@@ -97,6 +101,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     }
 
     ngOnInit(): void {
+
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.projectId = params['project'];
             this.instanceId = params['instance'];
@@ -147,13 +152,30 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
         // this.instance.actual_instance.procedures.forEach(proc => proc.updates.forEach(update => update.));
         this.backendService.instanceGet(this.instanceId) // TODO [permission]: "B_program.update_permission"
             .then((instance) => {
+
                 this.instance = instance;
                 this.loadBlockoLiveView();
                 this.currentHistoricInstance = this.instance.instance_history.pop();
                 this.unblockUI();
 
+                this.backendService.onlineStatus.subscribe((status) => {
+                    if (status.model === 'HomerServer' && this.instance.server_id === status.model_id) {
+                        this.instance.server_online_state = status.online_status;
+                    }
+                });
+
                 if (!this.instance.actual_instance) {
+
                     this.router.navigate(['/', 'projects', this.projectId, 'instances', this.instanceId]);
+
+                    this.instance.actual_instance.hardware_group.forEach((deviceGroup, index, obj) => {
+
+                        this.backendService.onlineStatus.subscribe((status) => {
+                            if (status.model === 'Board' && deviceGroup.main_board_pair.board_id === status.model_id) {
+                                deviceGroup.main_board_pair.online_state = status.online_status;
+                            }
+                        });
+                    });
                 }
             })
             .catch(reason => {

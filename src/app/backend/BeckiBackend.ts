@@ -267,8 +267,8 @@ export class RequestError extends Error {
 
 }
 
-export interface IOnlineStatus {
-    model: ICProgram;
+export interface OnlineChangeStatus {
+    model: ('Board' | 'HomerInstance' | 'HomerServer');
     model_id: 'string';
     online_status: ('not_yet_first_connected' | 'synchronization_in_progress' | 'offline' | 'online' | 'unknown_lost_connection_with_server');
 
@@ -300,7 +300,7 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     public garfieldWebsocketRecived: Rx.Subject<any> = new Rx.Subject<any>();
 
-    public onlineStatus: Rx.Subject<IOnlineStatus> = new Rx.Subject<IOnlineStatus>();
+    public onlineStatus: Rx.Subject<OnlineChangeStatus> = new Rx.Subject<OnlineChangeStatus>();
 
     public interactionsOpened: Rx.Subject<void> = new Rx.Subject<void>();
     public interactionsSchemeSubscribed: Rx.Subject<void> = new Rx.Subject<void>();
