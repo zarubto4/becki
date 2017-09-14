@@ -15,12 +15,18 @@
                 <div class="menu-toggler sidebar-toggler pull-left" (click)="onSidebarToggleClick($event)">
                     <span></span>
                 </div>
+
                 <div class="byzance-logo byzance-logo-size-top-menu"></div>
+                <div class="visible-xs-block pull-right"> <button (click)="onQRclick()" class="btn green btn-outline">QR-SCAN</button> </div>
+                
+                <!-- div class=" visible-xs-block menu-toggler pull-left" (click)="onSidebarToggleClick($event)">
+                    <span></span>
+                </div-->
             </div>
             <!-- END LOGO -->
             <!-- BEGIN TOP NAVIGATION MENU -->
             <div class="top-menu">
-                <ul class="nav navbar-nav pull-right">
+                <ul class="nav navbar-nav">
                     <li *ngIf="backendService.tassks">
                         <a><i class="fa fa-spinner fa-spin"></i></a>
                     </li>
@@ -33,7 +39,7 @@
                         <ul class="dropdown-menu toolbar-notification-menu" [style.display]="showNotificationMenu?'block':'none'">
                             <li class="external">
                                 <h3>
-                                    <span class="bold"> {{'label_number_of_unread'|bkTranslate:this:notificationService.unreadNotificationsCount}}</span> {{'label_notifications'|bkTranslate:this}}</h3>
+                                    <span class="bold"> {{'label_number_of_unread'|bkTranslate:this:notificationService.unreadNotificationsCount}}</span>                                    {{'label_notifications'|bkTranslate:this}}</h3>
                                 <a [routerLink]="['/notifications']">{{'label_view_all'|bkTranslate:this}}</a>
                             </li>
                             <bk-notifications-list class="dropdown-menu-list n-list-scrolling" listName="toolbarNotifications"></bk-notifications-list>
@@ -61,6 +67,8 @@
                     </li>
                     <!-- END USER LOGIN DROPDOWN -->
                 </ul>
+                <div class="clearfix"></div>
+
             </div>
             <!-- END TOP NAVIGATION MENU -->
         </div>
@@ -74,7 +82,7 @@
         <div class="page-sidebar-wrapper">
             <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
             <!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-            <div class="page-sidebar navbar-collapse collapse">
+            <div class="hidden-xs page-sidebar" [class.navbar-collapse]="sidebarClosed" [class.collapse]="sidebarClosed">
                 <!-- BEGIN SIDEBAR MENU -->
                 <ul class="page-sidebar-menu" [class.page-sidebar-menu-closed]="sidebarClosed">
 
@@ -170,7 +178,8 @@
 
                 <div [class.tabbable-line]="tabMenuItems">
                     <ul *ngIf="tabMenuItems" class="nav nav-tabs becki-tab-menu">
-                        <li *ngFor="let tabItem of tabMenuItems; let index = index" class="{{tabItem.options['styleClass']}}" [class.spacer]="!tabItem.options['items'] && !tabItem.link" [class.active]="isRouterLinkActive(tabItem)" [class.dropdown]="tabItem.options['items']" [class.open]="openTabMenuIndex == index">
+                        <li *ngFor="let tabItem of tabMenuItems; let index = index" class="{{tabItem.options['styleClass']}}" [class.spacer]="!tabItem.options['items'] && !tabItem.link"
+                            [class.active]="isRouterLinkActive(tabItem)" [class.dropdown]="tabItem.options['items']" [class.open]="openTabMenuIndex == index">
                             <a *ngIf="!tabItem.options['items'] && tabItem.link" [routerLink]="tabItem.link" [class.disabled]="tabItem.options['disabled']"><span *ngIf="tabItem.icon" class="fa fa-fw fa-{{tabItem.icon}}"></span> <span [innerHTML]="tabItem.label"></span> </a>
                             <a *ngIf="tabItem.options['items']" (click)="toggleTabMenu(index)" class="cursor-hand"><span *ngIf="tabItem.icon" class="fa fa-fw fa-{{tabItem.icon}}"></span> <span [innerHTML]="tabItem.label"></span> <span class="dropdown-icon fa fa-angle-down"></span></a>
                             <ul *ngIf="tabItem.options['items']" class="dropdown-menu becki-tab-menu-dropdown">

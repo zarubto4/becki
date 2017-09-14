@@ -167,6 +167,7 @@ import { ModalsCompanyInformationComponent } from './modals/company-information'
 import { ModalsPublicShareRequestComponent } from './modals/public-share-request';
 import { ModalsPublicShareResponseComponent } from './modals/public-share-response';
 import { FilterPagerComponent } from './components/FilterPagerComponent';
+import { ReaderQrComponent } from './views/qr-reader';
 
 
 // @formatter:off
@@ -187,6 +188,9 @@ let routes: Routes = [
     {path: 'dashboard', data: {breadName: 'Dashboard'}, component: DashboardComponent, canActivate: [AuthGuard]},
 
     {path: 'notifications', data: {breadName: 'Notifications'}, component: NotificationsComponent, canActivate: [AuthGuard]},
+
+    { path: 'qr-reader', data: { breadName: 'QR-Reader' }, component: ReaderQrComponent, canActivate: [AuthGuard] },
+    
 
     {path: 'profile', data: {breadName: 'Profile'}, component: ProfileComponent, canActivate: [AuthGuard]},
 
@@ -466,6 +470,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ProducersProducerComponent,
         ProjectsProjectLibrariesComponent,
         ProjectsProjectLibrariesLibraryComponent,
+        ReaderQrComponent,
         // Modals components
         ModalsAdminCreateHardwareComponent,
         ModalsBillingInformationComponent,

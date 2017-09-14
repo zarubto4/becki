@@ -197,6 +197,11 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
         this.showNotificationMenu = false;
     }
 
+    onQRclick() {
+        this.router.navigate(['/qr-reader']);
+
+    }
+
     onNotificationToggleClick() {
         this.showNotificationMenu = !this.showNotificationMenu;
         this.showUserMenu = false;
