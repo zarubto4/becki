@@ -78,10 +78,10 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
     onInstanceStartOrShutdownClick(instance: IInstanceShortDetail, start: boolean) { // start (True) for Start or (False) for Shutdown
         let m = null;
 
-        if (start) {
-            m = new ModalsConfirmModel(this.translate('label_shut_down_instance_modal'), this.translate('label_shut_down_instance_modal_comment'));
-        } else {
+        if (start) { // start (True) for Start or (False) for Shutdown
             m = new ModalsConfirmModel(this.translate('label_upload_instance_modal'), this.translate('label_upload_instance_modal_comment'));
+        } else {
+            m = new ModalsConfirmModel(this.translate('label_shut_down_instance_modal'), this.translate('label_shut_down_instance_modal_comment'));
         }
 
         this.modalService.showModal(m)

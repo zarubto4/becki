@@ -172,7 +172,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     }
 
     onBlockoProgramVersionClick(bProgramId: string, bProgramVersionId: string) {
-        this.router.navigate(['/projects', this.projectId, 'blocko', bProgramId, bProgramVersionId]);
+        this.router.navigate(['/projects', this.projectId, 'blocko', bProgramId]);
     }
 
     onGridProgramPublishClick(gridProgram: IMProgramInstanceParameter) {
@@ -260,10 +260,10 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
     onInstanceStartOrShutdownClick(start: boolean) { // start (True) for Start or (False) for Shutdown
         let m = null;
 
-        if (start) {
-            m = new ModalsConfirmModel(this.translate('label_modal_shutdown_instance'), this.translate('label_modal_confirm_shutdown_instance'));
-        } else {
+        if (start) {  // start (True) for Start or (False) for Shutdown
             m = new ModalsConfirmModel(this.translate('label_modal_shutdown_instance'), this.translate('label_modal_confirm_run_latest_version'));
+        } else {
+            m = new ModalsConfirmModel(this.translate('label_modal_shutdown_instance'), this.translate('label_modal_confirm_shutdown_instance'));
         }
 
         this.modalService.showModal(m)
@@ -274,6 +274,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                         .then(() => {
                             this.storageService.projectRefresh(this.projectId);
                             this.unblockUI();
+                            this.refresh();
                         })
                         .catch((err) => {
                             this.unblockUI();

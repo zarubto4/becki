@@ -51,6 +51,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     projectId: string;
     blockoId: string;
 
+
     routeParamsSubscription: Subscription;
 
     project: IProject = null;
