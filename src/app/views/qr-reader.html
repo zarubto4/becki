@@ -1,23 +1,14 @@
-<bk-layout-main [title]="'main_title'|bkTranslate:this">
+<div class="portlet portlet light bordered">
 
-    <div class="portlet portlet light bordered">
-        <div class="portlet-title">
-            <div class="becki-caption">
-                <span class="font-blue-dark">
-                            <i class="fa fa-fw fa-flag"></i>
-                            <span>QR READER</span>
-                </span>
-            </div>
-        </div>
-        <video #video width="280" height="260" [hidden]="!foundQR" autoplay></video>
-        <!-- TODO automatické zvetšování dle CSS -->
-        <canvas #myCanvas width="280" height="260" [hidden]="foundQR" style="background:lightgray;"></canvas>
-        <div class="clearfix"></div>
-        <span>{{qrStatus}}</span>
-        <button *ngIf="foundQR" class="btn green btn-outline" (click)="onScanAgain()">Re-Scan</button>
-        <button *ngIf="foundQR" class="btn green btn-outline" (click)="onScanConfirm()">Confirm Scan</button>
-        <div class="clearfix"></div>
+    <div class="row">
+    <video #video class="col-1" [hidden]="!foundQR" autoplay></video>
+    <canvas #myCanvas class="col-1" [hidden]="foundQR" style="background:lightgray;"></canvas>
     </div>
-
-
-</bk-layout-main>
+    <div class="clearfix"></div>
+    <span>{{qrStatus}}</span>
+    <div class="row">
+        <button *ngIf="foundQR" class="col-6 btn green btn-outline" (click)="onScanAgain()">Re-Scan</button>
+        <button *ngIf="foundQR" class="col-6 btn green btn-outline" (click)="onScanConfirm()">Confirm Scan</button>
+    </div>
+    <div class="clearfix"></div>
+</div>

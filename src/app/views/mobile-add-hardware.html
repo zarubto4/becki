@@ -1,0 +1,25 @@
+<bk-layout-main [title]="'main_title'|bkTranslate:this">
+
+    <div class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="becki-caption">
+                <span class="font-blue-dark">
+                        <i class="fa fa-fw fa-flag"></i>
+                        <span [innerHTML]="'title'|bkTranslate:this"></span>
+                </span>
+            </div>
+        </div>
+        <div style="font-size: 14px; font-weight: 200;">
+            {{'dashboard_info_text'|bkTranslate:this}}
+        </div>
+        <div class="clearfix"></div>
+
+
+        <bk-form-input [control]="blockForm.controls['id']" label="{{'label_add_hardware'|bkTranslate:this}}"></bk-form-input>
+        <button (click)="onQrbuttonScan()" class="col-6 btn green btn-outline">{{'btn_add_hardware_qrcode'|bkTranslate:this}}</button>
+        <bk-view-qr-reader *ngIf="scan" (QrScanClose)="blockForm.controls['id']"></bk-view-qr-reader>
+        <button  (click)="onSubmit" class="col-6 btn green btn-outline">Send</button>
+    </div>
+
+
+</bk-layout-main>
