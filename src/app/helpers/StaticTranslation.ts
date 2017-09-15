@@ -1881,7 +1881,7 @@ export class StaticTranslation {
                 'main_title': 'Platform administration',
                 'main_subtitle': 'Hardware Management',
 
-                'title': 'Basic Overview of comonents',
+                'title': 'Basic Overview of components',
                 'label_name': 'Name',
                 'label_description': 'Description',
 
