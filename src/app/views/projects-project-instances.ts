@@ -37,7 +37,17 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.id = params['project'];
             this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
+
                 this.instances = project.instancies;
+
+                this.instances.forEach((instance, index, obj) => {
+                    this.backendService.onlineStatus.subscribe((status) => {
+                        if (status.model === 'HomerInstance' && instance.id === status.model_id) {
+                            instance.instance_online_state = status.online_status;
+                        }
+                    });
+                });
+
             });
         });
     }
@@ -78,10 +88,10 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
     onInstanceStartOrShutdownClick(instance: IInstanceShortDetail, start: boolean) { // start (True) for Start or (False) for Shutdown
         let m = null;
 
-        if (start) {
-            m = new ModalsConfirmModel(this.translate('label_shut_down_instance_modal'), this.translate('label_shut_down_instance_modal_comment'));
-        } else {
+        if (start) { // start (True) for Start or (False) for Shutdown
             m = new ModalsConfirmModel(this.translate('label_upload_instance_modal'), this.translate('label_upload_instance_modal_comment'));
+        } else {
+            m = new ModalsConfirmModel(this.translate('label_shut_down_instance_modal'), this.translate('label_shut_down_instance_modal_comment'));
         }
 
         this.modalService.showModal(m)

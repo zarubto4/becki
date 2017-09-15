@@ -18,7 +18,6 @@ import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-descript
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsHardwareBootloaderUpdateModel } from '../modals/hardware-bootloader-update';
 
-
 @Component({
     selector: 'bk-view-projects-project-hardware',
     templateUrl: './projects-project-hardware.html',
@@ -46,6 +45,16 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
             this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
                 this.project = project;
                 this.devices = project.boards;
+
+                this.devices.forEach((device, index, obj) => {
+                    this.backendService.onlineStatus.subscribe((status) => {
+                        if (status.model === 'Board' && device.id === status.model_id) {
+                            device.online_state = status.online_status;
+                        }
+                    });
+                });
+
+
                 if (this.devices.find((device, index, obj) => { return !!(device.alert_list && device.alert_list.length); })) {
                     this.bootloaderRequred = true;
                 } else {

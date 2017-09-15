@@ -267,11 +267,15 @@ export class RequestError extends Error {
 
 }
 
-export interface IOnlineStatus {
-    model: ICProgram;
+export interface OnlineChangeStatus {
+    model: ('Board' | 'HomerInstance' | 'HomerServer');
     model_id: 'string';
     online_status: ('not_yet_first_connected' | 'synchronization_in_progress' | 'offline' | 'online' | 'unknown_lost_connection_with_server');
+}
 
+export interface ModelChangeStatus {
+    model: ('Board' | 'CProgram' | 'MProgram' | 'BProgram');
+    model_id: 'string';
 }
 
 // BECKI BACKEND
@@ -300,7 +304,8 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     public garfieldWebsocketRecived: Rx.Subject<any> = new Rx.Subject<any>();
 
-    public onlineStatus: Rx.Subject<IOnlineStatus> = new Rx.Subject<IOnlineStatus>();
+    public onlineStatus: Rx.Subject<OnlineChangeStatus> = new Rx.Subject<OnlineChangeStatus>();
+    public objectUpdateTyrionEcho: Rx.Subject<ModelChangeStatus> = new Rx.Subject<ModelChangeStatus>();
 
     public interactionsOpened: Rx.Subject<void> = new Rx.Subject<void>();
     public interactionsSchemeSubscribed: Rx.Subject<void> = new Rx.Subject<void>();
@@ -628,7 +633,7 @@ export abstract class BeckiBackend extends TyrionAPI {
                     )
                     .subscribe(this.notificationReceived);
                 channelReceived
-                    .filter(message => (message.message_type === 'subscribe_garfield' || message.message_type === 'garfield_update' || message.message_type === 'device_disconnect' || message.message_type === 'device_connect'))
+                    .filter(message => (message.message_channel === 'garfield'))
                     .subscribe(this.garfieldWebsocketRecived);
                 channelReceived
                     .filter(message => message.message_type === 'getValues' && message.status === 'success')
@@ -645,6 +650,9 @@ export abstract class BeckiBackend extends TyrionAPI {
                 channelReceived
                     .filter(message => message.message_type === 'online_status_change')
                     .subscribe(this.onlineStatus);
+                channelReceived
+                    .filter(message => message.message_type === 'becki_object_update')
+                    .subscribe(this.objectUpdateTyrionEcho);
                 channelReceived
                     .filter(message => message.message_type === 'newOutputConnectorValue')
                     .subscribe(this.BProgramOutputConnectorValueReceived);

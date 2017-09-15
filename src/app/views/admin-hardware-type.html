@@ -34,7 +34,6 @@
                     </ul>
                 </div>
 
-
                 <!-- Device List -->
 
                 <div *ngIf="tab == 'hardware_list'">
@@ -46,7 +45,7 @@
                         </button>
                         <button title="{{'label_add_new_with_full_flow'|bkTranslate:this}}" class="btn btn-icon-only green"
                                 [disabled]="false"
-                                (click)="onCreateHardwareClick()">
+                                [routerLink]="['/admin/garfield']">
                             <i class="fa fa-plus-circle"></i>
                             <i class="fa fa-fire"></i>
                         </button>
