@@ -190,7 +190,6 @@ let routes: Routes = [
     {path: 'notifications', data: {breadName: 'Notifications'}, component: NotificationsComponent, canActivate: [AuthGuard]},
 
     { path: 'qr-reader', data: { breadName: 'QR-Reader' }, component: ReaderQrComponent, canActivate: [AuthGuard] },
-    
 
     {path: 'profile', data: {breadName: 'Profile'}, component: ProfileComponent, canActivate: [AuthGuard]},
 
