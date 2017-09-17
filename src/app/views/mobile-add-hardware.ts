@@ -7,6 +7,8 @@ import { BaseMainComponent } from './BaseMainComponent';
 import { FlashMessageSuccess, FlashMessageError } from '../services/NotificationService';
 import { FormGroup, Validators } from '@angular/forms';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
+import { IProject, IProjectShortDetail } from '../backend/TyrionAPI';
+import { FormSelectComponentOption } from '../components/FormSelectComponent';
 
 @Component({
     selector: 'bk-view-mobile-add-hardware',
@@ -16,19 +18,29 @@ export class MobileAddHardwareComponent extends BaseMainComponent implements OnI
 
 
     blockForm: FormGroup = null;
+
     scan: boolean = false;
 
+    projects: FormSelectComponentOption[];
 
     constructor(injector: Injector) {
         super(injector);
         this.blockForm = this.formBuilder.group({
             'id': ['', [Validators.required, /*BeckiAsyncValidators.hardwareDeviceId(this.backendService)*/]],
+            'project': ['', [Validators.required, /*BeckiAsyncValidators.hardwareDeviceId(this.backendService)*/]],
         });
     };
 
 
     ngOnInit(): void {
-
+        this.backendService.projectGetByLoggedPerson().then((projects) => {
+            this.projects = projects.map(project => {
+                return {
+                    label: project.product_name,
+                    value: project.product_id
+                };
+            });
+        });
     }
 
     onQrbuttonScan() {
@@ -36,22 +48,20 @@ export class MobileAddHardwareComponent extends BaseMainComponent implements OnI
     }
 
     onAddClick(): void {
-        /*    let model = new ModalsAddHardwareModel();
-            this.modalService.showModal(model).then((success) => {
-                if (success) {
-                    this.blockUI();
-                    this.backendService.boardConnectWithProject(model.id, this.id) // TODO [permission]: Board.first_connect_permission, Project.update_permission
-                        .then(() => {
-                            this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_add_device_success', model.id)));
-                            this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
-                        })
-                        .catch(reason => {
-                            this.addFlashMessage(new FlashMessageError(this.translate('flash_add_device_fail', model.id, reason)));
-                            this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
-                        });
-                }
+
+        this.blockUI();
+        this.backendService.boardConnectWithProject(this.blockForm.value.id, this.blockForm.value.id) // TODO [permission]: Board.first_connect_permission, Project.update_permission
+            .then(() => {
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_add_device_success', this.blockForm.value.id)));
+                this.unblockUI();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_add_device_fail', this.blockForm.value.id, reason)));
+                this.unblockUI();
             });
-        }*/
     }
+
+
 }
+
 

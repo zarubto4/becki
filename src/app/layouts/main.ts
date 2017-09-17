@@ -198,7 +198,7 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     onQRclick() {
-        this.router.navigate(['/qr-reader']);
+        this.router.navigate(['/qr-reader-hardware']);
 
     }
 

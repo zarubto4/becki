@@ -359,6 +359,22 @@ export class StaticTranslation {
                 'label_can_login': 'now you can login!',
             },
 
+            'ReaderQrComponent:': {
+                'not_valid_byzance_qr_code': 'not a valid Byuance QRcode',
+                'byzance_qr_code_found': 'Byzance QR code found',
+                'btn_rescan': 'Scan again',
+                'btn_confirm_can': 'Confirm Scan',
+            },
+
+            'MobileAddHardwareComponent': {
+                'main_title': 'QR Hardware registration',
+                'btn_add_hardware_qrcode': 'Add Hardware by QR',
+                'label_add_hardware': 'Add hardware',
+                'title': 'Add hardware',
+                'label_project': 'Selected Project',
+                'placeholder_project': 'select project',
+            },
+
             'DashboardComponent': {
                 'title_first_steps': 'First steps',
                 'main_title': 'Dashboard',
@@ -456,7 +472,7 @@ export class StaticTranslation {
                 'label_no_role': 'No Roles',
                 'label_no_role_comment': 'We didn\'t find any roles. Create new one',
 
-            },  'GarfieldComponent': {
+            }, 'GarfieldComponent': {
                 'main_title': 'Platform administration',
                 'main_subtitle': 'Garfield - Test & Burn Kits',
 
@@ -604,13 +620,13 @@ export class StaticTranslation {
                 'nav_step_four_title': 'Summary',
                 'nav_step_four_text': 'Check your order and confirm',
                 'financial_monologue': '<p> The financial plan - or the package you can see here is only the starting state at the beginning. ' +
-                                        'You can see estimated monthly costs and recommended customer type. ' +
-                                        'Each tariff includes a group of extensions at the beginning, such as number of co-workers, storage size, technical support, etc., but you can remove or add, increase, or change extensions anytime later. ' +
-                                        'All tariffs and extensions are based on SaaS (Software as a Service) and Haas (Hardware as a Service). ' +
-                                        'You can pay by card or set up automatic email billing alerts to be notified to your account department, which will be sent by bank transfer. ' +
-                                        '<strong> For each tariff, we give you free credit that should be enough for the first month for free. </strong></p>' +
-                                        '<p>For <strong>large or individual customers</strong>, we have a special tariff by the business contract with technical support, dedicated developers in your office etc. </p>' +
-                                        '<p> For more details please visit <a href="http://byzance.cz/financial" target="_blank">Financial Site</a> </p>',
+                'You can see estimated monthly costs and recommended customer type. ' +
+                'Each tariff includes a group of extensions at the beginning, such as number of co-workers, storage size, technical support, etc., but you can remove or add, increase, or change extensions anytime later. ' +
+                'All tariffs and extensions are based on SaaS (Software as a Service) and Haas (Hardware as a Service). ' +
+                'You can pay by card or set up automatic email billing alerts to be notified to your account department, which will be sent by bank transfer. ' +
+                '<strong> For each tariff, we give you free credit that should be enough for the first month for free. </strong></p>' +
+                '<p>For <strong>large or individual customers</strong>, we have a special tariff by the business contract with technical support, dedicated developers in your office etc. </p>' +
+                '<p> For more details please visit <a href="http://byzance.cz/financial" target="_blank">Financial Site</a> </p>',
                 'step_one_title': 'Tariff',
                 'step_two_title': 'Packages',
                 'label_companies': 'Which company will be the owner?',
@@ -1862,7 +1878,7 @@ export class StaticTranslation {
                 'main_subtitle': 'Admin Dashboard',
 
                 'title': 'Basic Overview',
-                'dashboard_info_text' : 'fasdfsdfs sdafbk jshdfkjhasdkjhsdafhjkfasdjkbhkhjfgsdkjhgsdfkjhgfsd',
+                'dashboard_info_text': 'fasdfsdfs sdafbk jshdfkjhasdkjhsdafhjkfasdjkbhkhjfgsdkjhgsdfkjhgfsd',
 
                 'label_homer_server': 'Homer servers',
                 'label_compilation_server': 'Compilation Servers',
@@ -2036,8 +2052,8 @@ export class StaticTranslation {
             'btn_no': 'No',
             'btn_update': 'Update',
             'btn_ok': 'OK',
-            'btn_create' : 'Create',
-            'btn_copy' : 'Copy',
+            'btn_create': 'Create',
+            'btn_copy': 'Copy',
             'flash_fail': 'Something is wrong',
             'flash_successfully_edit': 'Successfully edit',
             'flash_successfully_remove': 'Successfully removed',
@@ -2124,7 +2140,7 @@ export class StaticTranslation {
                 'json_code_is_broken': 'Json Code is Broken. Please try again later.',
                 'hardware_unstable': 'Some of your devices with this version of the program had a critical error and had to be restored from a backup. This version is not recommended to use in production until you have solved the cause for the error.',
                 'undefined': 'Version status is unknown.',
-                'main_version' : 'Version is set as Main or Default'
+                'main_version': 'Version is set as Main or Default'
             },
 
             'update_state': {

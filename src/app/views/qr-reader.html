@@ -1,14 +1,14 @@
 <div class="portlet portlet light bordered">
 
     <div class="row">
-    <video #video class="col-1" [hidden]="!foundQR" autoplay></video>
-    <canvas #myCanvas class="col-1" [hidden]="foundQR" style="background:lightgray;"></canvas>
+        <video #video class="col-1" style="width:100%" [hidden]="!foundQR" autoplay></video>
+        <canvas #myCanvas class="col-1" [hidden]="foundQR" style="background:lightgray; width:100%"></canvas>
     </div>
     <div class="clearfix"></div>
     <span>{{qrStatus}}</span>
     <div class="row">
-        <button *ngIf="foundQR" class="col-6 btn green btn-outline" (click)="onScanAgain()">Re-Scan</button>
-        <button *ngIf="foundQR" class="col-6 btn green btn-outline" (click)="onScanConfirm()">Confirm Scan</button>
+        <button *ngIf="foundQR" class="col-6 btn green btn-outline" (click)="onScanAgain()">{{btn_rescan|bkTranslate:this}}</button>
+        <button *ngIf="foundQR" class="col-6 btn green btn-outline" (click)="onScanConfirm()">{{btn_confirm_can|bkTranslate:this}}</button>
     </div>
     <div class="clearfix"></div>
 </div>
