@@ -91,12 +91,11 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             }
         });
 
-        /*
-         * TODO - this is something like DDOS attack to tyrion, it must be changed to something more sophisticated
-         */
-        this.reloadInterval = setInterval(() => {
-            this.reloadVersions();
-        }, 10000);
+        this.backendService.objectUpdateTyrionEcho.subscribe(status => {
+            if (status.model === 'CProgram' && this.codeId === status.model_id) {
+                this.refresh();
+            }
+        });
 
     }
 
@@ -428,8 +427,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         let ios = getAllInputOutputs(main, userFiles);
 
         this.blockoView.setInterfaces([{
-            // 'targetType': 'yoda', // TODO - change this in homer [DH]
-            'color': '#99ccff', // TODO change color [TZ]
+            'color': '#99ccff',
             'targetId': 'dummy_id',
             'displayName': 'Program ' + this.codeProgram.name,
             'interface': ios

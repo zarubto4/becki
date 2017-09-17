@@ -67,7 +67,14 @@ export class ReaderQrComponent extends BaseMainComponent implements OnInit {
             let imageData = context.getImageData(0, 0, 280, 260);
             let decoded = jsQR.decodeQRFromImage(imageData.data, imageData.width, imageData.height);
             if (decoded) {
+
+                /* tslint:disable */
+                // TODO Remove after success testing
+
                 console.log(decoded);
+
+                /* tslint:disable */
+
                 if (decoded.slice(0, 3) === 'HWR') {
                     this.confirmedCapture(decoded);
                 } else {

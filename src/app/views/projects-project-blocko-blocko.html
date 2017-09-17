@@ -262,14 +262,14 @@
                                 <h4 class="panel-title">
                                     <a class="accordion-toggle collapsed" (click)="onToggleGroup(blocksType.id)">
                                         <i class="fa fa-pull-right fa-minus-square-o" [class.fa-minus-square-o]="blockGroupsOpenToggle[blocksType.id]" [class.fa-plus-square-o]="!blockGroupsOpenToggle[blocksType.id]"></i>
-                                        {{blocksType.name}} ({{blocksType.blocks.length}})
+                                        {{blocksType.name}} ({{blocksType.blocko_blocks.length}})
                                     </a>
                                 </h4>
                             </div>
                             <div class="panel-collapse collapse" [class.in]="blockGroupsOpenToggle[blocksType.id]">
                                 <div class="panel-body">
-                                    <div *ngIf="blocksType.blocks.length == 0" style="color: gray; text-align: center;">{{'label_no_blocks_in_group'|bkTranslate:this}}</div>
-                                    <div *ngFor="let block of blocksType.blocks;" [style.background-color]="blocksColors[block.id]" [class.with-icon]="blocksIcons[block.id]"
+                                    <div *ngIf="blocksType.blocko_blocks.length == 0" style="color: gray; text-align: center;">{{'label_no_blocks_in_group'|bkTranslate:this}}</div>
+                                    <div *ngFor="let block of blocksType.blocko_blocks;" [style.background-color]="blocksColors[block.id]" [class.with-icon]="blocksIcons[block.id]"
                                         [bkDraggable]="draggableOptions" [bkDraggableData]="block" (bkDraggableOnStop)="onDragStop($event)"
                                         (bkDraggableOnStart)="onDragStart($event)" class="blocko-block">
                                         <div class="blocko-block-mask"></div>
@@ -297,16 +297,19 @@
                     </div>
                     <div *ngIf="blockoProgram" class="becki-actions">
 
-                        <button *ngIf="!blockoProgram.instance_details.uploaded && blockoProgram.instance_details.version_id" class="btn green-jungle"
+                        <button *ngIf="blockoProgram.instance_details.online_state == 'shut_down' && blockoProgram.instance_details.server_online_state == 'online'" class="btn green-jungle"
                             (click)="onTurnOnClick()">
                             <i class="fa fa-power-off"></i> {{'btn_upload_on_cloud'|bkTranslate:this}}
                         </button>
 
-                        <button *ngIf="blockoProgram.instance_details.uploaded" class="btn red" (click)="onTurnOffClick()">
+                        <button *ngIf="blockoProgram.instance_details.online_state == 'online'" class="btn red" (click)="onTurnOffClick()">
                             <i class="fa fa-power-off"></i> {{'btn_turn_off_instance'|bkTranslate:this}}
                         </button>
 
-                        <button class="btn blue-hoki" (click)="onChangeVersionClick()">
+                        <button *ngIf="(blockoProgram.instance_details.online_state == 'shut_down' || blockoProgram.instance_details.online_state == 'offline') && blockoProgram.instance_details.server_online_state == 'online'" class="btn blue-hoki" (click)="onChangeVersionClick()">
+                            <i class="fa fa-code-fork"></i> {{'btn_select_cloud_version'|bkTranslate:this}}
+                        </button>
+                        <button *ngIf="blockoProgram.instance_details.online_state == 'online' && blockoProgram.instance_details.server_online_state == 'online'" class="btn blue-hoki" (click)="onChangeVersionClick()">
                             <i class="fa fa-code-fork"></i> {{'btn_change_cloud_version'|bkTranslate:this}}
                         </button>
 
@@ -320,8 +323,8 @@
                             <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}}</strong> {{'label_server'|bkTranslate:this}}
                             <span *ngIf="blockoProgram.instance_details.server_name">
                                 <strong>{{blockoProgram.instance_details.server_name}}</strong>
-                                <span *ngIf="blockoProgram.instance_details.server_online_state == 'online'" class="font-green-jungle bold">{{blockoProgram.instance_details.server_online_state|bkTranslateTable:this:'online_status'}}</span>
-                                <span *ngIf="blockoProgram.instance_details.server_online_state == 'offline'" class="font-red bold">{{blockoProgram.instance_details.server_online_state|bkTranslateTable:this:'online_status'}}</span>
+                                <span *ngIf="blockoProgram.instance_details.server_online_state == 'online'" class="font-green-jungle bold">({{blockoProgram.instance_details.server_online_state|bkTranslateTable:this:'online_status'}})</span>
+                                <span *ngIf="blockoProgram.instance_details.server_online_state == 'offline'" class="font-red bold">({{blockoProgram.instance_details.server_online_state|bkTranslateTable:this:'online_status'}})</span>
                             </span>
                             <span class="bold" *ngIf="!blockoProgram.instance_details.server_name">({{'label_none'|bkTranslate:this}})</span>
                         </div>
@@ -329,8 +332,9 @@
                         <div>
                             <strong class="font-color-cloud">{{'label_cloud'|bkTranslate:this}}</strong> {{'label_instance'|bkTranslate:this}}
                             <a *ngIf="blockoProgram.instance_details.instance_id" (click)="onInstanceIdClick(blockoProgram.instance_details.instance_id)"><strong>{{blockoProgram.instance_details.instance_id}}</strong></a>
-                            <span *ngIf="blockoProgram.instance_details.online_state == 'online'" class="font-green-jungle bold">{{blockoProgram.instance_details.online_state|bkTranslateTable:this:'online_status'}}</span>
-                            <span *ngIf="blockoProgram.instance_details.online_state == 'offline'" class="font-red bold">{{blockoProgram.instance_details.online_state|bkTranslateTable:this:'online_status'}}</span>
+                            <span *ngIf="blockoProgram.instance_details.online_state == 'online'" class="font-green-jungle bold">({{blockoProgram.instance_details.online_state|bkTranslateTable:this:'online_status'}})</span>
+                            <span *ngIf="blockoProgram.instance_details.online_state == 'offline'" class="font-red bold">({{blockoProgram.instance_details.online_state|bkTranslateTable:this:'online_status'}})</span>
+                            <span *ngIf="blockoProgram.instance_details.online_state == 'shut_down'" class="font-yellow-casablanca bold">({{blockoProgram.instance_details.online_state|bkTranslateTable:this:'online_status'}})</span>
                             <span class="bold" *ngIf="!blockoProgram.instance_details.instance_id">{{'label_none'|bkTranslate:this}}</span>
                         </div>
                         <br>
@@ -338,6 +342,7 @@
                             <strong class="font-color-blocko">{{'label_blocko'|bkTranslate:this}}</strong> {{'label_version'|bkTranslate:this}}
                             <a *ngIf="blockoProgram.instance_details.version_name" class="bold" (click)="onProgramVersionIdClick(blockoProgram.instance_details.version_id)">{{blockoProgram.instance_details.version_name}}</a>
                             <span class="bold" *ngIf="!blockoProgram.instance_details.version_name">{{'label_none'|bkTranslate:this}}</span>
+                            <span *ngIf="blockoProgram.instance_details.online_state == 'shut_down'" class="font-yellow-casablanca bold">({{'label_used_in_cloud'|bkTranslate:this}})</span>
                         </div>
 
                     </div>

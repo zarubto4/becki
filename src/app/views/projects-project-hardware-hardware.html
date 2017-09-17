@@ -363,10 +363,12 @@
                                         <strong class="font-color-cloud">CLOUD</strong>{{'label_main_server'|bkTranslate:this}}:
                                         <span *ngIf="device.server.personal_server_name" class="font-grey-mint bold">{{device.server_name}}</span>
                                         <span *ngIf="!device.server.personal_server_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
-                                        <span *ngIf="device.server.personal_server_name && device.server.online_state"
-                                              class="font-green-jungle">(online)</span>
-                                        <span *ngIf="device.server.personal_server_name && !device.server.online_state"
-                                              class="font-red">(offline)</span>
+
+                                        <span *ngIf="device.server && device.server.online_state == 'online' " class="font-green-jungle bold">{{device.server.online_state|bkTranslateTable:this:'online_status'}}</span>
+                                        <span *ngIf="device.server && device.server.online_state == 'offline' " class="font-red bold">{{device.server.online_state|bkTranslateTable:this:'online_status'}}</span>
+                                        <span *ngIf="device.server && device.server.online_state == 'synchronization_in_progress' " class="font-grey-mint bold"><i class="fa fa-spinner fa-spin"></i></span>
+                                        <span *ngIf="device.server && device.server.online_state == 'unknown_lost_connection_with_server' " class="font-grey-mint bold">{{device.server.online_state|bkTranslateTable:this:'online_status'}}</span>
+
                                     </div>
 
                                     <span *ngIf="device.server==null">
