@@ -42,6 +42,8 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
     showNotificationMenu: boolean = false;
 
     sidebarClosed: boolean = false;
+    sidebarMobileClosed: boolean = true;
+
 
     openTabMenuIndex: number = -1;
 
@@ -190,6 +192,16 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
         } else {
             document.body.classList.remove('page-sidebar-closed');
         }
+    }
+
+    onMobileSidebarToggleClick() {
+        this.sidebarMobileClosed = !this.sidebarMobileClosed;
+        /*localStorage.setItem('sidebarClosed', this.sidebarMobileClosed ? 'true' : 'false');
+        if (this.sidebarMobileClosed) {
+            document.body.classList.add('page-sidebar-closed');
+        } else {
+            document.body.classList.remove('page-sidebar-closed');
+        }*/
     }
 
     onUserToggleClick() {

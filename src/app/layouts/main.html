@@ -6,27 +6,26 @@
     <div class="page-header navbar navbar-fixed-top">
         <!-- BEGIN HEADER INNER -->
         <div class="page-header-inner">
+
+
             <!-- BEGIN RESPONSIVE MENU TOGGLER -->
             <a class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
             </a>
             <!-- END RESPONSIVE MENU TOGGLER -->
             <!-- BEGIN LOGO -->
             <div class="page-logo">
-                <div class="menu-toggler sidebar-toggler pull-left" (click)="onSidebarToggleClick($event)">
+                <div class="hidden-xs menu-toggler sidebar-toggler pull-left" (click)="onSidebarToggleClick($event)">
                     <span></span>
                 </div>
-
                 <div class="byzance-logo byzance-logo-size-top-menu"></div>
-                <div class="visible-xs-block pull-right"> <button (click)="onQRclick()" class="btn green btn-outline">QR-SCAN</button> </div>
-                
-                <!-- div class=" visible-xs-block menu-toggler pull-left" (click)="onSidebarToggleClick($event)">
-                    <span></span>
-                </div-->
             </div>
             <!-- END LOGO -->
+            <div class="visible-xs-block pull-right menu-toggler responsive-toggler" (click)="onMobileSidebarToggleClick($event)">
+                <span></span>
+            </div>
             <!-- BEGIN TOP NAVIGATION MENU -->
             <div class="top-menu">
-                <ul class="nav navbar-nav">
+                <ul class="nav navbar-nav pull-right">
                     <li *ngIf="backendService.tassks">
                         <a><i class="fa fa-spinner fa-spin"></i></a>
                     </li>
@@ -67,24 +66,23 @@
                     </li>
                     <!-- END USER LOGIN DROPDOWN -->
                 </ul>
-                <div class="clearfix"></div>
-
             </div>
             <!-- END TOP NAVIGATION MENU -->
         </div>
         <!-- END HEADER INNER -->
     </div>
+    <div class="clearfix"></div>
+
     <bk-notifications-overlay></bk-notifications-overlay>
     <!-- END HEADER -->
     <div class="page-container">
-
         <!-- BEGIN SIDEBAR -->
         <div class="page-sidebar-wrapper">
             <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
             <!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
-            <div class="hidden-xs page-sidebar" [class.navbar-collapse]="sidebarClosed" [class.collapse]="sidebarClosed">
+            <div class="page-sidebar" [class.navbar-collapse]="sidebarMobileClosed" [class.collapse]="sidebarMobileClosed">
                 <!-- BEGIN SIDEBAR MENU -->
-                <ul class="page-sidebar-menu" [class.page-sidebar-menu-closed]="sidebarClosed">
+                <ul class="page-sidebar-menu page-header-fixed" [class.page-sidebar-menu-closed]="sidebarClosed">
 
                     <li routerLinkActive="active" *ngFor="let page of navigation">
 
@@ -155,7 +153,6 @@
             </div>
         </div>
         <!-- END SIDEBAR -->
-
         <div class="page-content-wrapper">
             <!-- BEGIN CONTENT BODY -->
             <div class="page-content">
