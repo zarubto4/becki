@@ -1,10 +1,7 @@
 
 import { Component, Injector, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { QRCodeComponent } from '../components/QRCodeComponent';
 import { Observable } from 'rxjs/Rx';
-import { StringReplacerPipe } from '../pipes/StringReplacerPipe';
-import * as Rx from 'rxjs';
 const jsQR = require('jsqr');
 
 @Component({
@@ -50,8 +47,6 @@ export class ReaderQrComponent extends BaseMainComponent implements OnInit {
                     _video.play();
                 });
         }
-
-
     }
 
 
