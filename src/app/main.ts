@@ -168,6 +168,7 @@ import { ModalsPublicShareRequestComponent } from './modals/public-share-request
 import { ModalsPublicShareResponseComponent } from './modals/public-share-response';
 import { FilterPagerComponent } from './components/FilterPagerComponent';
 import { ReaderQrComponent } from './views/qr-reader';
+import { CommunityGridGroupsComponent } from './views/admin-grid-groups';
 
 
 // @formatter:off
@@ -243,6 +244,14 @@ let routes: Routes = [
     {path: 'admin/hardware', data: {breadName: 'Hardware'}, component: AdminHardwareComponent, canActivate: [AuthGuard]},
     {path: 'admin/hardware/code/:code', data: {breadName: ':code'}, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard]},
     {path: 'admin/hardware/libraries/:library', data: {breadName: ':library'}, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard]},
+
+    {path: 'admin/grid-group', data: {breadName: 'Grid Groups'}, component: CommunityGridGroupsComponent, canActivate: [AuthGuard]},
+    {path: 'admin/grid-group/:grid-group', data: {breadName: 'Grid'}, component: CommunityGridGroupsComponent, canActivate: [AuthGuard]},   // TODO
+    {path: 'admin/grid/:grid', data: {breadName: ':grids'}, component: ProjectsProjectGridGridsComponent, canActivate: [AuthGuard]},        // TODO
+
+    {path: 'admin/blocks', data: {breadName: 'Blocko Groups'}, component: CommunityGridGroupsComponent, canActivate: [AuthGuard]},            // TODO
+    {path: 'admin/blocks/:blocks', data: {breadName: ':blocks'}, component: ProjectsProjectBlocksBlocksComponent, canActivate: [AuthGuard]}, // TODO
+    {path: 'admin/block/:block', data: {breadName: ':blocks'}, component: ProjectsProjectBlocksBlocksComponent, canActivate: [AuthGuard]},  // TODO
 
     {path: 'admin/garfield', data: {breadName: 'Garfield'}, component: GarfieldComponent, canActivate: [AuthGuard]},
     {path: 'admin/garfield/:garfield', data: {breadName: ':garfield'}, component: GarfieldGarfieldComponent, canActivate: [AuthGuard]},
@@ -320,7 +329,7 @@ let tabMenus = {
         ]}),
         new LabeledLink('Community Management', null, null, {styleClass: 'color-hardware font-color-grid-dark', items:  [
             new LabeledLink('Embedded Code', ['/admin/c-program/c-program'], 'code', {adminNavigation: true}),
-            new LabeledLink('Grid', ['/admin/grid'], 'desktop', {adminNavigation: true}),
+            new LabeledLink('Grid', ['/admin/grid-group'], 'desktop', {adminNavigation: true}),
             new LabeledLink('Blocko', ['/admin/blocko'], 'random', {adminNavigation: true})
         ]}),
         new LabeledLink('Garfield', ['/admin/garfield'], 'fire'),
@@ -447,6 +456,7 @@ class BeckiErrorHandler implements ErrorHandler {
         RedirectOkComponent,
         GarfieldComponent,
         GarfieldGarfieldComponent,
+        CommunityGridGroupsComponent,
         RoleGroupComponent,
         RoleGroupGroupComponent,
         ProjectsProjectBlocksBlocksComponent,

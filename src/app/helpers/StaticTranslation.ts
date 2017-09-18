@@ -51,6 +51,7 @@ export class StaticTranslation {
                 'label_program_description': 'Program description in the public list',
                 'label_version_name': 'Version name in the public list',
                 'label_version_description': 'Version description in the public list',
+                'label_group_select': 'Group / Type where it will be registered',
                 'label_approve': 'The program will be published',
                 'label_reason': 'If not - there is a place for comment for the author.',
                 'btn_decide': 'Make decision',

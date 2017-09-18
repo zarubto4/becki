@@ -238,14 +238,26 @@
                                         }
                                     </style>
 
+                                    <!-- Buttons for Users for Community publishing  -->
+                                    <button *ngIf="projectId && !version.publish_status" title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only blue-grey"
+                                            (click)="onCommunityPublicVersionClick(version)">
+                                        <i class="fa fa-heart"></i>
+                                    </button>
+
+                                    <!-- Buttons for Administrator for Community decisions  -->
+                                    <button *ngIf="version.publish_status == 'pending' && version.community_publishing_permission" title="{{'label_publish'|bkTranslate:this}}" class="btn btn-icon-only green" (click)="onCProgramPublishResult(version)">
+                                        <i class="fa fa-heart"></i>
+                                    </button>
+
                                     <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.edit_permission"
                                             (click)="onEditVersionClick(version)">
-                                    <i class="fa fa-cog"></i>
-                                </button>
+                                             <i class="fa fa-cog"></i>
+                                    </button>
+
                                     <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission"
                                         (click)="onRemoveVersionClick(version)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
+                                        <i class="fa fa-trash"></i>
+                                    </button>
 
                                 </td>
 
