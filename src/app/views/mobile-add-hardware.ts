@@ -27,9 +27,15 @@ export class MobileAddHardwareComponent extends BaseMainComponent implements OnI
         super(injector);
         this.blockForm = this.formBuilder.group({
             'id': ['', [Validators.required, /*BeckiAsyncValidators.hardwareDeviceId(this.backendService)*/]],
-            'project': ['', [Validators.required, /*BeckiAsyncValidators.hardwareDeviceId(this.backendService)*/]],
+            'project': ['', [Validators.required]],
         });
     };
+
+    qrCodeSent(qrcode: string) {
+        this.scan = false;
+        this.blockForm.controls['id'].setValue(qrcode);
+
+    }
 
 
     ngOnInit(): void {
@@ -40,6 +46,7 @@ export class MobileAddHardwareComponent extends BaseMainComponent implements OnI
                     value: project.product_id
                 };
             });
+
         });
     }
 
@@ -47,7 +54,7 @@ export class MobileAddHardwareComponent extends BaseMainComponent implements OnI
         this.scan = true;
     }
 
-    onAddClick(): void {
+    onSubmit(): void {
 
         this.blockUI();
         this.backendService.boardConnectWithProject(this.blockForm.value.id, this.blockForm.value.id) // TODO [permission]: Board.first_connect_permission, Project.update_permission

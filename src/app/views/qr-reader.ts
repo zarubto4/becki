@@ -20,7 +20,7 @@ export class ReaderQrComponent extends BaseMainComponent implements OnInit {
     scanLoop: any;
     qrcode: string;
     Livestream: any;
-    qrStatus: string = '';
+    qrStatus: string = 'Scanning QR code';
 
     @Output()
     QrScanClose = new EventEmitter<string>();
@@ -68,13 +68,6 @@ export class ReaderQrComponent extends BaseMainComponent implements OnInit {
             let decoded = jsQR.decodeQRFromImage(imageData.data, imageData.width, imageData.height);
             if (decoded) {
 
-                /* tslint:disable */
-                // TODO Remove after success testing
-
-                console.log(decoded);
-
-                /* tslint:disable */
-
                 if (decoded.slice(0, 3) === 'HWR') {
                     this.confirmedCapture(decoded);
                 } else {
@@ -97,7 +90,9 @@ export class ReaderQrComponent extends BaseMainComponent implements OnInit {
 
     onScanConfirm() {
         if (this.foundQR && this.qrcode) {
-            this.Livestream.stop();
+            // this.Livestream.stop();
+            // TODO: zastavit stream [ÐK]
+
 
             this.QrScanClose.emit(this.qrcode);
         }

@@ -12,12 +12,13 @@
         <div class="clearfix"></div>
         <bk-form-input [control]="blockForm.controls['id']" label="{{'label_add_hardware'|bkTranslate:this}}"></bk-form-input>
         <button (click)="onQrbuttonScan()" class="col-6 btn green btn-outline">{{'btn_add_hardware_qrcode'|bkTranslate:this}}</button>
-        <bk-form-select [control]="blockForm.controls['project']" label="{{'label_project'|bkTranslate:this}}" placeholder="{{'placeholder_project'|bkTranslate:this}}"
-            [options]="options"></bk-form-select>
+        <bk-view-qr-reader *ngIf="scan" (QrScanClose)="qrCodeSent($event)"></bk-view-qr-reader>
         
-        <bk-view-qr-reader *ngIf="scan" (QrScanClose)="blockForm.controls['id']"></bk-view-qr-reader>
+        <bk-form-select [control]="blockForm.controls['project']" label="{{'label_project'|bkTranslate:this}}" placeholder="{{'placeholder_project'|bkTranslate:this}}"
+            [options]="projects"></bk-form-select>
+        
 
-        <button (click)="onSubmit" class="col-6 btn green btn-outline">{{'btn_send'|bkTranslate:this}}</button>
+        <button (click)="onSubmit()" class="col-6 btn green btn-outline">{{'btn_send'|bkTranslate:this}}</button>
     </div>
 
 

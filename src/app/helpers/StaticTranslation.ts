@@ -359,16 +359,16 @@ export class StaticTranslation {
                 'label_can_login': 'now you can login!',
             },
 
-            'ReaderQrComponent:': {
-                'not_valid_byzance_qr_code': 'not a valid Byuance QRcode',
+            'ReaderQrComponent': {
+                'not_valid_byzance_qr_code': 'not a valid Byzance QRcode',
                 'byzance_qr_code_found': 'Byzance QR code found',
                 'btn_rescan': 'Scan again',
-                'btn_confirm_can': 'Confirm Scan',
+                'btn_confirm_scan': 'Confirm Scan',
             },
 
             'MobileAddHardwareComponent': {
                 'main_title': 'QR Hardware registration',
-                'btn_add_hardware_qrcode': 'Add Hardware by QR',
+                'btn_add_hardware_qrcode': 'Insert Hardware ID by QR',
                 'label_add_hardware': 'Add hardware',
                 'title': 'Add hardware',
                 'label_project': 'Selected Project',
