@@ -19,8 +19,8 @@ export class ReaderQrComponent extends BaseMainComponent implements OnInit {
     foundQR: boolean = false;
     scanLoop: any;
     qrcode: string;
-    Livestream: any;
     qrStatus: string = 'Scanning QR code';
+    frontcamera: false;
 
     @Output()
     QrScanClose = new EventEmitter<string>();
@@ -43,9 +43,8 @@ export class ReaderQrComponent extends BaseMainComponent implements OnInit {
         let canvas = this.myCanvas.nativeElement;
 
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ video: true })
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: (this.frontcamera ? 'user' : 'environment') } })
                 .then(stream => {
-                    this.Livestream = stream;
                     _video.src = window.URL.createObjectURL(stream);
                     _video.play();
                 });
@@ -85,13 +84,24 @@ export class ReaderQrComponent extends BaseMainComponent implements OnInit {
         this.scanLoop = Observable.interval(100).subscribe(() => {
             this.onCapture();
         });
-        this.qrStatus = this.translate('byzance_qr_code_found');
+        this.qrStatus = '';
     }
 
     onScanConfirm() {
         if (this.foundQR && this.qrcode) {
-            // this.Livestream.stop();
-            // TODO: zastavit stream [ÐK]
+
+            let _video = this.video.nativeElement;
+            let canvas = this.myCanvas.nativeElement;
+
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(stream => {
+                        let track = stream.getTracks()[0]; // TODO camera is still on, dunno if chrome bug or just bad code [DK]
+                        track.stop();
+                        _video.src = "";
+                        _video.pause();
+                    });
+            }
 
 
             this.QrScanClose.emit(this.qrcode);
