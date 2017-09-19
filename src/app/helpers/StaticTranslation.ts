@@ -1329,14 +1329,23 @@ export class StaticTranslation {
                 'label_invitation_sent': 'Invitation(s) sent.',
 
             }, 'ProjectsProjectWidgetsComponent': {
-
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Community Grid Administration',
                 'title': 'Byzance<strong class="font-color-grid">GRID</strong> - ALL WIDGET GROUPS',
-
-                'btn_add_widget_group': 'Create GRID widget group',
-
                 'table_name': 'Name',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
+                'btn_add_widget_group': 'Create GRID widget group',
+                'tab_public_groups': 'Public Groups',
+                'tab_private_groups': 'Private Groups',
+                'tab_programs_for_decisions': 'Widgets waiting for decision',
+                'table_group_size': 'Count of Widgets',
+
+                'label_no_programs': 'No Widgets',
+                'label_no_program_comment': 'No widgets for community administrator decision',
+                'label_no_groups': 'No Groups',
+                'label_no_groups_comment': 'No public community groups',
+                'btn_create_group': 'Create Group',
 
                 'flash_grid_group_add_success': 'Version has been successfully created.',
                 'flash_grid_group_add_fail': 'Unable to create version, {0}.',
@@ -1351,7 +1360,8 @@ export class StaticTranslation {
                 'label_remove_group': 'Remove group',
 
             }, 'ProjectsProjectWidgetsWidgetsComponent': {
-
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Community Widget Group',
                 'title': 'Byzance<strong class="font-color-grid">GRID</strong> - WIDGET GROUP <strong>{0}</strong>',
 
                 'btn_add_widget': 'Create GRID widget',
@@ -1384,8 +1394,9 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectWidgetsWidgetsWidgetComponent': {
 
-
                 'title': 'Byzance<strong class="font-color-grid">GRID</strong> - WIDGET <strong>{0}</strong>',
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Widget Editor',
 
                 'flash_version_save_success': 'Version <b>{0}</b> saved successfully.',
                 'flash_version_save_fail': 'Unable to save version <b>{0}</b>, {1}.',

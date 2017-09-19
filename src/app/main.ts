@@ -169,7 +169,7 @@ import { ModalsPublicShareResponseComponent } from './modals/public-share-respon
 import { FilterPagerComponent } from './components/FilterPagerComponent';
 import { ReaderQrComponent } from './views/qr-reader';
 import { MobileAddHardwareComponent } from './views/mobile-add-hardware';
-import { CommunityGridGroupsComponent } from './views/admin-grid-groups';
+import { ModalsWidgetsWidgetCopyComponent } from './modals/widgets-widget-copy';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -246,16 +246,19 @@ let routes: Routes = [
     { path: 'admin/hardware/code/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard] },
     { path: 'admin/hardware/libraries/:library', data: { breadName: ':library' }, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard] },
 
-    {path: 'admin/grid-group', data: {breadName: 'Grid Groups'}, component: CommunityGridGroupsComponent, canActivate: [AuthGuard]},
-    {path: 'admin/grid-group/:grid-group', data: {breadName: 'Grid'}, component: CommunityGridGroupsComponent, canActivate: [AuthGuard]},   // TODO
-    {path: 'admin/grid/:grid', data: {breadName: ':grids'}, component: ProjectsProjectGridGridsComponent, canActivate: [AuthGuard]},        // TODO
+    { path: 'admin/widgets', data: {breadName: 'Community Grid Widgets Group'}, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard]},
+    { path: 'admin/widgets/:widgets', data: {breadName: 'widgets'}, component: ProjectsProjectWidgetsWidgetsComponent, canActivate: [AuthGuard]},
+    { path: 'admin/widgets/:widgets/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard]},
+    { path: 'admin/widget/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard]},  // Only for community decisions
 
-    {path: 'admin/blocks', data: {breadName: 'Blocko Groups'}, component: CommunityGridGroupsComponent, canActivate: [AuthGuard]},            // TODO
-    {path: 'admin/blocks/:blocks', data: {breadName: ':blocks'}, component: ProjectsProjectBlocksBlocksComponent, canActivate: [AuthGuard]}, // TODO
-    {path: 'admin/block/:block', data: {breadName: ':blocks'}, component: ProjectsProjectBlocksBlocksComponent, canActivate: [AuthGuard]},  // TODO
 
-    {path: 'admin/garfield', data: {breadName: 'Garfield'}, component: GarfieldComponent, canActivate: [AuthGuard]},
-    {path: 'admin/garfield/:garfield', data: {breadName: ':garfield'}, component: GarfieldGarfieldComponent, canActivate: [AuthGuard]},
+    { path: 'admin/blocks', data: {breadName: 'Blocko Groups'}, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard]},                       // TODO
+    { path: 'admin/blocks/:blocks', data: {breadName: ':blocks'}, component: ProjectsProjectBlocksBlocksComponent, canActivate: [AuthGuard]},               // TODO
+    { path: 'admin/blocks/:blocks/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard]},    // TODO
+    { path: 'admin/block/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard]},             // TODO
+
+    { path: 'admin/garfield', data: {breadName: 'Garfield'}, component: GarfieldComponent, canActivate: [AuthGuard]},
+    { path: 'admin/garfield/:garfield', data: {breadName: ':garfield'}, component: GarfieldGarfieldComponent, canActivate: [AuthGuard]},
 
     { path: 'admin/financial', data: { breadName: 'Tariff' }, component: AdminFinancialComponent, canActivate: [AuthGuard] },
     { path: 'admin/financial/:tariff', data: { breadName: ':tariff' }, component: AdminFinancialTariffComponent, canActivate: [AuthGuard] },
@@ -331,6 +334,8 @@ let tabMenus = {
         new LabeledLink('Platform Management', null, null, {
             styleClass: 'color-grid font-color-grid-dark', items: [
                 new LabeledLink('Hardware Management', ['/admin/hardware'], 'microchip', {adminNavigation: true}),
+                new LabeledLink('Blocko Management', ['/admin/block/00000000-0000-0000-0000-000000000001'], 'random', {adminNavigation: true}),
+                new LabeledLink('Widget Management', ['/admin/widget/00000000-0000-0000-0000-000000000001'], 'desktop', {adminNavigation: true}),
                 new LabeledLink('Servers Management', ['/admin/server'], 'server', {adminNavigation: true}),
                 new LabeledLink('Financial Management', ['/admin/financial'], 'money', {adminNavigation: true}),
                 new LabeledLink('Permission Management', ['/admin/permission-group'], 'users', {adminNavigation: true}),
@@ -339,7 +344,7 @@ let tabMenus = {
         new LabeledLink('Community Management', null, null, {
             styleClass: 'color-hardware font-color-grid-dark', items: [
                 new LabeledLink('Embedded Code', ['/admin/c-program/c-program'], 'code', {adminNavigation: true}),
-                new LabeledLink('Grid', ['/admin/grid-group'], 'desktop', {adminNavigation: true}),
+                new LabeledLink('Grid', ['/admin/widgets'], 'desktop', {adminNavigation: true}),
                 new LabeledLink('Blocko', ['/admin/blocko'], 'random', {adminNavigation: true})
             ]
         }),
@@ -467,7 +472,6 @@ class BeckiErrorHandler implements ErrorHandler {
         RedirectOkComponent,
         GarfieldComponent,
         GarfieldGarfieldComponent,
-        CommunityGridGroupsComponent,
         RoleGroupComponent,
         RoleGroupGroupComponent,
         ProjectsProjectBlocksBlocksComponent,
@@ -548,6 +552,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsCodeAddLibraryComponent,
         ModalsCodeLibraryVersionComponent,
         ModalsHardwareCodeProgramVersionSelectComponent,
+        ModalsWidgetsWidgetCopyComponent,
         ModalsExtensionComponent,
     ],
     exports: [AppComponent],

@@ -7,7 +7,7 @@ import { BaseMainComponent } from './BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
 import {
     IGridWidget, IGridWidgetVersion,
-    ITypeOfWidget, IGridWidgetVersionShortDetail, ITypeOfWidgetShortDetail, ITypeOfWidgetList
+    ITypeOfWidget, IGridWidgetVersionShortDetail, ITypeOfWidgetShortDetail, ITypeOfWidgetList, IProject
 } from '../backend/TyrionAPI';
 import { FormGroup, Validators } from '@angular/forms';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
@@ -28,23 +28,27 @@ import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsPublicShareRequestModel } from '../modals/public-share-request';
 import { ModalsPublicShareResponseModel } from '../modals/public-share-response';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
+import { ModalsCodePropertiesModel } from '../modals/code-properties';
+import { ModalsWidgetsWidgetCopyModel } from '../modals/widgets-widget-copy';
 
 @Component({
     selector: 'bk-view-projects-project-widgets-widgets-widget',
     templateUrl: './projects-project-widgets-widgets-widget.html',
 })
 export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainComponent implements OnInit, OnDestroy {
+
     widgetInstance: Core.Widget;
     widgetTestRunning: boolean;
 
-    projectId: string;
-    widgetId: string;
-    widgetsId: string;
+    projectId: string; // Project
+    project: IProject = null;
+    widgetId: string;  // Widget
+    typeOfWidgetId: string; // Type Of Widget
 
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
 
-    group: ITypeOfWidgetShortDetail = null;
+    group: ITypeOfWidgetShortDetail|ITypeOfWidget = null;
     widget: IGridWidget = null;
 
     widgetVersions: IGridWidgetVersionShortDetail[] = [];
@@ -92,14 +96,35 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.projectId = params['project'];
             this.widgetId = params['widget'];
-            this.widgetsId = params['widgets'];
-            this.projectSubscription = this.storageService.project(this.projectId).subscribe((project) => {
-                this.group = project.type_of_widgets.find((tw) => tw.id === this.widgetsId);
-            });
-            if (params['version']) {
-                this.router.navigate(['/projects', this.projectId, 'widgets', this.widgetsId, this.widgetId]);
-                this.selectVersionByVersionId(params['version']);
+            this.typeOfWidgetId = params['widgets'];
+
+            if (this.projectId) {
+                this.projectSubscription = this.storageService.project(this.projectId).subscribe((project) => {
+                    this.project = project;
+                    this.group = project.type_of_widgets.find((tw) => tw.id === this.typeOfWidgetId);
+                });
             }
+
+            if (this.typeOfWidgetId) {
+                Promise.all<any>([this.backendService.typeOfWidgetGet(this.typeOfWidgetId)])
+                    .then((values: [ITypeOfWidget]) => {
+                        this.group = values[0];
+                        this.unblockUI();
+                    })
+                    .catch((reason) => {
+                        this.addFlashMessage(new FlashMessageError('Widget Group cannot be loaded.', reason));
+                        this.unblockUI();
+                    });
+            }
+
+
+            if (this.projectId && this.typeOfWidgetId) {
+                if (params['version']) {
+                    this.router.navigate(['/projects', this.projectId, 'widgets', this.typeOfWidgetId, this.widgetId]);
+                    this.selectVersionByVersionId(params['version']);
+                }
+            }
+
             this.refresh();
         });
 
@@ -119,7 +144,6 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     }
 
     onWidgetEditClick(): void {
-
         let model = new ModalsWidgetsWidgetPropertiesModel(this.widget.name, this.widget.description, true, this.widget.name);
         this.modalService.showModal(model).then((success) => {
             if (success) {
@@ -127,11 +151,13 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 this.backendService.gridWidgetEdit(this.widget.id, {
                     name: model.name,
                     description: model.description,
-                    type_of_widget_id: this.widgetsId // tohle je trochu divný ne? ... možná kdyby jsi chtěl přesunout widget mezi groupama? [DU]
+                    type_of_widget_id: this.typeOfWidgetId // tohle je trochu divný ne? ... možná kdyby jsi chtěl přesunout widget mezi groupama? [DU]
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_edit_success')));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }
                         this.refresh();
                     })
                     .catch(reason => {
@@ -142,19 +168,26 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     }
 
     onWidgetDeleteClick(): void {
-
         this.modalService.showModal(new ModalsRemovalModel(this.widget.name)).then((success) => {
             if (success) {
                 this.blockUI();
                 this.backendService.gridWidgetDelete(this.widget.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_removed_success')));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        this.navigate(['/projects', this.currentParamsService.get('project'), 'widgets', this.group.id]);
+
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                            this.navigate(['/projects', this.currentParamsService.get('project'), 'widgets', this.group.id]);
+                        } else {
+                            this.navigate(['/admin/grid', this.widget.id]);
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_removed_fail', reason)));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }
                     });
             }
         });
@@ -168,12 +201,16 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 this.backendService.gridWidgetVersionDelete(version.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_removed_success')));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }
                         this.refresh();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError( this.translate('flash_version_removed_fail', reason)));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }
                         this.refresh();
                     });
             }
@@ -212,13 +249,15 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_code_publish_error', reason)));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }
                     });
             }
         });
     }
 
-    onCProgramPublishResult(version: IGridWidgetVersionShortDetail): void {
+    onProgramVersionPublishResult(version: IGridWidgetVersionShortDetail): void {
 
         Promise.all<any>([this.backendService.typeOfWidgetGetByFilter(0, {
             public_programs: true,       // For public its required
@@ -245,7 +284,8 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                     this.widget.description,
                     null,
                     null,
-                    group_for_select
+                    group_for_select,
+                    null,
                 );
                 this.modalService.showModal(model).then((success) => {
                     if (success) {
@@ -262,7 +302,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                         })
                             .then(() => {
                                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
-                                this.refresh();
+                                this.navigate(['/admin/widgets']);
                             })
                             .catch(reason => {
                                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
@@ -276,6 +316,30 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 this.addFlashMessage(new FlashMessageError('C Programs cannot be loaded.', reason));
                 this.unblockUI();
             });
+    }
+
+    onMakeClone(): void {
+        let model = new ModalsWidgetsWidgetCopyModel(this.widget.name, this.widget.description, this.project.type_of_widgets);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.gridWidgetMakeClone({
+                    grid_widget_id: this.widget.id,
+                    type_of_widget_id: model.type_of_widget,
+                    project_id: this.projectId,
+                    name: model.name,
+                    description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
+                        this.unblockUI();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                        this.unblockUI();
+                    });
+            }
+        });
     }
 
     selectVersionByVersionId(versionId: string) {
@@ -582,6 +646,18 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
             }
         });
 
+    }
+
+    onWidgetSetMainClick(version: IGridWidgetVersionShortDetail): void {
+        this.blockUI();
+        this.backendService.gridWidgetVersionSetAsMain(version.id)
+            .then(() => {
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
+                this.refresh();
+            });
     }
 
 }

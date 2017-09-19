@@ -45,12 +45,12 @@ export class ModalsPublicShareResponseComponent implements OnInit {
     constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
-            'version_name': ['', [Validators.required, Validators.minLength(2), Validators.maxLength(12)]],
-            'version_description': ['', [Validators.required, Validators.minLength(2), Validators.maxLength(160)]],
-            'program_name': ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
-            'program_description': ['', [Validators.required, Validators.minLength(2), Validators.maxLength(30)]],
+            'version_name': ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+            'version_description': ['', [BeckiValidators.condition(() => (this.modalModel && this.modalModel.decision), Validators.required), Validators.maxLength(160)]],
+            'program_name': ['', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+            'program_description': ['', [BeckiValidators.condition(() => (this.modalModel && this.modalModel.decision), Validators.required), Validators.maxLength(160)]],
             'reason': [''],
-            'choice_object' : ['', [BeckiValidators.condition(() => (this.modalModel.choice_list != null && this.modalModel.decision), Validators.required)]],
+            'choice_object' : ['', [BeckiValidators.condition(() => (this.modalModel && this.modalModel.choice_list != null && this.modalModel.decision), Validators.required)]]
         });
     }
 
@@ -62,7 +62,7 @@ export class ModalsPublicShareResponseComponent implements OnInit {
         (<FormControl>(this.form.controls['program_description'])).setValue(this.modalModel.program_description);
         (<FormControl>(this.form.controls['reason'])).setValue(this.modalModel.reason);
 
-        if (this.modalModel.choice_list) {
+        if (this.modalModel.choice_list != null) {
             (<FormControl>(this.form.controls['choice_object'])).setValue(this.modalModel.choice_object);
         }
     }

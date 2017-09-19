@@ -3,7 +3,10 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+<bk-layout-main
+    tabMenu="{{project == null ? 'byzance-admin' : 'projects-project'}}"
+    [title]="project == null ? ('main_title'|bkTranslate:this) : currentParamsService.currentProjectNameSnapshot"
+    [subtitle]="project == null ? ('main_subtitle'|bkTranslate:this) : currentParamsService.currentProjectDescriptionSnapshot">
 
     <div class="row">
         <div class="col-md-12">
@@ -16,11 +19,11 @@
                         </span>
                     </div>
                     <div class="becki-actions">
-                        <button title="{{'label_widget_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!widget.edit_permission"
+                        <button *ngIf="group" title="{{'label_widget_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!widget.edit_permission"
                             (click)="onWidgetEditClick()">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="Delete Library" class="btn btn-icon-only red" [disabled]="!widget.delete_permission" (click)="onWidgetDeleteClick()">
+                        <button *ngIf="group" title="Delete Library" class="btn btn-icon-only red" [disabled]="!widget.delete_permission" (click)="onWidgetDeleteClick()">
                             <i class="fa fa-trash"></i>
                         </button>
                     </div>
@@ -32,8 +35,10 @@
                     <strong class="font-color-grid">{{'label_grid'|bkTranslate:this}} </strong><span [innerHTML]="'label_description'|bkTranslate:this"></span>:
                     <strong>{{widget?widget.description:"0_o"}}</strong><br>
                     <br>
-                    <strong class="font-color-grid">{{'label_grid'|bkTranslate:this}} </strong><span [innerHTML]="'label_grid_group_name'|bkTranslate:this"></span>:
-                    <strong><a (click)="onWidgetsGroupClick(group.id)">{{group?group.name:""}}</a></strong>
+                    <div *ngIf="group">
+                        <strong class="font-color-grid">{{'label_grid'|bkTranslate:this}} </strong><span [innerHTML]="'label_grid_group_name'|bkTranslate:this"></span>:
+                        <strong><a (click)="onWidgetsGroupClick(group.id)">{{group?group.name:""}}</a></strong>
+                    </div>
                 </div>
             </div>
         </div>
@@ -84,8 +89,12 @@
                         <button type="button" class="btn default yellow-gold" (click)="onTestClick()">
                             <i class="fa fa-play"></i>{{'btn_test'|bkTranslate:this}}
                         </button>
-                        <button type="button" class="btn default green-haze" (click)="onSaveClick()" [disabled]="!widgetCode">
+                        <button *ngIf=" widget && ( (projectId && widget.update_permission) || (widget.publish_type == 'default_main_program'))" type="button" class="btn default green-haze" (click)="onSaveClick()" [disabled]="!widgetCode">
                             <i class="fa fa-floppy-o"></i>{{'btn_save'|bkTranslate:this}}
+                        </button>
+
+                        <button *ngIf="widget && widget.publish_type == 'public_program' && project" type="button" class="btn default blue" (click)="onMakeClone()">
+                            <i class="fa fa-clone"></i> {{'btn_copy'|bkTranslate:this}}
                         </button>
                     </div>
                     <div class="clearfix"></div>
@@ -211,20 +220,39 @@
                                 <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
                                 <th class="col col-lg-8">{{'table_description'|bkTranslate:this}}</th>
                                 <th class="col col-lg-1">{{'table_author'|bkTranslate:this}}</th>
+                                <th></th>
                                 <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                         </thead>
                         <tbody>
                             <tr *ngFor="let version of widgetVersions">
                                 <td class="vert-align no-wrap" [class.bold]="selectedWidgetVersion && (selectedWidgetVersion.id == version.id)">
-                                    <a (click)="onWidgetVersionClick(version)">
-                                    {{version.name}}
+                                    <a (click)="onWidgetVersionClick(version)"> {{version.name}}
+                                    <span *ngIf="version.publish_type == 'default_version'" class="font-green-jungle bold">(Default)</span>
                                 </a>
                                 </td>
                                 <td class="vert-align">
                                     {{version.description}}
                                 </td>
                                 <td class="vert-align">
-                                    {{version.author.nick_name}}
+                                    {{version.author!=null?version.author.nick_name:null}}
+                                </td>
+                                <td class="vert-align no-wrap">
+                                    <span class="icon-hint-wraper red" *ngIf="version.publish_status == 'pending'">
+                                        <i class="fa fa-heart font-red-flamingo" style="font-size: 1.6em; margin-left: 5px;" ></i>
+                                        <span class="hint" [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
+                                    </span>
+                                    <span class="icon-hint-wraper green" *ngIf="version.publish_status == 'approved'">
+                                        <i class="fa fa-heart font-green-jungle" style="font-size: 1.6em; margin-left: 5px;" ></i>
+                                        <span class="hint" [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
+                                    </span>
+                                    <span class="icon-hint-wraper gray" *ngIf="version.publish_status == 'disapproved'">
+                                        <i class="fa fa-heart" style="font-size: 1.6em; margin-left: 5px;" ></i>
+                                        <span class="hint" [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
+                                    </span>
+                                    <span class="icon-hint-wraper green" *ngIf="version.publish_status == 'edited'">
+                                        <i class="fa fa-heart font-blue" style="font-size: 1.6em; margin-left: 5px;" ></i>
+                                        <span class="hint" [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
+                                    </span>
                                 </td>
                                 <td class="vert-align no-wrap text-right">
 
@@ -239,14 +267,19 @@
                                     </style>
 
                                     <!-- Buttons for Users for Community publishing  -->
-                                    <button *ngIf="projectId && !version.publish_status" title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only blue-grey"
+                                    <button *ngIf="project && !version.publish_status" title="{{'label_publish'|bkTranslate:this}}" class="btn btn-icon-only blue-grey"
                                             (click)="onCommunityPublicVersionClick(version)">
                                         <i class="fa fa-heart"></i>
                                     </button>
 
                                     <!-- Buttons for Administrator for Community decisions  -->
-                                    <button *ngIf="version.publish_status == 'pending' && version.community_publishing_permission" title="{{'label_publish'|bkTranslate:this}}" class="btn btn-icon-only green" (click)="onCProgramPublishResult(version)">
+                                    <button *ngIf="version.publish_status == 'pending' && version.community_publishing_permission" title="{{'label_publish'|bkTranslate:this}}" class="btn btn-icon-only green" (click)="onProgramVersionPublishResult(version)">
                                         <i class="fa fa-heart"></i>
+                                    </button>
+
+                                    <!-- Only For for Administrator for Make Default Widget -->
+                                    <button *ngIf="widget && widget.publish_type == 'default_main_program' && version.publish_type != 'default_version'" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!widget.update_permission" (click)="onWidgetSetMainClick(version)">
+                                        <i class="fa fa-flag"></i>
                                     </button>
 
                                     <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.edit_permission"

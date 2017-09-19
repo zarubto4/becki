@@ -1131,7 +1131,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
         Promise.all<any>([
             this.backendService.typeOfBlocksGetByFilter( 0 , {
-                private_type: true,
+                public_programs: true,
                 project_id: this.projectId
             }),
             this.backendService.bProgramGetAllDetailsForIntegration(this.projectId) // TODO [permission]: project.read_permission

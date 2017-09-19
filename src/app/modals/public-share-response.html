@@ -15,11 +15,11 @@
             <bk-form-input label="{{'label_version_name'|bkTranslate:this}}" [control]="form.controls['version_name']"></bk-form-input>
             <bk-form-text-area label="{{'label_version_description'|bkTranslate:this}}" [control]="form.controls['version_description']"></bk-form-text-area>
 
-            <template>
+            <div *ngIf="this.modalModel.choice_list">
                 <hr>
                 <bk-form-select [control]="form.controls.choice_object" label="{{'label_group_select'|bkTranslate:this}}"
                                 [options]="modalModel.choice_list"></bk-form-select>
-            </template>
+            </div>
 
             <hr>
             <div>

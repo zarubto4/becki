@@ -8,7 +8,10 @@ import { BaseMainComponent } from './BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
 import { ModalsRemovalModel } from '../modals/removal';
-import { IProject, ITypeOfWidget, ITypeOfWidgetShortDetail } from '../backend/TyrionAPI';
+import {
+    IGridWidgetList, IGridWidgetShortDetail, IProject, ITypeOfWidget, ITypeOfWidgetList,
+    ITypeOfWidgetShortDetail
+} from '../backend/TyrionAPI';
 import { ModalsWidgetsTypePropertiesModel } from '../modals/widgets-type-properties';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 
@@ -18,13 +21,18 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 })
 export class ProjectsProjectWidgetsComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
-    id: string;
+    projectId: string;
 
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
 
     project: IProject = null;
-    groups: ITypeOfWidgetShortDetail[] = [];
+    privateGroups: ITypeOfWidgetShortDetail[] = [];
+    publicGroups: ITypeOfWidgetList = null;
+
+    widgetsNotApproved: IGridWidgetList = null; // Only if user is Admin and there is no project
+
+    tab: string = 'public_groups';
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -32,13 +40,32 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
         super(injector);
     };
 
+    onToggleTab(tab: string) {
+        this.tab = tab;
+
+        if (tab === 'public_groups' && this.publicGroups == null) {
+            this.onShowPublicGridGroupsByFilter();
+        }
+
+        if (tab === 'admin_programs_for_decisions' && this.widgetsNotApproved == null) {
+            this.onShowProgramForDecisionsByFilter();
+        }
+    }
+
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
-            this.id = params['project'];
-            this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
-                this.project = project;
-                this.groups = this.project.type_of_widgets;
-            });
+            this.projectId = params['project'];
+
+            if (this.projectId) {
+
+                this.tab = 'private_groups';
+                this.projectSubscription = this.storageService.project(this.projectId).subscribe((project) => {
+                    this.project = project;
+                    this.onShowPrivateGridGroupsByFilter();
+                });
+            } else {
+                this.onShowPublicGridGroupsByFilter();
+            }
         });
     }
 
@@ -55,17 +82,25 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
             if (success) {
                 this.blockUI();
                 this.backendService.typeOfWidgetCreate({ // TODO [permission]: TypeOfWidget_create_permission
-                    project_id: this.id,
+                    project_id: this.projectId ? this.projectId : null,
                     name: model.name,
                     description: model.description
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_group_add_success')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.onShowPublicGridGroupsByFilter();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail', reason)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.onShowPublicGridGroupsByFilter();
+                        }
                     });
             }
         });
@@ -82,11 +117,19 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_group_edit_success')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.onShowPublicGridGroupsByFilter();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_edit_fail', reason)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.onShowPublicGridGroupsByFilter();
+                        }
                     });
             }
         });
@@ -99,19 +142,131 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
                 this.backendService.typeOfWidgetDelete(group.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_group_edit_success')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.onShowPublicGridGroupsByFilter();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_remove_fail', reason)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.onShowPublicGridGroupsByFilter();
+                        }
                     });
             }
         });
 
     }
 
+    onShowPrivateGridGroupsByFilter(page: number = 0): void {
+        this.privateGroups = this.project.type_of_widgets;
+    }
+
+    onShowPublicGridGroupsByFilter(page: number = 0): void {
+        Promise.all<any>([this.backendService.typeOfWidgetGetByFilter(page, {
+            public_programs: true,       // For public its required
+        })
+        ])
+            .then((values: [ITypeOfWidgetList]) => {
+                this.publicGroups = values[0];
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.addFlashMessage(new FlashMessageError('C Programs cannot be loaded.', reason));
+                this.unblockUI();
+            });
+    }
+
+    onShowProgramForDecisionsByFilter(page: number = 0): void {
+        Promise.all<any>([this.backendService.gridWidgetGetByFilter(page, {
+            pending_widget: true,       // For public its required
+        })
+        ])
+            .then((values: [IGridWidgetList]) => {
+                this.widgetsNotApproved = values[0];
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.addFlashMessage(new FlashMessageError('C Programs cannot be loaded.', reason));
+                this.unblockUI();
+            });
+    }
+
+    onGroupShiftUpClick(group: ITypeOfWidgetShortDetail): void {
+        this.backendService.typeOfWidgetOrderUp(group.id)
+            .then(() => {
+                this.onShowPublicGridGroupsByFilter();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_label', reason)));
+                this.onShowPublicGridGroupsByFilter();
+            });
+    }
+
+    onGroupShiftDownClick(group: ITypeOfWidgetShortDetail): void {
+        this.backendService.typeOfWidgetOrderDown(group.id)
+            .then(() => {
+                this.onShowPublicGridGroupsByFilter();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_label', reason)));
+                this.onShowPublicGridGroupsByFilter();
+            });
+    }
+
+    onGroupActivateClick(group: ITypeOfWidgetShortDetail): void {
+        this.blockUI();
+        this.backendService.typeOfWidgetActivate(group.id)
+            .then(() => {
+                this.onShowPublicGridGroupsByFilter();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
+                this.onShowPublicGridGroupsByFilter();
+            });
+    }
+
+    onGroupDeactivateClick(group: ITypeOfWidgetShortDetail): void {
+        this.blockUI();
+        this.backendService.typeOfWidgetDeactivate(group.id)
+            .then(() => {
+                this.onShowPublicGridGroupsByFilter();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
+                this.onShowPublicGridGroupsByFilter();
+            });
+    }
+
+    onGroupRemoveClick(group: ITypeOfWidgetShortDetail): void {
+        this.modalService.showModal(new ModalsRemovalModel(group.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.typeOfWidgetDelete(group.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
+                        this.onShowPublicGridGroupsByFilter();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code', reason)));
+                    });
+            }
+        });
+    }
+
     onGroupClick(group: ITypeOfWidget): void {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'widgets', group.id]);
+        if (this.project) {
+            this.router.navigate(['/projects', this.currentParamsService.get('project'), 'widgets', group.id]);
+        }else {
+            this.router.navigate(['/admin/widgets/', group.id]);
+        }
+    }
+
+    onWidgetForDecisionClick(widget: IGridWidgetShortDetail): void {
+        this.router.navigate(['/admin/widget/', widget.id]);
     }
 
 }
