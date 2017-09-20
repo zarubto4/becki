@@ -169,6 +169,8 @@ import { ModalsPublicShareResponseComponent } from './modals/public-share-respon
 import { FilterPagerComponent } from './components/FilterPagerComponent';
 import { ReaderQrComponent } from './views/qr-reader';
 import { MobileAddHardwareComponent } from './views/mobile-add-hardware';
+import { MyDatePickerModule } from 'mydatepicker';
+import { DatePickerComponent } from './components/datePicker';
 
 
 // @formatter:off
@@ -365,6 +367,7 @@ class BeckiErrorHandler implements ErrorHandler {
         RouterModule.forRoot(routes),
         HttpModule,
         JsonpModule,
+        MyDatePickerModule,
     ],
     providers: [
         { provide: ErrorHandler, useClass: BeckiErrorHandler },
@@ -427,6 +430,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ConsoleLogComponent,
         InstanceHistoryTimelineComponent,
         QRCodeComponent,
+        DatePickerComponent,
         // Views components
         AdminDashboardComponent,
         Error404Component,

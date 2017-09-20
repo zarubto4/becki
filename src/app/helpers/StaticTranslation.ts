@@ -1738,6 +1738,7 @@ export class StaticTranslation {
                 'label_project_name_taken': 'This project name is already in use.',
                 'label_blocko_name_taken': 'This program name is already in use.',
                 'label_invalid_email': 'Invalid E-mail address.',
+                'label_invalid_time': 'Invalid Time, please write time in XY:YX format',
                 'label_different_password': 'Passwords do not match.',
                 'label_invalid_file_name': 'Invalid file/directory name.',
                 'label_field_only_number': 'This field only accepts numbers.',

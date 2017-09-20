@@ -98,7 +98,7 @@ export class ReaderQrComponent extends BaseMainComponent implements OnInit {
                     .then(stream => {
                         let track = stream.getTracks()[0]; // TODO camera is still on, dunno if chrome bug or just bad code [DK]
                         track.stop();
-                        _video.src = "";
+                        _video.src = '';
                         _video.pause();
                     });
             }

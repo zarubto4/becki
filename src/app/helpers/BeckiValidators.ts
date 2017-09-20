@@ -15,6 +15,13 @@ export class BeckiValidators {
         };
     }
 
+    public static time: ValidatorFn = (c: AbstractControl) => {
+        if (c.value.match(/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/)) {
+            return null; // valid
+        }
+        return {'time': true}; // invalid
+    }
+
     public static email: ValidatorFn = (c: AbstractControl) => {
         if (c.value.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
             return null; // valid

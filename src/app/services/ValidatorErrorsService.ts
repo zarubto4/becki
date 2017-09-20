@@ -46,6 +46,9 @@ export class ValidatorErrorsService {
             if (errors['email']) {
                 return this.translate('label_invalid_email');
             }
+            if (errors['time']) {
+                return this.translate('label_invalid_time');
+            }
             if (errors['passwordSame']) {
                 return this.translate('label_different_password');
             }
