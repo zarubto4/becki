@@ -6,7 +6,13 @@
     <div class="modal-body">
         <form [formGroup]="form">
             <bk-form-input [control]="form.controls.personal_server_name" label="{{'label_personal_server_name'|bkTranslate:this}}"></bk-form-input>
-            <bk-form-input [control]="form.controls.server_url"  label="{{'label_server_url'|bkTranslate:this}}"></bk-form-input>
+
+            <div>
+                <span>{{'label_server_url_comment'|bkTranslate:this}}</span>
+                <bk-form-input [control]="form.controls.server_url"  label="{{'label_server_url'|bkTranslate:this}}"></bk-form-input>
+                <br>
+            </div>
+
             <bk-form-input [control]="form.controls.mqtt_username" placeholder="user" label="{{'label_mqtt_username'|bkTranslate:this}}"></bk-form-input>
             <bk-form-input [control]="form.controls.mqtt_port" placeholder="1883" label="{{'label_mqtt_port'|bkTranslate:this}}"></bk-form-input>
             <bk-form-input [control]="form.controls.mqtt_password" placeholder="pass" label="{{'label_mqtt_password'|bkTranslate:this}}"></bk-form-input>
@@ -16,6 +22,6 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
-        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{(modalModel.edit?"btn_create":"btn_update")|bkTranslate:this}}</button>
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{(modalModel.edit?"btn_update":"btn_create")|bkTranslate:this}}</button>
     </div>
 </div>

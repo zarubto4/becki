@@ -129,6 +129,7 @@ export class StaticTranslation {
             }, 'ModalsCreateHomerServerComponent': {
                 'title': 'Create new Server',
                 'label_personal_server_name': 'Server name',
+                'label_server_url_comment': 'URL Address without port & schama (ftp, ws, http etc ..) When entering an IP address, it is necessary to specify the correct format according to ISO standard.',
                 'label_server_url': 'Server url (without http..)',
                 'label_mqtt_username': 'Mqtt user name',
                 'label_mqtt_port': 'Mqtt port',
@@ -950,6 +951,7 @@ export class StaticTranslation {
                 'btn_upload_on_cloud': 'Upload Latest Configuration to Cloud',
                 'btn_turn_off_instance': 'Shutdown instance',
                 'btn_change_cloud_version': 'Change Version',
+                'btn_first_deploy_cloud_version': 'Deploy to cloud',
                 'btn_select_cloud_version': 'Select & Upload Version to Cloud',
                 'label_no_devices_added': 'No devices added in this <strong class="font-color-blocko">BLOCKO</strong> program.',
                 'label_select_version': 'Select Version',
