@@ -17,7 +17,7 @@
                 </span>
             </div>
             <div *ngIf="group" class="becki-actions">
-                <button *ngIf="group && group.edit_permission" title="{{'label_group_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!group.edit_permission"
+                <button *ngIf="group && group.edit_permission" title="{{'label_group_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!group.edit_permission"
                     (click)="onGroupEditClick()">
                     <i class="fa fa-cog"></i>
                 </button>
@@ -89,7 +89,7 @@
         </div>
         <h3 *ngIf="!group" class="text-center">{{'loading'|bkTranslate:this}}</h3>
         <div *ngIf="group && !(group.blocko_blocks && group.blocko_blocks.length)" class="list-no-items">
-            <p class="list-no-items__main-label">{{'label_no_block_program'|bkTranslate:this}}</p>
+            <p class="list-no-items__main-label" [innerHTML]="'label_no_block_program'|bkTranslate:this"></p>
             <p class="list-no-items__sub-label">{{'label_create_block_text'|bkTranslate:this}}</p>
             <p>
                 <button class="btn blue" [disabled]="!group || !group.update_permission" (click)="onBlockAddClick(group)">

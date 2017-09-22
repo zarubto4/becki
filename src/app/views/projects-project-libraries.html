@@ -9,13 +9,13 @@
         <div class="portlet-title">
             <div class="becki-caption">
                 <span class="font-blue-dark">
-                    <i class="fa fa-fw fa-code"></i>
+                    <i class="fa fa-fw fa-file-code-o"></i>
                          <span [innerHTML]="'title'|bkTranslate:this"></span>
                 </span>
             </div>
             <div class="becki-actions">
-                <button class="btn blue" (click)="onAddClick()">
-                    <i class="fa fa-plus-circle"></i> <span [innerHTML]="'btn_add_library'|bkTranslate:this"></span>
+                <button *ngIf="tab == 'my_libraries'" class="btn blue" (click)="onAddClick()">
+                    <i class="fa fa-plus-circle"></i>  <span [innerHTML]="'btn_add_library'|bkTranslate:this"></span>
                 </button>
             </div>
         </div>

@@ -11,7 +11,7 @@
                 <div *ngIf="library" class="portlet-title">
                     <div class="becki-caption">
                         <span class="font-blue-dark">
-                            <i class="fa fa-fw fa-code"></i>
+                            <i class="fa fa-fw fa-file-code-o"></i>
                                 <span [innerHTML]="'title'|bkTranslate:this:currentParamsService.currentLibraryNameSnapshot"></span>
                         </span>
                     </div>
@@ -31,9 +31,8 @@
                     </div>
                 </div>
                 <div>
-                    <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_name'|bkTranslate:this}}:<strong>{{library?library.name:""}}</strong><br>
-                    <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_description'|bkTranslate:this}}:
-                    <strong>{{library?library.description:""}}</strong>
+                    <span [innerHTML]="'label_name'|bkTranslate:this"></span>: <strong>{{library?library.name:""}}</strong><br>
+                    <span [innerHTML]="'label_description'|bkTranslate:this"></span>: <strong>{{library?library.description:""}}</strong>
                 </div>
             </div>
         </div>

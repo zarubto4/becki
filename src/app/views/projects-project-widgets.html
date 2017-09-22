@@ -17,10 +17,10 @@
                 </span>
             </div>
             <div class="becki-actions">
-                <button *ngIf="tab == 'private_groups' && projectId" class="btn green" (click)="onGroupAddClick()">
+                <button *ngIf="tab == 'private_groups' && projectId" class="btn blue" (click)="onGroupAddClick()">
                     <i class="fa fa-plus-circle"></i> {{'btn_add_widget_group'|bkTranslate:this}}
                 </button>
-                <button *ngIf="tab == 'public_groups' && !projectId" class="btn green" (click)="onGroupAddClick()">
+                <button *ngIf="tab == 'public_groups' && !projectId" class="btn blue" (click)="onGroupAddClick()">
                     <i class="fa fa-plus-circle"></i> {{'btn_add_widget_group'|bkTranslate:this}}
                 </button>
             </div>
@@ -84,7 +84,7 @@
             </div>
             <h3 *ngIf="!privateGroups" class="text-center">{{'loading'|bkTranslate:this}}</h3>
             <div *ngIf="privateGroups && privateGroups.length == 0" class="list-no-items">
-                <p class="list-no-items__main-label">{{'label_no_item'|bkTranslate:this}}</p>
+                <p class="list-no-items__main-label" [innerHTML]="'label_no_item'|bkTranslate:this"></p>
                 <p class="list-no-items__sub-label">{{'label_you_can_create'|bkTranslate:this}}</p>
                 <p>
                     <button class="btn blue" (click)="onGroupAddClick()">
@@ -156,13 +156,8 @@
             </div>
             <h3 *ngIf="!publicGroups" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
             <div *ngIf="publicGroups && publicGroups.content.length < 1" class="list-no-items">
-                <p class="list-no-items__main-label">{{'label_no_groups'|bkTranslate:this}}</p>
+                <p class="list-no-items__main-label" [innerHTML]="'label_no_groups'|bkTranslate:this"></p>
                 <p class="list-no-items__sub-label">{{'label_no_groups_comment'|bkTranslate:this}} </p>
-                <p>
-                    <button class="btn blue" (click)="onGroupAddClick()">
-                        <i class="fa fa-plus-circle"></i>{{'btn_create_group'|bkTranslate:this}}
-                    </button>
-                </p>
             </div>
         </div>
 

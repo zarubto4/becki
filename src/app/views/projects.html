@@ -13,12 +13,14 @@
                 </span>
             </div>
             <div class="becki-actions pull-left">
+                <!--
                 <button class="btn btn-outline btn-sm white" (click)="onTest2Click()">
                     <i class="fa fa-spinner"></i> Test flash message
                 </button>
                 <button class="btn btn-outline btn-sm white" (click)="onTestClick()">
                     <i class="fa fa-spinner"></i> Test UI blocker
                 </button>
+                -->
             </div>
             <div class="becki-actions">
                 <button class="btn blue" (click)="onAddClick()" [disabled]="products && !products.length">
@@ -39,28 +41,28 @@
                 <tbody>
                 <tr *ngFor="let project of projects">
 
-                    <td *ngIf="project.active_status" class="no-wrap bold"><a (click)="onProjectClick(project)">{{project.project_name}}</a></td>
+                    <td *ngIf="project.active_status" class="no-wrap bold vert-align"><a (click)="onProjectClick(project)">{{project.project_name}}</a></td>
 
-                    <td *ngIf="!project.active_status">
+                    <td class="vert-align" *ngIf="!project.active_status">
                         <strong>{{project.project_name}}</strong>
                         <br>
                         <span class="font-red-flamingo">(Deactivated under <a (click)="onProductClick(project.product_id)"><span class="font-red-flamingo bold">{{project.product_name}}</span></a>) </span>
                     </td>
 
-                    <td>{{project.project_description}}</td>
+                    <td class="vert-align">{{project.project_description}}</td>
 
-                    <td>
+                    <td class="vert-align">
                         <a (click)="onProductClick(project.product_id)">{{project.product_name}}</a>
                     </td>
 
-                    <td class="no-wrap text-right ">
+                    <td class="no-wrap text-right vert-align ">
 
                         <style type="text/css">
                             table tr button { opacity:0.05;}
                             table tr:hover button { opacity:1 }
                         </style>
 
-                        <button title="Project properties" class="btn btn-icon-only green" [disabled]="!project.edit_permission || !project.active_status" (click)="onEditClick(project)">
+                        <button title="Project properties" class="btn btn-icon-only blue" [disabled]="!project.edit_permission || !project.active_status" (click)="onEditClick(project)">
                             <i class="fa fa-cog"></i>
                         </button>
                         <button title="{{'label_Remove_project'|bkTranslate}}" class="btn btn-icon-only red" [disabled]="!project.delete_permission || !project.active_status" (click)="onRemoveClick(project)">
