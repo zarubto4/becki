@@ -20,11 +20,12 @@ import { ModalsWidgetsWidgetCopyModel } from '../modals/widgets-widget-copy';
 export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     projectId: string;
-    typeOfWidgetId: string;
-    project: IProject = null;
 
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
+
+    typeOfWidgetId: string;
+    project: IProject = null;
 
     group: ITypeOfWidgetShortDetail|ITypeOfWidget = null; // User / Admin
 

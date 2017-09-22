@@ -3,7 +3,10 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+<bk-layout-main
+    tabMenu="{{projectId == null ? 'byzance-admin' : 'projects-project'}}"
+    [title]="projectId == null ? ('main_title'|bkTranslate:this) : currentParamsService.currentProjectNameSnapshot"
+    [subtitle]="projectId == null ? ('main_subtitle'|bkTranslate:this) : currentParamsService.currentProjectDescriptionSnapshot">
 
     <div class="row">
         <div class="col-md-12">
@@ -15,12 +18,12 @@
                             <span [innerHTML]="'title'|bkTranslate:this:(blockoBlock?blockoBlock.name:'')"></span>
                         </span>
                     </div>
-                    <div *ngIf="blockoBlock" class="becki-actions">
-                        <button title="{{'label_group_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!blockoBlock.edit_permission"
+                    <div class="becki-actions">
+                        <button *ngIf="blockoBlock" title="{{'label_group_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!blockoBlock.edit_permission"
                             (click)="onBlockEditClick()">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="{{'label_group_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!blockoBlock.delete_permission"
+                        <button *ngIf="blockoBlock"  title="{{'label_group_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!blockoBlock.delete_permission"
                             (click)="onBlockDeleteClick()">
                             <i class="fa fa-trash"></i>
                         </button>
@@ -28,8 +31,17 @@
                 </div>
                 <div class="clearfix"></div>
                 <div>
-                    <br> <span [innerHTML]="'label_description'|bkTranslate:this:(blockoBlock?blockoBlock.description:'')"></span>
-                    <br> <span [innerHTML]="'label_group'|bkTranslate:this"></span>: <strong><a (click)="onBlocksGroupClick(group.id)">{{group?group.name:""}}</a></strong>
+                    <span [innerHTML]="'label_name'|bkTranslate:this"></span>:
+                    <strong>{{blockoBlock?blockoBlock.name:""}}</strong><br>
+
+                    <span [innerHTML]="'label_description'|bkTranslate:this"></span>:
+                    <strong>{{blockoBlock?blockoBlock.description:"0_o"}}</strong><br>
+
+                    <br>
+                    <div *ngIf="group">
+                        <span [innerHTML]="'label_group'|bkTranslate:this"></span>:
+                        <strong><a (click)="onBlocksGroupClick(group.id)">{{group?group.name:""}}</a></strong>
+                    </div>
                 </div>
             </div>
         </div>
@@ -48,9 +60,7 @@
                 </div>
 
                 <bk-form-color-picker label="{{'label_block_color'|bkTranslate:this}}" [control]="blockForm.controls['color']" [waitForTouch]="false"></bk-form-color-picker>
-
                 <bk-form-fa-icon-select label="{{'label_block_icon'|bkTranslate:this}}" [control]="blockForm.controls['icon']" [waitForTouch]="false"></bk-form-fa-icon-select>
-
                 <bk-form-input label="{{'label_block_description'|bkTranslate:this}}" [control]="blockForm.controls['description']" [waitForTouch]="false"></bk-form-input>
 
                 <div class="form-group">
@@ -197,21 +207,42 @@
                                 <th class="col col-lg-2">{{'table_version_name'|bkTranslate:this}}</th>
                                 <th class="col col-lg-7">{{'table_description'|bkTranslate:this}}</th>
                                 <th class="col col-lg-2">{{'table_author'|bkTranslate:this}}</th>
+                                <th></th>
                                 <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr *ngFor="let version of blockoBlockVersions">
                                 <td class="vert-align no-wrap" [class.bold]="selectedBlockoBlockVersion && (selectedBlockoBlockVersion.id == version.id)">
-                                    <a (click)="onBlockoBlockVersionClick(version)">
-                                    {{version.name}}
+                                    <a (click)="onBlockoBlockVersionClick(version)"> {{version.name}}
+                                    <span *ngIf="version.publish_type == 'default_version'" class="font-green-jungle bold">(Default)</span>
                                 </a>
                                 </td>
                                 <td class="vert-align">
                                     {{version.description}}
                                 </td>
                                 <td class="vert-align">
-                                    {{version.author.nick_name}}
+                                    <span *ngIf="version.author">
+                                        {{version.author.nick_name}}
+                                    </span>
+                                </td>
+                                <td class="vert-align no-wrap">
+                                    <span class="icon-hint-wraper red" *ngIf="version.publish_status == 'pending'">
+                                        <i class="fa fa-heart font-red-flamingo" style="font-size: 1.6em; margin-left: 5px;" ></i>
+                                        <span class="hint" [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
+                                    </span>
+                                    <span class="icon-hint-wraper green" *ngIf="version.publish_status == 'approved'">
+                                        <i class="fa fa-heart font-green-jungle" style="font-size: 1.6em; margin-left: 5px;" ></i>
+                                        <span class="hint" [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
+                                    </span>
+                                    <span class="icon-hint-wraper gray" *ngIf="version.publish_status == 'disapproved'">
+                                        <i class="fa fa-heart" style="font-size: 1.6em; margin-left: 5px;" ></i>
+                                        <span class="hint" [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
+                                    </span>
+                                    <span class="icon-hint-wraper green" *ngIf="version.publish_status == 'edited'">
+                                        <i class="fa fa-heart font-blue" style="font-size: 1.6em; margin-left: 5px;" ></i>
+                                        <span class="hint" [innerHTML]="version.publish_status|bkTranslateTable:this:'publish_status'"></span>
+                                    </span>
                                 </td>
                                 <td class="vert-align no-wrap text-right">
                                     <style type="text/css">
@@ -224,15 +255,31 @@
                                         }
                                     </style>
 
+                                    <!-- Buttons for Users for Community publishing  -->
+                                    <button *ngIf="project && !version.publish_status" title="{{'label_publish'|bkTranslate:this}}" class="btn btn-icon-only blue-grey"
+                                            (click)="onCommunityPublicVersionClick(version)">
+                                        <i class="fa fa-heart"></i>
+                                    </button>
+
+                                    <!-- Buttons for Administrator for Community decisions  -->
+                                    <button *ngIf="version.publish_status == 'pending' && version.community_publishing_permission" title="{{'label_publish'|bkTranslate:this}}" class="btn btn-icon-only green" (click)="onProgramVersionPublishResult(version)">
+                                        <i class="fa fa-heart"></i>
+                                    </button>
+
+                                    <!-- Only For for Administrator for Make Default Block Version -->
+                                    <button *ngIf="blockoBlock && blockoBlock.publish_type == 'default_main_program' && version.publish_type != 'default_version'" title="{{'label_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!blockoBlock.update_permission" (click)="onBlockSetMainClick(version)">
+                                        <i class="fa fa-flag"></i>
+                                    </button>
+
                                     <button title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!version.edit_permission"
                                         (click)="onEditVersionClick(version)">
-                                    <i class="fa fa-cog"></i>
-                                </button>
+                                        <i class="fa fa-cog"></i>
+                                    </button>
 
                                     <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission"
                                         (click)="onRemoveVersionClick(version)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
+                                        <i class="fa fa-trash"></i>
+                                    </button>
 
                                 </td>
                             </tr>

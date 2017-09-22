@@ -1013,7 +1013,7 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectHardwareComponent': {
 
-                'title': 'all devices',
+                'title': 'All devices',
                 'label_loading': 'Loading',
                 'label_name': 'Name',
                 'label_id': 'Full ID',
@@ -1022,7 +1022,7 @@ export class StaticTranslation {
                 'label_status': 'Status',
                 'label_actions': 'Actions',
                 'btn_add_hardware': ' Add a Device',
-                'label_no_hardware': 'No hardware in this project.',
+                'label_no_hardware': 'No <strong class="font-color-hardware">HARDWARE</strong> in this project.',
                 'label_no_hardware_comment': 'Click on the button bellow to add a new device.',
                 'label_device_properties': 'Device properties',
                 'label_remove_device': 'Remove device',
@@ -1368,7 +1368,7 @@ export class StaticTranslation {
 
                 'btn_add_widget': 'Create GRID widget',
                 'widget_group_name': 'Group Name',
-                'widget_group_description': 'Description',
+                'widget_group_description': '<strong class="font-color-grid">GRID</strong> Description: <strong>{0}</strong>',
 
                 'table_name': 'Name',
                 'table_description': 'Description',
@@ -1418,7 +1418,7 @@ export class StaticTranslation {
                 'label_widget_code': 'Widget Code',
                 'label_name': 'Name',
                 'label_description': 'Description',
-                'label_grid_group_name': 'Widget Group',
+                'label_grid_group_name': '<strong class="font-color-grid">GRID</strong> Widget Group',
                 'label_version': 'Version',
                 'label_ide': 'IDE',
                 'label_build_errors': 'Build Errors',
@@ -1547,6 +1547,11 @@ export class StaticTranslation {
                 'table_actions': 'Actions',
                 'label_group_properties': 'Group properties',
                 'label_group_remove': 'Remove group',
+                'tab_private_groups': 'Private group',
+                'tab_public_groups': 'Public group',
+                'tab_programs_for_decisions': 'Publishing requirements',
+                'label_no_groups': 'No groups',
+                'label_no_groups_comment': 'We did\'t find any data according to the filters specifications',
 
                 'btn_add_blocks_group': 'New Group',
                 'flash_block_group_add': 'Block group has been created.',

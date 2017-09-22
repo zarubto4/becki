@@ -170,6 +170,7 @@ import { FilterPagerComponent } from './components/FilterPagerComponent';
 import { ReaderQrComponent } from './views/qr-reader';
 import { MobileAddHardwareComponent } from './views/mobile-add-hardware';
 import { ModalsWidgetsWidgetCopyComponent } from './modals/widgets-widget-copy';
+import { ModalsBlockoBlockCopyComponent } from './modals/blocko-block-copy';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -345,7 +346,7 @@ let tabMenus = {
             styleClass: 'color-hardware font-color-grid-dark', items: [
                 new LabeledLink('Embedded Code', ['/admin/c-program/c-program'], 'code', {adminNavigation: true}),
                 new LabeledLink('Grid', ['/admin/widgets'], 'desktop', {adminNavigation: true}),
-                new LabeledLink('Blocko', ['/admin/blocko'], 'random', {adminNavigation: true})
+                new LabeledLink('Blocko', ['/admin/blocks'], 'random', {adminNavigation: true})
             ]
         }),
         new LabeledLink('Garfield', ['/admin/garfield'], 'fire'),
@@ -554,6 +555,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsHardwareCodeProgramVersionSelectComponent,
         ModalsWidgetsWidgetCopyComponent,
         ModalsExtensionComponent,
+        ModalsBlockoBlockCopyComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

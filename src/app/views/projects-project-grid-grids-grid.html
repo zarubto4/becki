@@ -129,15 +129,15 @@
                                 <h4 class="panel-title">
                                     <a class="accordion-toggle collapsed" (click)="onToggleGroup(group.id)">
                                         <i class="fa fa-pull-right fa-minus-square-o" [class.fa-minus-square-o]="widgetGroupsOpenToggle[group.id]" [class.fa-plus-square-o]="!widgetGroupsOpenToggle[group.id]"></i>
-                                        {{group.name}} ({{group.widgets.length}})
+                                        {{group.name}} ({{group.grid_widgets.length}})
                                     </a>
                                 </h4>
                             </div>
                             <div class="panel-collapse collapse no-select" [class.in]="widgetGroupsOpenToggle[group.id]">
                                 <div class="panel-body no-select" style="padding: 5px;">
-                                    <div *ngIf="group.widgets.length == 0" style="color: gray; text-align: center;">{{'label_no_widgets'|bkTranslate:this}}</div>
+                                    <div *ngIf="group.grid_widgets.length == 0" style="color: gray; text-align: center;">{{'label_no_widgets'|bkTranslate:this}}</div>
 
-                                    <a *ngFor="let widget of group.widgets" class="the-grid__widget-drag-handler no-select" [bkDraggable]="draggableOptions"
+                                    <a *ngFor="let widget of group.grid_widgets" class="the-grid__widget-drag-handler no-select" [bkDraggable]="draggableOptions"
                                         (bkDraggableOnDrag)="onWidgetDrag($event)" (mousedown)="onWidgetDown($event,widget)">
                                         <i class="fa fa-fw fa-object-group" style="position: absolute; right: -25px; bottom: 0px; font-size: 65px; transform: rotate(45deg); opacity: 0.2;"></i>
                                         {{widget.name}}

@@ -30,8 +30,7 @@
             </div>
         </div>
         <div>
-            <strong class="font-color-grid">GRID </strong>{{'widget_group_name'|bkTranslate:this}}: <strong>{{group?group.name:""}}</strong><br>
-            <strong class="font-color-grid">GRID </strong>{{'widget_group_description'|bkTranslate:this}}: <strong>{{group?group.description:""}}</strong>
+            <span [innerHTML]="'widget_group_description'|bkTranslate:this:(group?group.description:'')"></span>
             <br>
         </div>
         <div *ngIf="(group && group.grid_widgets && group.grid_widgets.length)" class="table-scrollable">

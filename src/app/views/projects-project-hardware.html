@@ -89,8 +89,8 @@
         </div>
         <h3 *ngIf="!devices" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
         <div *ngIf="devices && devices.length == 0" class="list-no-items">
-            <p class="list-no-items__main-label">{{'label_no_hardware'|bkTranslate:this}}</p>
-            <p class="list-no-items__sub-label">{{'label_no_hardware_comment'|bkTranslate:this}} </p>
+            <p class="list-no-items__main-label"><span [innerHTML]="'label_no_hardware'|bkTranslate:this"></span></p>
+            <p class="list-no-items__sub-label">{{'label_no_hardware_comment'|bkTranslate:this}}</p>
             <p>
                 <button class="btn blue" (click)="onAddClick($event)">
                     <i class="fa fa-plus-circle"></i>{{'btn_add_hardware'|bkTranslate:this}}

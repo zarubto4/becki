@@ -166,6 +166,7 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
     }
 
     onShowPublicGridGroupsByFilter(page: number = 0): void {
+        this.blockUI();
         Promise.all<any>([this.backendService.typeOfWidgetGetByFilter(page, {
             public_programs: true,       // For public its required
         })
@@ -181,6 +182,7 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
     }
 
     onShowProgramForDecisionsByFilter(page: number = 0): void {
+        this.blockUI();
         Promise.all<any>([this.backendService.gridWidgetGetByFilter(page, {
             pending_widget: true,       // For public its required
         })
@@ -239,22 +241,6 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
                 this.onShowPublicGridGroupsByFilter();
             });
-    }
-
-    onGroupRemoveClick(group: ITypeOfWidgetShortDetail): void {
-        this.modalService.showModal(new ModalsRemovalModel(group.name)).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.backendService.typeOfWidgetDelete(group.id)
-                    .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_remove')));
-                        this.onShowPublicGridGroupsByFilter();
-                    })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code', reason)));
-                    });
-            }
-        });
     }
 
     onGroupClick(group: ITypeOfWidget): void {

@@ -19,6 +19,7 @@ import {
 import { ModalsBlocksTypePropertiesModel } from '../modals/blocks-type-properties';
 import { ModalsBlocksBlockPropertiesModel } from '../modals/blocks-block-properties';
 import { CurrentParamsService } from '../services/CurrentParamsService';
+import { ModalsBlockoBlockCopyModel } from '../modals/blocko-block-copy';
 
 @Component({
     selector: 'bk-view-projects-project-blocks-blocks',
@@ -26,15 +27,15 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 })
 export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
-    id: string;
-    blocksId: string;
+    projectId: string;
 
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
 
-    // project: IProject = null;
+    typeOfBlockId: string;
+    project: IProject = null;
 
-    group: ITypeOfBlockShortDetail = null;
+    group: ITypeOfBlockShortDetail|ITypeOfBlock = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -44,11 +45,21 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
 
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
-            this.id = params['project'];
-            this.blocksId = params['blocks'];
-            this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
-                this.group = project.type_of_blocks.find((tb) => tb.id === this.blocksId);
-            });
+            this.projectId = params['project'];
+            this.typeOfBlockId = params['blocks'];
+
+            if (this.projectId) {
+                this.projectSubscription = this.storageService.project(this.projectId).subscribe((project) => {
+                    this.project = project;
+                    this.group = project.type_of_blocks.find((tb) => tb.id === this.typeOfBlockId);
+
+                    if (!this.group) {
+                        this.refresh();
+                    }
+                });
+            }else {
+                this.refresh();
+            }
         });
     }
 
@@ -57,6 +68,52 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
         if (this.projectSubscription) {
             this.projectSubscription.unsubscribe();
         }
+    }
+
+    refresh(): void {
+        this.blockUI();
+        Promise.all<any>([this.backendService.typeOfBlockGet(this.typeOfBlockId)])
+            .then((values: [ITypeOfBlock]) => {
+                this.group = values[0];
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.addFlashMessage(new FlashMessageError('Block Group cannot be loaded.', reason));
+                this.unblockUI();
+            });
+    }
+
+    onBlockClick(block: IBlockoBlockShortDetail): void {
+        if (this.projectId) {
+            this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', this.typeOfBlockId, block.id]);
+        } else {
+            this.navigate(['/admin/blocks/', this.typeOfBlockId, block.id]);
+        }
+    }
+
+    onMakeClone(block: IBlockoBlockShortDetail): void {
+        let model = new ModalsBlockoBlockCopyModel(block.name, block.description, this.project.type_of_blocks);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.blockoBlockMakeClone({
+                    blocko_block_id: block.id,
+                    type_of_blocks_id: model.type_of_blocks,
+                    project_id: this.projectId,
+                    name: model.name,
+                    description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_copy_success')));
+                        this.unblockUI();
+
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_copy_fail', reason)));
+                        this.unblockUI();
+                    });
+            }
+        });
     }
 
     onGroupEditClick(): void {
@@ -70,11 +127,19 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_groups_edit')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.refresh();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_block_groups', reason)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.refresh();
+                        }
                     });
             }
         });
@@ -87,20 +152,25 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
                 this.backendService.typeOfBlockDelete(this.group.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_groups_remove')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.refresh();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_block_groups.', reason)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.refresh();
+                        }
                     });
             }
         });
 
     }
 
-    onBlockClick(block: IBlockoBlockShortDetail): void {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', this.blocksId, block.id]);
-    }
 
     onBlockAddClick(group: ITypeOfBlockShortDetail): void {
 
@@ -115,11 +185,19 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_add')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.refresh();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_block', reason)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.refresh();
+                        }
                     });
             }
         });
@@ -135,15 +213,23 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
                 this.backendService.blockoBlockEdit(block.id, {
                     name: model.name,
                     general_description: model.description,
-                    type_of_block_id: this.blocksId // tohle je trochu divný ne?
+                    type_of_block_id: this.typeOfBlockId // tohle je trochu divný ne?
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_edit')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.refresh();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_block', reason)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.refresh();
+                        }
                     });
             }
         });
@@ -158,15 +244,46 @@ export class ProjectsProjectBlocksBlocksComponent extends BaseMainComponent impl
                 this.backendService.blockoBlockDelete(block.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_remove')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.refresh();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_block', reason)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.refresh();
+                        }
                     });
             }
         });
+    }
 
+    onBlockActivateClick(block: IBlockoBlockShortDetail): void {
+        this.blockUI();
+        this.backendService.blockoBlockActivate(block.id)
+            .then(() => {
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
+                this.refresh();
+            });
+    }
+
+    onBlockDeactivateClick(block: IBlockoBlockShortDetail): void {
+        this.blockUI();
+        this.backendService.blockoBlockDeactivate(block.id)
+            .then(() => {
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
+                this.refresh();
+            });
     }
 
 }

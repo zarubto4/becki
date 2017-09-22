@@ -28,7 +28,6 @@ import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsPublicShareRequestModel } from '../modals/public-share-request';
 import { ModalsPublicShareResponseModel } from '../modals/public-share-response';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import { ModalsCodePropertiesModel } from '../modals/code-properties';
 import { ModalsWidgetsWidgetCopyModel } from '../modals/widgets-widget-copy';
 
 @Component({
@@ -105,7 +104,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 });
             }
 
-            if (this.typeOfWidgetId) {
+            if (!this.projectId && this.typeOfWidgetId) {
                 Promise.all<any>([this.backendService.typeOfWidgetGet(this.typeOfWidgetId)])
                     .then((values: [ITypeOfWidget]) => {
                         this.group = values[0];
@@ -233,110 +232,6 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_version_changed_success', model.name, reason)));
                         this.refresh();
-                    });
-            }
-        });
-    }
-
-    onCommunityPublicVersionClick(programVersion: IGridWidgetVersionShortDetail) {
-        this.modalService.showModal(new ModalsPublicShareRequestModel(this.widget.name, programVersion.name)).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.backendService.gridWidgetVersionMakePublic(programVersion.id)
-                    .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_was_publisher')));
-                        this.refresh();
-                    })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_code_publish_error', reason)));
-                        if (this.projectId) {
-                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }
-                    });
-            }
-        });
-    }
-
-    onProgramVersionPublishResult(version: IGridWidgetVersionShortDetail): void {
-
-        Promise.all<any>([this.backendService.typeOfWidgetGetByFilter(0, {
-            public_programs: true,       // For public its required
-        })
-        ])
-            .then((values: [ITypeOfWidgetList]) => {
-
-                // Group from request
-                let groups: ITypeOfWidgetList = values[0];
-
-                // Make list for Form select
-                let group_for_select: FormSelectComponentOption[] = groups.content.map((pv) => {
-                    return {
-                        label: pv.name,
-                        value: pv.id
-                    };
-                });
-
-                // Create Object and Modal
-                let model = new ModalsPublicShareResponseModel(
-                    version.name,
-                    version.description,
-                    this.widget.name,
-                    this.widget.description,
-                    null,
-                    null,
-                    group_for_select,
-                    null,
-                );
-                this.modalService.showModal(model).then((success) => {
-                    if (success) {
-                        this.blockUI();
-                        this.backendService.gridWidgetVersionEditResponsePublication({
-                            version_id: version.id,
-                            version_name: model.version_name,
-                            version_description: model.version_description,
-                            grid_widget_type_of_widget_id: model.choice_object,
-                            decision: model.decision,
-                            reason: model.reason,
-                            program_description: model.program_description,
-                            program_name: model.program_name
-                        })
-                            .then(() => {
-                                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
-                                this.navigate(['/admin/widgets']);
-                            })
-                            .catch(reason => {
-                                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
-                                this.refresh();
-                            });
-                    }
-                });
-
-            })
-            .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('C Programs cannot be loaded.', reason));
-                this.unblockUI();
-            });
-    }
-
-    onMakeClone(): void {
-        let model = new ModalsWidgetsWidgetCopyModel(this.widget.name, this.widget.description, this.project.type_of_widgets);
-        this.modalService.showModal(model).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.backendService.gridWidgetMakeClone({
-                    grid_widget_id: this.widget.id,
-                    type_of_widget_id: model.type_of_widget,
-                    project_id: this.projectId,
-                    name: model.name,
-                    description: model.description
-                })
-                    .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
-                        this.unblockUI();
-                    })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
-                        this.unblockUI();
                     });
             }
         });
@@ -646,6 +541,110 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
             }
         });
 
+    }
+
+    onCommunityPublicVersionClick(programVersion: IGridWidgetVersionShortDetail) {
+        this.modalService.showModal(new ModalsPublicShareRequestModel(this.widget.name, programVersion.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.gridWidgetVersionMakePublic(programVersion.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_was_publisher')));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_code_publish_error', reason)));
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }
+                    });
+            }
+        });
+    }
+
+    onProgramVersionPublishResult(version: IGridWidgetVersionShortDetail): void {
+
+        Promise.all<any>([this.backendService.typeOfWidgetGetByFilter(0, {
+            public_programs: true,       // For public its required
+        })
+        ])
+            .then((values: [ITypeOfWidgetList]) => {
+
+                // Group from request
+                let groups: ITypeOfWidgetList = values[0];
+
+                // Make list for Form select
+                let group_for_select: FormSelectComponentOption[] = groups.content.map((pv) => {
+                    return {
+                        label: pv.name,
+                        value: pv.id
+                    };
+                });
+
+                // Create Object and Modal
+                let model = new ModalsPublicShareResponseModel(
+                    version.name,
+                    version.description,
+                    this.widget.name,
+                    this.widget.description,
+                    null,
+                    null,
+                    group_for_select,
+                    null,
+                );
+                this.modalService.showModal(model).then((success) => {
+                    if (success) {
+                        this.blockUI();
+                        this.backendService.gridWidgetVersionEditResponsePublication({
+                            version_id: version.id,
+                            version_name: model.version_name,
+                            version_description: model.version_description,
+                            grid_widget_type_of_widget_id: model.choice_object,
+                            decision: model.decision,
+                            reason: model.reason,
+                            program_description: model.program_description,
+                            program_name: model.program_name
+                        })
+                            .then(() => {
+                                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
+                                this.navigate(['/admin/widgets']);
+                            })
+                            .catch(reason => {
+                                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                                this.refresh();
+                            });
+                    }
+                });
+
+            })
+            .catch((reason) => {
+                this.addFlashMessage(new FlashMessageError('C Programs cannot be loaded.', reason));
+                this.unblockUI();
+            });
+    }
+
+    onMakeClone(): void {
+        let model = new ModalsWidgetsWidgetCopyModel(this.widget.name, this.widget.description, this.project.type_of_widgets);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.gridWidgetMakeClone({
+                    grid_widget_id: this.widget.id,
+                    type_of_widget_id: model.type_of_widget,
+                    project_id: this.projectId,
+                    name: model.name,
+                    description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
+                        this.unblockUI();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                        this.unblockUI();
+                    });
+            }
+        });
     }
 
     onWidgetSetMainClick(version: IGridWidgetVersionShortDetail): void {

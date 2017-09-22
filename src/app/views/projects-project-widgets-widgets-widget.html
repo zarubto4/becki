@@ -30,13 +30,15 @@
                 </div>
                 <div class="clearfix"></div>
                 <div>
-                    <strong class="font-color-grid">{{'label_grid'|bkTranslate:this}} </strong><span [innerHTML]="'label_name'|bkTranslate:this"></span>:
+                    <span [innerHTML]="'label_name'|bkTranslate:this"></span>:
                     <strong>{{widget?widget.name:""}}</strong><br>
-                    <strong class="font-color-grid">{{'label_grid'|bkTranslate:this}} </strong><span [innerHTML]="'label_description'|bkTranslate:this"></span>:
+
+                    <span [innerHTML]="'label_description'|bkTranslate:this"></span>:
                     <strong>{{widget?widget.description:"0_o"}}</strong><br>
+
                     <br>
                     <div *ngIf="group">
-                        <strong class="font-color-grid">{{'label_grid'|bkTranslate:this}} </strong><span [innerHTML]="'label_grid_group_name'|bkTranslate:this"></span>:
+                        <span [innerHTML]="'label_grid_group_name'|bkTranslate:this"></span>:
                         <strong><a (click)="onWidgetsGroupClick(group.id)">{{group?group.name:""}}</a></strong>
                     </div>
                 </div>
@@ -234,7 +236,9 @@
                                     {{version.description}}
                                 </td>
                                 <td class="vert-align">
-                                    {{version.author!=null?version.author.nick_name:null}}
+                                    <span *ngIf="version.author">
+                                        {{version.author.nick_name}}
+                                    </span>
                                 </td>
                                 <td class="vert-align no-wrap">
                                     <span class="icon-hint-wraper red" *ngIf="version.publish_status == 'pending'">
@@ -278,7 +282,7 @@
                                     </button>
 
                                     <!-- Only For for Administrator for Make Default Widget -->
-                                    <button *ngIf="widget && widget.publish_type == 'default_main_program' && version.publish_type != 'default_version'" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!widget.update_permission" (click)="onWidgetSetMainClick(version)">
+                                    <button *ngIf="widget && widget.publish_type == 'default_main_program' && version.publish_type != 'default_version'" title="{{'label_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!widget.update_permission" (click)="onWidgetSetMainClick(version)">
                                         <i class="fa fa-flag"></i>
                                     </button>
 
