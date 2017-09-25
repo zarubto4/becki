@@ -10,7 +10,9 @@ export class ServerRegistrationComponent extends BaseMainComponent implements On
 
     tab: string = 'knowledge_base';
 
-    tickets: any=  null;
+    tickets: any = null;
+    private LOGO = require('../../style/assets/flags/china.svg');
+
 
     constructor(injector: Injector) {
         super(injector);
