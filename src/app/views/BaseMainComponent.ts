@@ -33,7 +33,6 @@ export abstract class BaseMainComponent {
     protected zone: NgZone = null;
 
     constructor(protected injector: Injector) {
-        // console.log('BaseMainComponent init');
         if (injector) {
             this.backendService = injector.get(BackendService);
             this.storageService = injector.get(StorageService);

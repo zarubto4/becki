@@ -825,7 +825,7 @@ export class StaticTranslation {
                 'btn_create_bootloader': 'Create first Bootloader',
 
             }, 'HardwareComponent': {
-                'main_title': '<strong class="font-color-hardware">Hardware</strong> Types',
+                'main_title': 'Hardware Types',
                 'flash_project_cant_load': 'Projects could not be loaded, {0}.'
 
             }, 'PictureUploadComponent': {
