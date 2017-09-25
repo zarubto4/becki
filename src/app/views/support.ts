@@ -10,7 +10,7 @@ export class SupportComponent extends BaseMainComponent implements OnInit {
 
     tab: string = 'knowledge_base';
 
-    tickets: any=  null;
+    tickets: any = null;
 
     constructor(injector: Injector) {
         super(injector);

@@ -173,6 +173,7 @@ import { ModalsWidgetsWidgetCopyComponent } from './modals/widgets-widget-copy';
 import { ModalsBlockoBlockCopyComponent } from './modals/blocko-block-copy';
 import { SupportComponent } from './views/support';
 import { ServerRegistrationComponent } from './views/server-registration';
+import { BeckiImageLinks } from './helpers/BeckiImageLinks';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -395,6 +396,7 @@ class BeckiErrorHandler implements ErrorHandler {
         BackendService,
         AuthGuard, // AuthGuard service must be after BackendService
         ExitConfirmGuard,
+        BeckiImageLinks,
         NonAuthGuard, // NonAuthGuard service must be after BackendService
         NotificationService, // NotificationService must be after BackendService
         StorageService,

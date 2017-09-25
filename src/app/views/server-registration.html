@@ -1,5 +1,4 @@
-<bk-layout-main
-    [title]="'main_title'|bkTranslate:this">
+<bk-layout-main [title]="'main_title'|bkTranslate:this">
 
     <div class="portlet portlet light bordered">
 
@@ -33,7 +32,7 @@
                     <div class="portlet light bordered" style="margin-inside: 10px">
                         <div class="row">
                             <div class="col-md-3">
-                                <img class="img-responsive" [src]="LOGO">
+                                <img *ngIf="flag" class="img-responsive" [src]="flag">
                             </div>
                             <div class="col-md-9">
                                 <h4 class="bold">{{'Miami'|bkTranslate:this}}</h4>

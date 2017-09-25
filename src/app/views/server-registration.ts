@@ -1,6 +1,8 @@
 
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
+import { BeckiImageLinks } from '../helpers/BeckiImageLinks';
+import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 
 @Component({
     selector: 'bk-view-support',
@@ -11,15 +13,15 @@ export class ServerRegistrationComponent extends BaseMainComponent implements On
     tab: string = 'knowledge_base';
 
     tickets: any = null;
-    private LOGO = require('../../style/assets/flags/china.svg');
 
+    flag: string;
 
-    constructor(injector: Injector) {
+    constructor(injector: Injector, private beckiImageLinks: BeckiImageLinks) {
         super(injector);
     };
 
     ngOnInit(): void {
-
+        this.flag = this.beckiImageLinks.getFlagImage('china.svg'); 
     }
 
     onToggleTab(tab: string) {
