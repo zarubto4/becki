@@ -169,6 +169,11 @@ import { ModalsPublicShareResponseComponent } from './modals/public-share-respon
 import { FilterPagerComponent } from './components/FilterPagerComponent';
 import { ReaderQrComponent } from './views/qr-reader';
 import { MobileAddHardwareComponent } from './views/mobile-add-hardware';
+import { ModalsWidgetsWidgetCopyComponent } from './modals/widgets-widget-copy';
+import { ModalsBlockoBlockCopyComponent } from './modals/blocko-block-copy';
+import { SupportComponent } from './views/support';
+import { ServerRegistrationComponent } from './views/server-registration';
+import { BeckiImageLinks } from './helpers/BeckiImageLinks';
 import { MyDatePickerModule } from 'mydatepicker';
 import { DatePickerComponent } from './components/datePicker';
 
@@ -241,21 +246,37 @@ let routes: Routes = [
     { path: 'producers', data: { breadName: 'Producers' }, component: ProducersComponent, canActivate: [AuthGuard] },
     { path: 'producers/:producer', data: { breadName: ':producer' }, component: ProducersProducerComponent, canActivate: [AuthGuard] },
 
+    { path: 'support', data: { breadName: 'Producers' }, component: SupportComponent, canActivate: [AuthGuard] }, // TODO - Rozpracováno koncept [TZ]
+    { path: 'support/:ticket', data: { breadName: ':ticket' }, component: ProducersProducerComponent, canActivate: [AuthGuard] }, // TODO - Rozpracováno koncept [TZ]
 
-    { path: 'admin-dashboard', data: { breadName: 'Admin Site' }, component: AdminDashboardComponent, canActivate: [AuthGuard] },
+    { path: 'server', data: { breadName: 'Server' }, component: ServerRegistrationComponent, canActivate: [AuthGuard] }, // TODO - Rozpracováno koncept [TZ]
+
+
+    { path: 'admin', data: { breadName: 'Admin Site' }, component: AdminDashboardComponent, canActivate: [AuthGuard] },
 
     { path: 'admin/hardware', data: { breadName: 'Hardware' }, component: AdminHardwareComponent, canActivate: [AuthGuard] },
     { path: 'admin/hardware/code/:code', data: { breadName: ':code' }, component: ProjectsProjectCodeCodeComponent, canActivate: [AuthGuard] },
     { path: 'admin/hardware/libraries/:library', data: { breadName: ':library' }, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard] },
 
-    { path: 'admin/garfield', data: { breadName: 'Garfield' }, component: GarfieldComponent, canActivate: [AuthGuard] },
-    { path: 'admin/garfield/:garfield', data: { breadName: ':garfield' }, component: GarfieldGarfieldComponent, canActivate: [AuthGuard] },
+    { path: 'admin/widgets', data: {breadName: 'Community Grid Widgets Group'}, component: ProjectsProjectWidgetsComponent, canActivate: [AuthGuard]},
+    { path: 'admin/widgets/:widgets', data: {breadName: 'widgets'}, component: ProjectsProjectWidgetsWidgetsComponent, canActivate: [AuthGuard]},
+    { path: 'admin/widgets/:widgets/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard]},
+    { path: 'admin/widget/:widget', data: {breadName: ':widget'}, component: ProjectsProjectWidgetsWidgetsWidgetComponent, canActivate: [AuthGuard]},  // Only for community decisions - Link without project path
+
+
+    { path: 'admin/blocks', data: {breadName: 'Blocko Groups'}, component: ProjectsProjectBlocksComponent, canActivate: [AuthGuard]},
+    { path: 'admin/blocks/:blocks', data: {breadName: ':blocks'}, component: ProjectsProjectBlocksBlocksComponent, canActivate: [AuthGuard]},
+    { path: 'admin/blocks/:blocks/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard]},
+    { path: 'admin/block/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard]}, // Only for community decisions - Link without project path
+
+    { path: 'admin/garfield', data: {breadName: 'Garfield'}, component: GarfieldComponent, canActivate: [AuthGuard]},
+    { path: 'admin/garfield/:garfield', data: {breadName: ':garfield'}, component: GarfieldGarfieldComponent, canActivate: [AuthGuard]},
 
     { path: 'admin/financial', data: { breadName: 'Tariff' }, component: AdminFinancialComponent, canActivate: [AuthGuard] },
     { path: 'admin/financial/:tariff', data: { breadName: ':tariff' }, component: AdminFinancialTariffComponent, canActivate: [AuthGuard] },
 
     { path: 'admin/server', data: { breadName: 'Servers' }, component: ServerComponent, canActivate: [AuthGuard] },
-    // {path: 'admin/server/:server', data: {breadName: 'Servers'}, component: ServerComponent, canActivate: [AuthGuard]},
+    // {path: 'admin/server/:server', data: {breadName: 'Servers'}, component: ServerComponent, canActivate: [AuthGuard]}, // TODO - USER / ADMIN
 
     { path: 'admin/permission-group', data: { breadName: 'Permission Group' }, component: RoleGroupComponent, canActivate: [AuthGuard] },
     { path: 'admin/permission-group/:group', data: { breadName: ':group' }, component: RoleGroupGroupComponent, canActivate: [AuthGuard] },
@@ -273,12 +294,14 @@ let navigation = [
     new LabeledLink('Financial', ['/financial'], 'dollar'),
     new LabeledLink('Projects', ['/projects'], 'briefcase'),
     new LabeledLink('Hardware types', ['/hardware'], 'microchip'),
-    // new LabeledLink('Producers',  ['/producers'] , 'industry'),
-    // new LabeledLink('Store',  ['/producers'] , 'industry'),
+    // new LabeledLink('Support', ['/support'], 'medkit'),
+    // new LabeledLink('Producers',  [' /producers'] , 'industry',
+    // new LabeledLink('Store',  ['https://store.byzance.cz'] , 'shopping-cart', { outsideLink: true }),
+    // new LabeledLink('Byzance Wiki', ['https://wiki.byzance.cz'], 'wikipedia-w', { outsideLink: true }),
     // new LabeledLink('Log out',  ['/logout'] , 'sign-out')
 
     // Admin Labes
-    new LabeledLink('Platform Admin ', ['/admin-dashboard'], 'tachometer', { adminNavigation: true }),
+    new LabeledLink('Platform Admin ', ['/admin'], 'tachometer', { adminNavigation: true }),
     new LabeledLink('Byzance Wiki', ['https://wiki.byzance.cz'], 'wikipedia-w', { adminNavigation: true, outsideLink: true }),
     new LabeledLink('Youtrack Agile', ['https://youtrack.byzance.cz'], 'thumb-tack', { adminNavigation: true, outsideLink: true }),
     new LabeledLink('GitHub', ['https://youtrack.byzance.cz'], 'github', { adminNavigation: true, outsideLink: true }),
@@ -320,21 +343,23 @@ let tabMenus = {
         new LabeledLink('Billing Preferences', ['/', 'financial', ':product', 'billing'], 'bank'),
     ],
     'byzance-admin': [
-        new LabeledLink('Dashboard', ['/admin-dashboard'], 'tachometer', { linkActiveExact: true }),
+        new LabeledLink('Dashboard', ['/admin'], 'tachometer', { linkActiveExact: true }),
         new LabeledLink(null, null),
         new LabeledLink('Platform Management', null, null, {
             styleClass: 'color-grid font-color-grid-dark', items: [
-                new LabeledLink('Hardware Management', ['/admin/hardware'], 'microchip', { adminNavigation: true }),
-                new LabeledLink('Servers Management', ['/admin/server'], 'server', { adminNavigation: true }),
-                new LabeledLink('Financial Management', ['/admin/financial'], 'money', { adminNavigation: true }),
-                new LabeledLink('Permission Management', ['/admin/permission-group'], 'users', { adminNavigation: true }),
+                new LabeledLink('Hardware Management', ['/admin/hardware'], 'microchip', {adminNavigation: true}),
+                new LabeledLink('Blocko Management', ['/admin/block/00000000-0000-0000-0000-000000000001'], 'random', {adminNavigation: true}),
+                new LabeledLink('Widget Management', ['/admin/widget/00000000-0000-0000-0000-000000000001'], 'desktop', {adminNavigation: true}),
+                new LabeledLink('Servers Management', ['/admin/server'], 'server', {adminNavigation: true}),
+                new LabeledLink('Financial Management', ['/admin/financial'], 'money', {adminNavigation: true}),
+                new LabeledLink('Permission Management', ['/admin/permission-group'], 'users', {adminNavigation: true}),
             ]
         }),
         new LabeledLink('Community Management', null, null, {
             styleClass: 'color-hardware font-color-grid-dark', items: [
-                new LabeledLink('Embedded Code', ['/admin/c-program/c-program'], 'code', { adminNavigation: true }),
-                new LabeledLink('Grid', ['/admin/grid'], 'desktop', { adminNavigation: true }),
-                new LabeledLink('Blocko', ['/admin/blocko'], 'random', { adminNavigation: true })
+                new LabeledLink('Embedded Code', ['/admin/c-program/c-program'], 'code', {adminNavigation: true}),
+                new LabeledLink('Grid', ['/admin/widgets'], 'desktop', {adminNavigation: true}),
+                new LabeledLink('Blocko', ['/admin/blocks'], 'random', {adminNavigation: true})
             ]
         }),
         new LabeledLink('Garfield', ['/admin/garfield'], 'fire'),
@@ -375,6 +400,7 @@ class BeckiErrorHandler implements ErrorHandler {
         BackendService,
         AuthGuard, // AuthGuard service must be after BackendService
         ExitConfirmGuard,
+        BeckiImageLinks,
         NonAuthGuard, // NonAuthGuard service must be after BackendService
         NotificationService, // NotificationService must be after BackendService
         StorageService,
@@ -487,6 +513,8 @@ class BeckiErrorHandler implements ErrorHandler {
         ProjectsProjectLibrariesLibraryComponent,
         ReaderQrComponent,
         MobileAddHardwareComponent,
+        SupportComponent,
+        ServerRegistrationComponent,
         // Modals components
         ModalsAdminCreateHardwareComponent,
         ModalsBillingInformationComponent,
@@ -543,7 +571,9 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsCodeAddLibraryComponent,
         ModalsCodeLibraryVersionComponent,
         ModalsHardwareCodeProgramVersionSelectComponent,
+        ModalsWidgetsWidgetCopyComponent,
         ModalsExtensionComponent,
+        ModalsBlockoBlockCopyComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

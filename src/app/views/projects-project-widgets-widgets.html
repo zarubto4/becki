@@ -3,7 +3,10 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+<bk-layout-main
+    tabMenu="{{projectId == null ? 'byzance-admin' : 'projects-project'}}"
+    [title]="projectId == null ? ('main_title'|bkTranslate:this) : currentParamsService.currentProjectNameSnapshot"
+    [subtitle]="projectId == null ? ('main_subtitle'|bkTranslate:this) : currentParamsService.currentProjectDescriptionSnapshot">
 
     <div class="portlet portlet light bordered">
         <div *ngIf="group" class="portlet-title">
@@ -14,20 +17,20 @@
                 </span>
             </div>
             <div class="becki-actions">
-                <button title="{{'label_group_properities'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!group.edit_permission" (click)="onGroupEditClick()">
+                <button *ngIf="group && group.edit_permission" title="{{'label_group_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onGroupEditClick()">
                     <i class="fa fa-cog"></i>
                 </button>
-                <button title="{{'label_remove_group'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!group.delete_permission" (click)="onGroupDeleteClick()">
+                <button *ngIf="group && group.delete_permission" title="{{'label_remove_group'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onGroupDeleteClick()">
                     <i class="fa fa-trash"></i>
                 </button>
-                <button class="btn blue" [disabled]="!group || !group.update_permission" (click)="onWidgetAddClick(group)">
+                <!-- Community Admin List not support creating -->
+                <button *ngIf="projectId && group.publish_type == 'private_program'" class="btn blue" [disabled]="!group || !group.update_permission" (click)="onWidgetAddClick(group)">
                     <i class="fa fa-plus-circle"></i> {{'btn_add_widget'|bkTranslate:this}}
                 </button>
             </div>
         </div>
         <div>
-            <strong class="font-color-grid">GRID </strong>{{'widget_group_name'|bkTranslate:this}}: <strong>{{group?group.name:""}}</strong><br>
-            <strong class="font-color-grid">GRID </strong>{{'widget_group_description'|bkTranslate:this}}: <strong>{{group?group.description:""}}</strong>
+            <span [innerHTML]="'widget_group_description'|bkTranslate:this:(group?group.description:'')"></span>
             <br>
         </div>
         <div *ngIf="(group && group.grid_widgets && group.grid_widgets.length)" class="table-scrollable">
@@ -41,7 +44,11 @@
                 </thead>
                 <tbody>
                 <tr *ngFor="let widget of group.grid_widgets">
-                    <td class="vert-align no-wrap bold"><a (click)="onWidgetClick(widget)">{{widget.name}}</a></td>
+                    <td class="vert-align no-wrap bold">
+                        <a (click)="onWidgetClick(widget)">{{widget.name}}</a>
+                        <span *ngIf="!projectId && widget.active" class="font-green-jungle bold">(Active)</span>         <!-- Only for Administrator -->
+                        <span *ngIf="!projectId && !widget.active" class="font-red-flamingo bold">(Deactivated)</span>   <!-- Only for Administrator -->
+                    </td>
                     <td class="vert-align">{{widget.description}}</td>
                     <td class="vert-align no-wrap">
 
@@ -50,10 +57,19 @@
                             table tr:hover button { opacity:1 }
                         </style>
 
-                        <button title="{{'label_widget_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!widget.edit_permission" (click)="onWidgetEditClick(widget)">
+                        <button *ngIf="projectId && group.publish_type == 'public_program'"  title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onMakeClone(widget)">
+                            <i class="fa fa-clone"></i>
+                        </button>
+                        <button *ngIf="!projectId && !widget.active" title="{{'label_active_group'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!widget.update_permission" (click)="onWidgetActivateClick(widget)">
+                            <i class="fa fa-power-off"></i>
+                        </button>
+                        <button  *ngIf="!projectId && widget.active" title="{{'label_deactive_group'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!widget.update_permission" (click)="onWidgetDeactivateClick(widget)">
+                            <i class="fa fa-power-off"></i>
+                        </button>
+                        <button *ngIf="widget.edit_permission" title="{{'label_widget_properties'|bkTranslate:this}}" class="btn btn-icon-only green" (click)="onWidgetEditClick(widget)">
                             <i class="fa fa-cog"></i>
                         </button>
-                        <button title="{{'label_remove_widget'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!widget.delete_permission" (click)="onWidgetDeleteClick(widget)">
+                        <button *ngIf="widget.delete_permission" title="{{'label_remove_widget'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onWidgetDeleteClick(widget)">
                             <i class="fa fa-trash"></i>
                         </button>
                     </td>
@@ -63,7 +79,7 @@
         </div>
         <h3 *ngIf="!group" class="text-center">{{'loading'|bkTranslate:this}}</h3>
         <div *ngIf="group && !(group.grid_widgets && group.grid_widgets.length)" class="list-no-items">
-            <p class="list-no-items__main-label">{{'label_no_item'|bkTranslate:this}}</p>
+            <p class="list-no-items__main-label" [innerHTML]="'label_no_item'|bkTranslate:this"></p>
             <p class="list-no-items__sub-label">{{'label_you_can_create'|bkTranslate:this}}</p>
             <p>
                 <button class="btn blue" [disabled]="!group || !group.update_permission" (click)="onWidgetAddClick(group)">

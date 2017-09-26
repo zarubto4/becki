@@ -87,8 +87,8 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                 if (this.blocksGroups) {
                     for (let i = 0; i < this.blocksGroups.length; i++) {
                         const group = this.blocksGroups[i];
-                        for (let j = 0; j < group.blocks.length; j++) {
-                            const blockDef: IBlockoBlockShortDetail = group.blocks[j];
+                        for (let j = 0; j < group.blocko_blocks.length; j++) {
+                            const blockDef: IBlockoBlockShortDetail = group.blocko_blocks[j];
                             if (blockDef.id === block.typeOfBlock) {
                                 versions = blockDef.versions;
                             }

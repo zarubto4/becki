@@ -1,0 +1,50 @@
+<bk-layout-main [title]="'main_title'|bkTranslate:this">
+
+    <div class="portlet portlet light bordered">
+
+        <div class="portlet-title tabbable-line">
+
+            <h3>Server Location</h3>
+            <!--ul class="nav nav-tabs margin-left-15 pull-left"-->
+
+            <ul class="nav nav-tabs pull-left tabbable-line">
+                <li [class.active]="tab == 'all_location'">
+                    <a class="cursor-pointer" (click)="onToggleTab('knowledge_base')"><i class="fa fa-question"></i> {{'knowledge_base'|bkTranslate:this}}</a>
+                </li>
+                <li [class.active]="tab == 'america'">
+                    <a class="cursor-pointer" (click)="onToggleTab('tickets')"><i class="fa fa-ticket"></i> {{'tickets'|bkTranslate:this}}</a>
+                </li>
+                <li [class.active]="tab == 'europa'">
+                    <a class="cursor-pointer" (click)="onToggleTab('tickets')"><i class="fa fa-ticket"></i> {{'tickets'|bkTranslate:this}}</a>
+                </li>
+                <li [class.active]="tab == 'australia'">
+                    <a class="cursor-pointer" (click)="onToggleTab('tickets')"><i class="fa fa-ticket"></i> {{'tickets'|bkTranslate:this}}</a>
+                </li>
+                <li [class.active]="tab == 'asia'">
+                    <a class="cursor-pointer" (click)="onToggleTab('tickets')"><i class="fa fa-ticket"></i> {{'tickets'|bkTranslate:this}}</a>
+                </li>
+            </ul>
+
+            <br>
+
+            <div class="row" style="margin-left: 5%; margin-right: 5%; margin-top: 50px">
+                <div class="col-md-4">
+                    <div class="portlet light bordered" style="margin-inside: 10px">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <img *ngIf="flag" class="img-responsive" [src]="flag">
+                            </div>
+                            <div class="col-md-9">
+                                <h4 class="bold">{{'Miami'|bkTranslate:this}}</h4>
+                                <span>United States</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</bk-layout-main>

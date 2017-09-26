@@ -87,8 +87,8 @@ export class GridViewComponent implements AfterViewInit, OnDestroy {
                 if (this.widgetsGroups) {
                     for (let i = 0; i < this.widgetsGroups.length; i++) {
                         const group = this.widgetsGroups[i];
-                        for (let j = 0; j < group.widgets.length; j++) {
-                            const widgetDef: IGridWidgetShortDetail = group.widgets[j];
+                        for (let j = 0; j < group.grid_widgets.length; j++) {
+                            const widgetDef: IGridWidgetShortDetail = group.grid_widgets[j];
                             if (widgetDef.id === widget.type.id) {
                                 versions = widgetDef.versions;
                             }

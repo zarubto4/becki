@@ -7,7 +7,7 @@ import { BaseMainComponent } from './BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
 import {
     IBlockoBlock, IBlockoBlockVersion,
-    ITypeOfBlock, IBlockoBlockVersionShortDetail, ITypeOfBlockShortDetail
+    ITypeOfBlock, IBlockoBlockVersionShortDetail, ITypeOfBlockShortDetail, IProject, ITypeOfBlockList
 } from '../backend/TyrionAPI';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { Blocks, Core } from 'blocko';
@@ -22,6 +22,10 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ExitConfirmationService } from '../services/ExitConfirmationService';
 import { ModalsBlocksBlockPropertiesModel } from '../modals/blocks-block-properties';
 import { ModalsRemovalModel } from '../modals/removal';
+import { FormSelectComponentOption } from '../components/FormSelectComponent';
+import { ModalsPublicShareResponseModel } from '../modals/public-share-response';
+import { ModalsPublicShareRequestModel } from '../modals/public-share-request';
+import { ModalsWidgetsWidgetCopyModel } from '../modals/widgets-widget-copy';
 
 @Component({
     selector: 'bk-view-projects-project-blocks-blocks-block',
@@ -29,16 +33,18 @@ import { ModalsRemovalModel } from '../modals/removal';
 })
 export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
-    projectId: string;
     blockId: string;
-    blocksId: string;
+    typeOfBlockId: string;
+
+    projectId: string;
+    project: IProject = null;
 
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
 
     // project: IProject = null;
 
-    group: ITypeOfBlockShortDetail = null;
+    group: ITypeOfBlockShortDetail|ITypeOfBlock = null;
 
     blockoBlock: IBlockoBlock = null;
 
@@ -93,14 +99,36 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.projectId = params['project'];
             this.blockId = params['block'];
-            this.blocksId = params['blocks'];
-            if (params['version']) {
-                this.router.navigate(['/projects', this.projectId, 'blocks', this.blocksId, this.blockId]);
-                this.selectVersionByVersionId(params['version']);
+            this.typeOfBlockId = params['blocks'];
+
+
+            if (this.projectId) {
+                this.projectSubscription = this.storageService.project(this.projectId).subscribe((project) => {
+                    this.project = project;
+                    this.group = project.type_of_blocks.find((tb) => tb.id === this.typeOfBlockId);
+                });
             }
-            this.projectSubscription = this.storageService.project(this.projectId).subscribe((project) => {
-                this.group = project.type_of_blocks.find((tb) => tb.id === this.blocksId);
-            });
+
+            if (!this.projectId && this.typeOfBlockId) {
+                Promise.all<any>([this.backendService.typeOfBlockGet(this.typeOfBlockId)])
+                    .then((values: [ITypeOfBlock]) => {
+                        this.group = values[0];
+                        this.unblockUI();
+                    })
+                    .catch((reason) => {
+                        this.addFlashMessage(new FlashMessageError('Blocko Group cannot be loaded.', reason));
+                        this.unblockUI();
+                    });
+            }
+
+
+            if (this.projectId && this.typeOfBlockId) {
+                if (params['version']) {
+                    this.router.navigate(['/projects', this.projectId, 'blocks', this.typeOfBlockId, this.blockId]);
+                    this.selectVersionByVersionId(params['version']);
+                }
+            }
+
             this.refresh();
         });
         this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib, Libs.ConsoleLib, Libs.UtilsLib, Blocks.FetchLib, Blocks.ServiceLib, this.blockoView.serviceHandler]);
@@ -188,7 +216,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                 this.backendService.blockoBlockEdit(this.blockoBlock.id, {
                     name: model.name,
                     general_description: model.description,
-                    type_of_block_id: this.blocksId // tohle je trochu divný ne?
+                    type_of_block_id: this.typeOfBlockId // tohle je trochu divný ne?
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_blocko_edit')));
@@ -214,7 +242,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_remove')));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', this.blocksId]);
+                        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', this.typeOfBlockId]);
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_block', reason)));
@@ -511,6 +539,122 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
             }
         });
 
+    }
+
+    onCommunityPublicVersionClick(programVersion: IBlockoBlockVersionShortDetail) {
+        this.modalService.showModal(new ModalsPublicShareRequestModel(this.blockoBlock.name, programVersion.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.blockoBlockVersionMakePublic(programVersion.id)
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_was_publisher')));
+                        this.refresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_code_publish_error', reason)));
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }
+                    });
+            }
+        });
+    }
+
+    onProgramVersionPublishResult(version: IBlockoBlockVersionShortDetail): void {
+
+        Promise.all<any>([this.backendService.typeOfBlocksGetByFilter(0, {
+            public_programs: true,       // For public its required
+        })
+        ])
+            .then((values: [ITypeOfBlockList]) => {
+
+                // Group from request
+                let groups: ITypeOfBlockList = values[0];
+
+                // Make list for Form select
+                let group_for_select: FormSelectComponentOption[] = groups.content.map((pv) => {
+                    return {
+                        label: pv.name,
+                        value: pv.id
+                    };
+                });
+
+                // Create Object and Modal
+                let model = new ModalsPublicShareResponseModel(
+                    version.name,
+                    version.description,
+                    this.blockoBlock.name,
+                    this.blockoBlock.description,
+                    null,
+                    null,
+                    group_for_select,
+                    null,
+                );
+                this.modalService.showModal(model).then((success) => {
+                    if (success) {
+                        this.blockUI();
+                        this.backendService.blockoBlockVersionEditResponsePublication({
+                            version_id: version.id,
+                            version_name: model.version_name,
+                            version_description: model.version_description,
+                            blocko_block_type_of_block_id: model.choice_object,
+                            decision: model.decision,
+                            reason: model.reason,
+                            program_description: model.program_description,
+                            program_name: model.program_name
+                        })
+                            .then(() => {
+                                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
+                                this.navigate(['/admin/blocks']);
+                            })
+                            .catch(reason => {
+                                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                                this.refresh();
+                            });
+                    }
+                });
+
+            })
+            .catch((reason) => {
+                this.addFlashMessage(new FlashMessageError('C Programs cannot be loaded.', reason));
+                this.unblockUI();
+            });
+    }
+
+    onMakeClone(): void {
+        let model = new ModalsWidgetsWidgetCopyModel(this.blockoBlock.name, this.blockoBlock.description, this.project.type_of_widgets);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.blockoBlockMakeClone({
+                    blocko_block_id: this.blockoBlock.id,
+                    type_of_blocks_id: model.type_of_widget,
+                    project_id: this.projectId,
+                    name: model.name,
+                    description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
+                        this.unblockUI();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                        this.unblockUI();
+                    });
+            }
+        });
+    }
+
+    onBlockSetMainClick(version: IBlockoBlockVersionShortDetail): void {
+        this.blockUI();
+        this.backendService.blockoBlockVersionSetAsMain(version.id)
+            .then(() => {
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
+                this.refresh();
+            });
     }
 
 }

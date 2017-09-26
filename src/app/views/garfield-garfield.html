@@ -248,9 +248,22 @@
                     </div>
                 </div>
 
+                <div *ngIf="garfield" class="row">
+                    <div class="col-md-12">
+                        <div class="portlet light portlet-fit bordered">
+                            <div class="portlet-body">
+                                <h3 style="text-align: center">{{'label_config'|bkTranslate:this}}</h3>
+                                <hr>
+                                <div style="text-align: center">
+                                    <bk-form-nice-json [description]="'Config Json'" [control]="formConfigJson.controls['config']" [cols]="75" [readonly]="false"></bk-form-nice-json>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                <div *ngIf="!(garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldHardwareConnected && test_firmware_file_Base64 && bootloader_file_Base64
-                                && mainServer && backupServer && mainServer.online_state == 'online' && backupServer.online_state == 'online' && productionBatchForm.valid)" class="row">
+
+                <div *ngIf="!visible_steps()" class="row">
                     <div class="col-md-12">
                         <div class="portlet light portlet-fit bordered">
                             <div class="portlet-body">
@@ -262,8 +275,7 @@
                     </div>
                 </div>
 
-                <div *ngIf="garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldHardwareConnected && test_firmware_file_Base64 && bootloader_file_Base64
-                                && mainServer && backupServer && productionBatchForm.valid" class="row">
+                <div *ngIf="visible_steps()" class="row">
                     <div class="col-md-12">
                         <div class="portlet light portlet-fit bordered">
                             <div class="portlet-body">

@@ -309,8 +309,12 @@
                         <button *ngIf="(blockoProgram.instance_details.online_state == 'shut_down' || blockoProgram.instance_details.online_state == 'offline') && blockoProgram.instance_details.server_online_state == 'online'" class="btn blue-hoki" (click)="onChangeVersionClick()">
                             <i class="fa fa-code-fork"></i> {{'btn_select_cloud_version'|bkTranslate:this}}
                         </button>
-                        <button *ngIf="blockoProgram.instance_details.online_state == 'online' && blockoProgram.instance_details.server_online_state == 'online'" class="btn blue-hoki" (click)="onChangeVersionClick()">
+                        <button *ngIf="(blockoProgram.instance_details.online_state == 'offline' || blockoProgram.instance_details.online_state == 'online') && blockoProgram.instance_details.server_online_state == 'online'" class="btn blue-hoki" (click)="onChangeVersionClick()">
                             <i class="fa fa-code-fork"></i> {{'btn_change_cloud_version'|bkTranslate:this}}
+                        </button>
+
+                        <button *ngIf="(blockoProgram.instance_details.online_state == 'not_yet_first_connected') && blockoProgram.instance_details.server_online_state == 'online'" class="btn blue-hoki" (click)="onChangeVersionClick()">
+                            <i class="fa fa-code-fork"></i> {{'btn_first_deploy_cloud_version'|bkTranslate:this}}
                         </button>
 
                     </div>
