@@ -298,7 +298,7 @@ let navigation = [
     // new LabeledLink('Log out',  ['/logout'] , 'sign-out')
 
     // Admin Labes
-    new LabeledLink('Platform Admin ', ['/admin-dashboard'], 'tachometer', { adminNavigation: true }),
+    new LabeledLink('Platform Admin ', ['/admin'], 'tachometer', { adminNavigation: true }),
     new LabeledLink('Byzance Wiki', ['https://wiki.byzance.cz'], 'wikipedia-w', { adminNavigation: true, outsideLink: true }),
     new LabeledLink('Youtrack Agile', ['https://youtrack.byzance.cz'], 'thumb-tack', { adminNavigation: true, outsideLink: true }),
     new LabeledLink('GitHub', ['https://youtrack.byzance.cz'], 'github', { adminNavigation: true, outsideLink: true }),

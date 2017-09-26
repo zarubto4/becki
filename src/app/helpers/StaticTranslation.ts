@@ -92,7 +92,7 @@ export class StaticTranslation {
                 'label_product_batch': 'Production Batch',
                 'label_pcb_product_manufacture': 'PCB Producer Name',
                 'label_pcb_product_manufacture_id': 'PCB Producer ID (VAT, IČO, etc)',
-                'label_assembly_product_manufacture': 'AssembleManufacture Name',
+                'label_assembly_product_manufacture': 'Assemble Manufacture Name',
                 'label_assembly_product_manufacture_id': 'Assemble Manufacture ID (VAT, IČO, etc)',
                 'label_mac_address_start': 'Mac Address start position (decimal numbers - 187723572641792)',
                 'label_mac_address_end': 'Mac Address End position (decimal numbers - 187723572641800)',
@@ -1980,7 +1980,7 @@ export class StaticTranslation {
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_hardware_type': 'Hardware type',
-                'label_producer': 'Producer',
+                'label_producer': 'Production Batch of this kind of Board (Collection) - Its Required!',
                 'label_main_test_version': 'Test version:',
                 'label_main_version': 'Production version',
                 'label_main_bootloader': 'Main bootloader',
@@ -2015,6 +2015,8 @@ export class StaticTranslation {
                 'label_company_made_description': 'Made Description for ex. \"Made in USA\"',
                 'label_who_testing': 'Tester Operator',
                 'label_garfield_station': 'Garfield Station',
+                'label_printer_not_found': 'Printer not found!',
+                'label_config': 'Configuration for Hardware settings',
 
 
                 'nav_step_one_title': 'Attach Hardware',

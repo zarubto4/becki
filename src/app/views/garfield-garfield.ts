@@ -47,6 +47,8 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     garfieldHardwareConnected: boolean = false; // Flag Register for initialization of connection (garfield Kit)
     testHardwareConnected: boolean = false; // Flag Register for initialization of connection (Device for testing)
 
+    formConfigJson: FormGroup;
+
     // For checking online state on printers
     reloadInterval: any = null;
 
@@ -70,6 +72,9 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             'batch': ['', [Validators.required]]
         });
 
+        this.formConfigJson = this.formBuilder.group({
+            'config': ['', [Validators.required]],
+        });
     }
 
     refresh(): void {
@@ -208,6 +213,25 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                     // not show error message -it will be showed in template
                 });
         }
+    }
+
+    visible_steps(): boolean {
+
+        return (
+            this.garfield
+            && this.typeOfBoard
+            && this.firmwareTestMainVersion
+            && this.bootLoader
+            && this.firmwareMainVersion
+            && this.printer_label_1
+            && this.printer_label_2
+            && this.print_sticker
+            && this.garfieldHardwareConnected
+            && this.test_firmware_file_Base64
+            && this.bootloader_file_Base64
+            && this.mainServer
+            && this.backupServer
+            && this.productionBatchForm.valid);
     }
 
     onTestPrinter(printerId: number) {
