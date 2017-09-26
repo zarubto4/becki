@@ -38,6 +38,14 @@ export interface IWebSocketErrorMessage extends IWebSocketMessage {
     error: string;
 }
 
+export interface IWebSocketGarfieldDeviceConnect extends IWebSocketMessage {
+    device_id: string;
+}
+
+export interface IWebSocketGarfieldDeviceConfigure extends IWebSocketMessage {
+    config: any;
+}
+
 export interface IWebSocketNotification extends INotification, IWebSocketMessage {
     state: ('created' | 'updated' | 'confirmed' | 'deleted');
 }
@@ -283,6 +291,8 @@ export interface ModelChangeStatus {
 export abstract class BeckiBackend extends TyrionAPI {
 
     public static WS_CHANNEL = 'becki';
+
+    public static WS_CHANNEL_GARFIELD = 'garfield';
 
     public host = '127.0.0.1:9000';
 
@@ -593,7 +603,7 @@ export abstract class BeckiBackend extends TyrionAPI {
                         }
                         return null;
                     })
-                    .filter(message => (message && message.message_channel === BeckiBackend.WS_CHANNEL));
+                    .filter(message => (message && (message.message_channel === BeckiBackend.WS_CHANNEL || message.message_channel === BeckiBackend.WS_CHANNEL_GARFIELD)));
                 let errorOccurred = Rx.Observable
                     .fromEvent(this.webSocket, 'error');
 

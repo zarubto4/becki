@@ -5,6 +5,7 @@
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import {
+    IBoard,
     IBootLoader, ICProgramVersionShortDetail, IGarfield, IHomerServer, IPrinter, IProducer,
     ITypeOfBoard
 } from '../backend/TyrionAPI';
@@ -14,6 +15,7 @@ import { ModalsGarfieldModel } from '../modals/garfield';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
+import { BeckiBackend, IWebSocketGarfieldDeviceConnect, IWebSocketGarfieldDeviceConfigure, IWebSocketMessage} from '../backend/BeckiBackend';
 
 @Component({
     selector: 'bk-view-garfield-garfield',
@@ -24,6 +26,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     garfield: IGarfield = null;
     garfieldId: string;
     typeOfBoard: ITypeOfBoard = null;
+    device: IBoard = null;
 
     firmwareTestMainVersion: ICProgramVersionShortDetail = null;    // Main Test Firmware
     firmwareMainVersion: ICProgramVersionShortDetail = null;        // Main Production Firmware
@@ -70,6 +73,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             'batch': ['', [Validators.required]]
         });
 
+        this.backendService.garfieldWebsocketRecived.subscribe(msg => this.onMessageGarfield(msg));
     }
 
     refresh(): void {
@@ -185,9 +189,9 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             });
 
         // And after that every 15 seconds
-        this.reloadInterval = setInterval(() => {
-            this.reloadPrinters();
-        }, 15000);
+        //this.reloadInterval = setInterval(() => {
+        //    this.reloadPrinters();
+        //}, 15000);
     }
 
     reloadPrinters(): void {
@@ -289,7 +293,47 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             });
     }
 
+    onMessageGarfield(message: IWebSocketMessage) {
+        switch (message.message_type) {
+            case 'device_connect': {
+                this.backendService.boardGet((<IWebSocketGarfieldDeviceConnect> message).device_id)
+                    .then((board) => {
+                        this.device = board;
+                        this.garfieldHardwareConnected = true;
+                        this.fmSuccess('Device detected.');
+                    })
+                    .catch((reason) => {
+                        this.fmError(this.translate('label_cant_load_device'));
+                    });
+                break;
+            }
+        }
+    }
 
+    onTestDevice() {
+        let message: IWebSocketMessage = {
+            message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
+            message_type: 'device_test',
+            message_id: this.backendService.uuid()
+        };
+
+        this.backendService.sendWebSocketMessage(message);
+    }
+
+
+    onConfigureDevice() {
+        let message: IWebSocketGarfieldDeviceConfigure = {
+            message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
+            message_type: 'device_configure',
+            message_id: this.backendService.uuid(),
+            config: { // TODO real config
+                normal_mqtt_host: 'dummy',
+                normal_mqtt_port: '0000'
+            }
+        };
+
+        this.backendService.sendWebSocketMessage(message);
+    }
 
     // Testovací Tlačítka -----------------------------------------------------------------
 

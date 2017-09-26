@@ -16,6 +16,16 @@
                         </span>
                     </div>
                     <div class="becki-actions">
+                        <button title="{{'label_configure_device'|bkTranslate:this}}" class="btn btn-icon-only blue"
+                                [disabled]="!garfieldHardwareConnected"
+                                (click)="onConfigureDevice()">
+                            <i class="fa fa-wrench"></i>
+                        </button>
+                        <button title="{{'label_test_device'|bkTranslate:this}}" class="btn btn-icon-only blue"
+                                [disabled]="!garfieldHardwareConnected"
+                                (click)="onTestDevice()">
+                            <i class="fa fa-bolt"></i>
+                        </button>
                         <button title="{{'label_create_garfield'|bkTranslate:this}}" class="btn btn-icon-only blue"
                                            [disabled]="false"
                                            (click)="onEditGarfield()">
