@@ -376,7 +376,7 @@ export class StaticTranslation {
             },
 
             'DashboardComponent': {
-                'title_first_steps': 'First steps',
+                'title_first_steps': 'FIRST STEPS',
                 'main_title': 'Dashboard',
                 'title': 'Welcome to Byzance <strong style="color: #36c6d3;"> PORTAL </strong> ',
                 'dashboard_info_text': 'We are Byzance – a technological laboratory of advanced automatization developing a toolkit for design, development and managing the \'Internet of Things\' (IoT) for industrial uses. We do not create smart washing machines, nor smart city furniture. We develop everything for our customers to let them do it themselves, easily and without any problems.',

@@ -25,6 +25,7 @@ import { ModalsLibraryPropertiesModel } from '../modals/library-properties';
 import { ModalsCodePropertiesModel } from '../modals/code-properties';
 import { ModalsPublicShareRequestModel } from '../modals/public-share-request';
 import { ModalsPublicShareResponseModel } from '../modals/public-share-response';
+import { ExitConfirmationService } from '../services/ExitConfirmationService';
 
 
 
@@ -38,6 +39,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
     libraryId: string;
 
     routeParamsSubscription: Subscription;
+    protected exitConfirmationService: ExitConfirmationService;
 
     // project: IProject = null;
 
@@ -58,6 +60,8 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
 
     constructor(injector: Injector) {
         super(injector);
+        this.exitConfirmationService = injector.get(ExitConfirmationService);
+        this.exitConfirmationService.setConfirmationEnabled(false);
     };
 
     /* TODO:
@@ -361,6 +365,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                 }
             });
         }
+        this.exitConfirmationService.setConfirmationEnabled(true);
         return changedFiles;
     }
 
@@ -381,7 +386,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_update')));
-                        this.navigate(['/projects', this.projectId , 'libraries']);
+                        this.navigate(['/projects', this.projectId, 'libraries']);
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
@@ -417,6 +422,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                 })
                     .then(() => {
                         this.fmSuccess(this.translate('flash_version_saved', m.name));
+                        this.exitConfirmationService.setConfirmationEnabled(false);
                         this.refresh();
                     })
                     .catch((err) => {

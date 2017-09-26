@@ -27,7 +27,6 @@
                         <th class="col col-lg-1"><strong class="font-color-blocko">BLOCKO</strong>{{'table_blocko_program'|bkTranslate:this}}</th>
                         <th class="col col-lg-1">{{'table_status'|bkTranslate:this}}</th>
                         <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-
                     </tr>
                 </thead>
                 <tbody>
@@ -36,8 +35,7 @@
                         <td class="vert-align no-wrap bold">
                             <a (click)="onInstanceClick(instance)" class="no-wrap"><strong>{{instance.name?instance.name:instance.id}}</strong></a>
                             <span *ngIf="!instance.name" class="icon-hint-wraper gray">
-                                    <i class="fa fa-info-circle font-color-byzance-blue"></i>
-                            <span class="hint">{{'label_own_name_and_description'|bkTranslate:this}}</span>
+                                <i  title="{{'label_own_name_and_description'|bkTranslate:this}}" class="fa fa-info-circle font-color-byzance-blue"></i>
                             </span>
                         </td>
                         <!--td class="no-wrap">{{instance.id}}</td-->

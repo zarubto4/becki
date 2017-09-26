@@ -19,7 +19,7 @@ import { ModalsConfirmModel } from '../modals/confirm';
 import { NullSafe } from '../helpers/NullSafe';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
-import { Core, EditorRenderer } from 'the-grid';
+import { Core, EditorRenderer, Widgets } from 'the-grid';
 import { ExitConfirmationService } from '../services/ExitConfirmationService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsGridProgramPropertiesModel } from '../modals/grid-program-properties';
@@ -192,7 +192,6 @@ export class ProjectsProjectGridGridsGridComponent extends BaseMainComponent imp
                 let gridProgram: IMProgram = values[1];
 
                 this.widgetGroups = typesOfWidgets;
-
                 this.gridProgram = gridProgram;
 
                 this.gridProgramVersions = this.gridProgram.program_versions || [];

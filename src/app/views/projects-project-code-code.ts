@@ -24,6 +24,7 @@ import { ModalsCodePropertiesModel } from '../modals/code-properties';
 import { ModalsSetAsMainModel } from '../modals/set-as-main';
 import { ModalsPublicShareRequestModel } from '../modals/public-share-request';
 import { ModalsPublicShareResponseModel } from '../modals/public-share-response';
+import { ExitConfirmationService } from '../services/ExitConfirmationService';
 
 
 
@@ -64,8 +65,15 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     fileChangeTimeout: any = null;
 
+    protected exitConfirmationService: ExitConfirmationService = null;
+
+
     constructor(injector: Injector) {
         super(injector);
+
+        this.exitConfirmationService = injector.get(ExitConfirmationService);
+        this.exitConfirmationService.setConfirmationEnabled(false);
+
     };
 
     ngOnInit(): void {
@@ -127,8 +135,8 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         return !version
             && !this.projectId
             && !this.device
-            && ( this.device.main_test_c_program  != null ||   this.device.main_c_program == null)
-            && ( this.device.main_test_c_program.id === this.codeProgram.id ||  this.device.main_c_program.id === this.codeProgram.id)
+            && (this.device.main_test_c_program != null || this.device.main_c_program == null)
+            && (this.device.main_test_c_program.id === this.codeProgram.id || this.device.main_c_program.id === this.codeProgram.id)
             && version.status === 'successfully_compiled_and_restored'
             && !version.main_mark;
     }
@@ -372,6 +380,8 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             clearTimeout(this.fileChangeTimeout);
         }
         this.fileChangeTimeout = setTimeout(() => this.onFileContentChangeDebounced(), 500);
+        this.exitConfirmationService.setConfirmationEnabled(true);
+
     }
 
     onFileContentChangeDebounced() {
@@ -394,7 +404,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
                         this.unblockUI();
                         if (this.projectId != null) {
-                            this.navigate(['/project', this.projectId , 'code']);
+                            this.navigate(['/project', this.projectId, 'code']);
                         }
 
                     })
@@ -619,6 +629,8 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 })
                     .then(() => {
                         this.fmSuccess(this.translate('flash_code_version_save', m.name));
+                        this.exitConfirmationService.setConfirmationEnabled(true);
+
                         this.refresh();
                     })
                     .catch((err) => {
