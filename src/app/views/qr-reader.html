@@ -6,9 +6,5 @@
     </div>
     <div class="clearfix"></div>
     <span>{{qrStatus}}</span>
-    <div class="row">
-        <button *ngIf="foundQR" class="col-6 btn green btn-outline" (click)="onScanAgain()">{{'btn_rescan'|bkTranslate:this}}</button>
-        <button *ngIf="foundQR" class="col-6 btn green btn-outline" (click)="onScanConfirm()">{{'btn_confirm_scan'|bkTranslate:this}}</button>
-    </div>
     <div class="clearfix"></div>
 </div>

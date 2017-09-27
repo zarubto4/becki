@@ -1,5 +1,5 @@
 
-import { Component, Injector, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, Injector, OnInit, ViewChild, ElementRef, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { QRCodeComponent } from '../components/QRCodeComponent';
 import { Observable } from 'rxjs/Rx';
@@ -11,7 +11,7 @@ const jsQR = require('jsqr');
     selector: 'bk-view-qr-reader',
     templateUrl: './qr-reader.html'
 })
-export class ReaderQrComponent extends BaseMainComponent implements OnInit {
+export class ReaderQrComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
 
     @ViewChild('video') video: ElementRef;
@@ -36,6 +36,10 @@ export class ReaderQrComponent extends BaseMainComponent implements OnInit {
 
     ngOnInit(): void {
         this.startCapture();
+    }
+
+    ngOnDestroy(): void {
+
     }
 
     startCapture() {
@@ -67,7 +71,7 @@ export class ReaderQrComponent extends BaseMainComponent implements OnInit {
             let decoded = jsQR.decodeQRFromImage(imageData.data, imageData.width, imageData.height);
             if (decoded) {
 
-                if (decoded.slice(0, 3) === 'HWR') {
+                if (decoded.slice(0, 2) === 'HW') {
                     this.confirmedCapture(decoded);
                 } else {
                     this.qrStatus = this.translate('not_valid_byzance_qr_code');
@@ -77,15 +81,6 @@ export class ReaderQrComponent extends BaseMainComponent implements OnInit {
 
     }
 
-
-    onScanAgain() {
-        this.video.nativeElement.play();
-        this.foundQR = false;
-        this.scanLoop = Observable.interval(100).subscribe(() => {
-            this.onCapture();
-        });
-        this.qrStatus = '';
-    }
 
     onScanConfirm() {
         if (this.foundQR && this.qrcode) {
@@ -116,7 +111,8 @@ export class ReaderQrComponent extends BaseMainComponent implements OnInit {
         this.qrStatus = this.translate('byzance_qr_code_found');
 
 
-        this.qrcode = decoded;
+        this.qrcode = decoded.slice(2, decoded.length);
+        this.onScanConfirm();
     }
 
 }
