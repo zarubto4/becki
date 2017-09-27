@@ -1456,8 +1456,8 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectBlocksBlocksBlockComponent': {
                 'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - BLOCK <strong>{0}</strong>',
-
-                'label_description': '<strong class="font-color-blocko">BLOCKO</strong> Block Description: <strong>{0}</strong>',
+                'label_name': '<strong class="font-color-blocko">BLOCKO</strong> Block Name:',
+                'label_description': '<strong class="font-color-blocko">BLOCKO</strong> Block Description:',
                 'label_group': '<strong class="font-color-blocko">BLOCKO</strong> Block Group Name',
                 'label_console_output': 'Output <strong>{0}</strong> = {1}',
 

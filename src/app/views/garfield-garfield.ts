@@ -2,7 +2,7 @@
  * Created by davidhradek on 05.12.16.
  */
 
-import { Component, Injector, OnInit } from '@angular/core';
+import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import {
     IBootLoader, ICProgramVersionShortDetail, IGarfield, IHomerServer, IPrinter, IProducer,
@@ -19,7 +19,7 @@ import { FormSelectComponentOption } from '../components/FormSelectComponent';
     selector: 'bk-view-garfield-garfield',
     templateUrl: './garfield-garfield.html'
 })
-export class GarfieldGarfieldComponent extends BaseMainComponent implements OnInit {
+export class GarfieldGarfieldComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     garfield: IGarfield = null;
     garfieldId: string;
@@ -75,6 +75,11 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
         this.formConfigJson = this.formBuilder.group({
             'config': ['', [Validators.required]],
         });
+    }
+
+    ngOnDestroy(): void {
+        this.routeParamsSubscription.unsubscribe();
+        clearInterval(this.reloadInterval);
     }
 
     refresh(): void {

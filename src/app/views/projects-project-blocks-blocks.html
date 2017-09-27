@@ -31,7 +31,8 @@
             </div>
         </div>
         <div>
-            <span [innerHTML]="'label_blocko_description'|bkTranslate:this:(group?group.description:'')"></span>
+            <span [innerHTML]="'label_blocko_description'|bkTranslate:this"></span>
+            <span>{{group?group.description:""}}</span>
             <br>
         </div>
         <div *ngIf="(group && group.blocko_blocks && group.blocko_blocks.length)" class="table-scrollable">
