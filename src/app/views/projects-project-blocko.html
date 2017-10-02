@@ -25,14 +25,14 @@
                 <tr>
                     <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
                     <th class="col col-lg-9">{{'table_description'|bkTranslate:this}}</th>
-                    <th class="col col-lg-1 text-center">{{'table_actions'|bkTranslate:this}}</th>
+                    <th class="col col-lg-1 text-right">{{'table_actions'|bkTranslate:this}}   </th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let blocko of blockoPrograms">
                     <td class="vert-align no-wrap bold"><a (click)="onBlockoClick(blocko)">{{blocko.name}}</a></td>
                     <td class="vert-align">{{blocko.description}}</td>
-                    <td class="vert-align no-wrap">
+                    <td class="vert-align no-wrap text-right">
 
                         <style type="text/css">
                             table tr button { opacity:0.05;}

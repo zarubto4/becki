@@ -268,6 +268,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                 })
                     .then(() => {
                         this.onFilterHardware();
+                        this.unblockUI();
                     }).catch(reason => {
                         this.unblockUI();
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
@@ -286,8 +287,8 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                 this.unblockUI();
             })
             .catch((reason) => {
-                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
                 this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
     }
 
@@ -302,6 +303,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                 this.backendService.boardDeactivate(board.id)
                     .then(() => {
                         this.refresh();
+                        this.unblockUI();
                     }).catch(reason => {
                         this.unblockUI();
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
@@ -318,13 +320,43 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                 this.backendService.boardEditPersonalDescription(device.id, { name: model.name, description: model.description })
                     .then(() => {
                         this.refresh();
+                        this.unblockUI();
                     })
                     .catch(reason => {
+                        this.unblockUI();
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail', reason)));
                     });
             }
         });
     }
+
+
+    onHardwareSynchronize(): void {
+        this.blockUI();
+        this.backendService.boardSynchronizeAllWithCentralRegistrationAuthority()
+            .then(() => {
+                this.unblockUI();
+                this.refresh();
+            })
+            .catch(reason => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail', reason)));
+
+            });
+    }
+
+    onPrintLabelHardwareClick(device: IBoardShortDetail): void {
+        this.blockUI();
+        this.backendService.boardPrintlabel(device.id)
+            .then(() => {
+                this.unblockUI();
+            })
+            .catch(reason => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail', reason)));
+            });
+    }
+
 
 }
 

@@ -269,7 +269,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
     }
 
     onCProgramClick(cprogramId: string): void {
-        this.navigate(['admin/hardware/code/', cprogramId]);
+        this.navigate([cprogramId]);
     }
 
     onCProgramDefaultSetMainClick(version: ICProgramVersionShortDetail) {

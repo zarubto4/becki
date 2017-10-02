@@ -14,11 +14,51 @@
                               {{'title'|bkTranslate:this}}
                         </span>
                     </div>
+                    <div class="becki-actions">
+                        <div *ngIf="tab == 'hardware_list'">
+                            <button title="{{'label_create_manually_hardware'|bkTranslate:this}}" class="btn btn-icon-only green"
+                                    [disabled]="false"
+                                    (click)="onCreateHardwareClick()">
+                                <i class="fa fa-plus-circle"></i>
+                            </button>
+                            <button title="{{'label_add_new_with_full_flow'|bkTranslate:this}}" class="btn btn-icon-only green"
+                                    [disabled]="false"
+                                    [routerLink]="['/admin/garfield']">
+                                <i class="fa fa-plus-circle"></i>
+                                <i class="fa fa-fire"></i>
+                            </button>
+                            <button title="{{'label_add_new_with_full_flow'|bkTranslate:this}}" class="btn btn-icon-only yellow"
+                                    [disabled]="false"
+                                    (click)="onHardwareSynchronize()">
+                                <i class="fa fa-plus-circle"></i>
+                                <i class="fa fa-refresh"></i>
+                            </button>
+                        </div>
+                        <div *ngIf="tab == 'hardware_type' && typeOfBoards && typeOfBoards.length">
+                            <button title="{{'label_create_type_of_board'|bkTranslate:this}}" class="btn btn-icon-only green"
+                                    [disabled]="false"
+                                    (click)="onCreateTypeOfBoardClick()">
+                                <i class="fa fa-plus-circle"></i>
+                            </button>
+                        </div>
+                        <div *ngIf="tab == 'producers' && producers && producers.length">
+                            <button title="{{'label_create_type_of_board'|bkTranslate:this}}" class="btn btn-icon-only green"
+                                    [disabled]="false"
+                                    (click)="onCreateProducerClick()">
+                                <i class="fa fa-plus-circle"></i>
+                            </button>
+                        </div>
+                        <div *ngIf="tab == 'processor' && processors && processors.length">
+                            <button title="{{'label_create_type_of_board'|bkTranslate:this}}" class="btn btn-icon-only green"
+                                    [disabled]="false"
+                                    (click)="onCreateProcessorClick()">
+                                <i class="fa fa-plus-circle"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-
                 <div class="portlet-title tabbable-line">
-                    <!--ul class="nav nav-tabs margin-left-15 pull-left"-->
-                    <ul class="nav nav-tabs pull-left">
+                    <ul class="nav nav-tabs pull-left margin-left-15">
                         <li [class.active]="tab == 'hardware_list'">
                             <a class="cursor-pointer" (click)="onToggleTab('hardware_list')">{{'tab_hardware_list'|bkTranslate:this}}</a>
                         </li>
@@ -35,21 +75,7 @@
                 </div>
 
                 <!-- Device List -->
-
                 <div *ngIf="tab == 'hardware_list'">
-                    <div *ngIf="boardsFiler"  class="becki-actions">
-                        <button title="{{'label_create_manually_hardware'|bkTranslate:this}}" class="btn btn-icon-only green"
-                                [disabled]="false"
-                                (click)="onCreateHardwareClick()">
-                            <i class="fa fa-plus-circle"></i>
-                        </button>
-                        <button title="{{'label_add_new_with_full_flow'|bkTranslate:this}}" class="btn btn-icon-only green"
-                                [disabled]="false"
-                                [routerLink]="['/admin/garfield']">
-                            <i class="fa fa-plus-circle"></i>
-                            <i class="fa fa-fire"></i>
-                        </button>
-                    </div>
                     <div *ngIf="(boardsFiler && boardsFiler.content.length)" class="table-scrollable">
                         <table class="table table-hover">
                             <thead>
@@ -92,6 +118,9 @@
                                         table tr:hover button { opacity:1 }
                                     </style>
 
+                                    <button title="{{'label_print_stickers'|bkTranslate:this}}" class="btn btn-icon-only yellow" (click)="onPrintLabelHardwareClick(device)">
+                                        <i class="fa fa-print"></i>
+                                    </button>
                                     <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!device.edit_permission" (click)="onEditHardwareClick(device)">
                                         <i class="fa fa-cog"></i>
                                     </button>
@@ -110,16 +139,9 @@
                     </div>
                 </div>
 
-                <!-- Hardware Types -->
 
+                <!-- Hardware Types -->
                 <div *ngIf="tab == 'hardware_type'">
-                    <div *ngIf="(typeOfBoards && typeOfBoards.length)"  class="becki-actions">
-                        <button title="{{'label_create_type_of_board'|bkTranslate:this}}" class="btn btn-icon-only green"
-                                [disabled]="false"
-                                (click)="onCreateTypeOfBoardClick()">
-                            <i class="fa fa-plus-circle"></i>
-                        </button>
-                    </div>
                     <div *ngIf="(typeOfBoards && typeOfBoards.length)" class="table-scrollable">
                         <table class="table table-hover">
                             <thead>
@@ -189,15 +211,7 @@
 
 
                 <!-- Producers-->
-
                 <div *ngIf="tab == 'producers'">
-                    <div *ngIf="(producers && producers.length)"  class="becki-actions">
-                        <button title="{{'label_create_type_of_board'|bkTranslate:this}}" class="btn btn-icon-only green"
-                                [disabled]="false"
-                                (click)="onCreateProducerClick()">
-                            <i class="fa fa-plus-circle"></i>
-                        </button>
-                    </div>
                     <div *ngIf="(producers && producers.length)" class="table-scrollable">
                         <table class="table table-hover">
                             <thead>
@@ -245,15 +259,7 @@
 
 
                 <!-- Processor -->
-
                 <div *ngIf="tab == 'processor'">
-                    <div *ngIf="(processors && processors.length)"  class="becki-actions">
-                        <button title="{{'label_create_type_of_board'|bkTranslate:this}}" class="btn btn-icon-only green"
-                                [disabled]="false"
-                                (click)="onCreateProcessorClick()">
-                            <i class="fa fa-plus-circle"></i>
-                        </button>
-                    </div>
                     <div *ngIf="(processors && processors.length)" class="table-scrollable">
                         <table class="table table-hover">
                             <thead>
@@ -302,7 +308,6 @@
                         </p>
                     </div>
                 </div>
-
 
 
             </div>
