@@ -10,8 +10,7 @@ import { OnInit, Component, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { ICustomer, IPaymentDetails, IProduct } from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
-import { ModalsFinancialProductModel } from '../modals/financial-product';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
+import { FlashMessageError } from '../services/NotificationService';
 import { ModalsBillingInformationModel } from '../modals/billing-information';
 import { ModalsCompanyInformationModel } from '../modals/company-information';
 

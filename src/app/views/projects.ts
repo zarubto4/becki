@@ -102,7 +102,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_create_project', model.name, reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_create_project', model.name, reason.message)));
                         this.refresh(); // also unblockUI
                     });
             }

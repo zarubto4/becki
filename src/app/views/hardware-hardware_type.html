@@ -68,34 +68,10 @@
         </div>
     </div>
 
-    <!-- Standard visible for users -->
-    <div *ngIf="typeOfBoard && typeOfBoard.main_boot_loader" class="portlet portlet light bordered">
-        <div class="portlet-title">
-            <div class="becki-caption">
-                <span class="font-blue-dark uppercase">
-                    <i class="fa fa-fw fa-terminal"></i>
-                    {{'label_bootloader'|bkTranslate:this}}
-                </span>
-            </div>
-        </div>
-        <div>
-            <div>
-                {{'label_bootloader_name'|bkTranslate:this}}:
-                <span class="font-color-neutral-dark bold">{{typeOfBoard.main_boot_loader.name}}</span>
-            </div>
-            <div>
-                {{'label_bootloader_description'|bkTranslate:this}}:
-                <span class="font-color-neutral-dark bold">{{typeOfBoard.main_boot_loader.description}}</span>
-            </div>
-            <div>
-                {{'label_bootlaoder_date'|bkTranslate:this}}:
-                <span class="font-color-neutral-dark bold">{{typeOfBoard.main_boot_loader.date_of_create|bkUnixTimeToDate}}</span>
-            </div>
-        </div>
-    </div>
+
 
     <!-- Only with permission -->
-    <div *ngIf="typeOfBoard && typeOfBoard.bootloader_edit_permission" class="portlet portlet light bordered">
+    <div *ngIf="typeOfBoard " class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
                 <span class="font-blue-dark uppercase">
@@ -145,16 +121,24 @@
                                 table tr button { opacity:0.05;}
                                 table tr:hover button { opacity:1 }
                             </style>
-                            <button title="{{'label_type_of_board_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!bootloader.edit_permission" (click)="onBootloaderEditClick(bootloader)">
+
+
+                            <a *ngIf="bootloader.file_path" href="{{bootloader.file_path}}">
+                                <button title="{{'label_bootloader_download_file'|bkTranslate:this}}" class="btn btn-icon-only blue">
+                                    <i class="fa fa-cloud-download"></i>
+                                </button>
+                            </a>
+
+                            <button *ngIf="typeOfBoard.bootloader_edit_permission" title="{{'label_type_of_board_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onBootloaderEditClick(bootloader)">
                                 <i class="fa fa-cog"></i>
                             </button>
-                            <button *ngIf="!bootloader.main_bootloader && bootloader.file_path" title="{{'label_bootloader_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!bootloader.update_permission" (click)="onBootloaderSetMainClick(bootloader)">
+                            <button *ngIf="typeOfBoard.bootloader_edit_permission && !bootloader.main_bootloader && bootloader.file_path" title="{{'label_bootloader_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!bootloader.update_permission" (click)="onBootloaderSetMainClick(bootloader)">
                                 <i class="fa fa-flag"></i>
                             </button>
-                            <button *ngIf="!bootloader.file_path" title="{{'label_bootloader_upload_file'|bkTranslate:this}}" class="btn btn-icon-only orange" [disabled]="!bootloader.update_permission" (click)="onBootloaderUpdateFile(bootloader)">
+                            <button *ngIf="typeOfBoard.bootloader_edit_permission && !bootloader.file_path" title="{{'label_bootloader_upload_file'|bkTranslate:this}}" class="btn btn-icon-only orange" [disabled]="!bootloader.update_permission" (click)="onBootloaderUpdateFile(bootloader)">
                                 <i class="fa fa-file-code-o"></i>
                             </button>
-                            <button title="{{'label_bootloader_remove'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!bootloader.delete_permission" (click)="onBootloaderDeleteClick(bootloader)">
+                            <button *ngIf="typeOfBoard.bootloader_edit_permission" title="{{'label_bootloader_remove'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onBootloaderDeleteClick(bootloader)">
                                 <i class="fa fa-trash"></i>
                             </button>
                         </td>
@@ -163,7 +147,7 @@
                 </table>
             </div>
             <h3  *ngIf="!typeOfBoard.boot_loaders" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
-            <div *ngIf="typeOfBoard.boot_loaders && typeOfBoard.boot_loaders.length == 0" class="list-no-items">
+            <div *ngIf="typeOfBoard.boot_loaders && typeOfBoard.boot_loaders.length == 0 " class="list-no-items">
                 <p class="list-no-items__main-label">{{'label_no_bootloaders'|bkTranslate:this}}</p>
                 <p class="list-no-items__sub-label">{{'label_no_bootloaders_comment'|bkTranslate:this}} </p>
                 <p>
@@ -187,7 +171,7 @@
             <div class="becki-actions">
 
                 <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!typeOfBoard.default_c_program_edit_permission"
-                        (click)="onCProgramClick(typeOfBoard.main_c_program.id)">
+                        [routerLink]="[typeOfBoard.main_test_c_program.id]">
                     <i class="fa fa-plus"></i>
                 </button>
                 <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!typeOfBoard.default_c_program_edit_permission"
@@ -222,7 +206,7 @@
                         <tr *ngFor="let version of typeOfBoard.main_c_program.program_versions">
                         <!-- NAME -->
                         <td class="vert-align bold">
-                            <a [routerLink]="['/admin/hardware/code/', typeOfBoard.main_c_program.id]">
+                            <a [routerLink]="[typeOfBoard.main_c_program.id]">
                                 {{version.version_name}}
                             </a>
                         </td>
@@ -327,7 +311,7 @@
             </div>
             <div class="becki-actions">
                 <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!typeOfBoard.test_c_program_edit_permission"
-                        (click)="onCProgramClick(typeOfBoard.main_test_c_program.id)">
+                        [routerLink]="[typeOfBoard.main_test_c_program.id]">
                     <i class="fa fa-plus"></i>
                 </button>
                 <button title="{{'label_type_of_boards_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" [disabled]="!typeOfBoard.test_c_program_edit_permission"
@@ -448,7 +432,7 @@
                 <p class="list-no-items__main-label">{{'label_no_c_program_versions'|bkTranslate:this}}</p>
                 <p class="list-no-items__sub-label">{{'label_no_c_program_versions_comment'|bkTranslate:this}} </p>
                 <p>
-                    <button class="btn blue" [routerLink]="['/admin/hardware/code/', typeOfBoard.main_test_c_program.id]">
+                    <button class="btn blue" [routerLink]="[typeOfBoard.main_test_c_program.id]">
                         <i class="fa fa-plus-circle"></i> {{'btn_create_c_program_version'|bkTranslate:this}}
                     </button>
                 </p>

@@ -14,7 +14,7 @@ import { ModalModel } from '../services/ModalService';
 import { FormSelectComponentOption, formSelectComponentOptionsMaker } from '../components/FormSelectComponent';
 import { ITypeOfBoard } from '../backend/TyrionAPI';
 
-
+// TODO Rozdělit kopírování a pak Crate a Edit! ( Dva modaly prostě) - Je to upodmínkované jako piča [TZ]
 export class ModalsCodePropertiesModel extends ModalModel {
     constructor(
         public typeOfBoards: ITypeOfBoard[],

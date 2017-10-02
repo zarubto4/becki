@@ -18,7 +18,7 @@ import { ModalsGridProjectPropertiesModel } from '../modals/grid-project-propert
 })
 export class ProjectsProjectGridGridsComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
-    id: string; // Project ID
+    projectId: string; // Project ID
     gridsId: string; // M Project ID
 
     routeParamsSubscription: Subscription;
@@ -34,11 +34,14 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
 
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
-            this.id = params['project'];
+            this.projectId = params['project'];
             this.gridsId = params['grids'];
-            this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
-                this.gridProject = project.m_projects.find((mp) => mp.id === this.gridsId);
-            });
+
+            if (this.projectId) {
+                this.projectSubscription = this.storageService.project(this.projectId).subscribe((project) => {
+                    this.gridProject = project.m_projects.find((mp) => mp.id === this.gridsId);
+                });
+            }
         });
     }
 
@@ -65,18 +68,22 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_program_add')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_grid_program', reason)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }
                     });
             }
         });
     }
 
     refresh(): void {
-        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
         this.navigate(['/projects', this.currentParamsService.get('project'), 'grid', this.gridsId]);
     }
 
@@ -109,8 +116,13 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
                 this.backendService.mProjectDelete(this.gridProject.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_project_remove')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
-                        this.router.navigate(['/projects/' + this.id + '/grid']);
+
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                            this.router.navigate(['/projects/' + this.projectId + '/grid']);
+                        }else {
+                            this.router.navigate(['/admin/widgets']);
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_grid_project', reason)));

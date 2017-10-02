@@ -51,6 +51,7 @@ export class StaticTranslation {
                 'label_program_description': 'Program description in the public list',
                 'label_version_name': 'Version name in the public list',
                 'label_version_description': 'Version description in the public list',
+                'label_group_select': 'Group / Type where it will be registered',
                 'label_approve': 'The program will be published',
                 'label_reason': 'If not - there is a place for comment for the author.',
                 'btn_decide': 'Make decision',
@@ -91,7 +92,7 @@ export class StaticTranslation {
                 'label_product_batch': 'Production Batch',
                 'label_pcb_product_manufacture': 'PCB Producer Name',
                 'label_pcb_product_manufacture_id': 'PCB Producer ID (VAT, IČO, etc)',
-                'label_assembly_product_manufacture': 'AssembleManufacture Name',
+                'label_assembly_product_manufacture': 'Assemble Manufacture Name',
                 'label_assembly_product_manufacture_id': 'Assemble Manufacture ID (VAT, IČO, etc)',
                 'label_mac_address_start': 'Mac Address start position (decimal numbers - 187723572641792)',
                 'label_mac_address_end': 'Mac Address End position (decimal numbers - 187723572641800)',
@@ -128,6 +129,7 @@ export class StaticTranslation {
             }, 'ModalsCreateHomerServerComponent': {
                 'title': 'Create new Server',
                 'label_personal_server_name': 'Server name',
+                'label_server_url_comment': 'URL Address without port & schama (ftp, ws, http etc ..) When entering an IP address, it is necessary to specify the correct format according to ISO standard.',
                 'label_server_url': 'Server url (without http..)',
                 'label_mqtt_username': 'Mqtt user name',
                 'label_mqtt_port': 'Mqtt port',
@@ -185,8 +187,8 @@ export class StaticTranslation {
             }, 'ModalsBlocksBlockPropertiesComponent': {
                 'title_edit': '<strong class="font-color-blocko">BLOCKO</strong> Properties',
                 'title_add': 'Add <strong class="font-color-blocko">BLOCKO</strong>',
-                'label_block_name': 'name',
-                'label_block_description': 'description',
+                'label_block_name': 'Name',
+                'label_block_description': 'Description',
 
 
             }, 'ModalsBlocksTypePropertiesComponent': {
@@ -778,6 +780,7 @@ export class StaticTranslation {
                 'label_bootlaoder_date': 'Date',
                 'label_bootloader_remove': 'Remove bootloader',
                 'label_bootloader_set_as_main': 'Set bootloader as main',
+                'label_bootloader_download_file': 'Download bootloader for manual restore',
                 'label_type_of_board_properties': 'Change bootloader properties',
                 'label_main_bootloader': 'Main bootloader',
                 'label_bootloader_settings': 'Bootloader settings',
@@ -799,6 +802,7 @@ export class StaticTranslation {
                 'table_revision': 'Revision',
                 'table_production_batch': 'Production Batch',
                 'table_mac_range': 'MacAddress Range',
+                'table_ean': 'Ean Code',
                 'table_assembly_time': 'Assembly Date',
 
                 'label_c_program_version_set_as_main': 'Set this version as a main',
@@ -894,9 +898,10 @@ export class StaticTranslation {
                 'main_title': 'Account Settings',
                 'title': 'Your profile',
                 'nav_personal_info': 'Personal Information',
-                'nav_avatar': 'Change Avatar',
-                'nav_password': 'Change Password',
-                'nav_email': 'Change E-mail',
+                'nav_avatar': 'Avatar',
+                'nav_password': 'Password',
+                'nav_email': 'E-mail Settings',
+                'nav_logins': 'Login Management',
 
                 'label_full_name': 'Full Name',
                 'label_nick_name': 'Nickname',
@@ -915,6 +920,11 @@ export class StaticTranslation {
                 'btn_change_password': 'Change password',
                 'btn_change_email': 'Change E-mail',
                 'label_set_own_picture': 'Set profile picture',
+                'table_system_component': 'System Component',
+                'table_user_agent': 'User Agent',
+                'table_created': 'Created',
+                'table_access_age': 'Expiration',
+                'table_actions': 'Actions',
 
                 'flash_cant_change_password': 'Could not change password, {0}.',
                 'flash_email_was_send': 'E-mail with instructions was sent.',
@@ -949,6 +959,7 @@ export class StaticTranslation {
                 'btn_upload_on_cloud': 'Upload Latest Configuration to Cloud',
                 'btn_turn_off_instance': 'Shutdown instance',
                 'btn_change_cloud_version': 'Change Version',
+                'btn_first_deploy_cloud_version': 'Deploy to cloud',
                 'btn_select_cloud_version': 'Select & Upload Version to Cloud',
                 'label_no_devices_added': 'No devices added in this <strong class="font-color-blocko">BLOCKO</strong> program.',
                 'label_select_version': 'Select Version',
@@ -1010,7 +1021,7 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectHardwareComponent': {
 
-                'title': 'all devices',
+                'title': 'All devices',
                 'label_loading': 'Loading',
                 'label_name': 'Name',
                 'label_id': 'Full ID',
@@ -1019,7 +1030,7 @@ export class StaticTranslation {
                 'label_status': 'Status',
                 'label_actions': 'Actions',
                 'btn_add_hardware': ' Add a Device',
-                'label_no_hardware': 'No hardware in this project.',
+                'label_no_hardware': 'No <strong class="font-color-hardware">HARDWARE</strong> in this project.',
                 'label_no_hardware_comment': 'Click on the button bellow to add a new device.',
                 'label_device_properties': 'Device properties',
                 'label_remove_device': 'Remove device',
@@ -1130,7 +1141,7 @@ export class StaticTranslation {
                 'label_upload_instance_modal': 'Deploy to Cloud',
                 'label_upload_instance_modal_comment': 'The last used <strong class="font-color-blocko">BLOCKO</strong> configuration will be uploaded to the server.',
                 'label_upload_error': 'Unable to shutdown this instance, {0}.',
-                'label_no_item': 'No instance in Cloud found.',
+                'label_no_item': 'No instances found in <strong class="font-color-cloud">CLOUD</strong>.',
                 'label_you_can_create': 'Are you sure to upload <strong class="font-color-blocko">BLOCKO</strong> and deploy instance to the Cloud?',
                 'label_shutdown_instance': 'Shutdown instance',
                 'label_upload_latest_used_version': 'Upload Latest Configuration to Cloud',
@@ -1240,7 +1251,7 @@ export class StaticTranslation {
                 'label_remove_program': 'Remove CODE program',
                 'label_list_no_item_main': 'There is not any code library in this project',
                 'label_list_no_item_sub': 'You can create it by click on button bellow.',
-                'label_no_public_library': 'No public Libraries ',
+                'label_no_public_library': 'No public <strong class="font-color-code">CODE</strong> Libraries',
                 'label_create_public_library_comment': 'If you do not see your dream library, create it and share it with others.',
 
                 'btn_add_library': 'New Library',
@@ -1294,8 +1305,8 @@ export class StaticTranslation {
                 'label_version_properties': 'Version properties',
                 'label_remove_version': 'Remove version',
                 'label_save': 'SAVED VERSIONS',
-                'label_name': 'Name',
-                'label_description': 'Description',
+                'label_name': '<strong class="font-color-code">CODE</strong>Library Name',
+                'label_description': '<strong class="font-color-code">CODE</strong>Library Description',
                 'label_version': 'Version',
                 'label_no_library_version': 'There are no libraries yet.',
                 'label_library_make_copy': 'Make a copy of Library.',
@@ -1328,14 +1339,23 @@ export class StaticTranslation {
                 'label_invitation_sent': 'Invitation(s) sent.',
 
             }, 'ProjectsProjectWidgetsComponent': {
-
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Community Grid Administration',
                 'title': 'Byzance<strong class="font-color-grid">GRID</strong> - ALL WIDGET GROUPS',
-
-                'btn_add_widget_group': 'Create GRID widget group',
-
                 'table_name': 'Name',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
+                'btn_add_widget_group': 'Create GRID widget group',
+                'tab_public_groups': 'Public Groups',
+                'tab_private_groups': 'Private Groups',
+                'tab_programs_for_decisions': 'Widgets waiting for decision',
+                'table_group_size': 'Count of Widgets',
+
+                'label_no_programs': 'No Widgets',
+                'label_no_program_comment': 'No widgets for community administrator decision',
+                'label_no_groups': 'No public <strong class="font-color-grid">GRID</strong> widgets available',
+                'label_no_groups_comment': 'If you do not see your dream widget, create it and share it with others.',
+                'btn_create_group': 'Create Group',
 
                 'flash_grid_group_add_success': 'Version has been successfully created.',
                 'flash_grid_group_add_fail': 'Unable to create version, {0}.',
@@ -1344,18 +1364,19 @@ export class StaticTranslation {
                 'flash_grid_group_remove_success': 'Version has been removed.',
                 'flash_grid_group_remove_fail': 'Unable to remove version, {0}.',
 
-                'label_no_item': 'No widget groups in this project.',
-                'label_you_can_create': 'Click on the button bellow to create a group.',
+                'label_no_item': 'No <strong class="font-color-grid">GRID</strong> widget groups in this project.',
+                'label_you_can_create': 'Click on the button bellow to create a group to collect your own widgets',
                 'label_group_properities': 'Group properties',
                 'label_remove_group': 'Remove group',
 
             }, 'ProjectsProjectWidgetsWidgetsComponent': {
-
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Community Widget Group',
                 'title': 'Byzance<strong class="font-color-grid">GRID</strong> - WIDGET GROUP <strong>{0}</strong>',
 
                 'btn_add_widget': 'Create GRID widget',
                 'widget_group_name': 'Group Name',
-                'widget_group_description': 'Description',
+                'widget_group_description': '<strong class="font-color-grid">GRID</strong> Widget Group Description: <strong>{0}</strong>',
 
                 'table_name': 'Name',
                 'table_description': 'Description',
@@ -1378,13 +1399,14 @@ export class StaticTranslation {
                 'flash_widget_edit_success': 'Widget has been edited.',
                 'flash_widget_edit_fail': 'Unable to edit widget, {0}.',
 
-                'label_no_item': 'No widgets in this group.',
+                'label_no_item': 'No <strong class="font-color-grid">GRID</strong> widgets in this group.',
                 'label_you_can_create': 'Click on the button bellow to create a widget.',
 
             }, 'ProjectsProjectWidgetsWidgetsWidgetComponent': {
 
-
                 'title': 'Byzance<strong class="font-color-grid">GRID</strong> - WIDGET <strong>{0}</strong>',
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Widget Editor',
 
                 'flash_version_save_success': 'Version <b>{0}</b> saved successfully.',
                 'flash_version_save_fail': 'Unable to save version <b>{0}</b>, {1}.',
@@ -1404,7 +1426,7 @@ export class StaticTranslation {
                 'label_widget_code': 'Widget Code',
                 'label_name': 'Name',
                 'label_description': 'Description',
-                'label_grid_group_name': 'Widget Group',
+                'label_grid_group_name': '<strong class="font-color-grid">GRID</strong> Widget Group',
                 'label_version': 'Version',
                 'label_ide': 'IDE',
                 'label_build_errors': 'Build Errors',
@@ -1427,7 +1449,7 @@ export class StaticTranslation {
                 'label_blocko_remove': 'Remove BLOCKO program',
                 'label_blocko_program_properties': 'BLOCKO program properties',
                 'label_no_blocko_program': 'No <strong class="font-color-blocko">BLOCKO</strong> programs available.',
-                'label_create_blocko_text': 'Click on the button bellow to create a program.',
+                'label_create_blocko_text': 'Click on the button bellow to create your first a program or use public one.',
                 'table_name': 'Name',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
@@ -1442,8 +1464,8 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectBlocksBlocksBlockComponent': {
                 'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - BLOCK <strong>{0}</strong>',
-
-                'label_description': '<strong class="font-color-blocko">BLOCKO</strong> Block Description: <strong>{0}</strong>',
+                'label_name': '<strong class="font-color-blocko">BLOCKO</strong> Block Name:',
+                'label_description': '<strong class="font-color-blocko">BLOCKO</strong> Block Description:',
                 'label_group': '<strong class="font-color-blocko">BLOCKO</strong> Block Group Name',
                 'label_console_output': 'Output <strong>{0}</strong> = {1}',
 
@@ -1504,14 +1526,14 @@ export class StaticTranslation {
                 'label_block_properties': 'BLOCKO block properties',
                 'label_block_remove': 'Remove BLOCKO block',
 
-                'label_blocko_name': '<strong class="font-color-blocko">BLOCKO</strong> Name: <strong>{0}</strong>',
-                'label_blocko_description': '<strong class="font-color-blocko">BLOCKO</strong> Description: <strong>{0}</strong>',
+                'label_blocko_name': '<strong class="font-color-blocko">BLOCKO</strong> Block Group Name: <strong>{0}</strong>',
+                'label_blocko_description': '<strong class="font-color-blocko">BLOCKO</strong> Block Group Description: <strong>{0}</strong>',
 
                 'table_name': 'Name',
                 'table_description': 'Description',
                 'table_actions': 'Actions',
-                'label_no_block_program': 'No blocks in this group',
-                'label_create_block_text': 'Click on the button bellow to create a block.',
+                'label_no_block_program': 'No <strong class="font-color-blocko">BLOCKO</strong> Block in this group',
+                'label_create_block_text': 'Click on the button bellow to create a Blocko Block.',
 
                 'btn_add_block': 'New Block',
 
@@ -1533,6 +1555,11 @@ export class StaticTranslation {
                 'table_actions': 'Actions',
                 'label_group_properties': 'Group properties',
                 'label_group_remove': 'Remove group',
+                'tab_private_groups': 'Private group',
+                'tab_public_groups': 'Public group',
+                'tab_programs_for_decisions': 'Publishing requirements',
+                'label_no_groups': 'No public <strong class="font-color-blocko">BLOCKO</strong> Blocks groups',
+                'label_no_groups_comment': 'If you do not see your dream program, create it and share it with others.',
 
                 'btn_add_blocks_group': 'New Group',
                 'flash_block_group_add': 'Block group has been created.',
@@ -1541,8 +1568,8 @@ export class StaticTranslation {
                 'flash_cant_edit_block_group': 'Unable to edit block group, {0}.',
                 'flash_block_group_remove': 'Block group has been removed.',
                 'flash_cant_remove_block_group': 'Unable to remove block group, {0}.',
-                'label_no_blocko_group': 'No block group available.',
-                'label_create_blocko_group_text': 'Click on the button bellow to create a group.',
+                'label_no_blocko_group': 'No <strong class="font-color-blocko">BLOCKO</strong> Blocks group available',
+                'label_create_blocko_group_text': 'Click on the button bellow to create your first group of Blocko Blocks.',
 
             }, 'ProjectsProjectCodeCodeComponent': {
 
@@ -1556,7 +1583,7 @@ export class StaticTranslation {
                 'label_remove_version': 'Remove CODE version',
                 'label_code_name': '<strong class="font-color-code">CODE</strong> Program Name: <strong>{0}</strong>',
                 'label_code_description': '<strong class="font-color-code">CODE</strong> Program Description: <strong>{0}</strong>',
-                'label_hardware_type': '<strong class="font-color-hardware">Hardware</strong> Device Type',
+                'label_hardware_type': '<strong class="font-color-hardware">Hardware</strong> Type',
                 'label_ide': 'IDE',
                 'label_version': 'Version',
                 'label_build_error': 'Build Errors',
@@ -1651,7 +1678,7 @@ export class StaticTranslation {
                 'label_grid_grid_project': '<strong class="font-color-grid" > GRID </strong> Program Group Name',
                 'label_grid': 'GRID',
                 'label_widgets': 'Widgets',
-                'label_no_widgets': 'No widgets in this group',
+                'label_no_widgets': 'No <strong class="font-color-grid" > GRID </strong> widgets in this group',
                 'label_device_properties': 'Device properties',
                 'label_device_remove': 'Remove Device',
                 'label_version_name': 'Name',
@@ -1688,7 +1715,7 @@ export class StaticTranslation {
                 'label_device_remove': 'Remove GRID group',
                 'label_program_properties': 'GRID program properties',
                 'label_program_remove': 'Remove GRID program',
-                'label_no_grid': 'No <strong class="font-color-grid">GRID</strong> program available.',
+                'label_no_grid': 'No <strong class="font-color-grid">GRID</strong> program available',
                 'label_create_grid_text': 'Click on the button bellow to create a program.',
 
                 'btn_add_grid_program': 'Create GRID Program',
@@ -1859,10 +1886,10 @@ export class StaticTranslation {
 
                 'label_open_file_browser': 'Open file in file browser',
             }, 'VersionListComponent': {
-                'table_name': 'name',
-                'table_description': 'description',
-                'table_product': 'product',
-                'table_actions': 'actions',
+                'table_name': 'Name',
+                'table_description': 'Description',
+                'table_product': 'Product',
+                'table_actions': 'Actions',
             }, 'ServerComponent': {
                 'main_title': 'Platform administration',
                 'main_subtitle': 'Server Management',
@@ -1962,7 +1989,7 @@ export class StaticTranslation {
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_hardware_type': 'Hardware type',
-                'label_producer': 'Producer',
+                'label_producer': 'Production Batch of this kind of Board (Collection) - Its Required!',
                 'label_main_test_version': 'Test version:',
                 'label_main_version': 'Production version',
                 'label_main_bootloader': 'Main bootloader',
@@ -1997,6 +2024,8 @@ export class StaticTranslation {
                 'label_company_made_description': 'Made Description for ex. \"Made in USA\"',
                 'label_who_testing': 'Tester Operator',
                 'label_garfield_station': 'Garfield Station',
+                'label_printer_not_found': 'Printer not found!',
+                'label_config': 'Configuration for Hardware settings',
 
 
                 'nav_step_one_title': 'Attach Hardware',

@@ -377,12 +377,14 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
         this.zone.runOutsideAngular(() => {
             const controller = this.blockoView.getBlockoController();
 
-            if (m.message_type === 'newInputConnectorValue') {
-                controller.setInputConnectorValue(m.blockId, m.connectorName, m.value);
+            if (m.message_type === 'new_input_connector_value') {
+                controller.setInputConnectorValue(m.block_id, m.interface_name, m.value);
+                return;
             }
 
-            if (m.message_type === 'newOutputConnectorValue') {
-                controller.setOutputConnectorValue(m.blockId, m.connectorName, m.value);
+            if (m.message_type === 'new_output_connector_value') {
+                controller.setOutputConnectorValue(m.block_id, m.interface_name, m.value);
+                return;
             }
 
             /* tslint:disable */
@@ -391,33 +393,40 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
             /* tslint:enable */
 
-            /*
 
-            According Blocko-core its Deprecated????
+            // According Blocko-core its Deprecated????
 
-            if (m.message_type === 'newExternalInputConnectorValue') {
-                controller.setInputExternalConnectorValue(m.targetType, m.targetId, m.connectorName, m.value);
+            if (m.message_type === 'new_external_input_connector_value') {
+                /* tslint:disable */
+                    console.error("homerMessageReceived:: new_external_input_connector_value - unsopported!!! ", m.message_type);
+                /* tslint:enable */
+                return;
             }
 
-            if (m.message_type === 'newExternalOutputConnectorValue') {
-                controller.setOutputExternalConnectorValue(m.targetType, m.targetId, m.connectorName, m.value);
+            if (m.message_type === 'new_external_output_connector_value') {
+                /* tslint:disable */
+                console.error("homerMessageReceived:: new_external_output_connector_value - unsopported!!! ", m.message_type);
+                /* tslint:enable */
+                return;
             }
-            */
 
-            if (m.message_type === 'newConsoleEvent') {
+
+            if (m.message_type === 'new_console_event') {
                 this.zone.run(() => {
-                    this.consoleLog.add(m.consoleMessageType, m.consoleMessage, 'Block ' + m.blockId, new Date(m.consoleMessageTime).toLocaleString());
+                    this.consoleLog.add(m.console_message_type, m.console_message, 'Block ' + m.block_id, new Date(m.console_message_time).toLocaleString());
                 });
+                return;
             }
 
-            if (m.message_type === 'newErrorEvent') {
-                controller.setError(m.blockId, true);
+            if (m.message_type === 'new_error_event') {
+                controller.setError(m.block_id, true);
                 this.zone.run(() => {
-                    this.consoleLog.add('error', m.errorMessage, 'Block ' + m.blockId, new Date(m.errorTime).toLocaleString());
+                    this.consoleLog.add('error', m.error_message, 'Block ' + m.block_id, new Date(m.error_time).toLocaleString());
                 });
+                return;
             }
 
-            if (m.message_type === 'getValues') {
+            if (m.message_type === 'get_values') {
 
                 for (let block in m.connector) {
                     if (!m.connector.hasOwnProperty(block)) {
@@ -494,12 +503,12 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                 }
             }
 
-            if (m.message_type === 'getLogs') {
+            if (m.message_type === 'get_logs') {
                 this.zone.run(() => {
                     if (m.logs) {
                         for (let i = 0; i < m.logs.length; i++) {
                             const log = m.logs[i];
-                            this.consoleLog.add(log.type, log.message, 'Block ' + log.blockId, new Date(log.time).toLocaleString());
+                            this.consoleLog.add(log.type, log.message, 'Block ' + log.block_id, new Date(log.time).toLocaleString());
                         }
                     }
 

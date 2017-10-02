@@ -27,6 +27,9 @@
                 <li *ngIf="person.edit_permission" [class.active]="openTabName == 'email'">
                     <a (click)="onTabClick('email')">{{'nav_email'|bkTranslate:this}}</a>
                 </li>
+                <li *ngIf="person.edit_permission" [class.active]="openTabName == 'logins'">
+                    <a (click)="onTabClick('logins')">{{'nav_logins'|bkTranslate:this}}</a>
+                </li>
             </ul>
         </div>
         <div class="portlet-body">
@@ -52,6 +55,7 @@
                     <div *ngIf="person.edit_permission" class="tab-pane center-align center text-center" [class.active]="openTabName == 'avatar'">
                         <img *ngIf="person.picture_link" class="preview img-circle center-align center" [src]="person.picture_link" width="128" height="128">
                         <img *ngIf="!person.picture_link" class="preview img-circle empty center-align center" width="128" height="128">
+
                         <p class="text-center"><a (click)="updatePictureClick()" class="font-grey-mint">{{'label_set_own_picture'|bkTranslate:this}}</a></p>
                     </div>
                 <!-- END AVATAR TAB -->
@@ -85,6 +89,44 @@
                         </form>
                     </div>
                 <!-- END EMAIL TAB -->
+
+                <div *ngIf="person.edit_permission" class="tab-pane" [class.active]="openTabName == 'logins'">
+                    <div *ngIf="login_tokens && login_tokens.length" class="table-scrollable">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th class="center-align">{{'table_system_component'|bkTranslate:this}}</th>
+                                    <th class="center-align">{{'table_user_agent'|bkTranslate:this}}</th>
+                                    <th class="center-align">{{'table_created'|bkTranslate:this}}</th>
+                                    <th class="center-align">{{'table_access_age'|bkTranslate:this}}</th>
+                                    <th class="center-align text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let login_token of login_tokens">
+                                    <td class="vert-align">
+                                        <span *ngIf="login_token.where_logged == 'BECKI_WEBSITE'">Byzance Portal</span>
+                                    </td>
+                                    <td class="vert-align">{{login_token.user_agent}}</td>
+                                    <td class="vert-align no-wrap">{{login_token.created|bkUnixTimeToDate}}</td>
+                                    <td class="vert-align no-wrap">{{login_token.access_age|bkUnixTimeToDate}}</td>
+
+                                    <td class="vert-align text-right no-wrap">
+                                        <style type="text/css">
+                                            table tr button { opacity:0.05;}
+                                            table tr:hover button { opacity:1 }
+                                        </style>
+
+                                        <button *ngIf="login_token.delete_permission" title="{{'label_token_remove'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onLoginTokenDeleteClick(login_token)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                    </div>
+                    <h3  *ngIf="!login_tokens" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
+                </div>
 
             </div>
         </div>

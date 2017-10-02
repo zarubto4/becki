@@ -12,7 +12,7 @@ import { BeckiValidators } from '../helpers/BeckiValidators';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { StaticOptionLists } from '../helpers/StaticOptionLists';
 import { ModalsPictureUploadModel } from '../modals/picture-upload';
-import { IPerson, ISecurityRole } from '../backend/TyrionAPI';
+import {IFloatingPersonToken, IPerson, ISecurityRole} from '../backend/TyrionAPI';
 
 @Component({
     selector: 'bk-view-profile',
@@ -30,6 +30,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
     roles: ISecurityRole[] = null;
 
     email: string;
+    login_tokens: IFloatingPersonToken[] = null;
 
     countryList: FormSelectComponentOption[] = StaticOptionLists.countryList;
     genderList: FormSelectComponentOption[] = StaticOptionLists.genderList;
@@ -63,6 +64,10 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
 
     onTabClick(tabName: string) {
         this.openTabName = tabName;
+
+        if (tabName === 'logins' && this.login_tokens == null) {
+            this.refresh_login_tokens();
+        }
     }
 
     ngOnInit(): void {
@@ -99,6 +104,19 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
             });
     }
 
+    refresh_login_tokens(): void {
+        this.blockUI();
+        this.backendService.personGetLoggedConnections()
+            .then((tokens) => {
+                this.login_tokens = tokens;
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.fmError(this.translate('label_cant_load_device'));
+                this.unblockUI();
+            });
+    }
+
 
     changePassword(): void {
         this.blockUI();
@@ -121,6 +139,17 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
             .catch(error => {
                 this.unblockUI();
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_password', error)));
+            });
+    }
+
+    onLoginTokenDeleteClick(token: IFloatingPersonToken): void{
+        this.backendService.personDeleteLoggedConnections(token.connection_id)
+            .then(() => {
+                this.refresh_login_tokens();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_picture_upload', reason)));
+                this.refresh();
             });
     }
 

@@ -4,6 +4,12 @@
             <template [ngSwitchCase]="'ModalsPermissionPermissionPropertyModel'">
                 <bk-modals-permission-permission-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-permission-permission-properties>
             </template>
+            <template [ngSwitchCase]="'ModalsBlockoBlockCopyModel'">
+                <bk-modals-blocko-block-copy [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-blocko-block-copy>
+            </template>
+            <template [ngSwitchCase]="'ModalsWidgetsWidgetCopyModel'">
+                <bk-modals-widgets-widget-copy [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-widgets-widget-copy>
+            </template>
             <template [ngSwitchCase]="'ModalsPublicShareResponseModel'">
                 <bk-modals-public-share-response [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-public-share-response>
             </template>

@@ -11,6 +11,7 @@ import { IProject, ITypeOfWidget, IGridWidget, ITypeOfWidgetShortDetail, IGridWi
 import { ModalsWidgetsWidgetPropertiesModel } from '../modals/widgets-widget-properties';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsWidgetsTypePropertiesModel } from '../modals/widgets-type-properties';
+import { ModalsWidgetsWidgetCopyModel } from '../modals/widgets-widget-copy';
 
 @Component({
     selector: 'bk-view-projects-project-widgets-widgets',
@@ -18,13 +19,15 @@ import { ModalsWidgetsTypePropertiesModel } from '../modals/widgets-type-propert
 })
 export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
-    id: string;
-    widgetsId: string;
+    projectId: string;
 
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
 
-    group: ITypeOfWidgetShortDetail = null;
+    typeOfWidgetId: string;
+    project: IProject = null;
+
+    group: ITypeOfWidgetShortDetail|ITypeOfWidget = null; // User / Admin
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -34,11 +37,21 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
 
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
-            this.id = params['project'];
-            this.widgetsId = params['widgets'];
-            this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
-                this.group = project.type_of_widgets.find((tw) => tw.id === this.widgetsId);
-            });
+            this.projectId = params['project'];
+            this.typeOfWidgetId = params['widgets'];
+
+            if (this.projectId) {
+                this.projectSubscription = this.storageService.project(this.projectId).subscribe((project) => {
+                    this.project = project;
+                    this.group = project.type_of_widgets.find((tw) => tw.id === this.typeOfWidgetId);
+
+                    if (!this.group) {
+                        this.refresh();
+                    }
+                });
+            }else {
+                this.refresh();
+            }
         });
     }
 
@@ -49,8 +62,51 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
         }
     }
 
+    refresh(): void {
+        this.blockUI();
+        Promise.all<any>([this.backendService.typeOfWidgetGet(this.typeOfWidgetId)])
+            .then((values: [ITypeOfWidget]) => {
+                this.group = values[0];
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.addFlashMessage(new FlashMessageError('Widget Group cannot be loaded.', reason));
+                this.unblockUI();
+            });
+    }
+
+
     onWidgetClick(widget: IGridWidgetShortDetail): void {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'widgets', this.widgetsId, widget.id]);
+        if (this.projectId) {
+            this.navigate(['/projects', this.currentParamsService.get('project'), 'widgets', this.typeOfWidgetId, widget.id]);
+        } else {
+            this.navigate(['/admin/widgets/', this.typeOfWidgetId, widget.id]);
+        }
+    }
+
+    onMakeClone(widget: IGridWidgetShortDetail): void {
+        let model = new ModalsWidgetsWidgetCopyModel(widget.name, widget.description, this.project.type_of_widgets);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.gridWidgetMakeClone({
+                    grid_widget_id: widget.id,
+                    type_of_widget_id: model.type_of_widget,
+                    project_id: this.projectId,
+                    name: model.name,
+                    description: model.description
+                })
+                    .then(() => {
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_copy_success')));
+                        this.unblockUI();
+
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_copy_fail', reason)));
+                        this.unblockUI();
+                    });
+            }
+        });
     }
 
     onGroupEditClick(): void {
@@ -64,11 +120,19 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_group_edit_success')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.refresh();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_edit_fail', reason)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.refresh();
+                        }
                     });
             }
         });
@@ -81,11 +145,19 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
                 this.backendService.typeOfWidgetDelete(this.group.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_group_remove_success')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.refresh();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_remove_fail', reason)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.refresh();
+                        }
                     });
             }
         });
@@ -106,11 +178,19 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_add_success')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.refresh();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_add_fail', reason)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.refresh();
+                        }
                     });
             }
         });
@@ -126,15 +206,23 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
                 this.backendService.gridWidgetEdit(widget.id, {
                     name: model.name,
                     description: model.description,
-                    type_of_widget_id: this.widgetsId // tohle je trochu divný ne? ... možná kdyby jsi chtěl přesunout widget mezi groupama? [DU]
+                    type_of_widget_id: this.typeOfWidgetId // tohle je trochu divný ne? ... možná kdyby jsi chtěl přesunout widget mezi groupama? [DU]
                 })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_edit_success')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.refresh();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_edit_fail', reason)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.refresh();
+                        }
                     });
             }
         });
@@ -149,15 +237,47 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
                 this.backendService.gridWidgetDelete(widget.id)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_removed_success')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.refresh();
+                        }
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_removed_fail', reason)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        if (this.projectId) {
+                            this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+                        }else {
+                            this.refresh();
+                        }
                     });
             }
         });
 
+    }
+
+    onWidgetActivateClick(widget: IGridWidgetShortDetail): void {
+        this.blockUI();
+        this.backendService.gridWidgetActivate(widget.id)
+            .then(() => {
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
+                this.refresh();
+            });
+    }
+
+    onWidgetDeactivateClick(widget: IGridWidgetShortDetail): void {
+        this.blockUI();
+        this.backendService.gridWidgetDeactivate(widget.id)
+            .then(() => {
+                this.refresh();
+            })
+            .catch(reason => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
+                this.refresh();
+            });
     }
 
 }

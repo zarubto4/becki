@@ -3,7 +3,8 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot" [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
+<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot"
+                [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
     <div class="portlet portlet light bordered">
         <div class="portlet-title">
@@ -22,74 +23,81 @@
         <div *ngIf="(devices && devices.length)" class="table-scrollable">
             <table class="table table-hover">
                 <thead>
-                    <tr>
-                        <th class="col col-lg-3">{{'label_name'|bkTranslate:this}}</th>
-                        <th class="col col-lg-4">{{'label_id'|bkTranslate:this}}</th>
-                        <th class="col col-lg-5">{{'label_description'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2"><strong class="font-color-hardware">Hardware</strong>{{'label_type'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2">{{'label_status'|bkTranslate:this}}</th>
-                        <th class="col col-lg-1 text-right no-wrap">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                    </tr>
+                <tr>
+                    <th class="col col-lg-3">{{'label_name'|bkTranslate:this}}</th>
+                    <th class="col col-lg-4">{{'label_id'|bkTranslate:this}}</th>
+                    <th class="col col-lg-5">{{'label_description'|bkTranslate:this}}</th>
+                    <th class="col col-lg-2"><strong class="font-color-hardware">Hardware</strong>{{'label_type'|bkTranslate:this}}
+                    </th>
+                    <th class="col col-lg-2">{{'label_status'|bkTranslate:this}}</th>
+                    <th class="col col-lg-1 text-right no-wrap">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let device of devices">
-                        <td class="vert-align no-wrap">
-                            <span class="icon-hint-wraper red" *ngIf="device.alert_list && device.alert_list.length > 0">
+                <tr *ngFor="let device of devices">
+                    <td class="vert-align no-wrap">
+                        <div class="icon-hint-wraper red" *ngIf="device.alert_list && device.alert_list.length > 0">
                             <i class="fa fa-fw fa-exclamation-triangle font-red-flamingo"></i>
                             <div class="hint-fixed">
                                 <span class="hint right">
                                     <div *ngFor="let alert of device.alert_list" class="no-wrap">{{alert|bkTranslateTable:this:'device_alerts'}}</div>
                                 </span>
-        </div>
-        </span>
-        <a (click)="onDeviceClick(device)" class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
-        </td>
-        <td class="vert-align no-wrap">{{device.id}}</td>
-        <td class="vert-align no-wrap">{{device.description}}</td>
-        <td class="vert-align no-wrap"><a (click)="onBoardTypeClick(device.type_of_board_id)">{{device.type_of_board_name}}</a></td>
-        <td class="no-wrap">
-            <span *ngIf="device.online_state == 'online'" class="font-green-jungle bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
-            <span *ngIf="device.online_state == 'offline'" class="font-red bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
-            <span *ngIf="device.online_state == 'synchronization_in_progress'" class="font-grey-mint bold"><i class="fa fa-spinner fa-spin"></i></span>
-            <span *ngIf="device.online_state == 'not_yet_first_connected'" class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
-            <span *ngIf="device.online_state == 'unknown_lost_connection_with_server'" class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
-        </td>
-        <td class="vert-align no-wrap">
+                            </div>
+                        </div>
+                        <a (click)="onDeviceClick(device)"
+                           class="no-wrap"><strong>{{device.name?device.name:device.id}}</strong></a>
+                    </td>
+                    <td class="vert-align no-wrap">{{device.id}}</td>
+                    <td class="vert-align no-wrap">{{device.description}}</td>
+                    <td class="vert-align no-wrap"><a (click)="onBoardTypeClick(device.type_of_board_id)">{{device.type_of_board_name}}</a>
+                    </td>
+                    <td class="no-wrap">
+                        <span *ngIf="device.online_state == 'online'" class="font-green-jungle bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
+                        <span *ngIf="device.online_state == 'offline'" class="font-red bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
+                        <span *ngIf="device.online_state == 'synchronization_in_progress'"
+                              class="font-grey-mint bold"><i class="fa fa-spinner fa-spin"></i></span>
+                        <span *ngIf="device.online_state == 'not_yet_first_connected'" class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
+                        <span *ngIf="device.online_state == 'unknown_lost_connection_with_server'"
+                              class="font-grey-mint bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
+                    </td>
+                    <td class="vert-align no-wrap">
 
-            <style type="text/css">
-                table tr button {
-                    opacity: 0.05;
-                }
+                        <style type="text/css">
+                            table tr button {
+                                opacity: 0.05;
+                            }
 
-                table tr:hover button {
-                    opacity: 1
-                }
-            </style>
+                            table tr:hover button {
+                                opacity: 1
+                            }
+                        </style>
 
-            <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!device.edit_permission"
-                (click)="onEditClick(device)">
+                        <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green"
+                                [disabled]="!device.edit_permission"
+                                (click)="onEditClick(device)">
                             <i class="fa fa-cog"></i>
                         </button>
-            <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!device.delete_permission"
-                (click)="onRemoveClick(device)">
+                        <button title="{{'label_remove_device'|bkTranslate:this}}" class="btn btn-icon-only red"
+                                [disabled]="!device.delete_permission"
+                                (click)="onRemoveClick(device)">
                             <i class="fa fa-trash"></i>
                         </button>
-        </td>
-        </tr>
-        </tbody>
-        </table>
-    </div>
-    <h3 *ngIf="!devices" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
-    <div *ngIf="devices && devices.length == 0" class="list-no-items">
-        <p class="list-no-items__main-label">{{'label_no_hardware'|bkTranslate:this}}</p>
-        <p class="list-no-items__sub-label">{{'label_no_hardware_comment'|bkTranslate:this}} </p>
-        <p>
-            <button class="btn blue" (click)="onAddClick($event)">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <h3 *ngIf="!devices" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
+        <div *ngIf="devices && devices.length == 0" class="list-no-items">
+            <p class="list-no-items__main-label"><span [innerHTML]="'label_no_hardware'|bkTranslate:this"></span></p>
+            <p class="list-no-items__sub-label">{{'label_no_hardware_comment'|bkTranslate:this}}</p>
+            <p>
+                <button class="btn blue" (click)="onAddClick($event)">
                     <i class="fa fa-plus-circle"></i>{{'btn_add_hardware'|bkTranslate:this}}
                 </button>
-        </p>
-    </div>
-    <br>
+            </p>
+        </div>
+        <br>
     </div>
 
 </bk-layout-main>

@@ -404,7 +404,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
                         this.unblockUI();
                         if (this.projectId != null) {
-                            this.navigate(['/project', this.projectId, 'code']);
+                            this.navigate(['/projects', this.projectId , 'code']);
                         }
 
                     })
