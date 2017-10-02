@@ -12,7 +12,7 @@ import { BeckiValidators } from '../helpers/BeckiValidators';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { StaticOptionLists } from '../helpers/StaticOptionLists';
 import { ModalsPictureUploadModel } from '../modals/picture-upload';
-import {IFloatingPersonToken, IPerson, ISecurityRole} from '../backend/TyrionAPI';
+import { IFloatingPersonToken, IPerson, ISecurityRole } from '../backend/TyrionAPI';
 
 @Component({
     selector: 'bk-view-profile',
@@ -142,7 +142,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
             });
     }
 
-    onLoginTokenDeleteClick(token: IFloatingPersonToken): void{
+    onLoginTokenDeleteClick(token: IFloatingPersonToken): void {
         this.backendService.personDeleteLoggedConnections(token.connection_id)
             .then(() => {
                 this.refresh_login_tokens();

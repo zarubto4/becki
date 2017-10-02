@@ -85,8 +85,8 @@
                     <tbody>
                     <tr *ngFor="let ticket of tickets.content">
 
-                        <td class="vert-align no-wrap bold"><a (click)="onTicketClick(ticket)">{{code.name}}</a></td>
-                        <td class="vert-align">{{code.description}}</td>
+                        <td class="vert-align no-wrap bold"><a (click)="onTicketClick(ticket)">name</a></td>
+                        <td class="vert-align">description</td>
                         <td class="vert-align no-wrap text-right">
 
                             <style type="text/css">
@@ -94,13 +94,6 @@
                                 table tr:hover button { opacity:1 }
                             </style>
 
-                            <button title="{{'label_code_program_properties'|bkTranslate:this}}" class="btn btn-icon-only green" [disabled]="!code.edit_permission" (click)="onCProgramEditClick(code)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-
-                            <button title="{{'label_remove_code_program'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!code.delete_permission" (click)="onCProgramRemoveClick(code)">
-                                <i class="fa fa-trash"></i>
-                            </button>
                         </td>
                     </tr>
                     </tbody>

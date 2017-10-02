@@ -170,7 +170,6 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                console.log(success);
                 this.backendService.gridWidgetCreate({
                     type_of_widget_id: group.id,
                     name: model.name,

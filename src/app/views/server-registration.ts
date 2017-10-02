@@ -21,7 +21,7 @@ export class ServerRegistrationComponent extends BaseMainComponent implements On
     };
 
     ngOnInit(): void {
-        this.flag = this.beckiImageLinks.getFlagImage('china.svg'); 
+        this.flag = this.beckiImageLinks.getFlagImage('china.svg');
     }
 
     onToggleTab(tab: string) {
