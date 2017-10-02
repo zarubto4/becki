@@ -170,7 +170,8 @@ import { FilterPagerComponent } from './components/FilterPagerComponent';
 import { ReaderQrComponent } from './views/qr-reader';
 import { MobileAddHardwareComponent } from './views/mobile-add-hardware';
 import { MyDatePickerModule } from 'mydatepicker';
-import { DatePickerComponent } from './components/datePicker';
+import { DatePickerComponent } from './components/datePickerComponent';
+import { TimePickerComponent } from './components/timePickerComponent';
 
 
 // @formatter:off
@@ -431,6 +432,7 @@ class BeckiErrorHandler implements ErrorHandler {
         InstanceHistoryTimelineComponent,
         QRCodeComponent,
         DatePickerComponent,
+        TimePickerComponent,
         // Views components
         AdminDashboardComponent,
         Error404Component,
