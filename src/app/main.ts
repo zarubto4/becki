@@ -270,16 +270,16 @@ let routes: Routes = [
     { path: 'admin/blocks/:blocks/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard]},
     { path: 'admin/block/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard]}, // Only for community decisions - Link without project path
 
-    { path: 'admin/garfield', data: {breadName: 'Garfield'}, component: GarfieldComponent, canActivate: [AuthGuard]},
+    { path: 'admin/garfield', data: {breadName: 'Garfields'}, component: GarfieldComponent, canActivate: [AuthGuard]},
     { path: 'admin/garfield/:garfield', data: {breadName: ':garfield'}, component: GarfieldGarfieldComponent, canActivate: [AuthGuard]},
 
-    { path: 'admin/financial', data: { breadName: 'Tariff' }, component: AdminFinancialComponent, canActivate: [AuthGuard] },
+    { path: 'admin/financial', data: { breadName: 'Tariffs' }, component: AdminFinancialComponent, canActivate: [AuthGuard] },
     { path: 'admin/financial/:tariff', data: { breadName: ':tariff' }, component: AdminFinancialTariffComponent, canActivate: [AuthGuard] },
 
     { path: 'admin/server', data: { breadName: 'Servers' }, component: ServerComponent, canActivate: [AuthGuard] },
-    // {path: 'admin/server/:server', data: {breadName: 'Servers'}, component: ServerComponent, canActivate: [AuthGuard]}, // TODO - USER / ADMIN
+    // {path: 'admin/server/:server', data: {breadName: ':server'}, component: ServerComponent, canActivate: [AuthGuard]}, // TODO - USER / ADMIN
 
-    { path: 'admin/permission-group', data: { breadName: 'Permission Group' }, component: RoleGroupComponent, canActivate: [AuthGuard] },
+    { path: 'admin/permission-group', data: { breadName: 'Permission Groups' }, component: RoleGroupComponent, canActivate: [AuthGuard] },
     { path: 'admin/permission-group/:group', data: { breadName: ':group' }, component: RoleGroupGroupComponent, canActivate: [AuthGuard] },
 
     { path: 'admin/c-program/c-program', data: { breadName: 'Community Management Code' }, component: CommunityCProgramComponent, canActivate: [AuthGuard] },

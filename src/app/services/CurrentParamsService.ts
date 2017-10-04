@@ -75,6 +75,14 @@ export class CurrentParamsService {
     protected currentGroupNameSubject: Subject<string> = null;
     public currentGroupNameSnapshot: string = null;
 
+    public currentGarfieldName: Observable<string> = null;
+    protected currentGarfieldNameSubject: Subject<string> = null;
+    public currentGarfieldNameSnapshot: string = null;
+
+    public currentTariffName: Observable<string> = null;
+    protected currentTariffNameSubject: Subject<string> = null;
+    public currentTariffNameSnapshot: string = null;
+
     constructor(protected router: Router, protected backendService: BackendService) {
         console.info('BreadcrumbsService init');
 
@@ -94,6 +102,8 @@ export class CurrentParamsService {
         this.currentInvoiceNumber = this.currentInvoiceNumberSubject = new Subject<string>();
         this.currentLibraryName = this.currentLibraryNameSubject = new Subject<string>();
         this.currentGroupName = this.currentGroupNameSubject = new Subject<string>();
+        this.currentGarfieldName = this.currentGarfieldNameSubject = new Subject<string>();
+        this.currentTariffName = this.currentTariffNameSubject = new Subject<string>();
 
         router.events.subscribe(event => {
             if (event instanceof NavigationCancel || event instanceof NavigationEnd) {
@@ -331,7 +341,31 @@ export class CurrentParamsService {
                     this.currentGroupNameSubject.next(this.currentGroupNameSnapshot);
                 });
             }
+        }
 
+        if (this.currentParamsSnapshot['garfield'] !== params['garfield']) {
+
+            if (!params['garfield']) {
+                this.currentGarfieldNameSnapshot = null;
+                this.currentGarfieldNameSubject.next(this.currentGarfieldNameSnapshot);
+            } else {
+                this.backendService.garfieldGet(params['garfield']).then((garfield) => {
+                    this.currentGarfieldNameSnapshot = garfield.name;
+                    this.currentGarfieldNameSubject.next(this.currentGarfieldNameSnapshot);
+                });
+            }
+        }
+
+        if (this.currentParamsSnapshot['tariff'] !== params['tariff']) {
+            if (!params['tariff']) {
+                this.currentTariffNameSnapshot = null;
+                this.currentTariffNameSubject.next(this.currentTariffNameSnapshot);
+            } else {
+                this.backendService.tariffGet(params['tariff']).then((tariff) => {
+                    this.currentTariffNameSnapshot = tariff.name;
+                    this.currentTariffNameSubject.next(this.currentTariffNameSnapshot);
+                });
+            }
         }
 
         this.currentParamsSnapshot = params;

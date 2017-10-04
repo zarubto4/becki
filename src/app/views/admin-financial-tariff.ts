@@ -2,7 +2,7 @@
  * Created by davidhradek on 05.12.16.
  */
 
-import { Component, Injector, OnInit } from '@angular/core';
+import {Component, Injector, OnDestroy, OnInit} from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import {
     IApplicableProduct, IProductExtension, IProductExtensionType, ITariff,
@@ -18,7 +18,7 @@ import { ModalsExtensionModel } from '../modals/extension';
     selector: 'bk-view-admin-financial',
     templateUrl: './admin-financial-tariff.html'
 })
-export class AdminFinancialTariffComponent extends BaseMainComponent implements OnInit {
+export class AdminFinancialTariffComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     tariff: ITariff = null;
     extensionTypes: IProductExtensionType[] = null;
@@ -37,6 +37,10 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
             this.tariffId = params['tariff'];
             this.refresh();
         });
+    }
+
+    ngOnDestroy(): void {
+        this.routeParamsSubscription.unsubscribe();
     }
 
     refresh(): void {
