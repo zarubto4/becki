@@ -38,6 +38,28 @@ export interface IWebSocketErrorMessage extends IWebSocketMessage {
     error: string;
 }
 
+export interface IWebSocketGarfieldDeviceConnect extends IWebSocketMessage {
+    device_id: string;
+}
+
+export interface IWebSocketGarfieldDeviceConfigure extends IWebSocketMessage {
+    configuration: any;
+}
+
+export interface IWebSocketGarfieldDeviceConfigureResult extends IWebSocketMessage {
+    status: any;
+}
+
+export interface IWebSocketGarfieldDeviceBinary extends IWebSocketMessage {
+    url: string;
+    type: ('bootloader' | 'firmware');
+}
+
+export interface IWebSocketGarfieldDeviceBinaryResult extends IWebSocketMessage {
+    status: string;
+    type: ('bootloader' | 'firmware');
+}
+
 export interface IWebSocketNotification extends INotification, IWebSocketMessage {
     state: ('created' | 'updated' | 'confirmed' | 'deleted');
 }
@@ -97,7 +119,13 @@ export class RestResponse {
 
 // ERROR CLASSES
 
-export class BugFoundError extends Error {
+export class GenericError extends Error {
+    state: string;
+    code: number;
+    message: string;
+}
+
+export class BugFoundError extends GenericError {
 
 
     name = 'bug found error';
@@ -105,6 +133,8 @@ export class BugFoundError extends Error {
     adminMessage: string;
 
     userMessage: string;
+
+    body: any;
 
     static fromRestResponse(response: RestResponse): BugFoundError {
         let content = response.body;
@@ -116,23 +146,24 @@ export class BugFoundError extends Error {
                 message = (<{ error: string }>response.body).error;
             }
         }
-        return new BugFoundError(`response ${response.status}: ${JSON.stringify(content)}`, message);
+        return new BugFoundError(response.body, `response ${response.status}: ${JSON.stringify(content)}`, message);
     }
 
     static fromWsResponse(response: IWebSocketErrorMessage): BugFoundError {
-        return new BugFoundError(`response ${JSON.stringify(response)}`, response.error);
+        return new BugFoundError(null, `response ${JSON.stringify(response)}`, response.error);
     }
 
     static composeMessage(adminMessage: string): string {
         return `bug found in client or server: ${adminMessage}`;
     }
 
-    constructor(adminMessage: string, userMessage?: string) {
+    constructor(body: any, adminMessage: string, userMessage?: string) {
         super(BugFoundError.composeMessage(adminMessage));
         this.name = 'BugFoundError';
         this.message = BugFoundError.composeMessage(adminMessage);
         this.adminMessage = adminMessage;
         this.userMessage = userMessage;
+        this.body = body;
 
         Object.setPrototypeOf(this, BugFoundError.prototype);
     }
@@ -281,6 +312,8 @@ export interface ModelChangeStatus {
 export abstract class BeckiBackend extends TyrionAPI {
 
     public static WS_CHANNEL = 'becki';
+
+    public static WS_CHANNEL_GARFIELD = 'garfield';
 
     public host = '127.0.0.1:9000';
 
@@ -591,7 +624,7 @@ export abstract class BeckiBackend extends TyrionAPI {
                         }
                         return null;
                     })
-                    .filter(message => (message && message.message_channel === BeckiBackend.WS_CHANNEL));
+                    .filter(message => (message && (message.message_channel === BeckiBackend.WS_CHANNEL || message.message_channel === BeckiBackend.WS_CHANNEL_GARFIELD)));
                 let errorOccurred = Rx.Observable
                     .fromEvent(this.webSocket, 'error');
 

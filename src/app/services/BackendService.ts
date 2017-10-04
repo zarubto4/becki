@@ -73,4 +73,22 @@ export class BackendService extends BeckiBackend {
         });
     }
 
+    public request(request: RestRequest): Promise<Response> {
+        let optionsArgs: RequestOptionsArgs = {
+            method: request.method,
+            headers: new Headers(request.headers),
+            body: ''
+        };
+        if (request.body) {
+            switch (optionsArgs.headers.get('Content-Type')) {
+                case 'application/json':
+                    optionsArgs.body = JSON.stringify(request.body);
+                    break;
+                default:
+                    throw new Error(this.translationService.translate('error_content_not_supported', this, null));
+            }
+        }
+
+        return this.http.request(request.url, optionsArgs).toPromise();
+    }
 }

@@ -1,0 +1,72 @@
+<bk-layout-main
+
+    tabMenu="byzance-admin"
+    [title]="'main_title'|bkTranslate:this"
+    [subtitle]="'main_subtitle'|bkTranslate:this">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark">
+                            <i class="fa fa-fw fa-bug"></i>
+                            All Bugs
+                        </span>
+                    </div>
+                    <div class="becki-actions">
+                        <button title="{{'label_delete_bugs_all'|bkTranslate:this}}" class="btn btn-icon-only red"
+                                [disabled]="false"
+                                (click)="onDeleteAllBugs()">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="m-heading-1 border-blue m-bordered">
+                    <p>{{'label_general_description'|bkTranslate:this}}</p>
+                </div>
+
+                <div *ngIf="(bugs && bugs.length)" class="table-scrollable">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th class="col col-lg-7">{{'table_summary'|bkTranslate:this}}</th>
+                            <th class="col col-lg-2">{{'table_date'|bkTranslate:this}}</th>
+                            <th class="col col-lg-1">{{'table_repetition'|bkTranslate:this}}</th>
+                            <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let bug of bugs">
+
+                            <td class="no-wrap bold vert-align"><a (click)="onBugClick(bug)">{{bug.summary}}</a></td>
+
+                            <td class="vert-align">{{bug.created|bkUnixTimeToDate}}</td>
+
+                            <td class="vert-align">{{bug.repetition}}</td>
+
+                            <td class="no-wrap text-right vert-align">
+
+                                <style type="text/css">
+                                    table tr button { opacity:0.05;}
+                                    table tr:hover button { opacity:1 }
+                                </style>
+
+                                <button title="{{'label_report_bug'|bkTranslate}}" class="btn btn-icon-only blue">
+                                    <i class="fa fa-share"></i>
+                                </button>
+                                <button title="{{'label_remove_bug'|bkTranslate}}" class="btn btn-icon-only red">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</bk-layout-main>

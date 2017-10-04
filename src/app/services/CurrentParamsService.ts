@@ -91,6 +91,10 @@ export class CurrentParamsService {
     protected currentCodeServerNameSubject: Subject<string> = null;
     public currentCodeServerNameSnapshot: string = null;
 
+    public currentBugSummary: Observable<string> = null;
+    protected currentBugSummarySubject: Subject<string> = null;
+    public currentBugSummarySnapshot: string = null;
+
     constructor(protected router: Router, protected backendService: BackendService) {
         console.info('BreadcrumbsService init');
 
@@ -114,6 +118,7 @@ export class CurrentParamsService {
         this.currentTariffName = this.currentTariffNameSubject = new Subject<string>();
         this.currentHomerServerName = this.currentHomerServerNameSubject = new Subject<string>();
         this.currentCodeServerName = this.currentCodeServerNameSubject = new Subject<string>();
+        this.currentBugSummary = this.currentBugSummarySubject = new Subject<string>();
 
         router.events.subscribe(event => {
             if (event instanceof NavigationCancel || event instanceof NavigationEnd) {
@@ -400,6 +405,20 @@ export class CurrentParamsService {
                     this.currentCodeServerNameSubject.next(this.currentCodeServerNameSnapshot);
                 });
             }
+        }
+
+        if (this.currentParamsSnapshot['bug'] !== params['bug']) {
+
+            if (!params['bug']) {
+                this.currentBugSummarySnapshot = null;
+                this.currentBugSummarySubject.next(this.currentBugSummarySnapshot);
+            } else {
+                this.backendService.getBug(params['bug']).then((bug) => {
+                    this.currentBugSummarySnapshot = bug.summary;
+                    this.currentBugSummarySubject.next(this.currentBugSummarySnapshot);
+                });
+            }
+
         }
 
         this.currentParamsSnapshot = params;

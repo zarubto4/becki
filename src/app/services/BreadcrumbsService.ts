@@ -84,6 +84,9 @@ export class BreadcrumbsService {
         this.currentParamsService.currentTariffName.subscribe(() => {
             this.refresh();
         });
+        this.currentParamsService.currentBugSummary.subscribe(() => {
+            this.refresh();
+        });
     }
 
     protected findRouteByPath(path: string): Route {
@@ -133,6 +136,8 @@ export class BreadcrumbsService {
                 return this.currentParamsService.currentHomerServerNameSnapshot;
             case ':code_server':
                 return this.currentParamsService.currentCodeServerNameSnapshot;
+            case ':bug':
+                return this.currentParamsService.currentBugSummarySnapshot;
             case ':last':
                 return this.lastBreadName;
             default:

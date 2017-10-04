@@ -2005,8 +2005,10 @@ export class StaticTranslation {
                 'label_c_programs': 'Code Programs',
                 'label_printers': ' Printers',
                 'label_printers_not_valid': ' Printer is not set or connection Id is not valid!',
+                'label_garfield_app': 'Garfield Desktop App',
+                'label_garfield_app_not_online': 'Garfield App is not running or not connected to Becki.',
                 'label_garfield_hardware_tester': 'Garfield Tester',
-                'label_garfield_hardware_not_online': 'Hardware Tester kit is not connected via Google Chrome plugin! Problem can be also in wrong Hardware identification (Its required for connection).',
+                'label_garfield_hardware_not_online': 'Hardware Tester kit is not connected via Garfield App! Problem can be also in wrong Hardware identification (Its required for connection).',
                 'label_server_settings': 'Server Settings',
                 'label_main_server': 'Main Server',
                 'label_backup_server': 'Backup Server',
@@ -2043,7 +2045,14 @@ export class StaticTranslation {
 
 
                 'flash_code_add': 'Community Code Add. Don\'t forget set first Version and publish program',
-                'flash_cant_load_bootloader_file': 'Cannot load Bootloader File to Cache Memmory',
+                'flash_cant_load_bootloader_file': 'Cannot load Bootloader File to Cache Memory',
+                'flash_tester_connected': 'TestKit connected',
+                'flash_tester_disconnected': 'TestKit disconnected',
+                'flash_garfield_connected': 'Garfield App connected',
+                'flash_garfield_disconnected': 'Garfield App disconnected',
+                'flash_device_connected': 'Device connected',
+                'flash_device_dead_connected': 'Device connected but dead',
+                'flash_device_disconnected': 'Device disconnected',
 
                 'label_no_c_programs': 'No Programs',
                 'label_no_c_programs_comment': 'Create new Program, or change Filter property',
@@ -2051,8 +2060,31 @@ export class StaticTranslation {
                 'label_no_c_library': 'No Libraries',
                 'label_no_c_library_comment': 'Create new Library, or change Filter property',
 
-            },
+            }, 'BugsComponent': {
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Caught Bugs',
 
+                'label_general_description': 'Bugs that occurred on the backend server. You can browse bugs or report them on YouTrack',
+                'label_delete_bugs_all': 'Delete all bugs',
+                'label_report_bug': 'Report to YouTrack',
+                'label_remove_bug': 'Remove bug',
+
+                'table_summary': 'Summary',
+                'table_date': 'Date',
+                'table_repetition': 'Occurrences',
+                'table_actions': 'Actions'
+
+            }, 'BugsBugComponent': {
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Bug',
+
+                'label_report_bug': 'Report to YouTrack',
+                'label_view_bug': 'View on YouTrack',
+                'label_remove_bug': 'Remove bug',
+                'label_repetition': 'Occurrences',
+                'label_stack_trace': 'Stack Trace',
+                'label_cause': 'Cause'
+            },
 
 
             'label_byzance_hardware': 'Byzance<strong class="font-color-hardware">HARDWARE</strong>',
@@ -2068,6 +2100,7 @@ export class StaticTranslation {
             'label_configuration': 'Configuration',
             'label_offline': 'offline',
             'label_online': 'online',
+            'label_date': 'Date',
             'btn_save': 'Save',
             'btn_test': 'Test',
             'btn_back': 'Back',
