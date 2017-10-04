@@ -83,6 +83,14 @@ export class CurrentParamsService {
     protected currentTariffNameSubject: Subject<string> = null;
     public currentTariffNameSnapshot: string = null;
 
+    public currentHomerServerName: Observable<string> = null;
+    protected currentHomerServerNameSubject: Subject<string> = null;
+    public currentHomerServerNameSnapshot: string = null;
+
+    public currentCodeServerName: Observable<string> = null;
+    protected currentCodeServerNameSubject: Subject<string> = null;
+    public currentCodeServerNameSnapshot: string = null;
+
     constructor(protected router: Router, protected backendService: BackendService) {
         console.info('BreadcrumbsService init');
 
@@ -104,6 +112,8 @@ export class CurrentParamsService {
         this.currentGroupName = this.currentGroupNameSubject = new Subject<string>();
         this.currentGarfieldName = this.currentGarfieldNameSubject = new Subject<string>();
         this.currentTariffName = this.currentTariffNameSubject = new Subject<string>();
+        this.currentHomerServerName = this.currentHomerServerNameSubject = new Subject<string>();
+        this.currentCodeServerName = this.currentCodeServerNameSubject = new Subject<string>();
 
         router.events.subscribe(event => {
             if (event instanceof NavigationCancel || event instanceof NavigationEnd) {
@@ -364,6 +374,30 @@ export class CurrentParamsService {
                 this.backendService.tariffGet(params['tariff']).then((tariff) => {
                     this.currentTariffNameSnapshot = tariff.name;
                     this.currentTariffNameSubject.next(this.currentTariffNameSnapshot);
+                });
+            }
+        }
+
+        if (this.currentParamsSnapshot['homer_server'] !== params['homer_server']) {
+            if (!params['homer_server']) {
+                this.currentHomerServerNameSnapshot = null;
+                this.currentHomerServerNameSubject.next(this.currentHomerServerNameSnapshot);
+            } else {
+                this.backendService.homerServerGet(params['homer_server']).then((server) => {
+                    this.currentHomerServerNameSnapshot = server.personal_server_name;
+                    this.currentHomerServerNameSubject.next(this.currentHomerServerNameSnapshot);
+                });
+            }
+        }
+
+        if (this.currentParamsSnapshot['code_server'] !== params['code__server']) {
+            if (!params['code_server']) {
+                this.currentCodeServerNameSnapshot = null;
+                this.currentCodeServerNameSubject.next(this.currentCodeServerNameSnapshot);
+            } else {
+                this.backendService.compilationServerGet(params['code__server']).then((server) => {
+                    this.currentCodeServerNameSnapshot = server.personal_server_name;
+                    this.currentCodeServerNameSubject.next(this.currentCodeServerNameSnapshot);
                 });
             }
         }

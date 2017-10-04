@@ -277,7 +277,8 @@ let routes: Routes = [
     { path: 'admin/financial/:tariff', data: { breadName: ':tariff' }, component: AdminFinancialTariffComponent, canActivate: [AuthGuard] },
 
     { path: 'admin/server', data: { breadName: 'Servers' }, component: ServerComponent, canActivate: [AuthGuard] },
-    // {path: 'admin/server/:server', data: {breadName: ':server'}, component: ServerComponent, canActivate: [AuthGuard]}, // TODO - USER / ADMIN
+    // {path: 'admin/server/homer/:homer_server', data: {breadName: ':homer_server'}, component: ServerComponent, canActivate: [AuthGuard]}, // TODO - USER / ADMIN (Breadcump je připraven)
+    // {path: 'admin/server/compilation/:code_server', data: {breadName: ':code_server'}, component: ServerComponent, canActivate: [AuthGuard]}, // TODO - USER / ADMIN (Breadcump je připraven)
 
     { path: 'admin/permission-group', data: { breadName: 'Permission Groups' }, component: RoleGroupComponent, canActivate: [AuthGuard] },
     { path: 'admin/permission-group/:group', data: { breadName: ':group' }, component: RoleGroupGroupComponent, canActivate: [AuthGuard] },

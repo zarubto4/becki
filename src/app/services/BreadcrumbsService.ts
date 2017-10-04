@@ -129,6 +129,10 @@ export class BreadcrumbsService {
                 return this.currentParamsService.currentGarfieldNameSnapshot;
             case ':tariff':
                 return this.currentParamsService.currentTariffNameSnapshot;
+            case ':homer_server':
+                return this.currentParamsService.currentHomerServerNameSnapshot;
+            case ':code_server':
+                return this.currentParamsService.currentCodeServerNameSnapshot;
             case ':last':
                 return this.lastBreadName;
             default:
