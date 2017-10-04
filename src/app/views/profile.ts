@@ -86,7 +86,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
             .then((iLoginResult) => {
 
                 this.person = iLoginResult.person;
-                this.roles  = iLoginResult.roles;
+                this.roles = iLoginResult.roles;
 
                 this.infoForm.controls['fullName'].setValue(this.person.full_name);
                 this.infoForm.controls['nickName'].setValue(this.person.nick_name);

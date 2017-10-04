@@ -16,12 +16,13 @@ export class ServerRegistrationComponent extends BaseMainComponent implements On
 
     flag: string;
 
-    constructor(injector: Injector, private beckiImageLinks: BeckiImageLinks) {
+    constructor(injector: Injector) {
         super(injector);
     };
 
     ngOnInit(): void {
-        this.flag = this.beckiImageLinks.getFlagImage('china.svg');
+        this.flag = this.getBeckiFlag('usa.svg');
+
     }
 
     onToggleTab(tab: string) {

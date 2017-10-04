@@ -17,9 +17,12 @@ import {
 import { StorageService } from '../services/StorageService';
 import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService';
 import { TranslationService } from '../services/TranslationService';
+import { BeckiImageLinks } from '../helpers/BeckiImageLinks';
+
 
 export abstract class BaseMainComponent {
 
+    protected beckiImageLinks: BeckiImageLinks = null;
     protected backendService: BackendService = null;
     protected storageService: StorageService = null;
     protected router: Router = null;
@@ -33,6 +36,7 @@ export abstract class BaseMainComponent {
     protected zone: NgZone = null;
 
     constructor(protected injector: Injector) {
+        // console.log('BaseMainComponent init');
         if (injector) {
             this.backendService = injector.get(BackendService);
             this.storageService = injector.get(StorageService);
@@ -45,6 +49,7 @@ export abstract class BaseMainComponent {
             this.blockUIService = injector.get(BlockUIService);
             this.translationService = injector.get(TranslationService);
             this.zone = injector.get(NgZone);
+            this.beckiImageLinks = injector.get(BeckiImageLinks);
             injector.get(MonacoEditorLoaderService); // only for preload monaco scripts
         } else {
             throw new Error('Injector is not defined! ... Don\'t you forget to add \"constructor(injector:Injector) {super(injector)};\"" in inherited class?');
@@ -65,6 +70,15 @@ export abstract class BaseMainComponent {
 
     protected unblockUI(): void {
         this.blockUIService.unblockUI();
+    }
+
+
+    protected getBeckiFlag(imageName: string): string {
+        return this.beckiImageLinks.getBeckiImage(imageName, 'flags');
+    }
+
+    protected getBeckiImage(imageName: string, folderName: string): string {
+        return this.beckiImageLinks.getBeckiImage(imageName, folderName);
     }
 
     protected translate(key: string, ...args: any[]): string {

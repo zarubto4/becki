@@ -1,12 +1,20 @@
 import { Injectable } from '@angular/core';
+import { NullSafe } from './NullSafe';
 
 
 @Injectable()
 export class BeckiImageLinks {
 
-    public getFlagImage(flag: string) {
-        return require('../../public/assets/images/flags/' + flag);
+    public getBeckiImage(imageName: string, folderName: string): string {
+        let pic = NullSafe(() => require('../../public/assets/images/' + folderName + '/' + imageName));
+        if (pic) {
+            return pic;
+        } else {
+            console.warn('Image ' + imageName + ' not found');
+            return require('../../public/assets/images/flags/notFound.svg');
+        }
     }
+
 
     /* just to be sure
         public flag_china = require('../../public/assets/images/flags/china.svg');
