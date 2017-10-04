@@ -16,11 +16,12 @@
                         </span>
                     </div>
                     <div *ngIf="bug" class="becki-actions">
-                        <button *ngIf="bug.youtrack_url" title="{{'label_view_bug'|bkTranslate:this}}" class="btn btn-icon-only green"
-                                [disabled]="false"
-                                (click)="window.open(bug.youtrack_url)">
-                            <i class="fa fa-bug"></i>
-                        </button>
+                        <a href="{{bug.youtrack_url}}" target="_blank">
+                            <button *ngIf="bug.youtrack_url" title="{{'label_view_bug'|bkTranslate:this}}" class="btn btn-icon-only green"
+                                    [disabled]="false">
+                                <i class="fa fa-bug"></i>
+                            </button>
+                        </a>
                         <button *ngIf="!bug.youtrack_url" title="{{'label_report_bug'|bkTranslate:this}}" class="btn btn-icon-only yellow"
                                 [disabled]="false"
                                 (click)="onReportBug()">

@@ -10,8 +10,8 @@ import { ModalsGarfieldModel } from '../modals/garfield';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import {  Response } from '@angular/http';
-import {CurrentParamsService} from '../services/CurrentParamsService';
+import { Response } from '@angular/http';
+import { CurrentParamsService } from '../services/CurrentParamsService';
 
 @Component({
     selector: 'bk-view-bugs-bug',

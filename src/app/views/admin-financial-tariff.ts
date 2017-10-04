@@ -2,7 +2,7 @@
  * Created by davidhradek on 05.12.16.
  */
 
-import {Component, Injector, OnDestroy, OnInit} from '@angular/core';
+import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import {
     IApplicableProduct, IProductExtension, IProductExtensionType, ITariff,

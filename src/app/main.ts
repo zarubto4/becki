@@ -175,10 +175,10 @@ import { SupportComponent } from './views/support';
 import { ServerRegistrationComponent } from './views/server-registration';
 import { BeckiImageLinks } from './helpers/BeckiImageLinks';
 import { MyDatePickerModule } from 'mydatepicker';
-import { DatePickerComponent } from './components/datePicker';
 import { BugsComponent } from './views/admin-bugs';
 import { BugsBugComponent } from './views/admin-bugs-bug';
 import { TimePickerComponent } from './components/timePickerComponent';
+import { DatePickerComponent } from './components/datePickerComponent';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
