@@ -16,13 +16,18 @@
                         </span>
                     </div>
                     <div class="becki-actions">
+                        <button title="{{'label_bootloader_upload'|bkTranslate:this}}" class="btn btn-icon-only blue"
+                                [disabled]="!testHardwareConnected"
+                                (click)="uploadBootLoader()">
+                            <i class="fa fa-fire"></i>
+                        </button>
                         <button title="{{'label_configure_device'|bkTranslate:this}}" class="btn btn-icon-only blue"
-                                [disabled]="!garfieldHardwareConnected"
-                                (click)="onConfigureDevice()">
+                                [disabled]="!testHardwareConnected"
+                                (click)="configureDevice()">
                             <i class="fa fa-wrench"></i>
                         </button>
                         <button title="{{'label_test_device'|bkTranslate:this}}" class="btn btn-icon-only blue"
-                                [disabled]="!garfieldHardwareConnected"
+                                [disabled]="!testHardwareConnected"
                                 (click)="onTestDevice()">
                             <i class="fa fa-bolt"></i>
                         </button>
@@ -114,9 +119,9 @@
                 <div class="portlet light portlet-fit bordered">
                     <div class="portlet-body">
 
-                        <h3 *ngIf="garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldHardwareConnected && test_firmware_file_Base64 && bootloader_file_Base64
+                        <h3 *ngIf="garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldTesterConnected && test_firmware_file_Base64 && bootloader_file_Base64
                                 && mainServer && backupServer && mainServer.online_state == 'online' && backupServer.online_state == 'online'" class="font-green-jungle bold" style="text-align: center">{{'label_prerequisite'|bkTranslate:this}}</h3>
-                        <h3 *ngIf="!(garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldHardwareConnected && test_firmware_file_Base64 && bootloader_file_Base64
+                        <h3 *ngIf="!(garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldTesterConnected && test_firmware_file_Base64 && bootloader_file_Base64
                                 && mainServer && backupServer && mainServer.online_state == 'online' && backupServer.online_state == 'online')" class="font-red-flamingo bold" style="text-align: center">{{'label_prerequisite_not_complete'|bkTranslate:this}}</h3>
                         <hr>
                         <div class="row">
@@ -192,11 +197,21 @@
                             </div>
 
                             <div class="col col-lg-3">
-                                <H4 *ngIf="!garfieldHardwareConnected" class="font-red-flamingo"><i class="fa fa-fire"></i> {{'label_garfield_hardware_tester'|bkTranslate:this}}</H4>
-                                <H4 *ngIf="garfieldHardwareConnected"  class="font-green-jungle"><i class="fa fa-fire"></i> {{'label_garfield_hardware_tester'|bkTranslate:this}}</H4>
                                 <div>
-                                    <span *ngIf="!garfieldHardwareConnected" class="font-red-flamingo">{{'label_garfield_hardware_not_online'|bkTranslate:this}}</span>
-                                    <span *ngIf="garfieldHardwareConnected" class="font-green-jungle bold">(Connected) <i class="fa fa-check"></i></span>
+                                    <H4 *ngIf="!garfieldAppConnected" class="font-red-flamingo"><i class="fa fa-fire"></i> {{'label_garfield_app'|bkTranslate:this}}</H4>
+                                    <H4 *ngIf="garfieldAppConnected" class="font-green-jungle"><i class="fa fa-fire"></i> {{'label_garfield_app'|bkTranslate:this}}</H4>
+                                    <div>
+                                        <span *ngIf="!garfieldAppConnected" class="font-red-flamingo">{{'label_garfield_app_not_online'|bkTranslate:this}}</span>
+                                        <span *ngIf="garfieldAppConnected" class="font-green-jungle bold">(Connected) <i class="fa fa-check"></i></span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <H4 *ngIf="!garfieldTesterConnected" class="font-red-flamingo"><i class="fa fa-fire"></i> {{'label_garfield_hardware_tester'|bkTranslate:this}}</H4>
+                                    <H4 *ngIf="garfieldTesterConnected" class="font-green-jungle"><i class="fa fa-fire"></i> {{'label_garfield_hardware_tester'|bkTranslate:this}}</H4>
+                                    <div>
+                                        <span *ngIf="!garfieldTesterConnected" class="font-red-flamingo">{{'label_garfield_hardware_not_online'|bkTranslate:this}}</span>
+                                        <span *ngIf="garfieldTesterConnected" class="font-green-jungle bold">(Connected) <i class="fa fa-check"></i></span>
+                                    </div>
                                 </div>
                             </div>
 

@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "generator": "./generator/generator",
+    "generator-win": "node ./generator/generator-win",
     "clean": "rimraf node_modules doc dist && npm cache clean",
     "clean-install": "npm run clean && npm install",
     "watch": "webpack --watch --progress --profile",

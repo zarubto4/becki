@@ -176,6 +176,8 @@ import { ServerRegistrationComponent } from './views/server-registration';
 import { BeckiImageLinks } from './helpers/BeckiImageLinks';
 import { MyDatePickerModule } from 'mydatepicker';
 import { DatePickerComponent } from './components/datePicker';
+import { BugsComponent } from './views/admin-bugs';
+import { BugsBugComponent } from './views/admin-bugs-bug';
 
 
 // @formatter:off
@@ -268,6 +270,9 @@ let routes: Routes = [
     { path: 'admin/blocks/:blocks', data: {breadName: ':blocks'}, component: ProjectsProjectBlocksBlocksComponent, canActivate: [AuthGuard]},
     { path: 'admin/blocks/:blocks/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard]},
     { path: 'admin/block/:block', data: {breadName: ':block'}, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard]}, // Only for community decisions - Link without project path
+
+    { path: 'admin/bugs', data: {breadName: 'Bugs'}, component: BugsComponent, canActivate: [AuthGuard]},
+    { path: 'admin/bugs/:bug', data: {breadName: ':bug'}, component: BugsBugComponent, canActivate: [AuthGuard]},
 
     { path: 'admin/garfield', data: {breadName: 'Garfield'}, component: GarfieldComponent, canActivate: [AuthGuard]},
     { path: 'admin/garfield/:garfield', data: {breadName: ':garfield'}, component: GarfieldGarfieldComponent, canActivate: [AuthGuard]},
@@ -465,6 +470,8 @@ class BeckiErrorHandler implements ErrorHandler {
         AdminHardwareComponent,
         AdminFinancialComponent,
         AdminFinancialTariffComponent,
+        BugsComponent,
+        BugsBugComponent,
         DashboardComponent,
         CommunityCProgramComponent,
         FinancialComponent,

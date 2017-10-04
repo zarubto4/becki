@@ -1,0 +1,81 @@
+<bk-layout-main
+
+    tabMenu="byzance-admin"
+    [title]="'main_title'|bkTranslate:this"
+    [subtitle]="'main_subtitle'|bkTranslate:this">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span *ngIf="bug" class="font-blue-dark">
+                            <i class="fa fa-fw fa-bug"></i>
+                            {{bug.summary}}
+                        </span>
+                    </div>
+                    <div *ngIf="bug" class="becki-actions">
+                        <button *ngIf="bug.youtrack_url" title="{{'label_view_bug'|bkTranslate:this}}" class="btn btn-icon-only green"
+                                [disabled]="false"
+                                (click)="window.open(bug.youtrack_url)">
+                            <i class="fa fa-bug"></i>
+                        </button>
+                        <button *ngIf="!bug.youtrack_url" title="{{'label_report_bug'|bkTranslate:this}}" class="btn btn-icon-only yellow"
+                                [disabled]="false"
+                                (click)="onReportBug()">
+                            <i class="fa fa-share"></i>
+                        </button>
+                        <button title="{{'label_delete_bug'|bkTranslate:this}}" class="btn btn-icon-only red"
+                                [disabled]="false"
+                                (click)="onDeleteBug()">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div *ngIf="bug" class="portlet">
+                    <div class="portlet-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="portlet light portlet-fit bordered">
+                                    <div class="portlet-body">
+                                        <div>
+                                            <strong>{{'label_date'|bkTranslate:this}}:</strong>
+                                            {{bug.created|bkUnixTimeToDate}}
+                                        </div>
+                                        <div>
+                                            <strong>{{'label_repetition'|bkTranslate:this}}:</strong>
+                                            {{bug.repetition}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="portlet light portlet-fit bordered">
+                                    <div class="portlet-body">
+                                        <h4>{{'label_stack_trace'|bkTranslate:this}}:</h4>
+                                        <span [innerHTML]="bug.stack_trace|bkNl2Br"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="bug.cause" class="row">
+                            <div class="col-md-12">
+                                <div class="portlet light portlet-fit bordered">
+                                    <div class="portlet-body">
+                                        <h4>{{'label_cause'|bkTranslate:this}}:</h4>
+                                        {{bug.cause}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</bk-layout-main>
