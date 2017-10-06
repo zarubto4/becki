@@ -52,6 +52,7 @@
     "the-grid": "git+ssh://git@github.com:ByzanceIoT/the-grid.git#v0.1.164",
     "tslib": "^1.5.0",
     "typescript": "2.2.2",
+    "web-app-browserconfig-loader": "0.0.0",
     "zone.js": "^0.7.4"
   },
   "devDependencies": {

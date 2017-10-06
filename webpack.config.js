@@ -8,6 +8,7 @@ var autoprefixer = require('autoprefixer');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+var browserConfig = require('web-app-browserconfig-loader');
 
 
 /**
@@ -97,6 +98,8 @@ module.exports = function makeWebpackConfig() {
                 loader: 'file-loader?name=assets/[name].[hash].[ext]?'
             },
 
+          
+
             // Support for *.json files.
             {
                 test: /\.json$/,
@@ -110,11 +113,11 @@ module.exports = function makeWebpackConfig() {
                 test: /\.css$/,
                 exclude: root('src', 'app'),
                 use: isTest ? 'null-loader' : ExtractTextPlugin.extract(
-                        {
-                            fallback: 'style-loader',
-                            use: ['css-loader', 'postcss-loader']
-                        }
-                    )
+                    {
+                        fallback: 'style-loader',
+                        use: ['css-loader', 'postcss-loader']
+                    }
+                )
             },
             // all css required in src/app files will be merged in js files
             {
@@ -129,7 +132,7 @@ module.exports = function makeWebpackConfig() {
             {
                 test: /\.(scss|sass)$/,
                 exclude: root('src', 'app'),
-                use: isTest ? 'null-loader' : ExtractTextPlugin.extract({ fallback: 'style-loader', use: ['css-loader', 'postcss-loader', 'sass-loader']})
+                use: isTest ? 'null-loader' : ExtractTextPlugin.extract({ fallback: 'style-loader', use: ['css-loader', 'postcss-loader', 'sass-loader'] })
             },
             // all css required in src/app files will be merged in js files
             {
@@ -232,7 +235,7 @@ module.exports = function makeWebpackConfig() {
             // Extract css files
             // Reference: https://github.com/webpack/extract-text-webpack-plugin
             // Disabled when in test mode or not in build mode
-            new ExtractTextPlugin({filename: 'css/[name].[hash].css', disable: !isProd})
+            new ExtractTextPlugin({ filename: 'css/[name].[hash].css', disable: !isProd })
         );
     }
 
