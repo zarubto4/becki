@@ -33,6 +33,10 @@ export interface IWebSocketMessage {
     message_type: string;
 }
 
+export interface IWebSocketSuccessMessage extends IWebSocketMessage {
+    status: string;
+}
+
 export interface IWebSocketErrorMessage extends IWebSocketMessage {
     status: string;
     error: string;
@@ -46,17 +50,12 @@ export interface IWebSocketGarfieldDeviceConfigure extends IWebSocketMessage {
     configuration: any;
 }
 
-export interface IWebSocketGarfieldDeviceConfigureResult extends IWebSocketMessage {
-    status: any;
-}
-
 export interface IWebSocketGarfieldDeviceBinary extends IWebSocketMessage {
     url: string;
     type: ('bootloader' | 'firmware');
 }
 
-export interface IWebSocketGarfieldDeviceBinaryResult extends IWebSocketMessage {
-    status: string;
+export interface IWebSocketGarfieldDeviceBinaryResult extends IWebSocketSuccessMessage {
     type: ('bootloader' | 'firmware');
 }
 
@@ -333,7 +332,7 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     public webSocketErrorOccurred: Rx.Subject<any> = new Rx.Subject<any>();
 
-    public garfieldWebsocketRecived: Rx.Subject<any> = new Rx.Subject<any>();
+    public garfieldRecived: Rx.Subject<any> = new Rx.Subject<any>();
 
     public onlineStatus: Rx.Subject<OnlineChangeStatus> = new Rx.Subject<OnlineChangeStatus>();
     public objectUpdateTyrionEcho: Rx.Subject<ModelChangeStatus> = new Rx.Subject<ModelChangeStatus>();
@@ -624,7 +623,18 @@ export abstract class BeckiBackend extends TyrionAPI {
                         }
                         return null;
                     })
-                    .filter(message => (message && (message.message_channel === BeckiBackend.WS_CHANNEL || message.message_channel === BeckiBackend.WS_CHANNEL_GARFIELD)));
+                    .filter(message => (message && message.message_channel === BeckiBackend.WS_CHANNEL));
+                let channelGarfieldReceived = Rx.Observable
+                    .fromEvent<MessageEvent>(this.webSocket, 'message')
+                    .map(event => {
+                        try {
+                            return JSON.parse(event.data);
+                        } catch (e) {
+                            console.error('Parse error: ', e);
+                        }
+                        return null;
+                    })
+                    .filter(message => (message && message.message_channel === BeckiBackend.WS_CHANNEL_GARFIELD));
                 let errorOccurred = Rx.Observable
                     .fromEvent(this.webSocket, 'error');
 
@@ -635,6 +645,9 @@ export abstract class BeckiBackend extends TyrionAPI {
                     .subscribe(() => this.sendWebSocketMessageQueue());
                 opened
                     .subscribe(this.interactionsOpened);
+
+                channelGarfieldReceived
+                    .subscribe(this.garfieldRecived);
 
                 channelReceived
                     .filter(message => message.message_type === 'ping')
@@ -663,9 +676,6 @@ export abstract class BeckiBackend extends TyrionAPI {
                         || message.message_type === 'notification'
                     )
                     .subscribe(this.notificationReceived);
-                channelReceived
-                    .filter(message => (message.message_channel === 'garfield'))
-                    .subscribe(this.garfieldWebsocketRecived);
                 channelReceived
                     .filter(message => message.message_type === 'getValues' && message.status === 'success')
                     .subscribe(this.BProgramValuesReceived);
