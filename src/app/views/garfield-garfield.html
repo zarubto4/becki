@@ -16,21 +16,6 @@
                         </span>
                     </div>
                     <div class="becki-actions">
-                        <button title="{{'label_bootloader_upload'|bkTranslate:this}}" class="btn btn-icon-only blue"
-                                [disabled]="!testHardwareConnected"
-                                (click)="uploadBootLoader()">
-                            <i class="fa fa-fire"></i>
-                        </button>
-                        <button title="{{'label_configure_device'|bkTranslate:this}}" class="btn btn-icon-only blue"
-                                [disabled]="!testHardwareConnected"
-                                (click)="configureDevice()">
-                            <i class="fa fa-wrench"></i>
-                        </button>
-                        <button title="{{'label_test_device'|bkTranslate:this}}" class="btn btn-icon-only blue"
-                                [disabled]="!testHardwareConnected"
-                                (click)="onTestDevice()">
-                            <i class="fa fa-bolt"></i>
-                        </button>
                         <button title="{{'label_create_garfield'|bkTranslate:this}}" class="btn btn-icon-only blue"
                                            [disabled]="false"
                                            (click)="onEditGarfield()">
@@ -254,7 +239,7 @@
                                 <hr>
                                 <div class="row">
                                     <form [formGroup]="productionBatchForm">
-                                        <bk-form-select [control]="productionBatchForm.controls.batch" label="{{'label_producer'|bkTranslate:this}}"
+                                        <bk-form-select [control]="productionBatchForm.controls['batch']" label="{{'label_producer'|bkTranslate:this}}"
                                                         [options]="batchOptions"></bk-form-select>
                                     </form>
                                 </div>
