@@ -1757,6 +1757,15 @@ export class StaticTranslation {
                 'flash_grid_project_remove': 'Project has been removed.',
                 'flash_cant_remove_grid_project': 'Unable to remove project, {0}.',
 
+            }, 'SupportComponent': {
+
+                'main_title': 'Support',
+                'tab_knowledge_base': 'Knowledge Base',
+                'tab_tickets': 'My Tickets',
+                'label_faq': 'FAQ',
+                'label_documentation': 'Documentation',
+                'label_open_ticket': 'Open Ticket',
+
             }, 'ValidatorErrorsService': {
                 'label_field_required': 'This field is required.',
                 'label_minimal_length': 'Minimal length of this field is {0} characters.',
