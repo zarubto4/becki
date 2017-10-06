@@ -5,13 +5,8 @@
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { ILoggyError } from '../backend/TyrionAPI';
-import { ModalsRemovalModel } from '../modals/removal';
-import { ModalsGarfieldModel } from '../modals/garfield';
 import { Subscription } from 'rxjs';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import {  Response } from '@angular/http';
-import {CurrentParamsService} from '../services/CurrentParamsService';
+import { CurrentParamsService } from '../services/CurrentParamsService';
 
 @Component({
     selector: 'bk-view-bugs-bug',
@@ -67,7 +62,3 @@ export class BugsBugComponent extends BaseMainComponent implements OnInit, OnDes
             });
     }
 }
-
-
-
-
