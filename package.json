@@ -53,6 +53,7 @@
     "tslib": "^1.5.0",
     "typescript": "2.2.2",
     "web-app-browserconfig-loader": "0.0.0",
+    "xml-loader": "^1.2.1",
     "zone.js": "^0.7.4"
   },
   "devDependencies": {

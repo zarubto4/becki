@@ -9,6 +9,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 var browserConfig = require('web-app-browserconfig-loader');
+var xmlConfig = require('xml-loader');
 
 
 /**
@@ -98,7 +99,8 @@ module.exports = function makeWebpackConfig() {
                 loader: 'file-loader?name=assets/[name].[hash].[ext]?'
             },
 
-          
+            { test: /\.xml$/, loader: 'xml-loader' }, // support for .xml files
+
 
             // Support for *.json files.
             {
