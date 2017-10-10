@@ -47,7 +47,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
 
-    group: ITypeOfWidgetShortDetail|ITypeOfWidget = null;
+    group: ITypeOfWidgetShortDetail | ITypeOfWidget = null;
     widget: IGridWidget = null;
 
     widgetVersions: IGridWidgetVersionShortDetail[] = [];
@@ -160,7 +160,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_edit_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_edit_fail'), reason));
                     });
             }
         });
@@ -182,7 +182,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                         }
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_removed_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_removed_fail'), reason));
 
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
@@ -206,7 +206,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError( this.translate('flash_version_removed_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_version_removed_fail', reason)));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         }
@@ -226,7 +226,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                     version_description: model.description
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess( this.translate('flash_version_changed_success', model.name)));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_changed_success', model.name)));
                         this.refresh();
                     })
                     .catch(reason => {
@@ -287,7 +287,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 }
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_version_load_fail', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_version_load_fail'), reason));
                 this.unblockUI();
             });
 
@@ -535,7 +535,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                         this.exitConfirmationService.setConfirmationEnabled(false);
                     })
                     .catch((err) => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_version_save_fail', m.name , err)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_version_save_fail', m.name, err)));
                         this.unblockUI();
                     });
             }
@@ -553,7 +553,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_code_publish_error', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_code_publish_error'), reason));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         }
@@ -610,7 +610,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                                 this.navigate(['/admin/widgets']);
                             })
                             .catch(reason => {
-                                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                                 this.refresh();
                             });
                     }
@@ -640,7 +640,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                         this.unblockUI();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                         this.unblockUI();
                     });
             }
@@ -654,7 +654,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                 this.refresh();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
                 this.refresh();
             });
     }

@@ -215,7 +215,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                         this.router.navigate(['/projects/' + this.projectId + '/blocko']);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_blocko', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_blocko'), reason));
                         this.refresh();
                     });
             }
@@ -233,7 +233,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_blocko', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_blocko'), reason));
                         this.refresh();
                     });
             }
@@ -352,7 +352,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                             this.blockoView.addTsBlock(this.blocksCache[wantedVersionName].logic_json, this.blocksCache[wantedVersionName].design_json, x, y, params.data.id, wantedVersion.id);
                         })
                         .catch(reason => {
-                            this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_blocko_version', reason)));
+                            this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_blocko_version'), reason));
                         });
 
                 }
@@ -385,7 +385,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                         this.blocksCache[wantedVersionName] = bbv;
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_blocko_block', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_blocko_block'), reason));
                     });
             }
 
@@ -647,7 +647,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     if (interfaceData) {
                         outInterface.push({
                             // 'targetType': targetName === 'BYZANCE_YODAG2' ? 'yoda' : 'device', // TODO: make better detection for another generations [DH] - Not supported?? [TZ]
-                            'color' : '#99ccff', // change color [TZ]
+                            'color': '#99ccff', // change color [TZ]
                             'targetId': hwId,
                             'displayName': board.name ? board.name : board.id,
                             'interface': interfaceData
@@ -858,7 +858,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_version', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_version'), reason));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     });
@@ -1130,7 +1130,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         this.blockUI();
 
         Promise.all<any>([
-            this.backendService.typeOfBlocksGetByFilter( 0 , {
+            this.backendService.typeOfBlocksGetByFilter(0, {
                 public_programs: true,
                 project_id: this.projectId
             }),
@@ -1186,13 +1186,13 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 this.blockoProgram = blockoProgram;
 
                 this.backendService.onlineStatus.subscribe((status) => {
-                    if (status.model === 'HomerInstance' &&  this.blockoProgram.instance_details.instance_id === status.model_id) {
+                    if (status.model === 'HomerInstance' && this.blockoProgram.instance_details.instance_id === status.model_id) {
                         this.blockoProgram.instance_details.online_state = status.online_status;
                     }
                 });
 
                 this.backendService.onlineStatus.subscribe((status) => {
-                    if (status.model === 'HomerServer' &&  this.blockoProgram.instance_details.server_id === status.model_id) {
+                    if (status.model === 'HomerServer' && this.blockoProgram.instance_details.server_id === status.model_id) {
                         this.blockoProgram.instance_details.server_online_state = status.online_status;
                     }
                 });
@@ -1212,7 +1212,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 this.unblockUI();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_blocko', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_blocko'), reason));
                 this.unblockUI();
             });
 

@@ -63,7 +63,7 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
                         this.unblockUI();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_project', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_project'), reason));
                         this.refresh();
                         this.unblockUI();
                     });
@@ -81,7 +81,7 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
                         this.router.navigate(['/projects']);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_project', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_project'), reason));
                         this.refresh();
                         this.unblockUI();
                     });
@@ -90,7 +90,7 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
     }
 
 
-    count(status: 'grid_widgets'|'grid_programs'|'blocko_blocks'|'devices_online'|'devices_offline'|'instances_online'|'instances_offline'): number {
+    count(status: 'grid_widgets' | 'grid_programs' | 'blocko_blocks' | 'devices_online' | 'devices_offline' | 'instances_online' | 'instances_offline'): number {
         if (!this.project) {
             return 0;
         }

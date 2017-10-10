@@ -90,15 +90,15 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_group_add_success')));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.onShowPublicGridGroupsByFilter();
                         }
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail'), reason));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.onShowPublicGridGroupsByFilter();
                         }
                     });
@@ -119,15 +119,15 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_group_edit_success')));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.onShowPublicGridGroupsByFilter();
                         }
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_edit_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_edit_fail'), reason));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.onShowPublicGridGroupsByFilter();
                         }
                     });
@@ -144,15 +144,15 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_group_edit_success')));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.onShowPublicGridGroupsByFilter();
                         }
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_remove_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_remove_fail'), reason));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.onShowPublicGridGroupsByFilter();
                         }
                     });
@@ -203,7 +203,7 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
                 this.onShowPublicGridGroupsByFilter();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_label', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_label'), reason));
                 this.onShowPublicGridGroupsByFilter();
             });
     }
@@ -214,7 +214,7 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
                 this.onShowPublicGridGroupsByFilter();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_label', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_label'), reason));
                 this.onShowPublicGridGroupsByFilter();
             });
     }
@@ -226,7 +226,7 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
                 this.onShowPublicGridGroupsByFilter();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
                 this.onShowPublicGridGroupsByFilter();
             });
     }
@@ -238,7 +238,7 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
                 this.onShowPublicGridGroupsByFilter();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
                 this.onShowPublicGridGroupsByFilter();
             });
     }
@@ -246,7 +246,7 @@ export class ProjectsProjectWidgetsComponent extends BaseMainComponent implement
     onGroupClick(group: ITypeOfWidget): void {
         if (this.project) {
             this.router.navigate(['/projects', this.currentParamsService.get('project'), 'widgets', group.id]);
-        }else {
+        } else {
             this.router.navigate(['/admin/widgets/', group.id]);
         }
     }

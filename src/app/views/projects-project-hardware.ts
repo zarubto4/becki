@@ -105,7 +105,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail'), reason));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -130,7 +130,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail'), reason));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }

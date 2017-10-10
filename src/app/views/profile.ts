@@ -138,7 +138,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
             })
             .catch(error => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_password', error)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_password'), error));
             });
     }
 
@@ -148,7 +148,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
                 this.refresh_login_tokens();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_picture_upload', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_picture_upload'), reason));
                 this.refresh();
             });
     }
@@ -167,7 +167,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_picture_upload', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_picture_upload'), reason));
                         this.refresh();
                     });
             }
@@ -190,13 +190,13 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
                                 this.navigate(['/login']);
                             })
                             .catch((error) => {
-                                this.addFlashMessage(new FlashMessageError(this.translate('flash_user_cant_log_out', error)));
+                                this.addFlashMessage(new FlashMessageError(this.translate('flash_user_cant_log_out'), error));
                             });
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_email_was_send')));
                     })
                     .catch(error => {
                         this.unblockUI();
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_email', error)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_email'), error));
                     });
             } else {
                 this.unblockUI();
@@ -220,7 +220,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
             })
             .catch((error) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_information', error)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_information'), error));
             });
     }
 }

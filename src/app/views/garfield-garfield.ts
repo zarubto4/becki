@@ -4,8 +4,10 @@
 
 import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { IBoard, IBootLoader, ICProgramVersionShortDetail, IGarfield, IHomerServer,
-    IPrinter, ITypeOfBoard } from '../backend/TyrionAPI';
+import {
+    IBoard, IBootLoader, ICProgramVersionShortDetail, IGarfield, IHomerServer,
+    IPrinter, ITypeOfBoard
+} from '../backend/TyrionAPI';
 import { ModalsRemovalModel } from '../modals/removal';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsGarfieldModel } from '../modals/garfield';
@@ -212,7 +214,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                 this.unblockUI();
             })
             .catch((reason) => {
-                this.fmError( this.translate('flash_cant_load', reason));
+                this.fmError(this.translate('flash_cant_load', reason));
                 this.unblockUI();
             });
 
@@ -262,11 +264,11 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
 
     onTestPrinter(printerId: number) {
 
-        this.backendService.printerTestprinting(this.garfieldId , printerId)
+        this.backendService.printerTestprinting(this.garfieldId, printerId)
             .then(() => {
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_test_print_success')));
             }).catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                 this.refresh();
             });
     }
@@ -288,7 +290,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.garfieldEdit(this.garfieldId , {
+                this.backendService.garfieldEdit(this.garfieldId, {
                     description: model.description,
                     name: model.name,
                     print_label_id_1: model.print_label_id_1,
@@ -299,7 +301,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                     .then(() => {
                         this.refresh();
                     }).catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
                     });
             }
@@ -316,7 +318,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                         this.navigate(['admin/garfield/']);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
             }
@@ -343,7 +345,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                         this.fmError(this.translate('label_cant_load_device', reason['message']));
                     });
             }).catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                 console.info(reason);
                 this.refresh();
             });
@@ -379,7 +381,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             }
             case 'device_connect': {
                 this.main_step = 1;
-                let msg: IWebSocketGarfieldDeviceConnect = <IWebSocketGarfieldDeviceConnect> message;
+                let msg: IWebSocketGarfieldDeviceConnect = <IWebSocketGarfieldDeviceConnect>message;
                 if (msg.device_id) {
                     this.backendService.boardGet(msg.device_id)
                         .then((board) => {
@@ -421,7 +423,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                 break;
             }
             case 'device_binary': {
-                let msg: IWebSocketGarfieldDeviceBinaryResult = <IWebSocketGarfieldDeviceBinaryResult> message;
+                let msg: IWebSocketGarfieldDeviceBinaryResult = <IWebSocketGarfieldDeviceBinaryResult>message;
                 if (msg.status === 'success') {
                     this.main_step++;
                     if (msg.type === 'bootloader') {
@@ -436,15 +438,15 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                     } else if (msg.type === 'firmware') {
                         this.main_step = 10;
                     }
-                }  else if (msg.status === 'error') {
-                    let errMsg: IWebSocketErrorMessage = <IWebSocketErrorMessage> message;
+                } else if (msg.status === 'error') {
+                    let errMsg: IWebSocketErrorMessage = <IWebSocketErrorMessage>message;
                     this.fmError(this.translate('flash_device_binary_fail'), errMsg.error);
                     this.stepError = true;
                 }
                 break;
             }
             case 'device_configure': {
-                let msg: IWebSocketSuccessMessage = <IWebSocketSuccessMessage> message;
+                let msg: IWebSocketSuccessMessage = <IWebSocketSuccessMessage>message;
                 if (msg.status === 'success') {
                     this.main_step = 8;
                     this.fmSuccess(this.translate('flash_device_configure_success'));
@@ -453,20 +455,20 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                         this.uploadFirmware(this.productionFirmwareDownloadLink);
                     }
                 } else if (msg.status === 'error') {
-                    let errMsg: IWebSocketErrorMessage = <IWebSocketErrorMessage> message;
+                    let errMsg: IWebSocketErrorMessage = <IWebSocketErrorMessage>message;
                     this.fmError(errMsg.error);
                     this.stepError = true;
                 }
                 break;
             }
             case 'device_test': {
-                let msg: IWebSocketSuccessMessage = <IWebSocketSuccessMessage> message;
+                let msg: IWebSocketSuccessMessage = <IWebSocketSuccessMessage>message;
                 if (msg.status === 'success') {
                     this.main_step = 6;
                     this.fmSuccess(this.translate('flash_device_configure_success'));
                     this.configureDevice();
                 } else if (msg.status === 'error') {
-                    let errMsg: IWebSocketErrorMessage = <IWebSocketErrorMessage> message;
+                    let errMsg: IWebSocketErrorMessage = <IWebSocketErrorMessage>message;
                     this.fmError(errMsg.error);
                     this.stepError = true;
                 }
@@ -573,7 +575,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     add_one() {
         if (this.main_step > 11) {
             this.main_step = 0;
-        }else {
+        } else {
             this.main_step = this.main_step + 1;
         }
     }

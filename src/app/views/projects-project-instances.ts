@@ -68,17 +68,17 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
     }
 
     onInstanceEditClick(instance: IInstanceShortDetail) {
-        let model = new ModalsInstanceEditDescriptionModel (instance.id, instance.name, instance.description);
+        let model = new ModalsInstanceEditDescriptionModel(instance.id, instance.name, instance.description);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.instanceEdit(instance.id, {name: model.name, description: model.description})
+                this.backendService.instanceEdit(instance.id, { name: model.name, description: model.description })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_instance_edit_success')));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_edit_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_edit_fail'), reason));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }

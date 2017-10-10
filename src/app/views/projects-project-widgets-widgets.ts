@@ -27,7 +27,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
     typeOfWidgetId: string;
     project: IProject = null;
 
-    group: ITypeOfWidgetShortDetail|ITypeOfWidget = null; // User / Admin
+    group: ITypeOfWidgetShortDetail | ITypeOfWidget = null; // User / Admin
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -49,7 +49,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
                         this.refresh();
                     }
                 });
-            }else {
+            } else {
                 this.refresh();
             }
         });
@@ -102,7 +102,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
 
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_copy_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_copy_fail'), reason));
                         this.unblockUI();
                     });
             }
@@ -122,15 +122,15 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_group_edit_success')));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.refresh();
                         }
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_edit_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_edit_fail'), reason));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.refresh();
                         }
                     });
@@ -147,15 +147,15 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_grid_group_remove_success')));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.refresh();
                         }
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_remove_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_remove_fail'), reason));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.refresh();
                         }
                     });
@@ -179,15 +179,15 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_add_success')));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.refresh();
                         }
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_add_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_add_fail'), reason));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.refresh();
                         }
                     });
@@ -211,15 +211,15 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_edit_success')));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.refresh();
                         }
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_edit_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_edit_fail'), reason));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.refresh();
                         }
                     });
@@ -238,15 +238,15 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_widget_removed_success')));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.refresh();
                         }
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_removed_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_widget_removed_fail'), reason));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.refresh();
                         }
                     });
@@ -262,7 +262,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
                 this.refresh();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
                 this.refresh();
             });
     }
@@ -274,7 +274,7 @@ export class ProjectsProjectWidgetsWidgetsComponent extends BaseMainComponent im
                 this.refresh();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
                 this.refresh();
             });
     }

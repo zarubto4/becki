@@ -101,7 +101,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                         this.navigate(['/projects', this.currentParamsService.get('project'), 'libraries']);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_removed_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_removed_fail'), reason));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     });
             }
@@ -124,7 +124,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_edit_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_edit_fail'), reason));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     });
@@ -171,7 +171,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_version_removed_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_version_removed_fail'), reason));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     });
@@ -189,7 +189,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_code_publish_error', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_code_publish_error'), reason));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     });
             }
@@ -242,7 +242,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
             })
             .catch(reason => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cannot_load_library', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cannot_load_library'), reason));
             });
 
     }
@@ -271,7 +271,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                         this.refresh();
                     });
             }
@@ -389,7 +389,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                         this.navigate(['/projects', this.projectId, 'libraries']);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                     });
             }
         });

@@ -166,7 +166,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                         this.refresh();
                     });
             }
@@ -186,7 +186,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                         this.router.navigate(['/projects/' + this.projectId + '/code']);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code'), reason));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     });
             }
@@ -207,7 +207,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                         this.refresh();
                     });
             }
@@ -227,7 +227,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code_version', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code_version'), reason));
                         if (this.projectId != null) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         }
@@ -303,7 +303,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             })
             .catch(reason => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_code_types', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_code_types'), reason));
             });
 
     }
@@ -404,12 +404,12 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
                         this.unblockUI();
                         if (this.projectId != null) {
-                            this.navigate(['/projects', this.projectId , 'code']);
+                            this.navigate(['/projects', this.projectId, 'code']);
                         }
 
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                         this.unblockUI();
                     });
             }
@@ -468,7 +468,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_code_publish_error', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_code_publish_error'), reason));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     });
             }
@@ -739,7 +739,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
             }

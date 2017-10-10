@@ -89,7 +89,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
                         this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code'), reason));
                         this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
                     });
             }
@@ -140,7 +140,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
                         this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                         this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
                     });
             }
@@ -163,14 +163,14 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
                         this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                         this.storageService.projectRefresh(this.project_id).then(() => this.unblockUI());
                     });
             }
         });
     }
 
-    selectedFilterPagePublic(event: { index: number}) {
+    selectedFilterPagePublic(event: { index: number }) {
         this.onFilterPublicPrograms(event.index);
     }
 
@@ -179,7 +179,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
         // Only for first page load - its not neccesery block page - user saw private programs first - soo api have time to load
         if (page != null) {
             this.blockUI();
-        }else {
+        } else {
             page = 1;
         }
 
@@ -191,7 +191,7 @@ export class ProjectsProjectCodeComponent extends BaseMainComponent implements O
                 this.unblockUI();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                 this.unblockUI();
             });
     }

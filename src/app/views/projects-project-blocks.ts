@@ -63,7 +63,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
                     this.project = project;
                     this.onShowPrivateBlockoGroupsByFilter();
                 });
-            }else {
+            } else {
                 this.onShowPublicBlockoGroupsByFilter();
             }
         });
@@ -90,15 +90,15 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_group_add')));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.onShowPublicBlockoGroupsByFilter();
                         }
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_block_group', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_block_group'), reason));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.onShowPublicBlockoGroupsByFilter();
                         }
                     });
@@ -119,15 +119,15 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_block_group_edit')));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.onShowPublicBlockoGroupsByFilter();
                         }
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_block_group', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_block_group'), reason));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.onShowPublicBlockoGroupsByFilter();
                         }
                     });
@@ -144,12 +144,12 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
                         this.addFlashMessage(new FlashMessageSuccess('flash_block_group_remove'));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                        }else {
+                        } else {
                             this.onShowPublicBlockoGroupsByFilter();
                         }
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_block_group', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_block_group'), reason));
                         this.unblockUI();
                     });
             }
@@ -200,7 +200,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
                 this.onShowPublicBlockoGroupsByFilter();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_label', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_label'), reason));
                 this.onShowPublicBlockoGroupsByFilter();
             });
     }
@@ -211,7 +211,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
                 this.onShowPublicBlockoGroupsByFilter();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_label', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_label'), reason));
                 this.onShowPublicBlockoGroupsByFilter();
             });
     }
@@ -223,7 +223,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
                 this.onShowPublicBlockoGroupsByFilter();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
                 this.onShowPublicBlockoGroupsByFilter();
             });
     }
@@ -235,7 +235,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
                 this.onShowPublicBlockoGroupsByFilter();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
                 this.onShowPublicBlockoGroupsByFilter();
             });
     }
@@ -243,7 +243,7 @@ export class ProjectsProjectBlocksComponent extends BaseMainComponent implements
     onGroupClick(group: ITypeOfBlock): void {
         if (this.project) {
             this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', group.id]);
-        }else {
+        } else {
             this.router.navigate(['/admin/blocks/', group.id]);
         }
     }

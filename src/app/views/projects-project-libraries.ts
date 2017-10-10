@@ -80,7 +80,7 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_removed_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_removed_fail'), reason));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -125,7 +125,7 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                     });
             }
         });
@@ -146,14 +146,14 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_edit_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_edit_fail'), reason));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
         });
     }
 
-    selectedFilterPagePublic(event: { index: number}) {
+    selectedFilterPagePublic(event: { index: number }) {
         this.onFilterPublicLibraries(event.index);
     }
 
@@ -162,7 +162,7 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
         // Only for first page load - its not necessary block page - user saw private programs first - soo api have time to load
         if (page != null) {
             this.blockUI();
-        }else {
+        } else {
             page = 1;
         }
 
@@ -174,7 +174,7 @@ export class ProjectsProjectLibrariesComponent extends BaseMainComponent impleme
                 this.unblockUI();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                 this.unblockUI();
             });
     }

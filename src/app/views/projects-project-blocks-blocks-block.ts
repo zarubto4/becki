@@ -44,7 +44,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
 
     // project: IProject = null;
 
-    group: ITypeOfBlockShortDetail|ITypeOfBlock = null;
+    group: ITypeOfBlockShortDetail | ITypeOfBlock = null;
 
     blockoBlock: IBlockoBlock = null;
 
@@ -201,7 +201,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                 }
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_block', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_block'), reason));
                 this.unblockUI();
             });
 
@@ -224,7 +224,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_block', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_block'), reason));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     });
@@ -245,7 +245,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                         this.navigate(['/projects', this.currentParamsService.get('project'), 'blocks', this.typeOfBlockId]);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_block', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_block'), reason));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     });
@@ -265,7 +265,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_version', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_version'), reason));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.refresh();
                     });
@@ -328,7 +328,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
             .catch(reason => {
                 this.selectedBlockoBlockVersion = null;
                 // console.log(this.blockCode);
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_block_version', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_block_version'), reason));
                 this.unblockUI();
             });
     }
@@ -551,7 +551,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_code_publish_error', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_code_publish_error'), reason));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         }
@@ -608,7 +608,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                                 this.navigate(['/admin/blocks']);
                             })
                             .catch(reason => {
-                                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                                 this.refresh();
                             });
                     }
@@ -638,7 +638,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                         this.unblockUI();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                         this.unblockUI();
                     });
             }
@@ -652,7 +652,7 @@ export class ProjectsProjectBlocksBlocksBlockComponent extends BaseMainComponent
                 this.refresh();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
                 this.refresh();
             });
     }

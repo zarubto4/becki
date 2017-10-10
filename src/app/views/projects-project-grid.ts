@@ -67,7 +67,7 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_grid_project', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_grid_project'), reason));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -89,7 +89,7 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_grid_project', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_grid_project'), reason));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -106,7 +106,7 @@ export class ProjectsProjectGridComponent extends BaseMainComponent implements O
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_grid_project', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_grid_project'), reason));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }

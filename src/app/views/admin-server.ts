@@ -68,7 +68,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
                     .then(() => {
                         this.refresh();
                     }).catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
                     });
             }
@@ -87,7 +87,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
                     .then(() => {
                         this.refresh();
                     }).catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
                     });
             }
@@ -130,7 +130,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
                             .then(() => {
                                 this.refresh();
                             }).catch(reason => {
-                                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                                 this.refresh();
                             });
                     }
@@ -154,7 +154,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
             }
@@ -183,7 +183,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
                             .then(() => {
                                 this.refresh();
                             }).catch(reason => {
-                                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                                 this.refresh();
                             });
                     }
@@ -207,7 +207,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
             }

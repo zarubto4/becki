@@ -54,14 +54,14 @@ export class FinancialProductBillingComponent extends BaseMainComponent implemen
 
     refresh(): void {
         this.blockUI();
-        this.backendService.productGet(this.id).then(product =>  {
+        this.backendService.productGet(this.id).then(product => {
             this.product = product;
             this.productPaymentDetails = this.product.payment_details;
             this.customer = this.product.customer;
             this.customerPaymentDetails = this.customer.payment_details;
 
             this.unblockUI();
-        }).catch(error =>  {
+        }).catch(error => {
 
             this.unblockUI();
         });
@@ -106,7 +106,7 @@ export class FinancialProductBillingComponent extends BaseMainComponent implemen
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_product_edit_error', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_product_edit_error'), reason));
                         this.refresh();
                     });
             }
@@ -150,7 +150,7 @@ export class FinancialProductBillingComponent extends BaseMainComponent implemen
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_company_edit_error', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_company_edit_error'), reason));
                         this.refresh();
                     });
             }

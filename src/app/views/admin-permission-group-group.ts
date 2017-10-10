@@ -75,7 +75,7 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_edit')));
                         this.refresh();
                     }).catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
                     });
             }
@@ -92,7 +92,7 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
                         this.navigate(['/admin/permission-group']);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
             }
@@ -115,7 +115,7 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
                             this.refresh(); // also unblockUI
                         })
                         .catch(reason => {
-                            this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add', reason)));
+                            this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add'), reason));
                             this.refresh(); // also unblockUI
                         });
                 }
@@ -138,7 +138,7 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
             }
@@ -154,12 +154,12 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
                     .then((success) => {
                         if (success) {
                             this.blockUI();
-                            this.backendService.roleAddPermissions(this.id, {permissions: m.permissionsForAdd})
+                            this.backendService.roleAddPermissions(this.id, { permissions: m.permissionsForAdd })
                                 .then(() => {
                                     this.refresh(); // also unblockUI
                                 })
                                 .catch(reason => {
-                                    this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add', reason)));
+                                    this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add'), reason));
                                     this.refresh(); // also unblockUI
                                 });
                         }
@@ -183,7 +183,7 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_edit')));
                         this.refresh();
                     }).catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
                     });
             }
@@ -200,7 +200,7 @@ export class RoleGroupGroupComponent extends BaseMainComponent implements OnInit
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
             }

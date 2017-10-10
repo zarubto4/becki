@@ -73,7 +73,7 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
                         }
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_grid_program', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_grid_program'), reason));
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         }
@@ -101,7 +101,7 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_grid_project', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_grid_project'), reason));
                         this.refresh();
                     });
             }
@@ -120,12 +120,12 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
                         if (this.projectId) {
                             this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                             this.router.navigate(['/projects/' + this.projectId + '/grid']);
-                        }else {
+                        } else {
                             this.router.navigate(['/admin/widgets']);
                         }
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_grid_project', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_grid_project'), reason));
                         this.refresh();
                     });
             }
@@ -148,7 +148,7 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_grid_program', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_edit_grid_program'), reason));
                         this.refresh();
                     });
             }
@@ -166,7 +166,7 @@ export class ProjectsProjectGridGridsComponent extends BaseMainComponent impleme
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_grid_program', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_grid_program'), reason));
                         this.refresh();
                     });
             }

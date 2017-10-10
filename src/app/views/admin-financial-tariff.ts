@@ -65,7 +65,7 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
 
     makePrice(price: number): string {
         if (price === 0) {
-            return  this.translate('label_free');
+            return this.translate('label_free');
         }
 
         price = price / 1000;
@@ -85,7 +85,7 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
                 this.refresh();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_delete_error', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_delete_error'), reason));
                 this.refresh();
             });
     }
@@ -98,7 +98,7 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
                 this.refresh();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_delete_error', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_delete_error'), reason));
                 this.refresh();
             });
     }
@@ -150,7 +150,7 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
                 this.refresh();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_label', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_label'), reason));
                 this.refresh();
             });
     }
@@ -161,7 +161,7 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
                 this.refresh();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_label', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_label'), reason));
                 this.refresh();
             });
     }
@@ -233,7 +233,7 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
                 this.refresh();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
                 this.refresh();
             });
     }
@@ -246,7 +246,7 @@ export class AdminFinancialTariffComponent extends BaseMainComponent implements 
                 this.refresh();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_extension_deactived_error'), reason));
                 this.refresh();
             });
     }

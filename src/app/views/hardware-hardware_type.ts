@@ -79,7 +79,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
                 this.modalService.showModal(model).then((success) => {
                     if (success) {
                         this.blockUI();
-                        this.backendService.typeOfBoardEdit( this.typeOfBoard.id, {
+                        this.backendService.typeOfBoardEdit(this.typeOfBoard.id, {
                             description: model.description,
                             name: model.name,
                             compiler_target_name: model.compiler_target_name,
@@ -90,7 +90,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
                             .then(() => {
                                 this.refresh();
                             }).catch(reason => {
-                                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                                 this.refresh();
                             });
                     }
@@ -113,7 +113,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.router.navigate(['/admin/hardware']);
                     });
             }
@@ -134,7 +134,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
                     .then(() => {
                         this.refresh();
                     }).catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
                     });
             }
@@ -160,7 +160,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
                     .then(() => {
                         this.refresh();
                     }).catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
                     });
             }
@@ -181,7 +181,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                         this.refresh();
                     });
             }
@@ -198,7 +198,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code_version', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code_version'), reason));
                         this.refresh();
                     });
             }
@@ -240,7 +240,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_code_version', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_code_version'), reason));
                         this.refresh();
                     });
             }
@@ -261,7 +261,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_file_upload', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_file_upload'), reason));
                         this.refresh();
                     });
             }
@@ -282,7 +282,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
             }
@@ -299,7 +299,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
             }
@@ -316,7 +316,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
             }
@@ -412,7 +412,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
                         this.navigate(['admin/garfield/']);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
             }

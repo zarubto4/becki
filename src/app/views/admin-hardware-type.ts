@@ -76,7 +76,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                         this.refresh();
                     }).catch(reason => {
                         this.unblockUI();
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
                     });
             }
@@ -95,7 +95,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                     .then(() => {
                         this.refresh();
                     }).catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.unblockUI();
                         this.refresh();
                     });
@@ -118,7 +118,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                         this.refresh();
                     }).catch(reason => {
                         this.unblockUI();
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
                     });
             }
@@ -130,7 +130,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.processorEdit( processor.id, {
+                this.backendService.processorEdit(processor.id, {
                     description: model.description,
                     processor_code: model.processor_code,
                     processor_name: model.processor_name,
@@ -139,7 +139,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                     .then(() => {
                         this.refresh();
                     }).catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
                     });
             }
@@ -151,14 +151,14 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.producerEdit( producer.id, {
+                this.backendService.producerEdit(producer.id, {
                     description: model.description,
                     name: model.name
                 })
                     .then(() => {
                         this.refresh();
                     }).catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                     });
             }
         });
@@ -179,7 +179,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.typeOfBoardEdit( typeOfBoard.id, {
+                this.backendService.typeOfBoardEdit(typeOfBoard.id, {
                     description: model.description,
                     name: model.name,
                     compiler_target_name: model.compiler_target_name,
@@ -190,7 +190,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                     .then(() => {
                         this.refresh();
                     }).catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.unblockUI();
                         this.refresh();
                     });
@@ -216,7 +216,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
             }
@@ -233,7 +233,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
             }
@@ -250,7 +250,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
             }
@@ -271,7 +271,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                         this.unblockUI();
                     }).catch(reason => {
                         this.unblockUI();
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                     });
             }
         });
@@ -279,7 +279,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
 
     onFilterHardware(pageNumber: number = 0, boardTypes: string[] = []): void {
 
-        this.backendService.boardsGetWithFilterParameters( pageNumber, {
+        this.backendService.boardsGetWithFilterParameters(pageNumber, {
             type_of_board_ids: boardTypes
         })
             .then((values) => {
@@ -306,7 +306,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                         this.unblockUI();
                     }).catch(reason => {
                         this.unblockUI();
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                     });
             }
         });
@@ -324,7 +324,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                     })
                     .catch(reason => {
                         this.unblockUI();
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail'), reason));
                     });
             }
         });
@@ -340,7 +340,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
             })
             .catch(reason => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail'), reason));
 
             });
     }
@@ -353,7 +353,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
             })
             .catch(reason => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail'), reason));
             });
     }
 

@@ -33,7 +33,7 @@ export class GarfieldComponent extends BaseMainComponent implements OnInit {
                 this.unblockUI();
             })
             .catch((reason) => {
-                this.fmError( this.translate('flash_cant_load', reason));
+                this.fmError(this.translate('flash_cant_load', reason));
                 this.unblockUI();
             });
     }
@@ -62,7 +62,7 @@ export class GarfieldComponent extends BaseMainComponent implements OnInit {
                             .then(() => {
                                 this.refresh();
                             }).catch(reason => {
-                                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                                 this.refresh();
                             });
                     }
@@ -92,7 +92,7 @@ export class GarfieldComponent extends BaseMainComponent implements OnInit {
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.garfieldEdit(garfield.id , {
+                this.backendService.garfieldEdit(garfield.id, {
                     description: model.description,
                     name: model.name,
                     print_label_id_1: model.print_label_id_1,
@@ -103,7 +103,7 @@ export class GarfieldComponent extends BaseMainComponent implements OnInit {
                     .then(() => {
                         this.refresh();
                     }).catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
                         this.refresh();
                     });
             }
@@ -120,7 +120,7 @@ export class GarfieldComponent extends BaseMainComponent implements OnInit {
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
                         this.refresh(); // also unblockUI
                     });
             }

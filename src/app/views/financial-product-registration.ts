@@ -66,7 +66,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
     makePrice(price: number): string {
         if (price === 0) {
-            return  this.translate('label_free');
+            return this.translate('label_free');
         }
 
         price = price / 1000;
@@ -125,7 +125,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
                         if (this.companies.length < 1) {
                             this.step = 1;
-                        }else {
+                        } else {
                             this.step = 2;
                         }
                     }
@@ -214,8 +214,8 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             'invoice_email': ['', [Validators.required, BeckiValidators.email]],
             'street': ['', [Validators.required]],
             'street_number': ['', [Validators.required]],
-            'company_registration_no' : ['', [BeckiValidators.condition(() => !this.inEu, Validators.required), Validators.minLength(4), Validators.maxLength(20)]],
-            'company_vat_number' : ['', [BeckiValidators.condition(() => this.inEu, Validators.required)], BeckiAsyncValidators.condition(() => this.inEu, BeckiAsyncValidators.validateEntity(this.backendService, 'vat_number'))],
+            'company_registration_no': ['', [BeckiValidators.condition(() => !this.inEu, Validators.required), Validators.minLength(4), Validators.maxLength(20)]],
+            'company_vat_number': ['', [BeckiValidators.condition(() => this.inEu, Validators.required)], BeckiAsyncValidators.condition(() => this.inEu, BeckiAsyncValidators.validateEntity(this.backendService, 'vat_number'))],
             'zip_code': ['', [Validators.required]]
         });
 
@@ -229,8 +229,8 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             'invoice_email': [''],
             'street': [''],
             'street_number': [''],
-            'company_registration_no' : [''],
-            'company_vat_number' : [''],
+            'company_registration_no': [''],
+            'company_vat_number': [''],
             'zip_code': ['']
         });
     }
@@ -269,19 +269,19 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
     canActivateStep(step: number) {
 
-        if (step === 1 ) {
+        if (step === 1) {
             return true;
         }
 
-        if (step === 2 ) {
+        if (step === 2) {
             return true;
         }
 
-        if (step === 3 ) {
+        if (step === 3) {
             return true;
         }
 
-        if (step === 4 ) {
+        if (step === 4) {
             return true;
         }
 
@@ -450,8 +450,8 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
             street: this.formCustomerRegistration.controls['street'].value,
             street_number: this.formCustomerRegistration.controls['street_number'].value,
             company_registration_no: this.formCustomerRegistration.controls['company_registration_no'].value,
-            company_vat_number:  this.formCustomerRegistration.controls['company_vat_number'].value,
-            zip_code:  this.formCustomerRegistration.controls['zip_code'].value
+            company_vat_number: this.formCustomerRegistration.controls['company_vat_number'].value,
+            zip_code: this.formCustomerRegistration.controls['zip_code'].value
         })
             .then((iCustomer) => {
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_company_create_success', iCustomer.payment_details.company_name)));
@@ -463,7 +463,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
                 this.refreshCompaniesForDecision();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_company_create_error', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_company_create_error'), reason));
                 this.unblockUI();
                 this.refreshCompaniesForDecision();
             });
@@ -485,7 +485,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
 
                 this.unblockUI();
             }).catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_company_load_error', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_company_load_error'), reason));
                 this.unblockUI();
             });
     }

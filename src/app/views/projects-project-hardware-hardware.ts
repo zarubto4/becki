@@ -24,8 +24,8 @@ import { ModalsPictureUploadModel } from '../modals/picture-upload';
 export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     init: boolean = false;  // Only for title and sutitle menu (for slow internet there was sometimes
-                            // issue with no project for admin view or for project view but with slow
-                            // ngOnInit method
+    // issue with no project for admin view or for project view but with slow
+    // ngOnInit method
     device: IBoard = null;
     typeOfBoard: ITypeOfBoard = null;
     projectId: string;
@@ -101,7 +101,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail'), reason));
                         this.refresh();
                     });
             }
@@ -119,7 +119,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                         this.router.navigate(['/projects/' + this.projectId + '/hardware']);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail'), reason));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     });
             }
@@ -139,7 +139,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_picture_update', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_picture_update'), reason));
                         this.refresh();
                     });
             }
@@ -148,7 +148,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     onEditParameterValue_Boolean_Click(parameter_type: string, value: boolean): void {
         this.blockUI();
-        this.backendService.boardEditDevelopersParameters( this.device.id, {
+        this.backendService.boardEditDevelopersParameters(this.device.id, {
             parameter_type: parameter_type,
             boolean_value: value
         })
@@ -167,7 +167,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
      * @param parameter_type
      * @param value
      */
-    onEditParameterValue_Number_Click(parameter_user_description: string,  parameter_type: string, value: number): void {
+    onEditParameterValue_Number_Click(parameter_user_description: string, parameter_type: string, value: number): void {
 
         let model = new ModalsDeviceEditDeveloperParameterValueModel(this.device.id, parameter_user_description, value);
 
@@ -195,7 +195,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
      * @param parameter_type
      * @param value
      */
-    onEditParameterValue_String_Click(parameter_user_description: string,  parameter_type: string, value: string): void {
+    onEditParameterValue_String_Click(parameter_user_description: string, parameter_type: string, value: string): void {
 
         let model = new ModalsDeviceEditDeveloperParameterValueModel(this.device.id, parameter_user_description, value);
         this.modalService.showModal(model).then((success) => {

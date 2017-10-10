@@ -82,7 +82,7 @@ export class FinancialProductComponent extends BaseMainComponent implements OnIn
                         this.router.navigate(['/financial']);
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_deactivate_product', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_deactivate_product'), reason));
                         this.refresh(); // also unblockUI
                     });
             }
@@ -99,7 +99,7 @@ export class FinancialProductComponent extends BaseMainComponent implements OnIn
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_activate_product', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_activate_product'), reason));
                         this.refresh(); // also unblockUI
                     });
             }
@@ -109,7 +109,7 @@ export class FinancialProductComponent extends BaseMainComponent implements OnIn
 
     refresh(): void {
         this.blockUI();
-        this.backendService.productGet(this.id).then(product =>  {
+        this.backendService.productGet(this.id).then(product => {
             this.product = product;
             this.unblockUI();
         })

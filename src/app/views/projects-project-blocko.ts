@@ -66,7 +66,7 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_blocko_cant_remove', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_blocko_cant_remove'), reason));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }
@@ -102,7 +102,7 @@ export class ProjectsProjectBlockoComponent extends BaseMainComponent implements
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_blocko_cant_update', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_blocko_cant_update'), reason));
                         this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
                     });
             }

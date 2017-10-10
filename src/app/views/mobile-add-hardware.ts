@@ -67,8 +67,6 @@ export class MobileAddHardwareComponent extends BaseMainComponent implements OnI
                 this.unblockUI();
             });
     }
-
-
 }
 
 

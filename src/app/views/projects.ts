@@ -127,7 +127,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_project', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_project'), reason));
                         this.refresh(); // also unblockUI
                     });
             }
@@ -144,7 +144,7 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_project', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_project'), reason));
                         this.refresh(); // also unblockUI
                     });
             }

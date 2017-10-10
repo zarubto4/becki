@@ -59,7 +59,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_delete_error', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_tariff_delete_error'), reason));
                         this.refresh();
                     });
             }
@@ -142,7 +142,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
                 this.refresh();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                 this.refresh();
             });
     }
@@ -153,7 +153,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
                 this.refresh();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                 this.refresh();
             });
     }
@@ -164,7 +164,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
                 this.refresh();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                 this.refresh();
             });
     }
@@ -175,7 +175,7 @@ export class AdminFinancialComponent extends BaseMainComponent implements OnInit
                 this.refresh();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                 this.refresh();
             });
     }

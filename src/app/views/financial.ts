@@ -70,7 +70,7 @@ export class FinancialComponent extends BaseMainComponent implements OnInit {
                 this.unblockUI();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_products_cant_load', reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_products_cant_load'), reason));
                 this.unblockUI();
             });
     }

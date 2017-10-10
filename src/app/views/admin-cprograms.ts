@@ -133,7 +133,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
                         this.onShowPublicProgramByFilter();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove_code'), reason));
                     });
             }
         });
@@ -157,7 +157,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
                         this.onShowPublicProgramByFilter();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_update_code'), reason));
                     });
             }
         });
@@ -190,7 +190,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
                         this.onShowPublicLibraryByFilter();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_edit_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_edit_fail'), reason));
                     });
             }
         });
@@ -206,7 +206,7 @@ export class CommunityCProgramComponent extends BaseMainComponent implements OnI
                         this.onShowPublicLibraryByFilter();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_removed_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_library_removed_fail'), reason));
                     });
             }
         });

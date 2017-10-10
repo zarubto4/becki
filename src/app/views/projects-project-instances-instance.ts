@@ -93,7 +93,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                         this.refresh();
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_edit_fail', reason)));
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_instance_edit_fail'), reason));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     });
             }
@@ -398,7 +398,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
             if (m.message_type === 'new_external_input_connector_value') {
                 /* tslint:disable */
-                    console.error("homerMessageReceived:: new_external_input_connector_value - unsopported!!! ", m.message_type);
+                console.error("homerMessageReceived:: new_external_input_connector_value - unsopported!!! ", m.message_type);
                 /* tslint:enable */
                 return;
             }
