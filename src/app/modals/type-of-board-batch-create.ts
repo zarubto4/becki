@@ -14,6 +14,7 @@ import { formSelectComponentOptionsMaker } from '../components/FormSelectCompone
 import { IApplicableProduct } from '../backend/TyrionAPI';
 import { ModalModel } from '../services/ModalService';
 import { BeckiValidators } from '../helpers/BeckiValidators';
+import { IMyDpOptions } from 'mydatepicker';
 
 export class ModalsCreateTypeOfBoardBatchModel extends ModalModel {
     constructor(
@@ -49,6 +50,25 @@ export class ModalsCreateTypeOfBoardBatchComponent implements OnInit {
     modalClose = new EventEmitter<boolean>();
 
     form: FormGroup;
+
+    dateNow = new Date();
+    dateOption: IMyDpOptions = { // can be found here: https://github.com/kekeh/mydatepicker/blob/master/README.md#options-attribute
+        dateFormat: 'dd.mm.yyyy',
+        showTodayBtn: true,
+        disableUntil: {
+            year: this.dateNow.getFullYear() + 1,
+            month: this.dateNow.getMonth() + 12,
+            day: this.dateNow.getDate() - 1
+        },
+        disableSince: {
+            year: this.dateNow.getFullYear(),
+            month: this.dateNow.getMonth() + 12,
+            day: this.dateNow.getDate()
+        },
+        firstDayOfWeek: 'mo',
+        sunHighlight: true,
+        inline: false
+    };
 
     constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
 

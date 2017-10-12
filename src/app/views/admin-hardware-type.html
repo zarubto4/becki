@@ -76,16 +76,22 @@
 
                 <!-- Device List -->
                 <div *ngIf="tab == 'hardware_list'">
+                    <!-- Filter !-->
+                    <div *ngIf="boardsFiler && boardsFiler.content"  class="becki-actions">
+
+                    </div>
+
                     <div *ngIf="(boardsFiler && boardsFiler.content.length)" class="table-scrollable">
                         <table class="table table-hover">
                             <thead>
                             <tr>
-                                <th class="col col-lg-3">{{'label_name'|bkTranslate:this}}</th>
-                                <th class="col col-lg-4">{{'label_table_id'|bkTranslate:this}}</th>
-                                <th class="col col-lg-5">{{'label_description'|bkTranslate:this}}</th>
-                                <th class="col col-lg-2"><strong class="font-color-hardware">Hardware</strong>{{'label_table_type'|bkTranslate:this}}</th>
-                                <th class="col col-lg-2">{{'label_table_status'|bkTranslate:this}}</th>
-                                <th class="col col-lg-1 text-right no-wrap">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                                <th class="no-wrap">{{'label_name'|bkTranslate:this}}</th>
+                                <th class="no-wrap">{{'label_table_id'|bkTranslate:this}}</th>
+                                <th class="no-wrap">{{'label_description'|bkTranslate:this}}</th>
+                                <th class="no-wrap">{{'label_hash'|bkTranslate:this}}</th>
+                                <th class="no-wrap"><strong class="font-color-hardware">Hardware</strong>{{'label_table_type'|bkTranslate:this}}</th>
+                                <th class="no-wrap">{{'label_table_status'|bkTranslate:this}}</th>
+                                <th class="text-right no-wrap">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -103,6 +109,7 @@
                                 </td>
                                 <td class="vert-align no-wrap">{{device.id}}</td>
                                 <td class="vert-align no-wrap">{{device.description}}</td>
+                                <td class="vert-align no-wrap">{{device.hash_for_adding}}</td>
                                 <td class="vert-align no-wrap"><a (click)="onTypeOfBoardClick(device.type_of_board_id)">{{device.type_of_board_name}}</a></td>
                                 <td class="vert-align no-wrap">
                                     <span *ngIf="device.online_state == 'online'" class="font-green-jungle bold">{{device.online_state|bkTranslateTable:this:'online_status'}}</span>
@@ -131,6 +138,7 @@
                             </tr>
                             </tbody>
                         </table>
+                        <bk-filter-page-component [from]="boardsFiler.from" [to]="boardsFiler.to" [total]="boardsFiler.total"  [totalPages]="boardsFiler.pages" (onSelect)="selectedFilterPageHardware($event)"></bk-filter-page-component>
                     </div>
                     <h3 *ngIf="!boardsFiler" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
                     <div *ngIf="boardsFiler && boardsFiler.content.length == 0" class="list-no-items">

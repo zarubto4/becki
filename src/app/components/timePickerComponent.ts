@@ -21,7 +21,7 @@ export class TimePickerComponent {
     label: string = '';
 
     @Input()
-    placeholder: string = this.currentdate.getHours() + ':' + this.currentdate.getMinutes();
+    placeholder: string = this.currentdate.getHours() + ':' + (this.currentdate.getMinutes() + 2);
 
     @Input()
     readonly: boolean = false;

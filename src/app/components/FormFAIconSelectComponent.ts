@@ -1,6 +1,3 @@
-/**
- * Created by davidhradek on 29.09.16.
- */
 
 import { Component, Input, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
 import { AbstractControl } from '@angular/forms';

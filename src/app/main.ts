@@ -179,6 +179,10 @@ import { BugsComponent } from './views/admin-bugs';
 import { BugsBugComponent } from './views/admin-bugs-bug';
 import { TimePickerComponent } from './components/timePickerComponent';
 import { DatePickerComponent } from './components/datePickerComponent';
+import { ModalsHardwareGroupPropertiesComponent } from './modals/hardware-group-properties';
+import { ModalsHardwareGroupDeviceSettingsComponent } from './modals/hardware-group-device-settings';
+import { FormSwitchTwoListSelectComponent } from './components/FormSwitchTwoListSelectComponent';
+import { ModalsUpdateReleaseFirmwareComponent } from './modals/update-release-firmware';
 import { MultiSelectComponent } from './components/MultiSelectComponent';
 
 // @formatter:off
@@ -467,6 +471,7 @@ class BeckiErrorHandler implements ErrorHandler {
         QRCodeComponent,
         DatePickerComponent,
         TimePickerComponent,
+        FormSwitchTwoListSelectComponent,
         // Views components
         AdminDashboardComponent,
         Error404Component,
@@ -586,6 +591,9 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsWidgetsWidgetCopyComponent,
         ModalsExtensionComponent,
         ModalsBlockoBlockCopyComponent,
+        ModalsHardwareGroupPropertiesComponent,
+        ModalsHardwareGroupDeviceSettingsComponent,
+        ModalsUpdateReleaseFirmwareComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

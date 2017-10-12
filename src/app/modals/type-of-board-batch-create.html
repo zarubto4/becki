@@ -26,7 +26,7 @@
             <hr>
             <bk-form-input label="{{'label_ean_number'|bkTranslate:this}}" [control]="form.controls['ean_number']"></bk-form-input>
             <hr>
-            <bk-form-input label="{{'label_date_of_assembly'|bkTranslate:this}}" [control]="form.controls['date_of_assembly']"></bk-form-input>
+            <bk-date-picker [control]="form.controls.date_of_assembly" [label]="'label_date_of_assembly'|bkTranslate:this" [dateOption]="dateOption"></bk-date-picker>
 
             <bk-form-input label="{{'label_customer_product_name'|bkTranslate:this}}" [control]="form.controls['customer_product_name']"></bk-form-input>
             <bk-form-input label="{{'label_customer_company_name'|bkTranslate:this}}" [control]="form.controls['customer_company_name']"></bk-form-input>

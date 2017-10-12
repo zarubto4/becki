@@ -1,6 +1,15 @@
 <div *ngFor="let modalWrapper of modalService.modalWrappers" class="modal fade" tabindex="-1" [class.in]="modalWrapper.modalIn" [style.display]="modalWrapper.modalDisplay ? 'block' : 'none'" style="background-color: rgba(0,0,0,0.5)">
     <div class="modal-dialog" [class.modal-width-80]="modalWrapper.modalModel?modalWrapper.modalModel.modalWide:false">
         <div class="modal-content" [ngSwitch]="modalWrapper.getModalType()">
+            <template [ngSwitchCase]="'ModalsUpdateReleaseFirmwareModel'">
+                <bk-modals-update-release-firmware [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-update-release-firmware>
+            </template>
+            <template [ngSwitchCase]="'ModalsHardwareGroupDeviceSettingsModel'">
+                <bk-modals-hardware-group-device-settings [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-group-device-settings>
+            </template>
+            <template [ngSwitchCase]="'ModalsHardwareGroupPropertiesModel'">
+                <bk-modals-hardware-group-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-group-properties>
+            </template>
             <template [ngSwitchCase]="'ModalsPermissionPermissionPropertyModel'">
                 <bk-modals-permission-permission-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-permission-permission-properties>
             </template>

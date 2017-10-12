@@ -354,7 +354,13 @@ export class StaticTranslation {
                 'title_edit': 'Widget Properties',
                 'title_add': 'New Widget',
                 'label_widget_name': 'Name',
-                'label_widget_description': 'Description',
+                'label_widget_description': 'Description'
+
+            }, 'ModalsHardwareGroupPropertiesComponent': {
+                'title_edit': 'Hardware Group Properties',
+                'title_add': 'New Group',
+                'label_group_name': 'Name',
+                'label_group_description': 'Description',
 
             }, 'RedirectOkComponent': {
                 'title': 'Success!',
@@ -830,6 +836,11 @@ export class StaticTranslation {
                 'main_title': 'Hardware Types',
                 'flash_project_cant_load': 'Projects could not be loaded, {0}.'
 
+            }, 'ModalsHardwareGroupDeviceSettingsComponent': {
+                'main_title': 'Hardware Groups Device Settings',
+                'label_available': 'Available Groups',
+                'title_in_group': 'In Groups'
+
             }, 'PictureUploadComponent': {
                 'flash_image_too_small': 'image too small',
                 'label_unsaved': 'unsaved',
@@ -885,6 +896,19 @@ export class StaticTranslation {
                 'label_available_devices': 'Available devices',
                 'label_no_device': 'No devices available.',
                 'flash_project_cant_load': 'Project could not be loaded, {0}.',
+
+            }, 'ModalsUpdateReleaseFirmwareComponent': {
+                'title': 'Firmware Release Settings',
+                'label_hw_group_title': 'Select <strong class="font-color-hardware">HARDWARE</strong> Groups',
+                'label_firmware_title': 'Select <strong class="font-color-code">FIRMWARE</strong>',
+                'label_no_firmware_warning': 'Sorry, but you haven\'t own <strong class="font-color-code">FIRMWARE CODE</strong> (program) yet.',
+                'label_no_groups_warning': 'Sorry, but you haven\'t own <strong class="font-color-code">HARDWARE</strong> groups yet.',
+                'label_firmware_type': 'Firmware Type',
+                'label_select_time': 'Select Time',
+                'label_select_date': 'Select Date',
+                'label_when': 'When',
+                'label_immediately': '<strong>(Immediately)</strong>',
+                'label_on_time': '<strong>(At a set time)</strong>',
 
             }, 'ProducersComponent': {
                 'main_title': 'Manufacturers',
@@ -1029,11 +1053,29 @@ export class StaticTranslation {
                 'label_type': 'Type',
                 'label_status': 'Status',
                 'label_actions': 'Actions',
-                'btn_add_hardware': ' Add a Device',
+                'btn_add_hardware': 'Add a Device',
+                'btn_add_hardware_group': 'Create Group',
+                'btn_add_new_update': 'Release Firmware',
                 'label_no_hardware': 'No <strong class="font-color-hardware">HARDWARE</strong> in this project.',
                 'label_no_hardware_comment': 'Click on the button bellow to add a new device.',
+                'label_no_hardware_group': 'No <strong class="font-color-hardware">HARDWARE GROUP</strong> in this project.',
+                'label_no_hardware_group_comment': 'Click on the button bellow to add a new group for hardware.',
+                'label_no_updates': 'No <strong class="font-color-code">FIRMWARE </strong> release',
+                'label_no_updates_comment': 'Click on the button bellow to update <strong class="font-color-code">HARDWARE</strong>, or <strong>Hardware Groups</strong>.',
                 'label_device_properties': 'Device properties',
                 'label_remove_device': 'Remove device',
+
+                'tab_hardware_list': 'Hardware List',
+                'tab_hardware_groups': 'Hardware Groups',
+                'tab_updates': 'Updates',
+
+                'table_description': 'Description',
+                'table_id': 'Updates',
+                'table_name': 'Alias Name',
+                'table_groups': 'Groups',
+                'table_status': 'Status',
+                'table_actions': 'Actions',
+                'table_size': 'Size []',
 
                 'flash_add_device_success': 'Device {0} has been added to your project.',
                 'flash_add_device_fail': 'Device {0} could not be added to your project, {1}.',
@@ -1953,6 +1995,7 @@ export class StaticTranslation {
 
                 'label_table_id': 'Processor ID',
                 'label_table_type': 'Type',
+                'label_hash': 'Hash Token',
                 'label_table_status': 'Online status',
 
                 'label_no_type_of_boards': 'No Boards Types',

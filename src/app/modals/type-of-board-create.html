@@ -16,10 +16,10 @@
 
             <bk-form-input [control]="form.controls.compiler_target_name" label="{{'label_compiler_target_name'|bkTranslate:this}}"></bk-form-input>
 
-            <bk-form-select [control]="form.controls.processor" label="{{'label_processor'|bkTranslate:this}}"
+            <bk-form-select [control]="form.controls.processor" [label]="'label_processor'|bkTranslate:this"
                             [options]="processor_options"></bk-form-select>
 
-            <bk-form-select [control]="form.controls.producer" label="{{'label_producer'|bkTranslate:this}}"
+            <bk-form-select [control]="form.controls.producer" [label]="'label_producer'|bkTranslate:this"
                             [options]="producer_options"></bk-form-select>
         </form>
     </div>

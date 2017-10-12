@@ -277,6 +277,10 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         });
     }
 
+    selectedFilterPageHardware(event: { index: number}) {
+        this.onFilterHardware(event.index);
+    }
+
     onFilterHardware(pageNumber: number = 0, boardTypes: string[] = []): void {
 
         this.backendService.boardsGetWithFilterParameters(pageNumber, {
@@ -336,7 +340,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         this.backendService.boardSynchronizeAllWithCentralRegistrationAuthority()
             .then(() => {
                 this.unblockUI();
-                this.refresh();
+                this.onFilterHardware(0);
             })
             .catch(reason => {
                 this.unblockUI();

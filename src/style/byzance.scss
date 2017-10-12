@@ -158,6 +158,16 @@
     width: 123px;
 }
 
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
 .error404-logo {
     bottom: 5%;
     left: 1%;
@@ -2616,10 +2626,10 @@ textarea.form-control {
 
 .time-picker-input{
     border:none;
-     text-align:center; 
+     text-align:center;
       border-color: inherit;
        -webkit-box-shadow: none;
-        box-shadow: none; outline: none; 
+        box-shadow: none; outline: none;
         max-width:2em;
 }
 

@@ -13,10 +13,16 @@ import { FlashMessageError, FlashMessageSuccess } from '../services/Notification
 import { Subscription } from 'rxjs/Rx';
 import { ModalsAddHardwareModel } from '../modals/add-hardware';
 import { ModalsRemovalModel } from '../modals/removal';
-import { IProject, IBoardShortDetail } from '../backend/TyrionAPI';
+import {
+    IProject, IBoardShortDetail, IBoardList, IBoardGroup, IActualizationProcedureList,
+    IActualizationProcedureShortDetail, ICProgramShortDetail
+} from '../backend/TyrionAPI';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsHardwareBootloaderUpdateModel } from '../modals/hardware-bootloader-update';
+import { ModalsHardwareGroupPropertiesModel } from '../modals/hardware-group-properties';
+import { ModalsHardwareGroupDeviceSettingsModel } from '../modals/hardware-group-device-settings';
+import { ModalsUpdateReleaseFirmwareModel } from '../modals/update-release-firmware';
 
 @Component({
     selector: 'bk-view-projects-project-hardware',
@@ -24,16 +30,20 @@ import { ModalsHardwareBootloaderUpdateModel } from '../modals/hardware-bootload
 })
 export class ProjectsProjectHardwareComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
-    id: string;
+    projectId: string;
+    project: IProject = null;
 
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
 
-    project: IProject = null;
-    devices: IBoardShortDetail[] = null;
 
-    bootloaderRequred: boolean = false;
+    devicesFilter: IBoardList = null;
+    deviceGroup: IBoardGroup[] = null;
+    actualizationList: IActualizationProcedureList = null;
+
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
+
+    tab: string = 'hardware_list';
 
     constructor(injector: Injector) {
         super(injector);
@@ -41,25 +51,19 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
 
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
-            this.id = params['project'];
-            this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
+            this.projectId = params['project'];
+            this.projectSubscription = this.storageService.project(this.projectId).subscribe((project) => {
                 this.project = project;
-                this.devices = project.boards;
 
-                this.devices.forEach((device, index, obj) => {
-                    this.backendService.onlineStatus.subscribe((status) => {
-                        if (status.model === 'Board' && device.id === status.model_id) {
-                            device.online_state = status.online_status;
-                        }
-                    });
-                });
+                this.onFilterHardware();
 
-
+                /**
                 if (this.devices.find((device, index, obj) => { return !!(device.alert_list && device.alert_list.length); })) {
                     this.bootloaderRequred = true;
                 } else {
                     this.bootloaderRequred = false;
-                }
+                }*/
+
             });
         });
     }
@@ -69,6 +73,19 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         if (this.projectSubscription) {
             this.projectSubscription.unsubscribe();
         }
+    }
+
+    onToggleTab(tab: string) {
+        this.tab = tab;
+
+        if (tab === 'hardware_groups' && this.deviceGroup == null) {
+            this.onHardwareGroupRefresh();
+        }
+
+        if (tab === 'updates' && this.actualizationList == null) {
+            this.onFilterActualizationProcedure();
+        }
+
     }
 
     onUpdateListBootloaderClick() {
@@ -83,11 +100,11 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
                   this.backendService.editBoardUserDescription(device.id, {name: model.description})
                   .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess('The device description was updated.'));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError('The device cannot be updated.', reason));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     });
             */}
         });
@@ -102,18 +119,18 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
                 this.backendService.boardEditPersonalDescription(device.id, { name: model.name, description: model.description })
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_edit_device_success')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_edit_device_fail'), reason));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     });
             }
         });
     }
 
     onDeviceClick(device: IBoardShortDetail): void {
-        this.navigate(['/projects', this.id, 'hardware', device.id]);
+        this.navigate(['/projects', this.projectId, 'hardware', device.id]);
     }
 
     onBoardTypeClick(boardTypeId: string): void {
@@ -121,40 +138,286 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     }
 
     onRemoveClick(device: IBoardShortDetail): void {
-        this.modalService.showModal(new ModalsRemovalModel(device.id)).then((success) => {
+        this.modalService.showModal(new ModalsRemovalModel('[' + device.id + '] ' + device.name)).then((success) => {
             if (success) {
                 this.blockUI();
                 this.backendService.boardDisconnectFromProject(device.id) // TODO [permission]: Project.update_permission (probably implemented as device.delete_permission)
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_remove_device_success')));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail'), reason));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_device_fail', reason)));
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     });
             }
         });
     }
-
-
 
     onAddClick(): void {
         let model = new ModalsAddHardwareModel();
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
-                this.backendService.boardConnectWithProject(model.id, this.id) // TODO [permission]: Board.first_connect_permission, Project.update_permission
+                this.backendService.boardConnectWithProject(model.id, this.projectId) // TODO [permission]: Board.first_connect_permission, Project.update_permission
                     .then(() => {
                         this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_add_device_success', model.id)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_add_device_fail', model.id, reason)));
-                        this.storageService.projectRefresh(this.id).then(() => this.unblockUI());
+                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                     });
             }
         });
     }
+
+
+    onDeviceEditGroupClick(device: IBoardShortDetail) {
+        if (this.deviceGroup == null) {
+            this.backendService.boardGroupGetListFromProject(this.projectId)
+                .then((values) => {
+                    this.unblockUI();
+                    this.deviceGroup = values;
+                    this.onDeviceEditGroupClick(device);
+                })
+                .catch((reason) => {
+                    this.unblockUI();
+                });
+        } else {
+            let model = new ModalsHardwareGroupDeviceSettingsModel(device, this.deviceGroup);
+            this.modalService.showModal(model).then((success) => {
+                if (success) {
+                    this.backendService.boardGroupCreate({  // TODO - Upravit na Tyrionovi metodu
+                        name: '',
+                        description: '',
+                        project_id: ''
+                    })
+                        .then(() => {
+                            this.unblockUI();
+                            this.onHardwareGroupRefresh();
+                        })
+                        .catch(reason => {
+                            this.unblockUI();
+                            this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail', reason)));
+                        });
+                }
+            });
+        }
+    }
+
+    onGroupAddClick(): void {
+        let model = new ModalsHardwareGroupPropertiesModel();
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.boardGroupCreate({
+                    name: model.name,
+                    description: model.description,
+                    project_id: this.projectId
+                })
+                    .then(() => {
+                        this.unblockUI();
+                        this.onHardwareGroupRefresh();
+                    })
+                    .catch(reason => {
+                        this.unblockUI();
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail', reason)));
+                    });
+            }
+        });
+    }
+
+    onGroupEditClick(group: IBoardGroup): void {
+        let model = new ModalsHardwareGroupPropertiesModel(group.name, group.description, true, group.name);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.boardGroupEdit(group.id, {
+                    name: model.name,
+                    description: model.description
+                })
+                    .then(() => {
+                        this.unblockUI();
+                        this.onHardwareGroupRefresh();
+                    })
+                    .catch(reason => {
+                        this.unblockUI();
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail', reason)));
+                    });
+            }
+        });
+    }
+
+    onGroupDeleteClick(group: IBoardGroup): void {
+        this.modalService.showModal(new ModalsRemovalModel(group.name)).then((success) => {
+            if (success) {
+                this.blockUI();
+                this.backendService.boardGroupDelete(group.id)
+                    .then(() => {
+                        this.unblockUI();
+                        this.onHardwareGroupRefresh();
+                    })
+                    .catch(reason => {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_group_fail', reason)));
+                        this.unblockUI();
+                        this.onHardwareGroupRefresh();
+                    });
+            }
+        });
+    }
+
+    selectedFilterPageHardware(event: { index: number}) {
+        this.onFilterHardware(event.index);
+    }
+
+    onFilterHardware(pageNumber: number = 0, boardTypes: string[] = []): void {
+        this.blockUI();
+        this.backendService.boardsGetWithFilterParameters( pageNumber, {
+            projects: [this.projectId],
+            type_of_board_ids: boardTypes
+        })
+            .then((values) => {
+                this.devicesFilter = values;
+
+                this.devicesFilter.content.forEach((device, index, obj) => {
+                    this.backendService.onlineStatus.subscribe((status) => {
+                        if (status.model === 'Board' && device.id === status.model_id) {
+                            device.online_state = status.online_status;
+                        }
+                    });
+                });
+
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+            });
+    }
+
+
+    selectedFilterPageActualizationProcedure(event: { index: number}) {
+        this.onFilterActualizationProcedure(event.index);
+    }
+
+    /* tslint:disable:max-line-length ter-indent */
+    onFilterActualizationProcedure(pageNumber: number = 0,
+                                   states: ('successful_complete'|'complete'|'complete_with_error'|'canceled'|'in_progress'|'not_start_yet')[] = [],
+                                   type_of_updates:  ('MANUALLY_BY_USER_INDIVIDUAL'|'MANUALLY_BY_USER_BLOCKO_GROUP'|'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME'|'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE'|'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE')[] = []): void {
+        this.blockUI();
+        this.backendService.actualizationProcedureGetByFilter( pageNumber, {
+            project_ids: [this.projectId],
+            states: states,
+            type_of_updates: type_of_updates
+        })
+            .then((values) => {
+                this.actualizationList = values;
+
+                this.actualizationList.content.forEach((procedure, index, obj) => {
+                    this.backendService.objectUpdateTyrionEcho.subscribe((status) => {
+                        if (status.model === 'ActualizationProcedure' && procedure.id === status.model_id) {
+
+                            this.backendService.actualizationProcedureGet(procedure.id)
+                                .then((value) => {
+                                    procedure.state = value.state;
+                                })
+                                .catch((reason) => {
+                                    this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                                });
+
+                        }
+                    });
+                });
+
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+            });
+    }
+    /* tslint:disable:max-line-length ter-indent*/
+
+    onHardwareGroupRefresh(): void {
+        this.blockUI();
+        this.backendService.boardGroupGetListFromProject(this.projectId)
+            .then((values) => {
+                this.deviceGroup = values;
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+            });
+    }
+
+
+    onUpdateProcedureCancelClick(procedure: IActualizationProcedureShortDetail): void {
+
+    }
+
+    onProcedureClick() {
+        // TODO
+    }
+
+    onProcedureCreateClick( cPrograms: ICProgramShortDetail[] = null) {
+
+        // Get all deviceGroup - Recursion
+        if (this.deviceGroup == null) {
+            this.blockUI();
+            this.backendService.boardGroupGetListFromProject(this.projectId)
+                .then((values) => {
+                    this.unblockUI();
+                    this.deviceGroup = values;
+                    this.onProcedureCreateClick();
+                    return;
+                })
+                .catch((reason) => {
+                    this.unblockUI();
+                    this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                });
+        }
+
+        if (cPrograms == null) {
+            this.blockUI();
+            this.backendService.cProgramGetListByFilter(0, {
+                project_id: this.projectId
+            })
+                .then((list) => {
+                    this.unblockUI();
+                    this.onProcedureCreateClick(list.content);
+                    return;
+                }).catch(reason => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail', reason)));
+            });
+        }
+
+        if (cPrograms == null ||  this.deviceGroup == null) {
+            return;
+        }
+
+        let model = new ModalsUpdateReleaseFirmwareModel(this.deviceGroup, cPrograms);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.backendService.boardGroupCreate({
+                    name: '',
+                    description: '',
+                    project_id: ''
+                })
+                    .then(() => {
+                        this.unblockUI();
+                        this.onHardwareGroupRefresh();
+                    })
+                    .catch(reason => {
+                        this.unblockUI();
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail', reason)));
+                    });
+            }
+        });
+
+    }
+
 
 }
