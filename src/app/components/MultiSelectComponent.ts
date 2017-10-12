@@ -1,28 +1,25 @@
 import { Component, Output, Input, EventEmitter, AfterViewInit, OnInit } from '@angular/core';
 import { FormSelectComponentOption } from './FormSelectComponent';
 
-
+/* tslint:disable: */
 @Component({
     selector: 'bk-multi-select',
     template: `
 
-        <div class="portlet-title"> 
-        </div> 
         <div *ngIf="items">
-            <table  class="table table-condensed" style="border-collapse: separate;"> 
+            <label *ngIf="labelComment" [innerHTML]="label"></label>
+            <table  class="table" style="border-collapse: separate;">
                 <thead> 
-                    <tr> 
-                        <th class="col col-lg-1 m-grid-col-left">{{'table_label'|bkTranslate:this}}</th> 
-                        <th class="col col-lg-1" *ngFor="let field of additionalFields">{{field|bkTranslate:this}}</th> 
-                        </tr> 
+                    <tr>
+                        <th class="col col-lg-1" *ngFor="let field of additionalFields">{{field}}</th> 
+                    </tr> 
                 </thead> 
                 <tbody *ngFor="let item of items"> 
             
                     <tr class="bk-hover-pick" [class.bg-green-meadow]="selectedItems.indexOf(item) > -1" (click)="itemSelected(item)"> 
                         <td class="vert-align no-wrap"> 
                            {{item.label}}
-                        </td> 
-
+                        </td>
                         <td class="vert-align" *ngFor="let field of additionalFields">
                             {{item[field]}}
                         </td> 
@@ -32,22 +29,29 @@ import { FormSelectComponentOption } from './FormSelectComponent';
         </div> 
     `
 })
+/* tslint:enable */
 
 export class MultiSelectComponent {
 
-    selectedItems: MultiSelectComponentOption[] = [];
+    selectedItems: FormSelectComponentOption[] = [];
 
     @Input()
-    items: MultiSelectComponentOption[];
+    label: string = 'Unknown label';
+
+    @Input()
+    labelComment: boolean = true;
+
+    @Input()
+    items: FormSelectComponentOption[];
 
     @Input()
     additionalFields: string[] = [];
 
     @Output()
-    selected = new EventEmitter<MultiSelectComponentOption[]>();
+    selected = new EventEmitter<FormSelectComponentOption[]>();
 
 
-    public getAndRemoveSelectedItems(): MultiSelectComponentOption[] {
+    public getAndRemoveSelectedItems(): FormSelectComponentOption[] {
         let c = this.items.filter(itemToDelete => {
             return this.selectedItems.indexOf(itemToDelete) === -1;
         });
@@ -63,7 +67,7 @@ export class MultiSelectComponent {
         items.map(item => this.items.push(item));
     }
 
-    itemSelected(item: MultiSelectComponentOption) {
+    itemSelected(item: FormSelectComponentOption) {
         let pickedItem = this.selectedItems.indexOf(item);
         if (pickedItem > -1) {
             this.selectedItems.splice(pickedItem, 1);
@@ -74,7 +78,3 @@ export class MultiSelectComponent {
     }
 }
 
-export interface MultiSelectComponentOption {
-    id: string;
-    label: string;
-}

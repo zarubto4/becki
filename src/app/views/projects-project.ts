@@ -26,14 +26,6 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
-    cProgramsPublicsGetter: any = (page: number) => {
-        return this.backendService.listCPrograms(page, {});
-    };
-
-    onProgramClick(program: ICProgramShortDetail) {
-        console.log(program);
-    }
-
     constructor(injector: Injector) {
         super(injector);
     };

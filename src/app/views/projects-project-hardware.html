@@ -15,19 +15,19 @@
                 </span>
             </div>
             <div *ngIf="tab == 'hardware_list' && (devicesFilter && devicesFilter.content.length)" class="becki-actions">
-                <button class="btn blue" (click)="onAddClick($event)">
+                <button class="btn blue" (click)="onAddClick()">
                     <i class="fa fa-plus-circle"></i>{{'btn_add_hardware'|bkTranslate:this}}
                 </button>
             </div>
 
             <div *ngIf="tab == 'hardware_groups' && (deviceGroup && deviceGroup.length)" class="becki-actions">
-                <button class="btn blue" (click)="onAddClick($event)">
+                <button class="btn blue" (click)="onGroupAddClick()">
                     <i class="fa fa-plus-circle"></i>{{'btn_add_hardware_group'|bkTranslate:this}}
                 </button>
             </div>
 
             <div *ngIf="tab == 'updates' && (actualizationList && actualizationList.content.length)" class="becki-actions">
-                <button class="btn blue" (click)="onProcedureCreateClick($event)">
+                <button class="btn blue" (click)="onProcedureCreateClick()">
                     <i class="fa fa-plus-circle"></i>{{'btn_add_new_update'|bkTranslate:this}}
                 </button>
             </div>

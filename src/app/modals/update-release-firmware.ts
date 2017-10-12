@@ -6,14 +6,14 @@
  * directory of this distribution.
  */
 
-import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
+import {Input, Output, EventEmitter, Component, OnInit, ViewChild} from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { BackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
 import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { IBoardGroup, ICProgramShortDetail } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import {IMyDpOptions} from "mydatepicker";
+import { IMyDpOptions } from 'mydatepicker';
 
 export class ModalsUpdateReleaseFirmwareModel extends ModalModel {
     constructor(
@@ -41,6 +41,9 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
     modalClose = new EventEmitter<boolean>();
 
     form: FormGroup;
+
+    @ViewChild('GroupList')
+    groupsForSelect: FormSelectComponentOption[] = null;
 
     cProgramForSelect: FormSelectComponentOption[] = null;
     cProgramVersionForSelect: FormSelectComponentOption[] = null;
@@ -83,6 +86,13 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
     }
 
     ngOnInit() {
+
+        this.groupsForSelect = this.modalModel.deviceGroup.map((pv) => {
+            return {
+                label: pv.name,
+                value: pv.id
+            };
+        });
 
         this.cProgramForSelect = this.modalModel.cPrograms.map((pv) => {
             return {

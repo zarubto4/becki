@@ -11,6 +11,8 @@
                     <h4 [innerHTML]="'label_hw_group_title'|bkTranslate:this"></h4>
                     <!-- -->
                     <span *ngIf="modalModel.deviceGroup.length == 0" [innerHTML]="'label_no_groups_warning'|bkTranslate:this"></span>
+                    <br>
+                    <bk-multi-select [items]="groupsForSelect" [labelComment]="false"></bk-multi-select>
                 </div>
                 <div class="col-md-6">
 
@@ -33,7 +35,9 @@
                     </div>
                 </div>
             </div>
-
+            <br>
+            <hr>
+            <br>
             <div>
                 <bk-form-select [control]="form.controls.firmwareType" [label]="'label_firmware_type'|bkTranslate:this"
                                 [options]="firmwareTypeSelect"></bk-form-select>
