@@ -179,6 +179,7 @@ import { BugsComponent } from './views/admin-bugs';
 import { BugsBugComponent } from './views/admin-bugs-bug';
 import { TimePickerComponent } from './components/timePickerComponent';
 import { DatePickerComponent } from './components/datePickerComponent';
+import { MultiSelectComponent } from './components/MultiSelectComponent';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -444,6 +445,7 @@ class BeckiErrorHandler implements ErrorHandler {
         TranslateTablePipe,
         HtmlSanitizeBypassPipe,
         // Components
+        MultiSelectComponent,
         MonacoEditorComponent,
         FormColorPickerComponent,
         FormFAIconSelectComponent,
