@@ -50,6 +50,14 @@ export interface IWebSocketGarfieldDeviceConfigure extends IWebSocketMessage {
     configuration: any;
 }
 
+export interface IWebSocketGarfieldDeviceTest extends IWebSocketMessage {
+    test_config: any;
+}
+
+export interface IWebSocketGarfieldDeviceTestResult extends IWebSocketSuccessMessage {
+    errors: string[];
+}
+
 export interface IWebSocketGarfieldDeviceBinary extends IWebSocketMessage {
     url: string;
     type: ('bootloader' | 'firmware');

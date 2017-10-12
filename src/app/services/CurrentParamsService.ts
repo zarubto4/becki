@@ -79,6 +79,10 @@ export class CurrentParamsService {
     protected currentBugSummarySubject: Subject<string> = null;
     public currentBugSummarySnapshot: string = null;
 
+    public currentGarfieldName: Observable<string> = null;
+    protected currentGarfieldNameSubject: Subject<string> = null;
+    public currentGarfieldNameSnapshot: string = null;
+
     constructor(protected router: Router, protected backendService: BackendService) {
         console.info('BreadcrumbsService init');
 
@@ -99,6 +103,7 @@ export class CurrentParamsService {
         this.currentLibraryName = this.currentLibraryNameSubject = new Subject<string>();
         this.currentGroupName = this.currentGroupNameSubject = new Subject<string>();
         this.currentBugSummary = this.currentBugSummarySubject = new Subject<string>();
+        this.currentGarfieldName = this.currentGarfieldNameSubject = new Subject<string>();
 
         router.events.subscribe(event => {
             if (event instanceof NavigationCancel || event instanceof NavigationEnd) {
@@ -348,6 +353,20 @@ export class CurrentParamsService {
                 this.backendService.getBug(params['bug']).then((bug) => {
                     this.currentBugSummarySnapshot = bug.summary;
                     this.currentBugSummarySubject.next(this.currentBugSummarySnapshot);
+                });
+            }
+
+        }
+
+        if (this.currentParamsSnapshot['garfield'] !== params['garfield']) {
+
+            if (!params['garfield']) {
+                this.currentGarfieldNameSnapshot = null;
+                this.currentGarfieldNameSubject.next(this.currentGarfieldNameSnapshot);
+            } else {
+                this.backendService.garfieldGet(params['garfield']).then((garfield) => {
+                    this.currentGarfieldNameSnapshot = garfield.name;
+                    this.currentGarfieldNameSubject.next(this.currentGarfieldNameSnapshot);
                 });
             }
 
