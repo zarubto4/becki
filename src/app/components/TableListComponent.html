@@ -1,0 +1,66 @@
+<div class="col-md-12">
+    <div class="portlet portlet light bordered">
+        <div class="portlet-title">
+            <div class="becki-caption">
+                <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw {{titleIcon}}"></i>
+                             {{title}}
+                 </span>
+            </div>
+        </div>
+        <div *ngIf="versions">
+            <table class="table table-condensed table-hover">
+                <thead>
+                    <tr>
+                        <th class="col col-lg-1">{{'table_name'|bkTranslate:this}}</th>
+                        <th class="col col-lg-1">{{'table_description'|bkTranslate:this}}</th>
+                        <th class="col col-lg-1">{{'table_product'|bkTranslate:this}}</th>
+                        <th class="col col-lg-1" *ngFor="let field of additionalFields">{{field|bkTranslate:this}}</th>
+                        <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let version of versions">
+                        <td class="vert-align no-wrap">
+                            <a (click)="onProgramClick(version)">{{version.name}}</a>
+                        </td>
+                        <td class="vert-align">
+                            {{version.description}}
+                        </td>
+                        <td class="vert-align">
+                            {{version.id}}
+                        </td>
+                        <td class="vert-align" *ngFor="let field of additionalFields">{{version[field]}}</td>
+                        
+                        <td class="vert-align no-wrap text-right">
+
+                            <style type="text/css">
+                                table tr button {
+                                    opacity: 0.05;
+                                }
+
+                                table tr:hover button {
+                                    opacity: 1
+                                }
+                            </style>
+
+                            <button title="Edit" class="btn btn-icon-only green" [disabled]="!version.edit_permission"
+                                (click)="onEditClick(version)">
+                                    <i class="fa fa-cog"></i>
+                                </button>
+
+                            <button title="Remove" class="btn btn-icon-only red" [disabled]="!version.delete_permission"
+                                (click)="onRemoveClick(version)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <a *ngFor="let page of pages" [class.bold]="page == currentPage" (click)="onClick(page)">{{page}}</a>
+
+        </div>
+    </div>
+</div>
