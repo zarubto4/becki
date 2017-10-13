@@ -2633,17 +2633,19 @@ textarea.form-control {
         max-width:2em;
 }
 
-
-
-    .bk-hover-pick
-{
+.bk-hover-pick{
         opacity:1;
 }
-    .bk-hover-pick:hover
-{
+
+.bk-hover-pick:hover{
     box-shadow:
     1px 1px #7E8285,
     2px 2px #7E8285,
     2px 2px #7E8285;
     -webkit-transform: translateX(-1px);
-    transform: translateX(-1px);}
+    transform: translateX(-1px);
+}
+
+.bk-table-scrollable{
+    overflow-y:scroll;
+}

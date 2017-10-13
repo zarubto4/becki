@@ -6,7 +6,7 @@ import { FormSelectComponentOption } from './FormSelectComponent';
     selector: 'bk-multi-select',
     template: `
 
-        <div *ngIf="items">
+        <div class="bk-table-scrollable" [style.max-height]="tabHeight" *ngIf="items">
             <label *ngIf="labelComment" [innerHTML]="label"></label>
             <table  class="table" style="border-collapse: separate;">
                 <thead> 
@@ -15,7 +15,6 @@ import { FormSelectComponentOption } from './FormSelectComponent';
                     </tr> 
                 </thead> 
                 <tbody *ngFor="let item of items"> 
-            
                     <tr class="bk-hover-pick" [class.bg-green-meadow]="selectedItems.indexOf(item) > -1" (click)="itemSelected(item)"> 
                         <td class="vert-align no-wrap"> 
                            {{item.label}}
@@ -31,9 +30,14 @@ import { FormSelectComponentOption } from './FormSelectComponent';
 })
 /* tslint:enable */
 
-export class MultiSelectComponent {
+export class MultiSelectComponent implements OnInit {
 
     selectedItems: FormSelectComponentOption[] = [];
+
+    tabHeight: string = '300px';
+
+    @Input()
+    displayedItems: number = 4;
 
     @Input()
     label: string = 'Unknown label';
@@ -50,6 +54,9 @@ export class MultiSelectComponent {
     @Output()
     selected = new EventEmitter<FormSelectComponentOption[]>();
 
+    ngOnInit() {
+        this.tabHeight = this.displayedItems * 36 + 'px';
+    }
 
     public getAndRemoveSelectedItems(): FormSelectComponentOption[] {
         let c = this.items.filter(itemToDelete => {

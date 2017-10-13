@@ -2,13 +2,13 @@
  * Created by davidhradek on 17.08.16.
  */
 
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 import { FormSelectComponentOption } from './FormSelectComponent';
 
 @Component({
     selector: 'bk-form-two-switch-list-select',
-/* tslint:disable */
+    /* tslint:disable */
     template: `
 <div>
     <div class="row">
@@ -36,7 +36,7 @@ import { FormSelectComponentOption } from './FormSelectComponent';
     </div>
 </div>
 `
-/* tslint:enable */
+    /* tslint:enable */
 })
 export class FormSwitchTwoListSelectComponent implements OnInit {
 
@@ -71,11 +71,11 @@ export class FormSwitchTwoListSelectComponent implements OnInit {
 
     }
 
-    command_right(){
+    command_right() {
 
     }
 
-    command_left(){
+    command_left() {
 
     }
 

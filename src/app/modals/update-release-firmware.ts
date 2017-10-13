@@ -6,7 +6,7 @@
  * directory of this distribution.
  */
 
-import {Input, Output, EventEmitter, Component, OnInit, ViewChild} from '@angular/core';
+import { Input, Output, EventEmitter, Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { BackendService } from '../services/BackendService';
 import { ModalModel } from '../services/ModalService';
