@@ -200,7 +200,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
                     });
             } else {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_email, ', response.message)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_email'), response.message));
             }
         });
     }
@@ -220,7 +220,7 @@ export class ProfileComponent extends BaseMainComponent implements OnInit {
             })
             .catch((error) => {
                 this.unblockUI();
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_information'), error));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_change_information', error)));
             });
     }
 }

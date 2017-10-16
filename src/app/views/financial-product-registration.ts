@@ -591,7 +591,7 @@ export class ProductRegistrationComponent extends BaseMainComponent implements O
                 }
             })
             .catch(reason => {
-                this.fmError(this.translate('flash_cant_buy_product', reason));
+                this.fmError(this.translate('flash_cant_buy_product'), reason);
                 this.unblockUI();
             });
     }

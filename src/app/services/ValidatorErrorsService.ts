@@ -68,6 +68,7 @@ export class ValidatorErrorsService {
                 return this.translateTable(errors['regExp'], 'regexp_not_valid');
             }
         }
+        console.info(errors);
         return this.translate('label_unknown_error');
     }
 

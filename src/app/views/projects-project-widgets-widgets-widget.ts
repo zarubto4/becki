@@ -529,7 +529,7 @@ export class ProjectsProjectWidgetsWidgetsWidgetComponent extends BaseMainCompon
                     design_json: designJson
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_save_success')));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_save_success', this.projectId)));
                         this.refresh(); // also unblockUI
                         this.unsavedChanges = false;
                         this.exitConfirmationService.setConfirmationEnabled(false);

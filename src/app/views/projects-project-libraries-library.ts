@@ -96,7 +96,7 @@ export class ProjectsProjectLibrariesLibraryComponent extends BaseMainComponent 
                 this.blockUI();
                 this.backendService.libraryDelete(this.library.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_save_success')));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_version_save_success', this.projectId)));
                         this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
                         this.navigate(['/projects', this.currentParamsService.get('project'), 'libraries']);
                     })

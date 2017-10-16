@@ -26,7 +26,7 @@ export class MobileAddHardwareComponent extends BaseMainComponent implements OnI
     constructor(injector: Injector) {
         super(injector);
         this.blockForm = this.formBuilder.group({
-            'id': ['', [Validators.required, /*BeckiAsyncValidators.hardwareDeviceId(this.backendService)*/]],
+            'id': ['', [Validators.required, BeckiAsyncValidators.hardwareDeviceId(this.backendService)]],
             'project': ['', [Validators.required]],
         });
     };
@@ -54,16 +54,20 @@ export class MobileAddHardwareComponent extends BaseMainComponent implements OnI
         this.scan = true;
     }
 
+    onBack() {
+        this.router.navigate(['/dashboard']);
+    }
+
     onSubmit(): void {
 
         this.blockUI();
         this.backendService.boardConnectWithProject(this.blockForm.value.id, this.blockForm.value.id) // TODO [permission]: Board.first_connect_permission, Project.update_permission
             .then(() => {
-                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_add_device_success', this.blockForm.value.id)));
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_add_device_success'), this.blockForm.value.id));
                 this.unblockUI();
             })
             .catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_add_device_fail', this.blockForm.value.id, reason)));
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_add_device_fail', this.blockForm.value.id), reason));
                 this.unblockUI();
             });
     }

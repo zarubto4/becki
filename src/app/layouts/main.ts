@@ -96,6 +96,11 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
         }
     }
 
+
+    onLogo() {
+        this.router.navigate(['/dashboard']);
+    }
+
     // define function as property is needed to can set it as event listener (class methods is called with wrong this)
     mouseUpEvent = (e: MouseEvent) => {
 

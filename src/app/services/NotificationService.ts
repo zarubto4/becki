@@ -91,6 +91,8 @@ export abstract class Notification {
         } else {
             this.elementsBody = body;
         }
+
+        this.closeTime = ((((this.htmlBody.length / 5) / 180) * 60) * 1000) + 1500;
         this.tick(0);
     }
 

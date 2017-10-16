@@ -15,6 +15,10 @@ export class DashboardComponent extends BaseMainComponent implements OnInit {
         super(injector);
     };
 
+    onQrClick() {
+        this.router.navigate(['/qr-reader-hardware']);
+    }
+
     ngOnInit(): void {
     }
 

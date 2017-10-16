@@ -22,7 +22,9 @@ export class StaticTranslation {
                 'label_icon': 'FA-ICON (http://fontawesome.io/)',
             }, 'ModalsAddHardwareComponent': {
                 'title': 'Add a Device',
-                'label_hash_token': 'Hash Token'
+                'label_hash_token': 'Hash Token',
+                'flash_add_device_fail': 'Adding device {0} failed',
+                'flash_add_device_success': 'Device add success'
             }, 'ModalsBillingInformationComponent': {
                 'title': 'Information details',
                 'label_invoice_email': 'Invoice E-mail',
@@ -386,6 +388,7 @@ export class StaticTranslation {
             'DashboardComponent': {
                 'title_first_steps': 'FIRST STEPS',
                 'main_title': 'Dashboard',
+                'btn_qrcode': 'Scan a QR code',
                 'title': 'Welcome to Byzance <strong style="color: #36c6d3;"> PORTAL </strong> ',
                 'dashboard_info_text': 'We are Byzance – a technological laboratory of advanced automatization developing a toolkit for design, development and managing the \'Internet of Things\' (IoT) for industrial uses. We do not create smart washing machines, nor smart city furniture. We develop everything for our customers to let them do it themselves, easily and without any problems.',
                 'step_one': '<strong class="font-grey" style="font-size: 1.5em;">1.</strong> Select best matching <strong>tariff</strong> for you and create your <strong>product</strong> in <a onclick="ngNavigate([\'/financial\'])">Financial section</a>',
@@ -416,9 +419,9 @@ export class StaticTranslation {
                 'flash_cant_create_project': 'The project {0} cannot be created. {1}',
                 'flash_cant_add_project': 'Cannot add project now.',
                 'flash_project_update': 'The project has been updated.',
-                'flash_cant_update_project': 'The project cannot be updated. {0}',
+                'flash_cant_update_project': 'The project cannot be updated.',
                 'flash_project_remove': 'The project has been removed.',
-                'flash_cant_remove_project': 'The project cannot be removed. {0}',
+                'flash_cant_remove_project': 'The project cannot be removed.',
 
             }, 'CreateUserComponent': {
                 'title': 'Create an account',
@@ -595,9 +598,9 @@ export class StaticTranslation {
                 'label_in_group': 'in <strong> {0} </strong>group(s)',
 
                 'flash_project_update': 'The project has been updated.',
-                'flash_cant_update_project': 'The project cannot be updated. {0}',
+                'flash_cant_update_project': 'The project cannot be updated.',
                 'flash_project_remove': 'The project has been removed.',
-                'flash_cant_remove_project': 'The project cannot be removed. {0}',
+                'flash_cant_remove_project': 'The project cannot be removed.',
 
             }, 'FinancialProductInvoicesComponent': {
                 'title': 'Invoice',
@@ -695,7 +698,7 @@ export class StaticTranslation {
                 'btn_create_new_company': 'Create new Financial Account',
                 'btn_included': 'Included',
                 'ribbon_selected': 'Selected',
-                'flash_cant_buy_product': 'The product cannot be bought.{0}',
+                'flash_cant_buy_product': 'The product cannot be bought.',
                 'flash_product_created_prepaid': 'Financial Product was created, you are using your pre-paid credit',
                 'flash_product_created': 'Financial Product was created, now you can create a new project',
 
@@ -721,9 +724,9 @@ export class StaticTranslation {
                 'label_deactivate_product': 'Deactivate product',
                 'label_activate_product': 'Activate product',
                 'label_modal_body_text': 'By deactivating, you disable instances in the cloud and disconnect hardware from our servers. Remote administration will stop working. But All data and settings will be saved and you can reactivate the product at any time.',
-                'flash_cant_deactivate_product': 'The product cannot be deactivated. {0}',
+                'flash_cant_deactivate_product': 'The product cannot be deactivated.',
                 'flash_product_activated': 'The product has been activated.',
-                'flash_cant_activate_product': 'The product cannot be activated. {0}',
+                'flash_cant_activate_product': 'The product cannot be activated.',
                 'flash_product_deactivated': 'The product has been deactivated.',
 
             }, 'FinancialComponent': {
@@ -759,9 +762,9 @@ export class StaticTranslation {
                 'label_not_set_yet': 'Not set yet',
                 'label_no_product': 'No product',
                 'label_no_product_comment': 'First create a financial entity under which all your content will be registered. You can add hardware, run cloud applications, deploy own servers, paid invoices :P and of course go safely from prototype to mass IoT production. <br><br> We wish you much luck with the ideas that dominate the world.',
-                'flash_cant_deactivate_product': 'The product cannot be deactivated. {0}',
+                'flash_cant_deactivate_product': 'The product cannot be deactivated. ',
                 'flash_product_activated': 'The product has been activated.',
-                'flash_cant_activate_product': 'The product cannot be activated. {0}',
+                'flash_cant_activate_product': 'The product cannot be activated. ',
                 'flash_product_deactivated': 'The product has been deactivated.',
                 'flash_products_cant_load': 'Products cannot be loaded, {0}.'
 
@@ -950,13 +953,13 @@ export class StaticTranslation {
                 'table_access_age': 'Expiration',
                 'table_actions': 'Actions',
 
-                'flash_cant_change_password': 'Could not change password, {0}.',
+                'flash_cant_change_password': 'Could not change password, ',
                 'flash_email_was_send': 'E-mail with instructions was sent.',
-                'flash_user_cant_log_out': 'This user could not be logged out, {0}.',
-                'flash_cant_change_email': 'Could not change email, {0}.',
+                'flash_user_cant_log_out': 'This user could not be logged out, ',
+                'flash_cant_change_email': 'Could not change email, ',
                 'flash_image_too_small': 'Image is too small, minimal dimensions are 50x50px.',
                 'flash_new_avatar_saved': 'New avatar saved successfully.',
-                'flash_cant_save_avatar': 'Could not save new avatar, {0}.',
+                'flash_cant_save_avatar': 'Could not save new avatar, ',
                 'flash_information_updated': 'Your information was updated.',
 
             }, 'ProjectsProjectBlockoBlockoComponent': {
@@ -1022,17 +1025,17 @@ export class StaticTranslation {
                 'label_remove_device': 'Remove device',
                 'label_remove_grid': 'Remove grid project',
 
-                'flash_cant_load_blocko': 'The blocko cannot be loaded. {0}',
+                'flash_cant_load_blocko': 'The blocko cannot be loaded. ',
                 'flash_cant_load_version': 'Unable to load version <b>{0}</b>`, {1}.',
                 'flash_cant_save_version': 'Unable to save version <b> {0} </b>, {1}.',
                 'flash_version_saved': 'Version <b> {0} </b> saved successfully.',
                 'flash_cant_change_version': 'Unable change version, {0}.',
-                'flash_cant_load_blocko_block': 'Unable to load this BLOCK version, {0}.',
+                'flash_cant_load_blocko_block': 'Unable to load this BLOCK version, ',
                 'flash_cant_add_blocko_block': 'Unable to add this BLOCK.',
-                'flash_cant_load_blocko_version': 'Unable to load this BLOCKO version, {0}.',
-                'flash_cant_update_blocko': 'Unable to update BLOCKO, {0}.',
+                'flash_cant_load_blocko_version': 'Unable to load this BLOCKO version, ',
+                'flash_cant_update_blocko': 'Unable to update BLOCKO, ',
                 'flash_blocko_updated': 'BLOCKO updated successfully.',
-                'flash_cant_remove_blocko': 'Unable to remove BLOCKO, {0}.',
+                'flash_cant_remove_blocko': 'Unable to remove BLOCKO, ',
                 'flash_blocko_removed': 'BLOCKO removed successfully.',
                 'flash_cant_change_information': 'Unable to change this information, {0}.',
                 'flash_version_removed': 'Version removed successfully.',
@@ -1080,9 +1083,9 @@ export class StaticTranslation {
                 'flash_add_device_success': 'Device {0} has been added to your project.',
                 'flash_add_device_fail': 'Device {0} could not be added to your project, {1}.',
                 'flash_edit_device_success': 'Device information was updated.',
-                'flash_edit_device_fail': 'Device information could not be updated. {0}',
+                'flash_edit_device_fail': 'Device information could not be updated. ',
                 'flash_remove_device_success': 'Device has been removed.',
-                'flash_remove_device_fail': 'Device could not be removed, {0}.',
+                'flash_remove_device_fail': 'Device could not be removed, ',
 
             }, 'ProjectsProjectHardwareHardwareComponent': {
 
@@ -1158,9 +1161,9 @@ export class StaticTranslation {
 
 
                 'flash_edit_device_success': 'Device information was updated.',
-                'flash_edit_device_fail': 'Device information could not be updated, {0}.',
+                'flash_edit_device_fail': 'Device information could not be updated, ',
                 'flash_remove_device_success': 'Device has been removed.',
-                'flash_remove_device_fail': 'Device could not be removed, {0}.',
+                'flash_remove_device_fail': 'Device could not be removed, ',
                 'flash_cant_update_bootloader': 'Unable to update Bootloader, {0}.',
                 'flash_cant_edit_backup_mode': 'Device backup mode could not be changed, {0}.',
 
@@ -1176,7 +1179,7 @@ export class StaticTranslation {
                 'table_actions': 'Actions',
 
                 'flash_instance_edit_success': 'Instance information has been updated.',
-                'flash_instance_edit_fail': 'Instance information could not be updated. {0}',
+                'flash_instance_edit_fail': 'Instance information could not be updated. ',
 
                 'label_shut_down_instance_modal': 'Shutdown instance',
                 'label_shut_down_instance_modal_comment': 'Are you sure to shutdown the running instance?',
@@ -1272,18 +1275,18 @@ export class StaticTranslation {
                 'label_modal_run_latest_version': 'Deploy to CLOUD in the latest version',
                 'label_modal_confirm_run_latest_version': 'Are you sure to deploy <strong class="font-color-blocko">BLOCKO</strong> and instance to CLOUD?',
                 'label_cannot_execute': 'Unable to execute command, {0}.',
-                'label_cannot_change_version': 'Unable to change version, {0}.',
-                'flash_cannot_change_developer_parameter': 'Unable to change parameter, {0}.',
+                'label_cannot_change_version': 'Unable to change version, {0}',
+                'flash_cannot_change_developer_parameter': 'Unable to change parameter, ',
                 'flash_picture_updated': 'Picture update successful.',
-                'flash_cant_picture_update': 'Cannot update picture, {0}.',
-                'label_cannot_change_program_publicity': 'Unable to change program privacy setting, {0}.',
+                'flash_cant_picture_update': 'Cannot update picture, ',
+                'label_cannot_change_program_publicity': 'Unable to change program privacy setting, ',
                 'label_modal_change_instance_version': 'Change instance version',
                 'label_modal_change_running_instance_version': 'Are you sure to change the running instance version?',
                 'label_time_missing_in_json': 'Time is missing in Json',
 
                 'flash_cant_load_verion': 'Cannot load version <b>{0}</b>, {1}',
                 'flash_instance_edit_success': 'Instance information was changed.',
-                'flash_instance_edit_fail': 'Unable to change instance information, {0}.',
+                'flash_instance_edit_fail': 'Unable to change instance information, ',
 
             }, 'ProjectsProjectLibrariesComponent': {
 
@@ -1304,9 +1307,9 @@ export class StaticTranslation {
                 'flash_library_add_success': 'Library has been created.',
                 'flash_library_add_fail': 'Unable to create library {0}, {1}.',
                 'flash_library_edit_success': 'Library has been updated.',
-                'flash_library_edit_fail': 'Unable to update library, {0}.',
+                'flash_library_edit_fail': 'Unable to update library, ',
                 'flash_library_removed_success': 'Library has been removed.',
-                'flash_library_removed_fail': 'Unable to remove library, {0}.',
+                'flash_library_removed_fail': 'Unable to remove library, ',
 
                 'table_name': 'Name',
                 'table_description': 'Description',
@@ -1326,15 +1329,15 @@ export class StaticTranslation {
                 'flash_unsaved_changes_version_reload': 'You have <b>unsaved changes</b> in version <b>{0}</b>, do you really want reload this version?',
                 'flash_cant_load_version': 'Cannot load version <b>{0}</b>`, {1}',
                 'flash_library_edit_success': 'Library has been updated.',
-                'flash_library_edit_fail': 'Unable to update library, {0}.',
+                'flash_library_edit_fail': 'Unable to update library, ',
                 'flash_library_removed_success': 'Library has been removed.',
-                'flash_library_removed_fail': 'Unable to remove library, {0}.',
+                'flash_library_removed_fail': 'Unable to remove library, ',
                 'flash_version_save_success': 'Version <b> {0} </b> saved successfully.',
                 'flash_version_save_fail': 'Unable to save version <b> {0} </b>, {1}.',
                 'flash_version_edit_success': 'Version <b> {0} </b> saved successfully.',
                 'flash_version_edit_fail': 'Unable to save version <b> {0} </b>, {1}.',
                 'flash_version_removed_success': 'Version has been removed.',
-                'flash_version_removed_fail': 'Unable to remove library, {0}.',
+                'flash_version_removed_fail': 'Unable to remove library, ',
                 'flash_cannot_load_library': 'Unable to load library.',
 
                 'table_name': 'Name',
@@ -1400,11 +1403,11 @@ export class StaticTranslation {
                 'btn_create_group': 'Create Group',
 
                 'flash_grid_group_add_success': 'Version has been successfully created.',
-                'flash_grid_group_add_fail': 'Unable to create version, {0}.',
+                'flash_grid_group_add_fail': 'Unable to create version, ',
                 'flash_grid_group_edit_success': 'Version has been changed.',
-                'flash_grid_group_edit_fail': 'Unable to change version, {0}.',
+                'flash_grid_group_edit_fail': 'Unable to change version, ',
                 'flash_grid_group_remove_success': 'Version has been removed.',
-                'flash_grid_group_remove_fail': 'Unable to remove version, {0}.',
+                'flash_grid_group_remove_fail': 'Unable to remove version, ',
 
                 'label_no_item': 'No <strong class="font-color-grid">GRID</strong> widget groups in this project.',
                 'label_you_can_create': 'Click on the button bellow to create a group to collect your own widgets',
@@ -1429,17 +1432,17 @@ export class StaticTranslation {
                 'label_widget_properties': 'GRID widget properties',
                 'label_remove_widget': 'Remove GRID widget',
 
-                'flash_grid_group_add_fail': 'Version cannot be created. {0}',
+                'flash_grid_group_add_fail': 'Version cannot be created. ',
                 'flash_grid_group_edit_success': 'Version has been changed.',
-                'flash_grid_group_edit_fail': 'Unable to change version, {0}.',
+                'flash_grid_group_edit_fail': 'Unable to change version, ',
                 'flash_grid_group_remove_success': 'Version has been removed.',
-                'flash_grid_group_remove_fail': 'Unable to remove version, {0}.',
+                'flash_grid_group_remove_fail': 'Unable to remove version, ',
                 'flash_widget_add_success': 'Version has been successfully created.',
-                'flash_widget_add_fail': 'Unable to create version, {0}.',
+                'flash_widget_add_fail': 'Unable to create version, ',
                 'flash_widget_removed_success': 'Widget has been removed.',
-                'flash_widget_removed_fail': 'Unable to remove widget, {0}.',
+                'flash_widget_removed_fail': 'Unable to remove widget, ',
                 'flash_widget_edit_success': 'Widget has been edited.',
-                'flash_widget_edit_fail': 'Unable to edit widget, {0}.',
+                'flash_widget_edit_fail': 'Unable to edit widget, ',
 
                 'label_no_item': 'No <strong class="font-color-grid">GRID</strong> widgets in this group.',
                 'label_you_can_create': 'Click on the button bellow to create a widget.',
@@ -1453,14 +1456,14 @@ export class StaticTranslation {
                 'flash_version_save_success': 'Version <b>{0}</b> saved successfully.',
                 'flash_version_save_fail': 'Unable to save version <b>{0}</b>, {1}.',
                 'flash_version_removed_success': 'Version has been removed.',
-                'flash_version_removed_fail': 'Unable to remove version, {0}.',
+                'flash_version_removed_fail': 'Unable to remove version, ',
                 'flash_version_changed_success': 'Version {0} has been changed.',
                 'flash_version_changed_fail': 'Unable to change version <b>{0}</b>, {1}.',
                 'flash_version_load_fail': 'Unable to load version <b>{0}</b>, {1}.',
                 'flash_widget_removed_success': 'Widget has been removed.',
-                'flash_widget_removed_fail': 'Unable to remove widget, {0}.',
+                'flash_widget_removed_fail': 'Unable to remove widget, ',
                 'flash_widget_edit_success': 'Widget has been edited.',
-                'flash_widget_edit_fail': 'Unable to edit widget, {0}.',
+                'flash_widget_edit_fail': 'Unable to edit widget, ',
 
                 'label_console_cant_crate_widget': '<strong>Cannot create widget:</strong> Make sure, that you specified size profiles for widget',
                 'label_widget_properties': 'GRID widget properties',
@@ -1475,7 +1478,7 @@ export class StaticTranslation {
                 'label_save': 'SAVED VERSIONS',
                 'label_version_properties': 'Version properties',
                 'label_remove_version': 'Remove version',
-                'label_console_output': 'Output < strong > {0} </strong> = {1}',
+                'label_console_output': 'Output <strong> {0} </strong> = {1}',
                 'label_console_true': '<span class="bold font-red">true</span>',
                 'label_console_false': '< span class="bold font-blue" > false </span>',
                 'label_grid': 'GRID',
@@ -1498,11 +1501,11 @@ export class StaticTranslation {
                 'btn_add_blocko_program': 'New Program',
 
                 'flash_blocko_remove': 'Program has been removed.',
-                'flash_blocko_cant_remove': 'Unable to remove program, {0}.',
+                'flash_blocko_cant_remove': 'Unable to remove program, ',
                 'flash_blocko_add_to_project': 'BLOCKO program {0} has been added to your project.',
                 'flash_blocko_cant_add_to_project': 'Unable to add BLOCKO program {0} to your project, {1}.',
                 'flash_blocko_update': 'Program has been updated.',
-                'flash_blocko_cant_update': 'Unable to update program, {0}.',
+                'flash_blocko_cant_update': 'Unable to update program, ',
 
             }, 'ProjectsProjectBlocksBlocksBlockComponent': {
                 'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - BLOCK <strong>{0}</strong>',
@@ -1547,19 +1550,19 @@ export class StaticTranslation {
                 'bool_true': 'true',
                 'bool_false': 'false',
 
-                'flash_cant_save_version': 'Unable to save version <b>{0}</b >, {1}.',
+                'flash_cant_save_version': 'Unable to save version <b>{0}</b>, {1}.',
                 'flash_version_save': 'Version <b> {0} </b> saved successfully.',
-                'flash_block_code_empty': 'Block code cannot be empty! Block error, {1}.',
-                'flash_cant_load_block': 'Unable to load block, {0}.',
+                'flash_block_code_empty': 'Block code cannot be empty! Block error, {0}.',
+                'flash_cant_load_block': 'Unable to load block, ',
                 'flash_blocko_edit': 'Block has been edited.',
-                'flash_cant_edit_block': 'Unable to edit block, {0}.',
+                'flash_cant_edit_block': 'Unable to edit block, ',
                 'flash_block_remove': 'Block has been removed.',
-                'flash_cant_remove_block': 'Unable to remove block, {0}.',
+                'flash_cant_remove_block': 'Unable to remove block, ',
                 'flash_version_remove': 'Version has been removed.',
-                'flash_cant_remove_version': 'Unable to remove version, {0}.',
+                'flash_cant_remove_version': 'Unable to remove version, ',
                 'flash_version_change': 'Version {0} has been changed.',
                 'flash_cant_change_version': 'Unable to change version {0}, {1}',
-                'flash_cant_load_block_version': 'Unable to load block version, {0}.',
+                'flash_cant_load_block_version': 'Unable to load block version, ',
 
             }, 'ProjectsProjectBlocksBlocksComponent': {
                 'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - BLOCK GROUP <strong>{0}</strong>',
@@ -1580,15 +1583,15 @@ export class StaticTranslation {
                 'btn_add_block': 'New Block',
 
                 'flash_block_groups_edit': 'Block group has been edited.',
-                'flash_cant_edit_block_groups': 'Unable to edit block group, {0}.',
+                'flash_cant_edit_block_groups': 'Unable to edit block group, ',
                 'flash_block_groups_remove': 'Block group has been removed.',
-                'flash_cant_remove_block_groups': 'Unable to remove block group, {0}.',
+                'flash_cant_remove_block_groups': 'Unable to remove block group, ',
                 'flash_block_add': 'Block has been created.',
-                'flash_cant_add_block': 'Unable to create block, {0}.',
+                'flash_cant_add_block': 'Unable to create block, ',
                 'flash_block_edit': 'Block has been edited.',
-                'flash_cant_edit_block': 'Unable to edit block, {0}.',
+                'flash_cant_edit_block': 'Unable to edit block, ',
                 'flash_block_remove': 'Block has been removed.',
-                'flash_cant_remove_block': 'Unable to remove block, {0}.',
+                'flash_cant_remove_block': 'Unable to remove block, ',
 
             }, 'ProjectsProjectBlocksComponent': {
                 'title': 'Byzance<strong class="font-color-blocko">BLOCKO</strong> - ALL BLOCK GROUPS',
@@ -1605,11 +1608,11 @@ export class StaticTranslation {
 
                 'btn_add_blocks_group': 'New Group',
                 'flash_block_group_add': 'Block group has been created.',
-                'flash_cant_add_block_group': 'Unable to create block group, {0}.',
+                'flash_cant_add_block_group': 'Unable to create block group,',
                 'flash_block_group_edit': 'Block group has been edited.',
-                'flash_cant_edit_block_group': 'Unable to edit block group, {0}.',
+                'flash_cant_edit_block_group': 'Unable to edit block group,',
                 'flash_block_group_remove': 'Block group has been removed.',
-                'flash_cant_remove_block_group': 'Unable to remove block group, {0}.',
+                'flash_cant_remove_block_group': 'Unable to remove block group,',
                 'label_no_blocko_group': 'No <strong class="font-color-blocko">BLOCKO</strong> Blocks group available',
                 'label_create_blocko_group_text': 'Click on the button bellow to create your first group of Blocko Blocks.',
 
@@ -1737,10 +1740,10 @@ export class StaticTranslation {
                 'modal_label_grid_size_change': 'Change <strong class="font-color-grid">GRID</strong> size class',
                 'modal_text_grid_size_change': 'Changing <strong class="font-color-grid">GRID</strong> size class <strong>will delete all your pages</strong>, are you sure?',
 
-                'flash_cant_load_widget_version': 'Unable to load widget version, {0}.',
+                'flash_cant_load_widget_version': 'Unable to load widget version,',
                 'flash_cant_save_version': 'Unable to save version <b>{0}</b >, {1}.',
                 'flash_version_save': 'Version <b>{0}</b> saved successfully.',
-                'flash_cant_remove_grid': 'Unable to remove program, {0}.',
+                'flash_cant_remove_grid': 'Unable to remove program,',
                 'flash_grid_remove': 'Program has been removed.',
                 'flash_grid_edit': 'Program has been edited.',
                 'flash_cant_edit_grid': 'Unable to edit program, {0}.',
@@ -1749,7 +1752,7 @@ export class StaticTranslation {
                 'flash_cant_change_version': 'Unable to change version {0}, {1}',
                 'flash_version_change': 'Version {0} has been changed.',
                 'flash_version_remove': 'Version has been removed.',
-                'flash_cant_remove_version': 'Unable to remove version, {0}.',
+                'flash_cant_remove_version': 'Unable to remove version,',
 
             }, 'ProjectsProjectGridGridsComponent': {
                 'title': 'Byzance<strong class="font-color-grid">GRID</strong> - PROGRAM GROUP <strong>{0}</strong>',
@@ -1768,15 +1771,15 @@ export class StaticTranslation {
                 'table_description': 'Description',
                 'table_actions': 'Actions',
                 'flash_grid_project_remove': 'Project has been removed.',
-                'flash_cant_remove_grid_project': 'Unable to remove project, {0}.',
+                'flash_cant_remove_grid_project': 'Unable to remove project,',
                 'flash_grid_project_edit': 'Project has been edited.',
-                'flash_cant_edit_grid_project': 'Unable to edit project, {0}.',
+                'flash_cant_edit_grid_project': 'Unable to edit project,',
                 'flash_grid_program_add': 'Program has been created.',
-                'flash_cant_add_grid_program': 'Unable to create program, {0}.',
+                'flash_cant_add_grid_program': 'Unable to create program,',
                 'flash_grid_program_edit': 'Program has been edited.',
-                'flash_cant_edit_grid_program': 'TUnable to edit program, {0}.',
+                'flash_cant_edit_grid_program': 'Unable to edit program,',
                 'flash_grid_program_remove': 'Program has been removed.',
-                'flash_cant_remove_grid_program': 'Unable to remove program, {0}.',
+                'flash_cant_remove_grid_program': 'Unable to remove program,',
 
             }, 'ProjectsProjectGridComponent': {
 
@@ -1793,11 +1796,11 @@ export class StaticTranslation {
                 'label_create_grid_text': 'Click on the button bellow to create a project.',
 
                 'flash_grid_project_add': 'Project has been created.',
-                'flash_cant_add_grid_project': 'Unable to create project, {0}.',
+                'flash_cant_add_grid_project': 'Unable to create project.',
                 'flash_grid_project_edit': 'Project has been edited.',
-                'flash_cant_edit_grid_project': 'Unable to edit project, {0}.',
+                'flash_cant_edit_grid_project': 'Unable to edit project, .',
                 'flash_grid_project_remove': 'Project has been removed.',
-                'flash_cant_remove_grid_project': 'Unable to remove project, {0}.',
+                'flash_cant_remove_grid_project': 'Unable to remove project.',
 
             }, 'SupportComponent': {
 
@@ -1821,7 +1824,7 @@ export class StaticTranslation {
                 'label_invalid_file_name': 'Invalid file/directory name.',
                 'label_field_only_number': 'This field only accepts numbers.',
                 'label_field_invalid_url': 'Invalid URL.',
-                'label_unknown_error': 'Unknown error, {0}.',
+                'label_unknown_error': 'Unknown error.',
 
             }, 'TabMenuService': {
                 'label_tab_menu_not_found': 'Unable to find TabMenu named {0}.',
