@@ -21,8 +21,17 @@ export class StaticTranslation {
                 'label_credit_for_beginning': 'Pre-Paid Credit for user on beginning 1USD == 1000 !!!!!',
                 'label_icon': 'FA-ICON (http://fontawesome.io/)',
             }, 'ModalsAddHardwareComponent': {
-                'title': 'Add a Device',
+                'title': '<strong class="font-color-hardware">Hardware</strong> registration',
                 'label_hash_token': 'Hash Token',
+                'label_hash_tokens': 'Hash Tokens',
+                'label_hardware_groups': 'Available <strong class="font-color-hardware">Hardware Groups</strong>',
+                'label_hash_token_label': 'Hash Token from Label',
+                'label_multiple_registration': 'Multiple Registration <br> (From B2B Invoices, Files etc.)',
+                'label_single_registration': 'Single Registration (QR)',
+                'label_little_advice': 'Little Advice',
+                'label_advice_single_registration': '<p><strong>You will find HashToken on the sticker on Hardware</strong></p> <br> <p> If you own a smart-phone with camera <strong>(That\'s the thing that girls do with selfie. True gourmets can also use tablet.)</strong>, you can sign in to the portal and quickly and easily capture the QR code sticker on the Hardware.</p> <br> <p> Trust us, it\'s much more comfortable...</p>',
+                'label_advice_multiple_registration': '<p> For register new <strong class="font-color-hardware">Hardware</strong> to this project, upload a text file below or insert text. The file or text should contain a list of device registration hash,where each key is separated by a semicolon. The spaces will be ignored. </p> <br><p><strong>Example: </strong> XXXXXXX; YYYYYYY;BBBBBB;  CCCCCC;DDDDD;</p><br><p> Each hash is sequentially registered. If a problem occurs - we\'ll show you which key is not valid and why.Attention - Multiple <strong>unsuccessful</strong> registration is flagged as a security breach attempt and your account may be blocked.</p>',
+                'label_advice_no_group': '<p>We strongly recommend register <strong class="font-color-hardware">Hardware</strong> into <strong class="font-color-hardware">Hardware Groups</strong>. We\'ve found that you do not have one yet. Groups are available in Release Manager to update more than one hardware. You can see progress and etc.</p> <br><p>You can use the <strong class="font-color-hardware">Hardware Groups</strong> to develop. For example, <strong>Beta</strong>, <strong>Dev HW</strong> or <strong>My Little Pony</strong>, and for production deployments where you can use an industrial registration API,for example <strong>Smart Fridge - Europe</strong> or <strong>Tracking equipment used in North Korea</strong>.</p>',
                 'flash_add_device_fail': 'Adding device {0} failed',
                 'flash_add_device_success': 'Device add success'
             }, 'ModalsBillingInformationComponent': {

@@ -11,7 +11,7 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 /* tslint:disable:max-line-length */
     template: `
 <div class="form-group" [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)" [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
-    <label>{{label}}</label>
+    <label *ngIf="labelComment">{{label}}</label>
     <div class="input-icon right">
         <i class="fa fa-check" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)"></i>
         <i class="fa fa-warning" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)"></i>
@@ -36,6 +36,9 @@ export class FormTextAreaComponent {
 
     @Input()
     label: string = 'Unknown label';
+
+    @Input()
+    labelComment: boolean = true;
 
     @Input()
     placeholder: string = null;

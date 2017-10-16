@@ -61,7 +61,11 @@ export class MobileAddHardwareComponent extends BaseMainComponent implements OnI
     onSubmit(): void {
 
         this.blockUI();
-        this.backendService.boardConnectWithProject(this.blockForm.value.id, this.blockForm.value.id) // TODO [permission]: Board.first_connect_permission, Project.update_permission
+        this.backendService.boardConnectWithProject({
+            group_ids: [],  // TODO doplnit Dominiku https://youtrack.byzance.cz/youtrack/issue/BECKI-320
+            hash_for_adding: this.blockForm.value.id,
+            project_id: this.blockForm.value.id
+        })
             .then(() => {
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_add_device_success'), this.blockForm.value.id));
                 this.unblockUI();

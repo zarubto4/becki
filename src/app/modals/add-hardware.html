@@ -1,14 +1,87 @@
 <div>
     <div class="modal-header">
         <button type="button" class="close" (click)="onCloseClick()"></button>
-        <h4 class="modal-title">{{'title'|bkTranslate:this}}</h4>
+        <h4 class="modal-title" [innerHTML]="'title'|bkTranslate:this"></h4>
     </div>
-    <div class="modal-body">
-        <form [formGroup]="form">
-            <bk-form-input [control]="form.controls.id" placeholder="Hash Token from Label" label="{{'label_hash_token'|bkTranslate:this}}"></bk-form-input>
-        </form>
+
+    <div *ngIf="step==null" class="row tiles" style="width: auto !important; margin-left: 10px !important; margin-right: 10px !important; margin-top: 20px !important; margin-bottom: 20px !important;">
+
+            <div class="col-md-6 text-center">
+                <a (click)="singleRegistration()" style="text-decoration: none !important;">
+                    <div class="tile double byzance-blue" style="width: auto !important; float: none !important;">
+                        <div class="tile-body">
+                            <i class="fa fa-microchip medium"></i>
+                        </div>
+                        <div class="tile-object">
+                            <div class="name" style="position: relative !important;">{{'label_single_registration'|bkTranslate:this}}</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div (click)="multipleRegistration()" class="col-md-6 text-center">
+                <a style="text-decoration: none !important;">
+                    <div class="tile double bg-blue-hoki" style="width: auto !important; float: none !important;">
+                        <div class="tile-body">
+                            <i class="fa fa-microchip"></i>
+                        </div>
+                        <div class="tile-object">
+                            <div class="name" style="position: relative !important;"><span [innerHTML]="'label_multiple_registration'|bkTranslate:this"></span></div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        <br>
+        <br>
+        <br>
+        <br>
     </div>
-    <div class="modal-footer">
+
+    <div *ngIf="step=='singleRegistration'"  style="width: auto !important; margin-left: 10px !important; margin-right: 10px !important; margin-top: 20px !important;">
+        <div class="modal-body">
+            <form [formGroup]="form">
+                <bk-form-input [control]="form.controls.id" [placeholder]="'label_hash_token_label'|bkTranslate:this" [label]="'label_hash_token'|bkTranslate:this"></bk-form-input>
+
+                <bk-multi-select *ngIf="group_options_available && group_options_available.length > 0" [items]="group_options_available" [label]="'label_hardware_groups'|bkTranslate:this" #groupList></bk-multi-select>
+            </form>
+            <br>
+            <br>
+            <div class="note note-info">
+                <h4 class="block">{{'label_little_advice'|bkTranslate:this}}</h4>
+                <span [innerHTML]="'label_advice_single_registration'|bkTranslate:this"></span>
+            </div>
+            <div *ngIf="group_options_available && group_options_available.length == 0" class="note note-warning">
+                <h4 class="block">{{'label_little_advice'|bkTranslate:this}}</h4>
+                <span [innerHTML]="'label_advice_no_group'|bkTranslate:this"></span>
+            </div>
+        </div>
+    </div>
+
+
+    <div *ngIf="step=='multipleRegistration'" style="width: auto !important; margin-left: 10px !important; margin-right: 10px !important; margin-top: 20px !important;">
+        <div class="modal-body">
+            <bk-form-text-area [control]="form.controls.listOfIds" [row]="6" [cols]="250" [placeholder]="'xxxxxxx; yyyyyyyy; ... '" [label]="'label_hash_tokens'|bkTranslate:this"></bk-form-text-area>
+            <br>
+            <bk-multi-select *ngIf="group_options_available && group_options_available.length > 0" [items]="group_options_available" [label]="'label_hardware_groups'|bkTranslate:this" #groupList></bk-multi-select>
+            <br>
+        </div>
+
+       <div class="note note-info">
+           <h4 class="block">{{'label_little_advice'|bkTranslate:this}}</h4>
+           <span [innerHTML]="'label_advice_multiple_registration'|bkTranslate:this"></span>
+        </div>
+
+        <div *ngIf="group_options_available && group_options_available.length == 0" class="note note-warning">
+            <h4 class="block">{{'label_little_advice'|bkTranslate:this}}</h4>
+             <span [innerHTML]="'label_advice_no_group'|bkTranslate:this"></span>
+        </div>
+        <br>
+        <br>
+    </div>
+
+
+
+    <div *ngIf="step" class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
         <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{'btn_add'|bkTranslate:this}}</button>
     </div>

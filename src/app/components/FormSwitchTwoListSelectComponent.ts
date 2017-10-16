@@ -2,23 +2,20 @@
  * Created by davidhradek on 17.08.16.
  */
 
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 import { FormSelectComponentOption } from './FormSelectComponent';
+import { MultiSelectComponent } from './MultiSelectComponent';
 
 @Component({
     selector: 'bk-form-two-switch-list-select',
-    /* tslint:disable */
+/* tslint:disable */
     template: `
 <div>
     <div class="row">
         <div class="col-md-5">
             <h4 *ngIf="labelComment" [innerHTML]="left_label"></h4>
-          
-            <select multiple="" size="{{size}}"  style="width: 220px;">>
-                <option *ngFor="let option of options_left" [value]="option.value">{{option.label}}</option>
-            </select>
-            
+            <bk-multi-select [items]="options_left" #left [labelComment]="false"></bk-multi-select>
         </div>
         <div class="col-md-2 text-center" style="vertical-align:middle;">
             <br>
@@ -29,14 +26,12 @@ import { FormSelectComponentOption } from './FormSelectComponent';
         </div>
         <div class="col-md-5">
             <h4 *ngIf="labelComment" [innerHTML]="right_label"></h4>
-            <select multiple="" size="{{size}}" style="width: 220px;">
-                <option *ngFor="let option of options_right" [value]="option.value">{{option.label}}</option>
-            </select>
+            <bk-multi-select [items]="options_right" #right [labelComment]="false"></bk-multi-select>
         </div>
     </div>
 </div>
 `
-    /* tslint:enable */
+/* tslint:enable */
 })
 export class FormSwitchTwoListSelectComponent implements OnInit {
 
@@ -47,10 +42,10 @@ export class FormSwitchTwoListSelectComponent implements OnInit {
     right_label: string = 'Unknown label';
 
     @Input()
-    size: number = 5;
+    labelComment: boolean = true;
 
     @Input()
-    labelComment: boolean = true;
+    size: number = 5;
 
     @Input()
     waitForTouch: boolean = true;
@@ -64,6 +59,12 @@ export class FormSwitchTwoListSelectComponent implements OnInit {
     @Input()
     options_right: FormSelectComponentOption[] = [];
 
+    @ViewChild('right')
+    right: MultiSelectComponent;
+
+    @ViewChild('left')
+    left: MultiSelectComponent;
+
     constructor(public validatorErrorsService: ValidatorErrorsService) {
     }
 
@@ -72,11 +73,21 @@ export class FormSwitchTwoListSelectComponent implements OnInit {
     }
 
     command_right() {
-
+        let c: FormSelectComponentOption[] = this.left.getAndRemoveSelectedItems();
+        this.right.addItems(c);
     }
 
     command_left() {
+        let c: FormSelectComponentOption[] = this.right.getAndRemoveSelectedItems();
+        this.left.addItems(c);
+    }
 
+    get_left(): FormSelectComponentOption[] {
+        return this.left.items;
+    }
+
+    get_right(): FormSelectComponentOption[] {
+        return this.right.items;
     }
 
 }

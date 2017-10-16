@@ -1,5 +1,5 @@
 /*********************************
- METRONIC ROUNDED STYLE COMPONENTS 
+ METRONIC ROUNDED STYLE COMPONENTS
 *********************************/
 /* Cubic Bezier Transition */
 /***
@@ -15,8 +15,8 @@ body {
   font-size: 14px; }
 
 /*
- Internet Explorer 10 doesn't differentiate device width from viewport width, and thus doesn't 
- properly apply the media queries in Bootstrap's CSS. To address this, 
+ Internet Explorer 10 doesn't differentiate device width from viewport width, and thus doesn't
+ properly apply the media queries in Bootstrap's CSS. To address this,
  you can optionally include the following CSS and JavaScript to work around this problem until Microsoft issues a fix.
 */
 @-webkit-viewport {
@@ -35,8 +35,8 @@ body {
   width: device-width; }
 
 /*
- Internet Explorer 10 doesn't differentiate device width from viewport width, 
- and thus doesn't properly apply the media queries in Bootstrap's CSS. To address this, following CSS code applied 
+ Internet Explorer 10 doesn't differentiate device width from viewport width,
+ and thus doesn't properly apply the media queries in Bootstrap's CSS. To address this, following CSS code applied
 */
 @-ms-viewport {
   width: auto !important; }
@@ -1401,7 +1401,7 @@ Simple Line Icons Demo
   .simplelineicons-demo .item-box {
     width: 33.333%; } }
 
-/*** 
+/***
 Glyphicons Demo
 ***/
 .glyphicons-demo ul {
@@ -1539,7 +1539,7 @@ Custom buttons based on bootstrap SASS
   line-height: 1.44; }
 
 /***
-Custom color buttons 
+Custom color buttons
 ***/
 .btn.white:not(.btn-outline) {
   color: #666;
@@ -4865,7 +4865,7 @@ Chats
       transition: all 0.3s; }
 
 /***
-Customized Bootstrap Close Icon 
+Customized Bootstrap Close Icon
 ***/
 .close {
   display: inline-block;
@@ -5535,7 +5535,7 @@ Forms
   color: #c5cdda; }
 
 /***
-Custom color buttons 
+Custom color buttons
 ***/
 .form-control.white {
   border-color: #ffffff; }
@@ -6773,7 +6773,7 @@ Metro icons
   background-position: -78px -28px; }
 
 /***
-Customized Bootstrap Modal 
+Customized Bootstrap Modal
 ***/
 .modal {
   z-index: 10050;
@@ -7361,7 +7361,7 @@ Portlets
     display: none; } }
 
 /***
-Custom colored portlets 
+Custom colored portlets
 ***/
 .portlet > .portlet-body.white,
 .portlet.white {
@@ -12432,7 +12432,7 @@ Light Table
   background: #f3f4f6 !important; }
 
 /***
-Customized Bootstrap Tabs 
+Customized Bootstrap Tabs
 ***/
 /* Tabs and pills */
 .nav-tabs,
@@ -12756,7 +12756,7 @@ Tiles(new in v1.1.1)
   .tiles .tile {
     display: block;
     letter-spacing: 0.02em;
-    float: left;
+    float: none;
     height: 135px;
     width: 135px !important;
     cursor: pointer;
@@ -13554,7 +13554,7 @@ AngularJS Basic Animations
     margin: 0px 0; } }
 
 /***
-Timeline 
+Timeline
 ***/
 .timeline {
   margin: 0;
@@ -13892,7 +13892,7 @@ Timeline 2
     padding-top: 10px; } }
 
 /***
-Horizontal Timeline 
+Horizontal Timeline
 ***/
 /* PLUGIN CSS */
 .cd-horizontal-timeline {
@@ -14308,7 +14308,7 @@ Horizontal Timeline
     margin: 0 !important; } }
 
 /***
-Tasks Widget 
+Tasks Widget
 ***/
 .tasks-widget:after {
   clear: both; }
@@ -18917,7 +18917,7 @@ Tasks Widget
     transform: translate3d(0, 0, 0); }
 
 /***
-Custom color buttons 
+Custom color buttons
 ***/
 .bg-white {
   background: #ffffff !important; }

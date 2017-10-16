@@ -4,7 +4,7 @@
         <h4 class="modal-title">{{'main_title'|bkTranslate:this}}</h4>
     </div>
     <div class="modal-body">
-        <bk-form-two-switch-list-select [left_label]="'label_available'|bkTranslate:this" [right_label]="'title_in_group'|bkTranslate:this" [options_left]="group_options_available" [options_right]="group_options_selected"></bk-form-two-switch-list-select>
+        <bk-form-two-switch-list-select [left_label]="'label_available'|bkTranslate:this" [right_label]="'title_in_group'|bkTranslate:this" [options_left]="group_options_available" [options_right]="group_options_selected" #listGroup></bk-form-two-switch-list-select>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>

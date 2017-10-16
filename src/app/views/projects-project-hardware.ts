@@ -155,21 +155,27 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     }
 
     onAddClick(): void {
-        let model = new ModalsAddHardwareModel();
-        this.modalService.showModal(model).then((success) => {
-            if (success) {
-                this.blockUI();
-                this.backendService.boardConnectWithProject(model.id, this.projectId) // TODO [permission]: Board.first_connect_permission, Project.update_permission
-                    .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_add_device_success', model.id)));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                    })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_add_device_fail', model.id, reason)));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                    });
-            }
-        });
+        if (this.deviceGroup == null) {
+            this.backendService.boardGroupGetListFromProject(this.projectId)
+                .then((values) => {
+                    this.unblockUI();
+                    this.deviceGroup = values;
+                    this.onAddClick();
+                })
+                .catch((reason) => {
+                    this.unblockUI();
+                });
+        }else {
+            let model = new ModalsAddHardwareModel(null, this.deviceGroup);
+            this.modalService.showModal(model).then((success) => {
+                this.onHardwareGroupRefresh();
+                this.onFilterHardware();
+                this.unblockUI();
+            }).catch((reason) => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_add_device_fail', reason)));
+                this.unblockUI();
+            });
+        }
     }
 
 
@@ -188,18 +194,23 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
             let model = new ModalsHardwareGroupDeviceSettingsModel(device, this.deviceGroup);
             this.modalService.showModal(model).then((success) => {
                 if (success) {
-                    this.backendService.boardGroupCreate({  // TODO - Upravit na Tyrionovi metodu
-                        name: '',
-                        description: '',
-                        project_id: ''
+                    this.backendService.boardGroupUpdateDeviceList({
+                        device_synchro: {
+                            device_id: device.id,
+                            group_ids: model.deviceGroupStringIdsSelected
+                        },
+                        group_synchro: null
                     })
                         .then(() => {
                             this.unblockUI();
                             this.onHardwareGroupRefresh();
+                            this.onFilterHardware();
                         })
                         .catch(reason => {
                             this.unblockUI();
                             this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail', reason)));
+                            this.onHardwareGroupRefresh();
+                            this.onFilterHardware();
                         });
                 }
             });
@@ -257,11 +268,13 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
                     .then(() => {
                         this.unblockUI();
                         this.onHardwareGroupRefresh();
+                        this.onFilterHardware();
                     })
                     .catch(reason => {
                         this.addFlashMessage(new FlashMessageError(this.translate('flash_remove_group_fail', reason)));
                         this.unblockUI();
                         this.onHardwareGroupRefresh();
+                        this.onFilterHardware();
                     });
             }
         });
