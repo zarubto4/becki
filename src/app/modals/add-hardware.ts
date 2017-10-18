@@ -14,6 +14,7 @@ import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { IBoardGroup } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { MultiSelectComponent } from '../components/MultiSelectComponent';
+import { FlashMessageError } from '../services/NotificationService';
 
 
 export class ModalsAddHardwareModel extends ModalModel {
@@ -34,10 +35,17 @@ export class ModalsAddHardwareComponent implements OnInit {
     @Input()
     modalModel: ModalsAddHardwareModel;
 
+
+
     @Output()
     modalClose = new EventEmitter<boolean>();
 
     form: FormGroup;
+
+    multiForm: FormGroup;
+
+    multiErrorList: string[] = [];
+
 
     step: string = null;
     group_options_available: FormSelectComponentOption[] = []; // Select Groups
@@ -49,8 +57,13 @@ export class ModalsAddHardwareComponent implements OnInit {
 
         this.form = this.formBuilder.group({
             'id': ['', [Validators.required], BeckiAsyncValidators.hardwareDeviceId(backendService)],       // TODO DOminik - ID select this.step = 'singleRegistration'
-            'listOfIds': ['', [Validators.required], BeckiAsyncValidators.hardwareDeviceId(backendService)] // TODO DOminik - ID select this.step = 'multipleRegistration'
         });
+
+        this.multiForm = this.formBuilder.group({
+            'listOfIds': ['', [Validators.required]] // TODO DOminik - ID select this.step = 'multipleRegistration'
+        });
+
+
     }
 
     multipleRegistration() {
@@ -72,22 +85,56 @@ export class ModalsAddHardwareComponent implements OnInit {
         });
 
         (<FormControl>(this.form.controls['id'])).setValue('');
-        (<FormControl>(this.form.controls['listOfIds'])).setValue('');
+        (<FormControl>(this.multiForm.controls['listOfIds'])).setValue('');
 
     }
 
     sequenceRegistaration() {
-        // Zde budeš registrovat sekvenšně ze seznamu
-        // Pokaždé když registruješ ID ho odstraníš ze seznamu
-        // Pokud je nějaký problém, Vypíšeš ID do nějakého nového text area a hlášku k tomu
+        this.multiErrorList = [];
+
+        let groupIDs = this.listGroup.selectedItems.map(a => a.value);
+        let data: string = this.multiForm.controls['listOfIds'].value;
+        data.replace(' ', '');
+        data.replace(',', ';');
+        data.replace(/(?:\r\n|\r|\n)/g, '');
+        data = data + ';';
+        let devicesForRegistration: string[] = data.split(';');
+        // devicesForRegistration = devicesForRegistration.filter(device => device.length === 24);
+        devicesForRegistration.forEach(device => {
+            this.backendService.boardConnectWithProject({ group_ids: groupIDs, hash_for_adding: device, project_id: this.modalModel.project_id })
+                .then(() => {
+                    this.multiErrorList.push('device ' + device + ' added');
+                    devicesForRegistration.splice(devicesForRegistration.indexOf(device), 1);
+                })
+                .catch(reason => {
+                    this.multiErrorList.push('cant add: ' + device + ' because ' + reason);
+                }).then(() => {
+                    this.multiForm.controls['listOfIds'].setValue(devicesForRegistration);
+                });
+        }
+        );
     }
 
+
     singleRegistaration() {
-        // Zde budeš registrovat jedno ID - a zavřeš modal
+        let groupIDs = this.listGroup.selectedItems.map(a => a.value);
+        this.backendService.boardConnectWithProject({ group_ids: groupIDs, hash_for_adding: this.form.controls['id'].value, project_id: this.modalModel.project_id })
+            .then(() => {
+                this.modalClose.emit(true);
+
+            })
+            .catch(reason => {
+
+            });
     }
 
     onSubmitClick(): void {
 
+        if (this.step === 'singleRegistration') {
+            this.singleRegistaration();
+        } else {
+            this.sequenceRegistaration();
+        }
 
         // Uzavření jen v případě úspěchu
         // Respektive - zde uděláme Rest Api na tyriona - zaregistrujeme HW, jeden nebo celý seznam.
@@ -98,37 +145,7 @@ export class ModalsAddHardwareComponent implements OnInit {
         // ccccccccc: fjksadfhksdbfmnbsda,.mnfb
 
         // Toto zde nezavolám abych okno nezavřel - tedy až na konci když se podaří dokončit vše (registrace jednoho devicu nebo všech)
-        this.modalClose.emit(true);
-    }
-
-    // Zde registruji -- Tady asi nedává smysl registrovat Hash - ten vím že buĎ nemám nebo mám
-    inRegistration() {
-
-        // Seznam ID Skupiny
-        let selectedGroupIdsList: string[] = [];
-        this.listGroup.selectedItems.forEach((value: FormSelectComponentOption) => {
-            selectedGroupIdsList.push(value.value);
-        });
-
-
-        this.backendService.boardConnectWithProject({
-            group_ids: selectedGroupIdsList,
-            hash_for_adding: 'xxxxxxxxx',
-            project_id: this.modalModel.project_id
-        })
-            .then(() => {
-
-                // Registruji jen jeden device - úspěšně zaregistrováno a tak můžu zavřít modal
-                if (this.form.controls['id'].value != null ) {
-                    this.modalClose.emit(true);
-                }
-
-                // Registurji seznam a tak pokračuji dokud není prázdný
-
-            })
-            .catch(reason => {
-                // Zaznamenám chybu - pokud
-            });
+        // this.modalClose.emit(true);
     }
 
     onCloseClick(): void {

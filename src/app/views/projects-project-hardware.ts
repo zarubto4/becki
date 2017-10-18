@@ -96,6 +96,8 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         let model = new ModalsHardwareBootloaderUpdateModel(selected.id);
         this.modalService.showModal(model).then((success) => {
             if (success) {
+                this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
+
                 /* this.blockUI();
                   this.backendService.editBoardUserDescription(device.id, {name: model.description})
                   .then(() => {
@@ -165,8 +167,8 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
                 .catch((reason) => {
                     this.unblockUI();
                 });
-        }else {
-            let model = new ModalsAddHardwareModel(null, this.deviceGroup);
+        } else {
+            let model = new ModalsAddHardwareModel(this.projectId, this.deviceGroup);
             this.modalService.showModal(model).then((success) => {
                 this.onHardwareGroupRefresh();
                 this.onFilterHardware();
@@ -280,13 +282,13 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         });
     }
 
-    selectedFilterPageHardware(event: { index: number}) {
+    selectedFilterPageHardware(event: { index: number }) {
         this.onFilterHardware(event.index);
     }
 
     onFilterHardware(pageNumber: number = 0, boardTypes: string[] = []): void {
         this.blockUI();
-        this.backendService.boardsGetWithFilterParameters( pageNumber, {
+        this.backendService.boardsGetWithFilterParameters(pageNumber, {
             projects: [this.projectId],
             type_of_board_ids: boardTypes
         })
@@ -310,16 +312,16 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     }
 
 
-    selectedFilterPageActualizationProcedure(event: { index: number}) {
+    selectedFilterPageActualizationProcedure(event: { index: number }) {
         this.onFilterActualizationProcedure(event.index);
     }
 
     /* tslint:disable:max-line-length ter-indent */
     onFilterActualizationProcedure(pageNumber: number = 0,
-                                   states: ('successful_complete'|'complete'|'complete_with_error'|'canceled'|'in_progress'|'not_start_yet')[] = [],
-                                   type_of_updates:  ('MANUALLY_BY_USER_INDIVIDUAL'|'MANUALLY_BY_USER_BLOCKO_GROUP'|'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME'|'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE'|'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE')[] = []): void {
+        states: ('successful_complete' | 'complete' | 'complete_with_error' | 'canceled' | 'in_progress' | 'not_start_yet')[] = [],
+        type_of_updates: ('MANUALLY_BY_USER_INDIVIDUAL' | 'MANUALLY_BY_USER_BLOCKO_GROUP' | 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' | 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' | 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE')[] = []): void {
         this.blockUI();
-        this.backendService.actualizationProcedureGetByFilter( pageNumber, {
+        this.backendService.actualizationProcedureGetByFilter(pageNumber, {
             project_ids: [this.projectId],
             states: states,
             type_of_updates: type_of_updates
@@ -374,7 +376,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         // TODO
     }
 
-    onProcedureCreateClick( cPrograms: ICProgramShortDetail[] = null) {
+    onProcedureCreateClick(cPrograms: ICProgramShortDetail[] = null) {
 
         // Get all deviceGroup - Recursion
         if (this.deviceGroup == null) {
@@ -402,12 +404,12 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
                     this.onProcedureCreateClick(list.content);
                     return;
                 }).catch(reason => {
-                this.unblockUI();
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail', reason)));
-            });
+                    this.unblockUI();
+                    this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail', reason)));
+                });
         }
 
-        if (cPrograms == null ||  this.deviceGroup == null) {
+        if (cPrograms == null || this.deviceGroup == null) {
             return;
         }
 
