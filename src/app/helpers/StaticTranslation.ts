@@ -22,6 +22,8 @@ export class StaticTranslation {
                 'label_icon': 'FA-ICON (http://fontawesome.io/)',
             }, 'ModalsAddHardwareComponent': {
                 'title': '<strong class="font-color-hardware">Hardware</strong> registration',
+                'label_succesfully_registred:': 'Succesfully registred',
+                'label_failed_to_register':'Failed to register',
                 'label_hash_token': 'Hash Token',
                 'label_hash_tokens': 'Hash Tokens',
                 'label_hardware_groups': 'Available <strong class="font-color-hardware">Hardware Groups</strong>',

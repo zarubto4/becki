@@ -140,7 +140,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
     }
 
     onRemoveClick(device: IBoardShortDetail): void {
-        this.modalService.showModal(new ModalsRemovalModel('[' + device.id + '] ' + device.name)).then((success) => {
+        this.modalService.showModal(new ModalsRemovalModel('[' + device.id + '] ' + (device.name ? device.name : ''))).then((success) => {
             if (success) {
                 this.blockUI();
                 this.backendService.boardDisconnectFromProject(device.id) // TODO [permission]: Project.update_permission (probably implemented as device.delete_permission)

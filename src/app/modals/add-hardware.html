@@ -67,30 +67,39 @@
                 <bk-form-text-area [control]="multiForm.controls.listOfIds" [row]="6" [cols]="250" [placeholder]="'xxxxxxx; yyyyyyyy; ... '"
                     [label]="'label_hash_tokens'|bkTranslate:this"></bk-form-text-area>
                 <br>
-                <bk-multi-select *ngIf="group_options_available && group_options_available.length > 0" [items]="group_options_available"
+                <bk-multi-select *ngIf="!afterFirstConfirm && group_options_available && group_options_available.length > 0" [items]="group_options_available"
                     [label]="'label_hardware_groups'|bkTranslate:this" #groupList></bk-multi-select>
                 <br>
             </form>
-        </div>
 
-        <div class="note note-info">
-            <h4 class="block">{{'label_little_advice'|bkTranslate:this}}</h4>
-            <span [innerHTML]="'label_advice_multiple_registration'|bkTranslate:this"></span>
-        </div>
 
-        <div *ngIf="group_options_available && group_options_available.length == 0" class="note note-warning">
-            <h4 class="block">{{'label_little_advice'|bkTranslate:this}}</h4>
-            <span [innerHTML]="'label_advice_no_group'|bkTranslate:this"></span>
-        </div>
-        <br>
-        <div>
-            <div *ngFor="let error of multiErrorList">
-                <span>{{error}} </span>
-                <br>
-                <br>
+            <div *ngIf="!afterFirstConfirm" class="note note-info">
+                <h4 class="block">{{'label_little_advice'|bkTranslate:this}}</h4>
+                <span [innerHTML]="'label_advice_multiple_registration'|bkTranslate:this"></span>
             </div>
+
+            <div *ngIf="!afterFirstConfirm && group_options_available && group_options_available.length == 0" class="note note-warning">
+                <h4 class="block">{{'label_little_advice'|bkTranslate:this}}</h4>
+                <span [innerHTML]="'label_advice_no_group'|bkTranslate:this"></span>
+            </div>
+            <br>
+            <div>
+                <div *ngIf="afterFirstConfirm">
+                    <span>
+                        <i class="font-green-jungle fa fa-check"></i> {{'label_succesfully_registred'|bkTranslate:this}}: </span>
+                    <bk-form-text-area [control]="deviceInfoTextForm.controls.succesfulDevices" [row]="6" [cols]="250" [placeholder]="" [labelComment]="false"></bk-form-text-area>
+                </div>
+                <br>
+                <br>
+
+                <div *ngIf="afterFirstConfirm">
+                    <span>
+                        <i class="font-red-thunderbird fa fa-warning"></i> {{'label_failed_to_register'|bkTranslate:this}}: </span>
+                    <bk-form-text-area [control]="deviceInfoTextForm.controls.failedDevices" [row]="6" [cols]="250" [placeholder]="" [labelComment]="false"></bk-form-text-area>
+                </div>
+            </div>
+            <br>
         </div>
-        <br>
     </div>
 
 
@@ -98,6 +107,5 @@
     <div *ngIf="step" class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
         <button type="button" [disabled]="!((multiForm.valid)||(form.valid))" class="btn green" (click)="onSubmitClick()">{{'btn_add'|bkTranslate:this}}</button>
-        <button *ngIf="step=='multipleRegistration'" type="button" class="btn green" (click)="onCloseClick()">{{'btn_close'|bkTranslate:this}}</button>
     </div>
 </div>

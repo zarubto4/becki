@@ -26,6 +26,12 @@ export class ModalsAddHardwareModel extends ModalModel {
     }
 }
 
+export interface StatusMesseage {
+    icon: string;
+    color: string;
+    text: string;
+}
+
 @Component({
     selector: 'bk-modals-add-hardware',
     templateUrl: './add-hardware.html'
@@ -35,8 +41,6 @@ export class ModalsAddHardwareComponent implements OnInit {
     @Input()
     modalModel: ModalsAddHardwareModel;
 
-
-
     @Output()
     modalClose = new EventEmitter<boolean>();
 
@@ -44,8 +48,13 @@ export class ModalsAddHardwareComponent implements OnInit {
 
     multiForm: FormGroup;
 
-    multiErrorList: string[] = [];
+    deviceInfoTextForm: FormGroup;
 
+
+    registredDevices: string[] = [];
+    failedDevices: string[] = [];
+
+    afterFirstConfirm: boolean = false;
 
     step: string = null;
     group_options_available: FormSelectComponentOption[] = []; // Select Groups
@@ -56,11 +65,15 @@ export class ModalsAddHardwareComponent implements OnInit {
     constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
 
         this.form = this.formBuilder.group({
-            'id': ['', [Validators.required], BeckiAsyncValidators.hardwareDeviceId(backendService)],       // TODO DOminik - ID select this.step = 'singleRegistration'
+            'id': ['', [Validators.required], BeckiAsyncValidators.hardwareDeviceId(backendService)],
         });
 
         this.multiForm = this.formBuilder.group({
-            'listOfIds': ['', [Validators.required]] // TODO DOminik - ID select this.step = 'multipleRegistration'
+            'listOfIds': ['', [Validators.required]]
+        });
+        this.deviceInfoTextForm = this.formBuilder.group({
+            'succesfulDevices': ['', []],
+            'failedDevices': ['', []],
         });
 
 
@@ -90,7 +103,8 @@ export class ModalsAddHardwareComponent implements OnInit {
     }
 
     sequenceRegistaration() {
-        this.multiErrorList = [];
+        this.registredDevices = [];
+        this.failedDevices = [];
 
         let groupIDs = this.listGroup.selectedItems.map(a => a.value);
         let data: string = this.multiForm.controls['listOfIds'].value;
@@ -99,17 +113,23 @@ export class ModalsAddHardwareComponent implements OnInit {
         data.replace(/(?:\r\n|\r|\n)/g, '');
         data = data + ';';
         let devicesForRegistration: string[] = data.split(';');
-        // devicesForRegistration = devicesForRegistration.filter(device => device.length === 24);
+        devicesForRegistration = devicesForRegistration.filter(device => device.length > 0);
         devicesForRegistration.forEach(device => {
             this.backendService.boardConnectWithProject({ group_ids: groupIDs, hash_for_adding: device, project_id: this.modalModel.project_id })
                 .then(() => {
-                    this.multiErrorList.push('device ' + device + ' added');
+                    this.registredDevices.push(device);
                     devicesForRegistration.splice(devicesForRegistration.indexOf(device), 1);
                 })
                 .catch(reason => {
-                    this.multiErrorList.push('cant add: ' + device + ' because ' + reason);
+                    this.failedDevices.push(device + ': ' + reason.body.message);
                 }).then(() => {
-                    this.multiForm.controls['listOfIds'].setValue(devicesForRegistration);
+                    if (devicesForRegistration.length > 0) {
+                        this.multiForm.controls['listOfIds'].setValue(devicesForRegistration);
+                        this.deviceInfoTextForm.controls['succesfulDevices'].setValue(this.registredDevices.join(', \n'));
+                        this.deviceInfoTextForm.controls['failedDevices'].setValue(this.failedDevices.join(', \n'));
+                    } else {
+                        this.modalClose.emit(true);
+                    }
                 });
         }
         );
@@ -129,7 +149,7 @@ export class ModalsAddHardwareComponent implements OnInit {
     }
 
     onSubmitClick(): void {
-
+        this.afterFirstConfirm = true;
         if (this.step === 'singleRegistration') {
             this.singleRegistaration();
         } else {

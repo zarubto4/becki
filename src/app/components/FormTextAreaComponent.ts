@@ -35,7 +35,7 @@ export class FormTextAreaComponent {
     cols: number = 50;
 
     @Input()
-    label: string = 'Unknown label';
+    label: string = '';
 
     @Input()
     labelComment: boolean = true;

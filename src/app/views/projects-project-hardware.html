@@ -89,8 +89,8 @@
                                 </div>
                                 <div *ngIf="device.hardware_groups">
                                     [
-                                    <span *ngFor="let group of device.hardware_groups">
-                                        {{group.name}},
+                                    <span *ngFor="let group of device.hardware_groups; let last = last">
+                                        {{group.name}}<span *ngIf="!last">, </span>
                                     </span>
                                     ]
                                 </div>
