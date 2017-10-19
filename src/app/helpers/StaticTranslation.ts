@@ -1,6 +1,6 @@
 /*
-* Created by DominikKrisztof 13.3.2017
-*/
+ * Created by DominikKrisztof 13.3.2017
+ */
 
 export class StaticTranslation {
     /* tslint:disable:max-line-length */
@@ -14,11 +14,11 @@ export class StaticTranslation {
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_identifier': 'Unique Identifier',
-                'label_color': 'Color in Template. Please used color from http://keenthemes.com/preview/metronic/theme/admin_1/ui_colors.html',
+                'label_color': 'Color in Template. Please use color from http://keenthemes.com/preview/metronic/theme/admin_1/ui_colors.html',
                 'label_company_details_required': 'Company details required',
                 'label_payment_details_required': 'Payment details required (Full registration)',
                 'label_payment_method_required': 'Payment mode required (User have to select a mode.)',
-                'label_credit_for_beginning': 'Pre-Paid Credit for user on beginning 1USD == 1000 !!!!!',
+                'label_credit_for_beginning': 'Pre-Paid Credit for user at the beginning 1USD == 1000 !!!!!',
                 'label_icon': 'FA-ICON (http://fontawesome.io/)',
             }, 'ModalsAddHardwareComponent': {
                 'title': '<strong class="font-color-hardware">Hardware</strong> registration',
@@ -32,8 +32,8 @@ export class StaticTranslation {
                 'label_single_registration': 'Single Registration (QR)',
                 'label_little_advice': 'Little Advice',
                 'label_advice_single_registration': '<p><strong>You will find HashToken on the sticker on Hardware</strong></p> <br> <p> If you own a smart-phone with camera <strong>(That\'s the thing that girls do with selfie. True gourmets can also use tablet.)</strong>, you can sign in to the portal and quickly and easily capture the QR code sticker on the Hardware.</p> <br> <p> Trust us, it\'s much more comfortable...</p>',
-                'label_advice_multiple_registration': '<p> For register new <strong class="font-color-hardware">Hardware</strong> to this project, upload a text file below or insert text. The file or text should contain a list of device registration hash,where each key is separated by a semicolon. The spaces will be ignored. </p> <br><p><strong>Example: </strong> XXXXXXX; YYYYYYY;BBBBBB;  CCCCCC;DDDDD;</p><br><p> Each hash is sequentially registered. If a problem occurs - we\'ll show you which key is not valid and why.Attention - Multiple <strong>unsuccessful</strong> registration is flagged as a security breach attempt and your account may be blocked.</p>',
-                'label_advice_no_group': '<p>We strongly recommend register <strong class="font-color-hardware">Hardware</strong> into <strong class="font-color-hardware">Hardware Groups</strong>. We\'ve found that you do not have one yet. Groups are available in Release Manager to update more than one hardware. You can see progress and etc.</p> <br><p>You can use the <strong class="font-color-hardware">Hardware Groups</strong> to develop. For example, <strong>Beta</strong>, <strong>Dev HW</strong> or <strong>My Little Pony</strong>, and for production deployments where you can use an industrial registration API,for example <strong>Smart Fridge - Europe</strong> or <strong>Tracking equipment used in North Korea</strong>.</p>',
+                'label_advice_multiple_registration': '<p> For register new <strong class="font-color-hardware">Hardware</strong> to this project, upload a text file below or insert text. The file or text should contain a list of device registration hash, where each key is separated by a semicolon. The spaces will be ignored. </p> <br><p><strong>Example: </strong> XXXXXXX; YYYYYYY;BBBBBB;  CCCCCC;DDDDD;</p><br><p> Each hash is sequentially registered. If a problem occurs - we\'ll show you which key is not valid and why. Attention - Multiple <strong>unsuccessful</strong> registration is flagged as a security breach attempt and your account may be blocked.</p>',
+                'label_advice_no_group': '<p>We strongly recommend to register <strong class="font-color-hardware">Hardware</strong> into <strong class="font-color-hardware">Hardware Groups</strong>. We\'ve found that you do not have any yet. Groups are available in Release Manager to update more than one hardware. You can see progress and etc.</p> <br><p>You can use the <strong class="font-color-hardware">Hardware Groups</strong> to develop. For example, <strong>Beta</strong>, <strong>Dev HW</strong> or <strong>My Little Pony</strong>, and for production deployments where you can use an industrial registration API,for example <strong>Smart Fridge - Europe</strong> or <strong>Tracking equipment used in North Korea</strong>.</p>',
                 'flash_add_device_fail': 'Adding device {0} failed',
                 'flash_add_device_success': 'Device add success'
             }, 'ModalsBillingInformationComponent': {
@@ -59,7 +59,7 @@ export class StaticTranslation {
                 'label_name': 'Product name',
             }, 'ModalsPublicShareResponseComponent': {
                 'title': 'Publishing decisions',
-                'label_program_additional_comment': 'If the user shares a new version of the same program as before. The program (not version) will be named which has already been used since the previous approval.',
+                'label_program_additional_comment': 'If the user shares a new version of the same program as before, the program (not version) will be named the same as the one which has already been used since the previous approval.',
                 'label_program_name': 'Program name in the public list',
                 'label_program_description': 'Program description in the public list',
                 'label_version_name': 'Version name in the public list',
@@ -70,7 +70,7 @@ export class StaticTranslation {
                 'btn_decide': 'Make decision',
             }, 'ModalsExtensionComponent': {
                 'title': 'Add a Device',
-                'label_color': 'Color in Template. Please used color from http://keenthemes.com/preview/metronic/theme/admin_1/ui_colors.html',
+                'label_color': 'Color in Template. Please use color from http://keenthemes.com/preview/metronic/theme/admin_1/ui_colors.html',
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_price': 'Price  1USD == 1000 !!!!!',
@@ -120,7 +120,7 @@ export class StaticTranslation {
                 'label_description': 'Description',
                 'label_processor': 'Processor',
                 'label_producer': 'Producer',
-                'label_connectible_to_internet': 'Connectible to Internet (Wifi, Ethernet)',
+                'label_connectable_to_internet': 'Connectable to Internet (Wifi, Ethernet)',
                 'label_compiler_target_name': 'Target name for Compiler server'
             }, 'ModalsCreateProcessorComponent': {
                 'title': 'Create new Processor',
@@ -142,7 +142,7 @@ export class StaticTranslation {
             }, 'ModalsCreateHomerServerComponent': {
                 'title': 'Create new Server',
                 'label_personal_server_name': 'Server name',
-                'label_server_url_comment': 'URL Address without port & schama (ftp, ws, http etc ..) When entering an IP address, it is necessary to specify the correct format according to ISO standard.',
+                'label_server_url_comment': 'URL Address without port & schema (ftp, ws, http etc ..) When entering an IP address, it is necessary to specify the correct format according to ISO standard.',
                 'label_server_url': 'Server url (without http..)',
                 'label_mqtt_username': 'Mqtt user name',
                 'label_mqtt_port': 'Mqtt port',
@@ -159,7 +159,7 @@ export class StaticTranslation {
                 'label_printer_label_24': 'Label Printer 2 (24 mm)',
                 'label_printer_sticker': 'Package Sticker printer (65mm)',
                 'label_hardware_tester_label': 'Garfield Hardware Identification (for autodetect)',
-                'label_type_of_board': 'Tester fot Device Type',
+                'label_type_of_board': 'Tester for Device Type',
                 'label_producer': 'Producer',
 
             }, 'ModalsBlockoAddGridEmptyComponent': {
@@ -232,12 +232,12 @@ export class StaticTranslation {
                 'text_rename_directory': 'Rename Directory <b> {0}</b>',
                 'text_remove_file': 'Are you sure to remove File <b> {0} </b>?',
                 'text_remove_library': 'Are you sure to remove Library <b> {0} </b>?',
-                'text_remove_directory': 'Are you sure to remove Directory <b> {0} </b> with all it`s Subdirectories?',
+                'text_remove_directory': 'Are you sure to remove Directory <b> {0} </b> with all its Subdirectories?',
                 'text_file_name': 'Name',
 
             }, 'ModalsCodeLibraryVersionComponent': {
                 'title': 'Select Library Version',
-                'label_no_library': 'No versions found in Library',
+                'label_no_library': 'No version found in Library',
                 'btn_select_library': 'Select',
 
             }, 'ModalsCodePropertiesComponent': {
@@ -340,11 +340,11 @@ export class StaticTranslation {
 
             }, 'ModalsPublicShareRequestComponent': {
                 'title': 'Set as ',
-                'body_text': '<p>Are you sure you want to publish the program? Is it properly named? It includes quality documentation?</p><p> Your request will be immediately forwarded to the administrators for review. It may take a few days. <strong>Please be patient.</strong> The code may be modified or you will be asked to make revisions.</p>',
+                'body_text': '<p>Are you sure you want to publish the program? Is it properly named? Does it include quality documentation?</p><p> Your request will be immediately forwarded to the administrators for review. It may take a few days. <strong>Please be patient.</strong> The code may be modified or you will be asked to make revision.</p>',
 
             }, 'ModalsSetAsMainComponent': {
                 'title': 'Set as default',
-                'body_text': 'Some settings may have fatal consequences. Please reconsider what you are doing! Are you sure that you want set parameter as a default?',
+                'body_text': 'Some settings may have fatal consequences. Please reconsider what you are doing! Are you sure that you want to set the parameter as a default?',
 
             }, 'ModalsSelectHardwareComponent': {
                 'title': 'Select Hardware Device',
@@ -377,11 +377,11 @@ export class StaticTranslation {
 
             }, 'RedirectOkComponent': {
                 'title': 'Success!',
-                'label_can_login': 'now you can login!',
+                'label_can_login': 'Now you can login!',
             },
 
             'ReaderQrComponent': {
-                'not_valid_byzance_qr_code': 'not a valid Byzance QRcode',
+                'not_valid_byzance_qr_code': 'not valid Byzance QRcode',
                 'byzance_qr_code_found': 'Byzance QR code found',
                 'btn_rescan': 'Scan again',
                 'btn_confirm_scan': 'Confirm Scan',
@@ -419,10 +419,10 @@ export class StaticTranslation {
                 'label_deactivated_under': 'Deactivated under',
                 'label_project_properties': 'Project properties',
                 'label_Remove_project': 'Remove project',
-                'label_no_projects': 'There is not any projects',
+                'label_no_projects': 'There is not any project',
                 'label_no_projects_comment': 'Create your first project, program, connect hardware and start slowly control the world. <br> Step by step.',
                 'label_no_product': 'Mr. Salieri likes things in order and leads an accounting book...',
-                'label_no_product_comment': 'If you want to create a project, you must have any <span class="bold"> financial product</span>. For add product click the link below.',
+                'label_no_product_comment': 'If you want to create a project, you must have a <span class="bold"> financial product</span>. For add product click the link below.',
                 'label_create_product_below': 'You can create it by click on button bellow.',
 
 
@@ -489,7 +489,7 @@ export class StaticTranslation {
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_actions': 'Action',
-                'label_role_properties': 'Editd Role properties',
+                'label_role_properties': 'Edit Role properties',
                 'label_role_remove': 'Remove Role',
                 'label_no_role': 'No Roles',
                 'label_no_role_comment': 'We didn\'t find any roles. Create new one',
@@ -636,7 +636,7 @@ export class StaticTranslation {
                 'nav_step_one_title': 'Tariff',
                 'nav_step_one_text': 'Select the right tariff for you',
                 'nav_step_two_title': 'Packages',
-                'nav_step_two_text': 'Choose your desired expansions',
+                'nav_step_two_text': 'Choose your desired expansion',
                 'nav_step_three_title': 'Information',
                 'nav_step_three_text': 'Fill additional information',
                 'nav_step_four_title': 'Summary',
@@ -772,7 +772,7 @@ export class StaticTranslation {
                 'label_free': 'Free',
                 'label_not_set_yet': 'Not set yet',
                 'label_no_product': 'No product',
-                'label_no_product_comment': 'First create a financial entity under which all your content will be registered. You can add hardware, run cloud applications, deploy own servers, paid invoices :P and of course go safely from prototype to mass IoT production. <br><br> We wish you much luck with the ideas that dominate the world.',
+                'label_no_product_comment': 'First create a financial entity under which all your content will be registered. You can add hardware, run cloud applications, deploy own servers, pay invoices :P and of course go safely from prototype to mass IoT production. <br><br> We wish you much luck with the ideas that dominate the world.',
                 'flash_cant_deactivate_product': 'The product cannot be deactivated. ',
                 'flash_product_activated': 'The product has been activated.',
                 'flash_cant_activate_product': 'The product cannot be activated. ',
@@ -856,7 +856,7 @@ export class StaticTranslation {
                 'title_in_group': 'In Groups'
 
             }, 'PictureUploadComponent': {
-                'flash_image_too_small': 'image too small',
+                'flash_image_too_small': 'image is too small',
                 'label_unsaved': 'unsaved',
                 'label_select_avatar': 'select avatar',
                 'label_avatar': 'avatar',
@@ -901,7 +901,7 @@ export class StaticTranslation {
                 'title': 'Notifications',
                 'label_load_older': 'Load older notifications',
                 'label_displaying_notif': 'Displaying <b>{0}</b> notification(s). Total Unread notifications: <b>{1}</b>',
-                'label_notif_undead': '(<b>{0}</b> unread notofications)',
+                'label_notif_undead': '(<b>{0}</b> unread notifications)',
                 'flash_cant_load': 'Could not load notifications',
 
             }, 'ProducersProducerComponent': {
@@ -915,8 +915,8 @@ export class StaticTranslation {
                 'title': 'Firmware Release Settings',
                 'label_hw_group_title': 'Select <strong class="font-color-hardware">HARDWARE</strong> Groups',
                 'label_firmware_title': 'Select <strong class="font-color-code">FIRMWARE</strong>',
-                'label_no_firmware_warning': 'Sorry, but you haven\'t own <strong class="font-color-code">FIRMWARE CODE</strong> (program) yet.',
-                'label_no_groups_warning': 'Sorry, but you haven\'t own <strong class="font-color-code">HARDWARE</strong> groups yet.',
+                'label_no_firmware_warning': 'Sorry, but you haven\'t owned <strong class="font-color-code">FIRMWARE CODE</strong> (program) yet.',
+                'label_no_groups_warning': 'Sorry, but you haven\'t owned <strong class="font-color-code">HARDWARE</strong> groups yet.',
                 'label_firmware_type': 'Firmware Type',
                 'label_select_time': 'Select Time',
                 'label_select_date': 'Select Date',
@@ -1001,7 +1001,7 @@ export class StaticTranslation {
                 'btn_select_cloud_version': 'Select & Upload Version to Cloud',
                 'label_no_devices_added': 'No devices added in this <strong class="font-color-blocko">BLOCKO</strong> program.',
                 'label_select_version': 'Select Version',
-                'label_no_program_version': 'No program versions.',
+                'label_no_program_version': 'No program version.',
                 'label_modal_change_instance_version': 'Change Instance Version',
                 'label_modal_change_running_instance_version': 'Are you sure to change the running instance version?',
                 'label_modal_ok': 'OK',
@@ -1040,7 +1040,7 @@ export class StaticTranslation {
                 'flash_cant_load_version': 'Unable to load version <b>{0}</b>`, {1}.',
                 'flash_cant_save_version': 'Unable to save version <b> {0} </b>, {1}.',
                 'flash_version_saved': 'Version <b> {0} </b> saved successfully.',
-                'flash_cant_change_version': 'Unable change version, {0}.',
+                'flash_cant_change_version': 'Unable to change version, {0}.',
                 'flash_cant_load_blocko_block': 'Unable to load this BLOCK version, ',
                 'flash_cant_add_blocko_block': 'Unable to add this BLOCK.',
                 'flash_cant_load_blocko_version': 'Unable to load this BLOCKO version, ',
@@ -1051,7 +1051,7 @@ export class StaticTranslation {
                 'flash_cant_change_information': 'Unable to change this information, {0}.',
                 'flash_version_removed': 'Version removed successfully.',
                 'flash_cant_remove_version': 'Could not remove version.',
-                'flash_cant_find_program_version': 'Program version not found.',
+                'flash_cant_find_program_version': 'Program version is not found.',
                 'flash_edit_version_been_changed': 'Version {0} has been changed.',
                 'flash_edit_cant_change_version': 'Version {0} could not be changed, {1}.',
                 'flash_cant_turn_instance_on': 'Could not turn on this instance, {0}.',
@@ -1068,7 +1068,7 @@ export class StaticTranslation {
                 'label_status': 'Status',
                 'label_actions': 'Actions',
                 'btn_add_hardware': 'Add a Device',
-                'btn_add_hardware_group': 'Create Group',
+                'btn_add_hardware_group': 'Create a Group',
                 'btn_add_new_update': 'Release Firmware',
                 'label_no_hardware': 'No <strong class="font-color-hardware">HARDWARE</strong> in this project.',
                 'label_no_hardware_comment': 'Click on the button bellow to add a new device.',
@@ -1128,10 +1128,10 @@ export class StaticTranslation {
                 'label_settings': 'Settings & Developers',
                 'label_image': 'Image',
                 'label_set_own_picture': 'Set your own photo',
-                'label_no_running_update_on_hardware': 'There is no updates for this device yet',
+                'label_no_running_update_on_hardware': 'There is no update for this device yet',
                 'label_main_server': 'Main Server',
                 'label_instance': 'Instance ID',
-                'label_main_server_not_found': 'Device not connected to Server yet',
+                'label_main_server_not_found': 'Device is not connected to Server yet',
                 'label_not_in_instance': 'Device is not connected to an instance',
                 'label_online': 'online',
                 'label_offline': 'offline',
@@ -1252,7 +1252,7 @@ export class StaticTranslation {
                 'label_progress': 'Progress',
                 'label_update_state': 'Update state',
                 'label_no_updates_title': 'No updates',
-                'label_no_update_text': 'Set instance to cloud not required any updates of firmware on hardware',
+                'label_no_update_text': 'Set instance to cloud does not require any updates of firmware on hardware',
                 'label_project': 'Project',
                 'label_program': 'Program',
                 'label_finished': 'Finished',
@@ -1260,8 +1260,8 @@ export class StaticTranslation {
                 'label_version': 'Version',
                 'label_description': 'Description',
                 'label_no_history_in_instance': 'There is no history for this instance',
-                'label_hardware_actual_in_instance': 'Actual in Instance',
-                'label_hardware_no_hardware_in_instance': 'No integrated Hardware in actually running instance',
+                'label_hardware_actual_in_instance': 'Currently in Instance',
+                'label_hardware_no_hardware_in_instance': 'No integrated Hardware in currently running instance',
                 'label_grid_no_grid_in_instance': 'No apps in this instance.',
                 'label_remove_device': 'Remove device',
                 'label_device_type': 'Device type',
@@ -1279,7 +1279,7 @@ export class StaticTranslation {
                 'label_firmware': 'Firmware',
                 'label_unknown_date': 'Not yet (Unknown)',
                 'label_hardware_caps': 'HARDWARE',
-                'label_select_version_for_details': 'Select version for see details',
+                'label_select_version_for_details': 'Select version to see details',
 
                 'label_modal_shutdown_instance': 'Shutdown instance',
                 'label_modal_confirm_shutdown_instance': 'Are you sure to shutdown the running instance?',
@@ -1288,7 +1288,7 @@ export class StaticTranslation {
                 'label_cannot_execute': 'Unable to execute command, {0}.',
                 'label_cannot_change_version': 'Unable to change version, {0}',
                 'flash_cannot_change_developer_parameter': 'Unable to change parameter, ',
-                'flash_picture_updated': 'Picture update successful.',
+                'flash_picture_updated': 'Picture updated successfully.',
                 'flash_cant_picture_update': 'Cannot update picture, ',
                 'label_cannot_change_program_publicity': 'Unable to change program privacy setting, ',
                 'label_modal_change_instance_version': 'Change instance version',
@@ -1306,7 +1306,7 @@ export class StaticTranslation {
                 'label_program_properties': 'CODE program properties',
                 'label_remove_program': 'Remove CODE program',
                 'label_list_no_item_main': 'There is not any code library in this project',
-                'label_list_no_item_sub': 'You can create it by click on button bellow.',
+                'label_list_no_item_sub': 'You can create it by click on the button bellow.',
                 'label_no_public_library': 'No public <strong class="font-color-code">CODE</strong> Libraries',
                 'label_create_public_library_comment': 'If you do not see your dream library, create it and share it with others.',
 
@@ -1366,7 +1366,7 @@ export class StaticTranslation {
                 'label_version': 'Version',
                 'label_no_library_version': 'There are no libraries yet.',
                 'label_library_make_copy': 'Make a copy of Library.',
-                'label_public_comment': 'This is public Library, you can only test i or make a copy.'
+                'label_public_comment': 'This is public Library, you can only test it or make a copy.'
 
             }, 'ProjectsProjectMembersComponent': {
 
@@ -1405,7 +1405,7 @@ export class StaticTranslation {
                 'tab_public_groups': 'Public Groups',
                 'tab_private_groups': 'Private Groups',
                 'tab_programs_for_decisions': 'Widgets waiting for decision',
-                'table_group_size': 'Count of Widgets',
+                'table_group_size': 'Number of Widgets',
 
                 'label_no_programs': 'No Widgets',
                 'label_no_program_comment': 'No widgets for community administrator decision',
@@ -1545,7 +1545,7 @@ export class StaticTranslation {
                 'label_saved_versions': 'Saved versions',
                 'label_device_properties': 'Device properties',
                 'label_remove_device': 'Remove device',
-                'label_block_code_change': 'Block code has been changed, you must test program first than save.',
+                'label_block_code_change': 'Block code has been changed, you must test the program first, then save it.',
 
                 'table_version_name': 'Name',
                 'table_description': 'Description',
@@ -1659,8 +1659,8 @@ export class StaticTranslation {
 
                 'codefile_library_version_dont_have_readme': '{0} ({1}), # Library {2}\n\nVersion: {3}\n\nLooks like this library doesn\'t have README.md file.',
                 'codefile_library_version_short_dont_have_readme': '# Library {0}\n\nVersion: {1}\n\nLooks like this library doesn\'t have README.md file.',
-                'text_unsaved_change_reload': 'You have <b> unsaved changes</b> in version <b> {0} </b>, are you sure to reload this version?',
-                'text_unsaved_change_switch': 'You have <b> unsaved changes</b> in version <b> {0} </b>, are you sure to switch to version <b> {1} </b>?',
+                'text_unsaved_change_reload': 'You have <b> unsaved changes</b> in this version <b> {0} </b>, are you sure to reload this version?',
+                'text_unsaved_change_switch': 'You have <b> unsaved changes</b> in this version <b> {0} </b>, are you sure to switch to version <b> {1} </b>?',
                 'text_changed_files': '<h5>Changed files:</h5>',
 
                 'modal_label_save_same_code': 'Save identical code?',
@@ -1670,7 +1670,7 @@ export class StaticTranslation {
 
                 'label_main_c_program_version_set_as_main': 'Set this version as Main',
                 'label_publish': 'Accept publication',
-                'label_unpublish': 'Refusal to Publish',
+                'label_unpublish': 'Refused to Publish',
 
                 'flash_update_success': 'Deployed successfully',
                 'flash_cant_upload_code': 'Deployment failed.',
@@ -1931,8 +1931,8 @@ export class StaticTranslation {
                 'modal_label_cant_move_base_directory': 'Unable to move <b>/</b> directory.',
                 'modal_label_cant_move_file_already_exist': 'Unable to move file to <b>/{0}</b>. File with the same name already exists.',
                 'modal_label_cant_add_directory_at_path': 'Unable to create directory in <b>/{0}</b>. Directory with the same name already exists.',
-                'modal_label_cant_move_directory_to_childern': 'Unable to move directory to it\'s own <b>sub-directory</b>. ',
-                'modal_label_cant_rename_directory': 'Unable to rename rename <b>/</b> directory.',
+                'modal_label_cant_move_directory_to_childern': 'Unable to move directory to its own <b>sub-directory</b>. ',
+                'modal_label_cant_rename_directory': 'Unable to rename <b>/</b> directory.',
                 'modal_label_cant_rename': 'Unable to rename <b>/{0} </b>.',
                 'modal_label_cant_remove_base_directory': 'Unable to remove <b>/</b> directory.',
                 'modal_label_cant_remove_file': 'Unable to remove <b>/{0} </b> file.',
@@ -2043,7 +2043,7 @@ export class StaticTranslation {
                 'table_hardware_type': 'HardwareType',
                 'table_actions': 'Actions',
 
-                'flash_code_add': 'Community Code Add. Don\'t forget set first Version and publish program',
+                'flash_code_add': 'Community Code Add. Don\'t forget to set first Version and publish program',
 
                 'label_no_c_programs': 'No Programs',
                 'label_no_c_programs_comment': 'Create new Program, or change Filter property',
@@ -2055,7 +2055,7 @@ export class StaticTranslation {
                 'main_title': 'Platform administration',
                 'main_subtitle': 'Garfield Test & Burn Utility',
 
-                'label_general_description': 'The Garfield Test Tool is designed for testing and burning the default settings. In addition, ' +
+                'label_general_description': 'The Garfield Test Tool is designed for testing and burning the default settings. Moreover, it is designed ' +
                 'for tagging the new hardware and flow for hardware registration into the system. For the successful start of the procedure, ' +
                 'it is necessary that all fields in the "prerequisite" are green.',
 
@@ -2070,7 +2070,7 @@ export class StaticTranslation {
                 'label_printer_label_2': 'Printer Label 22mm',
                 'label_print_sticker': 'Printer sticker 62 mm',
                 'label_hardware_tester': 'Hardware tester Kit:',
-                'label_prerequisites': 'Prerequisites',
+                'label_prerequisites': 'Prerequisite',
                 'label_prerequisites_not_complete': 'Prerequisites (incomplete)',
                 'label_prerequisites_not_met': 'Prerequisite are not met',
                 'label_test_firmware': 'Test Firmware',
@@ -2108,7 +2108,7 @@ export class StaticTranslation {
                 'nav_step_two_title': 'File Transfer',
                 'nav_step_two_text': 'Bootloader & Test Firmware',
                 'nav_step_three_title': 'Making Test',
-                'nav_step_three_text': 'Testing procedure on tester Harware',
+                'nav_step_three_text': 'Testing procedure on tester Hardware',
                 'nav_step_four_title': 'Settings',
                 'nav_step_four_text': 'Default settings',
                 'nav_step_five_title': 'File Transfer',
@@ -2117,7 +2117,7 @@ export class StaticTranslation {
                 'nav_step_six_text': 'Connection to Cloud',
 
 
-                'flash_code_add': 'Community Code Add. Don\'t forget set first Version and publish program',
+                'flash_code_add': 'Community Code Add. Don\'t forget to set first Version and publish program',
                 'flash_cant_load_bootloader_file': 'Cannot load Bootloader File to Cache Memory',
                 'flash_tester_connected': 'TestKit connected',
                 'flash_tester_disconnected': 'TestKit disconnected',
@@ -2211,7 +2211,15 @@ export class StaticTranslation {
         }
     };
 
-    public static translateTables: { [lang: string]: { [tableOrEnv: string]: { [keyOrTable: string]: (string | { [key: string]: string }) } } } = {
+    public static translateTables: {
+        [lang: string]: {
+            [tableOrEnv: string]: {
+                [keyOrTable: string]: (
+                    string
+                    | { [key: string]: string })
+            }
+        }
+    } = {
         'en': {
             'board_state': {
                 'UNKNOWN': 'unknown',
@@ -2261,7 +2269,7 @@ export class StaticTranslation {
                 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE': 'System update by central server - Critical patch',
             },
             'update_status': {
-                'successful_complete': 'Successfully complete',
+                'successful_complete': 'Successfully completed',
                 'complete': 'Complete',
                 'complete_with_error': 'Complete with error',
                 'canceled': 'Canceled',
@@ -2272,7 +2280,7 @@ export class StaticTranslation {
                 'pending': 'Your request has been submitted, <br> please wait for the administrator\'s decision.',
                 'approved': 'Your program has been approved. <br> You can find it with a slight modification in the list of public programs. <strong>Thank you!</strong>',
                 'disapproved': 'We apologize, but the administrator did not approve your program. More information was sent to you by email and notification.',
-                'edited': 'The program has been edited for another iteration. ',
+                'edited': 'The program has been edited for another iteraction. ',
             },
             'version_status': {
                 'compilation_in_progress': 'Compilation is in progress.',
@@ -2283,13 +2291,13 @@ export class StaticTranslation {
                 'file_with_code_not_found': 'Code file not found. The server can fix bugs in a short while. We know about this issue and we\'re working on it. Please be patient.',
                 'compilation_server_error': 'Compilation server error. The server can fix bugs in a short while. We know about this issue and we\'re working on it. Please be patient.',
                 'json_code_is_broken': 'Json Code is Broken. Please try again later.',
-                'hardware_unstable': 'Some of your devices with this version of the program had a critical error and had to be restored from a backup. This version is not recommended to use in production until you have solved the cause for the error.',
+                'hardware_unstable': 'Some of your devices with this version of the program had a critical error and had to be restored from a backup. This version is not recommended to use in production until you have solved the cause of the error.',
                 'undefined': 'Version status is unknown.',
                 'main_version': 'Version is set as Main or Default'
             },
 
             'update_state': {
-                'complete': 'Complete',
+                'complete': 'Completed',
                 'canceled': 'Cancelled',
                 'not_start_yet': 'Waiting in que (In Progress).',
                 'in_progress': 'Update is in progress',
@@ -2340,4 +2348,5 @@ export class StaticTranslation {
             // TODO
         }
     };
-};
+}
+;
