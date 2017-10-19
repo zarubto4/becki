@@ -2,7 +2,7 @@
  * Created by davidhradek on 05.12.16.
  */
 
-import { Component, Injector, OnDestroy, OnInit } from '@angular/core';
+import { Component, Injector, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import {
     IBoard, IBootLoader, ICProgramVersionShortDetail, IGarfield, IHomerServer,
@@ -17,8 +17,9 @@ import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import {
     BeckiBackend, IWebSocketGarfieldDeviceConnect, IWebSocketGarfieldDeviceConfigure, IWebSocketMessage,
     IWebSocketGarfieldDeviceBinary, BugFoundError, IWebSocketGarfieldDeviceBinaryResult, IWebSocketSuccessMessage,
-    IWebSocketErrorMessage
+    IWebSocketErrorMessage, IWebSocketGarfieldDeviceTest, IWebSocketGarfieldDeviceTestResult
 } from '../backend/BeckiBackend';
+import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
 
 @Component({
     selector: 'bk-view-garfield-garfield',
@@ -66,6 +67,11 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     routeParamsSubscription: Subscription;
     wsMessageSubscription: Subscription;
 
+    testConfig: string = null;
+
+    @ViewChild(ConsoleLogComponent)
+    consoleLog: ConsoleLogComponent;
+
     constructor(injector: Injector) {
         super(injector);
 
@@ -81,9 +87,88 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             'batch': ['', [Validators.required]]
         });
 
+        let testConfigJSON: any = {
+            pins: {
+                up: {
+                    x: ['1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'],
+                    y: ['1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'],
+                    z: ['1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1']
+                },
+                down: {
+                    x: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'],
+                    y: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0'],
+                    z: ['0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0']
+                }
+            },
+            power: {
+                poe_act: {
+                    vbus: {
+                        min: 0,
+                        max: 0
+                    },
+                    v3: {
+                        min: 0,
+                        max: 0
+                    },
+                    curr: {
+                        min: 0,
+                        max: 0
+                    }
+                },
+                poe_pas: {
+                    vbus: {
+                        min: 0,
+                        max: 0
+                    },
+                    v3: {
+                        min: 0,
+                        max: 0
+                    },
+                    curr: {
+                        min: 0,
+                        max: 0
+                    }
+                },
+                ext_pwr: {
+                    vbus: {
+                        min: 0,
+                        max: 0
+                    },
+                    v3: {
+                        min: 0,
+                        max: 0
+                    },
+                    curr: {
+                        min: 0,
+                        max: 0
+                    }
+                },
+                usb_pwr: {
+                    vbus: {
+                        min: 0,
+                        max: 0
+                    },
+                    v3: {
+                        min: 0,
+                        max: 0
+                    },
+                    curr: {
+                        min: 0,
+                        max: 0
+                    }
+                }
+            }
+        };
+        this.testConfig = JSON.stringify(testConfigJSON);
+
         this.formConfigJson = this.formBuilder.group({
             'config': ['', [Validators.required]],
+            'test_config': ['', [Validators.required]]
         });
+
+        // (<FormControl>this.formConfigJson.controls['test_config']).setValue(JSON.stringify(testConfigJSON).toString());
+
+        // this.formTestConfigJson.controls['config'].setValue(JSON.stringify(this.testConfig));
 
         this.wsMessageSubscription = this.backendService.garfieldRecived.subscribe(msg => this.onMessageGarfield(msg));
 
@@ -325,6 +410,24 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
         });
     }
 
+    onClearConsoleClick() {
+        if (this.consoleLog) {
+            this.consoleLog.clear();
+        }
+    }
+
+    onConsoleLog(message: string): void {
+        if (this.consoleLog) {
+            this.consoleLog.add('log', message);
+        }
+    }
+
+    onConsoleError(message: string): void {
+        if (this.consoleLog) {
+            this.consoleLog.add('error', message);
+        }
+    }
+
     onRegisterHardware(processorId: string) {
 
         this.backendService.boardCreateAutomaticGarfield({
@@ -380,6 +483,11 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                 break;
             }
             case 'device_connect': {
+                if (!this.visible_steps()) {
+                    this.fmError(this.translate('flash_prerequisite_not_met'));
+                    break;
+                }
+
                 this.main_step = 1;
                 let msg: IWebSocketGarfieldDeviceConnect = <IWebSocketGarfieldDeviceConnect>message;
                 if (msg.device_id) {
@@ -440,7 +548,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                     }
                 } else if (msg.status === 'error') {
                     let errMsg: IWebSocketErrorMessage = <IWebSocketErrorMessage>message;
-                    this.fmError(this.translate('flash_device_binary_fail'), errMsg.error);
+                    this.onConsoleError(errMsg.error);
                     this.stepError = true;
                 }
                 break;
@@ -456,7 +564,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                     }
                 } else if (msg.status === 'error') {
                     let errMsg: IWebSocketErrorMessage = <IWebSocketErrorMessage>message;
-                    this.fmError(errMsg.error);
+                    this.onConsoleError(errMsg.error);
                     this.stepError = true;
                 }
                 break;
@@ -468,8 +576,10 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                     this.fmSuccess(this.translate('flash_device_configure_success'));
                     this.configureDevice();
                 } else if (msg.status === 'error') {
-                    let errMsg: IWebSocketErrorMessage = <IWebSocketErrorMessage>message;
-                    this.fmError(errMsg.error);
+                    let errMsg: IWebSocketGarfieldDeviceTestResult = <IWebSocketGarfieldDeviceTestResult>message;
+                    errMsg.errors.forEach((error) => {
+                        this.onConsoleError(error);
+                    });
                     this.stepError = true;
                 }
                 break;
@@ -494,10 +604,11 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
 
     testDevice() {
         this.main_step = 5;
-        let message: IWebSocketMessage = {
+        let message: IWebSocketGarfieldDeviceTest = {
             message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
             message_type: 'device_test',
-            message_id: this.backendService.uuid()
+            message_id: this.backendService.uuid(),
+            test_config: JSON.parse(this.formConfigJson.controls['test_config'].value)
         };
 
         this.backendService.sendWebSocketMessage(message);
@@ -510,7 +621,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             message_type: 'device_configure',
             message_id: this.backendService.uuid(),
             configuration: {
-                // mac: this.device.mac_address, // TODO
+                mac: this.device.mac_address,
                 normal_mqtt_hostname: this.mainServer.server_url,
                 normal_mqtt_port: this.mainServer.mqtt_port,
                 normal_mqtt_username: this.mainServer.mqtt_username,
@@ -560,33 +671,4 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
 
         this.backendService.sendWebSocketMessage(message);
     }
-
-    // Testovací Tlačítka -----------------------------------------------------------------
-
-    test_Garfield_Connected() {
-        this.garfieldTesterConnected = true;
-    }
-
-    test_Garfield_disconnected() {
-        this.garfieldTesterConnected = false;
-    }
-
-
-    add_one() {
-        if (this.main_step > 11) {
-            this.main_step = 0;
-        } else {
-            this.main_step = this.main_step + 1;
-        }
-    }
-
-    change_error() {
-        this.stepError = !this.stepError;
-    }
-
-
 }
-
-
-
-

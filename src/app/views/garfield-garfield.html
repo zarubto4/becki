@@ -6,20 +6,19 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="portlet portlet light bordered">
-
+            <div *ngIf="garfield" class="portlet portlet light bordered">
                 <div class="portlet-title">
                     <div class="becki-caption">
-                        <span *ngIf="garfield" class="font-blue-dark">
-                            <i class="fa fa-fw fa-server"></i>
+                        <span class="font-blue-dark">
+                            <i class="fa fa-fw fa-fire"></i>
                               {{garfield.name}}
                         </span>
                     </div>
                     <div class="becki-actions">
                         <button title="{{'label_create_garfield'|bkTranslate:this}}" class="btn btn-icon-only blue"
-                                           [disabled]="false"
-                                           (click)="onEditGarfield()">
-                        <i class="fa fa-cog"></i>
+                                [disabled]="false"
+                                (click)="onEditGarfield()">
+                            <i class="fa fa-cog"></i>
                         </button>
                         <button title="{{'label_create_garfield'|bkTranslate:this}}" class="btn btn-icon-only red"
                                 [disabled]="false"
@@ -28,341 +27,382 @@
                         </button>
                     </div>
                 </div>
-                <div *ngIf="garfield" class="portlet">
-                    <div class="portlet-body">
-                        <div class="row">
-                            <div class="col col-lg-3">
-                                <div>
-                                    <strong>{{'label_name'|bkTranslate:this}}:</strong> {{garfield.name}}
-                                </div>
-                                <div>
-                                    <strong>{{'label_description'|bkTranslate:this}}:</strong> {{garfield.description}}
-                                </div>
+                <div class="portlet-body">
+                    <div class="m-heading-1 border-blue m-bordered">
+                        <p>{{'label_general_description'|bkTranslate:this}}</p>
+                    </div>
+                    <div class="row">
+                        <div class="col col-lg-3">
+                            <div>
+                                <strong>{{'label_name'|bkTranslate:this}}:</strong> {{garfield.name}}
                             </div>
-                            <div class="col col-lg-3">
-                                <div *ngIf="typeOfBoard">
-                                    <strong>{{'label_hardware_type'|bkTranslate:this}}:</strong>
-                                    <a [routerLink]="['/hardware', typeOfBoard.id]" class="bold">{{typeOfBoard.name}}</a>
-                                </div>
-                                <div *ngIf="typeOfBoard">
-                                    <strong>{{'label_producer'|bkTranslate:this}}:</strong>
-                                    <a [routerLink]="['/producers', garfield.producer.id]" class="bold">{{garfield.producer.name}}</a>
-                                </div>
-                                <br>
-                                <div *ngIf="firmwareTestMainVersion">
-                                    <strong>{{'label_main_test_version'|bkTranslate:this}}:</strong>
-                                    <a [routerLink]="['/admin/hardware/code', typeOfBoard.main_test_c_program.id]" class="bold">{{firmwareTestMainVersion.version_name}}</a>
-                                </div>
-                                <div *ngIf="firmwareMainVersion">
-                                    <strong>{{'label_main_version'|bkTranslate:this}}:</strong>
-                                    <a [routerLink]="['/admin/hardware/code', typeOfBoard.main_c_program.id]" class="bold">{{firmwareMainVersion.version_name}}</a>
-                                </div>
-                                <div *ngIf="bootLoader">
-                                    <strong>{{'label_main_bootloader'|bkTranslate:this}}:</strong>
-                                    <a [routerLink]="['/hardware', typeOfBoard.id]" class="bold">{{bootLoader.version_identificator}}</a>
-                                </div>
-
+                            <div>
+                                <strong>{{'label_description'|bkTranslate:this}}:</strong> {{garfield.description}}
                             </div>
-                            <div class="col col-lg-6">
+                        </div>
+                        <div class="col col-lg-3">
+                            <div *ngIf="typeOfBoard">
+                                <strong>{{'label_hardware_type'|bkTranslate:this}}:</strong>
+                                <a [routerLink]="['/hardware', typeOfBoard.id]" class="bold">{{typeOfBoard.name}}</a>
+                            </div>
+                            <div *ngIf="typeOfBoard">
+                                <strong>{{'label_producer'|bkTranslate:this}}:</strong>
+                                <a [routerLink]="['/producers', garfield.producer.id]" class="bold">{{garfield.producer.name}}</a>
+                            </div>
+                            <br>
+                            <div *ngIf="firmwareTestMainVersion">
+                                <strong>{{'label_main_test_version'|bkTranslate:this}}:</strong>
+                                <a [routerLink]="['/admin/hardware/code', typeOfBoard.main_test_c_program.id]" class="bold">{{firmwareTestMainVersion.version_name}}</a>
+                            </div>
+                            <div *ngIf="firmwareMainVersion">
+                                <strong>{{'label_main_version'|bkTranslate:this}}:</strong>
+                                <a [routerLink]="['/admin/hardware/code', typeOfBoard.main_c_program.id]" class="bold">{{firmwareMainVersion.version_name}}</a>
+                            </div>
+                            <div *ngIf="bootLoader">
+                                <strong>{{'label_main_bootloader'|bkTranslate:this}}:</strong>
+                                <a [routerLink]="['/hardware', typeOfBoard.id]" class="bold">{{bootLoader.version_identificator}}</a>
+                            </div>
 
-                                <div *ngIf="printer_label_1">
-                                    <strong>{{'label_printer_label_1'|bkTranslate:this}}:</strong> {{printer_label_1.name}} ({{printer_label_1.id}})
-                                </div>
-                                <div *ngIf="!printer_label_1">
-                                    <strong>{{'label_printer_label_1'|bkTranslate:this}}:</strong> {{garfield.print_label_id_1}} <span class="font-red-flamingo">{{'label_printer_not_found'|bkTranslate:this}}</span>
-                                </div>
+                        </div>
+                        <div class="col col-lg-6">
+
+                            <div *ngIf="printer_label_1">
+                                <strong>{{'label_printer_label_1'|bkTranslate:this}}:</strong> {{printer_label_1.name}} ({{printer_label_1.id}})
+                            </div>
+                            <div *ngIf="!printer_label_1">
+                                <strong>{{'label_printer_label_1'|bkTranslate:this}}:</strong> {{garfield.print_label_id_1}} <span class="font-red-flamingo">{{'label_printer_not_found'|bkTranslate:this}}</span>
+                            </div>
 
 
-                                <div *ngIf="printer_label_2">
-                                    <strong>{{'label_printer_label_2'|bkTranslate:this}}:</strong> {{printer_label_2.name}} ({{printer_label_2.id}})
-                                </div>
-                                <div *ngIf="!printer_label_2">
-                                    <strong>{{'label_printer_label_2'|bkTranslate:this}}:</strong> {{garfield.print_label_id_2}} <span class="font-red-flamingo">{{'label_printer_not_found'|bkTranslate:this}}</span>
-                                </div>
+                            <div *ngIf="printer_label_2">
+                                <strong>{{'label_printer_label_2'|bkTranslate:this}}:</strong> {{printer_label_2.name}} ({{printer_label_2.id}})
+                            </div>
+                            <div *ngIf="!printer_label_2">
+                                <strong>{{'label_printer_label_2'|bkTranslate:this}}:</strong> {{garfield.print_label_id_2}} <span class="font-red-flamingo">{{'label_printer_not_found'|bkTranslate:this}}</span>
+                            </div>
 
+                            <div *ngIf="print_sticker">
+                                <strong>{{'label_print_sticker'|bkTranslate:this}}:</strong> {{print_sticker.name}} ({{print_sticker.id}})
+                            </div>
+                            <div *ngIf="!print_sticker">
+                                <strong>{{'label_print_sticker'|bkTranslate:this}}:</strong> {{garfield.print_sticker_id}} <span class="font-red-flamingo">{{'label_printer_not_found'|bkTranslate:this}}</span>
+                            </div>
 
-                                <div *ngIf="print_sticker">
-                                    <strong>{{'label_print_sticker'|bkTranslate:this}}:</strong> {{print_sticker.name}} ({{print_sticker.id}})
-                                </div>
-                                <div *ngIf="!print_sticker">
-                                    <strong>{{'label_print_sticker'|bkTranslate:this}}:</strong> {{garfield.print_sticker_id}} <span class="font-red-flamingo">{{'label_printer_not_found'|bkTranslate:this}}</span>
-                                </div>
-
-                                <br>
-                                <div>
-                                    <strong>{{'label_hardware_tester'|bkTranslate:this}}:</strong> {{garfield.hardware_tester_id}}
-                                </div>
+                            <br>
+                            <div>
+                                <strong>{{'label_hardware_tester'|bkTranslate:this}}:</strong> {{garfield.hardware_tester_id}}
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
 
-                <div class="m-heading-1 border-blue m-bordered">
-                    <p>{{'label_general_description'|bkTranslate:this}}</p>
+    <div class="row">
+        <div class="col-md-9">
+            <div *ngIf="garfield" class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark" *ngIf="garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldTesterConnected && test_firmware_file_Base64 && bootloader_file_Base64
+                                && mainServer && backupServer && mainServer.online_state == 'online' && backupServer.online_state == 'online'">
+                            <i class="fa fa-fw fa-check"></i>
+                              {{'label_prerequisites'|bkTranslate:this}}
+                        </span>
+                        <span class="font-blue-dark" *ngIf="!(garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldTesterConnected && test_firmware_file_Base64 && bootloader_file_Base64
+                                && mainServer && backupServer && mainServer.online_state == 'online' && backupServer.online_state == 'online')">
+                            <i class="fa fa-fw fa-exclamation-triangle"></i>
+                              {{'label_prerequisites_not_complete'|bkTranslate:this}}
+                        </span>
+                    </div>
                 </div>
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col col-lg-3">
+                            <h4 *ngIf="!firmwareTestMainVersion || !firmwareTestMainVersion || !bootLoader" class="font-red-flamingo"><i class="fa fa-code"></i> {{'label_c_programs'|bkTranslate:this}}</h4>
+                            <h4 *ngIf="firmwareTestMainVersion && firmwareTestMainVersion && bootLoader"   class="font-green-jungle"><i class="fa fa-code"></i> {{'label_c_programs'|bkTranslate:this}}</h4>
+                            <div>
+                                <strong>{{'label_default_firmware'|bkTranslate:this}}</strong>
+                                <span *ngIf="!firmwareTestMainVersion" class="font-red-flamingo bold">
+                                    (Not set!) <i class="fa fa-times"></i>
+                                </span>
+                                <span *ngIf="firmwareTestMainVersion" class="font-green-jungle bold">
+                                    (Set) <i class="fa  fa-check"></i>
+                                </span>
+                            </div>
+                            <hr>
+                            <div>
+                                <strong>{{'label_test_firmware'|bkTranslate:this}}</strong>
+                                <span *ngIf="!firmwareTestMainVersion" class="font-red-flamingo bold">
+                                    (Not set!) <i class="fa fa-times"></i>
+                                </span>
+                                <span *ngIf="firmwareTestMainVersion" class="font-green-jungle bold">
+                                    (Set) <i class="fa  fa-check"></i>
+                                </span>
+                            </div>
+                            <hr>
+                            <div>
+                                <strong>{{'label_main_bootloader'|bkTranslate:this}}</strong>
+                                <span *ngIf="!bootLoader" class="font-red-flamingo bold">
+                                    (Not set!) <i class="fa fa-times"></i>
+                                </span>
+                                <span *ngIf="bootLoader" class="font-green-jungle bold">
+                                    (Set) <i class="fa  fa-check"></i>
+                                </span>
+                            </div>
+                        </div>
 
-                <div class="portlet light portlet-fit bordered">
-                    <div class="portlet-body">
+                        <div class="col col-lg-3">
+                            <h4 *ngIf="!printer_label_1 || !printer_label_2 || !print_sticker" class="font-red-flamingo"><i class="fa fa-print"></i> {{'label_printers'|bkTranslate:this}}</h4>
+                            <h4 *ngIf="printer_label_1 && printer_label_2 && print_sticker"  class="font-green-jungle"><i class="fa fa-print"></i> {{'label_printers'|bkTranslate:this}}</h4>
+                            <div>
+                                <strong>{{'label_printer_label_1'|bkTranslate:this}}</strong>
+                                <span *ngIf="!printer_label_1" class="font-red-flamingo bold">
+                                    {{'label_printers_not_valid'|bkTranslate:this}} <i class="fa fa-times"></i>
+                                </span>
+                                <span *ngIf="printer_label_1">
+                                    <span *ngIf="printer_label_1.state =='online'" class="font-green-jungle bold">(Online) <i class="fa  fa-check"></i></span>
+                                    <span *ngIf="printer_label_1.state =='!online'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
+                                    <i class="fa fa-print font-green-jungle cursor-hand" (click)="onTestPrinter(printer_label_1.id)"></i>
+                                </span>
+                            </div>
+                            <hr>
+                            <div>
+                                <strong>{{'label_printer_label_2'|bkTranslate:this}}</strong>
+                                <span *ngIf="!printer_label_2" class="font-red-flamingo bold">
+                                    {{'label_printers_not_valid'|bkTranslate:this}}<i class="fa fa-times"></i>
+                                </span>
+                                <span *ngIf="printer_label_2">
+                                    <span *ngIf="printer_label_2.state =='online'" class="font-green-jungle bold">(Online) <i class="fa fa-check"></i></span>
+                                    <span *ngIf="printer_label_2.state =='!online'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
+                                    <i  class="fa fa-print font-green-jungle cursor-hand" (click)="onTestPrinter(printer_label_2.id)"></i>
+                                </span>
+                            </div>
+                            <hr>
+                            <div>
+                                <strong>{{'label_print_sticker'|bkTranslate:this}}</strong>
+                                <span *ngIf="!print_sticker" class="font-red-flamingo bold">
+                                    {{'label_printers_not_valid'|bkTranslate:this}}<i class="fa fa-times"></i>
+                                </span>
+                                <span *ngIf="print_sticker">
+                                    <span *ngIf="print_sticker.state =='online'" class="font-green-jungle bold">(Online) <i class="fa fa-check"></i></span>
+                                    <span *ngIf="print_sticker.state =='!online'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
+                                    <i class="fa fa-print font-green-jungle cursor-hand" (click)="onTestPrinter(print_sticker.id)"></i>
+                                </span>
+                            </div>
+                        </div>
 
-                        <h3 *ngIf="garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldTesterConnected && test_firmware_file_Base64 && bootloader_file_Base64
-                                && mainServer && backupServer && mainServer.online_state == 'online' && backupServer.online_state == 'online'" class="font-green-jungle bold" style="text-align: center">{{'label_prerequisite'|bkTranslate:this}}</h3>
-                        <h3 *ngIf="!(garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldTesterConnected && test_firmware_file_Base64 && bootloader_file_Base64
-                                && mainServer && backupServer && mainServer.online_state == 'online' && backupServer.online_state == 'online')" class="font-red-flamingo bold" style="text-align: center">{{'label_prerequisite_not_complete'|bkTranslate:this}}</h3>
-                        <hr>
-                        <div class="row">
+                        <div class="col col-lg-3">
+                            <h4 *ngIf="!garfieldAppConnected || !garfieldTesterConnected" class="font-red-flamingo"><i class="fa fa-fire"></i> {{'label_garfield_desktop'|bkTranslate:this}}</h4>
+                            <h4 *ngIf="garfieldAppConnected && garfieldTesterConnected" class="font-green-jungle"><i class="fa fa-fire"></i> {{'label_garfield_desktop'|bkTranslate:this}}</h4>
+                            <div>
+                                <strong>{{'label_garfield_app'|bkTranslate:this}}</strong>
+                                <span *ngIf="!garfieldAppConnected" class="font-red-flamingo bold">
+                                    (Not connected!) <i class="fa fa-times"></i>
+                                </span>
+                                <span *ngIf="garfieldAppConnected" class="font-green-jungle bold">
+                                    (Connected) <i class="fa  fa-check"></i>
+                                </span>
+                            </div>
+                            <hr>
+                            <div>
+                                <strong>{{'label_garfield_tester'|bkTranslate:this}}</strong>
+                                <span *ngIf="!garfieldTesterConnected" class="font-red-flamingo bold">
+                                    (Not connected!) <i class="fa fa-times"></i>
+                                </span>
+                                <span *ngIf="garfieldTesterConnected" class="font-green-jungle bold">
+                                    (Connected) <i class="fa  fa-check"></i>
+                                </span>
+                            </div>
+                        </div>
 
-                            <div class="col col-lg-3">
-                                <H4 *ngIf="!firmwareTestMainVersion || !firmwareTestMainVersion || !bootLoader" class="font-red-flamingo"><i class="fa fa-code"></i> {{'label_c_programs'|bkTranslate:this}}</H4>
-                                <H4 *ngIf="firmwareTestMainVersion && firmwareTestMainVersion && bootLoader"   class="font-green-jungle"><i class="fa fa-code"></i> {{'label_c_programs'|bkTranslate:this}}</H4>
-                                <div>
-                                    <strong>{{'label_default_firmware'|bkTranslate:this}}</strong><br>
-                                    <span *ngIf="!firmwareTestMainVersion" class="font-red">
-                                        <span class="font-red-flamingo bold">(Not set!) <i class="fa fa-times"></i></span>
+                        <div class="col col-lg-3">
+                            <h4 *ngIf="!mainServer || !backupServer || mainServer.online_state != 'online' || backupServer.online_state != 'online' " class="font-red-flamingo"><i class="fa fa-server"></i> {{'label_server_settings'|bkTranslate:this}}</h4>
+                            <h4 *ngIf="mainServer && backupServer && mainServer.online_state == 'online' && backupServer.online_state == 'online' " class="font-green-jungle"><i class="fa fa-server"></i> {{'label_server_settings'|bkTranslate:this}}</h4>
+                            <div>
+                                <strong>{{'label_main_server'|bkTranslate:this}}</strong>
+                                <span *ngIf="!mainServer" class="font-red-flamingo">
+                                    ({{'label_server_not_set'|bkTranslate:this}})
+                                </span>
+                                <span *ngIf="mainServer" style="margin-left: 4px">
+                                    <span class="font-red-flamingo">
+                                        {{mainServer.personal_server_name}}
                                     </span>
-                                    <span *ngIf="firmwareTestMainVersion" style="margin-left: 4px">
-                                        <span class="font-green-jungle bold">(Set)<i class="fa  fa-check"></i></span>
+                                    <span *ngIf="mainServer.online_state == 'online'" class="font-green-jungle bold">(Online) <i class="fa  fa-check"></i></span>
+                                    <span *ngIf="mainServer.online_state != 'online'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
+                                    <i  class="fa fa-server font-blue-dark cursor-hand" [routerLink]="['/server/homer', mainServer.id]"></i>
+                                </span>
+                            </div>
+                            <hr>
+                            <div>
+                                <strong>{{'label_backup_server'|bkTranslate:this}}</strong>
+                                <span *ngIf="!backupServer" class="font-red-flamingo">
+                                    ({{'label_server_not_set'|bkTranslate:this}})
+                                </span>
+                                <span *ngIf="backupServer" style="margin-left: 4px">
+                                    <span class="font-red-flamingo">
+                                        {{backupServer.personal_server_name}}
                                     </span>
+                                    <span *ngIf="backupServer.online_state == 'online'" class="font-green-jungle bold">(Online) <i class="fa  fa-check"></i></span>
+                                    <span *ngIf="backupServer.online_state != 'online'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
+                                    <i  class="fa fa-server font-blue-dark cursor-hand" [routerLink]="['/server/homer', backupServer.id]"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div *ngIf="garfield" class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span *ngIf="productionBatchForm.valid" class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-wrench"></i>
+                            {{'label_burn_settings'|bkTranslate:this}}
+                        </span>
+                        <span *ngIf="!productionBatchForm.valid" class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-wrench"></i>
+                            {{'label_burn_settings_incomplete'|bkTranslate:this}}
+                        </span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <form [formGroup]="productionBatchForm">
+                        <bk-form-select [control]="productionBatchForm.controls['batch']" label="{{'label_producer'|bkTranslate:this}}" [options]="batchOptions"></bk-form-select>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="garfield" class="row">
+        <div class="col-md-4">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-wrench"></i>
+                            {{'label_config'|bkTranslate:this}}
+                        </span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div style="text-align: center">
+                        <bk-form-nice-json maxWidth="100%" [description]="'Config Json'" [control]="formConfigJson.controls['config']" [cols]="75" [row]="10" [readonly]="false"></bk-form-nice-json>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-wrench"></i>
+                            {{'label_test_config'|bkTranslate:this}}
+                        </span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div style="text-align: center">
+                        <bk-form-nice-json maxWidth="100%" [description]="'Test config Json'" [control]="formConfigJson.controls['test_config']" [cols]="75" [row]="10" [readonly]="false" [content]="testConfig"></bk-form-nice-json>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-terminal"></i>
+                            {{'label_console'|bkTranslate:this}}
+                        </span>
+                    </div>
+                    <div class="pull-right">
+                        <button type="button" class="btn default red" (click)="onClearConsoleClick()">
+                            <i class="fa fa-trash-o"></i> {{'btn_clear'|bkTranslate:this}}
+                        </button>
+                    </div>
+                </div>
+                <div class="padding-20">
+                    <bk-console-log maxHeight="200px"></bk-console-log>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!visible_steps()" class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered">
+                <div class="portlet-body">
+                    <div class="text-center font-red-flamingo">
+                        <h3>{{'label_prerequisites_not_met'|bkTranslate:this}}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="visible_steps()" class="row">
+        <div class="col-md-12">
+            <div class="portlet light bordered">
+                <div class="portlet-body">
+                    <div class="mt-element-step">
+                        <div class="row step-line">
+
+                            <div class="col-md-2 mt-step-col first" [class.done]="main_step > 1" [class.active]="main_step == 1">
+                                <div class="mt-step-number bg-white font-grey">
+                                    <i class="fa fa-bars"></i>
                                 </div>
-                                <hr>
-                                <div>
-                                    <strong>{{'label_test_firmware'|bkTranslate:this}}</strong><br>
-                                    <span *ngIf="!firmwareTestMainVersion" class="font-red">
-                                        <span class="font-red-flamingo bold">(Not set!) <i class="fa fa-times"></i></span>
-                                    </span>
-                                    <span *ngIf="firmwareTestMainVersion" style="margin-left: 4px">
-                                        <span class="font-green-jungle bold">(Set) <i class="fa  fa-check"></i></span>
-                                        <span *ngIf="test_firmware_file_Base64" class="font-green-jungle bold"> (File Cached)<i class="fa  fa-check"></i></span>
-                                    </span>
-                                </div>
-                                <hr>
-                                <div>
-                                    <strong>{{'label_main_bootloader'|bkTranslate:this}}</strong><br>
-                                    <span *ngIf="!bootLoader" class="font-red">
-                                        <span class="font-red-flamingo bold">(Not set!) <i class="fa fa-times"></i></span>
-                                    </span>
-                                    <span *ngIf="bootLoader" style="margin-left: 4px">
-                                        <span class="font-green-jungle bold">(Set) <i class="fa  fa-check"></i></span>
-                                          <span *ngIf="bootloader_file_Base64" class="font-green-jungle bold"> (File Cached)<i class="fa  fa-check"></i></span>
-                                    </span>
-                                </div>
+                                <div class="mt-step-title uppercase font-grey-cascade">{{'nav_step_one_title'|bkTranslate:this}}</div>
+                                <div class="mt-step-content font-grey-cascade">{{'nav_step_one_text'|bkTranslate:this}}</div>
                             </div>
 
-                            <div class="col col-lg-3">
-                                <H4 *ngIf="!printer_label_1 || !printer_label_2 || !print_sticker" class="font-red-flamingo"><i class="fa fa-print"></i> {{'label_printers'|bkTranslate:this}}</H4>
-                                <H4 *ngIf="printer_label_1 && printer_label_2 && print_sticker"  class="font-green-jungle"><i class="fa fa-print"></i> {{'label_printers'|bkTranslate:this}}</H4>
-                                <div>
-                                    <strong>{{'label_printer_label_1'|bkTranslate:this}}</strong><br>
-                                    <span *ngIf="!printer_label_1" class="font-red-flamingo">{{'label_printers_not_valid'|bkTranslate:this}}</span>
-                                    <span *ngIf="printer_label_1" style="margin-left: 4px">
-                                        <span *ngIf="printer_label_1.state =='online'" class="font-green-jungle bold">(Online) <i class="fa  fa-check"></i></span>
-                                        <span *ngIf="printer_label_1.state =='!online'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
-                                        <i  class="fa fa-print font-green-jungle cursor-hand" style="font-size: 1.2em;" (click)="onTestPrinter(printer_label_1.id)"></i>
-                                    </span>
+                            <div class="col-md-2 mt-step-col" [class.error]="(main_step == 3 || main_step == 4) && stepError" [class.done]="main_step > 3 && !stepError" [class.active]="main_step == 3 && !stepError">
+                                <div class="mt-step-number bg-white font-grey">
+                                    <i class="fa fa-archive"></i>
                                 </div>
-                                <hr>
-                                <div>
-                                    <strong>{{'label_printer_label_2'|bkTranslate:this}}</strong><br>
-                                    <span *ngIf="!printer_label_2" class="font-red-flamingo">{{'label_printers_not_valid'|bkTranslate:this}}</span>
-                                    <span *ngIf="printer_label_2">
-                                        <span *ngIf="printer_label_2.state =='online'" class="font-green-jungle bold">(Online) <i class="fa fa-check"></i></span>
-                                        <span *ngIf="printer_label_2.state =='!online'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
-                                        <i  class="fa fa-print font-green-jungle cursor-hand" style="font-size: 1.2em;" (click)="onTestPrinter(printer_label_2.id)"></i>
-                                    </span>
-                                </div>
-                                <hr>
-                                <div>
-                                    <strong>{{'label_print_sticker'|bkTranslate:this}}</strong><br>
-                                    <span *ngIf="!print_sticker" class="font-red-flamingo">{{'label_printers_not_valid'|bkTranslate:this}}</span>
-                                    <span *ngIf="print_sticker">
-                                        <span *ngIf="print_sticker.state =='online'" class="font-green-jungle bold">(Online) <i class="fa fa-check"></i></span>
-                                        <span *ngIf="print_sticker.state =='!online'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
-                                        <i class="fa fa-print font-green-jungle cursor-hand" style="font-size: 1.2em;" (click)="onTestPrinter(print_sticker.id)"></i>
-                                    </span>
-                                </div>
+                                <div class="mt-step-title uppercase font-grey-cascade">{{'nav_step_two_title'|bkTranslate:this}}</div>
+                                <div class="mt-step-content font-grey-cascade">{{'nav_step_two_text'|bkTranslate:this}}</div>
                             </div>
 
-                            <div class="col col-lg-3">
-                                <div>
-                                    <H4 *ngIf="!garfieldAppConnected" class="font-red-flamingo"><i class="fa fa-fire"></i> {{'label_garfield_app'|bkTranslate:this}}</H4>
-                                    <H4 *ngIf="garfieldAppConnected" class="font-green-jungle"><i class="fa fa-fire"></i> {{'label_garfield_app'|bkTranslate:this}}</H4>
-                                    <div>
-                                        <span *ngIf="!garfieldAppConnected" class="font-red-flamingo">{{'label_garfield_app_not_online'|bkTranslate:this}}</span>
-                                        <span *ngIf="garfieldAppConnected" class="font-green-jungle bold">(Connected) <i class="fa fa-check"></i></span>
-                                    </div>
+                            <div class="col-md-2 mt-step-col" [class.error]="(main_step == 5 || main_step == 6) && stepError"  [class.done]="main_step > 5 && !stepError" [class.active]="main_step == 5  && !stepError">
+                                <div class="mt-step-number bg-white font-grey">
+                                    <i class="fa fa-pencil-square-o"></i>
                                 </div>
-                                <div>
-                                    <H4 *ngIf="!garfieldTesterConnected" class="font-red-flamingo"><i class="fa fa-fire"></i> {{'label_garfield_hardware_tester'|bkTranslate:this}}</H4>
-                                    <H4 *ngIf="garfieldTesterConnected" class="font-green-jungle"><i class="fa fa-fire"></i> {{'label_garfield_hardware_tester'|bkTranslate:this}}</H4>
-                                    <div>
-                                        <span *ngIf="!garfieldTesterConnected" class="font-red-flamingo">{{'label_garfield_hardware_not_online'|bkTranslate:this}}</span>
-                                        <span *ngIf="garfieldTesterConnected" class="font-green-jungle bold">(Connected) <i class="fa fa-check"></i></span>
-                                    </div>
-                                </div>
+                                <div class="mt-step-title uppercase font-grey-cascade">{{'nav_step_three_title'|bkTranslate:this}}</div>
+                                <div class="mt-step-content font-grey-cascade">{{'nav_step_three_text'|bkTranslate:this}}</div>
                             </div>
 
-                            <div class="col col-lg-3">
-                                <H4 *ngIf="!mainServer || !backupServer || mainServer.online_state != 'online' || backupServer.online_state != 'online' " class="font-red-flamingo"><i class="fa fa-print"></i> {{'label_server_settings'|bkTranslate:this}}</H4>
-                                <H4 *ngIf="mainServer && backupServer && mainServer.online_state == 'online' && backupServer.online_state == 'online' " class="font-green-jungle"><i class="fa fa-print"></i> {{'label_server_settings'|bkTranslate:this}}</H4>
-                                <div>
-                                    <strong>{{'label_main_server'|bkTranslate:this}}</strong><br>
-                                    <span *ngIf="!mainServer" class="font-red-flamingo">({{'label_server_not_set'|bkTranslate:this}})</span>
-                                    <span *ngIf="mainServer" style="margin-left: 4px">
-                                        <span class="font-red-flamingo">{{mainServer.personal_server_name}}</span>
-                                        <span *ngIf="mainServer.online_state == 'online'" class="font-green-jungle bold">(Online) <i class="fa  fa-check"></i></span>
-                                        <span *ngIf="mainServer.online_state != 'online'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
-                                        <i  class="fa fa-server font-green-jungle cursor-hand" style="font-size: 1.2em;" [routerLink]="['/server/homer', mainServer.id]" ></i>
-                                    </span>
+                            <div class="col-md-2 mt-step-col" [class.error]="(main_step == 7 || main_step == 8) && stepError" [class.done]="main_step > 7  && !stepError" [class.active]="main_step == 7  && !stepError">
+                                <div class="mt-step-number bg-white font-grey">
+                                    <i class="fa fa-flag-checkered"></i>
                                 </div>
-                                <hr>
-                                <div>
-                                    <strong>{{'label_backup_server'|bkTranslate:this}}</strong><br>
-                                    <span *ngIf="!backupServer" class="font-red-flamingo">({{'label_server_not_set'|bkTranslate:this}})</span>
-                                    <span *ngIf="backupServer" style="margin-left: 4px">
-                                        <span class="font-red-flamingo">{{backupServer.personal_server_name}}</span>
-                                        <span *ngIf="backupServer.online_state == 'online'" class="font-green-jungle bold">(Online) <i class="fa  fa-check"></i></span>
-                                        <span *ngIf="backupServer.online_state != 'online'" class="font-red-flamingo bold">(Offline) <i class="fa fa-times"></i></span>
-                                        <i  class="fa fa-server font-green-jungle cursor-hand" style="font-size: 1.2em;" [routerLink]="['/server/homer', backupServer.id]" ></i>
-                                    </span>
+                                <div class="mt-step-title uppercase font-grey-cascade">{{'nav_step_four_title'|bkTranslate:this}}</div>
+                                <div class="mt-step-content font-grey-cascade">{{'nav_step_four_text'|bkTranslate:this}}</div>
+                            </div>
+
+                            <div class="col-md-2 mt-step-col" [class.error]="(main_step == 9 || main_step == 10) && stepError" [class.done]="main_step > 9 && !stepError" [class.active]="main_step == 9  && !stepError">
+                                <div class="mt-step-number bg-white font-grey">
+                                    <i class="fa fa-flag-checkered"></i>
                                 </div>
+                                <div class="mt-step-title uppercase font-grey-cascade">{{'nav_step_five_title'|bkTranslate:this}}</div>
+                                <div class="mt-step-content font-grey-cascade">{{'nav_step_five_text'|bkTranslate:this}}</div>
+                            </div>
+
+                            <div class="col-md-2 mt-step-col last" [class.error]="(main_step == 11 || main_step == 12) && stepError" [class.done]="main_step > 11 && !stepError"  [class.active]="main_step == 11  && !stepError">
+                                <div class="mt-step-number bg-white font-grey">
+                                    <i class="fa fa-flag-checkered"></i>
+                                </div>
+                                <div class="mt-step-title uppercase font-grey-cascade">{{'nav_step_six_title'|bkTranslate:this}}</div>
+                                <div class="mt-step-content font-grey-cascade">{{'nav_step_six_text'|bkTranslate:this}}</div>
                             </div>
 
                         </div>
                     </div>
                 </div>
-
-                <div *ngIf="garfield" class="row">
-                    <div class="col-md-12">
-                        <div class="portlet light portlet-fit bordered">
-                            <div class="portlet-body">
-                                <h3 *ngIf="productionBatchForm.valid" style="text-align: center" class="font-green-jungle bold">{{'label_burn_settings'|bkTranslate:this}}</h3>
-                                <h3 *ngIf="!productionBatchForm.valid" style="text-align: center" class="font-red-flamingo bold">{{'label_burn_settings_incomplete'|bkTranslate:this}}</h3>
-                                <hr>
-                                <div class="row">
-                                    <form [formGroup]="productionBatchForm">
-                                        <bk-form-select [control]="productionBatchForm.controls['batch']" label="{{'label_producer'|bkTranslate:this}}"
-                                                        [options]="batchOptions"></bk-form-select>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div *ngIf="garfield" class="row">
-                    <div class="col-md-12">
-                        <div class="portlet light portlet-fit bordered">
-                            <div class="portlet-body">
-                                <h3 style="text-align: center">{{'label_config'|bkTranslate:this}}</h3>
-                                <hr>
-                                <div style="text-align: center">
-                                    <bk-form-nice-json [description]="'Config Json'" [control]="formConfigJson.controls['config']" [cols]="75" [readonly]="false"></bk-form-nice-json>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div *ngIf="!visible_steps()" class="row">
-                    <div class="col-md-12">
-                        <div class="portlet light portlet-fit bordered">
-                            <div class="portlet-body">
-                                <div class="text-center font-red-flamingo">
-                                    <h3>{{'label_prerequisite_not_met'|bkTranslate:this}}</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div *ngIf="visible_steps()" class="row">
-                    <div class="col-md-12">
-                        <div class="portlet light portlet-fit bordered">
-                            <div class="portlet-body">
-                                <div class="mt-element-step">
-                                    <div class="row step-line">
-
-                                        <div class="col-md-2 mt-step-col first" [class.done]="main_step > 1" [class.active]="main_step == 1">
-                                            <div class="mt-step-number bg-white font-grey">
-                                                <i class="fa fa-bars"></i>
-                                            </div>
-                                            <div class="mt-step-title uppercase font-grey-cascade">{{'nav_step_one_title'|bkTranslate:this}}</div>
-                                            <div class="mt-step-content font-grey-cascade">{{'nav_step_one_text'|bkTranslate:this}}</div>
-                                        </div>
-
-                                        <div class="col-md-2 mt-step-col" [class.error]="(main_step == 3 || main_step == 4) && stepError" [class.done]="main_step > 3 && !stepError" [class.active]="main_step == 3 && !stepError">
-                                            <div class="mt-step-number bg-white font-grey">
-                                                <i class="fa fa-archive"></i>
-                                            </div>
-                                            <div class="mt-step-title uppercase font-grey-cascade">{{'nav_step_two_title'|bkTranslate:this}}</div>
-                                            <div class="mt-step-content font-grey-cascade">{{'nav_step_two_text'|bkTranslate:this}}</div>
-                                        </div>
-
-                                        <div class="col-md-2 mt-step-col" [class.error]="(main_step == 5 || main_step == 6) && stepError"  [class.done]="main_step > 5 && !stepError" [class.active]="main_step == 5  && !stepError">
-                                            <div class="mt-step-number bg-white font-grey">
-                                                <i class="fa fa-pencil-square-o"></i>
-                                            </div>
-                                            <div class="mt-step-title uppercase font-grey-cascade">{{'nav_step_three_title'|bkTranslate:this}}</div>
-                                            <div class="mt-step-content font-grey-cascade">{{'nav_step_three_text'|bkTranslate:this}}</div>
-                                        </div>
-
-                                       <div class="col-md-2 mt-step-col" [class.error]="(main_step == 7 || main_step == 8) && stepError" [class.done]="main_step > 7  && !stepError" [class.active]="main_step == 7  && !stepError">
-                                            <div class="mt-step-number bg-white font-grey">
-                                                <i class="fa fa-flag-checkered"></i>
-                                            </div>
-                                            <div class="mt-step-title uppercase font-grey-cascade">{{'nav_step_four_title'|bkTranslate:this}}</div>
-                                            <div class="mt-step-content font-grey-cascade">{{'nav_step_four_text'|bkTranslate:this}}</div>
-                                        </div>
-
-                                        <div class="col-md-2 mt-step-col" [class.error]="(main_step == 9 || main_step == 10) && stepError" [class.done]="main_step > 9 && !stepError" [class.active]="main_step == 9  && !stepError">
-                                            <div class="mt-step-number bg-white font-grey">
-                                                <i class="fa fa-flag-checkered"></i>
-                                            </div>
-                                            <div class="mt-step-title uppercase font-grey-cascade">{{'nav_step_five_title'|bkTranslate:this}}</div>
-                                            <div class="mt-step-content font-grey-cascade">{{'nav_step_five_text'|bkTranslate:this}}</div>
-                                        </div>
-
-                                        <div class="col-md-2 mt-step-col last" [class.error]="(main_step == 11 || main_step == 12) && stepError" [class.done]="main_step > 11 && !stepError"  [class.active]="main_step == 11  && !stepError">
-                                            <div class="mt-step-number bg-white font-grey">
-                                                <i class="fa fa-flag-checkered"></i>
-                                            </div>
-                                            <div class="mt-step-title uppercase font-grey-cascade">{{'nav_step_six_title'|bkTranslate:this}}</div>
-                                            <div class="mt-step-content font-grey-cascade">{{'nav_step_six_text'|bkTranslate:this}}</div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <br>
-
-                <div>
-                    <h4>Testovací tlačítka ke smazání!!!!!</h4>
-                    <button type="button" class="btn btn-primary" (click)="test_Garfield_Connected()">Připojit Garfield Tester</button>
-                    <button type="button" class="btn btn-danger"  (click)="test_Garfield_disconnected()">Odpojit Garfield Tester</button>
-                    <br><br>
-                    <button type="button" class="btn btn-primary" (click)="add_one()">Připojit Testovaný HW</button>
-                    <br><br>
-                    <button type="button" class="btn btn-primary" (click)="add_one()">1. Pustit Nahrávání testovacího Firmwaru</button>
-                    <button type="button" class="btn btn-primary" (click)="add_one()">2. Firmware Nahrán</button>
-                    <button type="button" class="btn btn-primary" (click)="add_one()">3. Pustit Test</button>
-                    <br><br>
-                    <button type="button" class="btn btn-primary" (click)="onRegisterHardware()">4.1 Test Dokončen úspěšně</button>
-                    <button type="button" class="btn btn-danger"  (click)="change_error()">4.2 Test Dokončen neúspěšně</button>
-                    <br><br>
-                    <button type="button" class="btn btn-primary" (click)="add_one()">5. Nahrát MacAddressu</button>
-                    <button type="button" class="btn btn-primary" (click)="add_one()">6. Nahrát Výchozí Config</button>
-                    <button type="button" class="btn btn-primary" (click)="add_one()">7. Nahrát Výchozí Firmware</button>
-                    <br><br>
-                    <button type="button" class="btn btn-primary" (click)="add_one()">8. Připojit Hardware do Cloudu</button>
-                    <button type="button" class="btn btn-primary" (click)="add_one()">9. Vytvořit štítky</button>
-                    <br><br>
-                    <button type="button" class="btn btn-warning" (click)="add_one()">10. Sundat Hardware</button>
-                </div>
-
             </div>
         </div>
     </div>

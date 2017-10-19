@@ -10,14 +10,14 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
     selector: 'bk-form-nice-json',
     /* tslint:disable:max-line-length */
     template: `
-        <div class="form-group"  [class.has-success]="!readonly && !control && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)" [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
+        <div class="form-group" [class.has-success]="!readonly && !control && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)" [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
             <label>{{description}}</label>
             <div class="input-icon right">
                 <i class="fa fa-check" *ngIf="!readonly && !control && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)"></i>
                 <i class="fa fa-warning" *ngIf="!readonly && !control && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)"></i>
                 <i class="fa fa-spinner fa-spin" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)"></i>
-                <textarea *ngIf="!readonly" [formControl]="control" [(ngModel)]='content' rows="{{row}}" cols="{{cols}}"></textarea>
-                <textarea *ngIf="readonly" [(ngModel)]='content' [readonly]="readonly" rows="{{row}}" cols="{{cols}}"></textarea>
+                <textarea *ngIf="!readonly" [formControl]="control" [(ngModel)]='content' rows="{{row}}" cols="{{cols}}" [style.max-width]="maxWidth"></textarea>
+                <textarea *ngIf="readonly" [(ngModel)]='content' [readonly]="readonly" rows="{{row}}" cols="{{cols}}" [style.max-width]="maxWidth"></textarea>
             </div>
             <span class="help-block" *ngIf="!readonly && !control && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)">{{validatorErrorsService.getMessageForErrors(control.errors)}}</span>
         </div>
@@ -25,6 +25,9 @@ import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
     /* tslint:enable */
 })
 export class FormJsonNiceTextAreaComponent implements OnInit {
+
+    @Input()
+    maxWidth: string = null;
 
     @Input()
     control: AbstractControl = null;
