@@ -106,7 +106,7 @@ export class ReaderQrComponent extends BaseMainComponent implements OnInit, OnDe
         this.qrStatus = this.translate('byzance_qr_code_found');
 
 
-        this.qrcode = decoded.slice(2, decoded.length);
+        this.qrcode = decoded;
         this.onScanConfirm();
     }
 

@@ -23,7 +23,7 @@ export class StaticTranslation {
             }, 'ModalsAddHardwareComponent': {
                 'title': '<strong class="font-color-hardware">Hardware</strong> registration',
                 'label_succesfully_registred:': 'Succesfully registred',
-                'label_failed_to_register':'Failed to register',
+                'label_failed_to_register': 'Failed to register',
                 'label_hash_token': 'Hash Token',
                 'label_hash_tokens': 'Hash Tokens',
                 'label_hardware_groups': 'Available <strong class="font-color-hardware">Hardware Groups</strong>',
@@ -394,6 +394,9 @@ export class StaticTranslation {
                 'title': 'Add hardware',
                 'label_project': 'Selected Project',
                 'placeholder_project': 'select project',
+                'flash_add_device_success': 'Device {0} has been added to your project',
+                'flash_add_device_fail': 'Device {0} can not be added to your project',
+                'label_hardware_groups': 'hardware groups',
             },
 
             'DashboardComponent': {

@@ -95,10 +95,6 @@ export class CurrentParamsService {
     protected currentBugSummarySubject: Subject<string> = null;
     public currentBugSummarySnapshot: string = null;
 
-    public currentGarfieldName: Observable<string> = null;
-    protected currentGarfieldNameSubject: Subject<string> = null;
-    public currentGarfieldNameSnapshot: string = null;
-
     constructor(protected router: Router, protected backendService: BackendService) {
         console.info('BreadcrumbsService init');
 

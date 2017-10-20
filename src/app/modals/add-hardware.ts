@@ -50,7 +50,6 @@ export class ModalsAddHardwareComponent implements OnInit {
 
     deviceInfoTextForm: FormGroup;
 
-
     registredDevices: string[] = [];
     failedDevices: string[] = [];
 
