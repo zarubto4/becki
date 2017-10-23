@@ -50,18 +50,18 @@ export interface FormSelectComponentOption {
 
 @Component({
     selector: 'bk-form-select',
-/* tslint:disable:max-line-length */
+    /* tslint:disable:max-line-length */
     template: `
 <div class="form-group" [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)" [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
     <label *ngIf="labelComment" [innerHTML]="label"></label>
-    <select class="form-control" [formControl]="control">
-        <option value="" disabled>{{(placeholder?placeholder:label)}}</option>
-        <option *ngFor="let option of options" [value]="option.value">{{option.label}}</option>
+    <select class="form-control" [formControl]="control"> 
+      <option *ngIf="!pickFirstOption" value="" disabled>{{(placeholder?placeholder:label)}}</option> 
+      <option *ngFor="let option of options" [value]="option.value">{{option.label}}</option>
     </select>
     <span class="help-block" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)">{{validatorErrorsService.getMessageForErrors(control.errors)}}</span>
 </div>
 `
-/* tslint:enable */
+    /* tslint:enable */
 })
 export class FormSelectComponent {
 
@@ -84,9 +84,25 @@ export class FormSelectComponent {
     readonly: boolean = false;
 
     @Input()
-    options: FormSelectComponentOption[] = [];
+    pickFirstOption: { name: string, value: string } = null;
+
+    private _options: FormSelectComponentOption[] = [];
+
+    @Input() set options(option: FormSelectComponentOption[]) {
+        if (option) {
+            this._options = option;
+            if (this.pickFirstOption) {
+                this.control.setValue(option[0].value);
+            }
+        }
+    }
+
+    get options(): FormSelectComponentOption[] {
+        return this._options;
+    }
 
     constructor(public validatorErrorsService: ValidatorErrorsService) {
+
     }
 
 }

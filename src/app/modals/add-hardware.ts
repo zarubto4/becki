@@ -14,7 +14,9 @@ import { BeckiAsyncValidators } from '../helpers/BeckiAsyncValidators';
 import { IBoardGroup } from '../backend/TyrionAPI';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { MultiSelectComponent } from '../components/MultiSelectComponent';
-import { FlashMessageError } from '../services/NotificationService';
+import { FlashMessageError, FlashMessage } from '../services/NotificationService';
+import { TranslatePipe } from '../pipes/TranslationPipe';
+import { TranslationService } from '../services/TranslationService';
 
 
 export class ModalsAddHardwareModel extends ModalModel {
@@ -44,6 +46,10 @@ export class ModalsAddHardwareComponent implements OnInit {
     @Output()
     modalClose = new EventEmitter<boolean>();
 
+
+    @Output()
+    flashMesseage = new EventEmitter<FlashMessage>();
+
     form: FormGroup;
 
     multiForm: FormGroup;
@@ -61,7 +67,7 @@ export class ModalsAddHardwareComponent implements OnInit {
     @ViewChild('groupList')
     listGroup: MultiSelectComponent;
 
-    constructor(private backendService: BackendService, private formBuilder: FormBuilder) {
+    constructor(private backendService: BackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
 
         this.form = this.formBuilder.group({
             'id': ['', [Validators.required], BeckiAsyncValidators.hardwareDeviceId(backendService)],
@@ -88,7 +94,6 @@ export class ModalsAddHardwareComponent implements OnInit {
 
     ngOnInit() {
 
-        // Here are all in Device list
         this.group_options_available = this.modalModel.deviceGroup.map((pv) => {
             return {
                 label: pv.name,
@@ -140,10 +145,10 @@ export class ModalsAddHardwareComponent implements OnInit {
         this.backendService.boardConnectWithProject({ group_ids: groupIDs, hash_for_adding: this.form.controls['id'].value, project_id: this.modalModel.project_id })
             .then(() => {
                 this.modalClose.emit(true);
-
             })
             .catch(reason => {
-
+                this.flashMesseage.emit(new FlashMessageError(this.translationService.translate('flash_cant_add_hardware', this), reason));
+                this.modalClose.emit(false);
             });
     }
 
@@ -154,17 +159,6 @@ export class ModalsAddHardwareComponent implements OnInit {
         } else {
             this.sequenceRegistaration();
         }
-
-        // Uzavření jen v případě úspěchu
-        // Respektive - zde uděláme Rest Api na tyriona - zaregistrujeme HW, jeden nebo celý seznam.
-        // Seznam uděláme for cyklem kdy vezmeme ID záznam ze stringu a ten zaregistrujeme - pokud se to povede odstraníme ho se zenamu
-        // Pokud ne - vložíme ho do nového seznamu kde uděláme něco jako (Používáme chyby z Tyriona)
-        // xxxxxxxxx: Already Registred
-        // yyyyyyyyy: Not Found
-        // ccccccccc: fjksadfhksdbfmnbsda,.mnfb
-
-        // Toto zde nezavolám abych okno nezavřel - tedy až na konci když se podaří dokončit vše (registrace jednoho devicu nebo všech)
-        // this.modalClose.emit(true);
     }
 
     onCloseClick(): void {

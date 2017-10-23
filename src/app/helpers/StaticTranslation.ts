@@ -35,7 +35,8 @@ export class StaticTranslation {
                 'label_advice_multiple_registration': '<p> For register new <strong class="font-color-hardware">Hardware</strong> to this project, upload a text file below or insert text. The file or text should contain a list of device registration hash, where each key is separated by a semicolon. The spaces will be ignored. </p> <br><p><strong>Example: </strong> XXXXXXX; YYYYYYY;BBBBBB;  CCCCCC;DDDDD;</p><br><p> Each hash is sequentially registered. If a problem occurs - we\'ll show you which key is not valid and why. Attention - Multiple <strong>unsuccessful</strong> registration is flagged as a security breach attempt and your account may be blocked.</p>',
                 'label_advice_no_group': '<p>We strongly recommend to register <strong class="font-color-hardware">Hardware</strong> into <strong class="font-color-hardware">Hardware Groups</strong>. We\'ve found that you do not have any yet. Groups are available in Release Manager to update more than one hardware. You can see progress and etc.</p> <br><p>You can use the <strong class="font-color-hardware">Hardware Groups</strong> to develop. For example, <strong>Beta</strong>, <strong>Dev HW</strong> or <strong>My Little Pony</strong>, and for production deployments where you can use an industrial registration API,for example <strong>Smart Fridge - Europe</strong> or <strong>Tracking equipment used in North Korea</strong>.</p>',
                 'flash_add_device_fail': 'Adding device {0} failed',
-                'flash_add_device_success': 'Device add success'
+                'flash_add_device_success': 'Device add success',
+                'flash_cant_add_hardware': 'Cant add device, ',
             }, 'ModalsBillingInformationComponent': {
                 'title': 'Information details',
                 'label_invoice_email': 'Invoice E-mail',
@@ -1636,6 +1637,7 @@ export class StaticTranslation {
                 'main_title': 'Platform administration',
                 'main_subtitle': 'Code Editor',
 
+                'label_library_version': 'Library Version',
                 'label_program_properties': 'CODE program properties',
                 'label_remove_program': 'Remove CODE program',
                 'label_version_properties': 'Version properties',

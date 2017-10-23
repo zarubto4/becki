@@ -328,6 +328,8 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             };
         });
 
+        this.libraryCompilationVersionOptions.sort((a, b) => { return (a.label > b.label) ? -1 : ((b.label > a.label) ? 1 : 0); });
+
         // TODO https://youtrack.byzance.cz/youtrack/issue/BECKI-323
         /** https://youtrack.byzance.cz/youtrack/issue/BECKI-323
          *

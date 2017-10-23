@@ -64,9 +64,9 @@
                     <div class="pull-right">
 
                         <div>
-                            <span><strong>Library Version: </strong></span>
+                            <span><strong>{{'label_library_version'|bkTranslate:this}}: </strong></span>
                             <bk-form-select [control]="formLibrarySelector.controls.tag_name" [labelComment]="false"
-                                            [options]="libraryCompilationVersionOptions"></bk-form-select>
+                            [pickFirstOption]="true" [options]="libraryCompilationVersionOptions"></bk-form-select>
                         </div>
 
                         <button type="button" class="btn default yellow-gold" (click)="onBuildClick()" [disabled]="buildInProgress">
