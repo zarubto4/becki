@@ -4,14 +4,7 @@
 
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { ILoggyError } from '../backend/TyrionAPI';
-import { ModalsRemovalModel } from '../modals/removal';
-import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
-import { ModalsGarfieldModel } from '../modals/garfield';
-import { Subscription } from 'rxjs';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { FormSelectComponentOption } from '../components/FormSelectComponent';
-import {  Response } from '@angular/http';
+import { IServerError } from '../backend/TyrionAPI';
 
 @Component({
     selector: 'bk-view-bugs',
@@ -19,7 +12,7 @@ import {  Response } from '@angular/http';
 })
 export class BugsComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
-    bugs: ILoggyError[];
+    bugs: IServerError[];
 
     constructor(injector: Injector) {
         super(injector);
@@ -49,7 +42,7 @@ export class BugsComponent extends BaseMainComponent implements OnInit, OnDestro
     onDeleteAllBugs() {
     }
 
-    onBugClick(bug: ILoggyError) {
+    onBugClick(bug: IServerError) {
         this.navigate(['/admin/bugs', bug.id]);
     }
 }

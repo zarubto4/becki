@@ -4,7 +4,6 @@
 
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { ILoggyError } from '../backend/TyrionAPI';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsGarfieldModel } from '../modals/garfield';
 import { Subscription } from 'rxjs';
@@ -12,6 +11,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { Response } from '@angular/http';
 import { CurrentParamsService } from '../services/CurrentParamsService';
+import { IServerError } from '../backend/TyrionAPI';
 
 @Component({
     selector: 'bk-view-bugs-bug',
@@ -20,7 +20,7 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 export class BugsBugComponent extends BaseMainComponent implements OnInit, OnDestroy {
 
     bugId: string;
-    bug: ILoggyError;
+    bug: IServerError;
 
     routeParamsSubscription: Subscription;
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent

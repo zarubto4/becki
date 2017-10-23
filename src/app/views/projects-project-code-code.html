@@ -63,6 +63,12 @@
 
                     <div class="pull-right">
 
+                        <div>
+                            <span><strong>Library Version: </strong></span>
+                            <bk-form-select [control]="formLibrarySelector.controls.tag_name" [labelComment]="false"
+                                            [options]="libraryCompilationVersionOptions"></bk-form-select>
+                        </div>
+
                         <button type="button" class="btn default yellow-gold" (click)="onBuildClick()" [disabled]="buildInProgress">
                             <i class="fa fa-play" *ngIf="!buildInProgress"></i> <i class="fa fa-spinner fa-spin" *ngIf="buildInProgress"></i> {{'btn_build'|bkTranslate:this}}
                         </button>
@@ -219,7 +225,7 @@
                                 <!-- UPLOAD -->
 
                                 <td class="vert-align">
-                                    <button *ngIf="projectId && device && device.connectible_to_internet && version.status=='successfully_compiled_and_restored' && codeProgram && codeProgram.publish_type == 'private_program'" class="btn blue" (click)="onUploadClick(version)" >
+                                    <button *ngIf="projectId && typeOfBoard && typeOfBoard.connectible_to_internet && version.status=='successfully_compiled_and_restored' && codeProgram && codeProgram.publish_type == 'private_program'" class="btn blue" (click)="onUploadClick(version)" >
                                          {{'btn_upload_to_hardware'|bkTranslate:this}}
                                      </button>
 
@@ -252,7 +258,7 @@
                                         <i class="fa fa-heart"></i>
                                     </button>
 
-                                    <button *ngIf="markupableAsMain(version)" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="device && !device.update_permission" (click)="onCProgramDefaultSetMainClick(version)">
+                                    <button *ngIf="markupableAsMain(version)" title="{{'label_main_c_program_version_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="typeOfBoard && !typeOfBoard.update_permission" (click)="onCProgramDefaultSetMainClick(version)">
                                         <i class="fa fa-flag"></i>
                                     </button>
                                     <button title="{{'label_remove_version'|bkTranslate:this}}" class="btn btn-icon-only red" [disabled]="!version.delete_permission"

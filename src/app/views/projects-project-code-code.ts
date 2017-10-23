@@ -25,6 +25,8 @@ import { ModalsSetAsMainModel } from '../modals/set-as-main';
 import { ModalsPublicShareRequestModel } from '../modals/public-share-request';
 import { ModalsPublicShareResponseModel } from '../modals/public-share-response';
 import { ExitConfirmationService } from '../services/ExitConfirmationService';
+import { FormSelectComponentOption } from '../components/FormSelectComponent';
+import { FormGroup, Validators } from '@angular/forms';
 
 
 
@@ -50,7 +52,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
     reloadInterval: any = null;
-    device: ITypeOfBoard = null;
+    typeOfBoard: ITypeOfBoard = null;
 
     allDevices: IBoardShortDetail[];
     projectSubscription: Subscription;
@@ -60,6 +62,11 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     @ViewChild(CodeIDEComponent)
     codeIDE: CodeIDEComponent;
+
+
+    // List of all Version for compilation (for this type_of_board)
+    libraryCompilationVersionOptions: FormSelectComponentOption[] = null;
+    formLibrarySelector: FormGroup;
 
     protected afterLoadSelectedVersionId: string = null;
 
@@ -82,6 +89,10 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
         this.selectedCodeFiles = [main];
 
         this.refreshInterface();
+
+        this.formLibrarySelector = this.formBuilder.group({
+            'tag_name': ['', [Validators.required]]
+        });
 
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.codeId = params['code'];
@@ -134,9 +145,9 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
     markupableAsMain(version: ICProgramVersionShortDetail): boolean {
         return !version
             && !this.projectId
-            && !this.device
-            && (this.device.main_test_c_program != null || this.device.main_c_program == null)
-            && (this.device.main_test_c_program.id === this.codeProgram.id || this.device.main_c_program.id === this.codeProgram.id)
+            && !this.typeOfBoard
+            && (this.typeOfBoard.main_test_c_program != null || this.typeOfBoard.main_c_program == null)
+            && (this.typeOfBoard.main_test_c_program.id === this.codeProgram.id || this.typeOfBoard.main_c_program.id === this.codeProgram.id)
             && version.status === 'successfully_compiled_and_restored'
             && !version.main_mark;
     }
@@ -298,7 +309,8 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
                 this.backendService.typeOfBoardGet(this.codeProgram.type_of_board_id)
                     .then((response) => {
-                        this.device = response;
+                        this.typeOfBoard = response;
+                        this.onMakeListOfCompilationVersion();
                     });
             })
             .catch(reason => {
@@ -306,6 +318,39 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                 this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_code_types'), reason));
             });
 
+    }
+
+    onMakeListOfCompilationVersion() {
+        this.libraryCompilationVersionOptions = this.typeOfBoard.supported_libraries.map((pv) => {
+            return {
+                label: pv.tag_name,
+                value: pv.tag_name
+            };
+        });
+
+        // TODO https://youtrack.byzance.cz/youtrack/issue/BECKI-323
+        /** https://youtrack.byzance.cz/youtrack/issue/BECKI-323
+         *
+         * // Setřídíme verze (první nejposlednější - nastavíme jako selected verzi která je nejvyšší
+         *  a to tu která je označená jako stabilní - tedy v1.0.3.
+         *  Nejposlednější verze je s nejvyšším číselm PS.
+         *  Existují vývojářské verze v1.0.3-alpha.4, v1.0.3-alpha.5 - tu vrátí Tyrion jen oprávněným osobám.
+         *  Exisutjí verze beta v1.0.3-beta.1, v1.0.3-beta.2, které zpřístupňujeme i public. Ale uživatel si jí
+         *  výslovňě musí nakliknout. Když si jí zaklikne neopomeneme fixnout bug který vznikne po uložení a refresh objektu
+         *  (asi stačí udělat podmínku, že když už je to vyplněné, tak se to nepřepisuje refreshem)
+         *
+         * https://github.com/npm/node-semver <-- Tohle k něčemu podobnému používám na Homerovi.
+         *
+         *  Example
+         *  v1.1.4-alfa.1       <-- Zde nevadí jak to bude setříděné - vrací se to jen povolaným osobám
+         *  v1.1.4-beta.5.1
+         *  v1.1.4-beta.2
+         *  v1.1.4-beta
+         *  v1.1.3,  <-- Selected
+         *  v1.0.2,
+         *  v1.0.1,
+         *  v1.0.1-alpha.4,
+         */
     }
 
     onAddLibraryClick() {
@@ -625,7 +670,8 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     version_name: m.name,
                     version_description: m.description,
                     main: main,
-                    files: userFiles
+                    files: userFiles,
+                    library_compilation_version: this.formLibrarySelector.controls['tag_name'].value
                 })
                     .then(() => {
                         this.fmSuccess(this.translate('flash_code_version_save', m.name));
@@ -689,7 +735,8 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
             imported_libraries: libs,
             main: main,
             files: userFiles,
-            type_of_board_id: this.codeProgram.type_of_board_id
+            type_of_board_id: this.codeProgram.type_of_board_id,
+            library_compilation_version: this.formLibrarySelector.controls['tag_name'].value
         })
             .then((success) => {
                 this.buildInProgress = false;

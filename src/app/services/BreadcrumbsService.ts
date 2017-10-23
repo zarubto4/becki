@@ -131,8 +131,6 @@ export class BreadcrumbsService {
                 return this.currentParamsService.currentLibraryNameSnapshot;
             case ':group':
                 return this.currentParamsService.currentGroupNameSnapshot;
-            case ':garfield':
-                return this.currentParamsService.currentGarfieldNameSnapshot;
             case ':tariff':
                 return this.currentParamsService.currentTariffNameSnapshot;
             case ':homer_server':
