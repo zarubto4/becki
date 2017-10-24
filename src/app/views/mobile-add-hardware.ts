@@ -46,7 +46,6 @@ export class MobileAddHardwareComponent extends BaseMainComponent implements OnI
     }
 
     reloadGroupOptions() {
-        console.log(this.blockForm.controls['project'].value);
         this.backendService.boardGroupGetListFromProject(this.blockForm.controls['project'].value).then(groups => {
             this.group_options_available = groups.map((pv) => {
                 return {

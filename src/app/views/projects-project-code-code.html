@@ -66,7 +66,7 @@
                         <div>
                             <span><strong>{{'label_library_version'|bkTranslate:this}}: </strong></span>
                             <bk-form-select [control]="formLibrarySelector.controls.tag_name" [labelComment]="false"
-                            [pickFirstOption]="true" [options]="libraryCompilationVersionOptions"></bk-form-select>
+                            [pickFirstOption]="true" [regexFirstOption]="'[v][0-9.]*(?![-])$'" [options]="libraryCompilationVersionOptions"></bk-form-select>
                         </div>
 
                         <button type="button" class="btn default yellow-gold" (click)="onBuildClick()" [disabled]="buildInProgress">
