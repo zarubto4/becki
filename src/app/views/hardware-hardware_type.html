@@ -5,7 +5,6 @@
         [subtitle]="typeOfBoard != null ? ( typeOfBoard.update_permission ? ('main_subtitle'|bkTranslate:this) : ( typeOfBoard ? typeOfBoard.name: '') ) : null"
         [lastBreadName]="typeOfBoard?typeOfBoard.name:''"
         >
-
     <div *ngIf="typeOfBoard" class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
@@ -71,7 +70,7 @@
 
 
     <!-- Only with permission -->
-    <div *ngIf="typeOfBoard " class="portlet portlet light bordered">
+    <div *ngIf="typeOfBoard && typeOfBoard.bootloader_edit_permission" class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
                 <span class="font-blue-dark uppercase">
