@@ -77,18 +77,17 @@ export class ModalsAddHardwareComponent implements OnInit {
             'listOfIds': ['', [Validators.required]]
         });
         this.deviceInfoTextForm = this.formBuilder.group({
-            'succesfulDevices': ['', []],
+            'successfulDevices': ['', []],
             'failedDevices': ['', []],
         });
 
-
     }
 
-    multipleRegistration() {
+    set_multipleRegistration() {
         this.step = 'multipleRegistration';
     }
 
-    singleRegistration() {
+    set_singleRegistration() {
         this.step = 'singleRegistration';
     }
 
@@ -106,11 +105,15 @@ export class ModalsAddHardwareComponent implements OnInit {
 
     }
 
-    sequenceRegistaration() {
+    sequenceRegistration() {
         this.registredDevices = [];
         this.failedDevices = [];
 
-        let groupIDs = this.listGroup.selectedItems.map(a => a.value);
+        let groupIDs: string[] = [];
+        if (this.modalModel.deviceGroup.length > 0) {
+            groupIDs = this.listGroup.selectedItems.map(a => a.value);
+        }
+
         let data: string = this.multiForm.controls['listOfIds'].value;
         data.replace(' ', '');
         data.replace(',', ';');
@@ -129,7 +132,7 @@ export class ModalsAddHardwareComponent implements OnInit {
                 }).then(() => {
                     if (devicesForRegistration.length > 0) {
                         this.multiForm.controls['listOfIds'].setValue(devicesForRegistration);
-                        this.deviceInfoTextForm.controls['succesfulDevices'].setValue(this.registredDevices.join(', \n'));
+                        this.deviceInfoTextForm.controls['successfulDevices'].setValue(this.registredDevices.join(', \n'));
                         this.deviceInfoTextForm.controls['failedDevices'].setValue(this.failedDevices.join(', \n'));
                     } else {
                         this.modalClose.emit(true);
@@ -140,8 +143,14 @@ export class ModalsAddHardwareComponent implements OnInit {
     }
 
 
-    singleRegistaration() {
-        let groupIDs = this.listGroup.selectedItems.map(a => a.value);
+    singleRegistration() {
+
+        let groupIDs: string[] = [];
+
+        if (this.modalModel.deviceGroup.length > 0) {
+            groupIDs = this.listGroup.selectedItems.map(a => a.value);
+        }
+
         this.backendService.boardConnectWithProject({ group_ids: groupIDs, hash_for_adding: this.form.controls['id'].value, project_id: this.modalModel.project_id })
             .then(() => {
                 this.modalClose.emit(true);
@@ -155,9 +164,9 @@ export class ModalsAddHardwareComponent implements OnInit {
     onSubmitClick(): void {
         this.afterFirstConfirm = true;
         if (this.step === 'singleRegistration') {
-            this.singleRegistaration();
+            this.singleRegistration();
         } else {
-            this.sequenceRegistaration();
+            this.sequenceRegistration();
         }
     }
 

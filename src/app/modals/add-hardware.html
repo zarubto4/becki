@@ -7,7 +7,7 @@
     <div *ngIf="step==null" class="row tiles" style="width: auto !important; margin-left: 10px !important; margin-right: 10px !important; margin-top: 20px !important; margin-bottom: 20px !important;">
 
         <div class="col-md-6 text-center">
-            <a (click)="singleRegistration()" style="text-decoration: none !important;">
+            <a (click)="set_singleRegistration()" style="text-decoration: none !important;">
                 <div class="tile double byzance-blue" style="width: auto !important; float: none !important;">
                     <div class="tile-body">
                         <i class="fa fa-microchip medium"></i>
@@ -18,7 +18,7 @@
                 </div>
             </a>
         </div>
-        <div (click)="multipleRegistration()" class="col-md-6 text-center">
+        <div (click)="set_multipleRegistration()" class="col-md-6 text-center">
             <a style="text-decoration: none !important;">
                 <div class="tile double bg-blue-hoki" style="width: auto !important; float: none !important;">
                     <div class="tile-body">
@@ -46,6 +46,10 @@
 
                 <bk-multi-select *ngIf="group_options_available && group_options_available.length > 0" [items]="group_options_available"
                     [label]="'label_hardware_groups'|bkTranslate:this" #groupList></bk-multi-select>
+
+                <div *ngIf="group_options_available && group_options_available.length == 0">
+                    <span [innerHTML]="'label_no_hardware_groups'|bkTranslate:this"></span>
+                </div>
             </form>
             <br>
             <br>
@@ -69,7 +73,6 @@
                 <br>
                 <bk-multi-select *ngIf="!afterFirstConfirm && group_options_available && group_options_available.length > 0" [items]="group_options_available"
                     [label]="'label_hardware_groups'|bkTranslate:this" #groupList></bk-multi-select>
-                <br>
             </form>
 
 
@@ -81,17 +84,17 @@
             <div *ngIf="!afterFirstConfirm && group_options_available && group_options_available.length == 0" class="note note-warning">
                 <h4 class="block">{{'label_little_advice'|bkTranslate:this}}</h4>
                 <span [innerHTML]="'label_advice_no_group'|bkTranslate:this"></span>
+
             </div>
             <br>
             <div>
                 <div *ngIf="afterFirstConfirm">
                     <span>
-                        <i class="font-green-jungle fa fa-check"></i> {{'label_succesfully_registred'|bkTranslate:this}}: </span>
-                    <bk-form-text-area [control]="deviceInfoTextForm.controls.succesfulDevices" [row]="6" [cols]="250" [placeholder]="" [labelComment]="false"></bk-form-text-area>
+                        <i class="font-green-jungle fa fa-check"></i> {{'label_successfully_registered'|bkTranslate:this}}: </span>
+                    <bk-form-text-area [control]="deviceInfoTextForm.controls.successfulDevices" [row]="6" [cols]="250" [placeholder]="" [labelComment]="false"></bk-form-text-area>
                 </div>
                 <br>
                 <br>
-
                 <div *ngIf="afterFirstConfirm">
                     <span>
                         <i class="font-red-thunderbird fa fa-warning"></i> {{'label_failed_to_register'|bkTranslate:this}}: </span>

@@ -83,5 +83,6 @@ export class MultiSelectComponent implements OnInit {
         }
         this.selected.emit(this.selectedItems);
     }
+
 }
 
