@@ -106,7 +106,6 @@
     </div>
 
 
-    <!-- [disabled]="!form.valid" -->
     <div *ngIf="step" class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
         <button type="button" [disabled]="!((multiForm.valid)||(form.valid))" class="btn green" (click)="onSubmitClick()">{{'btn_add'|bkTranslate:this}}</button>
