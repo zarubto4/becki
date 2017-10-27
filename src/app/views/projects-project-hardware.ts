@@ -15,7 +15,7 @@ import { ModalsAddHardwareModel } from '../modals/add-hardware';
 import { ModalsRemovalModel } from '../modals/removal';
 import {
     IProject, IBoardShortDetail, IBoardList, IBoardGroup, IActualizationProcedureList,
-    IActualizationProcedureShortDetail, ICProgramShortDetail
+    IActualizationProcedureShortDetail, ICProgramShortDetail, IBootLoader
 } from '../backend/TyrionAPI';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { CurrentParamsService } from '../services/CurrentParamsService';
@@ -318,12 +318,12 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
 
     /* tslint:disable:max-line-length ter-indent */
     onFilterActualizationProcedure(pageNumber: number = 0,
-        states: ('successful_complete' | 'complete' | 'complete_with_error' | 'canceled' | 'in_progress' | 'not_start_yet')[] = [],
-        type_of_updates: ('MANUALLY_BY_USER_INDIVIDUAL' | 'MANUALLY_BY_USER_BLOCKO_GROUP' | 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' | 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' | 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE')[] = []): void {
+        states: ('successful_complete' | 'complete' | 'complete_with_error' | 'canceled' | 'in_progress' | 'not_start_yet')[] = ['successful_complete', 'complete' , 'complete_with_error' , 'canceled' , 'in_progress' , 'not_start_yet'],
+        type_of_updates: ('MANUALLY_BY_USER_INDIVIDUAL' | 'MANUALLY_BY_USER_BLOCKO_GROUP' | 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' | 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' | 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE')[] = ['MANUALLY_BY_USER_INDIVIDUAL' , 'MANUALLY_BY_USER_BLOCKO_GROUP' , 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' , 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' , 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE']): void {
         this.blockUI();
         this.backendService.actualizationProcedureGetByFilter(pageNumber, {
             project_ids: [this.projectId],
-            states: states,
+            update_states: states,
             type_of_updates: type_of_updates
         })
             .then((values) => {
@@ -372,11 +372,15 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
 
     }
 
+    onUpdateProcedureUpdateClick(procedure: IActualizationProcedureShortDetail): void {
+
+    }
+
     onProcedureClick() {
         // TODO
     }
 
-    onProcedureCreateClick(cPrograms: ICProgramShortDetail[] = null) {
+    onProcedureCreateClick() {
 
         // Get all deviceGroup - Recursion
         if (this.deviceGroup == null) {
@@ -392,38 +396,23 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
                     this.unblockUI();
                     this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
                 });
-        }
-
-        if (cPrograms == null) {
-            this.blockUI();
-            this.backendService.cProgramGetListByFilter(0, {
-                project_id: this.projectId
-            })
-                .then((list) => {
-                    this.unblockUI();
-                    this.onProcedureCreateClick(list.content);
-                    return;
-                }).catch(reason => {
-                    this.unblockUI();
-                    this.addFlashMessage(new FlashMessageError(this.translate('flash_grid_group_add_fail', reason)));
-                });
-        }
-
-        if (cPrograms == null || this.deviceGroup == null) {
             return;
         }
 
-        let model = new ModalsUpdateReleaseFirmwareModel(this.deviceGroup, cPrograms);
+        let model = new ModalsUpdateReleaseFirmwareModel(this.projectId, this.deviceGroup);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-                this.backendService.boardGroupCreate({
-                    name: '',
-                    description: '',
-                    project_id: ''
+
+                this.backendService.actualizationProcedureMake({
+                    firmware_type: model.firmwareType,
+                    hardware_group_id: model.deviceGroupStringIdSelected,
+                    project_id: this.projectId,
+                    time: model.timePlan,
+                    type_of_boards_settings: model.groups
                 })
                     .then(() => {
                         this.unblockUI();
-                        this.onHardwareGroupRefresh();
+                        // this.onHardwareGroupRefresh();
                     })
                     .catch(reason => {
                         this.unblockUI();

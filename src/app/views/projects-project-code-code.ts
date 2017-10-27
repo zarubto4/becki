@@ -793,7 +793,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
                     .then((success) => {
                         if (success && m.selectedBoard) {
                             this.blockUI();
-                            this.backendService.cProgramUploadIntoHardware({ // TODO [permission]: Board.update_permission, Project.read_permission
+                            this.backendService.cProgramUploadIntoHardware({
                                 board_pairs: [{
                                     board_id: m.selectedBoard.id,
                                     c_program_version_id: version.version_id

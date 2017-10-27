@@ -32,7 +32,6 @@
                 </div>
             </a>
         </div>
-
         <br>
         <br>
         <br>
@@ -49,6 +48,10 @@
 
                 <div *ngIf="group_options_available && group_options_available.length == 0">
                     <span [innerHTML]="'label_no_hardware_groups'|bkTranslate:this"></span>
+                </div>
+
+                <div *ngIf="single_error_message != null">
+                    <span class="font-red bold">{{single_error_message}}</span>
                 </div>
             </form>
             <br>

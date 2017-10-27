@@ -69,6 +69,8 @@ export class ModalsAddHardwareComponent implements OnInit {
     @ViewChild('groupList')
     listGroup: MultiSelectComponent;
 
+    single_error_message: string = null;
+
     constructor(private backendService: BackendService, private formBuilder: FormBuilder, private translationService: TranslationService) {
 
         this.form = this.formBuilder.group({
@@ -94,6 +96,8 @@ export class ModalsAddHardwareComponent implements OnInit {
     }
 
     ngOnInit() {
+
+        this.flashMesseage.emit(new FlashMessageError(this.translationService.translate('flash_cant_add_hardware', this), 'pepa'));
 
         this.group_options_available = this.modalModel.deviceGroup.map((pv) => {
             return {
@@ -146,17 +150,21 @@ export class ModalsAddHardwareComponent implements OnInit {
 
     singleRegistration() {
 
+        this.single_error_message = null;
+
+        let groupIDs: string[] = [];
 
         if (this.multiSelectedHardwareGroups === null && this.modalModel.deviceGroup && this.modalModel.deviceGroup.length > 0) {
             this.multiSelectedHardwareGroups = this.listGroup.selectedItems.map(a => a.value);
         }
-        this.backendService.boardConnectWithProject({ group_ids: this.multiSelectedHardwareGroups, hash_for_adding: this.form.controls['id'].value, project_id: this.modalModel.project_id })
+
+        this.backendService.boardConnectWithProject({ group_ids: groupIDs, hash_for_adding: this.form.controls['id'].value, project_id: this.modalModel.project_id })
             .then(() => {
                 this.modalClose.emit(true);
             })
             .catch(reason => {
-                this.flashMesseage.emit(new FlashMessageError(this.translationService.translate('flash_cant_add_hardware', this), reason));
-                this.modalClose.emit(false);
+                this.single_error_message = reason.body.message;
+
             });
     }
 

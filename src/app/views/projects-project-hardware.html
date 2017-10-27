@@ -57,7 +57,7 @@
                     <thead>
                         <tr>
                             <th class="">{{'table_name'|bkTranslate:this}}</th>
-                            <th class="">{{'table_id'|bkTranslate:this}}</th>
+                            <th class="">{{'table_hardware_id'|bkTranslate:this}}</th>
                             <th class="no-wrap">{{'table_description'|bkTranslate:this}}</th>
                             <th class="no-wrap"><strong class="font-color-hardware">Hardware</strong>{{'label_type'|bkTranslate:this}}</th>
                             <th class="no-wrap">{{'table_groups'|bkTranslate:this}}</th>
@@ -123,7 +123,7 @@
                                         (click)="onDeviceEditGroupClick(device)">
                                     <i class="fa fa-object-group"></i>
                                 </button>
-                                <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green"
+                                <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only blue"
                                         [disabled]="!device.edit_permission"
                                         (click)="onEditClick(device)">
                                     <i class="fa fa-cog"></i>
@@ -181,7 +181,7 @@
                                 }
                             </style>
 
-                            <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only green"
+                            <button title="{{'label_device_properties'|bkTranslate:this}}" class="btn btn-icon-only blue"
                                     [disabled]="!group.edit_permission"
                                     (click)="onGroupEditClick(group)">
                                 <i class="fa fa-cog"></i>
@@ -215,26 +215,29 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th class="col col-lg-1">{{'table_id'|bkTranslate:this}}</th>
-                            <th class="col col-lg-2">{{'table_started'|bkTranslate:this}}</th>
+                            <th class="col col-lg-1">{{'table_update_id'|bkTranslate:this}}</th>
+                            <th class="col col-lg-2">{{'table_created'|bkTranslate:this}}</th>
                             <th class="col col-lg-2">{{'table_planed'|bkTranslate:this}}</th>
                             <th class="col col-lg-2">{{'table_finished'|bkTranslate:this}}</th>
-                            <th class="col col-lg-2">{{'table_type'|bkTranslate:this}}</th>
-                            <th class="col col-lg-1 text-center">{{'table_progress'|bkTranslate:this}}</th>
-                            <th class="col col-lg-2 text-center">{{'table_state'|bkTranslate:this}}</th>
+                            <th class="col col-lg-2">{{'table_firmware_type'|bkTranslate:this}}</th>
+                            <th class="col col-lg-2">{{'table_update_type'|bkTranslate:this}}</th>
+                            <th class="col col-lg-1 text-center">{{'table_update_progress'|bkTranslate:this}}</th>
+                            <th class="col col-lg-2 text-center">{{'table_update_state'|bkTranslate:this}}</th>
+                            <th class="col col-lg-2 text-center">{{'table_actions'|bkTranslate:this}}</th>
                         </tr>
                     </thead>
                     <tbody>
 
-                        <tr *ngFor="let procedure of instance.actual_instance.procedure_short_details">
+                        <tr *ngFor="let procedure of actualizationList.content">
 
                             <td><a (click)="onProcedureClick(procedure)">{{procedure.id.substr(0,13)}}</a></td>
                             <td>{{procedure.date_of_create|bkUnixTimeToDate}}</td>
                             <td>{{procedure.date_of_planing|bkUnixTimeToDate}}</td>
                             <td>
-                                <span *ngIf="!procedure.date_of_finish" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
-                                <span *ngIf="procedure.date_of_finish">{{procedure.date_of_finish|bkUnixTimeToDate}}</span>
+                                <span *ngIf="procedure.date_of_finish == null" class="font-yellow-casablanca">{{'label_time_missing_in_json'|bkTranslate:this}}</span>
+                                <span *ngIf="procedure.date_of_finish != null">{{procedure.date_of_finish|bkUnixTimeToDate}}</span>
                             </td>
+                            <td>{{procedure.firmware_type|bkTranslateTable:this:'firmware_type'}}</td>
                             <td>{{procedure.type_of_update|bkTranslateTable:this:'type_of_update'}}</td>
                             <td class="text-center">
                                 <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.procedure_size_complete}}/{{procedure.procedure_size_all}}</span>
@@ -253,11 +256,17 @@
                                         opacity: 1
                                     }
                                 </style>
+                                <button title="{{'label_change_update_parameters'|bkTranslate:this}}" class="btn btn-icon-only blue"
+                                        [disabled]="!procedure.edit_permission"
+                                        (click)="onUpdateProcedureUpdateClick(procedure)">
+                                    <i class="fa fa-cog"></i>
+                                </button>
                                 <button title="{{'label_cancel_update'|bkTranslate:this}}" class="btn btn-icon-only red"
-                                        [disabled]="!group.delete_permission"
+                                        [disabled]="!procedure.edit_permission"
                                         (click)="onUpdateProcedureCancelClick(procedure)">
                                     <i class="fa fa-trash"></i>
-                                </button>
+                                </button>,
+
                             </td>
 
                         </tr>

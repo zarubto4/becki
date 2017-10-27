@@ -918,16 +918,21 @@ export class StaticTranslation {
 
             }, 'ModalsUpdateReleaseFirmwareComponent': {
                 'title': 'Firmware Release Settings',
-                'label_hw_group_title': 'Select <strong class="font-color-hardware">HARDWARE</strong> Groups',
-                'label_firmware_title': 'Select <strong class="font-color-code">FIRMWARE</strong>',
+                'label_hw_group_title': '<strong class="font-color-hardware">HARDWARE</strong> Groups',
+                'label_select': 'Select',
+                'label_hardware_group': 'Hardware Group',
+                'label_firmware_title': '<span class="font-color-code">FIRMWARE</span>',
+                'label_bootloader_title': '<span class="font-color-code">BOOTLOADER</span>',
                 'label_no_firmware_warning': 'Sorry, but you haven\'t owned <strong class="font-color-code">FIRMWARE CODE</strong> (program) yet.',
-                'label_no_groups_warning': 'Sorry, but you haven\'t owned <strong class="font-color-code">HARDWARE</strong> groups yet.',
+                'label_no_groups_warning': 'Sorry, but you haven\'t owned <br><strong class="font-color-hardware">HARDWARE</strong> groups yet.',
+                'label_no_hw_types_in_group': 'Sorry, but this <strong class="font-color-hardware">HARDWARE</strong> groups probably not contains any Hardware',
                 'label_firmware_type': 'Firmware Type',
+                'label_select_bootloader_version': 'Select Bootloader version',
                 'label_select_time': 'Select Time',
                 'label_select_date': 'Select Date',
                 'label_when': 'When',
-                'label_immediately': '<strong>(Immediately)</strong>',
-                'label_on_time': '<strong>(At a set time)</strong>',
+                'label_immediately': 'Immediately',
+                'label_on_time': 'At a set time',
 
             }, 'ProducersComponent': {
                 'main_title': 'Manufacturers',
@@ -1080,9 +1085,10 @@ export class StaticTranslation {
                 'label_no_hardware_group': 'No <strong class="font-color-hardware">HARDWARE GROUP</strong> in this project.',
                 'label_no_hardware_group_comment': 'Click on the button bellow to add a new group for hardware.',
                 'label_no_updates': 'No <strong class="font-color-code">FIRMWARE </strong> release',
-                'label_no_updates_comment': 'Click on the button bellow to update <strong class="font-color-code">HARDWARE</strong>, or <strong>Hardware Groups</strong>.',
+                'label_no_updates_comment': 'Click on the button bellow to update <strong class="font-color-hardware">HARDWARE</strong>, or <strong class="font-color-hardware">Hardware Groups</strong>.',
                 'label_device_properties': 'Device properties',
                 'label_remove_device': 'Remove device',
+                'label_time_missing_in_json': 'Not Yet',
 
                 'tab_hardware_list': 'Hardware List',
                 'tab_hardware_groups': 'Hardware Groups',
@@ -1090,9 +1096,20 @@ export class StaticTranslation {
 
                 'table_description': 'Description',
                 'table_id': 'Updates',
+                'table_update_id': 'Update HASH',
+                'table_finished': 'Finished',
+                'table_created': 'Created',
+                'table_planed': 'Planed',
+                'table_program': 'Program',
+                'table_version': 'Version',
+                'table_status': 'Status',
+                'table_update_type': 'Update Type',
+                'table_firmware_type': 'Type',
+                'table_update_progress': 'Progress',
+                'table_update_state': 'State',
+                'table_hardware_id': 'Hardware ID',
                 'table_name': 'Alias Name',
                 'table_groups': 'Groups',
-                'table_status': 'Status',
                 'table_actions': 'Actions',
                 'table_size': 'Size []',
 
@@ -1167,13 +1184,6 @@ export class StaticTranslation {
                 'label_remove_device': 'Remove device',
                 'label_device_properties': 'Device properties',
 
-                'table_id': 'ID',
-                'table_finished': 'Finished',
-                'table_started': 'Started',
-                'table_program': 'Program',
-                'table_version': 'Version',
-                'table_status': 'Status',
-                'table_type': 'Type',
 
 
                 'flash_edit_device_success': 'Device information was updated.',
@@ -2279,11 +2289,18 @@ export class StaticTranslation {
                 'not_in_instance': 'Not present instance.',
             },
             'type_of_update': {
-                'MANUALLY_BY_USER_INDIVIDUAL': 'Manually (Individual Update)',
+                'MANUALLY_BY_USER_INDIVIDUAL': 'Individual Update',
+                'MANUALLY_RELEASE_MANAGER': 'Release Manager',
                 'MANUALLY_BY_USER_BLOCKO_GROUP': 'Manually through BLOCKO',
                 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME': 'Scheduled through BLOCKO',
                 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE': 'System update setting - Always up-to-date',
                 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE': 'System update by central server - Critical patch',
+            },
+            'firmware_type': {
+                'FIRMWARE': 'Firmware',
+                'BOOTLOADER': 'Boot-Loader',
+                'BACKUP': 'Firmware - Backup',
+                'WIFI': 'Wi-Fi '
             },
             'update_status': {
                 'successful_complete': 'Successfully completed',
@@ -2291,7 +2308,7 @@ export class StaticTranslation {
                 'complete_with_error': 'Complete with error',
                 'canceled': 'Canceled',
                 'in_progress': 'In Progress',
-                'not_start_yet': 'Not start yet'
+                'not_start_yet': 'Prepared'
             },
             'publish_status': {
                 'pending': 'Your request has been submitted, <br> please wait for the administrator\'s decision.',

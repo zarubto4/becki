@@ -70,7 +70,7 @@
                                     <i class="fa fa-plus-circle"></i> {{'btn_add_slave'|bkTranslate:this}}
                                 </button>
                                 <div class="ribbon-content no-padding-left-right no-padding-bottom padding-top-10">
-                                    <bk-c-program-version-selector [value]="hwGroup.main_board_pair.c_program_version_id" (valueChanged)="hwCProgramVersionChanged(hwGroup.main_board_pair, $event)"
+                                    <bk-c-program-version-selector [already_selected_c_program_id]="hwGroup.main_board_pair.c_program_version_id" [already_selected_c_program_id]="hwGroup.main_board_pair.c_program_version_id" (valueChanged)="hwCProgramVersionChanged(hwGroup.main_board_pair, $event)"
                                         [cPrograms]="getCProgramsForBoardType(boardById[hwGroup.main_board_pair.board_id].type_of_board_id)"></bk-c-program-version-selector>
                                     <template ngIf="hwGroup.device_board_pairs">
                                         <div *ngFor="let board of hwGroup.device_board_pairs;" class="margin-left-15 margin-right-15">
@@ -83,7 +83,7 @@
                                                     <i class="fa fa-trash"></i>
                                                 </button>
                                                 <div class="ribbon-content no-padding-left-right no-padding-bottom padding-top-10">
-                                                    <bk-c-program-version-selector [value]="board.c_program_version_id" (valueChanged)="hwCProgramVersionChanged(board, $event)"
+                                                    <bk-c-program-version-selector [already_selected_c_program_id]="board.c_pr" [already_selected_c_program_version_id]="board.c_program_version_id"  (valueChanged)="hwCProgramVersionChanged(board, $event)"
                                                         [cPrograms]="getCProgramsForBoardType(boardById[board.board_id].type_of_board_id)"></bk-c-program-version-selector>
                                                 </div>
                                             </div>

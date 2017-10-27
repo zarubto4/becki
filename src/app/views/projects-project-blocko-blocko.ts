@@ -21,7 +21,7 @@ import {
     IMProjectSnapShot, IBlockoBlockVersionShortDetail, IBoardShortDetail,
     IBProgramVersionShortDetail, IHardwareGroupIN, IMProjectShortDetailForBlocko, ICProgramVersionsShortDetailForBlocko,
     ICProgramShortDetailForBlocko, ITypeOfBlockFilter, ITypeOfBlockList, IBlockoBlockShortDetail,
-    ITypeOfBlockShortDetail
+    ITypeOfBlockShortDetail, IHardwareGroup
 } from '../backend/TyrionAPI';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { DraggableEventParams } from '../components/DraggableDirective';
@@ -79,7 +79,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     boardById: { [id: string]: IBoardShortDetail } = {};
 
-    selectedHardware: IHardwareGroupIN[] = [];
+    selectedHardware: IHardwareGroup[] = [];
 
     // grid:
 
@@ -552,8 +552,18 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                         this.selectedHardware.push({
                             device_board_pairs: [],
                             main_board_pair: {
+                                board_description: null,
                                 board_id: m.selectedBoard.id,
-                                c_program_version_id: null
+                                board_name: null,
+                                c_program_description: null,
+                                c_program_id: null,
+                                c_program_name: null,
+                                c_program_version_description: null,
+                                c_program_version_id: null,
+                                c_program_version_name: null,
+                                online_state: null,
+                                type_of_board_id: null,
+                                type_of_board_name: null
                             }
                         });
 
@@ -583,10 +593,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                         if (!parentObj.device_board_pairs) {
                             parentObj.device_board_pairs = [];
                         }
-                        parentObj.device_board_pairs.push({
-                            board_id: m.selectedBoard.id,
-                            c_program_version_id: null
-                        });
+
+                        parentObj.device_board_pairs.push( parentObj.main_board_pair );
 
                         this.updateBlockoInterfaces();
 
@@ -1063,7 +1071,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
                 this.selectedProgramVersion = programVersionFull;
                 // here is save re-cast it to IHardwareGroupIN because its only object with more properties
-                this.selectedHardware = this.hardwareGroupCopy(<IHardwareGroupIN[]>this.selectedProgramVersion.hardware_group) || [];
+                this.selectedHardware = this.hardwareGroupCopy(<IHardwareGroup[]>this.selectedProgramVersion.hardware_group) || [];
 
                 this.selectedGridProgramVersions = {};
                 programVersionFull.m_project_program_snapshots.forEach((pps) => {
@@ -1092,26 +1100,20 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     }
 
-    hardwareGroupCopy(hwGroup: IHardwareGroupIN[]): IHardwareGroupIN[] {
+    hardwareGroupCopy(hwGroup: IHardwareGroup[]): IHardwareGroup[] {
         if (!hwGroup) {
             return null;
         }
-        let out: IHardwareGroupIN[] = [];
+        let out: IHardwareGroup[] = [];
         hwGroup.forEach((hg) => {
-            let hgCopy: IHardwareGroupIN = {
-                main_board_pair: {
-                    board_id: hg.main_board_pair.board_id,
-                    c_program_version_id: hg.main_board_pair.c_program_version_id
-                },
+            let hgCopy: IHardwareGroup = {
+                main_board_pair: hg.main_board_pair,
                 device_board_pairs: []
             };
 
             if (hg.device_board_pairs) {
                 hg.device_board_pairs.forEach((dbp) => {
-                    hgCopy.device_board_pairs.push({
-                        board_id: dbp.board_id,
-                        c_program_version_id: dbp.c_program_version_id
-                    });
+                    hgCopy.device_board_pairs.push(dbp);
                 });
             }
             out.push(hgCopy);
