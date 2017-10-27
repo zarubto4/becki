@@ -185,6 +185,7 @@ import { ModalsHardwareGroupDeviceSettingsComponent } from './modals/hardware-gr
 import { FormSwitchTwoListSelectComponent } from './components/FormSwitchTwoListSelectComponent';
 import { ModalsUpdateReleaseFirmwareComponent } from './modals/update-release-firmware';
 import { MultiSelectComponent } from './components/MultiSelectComponent';
+import { TyrionComponent } from './views/admin-tyrion';
 
 
 // @formatter:off
@@ -288,6 +289,7 @@ let routes: Routes = [
     { path: 'admin/financial', data: { breadName: 'Tariff' }, component: AdminFinancialComponent, canActivate: [AuthGuard] },
     { path: 'admin/financial/:tariff', data: { breadName: ':tariff' }, component: AdminFinancialTariffComponent, canActivate: [AuthGuard] },
 
+    { path: 'admin/tyrion', data: { breadName: 'Tyrion' }, component: TyrionComponent, canActivate: [AuthGuard] },
     { path: 'admin/server', data: { breadName: 'Servers' }, component: ServerComponent, canActivate: [AuthGuard] },
     // {path: 'admin/server/homer/:homer_server', data: {breadName: ':homer_server'}, component: ServerComponent, canActivate: [AuthGuard]}, // TODO - USER / ADMIN (Breadcump je připraven)
     // {path: 'admin/server/compilation/:code_server', data: {breadName: ':code_server'}, component: ServerComponent, canActivate: [AuthGuard]}, // TODO - USER / ADMIN (Breadcump je připraven)
@@ -367,6 +369,7 @@ let tabMenus = {
                 new LabeledLink('Servers Management', ['/admin/server'], 'server', {adminNavigation: true}),
                 new LabeledLink('Financial Management', ['/admin/financial'], 'money', {adminNavigation: true}),
                 new LabeledLink('Permission Management', ['/admin/permission-group'], 'users', {adminNavigation: true}),
+                new LabeledLink('Tyrion Management', ['/admin/tyrion'], 'server', {adminNavigation: true}),
             ]
         }),
         new LabeledLink('Community Management', null, null, {
@@ -525,6 +528,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ProjectsProjectWidgetsComponent,
         ProjectsProjectWidgetsWidgetsWidgetComponent,
         ServerComponent,
+        TyrionComponent,
         ProjectsProjectWidgetsWidgetsComponent,
         ProjectsProjectHardwareHardwareComponent,
         ProducersComponent,

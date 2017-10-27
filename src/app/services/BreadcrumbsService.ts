@@ -139,6 +139,7 @@ export class BreadcrumbsService {
                 return this.currentParamsService.currentCodeServerNameSnapshot;
             case ':bug':
                 return this.currentParamsService.currentBugSummarySnapshot;
+
             case ':garfield':
                 return this.currentParamsService.currentGarfieldNameSnapshot;
             case ':last':

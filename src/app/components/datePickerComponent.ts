@@ -7,8 +7,7 @@ import { Validators, FormGroup, FormBuilder, AbstractControl, FormControl } from
     selector: 'bk-date-picker',
     /* tslint:disable:max-line-length */
     template: /*[formControl]="control"*/`
-    <label>{{label}}</label>
-    
+    <label *ngIf="labelEnabled">{{label}}</label>
     <my-date-picker [options]="dateOption" [formControl]="control" placeholder="{{placeholder}}" (dateChanged)="onDateChanged($event)"></my-date-picker>
 
 `
@@ -24,6 +23,9 @@ export class DatePickerComponent {
 
     @Input()
     label: string = '';
+
+    @Input()
+    labelEnabled: boolean = true;
 
     @Input()
     readonly: boolean = false;
