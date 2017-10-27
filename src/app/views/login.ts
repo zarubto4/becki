@@ -59,14 +59,14 @@ export class LoginComponent implements OnInit, OnDestroy {
         location.href = url;
     }
 
-    onResendClick(): void {
+    onResendValidationClick(): void {
         this.blockUIService.blockUI();
 
-        this.backendService.emailSendPasswordRecoveryEmail({ mail: this.loginForm.controls['email'].value })
+        this.backendService.emailSendAuthentication({ mail: this.loginForm.controls['email'].value })
             .then(() => {
                 this.blockUIService.unblockUI();
                 this.resendVertification = false;
-                this.loginError = this.translationService.translate('msg_login_error', this);
+                this.loginError = this.translationService.translate('msg_login_email_sent', this);
             })
             .catch(reason => {
                 this.blockUIService.unblockUI();
@@ -86,7 +86,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 if (reason instanceof PermissionMissingError) {
                     this.loginError = (<PermissionMissingError>reason).userMessage;
                 } else if (reason instanceof UserNotValidatedError) {
-                    this.loginError = this.translationService.translate('flash_password_change_fail', this, null, [(<UserNotValidatedError>reason).userMessage]);
+                    this.loginError = this.translationService.translate('msg_login_resend_vertification', this, null, [(<UserNotValidatedError>reason).userMessage]);
                     this.resendVertification = true;
                 } else {
                     if (reason.userMessage) {

@@ -84,7 +84,10 @@ export class FormSelectComponent {
     readonly: boolean = false;
 
     @Input()
-    pickFirstOption: { name: string, value: string } = null;
+    regexFirstOption:  string  = null;
+
+    @Input()
+    pickFirstOption: boolean = null;
 
     private _options: FormSelectComponentOption[] = [];
 
@@ -92,7 +95,16 @@ export class FormSelectComponent {
         if (option) {
             this._options = option;
             if (this.pickFirstOption) {
-                this.control.setValue(option[0].value);
+                let toPick: number = 0;
+                if (this.regexFirstOption) {
+                    toPick = option.findIndex(item => {
+                        if (item.label.match(this.regexFirstOption)) {
+                            console.log(item);
+                            return true;
+                        }
+                    });
+                }
+                this.control.setValue(option[toPick].value);
             }
         }
     }
