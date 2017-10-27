@@ -2163,6 +2163,15 @@ export class StaticTranslation {
                 'label_repetition': 'Occurrences',
                 'label_stack_trace': 'Stack Trace',
                 'label_cause': 'Cause'
+            }, 'TyrionComponent': {
+                'main_title': 'Platform administration',
+                'main_subtitle': 'Tyrion management',
+
+                'title': 'Updates',
+                'label_current_version': 'Current version',
+                'label_general_description': 'You can schedule an update of Tyrion server. Select a version from available updates for the current mode of the server.',
+                'flash_cannot_load_updates': 'Cannot load available updates',
+                'btn_schedule_update': 'Schedule',
             },
 
 
@@ -2180,6 +2189,8 @@ export class StaticTranslation {
             'label_offline': 'offline',
             'label_online': 'online',
             'label_date': 'Date',
+            'label_time': 'Time',
+            'label_version': 'Version',
             'btn_save': 'Save',
             'btn_test': 'Test',
             'btn_back': 'Back',

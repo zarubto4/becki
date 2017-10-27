@@ -71,7 +71,7 @@
 
 
     <!-- Only with permission -->
-    <div *ngIf="typeOfBoard " class="portlet portlet light bordered">
+    <div *ngIf="typeOfBoard && typeOfBoard.boot_loaders" class="portlet portlet light bordered">
         <div class="portlet-title">
             <div class="becki-caption">
                 <span class="font-blue-dark uppercase">
@@ -88,7 +88,7 @@
             </div>
         </div>
         <div>
-            <div *ngIf="(typeOfBoard && typeOfBoard.boot_loaders.length)" class="table-scrollable">
+            <div class="table-scrollable">
                 <table class="table table-hover">
                     <thead>
                     <tr>

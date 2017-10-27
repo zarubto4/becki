@@ -21,10 +21,16 @@ export class TimePickerComponent {
     label: string = '';
 
     @Input()
+    labelEnabled: boolean = true;
+
+    @Input()
     placeholder: string = this.currentdate.getHours() + ':' + (this.currentdate.getMinutes() + 2);
 
     @Input()
     readonly: boolean = false;
+
+    @Input()
+    waitForTouch: boolean = true;
 
     open: boolean = false;
 

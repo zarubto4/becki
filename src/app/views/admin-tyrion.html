@@ -1,0 +1,51 @@
+<bk-layout-main
+    tabMenu="byzance-admin"
+    [title]="'main_title'|bkTranslate:this"
+    [subtitle]="'main_subtitle'|bkTranslate:this">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark">
+                            <i class="fa fa-fw fa-server"></i>
+                              {{'title'|bkTranslate:this}}
+                        </span>
+                    </div>
+                </div>
+                <div *ngIf="updates" class="portlet-body">
+                    <div class="m-heading-1 border-blue m-bordered">
+                        <p>{{'label_general_description'|bkTranslate:this}}</p>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div>
+                                <strong>{{'label_current_version'|bkTranslate:this}}:</strong>
+                                {{updates.current}}
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <bk-form-select [control]="form.controls['version']" [labelComment]="false" [placeholder]="'label_version'|bkTranslate:this" [options]="versionSelect"></bk-form-select>
+                        </div>
+                        <div class="col-md-3">
+                            <bk-date-picker [control]="form.controls['date']" [labelEnabled]="false"></bk-date-picker>
+                        </div>
+                        <div class="col-md-3">
+                            <bk-time-picker [control]="form.controls['time']" [labelEnabled]="false"></bk-time-picker>
+                        </div>
+                        <div class="col-md-1">
+                            <button class="btn blue"
+                                    [disabled]="false"
+                                    (click)="onScheduleUpdate()">
+                                <i class="fa fa-cog"></i>
+                                {{'btn_schedule_update'|bkTranslate:this}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</bk-layout-main>
