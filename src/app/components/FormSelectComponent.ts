@@ -99,7 +99,7 @@ export class FormSelectComponent {
                 if (this.regexFirstOption) {
                     toPick = option.findIndex(item => {
                         if (item.label.match(this.regexFirstOption)) {
-                            console.log(item);
+                            console.info(item);
                             return true;
                         }
                     });

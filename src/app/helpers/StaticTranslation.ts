@@ -2163,7 +2163,12 @@ export class StaticTranslation {
                 'label_remove_bug': 'Remove bug',
                 'label_repetition': 'Occurrences',
                 'label_stack_trace': 'Stack Trace',
-                'label_cause': 'Cause'
+                'label_cause': 'Cause',
+                'label_type': 'Exception type',
+                'label_server': 'Server version',
+                'label_cause_type': 'Cause type',
+                'label_cause_message': 'Cause message',
+                'label_request': 'Request'
             }, 'TyrionComponent': {
                 'main_title': 'Platform administration',
                 'main_subtitle': 'Tyrion management',
@@ -2192,6 +2197,9 @@ export class StaticTranslation {
             'label_date': 'Date',
             'label_time': 'Time',
             'label_version': 'Version',
+            'label_message': 'Message',
+            'label_description': 'Description',
+            'label_user': 'User',
             'btn_save': 'Save',
             'btn_test': 'Test',
             'btn_back': 'Back',

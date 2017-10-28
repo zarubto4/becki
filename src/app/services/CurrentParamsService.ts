@@ -75,9 +75,7 @@ export class CurrentParamsService {
     protected currentGroupNameSubject: Subject<string> = null;
     public currentGroupNameSnapshot: string = null;
 
-
     public currentGarfieldName: Observable<string> = null;
-
     protected currentGarfieldNameSubject: Subject<string> = null;
     public currentGarfieldNameSnapshot: string = null;
 

@@ -4,18 +4,17 @@
     [title]="'main_title'|bkTranslate:this"
     [subtitle]="'main_subtitle'|bkTranslate:this">
 
-    <div class="row">
+    <div *ngIf="bug" class="row">
         <div class="col-md-12">
             <div class="portlet portlet light bordered">
-
                 <div class="portlet-title">
                     <div class="becki-caption">
-                        <span *ngIf="bug" class="font-blue-dark">
+                        <span class="font-blue-dark">
                             <i class="fa fa-fw fa-bug"></i>
                             {{bug.summary}}
                         </span>
                     </div>
-                    <div *ngIf="bug" class="becki-actions">
+                    <div class="becki-actions">
                         <a href="{{bug.youtrack_url}}" target="_blank">
                             <button *ngIf="bug.youtrack_url" title="{{'label_view_bug'|bkTranslate:this}}" class="btn btn-icon-only green"
                                     [disabled]="false">
@@ -34,43 +33,52 @@
                         </button>
                     </div>
                 </div>
-
-                <div *ngIf="bug" class="portlet">
-                    <div class="portlet-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="portlet light portlet-fit bordered">
-                                    <div class="portlet-body">
-                                        <div>
-                                            <strong>{{'label_date'|bkTranslate:this}}:</strong>
-                                            {{bug.created|bkUnixTimeToDate}}
-                                        </div>
-                                        <div>
-                                            <strong>{{'label_repetition'|bkTranslate:this}}:</strong>
-                                            {{bug.repetition}}
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="portlet-body">
+                    <div class="row">
+                        <div [class.col-md-12]="!bug.request && !bug.cause_type" [class.col-md-6]="(!bug.request && bug.cause_type) || (bug.request && !bug.cause_type)" [class.col-md-4]="bug.request && bug.cause_type">
+                            <div>
+                                <strong>{{'label_type'|bkTranslate:this}}:</strong>
+                                {{bug.type}}
+                            </div>
+                            <div>
+                                <strong>{{'label_message'|bkTranslate:this}}:</strong>
+                                {{bug.message}}
+                            </div>
+                            <div>
+                                <strong>{{'label_date'|bkTranslate:this}}:</strong>
+                                {{bug.created|bkUnixTimeToDate}}
+                            </div>
+                            <div>
+                                <strong>{{'label_repetition'|bkTranslate:this}}:</strong>
+                                {{bug.repetition}}
+                            </div>
+                            <div>
+                                <strong>{{'label_server'|bkTranslate:this}}:</strong>
+                                {{bug.tyrion}}
+                            </div>
+                            <div *ngIf="bug.description">
+                                <strong>{{'label_description'|bkTranslate:this}}:</strong>
+                                {{bug.tyrion}}
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="portlet light portlet-fit bordered">
-                                    <div class="portlet-body">
-                                        <h4>{{'label_stack_trace'|bkTranslate:this}}:</h4>
-                                        <span [innerHTML]="bug.stack_trace|bkNl2Br"></span>
-                                    </div>
-                                </div>
+                        <div *ngIf="bug.request" [class.col-md-4]="bug.cause_type" [class.col-md-6]="!bug.cause_type">
+                            <div>
+                                <strong>{{'label_request'|bkTranslate:this}}:</strong>
+                                {{bug.request}}
+                            </div>
+                            <div>
+                                <strong>{{'label_user'|bkTranslate:this}}:</strong>
+                                {{bug.person}}
                             </div>
                         </div>
-                        <div *ngIf="bug.cause" class="row">
-                            <div class="col-md-12">
-                                <div class="portlet light portlet-fit bordered">
-                                    <div class="portlet-body">
-                                        <h4>{{'label_cause'|bkTranslate:this}}:</h4>
-                                        {{bug.cause}}
-                                    </div>
-                                </div>
+                        <div *ngIf="bug.cause_type" [class.col-md-4]="bug.request" [class.col-md-6]="!bug.request">
+                            <div>
+                                <strong>{{'label_cause_type'|bkTranslate:this}}:</strong>
+                                {{bug.cause_type}}
+                            </div>
+                            <div>
+                                <strong>{{'label_cause_message'|bkTranslate:this}}:</strong>
+                                {{bug.cause_message}}
                             </div>
                         </div>
                     </div>
@@ -78,5 +86,36 @@
             </div>
         </div>
     </div>
-
+    <div *ngIf="bug" class="row">
+        <div [class.col-md-12]="!bug.cause_stack_trace" [class.col-md-6]="bug.cause_stack_trace">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark">
+                            <i class="fa fa-fw fa-bug"></i>
+                            {{'label_stack_trace'|bkTranslate:this}}
+                        </span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <span class="word-wrap" [innerHTML]="bug.stack_trace|bkNl2Br"></span>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="bug.cause_stack_trace" class="col-md-6">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark">
+                            <i class="fa fa-fw fa-bug"></i>
+                            {{'label_cause'|bkTranslate:this}}
+                        </span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <span class="word-wrap" [innerHTML]="bug.cause_stack_trace|bkNl2Br"></span>
+                </div>
+            </div>
+        </div>
+    </div>
 </bk-layout-main>
