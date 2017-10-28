@@ -39,7 +39,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
 
     devicesFilter: IBoardList = null;
     deviceGroup: IBoardGroup[] = null;
-    actualizationList: IActualizationProcedureList = null;
+    actualizationFilter: IActualizationProcedureList = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -82,36 +82,12 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
             this.onHardwareGroupRefresh();
         }
 
-        if (tab === 'updates' && this.actualizationList == null) {
+        if (tab === 'updates' && this.actualizationFilter == null) {
             this.onFilterActualizationProcedure();
         }
 
     }
 
-    onUpdateListBootloaderClick() {
-        // mass bootloader magic z toho bootloadersCheckboxChanged
-    }
-
-    onUpdateBootloaderClick(selected: IBoardShortDetail) {
-        let model = new ModalsHardwareBootloaderUpdateModel(selected.id);
-        this.modalService.showModal(model).then((success) => {
-            if (success) {
-                this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-
-                /* this.blockUI();
-                  this.backendService.editBoardUserDescription(device.id, {name: model.description})
-                  .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess('The device description was updated.'));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                    })
-                    .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError('The device cannot be updated.', reason));
-                        this.storageService.projectRefresh(this.projectId).then(() => this.unblockUI());
-                    });
-            */}
-        });
-
-    }
 
     onEditClick(device: IBoardShortDetail): void {
         let model = new ModalsDeviceEditDescriptionModel(device.id, device.name, device.description);
@@ -137,6 +113,10 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
 
     onBoardTypeClick(boardTypeId: string): void {
         this.navigate(['/hardware', boardTypeId]);
+    }
+
+    onCProgramClick(cProgramId: string): void {
+        this.navigate(['/projects', this.projectId, 'code', cProgramId]);
     }
 
     onRemoveClick(device: IBoardShortDetail): void {
@@ -327,15 +307,17 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
             type_of_updates: type_of_updates
         })
             .then((values) => {
-                this.actualizationList = values;
+                this.actualizationFilter = values;
 
-                this.actualizationList.content.forEach((procedure, index, obj) => {
+                this.actualizationFilter.content.forEach((procedure, index, obj) => {
                     this.backendService.objectUpdateTyrionEcho.subscribe((status) => {
                         if (status.model === 'ActualizationProcedure' && procedure.id === status.model_id) {
 
                             this.backendService.actualizationProcedureGet(procedure.id)
                                 .then((value) => {
                                     procedure.state = value.state;
+                                    procedure.procedure_size_complete = value.procedure_size_complete;
+                                    procedure.date_of_finish = value.date_of_finish;
                                 })
                                 .catch((reason) => {
                                     this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
@@ -412,7 +394,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
                 })
                     .then(() => {
                         this.unblockUI();
-                        // this.onHardwareGroupRefresh();
+                        this.onFilterActualizationProcedure();
                     })
                     .catch(reason => {
                         this.unblockUI();

@@ -228,7 +228,6 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
 
     updatePictureClick(): void {
         let model = new ModalsPictureUploadModel(null, this.typeOfBoard.picture_link, false);
-
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.blockUI();
