@@ -54,7 +54,7 @@ export interface FormSelectComponentOption {
     template: `
 <div class="form-group" [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)" [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
     <label *ngIf="labelComment" [innerHTML]="label"></label>
-    <select class="form-control" [formControl]="control" (ngModelChange)="onSelectedChange($event)"> 
+    <select class="form-control" [formControl]="control" [ngModel]="selectedValue" (ngModelChange)="onSelectedChange($event)"> 
       <option *ngIf="!pickFirstOption" value="" disabled>{{(placeholder?placeholder:label)}}</option> 
       <option *ngFor="let option of options" [value]="option.value">{{option.label}}</option>
     </select>
@@ -78,6 +78,9 @@ export class FormSelectComponent {
     placeholder: string = null;
 
     @Input()
+    already_selected_value_from_option: string = null;
+
+    @Input()
     waitForTouch: boolean = true;
 
     @Input()
@@ -88,6 +91,8 @@ export class FormSelectComponent {
 
     @Input()
     pickFirstOption: boolean = null;
+
+    selectedValue: string = null;
 
     @Output()
     valueChanged: EventEmitter<string> = new EventEmitter<string>();
@@ -117,7 +122,14 @@ export class FormSelectComponent {
     }
 
     onSelectedChange(newValue: string) {
-        this.valueChanged.emit(this.control.value);
+        if (this.selectedValue === newValue) {
+            return;
+        }
+
+        this.selectedValue = newValue;
+        this.already_selected_value_from_option = this.selectedValue;
+
+        this.valueChanged.emit(newValue);
     }
 
     constructor(public validatorErrorsService: ValidatorErrorsService) {

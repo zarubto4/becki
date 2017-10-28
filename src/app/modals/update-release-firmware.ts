@@ -16,7 +16,7 @@ import {
     IBoardGroup, IBootLoader, IBPair, ICProgramFilter, ICProgramList, ICProgramShortDetail,
     ICProgramShortDetailForBlocko, ITypeOfBoard, ITypeOfBoardShortDetail
 } from '../backend/TyrionAPI';
-import { FormSelectComponentOption } from '../components/FormSelectComponent';
+import { FormSelectComponent, FormSelectComponentOption } from '../components/FormSelectComponent';
 import { IMyDpOptions } from 'mydatepicker';
 
 export class ModalsUpdateReleaseFirmwareModel extends ModalModel {
@@ -47,6 +47,7 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
     form: FormGroup;
 
     @ViewChild('GroupList')
+    formGroupList: FormSelectComponent;
     groupsForSelect: FormSelectComponentOption[] = null;
 
     // cProgramForSelect: FormSelectComponentOption[] = null;
@@ -102,9 +103,8 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
     }
 
     onGroupChange() {
-        let group_id: string = this.form.controls['deviceGroupStringIdSelected'].value;
 
-        console.log("Vybraná skupina je:: ", group_id);
+        let group_id: string =  this.formGroupList.selectedValue;
 
         for (let i: number = 0; i < this.modalModel.deviceGroup.length; i++) {
 
@@ -187,7 +187,8 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
     }
 
     onSubmitClick(): void {
-        this.modalModel.deviceGroupStringIdSelected = this.form.controls['deviceGroupStringIdSelected'].value;
+
+        this.modalModel.deviceGroupStringIdSelected = this.formGroupList.selectedValue;
 
         if (this.type === 'bootloader') {
             this.modalModel.firmwareType = 'bootloader';

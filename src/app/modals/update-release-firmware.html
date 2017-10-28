@@ -18,7 +18,7 @@
                         <span [innerHTML]="'label_no_groups_warning'|bkTranslate:this"></span>
                     </div>
                     <div *ngIf="modalModel.deviceGroup.length > 0">
-                        <bk-form-select  [options]="groupsForSelect"  [label]="'label_hardware_group'|bkTranslate:this"  [control]="form.controls.deviceGroupStringIdSelected" (valueChanged)="onGroupChange($event)"></bk-form-select>
+                        <bk-form-select #GroupList [options]="groupsForSelect"  [label]="'label_hardware_group'|bkTranslate:this"  [control]="form.controls.deviceGroupStringIdSelected" (valueChanged)="onGroupChange($event)"></bk-form-select>
                     </div>
                 </div>
                 <div *ngIf="deviceGroup" class="col-md-6">
@@ -64,7 +64,12 @@
                         <div *ngIf="deviceGroup != null">
                             <div *ngFor="let type_of_board of deviceGroup.type_of_boards_short_detail">
                                 <span class="bold">{{type_of_board.name}}</span>
-                                <bk-form-select [options]="get_bootloader_option(bootloaders[type_of_board.id])" [labelComment]="false" [label]="'label_select_bootloader_version'|bkTranslate:this" type="text" [control]="form.controls[deviceGroup.id+'_selectedBootloaderId']"></bk-form-select>
+                                <div *ngIf="bootloaders[type_of_board.id] != null">
+                                    <bk-form-select [options]="get_bootloader_option(bootloaders[type_of_board.id])" [labelComment]="false" [label]="'label_select_bootloader_version'|bkTranslate:this" type="text" [control]="form.controls[ type_of_board.id + '_selectedBootloaderId']"></bk-form-select>
+                                </div>
+                                <div *ngIf="bootloaders[type_of_board.id] == null">
+                                    Chybí bootloadery!!! :(((
+                                </div>
                             </div>
                         </div>
                         <div *ngIf="deviceGroup.type_of_boards_short_detail.length == 0">
