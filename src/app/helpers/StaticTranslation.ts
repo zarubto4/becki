@@ -2359,6 +2359,7 @@ export class StaticTranslation {
                 'critical_error': 'Critical error.',
                 'homer_server_is_offline': 'Server is offline.',
                 'instance_inaccessible': 'Instance is not accessible.',
+                'homer_server_never_connected': 'Never connected',
 
                 // This description is used for Additional comment after mouseover. Information specifies a brief enum description
                 'complete_description': 'TODO', // TODO navázat na text po najetí myšky chci informační bublinu

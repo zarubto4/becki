@@ -437,10 +437,9 @@
                                     <th>{{'table_started'|bkTranslate:this}}</th>
                                     <th>{{'table_finished'|bkTranslate:this}}</th>
                                     <th>{{'table_type'|bkTranslate:this}}</th>
-                                    <th><strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'table_program'|bkTranslate:this}}
-                                    </th>
-                                    <th><strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'table_version'|bkTranslate:this}}
-                                    </th>
+                                    <th><strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'table_program'|bkTranslate:this}}</th>
+                                    <th><strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'table_version'|bkTranslate:this}}</th>
+                                    <th>{{'table_type'|bkTranslate:this}}</th>
                                     <th>{{'table_status'|bkTranslate:this}}</th>
                                 </tr>
                                 </thead>
@@ -465,33 +464,33 @@
                                     </td>
 
                                     <!-- Firmware -->
-                                    <td *ngIf="update.firmware_type == 'FIRMWARE' || update.firmware_type == 'BACKUP'"
-                                        class="vert-align font-grey-mint">
-                                        <a *ngIf="update.c_program_program_name" class="bold"
-                                           [routerLink]="['/projects', device.project_id, 'code', update.c_program_id]">{{update.c_program_program_name}}</a>
-                                        <span *ngIf="!update.c_program_program_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
-                                    </td>
-                                    <td *ngIf="update.firmware_type == 'BOOTLOADER'" class="vert-align font-grey-mint">
-                                        <span *ngIf="update.bootloader_name" class="font-grey-mint bold"> {{update.bootloader_name}}</span>
-                                        <span *ngIf="!update.bootloader_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
-                                    </td>
+                                    <template [ngIf]="update.firmware_type == 'FIRMWARE' || update.firmware_type == 'BACKUP'">
+                                        <td class="vert-align font-grey-mint">
+                                            <a *ngIf="update.program" class="bold"
+                                               [routerLink]="['/projects', device.project_id, 'code', update.program.c_program_id]">{{update.program.c_program_program_name}}</a>
+                                            <span *ngIf="!update.program.c_program_program_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
+                                        </td>
+                                        <td class="font-grey-mint">
+                                            <a *ngIf="update.program" class="bold"
+                                               [routerLink]="['/projects', device.project_id, 'code', update.program.c_program_id]">{{update.program.c_program_version_name}}</a>
+                                            <span *ngIf="!update.program.c_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
+                                        </td>
+                                    </template>
 
+                                    <!-- BootLoader -->
+                                    <template [ngIf]="update.firmware_type == 'BOOTLOADER'">
+                                        <td class="vert-align font-grey-mint"></td>
+                                        <td class="vert-align font-grey-mint">
+                                            <span *ngIf="update.bootloader" class="font-grey-mint bold"> {{update.bootloader.version_identificator}}</span>
+                                        </td>
+                                    </template>
 
                                     <!-- Version - Only in FIRWARE or BACKUP, BACKUP is EMPTY -->
-                                    <td *ngIf="update.firmware_type == 'FIRMWARE' || update.firmware_type == 'BACKUP'"
-                                        class="font-grey-mint">
-                                        <a *ngIf="update.c_program_version_name" class="bold"
-                                           [routerLink]="['/projects', device.project_id, 'code', update.c_program_id]">{{update.c_program_version_name}}</a>
-                                        <span *ngIf="!update.c_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
-                                    </td>
 
-                                    <td *ngIf="update.firmware_type == 'BOOTLOADER'" class="font-grey-mint">
-                                    </td>
-
+                                    <td class="vert-align">{{update.firmware_type|bkTranslateTable:this:'firmware_type'}}</td>
 
                                     <!-- Update State -->
                                     <td>
-
                                         <span *ngIf="update.state == 'complete'" class="bold font-green-jungle">{{update.state|bkTranslateTable:this:'update_state'}}</span>
                                         <span *ngIf="update.state == 'canceled'" class="bold font-green-jungle">{{update.state|bkTranslateTable:this:'update_state'}}</span>
 
@@ -502,14 +501,11 @@
                                         <span *ngIf="update.state == 'waiting_for_device'"
                                               class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:this:'update_state'}}</span>
 
-                                        <span *ngIf="update.state == 'bin_file_not_found'"
-                                              class="bold font-red-flamingo">{{update.state|bkTranslateTable:'update_state'}}</span>
+                                        <span *ngIf="update.state == 'bin_file_not_found'" class="bold font-red-flamingo">{{update.state|bkTranslateTable:'update_state'}}</span>
                                         <span *ngIf="update.state == 'critical_error'" class="bold font-red-flamingo">{{update.state|bkTranslateTable:this:'update_state'}}</span>
-                                        <span *ngIf="update.state == 'homer_server_is_offline'"
-                                              class="bold font-red-flamingo">{{update.state|bkTranslateTable:this:'update_state'}}</span>
-                                        <span *ngIf="update.state == 'instance_inaccessible'"
-                                              class="bold font-red-flamingo">{{update.state|bkTranslateTable:this:'update_state'}}</span>
-
+                                        <span *ngIf="update.state == 'homer_server_is_offline'" class="bold font-red-flamingo">{{update.state|bkTranslateTable:this:'update_state'}}</span>
+                                        <span *ngIf="update.state == 'instance_inaccessible'" class="bold font-red-flamingo">{{update.state|bkTranslateTable:this:'update_state'}}</span>
+                                        <span *ngIf="update.state == 'homer_server_never_connected'" class="bold font-red-flamingo">{{update.state|bkTranslateTable:this:'update_state'}}</span>
                                     </td>
 
                                 </tr>

@@ -20,7 +20,7 @@
             </p>
 
             <br>
-            <bk-form-input [control]="form.controls.hardware_tester_id" label="{{'label_hardware_tester_label'|bkTranslate:this}}"></bk-form-input>
+            <bk-form-input [control]="form.controls.hardware_tester_id" [label]="'label_hardware_tester_label'|bkTranslate:this"></bk-form-input>
             <br>
 
             <bk-form-select  *ngIf="!modalModel.edit" [control]="form.controls.typeOfBoard" [label]="'label_type_of_board'|bkTranslate:this"

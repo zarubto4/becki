@@ -236,7 +236,11 @@
                                 <span *ngIf="procedure.date_of_finish != null">{{procedure.date_of_finish|bkUnixTimeToDate}}</span>
                             </td>
 
-                            <td>{{procedure.firmware_type|bkTranslateTable:this:'firmware_type'}}
+                            <td class="vert-align">
+
+                                <template [ngIf]="procedure.firmware_type">
+                                    {{procedure.firmware_type|bkTranslateTable:this:'firmware_type'}}
+                                </template>
 
                                 <template [ngIf]="procedure.type_of_update == 'MANUALLY_RELEASE_MANAGER'">
                                     <template [ngIf]="procedure.firmware_type == 'FIRMWARE' || procedure.firmware_type == 'BACKUP'" >
@@ -247,7 +251,7 @@
                                     </template>
                                 </template>
                             </td>
-                            <td> {{procedure.type_of_update|bkTranslateTable:this:'type_of_update'}}</td>
+                            <td class="vert-align"> {{procedure.type_of_update|bkTranslateTable:this:'type_of_update'}}</td>
                             <td class="vert-align text-center">
                                 <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.procedure_size_complete}}/{{procedure.procedure_size_all}}</span>
                                 <span *ngIf="!procedure.procedure_size_all ||procedure_size_all == 0 " class="bold">-/-</span>
