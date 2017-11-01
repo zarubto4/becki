@@ -426,7 +426,7 @@
                 </div>
 
                 <div *ngIf="hardwareTab == 'update'">
-            <div *ngIf="device && typeOfBoard" class="row margin-left-15 margin-top-40 margin-right-15">
+            <div *ngIf="device && typeOfBoard" class="row">
                 <div class="col-md-12">
                     <div *ngIf="device.updates">
                         <div class="table-scrollable" *ngIf="device.updates.length">
@@ -447,7 +447,7 @@
                                 <tbody>
                                 <tr *ngFor="let update of device.updates">
 
-                                    <td class="vert-align">{{update.id}}</td>
+                                    <td class="vert-align">{{update.id.substr(0, 12)}}</td>
                                     <td class="vert-align">{{update.date_of_create|bkUnixTimeToDate}}</td>
 
                                     <td class="vert-align" *ngIf="update.date_of_finish">

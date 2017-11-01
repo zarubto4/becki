@@ -1184,7 +1184,16 @@ export class StaticTranslation {
                 'label_remove_device': 'Remove device',
                 'label_device_properties': 'Device properties',
 
-
+                'table_id': 'Update ID',
+                'table_program': 'Program',
+                'table_started': 'Created',
+                'table_planed': 'Planed',
+                'table_finished': 'Finished',
+                'table_type': 'Update type',
+                'table_progress': 'Progress',
+                'table_state': 'Status',
+                'table_version': 'Version',
+                'table_status': 'Status',
 
                 'flash_edit_device_success': 'Device information was updated.',
                 'flash_edit_device_fail': 'Device information could not be updated, ',
