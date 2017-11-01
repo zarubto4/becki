@@ -2,7 +2,7 @@
  * Created by davidhradek on 17.08.16.
  */
 
-import { Component, EventEmitter, Output, Input } from '@angular/core';
+import {Component, EventEmitter, Output, Input, OnInit} from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 
@@ -102,8 +102,9 @@ export class FormSelectComponent {
     @Input() set options(option: FormSelectComponentOption[]) {
         if (option) {
             this._options = option;
-            if (this.pickFirstOption) {
+            if (this.pickFirstOption || option.length === 1) {
                 let toPick: number = 0;
+
                 if (this.regexFirstOption) {
                     toPick = option.findIndex(item => {
                         if (item.label.match(this.regexFirstOption)) {
@@ -112,10 +113,12 @@ export class FormSelectComponent {
                         }
                     });
                 }
+                this.selectedValue = option[toPick].value;
                 this.control.setValue(option[toPick].value);
             }
         }
     }
+
 
     get options(): FormSelectComponentOption[] {
         return this._options;
