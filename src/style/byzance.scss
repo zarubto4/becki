@@ -1480,6 +1480,10 @@ table .no-wrap {
     white-space: nowrap;
 }
 
+.word-wrap {
+    word-wrap: break-word;
+}
+
 /* TheGrid end */
 
 @media (min-width: 768px) {

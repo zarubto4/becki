@@ -54,7 +54,16 @@ export class BugsBugComponent extends BaseMainComponent implements OnInit, OnDes
     }
 
     onReportBug() {
-        // this.backendService.reportBug()
+        this.blockUI();
+        this.backendService.reportBug(this.bugId)
+            .then((bug) => {
+                this.bug = bug;
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.unblockUI();
+                this.fmError(this.translate('flash_cant_report'), reason);
+            });
     }
 
     onDeleteBug() {
