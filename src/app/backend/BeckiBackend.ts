@@ -304,7 +304,7 @@ export class RequestError extends Error {
 }
 
 export interface OnlineChangeStatus {
-    model: ('Board' | 'HomerInstance' | 'HomerServer' );
+    model: ('Board' | 'HomerInstance' | 'HomerServer' | 'CompilationServer' );
     model_id: 'string';
     online_status: ('not_yet_first_connected' | 'synchronization_in_progress' | 'offline' | 'online' | 'unknown_lost_connection_with_server');
 }

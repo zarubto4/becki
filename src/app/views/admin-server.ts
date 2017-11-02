@@ -37,9 +37,28 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
 
         Promise.all<any>([this.backendService.homerServersGetList(), this.backendService.compilationServersGetList()])
             .then((values: [IHomerServerPublicDetail[], ICompilerServerPublicDetail[]]) => {
+
                 this.homer_servers = values[0];
+                this.homer_servers.forEach((server, index, obj) => {
+                    this.backendService.onlineStatus.subscribe((status) => {
+                        if (status.model === 'HomerServer' && server.id === status.model_id) {
+                            server.online_state = status.online_status;
+                        }
+                    });
+                });
+
+
                 this.compilations_servers = values[1];
+                this.compilations_servers.forEach((server, index, obj) => {
+                    this.backendService.onlineStatus.subscribe((status) => {
+                        if (status.model === 'CompilationServer' && server.id === status.model_id) {
+                            server.online_state = status.online_status;
+                        }
+                    });
+                });
+
                 this.unblockUI();
+
             })
             .catch((reason) => {
                 this.addFlashMessage(new FlashMessageError('Projects cannot be loaded.', reason));

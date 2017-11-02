@@ -2,7 +2,7 @@
  * Created by davidhradek on 17.08.16.
  */
 
-import {Component, EventEmitter, Output, Input, OnInit} from '@angular/core';
+import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 
