@@ -28,8 +28,6 @@ import { ExitConfirmationService } from '../services/ExitConfirmationService';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import { FormGroup, Validators } from '@angular/forms';
 
-
-
 @Component({
     selector: 'bk-view-projects-project-code-code',
     templateUrl: './projects-project-code-code.html'
@@ -322,6 +320,7 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     onMakeListOfCompilationVersion() {
         this.libraryCompilationVersionOptions = this.typeOfBoard.supported_libraries.map((pv) => {
+            console.log('TAg name:: ', pv.tag_name);
             return {
                 label: pv.tag_name,
                 value: pv.tag_name

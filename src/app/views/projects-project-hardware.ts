@@ -389,7 +389,7 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
                     firmware_type: model.firmwareType,
                     hardware_group_id: model.deviceGroupStringIdSelected,
                     project_id: this.projectId,
-                    time: model.timePlan,
+                    time: model.time,
                     type_of_boards_settings: model.groups
                 })
                     .then(() => {

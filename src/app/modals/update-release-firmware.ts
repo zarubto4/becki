@@ -18,6 +18,7 @@ import {
 } from '../backend/TyrionAPI';
 import { FormSelectComponent, FormSelectComponentOption } from '../components/FormSelectComponent';
 import { IMyDpOptions } from 'mydatepicker';
+import * as moment from 'moment';
 
 export class ModalsUpdateReleaseFirmwareModel extends ModalModel {
     constructor(
@@ -26,7 +27,7 @@ export class ModalsUpdateReleaseFirmwareModel extends ModalModel {
         public deviceGroupStringIdSelected: string = '',   // List with group ids for hardware update,
         public firmwareType: string = '',
         public groups: IActualizationProcedureMakeTypeOfBoard[] = [],
-        public timePlan: number = 0,
+        public time: number = 0,
     ) {
         super();
     }
@@ -89,8 +90,8 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
         this.form = this.formBuilder.group({
             'deviceGroupStringIdSelected': ['', [Validators.required]], // TODO Not Empty List Validator! Dominik
             'firmwareType': [''],
-            'datePlan': [''],
-            'timePlan': [''],
+            'date': [''],
+            'time': [''],
         });
     }
 
@@ -178,8 +179,8 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
         });
 
         (<FormControl>(this.form.controls['firmwareType'])).setValue(this.modalModel.firmwareType);
-        (<FormControl>(this.form.controls['datePlan'])).setValue(this.modalModel.timePlan);
-        (<FormControl>(this.form.controls['timePlan'])).setValue(this.modalModel.timePlan);
+        (<FormControl>(this.form.controls['date'])).setValue(this.modalModel.time);
+        (<FormControl>(this.form.controls['time'])).setValue(this.modalModel.time);
     }
 
     onBooleanClick(value: boolean): void {
@@ -210,7 +211,10 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
             this.modalModel.groups.push(gr);
         });
 
-        this.modalModel.timePlan = this.form.controls['datePlan'].value + this.form.controls['timePlan'].value;
+        let time: string[] = this.form.controls['time'].value.toString().split(':');
+        let update_time: number = moment(this.form.controls['date'].value.jsdate).add(time[0], 'hour').add(time[1], 'minute').unix() * 1000;
+
+        this.modalModel.time = update_time;
         this.modalClose.emit(true);
     }
 

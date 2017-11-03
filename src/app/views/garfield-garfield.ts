@@ -37,8 +37,9 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     bootLoader: IBootLoader = null;
     mainServer: IHomerServer = null;           // Destination for Server registration
     backupServer: IHomerServer = null;         // Destination for Server registration (backup)
-    testFirmwareDownloadLink: string = null;  // Test Firmware download link
-    productionFirmwareDownloadLink: string = null;  // Production Firmware download link
+
+   //  testFirmwareDownloadLink: string = null;  // Test Firmware download link  - Nahrazeno linkem ve ICProgramVersionShortDetail.download_link_bin_file
+   // productionFirmwareDownloadLink: string = null;  // Production Firmware download link
 
     productionBatchForm: FormGroup; // Burn Info Batch Form TypeOfBoard.batch
     batchOptions: FormSelectComponentOption[] = null;
@@ -236,25 +237,8 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
 
                     if (this.typeOfBoard.main_c_program.program_versions[key].main_mark) {
                         this.firmwareMainVersion = this.typeOfBoard.main_c_program.program_versions[key];
-                        this.backendService.cProgramVersionGetBinaryDownloadLink(this.firmwareMainVersion.version_id)
-                            .then((link) => {
-                                this.productionFirmwareDownloadLink = link.file_link;
-                            })
-                            .catch((reason) => {
-                                this.fmError(this.translate('flash_cant_load_firmware_file', reason));
-                            });
                         break;
                     }
-                }
-
-                if (this.firmwareTestMainVersion) {
-                    this.backendService.cProgramVersionGetBinaryDownloadLink(this.firmwareTestMainVersion.version_id)
-                        .then((link) => {
-                            this.testFirmwareDownloadLink = link.file_link;
-                        })
-                        .catch((reason) => {
-                            this.fmError(this.translate('flash_cant_load_firmware_file', reason));
-                        });
                 }
 
                 // Find Main and Backup Server
@@ -340,8 +324,6 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             && this.print_sticker
             && this.garfieldTesterConnected
             && this.bootLoader.file_path
-            && this.testFirmwareDownloadLink
-            && this.productionFirmwareDownloadLink
             && this.mainServer
             && this.backupServer
             && this.productionBatchForm.valid);
@@ -535,11 +517,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                 if (msg.status === 'success') {
                     this.main_step++;
                     if (msg.type === 'bootloader') {
-                        if (this.testFirmwareDownloadLink) {
-                            this.uploadFirmware(this.testFirmwareDownloadLink);
-                        } else {
-                            this.configureDevice();
-                        }
+                        this.uploadFirmware(this.firmwareTestMainVersion.download_link_bin_file);
                     } else if (msg.type === 'firmware' && this.main_step < 5) {
                         this.main_step = 4;
                         this.testDevice();
@@ -558,10 +536,10 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                 if (msg.status === 'success') {
                     this.main_step = 8;
                     this.fmSuccess(this.translate('flash_device_configure_success'));
-                    if (this.productionFirmwareDownloadLink) {
-                        this.main_step = 9;
-                        this.uploadFirmware(this.productionFirmwareDownloadLink);
-                    }
+
+                    this.main_step = 9;
+                    this.uploadFirmware(this.firmwareMainVersion.download_link_bin_file);
+
                 } else if (msg.status === 'error') {
                     let errMsg: IWebSocketErrorMessage = <IWebSocketErrorMessage>message;
                     this.onConsoleError(errMsg.error);

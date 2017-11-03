@@ -244,6 +244,12 @@
                                     </style>
 
 
+                                    <a *ngIf="version.download_link_bin_file" href="{{version.download_link_bin_file}}">
+                                        <button title="{{'label_download_file'|bkTranslate:this}}" class="btn btn-icon-only blue">
+                                            <i class="fa fa-cloud-download"></i>
+                                        </button>
+                                    </a>
+
                                     <button *ngIf="version.update_permission"  title="{{'label_version_properties'|bkTranslate:this}}" class="btn btn-icon-only green"
                                             (click)="onEditVersionClick(version)">
                                             <i class="fa fa-cog"></i>
