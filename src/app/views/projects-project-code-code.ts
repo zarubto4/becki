@@ -320,7 +320,6 @@ export class ProjectsProjectCodeCodeComponent extends BaseMainComponent implemen
 
     onMakeListOfCompilationVersion() {
         this.libraryCompilationVersionOptions = this.typeOfBoard.supported_libraries.map((pv) => {
-            console.log('TAg name:: ', pv.tag_name);
             return {
                 label: pv.tag_name,
                 value: pv.tag_name
