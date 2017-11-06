@@ -515,7 +515,6 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             case 'device_binary': {
                 let msg: IWebSocketGarfieldDeviceBinaryResult = <IWebSocketGarfieldDeviceBinaryResult>message;
                 if (msg.status === 'success') {
-                    this.main_step++;
                     if (msg.type === 'bootloader') {
                         this.uploadFirmware(this.firmwareTestMainVersion.download_link_bin_file);
                     } else if (msg.type === 'firmware' && this.main_step < 5) {
@@ -638,7 +637,6 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     }
 
     uploadFirmware(url: string) {
-        this.main_step++;
         let message: IWebSocketGarfieldDeviceBinary = {
             message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
             message_type: 'device_binary',
