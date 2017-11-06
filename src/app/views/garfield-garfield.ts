@@ -630,7 +630,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                 message_type: 'device_configure',
                 message_id: this.backendService.uuid(),
                 configuration: {
-                    mac: this.device.mac_address,
+                    mac: this.device.mac_address.toLowerCase(),
                     normal_mqtt_hostname: this.mainServer.server_url,
                     normal_mqtt_port: this.mainServer.mqtt_port,
                     normal_mqtt_username: this.mainServer.mqtt_username,
