@@ -419,18 +419,22 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             type_of_board_id: this.typeOfBoard.id
         })
             .then((result) => {
-                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_registration_device_successful')));
+                this.fmSuccess(this.translate('flash_registration_device_successful'));
                 this.backendService.boardGet(result.full_id)
                     .then((board) => {
                         this.device = board;
-                        this.testHardwareConnected = true;
-                        this.uploadBootLoader();
+                        if (this.main_step > 2) {
+                            this.configureDevice();
+                        } else {
+                            this.testHardwareConnected = true;
+                            this.uploadBootLoader();
+                        }
                     })
                     .catch((reason) => {
                         this.fmError(this.translate('label_cant_load_device', reason['message']));
                     });
             }).catch(reason => {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_fail'), reason));
+                this.fmError(this.translate('flash_fail'), reason);
                 console.info(reason);
                 this.refresh();
             });
@@ -522,6 +526,8 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                         this.testDevice();
                     } else if (msg.type === 'firmware') {
                         this.main_step = 10;
+                        this.device = null;
+                        this.fmSuccess(this.translate('flash_burn_successful'));
                     }
                 } else if (msg.status === 'error') {
                     let errMsg: IWebSocketErrorMessage = <IWebSocketErrorMessage>message;
@@ -561,6 +567,31 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                 }
                 break;
             }
+            case 'device_id': {
+                let msg: IWebSocketGarfieldDeviceConnect = <IWebSocketGarfieldDeviceConnect>message;
+                if (msg.device_id) {
+                    this.backendService.boardGet(msg.device_id)
+                        .then((board) => {
+                            this.device = board;
+                            this.configureDevice();
+                        })
+                        .catch((reason) => {
+
+                            if (reason instanceof BugFoundError) {
+                                let body = (<BugFoundError>reason).body;
+                                if (body.code === 404) {
+                                    this.onRegisterHardware(msg.device_id);
+                                }
+                            } else {
+                                this.fmError(this.translate('label_cant_load_device', reason['message']));
+                            }
+                        });
+                } else {
+                    this.stepError = true;
+                    this.fmError(this.translate('flash_cannot_get_device_id'));
+                }
+                break;
+            }
             default: console.info('Got unknown message: ' + message);
         }
     }
@@ -593,32 +624,42 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
 
     configureDevice() {
         this.main_step = 7;
-        let message: IWebSocketGarfieldDeviceConfigure = {
-            message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
-            message_type: 'device_configure',
-            message_id: this.backendService.uuid(),
-            configuration: {
-                mac: this.device.mac_address,
-                normal_mqtt_hostname: this.mainServer.server_url,
-                normal_mqtt_port: this.mainServer.mqtt_port,
-                normal_mqtt_username: this.mainServer.mqtt_username,
-                normal_mqtt_password: this.mainServer.mqtt_password,
-                backup_mqtt_hostname: this.backupServer.server_url,
-                backup_mqtt_port: this.backupServer.mqtt_port,
-                backup_mqtt_username: this.backupServer.mqtt_username,
-                backup_mqtt_password: this.backupServer.mqtt_password
-            }
-        };
+        if (this.device) {
+            let message: IWebSocketGarfieldDeviceConfigure = {
+                message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
+                message_type: 'device_configure',
+                message_id: this.backendService.uuid(),
+                configuration: {
+                    mac: this.device.mac_address,
+                    normal_mqtt_hostname: this.mainServer.server_url,
+                    normal_mqtt_port: this.mainServer.mqtt_port,
+                    normal_mqtt_username: this.mainServer.mqtt_username,
+                    normal_mqtt_password: this.mainServer.mqtt_password,
+                    backup_mqtt_hostname: this.backupServer.server_url,
+                    backup_mqtt_port: this.backupServer.mqtt_port,
+                    backup_mqtt_username: this.backupServer.mqtt_username,
+                    backup_mqtt_password: this.backupServer.mqtt_password
+                }
+            };
 
-        let configJson: any = JSON.parse(this.formConfigJson.controls['config'].value);
+            let configJson: any = JSON.parse(this.formConfigJson.controls['config'].value);
 
-        for (let key in configJson) {
-            if (configJson.hasOwnProperty(key)) {
-                message.configuration[key] = configJson[key];
+            for (let key in configJson) {
+                if (configJson.hasOwnProperty(key)) {
+                    message.configuration[key] = configJson[key];
+                }
             }
+
+            this.backendService.sendWebSocketMessage(message);
+
+        } else {
+            let message: IWebSocketMessage = {
+                message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
+                message_type: 'device_id',
+                message_id: this.backendService.uuid()
+            };
+            this.backendService.sendWebSocketMessage(message);
         }
-
-        this.backendService.sendWebSocketMessage(message);
     }
 
     uploadBootLoader() {
