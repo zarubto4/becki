@@ -352,7 +352,7 @@
                     <div class="mt-element-step">
                         <div class="row step-line">
 
-                            <div class="col-md-2 mt-step-col first" [class.done]="main_step > 1" [class.active]="main_step == 1">
+                            <div class="col-md-2 mt-step-col first" [class.done]="mainStep > 1" [class.active]="mainStep == 1">
                                 <div class="mt-step-number bg-white font-grey">
                                     <i class="fa fa-bars"></i>
                                 </div>
@@ -360,7 +360,7 @@
                                 <div class="mt-step-content font-grey-cascade">{{'nav_step_one_text'|bkTranslate:this}}</div>
                             </div>
 
-                            <div class="col-md-2 mt-step-col" [class.error]="(main_step == 3 || main_step == 4) && stepError" [class.done]="main_step > 3 && !stepError" [class.active]="main_step == 3 && !stepError">
+                            <div class="col-md-2 mt-step-col" [class.error]="(mainStep == 3 || mainStep == 4) && (errorStep == 3 || errorStep == 4)" [class.done]="mainStep > 3 && (errorStep != 3 || errorStep != 4)" [class.active]="mainStep == 3 && (errorStep != 3 || errorStep != 4)">
                                 <div class="mt-step-number bg-white font-grey">
                                     <i class="fa fa-archive"></i>
                                 </div>
@@ -368,7 +368,7 @@
                                 <div class="mt-step-content font-grey-cascade">{{'nav_step_two_text'|bkTranslate:this}}</div>
                             </div>
 
-                            <div class="col-md-2 mt-step-col" [class.error]="(main_step == 5 || main_step == 6) && stepError"  [class.done]="main_step > 5 && !stepError" [class.active]="main_step == 5  && !stepError">
+                            <div class="col-md-2 mt-step-col" [class.error]="(mainStep == 5 || mainStep == 6) && (errorStep == 5 || errorStep == 6)" [class.done]="mainStep > 5 && (errorStep != 5 || errorStep != 6)" [class.active]="mainStep == 5  && (errorStep != 5 || errorStep != 6)">
                                 <div class="mt-step-number bg-white font-grey">
                                     <i class="fa fa-pencil-square-o"></i>
                                 </div>
@@ -376,7 +376,7 @@
                                 <div class="mt-step-content font-grey-cascade">{{'nav_step_three_text'|bkTranslate:this}}</div>
                             </div>
 
-                            <div class="col-md-2 mt-step-col" [class.error]="(main_step == 7 || main_step == 8) && stepError" [class.done]="main_step > 7  && !stepError" [class.active]="main_step == 7  && !stepError">
+                            <div class="col-md-2 mt-step-col" [class.error]="(mainStep == 7 || mainStep == 8) && (errorStep == 7 || errorStep == 8)" [class.done]="mainStep > 7  && (errorStep != 7 || errorStep != 8)" [class.active]="mainStep == 7  && (errorStep != 7 || errorStep != 8)">
                                 <div class="mt-step-number bg-white font-grey">
                                     <i class="fa fa-flag-checkered"></i>
                                 </div>
@@ -384,7 +384,7 @@
                                 <div class="mt-step-content font-grey-cascade">{{'nav_step_four_text'|bkTranslate:this}}</div>
                             </div>
 
-                            <div class="col-md-2 mt-step-col" [class.error]="(main_step == 9 || main_step == 10) && stepError" [class.done]="main_step > 9 && !stepError" [class.active]="main_step == 9  && !stepError">
+                            <div class="col-md-2 mt-step-col" [class.error]="(mainStep == 9 || mainStep == 10) && (errorStep == 9 || errorStep == 10)" [class.done]="mainStep > 9 && (errorStep != 9 || errorStep != 10)" [class.active]="mainStep == 9  && (errorStep != 9 || errorStep != 10)">
                                 <div class="mt-step-number bg-white font-grey">
                                     <i class="fa fa-flag-checkered"></i>
                                 </div>
@@ -392,7 +392,7 @@
                                 <div class="mt-step-content font-grey-cascade">{{'nav_step_five_text'|bkTranslate:this}}</div>
                             </div>
 
-                            <div class="col-md-2 mt-step-col last" [class.error]="(main_step == 11 || main_step == 12) && stepError" [class.done]="main_step > 11 && !stepError"  [class.active]="main_step == 11  && !stepError">
+                            <div class="col-md-2 mt-step-col last" [class.error]="(mainStep == 11 || mainStep == 12) && (errorStep == 11 || errorStep == 12)" [class.done]="mainStep > 11 && (errorStep != 11 || errorStep != 12)" [class.active]="mainStep == 11  && (errorStep != 11 || errorStep != 12)">
                                 <div class="mt-step-number bg-white font-grey">
                                     <i class="fa fa-flag-checkered"></i>
                                 </div>

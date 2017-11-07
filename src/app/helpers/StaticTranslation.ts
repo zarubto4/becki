@@ -2129,15 +2129,15 @@ export class StaticTranslation {
 
 
                 'nav_step_one_title': 'Attach Hardware',
-                'nav_step_one_text': 'Connect Tested Hardware and ',
+                'nav_step_one_text': 'Tested HW connected',
                 'nav_step_two_title': 'File Transfer',
-                'nav_step_two_text': 'Bootloader & Test Firmware',
+                'nav_step_two_text': 'BootLoader & Test Firmware',
                 'nav_step_three_title': 'Making Test',
                 'nav_step_three_text': 'Testing procedure on tester Hardware',
-                'nav_step_four_title': 'Settings',
-                'nav_step_four_text': 'Default settings',
-                'nav_step_five_title': 'File Transfer',
-                'nav_step_five_text': 'Default Firmware',
+                'nav_step_four_title': 'File Transfer',
+                'nav_step_four_text': 'Default firmware',
+                'nav_step_five_title': 'Settings',
+                'nav_step_five_text': 'Default settings',
                 'nav_step_six_title': 'Connection',
                 'nav_step_six_text': 'Connection to Cloud',
 

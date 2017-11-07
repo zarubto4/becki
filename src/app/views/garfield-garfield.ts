@@ -62,8 +62,8 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     // For checking online state on printers
     reloadInterval: any = null;
 
-    main_step: number = 0;
-    stepError: boolean = false; // Made Step to Red
+    mainStep: number = 0;
+    errorStep: number = 0; // Made Step to Red
 
     routeParamsSubscription: Subscription;
     wsMessageSubscription: Subscription;
@@ -166,10 +166,6 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             'config': ['', [Validators.required]],
             'test_config': ['', [Validators.required]]
         });
-
-        // (<FormControl>this.formConfigJson.controls['test_config']).setValue(JSON.stringify(testConfigJSON).toString());
-
-        // this.formTestConfigJson.controls['config'].setValue(JSON.stringify(this.testConfig));
 
         this.wsMessageSubscription = this.backendService.garfieldRecived.subscribe(msg => this.onMessageGarfield(msg));
 
@@ -423,7 +419,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                 this.backendService.boardGet(result.full_id)
                     .then((board) => {
                         this.device = board;
-                        if (this.main_step > 2) {
+                        if (this.mainStep > 2) {
                             this.configureDevice();
                         } else {
                             this.testHardwareConnected = true;
@@ -478,8 +474,8 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                     break;
                 }
 
-                this.main_step = 1;
-                this.stepError = false;
+                this.mainStep = 1;
+                this.errorStep = 0;
                 this.device = null;
                 let msg: IWebSocketGarfieldDeviceConnect = <IWebSocketGarfieldDeviceConnect>message;
                 if (msg.device_id) {
@@ -530,44 +526,66 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                 if (msg.status === 'success') {
                     if (msg.type === 'bootloader') {
                         this.uploadFirmware(this.firmwareTestMainVersion.download_link_bin_file);
-                    } else if (msg.type === 'firmware' && this.main_step < 5) {
-                        this.main_step = 4;
+                    } else if (msg.type === 'firmware' && this.mainStep < 5) {
+                        this.mainStep = 4;
                         this.testDevice();
                     } else if (msg.type === 'firmware') {
-                        this.main_step = 10;
-                        this.device = null;
-                        this.fmSuccess(this.translate('flash_burn_successful'));
+                        this.mainStep = 8;
+                        this.configureDevice();
                     }
                 } else if (msg.status === 'error') {
                     let errMsg: IWebSocketErrorMessage = <IWebSocketErrorMessage>message;
                     this.onConsoleError(errMsg.error);
-                    this.stepError = true;
+                    if (msg.type === 'bootloader') {
+                        this.errorStep = 3;
+                    } else if (msg.type === 'firmware' && this.mainStep < 5) {
+                        this.errorStep = 4;
+                    } else if (msg.type === 'firmware') {
+                        this.errorStep = 8;
+                    }
                 }
                 break;
             }
             case 'device_configure': {
                 let msg: IWebSocketSuccessMessage = <IWebSocketSuccessMessage>message;
                 if (msg.status === 'success') {
-                    this.main_step = 9;
-                    this.uploadFirmware(this.firmwareMainVersion.download_link_bin_file);
+                    let backup: IWebSocketMessage = {
+                        message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
+                        message_type: 'device_backup',
+                        message_id: this.backendService.uuid()
+                    };
+                    this.backendService.sendWebSocketMessage(backup);
                 } else if (msg.status === 'error') {
                     let errMsg: IWebSocketErrorMessage = <IWebSocketErrorMessage>message;
                     this.onConsoleError(errMsg.error);
-                    this.stepError = true;
+                    this.errorStep = 9;
+                }
+                break;
+            }
+            case 'device_backup': {
+                let msg: IWebSocketSuccessMessage = <IWebSocketSuccessMessage>message;
+                if (msg.status === 'success') {
+                    this.mainStep = 10;
+                    this.device = null;
+                    this.fmSuccess(this.translate('flash_burn_successful'));
+                } else if (msg.status === 'error') {
+                    let errMsg: IWebSocketErrorMessage = <IWebSocketErrorMessage>message;
+                    this.onConsoleError(errMsg.error);
+                    this.errorStep = 10;
                 }
                 break;
             }
             case 'device_test': {
                 let msg: IWebSocketSuccessMessage = <IWebSocketSuccessMessage>message;
                 if (msg.status === 'success') {
-                    this.main_step = 6;
-                    this.configureDevice();
+                    this.mainStep = 7;
+                    this.uploadFirmware(this.firmwareMainVersion.download_link_bin_file);
                 } else if (msg.status === 'error') {
                     let errMsg: IWebSocketGarfieldDeviceTestResult = <IWebSocketGarfieldDeviceTestResult>message;
                     errMsg.errors.forEach((error) => {
                         this.onConsoleError(error);
                     });
-                    this.stepError = true;
+                    this.errorStep = 6;
                 }
                 break;
             }
@@ -587,11 +605,12 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                                     this.onRegisterHardware(msg.device_id);
                                 }
                             } else {
+                                this.errorStep = 9;
                                 this.fmError(this.translate('label_cant_load_device', reason['message']));
                             }
                         });
                 } else {
-                    this.stepError = true;
+                    this.errorStep = 9;
                     this.fmError(this.translate('flash_cannot_get_device_id'));
                 }
                 break;
@@ -615,7 +634,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     }
 
     testDevice() {
-        this.main_step = 5;
+        this.mainStep = 5;
         let message: IWebSocketGarfieldDeviceTest = {
             message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
             message_type: 'device_test',
@@ -627,7 +646,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     }
 
     configureDevice() {
-        this.main_step = 7;
+        this.mainStep = 9;
         if (this.device) {
             let message: IWebSocketGarfieldDeviceConfigure = {
                 message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
@@ -667,7 +686,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     }
 
     uploadBootLoader() {
-        this.main_step = 2;
+        this.mainStep = 2;
         let message: IWebSocketGarfieldDeviceBinary = {
             message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
             message_type: 'device_binary',
@@ -678,7 +697,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
 
         this.backendService.sendWebSocketMessage(message);
 
-        this.main_step = 3;
+        this.mainStep = 3;
     }
 
     uploadFirmware(url: string) {
