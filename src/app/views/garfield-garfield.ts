@@ -456,6 +456,10 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                     clearTimeout(this.garfieldAppDetection);
                     this.setDetection();
                 }
+                if (!this.garfieldAppConnected) {
+                    this.garfieldAppConnected = true;
+                    this.fmInfo(this.translate('flash_garfield_connected'));
+                }
                 break;
             }
             case 'subscribe_garfield': {
@@ -475,6 +479,8 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                 }
 
                 this.main_step = 1;
+                this.stepError = false;
+                this.device = null;
                 let msg: IWebSocketGarfieldDeviceConnect = <IWebSocketGarfieldDeviceConnect>message;
                 if (msg.device_id) {
                     this.backendService.boardGet(msg.device_id)
@@ -503,6 +509,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             }
             case 'device_disconnect': {
                 this.testHardwareConnected = false;
+                this.device = null;
                 this.fmWarning(this.translate('flash_device_disconnected'));
                 break;
             }
@@ -514,6 +521,8 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             case 'tester_disconnect': {
                 this.fmWarning(this.translate('flash_tester_disconnected'));
                 this.garfieldTesterConnected = false;
+                this.testHardwareConnected = false;
+                this.device = null;
                 break;
             }
             case 'device_binary': {
@@ -539,12 +548,8 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             case 'device_configure': {
                 let msg: IWebSocketSuccessMessage = <IWebSocketSuccessMessage>message;
                 if (msg.status === 'success') {
-                    this.main_step = 8;
-                    this.fmSuccess(this.translate('flash_device_configure_success'));
-
                     this.main_step = 9;
                     this.uploadFirmware(this.firmwareMainVersion.download_link_bin_file);
-
                 } else if (msg.status === 'error') {
                     let errMsg: IWebSocketErrorMessage = <IWebSocketErrorMessage>message;
                     this.onConsoleError(errMsg.error);
@@ -556,7 +561,6 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                 let msg: IWebSocketSuccessMessage = <IWebSocketSuccessMessage>message;
                 if (msg.status === 'success') {
                     this.main_step = 6;
-                    this.fmSuccess(this.translate('flash_device_configure_success'));
                     this.configureDevice();
                 } else if (msg.status === 'error') {
                     let errMsg: IWebSocketGarfieldDeviceTestResult = <IWebSocketGarfieldDeviceTestResult>message;
@@ -606,7 +610,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             this.backendService.sendWebSocketMessage(msg);
             this.garfieldAppDetection = setTimeout(() => {
                 this.onDisconnectGarfield();
-            }, 10000);
+            }, 20000);
         }, 10000);
     }
 
