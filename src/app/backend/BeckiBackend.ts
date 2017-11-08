@@ -390,12 +390,12 @@ export abstract class BeckiBackend extends TyrionAPI {
 
         // Mac mini
         if (location && location.hostname.indexOf('test.byzance.dev') > -1) {
-            this.requestProxyServerUrl = 'http://test.byzance.dev/fetch/';
+            this.requestProxyServerUrl = 'http://test.byzance.dev:3000/fetch/';
         }
 
         // Linux
         if (location && location.hostname.indexOf('test2.byzance.dev') > -1) {
-            this.requestProxyServerUrl = 'http://test2.byzance.dev/fetch/';
+            this.requestProxyServerUrl = 'http://test2.byzance.dev:3000/fetch/';
         }
 
         // David 1 IP
