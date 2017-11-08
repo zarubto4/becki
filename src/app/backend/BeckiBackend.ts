@@ -388,6 +388,16 @@ export abstract class BeckiBackend extends TyrionAPI {
             this.requestProxyServerUrl = 'https://request.stage.byzance.cz/fetch/';
         }
 
+        // Mac mini
+        if (location && location.hostname.indexOf('test.byzance.dev') > -1) {
+            this.requestProxyServerUrl = 'http://test.byzance.dev/fetch/';
+        }
+
+        // Linux
+        if (location && location.hostname.indexOf('test2.byzance.dev') > -1) {
+            this.requestProxyServerUrl = 'http://test2.byzance.dev/fetch/';
+        }
+
         // David 1 IP
         // this.host = "192.168.65.30:9000";
         // this.host = "192.168.65.137:9000";
