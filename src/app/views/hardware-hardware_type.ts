@@ -267,10 +267,6 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
         });
     }
 
-    onCProgramClick(cprogramId: string): void {
-        this.navigate([cprogramId]);
-    }
-
     onCProgramDefaultSetMainClick(version: ICProgramVersionShortDetail) {
         this.modalService.showModal(new ModalsSetAsMainModel(this.translate('label_default_c_program_setting'), version.version_name)).then((success) => {
             if (success) {

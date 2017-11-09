@@ -345,7 +345,7 @@
                     <tr *ngFor="let version of typeOfBoard.main_test_c_program.program_versions">
                         <!-- NAME -->
                         <td class="vert-align bold">
-                            <a (click)="onCProgramClick(typeOfBoard.main_test_c_program.id)">
+                            <a [routerLink]="[typeOfBoard.main_test_c_program.id]">
                                 {{version.version_name}}
                             </a>
                         </td>
