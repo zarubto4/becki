@@ -139,6 +139,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             this.blockoController.registerService(new Blocks.FetchService());
             this.blockoController.registerService(new Blocks.XmlApiService());
             this.blockoController.registerService(new Blocks.RestApiService());
+            this.blockoController.registerService(new Blocks.CronService());
 
             /*
              *
