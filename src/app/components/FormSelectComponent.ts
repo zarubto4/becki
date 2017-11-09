@@ -103,18 +103,26 @@ export class FormSelectComponent {
         if (option) {
             this._options = option;
             if (this.pickFirstOption || option.length === 1) {
+
                 let toPick: number = 0;
 
                 if (this.regexFirstOption) {
                     toPick = option.findIndex(item => {
                         if (item.label.match(this.regexFirstOption)) {
-                            // console.log(item);
                             return true;
                         }
                     });
                 }
-                this.selectedValue = option[toPick].value;
-                this.control.setValue(option[toPick].value);
+
+                if (toPick === -1) {
+                    this.selectedValue = option[0].value;
+                    this.control.setValue(option[0].value);
+                } else {
+                    this.selectedValue = option[toPick].value;
+                    this.control.setValue(option[toPick].value);
+                }
+
+
             }
         }
     }

@@ -351,7 +351,15 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
 
 
     onUpdateProcedureCancelClick(procedure: IActualizationProcedureShortDetail): void {
-
+        this.backendService.actualizationProcedureCancel(procedure.id)
+            .then(() => {
+                this.unblockUI();
+                this.onFilterActualizationProcedure();
+            })
+            .catch((reason) => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+            });
     }
 
     onUpdateProcedureUpdateClick(procedure: IActualizationProcedureShortDetail): void {

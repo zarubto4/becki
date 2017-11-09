@@ -1143,6 +1143,7 @@ export class StaticTranslation {
                 'label_bootloader_version': 'Version',
                 'label_last_seen_unknow': '(Unknown)',
                 'label_update_to': 'Update to',
+                'label_update_in_que': 'Update in Que',
                 'label_developer_settings': 'Developer settings',
                 'label_port': 'Port',
                 'label_alerts': 'Alerts',
@@ -1174,6 +1175,7 @@ export class StaticTranslation {
                 'label_not_set_none': 'none',
                 'label_you_can_set': '(You can set that)',
                 'label_bootloader_not_supported': 'Backend has not set Bootloader for this type od Board',
+                'label_bootloader_database_not_recognize': 'No available record about actual Bootloader version on Hardware ',
                 'label_bootloader_up_to_date': 'Hardware has latest version',
                 'label_firmware': 'Firmware',
                 'label_backup': 'Backup',
@@ -1675,6 +1677,7 @@ export class StaticTranslation {
 
                 'table_name': 'Name',
                 'table_description': 'Description',
+                'table_lib_version': 'Library Version',
                 'table_author': 'Author',
                 'table_status': 'Status',
                 'table_actions': 'Actions',

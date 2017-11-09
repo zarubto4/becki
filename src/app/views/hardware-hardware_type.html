@@ -87,61 +87,61 @@
             </div>
         </div>
         <div>
-            <div class="table-scrollable">
-                <table class="table table-hover">
+            <div>
+                <table class="table table-condensed table-hover">
                     <thead>
-                    <tr>
-                        <th class="col col-lg-1 center-align ">{{'table_id'|bkTranslate:this}}</th>
-                        <th></th>
-                        <th class="col col-lg-2 center-align ">{{'table_name'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2 center-align ">{{'table_identifier'|bkTranslate:this}}</th>
-                        <th class="col col-lg-3 center-align ">{{'table_description'|bkTranslate:this}}</th>
-                        <th class="col col-lg-3 center-align ">{{'table_change_notes'|bkTranslate:this}}</th>
-                        <th class="col col-lg-2 center-align text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
-                    </tr>
+                        <tr>
+                            <th class="col col-lg-1 center-align ">{{'table_id'|bkTranslate:this}}</th>
+                            <th></th>
+                            <th class="col col-lg-2 center-align ">{{'table_name'|bkTranslate:this}}</th>
+                            <th class="col col-lg-2 center-align ">{{'table_identifier'|bkTranslate:this}}</th>
+                            <th class="col col-lg-3 center-align ">{{'table_description'|bkTranslate:this}}</th>
+                            <th class="col col-lg-3 center-align ">{{'table_change_notes'|bkTranslate:this}}</th>
+                            <th class="col col-lg-2 center-align text-right">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr *ngFor="let bootloader of typeOfBoard.boot_loaders">
-                        <td class="vert-align no-wrap"><strong>{{bootloader.id.substr(0,8)}}</strong> </td>
-                        <!-- Main Mark - Only for settings for Type of Board -->
-                        <td class="vert-align">
-                             <span class="icon-hint-wraper green" *ngIf="bootloader.main_bootloader">
-                                    <i class="fa fa-lg fa-flag font-green-jungle"></i>
-                                    <span class="hint">{{'main_version'|bkTranslateTable:this:'version_status'}}</span>
-                            </span>
-                        </td>
-                        <td class="vert-align no-wrap">{{bootloader.name}}</td>
-                        <td class="vert-align no-wrap">{{bootloader.version_identificator}}</td>
-                        <td class="vert-align no-wrap">{{bootloader.description.substr(0, 32)}}<span *ngIf="bootloader.description.length > 32">...</span></td>
-                        <td class="vert-align no-wrap">{{bootloader.changing_note.substr(0, 32)}}<span *ngIf="bootloader.changing_note.length > 32">...</span></td>
+                        <tr *ngFor="let bootloader of typeOfBoard.boot_loaders">
+                            <td class="vert-align no-wrap"><strong>{{bootloader.id.substr(0,8)}}</strong> </td>
+                            <!-- Main Mark - Only for settings for Type of Board -->
+                            <td class="vert-align">
+                                 <span class="icon-hint-wraper green" *ngIf="bootloader.main_bootloader">
+                                        <i class="fa fa-lg fa-flag font-green-jungle"></i>
+                                        <span class="hint">{{'main_version'|bkTranslateTable:this:'version_status'}}</span>
+                                </span>
+                            </td>
+                            <td class="vert-align no-wrap">{{bootloader.name}}</td>
+                            <td class="vert-align no-wrap">{{bootloader.version_identificator}}</td>
+                            <td class="vert-align no-wrap">{{bootloader.description.substr(0, 32)}}<span *ngIf="bootloader.description.length > 32">...</span></td>
+                            <td class="vert-align no-wrap">{{bootloader.changing_note.substr(0, 32)}}<span *ngIf="bootloader.changing_note.length > 32">...</span></td>
 
-                        <td class="vert-align text-right no-wrap">
-                            <style type="text/css">
-                                table tr button { opacity:0.05;}
-                                table tr:hover button { opacity:1 }
-                            </style>
+                            <td class="vert-align text-right no-wrap">
+                                <style type="text/css">
+                                    table tr button { opacity:0.05;}
+                                    table tr:hover button { opacity:1 }
+                                </style>
 
 
-                            <a *ngIf="bootloader.file_path" href="{{bootloader.file_path}}">
-                                <button title="{{'label_bootloader_download_file'|bkTranslate:this}}" class="btn btn-icon-only blue">
-                                    <i class="fa fa-cloud-download"></i>
+                                <a *ngIf="bootloader.file_path" href="{{bootloader.file_path}}">
+                                    <button title="{{'label_bootloader_download_file'|bkTranslate:this}}" class="btn btn-icon-only blue">
+                                        <i class="fa fa-cloud-download"></i>
+                                    </button>
+                                </a>
+
+                                <button *ngIf="typeOfBoard.bootloader_edit_permission" title="{{'label_type_of_board_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onBootloaderEditClick(bootloader)">
+                                    <i class="fa fa-cog"></i>
                                 </button>
-                            </a>
-
-                            <button *ngIf="typeOfBoard.bootloader_edit_permission" title="{{'label_type_of_board_properties'|bkTranslate:this}}" class="btn btn-icon-only blue" (click)="onBootloaderEditClick(bootloader)">
-                                <i class="fa fa-cog"></i>
-                            </button>
-                            <button *ngIf="typeOfBoard.bootloader_edit_permission && !bootloader.main_bootloader && bootloader.file_path" title="{{'label_bootloader_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!bootloader.update_permission" (click)="onBootloaderSetMainClick(bootloader)">
-                                <i class="fa fa-flag"></i>
-                            </button>
-                            <button *ngIf="typeOfBoard.bootloader_edit_permission && !bootloader.file_path" title="{{'label_bootloader_upload_file'|bkTranslate:this}}" class="btn btn-icon-only orange" [disabled]="!bootloader.update_permission" (click)="onBootloaderUpdateFile(bootloader)">
-                                <i class="fa fa-file-code-o"></i>
-                            </button>
-                            <button *ngIf="typeOfBoard.bootloader_edit_permission" title="{{'label_bootloader_remove'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onBootloaderDeleteClick(bootloader)">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
+                                <button *ngIf="typeOfBoard.bootloader_edit_permission && !bootloader.main_bootloader && bootloader.file_path" title="{{'label_bootloader_set_as_main'|bkTranslate:this}}" class="btn btn-icon-only yellow" [disabled]="!bootloader.update_permission" (click)="onBootloaderSetMainClick(bootloader)">
+                                    <i class="fa fa-flag"></i>
+                                </button>
+                                <button *ngIf="typeOfBoard.bootloader_edit_permission && !bootloader.file_path" title="{{'label_bootloader_upload_file'|bkTranslate:this}}" class="btn btn-icon-only orange" [disabled]="!bootloader.update_permission" (click)="onBootloaderUpdateFile(bootloader)">
+                                    <i class="fa fa-file-code-o"></i>
+                                </button>
+                                <button *ngIf="typeOfBoard.bootloader_edit_permission" title="{{'label_bootloader_remove'|bkTranslate:this}}" class="btn btn-icon-only red" (click)="onBootloaderDeleteClick(bootloader)">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -189,8 +189,8 @@
                 <span class="font-color-neutral-dark bold">{{typeOfBoard.main_c_program.description}}</span>
             </div>
 
-            <div *ngIf="(typeOfBoard && typeOfBoard.main_c_program.program_versions.length)" class="table-scrollable">
-                <table class="table table-hover">
+            <div *ngIf="(typeOfBoard && typeOfBoard.main_c_program.program_versions.length)">
+                <table class="table table-condensed table-hover">
                     <thead>
                     <tr>
                         <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
@@ -329,8 +329,8 @@
                 <span class="font-color-neutral-dark bold">{{typeOfBoard.main_test_c_program.description}}</span>
             </div>
 
-            <div *ngIf="(typeOfBoard && typeOfBoard.main_test_c_program.program_versions.length)" class="table-scrollable">
-                <table class="table table-hover">
+            <div *ngIf="(typeOfBoard && typeOfBoard.main_test_c_program.program_versions.length)">
+                <table class="table table-condensed table-hover">
                     <thead>
                     <tr>
                         <th class="col col-lg-2">{{'table_name'|bkTranslate:this}}</th>
@@ -456,8 +456,8 @@
             </div>
         </div>
         <div>
-            <div *ngIf="(typeOfBoard && typeOfBoard.batchs.length)" class="table-scrollable">
-                <table class="table table-hover">
+            <div *ngIf="(typeOfBoard && typeOfBoard.batchs.length)">
+                <table class="table table-condensed table-hover">
                     <thead>
                     <tr>
                         <th class="col col-lg-2">{{'table_revision'|bkTranslate:this}}</th>
