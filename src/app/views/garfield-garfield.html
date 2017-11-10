@@ -123,10 +123,10 @@
                             <h4 *ngIf="firmwareTestMainVersion && firmwareTestMainVersion && bootLoader"   class="font-green-jungle"><i class="fa fa-code"></i> {{'label_c_programs'|bkTranslate:this}}</h4>
                             <div>
                                 <strong>{{'label_default_firmware'|bkTranslate:this}}</strong>
-                                <span *ngIf="!firmwareTestMainVersion" class="font-red-flamingo bold">
+                                <span *ngIf="!firmwareMainVersion" class="font-red-flamingo bold">
                                     (Not set!) <i class="fa fa-times"></i>
                                 </span>
-                                <span *ngIf="firmwareTestMainVersion" class="font-green-jungle bold">
+                                <span *ngIf="firmwareMainVersion" class="font-green-jungle bold">
                                     (Set) <i class="fa  fa-check"></i>
                                 </span>
                             </div>
@@ -269,7 +269,7 @@
                 </div>
                 <div class="portlet-body">
                     <form [formGroup]="productionBatchForm">
-                        <bk-form-select [control]="productionBatchForm.controls['batch']" label="{{'label_producer'|bkTranslate:this}}" [options]="batchOptions"></bk-form-select>
+                        <bk-form-select [control]="productionBatchForm.controls['batch']" [label]="'label_producer'|bkTranslate:this" [options]="batchOptions"></bk-form-select>
                     </form>
                 </div>
             </div>

@@ -218,6 +218,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                         continue;
                     }
 
+
                     if (this.typeOfBoard.main_test_c_program.program_versions[key].main_mark) {
                         this.firmwareTestMainVersion = this.typeOfBoard.main_test_c_program.program_versions[key];
                         break;

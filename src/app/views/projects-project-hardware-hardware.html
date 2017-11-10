@@ -281,22 +281,6 @@
                                             </span>
                                         </div>
                                     </div>
-
-                                    <div>
-                                        <div>
-                                            <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_actual_program_name'|bkTranslate:this}}:
-                                            <a *ngIf="device.actual_c_program_name" class="bold"
-                                               [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_id]">{{device.actual_c_program_name}}</a>
-                                            <span *ngIf="!device.actual_c_program_name" class="font-grey-mint bold">{{'label_alerts'|bkTranslate:this}}</span>
-                                        </div>
-                                        <div>
-                                            <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_actual_program_version'|bkTranslate:this}}:
-                                            <a *ngIf="device.actual_c_program_version_name" class=" bold"
-                                               [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_id, { version: device.actual_c_program_version_id }]">{{device.actual_c_program_version_name}}</a>
-                                            <span *ngIf="!device.actual_c_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
-                                        </div>
-                                    </div>
-                                    <br>
                                     <div>
                                         <div>
                                             <div>
@@ -307,11 +291,9 @@
                                             </div>
                                             <div>
                                                 <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_actual_program_version'|bkTranslate:this}}:
-                                                <a *ngIf="device.actual_c_program_version_name"
-                                                   class="font-grey-mint bold"
+                                                <a *ngIf="device.actual_c_program_version_name" class="font-grey-mint bold"
                                                    [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_id, { version: device.actual_c_program_version_id }]">{{device.actual_c_program_version_name}}</a>
-                                                <span *ngIf="!device.actual_c_program_version_name"
-                                                      class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
+                                                <span *ngIf="!device.actual_c_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                             </div>
                                         </div>
                                         <hr>

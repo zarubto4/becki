@@ -827,6 +827,7 @@ export class StaticTranslation {
                 'table_revision': 'Revision',
                 'table_production_batch': 'Production Batch',
                 'table_mac_range': 'MacAddress Range',
+                'table_latest_used': 'Latest Used',
                 'table_ean': 'Ean Code',
                 'table_assembly_time': 'Assembly Date',
 

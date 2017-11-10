@@ -463,6 +463,7 @@
                         <th class="col col-lg-2">{{'table_revision'|bkTranslate:this}}</th>
                         <th class="col col-lg-2">{{'table_production_batch'|bkTranslate:this}}</th>
                         <th class="col col-lg-3">{{'table_mac_range'|bkTranslate:this}}</th>
+                        <th class="col col-lg-2">{{'table_latest_used'|bkTranslate:this}}</th>
                         <th class="col col-lg-2">{{'table_ean'|bkTranslate:this}}</th>
                         <th class="col col-lg-2">{{'table_assembly_time'|bkTranslate:this}}</th>
                         <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
@@ -481,7 +482,18 @@
                         </td>
 
                         <td class="vert-align">
+                            {{batch.mac_address_start}} - {{batch.mac_address_end}} <br>
                             {{batch.mac_address_start.toString(16)}} - {{batch.mac_address_end.toString(16)}}
+                        </td>
+
+                        <td class="vert-align">
+                            <template [ngIf]="batch.latest_used_mac_address">
+                                {{batch.latest_used_mac_address}} <br>
+                                {{batch.latest_used_mac_address.toString(16)}}
+                            </template>
+                            <template [ngIf]="!batch.latest_used_mac_address">
+                                ?????????????????
+                            </template>
                         </td>
 
                         <td class="vert-align">
@@ -519,7 +531,7 @@
                 </table>
             </div>
             <h3 *ngIf="!typeOfBoard.batchs" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
-            <div *ngIf="typeOfBoard.batchs && typeOfBoard.batchs == 0" class="list-no-items">
+            <div *ngIf="typeOfBoard.batchs && typeOfBoard.batchs.length == 0" class="list-no-items">
                 <p class="list-no-items__main-label">{{'label_no_batch'|bkTranslate:this}}</p>
                 <p class="list-no-items__sub-label">{{'label_no_batch_comment'|bkTranslate:this}} </p>
                 <p>
