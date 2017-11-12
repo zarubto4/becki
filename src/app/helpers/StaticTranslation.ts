@@ -598,6 +598,7 @@ export class StaticTranslation {
                 'label_description': 'Description',
                 'label_product': 'Financial Product',
                 'label_byzance_hardware': 'Byzance<strong class="font-color-hardware">HARDWARE</strong>',
+                'label_byzance_hardware_update': 'Byzance<strong class="font-color-hardware">HARDWARE</strong> Updates',
                 'label_byzance_blocko': 'Byzance<strong class="font-color-blocko">BLOCKO</strong>',
                 'label_devices_count': 'Devices count',
                 'label_Status': 'Status',
@@ -1128,6 +1129,7 @@ export class StaticTranslation {
                 'main_subtitle': 'Embedded Hardware Settings',
                 'tab_overview': 'Overview',
                 'tab_update': 'Update progress',
+                'tab_developer': 'Developer Settings',
 
                 'label_name': 'Name',
                 'label_version': 'Version',
@@ -1136,6 +1138,7 @@ export class StaticTranslation {
                 'label_producer': 'Manufacturer',
                 'label_revision': 'Revision',
                 'label_id': 'ID',
+                'label_web_link': 'Hardware Web view',
                 'label_ethernet_address': 'Ethernet MAC address',
                 'label_wifi_address': 'Wi-Fi MAC address',
                 'label_device_status': 'Device status',

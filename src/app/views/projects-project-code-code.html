@@ -180,7 +180,12 @@
                                 <!-- STATUS -->
                                 <td class="vert-align">
 
-                                    <span class="icon-hint-wraper red" *ngIf="version.status=='hardware_unstable'">
+                                    <span class="icon-hint-wraper red" *ngIf="version.status=='server_was_offline'">
+                                        <i class="fa fa-exclamation-triangle font-red-mint"></i>
+                                        <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
+                                     </span>
+
+                                    <span class="icon-hint-wraper red" *ngIf="version.status=='json_code_is_broken'">
                                         <i class="fa fa-exclamation-triangle font-red-mint"></i>
                                         <span class="hint">{{version.status|bkTranslateTable:this:'version_status'}}</span>
                                      </span>

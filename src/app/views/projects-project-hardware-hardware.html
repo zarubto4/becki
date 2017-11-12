@@ -47,6 +47,9 @@
                         <li [class.active]="hardwareTab == 'update'">
                             <a class="cursor-pointer" (click)="onToggleHardwareTab('update')">{{'tab_update'|bkTranslate:this}}</a>
                         </li>
+                        <li [class.active]="hardwareTab == 'developer'">
+                            <a class="cursor-pointer" (click)="onToggleHardwareTab('developer')">{{'tab_developer'|bkTranslate:this}}</a>
+                        </li>
                         <!--li [class.active]="hardwareTab == 'debug'">
                             <a class="cursor-pointer" (click)="onToggleHardwareTab('command_center')">Advance Command center</a>
                         </li-->
@@ -141,7 +144,7 @@
                             <div class="col-md-5">
 
                                 <div>
-                                    <H4>{{'label_settings'|bkTranslate:this}}</H4>
+                                    <H4>{{'label_info'|bkTranslate:this}}</H4>
                                     <br>
                                     <ul>
                                         <div>
@@ -165,7 +168,7 @@
                                                 </span>
 
                                                 <!-- Update Bootlaoder on Hardware - There is condition - if user make update - we must hide this button [TZ]-->
-                                                <button *ngIf="device.available_bootloader_id != device.bootloader_update_in_progress_bootloader_id" class="btn red btn-sm" (click)="onUpdateBootloaderClick()">
+                                                <button *ngIf="device.available_bootloader_id != device.bootloader_update_in_progress_bootloader_id && !(device.actual_bootloader_id == device.available_bootloader_id)" class="btn red btn-sm" (click)="onUpdateBootloaderClick()">
                                                         <i class="fa fa-rocket"></i> {{'label_update_to'|bkTranslate:this}} <strong>{{device.available_bootloader_version_name}}</strong>
                                                 </button>
 
@@ -175,55 +178,23 @@
                                             </ul>
                                         </div>
                                         <br>
-                                        <div>
-                                            <span class="font-blue-dark">
-                                                <i class="fa fa-lg fa-bell"></i><span>&nbsp;&nbsp;&nbsp;{{'label_developer_settings'|bkTranslate:this}}</span>
-                                            </span>
-                                            <br>
-                                            <br>
-                                            <div class="row">
-                                                <div class="col-md-10">
-                                                    <ul>
-                                                        <table class="table table-hover table-light">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>
-                                                                        <span class="font-grey-mint"> Analytics for Developer </span>
-                                                                    </td>
-                                                                    <td>
-                                                                        <i *ngIf="!device.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('developer_kit',!device.developer_kit)"></i>
-                                                                        <i *ngIf="device.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('developer_kit',!device.developer_kit)"></i>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td><span class="font-grey-mint"> Synchronize always with database </span></td>
-                                                                    <td>
-                                                                        <i *ngIf="device.database_synchronize" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('database_synchronize',!device.database_synchronize)"></i>
-                                                                        <i *ngIf="!device.database_synchronize" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('database_synchronize',!device.database_synchronize)"></i>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td><span class="font-grey-mint"> Web View for Developers </span></td>
-                                                                    <td>
-                                                                        <i *ngIf="device.web_view" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('web_view', !device.web_view)"></i>
-                                                                        <i *ngIf="!device.web_view" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('web_view',!device.web_view)"></i>
-                                                                        &nbsp;&nbsp;<span class="font-grey-mint">{{'label_port'|bkTranslate:this}}:</span><span *ngIf="device.web_port" class="font-grey-mint bold">{{device.web_port}}</span>&nbsp;&nbsp;
-                                                                        <i class="fa fa-cog cursor-hand" style="vertical-align: middle; font-size: 1.2em;" (click)="onEditParameterValue_Number_Click('Change Port:', 'web_port' ,device.web_port)"></i>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
+
                                         <br>
                                         <div *ngIf="device.web_view">
-                                            <span class="font-blue-dark">
-                                                <i class="fa fa-lg fa-link"></i>&nbsp;&nbsp;&nbsp;<span class="font-grey-mint">Hardware Web view: </span>
-                                                <span  *ngIf="!device.ip_address" class="bold"><i class="fa fa-spinner fa-spin"></i></span>
-                                                <span  *ngIf="device.ip_address"><a target="_blank" href="http://{{device.ip_address}}:{{device.web_port}}" class="bold">http://{{device.ip_address}}:{{device.web_port}}</a> (working only on local network)</span>
+                                             <span class="font-blue-dark">
+                                                <i class="fa fa-lg fa-link"></i><span>&nbsp;&nbsp; {{'label_web_link'|bkTranslate:this}}</span>
                                             </span>
+                                            <br>
+                                            <br>
+                                            <ul>
+                                                <span class="font-blue-dark">
+                                                    <span class="font-grey-mint">Link: </span>
+                                                    <span  *ngIf="!device.ip_address" class="bold"><i class="fa fa-spinner fa-spin"></i></span>
+                                                    <span  *ngIf="device.ip_address"><a target="_blank" href="http://{{device.ip_address}}:{{device.web_port}}" class="bold">http://{{device.ip_address}}:{{device.web_port}}</a></span>
+                                                    <br>
+                                                    <span>(working only on same local network)</span>
+                                                </span>
+                                            </ul>
                                         </div>
                                     </ul>
 
@@ -350,7 +321,7 @@
 
 
                                     <div *ngIf="device.server!=null">
-                                        <strong class="font-color-cloud">CLOUD</strong>{{'label_main_server'|bkTranslate:this}}:
+                                        <strong class="font-color-cloud">CLOUD</strong> {{'label_main_server'|bkTranslate:this}}:
                                         <span *ngIf="device.server.personal_server_name" class="font-grey-mint bold">{{device.server_name}}</span>
                                         <span *ngIf="!device.server.personal_server_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
 
@@ -411,6 +382,62 @@
                                  </div>
                             </div>
 
+                        </div>
+                    </div>
+                </div>
+
+                <div *ngIf="hardwareTab == 'developer'">
+                    <div *ngIf="device && typeOfBoard" class="row">
+                        <div class="col-md-12">
+
+                            <div class="col-md-6">
+                                <H4>{{'label_settings'|bkTranslate:this}}</H4>
+                                <br>
+                                <div>
+                                   <span class="font-blue-dark">
+                                       <i class="fa fa-lg fa-bell"></i><span>&nbsp;&nbsp;&nbsp;{{'label_developer_settings'|bkTranslate:this}}</span>
+                                   </span>
+                                    <br>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-11">
+                                            <ul>
+                                                <table class="table table-hover table-light">
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <span class="font-grey-mint"> Analytics for Developer </span>
+                                                        </td>
+                                                        <td>
+                                                            <i *ngIf="!device.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('developer_kit',!device.developer_kit)"></i>
+                                                            <i *ngIf="device.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('developer_kit',!device.developer_kit)"></i>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><span class="font-grey-mint"> Synchronize always with database </span></td>
+                                                        <td>
+                                                            <i *ngIf="device.database_synchronize" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('database_synchronize',!device.database_synchronize)"></i>
+                                                            <i *ngIf="!device.database_synchronize" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('database_synchronize',!device.database_synchronize)"></i>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><span class="font-grey-mint"> Web View for Developers </span></td>
+                                                        <td>
+                                                            <i *ngIf="device.web_view" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('web_view', !device.web_view)"></i>
+                                                            <i *ngIf="!device.web_view" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('web_view',!device.web_view)"></i>
+                                                            &nbsp;&nbsp;<span class="font-grey-mint">{{'label_port'|bkTranslate:this}}:</span><span *ngIf="device.web_port" class="font-grey-mint bold">{{device.web_port}}</span>&nbsp;&nbsp;
+                                                            <i class="fa fa-cog cursor-hand" style="vertical-align: middle; font-size: 1.2em;" (click)="onEditParameterValue_Number_Click('Change Port:', 'web_port' ,device.web_port)"></i>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                            </div>
                         </div>
                     </div>
                 </div>

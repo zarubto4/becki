@@ -56,14 +56,14 @@
                 <div class="portlet-title">
                     <div class="becki-caption">
                         <span class="font-blue-dark">
-                            <i class="fa fa-fw fa-cloud"></i>
-            <span [innerHTML]="'label_byzance_cloud'|bkTranslate:this"></span>
+                            <i class="fa fa-fw fa-microchip"></i>
+                            <span [innerHTML]="'label_byzance_hardware_update'|bkTranslate:this"></span>
                         </span>
                     </div>
                 </div>
                 <div>
-                    {{'label_instances_count'|bkTranslate:this}}: <strong>{{project.instancies.length}}</strong><br> {{'label_Status'|bkTranslate:this}}:
-                    <strong>{{count("instances_online")}}</strong> <span class="font-green-jungle">{{'label_online'|bkTranslate:this}}</span> / <strong>{{count("instances_offline")}}</strong> <span class="font-red-flamingo">{{'label_offline'|bkTranslate:this}}</span>
+                    {{'label_devices_count'|bkTranslate:this}}: <strong>{{project.boards.length}}</strong><br> {{'label_Status'|bkTranslate:this}}:
+                    <strong>{{count("devices_online")}}</strong> <span class="font-green-jungle">{{'label_online'|bkTranslate:this}}</span> / <strong>{{count("devices_offline")}}</strong> <span class="font-red-flamingo">{{'label_offline'|bkTranslate:this}}</span>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -102,9 +102,7 @@
                 </div>
                 <div class="clearfix"></div>
             </div>
-        </div>
 
-        <div class="col-md-4">
             <div class="portlet portlet light bordered">
                 <div class="portlet-title">
                     <div class="becki-caption">
@@ -115,7 +113,25 @@
                     </div>
                 </div>
                 <div>
-                     {{'label_programs_count'|bkTranslate:this}}: <strong>{{count("grid_programs")}}</strong> <span [innerHTML]="'label_in_projects'|bkTranslate:this:project.m_projects.length"></span><br> {{'label_widgets_count'|bkTranslate:this}}: <strong>{{count("grid_widgets")}}</strong> <span [innerHTML]="'label_in_group'|bkTranslate:this:project.type_of_widgets.length"></span>
+                    {{'label_programs_count'|bkTranslate:this}}: <strong>{{count("grid_programs")}}</strong> <span [innerHTML]="'label_in_projects'|bkTranslate:this:project.m_projects.length"></span><br> {{'label_widgets_count'|bkTranslate:this}}: <strong>{{count("grid_widgets")}}</strong> <span [innerHTML]="'label_in_group'|bkTranslate:this:project.type_of_widgets.length"></span>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="portlet portlet light bordered">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark">
+                            <i class="fa fa-fw fa-cloud"></i>
+            <span [innerHTML]="'label_byzance_cloud'|bkTranslate:this"></span>
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    {{'label_instances_count'|bkTranslate:this}}: <strong>{{project.instancies.length}}</strong><br> {{'label_Status'|bkTranslate:this}}:
+                    <strong>{{count("instances_online")}}</strong> <span class="font-green-jungle">{{'label_online'|bkTranslate:this}}</span> / <strong>{{count("instances_offline")}}</strong> <span class="font-red-flamingo">{{'label_offline'|bkTranslate:this}}</span>
                 </div>
                 <div class="clearfix"></div>
             </div>
