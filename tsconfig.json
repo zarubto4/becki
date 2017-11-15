@@ -8,7 +8,7 @@
     "sourceMap": true,
     "importHelpers": true,
     "noEmitHelpers": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "lib": ["es6", "dom"]
   },
   "exclude": [

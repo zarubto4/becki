@@ -420,15 +420,6 @@
                                                             <i *ngIf="!device.database_synchronize" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('database_synchronize',!device.database_synchronize)"></i>
                                                         </td>
                                                     </tr>
-                                                    <tr>
-                                                        <td><span class="font-grey-mint"> Web View for Developers </span></td>
-                                                        <td>
-                                                            <i *ngIf="device.web_view" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('web_view', !device.web_view)"></i>
-                                                            <i *ngIf="!device.web_view" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click('web_view',!device.web_view)"></i>
-                                                            &nbsp;&nbsp;<span class="font-grey-mint">{{'label_port'|bkTranslate:this}}:</span><span *ngIf="device.web_port" class="font-grey-mint bold">{{device.web_port}}</span>&nbsp;&nbsp;
-                                                            <i class="fa fa-cog cursor-hand" style="vertical-align: middle; font-size: 1.2em;" (click)="onEditParameterValue_Number_Click('Change Port:', 'web_port' ,device.web_port)"></i>
-                                                        </td>
-                                                    </tr>
                                                     </tbody>
                                                 </table>
                                             </ul>
@@ -437,6 +428,44 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
+                                <H4>{{'label_core_configuration'|bkTranslate:this}}</H4>
+                                <span [innerHtml]="'label_core_configuration_comment'|bkTranslate:this"></span>
+                                <br>
+                                <div>
+                                   <span class="font-blue-dark">
+                                       <i class="fa fa-lg fa-bell"></i><span>&nbsp;&nbsp;&nbsp;{{'label_core_registers'|bkTranslate:this}}</span>
+                                   </span>
+                                    <br>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-11">
+                                            <ul>
+                                                <table class="table table-hover table-light">
+                                                    <tbody *ngIf="configParameters">
+                                                        <tr *ngFor="let conf of configParameters">
+                                                            <td>
+                                                                <span class="font-grey-mint">{{conf.key}}</span>
+                                                            </td>
+                                                            <td>
+                                                                <div *ngIf="conf.type == 'string'">
+                                                                    <span class="font-grey-mint bold">{{conf.value}}</span>
+                                                                </div>
+                                                                <div *ngIf="conf.type == 'number'">
+                                                                      <span class="font-grey-mint bold">{{conf.value}}</span>
+                                                                      <i class="fa fa-cog cursor-hand" style="vertical-align: middle; font-size: 1.2em;" (click)="onEditParameterValue_Number_Click('Change Register:', conf.key ,conf.value)"></i>
+                                                                </div>
+                                                                <div *ngIf="conf.type == 'boolean'">
+                                                                    <i *ngIf="conf.value" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click(conf.key, !conf.value)"></i>
+                                                                    <i *ngIf="!conf.value" class="fa fa-toggle-off font-grey-mint cursor-hand"  style="vertical-align: middle; font-size: 1.8em;" (click)="onEditParameterValue_Boolean_Click(conf.key, !conf.value)"></i>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

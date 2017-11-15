@@ -17,6 +17,12 @@ import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
 import { ModalsDeviceEditDeveloperParameterValueModel } from '../modals/device-edit-developer-parameter-value';
 import { ModalsPictureUploadModel } from '../modals/picture-upload';
 
+export interface ConfigParameters {
+    key: string;
+    value: any;
+    type: any;
+}
+
 @Component({
     selector: 'bk-view-projects-project-hardware-hardware',
     templateUrl: './projects-project-hardware-hardware.html'
@@ -35,6 +41,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
     hardwareTab: string = 'overview';
+    configParameters: ConfigParameters[];
 
     constructor(injector: Injector) {
         super(injector);
@@ -68,6 +75,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         this.backendService.boardGet(this.hardwareId) // TODO [permission]: Project.read_permission
             .then((board) => {
                 this.device = board;
+                this.config_array();
 
                 this.backendService.onlineStatus.subscribe(status => {
                     if (status.model === 'HomerServer' && this.device.server.id === status.model_id) {
@@ -76,6 +84,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 });
 
                 return this.backendService.typeOfBoardGet(board.type_of_board_id);
+
             })
             .then((typeOfBoard) => {
                 this.typeOfBoard = typeOfBoard;
@@ -85,6 +94,23 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 this.fmError(this.translate('label_cant_load_device'));
                 this.unblockUI();
             });
+    }
+
+    config_array(): void {
+
+        let configs: ConfigParameters[] = [];
+        for (let key in this.device.bootloader_core_configuration) {
+            if (true) {
+                configs.push({
+                    key: key,
+                    value: (<any>this.device.bootloader_core_configuration)[key],
+                    type: typeof ((<any>this.device.bootloader_core_configuration)[key])
+                });
+            }
+        }
+
+        this.configParameters = configs;
+
     }
 
     onEditClick(device: IBoardShortDetail): void {
@@ -168,6 +194,8 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
      * @param value
      */
     onEditParameterValue_Number_Click(parameter_user_description: string, parameter_type: string, value: number): void {
+
+        console.log("onEditParameterValue_Number_Click " + parameter_type + " value " + value);
 
         let model = new ModalsDeviceEditDeveloperParameterValueModel(this.device.id, parameter_user_description, value);
 
