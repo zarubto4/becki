@@ -8,6 +8,7 @@ import { Directive, ElementRef, Input, Output, EventEmitter, OnInit } from '@ang
 export interface DraggableEventParams {
     directive: DraggableDirective;
     data: any;
+    type: ('block'|'board'|'group');
     event: Event;
     ui: JQueryUI.DraggableEventUIParams;
 }
@@ -23,6 +24,9 @@ export class DraggableDirective implements OnInit {
 
     @Input('bkDraggableData')
     draggableData: any;
+
+    @Input('bkDraggableDataType')
+    draggableDataType: ('block'|'board'|'group');
 
     @Output('bkDraggableOnCreate')
     onCreate = new EventEmitter<DraggableEventParams>();
@@ -57,6 +61,7 @@ export class DraggableDirective implements OnInit {
         this.onCreate.emit({
             directive: this,
             data: this.draggableData,
+            type: this.draggableDataType,
             event: event,
             ui: ui
         });
@@ -66,6 +71,7 @@ export class DraggableDirective implements OnInit {
         this.onStart.emit({
             directive: this,
             data: this.draggableData,
+            type: this.draggableDataType,
             event: event,
             ui: ui
         });
@@ -75,6 +81,7 @@ export class DraggableDirective implements OnInit {
         this.onDrag.emit({
             directive: this,
             data: this.draggableData,
+            type: this.draggableDataType,
             event: event,
             ui: ui
         });
@@ -84,6 +91,7 @@ export class DraggableDirective implements OnInit {
         this.onStop.emit({
             directive: this,
             data: this.draggableData,
+            type: this.draggableDataType,
             event: event,
             ui: ui
         });

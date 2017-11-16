@@ -8,21 +8,10 @@ import { Component, OnInit, Injector, OnDestroy, ViewChild } from '@angular/core
 import { BaseMainComponent } from './BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
-import {
-    IProject,
-    IBProgram,
-    ITypeOfBlock,
-    IBlockoBlockVersion,
-    IBoardsForBlocko,
-    IBProgramVersion,
-    IBPair,
-    IMProject,
-    IMProgramSnapShot,
-    IMProjectSnapShot, IBlockoBlockVersionShortDetail, IBoardShortDetail,
-    IBProgramVersionShortDetail, IHardwareGroupIN, IMProjectShortDetailForBlocko, ICProgramVersionsShortDetailForBlocko,
-    ICProgramShortDetailForBlocko, ITypeOfBlockFilter, ITypeOfBlockList, IBlockoBlockShortDetail,
-    ITypeOfBlockShortDetail, IHardwareGroup
-} from '../backend/TyrionAPI';
+import { IProject, IBProgram, IBlockoBlockVersion, IBoardsForBlocko, IBProgramVersion, IBPair, IMProject, IMProgramSnapShot,
+    IMProjectSnapShot, IBlockoBlockVersionShortDetail, IBoardShortDetail, IBProgramVersionShortDetail,
+    IMProjectShortDetailForBlocko, ICProgramVersionsShortDetailForBlocko, ICProgramShortDetailForBlocko, ITypeOfBlockList,
+    IBlockoBlockShortDetail, ITypeOfBlockShortDetail, IHardwareGroup, IBoardGroup } from '../backend/TyrionAPI';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { DraggableEventParams } from '../components/DraggableDirective';
 import { ModalsBlockoAddHardwareModel } from '../modals/blocko-add-hardware';
@@ -31,7 +20,7 @@ import { BlockoTargetInterface, Blocks, Core } from 'blocko';
 import { Libs } from 'common-lib';
 import { ModalsVersionDialogModel } from '../modals/version-dialog';
 import { ModalsBlockoAddGridModel } from '../modals/blocko-add-grid';
-import { NullSafe, NullSafeDefault } from '../helpers/NullSafe';
+import { NullSafe } from '../helpers/NullSafe';
 import { ModalsBlockoVersionSelectModel } from '../modals/blocko-version-select';
 import { MonacoEditorLoaderService } from '../services/MonacoEditorLoaderService';
 import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
@@ -80,6 +69,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     boardById: { [id: string]: IBoardShortDetail } = {};
 
     selectedHardware: IHardwareGroup[] = [];
+
+    hwGroups: IBoardGroup[] = [];
 
     // grid:
 
@@ -327,50 +318,55 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
         // let blockoOffset = $(this.blocko.field.nativeElement).width();
 
-        if (
-            (dragOffset.top >= blockoOffset.top)
-            && (dragOffset.left >= blockoOffset.left)
-            && (dragOffset.top <= (blockoOffset.top + blockoHeight))
-            && (dragOffset.left <= (blockoOffset.left + blockoWidth))
-        ) {
+        if (dragOffset.top >= blockoOffset.top && dragOffset.left >= blockoOffset.left && dragOffset.top <= (blockoOffset.top + blockoHeight) && dragOffset.left <= (blockoOffset.left + blockoWidth)) {
+
             let x = dragOffset.left - blockoOffset.left;
             let y = dragOffset.top - blockoOffset.top;
 
-            if (params.data && params.data.id && this.blocksLastVersions[params.data.id]) {
+            switch (params.type) {
+                case 'block': {
+                    if (params.data && params.data.id && this.blocksLastVersions[params.data.id]) {
 
-                let wantedVersion = this.blocksLastVersions[params.data.id];
-                let wantedVersionName = params.data.id + '_' + wantedVersion.id;
+                        let wantedVersion = this.blocksLastVersions[params.data.id];
+                        let wantedVersionName = params.data.id + '_' + wantedVersion.id;
 
-                if (this.blocksCache[wantedVersionName]) {
-                    this.blockoView.addTsBlock(this.blocksCache[wantedVersionName].logic_json, this.blocksCache[wantedVersionName].design_json, x, y, params.data.id, wantedVersion.id);
-                } else {
-
-                    // TODO: make only one request
-                    this.backendService.blockoBlockVersionGet(wantedVersion.id)
-                        .then((bbv) => {
-                            this.blocksCache[wantedVersionName] = bbv;
+                        if (this.blocksCache[wantedVersionName]) {
                             this.blockoView.addTsBlock(this.blocksCache[wantedVersionName].logic_json, this.blocksCache[wantedVersionName].design_json, x, y, params.data.id, wantedVersion.id);
-                        })
-                        .catch(reason => {
-                            this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_blocko_version'), reason));
-                        });
+                        } else {
 
+                            // TODO: make only one request
+                            this.backendService.blockoBlockVersionGet(wantedVersion.id)
+                                .then((bbv) => {
+                                    this.blocksCache[wantedVersionName] = bbv;
+                                    this.blockoView.addTsBlock(this.blocksCache[wantedVersionName].logic_json, this.blocksCache[wantedVersionName].design_json, x, y, params.data.id, wantedVersion.id);
+                                })
+                                .catch(reason => {
+                                    this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_load_blocko_version'), reason));
+                                });
+                        }
+
+                    } else if (params.data && params.data.blockoName) {
+
+                        this.blockoView.addStaticBlock(params.data.blockoName, x, y);
+
+                    } else if (params.data && params.data.blockoTsCode) {
+
+                        this.blockoView.addTsBlock(params.data.blockoTsCode, params.data.blockoDesignJson, x, y);
+
+                    } else {
+                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_blocko_block')));
+                    }
+                    break;
                 }
-
-            } else if (params.data && params.data.blockoName) {
-
-                this.blockoView.addStaticBlock(params.data.blockoName, x, y);
-
-            } else if (params.data && params.data.blockoTsCode) {
-
-                this.blockoView.addTsBlock(params.data.blockoTsCode, params.data.blockoDesignJson, x, y);
-
-            } else {
-                this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_blocko_block')));
+                case 'board': {
+                    break;
+                }
+                case 'group': {
+                    break;
+                }
+                default: this.fmError(this.translate('flash_cant_add_blocko_block'));
             }
-
         }
-
     }
 
     onDragStart(params: DraggableEventParams) {
@@ -1136,11 +1132,13 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 public_programs: true,
                 project_id: this.projectId
             }),
-            this.backendService.bProgramGetAllDetailsForIntegration(this.projectId) // TODO [permission]: project.read_permission
+            this.backendService.bProgramGetAllDetailsForIntegration(this.projectId), // TODO [permission]: project.read_permission
+            this.backendService.boardGroupGetListFromProject(this.projectId)
         ])
-            .then((values: [ITypeOfBlockList, IBoardsForBlocko]) => {
+            .then((values: [ITypeOfBlockList, IBoardsForBlocko, IBoardGroup[]]) => {
                 let typeOfBlocks: ITypeOfBlockList = values[0];
                 let blockoDetails: IBoardsForBlocko = values[1];
+                this.hwGroups = values[2];
 
                 let projects: IMProjectShortDetailForBlocko[] = blockoDetails.m_projects;
 

@@ -56,7 +56,7 @@
                 </div>
 
                 <div [hidden]="connectionsTab != 'hardware'">
-                    <template ngIf="selectedHardware && selectedHardware.length">
+                    <template [ngIf]="selectedHardware && selectedHardware.length">
                         <div *ngFor="let hwGroup of selectedHardware;">
                             <div *ngIf="boardById[hwGroup.main_board_pair.board_id]" class="mt-element-ribbon border-green-seagreen bg-grey-steel">
                                 <div class="ribbon ribbon-shadow bg-green-seagreen font-white no-padding-left-right"><span class="ribbon-padding">{{boardById[hwGroup.main_board_pair.board_id].type_of_board_name}}</span>
@@ -70,7 +70,7 @@
                                     <i class="fa fa-plus-circle"></i> {{'btn_add_slave'|bkTranslate:this}}
                                 </button>
                                 <div class="ribbon-content no-padding-left-right no-padding-bottom padding-top-10">
-                                    <bk-c-program-version-selector [already_selected_c_program_id]="hwGroup.main_board_pair.c_program_version_id" [already_selected_c_program_id]="hwGroup.main_board_pair.c_program_version_id" (valueChanged)="hwCProgramVersionChanged(hwGroup.main_board_pair, $event)"
+                                    <bk-c-program-version-selector [already_selected_c_program_id]="hwGroup.main_board_pair.c_program_version_id" (valueChanged)="hwCProgramVersionChanged(hwGroup.main_board_pair, $event)"
                                         [cPrograms]="getCProgramsForBoardType(boardById[hwGroup.main_board_pair.board_id].type_of_board_id)"></bk-c-program-version-selector>
                                     <template ngIf="hwGroup.device_board_pairs">
                                         <div *ngFor="let board of hwGroup.device_board_pairs;" class="margin-left-15 margin-right-15">
@@ -83,7 +83,7 @@
                                                     <i class="fa fa-trash"></i>
                                                 </button>
                                                 <div class="ribbon-content no-padding-left-right no-padding-bottom padding-top-10">
-                                                    <bk-c-program-version-selector [already_selected_c_program_id]="board.c_pr" [already_selected_c_program_version_id]="board.c_program_version_id"  (valueChanged)="hwCProgramVersionChanged(board, $event)"
+                                                    <bk-c-program-version-selector [already_selected_c_program_id]="board.c_program_id" [already_selected_c_program_version_id]="board.c_program_version_id"  (valueChanged)="hwCProgramVersionChanged(board, $event)"
                                                         [cPrograms]="getCProgramsForBoardType(boardById[board.board_id].type_of_board_id)"></bk-c-program-version-selector>
                                                 </div>
                                             </div>
@@ -247,7 +247,7 @@
                             <div class="panel-collapse collapse" [class.in]="blockGroupsOpenToggle[staticBlocksGroup.id]">
                                 <div class="panel-body">
                                     <div *ngIf="staticBlocksGroup.blocks.length == 0" style="color: gray; text-align: center;">{{'label_no_blocks_in_group'|bkTranslate:this}}</div>
-                                    <div *ngFor="let block of staticBlocksGroup.blocks;" [bkDraggable]="draggableOptions" [bkDraggableData]="block" (bkDraggableOnStop)="onDragStop($event)"
+                                    <div *ngFor="let block of staticBlocksGroup.blocks;" [bkDraggable]="draggableOptions" [bkDraggableData]="block" [bkDraggableDataType]="'block'" (bkDraggableOnStop)="onDragStop($event)"
                                         (bkDraggableOnStart)="onDragStart($event)" class="blocko-block" [style.backgroundColor]="block.backgroundColor">
                                         <div class="blocko-block-mask"></div>
                                         <i class="fa fa-fw fa-cubes" style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
@@ -270,7 +270,7 @@
                                 <div class="panel-body">
                                     <div *ngIf="blocksType.blocko_blocks.length == 0" style="color: gray; text-align: center;">{{'label_no_blocks_in_group'|bkTranslate:this}}</div>
                                     <div *ngFor="let block of blocksType.blocko_blocks;" [style.background-color]="blocksColors[block.id]" [class.with-icon]="blocksIcons[block.id]"
-                                        [bkDraggable]="draggableOptions" [bkDraggableData]="block" (bkDraggableOnStop)="onDragStop($event)"
+                                        [bkDraggable]="draggableOptions" [bkDraggableData]="block" [bkDraggableDataType]="'block'" (bkDraggableOnStop)="onDragStop($event)"
                                         (bkDraggableOnStart)="onDragStart($event)" class="blocko-block">
                                         <div class="blocko-block-mask"></div>
                                         <i class="fa fa-fw fa-cubes" style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
@@ -280,6 +280,29 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet light bordered padding-20">
+                <div class="portlet-title">
+                    <div class="becki-caption">
+                        <span class="font-blue-dark uppercase">
+                            <i class="fa fa-fw fa-cubes"></i>
+                            {{'tab_hw_groups'|bkTranslate:this}}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="portlet-body">
+                    <div class="panel-group accordion blocko-blocks-group-list">
+                        <div *ngFor="let group of hwGroups;" [bkDraggable]="draggableOptions" [bkDraggableData]="group" [bkDraggableDataType]="'group'" (bkDraggableOnStop)="onDragStop($event)"
+                             (bkDraggableOnStart)="onDragStart($event)" class="blocko-block">
+                            <div class="blocko-block-mask"></div>
+                            <i class="fa fa-fw fa-cubes" style="position: absolute; bottom: 5px; right: -20px; left: auto; top: auto; font-size: 65px; opacity: 0.2;"></i>
+                            <i class="fa fa-exclamation"></i>
+                            <span>{{group.name}}</span>
+                            <span style="font-size: 0.8em"></span>
                         </div>
                     </div>
                 </div>
