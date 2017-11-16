@@ -87,8 +87,8 @@ export class CProgramVersionSelectorComponent implements OnInit {
 
                     this.backendService.cProgramGet(this.selectedProgramId)
                         .then((program) => {
+                            this.selectedVersions = program.program_versions;
                             program.program_versions.forEach((cp) => {
-
                                 if (cp.version_id === this.already_selected_c_program_version_id) {
                                     this.selectedProgramVersionId = cp.version_id;
                                     this.selectedVersion = cp;
