@@ -999,6 +999,7 @@ export class StaticTranslation {
                 'tab_grid': 'Grid',
                 'tab_blocko': 'Blocko',
                 'tab_blocks': 'Blocks',
+                'tab_hw_groups': 'HW Groups',
                 'tab_instance_in_cloud': 'Instance in cloud',
                 'tab_saved_versions': 'Saved Versions',
                 'btn_add_slave': 'Add Slave Device',
