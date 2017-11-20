@@ -1157,6 +1157,8 @@ export class StaticTranslation {
                 'label_core_configuration': 'Core Bootloader Configuration',
                 'label_core_configuration_comment': '<p>Please keep in mind that you have God\'s power. You can remotely change anything out of common flow. Please change key configuration parameters only if you know what you are doing.</>',
                 'label_core_registers': 'Registers',
+                'label_restart_device': 'Restart Device',
+                'label_info': 'Basic System Info',
                 'label_image': 'Image',
                 'label_set_own_picture': 'Set your own photo',
                 'label_no_running_update_on_hardware': 'There is no update for this device yet',
@@ -1207,6 +1209,7 @@ export class StaticTranslation {
 
                 'flash_edit_device_success': 'Device information was updated.',
                 'flash_edit_device_fail': 'Device information could not be updated, ',
+                'flash_device_restart_success': 'Restart command was successful',
                 'flash_remove_device_success': 'Device has been removed.',
                 'flash_remove_device_fail': 'Device could not be removed, ',
                 'flash_cant_update_bootloader': 'Unable to update Bootloader, {0}.',

@@ -180,7 +180,7 @@
                                         <br>
 
                                         <br>
-                                        <div *ngIf="device.web_view">
+                                        <div *ngIf="device.ip_address">
                                              <span class="font-blue-dark">
                                                 <i class="fa fa-lg fa-link"></i><span>&nbsp;&nbsp; {{'label_web_link'|bkTranslate:this}}</span>
                                             </span>
@@ -190,7 +190,7 @@
                                                 <span class="font-blue-dark">
                                                     <span class="font-grey-mint">Link: </span>
                                                     <span  *ngIf="!device.ip_address" class="bold"><i class="fa fa-spinner fa-spin"></i></span>
-                                                    <span  *ngIf="device.ip_address"><a target="_blank" href="http://{{device.ip_address}}:{{device.web_port}}" class="bold">http://{{device.ip_address}}:{{device.web_port}}</a></span>
+                                                    <span  *ngIf="device.ip_address"><a target="_blank" href="http://{{device.ip_address}}:{{device.bootloader_core_configuration.webport}}" class="bold">http://{{device.ip_address}}:{{device.bootloader_core_configuration.webport}}</a></span>
                                                     <br>
                                                     <span>(working only on same local network)</span>
                                                 </span>
@@ -400,7 +400,7 @@
                                     <br>
                                     <br>
                                     <div class="row">
-                                        <div class="col-md-11">
+                                        <div class="col-md-9">
                                             <ul>
                                                 <table class="table table-hover table-light">
                                                     <tbody>
@@ -430,10 +430,15 @@
                             <div class="col-md-6">
                                 <H4>{{'label_core_configuration'|bkTranslate:this}}</H4>
                                 <span [innerHtml]="'label_core_configuration_comment'|bkTranslate:this"></span>
+                                <div>
+                                    <button *ngIf="device.edit_permission" [disabled]="device.online_state != 'online'" class="btn red btn-sm" (click)="onRestartDeviceClick()">
+                                        <i class="fa fa-heartbeat"></i> {{'label_restart_device'|bkTranslate:this}}
+                                    </button>
+                                </div>
                                 <br>
                                 <div>
                                    <span class="font-blue-dark">
-                                       <i class="fa fa-lg fa-bell"></i><span>&nbsp;&nbsp;&nbsp;{{'label_core_registers'|bkTranslate:this}}</span>
+                                       <i class="fa fa-lg fa-wrench"></i><span>&nbsp;&nbsp;&nbsp;{{'label_core_registers'|bkTranslate:this}}</span>
                                    </span>
                                     <br>
                                     <br>
@@ -449,6 +454,7 @@
                                                             <td>
                                                                 <div *ngIf="conf.type == 'string'">
                                                                     <span class="font-grey-mint bold">{{conf.value}}</span>
+                                                                    <i class="fa fa-cog cursor-hand" style="vertical-align: middle; font-size: 1.2em;" (click)="onEditParameterValue_String_Click('Change Register:', conf.key ,conf.value)"></i>
                                                                 </div>
                                                                 <div *ngIf="conf.type == 'number'">
                                                                       <span class="font-grey-mint bold">{{conf.value}}</span>
@@ -568,7 +574,9 @@
                     </div>
                 </div>
 
-                <div *ngIf="hardwareTab == 'command_center'"></div>
+                <div *ngIf="hardwareTab == 'command_center'">
+
+                </div>
 
             </div>
         </div>

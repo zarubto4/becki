@@ -195,8 +195,6 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
      */
     onEditParameterValue_Number_Click(parameter_user_description: string, parameter_type: string, value: number): void {
 
-        console.log("onEditParameterValue_Number_Click " + parameter_type + " value " + value);
-
         let model = new ModalsDeviceEditDeveloperParameterValueModel(this.device.id, parameter_user_description, value);
 
         this.modalService.showModal(model).then((success) => {
@@ -217,6 +215,23 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             }
         });
     }
+
+    onRestartDeviceClick(): void {
+        console.log("Device Restart command");
+        this.backendService.boardCommandExecution({
+            board_id: this.device.id,
+            command: 'RESTART'
+        })
+            .then(() => {
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_device_restart_success')));
+                this.refresh();
+            })
+            .catch((reason) => {
+                this.fmError(this.translate('flash_device_restart_success_fail', reason));
+                this.unblockUI();
+            });
+    }
+
     /**
      * Edit onEditParameterValue_Number_Click
      * @param parameter_user_description
