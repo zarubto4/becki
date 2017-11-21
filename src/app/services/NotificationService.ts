@@ -91,8 +91,11 @@ export abstract class Notification {
         } else {
             this.elementsBody = body;
         }
-
-        this.closeTime = ((((this.htmlBody.length / 5) / 180) * 60) * 1000) + 1500;
+        if (this.htmlBody && this.htmlBody.length) {
+            this.closeTime = ((((this.htmlBody.length / 5) / 180) * 60) * 1000) + 1500;
+        } else {
+            this.closeTime = 4000;
+        }
         this.tick(0);
     }
 
