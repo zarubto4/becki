@@ -217,7 +217,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     }
 
     onRestartDeviceClick(): void {
-        console.log("Device Restart command");
+        console.info('Device Restart command');
         this.backendService.boardCommandExecution({
             board_id: this.device.id,
             command: 'RESTART'

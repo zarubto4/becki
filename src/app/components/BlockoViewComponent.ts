@@ -139,7 +139,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             this.blockoController.registerService(new Blocks.FetchService());
             this.blockoController.registerService(new Blocks.XmlApiService());
             this.blockoController.registerService(new Blocks.RestApiService());
-            this.blockoController.registerService(new Blocks.CronService());
+            // this.blockoController.registerService(new Blocks.CronService());
 
             /*
              *
@@ -275,7 +275,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
 
             let bc: BlockoCore.BlockClass = this.blockoController.getBlockClassByVisutalType(blockName);
             if (!bc) {
-                throw new Error(this.translate('error_block_not_found', blockName ));
+                throw new Error(this.translate('error_block_not_found', blockName));
             }
 
             b = new bc(this.blockoController.getFreeBlockId());

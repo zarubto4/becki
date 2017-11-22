@@ -87,7 +87,7 @@ export class FormSelectComponent {
     readonly: boolean = false;
 
     @Input()
-    regexFirstOption:  string  = null;
+    regexFirstOption: string = null;
 
     @Input()
     pickFirstOption: boolean = null;
@@ -102,8 +102,8 @@ export class FormSelectComponent {
     @Input() set options(option: FormSelectComponentOption[]) {
         if (option) {
             this._options = option;
-            if (this.pickFirstOption || option.length === 1) {
 
+            if (this.pickFirstOption || option.length > 0) {
                 let toPick: number = 0;
 
                 if (this.regexFirstOption) {
@@ -112,15 +112,15 @@ export class FormSelectComponent {
                             return true;
                         }
                     });
+                    if (toPick === -1) {
+                        this.selectedValue = option[0].value;
+                        this.control.setValue(option[0].value);
+                    }
                 }
 
-                if (toPick === -1) {
-                    this.selectedValue = option[0].value;
-                    this.control.setValue(option[0].value);
-                } else {
-                    this.selectedValue = option[toPick].value;
-                    this.control.setValue(option[toPick].value);
-                }
+
+                this.selectedValue = option[toPick].value;
+                this.control.setValue(option[toPick].value);
 
 
             }
