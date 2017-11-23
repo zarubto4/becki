@@ -290,11 +290,11 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
                 this.blockUI();
                 this.backendService.bootloaderEditSetAsMain(bootloader.id)
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_successfully_remove')));
+                        this.fmSuccess(this.translate('flash_successfully_set_main'));
                         this.refresh(); // also unblockUI
                     })
                     .catch(reason => {
-                        this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_remove'), reason));
+                        this.fmError(this.translate('flash_cant_set_main'), reason);
                         this.refresh(); // also unblockUI
                     });
             }

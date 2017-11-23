@@ -345,6 +345,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                 this.backendService.bProgramVersionGet(this.instance.actual_instance.b_program_version_id) // TODO [permission]: B_program.read_permission
                     .then((programVersionFull) => {
                         const selectedProgramVersion = programVersionFull;
+                        console.info(JSON.stringify(selectedProgramVersion.program));
                         this.blockoView.setDataJson(selectedProgramVersion.program);
 
                         if (this.instance.instance_remote_url) {
@@ -366,7 +367,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                     })
                     .catch((err) => {
                         this.zone.run(() => {
-                            this.fmError(this.translate('flash_cant_load_verion', this.instance.actual_instance.b_program_version_name, err));
+                            this.fmError(this.translate('flash_cant_load_version', this.instance.actual_instance.b_program_version_name, err));
                         });
                     });
             }
@@ -387,29 +388,15 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                 return;
             }
 
-            /* tslint:disable */
-
-            console.log("homerMessageReceived:: m.message_type =  ", m.message_type);
-
-            /* tslint:enable */
-
-
-            // According Blocko-core its Deprecated????
-
             if (m.message_type === 'new_external_input_connector_value') {
-                /* tslint:disable */
-                console.error("homerMessageReceived:: new_external_input_connector_value - unsopported!!! ", m.message_type);
-                /* tslint:enable */
+                // controller.setInputConnectorValue(m.block_id, m.interface_name, m.value);
                 return;
             }
 
             if (m.message_type === 'new_external_output_connector_value') {
-                /* tslint:disable */
-                console.error("homerMessageReceived:: new_external_output_connector_value - unsopported!!! ", m.message_type);
-                /* tslint:enable */
+                // controller.setOutputConnectorValue(m.block_id, m.interface_name, m.value);
                 return;
             }
-
 
             if (m.message_type === 'new_console_event') {
                 this.zone.run(() => {

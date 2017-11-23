@@ -106,7 +106,7 @@
                 </div>
 
                 <div [hidden]="connectionsTab != 'grid'">
-                    <template [ngIf]="selectedGrids && selectedGrids.length">
+                    <template [ngIf]="selectedGridProgramVersions">
                         <div *ngFor="let gridProject of allGridProjects;">
                             <div *ngIf="selectedGridProgramVersions[gridProject.id]" class="mt-element-ribbon bg-grey-steel border-purple">
                                 <div class="ribbon ribbon-shadow bg-purple font-white no-padding-left-right"><span class="ribbon-padding">{{gridProject.name}}</span></div>

@@ -328,7 +328,7 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     public wsProtocol = 'ws';
 
-    public requestProxyServerUrl = 'http://127.0.0.1:3000/fetch/';
+    public requestProxyServerUrl = 'http://127.0.0.1:4000/fetch/';
 
     private webSocket: WebSocket = null;
 
@@ -390,12 +390,12 @@ export abstract class BeckiBackend extends TyrionAPI {
 
         // Mac mini
         if (location && location.hostname.indexOf('test.byzance.dev') > -1) {
-            this.requestProxyServerUrl = 'http://test.byzance.dev:3000/fetch/';
+            this.requestProxyServerUrl = 'http://test.byzance.dev:4000/fetch/';
         }
 
         // Linux
         if (location && location.hostname.indexOf('test2.byzance.dev') > -1) {
-            this.requestProxyServerUrl = 'http://test2.byzance.dev:3000/fetch/';
+            this.requestProxyServerUrl = 'http://test2.byzance.dev:4000/fetch/';
         }
 
         // David 1 IP

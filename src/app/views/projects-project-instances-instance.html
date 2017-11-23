@@ -250,22 +250,19 @@
                     <div class="row">
                         <div *ngIf="instance && instance.actual_instance" class="col-6">
                             <div *ngIf="instance.actual_instance.m_project_snapshot">
-                                <div *ngFor="let grid of instance.actual_instance.m_project_snapshot"
-                                     style="margin-bottom: 20px;background: #EEE;padding: 0;border: 1px solid #8E44AD !important;">
+                                <div *ngFor="let grid of instance.actual_instance.m_project_snapshot" style="margin-bottom: 20px;background: #EEE;padding: 0;border: 1px solid #8E44AD !important;">
                                     <div style="margin: 10px;">
                                         <div>
                                             <strong class="font-color-grid">{{'label_grid'|bkTranslate:this}}</strong>{{'label_project'|bkTranslate:this}}:
                                             <a (click)="onGridProjectClick(grid.m_project_id)" class="font-grey-mint">
-                                                <strong><span
-                                                    style="font-size:1.2em;">{{grid.m_project_name}}</span></strong>
+                                                <strong><span style="font-size:1.2em;">{{grid.m_project_name}}</span></strong>
                                             </a>
                                         </div>
-                                        <div
-                                            [ngIf]="grid.m_project_description && grid.m_project_description.length">
+                                        <template [ngIf]="grid.m_project_description && grid.m_project_description.length">
                                             <div style="font-size:0.9em; color:#555;">
                                                 {{grid.m_project_description}}
                                             </div>
-                                        </div>
+                                        </template>
                                     </div>
                                     <hr style="margin: 0 10px;border-bottom: 1px solid #DDD;margin-top: 10px;">
                                     <div style="margin-top: 10px;" *ngFor="let gridProgram of grid.m_program_snapshots">
@@ -274,11 +271,8 @@
                                              [class.bg-yellow-saffron]="gridProgram.snapshot_settings == 'absolutely_public'"
                                              [class.bg-green-meadow]="gridProgram.snapshot_settings != 'absolutely_public'">
                                             <div>
-                                                <strong
-                                                    class="font-color-grid">{{'label_grid'|bkTranslate:this}}</strong>{{'label_program'|bkTranslate:this}}:
-                                                <a class="font-grey-mint"
-                                                   (click)="onGridProgramClick(grid.m_project_id,gridProgram.m_program_id)"
-                                                   class="font-grey-mint">
+                                                <strong class="font-color-grid">{{'label_grid'|bkTranslate:this}}</strong>{{'label_program'|bkTranslate:this}}:
+                                                <a class="font-grey-mint" (click)="onGridProgramClick(grid.m_project_id,gridProgram.m_program_id)">
                                                     <strong><span style="font-size:1.0em;">{{gridProgram.m_program_name}}</span></strong>
                                                 </a>
                                             </div>
@@ -321,7 +315,7 @@
                                             style="margin-top: 10px; margin-left: 20px; margin-right: 20px; margin-bottom: 10px;">
                                             <input onClick="this.setSelectionRange(0, this.value.length)" type="text"
                                                    style="width: 100%;" value="{{gridProgram.grid_app_url}}"
-                                                   readonly="true">
+                                                   readonly="readonly">
                                         </div>
                                     </div>
                                 </div>

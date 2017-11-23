@@ -78,9 +78,6 @@ export class FormSelectComponent {
     placeholder: string = null;
 
     @Input()
-    already_selected_value_from_option: string = null;
-
-    @Input()
     waitForTouch: boolean = true;
 
     @Input()
@@ -123,6 +120,19 @@ export class FormSelectComponent {
                 }
 
 
+            } else if (this.selectedValue) {
+
+                let toPick = option.findIndex(item => {
+                    return item.value === this.selectedValue;
+                });
+
+                if (toPick === -1) {
+                    this.selectedValue = option[0].value;
+                    this.control.setValue(option[0].value);
+                } else {
+                    this.selectedValue = option[toPick].value;
+                    this.control.setValue(option[toPick].value);
+                }
             }
         }
     }
@@ -138,8 +148,6 @@ export class FormSelectComponent {
         }
 
         this.selectedValue = newValue;
-        this.already_selected_value_from_option = this.selectedValue;
-
         this.valueChanged.emit(newValue);
     }
 

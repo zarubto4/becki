@@ -273,7 +273,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                 throw new Error(this.translate('error_read_only'));
             }
 
-            let bc: BlockoCore.BlockClass = this.blockoController.getBlockClassByVisutalType(blockName);
+            let bc: BlockoCore.BlockClass = this.blockoController.getBlockClassByVisualType(blockName);
             if (!bc) {
                 throw new Error(this.translate('error_block_not_found', blockName ));
             }

@@ -195,8 +195,6 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
      */
     onEditParameterValue_Number_Click(parameter_user_description: string, parameter_type: string, value: number): void {
 
-        console.log("onEditParameterValue_Number_Click " + parameter_type + " value " + value);
-
         let model = new ModalsDeviceEditDeveloperParameterValueModel(this.device.id, parameter_user_description, value);
 
         this.modalService.showModal(model).then((success) => {
