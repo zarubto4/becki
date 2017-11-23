@@ -13,7 +13,7 @@ import { INotificationElement, INotificationButton } from '../backend/TyrionAPI'
     <div class="row">
         
         <div class="col-md-5 col-sm-12">
-            <div class="dataTables_info" role="status" aria-live="polite">Showing {{from  == 0 ? 1 : from }} to {{to}} of {{total}} entries</div>
+            <div class="dataTables_info" style="margin-left: 10px" role="status" aria-live="polite">Showing {{from  == 0 ? 1 : from }} to {{to}} of {{total}} entries</div>
         </div>
         
         <div class="col-md-7 col-sm-12">
