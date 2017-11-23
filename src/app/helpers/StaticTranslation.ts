@@ -838,8 +838,10 @@ export class StaticTranslation {
                 'label_no_batch': 'No Revisions or Batches',
                 'label_no_batch_comment': 'We didn\'t find any revisions or production batches, please create new one',
 
-                'flash_successfully_set_as_default': 'Succesfuly set as default',
+                'flash_successfully_set_as_default': 'Successfully set as default',
                 'flash_file_uploaded': 'File successfully uploaded',
+                'flash_successfully_set_main': 'Successfully set as main',
+                'flash_cant_set_main': 'Cannot mark as main',
 
                 'table_id': 'Id',
                 'table_name': 'Name',
@@ -1332,7 +1334,7 @@ export class StaticTranslation {
                 'label_modal_change_running_instance_version': 'Are you sure to change the running instance version?',
                 'label_time_missing_in_json': 'Time is missing in Json',
 
-                'flash_cant_load_verion': 'Cannot load version <b>{0}</b>, {1}',
+                'flash_cant_load_version': 'Cannot load version <b>{0}</b>, {1}',
                 'flash_instance_edit_success': 'Instance information was changed.',
                 'flash_instance_edit_fail': 'Unable to change instance information, ',
 

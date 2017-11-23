@@ -52,7 +52,7 @@ export class ModalsBlockoVersionSelectComponent implements OnInit {
                 value: pv.version_id
             };
         });
-        (<FormControl>(this.form.controls['programVersion'])).setValue(this.modalModel.programVersion);
+        // (<FormControl>(this.form.controls['programVersion'])).setValue(this.modalModel.programVersion);
     }
 
     onSubmitClick(): void {
