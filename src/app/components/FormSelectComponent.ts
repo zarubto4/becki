@@ -112,27 +112,13 @@ export class FormSelectComponent {
                     if (toPick === -1) {
                         this.selectedValue = option[0].value;
                         this.control.setValue(option[0].value);
+                        return;
                     }
                 }
-
 
                 this.selectedValue = option[toPick].value;
                 this.control.setValue(option[toPick].value);
 
-
-            } else if (this.selectedValue) {
-
-                let toPick = option.findIndex(item => {
-                    return item.value === this.selectedValue;
-                });
-
-                if (toPick === -1) {
-                    this.selectedValue = option[0].value;
-                    this.control.setValue(option[0].value);
-                } else {
-                    this.selectedValue = option[toPick].value;
-                    this.control.setValue(option[toPick].value);
-                }
             }
         }
     }

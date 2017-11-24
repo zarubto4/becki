@@ -763,11 +763,8 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                                         }
                                     }
                                 }
-
                             }
-
                         }
-
                     });
                 }
 
@@ -787,12 +784,10 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                         'interface': out
                     });
                 }
-
             });
-
         }
 
-        // console.log(JSON.stringify(outInterface));
+        console.log(JSON.stringify(outInterface));
 
         this.blockoView.setInterfaces(outInterface);
     }
