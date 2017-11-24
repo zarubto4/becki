@@ -235,7 +235,7 @@ export class HardwareHardwareTypeComponent extends BaseMainComponent implements 
                     file: model.file
                 })
                     .then(() => {
-                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_code_version_change')));
+                        this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_file_uploaded')));
                         this.refresh();
                     })
                     .catch(reason => {
