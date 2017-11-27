@@ -787,7 +787,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
             });
         }
 
-        console.log(JSON.stringify(outInterface));
+        // console.log(JSON.stringify(outInterface));
 
         this.blockoView.setInterfaces(outInterface);
     }

@@ -105,6 +105,7 @@ import { ServerComponent } from './views/admin-server';
 import { ModalsWidgetsWidgetPropertiesComponent } from './modals/widgets-widget-properties';
 import { ProjectsProjectWidgetsWidgetsWidgetComponent } from './views/projects-project-widgets-widgets-widget';
 import { MonacoEditorComponent } from './components/MonacoEditorComponent';
+import { UpdateStateComponent } from './components/UpdateStateComponent';
 import { MonacoEditorLoaderService } from './services/MonacoEditorLoaderService';
 import { ModalsBlockoBlockCodeEditorComponent } from './modals/blocko-block-code-editor';
 import { ConsoleLogComponent } from './components/ConsoleLogComponent';
@@ -478,6 +479,7 @@ class BeckiErrorHandler implements ErrorHandler {
         DatePickerComponent,
         TimePickerComponent,
         FormSwitchTwoListSelectComponent,
+        UpdateStateComponent,
         // Views components
         AdminDashboardComponent,
         Error404Component,

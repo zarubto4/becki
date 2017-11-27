@@ -766,15 +766,7 @@
                                                             </td>
 
                                                             <td class="vert-align">
-                                                                <span
-                                                                    *ngIf="update.state == ('complete') || ('canceled') || ('overwritten')"
-                                                                    class="bold font-green-jungle">{{update.state|bkTranslateTable:this:'update_state'}}</span>
-                                                                <span
-                                                                    *ngIf="update.state == ('not_start_yet') || ('in_progress') || ('not_updated') || ('waiting_for_device')"
-                                                                    class="bold font-yellow-casablanca">{{update.state|bkTranslateTable:this:'update_state'}} </span>
-                                                                <span
-                                                                    *ngIf="update.state == ('homer_server_is_offline') || ('instance_inaccessible') || ('critical_error') || ('bin_file_not_found')"
-                                                                    class="bold font-red-flamingo">{{update.state|bkTranslateTable:this:'update_state'}}</span>
+                                                                <bk-update-state [updateState]=update.state></bk-update-state>
                                                             </td>
                                                         </tr>
 

@@ -205,6 +205,10 @@ export class StaticTranslation {
                 'label_block_name': 'Name',
                 'label_block_description': 'Description',
 
+            }, 'ModalsBlockoConfigPropertiesComponent': {
+                'title': 'blocko Confurigation',
+                'label_block_code_version': 'Block code version',
+                'label_detached_version': 'detached version'
 
             }, 'ModalsBlocksTypePropertiesComponent': {
                 'title_edit': 'BLOCKs Group Properties',
