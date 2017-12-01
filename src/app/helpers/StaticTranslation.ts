@@ -1303,6 +1303,7 @@ export class StaticTranslation {
                 'label_version': 'Version',
                 'label_description': 'Description',
                 'label_no_history_in_instance': 'There is no history for this instance',
+                'label_no_history_in_instance_comments': 'that means the instance is still too young',
                 'label_hardware_actual_in_instance': 'Currently in Instance',
                 'label_hardware_no_hardware_in_instance': 'No integrated Hardware in currently running instance',
                 'label_grid_no_grid_in_instance': 'No apps in this instance.',

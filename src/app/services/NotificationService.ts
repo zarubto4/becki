@@ -83,10 +83,19 @@ export abstract class Notification {
             this.htmlBody = body;
             let userMessage = NullSafe(() => <string>(<any>reason).userMessage);
             let error = NullSafe(() => <string>(<any>reason).error);
+            let bodyMesseage = NullSafe(() => <string>(<any>reason).body.message);
             if (userMessage) {
                 this.htmlBody += '<br><b>' + userMessage + '</b>';
+
+            } else if (bodyMesseage) {
+                this.htmlBody += '<br><b>' + bodyMesseage + '</b>';
+
             } else if (error) {
                 this.htmlBody += '<br><b>' + error + '</b>';
+
+            } else {
+                this.htmlBody += '<br><b>' + reason + '</b>';
+
             }
         } else {
             this.elementsBody = body;
