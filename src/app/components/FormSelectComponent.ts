@@ -112,6 +112,8 @@ export class FormSelectComponent {
                     if (toPick === -1) {
                         this.selectedValue = option[0].value;
                         this.control.setValue(option[0].value);
+                        this.onSelectedChange(option[0].value);
+                        this.valueChanged.emit(option[0].value);
                         return;
                     }
                 }

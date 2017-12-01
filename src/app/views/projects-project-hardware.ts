@@ -19,7 +19,6 @@ import {
 } from '../backend/TyrionAPI';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { CurrentParamsService } from '../services/CurrentParamsService';
-import { ModalsHardwareBootloaderUpdateModel } from '../modals/hardware-bootloader-update';
 import { ModalsHardwareGroupPropertiesModel } from '../modals/hardware-group-properties';
 import { ModalsHardwareGroupDeviceSettingsModel } from '../modals/hardware-group-device-settings';
 import { ModalsUpdateReleaseFirmwareModel } from '../modals/update-release-firmware';
@@ -364,10 +363,6 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
 
     onUpdateProcedureUpdateClick(procedure: IActualizationProcedureShortDetail): void {
 
-    }
-
-    onProcedureClick() {
-        // TODO
     }
 
     onProcedureCreateClick() {

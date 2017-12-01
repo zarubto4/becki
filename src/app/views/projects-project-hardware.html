@@ -228,7 +228,9 @@
                     <tbody>
                         <tr *ngFor="let procedure of actualizationFilter.content">
 
-                            <td class="vert-align"><a (click)="onProcedureClick(procedure)">{{procedure.id.substr(0,13)}}</a></td>
+                            <td class="vert-align">
+                                <a class="bold" [routerLink]="['/projects', projectId, 'actualization_procedure', procedure.id]">{{procedure.id.substr(0, 12)}}</a>
+                            </td>
                             <td class="vert-align">{{procedure.date_of_create|bkUnixTimeToDate}}</td>
                             <td class="vert-align">{{procedure.date_of_planing|bkUnixTimeToDate}}</td>
                             <td class="vert-align">
@@ -251,14 +253,20 @@
                                     </template>
                                 </template>
                             </td>
-                            <td class="vert-align"> {{procedure.type_of_update|bkTranslateTable:this:'type_of_update'}}</td>
+                            <td class="vert-align">
+                                <bk-type-of-update [state]="procedure.type_of_update"></bk-type-of-update>
+                            </td>
                             <td class="vert-align text-center">
                                 <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.procedure_size_complete}}/{{procedure.procedure_size_all}}</span>
                                 <span *ngIf="!procedure.procedure_size_all ||procedure_size_all == 0 " class="bold">-/-</span>
                             </td>
+
+                            <!-- Update State -->
                             <td class="vert-align text-center">
-                                <span [innerHTML]="procedure.state|bkTranslateTable:this:'update_status'"></span>
+                                <bk-update-state [updateState]="procedure.state"></bk-update-state>
                             </td>
+
+
                             <td class="vert-align no-wrap">
                                 <style type="text/css">
                                     table tr button {

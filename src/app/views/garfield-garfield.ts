@@ -310,22 +310,6 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
         }
     }
 
-    visible_steps(): boolean {
-
-        return (
-            this.garfield
-            && this.typeOfBoard
-            && this.bootLoader
-            && this.printer_label_1
-            && this.printer_label_2
-            && this.print_sticker
-            && this.garfieldTesterConnected
-            && this.bootLoader.file_path
-            && this.mainServer
-            && this.backupServer
-            && this.productionBatchForm.valid);
-    }
-
     onTestPrinter(printerId: number) {
 
         this.backendService.printerTestprinting(this.garfieldId, printerId)
@@ -470,7 +454,18 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                 break;
             }
             case 'device_connect': {
-                if (!this.visible_steps()) {
+                if (!(
+                    this.garfield
+                    && this.typeOfBoard
+                    && this.bootLoader
+                    && this.printer_label_1
+                    && this.printer_label_2
+                    && this.print_sticker
+                    && this.garfieldTesterConnected
+                    && this.bootLoader.file_path
+                    && this.mainServer
+                    && this.backupServer
+                    && this.productionBatchForm.valid)) {
                     this.fmError(this.translate('flash_prerequisite_not_met'));
                     break;
                 }
@@ -657,12 +652,8 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                     mac: this.device.mac_address.toLowerCase(),
                     normal_mqtt_hostname: this.mainServer.server_url,
                     normal_mqtt_port: this.mainServer.mqtt_port,
-                    normal_mqtt_username: this.mainServer.mqtt_username,
-                    normal_mqtt_password: this.mainServer.mqtt_password,
                     backup_mqtt_hostname: this.backupServer.server_url,
                     backup_mqtt_port: this.backupServer.mqtt_port,
-                    backup_mqtt_username: this.backupServer.mqtt_username,
-                    backup_mqtt_password: this.backupServer.mqtt_password
                 }
             };
 

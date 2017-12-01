@@ -104,13 +104,13 @@
             <div *ngIf="garfield" class="portlet portlet light bordered">
                 <div class="portlet-title">
                     <div class="becki-caption">
-                        <span class="font-blue-dark" *ngIf="garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldTesterConnected && test_firmware_file_Base64 && bootloader_file_Base64
-                                && mainServer && backupServer && mainServer.online_state == 'online' && backupServer.online_state == 'online'">
+                        <span class="font-blue-dark" *ngIf="garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldTesterConnected
+                                && mainServer && backupServer && mainServer && backupServer">
                             <i class="fa fa-fw fa-check"></i>
                               {{'label_prerequisites'|bkTranslate:this}}
                         </span>
-                        <span class="font-blue-dark" *ngIf="!(garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldTesterConnected && test_firmware_file_Base64 && bootloader_file_Base64
-                                && mainServer && backupServer && mainServer.online_state == 'online' && backupServer.online_state == 'online')">
+                        <span class="font-blue-dark" *ngIf="!(garfield && typeOfBoard && firmwareTestMainVersion && bootLoader && firmwareMainVersion && printer_label_1 &&  printer_label_2 && print_sticker && garfieldTesterConnected
+                                && mainServer && backupServer && mainServer && backupServer)">
                             <i class="fa fa-fw fa-exclamation-triangle"></i>
                               {{'label_prerequisites_not_complete'|bkTranslate:this}}
                         </span>
@@ -256,7 +256,7 @@
         <div class="col-md-3">
             <div *ngIf="garfield" class="portlet light bordered">
                 <div class="portlet-title">
-                    <div class="becki-caption">
+                    <div *ngIf="productionBatchForm" class="becki-caption">
                         <span *ngIf="productionBatchForm.valid" class="font-blue-dark uppercase">
                             <i class="fa fa-fw fa-wrench"></i>
                             {{'label_burn_settings'|bkTranslate:this}}
@@ -333,7 +333,7 @@
         </div>
     </div>
 
-    <div *ngIf="!visible_steps()" class="row">
+    <div *ngIf="!(garfield && typeOfBoard && bootLoader && printer_label_1 && printer_label_2 && print_sticker && garfieldTesterConnected  && bootLoader.file_path && mainServer&& backupServer && productionBatchForm.valid)" class="row">
         <div class="col-md-12">
             <div class="portlet light bordered">
                 <div class="portlet-body">
@@ -345,7 +345,7 @@
         </div>
     </div>
 
-    <div *ngIf="visible_steps()" class="row">
+    <div *ngIf="(garfield && typeOfBoard && bootLoader && printer_label_1 && printer_label_2 && print_sticker && garfieldTesterConnected  && bootLoader.file_path && mainServer && backupServer && productionBatchForm.valid)" class="row">
         <div class="col-md-12">
             <div class="portlet light bordered">
                 <div class="portlet-body">

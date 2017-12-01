@@ -187,6 +187,10 @@ import { FormSwitchTwoListSelectComponent } from './components/FormSwitchTwoList
 import { ModalsUpdateReleaseFirmwareComponent } from './modals/update-release-firmware';
 import { MultiSelectComponent } from './components/MultiSelectComponent';
 import { TyrionComponent } from './views/admin-tyrion';
+import { OnlineStateComponent } from './components/OnlineStateComponent';
+import { TypeOfUpdateComponent } from './components/TypeOfUpdateComponent';
+import { CompilationStatusComponent } from './components/CompilationStatusComponent';
+import { ProjectsProjectActualizationProcedureComponent } from './views/projects-project-actualization-procedure';
 
 
 // @formatter:off
@@ -233,7 +237,7 @@ let routes: Routes = [
     { path: 'projects', data: { breadName: 'Projects' }, component: ProjectsComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project', data: { breadName: ':project' }, component: ProjectsProjectComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/hardware', data: { breadName: 'HARDWARE devices' }, component: ProjectsProjectHardwareComponent, canActivate: [AuthGuard] },
-    { path: 'projects/:project/hardware/:hardware', data: { breadName: ':last' }, component: ProjectsProjectHardwareHardwareComponent, canActivate: [AuthGuard] },
+    { path: 'projects/:project/hardware/:hardware', data: { breadName: ':hardware' }, component: ProjectsProjectHardwareHardwareComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/blocko', data: { breadName: 'BLOCKO programs' }, component: ProjectsProjectBlockoComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/blocko/:blocko', data: { breadName: ':blocko' }, component: ProjectsProjectBlockoBlockoComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard]  },
     { path: 'projects/:project/code', data: { breadName: 'CODE programs' }, component: ProjectsProjectCodeComponent, canActivate: [AuthGuard] },
@@ -243,6 +247,8 @@ let routes: Routes = [
     { path: 'projects/:project/blocks/:blocks/:block', data: { breadName: ':block' }, component: ProjectsProjectBlocksBlocksBlockComponent, canActivate: [AuthGuard], canDeactivate: [ExitConfirmGuard] },
     { path: 'projects/:project/libraries', data: { breadName: 'CODE libraries' }, component: ProjectsProjectLibrariesComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/libraries/:library', data: { breadName: ':library' }, component: ProjectsProjectLibrariesLibraryComponent, canActivate: [AuthGuard] , canDeactivate: [ExitConfirmGuard] },
+
+    { path: 'projects/:project/actualization_procedure/:procedure', data: { breadName: ':last' }, component: ProjectsProjectActualizationProcedureComponent, canActivate: [AuthGuard] , canDeactivate: [ExitConfirmGuard] },
 
     { path: 'projects/:project/grid', data: { breadName: 'GRID projects' }, component: ProjectsProjectGridComponent, canActivate: [AuthGuard] },
     { path: 'projects/:project/grid/:grids', data: { breadName: ':grids' }, component: ProjectsProjectGridGridsComponent, canActivate: [AuthGuard] },
@@ -480,6 +486,8 @@ class BeckiErrorHandler implements ErrorHandler {
         TimePickerComponent,
         FormSwitchTwoListSelectComponent,
         UpdateStateComponent,
+        OnlineStateComponent,
+        TypeOfUpdateComponent,
         // Views components
         AdminDashboardComponent,
         Error404Component,
@@ -541,6 +549,8 @@ class BeckiErrorHandler implements ErrorHandler {
         MobileAddHardwareComponent,
         SupportComponent,
         ServerRegistrationComponent,
+        CompilationStatusComponent,
+        ProjectsProjectActualizationProcedureComponent,
         // Modals components
         ModalsAdminCreateHardwareComponent,
         ModalsBillingInformationComponent,
@@ -603,6 +613,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsHardwareGroupPropertiesComponent,
         ModalsHardwareGroupDeviceSettingsComponent,
         ModalsUpdateReleaseFirmwareComponent,
+
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

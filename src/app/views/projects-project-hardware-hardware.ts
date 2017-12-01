@@ -4,7 +4,10 @@
 
 import { Component, Injector, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
-import { IBoard, IBoardShortDetail, ITypeOfBoard } from '../backend/TyrionAPI';
+import {
+    IActualizationProcedureTaskList, IBoard, IBoardShortDetail,
+    ITypeOfBoard
+} from '../backend/TyrionAPI';
 import { Subscription } from 'rxjs';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsHardwareBootloaderUpdateModel } from '../modals/hardware-bootloader-update';
@@ -37,6 +40,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     projectId: string;
     hardwareId: string;
     routeParamsSubscription: Subscription;
+    actualizationTaskFilter: IActualizationProcedureTaskList = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -67,6 +71,11 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     }
 
     onToggleHardwareTab(tab: string) {
+
+        if (tab === 'updates' && this.actualizationTaskFilter == null) {
+            this.onFilterActualizationProcedureTask();
+        }
+
         this.hardwareTab = tab;
     }
 
@@ -284,7 +293,51 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             });
     }
 
+    selectedFilterPageActualizationProcedureTask(event: { index: number }) {
+        this.onFilterActualizationProcedureTask(event.index);
+    }
 
+    /* tslint:disable:max-line-length ter-indent */
+    onFilterActualizationProcedureTask(pageNumber: number = 0,
+                                       states: ('successful_complete' | 'complete' | 'complete_with_error' | 'canceled' | 'in_progress' | 'not_start_yet')[] = ['successful_complete', 'complete' , 'complete_with_error' , 'canceled' , 'in_progress' , 'not_start_yet'],
+                                       type_of_updates: ('MANUALLY_BY_USER_INDIVIDUAL' | 'MANUALLY_BY_USER_BLOCKO_GROUP' | 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' | 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' | 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE')[] = ['MANUALLY_BY_USER_INDIVIDUAL' , 'MANUALLY_BY_USER_BLOCKO_GROUP' , 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' , 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' , 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE']): void {
+        this.blockUI();
+
+        this.backendService.actualizationTaskGetByFilter(pageNumber, {
+            actualization_procedure_ids: null,
+            board_ids: [this.device.id],
+            instance_ids: null,
+            update_states: states,
+            type_of_updates: type_of_updates
+        })
+            .then((values) => {
+                this.actualizationTaskFilter = values;
+
+                this.actualizationTaskFilter.content.forEach((task, index, obj) => {
+                    this.backendService.objectUpdateTyrionEcho.subscribe((status) => {
+                        if (status.model === 'CProgramUpdatePlan' && task.id === status.model_id) {
+
+                            this.backendService.actualizationTaskGet(task.id)
+                                .then((value) => {
+                                    task.state = value.state;
+                                    task.date_of_finish = value.date_of_finish;
+                                })
+                                .catch((reason) => {
+                                    this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+                                });
+
+                        }
+                    });
+                });
+
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
+            });
+    }
+    /* tslint:disable:max-line-length ter-indent*/
 
     onAutobackupSwitchClick(backup_mode: string): void {
         if (!this.device) {

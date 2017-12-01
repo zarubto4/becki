@@ -42,11 +42,7 @@
                         <td class="no-wrap">{{instance.description}}</td>
                         <td class="no-wrap"><a (click)="onBlockoProgramClick(instance.b_program_id)">{{instance.b_program_name}}</a></td>
                         <td class="no-wrap">
-                            <span *ngIf="instance.instance_online_state == 'online' " class="font-green-jungle">{{instance.instance_online_state|bkTranslateTable:this:'online_status'}}</span>
-                            <span *ngIf="instance.instance_online_state == 'offline' " class="font-red">{{instance.instance_online_state|bkTranslateTable:this:'online_status'}}</span>
-                            <span *ngIf="instance.instance_online_state == 'synchronization_in_progress' " class="font-grey-mint"><i class="fa fa-spinner fa-spin"></i></span>
-                            <span *ngIf="instance.instance_online_state == 'unknown_lost_connection_with_server' " class="font-grey-mint">{{instance.instance_online_state|bkTranslateTable:this:'online_status'}}</span>
-                            <span *ngIf="instance.instance_online_state == 'shut_down' " class="font-grey-mint">{{instance.instance_online_state|bkTranslateTable:this:'online_status'}}</span>
+                          <bk-online-state [online_state]="instance.instance_online_state"></bk-online-state>
                         </td>
                         <td class="vert-align no-wrap text-right">
 

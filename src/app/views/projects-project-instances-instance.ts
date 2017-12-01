@@ -164,7 +164,7 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
                     }
                 });
 
-                if (!this.instance.actual_instance) {
+                if (this.instance.actual_instance) {
 
                     this.router.navigate(['/', 'projects', this.projectId, 'instances', this.instanceId]);
 

@@ -79,9 +79,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
                     personal_server_name: model.personal_server_name,
                     web_view_port: model.web_view_port,
                     server_url: model.server_url,
-                    mqtt_username: model.mqtt_username,
                     mqtt_port: model.mqtt_port,
-                    mqtt_password: model.mqtt_password,
                     grid_port: model.grid_port
                 })
                     .then(() => {
@@ -127,8 +125,6 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
                 let model = new ModalsCreateHomerServerModel(
                     server.personal_server_name,
                     server.mqtt_port,
-                    server.mqtt_username,
-                    server.mqtt_password,
                     server.grid_port,
                     server.web_view_port,
                     server.server_url,
@@ -141,9 +137,7 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
                             personal_server_name: model.personal_server_name,
                             web_view_port: model.web_view_port,
                             server_url: model.server_url,
-                            mqtt_username: model.mqtt_username,
                             mqtt_port: model.mqtt_port,
-                            mqtt_password: model.mqtt_password,
                             grid_port: model.grid_port
                         })
                             .then(() => {

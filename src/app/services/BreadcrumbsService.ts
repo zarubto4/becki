@@ -90,6 +90,9 @@ export class BreadcrumbsService {
         this.currentParamsService.currentGarfieldName.subscribe(() => {
             this.refresh();
         });
+        this.currentParamsService.currentHardwareName.subscribe(() => {
+            this.refresh();
+        });
     }
 
     protected findRouteByPath(path: string): Route {
@@ -141,6 +144,10 @@ export class BreadcrumbsService {
                 return this.currentParamsService.currentBugSummarySnapshot;
             case ':garfield':
                 return this.currentParamsService.currentGarfieldNameSnapshot;
+            case ':hardware':
+                return this.currentParamsService.currentHardwareNameSnapShot;
+            case ':actualization_procedure':
+                return this.currentParamsService.currentActualizationProcedureSnapShot;
             case ':last':
                 return this.lastBreadName;
             default:

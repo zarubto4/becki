@@ -502,10 +502,10 @@ export class NotificationService {
                 this.router.navigate(['persons', e.id]);
                 break;
             case 'B_Program_Version':
-                this.router.navigate(['projects', e.project_id, 'blocko', e.program_id, { version: e.project_id }]);
+                this.router.navigate(['projects', e.project_id, 'blocko', e.program_id, { version: e.id }]);
                 break;
             case 'C_Program_Version':
-                this.router.navigate(['projects', e.project_id, 'code', e.program_id, { version: e.project_id }]);
+                this.router.navigate(['projects', e.project_id, 'code', e.program_id, { version: e.id }]);
                 break;
             case 'BProgram':
                 this.router.navigate(['projects', e.project_id, 'blocko', e.id]);
@@ -520,7 +520,7 @@ export class NotificationService {
                 this.router.navigate(['projects', e.project_id, 'instances', e.id]);
                 break;
             case 'ActualizationProcedure':
-                this.router.navigate(['projects', e.project_id, 'instances', e.id]);
+                this.router.navigate(['projects', e.project_id, 'actualization_procedure', e.id]);
                 break;
         }
     }

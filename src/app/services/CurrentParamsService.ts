@@ -95,6 +95,14 @@ export class CurrentParamsService {
     protected currentBugSummarySubject: Subject<string> = null;
     public currentBugSummarySnapshot: string = null;
 
+    public currentHardwareName: Observable<string> = null;
+    protected currentHardwareNameSubject: Subject<string> = null;
+    public currentHardwareNameSnapShot: string = null;
+
+    public currentActualizationProcedureName: Observable<string> = null;
+    protected currentActualizationProcedureSubject: Subject<string> = null;
+    public currentActualizationProcedureSnapShot: string = null;
+
     constructor(protected router: Router, protected backendService: BackendService) {
         console.info('BreadcrumbsService init');
 
@@ -120,6 +128,8 @@ export class CurrentParamsService {
         this.currentCodeServerName = this.currentCodeServerNameSubject = new Subject<string>();
         this.currentBugSummary = this.currentBugSummarySubject = new Subject<string>();
         this.currentGarfieldName = this.currentGarfieldNameSubject = new Subject<string>();
+        this.currentHardwareName = this.currentHardwareNameSubject = new Subject<string>();
+        this.currentActualizationProcedureName = this.currentActualizationProcedureSubject = new Subject<string>();
 
         router.events.subscribe(event => {
             if (event instanceof NavigationCancel || event instanceof NavigationEnd) {
@@ -172,6 +182,20 @@ export class CurrentParamsService {
 
         }
 
+        if (this.currentParamsSnapshot['hardware'] !== params['hardware']) {
+
+            if (!params['hardware']) {
+                this.currentHardwareNameSnapShot = null;
+                this.currentHardwareNameSubject.next(this.currentHardwareNameSnapShot);
+            } else {
+                this.backendService.boardGet(params['hardware']).then((hardware) => {
+                    this.currentHardwareNameSnapShot = hardware.name != null ? (hardware.id + ' (' + hardware.name + ')') : hardware.id;
+                    this.currentHardwareNameSubject.next(this.currentHardwareNameSnapShot);
+                });
+            }
+
+        }
+
         if (this.currentParamsSnapshot['product'] !== params['product']) {
 
             if (!params['product']) {
@@ -199,14 +223,11 @@ export class CurrentParamsService {
                 // TODO: remove parseInt after make invoice id string in Tyrion!!! [DH]
                 this.backendService.invoiceGet(params['invoice']).then((invoice) => {
                     this.currentInvoiceNumberSnapshot = invoice.invoice.invoice_number;
-                    this.currentInstanceIdSubject.next(this.currentInvoiceNumberSnapshot);
+                    this.currentInvoiceNumberSubject.next(this.currentInvoiceNumberSnapshot);
                 });
             }
 
         }
-
-
-
 
         if (this.currentParamsSnapshot['blocko'] !== params['blocko']) {
 
@@ -217,6 +238,20 @@ export class CurrentParamsService {
                 this.backendService.bProgramGet(params['blocko']).then((blocko) => { // TODO [permission]: Project.read_permission
                     this.currentBlockoNameSnapshot = blocko.name;
                     this.currentBlockoNameSubject.next(this.currentBlockoNameSnapshot);
+                });
+            }
+
+        }
+
+        if (this.currentParamsSnapshot['actualization_procedure'] !== params['actualization_procedure']) {
+
+            if (!params['actualization_procedure']) {
+                this.currentActualizationProcedureSnapShot = null;
+                this.currentActualizationProcedureSubject.next(this.currentActualizationProcedureSnapShot);
+            } else {
+                this.backendService.actualizationProcedureGet(params['actualization_procedure']).then((procedure) => { // TODO [permission]: Project.read_permission
+                    this.currentActualizationProcedureSnapShot = procedure.id;
+                    this.currentActualizationProcedureSubject.next(this.currentActualizationProcedureSnapShot);
                 });
             }
 
@@ -326,8 +361,10 @@ export class CurrentParamsService {
                 this.currentInstanceIdSnapshot = null;
                 this.currentInstanceIdSubject.next(this.currentInstanceIdSnapshot);
             } else {
-                this.currentInstanceIdSnapshot = params['instance'];
-                this.currentInstanceIdSubject.next(this.currentInstanceIdSnapshot);
+                this.backendService.instanceGet(params['instance']).then((instance) => {
+                    this.currentInstanceIdSnapshot = instance.name != null ? (instance.id + ' (' + instance.name + ')') : instance.id;
+                    this.currentInstanceIdSubject.next(this.currentInstanceIdSnapshot);
+                });
             }
 
         }

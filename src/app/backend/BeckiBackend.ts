@@ -310,7 +310,7 @@ export interface OnlineChangeStatus {
 }
 
 export interface ModelChangeStatus {
-    model: ('Board' | 'CProgram' | 'MProgram' | 'BProgram' | 'ActualizationProcedure');
+    model: ('Board' | 'CProgram' | 'MProgram' | 'BProgram' | 'ActualizationProcedure' | 'CProgramUpdatePlan');
     model_id: 'string';
 }
 
