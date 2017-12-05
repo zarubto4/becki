@@ -93,7 +93,7 @@ export abstract class Notification {
             } else if (error) {
                 this.htmlBody += '<br><b>' + error + '</b>';
 
-            } else {
+            } else if (reason) {
                 this.htmlBody += '<br><b>' + reason + '</b>';
 
             }
