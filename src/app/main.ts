@@ -191,6 +191,7 @@ import { OnlineStateComponent } from './components/OnlineStateComponent';
 import { TypeOfUpdateComponent } from './components/TypeOfUpdateComponent';
 import { CompilationStatusComponent } from './components/CompilationStatusComponent';
 import { ProjectsProjectActualizationProcedureComponent } from './views/projects-project-actualization-procedure';
+import { ModalPickHardwareTerminalComponent } from './modals/pick-hardware-terminal';
 
 
 // @formatter:off
@@ -613,6 +614,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsHardwareGroupPropertiesComponent,
         ModalsHardwareGroupDeviceSettingsComponent,
         ModalsUpdateReleaseFirmwareComponent,
+        ModalPickHardwareTerminalComponent,
 
     ],
     exports: [AppComponent],

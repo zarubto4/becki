@@ -19,6 +19,15 @@ import { OnlineChangeStatus } from '../backend/BeckiBackend';
 import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
 import { ModalsDeviceEditDeveloperParameterValueModel } from '../modals/device-edit-developer-parameter-value';
 import { ModalsPictureUploadModel } from '../modals/picture-upload';
+import { ConsoleLogComponent } from '../components/ConsoleLogComponent';
+import { FormGroup, FormControl } from '@angular/forms';
+import { ModalPickHardwareTerminalComponent, ModalPickHardwareTerminalModel } from '../modals/pick-hardware-terminal';
+import { IBoardForFastUploadDetail } from '../backend/TyrionAPI';
+
+export interface TerminalParameters {
+    id: string;
+    name: string;
+}
 
 export interface ConfigParameters {
     key: string;
@@ -45,16 +54,51 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
     hardwareTab: string = 'overview';
+    commandTab: string = 'terminal';
+
     configParameters: ConfigParameters[];
+    colorForm: FormGroup;
+
+    avalibleHardware: IBoardForFastUploadDetail[];
+    avalibleColors = ['#0082c8', '#e6194b', '#3cb44b', '#ffe119', '#f58231', '#911eb4', '#46f0f0', '#008080', '#aa6e28', '#ffd8b1'];
+
+    @ViewChild(ConsoleLogComponent)
+    consoleLog: ConsoleLogComponent;
+
+    numbers: any;
+
+    terminalSubscibe: any; //TODO 
+    terminalHardware: TerminalParameters[] = [];
+
+    lastInstance: number = 1;
 
     constructor(injector: Injector) {
         super(injector);
+
+        this.colorForm = this.formBuilder.group({
+        });
 
         this.backendService.onlineStatus.subscribe(status => {
             if (status.model === 'Board' && this.hardwareId === status.model_id) {
                 this.device.online_state = status.online_status;
             }
         });
+
+       /* this.terminalSubscibe = this.backendService.hardwareTerminal.subscribe(log => {
+            this.logRecived(log);
+        });*/
+
+        setInterval(intrvl => {
+            if (this.consoleLog) {
+                let rnd = Math.floor(Math.random() * 5);
+                if (rnd === 0) { this.consoleLog.add('error', 'Status update', 'CSsource'); } else
+                    if (rnd === 1) { this.consoleLog.add('info', 'Status update', 'CSsource'); } else
+                        if (rnd === 2) { this.consoleLog.add('log', 'Status update', 'CSsource'); } else
+                            if (rnd === 3) { this.consoleLog.add('output', 'Status update', 'CSsource'); } else {
+                                this.consoleLog.add('warn', 'Status update', 'CSsource');
+                            }
+            }
+        }, 1000);
     };
 
     ngOnInit(): void {
@@ -64,9 +108,57 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             this.init = true;
             this.refresh();
         });
+
+    }
+
+    logRecived(log: any) {
+        if (log.id) {
+
+        }
+    }
+
+    onAddHardwareClick() {
+        console.log(this.avalibleHardware);
+        if (this.avalibleHardware && this.avalibleHardware.length > 0) {
+            this.addNewHardwareToTerminal();
+
+        } else {
+            this.addFlashMessage(new FlashMessageError(this.translate('no more HW to add')));
+
+        }
+    }
+
+    addNewHardwareToTerminal() {
+        let model = new ModalPickHardwareTerminalModel(this.avalibleHardware, this.avalibleColors[this.lastInstance]);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                this.colorForm.addControl('color' + model.selectedBoard.id, new FormControl('color' + model.selectedBoard.id));
+                this.colorForm.controls['color' + model.selectedBoard.id].setValue(model.color);
+
+                let deleteId = this.avalibleHardware.findIndex(x => x.id === model.selectedBoard.id);
+                if (deleteId > -1) {
+                    this.avalibleHardware.splice(deleteId, 1);
+                }
+
+                this.terminalHardware.push({ 'id': model.selectedBoard.id, 'name': model.selectedBoard.name });
+
+                this.lastInstance++;
+
+
+            }
+        }).catch(reason => {
+            // this.unblockUI();
+            this.addFlashMessage(new FlashMessageError(this.translate('flash_invoice_cant_be_resend'), reason));
+        });
+
+    }
+
+    onTogglecommandTab(tab: string) {
+        this.commandTab = tab;
     }
 
     ngOnDestroy(): void {
+
         this.routeParamsSubscription.unsubscribe();
     }
 
@@ -92,12 +184,31 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                     }
                 });
 
+
+                if (!this.terminalHardware.find(boardsInTerminal => boardsInTerminal.id === this.device.id)) {
+                    this.colorForm.addControl('color' + this.device.id, new FormControl('color' + this.device.id));
+                    this.colorForm.controls['color' + this.device.id].setValue('#0000FF');
+                    this.terminalHardware.push({ 'id': this.device.id, 'name': this.device.name });
+                    console.log(this.terminalHardware);
+                }
+
                 return this.backendService.typeOfBoardGet(board.type_of_board_id);
 
             })
             .then((typeOfBoard) => {
                 this.typeOfBoard = typeOfBoard;
+
+                this.backendService.boardsGetForIdeOperation(this.projectId).then(boards => {
+                    this.avalibleHardware = boards.filter(item => {
+                        return !this.terminalHardware.some(board => board.id === item.id);
+                    });
+
+
+                }).catch(error => {
+                    this.addFlashMessage(new FlashMessageError(this.translate('flash_hardware_cant_get_list'), error));
+                });
                 this.unblockUI();
+
             })
             .catch((reason) => {
                 this.fmError(this.translate('label_cant_load_device'));
@@ -299,8 +410,8 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     /* tslint:disable:max-line-length ter-indent */
     onFilterActualizationProcedureTask(pageNumber: number = 0,
-                                       states: ('successful_complete' | 'complete' | 'complete_with_error' | 'canceled' | 'in_progress' | 'not_start_yet')[] = ['successful_complete', 'complete' , 'complete_with_error' , 'canceled' , 'in_progress' , 'not_start_yet'],
-                                       type_of_updates: ('MANUALLY_BY_USER_INDIVIDUAL' | 'MANUALLY_BY_USER_BLOCKO_GROUP' | 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' | 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' | 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE')[] = ['MANUALLY_BY_USER_INDIVIDUAL' , 'MANUALLY_BY_USER_BLOCKO_GROUP' , 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' , 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' , 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE']): void {
+        states: ('successful_complete' | 'complete' | 'complete_with_error' | 'canceled' | 'in_progress' | 'not_start_yet')[] = ['successful_complete', 'complete', 'complete_with_error', 'canceled', 'in_progress', 'not_start_yet'],
+        type_of_updates: ('MANUALLY_BY_USER_INDIVIDUAL' | 'MANUALLY_BY_USER_BLOCKO_GROUP' | 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' | 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' | 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE')[] = ['MANUALLY_BY_USER_INDIVIDUAL', 'MANUALLY_BY_USER_BLOCKO_GROUP', 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME', 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE', 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE']): void {
         this.blockUI();
 
         this.backendService.actualizationTaskGetByFilter(pageNumber, {

@@ -44,9 +44,9 @@
                         <li [class.active]="hardwareTab == 'developer'">
                             <a class="cursor-pointer" (click)="onToggleHardwareTab('developer')">{{'tab_developer'|bkTranslate:this}}</a>
                         </li>
-                        <!--li [class.active]="hardwareTab == 'debug'">
+                        <li [class.active]="hardwareTab == 'debug'">
                             <a class="cursor-pointer" (click)="onToggleHardwareTab('command_center')">Advance Command center</a>
-                        </li-->
+                        </li>
                     </ul>
                 </div>
 
@@ -106,7 +106,8 @@
                                 </div>
                                 <hr>
                                 <div>
-                                    {{'label_device_status'|bkTranslate:this}}: <bk-online-state [online_state]="device.online_state"></bk-online-state>
+                                    {{'label_device_status'|bkTranslate:this}}:
+                                    <bk-online-state [online_state]="device.online_state"></bk-online-state>
                                 </div>
                                 <div>
                                     <span *ngIf="!device.latest_online">
@@ -153,7 +154,8 @@
 
                                                 <span *ngIf="device.actual_bootloader_id" class="font-grey-mint">{{'label_bootloader_version'|bkTranslate:this}}: </span>
                                                 <span *ngIf="device.actual_bootloader_id" class="font-grey-mint bold"> {{device.actual_bootloader_version_name?device.actual_bootloader_version_name:('label_not_set_none'|bkTranslate:this)
-                                                    }}</span>
+                                                    }}
+                                                </span>
 
                                                 <span *ngIf="device.actual_bootloader_id != null && device.available_bootloader_id == device.actual_bootloader_id"> &nbsp;&nbsp;
                                                     <span class="font-grey-mint">({{'label_bootloader_up_to_date'|bkTranslate:this}})</span>
@@ -189,8 +191,7 @@
                                                         <i class="fa fa-spinner fa-spin"></i>
                                                     </span>
                                                     <span *ngIf="device.ip_address">
-                                                        <a target="_blank" href="http://{{device.ip_address}}:{{device.bootloader_core_configuration.webport}}"
-                                                            class="bold">http://{{device.ip_address}}:{{device.bootloader_core_configuration.webport}}</a>
+                                                        <a target="_blank" href="http://{{device.ip_address}}:{{device.bootloader_core_configuration.webport}}" class="bold">http://{{device.ip_address}}:{{device.bootloader_core_configuration.webport}}</a>
                                                     </span>
                                                     <br>
                                                     <span>(working only on same local network)</span>
@@ -463,7 +464,7 @@
                     <div *ngIf="device && typeOfBoard" class="row">
                         <div class="col-md-12">
 
-                            <div *ngIf="actualizationTaskFilter && actualizationTaskFilter.content.length > 0"  class="table-scrollable">
+                            <div *ngIf="actualizationTaskFilter && actualizationTaskFilter.content.length > 0" class="table-scrollable">
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
@@ -533,12 +534,17 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <bk-filter-page-component [from]="actualizationTaskFilter.from" [to]="actualizationTaskFilter.to" [total]="actualizationTaskFilter.total"  [totalPages]="actualizationTaskFilter.pages" (onSelect)="selectedFilterPageActualizationProcedureTask($event)"></bk-filter-page-component>
+                                <bk-filter-page-component [from]="actualizationTaskFilter.from" [to]="actualizationTaskFilter.to" [total]="actualizationTaskFilter.total"
+                                    [totalPages]="actualizationTaskFilter.pages" (onSelect)="selectedFilterPageActualizationProcedureTask($event)"></bk-filter-page-component>
                             </div>
                             <h3 *ngIf="!actualizationTaskFilter" class="text-center">{{'label_loading'|bkTranslate:this}}</h3>
                             <div *ngIf="actualizationTaskFilter && actualizationTaskFilter.content.length == 0" class="list-no-items">
-                                <p class="list-no-items__main-label"><span [innerHTML]="'label_no_running_update_on_hardware'|bkTranslate:this"></span></p>
-                                <p class="list-no-items__sub-label"><span [innerHTML]="'label_no_running_update_on_hardware_comment'|bkTranslate:this"></span></p>
+                                <p class="list-no-items__main-label">
+                                    <span [innerHTML]="'label_no_running_update_on_hardware'|bkTranslate:this"></span>
+                                </p>
+                                <p class="list-no-items__sub-label">
+                                    <span [innerHTML]="'label_no_running_update_on_hardware_comment'|bkTranslate:this"></span>
+                                </p>
                             </div>
 
 
@@ -548,8 +554,35 @@
 
                 <div *ngIf="hardwareTab == 'command_center'">
 
+                    <div class="row">
+                        <div class="col-12 portlet-title tabbable-line">
+                            <!--ul class="nav nav-tabs margin-left-15 pull-left"-->
+                            <ul class="nav nav-tabs margin-left-15 pull-left">
+                                <li [class.active]="commandTab == 'terminal'">
+                                    <a class="cursor-pointer" (click)="onTogglecommandTab('terminal')">{{'terminal'|bkTranslate:this}}</a>
+                                </li>
+                                <li [class.active]="commandTab == 'settings'">
+                                    <a class="cursor-pointer" (click)="onTogglecommandTab('settings')">{{'settings'|bkTranslate:this}}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div [hidden]="commandTab != 'terminal'">
+                            <bk-console-log maxHeight="400px"></bk-console-log>
+                        </div>
+                        <div [hidden]="commandTab != 'settings'">
+                            <ul>
+                                <li *ngFor="let terminal of terminalHardware">
+                                    <bk-form-color-picker label="{{(terminal.name?terminal.name:terminal.id)}}" [control]="colorForm.controls['color'+terminal.id]" [waitForTouch]="false"></bk-form-color-picker>
+                                </li>
+                            </ul>
+                            <button (click)="onAddHardwareClick()" class="btn default btn-sm">
+                                <i class="fa fa-rocket"></i> {{'add hardware'|bkTranslate:this}}
+                            </button>
+                        </div>
+                    </div>
                 </div>
-
             </div>
         </div>
     </div>

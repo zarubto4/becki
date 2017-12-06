@@ -14,6 +14,7 @@ export interface ConsoleLogItem {
     type: string;
     message: string;
     source?: string;
+    sourceColor?: string;
 }
 
 export type ConsoleLogType = 'log' | 'error' | 'output' | 'info' | 'warn';
@@ -22,7 +23,7 @@ export type ConsoleLogType = 'log' | 'error' | 'output' | 'info' | 'warn';
     selector: 'bk-console-log',
     /* tslint:disable:max-line-length */
     template: `
-<div class="console-log-table-wrapper" [style.max-height]="maxHeight">
+<div class="console-log-table-wrapper" [style.min-height]="(startOnMaxHeight?maxHeight:'20px')" [style.max-height]="maxHeight">
     <table class="table table-fixed table-hover table-light">
         <tbody>
             <tr *ngFor="let log of items;" class="console-log-tr log-{{log.type}}">
@@ -35,7 +36,7 @@ export type ConsoleLogType = 'log' | 'error' | 'output' | 'info' | 'warn';
                         <i class="console-log-icon fa fa-fw fa-info-circle font-blue" *ngIf="log.type == 'info'"></i>
                         <i class="console-log-icon fa fa-fw fa-exclamation-triangle font-yellow-saffron" *ngIf="log.type == 'warn'"></i>
                     </div>
-                    <div class="console-log-message"><span *ngIf="log.source" class="console-log-source">{{log.source}}<i class="fa fa-fw fa-angle-right"></i></span><span [innerHTML]="log.message"></span></div>
+                    <div class="console-log-message"><span *ngIf="log.source" [style.color]="(log.sourceColor?log.sourceColor:'#8896a0')" >{{log.source}}<i class="fa fa-fw fa-angle-right"></i></span><span [innerHTML]="log.message"></span></div>
                 </td>
             </tr>
             <tr *ngIf="items.length == 0">
@@ -54,6 +55,9 @@ export class ConsoleLogComponent {
     @Input()
     maxHeight: string = null;
 
+    @Input()
+    startOnMaxHeight: boolean = true;
+
     items: ConsoleLogItem[] = [];
 
     constructor(private translationService: TranslationService) {
@@ -67,7 +71,7 @@ export class ConsoleLogComponent {
         return this.translationService.translate(key, this, null, args);
     }
 
-    add(type: ConsoleLogType, message: string, source?: string, timestamp?: string) {
+    add(type: ConsoleLogType, message: string, source?: string, sourceColor?: string, timestamp?: string) {
         if (!timestamp) {
             timestamp = moment().format('HH:mm:ss.SSS');
         }
@@ -75,7 +79,8 @@ export class ConsoleLogComponent {
             timestamp: timestamp,
             type: type,
             message: message.replace(/\n/g, '<br>').replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;'),
-            source: source
+            source: source,
+            sourceColor: sourceColor
         });
     }
 
