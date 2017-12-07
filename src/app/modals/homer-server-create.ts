@@ -18,8 +18,9 @@ export class ModalsCreateHomerServerModel extends ModalModel {
     constructor(
         public personal_server_name: string = '',
         public mqtt_port: number = 1883,
-        public grid_port: number = 8052,
-        public web_view_port: number = 8051,
+        public grid_port: number = 8053,
+        public web_view_port: number = 8052,
+        public server_remote_port: number = 8054,
         public server_url: string = '',
         public edit: boolean = false,
     ) {
@@ -45,9 +46,10 @@ export class ModalsCreateHomerServerComponent implements OnInit {
 
         this.form = this.formBuilder.group({
             'personal_server_name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
-            'mqtt_port': ['', [Validators.required, Validators.minLength(4), BeckiValidators.number]],
+            'mqtt_port': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
             'grid_port': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
             'web_view_port': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
+            'server_remote_port': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
             'server_url': ['', [Validators.required]]    // TODO Valid URL
         });
     }
@@ -57,6 +59,7 @@ export class ModalsCreateHomerServerComponent implements OnInit {
         (<FormControl>(this.form.controls['mqtt_port'])).setValue(this.modalModel.mqtt_port);
         (<FormControl>(this.form.controls['grid_port'])).setValue(this.modalModel.grid_port);
         (<FormControl>(this.form.controls['web_view_port'])).setValue(this.modalModel.web_view_port);
+        (<FormControl>(this.form.controls['server_remote_port'])).setValue(this.modalModel.server_remote_port);
         (<FormControl>(this.form.controls['server_url'])).setValue(this.modalModel.server_url);
     }
 
@@ -65,6 +68,7 @@ export class ModalsCreateHomerServerComponent implements OnInit {
         this.modalModel.mqtt_port = this.form.controls['mqtt_port'].value;
         this.modalModel.grid_port = this.form.controls['grid_port'].value;
         this.modalModel.web_view_port = this.form.controls['web_view_port'].value;
+        this.modalModel.server_remote_port = this.form.controls['server_remote_port'].value;
         this.modalModel.server_url = this.form.controls['server_url'].value;
         this.modalClose.emit(true);
     }

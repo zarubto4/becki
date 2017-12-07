@@ -3,9 +3,9 @@
         <button type="button" class="close" (click)="onCloseClick()"></button>
         <h4 class="modal-title">{{'title'|bkTranslate:this}}</h4>
     </div>
-    <div class="modal-body">
+    <div *ngIf="modalModel.boards" class="modal-body">
         <form [formGroup]="form">
-            <bk-form-select [control]="form.controls.board" label="{{'label_hardware'|bkTranslate:this}}" placeholder="{{'placeholder_hardware'|bkTranslate:this}}" [options]="options"></bk-form-select>
+            <bk-form-select [control]="form.controls.board" [label]="'label_hardware'|bkTranslate:this" [placeholder]="'placeholder_hardware'|bkTranslate:this" [options]="options"></bk-form-select>
         </form>
     </div>
     <div class="modal-footer">

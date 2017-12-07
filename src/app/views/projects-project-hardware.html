@@ -214,15 +214,16 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th class="col col-lg-1">{{'table_update_id'|bkTranslate:this}}</th>
-                            <th class="col col-lg-2">{{'table_created'|bkTranslate:this}}</th>
-                            <th class="col col-lg-2">{{'table_planed'|bkTranslate:this}}</th>
-                            <th class="col col-lg-2">{{'table_finished'|bkTranslate:this}}</th>
-                            <th class="col col-lg-2">{{'table_firmware_type'|bkTranslate:this}}</th>
-                            <th class="col col-lg-2">{{'table_update_type'|bkTranslate:this}}</th>
-                            <th class="col col-lg-1 text-center">{{'table_update_progress'|bkTranslate:this}}</th>
-                            <th class="col col-lg-2 text-center">{{'table_update_state'|bkTranslate:this}}</th>
-                            <th class="col col-lg-2 text-center">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                            <th class="text-center">{{'table_update_id'|bkTranslate:this}}</th>
+                            <th class="text-center">{{'table_created'|bkTranslate:this}}</th>
+                            <th class="text-center">{{'table_planed'|bkTranslate:this}}</th>
+                            <th class="text-center">{{'table_finished'|bkTranslate:this}}</th>
+                            <th class="text-center">{{'table_firmware_type'|bkTranslate:this}}</th>
+                            <th class="text-center">{{'table_details'|bkTranslate:this}}</th>
+                            <th class="text-center">{{'table_update_type'|bkTranslate:this}}</th>
+                            <th class="text-center">{{'table_update_progress'|bkTranslate:this}}</th>
+                            <th class="text-center">{{'table_update_state'|bkTranslate:this}}</th>
+                            <th class="text-center">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -239,26 +240,27 @@
                             </td>
 
                             <td class="vert-align">
-
-                                <template [ngIf]="procedure.firmware_type">
-                                    {{procedure.firmware_type|bkTranslateTable:this:'firmware_type'}}
-                                </template>
-
+                                <bk-firmware-type [firmware_type]="procedure.firmware_type"></bk-firmware-type>
+                            </td>
+                            <td class="vert-align">
                                 <template [ngIf]="procedure.type_of_update == 'MANUALLY_RELEASE_MANAGER'">
                                     <template [ngIf]="procedure.firmware_type == 'FIRMWARE' || procedure.firmware_type == 'BACKUP'" >
-                                        <a *ngIf="procedure.program" (click)="onCProgramClick(procedure.program.c_program_id)">{{procedure.program.c_program_version_name}}</a>
+                                        <a *ngIf="procedure.program" class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id]">{{procedure.program.c_program_program_name}}</a>
+                                        -
+                                        <a *ngIf="procedure.program" class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id, procedure.program.c_program_version_id]">{{procedure.program.c_program_version_name}}</a>
                                     </template>
                                     <template [ngIf]="procedure.firmware_type == 'BOOTLOADER'">
-                                        <a *ngIf="procedure.bootloader" (click)="onBoardTypeClick(procedure.bootloader.type_of_board_id)">{{procedure.bootloader.bootloader_name}}</a>
+                                        <a *ngIf="procedure.program" class="bold" [routerLink]="['/hardware', procedure.bootloader.type_of_board_id]">{{procedure.bootloader.bootloader_name}}</a>
                                     </template>
                                 </template>
                             </td>
+
                             <td class="vert-align">
                                 <bk-type-of-update [state]="procedure.type_of_update"></bk-type-of-update>
                             </td>
                             <td class="vert-align text-center">
                                 <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.procedure_size_complete}}/{{procedure.procedure_size_all}}</span>
-                                <span *ngIf="!procedure.procedure_size_all ||procedure_size_all == 0 " class="bold">-/-</span>
+                                <span *ngIf="!procedure.procedure_size_all || procedure_size_all == 0 " class="bold">-/-</span>
                             </td>
 
                             <!-- Update State -->

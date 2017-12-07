@@ -17,7 +17,7 @@ export class TyrionComponent extends BaseMainComponent implements OnInit {
 
     updates: IServerUpdates = null;
 
-    form: FormGroup;
+    form: FormGroup = null;
 
     versionSelect: FormSelectComponentOption[] = [];
 

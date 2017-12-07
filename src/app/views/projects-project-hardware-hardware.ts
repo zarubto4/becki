@@ -67,7 +67,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     numbers: any;
 
-    terminalSubscibe: any; //TODO 
+    terminalSubscibe: any; // TODO
     terminalHardware: TerminalParameters[] = [];
 
     lastInstance: number = 1;
@@ -109,6 +109,12 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             this.refresh();
         });
 
+        this.backendService.objectUpdateTyrionEcho.subscribe((status) => {
+            if (status.model === 'Board' && this.hardwareId === status.model_id) {
+                this.refresh();
+                this.onFilterActualizationProcedureTask();
+            }
+        });
     }
 
     logRecived(log: any) {
@@ -156,6 +162,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     onTogglecommandTab(tab: string) {
         this.commandTab = tab;
     }
+
 
     ngOnDestroy(): void {
 

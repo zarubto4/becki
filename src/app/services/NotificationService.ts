@@ -89,10 +89,8 @@ export abstract class Notification {
 
             } else if (bodyMesseage) {
                 this.htmlBody += '<br><b>' + bodyMesseage + '</b>';
-
             } else if (error) {
                 this.htmlBody += '<br><b>' + error + '</b>';
-
             } else if (reason) {
                 this.htmlBody += '<br><b>' + reason + '</b>';
 

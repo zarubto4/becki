@@ -40,10 +40,10 @@
                 <div class="col-md-4">
                     <template [ngIf]="procedure.type_of_update == 'MANUALLY_RELEASE_MANAGER'">
                         <template [ngIf]="procedure.firmware_type == 'FIRMWARE' || procedure.firmware_type == 'BACKUP'" >
-                            <a *ngIf="procedure.program" (click)="onCProgramClick(procedure.program.c_program_id)">{{procedure.a.c_program_version_name}}</a>
+                            <a class="bold" [routerLink]="['/projects', projectId, 'code', procedure.program.c_program_id]">{{procedure.a.c_program_version_name}}</a>
                         </template>
                         <template [ngIf]="procedure.firmware_type == 'BOOTLOADER'">
-                            <a *ngIf="procedure.bootloader" (click)="onBoardTypeClick(procedure.bootloader.type_of_board_id)">{{procedure.bootloader.bootloader_name}}</a>
+                            <a class="bold" [routerLink]="['/projects', projectId, 'hardware', procedure.bootloader.type_of_board_id]">{{procedure.bootloader.bootloader_name}}</a>
                         </template>
                     </template>
                 </div>
@@ -69,10 +69,12 @@
                     <th>{{'table_finished'|bkTranslate:this}}</th>
                     <th>{{'table_type'|bkTranslate:this}}</th>
                     <th>
-                        <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'table_program'|bkTranslate:this}}</th>
+                        <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'table_program'|bkTranslate:this}}
+                    </th>
                     <th>
-                        <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'table_version'|bkTranslate:this}}</th>
-                    <th>{{'table_type'|bkTranslate:this}}</th>
+                        <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'table_version'|bkTranslate:this}}
+                    </th>
+
                     <th>{{'table_status'|bkTranslate:this}}</th>
                 </tr>
                 </thead>
@@ -81,7 +83,7 @@
 
                     <td class="vert-align">{{update.id.substr(0, 12)}}</td>
                     <td class="vert-align">
-                        <a class="bold" [routerLink]="['/projects', projectId, 'hardware', update.board.id]">{{ !update.board.name ? update.board.name : update.board.id}}</a>
+                        <a class="bold" [routerLink]="['/projects', projectId, 'hardware', update.board.id]">{{ update.board.name ? update.board.name : update.board.id}}</a>
                     </td>
 
                     <td class="vert-align">
@@ -89,10 +91,8 @@
                         <span *ngIf="update.date_of_finish">{{update.date_of_finish|bkUnixTimeToDate}}</span>
                     </td>
 
-                    <td class="vert-align font-grey-mint">
-                        <span *ngIf="update.firmware_type == 'FIRMWARE'" class="bold font-color-grid">{{'label_firmware'|bkTranslate:this}}</span>
-                        <span *ngIf="update.firmware_type == 'BACKUP'" class="bold font-color-grid-dark">{{'label_backup'|bkTranslate:this}}</span>
-                        <span *ngIf="update.firmware_type == 'BOOTLOADER'" class="bold font-blue">{{'label_bootloader'|bkTranslate:this}}</span>
+                    <td class="vert-align">
+                        <bk-firmware-type [firmware_type]="update.firmware_type"></bk-firmware-type>
                     </td>
 
                     <!-- Firmware -->
@@ -114,11 +114,6 @@
                             <span *ngIf="update.bootloader_detail" class="font-grey-mint bold"> {{update.bootloader_detail.version_identificator}}</span>
                         </td>
                     </template>
-
-                    <!-- type -->
-                    <td class="vert-align">
-                        <bk-type-of-update [state]="update.type_of_update"></bk-type-of-update>
-                    </td>
 
                     <!-- Update State -->
                     <td class="vert-align">

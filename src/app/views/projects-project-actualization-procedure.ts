@@ -20,6 +20,8 @@ export class ProjectsProjectActualizationProcedureComponent extends BaseMainComp
     procedure: IActualizationProcedure = null;
     actualizationTaskFilter: IActualizationProcedureTaskList = null;
 
+    currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
+
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
 
@@ -115,9 +117,10 @@ export class ProjectsProjectActualizationProcedureComponent extends BaseMainComp
         this.onFilterActualizationProcedureTask(event.index);
     }
 
-    onBlockoClick(blocko: IBProgramShortDetail): void {
-        this.navigate(['/projects', this.currentParamsService.get('project'), 'blocko', blocko.id]);
+    onBoardTypeClick(boardTypeId: string): void {
+        this.navigate(['/hardware', boardTypeId]);
     }
+
 
 }
 

@@ -17,11 +17,11 @@
                     <div *ngIf="modalModel.deviceGroup.length == 0" class="text-center">
                         <span [innerHTML]="'label_no_groups_warning'|bkTranslate:this"></span>
                     </div>
-                    <div *ngIf="modalModel.deviceGroup.length > 0">
+                    <div *ngIf="modalModel.deviceGroup.length > 0 && groupsForSelect">
                         <bk-form-select #GroupList [options]="groupsForSelect"  [label]="'label_hardware_group'|bkTranslate:this"  [control]="form.controls.deviceGroupStringIdSelected" (valueChanged)="onGroupChange($event)"></bk-form-select>
                     </div>
                 </div>
-                <div *ngIf="deviceGroup" class="col-md-6">
+                <div *ngIf="selectedDeviceGroup" class="col-md-6">
                     <div>
                         <h4>
                             <span [innerHTML]="'label_select'|bkTranslate:this"></span><br>
@@ -32,8 +32,8 @@
 
                     <div *ngIf="type == 'firmware'">
 
-                        <div *ngIf="deviceGroup != null">
-                            <div *ngFor="let type_of_board of deviceGroup.type_of_boards_short_detail">
+                        <div *ngIf="cPrograms">
+                            <div *ngFor="let type_of_board of selectedDeviceGroup.type_of_boards_short_detail">
                                 <span class="bold">{{type_of_board.name}}</span>
                                 <div *ngIf="cPrograms[type_of_board.id] != null && cPrograms[type_of_board.id].content.length > 0">
 
@@ -53,7 +53,7 @@
                                     <span class="text-center" [innerHTML]="'label_no_firmware_warning'|bkTranslate:this"></span>
                                 </div>
                             </div>
-                            <div *ngIf="deviceGroup.type_of_boards_short_detail.length == 0">
+                            <div *ngIf="selectedDeviceGroup.type_of_boards_short_detail.length == 0">
                                 <span class="text-center" [innerHTML]="'label_no_hw_types_in_group'|bkTranslate:this"></span>
                             </div>
                         </div>
@@ -61,8 +61,8 @@
 
 
                     <div *ngIf="type == 'bootloader'">
-                        <div *ngIf="deviceGroup != null">
-                            <div *ngFor="let type_of_board of deviceGroup.type_of_boards_short_detail">
+                        <div *ngIf="bootloaders">
+                            <div *ngFor="let type_of_board of selectedDeviceGroup.type_of_boards_short_detail">
                                 <span class="bold">{{type_of_board.name}}</span>
                                 <div *ngIf="bootloaders[type_of_board.id] != null">
                                     <bk-form-select [options]="get_bootloader_option(bootloaders[type_of_board.id])" [labelComment]="false" [label]="'label_select_bootloader_version'|bkTranslate:this" type="text" [control]="form.controls[ type_of_board.id + '_selectedBootloaderId']"></bk-form-select>
@@ -72,23 +72,23 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="deviceGroup.type_of_boards_short_detail.length == 0">
+                        <div *ngIf="selectedDeviceGroup.type_of_boards_short_detail.length == 0">
                             <span class="text-center" [innerHTML]="'label_no_hw_types_in_group'|bkTranslate:this"></span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div *ngIf="deviceGroup != null && deviceGroup.type_of_boards_short_detail.length > 0 && type == 'firmware'" class="text-center">
-                 <span>Affected devices: {{deviceGroup.group_size}}</span>
+            <div *ngIf="selectedDeviceGroup != null && selectedDeviceGroup.type_of_boards_short_detail.length > 0 && type == 'firmware'" class="text-center">
+                 <span>Affected devices: {{selectedDeviceGroup.group_size}}</span>
             </div>
-            <div *ngIf="deviceGroup != null && deviceGroup.type_of_boards_short_detail.length > 0 && type == 'firmware'">
+            <div *ngIf="selectedDeviceGroup != null && selectedDeviceGroup.type_of_boards_short_detail.length > 0 && type == 'firmware'">
                 <hr>
                 <br>
                 <bk-form-select [control]="form.controls.firmwareType" [label]="'label_firmware_type'|bkTranslate:this"
                                 [options]="firmwareTypeSelect"></bk-form-select>
             </div>
 
-            <div *ngIf="deviceGroup != null && deviceGroup.type_of_boards_short_detail.length > 0">
+            <div *ngIf="selectedDeviceGroup != null && selectedDeviceGroup.type_of_boards_short_detail.length > 0">
                 <hr>
                 <div class="text-center">
                     <h4>

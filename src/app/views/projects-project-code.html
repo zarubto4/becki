@@ -17,7 +17,7 @@
                 </span>
             </div>
             <div class="becki-actions">
-                <button class="btn blue" (click)="onAddClick()">
+                <button *ngIf="tab == 'my_programs'" class="btn blue" (click)="onAddClick()">
                     <i class="fa fa-plus-circle"></i> {{'btn_add_code_program'|bkTranslate:this}}
                 </button>
             </div>

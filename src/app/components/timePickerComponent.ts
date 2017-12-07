@@ -34,7 +34,7 @@ export class TimePickerComponent {
 
     open: boolean = false;
 
-    minute: string = '' + this.currentdate.getMinutes();
+    minute: string = '' + (this.currentdate.getMinutes() + 2);
 
     hour: string = '' + this.currentdate.getHours();
 

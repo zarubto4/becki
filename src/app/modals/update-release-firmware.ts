@@ -25,7 +25,7 @@ export class ModalsUpdateReleaseFirmwareModel extends ModalModel {
         public project_id: string = null,
         public deviceGroup: IBoardGroup[] = [],         // All possible Hardware groups for settings
         public deviceGroupStringIdSelected: string = '',   // List with group ids for hardware update,
-        public firmwareType: string = '',
+        public firmwareType: string = 'firmware',
         public groups: IActualizationProcedureMakeTypeOfBoard[] = [],
         public time: number = 0,
     ) {
@@ -54,7 +54,7 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
     // cProgramForSelect: FormSelectComponentOption[] = null;
     // cProgramVersionForSelect: FormSelectComponentOption[] = null;
     type_of_boards: ITypeOfBoard[] = null;
-    deviceGroup: IBoardGroup = null;
+    selectedDeviceGroup: IBoardGroup = null;
     immediately: boolean = true;
 
     cPrograms: { [typeOfBoardId: string]: ICProgramList } = {};
@@ -86,10 +86,9 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
     };
 
     constructor(public backendService: BackendService, private formBuilder: FormBuilder) {
-
         this.form = this.formBuilder.group({
             'deviceGroupStringIdSelected': ['', [Validators.required]], // TODO Not Empty List Validator! Dominik
-            'firmwareType': [''],
+            'firmwareType': ['', [Validators.required]],
             'date': [''],
             'time': [''],
         });
@@ -103,43 +102,51 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
         this.type = 'bootloader';
     }
 
-    onGroupChange() {
-
-        let group_id: string =  this.formGroupList.selectedValue;
+    onGroupChange(value: string) {
+        let devgroup: IBoardGroup = null;
 
         for (let i: number = 0; i < this.modalModel.deviceGroup.length; i++) {
 
-            if (this.modalModel.deviceGroup[i].id === group_id ) {
+            if (this.modalModel.deviceGroup[i].id === value ) {
+                devgroup = this.modalModel.deviceGroup[i];
+                devgroup.type_of_boards_short_detail.forEach((tp: ITypeOfBoardShortDetail) => {
 
-                this.deviceGroup = this.modalModel.deviceGroup[i];
-                this.modalModel.deviceGroup[i].type_of_boards_short_detail.forEach((tp: ITypeOfBoardShortDetail) => {
 
                     this.form.addControl(tp.id + '_selectedBootloaderId', new FormControl('', []));
                     this.form.addControl(tp.id + '_selectedCProgramVersionId', new FormControl('', []));
 
                     if (this.cPrograms[tp.id] == null) {
+
                         this.backendService.cProgramGetListByFilter(0, {
                             project_id: this.modalModel.project_id,
                             type_of_board_ids: [tp.id]
                         }).then((list: ICProgramList) => {
                             this.cPrograms[tp.id] = list;
+
+                            if (this.cPrograms[tp.id] && this.bootloaders[tp.id]) {
+                                this.selectedDeviceGroup = devgroup;
+                            }
+
                         }).catch(reason => {
                         });
                     }
-                });
 
-                this.modalModel.deviceGroup[i].type_of_boards_short_detail.forEach((tp: ITypeOfBoardShortDetail) => {
                     if (this.bootloaders[tp.id] == null) {
+
                         this.backendService.typeOfBoardGet(tp.id)
                             .then((typeOfBoard) => {
                                 this.bootloaders[tp.id] = typeOfBoard.boot_loaders;
+
+                                if (this.cPrograms[tp.id] && this.bootloaders[tp.id]) {
+                                    this.selectedDeviceGroup = devgroup;
+                                }
+
                             }).catch(reason => {
                             });
                     }
                 });
             }
         }
-
     }
 
     hwCProgramVersionChanged(typeOfBoardId: string, cProgramVersion: string) {
@@ -156,7 +163,6 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
     }
 
     ngOnInit() {
-
         this.set_firmware();
 
         this.groupsForSelect = this.modalModel.deviceGroup.map((pv) => {
@@ -178,7 +184,9 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
             label: 'Firmware - Backup'
         });
 
+
         (<FormControl>(this.form.controls['firmwareType'])).setValue(this.modalModel.firmwareType);
+        (<FormControl>(this.form.controls['deviceGroupStringIdSelected'])).setValue('');
         (<FormControl>(this.form.controls['date'])).setValue(this.modalModel.time);
         (<FormControl>(this.form.controls['time'])).setValue(this.modalModel.time);
     }
@@ -197,7 +205,7 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
             this.modalModel.firmwareType = this.form.controls['firmwareType'].value;
         }
 
-        this.deviceGroup.type_of_boards_short_detail.forEach((typeOfBoard: ITypeOfBoardShortDetail) => {
+        this.selectedDeviceGroup.type_of_boards_short_detail.forEach((typeOfBoard: ITypeOfBoardShortDetail) => {
 
             let bootloader_id: string = this.form.controls[typeOfBoard.id + '_selectedBootloaderId'].value;
             let c_program_version_id: string  = this.form.controls[typeOfBoard.id + '_selectedCProgramVersionId'].value;

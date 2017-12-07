@@ -151,6 +151,7 @@ export class StaticTranslation {
                 'label_mqtt_password': 'Mqtt password',
                 'label_grid_port': 'Grid port',
                 'label_web_view_port': 'Web View port',
+                'label_hardware_log_port': 'Hardware Logger Stream port',
             }, 'ModalsGarfieldComponent': {
                 'title': 'Garfield',
                 'label_name': 'Garfield Identification',
@@ -1112,6 +1113,7 @@ export class StaticTranslation {
                 'table_program': 'Program',
                 'table_version': 'Version',
                 'table_status': 'Status',
+                'table_details': 'Details',
                 'table_update_type': 'Update Type',
                 'table_firmware_type': 'Type',
                 'table_update_progress': 'Progress',
@@ -1568,6 +1570,7 @@ export class StaticTranslation {
                 'table_started': 'Created',
                 'table_type': 'Update type',
                 'label_finished': 'Finished',
+                'label_time_missing_in_json': 'Not Yet',
                 'label_created': 'Created',
                 'label_planed': 'Planed',
                 'label_type_of_update': 'Planed',

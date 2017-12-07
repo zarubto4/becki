@@ -8,7 +8,7 @@ import { Validators, FormGroup, FormBuilder, AbstractControl, FormControl } from
     /* tslint:disable:max-line-length */
     template: /*[formControl]="control"*/`
     <label *ngIf="labelEnabled">{{label}}</label>
-    <my-date-picker [options]="dateOption" [formControl]="control" placeholder="{{placeholder}}" (dateChanged)="onDateChanged($event)"></my-date-picker>
+    <my-date-picker [options]="dateOption" [formControl]="control" [placeholder]="placeholder" (dateChanged)="onDateChanged($event)"></my-date-picker>
 
 `
     /* tslint:enable */

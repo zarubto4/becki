@@ -496,10 +496,8 @@
                                                 {{'label_time_missing_in_json'|bkTranslate:this}}
                                             </td>
 
-                                            <td class="vert-align font-grey-mint">
-                                                <span *ngIf="update.firmware_type == 'FIRMWARE'" class="bold font-color-grid">{{'label_firmware'|bkTranslate:this}}</span>
-                                                <span *ngIf="update.firmware_type == 'BACKUP'" class="bold font-color-grid-dark">{{'label_backup'|bkTranslate:this}}</span>
-                                                <span *ngIf="update.firmware_type == 'BOOTLOADER'" class="bold font-blue">{{'label_bootloader'|bkTranslate:this}}</span>
+                                            <td class="vert-align">
+                                                <bk-firmware-type [firmware_type]="update.firmware_type"></bk-firmware-type>
                                             </td>
 
                                             <!-- Firmware -->
@@ -508,7 +506,7 @@
                                                     <a *ngIf="update.c_program_detail" class="bold" [routerLink]="['/projects', device.project_id, 'code', update.c_program_detail.c_program_id]">{{update.c_program_detail.c_program_program_name}}</a>
                                                     <span *ngIf="!update.c_program_detail.c_program_program_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                                 </td>
-                                                <td class="font-grey-mint">
+                                                <td class="vert-align font-grey-mint">
                                                     <a *ngIf="update.c_program_detail" class="bold" [routerLink]="['/projects', device.project_id, 'code', update.c_program_detail.c_program_id]">{{update.c_program_detail.c_program_version_name}}</a>
                                                     <span *ngIf="!update.c_program_detail.c_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                                 </td>

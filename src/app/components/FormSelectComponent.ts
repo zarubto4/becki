@@ -54,9 +54,10 @@ export interface FormSelectComponentOption {
     template: `
 <div class="form-group" [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)" [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
     <label *ngIf="labelComment" [innerHTML]="label"></label>
-    <select class="form-control" [formControl]="control" [ngModel]="selectedValue" (ngModelChange)="onSelectedChange($event)"> 
-      <option *ngIf="!pickFirstOption" value="" disabled>{{(placeholder?placeholder:label)}}</option> 
-      <option *ngFor="let option of options" [value]="option.value">{{option.label}}</option>
+    <select class="form-control" [formControl]="control" [ngModel]="selectedValue" (ngModelChange)="onSelectedChange($event)">
+      <template [ngIf]="_options">
+         <option *ngFor="let option of _options" [value]="option.value">{{option.label}}</option>
+      </template>
     </select>
     <span class="help-block" *ngIf="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)">{{validatorErrorsService.getMessageForErrors(control.errors)}}</span>
 </div>
@@ -69,7 +70,7 @@ export class FormSelectComponent {
     control: AbstractControl = null;
 
     @Input()
-    label: string = 'Unknown label';
+    label: string = 'Select one';
 
     @Input()
     labelComment: boolean = true;
@@ -86,52 +87,67 @@ export class FormSelectComponent {
     @Input()
     regexFirstOption: string = null;
 
-    @Input()
-    pickFirstOption: boolean = null;
-
+    firstSelect: boolean = true;
     selectedValue: string = null;
 
     @Output()
     valueChanged: EventEmitter<string> = new EventEmitter<string>();
 
+
     private _options: FormSelectComponentOption[] = [];
 
-    @Input() set options(option: FormSelectComponentOption[]) {
+    @Input()
+    set options(option: FormSelectComponentOption[]) {
         if (option) {
-            this._options = option;
 
-            if (this.pickFirstOption || option.length > 0) {
+            if (this.regexFirstOption) {
                 let toPick: number = 0;
+                // console.log("options:: regexFirstOption selected ");
 
-                if (this.regexFirstOption) {
-                    toPick = option.findIndex(item => {
-                        if (item.label.match(this.regexFirstOption)) {
-                            return true;
-                        }
-                    });
-                    if (toPick === -1) {
-                        this.selectedValue = option[0].value;
-                        this.control.setValue(option[0].value);
-                        this.onSelectedChange(option[0].value);
-                        this.valueChanged.emit(option[0].value);
-                        return;
+                toPick = option.findIndex(item => {
+                    if (item.label.match(this.regexFirstOption)) {
+                        return true;
                     }
+                });
+                if (toPick === -1) {
+                   // console.log("options:: regexFirstOption toPick== -1 ");
+                    this.selectedValue = option[0].value;
+                    this.control.setValue(option[0].value);
+                } else {
+                    // console.log("options:: regexFirstOption toPick== " + toPick);
+                    this.selectedValue = option[toPick].value;
+                    this.control.setValue(option[toPick].value);
                 }
+            }else {
 
-                this.selectedValue = option[toPick].value;
-                this.control.setValue(option[toPick].value);
-
+                if (option.length > 0) {
+                    // console.log("options:: pickFirstOption selected ");
+                    this.selectedValue = option[0].value;
+                    this.control.setValue(option[0].value);
+                }
             }
+
+            this._options = option;
         }
     }
 
-
-    get options(): FormSelectComponentOption[] {
-        return this._options;
-    }
-
     onSelectedChange(newValue: string) {
+        // console.log("onSelectedChange:: Selected value:: ", newValue);
+        // Select first
+        if (newValue == null) {
+            // console.log("onSelectedChange:: Selected value == null ");
+            return;
+        }
+
+        if (this.firstSelect && newValue != null ) {
+            // console.log("this.firstSelect && newValue != null");
+            this.firstSelect = false;
+            this.valueChanged.emit(newValue);
+            return;
+        }
+
         if (this.selectedValue === newValue) {
+            // console.log("onSelectedChange:: this.selectedValue === newValue ");
             return;
         }
 

@@ -191,6 +191,7 @@ import { OnlineStateComponent } from './components/OnlineStateComponent';
 import { TypeOfUpdateComponent } from './components/TypeOfUpdateComponent';
 import { CompilationStatusComponent } from './components/CompilationStatusComponent';
 import { ProjectsProjectActualizationProcedureComponent } from './views/projects-project-actualization-procedure';
+import { FirmwareTypeComponent } from './components/FirmwareTypeComponent';
 import { ModalPickHardwareTerminalComponent } from './modals/pick-hardware-terminal';
 
 
@@ -552,6 +553,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ServerRegistrationComponent,
         CompilationStatusComponent,
         ProjectsProjectActualizationProcedureComponent,
+        FirmwareTypeComponent,
         // Modals components
         ModalsAdminCreateHardwareComponent,
         ModalsBillingInformationComponent,
