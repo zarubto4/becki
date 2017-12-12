@@ -414,6 +414,10 @@
                                     <button *ngIf="device.edit_permission" [disabled]="device.online_state != 'online'" class="btn red btn-sm" (click)="onRestartDeviceClick()">
                                         <i class="fa fa-heartbeat"></i> {{'label_restart_device'|bkTranslate:this}}
                                     </button>
+
+                                    <button *ngIf="device.edit_permission" [disabled]="device.online_state != 'online'" class="btn red btn-sm" (click)="onSwitchToBootloaderDeviceClick()">
+                                        <i class="fa fa-briefcase"></i> {{'label_restart_to_bootloader'|bkTranslate:this}}
+                                    </button>
                                 </div>
                                 <br>
                                 <div>

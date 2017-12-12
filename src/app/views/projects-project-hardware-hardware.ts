@@ -344,10 +344,24 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     }
 
     onRestartDeviceClick(): void {
-        console.info('Device Restart command');
         this.backendService.boardCommandExecution({
             board_id: this.device.id,
             command: 'RESTART'
+        })
+            .then(() => {
+                this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_device_restart_success')));
+                this.refresh();
+            })
+            .catch((reason) => {
+                this.fmError(this.translate('flash_device_restart_success_fail', reason));
+                this.unblockUI();
+            });
+    }
+
+    onSwitchToBootloaderDeviceClick(): void {
+        this.backendService.boardCommandExecution({
+            board_id: this.device.id,
+            command: 'SWITCH_TO_BOOTLOADER'
         })
             .then(() => {
                 this.addFlashMessage(new FlashMessageSuccess(this.translate('flash_device_restart_success')));

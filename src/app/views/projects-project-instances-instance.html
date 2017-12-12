@@ -259,8 +259,8 @@
                                     <div style="margin-top: 10px;" *ngFor="let gridProgram of grid.m_program_snapshots">
 
                                         <div style="padding: 10px; padding-left: 20px; position: relative;"
-                                             [class.bg-yellow-saffron]="gridProgram.snapshot_settings == 'absolutely_public'"
-                                             [class.bg-green-meadow]="gridProgram.snapshot_settings != 'absolutely_public'">
+                                             [class.bg-yellow-saffron]="gridProgram.snapshot_settings == 'only_for_project_members'"
+                                             [class.bg-green-meadow]="gridProgram.snapshot_settings == 'absolutely_public'">
                                             <div>
                                                 <strong class="font-color-grid">{{'label_grid'|bkTranslate:this}}</strong>{{'label_program'|bkTranslate:this}}:
                                                 <a class="font-grey-mint" (click)="onGridProgramClick(grid.m_project_id,gridProgram.m_program_id)">
@@ -284,15 +284,14 @@
                                             </div>
 
                                             <div style="position: absolute; right: 10px; top: 10px;">
-                                                <span
-                                                    [class.font-blue-dark]="gridProgram.snapshot_settings == 'only_for_project_members'">{{'only_for_project_members'|bkTranslateTable:this:'snapshot_settings'}}</span>
+                                                <span [class.font-blue-dark]="gridProgram.snapshot_settings == 'only_for_project_members'">{{'only_for_project_members'|bkTranslateTable:this:'snapshot_settings'}}</span>
                                                 <i class="fa cursor-hand"
                                                    style="vertical-align: middle; font-size: 1.5em;"
-                                                   [class.fa-toggle-on]="gridProgram.snapshot_settings != 'absolutely_public'"
-                                                   [class.fa-toggle-off]="gridProgram.snapshot_settings == 'absolutely_public'"
-                                                   (click)="onGridProgramPublishClick(gridProgram)"></i>
-                                                <span
-                                                    [class.font-blue-dark]="gridProgram.snapshot_settings == 'absolutely_public'">{{'absolutely_public'|bkTranslateTable:this:'snapshot_settings'}}</span>
+                                                   [class.fa-toggle-on]="gridProgram.snapshot_settings == 'absolutely_public'"
+                                                   [class.fa-toggle-off]="gridProgram.snapshot_settings == 'only_for_project_members'"
+                                                   (click)="onGridProgramPublishClick(gridProgram)">
+                                                </i>
+                                                <span [class.font-blue-dark]="gridProgram.snapshot_settings == 'absolutely_public'">{{'absolutely_public'|bkTranslateTable:this:'snapshot_settings'}}</span>
                                             </div>
                                         </div>
                                         <div style="margin-top: 10px; margin-left: 20px; margin-right: 20px;">

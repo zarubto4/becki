@@ -1166,6 +1166,7 @@ export class StaticTranslation {
                 'label_core_configuration_comment': '<p>Please keep in mind that you have God\'s power. You can remotely change anything out of common flow. Please change key configuration parameters only if you know what you are doing.</p>',
                 'label_core_registers': 'Registers',
                 'label_restart_device': 'Restart Device',
+                'label_restart_to_bootloader': 'Restart to Bootloader',
                 'label_info': 'Basic System Info',
                 'label_image': 'Image',
                 'label_set_own_picture': 'Set your own photo',

@@ -327,7 +327,7 @@ let navigation = [
 
     // Admin Labes
     new LabeledLink('Platform Admin ', ['/admin'], 'tachometer', { adminNavigation: true }),
-    new LabeledLink('Byzance Wiki', ['https://wiki.byzance.cz'], 'wikipedia-w', { adminNavigation: true, outsideLink: true }),
+    new LabeledLink('Byzance Wiki', ['https://docu.byzance.cz'], 'wikipedia-w', { adminNavigation: true, outsideLink: true }),
     new LabeledLink('Youtrack Agile', ['https://youtrack.byzance.cz'], 'thumb-tack', { adminNavigation: true, outsideLink: true }),
     new LabeledLink('GitHub', ['https://youtrack.byzance.cz'], 'github', { adminNavigation: true, outsideLink: true }),
     new LabeledLink('Email', ['https://webmail.active24.com'], 'envelope', { adminNavigation: true, outsideLink: true }),
