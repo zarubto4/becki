@@ -259,13 +259,13 @@
                                     <div>
                                         <div>
                                             <div>
-                                                <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_actual_program_name'|bkTranslate:this}}:
-                                                <a *ngIf="device.actual_c_program_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_id]">{{device.actual_c_program_name}}</a>
-                                                <span *ngIf="!device.actual_c_program_name" class="font-grey-mint bold">{{'label_alerts'|bkTranslate:this}}</span>
+                                                <span [innerHTML]="'label_actual_program_name'|bkTranslate:this"></span>:
+                                                <a *ngIf="device.actual_c_program_name" class="bold" [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_id]">{{device.actual_c_program_name}}</a>
+                                                <span *ngIf="!device.actual_c_program_name" class="bold">{{'label_alerts'|bkTranslate:this}}</span>
                                             </div>
                                             <div>
-                                                <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_actual_program_version'|bkTranslate:this}}:
-                                                <a *ngIf="device.actual_c_program_version_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_id, { version: device.actual_c_program_version_id }]">{{device.actual_c_program_version_name}}</a>
+                                                <span [innerHTML]="'label_actual_program_version'|bkTranslate:this"></span>:
+                                                <a *ngIf="device.actual_c_program_version_name" class="bold" [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_id, { version: device.actual_c_program_version_id }]">{{device.actual_c_program_version_name}}</a>
                                                 <span *ngIf="!device.actual_c_program_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                             </div>
                                         </div>
@@ -289,13 +289,13 @@
                                             </div>
                                             <div>
                                                 <div>
-                                                    <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_actual_backup_program_name'|bkTranslate:this}}:
-                                                    <a *ngIf="device.actual_c_program_backup_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_backup_id]">{{device.actual_c_program_backup_name}}</a>
+                                                    <span [innerHTML]="'label_actual_backup_program_name'|bkTranslate:this"></span>:
+                                                    <a *ngIf="device.actual_c_program_backup_name" class="bold" [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_backup_id]">{{device.actual_c_program_backup_name}}</a>
                                                     <span *ngIf="!device.actual_c_program_backup_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                                 </div>
                                                 <div>
-                                                    <strong class="font-color-code">{{'label_code'|bkTranslate:this}} </strong>{{'label_actual_backup_program_version'|bkTranslate:this}}:
-                                                    <a *ngIf="device.actual_c_program_backup_version_name" class="font-grey-mint bold" [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_backup_id, { version: device.actual_c_program_backup_version_id }]">{{device.actual_c_program_backup_version_name}}</a>
+                                                    <span [innerHTML]="'label_actual_backup_program_version'|bkTranslate:this"></span>:
+                                                    <a *ngIf="device.actual_c_program_backup_version_name" class=" bold" [routerLink]="['/projects', device.project_id, 'code', device.actual_c_program_backup_id, { version: device.actual_c_program_backup_version_id }]">{{device.actual_c_program_backup_version_name}}</a>
                                                     <span *ngIf="!device.actual_c_program_backup_version_name" class="font-grey-mint bold">{{'label_not_set_none'|bkTranslate:this}}</span>
                                                 </div>
                                             </div>
@@ -383,9 +383,9 @@
                                                                 <span class="font-grey-mint"> Analytics for Developer </span>
                                                             </td>
                                                             <td>
-                                                                <i *ngIf="!device.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;"
+                                                                <i *ngIf="device.developer_kit" class="fa fa-toggle-on font-green-jungle cursor-hand" style="vertical-align: middle; font-size: 1.8em;"
                                                                     (click)="onEditParameterValue_Boolean_Click('developer_kit',!device.developer_kit)"></i>
-                                                                <i *ngIf="device.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;"
+                                                                <i *ngIf="!device.developer_kit" class="fa fa-toggle-off font-grey-mint cursor-hand" style="vertical-align: middle; font-size: 1.8em;"
                                                                     (click)="onEditParameterValue_Boolean_Click('developer_kit',!device.developer_kit)"></i>
                                                             </td>
                                                         </tr>

@@ -3,7 +3,8 @@
   ~ directory of this distribution.
   -->
 
-<bk-layout-main tabMenu="projects-project" [title]="currentParamsService.currentProjectNameSnapshot"
+<bk-layout-main tabMenu="projects-project"
+                [title]="currentParamsService.currentProjectNameSnapshot"
                 [subtitle]="currentParamsService.currentProjectDescriptionSnapshot">
 
     <div class="portlet portlet light bordered">
@@ -214,16 +215,16 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th class="text-center">{{'table_update_id'|bkTranslate:this}}</th>
-                            <th class="text-center">{{'table_created'|bkTranslate:this}}</th>
-                            <th class="text-center">{{'table_planed'|bkTranslate:this}}</th>
-                            <th class="text-center">{{'table_finished'|bkTranslate:this}}</th>
-                            <th class="text-center">{{'table_firmware_type'|bkTranslate:this}}</th>
-                            <th class="text-center">{{'table_details'|bkTranslate:this}}</th>
-                            <th class="text-center">{{'table_update_type'|bkTranslate:this}}</th>
-                            <th class="text-center">{{'table_update_progress'|bkTranslate:this}}</th>
-                            <th class="text-center">{{'table_update_state'|bkTranslate:this}}</th>
-                            <th class="text-center">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
+                            <th class="vert-align">{{'table_update_id'|bkTranslate:this}}</th>
+                            <th class="vert-align">{{'table_created'|bkTranslate:this}}</th>
+                            <th class="vert-align">{{'table_planed'|bkTranslate:this}}</th>
+                            <th class="vert-align">{{'table_finished'|bkTranslate:this}}</th>
+                            <th class="vert-align">{{'table_firmware_type'|bkTranslate:this}}</th>
+                            <th class="vert-align">{{'table_details'|bkTranslate:this}}</th>
+                            <th class="vert-align">{{'table_update_type'|bkTranslate:this}}</th>
+                            <th class="vert-align">{{'table_update_progress'|bkTranslate:this}}</th>
+                            <th class="vert-align">{{'table_update_state'|bkTranslate:this}}</th>
+                            <th class="vert-align">{{'table_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -258,13 +259,13 @@
                             <td class="vert-align">
                                 <bk-type-of-update [state]="procedure.type_of_update"></bk-type-of-update>
                             </td>
-                            <td class="vert-align text-center">
+                            <td class="vert-align">
                                 <span *ngIf="procedure.procedure_size_all > 0" class="bold">{{procedure.procedure_size_complete}}/{{procedure.procedure_size_all}}</span>
                                 <span *ngIf="!procedure.procedure_size_all || procedure_size_all == 0 " class="bold">-/-</span>
                             </td>
 
                             <!-- Update State -->
-                            <td class="vert-align text-center">
+                            <td class="vert-align">
                                 <bk-update-state [updateState]="procedure.state"></bk-update-state>
                             </td>
 

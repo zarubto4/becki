@@ -36,6 +36,13 @@ export class ProjectsProjectComponent extends BaseMainComponent implements OnIni
             this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
                 this.project = project;
             });
+
+            this.backendService.objectUpdateTyrionEcho.subscribe(status => {
+                if (status.model === 'Project' && this.id === status.model_id) {
+                    this.refresh();
+                }
+            });
+
             this.refresh();
         });
     }

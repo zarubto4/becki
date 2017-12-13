@@ -8,7 +8,7 @@
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
-import { IInstanceShortDetail } from '../backend/TyrionAPI';
+import {IInstanceList, IInstanceShortDetail} from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
@@ -25,7 +25,7 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
     routeParamsSubscription: Subscription;
     projectSubscription: Subscription;
 
-    instances: IInstanceShortDetail[] = null;
+    instanceFilter: IInstanceList = null;
 
     currentParamsService: CurrentParamsService; // exposed for template - filled by BaseMainComponent
 
@@ -37,20 +37,39 @@ export class ProjectsProjectInstancesComponent extends BaseMainComponent impleme
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.id = params['project'];
             this.projectSubscription = this.storageService.project(this.id).subscribe((project) => {
+                this.onFilterInstances();
+            });
+        });
+    }
 
-                this.instances = project.instancies;
+    selectedFilterPage(event: { index: number }) {
+        this.onFilterInstances(event.index);
+    }
 
-                this.instances.forEach((instance, index, obj) => {
+    onFilterInstances(pageNumber: number = 0): void {
+        this.blockUI();
+        this.backendService.instanceGetByFilter(pageNumber, {
+            project_id: this.id
+        })
+            .then((values) => {
+                this.instanceFilter = values;
+
+                this.instanceFilter.content.forEach((instance, index, obj) => {
                     this.backendService.onlineStatus.subscribe((status) => {
                         if (status.model === 'HomerInstance' && instance.id === status.model_id) {
-                            instance.instance_online_state = status.online_status;
+                            instance.online_state = status.online_status;
                         }
                     });
                 });
 
+                this.unblockUI();
+            })
+            .catch((reason) => {
+                this.unblockUI();
+                this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
             });
-        });
     }
+
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();

@@ -29,6 +29,11 @@ export class ProjectsComponent extends BaseMainComponent implements OnInit {
     };
 
     ngOnInit(): void {
+        this.backendService.objectUpdateTyrionEcho.subscribe(status => {
+            if (status.model === 'ProjectsRefreshAfterInvite') {
+                this.refresh();
+            }
+        });
         this.refresh();
     }
 

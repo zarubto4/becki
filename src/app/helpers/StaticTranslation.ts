@@ -1079,7 +1079,7 @@ export class StaticTranslation {
 
             }, 'ProjectsProjectHardwareComponent': {
 
-                'title': 'All devices',
+                'title': 'Project <strong class="font-color-hardware">HARDWARE</strong> Overview',
                 'label_loading': 'Loading',
                 'label_name': 'Name',
                 'label_id': 'Full ID',
@@ -1182,10 +1182,10 @@ export class StaticTranslation {
                 'label_unknown_value': 'none',
                 'label_cant_load_device': 'Device cannot be loaded. {0}',
 
-                'label_actual_program_name': 'Current program name',
-                'label_actual_program_version': 'Current program version',
-                'label_actual_backup_program_name': 'Current backup program name',
-                'label_actual_backup_program_version': 'Current backup program version',
+                'label_actual_program_name': 'Current <strong class="font-color-code">FIRMWARE </strong> name',
+                'label_actual_program_version': 'Current <strong class="font-color-code">FIRMWARE </strong> version name',
+                'label_actual_backup_program_name': 'Current <strong class="font-color-code">BACKUP </strong> program name',
+                'label_actual_backup_program_version': 'Current <strong class="font-color-code">BACKUP </strong> version name',
                 'label_backup_mode': 'Backup mode',
                 'label_backup_static': 'Manual',
                 'label_backup_automatic': 'Automatic',
@@ -2395,7 +2395,10 @@ export class StaticTranslation {
                 'undefined': 'Version status is unknown.',
                 'main_version': 'Version is set as Main or Default'
             },
+            'error_code': {
+                '1' : 'Missing Label in update procedure - probably incompatible previous firmware'
 
+            },
             'update_state': {
                 'complete': 'Completed',
                 'canceled': 'Cancelled',
@@ -2405,7 +2408,7 @@ export class StaticTranslation {
                 'not_updated': 'Updated to wrong version.',
                 'waiting_for_device': 'Waiting for the device to reconnect.',
                 'bin_file_not_found': 'Bin file not found.',
-                'critical_error': 'Critical error.',
+                'critical_error': 'Critical error',
                 'homer_server_is_offline': 'Server is offline.',
                 'instance_inaccessible': 'Instance is not accessible.',
                 'homer_server_never_connected': 'Never connected',
