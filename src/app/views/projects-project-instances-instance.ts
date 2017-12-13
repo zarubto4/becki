@@ -354,11 +354,11 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
 
                             this.homerDao.onOpenCallback = (e) => {
                                 this.homerDao.sendMessage({
-                                    message_type: 'getValues'
+                                    message_type: 'get_values'
                                 });
 
                                 this.homerDao.sendMessage({
-                                    message_type: 'getLogs'
+                                    message_type: 'get_logs'
                                 });
                             };
 
