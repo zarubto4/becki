@@ -2,9 +2,8 @@
  * Created by davidhradek on 08.09.16.
  */
 
-import { TyrionAPI, INotification, IPerson, ILoginResult, IWebSocketToken, ISocialNetworkLogin, ICProgram } from './TyrionAPI';
+import { TyrionAPI, INotification, IPerson, ILoginResult, IWebSocketToken, ISocialNetworkLogin } from './TyrionAPI';
 import * as Rx from 'rxjs';
-import { TranslationService } from '../services/TranslationService';
 
 declare const BECKI_VERSION: string;
 

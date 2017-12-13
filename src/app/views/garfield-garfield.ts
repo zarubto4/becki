@@ -1,11 +1,7 @@
-/**
- * Created by davidhradek on 05.12.16.
- */
-
 import { Component, Injector, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import {
-    IBoard, IBootLoader, ICProgramVersionShortDetail, IGarfield, IHomerServer,
+    IBoard, IBootLoader, ICProgramVersionShortDetail, IGarfield, IHardwareNewSettingsResult, IHomerServer,
     IPrinter, ITypeOfBoard
 } from '../backend/TyrionAPI';
 import { ModalsRemovalModel } from '../modals/removal';
@@ -16,10 +12,10 @@ import { FormGroup, Validators } from '@angular/forms';
 import { FormSelectComponentOption } from '../components/FormSelectComponent';
 import {
     BeckiBackend, IWebSocketGarfieldDeviceConnect, IWebSocketGarfieldDeviceConfigure, IWebSocketMessage,
-    IWebSocketGarfieldDeviceBinary, BugFoundError, IWebSocketGarfieldDeviceBinaryResult, IWebSocketSuccessMessage,
-    IWebSocketErrorMessage, IWebSocketGarfieldDeviceTest, IWebSocketGarfieldDeviceTestResult
+    IWebSocketGarfieldDeviceBinary, BugFoundError, IWebSocketGarfieldDeviceTest
 } from '../backend/BeckiBackend';
-import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
+import { ConsoleLogComponent } from '../components/ConsoleLogComponent';
+import { ModalsConfirmModel } from '../modals/confirm';
 
 @Component({
     selector: 'bk-view-garfield-garfield',
@@ -30,16 +26,14 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     garfield: IGarfield = null;
     garfieldId: string;
     typeOfBoard: ITypeOfBoard = null;
-    device: IBoard = null;
+    device: IHardwareNewSettingsResult = null;
+    deviceId: string = null;
 
     firmwareTestMainVersion: ICProgramVersionShortDetail = null;    // Main Test Firmware
     firmwareMainVersion: ICProgramVersionShortDetail = null;        // Main Production Firmware
     bootLoader: IBootLoader = null;
     mainServer: IHomerServer = null;           // Destination for Server registration
     backupServer: IHomerServer = null;         // Destination for Server registration (backup)
-
-   //  testFirmwareDownloadLink: string = null;  // Test Firmware download link  - Nahrazeno linkem ve ICProgramVersionShortDetail.download_link_bin_file
-   // productionFirmwareDownloadLink: string = null;  // Production Firmware download link
 
     productionBatchForm: FormGroup; // Burn Info Batch Form TypeOfBoard.batch
     batchOptions: FormSelectComponentOption[] = null;
@@ -59,6 +53,10 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
 
     formConfigJson: FormGroup;
 
+    actions: GarfieldAction[] = [];
+
+    messageBuffer: GarfieldRequest[] = [];
+
     // For checking online state on printers
     reloadInterval: any = null;
 
@@ -75,7 +73,6 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
 
     constructor(injector: Injector) {
         super(injector);
-
     };
 
     ngOnInit(): void {
@@ -167,11 +164,11 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             'test_config': ['', [Validators.required]]
         });
 
-        this.wsMessageSubscription = this.backendService.garfieldRecived.subscribe(msg => this.onMessageGarfield(msg));
+        this.wsMessageSubscription = this.backendService.garfieldRecived.subscribe(msg => this.onMessage(msg));
 
         let message: IWebSocketMessage = {
             message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
-            message_type: 'subscribe_becki',
+            message_type: 'subscribe_garfield',
             message_id: this.backendService.uuid()
         };
 
@@ -181,7 +178,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     ngOnDestroy(): void {
         let message: IWebSocketMessage = {
             message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
-            message_type: 'becki_disconnect',
+            message_type: 'unsubscribe_garfield',
             message_id: this.backendService.uuid()
         };
 
@@ -290,6 +287,57 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
         }, 15000);
     }
 
+    beginProcess(): void {
+        if (this.actions.find(action => action.isFailed())) {
+            this.modalService.showModal(new ModalsConfirmModel(this.translate('modal_title_new_device'), this.translate('modal_text_repeat')))
+                .then((value) => {
+                    if (value) {
+                        this.continueProcess();
+                    } else {
+                        this.loadProcessAndStart();
+                    }
+                });
+        }
+        this.modalService.showModal(new ModalsConfirmModel(this.translate('modal_title_new_device'), this.translate('modal_text_new_device'), false))
+            .then((value) => {
+                if (value) {
+                    this.loadProcessAndStart();
+                }
+            });
+    }
+
+    loadProcessAndStart() {
+        this.actions = [];
+        this.actions.push(new GarfieldAction(this.uploadBootLoaderProcess.bind(this)));
+        this.actions.push(new GarfieldAction(this.uploadTestFirmwareProcess.bind(this)));
+        this.actions.push(new GarfieldAction(this.testDeviceProcess.bind(this)));
+        this.actions.push(new GarfieldAction(this.uploadProductionFirmwareProcess.bind(this)));
+        this.actions.push(new GarfieldAction(this.configureDeviceProcess.bind(this)));
+        this.actions.push(new GarfieldAction(this.backUpProcess.bind(this)));
+        this.continueProcess();
+    }
+
+    continueProcess(): void {
+        let action: GarfieldAction = this.actions.find((act: GarfieldAction) => {
+            return !act.isResolved() || act.isFailed();
+        });
+
+        if (action) {
+            action.do()
+                .then((result) => {
+                    action.resolve();
+                    this.onConsoleLog(result);
+                    this.continueProcess();
+                })
+                .catch((reason) => {
+                    action.fail();
+                    this.onConsoleError(reason.toString());
+                });
+        } else {
+            this.fmSuccess(this.translate('flash_burn_successful'));
+        }
+    }
+
     reloadPrinters(): void {
         if (this.garfield && this.garfield.print_sticker_id && this.garfield.print_label_id_1 && this.garfield.print_label_id_2) {
 
@@ -391,36 +439,6 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
         }
     }
 
-    onRegisterHardware(processorId: string) {
-
-        this.backendService.boardCreateAutomaticGarfield({
-            full_id: processorId,
-            garfield_station_id: this.garfield.id,
-            type_of_board_batch_id: this.productionBatchForm.controls['batch'].value,
-            type_of_board_id: this.typeOfBoard.id
-        })
-            .then((result) => {
-                this.fmSuccess(this.translate('flash_registration_device_successful'));
-                this.backendService.boardGet(result.full_id)
-                    .then((board) => {
-                        this.device = board;
-                        if (this.mainStep > 2) {
-                            this.configureDevice();
-                        } else {
-                            this.testHardwareConnected = true;
-                            this.uploadBootLoader();
-                        }
-                    })
-                    .catch((reason) => {
-                        this.fmError(this.translate('label_cant_load_device', reason['message']));
-                    });
-            }).catch(reason => {
-                this.fmError(this.translate('flash_fail'), reason);
-                console.info(reason);
-                this.refresh();
-            });
-    }
-
     onDisconnectGarfield() {
         this.fmWarning(this.translate('flash_garfield_disconnected'));
         this.garfieldAppConnected = false;
@@ -430,188 +448,10 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
         this.garfieldAppDetection = null;
     }
 
-    onMessageGarfield(message: IWebSocketMessage) {
-        switch (message.message_type) {
-            case 'keepalive': {
-                if (this.garfieldAppDetection) {
-                    clearTimeout(this.garfieldAppDetection);
-                    this.setDetection();
-                }
-                if (!this.garfieldAppConnected) {
-                    this.garfieldAppConnected = true;
-                    this.fmInfo(this.translate('flash_garfield_connected'));
-                }
-                break;
-            }
-            case 'subscribe_garfield': {
-                this.garfieldAppConnected = true;
-                this.setDetection();
-                this.fmInfo(this.translate('flash_garfield_connected'));
-                break;
-            }
-            case 'unsubscribe_garfield': {
-                this.onDisconnectGarfield();
-                break;
-            }
-            case 'device_connect': {
-                if (!(
-                    this.garfield
-                    && this.typeOfBoard
-                    && this.bootLoader
-                    && this.printer_label_1
-                    && this.printer_label_2
-                    && this.print_sticker
-                    && this.garfieldTesterConnected
-                    && this.bootLoader.file_path
-                    && this.mainServer
-                    && this.backupServer
-                    && this.productionBatchForm.valid)) {
-                    this.fmError(this.translate('flash_prerequisite_not_met'));
-                    break;
-                }
-
-                this.mainStep = 1;
-                this.errorStep = 0;
-                this.device = null;
-                let msg: IWebSocketGarfieldDeviceConnect = <IWebSocketGarfieldDeviceConnect>message;
-                if (msg.device_id) {
-                    this.backendService.boardGet(msg.device_id)
-                        .then((board) => {
-                            this.device = board;
-                            this.testHardwareConnected = true;
-                            this.fmSuccess(this.translate('flash_device_connected'));
-                            this.uploadBootLoader();
-                        })
-                        .catch((reason) => {
-
-                            if (reason instanceof BugFoundError) {
-                                let body = (<BugFoundError>reason).body;
-                                if (body.code === 404) {
-                                    this.onRegisterHardware(msg.device_id);
-                                }
-                            } else {
-                                this.fmError(this.translate('label_cant_load_device', reason['message']));
-                            }
-                        });
-                } else {
-                    this.fmInfo(this.translate('flash_device_dead_connected'));
-                    this.uploadBootLoader();
-                }
-                break;
-            }
-            case 'device_disconnect': {
-                this.testHardwareConnected = false;
-                this.device = null;
-                this.fmWarning(this.translate('flash_device_disconnected'));
-                break;
-            }
-            case 'tester_connect': {
-                this.garfieldTesterConnected = true;
-                this.fmInfo(this.translate('flash_tester_connected'));
-                break;
-            }
-            case 'tester_disconnect': {
-                this.fmWarning(this.translate('flash_tester_disconnected'));
-                this.garfieldTesterConnected = false;
-                this.testHardwareConnected = false;
-                this.device = null;
-                break;
-            }
-            case 'device_binary': {
-                let msg: IWebSocketGarfieldDeviceBinaryResult = <IWebSocketGarfieldDeviceBinaryResult>message;
-                if (msg.status === 'success') {
-                    if (msg.type === 'bootloader') {
-                        this.uploadFirmware(this.firmwareTestMainVersion.download_link_bin_file);
-                    } else if (msg.type === 'firmware' && this.mainStep < 5) {
-                        this.mainStep = 4;
-                        this.testDevice();
-                    } else if (msg.type === 'firmware') {
-                        this.mainStep = 8;
-                        this.configureDevice();
-                    }
-                } else if (msg.status === 'error') {
-                    let errMsg: IWebSocketErrorMessage = <IWebSocketErrorMessage>message;
-                    this.onConsoleError(errMsg.error);
-                    if (msg.type === 'bootloader') {
-                        this.errorStep = 3;
-                    } else if (msg.type === 'firmware' && this.mainStep < 5) {
-                        this.errorStep = 4;
-                    } else if (msg.type === 'firmware') {
-                        this.errorStep = 8;
-                    }
-                }
-                break;
-            }
-            case 'device_configure': {
-                let msg: IWebSocketSuccessMessage = <IWebSocketSuccessMessage>message;
-                if (msg.status === 'success') {
-                    let backup: IWebSocketMessage = {
-                        message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
-                        message_type: 'device_backup',
-                        message_id: this.backendService.uuid()
-                    };
-                    this.backendService.sendWebSocketMessage(backup);
-                } else if (msg.status === 'error') {
-                    let errMsg: IWebSocketErrorMessage = <IWebSocketErrorMessage>message;
-                    this.onConsoleError(errMsg.error);
-                    this.errorStep = 9;
-                }
-                break;
-            }
-            case 'device_backup': {
-                let msg: IWebSocketSuccessMessage = <IWebSocketSuccessMessage>message;
-                if (msg.status === 'success') {
-                    this.mainStep = 10;
-                    this.device = null;
-                    this.fmSuccess(this.translate('flash_burn_successful'));
-                } else if (msg.status === 'error') {
-                    let errMsg: IWebSocketErrorMessage = <IWebSocketErrorMessage>message;
-                    this.onConsoleError(errMsg.error);
-                    this.errorStep = 10;
-                }
-                break;
-            }
-            case 'device_test': {
-                let msg: IWebSocketSuccessMessage = <IWebSocketSuccessMessage>message;
-                if (msg.status === 'success') {
-                    this.mainStep = 7;
-                    this.uploadFirmware(this.firmwareMainVersion.download_link_bin_file);
-                } else if (msg.status === 'error') {
-                    let errMsg: IWebSocketGarfieldDeviceTestResult = <IWebSocketGarfieldDeviceTestResult>message;
-                    errMsg.errors.forEach((error) => {
-                        this.onConsoleError(error);
-                    });
-                    this.errorStep = 6;
-                }
-                break;
-            }
-            case 'device_id': {
-                let msg: IWebSocketGarfieldDeviceConnect = <IWebSocketGarfieldDeviceConnect>message;
-                if (msg.device_id) {
-                    this.backendService.boardGet(msg.device_id)
-                        .then((board) => {
-                            this.device = board;
-                            this.configureDevice();
-                        })
-                        .catch((reason) => {
-
-                            if (reason instanceof BugFoundError) {
-                                let body = (<BugFoundError>reason).body;
-                                if (body.code === 404) {
-                                    this.onRegisterHardware(msg.device_id);
-                                }
-                            } else {
-                                this.errorStep = 9;
-                                this.fmError(this.translate('label_cant_load_device', reason['message']));
-                            }
-                        });
-                } else {
-                    this.errorStep = 9;
-                    this.fmError(this.translate('flash_cannot_get_device_id'));
-                }
-                break;
-            }
-            default: console.info('Got unknown message: ' + message);
+    resetDetection() {
+        if (this.garfieldAppDetection) {
+            clearTimeout(this.garfieldAppDetection);
+            this.setDetection();
         }
     }
 
@@ -626,81 +466,434 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
             this.garfieldAppDetection = setTimeout(() => {
                 this.onDisconnectGarfield();
             }, 20000);
-        }, 10000);
+        }, 20000);
     }
 
-    testDevice() {
-        this.mainStep = 5;
-        let message: IWebSocketGarfieldDeviceTest = {
+    // Method is used to make sure that device is registered and loaded
+    deviceSafe(): Promise<IHardwareNewSettingsResult> {
+        return new Promise((resolve, reject) => {
+            if (this.deviceId) {
+                this.getDeviceOrRegister(this.deviceId)
+                    .then((device: IHardwareNewSettingsResult) => {
+                        this.device = device;
+                        resolve(device);
+                    })
+                    .catch((reason) => {
+                        reject(reason);
+                    });
+            } else {
+                this.getDeviceId()
+                    .then((full_id) => {
+                        return this.getDeviceOrRegister(full_id);
+                    })
+                    .then((device: IHardwareNewSettingsResult) => {
+                        this.device = device;
+                        resolve(device);
+                    })
+                    .catch((reason) => {
+                        reject(reason);
+                    });
+            }
+        });
+    }
+
+    getDeviceId(): Promise<any> {
+        let message: IWebSocketMessage = {
             message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
-            message_type: 'device_test',
-            message_id: this.backendService.uuid(),
-            test_config: JSON.parse(this.formConfigJson.controls['test_config'].value)
+            message_type: 'device_id',
+            message_id: this.backendService.uuid()
         };
-
-        this.backendService.sendWebSocketMessage(message);
+        return this.send(message, 15000);
     }
 
-    configureDevice() {
-        this.mainStep = 9;
-        if (this.device) {
-            let message: IWebSocketGarfieldDeviceConfigure = {
+    getDeviceOrRegister(full_id: string): Promise<IHardwareNewSettingsResult> {
+        return this.backendService.boardCreateAutomaticGarfield({
+            full_id: full_id,
+            garfield_station_id: this.garfield.id,
+            type_of_board_batch_id: this.productionBatchForm.controls['batch'].value,
+            type_of_board_id: this.typeOfBoard.id
+        });
+    }
+
+    /**************************
+     *                        *
+     * Process Handlers       *
+     *                        *
+     **************************/
+
+    uploadBootLoaderProcess(): Promise<string> {
+        return new Promise((resolve, reject) => {
+            let message: IWebSocketGarfieldDeviceBinary = {
                 message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
-                message_type: 'device_configure',
+                message_type: 'device_binary',
                 message_id: this.backendService.uuid(),
-                configuration: {
-                    mac: this.device.mac_address.toLowerCase(),
-                    normal_mqtt_hostname: this.mainServer.server_url,
-                    normal_mqtt_port: this.mainServer.mqtt_port,
-                    backup_mqtt_hostname: this.backupServer.server_url,
-                    backup_mqtt_port: this.backupServer.mqtt_port,
-                }
+                url: this.bootLoader.file_path,
+                type: 'bootloader'
             };
 
-            let configJson: any = JSON.parse(this.formConfigJson.controls['config'].value);
+            this.send(message, 30000)
+                .then((response) => {
+                    resolve('bootloader upload successful');
+                })
+                .catch((reason) => {
+                    if (typeof reason === 'object' && reason.hasOwnProperty('error')) {
+                        reject('bootloader upload failed - ' + reason['error']);
+                    } else if (typeof reason === 'string') {
+                        reject('bootloader upload failed - ' + reason);
+                    } else {
+                        reject('bootloader upload failed');
+                    }
+                });
+        });
+    }
 
-            for (let key in configJson) {
-                if (configJson.hasOwnProperty(key)) {
-                    message.configuration[key] = configJson[key];
-                }
-            }
+    uploadTestFirmwareProcess(): Promise<string> {
+        return new Promise((resolve, reject) => {
+            let message: IWebSocketGarfieldDeviceBinary = {
+                message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
+                message_type: 'device_binary',
+                message_id: this.backendService.uuid(),
+                url: this.firmwareTestMainVersion.download_link_bin_file,
+                type: 'firmware'
+            };
 
-            this.backendService.sendWebSocketMessage(message);
+            this.send(message, 60000)
+                .then((response) => {
+                    resolve('test firmware upload successful');
+                })
+                .catch((reason) => {
+                    if (typeof reason === 'object' && reason.hasOwnProperty('error')) {
+                        reject('test firmware upload failed - ' + reason['error']);
+                    } else if (typeof reason === 'string') {
+                        reject('test firmware upload failed - ' + reason);
+                    } else {
+                        reject('test firmware upload failed');
+                    }
+                });
+        });
+    }
 
-        } else {
+    testDeviceProcess(): Promise<string> {
+        return new Promise((resolve, reject) => {
+            let message: IWebSocketGarfieldDeviceTest = {
+                message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
+                message_type: 'device_test',
+                message_id: this.backendService.uuid(),
+                test_config: JSON.parse(this.formConfigJson.controls['test_config'].value)
+            };
+
+            this.send(message, 30000)
+                .then((response) => {
+                    resolve('device test successful');
+                })
+                .catch((reason) => {
+                    if (typeof reason === 'object' && reason.hasOwnProperty('errors')) {
+                        reject(reason['errors']);
+                    } else if (typeof reason === 'string') {
+                        reject('device test failed - ' + reason);
+                    } else {
+                        reject('device test failed');
+                    }
+                });
+        });
+    }
+
+    uploadProductionFirmwareProcess(): Promise<string> {
+        return new Promise((resolve, reject) => {
+            let message: IWebSocketGarfieldDeviceBinary = {
+                message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
+                message_type: 'device_binary',
+                message_id: this.backendService.uuid(),
+                url: this.firmwareMainVersion.download_link_bin_file,
+                type: 'firmware'
+            };
+
+            this.send(message, 60000)
+                .then((response) => {
+                    resolve('firmware upload successful');
+                })
+                .catch((reason) => {
+                    if (typeof reason === 'object' && reason.hasOwnProperty('error')) {
+                        reject('firmware upload failed - ' + reason['error']);
+                    } else if (typeof reason === 'string') {
+                        reject('firmware upload failed - ' + reason);
+                    } else {
+                        reject('firmware upload failed');
+                    }
+                });
+        });
+    }
+
+    configureDeviceProcess(): Promise<string> {
+        return new Promise((resolve, reject) => {
+            this.deviceSafe()
+                .then((device: IHardwareNewSettingsResult) => {
+                    let message: IWebSocketGarfieldDeviceConfigure = {
+                        message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
+                        message_type: 'device_configure',
+                        message_id: this.backendService.uuid(),
+                        configuration: device.configuration
+                    };
+
+                    if (message.configuration.hasOwnProperty('mac')) {
+                        message.configuration['mac'] = message.configuration['mac'].toLowerCase();
+                    }
+
+                    let configJson: any = JSON.parse(this.formConfigJson.controls['config'].value);
+
+                    for (let key in configJson) {
+                        if (configJson.hasOwnProperty(key)) {
+                            message.configuration[key] = configJson[key];
+                        }
+                    }
+
+                    this.send(message, 60000)
+                        .then((response) => {
+                            resolve('device configuration successful');
+                        })
+                        .catch((reason) => {
+                            if (typeof reason === 'object' && reason.hasOwnProperty('error')) {
+                                reject('device configuration failed - ' + reason['error']);
+                            } else if (typeof reason === 'string') {
+                                reject('device configuration failed - ' + reason);
+                            } else {
+                                reject('device configuration failed');
+                            }
+                        });
+                })
+                .catch((reason) => {
+                    if (typeof reason === 'object' && reason.hasOwnProperty('error')) {
+                        reject('device configuration failed - ' + reason['error']);
+                    } else if (typeof reason === 'string') {
+                        reject('device configuration failed - ' + reason);
+                    } else {
+                        reject('device configuration failed - unable to load device');
+                    }
+                });
+        });
+    }
+
+    backUpProcess(): Promise<string> {
+        return new Promise((resolve, reject) => {
             let message: IWebSocketMessage = {
                 message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
-                message_type: 'device_id',
-                message_id: this.backendService.uuid()
+                message_type: 'device_backup',
+                message_id: this.backendService.uuid(),
             };
-            this.backendService.sendWebSocketMessage(message);
+
+            this.send(message, 30000)
+                .then((response) => {
+                    resolve('device backup successful');
+                })
+                .catch((reason) => {
+                    if (typeof reason === 'object' && reason.hasOwnProperty('error')) {
+                        reject('device backup failed - ' + reason['error']);
+                    } else if (typeof reason === 'string') {
+                        reject('device backup failed - ' + reason);
+                    } else {
+                        reject('device backup failed');
+                    }
+                });
+        });
+    }
+
+    /**************************
+     *                        *
+     * Message Handlers       *
+     *                        *
+     **************************/
+
+    onKeepAliveMessage() {
+        this.resetDetection();
+        if (!this.garfieldAppConnected) {
+            this.garfieldAppConnected = true;
+            this.fmInfo(this.translate('flash_garfield_connected'));
         }
     }
 
-    uploadBootLoader() {
-        this.mainStep = 2;
-        let message: IWebSocketGarfieldDeviceBinary = {
-            message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
-            message_type: 'device_binary',
-            message_id: this.backendService.uuid(),
-            url: this.bootLoader.file_path,
-            type: 'bootloader'
-        };
-
-        this.backendService.sendWebSocketMessage(message);
-
-        this.mainStep = 3;
+    onSubscribeGarfieldMessage() {
+        this.resetDetection();
+        if (!this.garfieldAppConnected) {
+            this.garfieldAppConnected = true;
+            this.fmInfo(this.translate('flash_garfield_connected'));
+        }
     }
 
-    uploadFirmware(url: string) {
-        let message: IWebSocketGarfieldDeviceBinary = {
-            message_channel: BeckiBackend.WS_CHANNEL_GARFIELD,
-            message_type: 'device_binary',
-            message_id: this.backendService.uuid(),
-            url: url,
-            type: 'firmware'
-        };
+    onDeviceConnectMessage(message: IWebSocketMessage) {
+        if (!(this.garfield
+                && this.typeOfBoard
+                && this.bootLoader
+                && this.printer_label_1
+                && this.printer_label_2
+                && this.print_sticker
+                && this.garfieldTesterConnected
+                && this.bootLoader.file_path
+                && this.mainServer
+                && this.backupServer
+                && this.productionBatchForm.valid)) {
+            this.fmError(this.translate('flash_prerequisite_not_met'));
+            return;
+        }
 
-        this.backendService.sendWebSocketMessage(message);
+        this.device = null;
+        let msg: IWebSocketGarfieldDeviceConnect = <IWebSocketGarfieldDeviceConnect>message;
+        if (msg.device_id) {
+            this.deviceId = msg.device_id;
+        }
+        this.beginProcess();
+    }
+
+    onDeviceDisconnectedMessage() {
+        this.testHardwareConnected = false;
+        this.device = null;
+        this.fmWarning(this.translate('flash_device_disconnected'));
+    }
+
+    onTesterConnectedMessage() {
+        this.garfieldTesterConnected = true;
+        this.fmInfo(this.translate('flash_tester_connected'));
+    }
+
+    onTesterDisconnectedMessage() {
+        this.garfieldTesterConnected = false;
+        this.testHardwareConnected = false;
+        this.device = null;
+        this.fmWarning(this.translate('flash_tester_disconnected'));
+    }
+
+    handleSingleMessage(message: IWebSocketMessage) {
+        switch (message.message_type) {
+            case 'keepalive': this.onKeepAliveMessage(); break;
+            case 'subscribe_garfield': this.onSubscribeGarfieldMessage(); break;
+            case 'unsubscribe_garfield': this.onDisconnectGarfield(); break;
+            case 'device_connect': this.onDeviceConnectMessage(message); break;
+            case 'device_disconnect': this.onDeviceDisconnectedMessage(); break;
+            case 'tester_connect': this.onTesterConnectedMessage(); break;
+            case 'tester_disconnect': this.onTesterDisconnectedMessage(); break;
+            default: console.warn('Got unknown message:', JSON.stringify(message));
+        }
+    }
+
+    onMessage(message: IWebSocketMessage) {
+        // Find the message in buffer
+        let index: number = this.messageBuffer.findIndex((req) => {
+            return req.message.message_type === message.message_type && req.message.message_id === message.message_id;
+        });
+
+        if (index === -1) {
+            this.handleSingleMessage(message); // Message was not response on request
+        } else {
+            let request: GarfieldRequest = this.messageBuffer[index];
+            let status: string = message['status'];
+
+            if (status === 'error') {
+                request.reject(message);
+            } else if (status === 'success') {
+                request.resolve(message);
+            } else {
+                console.warn('Got response on request, but without \'status\', message:', JSON.stringify(message));
+            }
+        }
+    }
+
+    send(message: IWebSocketMessage, timeout: number): Promise<any> {
+        return new Promise((resolve, reject) => {
+            let request: GarfieldRequest = new GarfieldRequest(message, timeout);
+
+            // This will happen if no response was received and time is up
+            let onTimeout = (): void => {
+
+                let index: number = this.messageBuffer.findIndex((req) => {
+                    return req.message.message_id === message.message_id;
+                });
+
+                if (index > 0) {
+                    let requests: GarfieldRequest[] = this.messageBuffer.splice(index, 1);
+                    requests.forEach((r) => { r.reject('timeout for response'); });
+                } else {
+                    console.warn('Timeout for response, but could not found the request in buffer.');
+                }
+            };
+
+            request.setCallbacks(resolve, reject, onTimeout.bind(this));
+            request.startTimeout(); // Begin countdown
+            this.messageBuffer.push(request);
+            this.backendService.sendWebSocketMessage(message);
+        });
+    }
+}
+
+export class GarfieldRequest {
+
+    public message: IWebSocketMessage;
+
+    private resolveCallback: (response: IWebSocketMessage) => void;
+    private rejectCallback: (reason: any) => void;
+    private timeout: number = 30000;
+    private onTimeout: () => void;
+    private timeoutHandler;
+
+    constructor(message: IWebSocketMessage, timeout: number) {
+        this.message = message;
+        this.timeout = timeout;
+    }
+
+    public setCallbacks(resolve: (response: IWebSocketMessage) => void, reject: (reason: any) => void, onTimeout: () => void): void {
+        this.resolveCallback = resolve;
+        this.rejectCallback = reject;
+        this.onTimeout = onTimeout;
+    }
+
+    public startTimeout(): void {
+        this.timeoutHandler = setTimeout(this.onTimeout, this.timeout);
+    }
+
+    public resolve(response: IWebSocketMessage): void {
+        if (this.timeoutHandler) {
+            clearTimeout(this.timeoutHandler);
+        }
+
+        this.resolveCallback(response);
+    }
+
+    public reject(response: any): void {
+        if (this.timeoutHandler) {
+            clearTimeout(this.timeoutHandler);
+        }
+
+        this.rejectCallback(response);
+    }
+}
+
+export class GarfieldAction {
+
+    private action: () => Promise<string>;
+    private resolved: boolean = false;
+    private failed: boolean = false;
+
+    constructor(action: () => Promise<string>) {
+        this.action = action;
+    }
+
+    public do(): Promise<string> {
+        return this.action();
+    }
+
+    public resolve(): void {
+        this.resolved = true;
+        this.failed = false;
+    }
+
+    public fail(): void {
+        this.resolved = false;
+        this.failed = true;
+    }
+
+    public isResolved(): boolean {
+        return this.resolved;
+    }
+
+    public isFailed(): boolean {
+        return this.failed;
     }
 }

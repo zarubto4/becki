@@ -2140,6 +2140,10 @@ export class StaticTranslation {
                 'for tagging the new hardware and flow for hardware registration into the system. For the successful start of the procedure, ' +
                 'it is necessary that all fields in the "prerequisite" are green.',
 
+                'modal_title_new_device': 'New device',
+                'modal_text_new_device': 'There was new device detected on TestKit. Do you wish to start the registration process?',
+                'modal_text_repeat': 'Do you wish to continue the process from the failed step? Pressing \'No\' will start the process from the beginning.',
+
                 'label_name': 'Name',
                 'label_description': 'Description',
                 'label_hardware_type': 'Hardware type',
@@ -2208,6 +2212,7 @@ export class StaticTranslation {
                 'flash_device_dead_connected': 'Device connected but dead',
                 'flash_device_disconnected': 'Device disconnected',
                 'flash_prerequisite_not_met': 'All prerequisites have to be met to start procedure',
+                'flash_registration_fail': 'Registration of device failed',
 
                 'label_no_c_programs': 'No Programs',
                 'label_no_c_programs_comment': 'Create new Program, or change Filter property',
