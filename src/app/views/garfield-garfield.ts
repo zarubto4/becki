@@ -297,13 +297,14 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
                         this.loadProcessAndStart();
                     }
                 });
+        } else {
+            this.modalService.showModal(new ModalsConfirmModel(this.translate('modal_title_new_device'), this.translate('modal_text_new_device'), false))
+                .then((value) => {
+                    if (value) {
+                        this.loadProcessAndStart();
+                    }
+                });
         }
-        this.modalService.showModal(new ModalsConfirmModel(this.translate('modal_title_new_device'), this.translate('modal_text_new_device'), false))
-            .then((value) => {
-                if (value) {
-                    this.loadProcessAndStart();
-                }
-            });
     }
 
     loadProcessAndStart() {
@@ -711,11 +712,20 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
         }
     }
 
-    onSubscribeGarfieldMessage() {
+    onSubscribeGarfieldMessage(message: IWebSocketMessage) {
         this.resetDetection();
         if (!this.garfieldAppConnected) {
             this.garfieldAppConnected = true;
             this.fmInfo(this.translate('flash_garfield_connected'));
+        }
+        if (!message['status']) {
+            let msg: IWebSocketMessage = <IWebSocketMessage>{
+                message_id: message.message_id,
+                message_type: message.message_type,
+                message_channel: message.message_channel,
+                status: 'success'
+            };
+            this.backendService.sendWebSocketMessage(msg);
         }
     }
 
@@ -764,7 +774,7 @@ export class GarfieldGarfieldComponent extends BaseMainComponent implements OnIn
     handleSingleMessage(message: IWebSocketMessage) {
         switch (message.message_type) {
             case 'keepalive': this.onKeepAliveMessage(); break;
-            case 'subscribe_garfield': this.onSubscribeGarfieldMessage(); break;
+            case 'subscribe_garfield': this.onSubscribeGarfieldMessage(message); break;
             case 'unsubscribe_garfield': this.onDisconnectGarfield(); break;
             case 'device_connect': this.onDeviceConnectMessage(message); break;
             case 'device_disconnect': this.onDeviceDisconnectedMessage(); break;
