@@ -230,7 +230,7 @@
                                     <h5 class="font-red-flamingo">
                                         <i class="fa fa-fw fa-exclamation-triangle font-red-flamingo"></i>{{'label_alerts'|bkTranslate:this}}
                                     </h5>
-                                    <ul style="padding-left: 25px;">
+                                    <ul *ngIf="alert_list" style="padding-left: 25px;">
                                         <li *ngFor="let alert of device.alert_list" class="bold no-wrap">
                                             {{alert|bkTranslateTable:this:'device_alerts'}}
                                         </li>
@@ -555,32 +555,53 @@
                 </div>
 
                 <div *ngIf="hardwareTab == 'command_center'">
+                    
+                    <!-- div class="row">
+                        <div class="vert-align">
+                            <span *ngIf="WSconnected">
+                                <i style="color: rgb(40, 240, 22);" class="fa fa-check"></i> connected</span>
+                            <span *ngIf="!WSconnected">
+                                <i style="color: red;" class="fa fa-warning"></i> trying to connect</span>
+                        </div>
+                    </div-->
 
                     <div class="row">
                         <div class="col-12 portlet-title tabbable-line">
                             <!--ul class="nav nav-tabs margin-left-15 pull-left"-->
                             <ul class="nav nav-tabs margin-left-15 pull-left">
                                 <li [class.active]="commandTab == 'terminal'">
-                                    <a class="cursor-pointer" (click)="onTogglecommandTab('terminal')">{{'terminal'|bkTranslate:this}}</a>
+                                    <a class="cursor-pointer" (click)="onTogglecommandTab('terminal')">{{'label_terminal'|bkTranslate:this}}</a>
                                 </li>
                                 <li [class.active]="commandTab == 'settings'">
-                                    <a class="cursor-pointer" (click)="onTogglecommandTab('settings')">{{'settings'|bkTranslate:this}}</a>
+                                    <a class="cursor-pointer" (click)="onTogglecommandTab('settings')">{{'label_settings_terminal'|bkTranslate:this}}</a>
                                 </li>
                             </ul>
+
                         </div>
+
                     </div>
+
+
+
                     <div class="row">
                         <div [hidden]="commandTab != 'terminal'">
                             <bk-console-log maxHeight="400px"></bk-console-log>
+                            <button (click)="consoleLog.clear()">{{'btn_clear_console'|bkTranslate:this}}</button>
                         </div>
                         <div [hidden]="commandTab != 'settings'">
-                            <ul>
-                                <li *ngFor="let terminal of terminalHardware">
-                                    <bk-form-color-picker label="{{(terminal.name?terminal.name:terminal.id)}}" [control]="colorForm.controls['color'+terminal.id]" [waitForTouch]="false"></bk-form-color-picker>
-                                </li>
-                            </ul>
-                            <button (click)="onAddHardwareClick()" class="btn default btn-sm">
-                                <i class="fa fa-rocket"></i> {{'add hardware'|bkTranslate:this}}
+                            <div *ngFor="let terminal of terminalHardware">
+                                <a (click)="onUserUnsubscribeClick(terminal)"> {{'label_unsubscribe'|bkTranslate:this}} </a>
+                                <a (click)="onUserChangeLogLevelClick(terminal)"> {{'label_change_log_level'|bkTranslate:this}} </a>
+                                <bk-form-color-picker label="{{(terminal.name?terminal.name:terminal.id)}}" [control]="colorForm.controls['color'+terminal.id]"
+                                    [waitForTouch]="false"></bk-form-color-picker>
+
+                            </div>
+
+                            <h2 *ngIf="terminalHardware && terminalHardware.length === 0"> {{'label_no_hardware_to_show'|bkTranslate:this}}</h2>
+                            <br>
+
+                            <button (click)="onAddTerminalHardwareClick()" class="btn default btn-sm">
+                                <i class="fa fa-rocket"></i> {{'btn_add_hardware'|bkTranslate:this}}
                             </button>
                         </div>
                     </div>

@@ -193,6 +193,7 @@ import { CompilationStatusComponent } from './components/CompilationStatusCompon
 import { ProjectsProjectActualizationProcedureComponent } from './views/projects-project-actualization-procedure';
 import { FirmwareTypeComponent } from './components/FirmwareTypeComponent';
 import { ModalPickHardwareTerminalComponent } from './modals/pick-hardware-terminal';
+import { ModalsLogLevelComponent } from './modals/hardware-terminal-logLevel';
 
 
 // @formatter:off
@@ -555,6 +556,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ProjectsProjectActualizationProcedureComponent,
         FirmwareTypeComponent,
         // Modals components
+        ModalsLogLevelComponent,
         ModalsAdminCreateHardwareComponent,
         ModalsBillingInformationComponent,
         ModalsProjectPropertiesComponent,

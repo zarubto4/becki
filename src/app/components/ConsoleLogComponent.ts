@@ -14,7 +14,12 @@ export interface ConsoleLogItem {
     type: string;
     message: string;
     source?: string;
-    sourceColor?: string;
+    sourceColorId?: string;
+}
+
+export interface ConsoleSourceColor {
+    id: string;
+    color: string;
 }
 
 export type ConsoleLogType = 'log' | 'error' | 'output' | 'info' | 'warn';
@@ -36,8 +41,8 @@ export type ConsoleLogType = 'log' | 'error' | 'output' | 'info' | 'warn';
                         <i class="console-log-icon fa fa-fw fa-info-circle font-blue" *ngIf="log.type == 'info'"></i>
                         <i class="console-log-icon fa fa-fw fa-exclamation-triangle font-yellow-saffron" *ngIf="log.type == 'warn'"></i>
                     </div>
-                    <div class="console-log-message"><span *ngIf="log.source" [style.color]="(log.sourceColor?log.sourceColor:'#8896a0')" >{{log.source}}<i class="fa fa-fw fa-angle-right"></i></span><span [innerHTML]="log.message"></span></div>
-                </td>
+                    <div class="console-log-message"><span *ngIf="log.source" [style.color]="(sourceColor[log.sourceColorId]?sourceColor[log.sourceColorId]:'#222')" >{{log.source}}<i class="fa fa-fw fa-angle-right"></i></span><span [innerHTML]="log.message"></span></div>
+                    </td>
             </tr>
             <tr *ngIf="items.length == 0">
                 <td class="text-center">
@@ -60,6 +65,8 @@ export class ConsoleLogComponent {
 
     items: ConsoleLogItem[] = [];
 
+    sourceColor = {};
+
     constructor(private translationService: TranslationService) {
     }
 
@@ -71,7 +78,12 @@ export class ConsoleLogComponent {
         return this.translationService.translate(key, this, null, args);
     }
 
-    add(type: ConsoleLogType, message: string, source?: string, sourceColor?: string, timestamp?: string) {
+
+    addSourceColor(sourceID: string, color: string) {
+        this.sourceColor[sourceID] = color;
+    }
+
+    add(type: ConsoleLogType, message: string, source?: string, sourceColorId?: string, timestamp?: string) {
         if (!timestamp) {
             timestamp = moment().format('HH:mm:ss.SSS');
         }
@@ -80,7 +92,7 @@ export class ConsoleLogComponent {
             type: type,
             message: message.replace(/\n/g, '<br>').replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;'),
             source: source,
-            sourceColor: sourceColor
+            sourceColorId: sourceColorId
         });
     }
 
