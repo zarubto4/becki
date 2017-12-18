@@ -55,16 +55,6 @@ export class ModalsCreateTypeOfBoardBatchComponent implements OnInit {
     dateOption: IMyDpOptions = { // can be found here: https://github.com/kekeh/mydatepicker/blob/master/README.md#options-attribute
         dateFormat: 'dd.mm.yyyy',
         showTodayBtn: true,
-        disableUntil: {
-            year: this.dateNow.getFullYear() + 1,
-            month: this.dateNow.getMonth() + 12,
-            day: this.dateNow.getDate() - 1
-        },
-        disableSince: {
-            year: this.dateNow.getFullYear(),
-            month: this.dateNow.getMonth() + 12,
-            day: this.dateNow.getDate()
-        },
         firstDayOfWeek: 'mo',
         sunHighlight: true,
         inline: false

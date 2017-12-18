@@ -315,19 +315,24 @@ let routes: Routes = [
 /* tslint:enable */
 
 let navigation = [
+
     new LabeledLink('Dashboard', ['/dashboard'], 'tachometer'),
     new LabeledLink('Financial', ['/financial'], 'dollar'),
     new LabeledLink('Projects', ['/projects'], 'briefcase'),
     new LabeledLink('Hardware types', ['/hardware'], 'microchip'),
+
+    // Extermal
+    new LabeledLink('External Sites', null, ''), // <- Head <H3>
+    new LabeledLink('Byzance Wiki', ['https://docu.byzance.cz'], 'wikipedia-w', {outsideLink: true }),
+    new LabeledLink('HW Store', ['https://store.byzance.cz'], 'shopping-cart', {outsideLink: true }),
     // new LabeledLink('Support', ['/support'], 'medkit'),
     // new LabeledLink('Producers',  [' /producers'] , 'industry',
-    // new LabeledLink('Store',  ['https://store.byzance.cz'] , 'shopping-cart', { outsideLink: true }),
-    // new LabeledLink('Byzance Wiki', ['https://wiki.byzance.cz'], 'wikipedia-w', { outsideLink: true }),
     // new LabeledLink('Log out',  ['/logout'] , 'sign-out')
 
     // Admin Labes
+    new LabeledLink('Byzance Admin', null, '', { adminNavigation: true }), // <- Head <H3>
     new LabeledLink('Platform Admin ', ['/admin'], 'tachometer', { adminNavigation: true }),
-    new LabeledLink('Byzance Wiki', ['https://docu.byzance.cz'], 'wikipedia-w', { adminNavigation: true, outsideLink: true }),
+    // new LabeledLink('Byzance Wiki', ['https://docu.byzance.cz'], 'wikipedia-w', { adminNavigation: true, outsideLink: true }),
     new LabeledLink('Youtrack Agile', ['https://youtrack.byzance.cz'], 'thumb-tack', { adminNavigation: true, outsideLink: true }),
     new LabeledLink('GitHub', ['https://youtrack.byzance.cz'], 'github', { adminNavigation: true, outsideLink: true }),
     new LabeledLink('Email', ['https://webmail.active24.com'], 'envelope', { adminNavigation: true, outsideLink: true }),
