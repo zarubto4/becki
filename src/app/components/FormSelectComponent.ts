@@ -98,7 +98,7 @@ export class FormSelectComponent {
 
     @Input()
     set options(option: FormSelectComponentOption[]) {
-        if (option) {
+        if (option && option.length > 0) {
 
             if (this.regexFirstOption) {
                 let toPick: number = 0;
