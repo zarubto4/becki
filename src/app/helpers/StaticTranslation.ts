@@ -224,7 +224,13 @@ export class StaticTranslation {
                 'label_no_more': 'All libraries displayed.',
                 'btn_select_library': 'Add',
 
-            }, 'ModalsCodeFileDialogComponent': {
+            }, 'ModalsLogLevelComponent': {
+
+                'title': 'Change terminal log level',
+                'label_logLevel': 'Log Level'
+
+            },
+            'ModalsCodeFileDialogComponent': {
                 'label_into_directory': 'Add to Directory',
 
                 'text_add_file': 'New File',
@@ -1147,6 +1153,7 @@ export class StaticTranslation {
                 'tab_overview': 'Overview',
                 'tab_update': 'Update progress',
                 'tab_developer': 'Developer Settings',
+                'tab_advance_command_center': 'Advance Command center',
 
                 'label_name': 'Name',
                 'label_version': 'Version',
@@ -1231,6 +1238,8 @@ export class StaticTranslation {
                 'table_state': 'Status',
                 'table_version': 'Version',
                 'table_status': 'Status',
+                'table_color': 'Terminal color',
+                'table_actions': 'Actions',
 
                 'flash_cant_add_hardware': 'Unable to add hardware ',
                 'flash_no_more_device': 'No more Device to add',

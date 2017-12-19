@@ -137,8 +137,10 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     }
 
     onMessage(msg: ITerminalWebsocketMessage) {
-        if (this.consoleLog && this.terminalHardware.findIndex(device => device.id === msg.hardware_id) > -1) {
-            this.consoleLog.add(msg.level, msg.message, msg.hardware_id, msg.hardware_id);
+        let deviceTerminal = this.terminalHardware.findIndex(device => device.id === msg.hardware_id);
+        if (this.consoleLog && deviceTerminal > -1) {
+            let alias = this.terminalHardware[deviceTerminal].name;
+            this.consoleLog.add(msg.level, msg.message, (alias ? alias : msg.hardware_id), msg.hardware_id);
         }
     }
 
@@ -152,10 +154,13 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         }
     }
     onUserUnsubscribeClick(terminal: TerminalParameters) {
-        let con = this.avalibleHardware.concat(this.terminalHardware.splice(this.terminalHardware.findIndex(device => device.id === terminal.id), 1)); // dont need chceck if exist cuz we know its exist
-        this.avalibleHardware = con;
-        this.backendService.requestDeviceTerminalUnsubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport);
-
+        this.modalService.showModal(new ModalsRemovalModel((terminal.name ? terminal.name : terminal.id))).then((success) => {
+            if (success) {
+                let con = this.avalibleHardware.concat(this.terminalHardware.splice(this.terminalHardware.findIndex(device => device.id === terminal.id), 1)); // dont need chceck if exist cuz we know its exist
+                this.avalibleHardware = con;
+                this.backendService.requestDeviceTerminalUnsubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport);
+            }
+        });
     }
 
     onUserChangeLogLevelClick(terminal: TerminalParameters) {
@@ -271,11 +276,9 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                     this.terminalHardware.push({ 'id': this.device.id, 'name': this.device.name, hardwareURL: board.server.server_url, hardwareURLport: board.server.hardware_log_port });
 
                     new Promise<any>((resolve) => {
-                        console.log("init");
 
                         let checker = setInterval(() => {
                             if (this.consoleLog) {
-                                console.log("solved");
                                 clearInterval(checker);
                                 resolve();
                             }
@@ -283,7 +286,6 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
 
                     }).then(() => {
-                        console.log("add");
                         this.colorForm.controls['color' + this.device.id].setValue('#0000FF');
                     })
 
