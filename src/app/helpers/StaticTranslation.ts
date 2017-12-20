@@ -276,6 +276,13 @@ export class StaticTranslation {
                 'label_activate': 'activate',
                 'label_attention': 'Warning',
 
+            }, 'ModalsHardwareRestartMQTTPassComponent': {
+                'title': 'Generate new MQTT Connection Secrets',
+                'label_attention': 'Warning!',
+                'body_text': '<p>MQTT <strong>Password</strong> and <strong>Name</strong> is stored in device memory as a <a href="https://en.wikipedia.org/wiki/Universally_unique_identifier" target="_blank">UUID</a> . And it is not distributed online or inside the firmware update. </p> <p><strong>Password</strong> and <strong>Name</strong> were created and uploaded during production in our factory. But in some case, for example, when you changing server hierarchy (Developer, Stage or Production Servers), you have to change security tokens.</p><p>Changing your password on Hardware within maximum security can <strong>only be done physically in Bootloader mode via USB Cable!</strong></p><p>If you are generating new access data, the previous ones will automatically be irreversibly removed. Also, it is not possible to show the original or new generated access data again because <strong>we have only HASH, not the original value.</strong></p><p>So you can only see the password in the original form once!</p>',
+                'btn_generate': 'Generate New Password',
+                'body_password_message': '<p> <strong>Warning!</strong> It is not possible to show access data again because <strong>we store all information only in HASH, not the original value. </p> <p>You can see the password and name in the original form once! </p>',
+
             }, 'ModalsFileUploadComponent': {
                 'title': 'Upload File',
                 'label_file_type': 'File Type',
@@ -1182,6 +1189,7 @@ export class StaticTranslation {
                 'label_core_registers': 'Registers',
                 'label_restart_device': 'Restart Device',
                 'label_restart_to_bootloader': 'Restart to Bootloader',
+                'label_change_mqtt_pass': 'Restart MQTT Password',
                 'label_info': 'Basic System Info',
                 'label_image': 'Image',
                 'label_set_own_picture': 'Set your own photo',
@@ -2309,6 +2317,7 @@ export class StaticTranslation {
             'label_user': 'User',
             'btn_save': 'Save',
             'btn_test': 'Test',
+            'btn_close': 'Close',
             'btn_back': 'Back',
             'btn_send': 'Send',
             'btn_submit': 'Submit',

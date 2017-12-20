@@ -193,8 +193,8 @@ import { CompilationStatusComponent } from './components/CompilationStatusCompon
 import { ProjectsProjectActualizationProcedureComponent } from './views/projects-project-actualization-procedure';
 import { FirmwareTypeComponent } from './components/FirmwareTypeComponent';
 import { ModalPickHardwareTerminalComponent } from './modals/pick-hardware-terminal';
+import { ModalsHardwareRestartMQTTPassComponent } from './modals/hardware-restart-mqtt-pass';
 import { ModalsLogLevelComponent } from './modals/hardware-terminal-logLevel';
-
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -624,6 +624,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsHardwareGroupDeviceSettingsComponent,
         ModalsUpdateReleaseFirmwareComponent,
         ModalPickHardwareTerminalComponent,
+        ModalsHardwareRestartMQTTPassComponent,
 
     ],
     exports: [AppComponent],

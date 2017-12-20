@@ -1,0 +1,40 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title">{{'title'|bkTranslate:this}}:{{modalModel.hardwareName}}</h4>
+    </div>
+    <div class="modal-body">
+
+        <div *ngIf="!pass">
+            <h1> {{'label_attention'|bkTranslate:this}}</h1>
+            <span [innerHTML] = "'body_text'|bkTranslate:this"></span>
+        </div>
+
+        <div *ngIf="pass">
+
+                <h2>
+                    <strong>MQTT User Name</strong>
+                </h2>
+                <h3>
+                   {{pass.mqtt_username}}
+                </h3>
+                <br>
+                <h2>
+                    <strong>MQTT Password</strong>
+                </h2>
+                <h3>
+                    {{pass.mqtt_password}}
+                </h3>
+                <br>
+                <span [innerHTML] = "'body_password_message'|bkTranslate:this"></span>
+        </div>
+
+        <div style="text-align: center">
+            <button type="button" class="btn btn-lg blue" (click)="onGenerateClick()">{{'btn_generate'|bkTranslate:this}}</button>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn green" (click)="onSubmitClick()">{{'btn_close'|bkTranslate:this}}</button> <!-- mohli bychom opozdit prokliknutelnost tlačítka aby uživatel opravdu musel přečíst co se děje -->
+    </div>
+</div>

@@ -23,6 +23,7 @@ import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogCom
 import { FormGroup, FormControl } from '@angular/forms';
 import { ModalPickHardwareTerminalComponent, ModalPickHardwareTerminalModel } from '../modals/pick-hardware-terminal';
 import { IBoardForFastUploadDetail } from '../backend/TyrionAPI';
+import {ModalsHardwareRestartMQTTPassModel} from "../modals/hardware-restart-mqtt-pass";
 import * as Rx from 'rxjs';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 import { ModalsLogLevelModel } from '../modals/hardware-terminal-logLevel';
@@ -457,6 +458,13 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             });
     }
 
+    onGenerateNewPassword(): void {
+
+        let model = new ModalsHardwareRestartMQTTPassModel(this.device);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {}
+        });
+    }
     onSwitchToBootloaderDeviceClick(): void {
         this.backendService.boardCommandExecution({
             board_id: this.device.id,
