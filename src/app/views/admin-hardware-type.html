@@ -94,8 +94,10 @@
                                 <th class="text-right no-wrap">{{'label_actions'|bkTranslate:this}} &nbsp;&nbsp;</th>
                             </tr>
                             </thead>
+
                             <tbody>
                             <tr *ngFor="let device of boardsFiler.content">
+                                <template [ngIf]="device">
                                 <td class="vert-align no-wrap">
                                     <span class="icon-hint-wraper red" *ngIf="device.alert_list && device.alert_list.length > 0">
                                         <i class="fa fa-fw fa-exclamation-triangle font-red-flamingo"></i>
@@ -135,6 +137,7 @@
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </td>
+                            </template>
                             </tr>
                             </tbody>
                         </table>

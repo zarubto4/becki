@@ -94,8 +94,11 @@
             <template [ngSwitchCase]="'ModalsBlockoPropertiesModel'">
                 <bk-modals-blocko-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-blocko-properties>
             </template>
-            <template [ngSwitchCase]="'ModalsCodePropertiesModel'">
-                <bk-modals-code-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-code-properties>
+            <template [ngSwitchCase]="'ModalsBlockoPropertiesModel'">
+                <bk-modals-blocko-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-blocko-properties>
+            </template>
+            <template [ngSwitchCase]="'ModalsLogLevelModel'">
+                <bk-modals-terminal-loglevel-change [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-terminal-loglevel-change>
             </template>
             <template [ngSwitchCase]="'ModalsLibraryPropertiesModel'">
                 <bk-modals-library-properties [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-library-properties>

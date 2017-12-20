@@ -47,6 +47,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
                 this.processors = values[1];
                 this.producers = values[2];
                 this.unblockUI();
+
             })
             .catch((reason) => {
                 this.addFlashMessage(new FlashMessageError('Cannot be loaded.', reason));
@@ -288,6 +289,7 @@ export class AdminHardwareComponent extends BaseMainComponent implements OnInit 
         })
             .then((values) => {
                 this.boardsFiler = values;
+
                 this.unblockUI();
             })
             .catch((reason) => {

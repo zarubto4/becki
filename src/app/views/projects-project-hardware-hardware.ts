@@ -2,7 +2,7 @@
  * Created by Tomas Kupcek on 12.01.2017.
  */
 
-import { Component, Injector, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, Injector, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import {
     IActualizationProcedureTaskList, IBoard, IBoardShortDetail,
@@ -15,18 +15,23 @@ import { ModalsHardwareCodeProgramVersionSelectModel } from '../modals/hardware-
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { ModalsRemovalModel } from '../modals/removal';
-import { OnlineChangeStatus } from '../backend/BeckiBackend';
+import { OnlineChangeStatus, BeckiBackend, ITerminalWebsocketMessage } from '../backend/BeckiBackend';
 import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
 import { ModalsDeviceEditDeveloperParameterValueModel } from '../modals/device-edit-developer-parameter-value';
 import { ModalsPictureUploadModel } from '../modals/picture-upload';
-import { ConsoleLogComponent } from '../components/ConsoleLogComponent';
+import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ModalPickHardwareTerminalComponent, ModalPickHardwareTerminalModel } from '../modals/pick-hardware-terminal';
 import { IBoardForFastUploadDetail } from '../backend/TyrionAPI';
+import * as Rx from 'rxjs';
+import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
+import { ModalsLogLevelModel } from '../modals/hardware-terminal-logLevel';
 
 export interface TerminalParameters {
     id: string;
     name: string;
+    hardwareURL: string;
+    hardwareURLport: number;
 }
 
 export interface ConfigParameters {
@@ -59,7 +64,8 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     configParameters: ConfigParameters[];
     colorForm: FormGroup;
 
-    avalibleHardware: IBoardForFastUploadDetail[];
+    WSinit: boolean = false;
+    avalibleHardware: TerminalParameters[] = [];
     avalibleColors = ['#0082c8', '#e6194b', '#3cb44b', '#ffe119', '#f58231', '#911eb4', '#46f0f0', '#008080', '#aa6e28', '#ffd8b1'];
 
     @ViewChild(ConsoleLogComponent)
@@ -67,7 +73,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     numbers: any;
 
-    terminalSubscibe: any; // TODO
+    hardwareTerminalWS: Rx.Subject<ITerminalWebsocketMessage>;
     terminalHardware: TerminalParameters[] = [];
 
     lastInstance: number = 1;
@@ -84,30 +90,37 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             }
         });
 
-       /* this.terminalSubscibe = this.backendService.hardwareTerminal.subscribe(log => {
-            this.logRecived(log);
-        });*/
+        this.hardwareTerminalWS = this.backendService.hardwareTerminal;
+        this.hardwareTerminalWS.subscribe(msg => this.onMessage(msg));
 
-        setInterval(intrvl => {
+        this.colorForm.valueChanges.subscribe(value => {
             if (this.consoleLog) {
-                let rnd = Math.floor(Math.random() * 5);
-                if (rnd === 0) { this.consoleLog.add('error', 'Status update', 'CSsource'); } else
-                    if (rnd === 1) { this.consoleLog.add('info', 'Status update', 'CSsource'); } else
-                        if (rnd === 2) { this.consoleLog.add('log', 'Status update', 'CSsource'); } else
-                            if (rnd === 3) { this.consoleLog.add('output', 'Status update', 'CSsource'); } else {
-                                this.consoleLog.add('warn', 'Status update', 'CSsource');
-                            }
+
+                Object.keys(value).forEach(
+                    colorKey => {
+                        this.consoleLog.addSourceColor(colorKey.substr(5), value[colorKey]);
+                    });
             }
-        }, 1000);
+        });
+        /*
+                setInterval(int => {
+                    this.consoleLog.add("info", "kekekewkf", "0227852", this.device.id);
+                    console.log(this.device.id);
+                }, 1000);*/
     };
+
 
     ngOnInit(): void {
         this.routeParamsSubscription = this.activatedRoute.params.subscribe(params => {
             this.hardwareId = params['hardware'];
             this.projectId = params['project'];
             this.init = true;
+
             this.refresh();
         });
+
+
+
 
         this.backendService.objectUpdateTyrionEcho.subscribe((status) => {
             if (status.model === 'Board' && this.hardwareId === status.model_id) {
@@ -123,15 +136,48 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         }
     }
 
-    onAddHardwareClick() {
-        console.log(this.avalibleHardware);
+    onMessage(msg: ITerminalWebsocketMessage) {
+        let deviceTerminal = this.terminalHardware.findIndex(device => device.id === msg.hardware_id);
+        if (this.consoleLog && deviceTerminal > -1) {
+            let alias = this.terminalHardware[deviceTerminal].name;
+            this.consoleLog.add(msg.level, msg.message, (alias ? alias : msg.hardware_id), msg.hardware_id);
+        }
+    }
+
+    onAddTerminalHardwareClick() {
         if (this.avalibleHardware && this.avalibleHardware.length > 0) {
             this.addNewHardwareToTerminal();
 
         } else {
-            this.addFlashMessage(new FlashMessageError(this.translate('no more HW to add')));
+            this.addFlashMessage(new FlashMessageError(this.translate('flash_no_more_device')));
 
         }
+    }
+    onUserUnsubscribeClick(terminal: TerminalParameters) {
+        this.modalService.showModal(new ModalsRemovalModel((terminal.name ? terminal.name : terminal.id))).then((success) => {
+            if (success) {
+                let con = this.avalibleHardware.concat(this.terminalHardware.splice(this.terminalHardware.findIndex(device => device.id === terminal.id), 1)); // dont need chceck if exist cuz we know its exist
+                this.avalibleHardware = con;
+                this.backendService.requestDeviceTerminalUnsubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport);
+            }
+        });
+    }
+
+    onUserChangeLogLevelClick(terminal: TerminalParameters) {
+        let logLevel: string;
+        let model = new ModalsLogLevelModel;
+
+        this.modalService.showModal(model).then((success) => {
+            if (success) {
+                logLevel = model.logLevel;
+
+                this.backendService.requestDeviceTerminalUnsubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport);
+                this.backendService.requestDeviceTerminalSubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport, logLevel);
+
+            }
+        });
+
+
     }
 
     addNewHardwareToTerminal() {
@@ -141,20 +187,33 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 this.colorForm.addControl('color' + model.selectedBoard.id, new FormControl('color' + model.selectedBoard.id));
                 this.colorForm.controls['color' + model.selectedBoard.id].setValue(model.color);
 
+
+
                 let deleteId = this.avalibleHardware.findIndex(x => x.id === model.selectedBoard.id);
                 if (deleteId > -1) {
                     this.avalibleHardware.splice(deleteId, 1);
                 }
 
-                this.terminalHardware.push({ 'id': model.selectedBoard.id, 'name': model.selectedBoard.name });
 
-                this.lastInstance++;
+                if (this.terminalHardware.find(hardware => {
+                    if (hardware.hardwareURL !== model.selectedBoard.hardwareURL) {
+                        return true;
+                    }
+                })) {
+                    // console.log("pouštím druhý WS");
+                    this.backendService.connectDeviceTerminalWebSocket(model.selectedBoard.hardwareURL, model.selectedBoard.hardwareURLport + '');
+                } else {
 
+                    this.terminalHardware.push({ 'id': model.selectedBoard.id, 'name': model.selectedBoard.name, 'hardwareURL': model.selectedBoard.hardwareURL, hardwareURLport: model.selectedBoard.hardwareURLport });
+
+                    this.backendService.requestDeviceTerminalSubcribe(model.selectedBoard.id, model.selectedBoard.hardwareURL + ':' + model.selectedBoard.hardwareURLport, model.logLevel);
+                    this.lastInstance++;
+                }
 
             }
         }).catch(reason => {
             // this.unblockUI();
-            this.addFlashMessage(new FlashMessageError(this.translate('flash_invoice_cant_be_resend'), reason));
+            this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_add_hardware'), reason));
         });
 
     }
@@ -165,8 +224,15 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
 
     ngOnDestroy(): void {
-
         this.routeParamsSubscription.unsubscribe();
+        //  this.hardwareTerminalWS.unsubscribe();
+
+        this.terminalHardware.forEach(hardware => {
+            this.backendService.requestDeviceTerminalUnsubcribe(hardware.id, hardware.hardwareURL + ':' + hardware.hardwareURLport);
+        });
+
+
+        this.backendService.closeHardwareTerminalWebsocket();
     }
 
     onToggleHardwareTab(tab: string) {
@@ -191,12 +257,39 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                     }
                 });
 
+                if (!this.WSinit) {
+                    this.backendService.connectDeviceTerminalWebSocket(this.device.server.server_url, this.device.server.hardware_log_port + ''); // TODO získat z device
+                    this.WSinit = true;
 
-                if (!this.terminalHardware.find(boardsInTerminal => boardsInTerminal.id === this.device.id)) {
+                    /*
+                    this.backendService.getTerminalWebsocket.addEventListener('close', e => {
+                    this.addFlashMessage(new FlashMessageError('Websocket comunication ended, trying to re-connect ', e.reason));
+                     });
+                    this.backendService.getTerminalWebsocket.addEventListener('error', e => {
+                    this.addFlashMessage(new FlashMessageError('something is wrong: ', ));
+                   });*/
+
+
+
                     this.colorForm.addControl('color' + this.device.id, new FormControl('color' + this.device.id));
                     this.colorForm.controls['color' + this.device.id].setValue('#0000FF');
-                    this.terminalHardware.push({ 'id': this.device.id, 'name': this.device.name });
-                    console.log(this.terminalHardware);
+                    this.terminalHardware.push({ 'id': this.device.id, 'name': this.device.name, hardwareURL: board.server.server_url, hardwareURLport: board.server.hardware_log_port });
+
+                    new Promise<any>((resolve) => {
+
+                        let checker = setInterval(() => {
+                            if (this.consoleLog) {
+                                clearInterval(checker);
+                                resolve();
+                            }
+                        }, 100);
+
+
+                    }).then(() => {
+                        this.colorForm.controls['color' + this.device.id].setValue('#0000FF');
+                    })
+
+                    this.backendService.requestDeviceTerminalSubcribe(this.device.id, this.device.server.server_url + ':' + this.device.server.hardware_log_port, 'info');
                 }
 
                 return this.backendService.typeOfBoardGet(board.type_of_board_id);
@@ -206,10 +299,16 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 this.typeOfBoard = typeOfBoard;
 
                 this.backendService.boardsGetForIdeOperation(this.projectId).then(boards => {
-                    this.avalibleHardware = boards.filter(item => {
+                    let hardwares = boards.filter(item => {
                         return !this.terminalHardware.some(board => board.id === item.id);
                     });
+                    hardwares.map(hardware => {
+                        this.backendService.boardGet(hardware.id).then(board => {
+                            this.avalibleHardware.push({ id: hardware.id, name: hardware.name, hardwareURL: board.server.server_url, hardwareURLport: board.server.hardware_log_port });
 
+                        });
+
+                    });
 
                 }).catch(error => {
                     this.addFlashMessage(new FlashMessageError(this.translate('flash_hardware_cant_get_list'), error));
@@ -218,7 +317,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
             })
             .catch((reason) => {
-                this.fmError(this.translate('label_cant_load_device'));
+                this.fmError(this.translate('label_cant_load_device', reason));
                 this.unblockUI();
             });
     }

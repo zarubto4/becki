@@ -4,6 +4,7 @@
 
 import { TyrionAPI, INotification, IPerson, ILoginResult, IWebSocketToken, ISocialNetworkLogin } from './TyrionAPI';
 import * as Rx from 'rxjs';
+import { ConsoleLogType } from '../components/ConsoleLogComponent';
 
 declare const BECKI_VERSION: string;
 
@@ -30,6 +31,15 @@ export interface IWebSocketMessage {
     message_id: string;
     message_channel: string;
     message_type: string;
+
+    websocketURL?: string;
+}
+
+export interface ITerminalWebsocketMessage extends IWebSocketMessage {
+    hardware_id: string;
+    level: ConsoleLogType;
+    message: string;
+
 }
 
 export interface IWebSocketSuccessMessage extends IWebSocketMessage {
@@ -303,7 +313,7 @@ export class RequestError extends Error {
 }
 
 export interface OnlineChangeStatus {
-    model: ('Board' | 'HomerInstance' | 'HomerServer' | 'CompilationServer' );
+    model: ('Board' | 'HomerInstance' | 'HomerServer' | 'CompilationServer');
     model_id: 'string';
     online_status: ('not_yet_first_connected' | 'synchronization_in_progress' | 'offline' | 'online' | 'unknown_lost_connection_with_server');
 }
@@ -333,13 +343,22 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     private webSocketMessageQueue: IWebSocketMessage[] = [];
 
+    private webSocketTerminalMessageQueue: IWebSocketMessage[] = [];
+
     private webSocketReconnectTimeout: any = null;
+
 
     public notificationReceived: Rx.Subject<IWebSocketNotification> = new Rx.Subject<IWebSocketNotification>();
 
     public webSocketErrorOccurred: Rx.Subject<any> = new Rx.Subject<any>();
 
     public garfieldRecived: Rx.Subject<any> = new Rx.Subject<any>();
+
+    private hardwareTerminalwebSockets: WebSocket[] = [];
+    private TerminalwebSocketReconnectTimeout: any = null;
+
+    public hardwareTerminal: Rx.Subject<ITerminalWebsocketMessage> = new Rx.Subject<ITerminalWebsocketMessage>();
+    public hardwareTerminalState: Rx.Subject<{ id: string, isConnected: boolean }> = new Rx.Subject<{ id: string, isConnected: boolean }>();
 
     public onlineStatus: Rx.Subject<OnlineChangeStatus> = new Rx.Subject<OnlineChangeStatus>();
     public objectUpdateTyrionEcho: Rx.Subject<ModelChangeStatus> = new Rx.Subject<ModelChangeStatus>();
@@ -405,6 +424,8 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     // GENERIC REQUESTS
 
+
+
     protected abstract requestRestGeneral(request: RestRequest): Promise<RestResponse>;
 
     public requestRestPath<T>(method: string, path: string, body: Object, success: number[]): Promise<T> {
@@ -461,6 +482,7 @@ export abstract class BeckiBackend extends TyrionAPI {
     public getToken(): string {
         return window.localStorage.getItem('authToken');
     }
+
 
     private setToken(token: string, withRefreshPersonalInfo = true): void {
         window.localStorage.setItem('authToken', token);
@@ -595,11 +617,66 @@ export abstract class BeckiBackend extends TyrionAPI {
         this.sendWebSocketMessageQueue();
     }
 
+
+
+    public sendWebSocketTerminalMessage(message: IWebSocketMessage): void {
+        this.webSocketTerminalMessageQueue.push(message);
+        this.sendWebSocketTerminalMessageQueue();
+    }
+
+
+    private sendWebSocketTerminalMessageQueue(): void {
+
+        this.webSocketTerminalMessageQueue.slice().forEach(message => {
+
+            let websocket = this.hardwareTerminalwebSockets.find(ws => {
+
+                if (ws.url.indexOf(message.websocketURL) !== -1) {
+                    return true;
+                }
+
+
+            });
+
+            if (!websocket) {
+                return;
+            }
+
+
+            if (websocket.readyState) {
+                try {
+                    websocket.send(JSON.stringify(message));
+                    let i = this.webSocketTerminalMessageQueue.indexOf(message);
+                    if (i > -1) {
+                        this.webSocketTerminalMessageQueue.splice(i, 1);
+                    }
+                } catch (err) {
+                    console.error('ERR', err);
+                }
+            }
+        });
+    }
+
+
+
+
+
     // define function as property is needed to can set it as event listener (class methods is called with wrong this)
     protected reconnectWebSocketAfterTimeout = () => {
         // console.log('reconnectWebSocketAfterTimeout()');
         clearTimeout(this.webSocketReconnectTimeout);
         this.webSocketReconnectTimeout = setTimeout(() => {
+            this.connectWebSocket();
+        }, 5000);
+    }
+
+    // define function as property is needed to can set it as event listener (class methods is called with wrong this)
+    protected reconnectTerminalWebSocketAfterTimeout = () => {
+        // console.log('reconnectWebSocketAfterTimeout()');
+
+
+        clearTimeout(this.TerminalwebSocketReconnectTimeout);
+        this.TerminalwebSocketReconnectTimeout = setTimeout(() => {
             this.connectWebSocket();
         }, 5000);
     }
@@ -611,6 +688,94 @@ export abstract class BeckiBackend extends TyrionAPI {
             this.webSocket.close();
         }
         this.webSocket = null;
+    }
+
+    public connectDeviceTerminalWebSocket(server: string, port: string): void {
+
+        let websocket: WebSocket = null; /*= this.hardwareTerminalwebSockets.find(ws => {
+            console.log(ws.url);
+            if (ws.url === server + port) {
+                return true;
+            }
+        });*/
+
+        if (websocket) {
+            this.closeHardwareTerminalWebsocket(websocket.url);
+        }
+
+        websocket = new WebSocket(`${this.wsProtocol}://${server}:${port}/${this.getToken()}`);
+
+        websocket.addEventListener('close', ws => {
+            this.reconnectTerminalWebSocketAfterTimeout();
+            //this.hardwareTerminalState.next({ 'id': websocket.url, 'isConnected': false }); //TODO poslat i připojení
+        });
+        let opened = Rx.Observable
+            .fromEvent<void>(websocket, 'open');
+        let channelReceived = Rx.Observable
+            .fromEvent<MessageEvent>(websocket, 'message')
+            .map(event => { // TODO: think why is this triggered 8 times (for 8 subscribes)
+                try {
+                    return JSON.parse(event.data);
+                } catch (e) {
+                    console.error('Parse error: ', e);
+                }
+                return null;
+            });
+        channelReceived
+            // .filter(message => message.message_type === '"hardware-logger"')
+            .subscribe(this.hardwareTerminal);
+
+
+        opened.subscribe(open => this.sendWebSocketTerminalMessageQueue());
+
+        this.hardwareTerminalwebSockets.push(websocket);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*if(this.terminalConnection.find(connection => connection.id == deviceId)){
+        return
+}*/
+
+    public closeHardwareTerminalWebsocket(websocketURL?: string) {
+
+        if (websocketURL) {
+            let websocket = this.hardwareTerminalwebSockets.find(ws => {
+                console.log(ws.url);
+                if (ws.url === websocketURL) {
+                    return true;
+                }
+            });
+            if (websocket) {
+                websocket.removeEventListener('close', this.reconnectWebSocketAfterTimeout);
+                websocket.close();
+            }
+            websocket = null;
+        } else {
+            this.hardwareTerminalwebSockets = [];
+        }
     }
 
     protected connectWebSocket(): void {
@@ -728,6 +893,40 @@ export abstract class BeckiBackend extends TyrionAPI {
     }
 
     // WebSocket Messages:
+
+
+    public requestDeviceTerminalSubcribe(deviceId: string, webSocketURL: string, logLevel: string): void {
+        if (this.hardwareTerminalwebSockets) {
+
+            let message = {
+                message_id: this.uuid(),
+                message_type: 'subscribe_hardware',
+                hardware_ids: [deviceId],
+                message_channel: 'hardware-logger',
+                log_level: logLevel,
+                websocketURL: webSocketURL,
+            };
+
+            this.sendWebSocketTerminalMessage(message);
+        }
+    }
+
+    public requestDeviceTerminalUnsubcribe(deviceId: string, webSocketURL: string): void {
+
+        if (this.hardwareTerminalwebSockets) {
+
+            let message = {
+                message_id: this.uuid(),
+                message_type: 'unsubscribe_hardware',
+                hardware_ids: [deviceId],
+                message_channel: 'hardware-logger',
+                websocketURL: webSocketURL,
+
+            };
+
+            this.sendWebSocketTerminalMessage(message);
+        }
+    }
 
     public requestNotificationsSubscribe(): void {
         let message = {

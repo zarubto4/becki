@@ -224,7 +224,13 @@ export class StaticTranslation {
                 'label_no_more': 'All libraries displayed.',
                 'btn_select_library': 'Add',
 
-            }, 'ModalsCodeFileDialogComponent': {
+            }, 'ModalsLogLevelComponent': {
+
+                'title': 'Change terminal log level',
+                'label_logLevel': 'Log Level'
+
+            },
+            'ModalsCodeFileDialogComponent': {
                 'label_into_directory': 'Add to Directory',
 
                 'text_add_file': 'New File',
@@ -241,6 +247,14 @@ export class StaticTranslation {
                 'text_remove_library': 'Are you sure to remove Library <b> {0} </b>?',
                 'text_remove_directory': 'Are you sure to remove Directory <b> {0} </b> with all its Subdirectories?',
                 'text_file_name': 'Name',
+
+            },
+            'ModalPickHardwareTerminalComponent': {
+                'description_logLevel': 'Choose a maximal logLevel. The higer ones automaticly subscribe all logs under itself',
+                'title': 'Subscribe a new terminal data',
+                'label_logLevel': 'Maximal logLevel',
+                'label_block_color': 'Terminal color',
+                'label_hardware': 'Hardware',
 
             }, 'ModalsCodeLibraryVersionComponent': {
                 'title': 'Select Library Version',
@@ -1139,6 +1153,7 @@ export class StaticTranslation {
                 'tab_overview': 'Overview',
                 'tab_update': 'Update progress',
                 'tab_developer': 'Developer Settings',
+                'tab_advance_command_center': 'Advance Command center',
 
                 'label_name': 'Name',
                 'label_version': 'Version',
@@ -1205,6 +1220,13 @@ export class StaticTranslation {
                 'label_cloud': 'CLOUD',
                 'label_remove_device': 'Remove device',
                 'label_device_properties': 'Device properties',
+                'label_terminal': 'terminal',
+                'label_settings_terminal': 'settings',
+                'label_unsubscribe': 'unsubscribe',
+                'label_no_hardware_to_show': 'No hardware to show',
+                'label_change_log_level': 'Change log level',
+                'btn_add_hardware': 'Add hardware',
+                'btn_clear_console': 'clear console',
 
                 'table_id': 'Update ID',
                 'table_program': 'Program',
@@ -1216,7 +1238,11 @@ export class StaticTranslation {
                 'table_state': 'Status',
                 'table_version': 'Version',
                 'table_status': 'Status',
+                'table_color': 'Terminal color',
+                'table_actions': 'Actions',
 
+                'flash_cant_add_hardware': 'Unable to add hardware ',
+                'flash_no_more_device': 'No more Device to add',
                 'flash_edit_device_success': 'Device information was updated.',
                 'flash_edit_device_fail': 'Device information could not be updated, ',
                 'flash_device_restart_success': 'Restart command was successful',
@@ -2401,7 +2427,7 @@ export class StaticTranslation {
                 'main_version': 'Version is set as Main or Default'
             },
             'error_code': {
-                '1' : 'Missing Label in update procedure - probably incompatible previous firmware'
+                '1': 'Missing Label in update procedure - probably incompatible previous firmware'
 
             },
             'update_state': {
