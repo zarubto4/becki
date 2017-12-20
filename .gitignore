@@ -56,6 +56,7 @@ npm-debug.log
 /src/*/__build__/
 __build__/**
 .webpack.json
+dist.zip
 
 # Doc #
 /doc/
