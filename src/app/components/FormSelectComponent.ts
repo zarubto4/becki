@@ -87,6 +87,9 @@ export class FormSelectComponent {
     @Input()
     regexFirstOption: string = null;
 
+    @Input()
+    positionFirstOption: number = null;
+
     firstSelect: boolean = true;
     selectedValue: string = null;
 
@@ -102,7 +105,6 @@ export class FormSelectComponent {
 
             if (this.regexFirstOption) {
                 let toPick: number = 0;
-                // console.log("options:: regexFirstOption selected ");
 
                 toPick = option.findIndex(item => {
                     if (item.label.match(this.regexFirstOption)) {
@@ -110,15 +112,18 @@ export class FormSelectComponent {
                     }
                 });
                 if (toPick === -1) {
-                   // console.log("options:: regexFirstOption toPick== -1 ");
                     this.selectedValue = option[0].value;
                     this.control.setValue(option[0].value);
                 } else {
-                    // console.log("options:: regexFirstOption toPick== " + toPick);
                     this.selectedValue = option[toPick].value;
                     this.control.setValue(option[toPick].value);
                 }
-            }else {
+            } else if (this.positionFirstOption && this.positionFirstOption > -1 && this.positionFirstOption < option.length) {
+
+                this.selectedValue = option[this.positionFirstOption].value;
+                this.control.setValue(option[this.positionFirstOption].value);
+
+            } else {
 
                 if (option.length > 0) {
                     // console.log("options:: pickFirstOption selected ");
@@ -139,7 +144,7 @@ export class FormSelectComponent {
             return;
         }
 
-        if (this.firstSelect && newValue != null ) {
+        if (this.firstSelect && newValue != null) {
             // console.log("this.firstSelect && newValue != null");
             this.firstSelect = false;
             this.valueChanged.emit(newValue);

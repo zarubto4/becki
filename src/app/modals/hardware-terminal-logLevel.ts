@@ -15,6 +15,7 @@ import { FormSelectComponentOption } from '../components/FormSelectComponent';
 
 
 export class ModalsLogLevelModel extends ModalModel {
+    ;
     constructor(public logLevel: string = 'info') {
         super();
     }
@@ -39,12 +40,12 @@ export class ModalsLogLevelComponent implements OnInit {
 
     constructor(private translationService: TranslationService, private formBuilder: FormBuilder) {
         this.form = this.formBuilder.group({
-            'logLevel': ['info', Validators.required],
+            'logLevel': ['', Validators.required],
         });
     }
 
     ngOnInit(): void {
-
+        let previousLog = this.logLeveloptions.find(level => level.label === this.modalModel.logLevel).label += ' ' + this.translationService.translate('label_choosen', this);
     }
 
     onCloseClick(): void {

@@ -575,19 +575,21 @@
                                 <bk-console-log maxHeight="400px"></bk-console-log>
                                 <br>
                                 <button class="btn blue" (click)="consoleLog.clear()">
-                                        <i class="fa fa-times-circle"></i> {{'btn_clear_console'|bkTranslate:this}}
-                                    </button>
+                                    <i class="fa fa-times-circle"></i> {{'btn_clear_console'|bkTranslate:this}}
+                                </button>
                             </div>
                             <div [hidden]="commandTab != 'settings'">
 
 
 
-                                <table class="table table-hover">
+                                <table *ngIf="terminalHardware && terminalHardware.length >= 1" class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th class="col col-lg-4">{{'table_id'|bkTranslate:this}}</th>
-                                            <th class="col col-lg-3">{{'table_color'|bkTranslate:this}}</th>
-                                            <th class="col col-lg-1 text-right no-wrap">{{'table_actions'|bkTranslate:this}}</th>
+                                            <th class="col col-lg-2">{{'table_id'|bkTranslate:this}}</th>
+                                            <th class="col col-lg-2">{{'table_logLevel'|bkTranslate:this}}</th>
+                                            <th class="col col-lg-2">{{'table_connection'|bkTranslate:this}}</th>
+                                            <th class="col col-lg-4">{{'table_color'|bkTranslate:this}}</th>
+                                            <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}}</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -596,7 +598,23 @@
                                             <td class="vert-align">
                                                 {{(terminal.name?terminal.name:terminal.id)}}
                                             </td>
-
+                                            <td class="vert-align">
+                                                <span>                                                     
+                                                        <i class="fa fa-times-circle font-red" *ngIf="terminal.logLevel == 'error'"></i>
+                                                        <i class="fa fa-sign-out font-green-jungle" *ngIf="terminal.logLevel == 'output'"></i>
+                                                        <i class="fa fa-info-circle font-blue" *ngIf="terminal.logLevel == 'info'"></i>
+                                                        <i class="fa fa-exclamation-triangle font-yellow-saffron" *ngIf="terminal.logLevel == 'warn'"></i>
+                                                        <i class="fa fa-angle-double-right" *ngIf="terminal.logLevel == 'log'"></i>
+                                                </span>
+                                                {{(terminal.logLevel)}}
+                                            </td>
+                                            <td class="vert-align">
+                                                    <bk-online-state [online_state]="terminal.onlineStatus"></bk-online-state>
+                                                    
+                                                <!--span class="font-green-jungle bold"> true </span>
+                                                <span class="font-red-thunderbird bold"> false </span>
+                                                {{WSinit}}-->
+                                            </td>
                                             <td class="vert-align">
                                                 <bk-form-color-picker label="" [control]="colorForm.controls['color'+terminal.id]" [waitForTouch]="false"></bk-form-color-picker>
                                             </td>
@@ -610,11 +628,22 @@
                                                 </button>
                                             </td>
                                         </tr>
-                                        <h2 *ngIf="terminalHardware && terminalHardware.length === 0"> {{'label_no_hardware_to_show'|bkTranslate:this}}</h2>
+                                        <h2 *ngIf="terminalHardware && terminalHardware.length === 0"> </h2>
 
                                     </tbody>
                                 </table>
-                                <button (click)="onAddTerminalHardwareClick()" class="btn default btn-sm">
+                                <div *ngIf="terminalHardware && terminalHardware.length < 1" class="list-no-items">
+                                    <p class="list-no-items__main-label">{{'label_no_hardware_to_show'|bkTranslate:this}}</p>
+                                    <p class="list-no-items__sub-label">{{'label_no_hardware_to_show_comment'|bkTranslate:this}} </p>
+                                    <p>
+                                        <button (click)="onAddTerminalHardwareClick()" class="btn default btn-sm">
+                                            <i class="fa fa-rocket"></i> {{'btn_add_hardware'|bkTranslate:this}}
+                                        </button>
+                                    </p>
+                                </div>
+
+                                <button *ngIf="terminalHardware && terminalHardware.length >= 1" [disabled]="!(this.avalibleHardware && this.avalibleHardware.length > 0)"
+                                    (click)="onAddTerminalHardwareClick()" class="btn blue btn-sm">
                                     <i class="fa fa-rocket"></i> {{'btn_add_hardware'|bkTranslate:this}}
                                 </button>
 

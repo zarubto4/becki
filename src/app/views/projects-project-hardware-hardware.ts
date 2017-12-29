@@ -19,11 +19,10 @@ import { OnlineChangeStatus, BeckiBackend, ITerminalWebsocketMessage } from '../
 import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
 import { ModalsDeviceEditDeveloperParameterValueModel } from '../modals/device-edit-developer-parameter-value';
 import { ModalsPictureUploadModel } from '../modals/picture-upload';
-import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
+import { ConsoleLogComponent, ConsoleLogType, ConsoleLogItem } from '../components/ConsoleLogComponent';
 import { FormGroup, FormControl } from '@angular/forms';
 import { ModalPickHardwareTerminalComponent, ModalPickHardwareTerminalModel } from '../modals/pick-hardware-terminal';
 import { IBoardForFastUploadDetail } from '../backend/TyrionAPI';
-import {ModalsHardwareRestartMQTTPassModel} from "../modals/hardware-restart-mqtt-pass";
 import * as Rx from 'rxjs';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 import { ModalsLogLevelModel } from '../modals/hardware-terminal-logLevel';
@@ -31,6 +30,8 @@ import { ModalsLogLevelModel } from '../modals/hardware-terminal-logLevel';
 export interface TerminalParameters {
     id: string;
     name: string;
+    logLevel: string;
+    onlineStatus: string;
     hardwareURL: string;
     hardwareURLport: number;
 }
@@ -86,9 +87,12 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         });
 
         this.backendService.onlineStatus.subscribe(status => {
-            if (status.model === 'Board' && this.hardwareId === status.model_id) {
-                this.device.online_state = status.online_status;
+            if (status.model === 'Board') {
+                if (this.hardwareId === status.model_id) {
+                    this.device.online_state = status.online_status;
+                };
             }
+            this.terminalHardware.find(hardware => hardware.id === status.model_id).onlineStatus = status.online_status;
         });
 
         this.hardwareTerminalWS = this.backendService.hardwareTerminal;
@@ -166,11 +170,14 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     onUserChangeLogLevelClick(terminal: TerminalParameters) {
         let logLevel: string;
-        let model = new ModalsLogLevelModel;
+        let model = new ModalsLogLevelModel(terminal.logLevel);
 
         this.modalService.showModal(model).then((success) => {
             if (success) {
+
                 logLevel = model.logLevel;
+
+                this.terminalHardware.find(terminals => terminal.id === terminals.id).logLevel = logLevel;
 
                 this.backendService.requestDeviceTerminalUnsubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport);
                 this.backendService.requestDeviceTerminalSubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport, logLevel);
@@ -205,7 +212,14 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                     this.backendService.connectDeviceTerminalWebSocket(model.selectedBoard.hardwareURL, model.selectedBoard.hardwareURLport + '');
                 } else {
 
-                    this.terminalHardware.push({ 'id': model.selectedBoard.id, 'name': model.selectedBoard.name, 'hardwareURL': model.selectedBoard.hardwareURL, hardwareURLport: model.selectedBoard.hardwareURLport });
+                    this.terminalHardware.push({
+                        'id': model.selectedBoard.id,
+                        'logLevel': model.logLevel,
+                        'name': model.selectedBoard.name,
+                        'onlineStatus': model.selectedBoard.onlineStatus,
+                        'hardwareURL': model.selectedBoard.hardwareURL,
+                        'hardwareURLport': model.selectedBoard.hardwareURLport
+                    });
 
                     this.backendService.requestDeviceTerminalSubcribe(model.selectedBoard.id, model.selectedBoard.hardwareURL + ':' + model.selectedBoard.hardwareURLport, model.logLevel);
                     this.lastInstance++;
@@ -259,38 +273,11 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 });
 
                 if (!this.WSinit) {
-                    this.backendService.connectDeviceTerminalWebSocket(this.device.server.server_url, this.device.server.hardware_log_port + ''); // TODO získat z device
-                    this.WSinit = true;
-
-                    /*
-                    this.backendService.getTerminalWebsocket.addEventListener('close', e => {
-                    this.addFlashMessage(new FlashMessageError('Websocket comunication ended, trying to re-connect ', e.reason));
-                     });
-                    this.backendService.getTerminalWebsocket.addEventListener('error', e => {
-                    this.addFlashMessage(new FlashMessageError('something is wrong: ', ));
-                   });*/
-
-
-
-                    this.colorForm.addControl('color' + this.device.id, new FormControl('color' + this.device.id));
-                    this.colorForm.controls['color' + this.device.id].setValue('#0000FF');
-                    this.terminalHardware.push({ 'id': this.device.id, 'name': this.device.name, hardwareURL: board.server.server_url, hardwareURLport: board.server.hardware_log_port });
-
-                    new Promise<any>((resolve) => {
-
-                        let checker = setInterval(() => {
-                            if (this.consoleLog) {
-                                clearInterval(checker);
-                                resolve();
-                            }
-                        }, 100);
-
-
-                    }).then(() => {
-                        this.colorForm.controls['color' + this.device.id].setValue('#0000FF');
-                    })
-
-                    this.backendService.requestDeviceTerminalSubcribe(this.device.id, this.device.server.server_url + ':' + this.device.server.hardware_log_port, 'info');
+                    if (this.device.server && this.device.server.server_url) {
+                        this.terminalFirstRun(board);
+                    } else {
+                        this.terminalHardware.push({ 'id': this.device.id, 'logLevel': 'info', 'name': this.device.name, 'onlineStatus': this.device.online_state, 'hardwareURL': null, 'hardwareURLport': null });
+                    }
                 }
 
                 return this.backendService.typeOfBoardGet(board.type_of_board_id);
@@ -305,8 +292,13 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                     });
                     hardwares.map(hardware => {
                         this.backendService.boardGet(hardware.id).then(board => {
-                            this.avalibleHardware.push({ id: hardware.id, name: hardware.name, hardwareURL: board.server.server_url, hardwareURLport: board.server.hardware_log_port });
-
+                            if (board.server && board.server.server_url) {
+                                this.avalibleHardware.push({
+                                    id: hardware.id, logLevel: 'info', name: hardware.name, 'onlineStatus': 'synchronization_in_progress',
+                                    'hardwareURL': board.server.server_url, 'hardwareURLport': board.server.hardware_log_port
+                                });
+                                // TODO send online_status request
+                            }
                         });
 
                     });
@@ -321,6 +313,46 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 this.fmError(this.translate('label_cant_load_device', reason));
                 this.unblockUI();
             });
+    }
+
+
+    terminalFirstRun(board: IBoard): void {
+        this.backendService.connectDeviceTerminalWebSocket(this.device.server.server_url, this.device.server.hardware_log_port + ''); // TODO získat z device
+        this.WSinit = true;
+
+        /*
+                                this.backendService.getTerminalWebsocket.addEventListener('close', e => {
+                                    this.addFlashMessage(new FlashMessageError('Websocket comunication ended, trying to re-connect ', e.reason));
+                                });
+                                this.backendService.getTerminalWebsocket.addEventListener('error', e => {
+                                    this.addFlashMessage(new FlashMessageError('something is wrong: ', ));
+                                });*/
+
+        // TODO při změně jména/aliasu refreshnout název terminálu
+
+        this.colorForm.addControl('color' + this.device.id, new FormControl('color' + this.device.id));
+        this.colorForm.controls['color' + this.device.id].setValue('#0000FF');
+        this.terminalHardware.push({
+            'id': this.device.id, 'logLevel': 'info', 'name': this.device.name,
+            'onlineStatus': this.device.online_state, 'hardwareURL': board.server.server_url, 'hardwareURLport': board.server.hardware_log_port
+        });
+
+        new Promise<any>((resolve) => {
+
+            let checker = setInterval(() => {
+                if (this.consoleLog) {
+                    clearInterval(checker);
+                    resolve();
+                }
+            }, 100);
+
+
+        }).then(() => {
+            this.colorForm.controls['color' + this.device.id].setValue('#0000FF');
+        });
+        if (this.device.server && this.device.server.server_url) {
+            this.backendService.requestDeviceTerminalSubcribe(this.device.id, this.device.server.server_url + ':' + this.device.server.hardware_log_port, 'info');
+        }
     }
 
     config_array(): void {
@@ -458,13 +490,6 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             });
     }
 
-    onGenerateNewPassword(): void {
-
-        let model = new ModalsHardwareRestartMQTTPassModel(this.device);
-        this.modalService.showModal(model).then((success) => {
-            if (success) {}
-        });
-    }
     onSwitchToBootloaderDeviceClick(): void {
         this.backendService.boardCommandExecution({
             board_id: this.device.id,

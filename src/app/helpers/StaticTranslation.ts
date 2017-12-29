@@ -227,8 +227,8 @@ export class StaticTranslation {
             }, 'ModalsLogLevelComponent': {
 
                 'title': 'Change terminal log level',
-                'label_logLevel': 'Log Level'
-
+                'label_logLevel': 'Log Level',
+                'label_choosen': '(chosen)',
             },
             'ModalsCodeFileDialogComponent': {
                 'label_into_directory': 'Add to Directory',
@@ -1204,6 +1204,7 @@ export class StaticTranslation {
                 'label_none': 'none',
                 'label_unknown_value': 'none',
                 'label_cant_load_device': 'Device cannot be loaded. {0}',
+                'label_no_hardware_to_show_comment': 'There are no devices to show, but you can add some',
 
                 'label_actual_program_name': 'Current <strong class="font-color-code">FIRMWARE </strong> name',
                 'label_actual_program_version': 'Current <strong class="font-color-code">FIRMWARE </strong> version name',
@@ -1248,6 +1249,8 @@ export class StaticTranslation {
                 'table_status': 'Status',
                 'table_color': 'Terminal color',
                 'table_actions': 'Actions',
+                'table_logLevel': 'Log Level',
+                'table_connection': 'Connection status',
 
                 'flash_cant_add_hardware': 'Unable to add hardware ',
                 'flash_no_more_device': 'No more Device to add',

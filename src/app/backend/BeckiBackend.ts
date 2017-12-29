@@ -707,7 +707,7 @@ export abstract class BeckiBackend extends TyrionAPI {
 
         websocket.addEventListener('close', ws => {
             this.reconnectTerminalWebSocketAfterTimeout();
-            //this.hardwareTerminalState.next({ 'id': websocket.url, 'isConnected': false }); //TODO poslat i připojení
+            // this.hardwareTerminalState.next({ 'id': websocket.url, 'isConnected': false }); //TODO poslat i připojení
         });
         let opened = Rx.Observable
             .fromEvent<void>(websocket, 'open');
@@ -763,7 +763,6 @@ export abstract class BeckiBackend extends TyrionAPI {
 
         if (websocketURL) {
             let websocket = this.hardwareTerminalwebSockets.find(ws => {
-                console.log(ws.url);
                 if (ws.url === websocketURL) {
                     return true;
                 }
