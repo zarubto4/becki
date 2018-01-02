@@ -696,12 +696,14 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     public connectDeviceTerminalWebSocket(server: string, port: string): void {
 
-        let websocket: WebSocket = null; /*= this.hardwareTerminalwebSockets.find(ws => {
-            console.log(ws.url);
-            if (ws.url === server + port) {
+        let websocket: WebSocket = null;
+
+        let wsPosition: number = this.hardwareTerminalwebSockets.findIndex(ws => {
+            if (ws.url.includes(server + ':' + port)) {
+                websocket = ws;
                 return true;
             }
-        });*/
+        });
 
         if (websocket) {
             this.closeHardwareTerminalWebsocket(websocket.url);
@@ -732,30 +734,14 @@ export abstract class BeckiBackend extends TyrionAPI {
 
         opened.subscribe(open => this.sendWebSocketTerminalMessageQueue());
 
-        this.hardwareTerminalwebSockets.push(websocket);
+        if (wsPosition > -1) {
+
+            this.hardwareTerminalwebSockets[wsPosition] = websocket;
+        } else {
+
+            this.hardwareTerminalwebSockets.push(websocket);
+        }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

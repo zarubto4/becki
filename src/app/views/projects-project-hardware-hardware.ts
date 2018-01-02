@@ -206,26 +206,27 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
 
                 if (this.terminalHardware.find(hardware => {
-                    if (hardware.hardwareURL !== model.selectedBoard.hardwareURL) {
+                    if (hardware.hardwareURL !== model.selectedBoard.hardwareURL || hardware.hardwareURLport !== model.selectedBoard.hardwareURLport) {
                         return true;
                     }
                 })) {
-                    // console.log("pouštím druhý WS");
+                    console.log("pouštím druhý WS");
                     this.backendService.connectDeviceTerminalWebSocket(model.selectedBoard.hardwareURL, model.selectedBoard.hardwareURLport + '');
-                } else {
-
-                    this.terminalHardware.push({
-                        'id': model.selectedBoard.id,
-                        'logLevel': model.logLevel,
-                        'name': model.selectedBoard.name,
-                        'onlineStatus': model.selectedBoard.onlineStatus,
-                        'hardwareURL': model.selectedBoard.hardwareURL,
-                        'hardwareURLport': model.selectedBoard.hardwareURLport
-                    });
-
-                    this.backendService.requestDeviceTerminalSubcribe(model.selectedBoard.id, model.selectedBoard.hardwareURL + ':' + model.selectedBoard.hardwareURLport, model.logLevel);
-                    this.lastInstance++;
                 }
+
+
+                this.terminalHardware.push({
+                    'id': model.selectedBoard.id,
+                    'logLevel': model.logLevel,
+                    'name': model.selectedBoard.name,
+                    'onlineStatus': model.selectedBoard.onlineStatus,
+                    'hardwareURL': model.selectedBoard.hardwareURL,
+                    'hardwareURLport': model.selectedBoard.hardwareURLport
+                });
+
+                this.backendService.requestDeviceTerminalSubcribe(model.selectedBoard.id, model.selectedBoard.hardwareURL + ':' + model.selectedBoard.hardwareURLport, model.logLevel);
+                this.lastInstance++;
+
 
             }
         }).catch(reason => {
@@ -296,7 +297,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                         this.backendService.boardGet(hardware.id).then(board => {
                             if (board.server && board.server.server_url) {
                                 this.avalibleHardware.push({
-                                    id: hardware.id, logLevel: 'info', name: hardware.name, 'onlineStatus': 'synchronization_in_progress',
+                                    id: hardware.id, logLevel: 'info', name: hardware.name, 'onlineStatus': board.online_state,
                                     'hardwareURL': board.server.server_url, 'hardwareURLport': board.server.hardware_log_port
                                 });
                                 // TODO send online_status request
@@ -495,14 +496,14 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     onGenerateNewPassword(): void {
         let model = new ModalsHardwareRestartMQTTPassModel(this.device);
         this.modalService.showModal(model).then((success) => {
-            if (success) {}
+            if (success) { }
         });
     }
 
     onChangeServer(): void {
         let model = new ModalsHardwareChangeServerModel(this.device);
         this.modalService.showModal(model).then((success) => {
-            if (success) {}
+            if (success) { }
         });
     }
 
