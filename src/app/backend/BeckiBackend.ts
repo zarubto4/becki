@@ -347,6 +347,7 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     private webSocketReconnectTimeout: any = null;
 
+    private beckiBeta: boolean = true; // TODO BETA
 
     public notificationReceived: Rx.Subject<IWebSocketNotification> = new Rx.Subject<IWebSocketNotification>();
 
@@ -483,6 +484,9 @@ export abstract class BeckiBackend extends TyrionAPI {
         return window.localStorage.getItem('authToken');
     }
 
+    public getBeckiBeta(): boolean {
+        return this.beckiBeta;
+    }
 
     private setToken(token: string, withRefreshPersonalInfo = true): void {
         window.localStorage.setItem('authToken', token);

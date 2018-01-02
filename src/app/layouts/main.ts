@@ -44,6 +44,7 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
     sidebarClosed: boolean = false;
     sidebarMobileClosed: boolean = true;
 
+    beckiBeta: boolean = false;
 
     openTabMenuIndex: number = -1;
 
@@ -64,6 +65,7 @@ export class LayoutMainComponent implements OnInit, OnDestroy, OnChanges {
         private zone: NgZone,
     ) {
         this.breadcrumbsService = breadcrumbsService;
+        this.beckiBeta = backendService.getBeckiBeta();
     }
 
     ngOnChanges(changes: SimpleChanges): void {

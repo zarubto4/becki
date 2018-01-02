@@ -18,6 +18,8 @@
                     <span></span>
                 </div>
                 <div (click)="onLogo()" class="byzance-logo byzance-logo-size-top-menu"></div>
+                <span *ngIf="beckiBeta" style="margin-left: -15px;" class="bold font-white">BETA</span>
+
             </div>
             <!-- END LOGO -->
             <div class="hidden-lg visible-sm-block pull-right menu-toggler responsive-toggler" (click)="onMobileSidebarToggleClick($event)">
@@ -27,7 +29,9 @@
             <div class="top-menu">
                 <ul class="nav navbar-nav pull-right">
                     <li *ngIf="backendService.tassks">
-                        <a><i class="fa fa-spinner fa-spin"></i></a>
+                        <a>
+                            <i class="fa fa-spinner fa-spin"></i>
+                        </a>
                     </li>
                     <!-- BEGIN NOTIFICATION DROPDOWN -->
                     <li class="dropdown dropdown-extended dropdown-notification">
@@ -38,7 +42,8 @@
                         <ul class="dropdown-menu toolbar-notification-menu" [style.display]="showNotificationMenu?'block':'none'">
                             <li class="external">
                                 <h3>
-                                    <span class="bold"> {{'label_number_of_unread'|bkTranslate:this:notificationService.unreadNotificationsCount}}</span>                                    {{'label_notifications'|bkTranslate:this}}</h3>
+                                    <span class="bold"> {{'label_number_of_unread'|bkTranslate:this:notificationService.unreadNotificationsCount}}</span>
+                                    {{'label_notifications'|bkTranslate:this}}</h3>
                                 <a [routerLink]="['/notifications']">{{'label_view_all'|bkTranslate:this}}</a>
                             </li>
                             <bk-notifications-list class="dropdown-menu-list n-list-scrolling" listName="toolbarNotifications"></bk-notifications-list>
@@ -48,7 +53,8 @@
                     <!-- BEGIN USER LOGIN DROPDOWN -->
                     <li class="dropdown dropdown-user">
                         <a class="dropdown-toggle" (click)="onUserToggleClick($event)">
-                            <img alt="" class="img-circle" *ngIf="backendService.personInfoSnapshot.picture_link" [attr.src]="backendService.personInfoSnapshot.picture_link?backendService.personInfoSnapshot.picture_link:''"/>
+                            <img alt="" class="img-circle" *ngIf="backendService.personInfoSnapshot.picture_link" [attr.src]="backendService.personInfoSnapshot.picture_link?backendService.personInfoSnapshot.picture_link:''"
+                            />
                             <div class="empty-avatar" *ngIf="!backendService.personInfoSnapshot.picture_link"></div>
                             <span class="username">
                                 {{backendService.personInfoSnapshot.full_name?backendService.personInfoSnapshot.full_name:backendService.personInfoSnapshot.nick_name}}
@@ -57,10 +63,12 @@
                         </a>
                         <ul class="dropdown-menu" [style.display]="showUserMenu?'block':'none'">
                             <li>
-                                <a [routerLink]="['/profile']"><i class="icon-settings"></i> {{'label_profile'|bkTranslate:this}}</a>
+                                <a [routerLink]="['/profile']">
+                                    <i class="icon-settings"></i> {{'label_profile'|bkTranslate:this}}</a>
                             </li>
                             <li>
-                                <a [routerLink]="['/logout']"><i class="icon-key"></i> {{'label_log_out'|bkTranslate:this}}</a>
+                                <a [routerLink]="['/logout']">
+                                    <i class="icon-key"></i> {{'label_log_out'|bkTranslate:this}}</a>
                             </li>
                         </ul>
                     </li>
@@ -115,10 +123,10 @@
                     <ng-container *ngIf="backendService.personPermissions && backendService.personPermissions.length">
 
 
-                        <li *ngFor="let page of navigation" [class.heading]="!page.link" [class.nav-item]="page.link" [class.hide] ="!page.options['adminNavigation']">
+                        <li *ngFor="let page of navigation" [class.heading]="!page.link" [class.nav-item]="page.link" [class.hide]="!page.options['adminNavigation']">
 
                             <!-- Menu Header !-->
-                            <template [ngIf]="!page.link" >
+                            <template [ngIf]="!page.link">
                                 <h3 class="uppercase">{{page.label}}</h3>
                             </template>
 
@@ -175,7 +183,9 @@
                         <li *ngFor="let breadcrumb of breadcrumbsService.breadcrumbs; let last = last">
                             <a *ngIf="!last" [routerLink]="breadcrumb.link">{{breadcrumb.label}}</a>
                             <i *ngIf="!last" class="fa fa-angle-right"></i>
-                            <span *ngIf="last"><strong>{{breadcrumb.label}}</strong></span>
+                            <span *ngIf="last">
+                                <strong>{{breadcrumb.label}}</strong>
+                            </span>
                         </li>
                     </ul>
                 </div>
@@ -191,11 +201,21 @@
                     <ul *ngIf="tabMenuItems" class="nav nav-tabs becki-tab-menu">
                         <li *ngFor="let tabItem of tabMenuItems; let index = index" class="{{tabItem.options['styleClass']}}" [class.spacer]="!tabItem.options['items'] && !tabItem.link"
                             [class.active]="isRouterLinkActive(tabItem)" [class.dropdown]="tabItem.options['items']" [class.open]="openTabMenuIndex == index">
-                            <a *ngIf="!tabItem.options['items'] && tabItem.link" [routerLink]="tabItem.link" [class.disabled]="tabItem.options['disabled']"><span *ngIf="tabItem.icon" class="fa fa-fw fa-{{tabItem.icon}}"></span> <span [innerHTML]="tabItem.label"></span> </a>
-                            <a *ngIf="tabItem.options['items']" (click)="toggleTabMenu(index)" class="cursor-hand"><span *ngIf="tabItem.icon" class="fa fa-fw fa-{{tabItem.icon}}"></span> <span [innerHTML]="tabItem.label"></span> <span class="dropdown-icon fa fa-angle-down"></span></a>
+                            <a *ngIf="!tabItem.options['items'] && tabItem.link" [routerLink]="tabItem.link" [class.disabled]="tabItem.options['disabled']">
+                                <span *ngIf="tabItem.icon" class="fa fa-fw fa-{{tabItem.icon}}"></span>
+                                <span [innerHTML]="tabItem.label"></span>
+                            </a>
+                            <a *ngIf="tabItem.options['items']" (click)="toggleTabMenu(index)" class="cursor-hand">
+                                <span *ngIf="tabItem.icon" class="fa fa-fw fa-{{tabItem.icon}}"></span>
+                                <span [innerHTML]="tabItem.label"></span>
+                                <span class="dropdown-icon fa fa-angle-down"></span>
+                            </a>
                             <ul *ngIf="tabItem.options['items']" class="dropdown-menu becki-tab-menu-dropdown">
                                 <li *ngFor="let subTabItem of tabItem.options['items']" [class.active]="isRouterLinkActive(subTabItem)">
-                                    <a [routerLink]="subTabItem.link" [class.disabled]="subTabItem.options['disabled']"><span *ngIf="subTabItem.icon" class="fa fa-fw fa-{{subTabItem.icon}}"></span> <span [innerHTML]="subTabItem.label"></span> </a>
+                                    <a [routerLink]="subTabItem.link" [class.disabled]="subTabItem.options['disabled']">
+                                        <span *ngIf="subTabItem.icon" class="fa fa-fw fa-{{subTabItem.icon}}"></span>
+                                        <span [innerHTML]="subTabItem.label"></span>
+                                    </a>
                                 </li>
                             </ul>
                         </li>
