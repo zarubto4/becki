@@ -179,8 +179,8 @@ import { BeckiImageLinks } from './helpers/BeckiImageLinks';
 import { MyDatePickerModule } from 'mydatepicker';
 import { BugsComponent } from './views/admin-bugs';
 import { BugsBugComponent } from './views/admin-bugs-bug';
-import { TimePickerComponent } from './components/timePickerComponent';
-import { DatePickerComponent } from './components/datePickerComponent';
+import { TimePickerComponent } from './components/TimePickerComponent';
+import { DatePickerComponent } from './components/DatePickerComponent';
 import { ModalsHardwareGroupPropertiesComponent } from './modals/hardware-group-properties';
 import { ModalsHardwareGroupDeviceSettingsComponent } from './modals/hardware-group-device-settings';
 import { FormSwitchTwoListSelectComponent } from './components/FormSwitchTwoListSelectComponent';
@@ -195,7 +195,10 @@ import { FirmwareTypeComponent } from './components/FirmwareTypeComponent';
 import { ModalPickHardwareTerminalComponent } from './modals/pick-hardware-terminal';
 import { ModalsHardwareRestartMQTTPassComponent } from './modals/hardware-restart-mqtt-pass';
 import { ModalsLogLevelComponent } from './modals/hardware-terminal-logLevel';
+import { ModalsHardwareChangeServerComponent } from './modals/hardware-change-server';
+import { TimeZoneSelectorComponent } from './components/TimeZoneSelector';
 import { BeckiClickOutsideDirective } from './helpers/ClickDetection';
+
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -498,6 +501,7 @@ class BeckiErrorHandler implements ErrorHandler {
         UpdateStateComponent,
         OnlineStateComponent,
         TypeOfUpdateComponent,
+        TimeZoneSelectorComponent,
         // Views components
         AdminDashboardComponent,
         Error404Component,
@@ -627,7 +631,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalsUpdateReleaseFirmwareComponent,
         ModalPickHardwareTerminalComponent,
         ModalsHardwareRestartMQTTPassComponent,
-
+        ModalsHardwareChangeServerComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

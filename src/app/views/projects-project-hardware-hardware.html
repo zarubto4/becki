@@ -420,6 +420,9 @@
                                         <button *ngIf="device.edit_permission" class="btn red btn-sm" (click)="onGenerateNewPassword()">
                                             <i class="fa fa-lock"></i> {{'label_change_mqtt_pass'|bkTranslate:this}}
                                         </button>
+                                        <button *ngIf="device.edit_permission" class="btn red btn-sm" (click)="onChangeServer()">
+                                            <i class="fa fa-lock"></i> {{'label_change_server'|bkTranslate:this}}
+                                        </button>
                                     </div>
                                 <br>
                                 <div>

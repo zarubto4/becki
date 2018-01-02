@@ -19,6 +19,7 @@ import {
 import { FormSelectComponent, FormSelectComponentOption } from '../components/FormSelectComponent';
 import { IMyDpOptions } from 'mydatepicker';
 import * as moment from 'moment';
+import { BeckiValidators } from '../helpers/BeckiValidators';
 
 export class ModalsUpdateReleaseFirmwareModel extends ModalModel {
     constructor(
@@ -28,6 +29,7 @@ export class ModalsUpdateReleaseFirmwareModel extends ModalModel {
         public firmwareType: string = 'firmware',
         public groups: IActualizationProcedureMakeTypeOfBoard[] = [],
         public time: number = 0,
+        public timeZoneOffset: number = 0,
     ) {
         super();
     }
@@ -51,15 +53,12 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
     formGroupList: FormSelectComponent;
     groupsForSelect: FormSelectComponentOption[] = null;
 
-    // cProgramForSelect: FormSelectComponentOption[] = null;
-    // cProgramVersionForSelect: FormSelectComponentOption[] = null;
     type_of_boards: ITypeOfBoard[] = null;
     selectedDeviceGroup: IBoardGroup = null;
     immediately: boolean = true;
 
     cPrograms: { [typeOfBoardId: string]: ICProgramList } = {};
     bootloaders: { [typeOfBoardId: string]: IBootLoader[] } = {};
-
 
     firmwareTypeSelect: FormSelectComponentOption[] = [];
 
@@ -87,10 +86,12 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
 
     constructor(public backendService: BackendService, private formBuilder: FormBuilder) {
         this.form = this.formBuilder.group({
-            'deviceGroupStringIdSelected': ['', [Validators.required]], // TODO Not Empty List Validator! Dominik
+            'deviceGroupStringIdSelected': ['', [Validators.required]],
             'firmwareType': ['', [Validators.required]],
-            'date': [''],
-            'time': [''],
+            'date': ['', [BeckiValidators.condition(() => (!this.immediately), Validators.required)]],
+            'time': ['', [BeckiValidators.condition(() => (!this.immediately), Validators.required)]],
+            'timeZoneOffset': ['', [BeckiValidators.condition(() => (!this.immediately), Validators.required)]],
+            'versionSelected': ['', [Validators.required]]
         });
     }
 
@@ -187,8 +188,9 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
 
         (<FormControl>(this.form.controls['firmwareType'])).setValue(this.modalModel.firmwareType);
         (<FormControl>(this.form.controls['deviceGroupStringIdSelected'])).setValue('');
-        (<FormControl>(this.form.controls['date'])).setValue(this.modalModel.time);
-        (<FormControl>(this.form.controls['time'])).setValue(this.modalModel.time);
+        (<FormControl>(this.form.controls['date'])).setValue(this.dateNow.toDateString());
+        (<FormControl>(this.form.controls['time'])).setValue(this.dateNow.getHours() + ':' + (this.dateNow.getMinutes() + 2));
+        (<FormControl>(this.form.controls['timeZoneOffset'])).setValue('');
     }
 
     onBooleanClick(value: boolean): void {
@@ -208,7 +210,7 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
         this.selectedDeviceGroup.type_of_boards_short_detail.forEach((typeOfBoard: ITypeOfBoardShortDetail) => {
 
             let bootloader_id: string = this.form.controls[typeOfBoard.id + '_selectedBootloaderId'].value;
-            let c_program_version_id: string  = this.form.controls[typeOfBoard.id + '_selectedCProgramVersionId'].value;
+            let c_program_version_id: string = this.form.controls[typeOfBoard.id + '_selectedCProgramVersionId'].value;
 
             let gr: IActualizationProcedureMakeTypeOfBoard = {
                 type_of_board_id: typeOfBoard.id,
@@ -219,10 +221,27 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
             this.modalModel.groups.push(gr);
         });
 
-        let time: string[] = this.form.controls['time'].value.toString().split(':');
-        let update_time: number = moment(this.form.controls['date'].value.jsdate).add(time[0], 'hour').add(time[1], 'minute').unix() * 1000;
+        if (!this.immediately) {
 
-        this.modalModel.time = update_time;
+            let time: number[] = this.form.controls['time'].value.toString().split(':');
+            // console.log('Time:: ', time);
+
+            let date: number = this.form.controls['date'].value;
+            // console.log('Date:: ', date);
+            // console.log('Date:: ', '' + date.toString());
+
+            // console.log('date jsdat:: ', this.form.controls['date'].value.jsdat);
+            // console.log('date in unix:: ', moment(this.form.controls['date'].value.jsdate).unix());
+
+            let complete_date: Date = new Date( moment(this.form.controls['date'].value.jsdate).unix() * 1000);
+            complete_date.setHours(time[0]);
+            complete_date.setMinutes(time[1]);
+
+            // console.log('update_time:: To String ', complete_date.toString());
+            // console.log('update_time:: Unix ',  moment(complete_date).unix());
+            this.modalModel.time = moment(complete_date).unix();
+            this.modalModel.timeZoneOffset = this.form.controls['timeZoneOffset'].value;
+        }
         this.modalClose.emit(true);
     }
 

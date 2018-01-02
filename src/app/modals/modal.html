@@ -2,6 +2,12 @@
     <div class="modal-dialog" [class.modal-width-80]="modalWrapper.modalModel?modalWrapper.modalModel.modalWide:false">
         <div class="modal-content" [ngSwitch]="modalWrapper.getModalType()">
 
+            <template [ngSwitchCase]="'ModalsHardwareChangeServerModel'">
+                <bk-modals-hardware-change-server [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-change-server>
+            </template>
+            <template [ngSwitchCase]="'ModalsUpdateReleaseFirmwareModel'">
+                <bk-modals-update-release-firmware [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-update-release-firmware>
+            </template>
             <template [ngSwitchCase]="'ModalsHardwareRestartMQTTPassModel'">
                 <bk-modals-hardware-restart-mqtt-pass [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-restart-mqtt-pass>
             </template>

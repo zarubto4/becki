@@ -1,0 +1,49 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title" [innerHTML]="'title'|bkTranslate:this"></h4>
+    </div>
+    <div class="modal-body">
+
+        <form [formGroup]="form">
+
+            <div class="text-center">
+            <h3>
+                <span class="cursor-hand" [class.bold]="tab == 'selector'" (click)="onToggleHardwareTab('selector')" [innerHTML]="'label_select'|bkTranslate:this"></span>
+                /
+                <span class="cursor-hand" [class.bold]="tab == 'manual'" (click)="onToggleHardwareTab('manual')" [innerHTML]="'label_manually'|bkTranslate:this"></span>
+            </h3>
+            </div>
+
+            <br>
+
+            <div *ngIf="tab == 'selector'">
+                <h4> {{'label_attention'|bkTranslate:this}}</h4>
+                <span [innerHTML] = "'label_select_description_attention'|bkTranslate:this"></span>
+                <div ng-if="!servers && !servers_options">
+                    <bk-form-select [control]="form.controls.serverSelector"
+                                    [label]="'label_select'|bkTranslate:this"
+                                    [options]="servers_options"></bk-form-select>
+                </div>
+            </div>
+
+            <div *ngIf="tab == 'manual'">
+                <h4> {{'label_attention'|bkTranslate:this}}</h4>
+                <span [innerHTML] = "'label_manual_description_attention'|bkTranslate:this"></span>
+                <br>
+                <bk-form-input [control]="form.controls.serverUrl" [label]="'label_url'|bkTranslate:this" [widthSize]="'medium'"></bk-form-input>
+                <bk-form-input [control]="form.controls.serverPort" [label]="'label_port'|bkTranslate:this" [widthSize]="'small'"></bk-form-input>
+                <span [innerHTML]="'label_url_description'|bkTranslate:this"></span>
+                <br>
+
+
+            </div>
+        </form>
+        <div style="text-align: center">
+            <button type="button" class="btn btn-lg blue" [disabled]="!form.valid" (click)="onRedirectClick()">{{'btn_redirect'|bkTranslate:this}}</button>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+    </div>
+</div>

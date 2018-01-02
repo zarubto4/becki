@@ -22,6 +22,8 @@ export class ModalsCreateHomerServerModel extends ModalModel {
         public web_view_port: number = 8052,
         public server_remote_port: number = 8054,
         public server_url: string = '',
+        public hash_certificate: string = null,
+        public connection_identificator: string = null,
         public edit: boolean = false,
     ) {
         super();
@@ -46,11 +48,13 @@ export class ModalsCreateHomerServerComponent implements OnInit {
 
         this.form = this.formBuilder.group({
             'personal_server_name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
-            'mqtt_port': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
-            'grid_port': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
-            'web_view_port': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
-            'server_remote_port': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
-            'server_url': ['', [Validators.required]]    // TODO Valid URL
+            'mqtt_port': [0, [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
+            'grid_port': [0, [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
+            'web_view_port': [0, [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
+            'server_remote_port': [0, [Validators.required, Validators.minLength(4), Validators.maxLength(5), BeckiValidators.number]],
+            'server_url': ['', [Validators.required]],    // TODO Valid URL
+            'hash_certificate': [''],   // TODO Valid URL
+            'connection_identificator': ['']    // TODO Valid URL
         });
     }
 
@@ -61,6 +65,8 @@ export class ModalsCreateHomerServerComponent implements OnInit {
         (<FormControl>(this.form.controls['web_view_port'])).setValue(this.modalModel.web_view_port);
         (<FormControl>(this.form.controls['server_remote_port'])).setValue(this.modalModel.server_remote_port);
         (<FormControl>(this.form.controls['server_url'])).setValue(this.modalModel.server_url);
+        (<FormControl>(this.form.controls['hash_certificate'])).setValue(this.modalModel.hash_certificate);
+        (<FormControl>(this.form.controls['connection_identificator'])).setValue(this.modalModel.connection_identificator);
     }
 
     onSubmitClick(): void {

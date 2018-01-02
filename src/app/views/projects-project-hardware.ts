@@ -387,7 +387,6 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
         let model = new ModalsUpdateReleaseFirmwareModel(this.projectId, this.deviceGroup);
         this.modalService.showModal(model).then((success) => {
             if (success) {
-
                 this.backendService.actualizationProcedureMake({
                     firmware_type: model.firmwareType,
                     hardware_group_id: model.deviceGroupStringIdSelected,

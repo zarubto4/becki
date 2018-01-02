@@ -101,8 +101,9 @@
                     <br>
                     <bk-date-picker [control]="form.controls.date" [label]="'label_select_date'|bkTranslate:this" [dateOption]="dateOption"></bk-date-picker>
                     <br>
-                    <br>
                     <bk-time-picker [control]="form.controls.time" [label]="'label_select_time'|bkTranslate:this"></bk-time-picker>
+                    <br>
+                    <bk-time-zone-selector [control]="form.controls.timeZoneOffset" [labelEnabled]="true"></bk-time-zone-selector>
                 </div>
 
             </div>
@@ -111,7 +112,6 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
-        <button type="button" class="btn green" (click)="onSubmitClick()">{{'btn_create'|bkTranslate:this}}</button>
-        <!-- z řádku nad jsem odstranil [disabled]="!form.valid" protože není ještě správně podchycený validační stav-->
+        <button type="button" class="btn green" [disabled]="!form.valid" (click)="onSubmitClick()">{{'btn_create'|bkTranslate:this}}</button>
     </div>
 </div>

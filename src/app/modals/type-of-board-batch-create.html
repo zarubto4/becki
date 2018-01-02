@@ -5,8 +5,8 @@
     </div>
     <div class="modal-body">
         <form [formGroup]="form">
-            <bk-form-input label="{{'label_product_revision'|bkTranslate:this}}" [control]="form.controls['revision']"></bk-form-input>
-            <bk-form-input label="{{'label_product_batch'|bkTranslate:this}}" [control]="form.controls['production_batch']"></bk-form-input>
+            <bk-form-input [label]="'label_product_revision'|bkTranslate:this" [control]="form.controls['revision']"></bk-form-input>
+            <bk-form-input [label]="'label_product_batch'|bkTranslate:this" [control]="form.controls['production_batch']"></bk-form-input>
             <hr>
             <bk-form-input label="{{'label_pcb_product_manufacture'|bkTranslate:this}}" [control]="form.controls['pcb_manufacture_name']"></bk-form-input>
             <bk-form-input label="{{'label_pcb_product_manufacture_id'|bkTranslate:this}}" [control]="form.controls['pcb_manufacture_id']"></bk-form-input>

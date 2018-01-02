@@ -23,9 +23,11 @@ import { ConsoleLogComponent, ConsoleLogType, ConsoleLogItem } from '../componen
 import { FormGroup, FormControl } from '@angular/forms';
 import { ModalPickHardwareTerminalComponent, ModalPickHardwareTerminalModel } from '../modals/pick-hardware-terminal';
 import { IBoardForFastUploadDetail } from '../backend/TyrionAPI';
+import { ModalsHardwareRestartMQTTPassModel } from '../modals/hardware-restart-mqtt-pass';
 import * as Rx from 'rxjs';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 import { ModalsLogLevelModel } from '../modals/hardware-terminal-logLevel';
+import { ModalsHardwareChangeServerModel } from '../modals/hardware-change-server';
 
 export interface TerminalParameters {
     id: string;
@@ -488,6 +490,20 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 this.fmError(this.translate('flash_device_restart_success_fail', reason));
                 this.unblockUI();
             });
+    }
+
+    onGenerateNewPassword(): void {
+        let model = new ModalsHardwareRestartMQTTPassModel(this.device);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {}
+        });
+    }
+
+    onChangeServer(): void {
+        let model = new ModalsHardwareChangeServerModel(this.device);
+        this.modalService.showModal(model).then((success) => {
+            if (success) {}
+        });
     }
 
     onSwitchToBootloaderDeviceClick(): void {

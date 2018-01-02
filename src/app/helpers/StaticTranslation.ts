@@ -122,7 +122,7 @@ export class StaticTranslation {
                 'label_description': 'Description',
                 'label_processor': 'Processor',
                 'label_producer': 'Producer',
-                'label_connectable_to_internet': 'Connectable to Internet (Wifi, Ethernet)',
+                'label_connectible_to_internet': 'Connectable to Internet (Wifi, Ethernet)',
                 'label_compiler_target_name': 'Target name for Compiler server'
             }, 'ModalsCreateProcessorComponent': {
                 'title': 'Create new Processor',
@@ -152,6 +152,8 @@ export class StaticTranslation {
                 'label_grid_port': 'Grid port',
                 'label_web_view_port': 'Web View port',
                 'label_hardware_log_port': 'Hardware Logger Stream port',
+                'label_hash_certificate': 'Hash',
+                'label_connection_identifier': 'Connection Token',
             }, 'ModalsGarfieldComponent': {
                 'title': 'Garfield',
                 'label_name': 'Garfield Identification',
@@ -282,6 +284,19 @@ export class StaticTranslation {
                 'body_text': '<p>MQTT <strong>Password</strong> and <strong>Name</strong> is stored in device memory as a <a href="https://en.wikipedia.org/wiki/Universally_unique_identifier" target="_blank">UUID</a> . And it is not distributed online or inside the firmware update. </p> <p><strong>Password</strong> and <strong>Name</strong> were created and uploaded during production in our factory. But in some case, for example, when you changing server hierarchy (Developer, Stage or Production Servers), you have to change security tokens.</p><p>Changing your password on Hardware within maximum security can <strong>only be done physically in Bootloader mode via USB Cable!</strong></p><p>If you are generating new access data, the previous ones will automatically be irreversibly removed. Also, it is not possible to show the original or new generated access data again because <strong>we have only HASH, not the original value.</strong></p><p>So you can only see the password in the original form once!</p>',
                 'btn_generate': 'Generate New Password',
                 'body_password_message': '<p> <strong>Warning!</strong> It is not possible to show access data again because <strong>we store all information only in HASH, not the original value. </p> <p>You can see the password and name in the original form once! </p>',
+
+
+            }, 'ModalsHardwareChangeServerComponent': {
+                'title': 'Change <strong class="font-color-cloud">CLOUD</strong> IoT Server',
+                'label_attention': 'Warning!',
+                'label_select_description_attention': '<p>You can redirect the hardware to another server if there is a geolocation in the preference. For public servers, the system can automatically make adjustments to increase stability and performance. If the server is overloaded, it can redirect the hardware itself to less busy servers.</p> <p>Additionally, the server measures latency and approximate hardware location at daily intervals. When it finds a better server with better latency, it automatically redirects the hardware. These features are also used when we updating our servers. Before update and restart of server, the hardware is redirected to another temporary server. We update at weekly intervals. This guarantees 100% reliability.</p>',
+                'label_manual_description_attention': '<p> Manual redirection of hardware to another server can have fatal consequences. Use this feature only if you know what you are doing.</p><p><strong> There is a backup server where the hardware redirects if an unsuccessful connection to a new server, we cover your back</strong>, but we want to inform you that there may be unexpected complications. Hardware may "lose" on the Internet. </p> <p> Hardware can always be repaired by connecting a USB cable and by using manual settings in Bootloader. </p>',
+                'label_select': 'Select Server',
+                'label_manually': 'Manual Redirection',
+                'label_url_description': '<p>The address can not contain http, https, ws, and others. The address may look like <strong>8.8.8.8</strong> or <strong>my-server.my_domain.com</strong>. Please note that Cloud server does not have the url directory.</p> <p>For example <strong>my_server.com/and_my_stupid_idea/yeah</strong>.</p>',
+                'label_url': 'Url',
+                'label_port': 'Port',
+                'btn_redirect': 'Redirect',
 
             }, 'ModalsFileUploadComponent': {
                 'title': 'Upload File',
@@ -1190,6 +1205,7 @@ export class StaticTranslation {
                 'label_restart_device': 'Restart Device',
                 'label_restart_to_bootloader': 'Restart to Bootloader',
                 'label_change_mqtt_pass': 'Restart MQTT Password',
+                'label_change_server': 'Change Server',
                 'label_info': 'Basic System Info',
                 'label_image': 'Image',
                 'label_set_own_picture': 'Set your own photo',
@@ -2103,7 +2119,7 @@ export class StaticTranslation {
                 'main_subtitle': 'Admin Dashboard',
 
                 'title': 'Basic Overview',
-                'dashboard_info_text': 'fasdfsdfs sdafbk jshdfkjhasdkjhsdafhjkfasdjkbhkhjfgsdkjhgsdfkjhgfsd',
+                'dashboard_info_text': 'TODO NECO DOPSAT??? [TZ]',
 
                 'label_homer_server': 'Homer servers',
                 'label_compilation_server': 'Compilation Servers',
@@ -2382,9 +2398,10 @@ export class StaticTranslation {
             'server_type': {
                 'public_server': 'Public Byzance Server',
                 'private_server': 'Private Server',
-                'backup_server': 'Backup Server',
-                'main_server': 'Main Server',
-                'test_server': 'Test Server'
+                'backup_server': 'Public Byzance Backup Server',
+                'main_server': 'Public Byzance Main Server',
+                'test_server': 'Test Server',
+                'already_on': 'Already on',
             },
             'device_alerts': {
                 'BOOTLOADER_REQUIRED': 'Bootloader update is required.',

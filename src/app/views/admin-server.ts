@@ -130,6 +130,8 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
                     server.web_view_port,
                     server.server_remote_port,
                     server.server_url,
+                    server.hash_certificate,
+                    server.connection_identificator,
                     true
                 );
                 this.modalService.showModal(model).then((success) => {

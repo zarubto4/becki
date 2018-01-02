@@ -97,8 +97,6 @@ export class ModalsAddHardwareComponent implements OnInit {
 
     ngOnInit() {
 
-        this.flashMesseage.emit(new FlashMessageError(this.translationService.translate('flash_cant_add_hardware', this), 'pepa'));
-
         this.group_options_available = this.modalModel.deviceGroup.map((pv) => {
             return {
                 label: pv.name,

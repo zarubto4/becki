@@ -29,6 +29,32 @@ export class BeckiValidators {
         return {'email': true}; // invalid
     }
 
+    public static notEmptyList: ValidatorFn = (c: AbstractControl) => {
+
+        try {
+
+            console.log("Kontrola notEmptyList");
+
+            if (c.value instanceof Array) {
+
+                console.log("Je to pole!");
+
+                let l: any[] = c.value;
+
+                if (l.length > 0) {
+                    console.log("a jje vetší než 0");
+                    return null; // valid
+                }
+                return {'empty_list': true}; // invalid
+            }
+
+            return {'empty_list': true}; // invalid
+
+        } catch (exc) {
+            console.error("Kontrola notEmptyList shit happens ", exc)
+        }
+    }
+
     public static url: ValidatorFn = (c: AbstractControl) => {
 
         if (c.value.indexOf('.') === -1) {
@@ -53,13 +79,18 @@ export class BeckiValidators {
                 return {'number': true}; // invalid
             }
 
-            if (c.value.match(/^[0-9]+([\/][0-9]+)?$/)) {
+            if (c.value === null) {
+                return {'number': true}; // invalid
+            }
+
+            if (c.value.toString().match(/^[0-9]+([\/][0-9]+)?$/)) {
                 return null; // valid
             }
 
             return {'number': true}; // invalid
 
         } catch (e) {
+
             return {'number': true}; // invalid
         }
     }

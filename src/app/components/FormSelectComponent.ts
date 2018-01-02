@@ -137,6 +137,9 @@ export class FormSelectComponent {
     }
 
     onSelectedChange(newValue: string) {
+
+        this.control.updateValueAndValidity();
+
         // console.log("onSelectedChange:: Selected value:: ", newValue);
         // Select first
         if (newValue == null) {
