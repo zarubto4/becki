@@ -4,6 +4,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Validators, FormGroup, FormBuilder, AbstractControl, FormControl } from '@angular/forms';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 import { BeckiValidators } from '../helpers/BeckiValidators';
+import { ConsoleSourceColor } from './ConsoleLogComponent';
 
 
 @Component({
@@ -44,6 +45,12 @@ export class TimePickerComponent {
         this.open = !this.open;
     }
 
+
+    OnOutsideClick(event: any) {
+        if (event.value && this.open) {
+            this.open = !this.open;
+        }
+    }
 
     addZero(num: number): string {
         let corrected = ('0' + num).slice(-2);

@@ -1,7 +1,7 @@
-<div class="form-group" [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)" [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
+<div bkClickOutside (clickOutside)="OnOutsideClick($event)" class="form-group" [class.has-success]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && control.valid)" [class.has-error]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && !control.pending && !control.valid)" [class.has-warning]="!readonly && (((!waitForTouch) || (control.dirty ||control.touched)) && control.pending)">
     <label *ngIf="labelEnabled">{{label}}</label>
     <div class="input-group">
-        <input type="text" [readonly]="readonly" maxlength="5" [value]="hour+':'+minute" [formControl]="control"
+        <input type="text" readonly="true" maxlength="5" [value]="hour+':'+minute" [formControl]="control"
                placeholder="{{placeholder}}" class="form-control timepicker timepicker-no-seconds">
         <span class="input-group-btn">
             <button (click)="changeOpen()" class="btn default" type="button">

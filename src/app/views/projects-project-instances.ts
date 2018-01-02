@@ -8,7 +8,7 @@
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
-import {IInstanceList, IInstanceShortDetail} from '../backend/TyrionAPI';
+import { IInstanceList, IInstanceShortDetail } from '../backend/TyrionAPI';
 import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';

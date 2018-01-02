@@ -195,6 +195,7 @@ import { FirmwareTypeComponent } from './components/FirmwareTypeComponent';
 import { ModalPickHardwareTerminalComponent } from './modals/pick-hardware-terminal';
 import { ModalsHardwareRestartMQTTPassComponent } from './modals/hardware-restart-mqtt-pass';
 import { ModalsLogLevelComponent } from './modals/hardware-terminal-logLevel';
+import { BeckiClickOutsideDirective } from './helpers/ClickDetection';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -483,6 +484,7 @@ class BeckiErrorHandler implements ErrorHandler {
         TableListComponent,
         CProgramVersionSelectorComponent,
         DraggableDirective,
+        BeckiClickOutsideDirective,
         FileTreeComponent,
         GridViewComponent,
         NotificationsOverlayComponent,
