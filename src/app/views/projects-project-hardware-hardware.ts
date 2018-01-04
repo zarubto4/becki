@@ -15,7 +15,7 @@ import { ModalsHardwareCodeProgramVersionSelectModel } from '../modals/hardware-
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsDeviceEditDescriptionModel } from '../modals/device-edit-description';
 import { ModalsRemovalModel } from '../modals/removal';
-import { OnlineChangeStatus, BeckiBackend, ITerminalWebsocketMessage } from '../backend/BeckiBackend';
+import { OnlineChangeStatus, BeckiBackend, ITerminalWebsocketMessage, IWebsocketTerminalState } from '../backend/BeckiBackend';
 import { CropperSettings, ImageCropperComponent } from 'ng2-img-cropper';
 import { ModalsDeviceEditDeveloperParameterValueModel } from '../modals/device-edit-developer-parameter-value';
 import { ModalsPictureUploadModel } from '../modals/picture-upload';
@@ -36,6 +36,7 @@ export interface TerminalParameters {
     onlineStatus: string;
     hardwareURL: string;
     hardwareURLport: number;
+    connected: boolean;
 }
 
 export interface ConfigParameters {
@@ -78,6 +79,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     numbers: any;
 
     hardwareTerminalWS: Rx.Subject<ITerminalWebsocketMessage>;
+    hardwareTerminalStateWS: Rx.Subject<IWebsocketTerminalState>;
     terminalHardware: TerminalParameters[] = [];
 
     lastInstance: number = 1;
@@ -97,23 +99,6 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             this.terminalHardware.find(hardware => hardware.id === status.model_id).onlineStatus = status.online_status;
         });
 
-        this.hardwareTerminalWS = this.backendService.hardwareTerminal;
-        this.hardwareTerminalWS.subscribe(msg => this.onMessage(msg));
-
-        this.colorForm.valueChanges.subscribe(value => {
-            if (this.consoleLog) {
-
-                Object.keys(value).forEach(
-                    colorKey => {
-                        this.consoleLog.addSourceColor(colorKey.substr(5), value[colorKey]);
-                    });
-            }
-        });
-        /*
-                setInterval(int => {
-                    this.consoleLog.add("info", "kekekewkf", "0227852", this.device.id);
-                    console.log(this.device.id);
-                }, 1000);*/
     };
 
 
@@ -144,12 +129,35 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     }
 
     onMessage(msg: ITerminalWebsocketMessage) {
-        let deviceTerminal = this.terminalHardware.findIndex(device => device.id === msg.hardware_id);
-        if (this.consoleLog && deviceTerminal > -1) {
-            let alias = this.terminalHardware[deviceTerminal].name;
-            this.consoleLog.add(msg.level, msg.message, (alias ? alias : msg.hardware_id), msg.hardware_id);
+        let deviceTerminal = this.terminalHardware.find(device => device.id === msg.hardware_id);
+        if (deviceTerminal) {
+            if (!deviceTerminal.connected && msg.message_type === 'subscribe_hardware') {
+                deviceTerminal.connected = true;
+            }
+            if (this.consoleLog) {
+                let alias = deviceTerminal.name;
+                this.consoleLog.add(msg.level, msg.message, (alias ? alias : msg.hardware_id), msg.hardware_id);
+
+            }
         }
     }
+
+    onStateMessage(msg: IWebsocketTerminalState) {
+        // console.log(msg);
+        if (msg.websocketUrl === null && msg.isConnected === null) {
+            this.addFlashMessage(new FlashMessageError('cant connect offline device'));
+            return;
+        }
+
+        if (this.terminalHardware) {
+            this.terminalHardware.find(terminal => {
+                if (msg.websocketUrl.includes(terminal.hardwareURL + ':' + terminal.hardwareURLport)) {
+                    return true;
+                }
+            }).connected = msg.isConnected;
+        }
+    }
+
 
     onAddTerminalHardwareClick() {
         if (this.avalibleHardware && this.avalibleHardware.length > 0) {
@@ -166,6 +174,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 let con = this.avalibleHardware.concat(this.terminalHardware.splice(this.terminalHardware.findIndex(device => device.id === terminal.id), 1)); // dont need chceck if exist cuz we know its exist
                 this.avalibleHardware = con;
                 this.backendService.requestDeviceTerminalUnsubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport);
+                //this.backendService.closeHardwareTerminalWebsocket(terminal.hardwareURL + ':' + terminal.hardwareURLport); //TODO lepší je ponechat WS otevřený v "resting" stavu a pak je všechny zavřít najedou
             }
         });
     }
@@ -210,7 +219,6 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                         return true;
                     }
                 })) {
-                    console.log("pouštím druhý WS");
                     this.backendService.connectDeviceTerminalWebSocket(model.selectedBoard.hardwareURL, model.selectedBoard.hardwareURLport + '');
                 }
 
@@ -221,7 +229,8 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                     'name': model.selectedBoard.name,
                     'onlineStatus': model.selectedBoard.onlineStatus,
                     'hardwareURL': model.selectedBoard.hardwareURL,
-                    'hardwareURLport': model.selectedBoard.hardwareURLport
+                    'hardwareURLport': model.selectedBoard.hardwareURLport,
+                    'connected': false
                 });
 
                 this.backendService.requestDeviceTerminalSubcribe(model.selectedBoard.id, model.selectedBoard.hardwareURL + ':' + model.selectedBoard.hardwareURLport, model.logLevel);
@@ -250,13 +259,87 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         });
 
 
-        this.backendService.closeHardwareTerminalWebsocket();
+        this.backendService.closeHardwareTerminalWebsocket('all');
     }
 
     onToggleHardwareTab(tab: string) {
 
         if (tab === 'updates' && this.actualizationTaskFilter == null) {
             this.onFilterActualizationProcedureTask();
+        }
+
+        if (tab === 'command_center' && !this.WSinit) {
+            this.blockUI();
+
+            this.hardwareTerminalWS = this.backendService.hardwareTerminal;
+            this.hardwareTerminalWS.subscribe(msg => this.onMessage(msg));
+
+            this.hardwareTerminalStateWS = this.backendService.hardwareTerminalState;
+            this.hardwareTerminalStateWS.subscribe(msg => this.onStateMessage(msg));
+
+            this.colorForm.valueChanges.subscribe(value => {
+                if (this.consoleLog) {
+                    Object.keys(value).forEach(
+                        colorKey => {
+                            this.consoleLog.addSourceColor(colorKey.substr(5), value[colorKey]);
+                        });
+                }
+            });
+
+            if (this.device.server && this.device.server.server_url) {
+                this.terminalFirstRun(this.device);
+            } else {
+                this.terminalHardware.push({
+                    'id': this.device.id,
+                    'logLevel': 'info',
+                    'name': this.device.name,
+                    'onlineStatus': this.device.online_state,
+                    'hardwareURL': null,
+                    'hardwareURLport': null,
+                    'connected': false
+                });
+            }
+
+            this.backendService.boardsGetWithFilterParameters(0, { // TODO https://youtrack.byzance.cz/youtrack/issue/BECKI-368
+                projects: [this.projectId],
+                type_of_board_ids: []
+            }).then(boards => {
+
+                let hardwares = boards.content.filter(item => {
+                    return !this.terminalHardware.some(board => board.id === item.id);
+                });
+
+                hardwares.map(hardware => {
+                    this.backendService.boardGet(hardware.id).then(board => {
+                        if (board.server && board.server.server_url) {
+                            this.avalibleHardware.push({
+                                'id': hardware.id,
+                                'logLevel': 'info',
+                                'name': hardware.name,
+                                'onlineStatus': board.online_state,
+                                'hardwareURL': board.server.server_url,
+                                'hardwareURLport': board.server.hardware_log_port,
+                                'connected': false
+                            });
+                        } else {
+                            this.avalibleHardware.push({
+                                'id': hardware.id,
+                                'logLevel': 'info',
+                                'name': hardware.name,
+                                'onlineStatus': board.online_state,
+                                'hardwareURL': null,
+                                'hardwareURLport': null,
+                                'connected': false
+                            });
+                        }
+                    });
+                });
+                this.unblockUI();
+            }).catch(error => {
+                this.addFlashMessage(new FlashMessageError(this.translate('flash_hardware_cant_get_list'), error));
+                this.unblockUI();
+            });
+
         }
 
         this.hardwareTab = tab;
@@ -275,40 +358,11 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                     }
                 });
 
-                if (!this.WSinit) {
-                    if (this.device.server && this.device.server.server_url) {
-                        this.terminalFirstRun(board);
-                    } else {
-                        this.terminalHardware.push({ 'id': this.device.id, 'logLevel': 'info', 'name': this.device.name, 'onlineStatus': this.device.online_state, 'hardwareURL': null, 'hardwareURLport': null });
-                    }
-                }
-
                 return this.backendService.typeOfBoardGet(board.type_of_board_id);
 
             })
             .then((typeOfBoard) => {
                 this.typeOfBoard = typeOfBoard;
-
-                this.backendService.boardsGetForIdeOperation(this.projectId).then(boards => {
-                    let hardwares = boards.filter(item => {
-                        return !this.terminalHardware.some(board => board.id === item.id);
-                    });
-                    hardwares.map(hardware => {
-                        this.backendService.boardGet(hardware.id).then(board => {
-                            if (board.server && board.server.server_url) {
-                                this.avalibleHardware.push({
-                                    id: hardware.id, logLevel: 'info', name: hardware.name, 'onlineStatus': board.online_state,
-                                    'hardwareURL': board.server.server_url, 'hardwareURLport': board.server.hardware_log_port
-                                });
-                                // TODO send online_status request
-                            }
-                        });
-
-                    });
-
-                }).catch(error => {
-                    this.addFlashMessage(new FlashMessageError(this.translate('flash_hardware_cant_get_list'), error));
-                });
                 this.unblockUI();
 
             })
@@ -320,24 +374,21 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
 
     terminalFirstRun(board: IBoard): void {
-        this.backendService.connectDeviceTerminalWebSocket(this.device.server.server_url, this.device.server.hardware_log_port + ''); // TODO získat z device
+        this.backendService.connectDeviceTerminalWebSocket(this.device.server.server_url, this.device.server.hardware_log_port + '');
         this.WSinit = true;
-
-        /*
-                                this.backendService.getTerminalWebsocket.addEventListener('close', e => {
-                                    this.addFlashMessage(new FlashMessageError('Websocket comunication ended, trying to re-connect ', e.reason));
-                                });
-                                this.backendService.getTerminalWebsocket.addEventListener('error', e => {
-                                    this.addFlashMessage(new FlashMessageError('something is wrong: ', ));
-                                });*/
 
         // TODO při změně jména/aliasu refreshnout název terminálu
 
         this.colorForm.addControl('color' + this.device.id, new FormControl('color' + this.device.id));
         this.colorForm.controls['color' + this.device.id].setValue('#0000FF');
         this.terminalHardware.push({
-            'id': this.device.id, 'logLevel': 'info', 'name': this.device.name,
-            'onlineStatus': this.device.online_state, 'hardwareURL': board.server.server_url, 'hardwareURLport': board.server.hardware_log_port
+            'id': this.device.id,
+            'logLevel': 'info',
+            'name': this.device.name,
+            'onlineStatus': this.device.online_state,
+            'hardwareURL': board.server.server_url,
+            'hardwareURLport': board.server.hardware_log_port,
+            'connected': false
         });
 
         new Promise<any>((resolve) => {

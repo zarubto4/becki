@@ -33,16 +33,16 @@ export class BeckiValidators {
 
         try {
 
-            console.log("Kontrola notEmptyList");
+           // console.log("Kontrola notEmptyList");
 
             if (c.value instanceof Array) {
 
-                console.log("Je to pole!");
+               // console.log("Je to pole!");
 
                 let l: any[] = c.value;
 
                 if (l.length > 0) {
-                    console.log("a jje vetší než 0");
+                   // console.log("a jje vetší než 0");
                     return null; // valid
                 }
                 return {'empty_list': true}; // invalid
@@ -51,7 +51,7 @@ export class BeckiValidators {
             return {'empty_list': true}; // invalid
 
         } catch (exc) {
-            console.error("Kontrola notEmptyList shit happens ", exc)
+            console.error('Kontrola notEmptyList shit happens ', exc);
         }
     }
 

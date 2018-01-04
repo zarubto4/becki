@@ -80,6 +80,12 @@ export interface IWebSocketNotification extends INotification, IWebSocketMessage
     state: ('created' | 'updated' | 'confirmed' | 'deleted');
 }
 
+export interface IWebsocketTerminalState {
+    websocketUrl: string;
+    isConnected: boolean;
+    reason: string;
+}
+
 export interface ICodeCompileErrorMessage {
     filename: string;
     type: string;
@@ -359,7 +365,7 @@ export abstract class BeckiBackend extends TyrionAPI {
     private TerminalwebSocketReconnectTimeout: any = null;
 
     public hardwareTerminal: Rx.Subject<ITerminalWebsocketMessage> = new Rx.Subject<ITerminalWebsocketMessage>();
-    public hardwareTerminalState: Rx.Subject<{ id: string, isConnected: boolean }> = new Rx.Subject<{ id: string, isConnected: boolean }>();
+    public hardwareTerminalState: Rx.Subject<IWebsocketTerminalState> = new Rx.Subject<IWebsocketTerminalState>();
 
     public onlineStatus: Rx.Subject<OnlineChangeStatus> = new Rx.Subject<OnlineChangeStatus>();
     public objectUpdateTyrionEcho: Rx.Subject<ModelChangeStatus> = new Rx.Subject<ModelChangeStatus>();
@@ -646,6 +652,8 @@ export abstract class BeckiBackend extends TyrionAPI {
                 return;
             }
 
+            // delete message.websocketURL;
+
 
             if (websocket.readyState) {
                 try {
@@ -696,50 +704,63 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     public connectDeviceTerminalWebSocket(server: string, port: string): void {
 
-        let websocket: WebSocket = null;
+        if (!(server !== null) && !(port !== null)) {
 
-        let wsPosition: number = this.hardwareTerminalwebSockets.findIndex(ws => {
-            if (ws.url.includes(server + ':' + port)) {
-                websocket = ws;
-                return true;
-            }
-        });
+            let websocket: WebSocket = null;
 
-        if (websocket) {
-            this.closeHardwareTerminalWebsocket(websocket.url);
-        }
-
-        websocket = new WebSocket(`${this.wsProtocol}://${server}:${port}/${this.getToken()}`);
-
-        websocket.addEventListener('close', ws => {
-            this.reconnectTerminalWebSocketAfterTimeout();
-            // this.hardwareTerminalState.next({ 'id': websocket.url, 'isConnected': false }); //TODO poslat i připojení
-        });
-        let opened = Rx.Observable
-            .fromEvent<void>(websocket, 'open');
-        let channelReceived = Rx.Observable
-            .fromEvent<MessageEvent>(websocket, 'message')
-            .map(event => { // TODO: think why is this triggered 8 times (for 8 subscribes)
-                try {
-                    return JSON.parse(event.data);
-                } catch (e) {
-                    console.error('Parse error: ', e);
+            let wsPosition: number = this.hardwareTerminalwebSockets.findIndex(ws => {
+                if (ws.url.includes(server + ':' + port)) {
+                    websocket = ws;
+                    return true;
                 }
-                return null;
             });
-        channelReceived
-            // .filter(message => message.message_type === '"hardware-logger"')
-            .subscribe(this.hardwareTerminal);
+
+            if (websocket) {
+                this.closeHardwareTerminalWebsocket(websocket.url);
+            }
+
+            websocket = new WebSocket(`${this.wsProtocol}://${server}:${port}/${this.getToken()}`);
+
+            websocket.addEventListener('close', ws => {
+                this.reconnectTerminalWebSocketAfterTimeout();
+                this.hardwareTerminalState.next({ 'websocketUrl': websocket.url, 'isConnected': false,'reason': 'conectionFailed'});
+            });
+
+            websocket.addEventListener('open', ws => {
+                this.reconnectTerminalWebSocketAfterTimeout();
+                this.hardwareTerminalState.next({ 'websocketUrl': websocket.url, 'isConnected': true, 'reason': 'connected' });
+            });
 
 
-        opened.subscribe(open => this.sendWebSocketTerminalMessageQueue());
+            let opened = Rx.Observable
+                .fromEvent<void>(websocket, 'open');
+            let channelReceived = Rx.Observable
+                .fromEvent<MessageEvent>(websocket, 'message')
+                .map(event => {
+                    try {
+                        return JSON.parse(event.data);
+                    } catch (e) {
+                        console.error('Parse error: ', e);
+                    }
+                    return null;
+                });
+            channelReceived
+                .filter(message => message.message_channel === 'hardware-logger')
+                .subscribe(this.hardwareTerminal);
 
-        if (wsPosition > -1) {
 
-            this.hardwareTerminalwebSockets[wsPosition] = websocket;
+            opened.subscribe(open => this.sendWebSocketTerminalMessageQueue());
+
+            if (wsPosition > -1) {
+
+                this.hardwareTerminalwebSockets[wsPosition] = websocket;
+            } else {
+
+                this.hardwareTerminalwebSockets.push(websocket);
+            }
         } else {
-
-            this.hardwareTerminalwebSockets.push(websocket);
+            this.hardwareTerminalState.next({ websocketUrl: null, isConnected: null, 'reason': 'cantConnect' });
+            return;
         }
     }
 
@@ -749,22 +770,25 @@ export abstract class BeckiBackend extends TyrionAPI {
         return
 }*/
 
-    public closeHardwareTerminalWebsocket(websocketURL?: string) {
-
-        if (websocketURL) {
-            let websocket = this.hardwareTerminalwebSockets.find(ws => {
-                if (ws.url === websocketURL) {
-                    return true;
-                }
-            });
-            if (websocket) {
-                websocket.removeEventListener('close', this.reconnectWebSocketAfterTimeout);
-                websocket.close();
-            }
-            websocket = null;
-        } else {
+    public closeHardwareTerminalWebsocket(websocketURL: string) {
+        if (websocketURL === 'all') {
             this.hardwareTerminalwebSockets = [];
+            return;
         }
+
+        let websocket = this.hardwareTerminalwebSockets.find(ws => {
+            if (ws.url.includes(websocketURL)) {
+                return true;
+            }
+        });
+        if (websocket) {
+            websocket.removeEventListener('close');
+            websocket.removeEventListener('open');
+            websocket.close();
+
+            this.hardwareTerminalState.next({ 'websocketUrl': websocket.url, 'isConnected': false, 'reason': 'dissconected' });
+        }
+        websocket = null;
     }
 
     protected connectWebSocket(): void {

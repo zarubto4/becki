@@ -1267,6 +1267,7 @@ export class StaticTranslation {
                 'table_actions': 'Actions',
                 'table_logLevel': 'Log Level',
                 'table_connection': 'Connection status',
+                'table_connection_confirmed': 'Connected',
 
                 'flash_cant_add_hardware': 'Unable to add hardware ',
                 'flash_no_more_device': 'No more Device to add',
