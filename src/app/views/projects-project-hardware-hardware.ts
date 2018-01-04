@@ -580,15 +580,16 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     /* tslint:disable:max-line-length ter-indent */
     onFilterActualizationProcedureTask(pageNumber: number = 0,
-        states: ('successful_complete' | 'complete' | 'complete_with_error' | 'canceled' | 'in_progress' | 'not_start_yet')[] = ['successful_complete', 'complete', 'complete_with_error', 'canceled', 'in_progress', 'not_start_yet'],
+        states: ('complete' | 'canceled' | 'bin_file_not_found' | 'not_start_yet' | 'in_progress' | 'overwritten' | 'not_updated' | 'waiting_for_device' | 'instance_inaccessible' | 'homer_server_is_offline' | 'homer_server_never_connected' | 'critical_error')[] = ['complete', 'canceled', 'bin_file_not_found', 'not_start_yet', 'in_progress', 'not_updated', 'waiting_for_device', 'instance_inaccessible', 'homer_server_is_offline', 'homer_server_never_connected', 'critical_error'],
         type_of_updates: ('MANUALLY_BY_USER_INDIVIDUAL' | 'MANUALLY_BY_USER_BLOCKO_GROUP' | 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME' | 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE' | 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE')[] = ['MANUALLY_BY_USER_INDIVIDUAL', 'MANUALLY_BY_USER_BLOCKO_GROUP', 'MANUALLY_BY_USER_BLOCKO_GROUP_ON_TIME', 'AUTOMATICALLY_BY_USER_ALWAYS_UP_TO_DATE', 'AUTOMATICALLY_BY_SERVER_ALWAYS_UP_TO_DATE']): void {
         this.blockUI();
 
         this.backendService.actualizationTaskGetByFilter(pageNumber, {
             actualization_procedure_ids: null,
             board_ids: [this.device.id],
-            instance_ids: null,
+            instance_ids: [],
             update_states: states,
+            update_status: [],
             type_of_updates: type_of_updates
         })
             .then((values) => {

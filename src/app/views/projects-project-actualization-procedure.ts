@@ -81,7 +81,8 @@ export class ProjectsProjectActualizationProcedureComponent extends BaseMainComp
             actualization_procedure_ids: [this.actualization_procedure_id],
             board_ids: null,
             instance_ids: null,
-            update_states: states,
+            update_status: states,
+            update_states: [],
             type_of_updates: type_of_updates
         })
             .then((values) => {

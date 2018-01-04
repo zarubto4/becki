@@ -392,7 +392,8 @@ export class ProjectsProjectHardwareComponent extends BaseMainComponent implemen
                     hardware_group_id: model.deviceGroupStringIdSelected,
                     project_id: this.projectId,
                     time: model.time,
-                    type_of_boards_settings: model.groups
+                    type_of_boards_settings: model.groups,
+                    timeOffset: model.timeZoneOffset
                 })
                     .then(() => {
                         this.unblockUI();
