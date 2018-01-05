@@ -104,6 +104,7 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
     }
 
     onGroupChange(value: string) {
+        (<FormControl>(this.form.controls['versionSelected'])).setValue(null);
         let devgroup: IBoardGroup = null;
 
         for (let i: number = 0; i < this.modalModel.deviceGroup.length; i++) {
@@ -152,6 +153,7 @@ export class ModalsUpdateReleaseFirmwareComponent implements OnInit {
 
     hwCProgramVersionChanged(typeOfBoardId: string, cProgramVersion: string) {
         (<FormControl>(this.form.controls[typeOfBoardId + '_selectedCProgramVersionId'])).setValue(cProgramVersion);
+        (<FormControl>(this.form.controls['versionSelected'])).setValue(cProgramVersion);
     }
 
     get_bootloader_option(boot_loaders: IBootLoader[]): FormSelectComponentOption[] {

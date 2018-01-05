@@ -409,21 +409,21 @@
                             <div class="col-md-6">
                                 <H4>{{'label_core_configuration'|bkTranslate:this}}</H4>
                                 <span [innerHtml]="'label_core_configuration_comment'|bkTranslate:this"></span>
-                                    <div>
-                                        <button *ngIf="device.edit_permission" [disabled]="device.online_state != 'online'" class="btn red btn-sm" (click)="onRestartDeviceClick()">
-                                            <i class="fa fa-heartbeat"></i> {{'label_restart_device'|bkTranslate:this}}
-                                        </button>
+                                <div>
+                                    <button *ngIf="device.edit_permission" [disabled]="device.online_state != 'online'" class="btn red btn-sm" (click)="onRestartDeviceClick()">
+                                        <i class="fa fa-heartbeat"></i> {{'label_restart_device'|bkTranslate:this}}
+                                    </button>
 
-                                        <button *ngIf="device.edit_permission" [disabled]="device.online_state != 'online'" class="btn red btn-sm" (click)="onSwitchToBootloaderDeviceClick()">
-                                            <i class="fa fa-briefcase"></i> {{'label_restart_to_bootloader'|bkTranslate:this}}
-                                        </button>
-                                        <button *ngIf="device.edit_permission" class="btn red btn-sm" (click)="onGenerateNewPassword()">
-                                            <i class="fa fa-lock"></i> {{'label_change_mqtt_pass'|bkTranslate:this}}
-                                        </button>
-                                        <button *ngIf="device.edit_permission" class="btn red btn-sm" (click)="onChangeServer()">
-                                            <i class="fa fa-lock"></i> {{'label_change_server'|bkTranslate:this}}
-                                        </button>
-                                    </div>
+                                    <button *ngIf="device.edit_permission" [disabled]="device.online_state != 'online'" class="btn red btn-sm" (click)="onSwitchToBootloaderDeviceClick()">
+                                        <i class="fa fa-briefcase"></i> {{'label_restart_to_bootloader'|bkTranslate:this}}
+                                    </button>
+                                    <button *ngIf="device.edit_permission" class="btn red btn-sm" (click)="onGenerateNewPassword()">
+                                        <i class="fa fa-lock"></i> {{'label_change_mqtt_pass'|bkTranslate:this}}
+                                    </button>
+                                    <button *ngIf="device.edit_permission" class="btn red btn-sm" (click)="onChangeServer()">
+                                        <i class="fa fa-lock"></i> {{'label_change_server'|bkTranslate:this}}
+                                    </button>
+                                </div>
                                 <br>
                                 <div>
                                     <span class="font-blue-dark">
@@ -589,9 +589,10 @@
                                     <thead>
                                         <tr>
                                             <th class="col col-lg-2">{{'table_id'|bkTranslate:this}}</th>
-                                            <th class="col col-lg-2">{{'table_logLevel'|bkTranslate:this}}</th>
-                                            <th class="col col-lg-2">{{'table_connection'|bkTranslate:this}}</th>
-                                            <th class="col col-lg-4">{{'table_color'|bkTranslate:this}}</th>
+                                            <th class="col col-lg-2  text-center">{{'table_logLevel'|bkTranslate:this}}</th>
+                                            <th class="col col-lg-1  text-center">{{'table_connection_confirmed'|bkTranslate:this}}</th>
+                                            <th class="col col-lg-2  text-center">{{'table_connection'|bkTranslate:this}}</th>
+                                            <th class="col col-lg-3  text-center">{{'table_color'|bkTranslate:this}}</th>
                                             <th class="col col-lg-2 text-right no-wrap">{{'table_actions'|bkTranslate:this}}</th>
                                         </tr>
                                     </thead>
@@ -601,24 +602,24 @@
                                             <td class="vert-align">
                                                 {{(terminal.name?terminal.name:terminal.id)}}
                                             </td>
-                                            <td class="vert-align">
-                                                <span>                                                     
-                                                        <i class="fa fa-times-circle font-red" *ngIf="terminal.logLevel == 'error'"></i>
-                                                        <i class="fa fa-sign-out font-green-jungle" *ngIf="terminal.logLevel == 'output'"></i>
-                                                        <i class="fa fa-info-circle font-blue" *ngIf="terminal.logLevel == 'info'"></i>
-                                                        <i class="fa fa-exclamation-triangle font-yellow-saffron" *ngIf="terminal.logLevel == 'warn'"></i>
-                                                        <i class="fa fa-angle-double-right" *ngIf="terminal.logLevel == 'log'"></i>
+                                            <td class="vert-align  text-center">
+                                                <span>
+                                                    <i class="fa fa-times-circle font-red" *ngIf="terminal.logLevel == 'error'"></i>
+                                                    <i class="fa fa-sign-out font-green-jungle" *ngIf="terminal.logLevel == 'output'"></i>
+                                                    <i class="fa fa-info-circle font-blue" *ngIf="terminal.logLevel == 'info'"></i>
+                                                    <i class="fa fa-exclamation-triangle font-yellow-saffron" *ngIf="terminal.logLevel == 'warn'"></i>
+                                                    <i class="fa fa-angle-double-right" *ngIf="terminal.logLevel == 'log'"></i>
                                                 </span>
                                                 {{(terminal.logLevel)}}
                                             </td>
-                                            <td class="vert-align">
-                                                    <bk-online-state [online_state]="terminal.onlineStatus"></bk-online-state>
-                                                    
-                                                <!--span class="font-green-jungle bold"> true </span>
-                                                <span class="font-red-thunderbird bold"> false </span>
-                                                {{WSinit}}-->
+                                            <td class="text-center vert-align">
+                                                <i class="fa fa-2x fa-check font-green-jungle" *ngIf="terminal.connected"></i>
+                                                <i class="fa fa-2x fa-times-circle font-red" *ngIf="!terminal.connected"></i>
                                             </td>
-                                            <td class="vert-align">
+                                            <td class="vert-align  text-center">
+                                                <bk-online-state [online_state]="terminal.onlineStatus"></bk-online-state>
+                                            </td>
+                                            <td class="vert-align  text-center">
                                                 <bk-form-color-picker label="" [control]="colorForm.controls['color'+terminal.id]" [waitForTouch]="false"></bk-form-color-picker>
                                             </td>
 
@@ -659,41 +660,3 @@
         </div>
     </div>
 </bk-layout-main>
-
-<!-- div class="row">
-                        <div class="vert-align">
-                            <span *ngIf="WSconnected">
-                                <i style="color: rgb(40, 240, 22);" class="fa fa-check"></i> connected</span>
-                            <span *ngIf="!WSconnected">
-                                <i style="color: red;" class="fa fa-warning"></i> trying to connect</span>
-                        </div>
-                    <div class="row">
-                        <div class="margin-left-15 margin-top-40 margin-right-15">
-
-
-
-
-
-
-
-
-            <div *ngFor="let terminal of terminalHardware">
-                                    <div>
-                                        <a (click)="onUserUnsubscribeClick(terminal)"> {{'label_unsubscribe'|bkTranslate:this}} </a>
-                                        <a (click)="onUserChangeLogLevelClick(terminal)"> {{'label_change_log_level'|bkTranslate:this}} </a>
-                                        <bk-form-color-picker label="{{(terminal.name?terminal.name:terminal.id)}}" [control]="colorForm.controls['color'+terminal.id]"
-                                            [waitForTouch]="false"></bk-form-color-picker>
-                                    </div>
-                                </div>
-                                <h2 *ngIf="terminalHardware && terminalHardware.length === 0"> {{'label_no_hardware_to_show'|bkTranslate:this}}</h2>
-                                <br>
-                                <button (click)="onAddTerminalHardwareClick()" class="btn default btn-sm">
-                                    <i class="fa fa-rocket"></i> {{'btn_add_hardware'|bkTranslate:this}}
-                                </button>
-
-
-
-
-
-
-                    </div-->
