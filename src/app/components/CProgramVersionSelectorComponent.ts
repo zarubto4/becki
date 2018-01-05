@@ -22,7 +22,6 @@ import { ModalService } from '../services/ModalService';
         </select>
     </div>
     <div class="form-group" [class.col-md-6]="align_horizontal"  [class.has-error]="selectedProgramId && !selectedProgramVersionId">
-    <div class="form-group" [class.col-md-6]="align_horizontal"  [class.has-error]="selectedProgramId && !selectedProgramVersionId">
         <label>Program version</label>
         <select class="form-control" *ngIf="selectedProgram && !(selectedVersions && selectedVersions.length)" disabled>
             <option [value]="null" disabled>No program versions</option>

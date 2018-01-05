@@ -198,7 +198,7 @@ import { ModalsLogLevelComponent } from './modals/hardware-terminal-logLevel';
 import { ModalsHardwareChangeServerComponent } from './modals/hardware-change-server';
 import { TimeZoneSelectorComponent } from './components/TimeZoneSelector';
 import { BeckiClickOutsideDirective } from './helpers/ClickDetection';
-
+import { ModalsCodeSelectComponent } from './modals/code-select';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -632,6 +632,7 @@ class BeckiErrorHandler implements ErrorHandler {
         ModalPickHardwareTerminalComponent,
         ModalsHardwareRestartMQTTPassComponent,
         ModalsHardwareChangeServerComponent,
+        ModalsCodeSelectComponent,
     ],
     exports: [AppComponent],
     bootstrap: [AppComponent]

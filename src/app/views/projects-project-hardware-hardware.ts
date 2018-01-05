@@ -210,7 +210,6 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                         return true;
                     }
                 })) {
-                    console.log("pouštím druhý WS");
                     this.backendService.connectDeviceTerminalWebSocket(model.selectedBoard.hardwareURL, model.selectedBoard.hardwareURLport + '');
                 }
 

@@ -77,6 +77,8 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     @ViewChild('field')
     field: ElementRef;
 
+    groupRemovedCallback: (block: Blocks.BaseInterfaceBlockGroup) => void;
+
     constructor(protected modalService: ModalService, protected zone: NgZone, protected backendService: BackendService, private translationService: TranslationService) {
         this.zone.runOutsideAngular(() => {
 
@@ -166,6 +168,11 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                 this.zone.run(() => {
                     this.onLog.emit({ block: block, type: type, message: message });
                 });
+            });
+            this.blockoController.registerBlockRemovedCallback((block: BlockoCore.Block) => {
+                if (this.groupRemovedCallback && block instanceof Blocks.BaseInterfaceBlockGroup) {
+                    this.groupRemovedCallback(block);
+                }
             });
             this.blockoController.registerBlocks(BlockoBasicBlocks.Manager.getAllBlocks());
 
@@ -367,6 +374,12 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         });
     }
 
+    setGroups(ifaces: BlockoTargetInterface[]): void {
+        this.zone.runOutsideAngular(() => {
+            this.blockoController.setGroups(ifaces);
+        });
+    }
+
     getBlockoController(): BlockoCore.Controller {
         return this.blockoController;
     }
@@ -380,5 +393,9 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
         /*.catch((reason) => {
             console.log("fail loading blocko version", reason);
         });*/
+    }
+
+    registerGroupRemovedCallback(callback: (block: Blocks.BaseInterfaceBlockGroup) => void) {
+        this.groupRemovedCallback = callback;
     }
 }

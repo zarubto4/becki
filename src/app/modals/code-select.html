@@ -1,0 +1,18 @@
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" (click)="onCloseClick()"></button>
+        <h4 class="modal-title" [innerHTML]="'title'|bkTranslate:this"></h4>
+    </div>
+    <div class="modal-body">
+        <div class="clearfix">
+            <bk-c-program-version-selector [cPrograms]="modalModel.cPrograms" (valueChanged)="onValueChanged($event)"></bk-c-program-version-selector>
+        </div>
+        <div *ngIf="errorMessage">
+            <span class="font-red bold">{{errorMessage}}</span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn red" (click)="onCancelClick()">{{'btn_cancel'|bkTranslate:this}}</button>
+        <button type="button" class="btn green" (click)="onSubmitClick()">{{'btn_ok'|bkTranslate:this}}</button>
+    </div>
+</div>

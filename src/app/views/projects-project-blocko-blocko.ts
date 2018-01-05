@@ -1,4 +1,3 @@
-import { ModalsBlockoAddGridEmptyModel } from './../modals/blocko-add-grid-emtpy';
 /**
  * Created by davidhradek on 17.08.16.
  */
@@ -28,6 +27,13 @@ import { CurrentParamsService } from '../services/CurrentParamsService';
 import { ExitConfirmationService } from '../services/ExitConfirmationService';
 import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsBlockoPropertiesModel } from '../modals/blocko-properties';
+import { ModalsSelectCodeModel } from '../modals/code-select';
+import { ModalsBlockoAddGridEmptyModel } from '../modals/blocko-add-grid-emtpy';
+
+export interface IGroupPair {
+    groupId: string;
+    versionId: string;
+}
 
 @Component({
     selector: 'bk-view-projects-project-blocko-blocko',
@@ -39,7 +45,6 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     projectId: string;
     blockoId: string;
-
 
     routeParamsSubscription: Subscription;
 
@@ -61,7 +66,6 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     blocksCache: { [blockId_versionId: string]: IBlockoBlockVersion } = {};
 
-
     // hw:
 
     allBoardsDetails: IBoardsForBlocko = null;
@@ -82,6 +86,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
     blockoProgramVersions: IBProgramVersionShortDetail[] = null;
     selectedProgramVersion: IBProgramVersion = null;
+    selectedGroupProgramVersions: IGroupPair[] = [];
 
     @ViewChild(BlockoViewComponent)
     blockoView: BlockoViewComponent;
@@ -243,6 +248,14 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         });
         this.refresh();
         this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib, Libs.ConsoleLib, Libs.UtilsLib, Blocks.FetchLib, Blocks.ServiceLib, this.blockoView.serviceHandler]);
+        this.blockoView.registerGroupRemovedCallback((block: Blocks.BaseInterfaceBlockGroup) => {
+            let index: number = this.selectedGroupProgramVersions.findIndex((pair: IGroupPair) => {
+                return pair.groupId === block.targetId;
+            });
+            if (index > -1) {
+                this.selectedGroupProgramVersions.splice(index, 1);
+            }
+        });
     }
 
     selectVersionByVersionId(versionId: string) {
@@ -362,6 +375,23 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                     break;
                 }
                 case 'group': {
+                    let cPrograms: ICProgramShortDetailForBlocko[] = [];
+                    params.data.type_of_boards_short_detail.forEach((t: ITypeOfBlockShortDetail) => {
+                        this.getCProgramsForBoardType(t.id).forEach((c) => {
+                            cPrograms.push(c);
+                        });
+                    });
+                    let m = new ModalsSelectCodeModel(cPrograms);
+                    this.modalService.showModal(m)
+                        .then((success: boolean) => {
+                            if (success && m.selectedVersionId) {
+                                this.selectedGroupProgramVersions.push({
+                                    groupId: params.data.id,
+                                    versionId: m.selectedVersionId
+                                });
+                                this.updateBlockoGroupInterfaces();
+                            }
+                        });
                     break;
                 }
                 default: this.fmError(this.translate('flash_cant_add_blocko_block'));
@@ -792,6 +822,30 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         this.blockoView.setInterfaces(outInterface);
     }
 
+    updateBlockoGroupInterfaces(): void {
+        let outInterface: BlockoTargetInterface[] = [];
+
+        this.selectedGroupProgramVersions.forEach((groupPair: IGroupPair) => {
+            if (groupPair && groupPair.groupId && groupPair.versionId) {
+                let cpv = this.getCProgramVersionById(groupPair.versionId);
+                if (cpv && cpv.virtual_input_output) {
+                    let interfaceData = JSON.parse(cpv.virtual_input_output);
+                    if (interfaceData) {
+                        outInterface.push({
+                            // 'targetType': targetName === 'BYZANCE_YODAG2' ? 'yoda' : 'device', // TODO: make better detection for another generations [DH] - Not supported?? [TZ]
+                            'color': '#30f485',
+                            'targetId': groupPair.groupId,
+                            'displayName': groupPair.groupId,
+                            'interface': interfaceData
+                        });
+                    }
+                }
+            }
+        });
+
+        this.blockoView.setGroups(outInterface);
+    }
+
     onInstanceIdClick(instanceId: string): void {
         this.navigate(['/projects', this.currentParamsService.get('project'), 'instances', instanceId]);
     }
@@ -1055,7 +1109,6 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         this.blockUI();
         this.backendService.bProgramVersionGet(programVersion.version_id) // TODO [permission]: B_program.read_permission
             .then((programVersionFull) => {
-                this.unblockUI();
 
                 this.unsavedChanges = false;
                 this.exitConfirmationService.setConfirmationEnabled(false);
@@ -1075,14 +1128,12 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
 
                 });
 
-                // console.log(this.selectedGridProgramVersions);
-
                 this.blockoView.setDataJson(this.selectedProgramVersion.program);
 
                 if (this.consoleLog) {
                     this.consoleLog.clear();
                 }
-
+                this.unblockUI();
             })
             .catch((err) => {
                 this.unblockUI();

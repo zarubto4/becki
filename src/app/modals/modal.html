@@ -197,6 +197,9 @@
             <template [ngSwitchCase]="'ModalsHardwareCodeProgramVersionSelectModel'">
                 <bk-modals-hardware-code-program-version-select [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-hardware-code-program-version-select>
             </template>
+            <template [ngSwitchCase]="'ModalsSelectCodeModel'">
+                <bk-modals-code-select [modalModel]="modalWrapper.modalModel" (modalClose)="modalService.closeModal(modalWrapper.modalModel, $event)"></bk-modals-code-select>
+            </template>
         </div>
     </div>
 </div>

@@ -7,7 +7,7 @@ import json
 import zipfile
 import requests
 
-config = json.loads(open('./update_config.json', 'r').read()) # Load config
+config = json.loads(open(os.path.dirname(sys.argv[0]) + '/update_config.json', 'r').read()) # Load config
 
 mode = config['mode']
 
@@ -41,7 +41,7 @@ for index, asset in enumerate(release['assets']):
         print 'Cannot found any asset named dist.zip'
         sys.exit(1)
 
-current = open('current_version', 'r+')
+current = open(os.path.dirname(sys.argv[0]) + '/current_version', 'r+')
 new = release['tag_name']
 
 if mode == 'developer':
@@ -125,7 +125,7 @@ for index in range(len(newVersionNumbers)):
             print 'Suffix version is same - comparing subversion'
             if (currentSuffixNumbers is None and newSuffixNumbers is None) or (currentSuffixNumbers is not None and newSuffixNumbers is None):
                 print 'Version is not higher - not updating'
-                break
+                sys.exit(1)
             if (currentSuffixNumbers is None and newSuffixNumbers is not None) or (len(currentSuffixNumbers) == 0 and len(newSuffixNumbers) > 0):
                 print 'Subversion is higher - updating'
                 break
@@ -150,13 +150,13 @@ for index in range(len(newVersionNumbers)):
 headers2 = {'Authorization': 'token ' + config['api_key'], 'Accept': 'application/octet-stream'}
 package = requests.get(asset_url, headers = headers2)
 
-with open('./dist.zip', 'w') as fd:
+with open(os.path.dirname(sys.argv[0]) + '/dist.zip', 'w') as fd:
     for chunk in package.iter_content(chunk_size=128):
         fd.write(chunk)
 
 print 'File was downloaded'
 
-with zipfile.ZipFile('./dist.zip') as zip:
+with zipfile.ZipFile(os.path.dirname(sys.argv[0]) + '/dist.zip') as zip:
     zip.extractall()
 
 print 'File was extracted'
