@@ -199,6 +199,7 @@ import { ModalsHardwareChangeServerComponent } from './modals/hardware-change-se
 import { TimeZoneSelectorComponent } from './components/TimeZoneSelector';
 import { BeckiClickOutsideDirective } from './helpers/ClickDetection';
 import { ModalsCodeSelectComponent } from './modals/code-select';
+import { BeckiBooleanButtonComponent } from './components/BooleanButtonComponent';
 
 // @formatter:off
 // DON'T USE children IN ROUTER YET!!!
@@ -474,6 +475,7 @@ class BeckiErrorHandler implements ErrorHandler {
         HtmlSanitizeBypassPipe,
         // Components
         MultiSelectComponent,
+        BeckiBooleanButtonComponent,
         MonacoEditorComponent,
         FormColorPickerComponent,
         FormFAIconSelectComponent,
