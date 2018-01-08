@@ -270,6 +270,8 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
         if (tab === 'command_center' && !this.WSinit) {
             this.blockUI();
+            this.WSinit = true;
+
 
             this.hardwareTerminalWS = this.backendService.hardwareTerminal;
             this.hardwareTerminalWS.subscribe(msg => this.onMessage(msg));
@@ -375,7 +377,6 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     terminalFirstRun(board: IBoard): void {
         this.backendService.connectDeviceTerminalWebSocket(this.device.server.server_url, this.device.server.hardware_log_port + '');
-        this.WSinit = true;
 
         // TODO při změně jména/aliasu refreshnout název terminálu
 
