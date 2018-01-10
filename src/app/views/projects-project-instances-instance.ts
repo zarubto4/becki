@@ -8,6 +8,7 @@
  * directory of this distribution.
  */
 import { IHomerInstanceRecord, IInstanceGridAppSettings } from './../backend/TyrionAPI';
+import { BlockoCore } from 'blocko';
 import { Component, OnInit, Injector, OnDestroy, AfterContentChecked, ViewChild, ElementRef } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { Subscription } from 'rxjs/Rx';
@@ -19,11 +20,9 @@ import { HomerService, HomerDao } from '../services/HomerService';
 import { ModalsConfirmModel } from '../modals/confirm';
 import { InstanceHistoryTimelineComponent } from '../components/InstanceHistoryTimelineComponent';
 import { ConsoleLogComponent, ConsoleLogType } from '../components/ConsoleLogComponent';
-import { QRCodeComponent } from '../components/QRCodeComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { ModalsInstanceEditDescriptionModel } from '../modals/instance-edit-description';
 import { ModalsBlockoVersionSelectModel } from '../modals/blocko-version-select';
-import { ProjectsProjectBlockoBlockoComponent } from './projects-project-blocko-blocko';
 import { OnlineChangeStatus } from '../backend/BeckiBackend';
 
 @Component({
@@ -379,12 +378,12 @@ export class ProjectsProjectInstancesInstanceComponent extends BaseMainComponent
             const controller = this.blockoView.getBlockoController();
 
             if (m.message_type === 'new_input_connector_value') {
-                controller.setInputConnectorValue(m.block_id, m.interface_name, m.value);
+                controller.setInputConnectorValue(m.block_id, m.interface_name, typeof m.value === 'object' ? new BlockoCore.Message(m.value) : m.value);
                 return;
             }
 
             if (m.message_type === 'new_output_connector_value') {
-                controller.setOutputConnectorValue(m.block_id, m.interface_name, m.value);
+                controller.setOutputConnectorValue(m.block_id, m.interface_name, typeof m.value === 'object' ? new BlockoCore.Message(m.value) : m.value);
                 return;
             }
 

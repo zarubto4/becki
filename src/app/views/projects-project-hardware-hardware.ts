@@ -174,7 +174,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 let con = this.avalibleHardware.concat(this.terminalHardware.splice(this.terminalHardware.findIndex(device => device.id === terminal.id), 1)); // dont need chceck if exist cuz we know its exist
                 this.avalibleHardware = con;
                 this.backendService.requestDeviceTerminalUnsubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport);
-                //this.backendService.closeHardwareTerminalWebsocket(terminal.hardwareURL + ':' + terminal.hardwareURLport); //TODO lepší je ponechat WS otevřený v "resting" stavu a pak je všechny zavřít najedou
+                // this.backendService.closeHardwareTerminalWebsocket(terminal.hardwareURL + ':' + terminal.hardwareURLport); // TODO lepší je ponechat WS otevřený v "resting" stavu a pak je všechny zavřít najedou
             }
         });
     }

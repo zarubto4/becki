@@ -28,7 +28,7 @@
     "@angular/platform-browser": "~2.4.0",
     "@angular/platform-browser-dynamic": "~2.4.0",
     "@angular/router": "~3.4.0",
-    "blocko": "git+ssh://git@github.com/ByzanceIoT/blocko.git#v0.2.11",
+    "blocko": "git+ssh://git@github.com/ByzanceIoT/blocko.git#v0.2.13",
     "canvas": "^1.6.8",
     "common-lib": "git+ssh://git@github.com/ByzanceIoT/common-lib.git#v0.0.27",
     "core-js": "^2.5.3",

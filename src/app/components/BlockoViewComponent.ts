@@ -7,21 +7,13 @@
  */
 
 import { BlockoCore, BlockoPaperRenderer, BlockoBasicBlocks, BlockoTargetInterface, Blocks } from 'blocko';
-import {
-    Component,
-    AfterViewInit,
-    OnChanges,
-    OnDestroy,
-    Input,
-    ViewChild,
-    ElementRef,
-    SimpleChanges, Output, EventEmitter, NgZone
-} from '@angular/core';
+import { Component, AfterViewInit, OnChanges, OnDestroy, Input, ViewChild, ElementRef,
+    SimpleChanges, Output, EventEmitter, NgZone } from '@angular/core';
 import { ModalService } from '../services/ModalService';
 import { BackendService } from '../services/BackendService';
 import { ModalsBlockoConfigPropertiesModel } from '../modals/blocko-config-properties';
 import { ModalsBlockoBlockCodeEditorModel } from '../modals/blocko-block-code-editor';
-import { ITypeOfBlock, IBlockoBlockVersionShortDetail, IBlockoBlock, IBlockoBlockShortDetail } from '../backend/TyrionAPI';
+import { ITypeOfBlock, IBlockoBlockVersionShortDetail, IBlockoBlockShortDetail } from '../backend/TyrionAPI';
 import { TranslationService } from '../services/TranslationService';
 
 
@@ -121,7 +113,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
             if (this.disableExecution) {
                 this.blockoController.configuration.asyncEventsEnabled = false;
                 this.blockoController.configuration.inputEnabled = false;
-                this.blockoController.configuration.outputEnabled = false;
+                this.blockoController.configuration.outputEnabled = true;
             }
 
             /*
@@ -201,7 +193,7 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
                 if (disableExecution.currentValue) {
                     this.blockoController.configuration.asyncEventsEnabled = false;
                     this.blockoController.configuration.inputEnabled = false;
-                    this.blockoController.configuration.outputEnabled = false;
+                    this.blockoController.configuration.outputEnabled = true;
                 }
             }
 
@@ -377,6 +369,12 @@ export class BlockoViewComponent implements AfterViewInit, OnChanges, OnDestroy 
     setGroups(ifaces: BlockoTargetInterface[]): void {
         this.zone.runOutsideAngular(() => {
             this.blockoController.setGroups(ifaces);
+        });
+    }
+
+    addInterfaceGroup(iface: BlockoTargetInterface): void {
+        this.zone.runOutsideAngular(() => {
+            this.blockoController.addInterfaceGroup(iface);
         });
     }
 

@@ -723,7 +723,7 @@ export abstract class BeckiBackend extends TyrionAPI {
 
             websocket.addEventListener('close', ws => {
                 this.reconnectTerminalWebSocketAfterTimeout();
-                this.hardwareTerminalState.next({ 'websocketUrl': websocket.url, 'isConnected': false,'reason': 'conectionFailed'});
+                this.hardwareTerminalState.next({ 'websocketUrl': websocket.url, 'isConnected': false, 'reason': 'conectionFailed'});
             });
 
             websocket.addEventListener('open', ws => {

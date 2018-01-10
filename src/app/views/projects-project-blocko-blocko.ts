@@ -1,16 +1,20 @@
 /**
  * Created by davidhradek on 17.08.16.
  */
+
 declare let $: JQueryStatic;
 import moment = require('moment/moment');
 import { Component, OnInit, Injector, OnDestroy, ViewChild } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
 import { Subscription } from 'rxjs/Rx';
-import { IProject, IBProgram, IBlockoBlockVersion, IBoardsForBlocko, IBProgramVersion, IBPair, IMProject, IMProgramSnapShot,
+import {
+    IProject, IBProgram, IBlockoBlockVersion, IBoardsForBlocko, IBProgramVersion, IBPair, IMProject, IMProgramSnapShot,
     IMProjectSnapShot, IBlockoBlockVersionShortDetail, IBoardShortDetail, IBProgramVersionShortDetail,
-    IMProjectShortDetailForBlocko, ICProgramVersionsShortDetailForBlocko, ICProgramShortDetailForBlocko, ITypeOfBlockList,
-    IBlockoBlockShortDetail, ITypeOfBlockShortDetail, IHardwareGroup, IBoardGroup } from '../backend/TyrionAPI';
+    IMProjectShortDetailForBlocko, ICProgramVersionsShortDetailForBlocko, ICProgramShortDetailForBlocko,
+    ITypeOfBlockList,
+    IBlockoBlockShortDetail, ITypeOfBlockShortDetail, IHardwareGroup, IBoardGroup, IGroupPair
+} from '../backend/TyrionAPI';
 import { BlockoViewComponent } from '../components/BlockoViewComponent';
 import { DraggableEventParams } from '../components/DraggableDirective';
 import { ModalsBlockoAddHardwareModel } from '../modals/blocko-add-hardware';
@@ -29,11 +33,6 @@ import { ModalsRemovalModel } from '../modals/removal';
 import { ModalsBlockoPropertiesModel } from '../modals/blocko-properties';
 import { ModalsSelectCodeModel } from '../modals/code-select';
 import { ModalsBlockoAddGridEmptyModel } from '../modals/blocko-add-grid-emtpy';
-
-export interface IGroupPair {
-    groupId: string;
-    versionId: string;
-}
 
 @Component({
     selector: 'bk-view-projects-project-blocko-blocko',
@@ -77,13 +76,11 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
     hwGroups: IBoardGroup[] = [];
 
     // grid:
-
     allGridProjects: IMProjectShortDetailForBlocko[] = null;
 
     selectedGridProgramVersions: { [projectId: string]: { [programId: string]: string } } = {};
 
     // versions:
-
     blockoProgramVersions: IBProgramVersionShortDetail[] = null;
     selectedProgramVersion: IBProgramVersion = null;
     selectedGroupProgramVersions: IGroupPair[] = [];
@@ -250,7 +247,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         this.monacoEditorLoaderService.registerTypings([Blocks.TSBlockLib, Libs.ConsoleLib, Libs.UtilsLib, Blocks.FetchLib, Blocks.ServiceLib, this.blockoView.serviceHandler]);
         this.blockoView.registerGroupRemovedCallback((block: Blocks.BaseInterfaceBlockGroup) => {
             let index: number = this.selectedGroupProgramVersions.findIndex((pair: IGroupPair) => {
-                return pair.groupId === block.targetId;
+                return pair.group_id === block.targetId;
             });
             if (index > -1) {
                 this.selectedGroupProgramVersions.splice(index, 1);
@@ -386,10 +383,23 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                         .then((success: boolean) => {
                             if (success && m.selectedVersionId) {
                                 this.selectedGroupProgramVersions.push({
-                                    groupId: params.data.id,
-                                    versionId: m.selectedVersionId
+                                    group_id: params.data.id,
+                                    version_id: m.selectedVersionId
                                 });
-                                this.updateBlockoGroupInterfaces();
+                                let cpv = this.getCProgramVersionById(m.selectedVersionId);
+                                if (cpv && cpv.virtual_input_output) {
+                                    let interfaceData = JSON.parse(cpv.virtual_input_output);
+                                    if (interfaceData) {
+                                        this.blockoView.addInterfaceGroup({
+                                            'color': '#30f485',
+                                            'targetId': params.data.id,
+                                            'displayName': params.data.id,
+                                            'pos_x': Math.round(x / 22) * 22,
+                                            'pos_y': Math.round(y / 22) * 22,
+                                            'interface': interfaceData
+                                        });
+                                    }
+                                }
                             }
                         });
                     break;
@@ -826,16 +836,16 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
         let outInterface: BlockoTargetInterface[] = [];
 
         this.selectedGroupProgramVersions.forEach((groupPair: IGroupPair) => {
-            if (groupPair && groupPair.groupId && groupPair.versionId) {
-                let cpv = this.getCProgramVersionById(groupPair.versionId);
+            if (groupPair && groupPair.group_id && groupPair.version_id) {
+                let cpv = this.getCProgramVersionById(groupPair.version_id);
                 if (cpv && cpv.virtual_input_output) {
                     let interfaceData = JSON.parse(cpv.virtual_input_output);
                     if (interfaceData) {
                         outInterface.push({
                             // 'targetType': targetName === 'BYZANCE_YODAG2' ? 'yoda' : 'device', // TODO: make better detection for another generations [DH] - Not supported?? [TZ]
                             'color': '#30f485',
-                            'targetId': groupPair.groupId,
-                            'displayName': groupPair.groupId,
+                            'targetId': groupPair.group_id,
+                            'displayName': groupPair.group_id,
                             'interface': interfaceData
                         });
                     }
@@ -1076,6 +1086,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 this.backendService.bProgramVersionCreate(this.blockoId, { // TODO [permission]: B_program.update_permission
                     version_name: m.name,
                     version_description: m.description,
+                    group_pairs: this.selectedGroupProgramVersions.slice(0),
                     hardware_group: this.selectedHardware,
                     m_project_snapshots: mProjectSnapshots,
                     program: this.blockoView.getDataJson()
@@ -1116,7 +1127,6 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 this.selectedProgramVersion = programVersionFull;
                 // here is save re-cast it to IHardwareGroupIN because its only object with more properties
                 this.selectedHardware = this.hardwareGroupCopy(<IHardwareGroup[]>this.selectedProgramVersion.hardware_group) || [];
-
                 this.selectedGridProgramVersions = {};
                 programVersionFull.m_project_program_snapshots.forEach((pps) => {
                     this.selectedGridProgramVersions[pps.m_project_id] = {};
@@ -1129,7 +1139,7 @@ export class ProjectsProjectBlockoBlockoComponent extends BaseMainComponent impl
                 });
 
                 this.blockoView.setDataJson(this.selectedProgramVersion.program);
-
+                this.selectedGroupProgramVersions = programVersionFull.group_pairs.slice(0);
                 if (this.consoleLog) {
                     this.consoleLog.clear();
                 }
