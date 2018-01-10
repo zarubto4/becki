@@ -362,6 +362,7 @@ export abstract class BeckiBackend extends TyrionAPI {
     public garfieldRecived: Rx.Subject<any> = new Rx.Subject<any>();
 
     private hardwareTerminalwebSockets: WebSocket[] = [];
+
     private TerminalwebSocketReconnectTimeout: any = null;
 
     public hardwareTerminal: Rx.Subject<ITerminalWebsocketMessage> = new Rx.Subject<ITerminalWebsocketMessage>();
@@ -754,9 +755,11 @@ export abstract class BeckiBackend extends TyrionAPI {
             if (wsPosition > -1) {
 
                 this.hardwareTerminalwebSockets[wsPosition] = websocket;
+                console.log("close", this.hardwareTerminalwebSockets);
             } else {
 
                 this.hardwareTerminalwebSockets.push(websocket);
+                console.log("close", this.hardwareTerminalwebSockets);
             }
         } else {
             this.hardwareTerminalState.next({ websocketUrl: null, isConnected: null, 'reason': 'cantConnect' });
@@ -772,21 +775,29 @@ export abstract class BeckiBackend extends TyrionAPI {
 
     public closeHardwareTerminalWebsocket(websocketURL: string) {
         if (websocketURL === 'all') {
+            this.hardwareTerminalwebSockets.forEach(websocket => {
+                websocket.removeEventListener('close');
+                websocket.removeEventListener('open');
+                websocket.close();
+            });
             this.hardwareTerminalwebSockets = [];
             return;
         }
 
         let websocket = this.hardwareTerminalwebSockets.find(ws => {
             if (ws.url.includes(websocketURL)) {
+                console.warn("nenalezen websocket");
+
                 return true;
             }
         });
         if (websocket) {
+
+            this.hardwareTerminalState.next({ 'websocketUrl': websocket.url, 'isConnected': false, 'reason': 'dissconected' });
+
             websocket.removeEventListener('close');
             websocket.removeEventListener('open');
             websocket.close();
-
-            this.hardwareTerminalState.next({ 'websocketUrl': websocket.url, 'isConnected': false, 'reason': 'dissconected' });
         }
         websocket = null;
     }
