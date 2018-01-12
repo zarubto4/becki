@@ -28,6 +28,7 @@ import * as Rx from 'rxjs';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 import { ModalsLogLevelModel } from '../modals/hardware-terminal-logLevel';
 import { ModalsHardwareChangeServerModel } from '../modals/hardware-change-server';
+import { Observable, Subject } from 'rxjs/Rx';
 
 export interface TerminalParameters {
     id: string;
@@ -78,8 +79,9 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     numbers: any;
 
-    hardwareTerminalWS: Rx.Subject<ITerminalWebsocketMessage>;
-    hardwareTerminalStateWS: Rx.Subject<IWebsocketTerminalState>;
+    hardwareTerminalWS: Rx.Subscription;
+    hardwareTerminalStateWS: Rx.Subscription;
+
     terminalHardware: TerminalParameters[] = [];
 
     lastInstance: number = 1;
@@ -143,9 +145,9 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     }
 
     onStateMessage(msg: IWebsocketTerminalState) {
-        // console.log(msg);
+        console.log(msg.reason);
         if (msg.websocketUrl === null && msg.isConnected === null) {
-            this.addFlashMessage(new FlashMessageError('cant connect offline device'));
+            this.addFlashMessage(new FlashMessageError('cant device dont have right server adress'));
             return;
         }
 
@@ -252,7 +254,6 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
-        //  this.hardwareTerminalWS.unsubscribe();
 
         this.terminalHardware.forEach(hardware => {
             this.backendService.requestDeviceTerminalUnsubcribe(hardware.id, hardware.hardwareURL + ':' + hardware.hardwareURLport);
@@ -260,6 +261,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
 
         this.backendService.closeHardwareTerminalWebsocket('all');
+        this.hardwareTerminalStateWS.unsubscribe();
     }
 
     onToggleHardwareTab(tab: string) {
@@ -273,11 +275,9 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             this.WSinit = true;
 
 
-            this.hardwareTerminalWS = this.backendService.hardwareTerminal;
-            this.hardwareTerminalWS.subscribe(msg => this.onMessage(msg));
+            this.hardwareTerminalWS = this.backendService.hardwareTerminal.subscribe(msg => this.onMessage(msg));
 
-            this.hardwareTerminalStateWS = this.backendService.hardwareTerminalState;
-            this.hardwareTerminalStateWS.subscribe(msg => this.onStateMessage(msg));
+            this.hardwareTerminalStateWS = this.backendService.hardwareTerminalState.subscribe(msg => this.onStateMessage(msg));
 
             this.colorForm.valueChanges.subscribe(value => {
                 if (this.consoleLog) {

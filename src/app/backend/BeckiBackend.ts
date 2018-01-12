@@ -704,7 +704,6 @@ export abstract class BeckiBackend extends TyrionAPI {
     }
 
     public connectDeviceTerminalWebSocket(server: string, port: string): void {
-
         if (!(server !== null) && !(port !== null)) {
 
             let websocket: WebSocket = null;
@@ -724,7 +723,7 @@ export abstract class BeckiBackend extends TyrionAPI {
 
             websocket.addEventListener('close', ws => {
                 this.reconnectTerminalWebSocketAfterTimeout();
-                this.hardwareTerminalState.next({ 'websocketUrl': websocket.url, 'isConnected': false, 'reason': 'conectionFailed'});
+                this.hardwareTerminalState.next({ 'websocketUrl': websocket.url, 'isConnected': false, 'reason': 'conectionFailed' });
             });
 
             websocket.addEventListener('open', ws => {
@@ -755,11 +754,9 @@ export abstract class BeckiBackend extends TyrionAPI {
             if (wsPosition > -1) {
 
                 this.hardwareTerminalwebSockets[wsPosition] = websocket;
-                console.log("close", this.hardwareTerminalwebSockets);
             } else {
 
                 this.hardwareTerminalwebSockets.push(websocket);
-                console.log("close", this.hardwareTerminalwebSockets);
             }
         } else {
             this.hardwareTerminalState.next({ websocketUrl: null, isConnected: null, 'reason': 'cantConnect' });
