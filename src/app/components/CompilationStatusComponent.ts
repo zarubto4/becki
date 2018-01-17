@@ -5,40 +5,40 @@ import { Component, Input } from '@angular/core';
     selector: 'bk-compilation-status-component',
     template: `
 
-        <span class="icon-hint-wraper red" *ngIf="status=='server_was_offline'">
+        <span class="icon-hint-wraper red" *ngIf="status =='server_was_offline'">
                                         <i class="fa fa-exclamation-triangle font-red-mint"></i>
-                                        <span class="hint">{{status | bkTranslateTable:this:status}}</span>
+                                        <span class="hint">{{status|bkTranslateTable:this:'version_status'}}</span>
                                      </span>
 
         <span class="icon-hint-wraper red" *ngIf="status=='json_code_is_broken'">
                                         <i class="fa fa-exclamation-triangle font-red-mint"></i>
-                                        <span class="hint">{{status | bkTranslateTable:this:status}}</span>
+                                        <span class="hint">{{status|bkTranslateTable:this:'version_status'}}</span>
                                      </span>
 
         <span class="icon-hint-wraper orange" *ngIf="status=='compiled_with_code_errors'">
                                         <i class="fa fa-bug font-yellow"></i>
-                                        <span class="hint">{{status | bkTranslateTable:this:status}}</span>
+                                        <span class="hint">{{status|bkTranslateTable:this:'version_status'}}</span>
                                     </span>
 
         <span class="icon-hint-wraper red" *ngIf="status=='hardware_unstable'">
                                         <i class="fa fa-heartbeat font-red-mint"></i>
-                                        <span class="hint">{{status | bkTranslateTable:this:status}}</span>
+                                        <span class="hint">{{status|bkTranslateTable:this:'version_status'}}</span>
                                     </span>
 
         <span class="icon-hint-wraper orange"
               *ngIf="status=='server_was_offline' || status=='successfully_compiled_not_restored' || status=='undefined' || status=='file_with_code_not_found' || status=='compilation_server_error' || status=='json_code_is_broken'">
                                         <i class="fa fa-thumbs-down font-yellow"></i>
-                                        <span class="hint">{{status | bkTranslateTable:this:status}}</span>
+                                        <span class="hint">{{status|bkTranslateTable:this:'version_status'}}</span>
                                     </span>
 
         <span class="icon-hint-wraper gray" *ngIf="status=='compilation_in_progress'">
                                         <i class="fa fa-spinner fa-spin"></i>
-                                        <span class="hint">{{status | bkTranslateTable:this:status}}</span>
+                                        <span class="hint">{{status|bkTranslateTable:this:'version_status'}}</span>
                                     </span>
 
         <span class="icon-hint-wraper green" *ngIf="status=='successfully_compiled_and_restored'">
                                         <i class="fa fa-check font-green-jungle"></i>
-                                        <span class="hint">{{status | bkTranslateTable:this:status}}</span>
+                                        <span class="hint">{{status|bkTranslateTable:this:'version_status'}}</span>
                                     </span>
 
         <!-- Public Status -->
