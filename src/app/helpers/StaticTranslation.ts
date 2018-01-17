@@ -1278,6 +1278,7 @@ export class StaticTranslation {
                 'flash_remove_device_fail': 'Device could not be removed, ',
                 'flash_cant_update_bootloader': 'Unable to update Bootloader, {0}.',
                 'flash_cant_edit_backup_mode': 'Device backup mode could not be changed, {0}.',
+                'flash_cant_connect_device_wrong_server': 'cant connect device, device don\'t have correct server adress'
 
             }, 'ProjectsProjectInstancesComponent': {
 

@@ -28,6 +28,7 @@ import * as Rx from 'rxjs';
 import { ValidatorErrorsService } from '../services/ValidatorErrorsService';
 import { ModalsLogLevelModel } from '../modals/hardware-terminal-logLevel';
 import { ModalsHardwareChangeServerModel } from '../modals/hardware-change-server';
+import { Observable, Subject } from 'rxjs/Rx';
 
 export interface TerminalParameters {
     id: string;
@@ -70,25 +71,26 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     colorForm: FormGroup;
 
     WSinit: boolean = false;
-    avalibleHardware: TerminalParameters[] = [];
-    avalibleColors = ['#0082c8', '#e6194b', '#3cb44b', '#ffe119', '#f58231', '#911eb4', '#46f0f0', '#008080', '#aa6e28', '#ffd8b1'];
+    avalibleHardware: TerminalParameters[] = []; // ukládání všech dostupných HW pro terminalSubsribe
+    avalibleColors = ['#0082c8', '#e6194b', '#3cb44b', '#ffe119', '#f58231', '#911eb4', '#46f0f0', '#008080', '#aa6e28', '#ffd8b1']; //předdefinované barvy pro terminál
 
     @ViewChild(ConsoleLogComponent)
     consoleLog: ConsoleLogComponent;
 
     numbers: any;
 
-    hardwareTerminalWS: Rx.Subject<ITerminalWebsocketMessage>;
-    hardwareTerminalStateWS: Rx.Subject<IWebsocketTerminalState>;
-    terminalHardware: TerminalParameters[] = [];
+    hardwareTerminalWS: Rx.Subscription; // objekt pro subscribe websocketu (a práci s pouze s touto instancí, takže ve chvíli co použiju  unsubscribe, tak se zruší toto a né Rx.subject v beckibackend)
+    hardwareTerminalStateWS: Rx.Subscription; // stejně jako nahoře, more info:   http://reactivex.io/rxjs/manual/overview.html#subscription
 
-    lastInstance: number = 1;
+    terminalHardware: TerminalParameters[] = []; // Hardware, ze kterého čteme logy je uložen zde
+
+    lastInstance: number = 1; // kvůli barvám sledujeme poslední přidanou instanci
 
     constructor(injector: Injector) {
         super(injector);
 
         this.colorForm = this.formBuilder.group({
-        });
+        }); // inicializace prázdného formu pro barvy
 
         this.backendService.onlineStatus.subscribe(status => {
             if (status.model === 'Board') {
@@ -96,7 +98,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                     this.device.online_state = status.online_status;
                 };
             }
-            this.terminalHardware.find(hardware => hardware.id === status.model_id).onlineStatus = status.online_status;
+            this.terminalHardware.find(hardware => hardware.id === status.model_id).onlineStatus = status.online_status; // pokud najdeme terminalHW, změníme mu status u něj.
         });
 
     };
@@ -129,23 +131,21 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
     }
 
     onMessage(msg: ITerminalWebsocketMessage) {
-        let deviceTerminal = this.terminalHardware.find(device => device.id === msg.hardware_id);
+        let deviceTerminal = this.terminalHardware.find(device => device.id === msg.hardware_id); // najdeme hardware, kterého se zpráva týká
         if (deviceTerminal) {
             if (!deviceTerminal.connected && msg.message_type === 'subscribe_hardware') {
                 deviceTerminal.connected = true;
             }
             if (this.consoleLog) {
-                let alias = deviceTerminal.name;
-                this.consoleLog.add(msg.level, msg.message, (alias ? alias : msg.hardware_id), msg.hardware_id);
+                this.consoleLog.add(msg.level, msg.message, (deviceTerminal.name ? deviceTerminal.name : msg.hardware_id), msg.hardware_id); // přidání zprávy do consoleComponent
 
             }
         }
     }
 
     onStateMessage(msg: IWebsocketTerminalState) {
-        // console.log(msg);
-        if (msg.websocketUrl === null && msg.isConnected === null) {
-            this.addFlashMessage(new FlashMessageError('cant connect offline device'));
+        if (msg.websocketUrl === null && msg.isConnected === null) { // Pokud z beckiBacked příjde oboje null, znamená to, že device nemá serverURL a serverPort
+            this.addFlashMessage(new FlashMessageError(this.translate('flash_cant_connect_device_wrong_server')));
             return;
         }
 
@@ -154,13 +154,13 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                 if (msg.websocketUrl.includes(terminal.hardwareURL + ':' + terminal.hardwareURLport)) {
                     return true;
                 }
-            }).connected = msg.isConnected;
+            }).connected = msg.isConnected; // najdeme odebíraný HW kterého se status update týká a upravíme ho (pokud se nenajde, prostě se to přeskočí)
         }
     }
 
 
     onAddTerminalHardwareClick() {
-        if (this.avalibleHardware && this.avalibleHardware.length > 0) {
+        if (this.avalibleHardware && this.avalibleHardware.length > 0) { // pokud máme dostupný hardware na odběr, tak pokračujem jinak vyhodíme flashmesseage
             this.addNewHardwareToTerminal();
 
         } else {
@@ -168,18 +168,21 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
         }
     }
+
     onUserUnsubscribeClick(terminal: TerminalParameters) {
         this.modalService.showModal(new ModalsRemovalModel((terminal.name ? terminal.name : terminal.id))).then((success) => {
             if (success) {
-                let con = this.avalibleHardware.concat(this.terminalHardware.splice(this.terminalHardware.findIndex(device => device.id === terminal.id), 1)); // dont need chceck if exist cuz we know its exist
-                this.avalibleHardware = con;
-                this.backendService.requestDeviceTerminalUnsubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport);
-                // this.backendService.closeHardwareTerminalWebsocket(terminal.hardwareURL + ':' + terminal.hardwareURLport); // TODO lepší je ponechat WS otevřený v "resting" stavu a pak je všechny zavřít najedou
+
+                this.avalibleHardware = this.avalibleHardware.concat(this.terminalHardware.splice(this.terminalHardware.findIndex(device => device.id === terminal.id), 1));
+                // Tímto přidáme unsubscribed HW do "avalibeHardware" takže ho uživatel může znovu přidat
+
+                this.backendService.requestDeviceTerminalUnsubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport); // pošleme unsubscribe request na WS 
+                // this.backendService.closeHardwareTerminalWebsocket(terminal.hardwareURL + ':' + terminal.hardwareURLport); // je lepší je ponechat WS otevřený v "resting" stavu a pak je všechny zavřít najedou
             }
         });
     }
 
-    onUserChangeLogLevelClick(terminal: TerminalParameters) {
+    onUserChangeLogLevelClick(terminal: TerminalParameters) { // změna log levelu
         let logLevel: string;
         let model = new ModalsLogLevelModel(terminal.logLevel);
 
@@ -192,6 +195,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
                 this.backendService.requestDeviceTerminalUnsubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport);
                 this.backendService.requestDeviceTerminalSubcribe(terminal.id, terminal.hardwareURL + ':' + terminal.hardwareURLport, logLevel);
+                // Zde se odhlásíme a příhlásíme k s novým loglevelem
 
             }
         });
@@ -199,25 +203,25 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     }
 
-    addNewHardwareToTerminal() {
+    addNewHardwareToTerminal() { // přidání HW do "odebíraných"
         let model = new ModalPickHardwareTerminalModel(this.avalibleHardware, this.avalibleColors[this.lastInstance]);
         this.modalService.showModal(model).then((success) => {
             if (success) {
                 this.colorForm.addControl('color' + model.selectedBoard.id, new FormControl('color' + model.selectedBoard.id));
                 this.colorForm.controls['color' + model.selectedBoard.id].setValue(model.color);
-
+                // pokud modal projde, přidáme nový controls s ID dle ID hardwaru, práci s ním
 
 
                 let deleteId = this.avalibleHardware.findIndex(x => x.id === model.selectedBoard.id);
                 if (deleteId > -1) {
                     this.avalibleHardware.splice(deleteId, 1);
-                }
+                } // najdeme a odebereme daný HW ze seznamu dostupných HW
 
 
                 if (this.terminalHardware.find(hardware => {
                     if (hardware.hardwareURL !== model.selectedBoard.hardwareURL || hardware.hardwareURLport !== model.selectedBoard.hardwareURLport) {
                         return true;
-                    }
+                    } // Pokud nenajdeme HW, se stejným portem nebo server URL, pošleme novej pořadavek na připojení HW
                 })) {
                     this.backendService.connectDeviceTerminalWebSocket(model.selectedBoard.hardwareURL, model.selectedBoard.hardwareURLport + '');
                 }
@@ -231,11 +235,11 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
                     'hardwareURL': model.selectedBoard.hardwareURL,
                     'hardwareURLport': model.selectedBoard.hardwareURLport,
                     'connected': false
-                });
+                }); // přidáme data o subsribed HW
 
                 this.backendService.requestDeviceTerminalSubcribe(model.selectedBoard.id, model.selectedBoard.hardwareURL + ':' + model.selectedBoard.hardwareURLport, model.logLevel);
                 this.lastInstance++;
-
+                // Nakonec na nově otevřený WS pošleme subscribe request
 
             }
         }).catch(reason => {
@@ -252,14 +256,15 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     ngOnDestroy(): void {
         this.routeParamsSubscription.unsubscribe();
-        //  this.hardwareTerminalWS.unsubscribe();
 
         this.terminalHardware.forEach(hardware => {
             this.backendService.requestDeviceTerminalUnsubcribe(hardware.id, hardware.hardwareURL + ':' + hardware.hardwareURLport);
-        });
+        }); // odhlásíme každej HW co byl připojen
 
 
-        this.backendService.closeHardwareTerminalWebsocket('all');
+        this.backendService.closeHardwareTerminalWebsocket('all'); // zavřeme všechny HW websockety na backednu
+        this.hardwareTerminalWS.unsubscribe();
+        this.hardwareTerminalStateWS.unsubscribe(); // unsubscribe toho neposedného subscribera, takže se nestane že přijde stejná flash messeage 5x za sebou
     }
 
     onToggleHardwareTab(tab: string) {
@@ -270,20 +275,20 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
         if (tab === 'command_center' && !this.WSinit) {
             this.blockUI();
-            this.WSinit = true;
+            this.WSinit = true; // aby se celá inicializace websocketů nepusila znova
 
 
-            this.hardwareTerminalWS = this.backendService.hardwareTerminal;
-            this.hardwareTerminalWS.subscribe(msg => this.onMessage(msg));
+            this.hardwareTerminalWS = this.backendService.hardwareTerminal.subscribe(msg => this.onMessage(msg));
 
-            this.hardwareTerminalStateWS = this.backendService.hardwareTerminalState;
-            this.hardwareTerminalStateWS.subscribe(msg => this.onStateMessage(msg));
+            this.hardwareTerminalStateWS = this.backendService.hardwareTerminalState.subscribe(msg => this.onStateMessage(msg));
+
+
 
             this.colorForm.valueChanges.subscribe(value => {
                 if (this.consoleLog) {
-                    Object.keys(value).forEach(
+                    Object.keys(value).forEach( // pro každej prvek colorform
                         colorKey => {
-                            this.consoleLog.addSourceColor(colorKey.substr(5), value[colorKey]);
+                            this.consoleLog.addSourceColor(colorKey.substr(5), value[colorKey]); // přidáme jeden sourceColor kterej měníme při jakékoliv změně barvy
                         });
                 }
             });
@@ -291,7 +296,7 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             if (this.device.server && this.device.server.server_url) {
                 this.terminalFirstRun(this.device);
             } else {
-                this.terminalHardware.push({
+                this.terminalHardware.push({ // pokud nemá device jak URL tak i PORT tak ho přidáme do seznamu, ale nepřipojíme ho
                     'id': this.device.id,
                     'logLevel': 'info',
                     'name': this.device.name,
@@ -308,11 +313,11 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
             }).then(boards => {
 
                 let hardwares = boards.content.filter(item => {
-                    return !this.terminalHardware.some(board => board.id === item.id);
+                    return !this.terminalHardware.some(board => board.id === item.id); // vyfiltruje již existjící boardy
                 });
 
                 hardwares.map(hardware => {
-                    this.backendService.boardGet(hardware.id).then(board => {
+                    this.backendService.boardGet(hardware.id).then(board => { // na seznam všech získaných boardů se postupně zeptá a přidá je do seznamu dostupných HW
                         if (board.server && board.server.server_url) {
                             this.avalibleHardware.push({
                                 'id': hardware.id,
@@ -377,12 +382,13 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
     terminalFirstRun(board: IBoard): void {
         this.backendService.connectDeviceTerminalWebSocket(this.device.server.server_url, this.device.server.hardware_log_port + '');
+        // připojení k websocketu daného deviceu
 
         // TODO při změně jména/aliasu refreshnout název terminálu
 
-        this.colorForm.addControl('color' + this.device.id, new FormControl('color' + this.device.id));
-        this.colorForm.controls['color' + this.device.id].setValue('#0000FF');
-        this.terminalHardware.push({
+        this.colorForm.addControl('color' + this.device.id, new FormControl('color' + this.device.id)); // přidáme control na barvu v terminálu
+        this.colorForm.controls['color' + this.device.id].setValue('#0000FF'); // přidáme default barvu
+        this.terminalHardware.push({ // přidáme to do seznamu "odebýraných HW"
             'id': this.device.id,
             'logLevel': 'info',
             'name': this.device.name,
@@ -393,6 +399,8 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
         });
 
         new Promise<any>((resolve) => {
+            // todle je takovej "oblouk", protože nevíme kdy se console.log inicializuje, vytvoříme si interval kterej se každejch 100 ms ptá, zda již consoleLog existuje
+            // pokud kohokoliv napadne lepší řešení, tohoto, feel free to do it
 
             let checker = setInterval(() => {
                 if (this.consoleLog) {
@@ -403,10 +411,11 @@ export class ProjectsProjectHardwareHardwareComponent extends BaseMainComponent 
 
 
         }).then(() => {
-            this.colorForm.controls['color' + this.device.id].setValue('#0000FF');
+            this.colorForm.controls['color' + this.device.id].setValue('#0000FF'); // přidáme do console.log barvu
         });
-        if (this.device.server && this.device.server.server_url) {
+        if (this.device.server && this.device.server.server_url) {// prob. navíc podmínka
             this.backendService.requestDeviceTerminalSubcribe(this.device.id, this.device.server.server_url + ':' + this.device.server.hardware_log_port, 'info');
+            // Pošleme request na WS o subscribe logy
         }
     }
 
