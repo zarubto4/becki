@@ -1,11 +1,8 @@
 /**
- * Created by davidhradek on 28.11.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
-/*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
- */
 
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';

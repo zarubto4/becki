@@ -1,10 +1,8 @@
 /**
- * Created by davidhradek on 14.09.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
-/*
- * © 2015-2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
- */
+
 
 import { BlockoCore, BlockoPaperRenderer, BlockoBasicBlocks, BlockoTargetInterface, Blocks } from 'blocko';
 import { Component, AfterViewInit, OnChanges, OnDestroy, Input, ViewChild, ElementRef,

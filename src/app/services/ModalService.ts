@@ -1,5 +1,6 @@
 /**
- * Created by davidhradek on 08.08.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
 import { EventEmitter, Injectable, NgZone } from '@angular/core';

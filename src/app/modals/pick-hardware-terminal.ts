@@ -1,8 +1,8 @@
-import { TranslationService } from './../services/TranslationService';
 /**
- * Created by davidhradek on 20.09.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
-
+import { TranslationService } from './../services/TranslationService';
 import { Input, Output, EventEmitter, Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { BackendService } from '../services/BackendService';

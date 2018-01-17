@@ -1,7 +1,7 @@
 /**
- * Created by davidhradek on 15.08.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
-
 import { Injectable } from '@angular/core';
 import { TranslationService } from './TranslationService';
 

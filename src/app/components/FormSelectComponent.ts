@@ -1,6 +1,8 @@
 /**
- * Created by davidhradek on 17.08.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
+
 
 import { Component, EventEmitter, Output, Input, OnInit } from '@angular/core';
 import { AbstractControl } from '@angular/forms';

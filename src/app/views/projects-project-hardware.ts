@@ -1,10 +1,6 @@
 /**
- * Created by davidhradek on 10.08.16.
- */
-
-/*
- * © 2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';

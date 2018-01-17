@@ -1,7 +1,7 @@
 /**
- * Created by davidhradek on 20.12.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
-
 /* tslint:disable */
 export const ES5Lib = {
     libName: 'ES5',

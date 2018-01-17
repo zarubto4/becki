@@ -1,6 +1,4 @@
-/**
- * Created by davidhradek on 05.12.16.
- */
+
 
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';

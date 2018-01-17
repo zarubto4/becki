@@ -1,6 +1,8 @@
 /**
- * Created by davidhradek on 10.08.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
+
 
 import { Injectable, Inject } from '@angular/core';
 import { LabeledLink } from '../helpers/LabeledLink';

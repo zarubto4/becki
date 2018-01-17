@@ -1,6 +1,8 @@
 /**
- * Created by davidhradek on 22.09.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
+
 import moment = require('moment/moment');
 import { Component, OnInit, Injector, OnDestroy, ViewChild } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';

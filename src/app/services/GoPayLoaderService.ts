@@ -1,7 +1,7 @@
 /**
- * Created by davidhradek on 22.02.17.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
-
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 

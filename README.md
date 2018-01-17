@@ -38,7 +38,11 @@ available at same address as you have in browser and port 9000.
 
 * `npm run docs` to generate documentation into *doc* folder
 
-* `npm run generator` to start generator for TyrionAPI.ts file from currently running Tyrion
+* `npm run tyrion-generator` to start generator for TyrionAPI.ts file from currently running Tyrion running Tyrion on localhost:9000
+* `npm run tyrion-generator-win` to start generator for TyrionAPI.ts on Windows file from currently running Tyrion on localhost:9000
+
+* `npm run homer-generator` to start generator for HomerAPI.ts from currently running Homer on localhost:3000
+
 
 * `npm run build` to start *webpack* and create build of Becki into *dist* folder
 

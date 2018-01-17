@@ -1,6 +1,4 @@
-/**
- * Created by davidhradek on 17.08.16.
- */
+
 
 declare let $: JQueryStatic;
 import moment = require('moment/moment');

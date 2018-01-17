@@ -1,11 +1,6 @@
-
 /**
- * Created by davidhradek on 01.12.16.
- */
-
-/*
- * © 2016 Becki Authors. See the AUTHORS file found in the top-level
- * directory of this distribution.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 import { IHomerInstanceRecord, IInstanceGridAppSettings } from './../backend/TyrionAPI';
 import { BlockoCore } from 'blocko';

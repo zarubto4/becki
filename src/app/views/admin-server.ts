@@ -1,7 +1,7 @@
 /**
- * Created by davidhradek on 05.12.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
-
 import { Component, Injector, OnInit } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import {
@@ -155,6 +155,24 @@ export class ServerComponent extends BaseMainComponent implements OnInit {
                 });
 
                 this.unblockUI();
+            })
+            .catch((reason) => {
+                this.addFlashMessage(new FlashMessageError('Projects cannot be loaded.', reason));
+                this.unblockUI();
+            });
+    }
+
+    onHomerServerUpdateServer(serverShortDetail: IHomerServerPublicDetail): void {
+
+        // Get full detail object first
+        Promise.all<any>([this.backendService.homerServerGet(serverShortDetail.id)])
+            .then((values: [IHomerServer]) => {
+
+                // TODO Example API NA Homera
+                // TODO DOMINIK EXAMPLE ÚKOL
+                // NA tuto adresu budu posílat request
+                let homer_url = values[0].server_url;
+
             })
             .catch((reason) => {
                 this.addFlashMessage(new FlashMessageError('Projects cannot be loaded.', reason));

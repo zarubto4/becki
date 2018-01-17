@@ -1,8 +1,11 @@
 /**
- * Created by davidhradek on 08.09.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
 
+
 import { TyrionAPI, INotification, IPerson, ILoginResult, IWebSocketToken, ISocialNetworkLogin } from './TyrionAPI';
+import { HomerAPI } from './HomerAPI';
 import * as Rx from 'rxjs';
 import { ConsoleLogType } from '../components/ConsoleLogComponent';
 

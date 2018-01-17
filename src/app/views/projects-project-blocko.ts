@@ -1,10 +1,7 @@
 /**
- * Created by davidhradek on 15.08.16.
+ * © 2016 Becki Authors. See the AUTHORS file found in the top-level directory
+ * of this distribution.
  */
-/**
- * Created by davidhradek on 10.08.16.
- */
-
 import { Component, OnInit, Injector, OnDestroy } from '@angular/core';
 import { BaseMainComponent } from './BaseMainComponent';
 import { FlashMessageError, FlashMessageSuccess } from '../services/NotificationService';
