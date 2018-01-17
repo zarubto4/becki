@@ -5,7 +5,7 @@
     </div>
     <div class="modal-body widget-config">
         <template [ngIf]="widgetVersions && widgetVersions.length > 0">
-            <h4>{{'label_widget_code_versionc'|bkTranslate:this}}</h4>
+            <h4>{{'label_widget_code_version'|bkTranslate:this}}</h4>
             <div>
                 <select name="{{'label_select_widget_version'|bkTranslate:this}}" class="form-control" [(ngModel)]="formModelVersion">
                     <option *ngFor="let version of widgetVersions;" [value]="version.id" >{{version.name}}{{version.description && " - " + version.description}}</option>
