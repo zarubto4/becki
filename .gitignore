@@ -3,6 +3,8 @@
 /src/app/**/*.js.map
 
 /generator/generator.js
+/generator-homer/generator.js
+
 
 
 # Logs
