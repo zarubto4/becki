@@ -49,8 +49,8 @@ export class ModalsExtensionComponent implements OnInit {
 
         this.form = this.formBuilder.group({
             'color': ['', [Validators.required]],
-            'name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(16)]],
-            'description': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
+            'name': ['', [Validators.required, Validators.minLength(4), Validators.maxLength(60)]],
+            'description': ['', [Validators.maxLength(255)]],
             'extension_type': ['', [ ]],
             'config': ['', [Validators.required]],
         });

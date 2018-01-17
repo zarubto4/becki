@@ -71,7 +71,7 @@ export class StaticTranslation {
                 'label_reason': 'If not - there is a place for comment for the author.',
                 'btn_decide': 'Make decision',
             }, 'ModalsExtensionComponent': {
-                'title': 'Add a Device',
+                'title': 'Add a Extension',
                 'label_color': 'Color in Template. Please use color from http://keenthemes.com/preview/metronic/theme/admin_1/ui_colors.html',
                 'label_name': 'Name',
                 'label_description': 'Description',
