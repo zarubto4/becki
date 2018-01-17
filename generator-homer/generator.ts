@@ -43,11 +43,11 @@ if (program['debug'] === true) {
 
 let CONFIG = {
     definitionsRefPrefix: '#/definitions/',
-    ignoredDefinitions: [ 'EntityBean', 'EntityBeanIntercept', 'ValuePair' ],
+    ignoredDefinitions: ['EntityBean', 'EntityBeanIntercept', 'ValuePair'],
     methodsReplace: {
 
         // "" for ignore
-       // like 'get:/websocket/becki/{secure_token}': '',
+        // like 'get:/websocket/becki/{secure_token}': '',
 
         // normal replaces
         'post:/login': '__login',
@@ -83,7 +83,7 @@ if (argInput.toLocaleLowerCase().indexOf('http') === 0) {
     console.log(chalk.magenta('Going open file ' + argInput + ''));
 
     try {
-        swaggerFile = readFileSync(argInput, {encoding: 'utf8'});
+        swaggerFile = readFileSync(argInput, { encoding: 'utf8' });
     } catch (e) {
         throwError('Cannot open Swagger JSON file from ' + argInput + ' (error: ' + e.toString() + ')');
     }
@@ -277,12 +277,12 @@ definitionsKeys.forEach((defName) => {
             fileWriteLine('    /**');
             fileWriteLine('     * @name ' + propKey);
             fileWriteLine('     * @type ' + type);
-            if (prop['description']) {        fileWriteLine('     * @description ' + prop['description'].split('\n').join('\n     *    ')); }
-            if (prop['example']) {          fileWriteLine('     * @example ' + prop['example']); }
-            if (prop['format']) {           fileWriteLine('     * @format ' + prop['format']); }
-            if (prop['default']) {           fileWriteLine('     * @default ' + prop['default']); }
-            if (prop['readOnly'] === true) {  fileWriteLine('     * @readonly'); }
-            if (required === '') {            fileWriteLine('     * @required'); }
+            if (prop['description']) { fileWriteLine('     * @description ' + prop['description'].split('\n').join('\n     *    ')); }
+            if (prop['example']) { fileWriteLine('     * @example ' + prop['example']); }
+            if (prop['format']) { fileWriteLine('     * @format ' + prop['format']); }
+            if (prop['default']) { fileWriteLine('     * @default ' + prop['default']); }
+            if (prop['readOnly'] === true) { fileWriteLine('     * @readonly'); }
+            if (required === '') { fileWriteLine('     * @required'); }
             fileWriteLine('     */');
 
             fileWriteLine('    ' + propKey + required + ': ' + type + ';');
@@ -377,7 +377,7 @@ let makeReadableMethodName = (method: string, url: string, pathObj: string) => {
         }
     });
 
-    if (first_prefix === null || second_prefix === null ) {
+    if (first_prefix === null || second_prefix === null) {
         throwError('Missing fist or second Parameter');
     }
 
@@ -442,7 +442,7 @@ methodsNames.sort();
 
 fileWriteLine('export abstract class ' + className + ' {');
 fileWriteLine();
-fileWriteLine('    protected abstract requestRestPath<T>(method:string, path:string, body:Object, success:number[]):Promise<T>;');
+fileWriteLine('    protected abstract requestRestPath<T>(method:string, path:string, body:Object, success:number[], serverURL:string):Promise<T>;');
 fileWriteLine();
 
 methodsNames.forEach((methodName) => {
@@ -464,6 +464,8 @@ methodsNames.forEach((methodName) => {
     let encodeQueries = [];
 
     if (params) {
+        outParameters.push('serverURL:string');
+
         params.forEach((param) => {
             if (param['in'] === 'path') {
 
@@ -597,9 +599,9 @@ methodsNames.forEach((methodName) => {
 
     fileWriteLine('    /**');
     fileWriteLine('     * @name ' + methodName);
-    if (pathInfo['summary']) {        fileWriteLine('     * @summary ' + pathInfo['summary']);     }
-    if (pathInfo['operationId']) {    fileWriteLine('     * @operationId ' + pathInfo['operationId']);    }
-    if (pathInfo['tags']) {           fileWriteLine('     * @tags ' + pathInfo['tags'].join(', '));    }
+    if (pathInfo['summary']) { fileWriteLine('     * @summary ' + pathInfo['summary']); }
+    if (pathInfo['operationId']) { fileWriteLine('     * @operationId ' + pathInfo['operationId']); }
+    if (pathInfo['tags']) { fileWriteLine('     * @tags ' + pathInfo['tags'].join(', ')); }
     if (pathInfo['description']) {
         fileWriteLine('     *');
         fileWriteLine('     * @description ' + pathInfo['description'].split('\n').join('\n     *    '));
@@ -620,7 +622,7 @@ methodsNames.forEach((methodName) => {
     if (encodeQueries.length) {
         fileWriteLine(encodeQueries.join('\n'));
     }
-    fileWriteLine('        return this.requestRestPath(\"' + pathMethod.toLocaleUpperCase() + '\", `' + pathUrlVariables + (queryParameters.length ? '?' + queryParameters.join('&') : '') + '`, ' + body + ', [' + returnCodes.join(',') + ']);');
+    fileWriteLine('        return this.requestRestPath(\"' + pathMethod.toLocaleUpperCase() + '\", `' + pathUrlVariables + (queryParameters.length ? '?' + queryParameters.join('&') : '') + '`, ' + body + ', [' + returnCodes.join(',') + '], serverURL);');
     fileWriteLine('    }');
     fileWriteLine();
 
@@ -630,7 +632,7 @@ fileWriteLine('}');
 
 
 console.log(chalk.yellow('Go to write out file.'));
-writeFileSync(argOutput, outFileContent, {encoding: 'utf8'});
+writeFileSync(argOutput, outFileContent, { encoding: 'utf8' });
 console.log();
 console.log(chalk.magenta('██████╗  ██████╗ ███╗   ██╗███████╗██╗'));
 console.log(chalk.magenta('██╔══██╗██╔═══██╗████╗  ██║██╔════╝██║'));
